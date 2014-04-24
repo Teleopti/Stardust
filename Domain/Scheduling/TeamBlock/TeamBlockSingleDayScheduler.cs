@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 												ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 												IResourceCalculateDelayer resourceCalculateDelayer,
 												ISchedulingResultStateHolder schedulingResultStateHolder,
-												IEffectiveRestriction customEffectiveRestriction);
+												IEffectiveRestriction shiftNudgeRestriction);
 
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 										IResourceCalculateDelayer resourceCalculateDelayer,
 										ISchedulingResultStateHolder schedulingResultStateHolder,
-										IEffectiveRestriction customEffectiveRestriction)
+										IEffectiveRestriction shiftNudgeRestriction)
 		{
 			if (roleModelShift == null) return false;
 			var teamInfo = teamBlockInfo.TeamInfo;
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				{
 					var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person, roleModelShift);
 					if (restriction == null) return false;
-					restriction = restriction.Combine(customEffectiveRestriction);
+					restriction = restriction.Combine(shiftNudgeRestriction);
 					var shifts = _workShiftFilterService.Filter(day, person, teamBlockSingleDayInfo, restriction, schedulingOptions,
 					                                            new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day));
 					if (shifts.IsNullOrEmpty()) continue;

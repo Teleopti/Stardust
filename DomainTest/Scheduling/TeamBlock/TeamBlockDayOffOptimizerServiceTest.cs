@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -168,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1),
 					_schedulingOptions, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _selectedPersons,
-					_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction())).Return(true);
+					_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).IgnoreArguments().Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true);
 				Expect.Call(_restrictionOverLimitValidator.Validate(_teamInfo, _optimizationPreferences)).Return(true);
@@ -234,7 +235,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1),
 					_schedulingOptions, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _selectedPersons,
-					_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction())).Return(true);
+					_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).IgnoreArguments().Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true);
 				Expect.Call(_restrictionOverLimitValidator.Validate(_teamInfo, _optimizationPreferences)).Return(true);
@@ -478,7 +479,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions,
 				new DateOnlyPeriod(DateOnly.MinValue,
 					DateOnly.MinValue.AddDays(1)),
-				_selectedPersons, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction()))
+				_selectedPersons, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective()))
+				.IgnoreArguments()
 				.Return(!failOnRescheduling);
 			if (failOnRescheduling)
 				return;

@@ -530,6 +530,7 @@
     <Compile Include="Optimization\WeeklyRestSolver\ExtractDayOffFromGivenWeek.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\IdentifyDayOffWithHighestSpan.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ScheduleDayWorkShiftTimeExtractor.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeDirective.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeEarlier.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeLater.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeManager.cs" />
