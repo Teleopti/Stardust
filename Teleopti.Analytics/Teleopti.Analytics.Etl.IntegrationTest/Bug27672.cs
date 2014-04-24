@@ -107,7 +107,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             //transfer site, team contract etc from app to analytics
             var result = StepRunner.RunNightly(jobParameters);
 
-            // now it should have data on all three dates on both persons 192 interval
+            // now it should have data on all three dates on 96 interval
             var db = new AnalyticsContext(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
             var factSchedules = from s in db.fact_schedule select s;
             Assert.That(factSchedules.Count(), Is.EqualTo(96));

@@ -27,7 +27,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 
 	    protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
         {
-            var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling);
+            var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling.AddDays(1));
 			
             //Transform data from Raptor to Matrix format
             _raptorTransformer.RowsUpdatedEvent += raptorTransformer_RowsUpdatedEvent;

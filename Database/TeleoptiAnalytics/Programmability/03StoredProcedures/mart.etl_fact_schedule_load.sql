@@ -46,7 +46,7 @@ SET @start_date_id =	(SELECT date_id FROM mart.dim_date WHERE @start_date = date
 SET @end_date_id	 =	(SELECT date_id FROM mart.dim_date WHERE @end_date = date_date)
 
 --Debug
---SELECT @start_date, @end_date
+--SELECT @start_date, @end_date, @start_date_id,@end_date_id
 --SELECT count(*) FROM mart.fact_schedule  WHERE shift_starttime between @start_date AND @end_date
 -----------------------------------------------------------------------------------
 -- Delete rows based on shift_starttime
@@ -85,6 +85,7 @@ INNER JOIN mart.fact_schedule fs
 	AND dp.person_id = fs.person_id
 	AND stg.interval_id = fs.interval_id
 	AND ds.scenario_id = fs.scenario_id
+WHERE convert(smalldatetime,floor(convert(decimal(18,8),stg.shift_start))) between @start_date AND @end_date --#27672 Only those who will be inserted
 
 --another special delete for newly deleted midnight shifts, where the next day is now occupied with existing shifts overlapping the old (Mobily problems))
 DELETE fs
@@ -110,6 +111,7 @@ INNER JOIN mart.fact_schedule fs
 	AND dp.person_id = fs.person_id
 	AND stg.interval_id = fs.interval_id
 	AND ds.scenario_id = fs.scenario_id
+WHERE convert(smalldatetime,floor(convert(decimal(18,8),stg.shift_start))) between @start_date AND @end_date --#27672 Only those who will be inserted
 
 /*
 DELETE FROM mart.fact_schedule
