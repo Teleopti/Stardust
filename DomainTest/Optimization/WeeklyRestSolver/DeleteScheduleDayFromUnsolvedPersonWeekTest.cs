@@ -44,8 +44,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             }
             using (_mock.Playback())
             {
-                _target.DeleteAppropiateScheduleDay(personRange,date,rollbackService);
+                _target.DeleteAppropiateScheduleDay(personRange,date,rollbackService, new DateOnlyPeriod(2014,03,25,2014,03,27));
             }
         }
+
+		  [Test]
+		  public void ShouldNotDeleteProvidedScheduleDayIfOutSideSelection()
+		  {
+			  var personRange = _mock.StrictMock<IScheduleRange>();
+			  var date = new DateOnly(2014, 03, 26);
+			  var rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
+			  _target.DeleteAppropiateScheduleDay(personRange, date, rollbackService, new DateOnlyPeriod(2014, 04, 25, 2014, 04, 27));
+		  }
     }
 }

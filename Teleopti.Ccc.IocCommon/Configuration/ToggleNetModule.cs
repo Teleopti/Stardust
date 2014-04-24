@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Toggle.Net;
 using Toggle.Net.Internal;
 using Toggle.Net.Providers.TextFile;
@@ -26,10 +27,19 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			else
 			{
-				var toggleChecker = new ToggleChecker(new FileProvider(new FileReader(_pathToToggleFile)));
-				builder.Register(_ => new toggleCheckerWrapper(toggleChecker))
-					.SingleInstance()
-					.As<IToggleManager>();
+				if (_pathToToggleFile.StartsWith("http://") || _pathToToggleFile.StartsWith("https://"))
+				{
+					builder.Register(_ => new ToggleQuerier(_pathToToggleFile))
+						.SingleInstance()
+						.As<IToggleManager>();
+				}
+				else
+				{
+					var toggleChecker = new ToggleChecker(new FileProvider(new FileReader(_pathToToggleFile)));
+					builder.Register(_ => new toggleCheckerWrapper(toggleChecker))
+						.SingleInstance()
+						.As<IToggleManager>();
+				}
 			}
 		}
 
