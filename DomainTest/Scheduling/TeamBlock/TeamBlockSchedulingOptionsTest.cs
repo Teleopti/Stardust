@@ -260,6 +260,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
 			Assert.IsFalse(_target.IsBlockWithSameShiftCategoryInvolved(_schedulingOptions));
 
+			_schedulingOptions.UseTeamBlockPerOption = true;
 			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
 			Assert.IsTrue(_target.IsBlockWithSameShiftCategoryInvolved(_schedulingOptions));
 

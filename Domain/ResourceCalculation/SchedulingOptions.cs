@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool UseMaxSeats { get; set; }
 		public bool DoNotBreakMaxSeats { get; set; }
         public bool UseSameDayOffs { get; set; }
-        public BlockFinderType UseBlockOptimizing { get; set; }
         public IScheduleTag TagToUseOnScheduling { get; set; }
     	public int ResourceCalculateFrequency { get; set; }
     	public TimeSpan? UseCustomTargetTime { get; set; }
@@ -61,17 +60,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool UseCommonActivity { get; set; }
 		public bool UseAverageShiftLengths { get; set; }
 
-        public bool UsePeriodAsBlock { get; set; }
-
-        public bool UseTwoDaysOffAsBlock{get;set;}
-
-        public bool UseCalendarWeekAsBlock{get;set;}
-
         private BlockFinderType _blockFinderTypeForAdvanceScheduling;
         
         public BlockFinderType BlockFinderTypeForAdvanceScheduling
         {
-            get { return _blockFinderTypeForAdvanceScheduling; }
+	        get
+	        {
+				if(!UseTeamBlockPerOption)
+					return BlockFinderType.SingleDay;
+
+		        return _blockFinderTypeForAdvanceScheduling;
+	        }
             set
             {
                 _blockFinderTypeForAdvanceScheduling = value;

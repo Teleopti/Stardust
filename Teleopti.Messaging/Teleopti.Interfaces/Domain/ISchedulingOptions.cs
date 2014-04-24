@@ -267,10 +267,6 @@ namespace Teleopti.Interfaces.Domain
 
         ///<summary>
         ///</summary>
-        BlockFinderType UseBlockOptimizing { get; set; }
-
-        ///<summary>
-        ///</summary>
         IScheduleTag TagToUseOnScheduling { get; set; }
 
         ///<summary>
