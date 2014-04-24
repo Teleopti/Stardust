@@ -46,6 +46,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
+using Teleopti.Ccc.Web.Areas.Toggle;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
@@ -89,6 +90,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 			controllerNew
 				.Should().Not.Be.SameInstanceAs(controllerNew2);
+		}
+
+		[Test]
+		public void ShouldRegisterToggleHandlerController()
+		{
+			requestContainer.Resolve<ToggleHandlerController>()
+				.Should().Not.Be.Null();
 		}
 
 		[Test]

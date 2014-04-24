@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
+using Teleopti.Ccc.Web.Areas.Toggle;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Filters;
 
@@ -40,7 +41,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 																		typeof(TestController),
 																		typeof(OpenIdController),
 																		typeof(Areas.SSO.Controllers.AuthenticationApiController),
-																		typeof(Areas.SSO.Controllers.ApplicationAuthenticationApiController)
+																		typeof(Areas.SSO.Controllers.ApplicationAuthenticationApiController),
+																		typeof(ToggleHandlerController)
 			                                                    	}));
 			filters.Add(new CheckStartupResultAttribute());
 		}

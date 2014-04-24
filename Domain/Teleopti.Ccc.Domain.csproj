@@ -333,6 +333,8 @@
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateBitArrayCreator.cs" />
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\WorkShiftLegalStateDayIndexCalculator.cs" />
+    <Compile Include="FeatureFlags\IToggleManager.cs" />
+    <Compile Include="FeatureFlags\Toggles.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonth.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthCreator.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthHelper.cs" />
@@ -415,6 +417,7 @@
     <Compile Include="Optimization\DayOffRulesValidator.cs" />
     <Compile Include="Optimization\DaysOffLegalStateValidatorsFactory.cs" />
     <Compile Include="Optimization\ScheduleMatrixLockableBitArrayConverterEx.cs" />
+    <Compile Include="Optimization\TeamBlock\AllTeamMembersInSelectionSpecification.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportData.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportService.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualCategoryDistributionBestTeamBlockDecider.cs" />
@@ -527,6 +530,7 @@
     <Compile Include="Optimization\WeeklyRestSolver\ExtractDayOffFromGivenWeek.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\IdentifyDayOffWithHighestSpan.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ScheduleDayWorkShiftTimeExtractor.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeDirective.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeEarlier.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeLater.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeManager.cs" />
@@ -2004,6 +2008,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analyzer\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FeatureFlags\released.toggles.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FeatureFlags\RC.toggles.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

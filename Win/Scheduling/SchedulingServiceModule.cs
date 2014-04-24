@@ -418,28 +418,33 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>();
 			//IRuleSetSkillActivityChecker
         }
-		private static void registerWeeklyRestSolverClasses(ContainerBuilder builder)
+
+	    private static void registerWeeklyRestSolverClasses(ContainerBuilder builder)
 	    {
-			builder.RegisterType<ShiftNudgeEarlier>().As<IShiftNudgeEarlier>();
-            builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
-            builder.RegisterType<DayOffToTimeSpanExtractor>().As<IDayOffToTimeSpanExtractor>();
-            builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
-            builder.RegisterType<ExtractDayOffFromGivenWeek>().As<IExtractDayOffFromGivenWeek>();
-            builder.RegisterType<ScheduleDayWorkShiftTimeExtractor>().As<IScheduleDayWorkShiftTimeExtractor>();
-            builder.RegisterType<WeeklyRestSolverService>().As<IWeeklyRestSolverService>();
-            builder.RegisterType<DeleteScheduleDayFromUnsolvedPersonWeek>().As<IDeleteScheduleDayFromUnsolvedPersonWeek>();
-            builder.RegisterType<BrokenWeekOutsideSelectionSpecification>().As<IBrokenWeekOutsideSelectionSpecification>();
+		    builder.RegisterType<ShiftNudgeEarlier>().As<IShiftNudgeEarlier>();
+          builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
+          builder.RegisterType<DayOffToTimeSpanExtractor>().As<IDayOffToTimeSpanExtractor>();
+          builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
+          builder.RegisterType<ExtractDayOffFromGivenWeek>().As<IExtractDayOffFromGivenWeek>();
+          builder.RegisterType<ScheduleDayWorkShiftTimeExtractor>().As<IScheduleDayWorkShiftTimeExtractor>();
+          builder.RegisterType<WeeklyRestSolverService>().As<IWeeklyRestSolverService>();
+          builder.RegisterType<DeleteScheduleDayFromUnsolvedPersonWeek>().As<IDeleteScheduleDayFromUnsolvedPersonWeek>();
+          builder.RegisterType<BrokenWeekOutsideSelectionSpecification>().As<IBrokenWeekOutsideSelectionSpecification>();
 		    builder.RegisterType<IdentifyDayOffWithHighestSpan>();
-			builder.RegisterType<ShiftNudgeLater>().As<IShiftNudgeLater>();
-			builder.RegisterType<ShiftNudgeManager>().As<IShiftNudgeManager>();
-			builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
-			builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
-			builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
-			builder.RegisterType<TeamBlockScheduleCloner>().As<ITeamBlockScheduleCloner>();
-            builder.RegisterType<WeeksFromScheduleDaysExtractor>().As<IWeeksFromScheduleDaysExtractor>();
-            builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
-            builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>();
+			 builder.RegisterType<ShiftNudgeLater>().As<IShiftNudgeLater>();
+			 builder.RegisterType<ShiftNudgeManager>().As<IShiftNudgeManager>();
+			 builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
+			 builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
+			 builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
+			 builder.RegisterType<TeamBlockScheduleCloner>().As<ITeamBlockScheduleCloner>();
+          builder.RegisterType<WeeksFromScheduleDaysExtractor>().As<IWeeksFromScheduleDaysExtractor>();
+          builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
+          builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>();
             builder.RegisterType<VerifyWeeklyRestAroundDayOffSpecification>().As<IVerifyWeeklyRestAroundDayOffSpecification>();
+             builder.RegisterType<AllTeamMembersInSelectionSpecification>().As<IAllTeamMembersInSelectionSpecification>();
 	    }
+			
+			
+	    
     }
 }

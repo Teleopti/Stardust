@@ -188,6 +188,11 @@
 			// numericUpDownAsmSetting
 			// 
 			this.numericUpDownAsmSetting.Location = new System.Drawing.Point(186, 126);
+			this.numericUpDownAsmSetting.Maximum = new decimal(new int[] {
+            1800,
+            0,
+            0,
+            0});
 			this.numericUpDownAsmSetting.Name = "numericUpDownAsmSetting";
 			this.numericUpDownAsmSetting.Size = new System.Drawing.Size(120, 20);
 			this.numericUpDownAsmSetting.TabIndex = 64;

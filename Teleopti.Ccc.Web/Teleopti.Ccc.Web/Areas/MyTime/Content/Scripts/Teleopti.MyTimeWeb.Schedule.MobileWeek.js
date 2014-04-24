@@ -42,9 +42,11 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
             }
         },
         PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
-            vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
-            ko.applyBindings(vm, $('#page')[0]);
-            _fetchData();
+	        if ($('.weekview-mobile').length > 0) {
+	        	vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+	        	ko.applyBindings(vm, $('#page')[0]);
+	        	_fetchData();
+	        }
             completelyLoadedCallback();
             readyForInteractionCallback();
         },

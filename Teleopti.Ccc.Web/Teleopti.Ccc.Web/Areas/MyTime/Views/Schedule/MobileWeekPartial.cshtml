@@ -1,22 +1,21 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @{
-    Layout = null;
+	Layout = null;
 }
 
-<!-- ko foreach: dayViewModels-->
-<div class="weekview-day" data-bind="attr: { 'data-mytime-date': fixedDate}">
-	<div class="row">
-	<div class="weekview-day-header" data-bind="text: weekDayHeaderTitle"></div>
-	<div class="weekview-day data-mytime-date" data-bind="text: fixedDate"></div>
-</div>
-	<div class="shift" data-bind="style: { backgroundColor: shiftColor}">
-		<div>
-			<strong data-bind="text: shiftName"></strong>
+<div class="weekview-mobile row">
+	<!-- ko foreach: dayViewModels-->
+	<div class="day" data-bind="attr: { 'data-mytime-date': fixedDate }">
+		<div class="header">
+			<div class="weekday" data-bind="text: weekDayHeaderTitle"></div>
+			<div class="date" data-bind="text: fixedDate"></div>
 		</div>
-		<div data-bind="text: shiftTimeSpan"></div>
+		<div class="summary" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: { 'dayoff': isDayoff, 'shift': hasShift }">
+			<div>
+				<strong data-bind="text: summaryName"></strong>
+			</div>
+			<div data-bind="text: summaryTimeSpan"></div>
+		</div>
 	</div>
+	<!-- /ko -->
 </div>
-<!-- /ko -->
-<ul>
-	<li><a href="#" id="desktop" data-bind="click: desktop">desktop</a></li>
-</ul>

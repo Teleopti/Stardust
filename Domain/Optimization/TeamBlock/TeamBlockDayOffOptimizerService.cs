@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -41,8 +41,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
 		private bool _cancelMe;
 	    private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
+		 private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 
-	    public TeamBlockDayOffOptimizerService(
+		public TeamBlockDayOffOptimizerService(
 			ITeamInfoFactory teamInfoFactory,
 			ILockableBitArrayFactory lockableBitArrayFactory,
 			ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockClearer teamBlockClearer,
 			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
-			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder, ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
+			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder, ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_lockableBitArrayFactory = lockableBitArrayFactory;
@@ -71,6 +72,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_teamBlockDaysOffMoveFinder = teamBlockDaysOffMoveFinder;
 	        _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
+			_allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -92,7 +94,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			foreach (var selectedPerson in selectedPersons)
 			{
 				var teamInfo = _teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList);
-				if (teamInfo != null)
+				if(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.KeepSameDaysOffInTeam )
+					if (!_allTeamMembersInSelectionSpecification.IsSatifyBy(teamInfo, selectedPersons))
+						continue;
+				if (teamInfo != null )
 					allTeamInfoListOnStartDate.Add(teamInfo);
 			}
 
@@ -161,6 +166,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 					foreach (var matrix in teamInfo.MatrixesForGroup())
 					{
+						if (!(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.KeepSameDaysOffInTeam))
+							if (!selectedPersons.Contains(matrix.Person)) continue;
 						rollbackService.ClearModificationCollection();
 
 						var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix, schedulingOptions, teamInfo,
@@ -397,7 +404,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
 					selectedPersons, rollbackService, resourceCalculateDelayer, 
-				                                                        schedulingResultStateHolder, new EffectiveRestriction());
+				                                                        schedulingResultStateHolder, new ShiftNudgeDirective());
 				if (!success)
 					return false;
 			}
