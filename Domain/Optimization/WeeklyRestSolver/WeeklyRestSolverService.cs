@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	                            {
 	                                //rollback this week 
 	                                _shiftNudgeManager.RollbackLastScheduledWeek(rollbackService, resourceCalculateDelayer);
-                                    _deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, possiblePositionsToFix.First().Key, rollbackService);
+                                    _deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, possiblePositionsToFix.First().Key, rollbackService,selectedPeriod);
 	                            }
                                 break;
 	                        }
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	                    }
 	                    if (!success  && fisrtDayOfElement != DateOnly.MinValue)
 	                    {
-                            _deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, fisrtDayOfElement, rollbackService);
+								  _deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, fisrtDayOfElement, rollbackService, selectedPeriod);
 	                    }
 	                }
 	            }
