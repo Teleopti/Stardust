@@ -26,6 +26,7 @@ define(
     		}
     	};
 	    
+
     	ko.bindingHandlers.timepicker = {
     		init: function (element, valueAccessor, allBindingsAccessor) {
     			var options = allBindingsAccessor().timepickerOptions || {};
