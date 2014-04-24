@@ -2012,7 +2012,7 @@
     <Content Include="FeatureFlags\released.toggles.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="FeatureFlags\vnext.toggles.txt">
+    <Content Include="FeatureFlags\RC.toggles.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
