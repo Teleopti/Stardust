@@ -46,3 +46,9 @@ Scenario: Navigate to overview with same date
 	When I choose to go to overview
 	Then I should end up in my report for '2013-10-04'
 
+Scenario: Show the detailed adherence report in mobile view
+	Given I am an agent
+	And I have adherence report data for mobile view for '2013-10-02'
+	When I view my adherence report for '2013-10-02'
+	Then I should see the detailed adherence report for '2013-10-02'
+
