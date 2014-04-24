@@ -43,9 +43,13 @@
 		self.intervalMinutes = ko.computed(function() {
 			return 1440 / self.intervalsPerDay();
 		});
+		self.intervalsPerHour = ko.computed(function () {
+			return self.intervalsPerDay()/24;
+		});
 
 		self.timeLines = ko.computed(function() {
 			var times = [];
+			var intervals = self.intervalAdherence();
 			if (self.startInterval() && self.lastInterval()) {
 				var start = self.startInterval().IntervalId;
 				var time = start;
@@ -54,9 +58,10 @@
 					end += self.intervalsPerDay();
 				while (time < end + 1) {
 					times.push({
-						'Time': moment().startOf('day').add('minutes', time * self.intervalMinutes()).format("HH:mm")
+						'Time': moment().startOf('day').add('minutes', time * self.intervalMinutes()).format("HH:mm"),
+						'Position': intervalLeftPos(time)
 					});
-					time = time + 4;
+					time = time + self.intervalsPerHour();
 				}
 			}
 			return times;
@@ -67,7 +72,7 @@
 				intervalId = intervalId + self.intervalsPerDay() -1;
 			}
 			var number = intervalId - self.startInterval().IntervalId;
-			return (number * 10) + 'px';
+			return (number * 15) + 'px';
 		};
 
 		self.schedules = ko.computed(function () {
@@ -81,7 +86,7 @@
 					end += self.intervalsPerDay();
 				while (time < end + 1) {
 					schedules.push({
-						'Color': intervals[time - start] ? intervals[time - start].Color : "#FFFFFF",
+						'Color': intervals[time - start] ? intervals[time - start].Color : "",
 						'Position': intervals[time - start] ? intervalLeftPos(intervals[time - start].IntervalId) : '0px'
 					});
 					

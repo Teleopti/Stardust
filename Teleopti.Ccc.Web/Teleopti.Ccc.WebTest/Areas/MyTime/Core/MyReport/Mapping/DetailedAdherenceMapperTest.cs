@@ -64,12 +64,37 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 			{
 				new DetailedAdherenceForDayResult
 				{
-					IntervalId = 3
+					IntervalId = 3,
+					IntervalsPerDay = 96
 				}
 			};
 			var viewModel = _target.Map(dataModel);
 
-			viewModel.Intervals.First().IntervalId.Should().Be.EqualTo(dataModel.First().IntervalId);
+			viewModel.Intervals.First().IntervalId.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldMapEmptyIntervalId()
+		{
+			var dataModel = new[]
+			{
+				new DetailedAdherenceForDayResult
+				{
+					IntervalId = 3,
+					IntervalsPerDay = 96
+				},
+
+				new DetailedAdherenceForDayResult
+				{
+					IntervalId = 26,
+					IntervalsPerDay = 96
+				}
+			};
+			var viewModel = _target.Map(dataModel);
+
+			viewModel.Intervals.First().IntervalId.Should().Be.EqualTo(0);
+			viewModel.Intervals.Last().IntervalId.Should().Be.EqualTo(28);
+			viewModel.Intervals.Count.Should().Be.EqualTo(4);
 		}
 
 		[Test]
@@ -79,7 +104,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 			{
 				new DetailedAdherenceForDayResult
 				{
-					IntervalCounter = 1
+					IntervalCounter = 1,
+					IntervalsPerDay = 96
 				}
 			};
 			var viewModel = _target.Map(dataModel);
@@ -94,7 +120,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 			{
 				new DetailedAdherenceForDayResult
 				{
-					Deviation = 4
+					Deviation = 4,
+					IntervalsPerDay = 96
 				}
 			};
 			var viewModel = _target.Map(dataModel);
@@ -109,7 +136,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 			{
 				new DetailedAdherenceForDayResult
 				{
-					Adherence = 0.6
+					Adherence = 0.6,
+					IntervalsPerDay = 96
 				}
 			};
 			var viewModel = _target.Map(dataModel);
@@ -124,7 +152,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 			{
 				new DetailedAdherenceForDayResult
 				{
-					DisplayName = "test"
+					DisplayName = "test",
+					IntervalsPerDay = 96
 				}
 			};
 			var viewModel = _target.Map(dataModel);
@@ -139,7 +168,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 			{
 				new DetailedAdherenceForDayResult
 				{
-					DisplayColor = Color.ForestGreen
+					DisplayColor = Color.ForestGreen,
+					IntervalsPerDay = 96
 				}
 			};
 			var viewModel = _target.Map(dataModel);

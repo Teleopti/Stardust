@@ -62,7 +62,7 @@ table td.right-align-cell
 		{
 			.schedule-interval
 			{
-				width: 10px;
+				width: 15px;
 				height: 20px;
 				position: absolute;
 			}
@@ -124,11 +124,6 @@ table td.right-align-cell
 		height: 12px;
 		z-index: 111;
 	 }
-			.time-line 
-	{
-		left: 121px; /* 105 + 8 + 8    first column with paddings */
-		/*width: 100%;*/
-	}
 
 	.time-line,
 	.time-line div
@@ -137,7 +132,9 @@ table td.right-align-cell
 		z-index: -10;
 		margin-top:5px;
 	}
-
+	.no-padding {
+		padding: 0;
+	}
 	.time-line .ruler {
 		height: 30px;
 		width: 1px;
