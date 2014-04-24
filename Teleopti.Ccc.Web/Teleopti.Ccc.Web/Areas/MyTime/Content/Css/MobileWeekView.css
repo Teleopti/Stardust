@@ -1,4 +1,4 @@
-﻿.table-wrapper {
+﻿.weekview-mobile .table-wrapper {
   display: table;
   vertical-align: middle;
   text-align: center;
@@ -6,7 +6,7 @@
   height: 100%;
 }
 
-.table-cell-wrapper {
+.weekview-mobile .table-cell-wrapper {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
@@ -14,12 +14,12 @@
   height: 100%;  
 }
 
-.week-dayoff {
+.weekview-mobile .week-dayoff {
     background-color: beige;
     background-image: url(../Images/stripe.png);
 }
 
-@media (min-width: 768px) {
+/*@media (min-width: 768px) {
 	.week-overview {
 		min-height: 20px;
 		padding: 0px;
@@ -116,5 +116,5 @@
 		font-size: 85%; display: table-cell; vertical-align: middle; 
 	}
 
-}
+}*/
 
