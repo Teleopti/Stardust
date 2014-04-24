@@ -10,7 +10,7 @@
 			<div class="weekday" data-bind="text: weekDayHeaderTitle"></div>
 			<div class="date" data-bind="text: fixedDate"></div>
 		</div>
-		<div class="summary shift" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: { 'dayoff': isDayoff }">
+		<div class="summary" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: { 'dayoff': isDayoff, 'shift': hasShift }">
 			<div>
 				<strong data-bind="text: summaryName"></strong>
 			</div>

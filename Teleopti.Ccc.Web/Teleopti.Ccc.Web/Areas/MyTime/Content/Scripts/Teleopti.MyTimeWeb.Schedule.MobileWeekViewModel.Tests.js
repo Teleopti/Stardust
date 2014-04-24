@@ -46,19 +46,30 @@ $(document).ready(function () {
     
 
     test("should read dayoff data", function () {
-
         var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
 
         vm.readData({
             Days: [{
             	Summary: {
-            		Title: "Dayoff",
             		StyleClassName: "dayoff striped",
             	}
             }]
         });
 
-        equal(vm.dayViewModels()[0].summaryStyleClassName(), "dayoff striped");
+        equal(vm.dayViewModels()[0].isDayoff(), true);
+    });
+
+    test("should indicate has shift", function () {
+        var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+
+        vm.readData({
+            Days: [{
+            	Periods: [{
+            	}]
+            }]
+        });
+
+        equal(vm.dayViewModels()[0].hasShift(), true);
     });
 
 	test("should read week day header titles", function() {
