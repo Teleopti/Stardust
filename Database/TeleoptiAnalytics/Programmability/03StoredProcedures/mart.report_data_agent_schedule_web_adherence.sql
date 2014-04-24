@@ -87,8 +87,8 @@ adherence_tot TotalAdherence,
 CAST(ROUND(deviation_m, 0) as int) AS Deviation, 
 CASE (activity_id + absence_id)
 	WHEN -2 THEN 16777215
-	ELSE display_color A
-END S DisplayColor,
+	ELSE display_color
+END AS DisplayColor,
 activity_absence_name AS DisplayName, 
 date_interval_counter AS IntervalCounter
 from #webresult
