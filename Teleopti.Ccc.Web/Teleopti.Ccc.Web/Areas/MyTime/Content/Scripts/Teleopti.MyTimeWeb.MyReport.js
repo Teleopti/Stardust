@@ -59,8 +59,6 @@
 		});
 	}
 
-	
-
 	function setWeekStart() {
 		$.ajax({
 			url: 'UserInfo/Culture',

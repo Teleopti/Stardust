@@ -38,6 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[EnsureInPortal]
 		public ViewResult Adherence()
 		{
+			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
+			ViewBag.DatePickerFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper();
 			return View("AdherencePartial");
 		}
 

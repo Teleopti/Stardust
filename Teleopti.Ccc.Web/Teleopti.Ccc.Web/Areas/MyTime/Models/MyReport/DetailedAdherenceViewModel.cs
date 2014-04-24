@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport
 		public string TotalAdherence { get; set; }
 		public int IntervalsPerDay { get; set; }
 		public ICollection<AdherenceIntervalViewModel> Intervals { get; set; }
+		public bool DataAvailable { get; set; }
 	}
 
 	public class AdherenceIntervalViewModel

@@ -1,13 +1,14 @@
 ﻿Teleopti.MyTimeWeb.MyAdherence = (function () {
 	var vm;
 
-	function MyAdherenceViewModel(date) {
+	function MyAdherenceViewModel(loadDataMethod, date) {
 		var self = this;
 
 		self.selectedDateInternal = ko.observable(date);
 		self.datePickerFormat = ko.observable('YYYYMMDD');
-		//var format = $('#my-report-datepicker-format').val().toUpperCase();
-		//self.datePickerFormat(format);
+		var format = $('#my-report-datepicker-format').val().toUpperCase();
+		self.datePickerFormat(format);
+		self.dataAvailable = ko.observable();
 		self.goToAnotherDay = function (toDate) {
 			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Adherence" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD')));
 		};
@@ -33,6 +34,90 @@
 		self.goToOverview = function () {
 			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD')));
 		};
+
+		self.totalAdherence = ko.observable();
+		self.intervalAdherence = ko.observableArray();
+		self.intervalsPerDay = ko.observable();
+		self.startInterval = ko.observable();
+		self.lastInterval = ko.observable();
+		self.intervalMinutes = ko.computed(function() {
+			return 1440 / self.intervalsPerDay();
+		});
+
+		self.timeLines = ko.computed(function() {
+			var times = [];
+			if (self.startInterval() && self.lastInterval()) {
+				var start = self.startInterval().IntervalId;
+				var time = start;
+				var end = self.lastInterval().IntervalId;
+				if (end < start)
+					end += self.intervalsPerDay();
+				while (time < end + 1) {
+					times.push({
+						'Time': moment().startOf('day').add('minutes', time * self.intervalMinutes()).format("HH:mm")
+					});
+					time = time + 4;
+				}
+			}
+			return times;
+		});
+
+		function intervalLeftPos(intervalId) {
+			if (intervalId < self.startInterval().IntervalId) {
+				intervalId = intervalId + self.intervalsPerDay() -1;
+			}
+			var number = intervalId - self.startInterval().IntervalId;
+			return (number * 10) + 'px';
+		};
+
+		self.schedules = ko.computed(function () {
+			var schedules = [];
+			var intervals = self.intervalAdherence();
+			if (self.startInterval() && self.lastInterval()) {
+				var start = self.startInterval().IntervalId;
+				var time = start;
+				var end = self.lastInterval().IntervalId;
+				if (end < start)
+					end += self.intervalsPerDay();
+				while (time < end + 1) {
+					schedules.push({
+						'Color': intervals[time - start] ? intervals[time - start].Color : "#FFFFFF",
+						'Position': intervals[time - start] ? intervalLeftPos(intervals[time - start].IntervalId) : '0px'
+					});
+					
+					time = time + 1;
+				}
+			}
+			return schedules;
+		});
+
+		loadDataMethod(date);
+	}
+
+	function fillData(date) {
+		$.ajax({
+			url: 'MyTime/MyReport/AdherenceDetails',
+			dataType: 'json',
+			data: { date: date.clone().utc().toDate().toJSON() },
+			success: function (data) {
+				vm.selectedDateInternal(date);
+				vm.totalAdherence(data.TotalAdherence);
+				vm.intervalsPerDay(data.IntervalsPerDay);
+				if (data.Intervals && data.Intervals.length !== 0) {
+					vm.startInterval(data.Intervals[0]);
+					vm.lastInterval(data.Intervals[data.Intervals.length - 1]);
+					vm.intervalAdherence(data.Intervals);
+				}
+				
+				//vm.answeredCalls = data.AnsweredCalls;
+				//vm.averageAfterCallWork = data.AverageAfterCallWork;
+				//vm.averageHandlingTime = data.AverageHandlingTime;
+				//vm.averageTalkTime = data.AverageTalkTime;
+				//vm.readyTimePerScheduledReadyTime = data.ReadyTimePerScheduledReadyTime;
+				vm.dataAvailable(data.DataAvailable);
+			}
+
+		});
 	}
 
 	function setWeekStart() {
@@ -48,7 +133,7 @@
 	};
 
 	function bindData() {
-		vm = new MyAdherenceViewModel(getDate());
+		vm = new MyAdherenceViewModel(fillData, getDate());
 		var elementToBind = $('.myadherence')[0];
 		ko.applyBindings(vm, elementToBind);
 	}
@@ -78,6 +163,10 @@
 
 			readyForInteractionCallback();
 			completelyLoadedCallback();
+		},
+
+		ForDay: function (date) {
+			fillData(date);
 		}
 	};
 })(jQuery);

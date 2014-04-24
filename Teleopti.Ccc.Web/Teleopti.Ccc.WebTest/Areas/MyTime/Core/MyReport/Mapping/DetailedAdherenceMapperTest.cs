@@ -28,6 +28,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 		}
 
 		[Test]
+		public void ShouldMapDataAvailable()
+		{
+			var dataModel = new DetailedAdherenceForDayResult[] {};
+
+			var viewModel = _target.Map(dataModel);
+
+			viewModel.DataAvailable.Should().Be.False();
+		}
+
+		[Test]
 		public void ShouldMapShiftDateAndTotalAdherenceAndIntervalsPerDay()
 		{
 			var dataModel = new[]
@@ -44,6 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 			viewModel.ShiftDate.Should().Be.EqualTo(dataModel.First().ShiftDate.ToShortDateString(_culture));
 			viewModel.TotalAdherence.Should().Be.EqualTo(dataModel.First().TotalAdherence.ValueAsPercent().ToString(_culture));
 			viewModel.IntervalsPerDay.Should().Be.EqualTo(dataModel.First().IntervalsPerDay);
+			viewModel.DataAvailable.Should().Be.True();
 		}
 
 		[Test]

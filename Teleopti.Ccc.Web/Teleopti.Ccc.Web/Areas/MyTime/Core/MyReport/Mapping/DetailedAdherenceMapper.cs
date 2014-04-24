@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 
 			if (dataModels == null || dataModels.IsEmpty())
 			{
-				return null;
+				return new DetailedAdherenceViewModel {DataAvailable = false};
 			}
 
 			return new DetailedAdherenceViewModel
@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 				ShiftDate = dataModels.First().ShiftDate.ToShortDateString(culture),
 				TotalAdherence = dataModels.First().TotalAdherence.ValueAsPercent().ToString(culture),
 				IntervalsPerDay = dataModels.First().IntervalsPerDay,
+				DataAvailable = true,
 				Intervals = dataModels.Select(model => new AdherenceIntervalViewModel
 				{
 					IntervalId = model.IntervalId,
