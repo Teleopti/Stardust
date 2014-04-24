@@ -2,11 +2,12 @@
 using System.IO;
 using System.Net;
 using System.Web;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	//integration tests from Toggle.feature scenario
-	public class ToggleQuerier 
+	public class ToggleQuerier : IToggleManager
 	{
 		private readonly string _url;
 
@@ -15,11 +16,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			_url = url;
 		}
 
-		public bool IsEnabled(string flag)
+		public bool IsEnabled(Toggles toggle)
 		{
 			var uriBuilder = new UriBuilder(_url);
 			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-			query["toggle"] = flag;
+			query["toggle"] = toggle.ToString();
 			uriBuilder.Query = query.ToString();
 			var request = WebRequest.Create(uriBuilder.ToString());
 			using (var reader = new StreamReader(request.GetResponse().GetResponseStream()))

@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 		public void WhenIQueryOutofprocessToggleServiceFor(string flag)
 		{
 			var toggleQuerier = new ToggleQuerier(new Uri(TestSiteConfigurationSetup.Url, "ToggleHandler/IsEnabled").ToString());
-			reply = toggleQuerier.IsEnabled(flag);
+			reply = toggleQuerier.IsEnabled((Toggles)Enum.Parse(typeof(Toggles), flag));
 		}
 
 		[Then(@"I should get '(.*)' back")]
