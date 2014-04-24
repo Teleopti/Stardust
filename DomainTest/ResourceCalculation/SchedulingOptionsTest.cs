@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 
             _target.BlockFinderTypeForAdvanceScheduling  = BlockFinderType.BetweenDayOff;
+	        _target.UseTeamBlockPerOption = true;
             Assert.AreEqual(BlockFinderType.BetweenDayOff, _target.BlockFinderTypeForAdvanceScheduling);
 
             _target.UsePreferences = true;

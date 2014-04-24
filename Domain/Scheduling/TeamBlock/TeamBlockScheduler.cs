@@ -107,6 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					return false;
 
 				if (shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Left && dayIndex == lastIndex)
+					shiftNudgeRestriction = shiftNudgeDirective.EffectiveRestriction;
 				
 				_singleDayScheduler.DayScheduled += OnDayScheduled;
 				bool successful = _singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day,
