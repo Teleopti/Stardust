@@ -978,7 +978,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\noty\layouts\topCenter.js" />
     <Content Include="Areas\MyTime\Content\Scripts\noty\layouts\topLeft.js" />
     <Content Include="Areas\MyTime\Content\Scripts\noty\layouts\topRight.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\noty\promise.js" />
     <Content Include="Areas\MyTime\Content\Scripts\noty\themes\default.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Asm.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Notifier.js" />
