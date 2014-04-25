@@ -5,17 +5,17 @@
 
 <div class="weekview-mobile">
 	<!-- ko foreach: dayViewModels-->
-	<div class="day" data-bind="attr: { 'data-mytime-date': fixedDate }">
-		<div class="header">
+	<div class="day panel panel-default" data-bind="attr: { 'data-mytime-date': fixedDate }">
+		<div class="header panel-heading">
 			<span class="weekday" data-bind="text: weekDayHeaderTitle"></span>
 			<span class="date" data-bind="text: fixedDate"></span>
 		</div>
-		<div class="summary" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: { 'dayoff': isDayoff, 'shift': hasShift }">
+		<div class="panel-body" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: { 'dayoff': isDayoff, 'shift': hasShift }">
 			<div>
 				<strong data-bind="text: summaryName"></strong>
 			</div>
 			<div data-bind="text: summaryTimeSpan"></div>
 		</div>
 	</div>
-	<!-- /ko -->
+<!-- /ko -->
 </div>

@@ -1,20 +1,5 @@
-﻿.weekview-mobile .dayoff {
-	background-color: beige;
-	background-image: url(../Images/stripe.png);
-}
-
-.weekview-mobile .shift {
-	padding: 0;
-}
-
-.weekview-mobile .day {
-	border: 1px solid #dfdfdf;
-	border-radius: 4px;
-	margin-bottom: 10px;
-}
-
-.weekview-mobile .header {
-	border-bottom: 1px solid #dfdfdf;
+﻿.weekview-mobile .header {
+	padding: 2px;
 }
 
 .weekview-mobile .weekday {
@@ -30,8 +15,16 @@
 	font-size: 85%;
 }
 
-.weekview-mobile .summary {
-	height: 40px;
-	text-align: center;
+.weekview-mobile .dayoff {
+	background-color: beige;
+	background-image: url(../Images/stripe.png);
 }
 
+.weekview-mobile .shift {
+}
+
+.weekview-mobile .day .panel-body {
+	height: 40px;
+	padding: 0;
+	text-align: center;
+}
