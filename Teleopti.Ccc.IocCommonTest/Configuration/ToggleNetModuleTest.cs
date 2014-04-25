@@ -103,5 +103,17 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				toggleChecker.Should().Be.OfType<ToggleQuerier>();
 			}
 		}
+
+		[Test]
+		public void ShouldResolveTogglesActive()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule(new ToggleNetModule(" "));
+			using (var container = containerBuilder.Build())
+			{
+				container.Resolve<ITogglesActive>()
+					.Should().Not.Be.Null();
+			}
+		}
 	}
 }
