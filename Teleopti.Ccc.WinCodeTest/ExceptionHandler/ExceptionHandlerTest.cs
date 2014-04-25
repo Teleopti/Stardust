@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
             _view = _mocks.StrictMock<IExceptionHandlerView>();
             _mapi = _mocks.StrictMock<IMapiMailMessage>();
             _fileWriter = _mocks.StrictMock<IWriteToFile>(); 
-            _model = new ExceptionHandlerModel(_exception, "hej", _mapi, _fileWriter);
+            _model = new ExceptionHandlerModel(_exception, "hej", _mapi, _fileWriter,null);
             _target = new ExceptionHandlerPresenter(_view, _model);
         }
 
@@ -134,9 +137,69 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
         public void ShouldGetAllExceptionsIfSqlExceptionException()
         {
             var createSqlException = SqlExceptionConstructor.CreateSqlException("Timeout", 123);
-            var model = new ExceptionHandlerModel(createSqlException, "", _mapi, _fileWriter);
+            var model = new ExceptionHandlerModel(createSqlException, "", _mapi, _fileWriter,null);
             var expectedString = model.CompleteStackAndAssemblyText();
-            expectedString.Should().StartWith("System.Data.SqlClient.SqlError: Timeout\nSystem.Data.SqlClient.SqlError: Timeout2");
+            expectedString.Should().StartWith("System.Data.SqlClient.SqlError: Timeout\nSystem.Data.SqlClient.SqlError: Timeout");
         }
+
+		[Test]
+		public void CompleteStackAndAssemblyText_Always_ShouldIncludeEnabledToggleFeatures()
+		{
+			var features = new Dictionary<Toggles, bool> {{Toggles.EnabledFeature, true}};
+			var allToggleFeatures = new SomethingFromRogerStub(features);
+
+			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException("Any Exception will do", 123), "", _mapi, _fileWriter, allToggleFeatures);
+			var expectedString = model.CompleteStackAndAssemblyText();
+
+			expectedString.Should().Contain(features[Toggles.EnabledFeature].ToString());
+			expectedString.Should().Contain(Toggles.EnabledFeature.ToString());
+		}
+
+		[Test]
+		public void CompleteStackAndAssemblyText_Always_ShouldIncludeDisabledToggleFeatures()
+		{
+			var features = new Dictionary<Toggles, bool> {{Toggles.EnabledFeature, false}};
+			var allToggleFeatures = new SomethingFromRogerStub(features);
+
+			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException("Any Exception will do", 123), "", _mapi, _fileWriter, allToggleFeatures);
+			var expectedString = model.CompleteStackAndAssemblyText();
+
+			expectedString.Should().Contain(features[Toggles.EnabledFeature].ToString());
+			expectedString.Should().Contain(Toggles.EnabledFeature.ToString());
+		}
+
+	    [Test]
+	    public void CompleteStackAndAssemblyText_WhenUnableToReadDataFromToggleService_ShouldShowExceptionAndInfoAboutUnknownToggles()
+	    {
+		    const string exceptionInfo = "System.Data.SqlClient.SqlError";
+			var allToggleFeatures = new SomethingFromRogerStubThatThrowsWhenTryingToReadFeatures();
+
+			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException(exceptionInfo, 123), "", _mapi, _fileWriter, allToggleFeatures);
+			var expectedString = model.CompleteStackAndAssemblyText();
+
+			expectedString.Should().StartWith(exceptionInfo);
+		    expectedString.Should().Contain(ExceptionHandlerModel.ToggleFeaturesUnknown);
+
+	    }
+
+		
+		public class SomethingFromRogerStub: ISomethingFromRoger
+		{
+			public SomethingFromRogerStub(IDictionary<Toggles, bool> features)
+			{
+				Features = features;
+			}
+
+			public IDictionary<Toggles, bool> Features { get; private set; }
+		}
+
+		public class SomethingFromRogerStubThatThrowsWhenTryingToReadFeatures: ISomethingFromRoger
+		{
+			public IDictionary<Toggles, bool> Features
+			{
+				get { throw  new Exception("Unable to get the features, probably because the network is down");}
+			}
+		}
     }
+    
 }
