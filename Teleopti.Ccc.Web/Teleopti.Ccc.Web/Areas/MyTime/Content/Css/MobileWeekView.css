@@ -1,7 +1,6 @@
 ﻿.weekview-mobile .dayoff {
 	background-color: beige;
 	background-image: url(../Images/stripe.png);
-	height: 40px;
 }
 
 .weekview-mobile .shift {
@@ -10,23 +9,18 @@
 
 .weekview-mobile .day {
 	border: 1px solid #dfdfdf;
+	border-radius: 4px;
 	margin-bottom: 10px;
-	color: #333;
 }
 
 .weekview-mobile .header {
-	width: 100%;
-	display: table;
 	border-bottom: 1px solid #dfdfdf;
 }
 
 .weekview-mobile .weekday {
-	float: left;
 	padding-left: 5px;
 	text-transform: uppercase;
 	font-size: 85%;
-	display: table-cell;
-	vertical-align: middle;
 }
 
 .weekview-mobile .date {
@@ -34,13 +28,10 @@
 	text-transform: uppercase;
 	padding-right: 5px;
 	font-size: 85%;
-	display: table-cell;
-	vertical-align: middle;
 }
 
 .weekview-mobile .summary {
 	height: 40px;
-	vertical-align: middle;
 	text-align: center;
 }
 
