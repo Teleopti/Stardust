@@ -36,71 +36,64 @@
 		</div>
 	</div>
 
-	<div class="container fixed-non-responsive">
-		<div data-bind="ifnot: dataAvailable">
-			<div id="friendly-message" class="alert alert-info alert-myreport">
-				@Resources.NoDataAvailable
-			</div>
+	<div data-bind="ifnot: dataAvailable">
+		<div id="friendly-message" class="alert alert-info alert-myreport">
+			@Resources.NoDataAvailable
 		</div>
-		<div class="row">
-			<div class="container fixed-non-responsive" data-bind="if: dataAvailable">
-				<div class="row">
-					<div class="col-md-4">
-						<div class="well well-sm dashboard dashboard-blue">
-							<div class="row">
-								<div class="col-xs-3">
-									<div class="glyphicon glyphicon-stats"></div>
-								</div>
-								<div class="text-center col-xs-7">
-									<h1 data-bind="text: totalAdherence() + '%'"></h1>
-									<p class="adherenceValue">@Resources.Adherence</p>
-								</div>
-							</div>
+	</div>
+	<div data-bind="if: dataAvailable" class="clearfix">
+		<div>
+			<div class="col-md-4">
+				<div class="well well-sm dashboard dashboard-blue">
+					<div class="row">
+						<div class="text-center col-xs-12">
+							<h1 data-bind="text: totalAdherence() + '%'"></h1>
+							<p class="adherenceValue">@Resources.Adherence</p>
 						</div>
 					</div>
-					<div class="col-md-8 hidden-xs" style="overflow-x: auto;">
-						<div class="col-xs-12 no-padding" data-bind="foreach: schedules">
-							<div class="vertical-progress absolute" data-bind="style: { left: Position }">
-								<div class="vertical-progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-bind="style: { height: BarLength, marginTop: Margin }"></div>
-							</div>
-						</div>
-						<div class="col-xs-12 no-padding bar-chart" data-bind="foreach: schedules">
-							<div class="schedule-interval" data-bind="style: {backgroundColor: Color, left: Position}"></div>
-						</div>
+				</div>
+			</div>
+			<div class="col-md-8 hidden-xs" style="overflow-x: auto;">
+				<div class="col-xs-12 no-padding" data-bind="foreach: schedules">
+					<div class="vertical-progress absolute" data-bind="style: { left: Position }">
+						<div class="vertical-progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-bind="style: { height: BarLength, marginTop: Margin }"></div>
+					</div>
+				</div>
+				<div class="col-xs-12 no-padding bar-chart" data-bind="foreach: schedules">
+					<div class="schedule-interval" data-bind="style: {backgroundColor: Color, left: Position}"></div>
+				</div>
 
-						<div class="col-xs-12 no-padding time-line-margin time-line">
-							<div class="absolute">
-								<div data-bind="foreach: timeLines">
-									<div class="absolute" data-bind="style: { left: Position }">
-										<div class="ruler"></div>
-										<div class="label label-primary" style="margin-left: -13px" data-bind="text: Time" ></div>
-									</div>
-								</div>
+				<div class="col-xs-12 no-padding time-line-margin time-line">
+					<div class="absolute">
+						<div data-bind="foreach: timeLines">
+							<div class="absolute" data-bind="style: { left: Position }">
+								<div class="ruler"></div>
+								<div class="label label-primary" style="margin-left: -13px" data-bind="text: Time" ></div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="hidden-sm hidden-md hidden-lg">
-					<div class="no-padding time-line-margin time-line-vertical floatleft">
-						<div class="relative">
-							<div data-bind="foreach: timeLines" style="margin-top: -59px">
-								<div class="" style="margin-top: 59px">
-									<div class="ruler"></div>
-									<div class="label label-primary absolute" style="margin-top: -8px; z-index: 50" data-bind="text: Time" ></div>
-								</div>
-							</div>
+			</div>
+		</div>
+		<div class="hidden-sm hidden-md hidden-lg">
+			<div class="no-padding time-line-margin time-line-vertical floatleft">
+				<div class="relative">
+					<div data-bind="foreach: timeLines" style="margin-top: -59px">
+						<div class="" style="margin-top: 59px">
+							<div class="ruler"></div>
+							<div class="label label-primary absolute" style="margin-top: -8px; z-index: 50" data-bind="text: Time" ></div>
 						</div>
 					</div>
+				</div>
+			</div>
 						
-					<div class="no-padding floatleft schedule-margin" data-bind="foreach: schedules">
-						<div class="schedule-interval absolute" data-bind="style: { backgroundColor: Color, marginTop: Position }"></div>
-					</div>
+			<div class="no-padding floatleft schedule-margin" data-bind="foreach: schedules">
+				<div class="schedule-interval absolute" data-bind="style: { backgroundColor: Color, marginTop: Position }"></div>
+			</div>
 
-					<div class="no-padding floatleft relative bar-chart" data-bind="foreach: schedules">
-						<div class="progress absolute" data-bind="style: { top: Position }">
-							<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-bind="style: { width: BarLength, marginRight: Margin }"></div>
-						</div>
-					</div>
+			<div class="no-padding floatleft relative bar-chart" data-bind="foreach: schedules">
+				<div class="progress absolute" data-bind="style: { top: Position }">
+					<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-bind="style: { width: BarLength, marginRight: Margin }"></div>
 				</div>
 			</div>
 		</div>

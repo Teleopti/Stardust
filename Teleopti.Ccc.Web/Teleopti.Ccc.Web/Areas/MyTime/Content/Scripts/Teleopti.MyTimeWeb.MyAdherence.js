@@ -165,10 +165,11 @@
 	return {
 		Init: function () {
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('MyReport/Adherence',
-									Teleopti.MyTimeWeb.MyAdherence.MyAdherencePartialInit);
+									Teleopti.MyTimeWeb.MyAdherence.MyAdherencePartialInit, Teleopti.MyTimeWeb.MyAdherence.MyAdherencePartialDispose);
 		},
 
 		MyAdherencePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
+			$('#page').removeClass('fixed-non-responsive');
 			if (!$('.myadherence').length) {
 				return;
 			}
@@ -178,6 +179,10 @@
 
 			readyForInteractionCallback();
 			completelyLoadedCallback();
+		},
+
+		MyAdherencePartialDispose: function () {
+			$('#page').addClass('fixed-non-responsive');
 		},
 
 		ForDay: function (date) {

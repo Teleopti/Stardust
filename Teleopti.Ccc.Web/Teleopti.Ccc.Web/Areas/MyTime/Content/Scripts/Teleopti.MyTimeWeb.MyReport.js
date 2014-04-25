@@ -92,9 +92,10 @@
 	return {
 		Init: function () {
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('MyReport/Index',
-									Teleopti.MyTimeWeb.MyReport.MyReportPartialInit);
+									Teleopti.MyTimeWeb.MyReport.MyReportPartialInit, Teleopti.MyTimeWeb.MyReport.MyReportPartialDispose);
 		},
 		MyReportPartialInit: function () {
+			$('#page').removeClass('fixed-non-responsive');
 			if (!$('.myreport-daily-metrics').length) {
 				return;
 			}
@@ -102,7 +103,9 @@
 			bindData();
 			setWeekStart();
 		},
-		
+		MyReportPartialDispose: function () {
+			$('#page').addClass('fixed-non-responsive');
+		},
 		ForDay: function(date) {
 			fillData(date);
 		}		
