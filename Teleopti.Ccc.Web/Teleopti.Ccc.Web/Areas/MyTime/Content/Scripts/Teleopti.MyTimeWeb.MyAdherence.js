@@ -123,12 +123,6 @@
 					vm.lastInterval(data.Intervals[data.Intervals.length - 1]);
 					vm.intervalAdherence(data.Intervals);
 				}
-				
-				//vm.answeredCalls = data.AnsweredCalls;
-				//vm.averageAfterCallWork = data.AverageAfterCallWork;
-				//vm.averageHandlingTime = data.AverageHandlingTime;
-				//vm.averageTalkTime = data.AverageTalkTime;
-				//vm.readyTimePerScheduledReadyTime = data.ReadyTimePerScheduledReadyTime;
 				vm.dataAvailable(data.DataAvailable);
 			}
 
