@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[HttpGet]
 		[UnitOfWorkAction]
-		public JsonResult OnDates(DateOnly date)
+		public JsonResult Overview(DateOnly date)
 		{
 			return Json(_myReportViewModelFactory.CreateDailyMetricsViewModel(date), JsonRequestBehavior.AllowGet);
 		}
@@ -38,7 +38,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[EnsureInPortal]
 		public ViewResult Adherence()
 		{
+			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
+			ViewBag.DatePickerFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper();
 			return View("AdherencePartial");
+		}
+
+		[HttpGet]
+		[UnitOfWorkAction]
+		public JsonResult AdherenceDetails(DateOnly date)
+		{
+			return Json(_myReportViewModelFactory.CreateDetailedAherenceViewModel(date), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

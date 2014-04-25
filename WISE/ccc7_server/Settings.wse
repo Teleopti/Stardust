@@ -531,6 +531,17 @@ item: Insert Line into Text File
   New Text=$(DATASOURCE_NAME)|Teleopti CCC
   Line Number=0
 end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(TOGGLE_FILE)|bin/FeatureFlags/released.toggles.txt
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(TOGGLE_URL)|%DNS_ALIAS_TMP%TeleoptiCCC/Web/ToggleHandler/IsEnabled
+  Line Number=0
+end
+
 item: Remark
   Text===============================================
 end

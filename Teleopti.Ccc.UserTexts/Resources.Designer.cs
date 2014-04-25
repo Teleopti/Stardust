@@ -19280,6 +19280,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resolving weekly rest for {0} {1}.
+        /// </summary>
+        public static string ResolvingWeeklyRestFor {
+            get {
+                return ResourceManager.GetString("ResolvingWeeklyRestFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resource calculate every:.
         /// </summary>
         public static string ResourceCalculateEveryColon {

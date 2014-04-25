@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
     public interface IDeleteScheduleDayFromUnsolvedPersonWeek
     {
-        void DeleteAppropiateScheduleDay(IScheduleRange personScheduleRange, DateOnly dayOff,
-            ISchedulePartModifyAndRollbackService rollbackService);
+        void DeleteAppropiateScheduleDay(IScheduleRange personScheduleRange, DateOnly dayOff, ISchedulePartModifyAndRollbackService rollbackService, DateOnlyPeriod selectedPeriod);
     }
     public class DeleteScheduleDayFromUnsolvedPersonWeek : IDeleteScheduleDayFromUnsolvedPersonWeek
     {
@@ -22,10 +21,11 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
             _deleteSchedulePartService = deleteSchedulePartService;
         }
 
-        public void DeleteAppropiateScheduleDay(IScheduleRange personScheduleRange, DateOnly dayOff, ISchedulePartModifyAndRollbackService rollbackService)
+        public void DeleteAppropiateScheduleDay(IScheduleRange personScheduleRange, DateOnly dayOff, ISchedulePartModifyAndRollbackService rollbackService, DateOnlyPeriod selectedPeriod)
         {
             //lets pick the previous day as an experinment 
-            var scheduleDayToDelete = personScheduleRange.ScheduledDay(dayOff.AddDays(-1));
+	        if (!selectedPeriod.Contains(dayOff.AddDays(-1))) return;
+			  var scheduleDayToDelete = personScheduleRange.ScheduledDay(dayOff.AddDays(-1));
             var deleteOption = new DeleteOption { Default = true };
             using (var bgWorker = new BackgroundWorker())
             {

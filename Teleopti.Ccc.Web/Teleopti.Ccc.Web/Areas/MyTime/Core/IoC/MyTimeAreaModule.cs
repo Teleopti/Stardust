@@ -192,7 +192,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		private static void registerMyReportTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<DailyMetricsForDayQuery>().As<IDailyMetricsForDayQuery>();
+			builder.RegisterType<DetailedAdherenceForDayQuery>().As<IDetailedAdherenceForDayQuery>();
 			builder.RegisterType<DailyMetricsMapper>().As<IDailyMetricsMapper>();
+			builder.RegisterType<DetailedAdherenceMapper>().As<IDetailedAdherenceMapper>();
 			builder.RegisterType<MyReportViewModelFactory>().As<IMyReportViewModelFactory>();
 		}
 

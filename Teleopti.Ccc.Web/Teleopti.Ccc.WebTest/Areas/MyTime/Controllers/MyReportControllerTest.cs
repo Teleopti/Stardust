@@ -23,8 +23,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			viewModelFactory.Stub(x => x.CreateDailyMetricsViewModel(date)).Return(model);
 
-			var result = target.OnDates(date);
+			var result = target.Overview(date);
 				
+			result.Data.Should().Be.SameInstanceAs(model);
+		}
+
+		[Test]
+		public void ShouldReturnDetailedAdherence()
+		{
+			var viewModelFactory = MockRepository.GenerateMock<IMyReportViewModelFactory>();
+			var target = new MyReportController(viewModelFactory, null);
+			var date = DateOnly.Today;
+			var model = new DetailedAdherenceViewModel();
+			viewModelFactory.Stub(x => x.CreateDetailedAherenceViewModel(date)).Return(model);
+
+			var result = target.AdherenceDetails(date);
+
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 
@@ -42,4 +56,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			controller.Index().Should().Be.OfType<ViewResult>();
 		}
 	}
+
+	
 }

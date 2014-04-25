@@ -114,8 +114,14 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		        var viewAction = view + '/' + action;
 		        var hashInfo = _parseHash('#' + viewAction);
 		        if (viewAction == currentViewId) {
-			        var parsedDate = new Date(year, month - 1, day);
-			        Teleopti.MyTimeWeb.MyReport.ForDay(moment(parsedDate));
+		        	var parsedDate = new Date(year, month - 1, day);
+			        var actionUpperCase = action.toUpperCase();
+			        if (actionUpperCase === "INDEX") {
+		        		Teleopti.MyTimeWeb.MyReport.ForDay(moment(parsedDate));
+		        	}
+			        if (actionUpperCase === "ADHERENCE") {
+			        	Teleopti.MyTimeWeb.MyAdherence.ForDay(moment(parsedDate));
+					}
 			        return;
 		        }
 		        _invokeDisposeCallback(currentViewId);

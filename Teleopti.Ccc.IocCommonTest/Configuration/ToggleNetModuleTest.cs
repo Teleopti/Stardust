@@ -3,6 +3,7 @@ using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -14,6 +15,19 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule("ALL"));
+			using (var container = containerBuilder.Build())
+			{
+				var toggleChecker = container.Resolve<IToggleManager>();
+				toggleChecker.IsEnabled(Toggles.EnabledFeature)
+					.Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void DefinedShouldBeEnabledIfEndWithAll()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule(new ToggleNetModule(@"c:\blablablab\aLl  "));
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -63,6 +77,30 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			finally
 			{
 				File.Delete(tempFile);
+			}
+		}
+
+		[Test]
+		public void ShouldUseToggleQuerierIfStartsWithHttp()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule(new ToggleNetModule("http://tralala"));
+			using (var container = containerBuilder.Build())
+			{
+				var toggleChecker = container.Resolve<IToggleManager>();
+				toggleChecker.Should().Be.OfType<ToggleQuerier>();
+			}
+		}
+
+		[Test]
+		public void ShouldUseToggleQuerierIfStartsWithHttps()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule(new ToggleNetModule("https://hejsan"));
+			using (var container = containerBuilder.Build())
+			{
+				var toggleChecker = container.Resolve<IToggleManager>();
+				toggleChecker.Should().Be.OfType<ToggleQuerier>();
 			}
 		}
 	}

@@ -85,7 +85,10 @@ interval_id as IntervalId,
 adherence Adherence, 
 adherence_tot TotalAdherence, 
 CAST(ROUND(deviation_m, 0) as int) AS Deviation, 
-display_color AS DisplayColor, 
+CASE (activity_id + absence_id)
+	WHEN -2 THEN 16777215
+	ELSE display_color
+END AS DisplayColor,
 activity_absence_name AS DisplayName, 
 date_interval_counter AS IntervalCounter
 from #webresult

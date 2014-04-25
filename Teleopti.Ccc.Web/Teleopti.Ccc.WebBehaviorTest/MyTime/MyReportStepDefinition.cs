@@ -74,6 +74,58 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Analytics().Setup(new FactScheduleDeviation(theDay.DateId, theDay.DateId, intervalId, personId, 900, 60, 60, 60, true));
 		}
 
+		[Given(@"I have adherence report data for mobile view for '(.*)'")]
+		public void GivenIHaveAdherenceReportDataForMobileViewFor(DateTime date)
+		{
+			var timeZones = new UtcAndCetTimeZones();
+			var theDay = new SpecificDate { Date = new DateOnly(date) };
+			var intervals = new QuarterOfAnHourInterval();
+			var datasource = new ExistingDatasources(timeZones);
+
+			const int personId = 76;
+			const int acdLoginId = 123;
+			const int scenarioId = 12;
+
+			var agent = new Person(DataMaker.Me().Person, datasource, personId, new DateTime(2010, 1, 1),
+						 new DateTime(2059, 12, 31), 0, -2, 0, TestData.BusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
+			var scenario = Scenario.DefaultScenarioFor(scenarioId, TestData.BusinessUnit.Id.Value);
+
+			//common analytics data
+			DataMaker.Data().Analytics().Setup(new EternityAndNotDefinedDate());
+			DataMaker.Data().Analytics().Setup(timeZones);
+			DataMaker.Data().Analytics().Setup(theDay);
+			DataMaker.Data().Analytics().Setup(intervals);
+			DataMaker.Data().Analytics().Setup(datasource);
+			DataMaker.Data().Analytics().Setup(new FillBridgeTimeZoneFromData(theDay, intervals, timeZones, datasource));
+			DataMaker.Data().Analytics().Setup(agent);
+			DataMaker.Data().Analytics().Setup(new FillBridgeAcdLoginPersonFromData(agent, acdLoginId));
+			DataMaker.Data().Analytics().Setup(scenario);
+
+			//some report data
+			var intervalId = 2;
+			setReportData(personId, theDay, intervalId, scenarioId, acdLoginId);
+
+			intervalId = 80;
+			setReportData(personId, theDay, intervalId, scenarioId, acdLoginId);
+		
+		}
+
+		private static void setReportData(int personId, SpecificDate theDay, int intervalId, int scenarioId, int acdLoginId)
+		{
+			DataMaker.Data()
+				.Analytics()
+				.Setup(new FactSchedule(personId, theDay.DateId, theDay.DateId, 0, 22, intervalId, scenarioId));
+			DataMaker.Data()
+				.Analytics()
+				.Setup(new FactAgent(theDay.DateId, intervalId, acdLoginId, theDay.DateId, intervalId - 8, 600, 900, 300, 55, 0, 0, 7,
+					210, 60));
+			DataMaker.Data().Analytics().Setup(new FactAgentQueue(theDay.DateId, intervalId, 5, acdLoginId, 210, 60, 7, 0));
+			DataMaker.Data()
+				.Analytics()
+				.Setup(new FactScheduleDeviation(theDay.DateId, theDay.DateId, intervalId, personId, 900, 60, 60, 60, true));
+		}
+
+
 		[Then(@"I should see my report with data for '(.*)'")]
 		public void ThenIShouldSeeMyReportWithDataFor(DateTime date)
 		{
@@ -88,7 +140,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the detailed adherence report for '(.*)'")]
 		public void ThenIShouldSeeTheDetailedAdherenceReportFor(DateTime date)
 		{
-			ThenIShouldEndUpInMyAdherenceReportFor(date);
+			Browser.Interactions.AssertExists(".vertical-progress-bar");
+			Browser.Interactions.AssertExists(".schedule-interval");
 		}
 
 
@@ -122,7 +175,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I choose to view my detailed adherence")]
 		public void WhenIChooseToViewMyDetailedAdherence()
 		{
-			Browser.Interactions.Click(".adherence-percentage");
+			Browser.Interactions.Click(".adherenceValue");
 		}
 
 		[When(@"I choose to go to overview")]

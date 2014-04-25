@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Xml;
-using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
-using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
@@ -22,21 +15,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         [Then(@"I should see my mobile week schedule for date '(.*)'")]
         public void ThenIShouldSeeMyMobileWeekScheduleForDate(DateTime date)
         {
-            AssertShowingWeekForDay(DateHelper.GetFirstDateInWeek(date.Date, DataMaker.Data().MyCulture));
-        }
-
-        [When(@"I click the desktop link")]
-        public void WhenIClickTheDesktopLink()
-        {
-            Browser.Interactions.Click("#desktop");
+            AssertShowingWeekForDay(date.Date);
         }
 
         [Then(@"I should see the shift with")]
 		public void ThenIShouldSeeTheShiftWith(Table table)
 		{
 			var shift = table.CreateInstance<ShiftListItem>();
-			Browser.Interactions.AssertAnyContains(string.Format("[data-mytime-date='{0}'] .mobile-shift", shift.Date), shift.ShiftCategory);
-			Browser.Interactions.AssertAnyContains(string.Format("[data-mytime-date='{0}'] .mobile-shift", shift.Date), shift.TimeSpan);
+			Browser.Interactions.AssertAnyContains(string.Format("[data-mytime-date='{0}'] .shift", shift.Date), shift.ShiftCategory);
+			Browser.Interactions.AssertAnyContains(string.Format("[data-mytime-date='{0}'] .shift", shift.Date), shift.TimeSpan);
 		}
 
 		public class ShiftListItem
@@ -52,97 +39,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists(string.Format("[data-mytime-date='{0}'] .dayoff", date));
         }
 
-        [Then(@"I should see the absence on date '(.*)'")]
-        public void ThenIShouldSeeTheAbsenceOnDate(string date)
-        {
-            ScenarioContext.Current.Pending();
-        }
-
-        [Scope(Feature = "View week schedule on mobile")]
-        [Then(@"I should not see a shift on date '(.*)'")]
-        public void ThenIShouldNotSeeAShiftOnDate(DateTime date)
-        {
-            ScenarioContext.Current.Pending();
-        }
-
-        [Then(@"I should see the absence with")]
-        public void ThenIShouldSeeTheAbsenceWith(Table table)
-        {
-            ScenarioContext.Current.Pending();
-        }
-
-        [Then(@"I should not see any shift for day '(.*)'")]
-        public void ThenIShouldNotSeeAnyShiftForDay(string p0)
-        {
-            ScenarioContext.Current.Pending();
-        }
-
-        [Then(@"I should see a day name being '(.*)'")]
-        public void ThenIShouldSeeADayNameBeing(string p0)
-        {
-            ScenarioContext.Current.Pending();
-        }
-
-        [Then(@"I should see '(.*)' as the first day")]
-        public void ThenIShouldSeeAsTheFirstDay(DateTime date)
-        {
-            ScenarioContext.Current.Pending();
-        }
-
-        [Then(@"I should see '(.*)' as the last day")]
-        public void ThenIShouldSeeAsTheLastDay(DateTime date)
-        {
-            ScenarioContext.Current.Pending();
-        }
-
-        [Then(@"I should see '(.*)' as the first day of week label")]
-        public void ThenIShouldSeeAsTheFirstDayOfWeekLabel(string dayOfWeek)
-        {
-            ScenarioContext.Current.Pending();
-        }
-        [Given(@"I view my mobile week schedule for date '(.*)'")]
-        public void GivenIViewMyMobileWeekScheduleForDate(string p0)
-        {
-            ScenarioContext.Current.Pending();
-        }
-
-        [When(@"I navigate to next week")]
-        public void WhenINavigateToNextWeek()
-        {
-            ScenarioContext.Current.Pending();
-        }
-
-        [Then(@"I should see mobile week schedule for '(.*)'")]
-        public void ThenIShouldSeeMobileWeekScheduleFor(string p0)
-        {
-            ScenarioContext.Current.Pending();
-        }
-
-        [When(@"I navigate to previous week")]
-        public void WhenINavigateToPreviousWeek()
-        {
-            ScenarioContext.Current.Pending();
-        }
-
-        [When(@"I select week '(.*)' in the calendar")]
-        public void WhenISelectWeekInTheCalendar(int p0)
-        {
-            ScenarioContext.Current.Pending();
-        }
-
-        [Then(@"I should end up in month view for '(.*)'")]
-        public void ThenIShouldEndUpInMonthViewFor(string p0)
-        {
-            ScenarioContext.Current.Pending();
-        }
-
         private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
         {
             var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, DataMaker.Data().MyCulture);
 
             foreach (var date in firstDayOfWeek.DateRange(7))
             {
-                Browser.Interactions.AssertExistsUsingJQuery(string.Format(".data-mytime-date:contains('{0}')", date.ToString("yyyy-MM-dd")));
+                Browser.Interactions.AssertExistsUsingJQuery(string.Format(".day:contains('{0}')", date.ToString("yyyy-MM-dd")));
             }
         }
     }

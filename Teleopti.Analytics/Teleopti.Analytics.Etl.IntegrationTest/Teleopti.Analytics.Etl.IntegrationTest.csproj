@@ -54,6 +54,7 @@
     <Compile Include="Bug25126.cs" />
     <Compile Include="Bug25131.cs" />
     <Compile Include="Bug26500.cs" />
+    <Compile Include="Bug27672.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="FactScheduleTest.cs" />
     <Compile Include="SqlCommands.cs" />

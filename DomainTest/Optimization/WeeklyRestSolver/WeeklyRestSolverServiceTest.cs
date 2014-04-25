@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
                     _allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
                     _selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(false);
                 Expect.Call(()=>_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(_scheduleRange1,
-                    dayOffDate, _rollbackService));
+                    dayOffDate, _rollbackService,_selectedPeriod ));
             }
             using (_mock.Playback())
             {
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
                 Expect.Call(_shiftNudgeManager.RollbackLastScheduledWeek(_rollbackService, _resourceCalculateDelayer))
                     .Return(true);
                 Expect.Call(() => _deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(_scheduleRange1,
-                    dayOffDate, _rollbackService));
+                    dayOffDate, _rollbackService,_selectedPeriod ));
             }
             using (_mock.Playback())
             {
@@ -256,9 +256,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
         }
 
 
-        private void targetWeekScheduledScheduled(object sender, BlockSchedulingServiceEventArgs  blockSchedulingServiceEventArgs )
+		  private void targetWeekScheduledScheduled(object sender, ResourceOptimizerProgressEventArgs resourceOptimizerProgressEventArgs)
         {
-            blockSchedulingServiceEventArgs.Cancel  = true;
+			  resourceOptimizerProgressEventArgs.Cancel = true;
         }
         
     }

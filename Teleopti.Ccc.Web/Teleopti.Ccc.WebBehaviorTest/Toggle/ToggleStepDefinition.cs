@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Toggle
@@ -12,15 +14,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 	{
 		private bool reply;
 
-		[When(@"I query toggle service for '(.*)'")]
-		public void WhenIQueryToggleServiceFor(string flag)
+		[When(@"I query inprocess toggle service for '(.*)'")]
+		public void WhenIQueryInprocessToggleServiceFor(string flag)
 		{
 			var uri = new Uri(TestSiteConfigurationSetup.Url, "ToggleHandler/IsEnabled?toggle=" + flag);
 			var request = WebRequest.Create(uri);
-			using(var reader = new StreamReader(request.GetResponse().GetResponseStream()))
+			using (var reader = new StreamReader(request.GetResponse().GetResponseStream()))
 			{
 				reply = Convert.ToBoolean(reader.ReadToEnd());
 			}
+		}
+
+		[When(@"I query outofprocess toggle service for '(.*)'")]
+		public void WhenIQueryOutofprocessToggleServiceFor(string flag)
+		{
+			var toggleQuerier = new ToggleQuerier(new Uri(TestSiteConfigurationSetup.Url, "ToggleHandler/IsEnabled").ToString());
+			reply = toggleQuerier.IsEnabled((Toggles)Enum.Parse(typeof(Toggles), flag));
 		}
 
 		[Then(@"I should get '(.*)' back")]

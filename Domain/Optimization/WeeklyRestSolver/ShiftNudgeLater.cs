@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var dateOffset = (int)adjustedStart.Date.Subtract(shiftStartDate).TotalDays;
 			var shiftStartUserLocalDateTime = TimeZoneHelper.ConvertFromUtc(adjustedStart, scheduleDay.TimeZone);
 			var earliestStartTime = shiftStartUserLocalDateTime.TimeOfDay.Add(TimeSpan.FromDays(dateOffset));
-		
+
+			rollbackService.ClearModificationCollection();
 			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 
 			var shiftDate = personAssignment.Date;
@@ -60,9 +61,19 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				effectiveRestriction.DayOffTemplate, effectiveRestriction.Absence,
 				new List<IActivityRestriction>(effectiveRestriction.ActivityRestrictionCollection));
 
-			rollbackService.ClearModificationCollection();
 			bool result = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, shiftDate, schedulingOptions, selectedPeriod,
-				selectedPersons, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, adjustedEffectiveRestriction);
+				selectedPersons, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder,
+				new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Right));
+			if (!result)
+			{
+				rollbackService.Rollback();
+				var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
+				foreach (var dateOnly in blockPeriod.DayCollection())
+				{
+					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+				}
+				resourceCalculateDelayer.CalculateIfNeeded(blockPeriod.EndDate.AddDays(1), null);
+			}
 			rollbackService.ClearModificationCollection();
 			
 			return result;

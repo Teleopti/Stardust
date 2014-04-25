@@ -39,6 +39,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("MATRIX_WEB_SITE_URL", "http://localhost:52510");
             Add("MachineKey", CryptoCreator.MachineKeyCreator.GetConfig());
 			Add("AGENTPORTALWEB_nhibConfPath", IniFileInfo.AGENTPORTALWEB_nhibConfPath);
+			//should differ on different builds later...
+			Add("TOGGLE_FILE", "ALL");
 	}
 
 		public AllTags(IEnumerable<KeyValuePair<string, string>> additionalTags)

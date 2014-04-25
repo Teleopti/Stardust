@@ -1,27 +1,21 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @{
-    Layout = null;
+	Layout = null;
 }
 
-<div class="mobile-view row">
-<!-- ko foreach: dayViewModels-->
-<div class="col-md-3 col-sm-4 col-xs-12" data-bind="attr: { 'data-mytime-date': fixedDate}">
-	<div class="tile week-overview">
-		<div class="week-header table-wrapper">
-			<div class="table-cell-wrapper">
-				<div class="week-weekday" data-bind="text: weekDayHeaderTitle"></div>
-				<div class="week-date data-mytime-date" data-bind="text: fixedDate"></div>
+<div class="weekview-mobile row">
+	<!-- ko foreach: dayViewModels-->
+	<div class="day" data-bind="attr: { 'data-mytime-date': fixedDate }">
+		<div class="header">
+			<div class="weekday" data-bind="text: weekDayHeaderTitle"></div>
+			<div class="date" data-bind="text: fixedDate"></div>
+		</div>
+		<div class="summary" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: { 'dayoff': isDayoff, 'shift': hasShift }">
+			<div>
+				<strong data-bind="text: summaryName"></strong>
 			</div>
-			</div>
-			<div class="mobile-height mobile-shift" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }">
-				<div>
-					<strong data-bind="text: summaryName"></strong>
-				</div>
-				<div data-bind="text: summaryTimeSpan"></div>
-			</div>
-
-	</div>
+			<div data-bind="text: summaryTimeSpan"></div>
+		</div>
 	</div>
 	<!-- /ko -->
-		</div>
-<div class="mobile-foot">Mobile | <a href="#" id="desktop" data-bind="click: desktop">Desktop</a></div>
+</div>
