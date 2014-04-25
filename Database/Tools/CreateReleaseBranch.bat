@@ -42,10 +42,10 @@ REM hg branch %releaseBranchName%
 REM hg ci -m "Creating release %SYSTEMVERSION%"
 
 :: Bump version on default
-hg update default
-SET /P ActiveBranchVersion= < "%ROOTDIR%\..\ActiveBranchVersion.txt"
-SET /a NextBuild=%ActiveBranchVersion% + 1
-echo.%NextBuild% > "%ROOTDIR%\..\ActiveBranchVersion.txt"
-hg ci -m "Bumping version number to %NextBuild%"
+REM hg update default
+REM SET /P ActiveBranchVersion= < "%ROOTDIR%\..\ActiveBranchVersion.txt"
+REM SET /a NextBuild=%ActiveBranchVersion% + 1
+REM echo.%NextBuild% > "%ROOTDIR%\..\ActiveBranchVersion.txt"
+REM hg ci -m "Bumping version number to %NextBuild%"
 
 echo Finished!
