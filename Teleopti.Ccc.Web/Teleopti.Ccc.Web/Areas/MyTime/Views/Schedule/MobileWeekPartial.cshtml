@@ -3,12 +3,12 @@
 	Layout = null;
 }
 
-<div class="weekview-mobile row">
+<div class="weekview-mobile container fixed-non-responsive row">
 	<!-- ko foreach: dayViewModels-->
 	<div class="day" data-bind="attr: { 'data-mytime-date': fixedDate }">
 		<div class="header">
-			<div class="weekday" data-bind="text: weekDayHeaderTitle"></div>
-			<div class="date" data-bind="text: fixedDate"></div>
+			<span class="weekday" data-bind="text: weekDayHeaderTitle"></span>
+			<span class="date" data-bind="text: fixedDate"></span>
 		</div>
 		<div class="summary" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: { 'dayoff': isDayoff, 'shift': hasShift }">
 			<div>

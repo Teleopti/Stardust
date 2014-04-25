@@ -1,8 +1,8 @@
-$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
+﻿$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
 $(AS_SERVER_NAME)|.
-$(DB_CCC7)|PBI2224_DemoSales_TeleoptiCCC7
-$(DB_ANALYTICS)|PBI22249_DemoSales_TeleoptiAnalytics
-$(AS_DATABASE)|Main_DemoSales_TeleoptiAnalytics
+$(DB_CCC7)|main_DemoSales_TeleoptiCCC7
+$(DB_ANALYTICS)|main_DemoSales_TeleoptiAnalytics
+$(AS_DATABASE)|main_DemoSales_TeleoptiAnalytics
 $(IIS_AUTH)|Windows
 $(LOCAL_WIKI)|c:\temp
 $(PM_ASMX)|http://localhost/analyzer/services/Analyzer2005.asmx
@@ -25,11 +25,18 @@ $(LocalWiki)|http://localhost/TeleoptiCCC/LocalWiki/
 $(WEB_BROKER_FOR_WEB)|http://localhost:52858
 $(WEB_BROKER)|http://localhost:54903/
 $(WEB_BROKER_BACKPLANE)|
+$(DEFAULT_IDENTITY_PROVIDER)|Teleopti
+$(IDENTITY_PROVIDERS)|Windows,Teleopti
+$(UrlAuthenticationBridge)|http://localhost:52857/
+$(Url)|http://localhost:52858/
+$(UrlWindowsIdentityProvider)|http://localhost:52859/
 $(ETL_SERVICE_nhibConfPath)|c:\nhib
 $(ETL_TOOL_nhibConfPath)|c:\nhib
 $(AGENTPORTALWEB_nhibConfPath)|c:\nhib
 <compilation debug="false"|<compilation debug="true"
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
 $(SDK_nhibConfPath)|c:\nhib
-$(SDK_nhibConfPath)|c:\nhib
+$(TOGGLE_FILE)|all
+$(TOGGLE_URL)|all
+$(DATASOURCE_NAME)|Teleopti CCC
 _replace_|c:\InfraTest.ini

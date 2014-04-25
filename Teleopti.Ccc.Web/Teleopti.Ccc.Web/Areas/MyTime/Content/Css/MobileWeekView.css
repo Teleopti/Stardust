@@ -1,39 +1,26 @@
-﻿/*.weekview-mobile .table-wrapper {
-  display: table;
-  vertical-align: middle;
-  text-align: center;
-  width: 100%;
-  height: 100%;
-}
-
-.weekview-mobile .table-cell-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-  width: 100%;
-  height: 100%;  
-}
-	*/
-.weekview-mobile .dayoff {
+﻿.weekview-mobile .dayoff {
 	background-color: beige;
 	background-image: url(../Images/stripe.png);
-	height: 100%;
+	height: 40px;
+}
+
+.weekview-mobile .shift {
+	padding: 0;
 }
 
 .weekview-mobile .day {
-	border: 1px solid #e3e3e3;
+	border: 1px solid #dfdfdf;
 	margin-bottom: 10px;
+	color: #333;
 }
 
 .weekview-mobile .header {
 	width: 100%;
-	display: inline-block;
-	padding-bottom: 30px;
-	border-bottom: 1px solid #e3e3e3;
+	display: table;
+	border-bottom: 1px solid #dfdfdf;
 }
 
 .weekview-mobile .weekday {
-	color: #9d9d9d;
 	float: left;
 	padding-left: 5px;
 	text-transform: uppercase;
@@ -53,56 +40,7 @@
 
 .weekview-mobile .summary {
 	height: 40px;
-	margin-top: -30px;
 	vertical-align: middle;
 	text-align: center;
 }
-/*
-
-
-@media (max-width: 768px) {
-	.mobile-height {
-		height:40px;
-	}
-	.week-overview {
-		min-height: 20px;
-		padding: 0px;
-		margin-bottom: 5px;
-		border: 1px solid #e3e3e3;
-		border-radius: 4px;
-		-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-		text-align: center;
-	}
-
-	.tile {
-		width: 100%;
-		display: inline-block;
-		box-sizing: border-box;
-		margin-bottom: 5px;
-	}
-
-    .week-header {
-        height: 20px;
-        color: #9d9d9d;
-        border-bottom: solid 1px #e3e3e3; 
-    }
-
-	.week-weekday {
-	    float: left;
-	    padding-left: 5px;
-		text-transform: uppercase;
-		font-size: 85%;
-	    display: table-cell;
-	    vertical-align: middle;
-	}  
-    
-    .week-date {
-        float: right;
-	    text-transform: uppercase;
-        padding-right: 5px;
-		font-size: 85%; display: table-cell; vertical-align: middle; 
-	}
-
-}*/
 
