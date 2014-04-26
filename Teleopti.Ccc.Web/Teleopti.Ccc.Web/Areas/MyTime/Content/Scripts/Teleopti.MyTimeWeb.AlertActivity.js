@@ -31,7 +31,8 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 	function notificationActivities() {
 		var self = this;
 		self.now = new Date().getTeleoptiTime();
-		self.timeZero = moment(self.now).startOf('day').toDate();
+		self.timeZero = moment(self.now).add('days', -1).startOf('day').toDate();
+
 		self.alertTimeSetting = 60; //default setting 60secs
 		self.alertMessage = "";
 		self.restartAlertDelayTime = 60;
