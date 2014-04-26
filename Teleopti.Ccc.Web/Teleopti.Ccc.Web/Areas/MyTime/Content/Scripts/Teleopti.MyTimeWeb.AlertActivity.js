@@ -30,8 +30,10 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 	function notificationActivities() {
 		var self = this;
-		self.now = new Date().getTeleoptiTime();
-		self.timeZero = moment(self.now).add('days', -1).startOf('day').toDate();
+		self.getCurrentTime = function () {
+			return new Date().getTeleoptiTime();
+		}
+		self.timeZero = moment(self.getCurrentTime()).add('days', -1).startOf('day').toDate();
 
 		self.alertTimeSetting = 60; //default setting 60secs
 		self.alertMessage = "";
@@ -39,7 +41,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		self.layers = new Array();
 
 		self.getCurrentLayerIndex = function () {
-			var now = (self.now - self.timeZero) / 1000;
+			var now = (self.getCurrentTime() - self.timeZero) / 1000;
 			var layerCount = self.layers.length;
 
 			var shiftStartTime = self.layers[0].startMinutesSinceAsmZero * 60;
@@ -48,7 +50,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			var currentLayer = -1;
 			if (now < shiftStartTime) {
 				// First activity not started;
-				currentLayer = - 1;
+				currentLayer = -1;
 			} else if (now >= shiftEndTime) {
 				// Last activity already finished;
 				currentLayer = layerCount;
@@ -79,7 +81,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			}
 
 			var layerIndex = self.getCurrentLayerIndex();
-			var secondsSinceStart = (self.now - self.timeZero) / 1000;
+			var secondsSinceStart = (self.getCurrentTime() - self.timeZero) / 1000;
 
 			var layer;
 			var activityName, alertMessage;
@@ -116,7 +118,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			}
 
 			return {
-				message: alertMessage, 
+				message: alertMessage,
 				timespan: timeDiff
 			};
 		};
@@ -195,11 +197,11 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		if (alert.timespan >= 0) {
 			if (alert.timespan >= alertvm.alertTimeSetting) {
 				interval = alert.timespan - alertvm.alertTimeSetting;
-				delayTime = alertvm.alertTimeSetting;
+				delayTime = alertvm.alertTimeSetting + 5;
 			}
 			if (alert.timespan < alertvm.alertTimeSetting) {
 				interval = 0;
-				delayTime = alert.timespan == 0 ? 1 : alert.timespan;
+				delayTime = alert.timespan + 5;
 			}
 
 			alertvm.alertMessage = alert.message;
