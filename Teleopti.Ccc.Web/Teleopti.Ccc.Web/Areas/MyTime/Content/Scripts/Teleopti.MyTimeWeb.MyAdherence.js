@@ -123,12 +123,6 @@
 					vm.lastInterval(data.Intervals[data.Intervals.length - 1]);
 					vm.intervalAdherence(data.Intervals);
 				}
-				
-				//vm.answeredCalls = data.AnsweredCalls;
-				//vm.averageAfterCallWork = data.AverageAfterCallWork;
-				//vm.averageHandlingTime = data.AverageHandlingTime;
-				//vm.averageTalkTime = data.AverageTalkTime;
-				//vm.readyTimePerScheduledReadyTime = data.ReadyTimePerScheduledReadyTime;
 				vm.dataAvailable(data.DataAvailable);
 			}
 
@@ -165,10 +159,11 @@
 	return {
 		Init: function () {
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('MyReport/Adherence',
-									Teleopti.MyTimeWeb.MyAdherence.MyAdherencePartialInit);
+									Teleopti.MyTimeWeb.MyAdherence.MyAdherencePartialInit, Teleopti.MyTimeWeb.MyAdherence.MyAdherencePartialDispose);
 		},
 
 		MyAdherencePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
+			$('#page').removeClass('fixed-non-responsive');
 			if (!$('.myadherence').length) {
 				return;
 			}
@@ -178,6 +173,10 @@
 
 			readyForInteractionCallback();
 			completelyLoadedCallback();
+		},
+
+		MyAdherencePartialDispose: function () {
+			$('#page').addClass('fixed-non-responsive');
 		},
 
 		ForDay: function (date) {

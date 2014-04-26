@@ -11,3 +11,4 @@ Broker,Broker
 ServiceBus,TeleoptiCCC\Services\ServiceBus
 SupportTools,TeleoptiCCC\Tools\SupportTools
 Database,TeleoptiCCC\Tools\Database
+BrokerBackplane,BrokerBackplane

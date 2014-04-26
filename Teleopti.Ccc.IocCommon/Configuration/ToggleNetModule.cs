@@ -41,6 +41,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						.As<IToggleManager>();
 				}
 			}
+
+			builder.RegisterType<TogglesActive>()
+				.SingleInstance().As<ITogglesActive>();
+			builder.RegisterType<AllToggles>()
+				.SingleInstance().As<IAllToggles>();
 		}
 
 		private class toggleManagerFullAccess : IToggleManager

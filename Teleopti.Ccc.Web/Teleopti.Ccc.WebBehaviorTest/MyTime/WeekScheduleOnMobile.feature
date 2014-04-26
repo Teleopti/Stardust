@@ -75,5 +75,10 @@ Scenario: View when you have a day off
 	| Field | Value      |
 	| Name  | DayOff     |
 	| Date  | 2014-04-22 |
+		And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2014-04-21 09:00 |
+	| EndTime        | 2014-04-21 18:00 |
+	| Shift category | Early            |
 	When I view my mobile week schedule
 	Then I should see the day off on '2014-04-22'

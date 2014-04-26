@@ -28,11 +28,12 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
         private readonly IDeleteScheduleDayFromUnsolvedPersonWeek _deleteScheduleDayFromUnsolvedPersonWeek;
         private readonly IBrokenWeekOutsideSelectionSpecification _brokenWeekOutsideSelectionSpecification;
         private bool _cancelMe;
-		  public event EventHandler<ResourceOptimizerProgressEventArgs> ResolvingWeek;
+	    private readonly IAllTeamMembersInSelectionSpecification  _allTeamMembersInSelectionSpecification;
+	    public event EventHandler<ResourceOptimizerProgressEventArgs> ResolvingWeek;
 
         public WeeklyRestSolverService(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor, IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek, 
                     IDayOffToTimeSpanExtractor dayOffToTimeSpanExtractor, IShiftNudgeManager shiftNudgeManager,  IdentifyDayOffWithHighestSpan identifyDayOffWithHighestSpan, 
-                    IDeleteScheduleDayFromUnsolvedPersonWeek deleteScheduleDayFromUnsolvedPersonWeek, IBrokenWeekOutsideSelectionSpecification brokenWeekOutsideSelectionSpecification)
+                    IDeleteScheduleDayFromUnsolvedPersonWeek deleteScheduleDayFromUnsolvedPersonWeek, IBrokenWeekOutsideSelectionSpecification brokenWeekOutsideSelectionSpecification, IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification)
         {
             _weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
             _ensureWeeklyRestRule = ensureWeeklyRestRule;
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
             _identifyDayOffWithHighestSpan = identifyDayOffWithHighestSpan;
             _deleteScheduleDayFromUnsolvedPersonWeek = deleteScheduleDayFromUnsolvedPersonWeek;
             _brokenWeekOutsideSelectionSpecification = brokenWeekOutsideSelectionSpecification;
+	        _allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
         }
 
 		  protected virtual void OnDayScheduled(ResourceOptimizerProgressEventArgs resourceOptimizerProgressEventArgs)
@@ -106,7 +108,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	                            {
 	                                //rollback this week 
 	                                _shiftNudgeManager.RollbackLastScheduledWeek(rollbackService, resourceCalculateDelayer);
-                                    _deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, possiblePositionsToFix.First().Key, rollbackService,selectedPeriod);
+											 if(isFullTeamSelected(selectedPersons,personWeek.Person,teamBlockGenerator,schedulingOptions,allPersonMatrixList,personWeek.Week    ) ) 
+												_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, possiblePositionsToFix.First().Key, rollbackService, selectedPeriod);
 	                            }
                                 break;
 	                        }
@@ -115,7 +118,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	                    }
 	                    if (!success  && fisrtDayOfElement != DateOnly.MinValue)
 	                    {
-								  _deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, fisrtDayOfElement, rollbackService, selectedPeriod);
+								  if (isFullTeamSelected(selectedPersons, personWeek.Person, teamBlockGenerator, schedulingOptions, allPersonMatrixList, personWeek.Week)) 
+									_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, fisrtDayOfElement, rollbackService, selectedPeriod);
 	                    }
 	                }
 	            }
@@ -123,6 +127,12 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 	    }
 
+	    private bool isFullTeamSelected(IList<IPerson> selectedPersons, IPerson person, ITeamBlockGenerator teamBlockGenerator, ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod week)
+	    {
+			 var teamBlockInfo = teamBlockGenerator.Generate(allPersonMatrixList, week, new List<IPerson> { person }, schedulingOptions).First();
+		    return _allTeamMembersInSelectionSpecification.IsSatifyBy(teamBlockInfo.TeamInfo , selectedPersons);
+	    }
+    
 
     }
 }

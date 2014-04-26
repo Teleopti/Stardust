@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Reflection;
+using System.Text;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces;
@@ -12,16 +16,20 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
 {
+
     public class ExceptionHandlerModel
     {
         private Exception _exception;
         private string _defaultEmail;
         private IMapiMailMessage _mapiMessage;
         private IWriteToFile _fileWriter;
+	    private ITogglesActive _allToggles;
+	    public const string ToggleFeaturesUnknown = "ToggleFeatures unknown";
 
-        public ExceptionHandlerModel(Exception exception, string defaultEmail, IMapiMailMessage mapiMessage, IWriteToFile fileWriter)
+		public ExceptionHandlerModel(Exception exception, string defaultEmail, IMapiMailMessage mapiMessage, IWriteToFile fileWriter, ITogglesActive allToggles)
         {
-            _exception = exception;
+			_allToggles = allToggles;
+			_exception = exception;
             _defaultEmail = defaultEmail;
             _mapiMessage = mapiMessage;
             _fileWriter = fileWriter;
@@ -91,7 +99,7 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
         public string CompleteStackAndAssemblyText()
         {
             string asseblyString = string.Empty;
-
+	        string exceptionInfoText;
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 asseblyString += assembly.ToString();
@@ -101,13 +109,41 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
             //to get all the information.
             var sqlException = _exception as SqlException;
 
-            if (sqlException == null)
-                return string.Concat(_exception.ToString(), asseblyString);
+	        if (sqlException == null)
+	        {
+				exceptionInfoText = string.Concat(_exception.ToString(), asseblyString);   
+	        }
+	        else
+	        {
+		        exceptionInfoText = extractSqlException(asseblyString, sqlException);
+	        }
 
-            return extractSqlException(asseblyString, sqlException);
+
+			return extractFeatureInfo(exceptionInfoText, _allToggles);
         }
 
-        private string extractSqlException(string asseblyString, SqlException sqlException)
+		private static string extractFeatureInfo(string exceptionText, ITogglesActive allToggles)
+	    {
+			var text = new StringBuilder(exceptionText);
+			text.AppendLine();
+			text.AppendLine();
+			try
+		    {
+
+				foreach (var entry in allToggles.AllActiveToggles())
+			    {
+				    text.AppendLine(string.Format("{0} = {1} ", entry.Key, entry.Value));
+			    }
+		    }
+		    catch (Exception)
+		    {
+				text.AppendLine(ToggleFeaturesUnknown);
+		    }
+			return text.ToString();
+
+	    }
+
+        private static string extractSqlException(string asseblyString, SqlException sqlException)
         {
             var errString = string.Empty;
             

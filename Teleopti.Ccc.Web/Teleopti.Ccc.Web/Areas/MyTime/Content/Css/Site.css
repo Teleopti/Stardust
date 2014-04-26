@@ -752,7 +752,7 @@ End personal drop down menu
 }
 
 .fixed-non-responsive.container{
-	max-width: 965px;
+	width: 965px;
 }
 
 .visibility {

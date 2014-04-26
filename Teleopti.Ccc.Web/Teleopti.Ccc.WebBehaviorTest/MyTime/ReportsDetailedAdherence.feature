@@ -9,13 +9,6 @@ Given there is a role with
 	| Name                                | Access To Detailed Adherence Report |
 	| Access To Detailed Adherence Report | True                                |
 
-Scenario: Should not show the detailed adherence report if no permission
-	Given I have a role with
-	| Field                               | Value |
-	| Access To Detailed Adherence Report | False |
-	When I view my adherence report
-	Then I should see a user-friendly message "no permission"
-
 Scenario: Show the detailed adherence report
 	Given I am an agent
 	And I have adherence report data for '2013-10-02'

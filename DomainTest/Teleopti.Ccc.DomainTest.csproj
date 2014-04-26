@@ -247,6 +247,7 @@
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateBitArrayCreatorTest.cs" />
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateDecisionMakerTest.cs" />
     <Compile Include="DayOffPlanning\WorkShiftLegalStateDayIndexCalculatorTest.cs" />
+    <Compile Include="FeatureFlags\AllTogglesTest.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthCreatorTest.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthHelperTest.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthTest.cs" />

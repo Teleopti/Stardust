@@ -168,6 +168,7 @@
     <Compile Include="Foundation\AvailableApplicationIdentityDataSourcesTest.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
+    <Compile Include="Foundation\TogglesActiveTest.cs" />
     <Compile Include="NHibernateConfiguration\CompressedStringTest.cs" />
     <Compile Include="Helper\FakeLogon.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />

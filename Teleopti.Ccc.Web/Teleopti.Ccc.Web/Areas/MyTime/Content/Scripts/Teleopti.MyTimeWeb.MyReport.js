@@ -4,12 +4,12 @@
 	function MyReportViewModel(loadDataMethod, date) {
 		var self = this;
 
-		self.adherence = "";
-		self.answeredCalls = "";
-		self.averageAfterCallWork = "";
-		self.averageHandlingTime = "";
-		self.averageTalkTime = "";
-		self.readyTimePerScheduledReadyTime = "";
+		self.adherence = ko.observable();
+		self.answeredCalls = ko.observable();
+		self.averageAfterCallWork = ko.observable();
+		self.averageHandlingTime = ko.observable();
+		self.averageTalkTime = ko.observable();
+		self.readyTimePerScheduledReadyTime = ko.observable();
 
 		self.selectedDateInternal = ko.observable(date);
 		self.datePickerFormat = ko.observable('YYYYMMDD');
@@ -50,12 +50,12 @@
 			data: { date: date.clone().utc().toDate().toJSON() },
 			success: function (data) {
 				vm.selectedDateInternal(date);
-				vm.adherence = data.Adherence;
-				vm.answeredCalls = data.AnsweredCalls;
-				vm.averageAfterCallWork = data.AverageAfterCallWork;
-				vm.averageHandlingTime = data.AverageHandlingTime;
-				vm.averageTalkTime = data.AverageTalkTime;
-				vm.readyTimePerScheduledReadyTime = data.ReadyTimePerScheduledReadyTime;
+				vm.adherence(data.Adherence);
+				vm.answeredCalls(data.AnsweredCalls);
+				vm.averageAfterCallWork(data.AverageAfterCallWork);
+				vm.averageHandlingTime(data.AverageHandlingTime);
+				vm.averageTalkTime(data.AverageTalkTime);
+				vm.readyTimePerScheduledReadyTime(data.ReadyTimePerScheduledReadyTime);
 				vm.dataAvailable(data.DataAvailable);
 			}
 
@@ -92,9 +92,10 @@
 	return {
 		Init: function () {
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('MyReport/Index',
-									Teleopti.MyTimeWeb.MyReport.MyReportPartialInit);
+									Teleopti.MyTimeWeb.MyReport.MyReportPartialInit, Teleopti.MyTimeWeb.MyReport.MyReportPartialDispose);
 		},
 		MyReportPartialInit: function () {
+			$('#page').removeClass('fixed-non-responsive');
 			if (!$('.myreport-daily-metrics').length) {
 				return;
 			}
@@ -102,7 +103,9 @@
 			bindData();
 			setWeekStart();
 		},
-		
+		MyReportPartialDispose: function () {
+			$('#page').addClass('fixed-non-responsive');
+		},
 		ForDay: function(date) {
 			fillData(date);
 		}		

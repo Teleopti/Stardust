@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("DEFAULT_IDENTITY_PROVIDER", "Teleopti");
 			Add("IDENTITY_PROVIDERS", "Windows,Teleopti");
 			Add("MATRIX_WEB_SITE_URL", "http://localhost:52510");
-            Add("MachineKey", CryptoCreator.MachineKeyCreator.GetConfig());
+			Add("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
 			Add("AGENTPORTALWEB_nhibConfPath", IniFileInfo.AGENTPORTALWEB_nhibConfPath);
 			//should differ on different builds later...
 			Add("TOGGLE_FILE", "ALL");

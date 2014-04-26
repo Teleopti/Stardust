@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -44,8 +45,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
         private IList<IScheduleMatrixPro> _allPersonMatrixList;
         private List<IScheduleDay> _scheduleDayList;
         private IEnumerable<PersonWeek> _personWeekList;
+	    private IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
+	    private ITeamBlockInfo _teamBlockInfo;
+	    private ITeamInfo _teamInfo;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -57,10 +61,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             _identifyDayOffWithHighestSpan = new IdentifyDayOffWithHighestSpan();
             _deleteScheduleDayFromUnsolvedPersonWeek = _mock.StrictMock<IDeleteScheduleDayFromUnsolvedPersonWeek>();
             _brokenWeekOutsideSelectionSpecification = _mock.StrictMock<IBrokenWeekOutsideSelectionSpecification>();
+		    _allTeamMembersInSelectionSpecification = _mock.StrictMock<IAllTeamMembersInSelectionSpecification>();
+		    _teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
+		    _teamInfo  = _mock.StrictMock<ITeamInfo >();
             _target = new WeeklyRestSolverService(_weeksFromScheduleDaysExtractor, _ensureWeeklyRestRule,
                 _contractWeeklyRestForPersonWeek, _dayOffToTimeSpanExtractor,
                 _shiftNudgeManager, _identifyDayOffWithHighestSpan, _deleteScheduleDayFromUnsolvedPersonWeek,
-                _brokenWeekOutsideSelectionSpecification);
+                _brokenWeekOutsideSelectionSpecification,_allTeamMembersInSelectionSpecification );
             _teamBlockGenerator = _mock.StrictMock<ITeamBlockGenerator>();
             _rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
             _resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
@@ -146,6 +153,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
                     _selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(false);
                 Expect.Call(()=>_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(_scheduleRange1,
                     dayOffDate, _rollbackService,_selectedPeriod ));
+	            Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, _personWeek1.Week,
+		            new List<IPerson> {_personWeek1.Person}, _schedulingOptions))
+		            .Return(new List<ITeamBlockInfo> {_teamBlockInfo});
+	            Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+	            Expect.Call(_allTeamMembersInSelectionSpecification.IsSatifyBy(_teamInfo, _selectedPersons)).Return(true);
             }
             using (_mock.Playback())
             {
@@ -181,6 +193,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
                     new Dictionary<PersonWeek, TimeSpan>(), _scheduleRange1)).IgnoreArguments().Return(true);
                 Expect.Call(_shiftNudgeManager.RollbackLastScheduledWeek(_rollbackService, _resourceCalculateDelayer))
                     .Return(true);
+					 Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, _personWeek1.Week,
+						 new List<IPerson> { _personWeek1.Person }, _schedulingOptions))
+						 .Return(new List<ITeamBlockInfo> { _teamBlockInfo });
+					 Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+					 Expect.Call(_allTeamMembersInSelectionSpecification.IsSatifyBy(_teamInfo, _selectedPersons)).Return(true);
                 Expect.Call(() => _deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(_scheduleRange1,
                     dayOffDate, _rollbackService,_selectedPeriod ));
             }
@@ -192,6 +209,46 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             }
 
         }
+
+		  [Test]
+		  public void DoNotRunDeleteServiceIfFullTeamNotSelected()
+		  {
+			  DateOnly dayOffDate = new DateOnly(2014, 04, 17);
+			  IDictionary<DateOnly, TimeSpan> dayOffToSpanDictionary = new Dictionary<DateOnly, TimeSpan>();
+			  dayOffToSpanDictionary.Add(dayOffDate, TimeSpan.FromHours(10));
+			  using (_mock.Record())
+			  {
+				  extractingPersonWeek(_selectedPeriod, _scheduleDayList, _personWeekList);
+				  Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(_scheduleDayList, true))
+					 .Return(_personWeekList);
+				  Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
+					  .Return(false);
+				  //analyzing failed weeks
+				  Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
+						.Return(false);
+				  Expect.Call(_dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(_personWeek1.Week,
+						_scheduleRange1)).Return(dayOffToSpanDictionary);
+				  Expect.Call(_shiftNudgeManager.TrySolveForDayOff(_personWeek1, dayOffDate, _teamBlockGenerator,
+						_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
+						_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(true);
+				  Expect.Call(_brokenWeekOutsideSelectionSpecification.IsSatisfy(_personWeek1, _personWeekList.ToList(),
+						new Dictionary<PersonWeek, TimeSpan>(), _scheduleRange1)).IgnoreArguments().Return(true);
+				  Expect.Call(_shiftNudgeManager.RollbackLastScheduledWeek(_rollbackService, _resourceCalculateDelayer))
+						.Return(true);
+				  Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, _personWeek1.Week,
+					  new List<IPerson> { _personWeek1.Person }, _schedulingOptions))
+					  .Return(new List<ITeamBlockInfo> { _teamBlockInfo });
+				  Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+				  Expect.Call(_allTeamMembersInSelectionSpecification.IsSatifyBy(_teamInfo, _selectedPersons)).Return(false );
+			  }
+			  using (_mock.Playback())
+			  {
+				  _target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,
+						_resourceCalculateDelayer, _schedulingResultStateHolder, _allPersonMatrixList,
+						_optimizationPreferences, _schedulingOptions);
+			  }
+
+		  }
 
         [Test]
         public void ShouldContinueIfNudgeIsSuccessfull()
