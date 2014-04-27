@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -26,21 +27,27 @@ namespace Teleopti.Ccc.Win.Commands
         private readonly IWeeklyRestSolverService  _weeklyRestSolverService;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly IGroupPersonBuilderForOptimizationFactory  _groupPersonBuilderForOptimizationFactory;
-        private BackgroundWorker  _backgroundWorker;
+	    private readonly IToggleManager _toggleManager;
+	    private BackgroundWorker  _backgroundWorker;
 
-        public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IWeeklyRestSolverService weeklyRestSolverService, ISchedulerStateHolder schedulerStateHolder, IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory)
-        {
-            _teamBlockInfoFactory = teamBlockInfoFactory;
-            _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
-            _weeklyRestSolverService = weeklyRestSolverService;
-            _schedulerStateHolder = schedulerStateHolder;
-            _groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
-        }
+	    public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
+		    ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IWeeklyRestSolverService weeklyRestSolverService,
+		    ISchedulerStateHolder schedulerStateHolder,
+		    IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory, IToggleManager toggleManager)
+	    {
+		    _teamBlockInfoFactory = teamBlockInfoFactory;
+		    _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
+		    _weeklyRestSolverService = weeklyRestSolverService;
+		    _schedulerStateHolder = schedulerStateHolder;
+		    _groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
+		    _toggleManager = toggleManager;
+	    }
 
-        public  void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, BackgroundWorker backgroundWorker)
+	    public  void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, BackgroundWorker backgroundWorker)
         {
-            var instance = PrincipalAuthorization.Instance();
-            if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction)) return;
+			if (!_toggleManager.IsEnabled(Toggles.WeeklyRestRuleSolver))
+		        return;
+
             _backgroundWorker = backgroundWorker;
             var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
