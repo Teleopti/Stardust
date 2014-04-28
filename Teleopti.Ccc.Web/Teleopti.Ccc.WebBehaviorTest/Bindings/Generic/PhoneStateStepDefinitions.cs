@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 					                          });
 			});
 
+		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		[When(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		public void WhenSetsHisPhoneStateTo(string personName, string state)
 		{
