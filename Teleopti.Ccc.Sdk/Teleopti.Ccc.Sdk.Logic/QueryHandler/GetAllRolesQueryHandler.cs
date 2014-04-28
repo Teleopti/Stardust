@@ -20,13 +20,16 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<RoleDto> Handle(GetAllRolesQueryDto query)
 		{
-			using (_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				return _applicationRoleRepository.LoadAllApplicationRolesSortedByName().Select(s => new RoleDto
+				using (uow.LoadDeletedIfSpecified(query.LoadDeleted))
 				{
-					Id = s.Id,
-					Name = s.Name
-				}).ToList();
+					return _applicationRoleRepository.LoadAllApplicationRolesSortedByName().Select(s => new RoleDto
+					{
+						Id = s.Id,
+						Name = s.Name
+					}).ToList();
+				}
 			}
 		}
 	}

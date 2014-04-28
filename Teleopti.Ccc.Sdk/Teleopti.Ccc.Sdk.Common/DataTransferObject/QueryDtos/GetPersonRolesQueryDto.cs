@@ -1,17 +1,18 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 {
 	/// <summary>
-	/// Query to get all application roles.
+	/// Query to get all application roles for a person.
 	/// </summary>
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2014/04/")]
-	public class GetAllRolesQueryDto : QueryDto
+	public class GetPersonRolesQueryDto : QueryDto
 	{
 		/// <summary>
-		/// Gets or sets option to include deleted roles in the result.
+		/// Gets or sets the person id.
 		/// </summary>
 		[DataMember]
-		public bool LoadDeleted { get; set; }
+		public Guid PersonId { get; set; }
 	}
 }

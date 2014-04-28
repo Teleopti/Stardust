@@ -227,6 +227,7 @@
     <Compile Include="QueryHandler\GetMultiplicatorDefinitionSetShiftAllowanceQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorOvertimeQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorShiftAllowanceQueryHandlerTest.cs" />
+    <Compile Include="QueryHandler\GetPersonRolesQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetSchedulesByGroupPageGroupQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetSchedulesBySiteQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetSchedulesForAllPeopleQueryHandlerTest.cs" />

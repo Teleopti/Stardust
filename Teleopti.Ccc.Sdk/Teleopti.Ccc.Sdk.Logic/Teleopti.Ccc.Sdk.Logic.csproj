@@ -209,6 +209,7 @@
     <Compile Include="QueryHandler\GetMultiplicatorOvertimeQueryHandler.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorShiftAllowanceQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPeopleOptionalValuesByPersonIdQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPersonRolesQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesByGroupPageGroupQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesBySiteQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesForAllPeopleQueryHandler.cs" />
