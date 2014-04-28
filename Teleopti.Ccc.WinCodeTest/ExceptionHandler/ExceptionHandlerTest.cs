@@ -146,27 +146,33 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 		[Test]
 		public void CompleteStackAndAssemblyText_Always_ShouldIncludeEnabledToggleFeatures()
 		{
-			var features = new Dictionary<Toggles, bool> {{Toggles.EnabledFeature, true}};
+			var features = new Dictionary<Toggles, bool>
+			               {
+				               {Toggles.EnabledFeature, true},
+				               {Toggles.DisabledFeature, false},
+			               };
 			var allToggleFeatures = new ActiveTogglesStub(features);
 
 			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException("Any Exception will do", 123), "", _mapi, _fileWriter, allToggleFeatures);
 			var expectedString = model.CompleteStackAndAssemblyText();
 
-			expectedString.Should().Contain(features[Toggles.EnabledFeature].ToString());
-			expectedString.Should().Contain(Toggles.EnabledFeature.ToString());
+			expectedString.Should().Contain(string.Format("{0} = {1}", Toggles.EnabledFeature, features[Toggles.EnabledFeature]));
 		}
 
 		[Test]
 		public void CompleteStackAndAssemblyText_Always_ShouldIncludeDisabledToggleFeatures()
 		{
-			var features = new Dictionary<Toggles, bool> {{Toggles.EnabledFeature, false}};
+			var features = new Dictionary<Toggles, bool>
+			               {
+				               {Toggles.EnabledFeature, false},
+							   {Toggles.DisabledFeature, false}
+			               };
 			var allToggleFeatures = new ActiveTogglesStub(features);
 
 			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException("Any Exception will do", 123), "", _mapi, _fileWriter, allToggleFeatures);
 			var expectedString = model.CompleteStackAndAssemblyText();
 
-			expectedString.Should().Contain(features[Toggles.EnabledFeature].ToString());
-			expectedString.Should().Contain(Toggles.EnabledFeature.ToString());
+			expectedString.Should().Contain(string.Format("{0} = {1}", Toggles.DisabledFeature, features[Toggles.DisabledFeature]));
 		}
 
 	    [Test]

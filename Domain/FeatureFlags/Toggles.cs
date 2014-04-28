@@ -4,6 +4,7 @@
 	{
 		//Don't remove this one - used in tests
 		EnabledFeature,
+		DisabledFeature,
 		//////
 		WeeklyRestRuleSolver
 	}
