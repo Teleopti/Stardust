@@ -56,8 +56,6 @@
 				var rest = start % self.intervalsPerHour();
 				var time = start - rest;
 				var end = lastInterval.IntervalId + self.intervalsPerHour() - (lastInterval.IntervalId % self.intervalsPerHour());
-				if (end < start)
-					end += self.intervalsPerDay();
 				while (time <= end) {
 					times.push({
 						'Time': moment().startOf('day').add('minutes', time * self.intervalMinutes()).format("HH:mm"),
@@ -87,8 +85,6 @@
 				var start = self.startInterval().IntervalId;
 				var time = start;
 				var end = self.lastInterval().IntervalId;
-				if (end < start)
-					end += self.intervalsPerDay();
 				while (time < end + 1) {
 					var currentInterval = intervals[time - start];
 					if (currentInterval) {

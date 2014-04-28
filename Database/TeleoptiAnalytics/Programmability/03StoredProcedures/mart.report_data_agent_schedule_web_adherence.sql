@@ -81,7 +81,10 @@ exec mart.report_data_agent_schedule_adherence
 
 select shift_startdate AS ShiftDate, 
 intervals_per_day as IntervalsPerDay,
-interval_id as IntervalId,
+CASE 
+	WHEN date != shift_startdate THEN  interval_id + intervals_per_day
+	ELSE interval_id
+END as IntervalId,
 adherence Adherence, 
 adherence_tot TotalAdherence, 
 CAST(ROUND(deviation_m, 0) as int) AS Deviation, 
