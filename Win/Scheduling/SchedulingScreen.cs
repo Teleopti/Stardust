@@ -5736,6 +5736,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				_schedulerMessageBrokerHandler.RequestDeletedFromBroker -= schedulerMessageBrokerHandlerRequestDeletedFromBroker;
 				_schedulerMessageBrokerHandler.SchedulesUpdatedFromBroker -= schedulerMessageBrokerHandlerSchedulesUpdatedFromBroker;
+                _schedulerMessageBrokerHandler.RequestInsertedFromBroker -= schedulerMessageBrokerHandlerRequestInsertedFromBroker;
 
 				_schedulerMessageBrokerHandler.Dispose();
 				_schedulerMessageBrokerHandler = null; // referens till SchedulingScreen
