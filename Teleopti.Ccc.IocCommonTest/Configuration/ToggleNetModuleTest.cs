@@ -11,7 +11,20 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	public class ToggleNetModuleTest
 	{
 		[Test]
-		public void DefinedShouldBeEnabledIfAll()
+		public void DisabledFeatureShouldBeEnabledIfAll()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule(new ToggleNetModule("ALL"));
+			using (var container = containerBuilder.Build())
+			{
+				var toggleChecker = container.Resolve<IToggleManager>();
+				toggleChecker.IsEnabled(Toggles.DisabledFeature)
+					.Should().Be.False();
+			}
+		}
+
+		[Test]
+		public void EnabledFeatureShouldBeEnabledIfAll()
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule("ALL"));
@@ -24,7 +37,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		public void DefinedShouldBeEnabledIfEndWithAll()
+		public void PathNameCanEndWithAll()
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule(@"c:\blablablab\aLl  "));
@@ -101,6 +114,18 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
 				toggleChecker.Should().Be.OfType<ToggleQuerier>();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveTogglesActive()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule(new ToggleNetModule(" "));
+			using (var container = containerBuilder.Build())
+			{
+				container.Resolve<ITogglesActive>()
+					.Should().Not.Be.Null();
 			}
 		}
 	}

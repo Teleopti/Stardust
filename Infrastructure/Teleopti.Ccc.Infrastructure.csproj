@@ -154,11 +154,13 @@
     <Compile Include="Foundation\ConfigurationManagerWrapper.cs" />
     <Compile Include="Foundation\IAvailableApplicationTokenDataSource.cs" />
     <Compile Include="Foundation\IConfigurationWrapper.cs" />
+    <Compile Include="Foundation\ITogglesActive.cs" />
     <Compile Include="Foundation\NewtonsoftJsonDeserializer.cs" />
     <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
     <Compile Include="Foundation\ToggleQuerier.cs" />
+    <Compile Include="Foundation\TogglesActive.cs" />
     <Compile Include="Licensing\XmlLicenseServiceFactory.cs" />
     <Compile Include="NHibernateConfiguration\CompressedString.cs" />
     <Compile Include="NHibernateConfiguration\FasterProxyFactoryFactory.cs" />

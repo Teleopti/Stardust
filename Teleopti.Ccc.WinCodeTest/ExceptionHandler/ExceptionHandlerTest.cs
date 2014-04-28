@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
@@ -34,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
             _view = _mocks.StrictMock<IExceptionHandlerView>();
             _mapi = _mocks.StrictMock<IMapiMailMessage>();
             _fileWriter = _mocks.StrictMock<IWriteToFile>(); 
-            _model = new ExceptionHandlerModel(_exception, "hej", _mapi, _fileWriter);
+            _model = new ExceptionHandlerModel(_exception, "hej", _mapi, _fileWriter,null);
             _target = new ExceptionHandlerPresenter(_view, _model);
         }
 
@@ -134,9 +138,79 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
         public void ShouldGetAllExceptionsIfSqlExceptionException()
         {
             var createSqlException = SqlExceptionConstructor.CreateSqlException("Timeout", 123);
-            var model = new ExceptionHandlerModel(createSqlException, "", _mapi, _fileWriter);
+            var model = new ExceptionHandlerModel(createSqlException, "", _mapi, _fileWriter,null);
             var expectedString = model.CompleteStackAndAssemblyText();
-            expectedString.Should().StartWith("System.Data.SqlClient.SqlError: Timeout\nSystem.Data.SqlClient.SqlError: Timeout2");
+            expectedString.Should().StartWith("System.Data.SqlClient.SqlError: Timeout\nSystem.Data.SqlClient.SqlError: Timeout");
         }
+
+		[Test]
+		public void CompleteStackAndAssemblyText_Always_ShouldIncludeEnabledToggleFeatures()
+		{
+			var features = new Dictionary<Toggles, bool>
+			               {
+				               {Toggles.EnabledFeature, true},
+				               {Toggles.DisabledFeature, false},
+			               };
+			var allToggleFeatures = new ActiveTogglesStub(features);
+
+			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException("Any Exception will do", 123), "", _mapi, _fileWriter, allToggleFeatures);
+			var expectedString = model.CompleteStackAndAssemblyText();
+
+			expectedString.Should().Contain(string.Format("{0} = {1}", Toggles.EnabledFeature, features[Toggles.EnabledFeature]));
+		}
+
+		[Test]
+		public void CompleteStackAndAssemblyText_Always_ShouldIncludeDisabledToggleFeatures()
+		{
+			var features = new Dictionary<Toggles, bool>
+			               {
+				               {Toggles.EnabledFeature, false},
+							   {Toggles.DisabledFeature, false}
+			               };
+			var allToggleFeatures = new ActiveTogglesStub(features);
+
+			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException("Any Exception will do", 123), "", _mapi, _fileWriter, allToggleFeatures);
+			var expectedString = model.CompleteStackAndAssemblyText();
+
+			expectedString.Should().Contain(string.Format("{0} = {1}", Toggles.DisabledFeature, features[Toggles.DisabledFeature]));
+		}
+
+	    [Test]
+	    public void CompleteStackAndAssemblyText_WhenUnableToReadDataFromToggleService_ShouldShowExceptionAndInfoAboutUnknownToggles()
+	    {
+		    const string exceptionInfo = "System.Data.SqlClient.SqlError";
+			var allToggleFeatures = new ActiveTogglesThatThrowsWhenTryingToReadFeatures();
+
+			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException(exceptionInfo, 123), "", _mapi, _fileWriter, allToggleFeatures);
+			var expectedString = model.CompleteStackAndAssemblyText();
+
+			expectedString.Should().StartWith(exceptionInfo);
+		    expectedString.Should().Contain(ExceptionHandlerModel.ToggleFeaturesUnknown);
+
+	    }
+
+		public class ActiveTogglesStub : ITogglesActive
+		{
+			private readonly IDictionary<Toggles, bool> _features;
+
+			public ActiveTogglesStub(IDictionary<Toggles, bool> features)
+			{
+				_features = features;
+			}
+
+			public IDictionary<Toggles, bool> AllActiveToggles()
+			{
+				return _features;
+			}
+		}
+
+		public class ActiveTogglesThatThrowsWhenTryingToReadFeatures : ITogglesActive
+		{
+			public IDictionary<Toggles, bool> AllActiveToggles()
+			{
+				throw new NotImplementedException();
+			}
+		}
     }
+    
 }

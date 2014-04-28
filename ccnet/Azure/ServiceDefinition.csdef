@@ -11,6 +11,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
         <VirtualApplication name="Client" physicalDirectory="../Azure/Temp/AzureContent/Client" />
         <VirtualApplication name="RTA" physicalDirectory="../Azure/Temp/AzureContent/RTA" />
 		<VirtualApplication name="Broker" physicalDirectory="../Azure/Temp/AzureContent/Broker" />
+		<VirtualApplication name="Broker.backplane" physicalDirectory="../Azure/Temp/AzureContent/BrokerBackplane" />
         <Bindings>
           <Binding name="HttpsIn" endpointName="HttpsIn" />
         </Bindings>

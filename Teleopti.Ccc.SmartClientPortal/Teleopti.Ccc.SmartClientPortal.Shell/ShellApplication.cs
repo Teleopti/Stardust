@@ -212,9 +212,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                                       : fallBack;
             IWriteToFile fileWriter = new WriteStringToFile();
             IMapiMailMessage message = new MapiMailMessage(string.Empty, string.Empty);
-            ExceptionHandlerModel exceptionHandlerModel = new ExceptionHandlerModel(ex, defaultEmail,
-                                                                                    message, fileWriter);
-            using (var view = new ExceptionHandlerView(exceptionHandlerModel))
+
+	        var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
+			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new ToggleNetModule(ConfigurationManager.AppSettings["FeatureToggle"]));
+			ExceptionHandlerModel exceptionHandlerModel;
+			using (var container = tempContainerBecauseWeDontHaveAGlobalOneHere.Build())
+	        {
+				exceptionHandlerModel = new ExceptionHandlerModel(ex, defaultEmail,message, fileWriter, container.Resolve<ITogglesActive>());		        
+	        }
+	        using (var view = new ExceptionHandlerView(exceptionHandlerModel))
             {
                 view.ShowDialog();
             }
