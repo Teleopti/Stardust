@@ -117,6 +117,8 @@ namespace SdkTestWinGui
 			this.backgroundWorkerLoadPersonPeriods = new System.ComponentModel.BackgroundWorker();
 			this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.tabPagePermissions = new System.Windows.Forms.TabPage();
+			this.listView3 = new System.Windows.Forms.ListView();
 			this.statusStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -141,6 +143,7 @@ namespace SdkTestWinGui
 			this.tabPageWriteProtect.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
 			this.panel1.SuspendLayout();
+			this.tabPagePermissions.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// backgroundWorkerLogon
@@ -243,6 +246,7 @@ namespace SdkTestWinGui
 			this.tabControl1.Controls.Add(this.tabPageSkillData);
 			this.tabControl1.Controls.Add(this.tabPagePersonPeriod);
 			this.tabControl1.Controls.Add(this.tabPageWriteProtect);
+			this.tabControl1.Controls.Add(this.tabPagePermissions);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Location = new System.Drawing.Point(0, 0);
 			this.tabControl1.Name = "tabControl1";
@@ -895,6 +899,24 @@ namespace SdkTestWinGui
 			this.dataGridViewTextBoxColumn2.HeaderText = "re";
 			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
 			// 
+			// tabPagePermissions
+			// 
+			this.tabPagePermissions.Controls.Add(this.listView3);
+			this.tabPagePermissions.Location = new System.Drawing.Point(4, 22);
+			this.tabPagePermissions.Name = "tabPagePermissions";
+			this.tabPagePermissions.Size = new System.Drawing.Size(820, 577);
+			this.tabPagePermissions.TabIndex = 5;
+			this.tabPagePermissions.Text = "Permission";
+			this.tabPagePermissions.UseVisualStyleBackColor = true;
+			// 
+			// listView3
+			// 
+			this.listView3.Location = new System.Drawing.Point(3, 32);
+			this.listView3.Name = "listView3";
+			this.listView3.Size = new System.Drawing.Size(220, 506);
+			this.listView3.TabIndex = 0;
+			this.listView3.UseCompatibleStateImageBehavior = false;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -931,6 +953,7 @@ namespace SdkTestWinGui
 			this.tabPageWriteProtect.ResumeLayout(false);
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
+			this.tabPagePermissions.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1014,5 +1037,7 @@ namespace SdkTestWinGui
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+		private System.Windows.Forms.TabPage tabPagePermissions;
+		private System.Windows.Forms.ListView listView3;
     }
 }

@@ -30,6 +30,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+		 public ApplicationRoleRepository(IUnitOfWorkFactory unitOfWorkFactory)
+            : base(unitOfWorkFactory)
+        {
+        }
+
+		 public ApplicationRoleRepository(ICurrentUnitOfWork currentUnitOfWork)
+			: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Reads all application roles ordered by their name.
         /// </summary>

@@ -373,9 +373,19 @@ namespace SdkTestWinGui
                 _writeProtctectionView.RedrawListView(treeView1.SelectedNode);
                 return;
             }
+
+	        if (tabControl1.SelectedTab == tabPagePermissions)
+	        {
+		        loadRoles();
+	        }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+	    private void loadRoles()
+	    {
+		    var roles = Service.OrganizationService.GetRolesByQuery(new GetAllRolesQueryDto());
+	    }
+
+	    private void button2_Click(object sender, EventArgs e)
         {
             foreach (AgentDay agentDay in _schedules)
             {

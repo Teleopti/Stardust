@@ -153,10 +153,12 @@
     <Compile Include="DataTransferObject\Commands\ChildSkillMappingDto.cs" />
     <Compile Include="DataTransferObject\Commands\ChangePersonEmploymentCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\ClearMainShiftCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\GrantPersonRoleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\QuickForecastCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\DenormalizeNotificationCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\DenormalizeScheduleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\ImportForecastsFileCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\RevokePersonRoleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\SendPushMessageToPeopleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\SetPersonOptionalValuesForPersonCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\SetSchedulePeriodWorktimeOverrideCommandDto.cs" />
@@ -200,12 +202,14 @@
     <Compile Include="DataTransferObject\PersonPeriodLoadOptionDto.cs" />
     <Compile Include="DataTransferObject\PersonSkillPeriodDto.cs" />
     <Compile Include="DataTransferObject\PublicNoteDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetAllRolesQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllScheduleTagsDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorDefinitionSetOvertimeDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorDefinitionSetShiftAllowanceDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorOvertimeQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorShiftAllowanceQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetPeopleOptionalValuesByPersonIdQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetPersonRolesQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesByGroupPageGroupQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesBySiteQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllScenariosQueryDto.cs" />
@@ -232,6 +236,7 @@
     <Compile Include="DataTransferObject\QueryDtos\GetValidatedSchedulePartsForPreferenceQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\KnownTypesHelper.cs" />
     <Compile Include="DataTransferObject\QueryDtos\QueryDto.cs" />
+    <Compile Include="DataTransferObject\RoleDto.cs" />
     <Compile Include="DataTransferObject\ScheduleLoadOptionDto.cs" />
     <Compile Include="DataTransferObject\ScheduleTagDto.cs" />
     <Compile Include="DataTransferObject\StudentAvailabilityDayDto.cs" />

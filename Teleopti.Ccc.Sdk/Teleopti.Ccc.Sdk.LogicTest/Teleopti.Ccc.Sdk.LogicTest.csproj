@@ -170,6 +170,8 @@
     <Compile Include="CommandHandler\CancelPersonalActivityCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\ChangePersonEmploymentCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\ClearMainShiftCommandHandlerTest.cs" />
+    <Compile Include="CommandHandler\GrantPersonRoleCommandHandlerTest.cs" />
+    <Compile Include="CommandHandler\RevokePersonRoleCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SetPersonOptionalValuesForPersonCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SendPushMessageToPersonCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\CreatePayrollExportCommandHandlerTest.cs" />
@@ -220,12 +222,14 @@
     <Compile Include="Payroll\PayrollFormatHandlerTest.cs" />
     <Compile Include="Payroll\PayrollResultServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryHandler\GetAllRolesQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetAllScheduleTagsQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetPeopleOptionalValuesByPersonIdQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorDefinitionSetOvertimeQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorDefinitionSetShiftAllowanceQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorOvertimeQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorShiftAllowanceQueryHandlerTest.cs" />
+    <Compile Include="QueryHandler\GetPersonRolesQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetSchedulesByGroupPageGroupQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetSchedulesBySiteQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetSchedulesForAllPeopleQueryHandlerTest.cs" />

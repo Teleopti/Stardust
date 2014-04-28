@@ -121,7 +121,6 @@
     <Compile Include="Domain\SkillDataLoader.cs" />
     <Compile Include="Domain\SkillDay.cs" />
     <Compile Include="Domain\TimePeriod.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Infrastructure\AuthenticationSoapHeader.cs" />
     <Compile Include="Infrastructure\AuthenticationSoapHeaderExtension.cs" />
     <Compile Include="Infrastructure\ServiceApplication.cs" />
@@ -207,6 +206,9 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Sdk\PublicNoteDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Sdk\RoleDto.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Sdk\ScenarioDto.datasource">
