@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			public bool IsEnabled(Toggles toggle)
 			{
-				return true;
+				return toggle != Toggles.DisabledFeature;
 			}
 		}
 
