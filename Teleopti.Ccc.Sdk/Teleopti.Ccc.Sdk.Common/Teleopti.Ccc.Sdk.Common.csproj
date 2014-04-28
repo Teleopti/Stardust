@@ -158,6 +158,7 @@
     <Compile Include="DataTransferObject\Commands\DenormalizeNotificationCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\DenormalizeScheduleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\ImportForecastsFileCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\RevokePersonRoleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\SendPushMessageToPeopleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\SetPersonOptionalValuesForPersonCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\SetSchedulePeriodWorktimeOverrideCommandDto.cs" />

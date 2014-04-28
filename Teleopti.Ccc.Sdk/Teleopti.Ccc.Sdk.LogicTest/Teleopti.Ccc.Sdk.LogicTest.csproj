@@ -171,6 +171,7 @@
     <Compile Include="CommandHandler\ChangePersonEmploymentCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\ClearMainShiftCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\GrantPersonRoleCommandHandlerTest.cs" />
+    <Compile Include="CommandHandler\RevokePersonRoleCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SetPersonOptionalValuesForPersonCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SendPushMessageToPersonCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\CreatePayrollExportCommandHandlerTest.cs" />

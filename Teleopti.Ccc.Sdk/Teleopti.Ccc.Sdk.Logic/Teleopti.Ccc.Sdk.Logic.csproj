@@ -189,6 +189,7 @@
     <Compile Include="CommandHandler\ImportForecastsFileCommandHandler.cs" />
     <Compile Include="CommandHandler\NewMainShiftCommandHandler.cs" />
     <Compile Include="CommandHandler\RecalculateForecastOnSkillCommandHandler.cs" />
+    <Compile Include="CommandHandler\RevokePersonRoleCommandHandler.cs" />
     <Compile Include="CommandHandler\SaveAgentPortalSettingsCommandHandler.cs" />
     <Compile Include="CommandHandler\SavePersonAbsenceRequestCommandHandler.cs" />
     <Compile Include="CommandHandler\SendPushMessageToPersonCommandHandler.cs" />

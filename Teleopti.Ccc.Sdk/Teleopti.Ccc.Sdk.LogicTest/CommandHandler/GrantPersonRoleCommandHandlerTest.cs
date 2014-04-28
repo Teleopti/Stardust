@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
-    [TestFixture]
+	[TestFixture]
 	public class GrantPersonRoleCommandHandlerTest
     {
         private IUnitOfWorkFactory _unitOfWorkFactory;
