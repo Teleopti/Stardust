@@ -34,6 +34,28 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			result.First().Id.Should().Be.EqualTo(person.PermissionInformation.ApplicationRoleCollection.First().Id);
 		}
+
+		[Test]
+		public void ShouldGetDeletedRolesForPerson()
+		{
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
+			((IDeleteTag)person.PermissionInformation.ApplicationRoleCollection.First()).SetDeleted();
+			person.SetId(Guid.NewGuid());
+
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			personRepository.Stub(x => x.Load(person.Id.GetValueOrDefault())).Return(person);
+
+			var target = new GetPersonRolesQueryHandler(personRepository, currentUnitOfWorkFactory);
+
+			var result = target.Handle(new GetPersonRolesQueryDto { PersonId = person.Id.GetValueOrDefault() });
+
+			result.First().IsDeleted.Should().Be.True();
+		}
 	}
 
 	

@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					person.PermissionInformation.ApplicationRoleCollection.Select(s => new RoleDto
 					{
 						Id = s.Id,
-						Name = s.Name
+						Name = s.Name,
+						IsDeleted = ((IDeleteTag)s).IsDeleted
 					}).ToList();
 			}
 		}

@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var applicationRoleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
 			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var role = ApplicationRoleFactory.CreateRole("testRole", "Role for test");
+			role.SetDeleted();
 			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 
@@ -53,6 +54,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var result = target.Handle(new GetAllRolesQueryDto{LoadDeleted = true});
 
 			result.First().Id.Should().Be.EqualTo(role.Id);
+			result.First().IsDeleted.Should().Be.True();
 
 			unitOfWork.AssertWasCalled(x => x.DisableFilter(QueryFilter.Deleted));
 		}
