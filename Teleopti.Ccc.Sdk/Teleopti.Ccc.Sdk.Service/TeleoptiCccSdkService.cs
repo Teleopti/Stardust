@@ -1605,6 +1605,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return ExecuteCommand(setSchedulePeriodWorktimeOverrideCommandDto);
 	    }
 
+		public ICollection<RoleDto> GetRolesByQuery(QueryDto queryDto)
+	    {
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<RoleDto>>>();
+			return invoker.Invoke(queryDto);
+	    }
+
 	    [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public CommandResultDto ExecuteCommand(CommandDto commandDto)
         {

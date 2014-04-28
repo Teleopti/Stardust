@@ -1,84 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.ccc.teleopti.com/sdk/2012/09/" elementFormDefault="qualified" targetNamespace="http://schemas.ccc.teleopti.com/sdk/2012/09/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd0" namespace="http://schemas.ccc.teleopti.com/sdk/2010/04/" />
-  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd8" namespace="http://schemas.ccc.teleopti.com/sdk/2011/07/" />
-  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:complexType name="GetMultiplicatorDefinitionSetOvertimeDto">
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/System.ServiceModel" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System.ServiceModel" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System" />
+  <xs:complexType name="FaultException">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q1="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q1:QueryDto">
-        <xs:sequence>
-          <xs:element xmlns:q2="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Period" nillable="true" type="q2:DateOnlyPeriodDto" />
-          <xs:element minOccurs="0" name="TimeZoneId" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="LoadDeleted" type="xs:boolean" />
-        </xs:sequence>
-      </xs:extension>
+      <xs:extension base="tns:CommunicationException" />
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="GetMultiplicatorDefinitionSetOvertimeDto" nillable="true" type="tns:GetMultiplicatorDefinitionSetOvertimeDto" />
-  <xs:complexType name="GetMultiplicatorDefinitionSetShiftAllowanceDto">
+  <xs:element name="FaultException" nillable="true" type="tns:FaultException" />
+  <xs:complexType name="CommunicationException">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q3="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q3:QueryDto">
-        <xs:sequence>
-          <xs:element xmlns:q4="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Period" nillable="true" type="q4:DateOnlyPeriodDto" />
-          <xs:element minOccurs="0" name="TimeZoneId" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="LoadDeleted" type="xs:boolean" />
-        </xs:sequence>
-      </xs:extension>
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/System" base="q1:SystemException" />
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="GetMultiplicatorDefinitionSetShiftAllowanceDto" nillable="true" type="tns:GetMultiplicatorDefinitionSetShiftAllowanceDto" />
-  <xs:complexType name="GetMultiplicatorOvertimeQueryDto">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q5="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q5:QueryDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="LoadDeleted" type="xs:boolean" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GetMultiplicatorOvertimeQueryDto" nillable="true" type="tns:GetMultiplicatorOvertimeQueryDto" />
-  <xs:complexType name="GetMultiplicatorShiftAllowanceQueryDto">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q6="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q6:QueryDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="LoadDeleted" type="xs:boolean" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="GetMultiplicatorShiftAllowanceQueryDto" nillable="true" type="tns:GetMultiplicatorShiftAllowanceQueryDto" />
-  <xs:complexType name="ArrayOfDefinitionSetDto">
+  <xs:element name="CommunicationException" nillable="true" type="tns:CommunicationException" />
+  <xs:complexType name="FaultException.FaultCodeData">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="DefinitionSetDto" nillable="true" type="tns:DefinitionSetDto" />
+      <xs:element name="name" nillable="true" type="xs:string" />
+      <xs:element name="ns" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfDefinitionSetDto" nillable="true" type="tns:ArrayOfDefinitionSetDto" />
-  <xs:complexType name="DefinitionSetDto">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q7="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q7:Dto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="IsDeleted" type="xs:boolean" />
-          <xs:element minOccurs="0" name="LayerCollection" nillable="true" type="tns:ArrayOfDefinitionSetLayerDto" />
-          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="DefinitionSetDto" nillable="true" type="tns:DefinitionSetDto" />
-  <xs:complexType name="ArrayOfDefinitionSetLayerDto">
+  <xs:element name="FaultException.FaultCodeData" nillable="true" type="tns:FaultException.FaultCodeData" />
+  <xs:complexType name="ArrayOfFaultException.FaultReasonData">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="DefinitionSetLayerDto" nillable="true" type="tns:DefinitionSetLayerDto" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FaultException.FaultReasonData" nillable="true" type="tns:FaultException.FaultReasonData" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfDefinitionSetLayerDto" nillable="true" type="tns:ArrayOfDefinitionSetLayerDto" />
-  <xs:complexType name="DefinitionSetLayerDto">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q8="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q8:LayerDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="MultiplicatorId" type="ser:guid" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
+  <xs:element name="ArrayOfFaultException.FaultReasonData" nillable="true" type="tns:ArrayOfFaultException.FaultReasonData" />
+  <xs:complexType name="FaultException.FaultReasonData">
+    <xs:sequence>
+      <xs:element name="text" nillable="true" type="xs:string" />
+      <xs:element name="xmlLang" nillable="true" type="xs:string" />
+    </xs:sequence>
   </xs:complexType>
-  <xs:element name="DefinitionSetLayerDto" nillable="true" type="tns:DefinitionSetLayerDto" />
+  <xs:element name="FaultException.FaultReasonData" nillable="true" type="tns:FaultException.FaultReasonData" />
+  <xs:complexType name="ArrayOfFaultException.FaultCodeData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FaultException.FaultCodeData" nillable="true" type="tns:FaultException.FaultCodeData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfFaultException.FaultCodeData" nillable="true" type="tns:ArrayOfFaultException.FaultCodeData" />
 </xs:schema>

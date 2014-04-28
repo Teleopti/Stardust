@@ -338,5 +338,13 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// <returns></returns>
 		[OperationContract]
 		CommandResultDto SetSchedulePeriodWorktimeOverride(SetSchedulePeriodWorktimeOverrideCommandDto setSchedulePeriodWorktimeOverrideCommandDto);
+
+		/// <summary>
+		/// Gets Application Roles.
+		/// </summary>
+		/// <param name="queryDto">A predefined query type used.</param>
+		/// <returns>Roles.</returns>
+		[OperationContract]
+		ICollection<RoleDto> GetRolesByQuery(QueryDto queryDto);
     }
 }
