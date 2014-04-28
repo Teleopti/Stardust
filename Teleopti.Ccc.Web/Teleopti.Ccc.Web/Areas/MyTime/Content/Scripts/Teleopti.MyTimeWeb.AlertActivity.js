@@ -193,7 +193,6 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		var interval = 0;
 		var delayTime = alertvm.alertTimeSetting;
 
-		// timespan in negative number means no schedule today or all activity finished
 		if (alert.timespan >= 0) {
 			if (alert.timespan >= alertvm.alertTimeSetting) {
 				interval = alert.timespan - alertvm.alertTimeSetting;
@@ -208,6 +207,16 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			alertvm.restartAlertDelayTime = delayTime;
 
 			setTimeout(alertActivity, interval * 1000);
+		} else {
+			// timespan in negative number means no schedule today or all activity finished.
+			// Then re-start alert when tomorrow comes.
+			var timeZeroTomorrow = moment(alertvm.getCurrentTime()).add('days', 1).startOf('day').toDate();
+			var intervalForTomorrowInSecond = (timeZeroTomorrow - alertvm.getCurrentTime()) / 1000;
+
+			setTimeout(function() {
+				initNotificationViewModel(options);
+				startAlert();
+			}, intervalForTomorrowInSecond * 1000);
 		}
 	}
 
