@@ -12,6 +12,7 @@
   <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd18" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain" />
   <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd15" namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/" />
   <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd12" namespace="http://schemas.ccc.teleopti.com/sdk/2013/03/" />
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd9" namespace="http://schemas.ccc.teleopti.com/sdk/2014/04/" />
   <xs:element name="ConvertToUtc">
     <xs:complexType>
       <xs:sequence>
@@ -2817,26 +2818,10 @@
   <xs:element name="GetRolesByQueryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q467="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetRolesByQueryResult" nillable="true" type="q467:ArrayOfRoleDto" />
+        <xs:element xmlns:q467="http://schemas.ccc.teleopti.com/sdk/2014/04/" minOccurs="0" name="GetRolesByQueryResult" nillable="true" type="q467:ArrayOfRoleDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="ArrayOfRoleDto">
-    <xs:sequence>
-      <xs:element xmlns:q468="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="RoleDto" nillable="true" type="q468:RoleDto" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element xmlns:q469="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfRoleDto" nillable="true" type="q469:ArrayOfRoleDto" />
-  <xs:complexType name="RoleDto">
-    <xs:complexContent mixed="false">
-      <xs:extension xmlns:q470="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q470:Dto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element xmlns:q471="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="RoleDto" nillable="true" type="q471:RoleDto" />
   <xs:element name="GetPayrollFormats">
     <xs:complexType>
       <xs:sequence />
@@ -2845,20 +2830,20 @@
   <xs:element name="GetPayrollFormatsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q472="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPayrollFormatsResult" nillable="true" type="q472:ArrayOfPayrollFormatDto" />
+        <xs:element xmlns:q468="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetPayrollFormatsResult" nillable="true" type="q468:ArrayOfPayrollFormatDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfPayrollFormatDto">
     <xs:sequence>
-      <xs:element xmlns:q473="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PayrollFormatDto" nillable="true" type="q473:PayrollFormatDto" />
+      <xs:element xmlns:q469="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="PayrollFormatDto" nillable="true" type="q469:PayrollFormatDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q474="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPayrollFormatDto" nillable="true" type="q474:ArrayOfPayrollFormatDto" />
+  <xs:element xmlns:q470="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfPayrollFormatDto" nillable="true" type="q470:ArrayOfPayrollFormatDto" />
   <xs:element name="CreateServerPayrollExport">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q475="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="payrollExport" nillable="true" type="q475:PayrollExportDto" />
+        <xs:element xmlns:q471="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="payrollExport" nillable="true" type="q471:PayrollExportDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2870,7 +2855,7 @@
   <xs:element name="InitializePayrollFormats">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q476="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="payrollFormatDtos" nillable="true" type="q476:ArrayOfPayrollFormatDto" />
+        <xs:element xmlns:q472="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="payrollFormatDtos" nillable="true" type="q472:ArrayOfPayrollFormatDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2887,7 +2872,7 @@
   <xs:element name="GetHibernateConfigurationInternalResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q477="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetHibernateConfigurationInternalResult" nillable="true" type="q477:ArrayOfstring" />
+        <xs:element xmlns:q473="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetHibernateConfigurationInternalResult" nillable="true" type="q473:ArrayOfstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2899,14 +2884,14 @@
   <xs:element name="VerifyLicenseInternalResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q478="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="VerifyLicenseInternalResult" nillable="true" type="q478:LicenseVerificationResultDto" />
+        <xs:element xmlns:q474="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="VerifyLicenseInternalResult" nillable="true" type="q474:LicenseVerificationResultDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="TransferSessionInternal">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q479="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="sessionDataDto" nillable="true" type="q479:SessionDataDto" />
+        <xs:element xmlns:q475="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="sessionDataDto" nillable="true" type="q475:SessionDataDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2923,7 +2908,7 @@
   <xs:element name="GetAppSettingsInternalResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q480="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetAppSettingsInternalResult" nillable="true" type="q480:ArrayOfKeyValueOfstringstring" />
+        <xs:element xmlns:q476="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GetAppSettingsInternalResult" nillable="true" type="q476:ArrayOfKeyValueOfstringstring" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2942,45 +2927,45 @@
   <xs:element name="ExecuteCommand">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q481="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="commandDto" nillable="true" type="q481:CommandDto" />
+        <xs:element xmlns:q477="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="commandDto" nillable="true" type="q477:CommandDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ExecuteCommandResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q482="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="ExecuteCommandResult" nillable="true" type="q482:CommandResultDto" />
+        <xs:element xmlns:q478="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="ExecuteCommandResult" nillable="true" type="q478:CommandResultDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetAgentPortalSettingsByQuery">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q483="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q483:QueryDto" />
+        <xs:element xmlns:q479="http://schemas.ccc.teleopti.com/sdk/2011/07/" minOccurs="0" name="queryDto" nillable="true" type="q479:QueryDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetAgentPortalSettingsByQueryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q484="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAgentPortalSettingsByQueryResult" nillable="true" type="q484:ArrayOfAgentPortalSettingsDto" />
+        <xs:element xmlns:q480="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="GetAgentPortalSettingsByQueryResult" nillable="true" type="q480:ArrayOfAgentPortalSettingsDto" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:complexType name="ArrayOfAgentPortalSettingsDto">
     <xs:sequence>
-      <xs:element xmlns:q485="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="AgentPortalSettingsDto" nillable="true" type="q485:AgentPortalSettingsDto" />
+      <xs:element xmlns:q481="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" maxOccurs="unbounded" name="AgentPortalSettingsDto" nillable="true" type="q481:AgentPortalSettingsDto" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q486="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfAgentPortalSettingsDto" nillable="true" type="q486:ArrayOfAgentPortalSettingsDto" />
+  <xs:element xmlns:q482="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="ArrayOfAgentPortalSettingsDto" nillable="true" type="q482:ArrayOfAgentPortalSettingsDto" />
   <xs:complexType name="AgentPortalSettingsDto">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q487="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q487:Dto">
+      <xs:extension xmlns:q483="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q483:Dto">
         <xs:sequence>
           <xs:element minOccurs="0" name="Resolution" type="xs:int" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element xmlns:q488="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AgentPortalSettingsDto" nillable="true" type="q488:AgentPortalSettingsDto" />
+  <xs:element xmlns:q484="http://schemas.ccc.teleopti.com/sdk/2010/04/" name="AgentPortalSettingsDto" nillable="true" type="q484:AgentPortalSettingsDto" />
 </xs:schema>
