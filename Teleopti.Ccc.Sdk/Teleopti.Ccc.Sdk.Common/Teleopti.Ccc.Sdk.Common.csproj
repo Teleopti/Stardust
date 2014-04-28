@@ -153,6 +153,7 @@
     <Compile Include="DataTransferObject\Commands\ChildSkillMappingDto.cs" />
     <Compile Include="DataTransferObject\Commands\ChangePersonEmploymentCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\ClearMainShiftCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\GrantPersonRoleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\QuickForecastCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\DenormalizeNotificationCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\DenormalizeScheduleCommandDto.cs" />
