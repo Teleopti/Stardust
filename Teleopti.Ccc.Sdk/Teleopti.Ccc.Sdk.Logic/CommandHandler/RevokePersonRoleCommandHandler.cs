@@ -1,6 +1,10 @@
+using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
@@ -23,6 +27,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var person = _personRepository.Load(command.PersonId);
+				checkIfAuthorized(person);
+
 				var role = _applicationRoleRepository.Load(command.RoleId);
 				if (person != null && role != null)
 				{
@@ -33,6 +39,14 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 						uow.PersistAll();
 					}
 				}
+			}
+		}
+
+		private static void checkIfAuthorized(IPerson person)
+		{
+			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, DateOnly.Today, person))
+			{
+				throw new FaultException("You're not allowed to modify roles for this person.");
 			}
 		}
 	}

@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 {
 	/// <summary>
-	/// This command revokes a role to an existing person. 
+	/// This command revokes a role from an existing person. 
 	/// </summary>
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2014/04/")]
 	public class RevokePersonRoleCommandDto : CommandDto

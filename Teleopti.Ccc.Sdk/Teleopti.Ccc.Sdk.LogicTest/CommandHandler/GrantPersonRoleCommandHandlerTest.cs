@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -6,6 +7,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -60,9 +62,21 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	        _person.PermissionInformation.ApplicationRoleCollection.Should().Contain(_role);
 			unitOfWork.AssertWasCalled(x => x.PersistAll());
         }
+
+		[Test]
+		public void ShouldNotGrantPersonRoleWhenNotPermitted()
+		{
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			_personRepository.Stub(x => x.Load(_person.Id.GetValueOrDefault())).Return(_person);
+			_applicationRoleRepository.Stub(x => x.Load(_role.Id.GetValueOrDefault())).Return(_role);
+
+			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+			{
+				Assert.Throws<FaultException>(()=> _target.Handle(_commandDto));
+			}
+
+			unitOfWork.AssertWasNotCalled(x => x.PersistAll());
+		}
     }
-
-	
-
-	
 }
