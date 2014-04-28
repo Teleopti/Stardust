@@ -6,6 +6,8 @@
 		EnabledFeature,
 		DisabledFeature,
 		//////
-		WeeklyRestRuleSolver
+		WeeklyRestRuleSolver,
+		//Show last updated states of realtime adherence overview
+		RtaLastStatesOverview
 	}
 }
