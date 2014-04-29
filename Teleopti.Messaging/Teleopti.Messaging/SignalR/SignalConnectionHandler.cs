@@ -20,15 +20,16 @@ namespace Teleopti.Messaging.SignalR
 		private const string addsubscription = "AddSubscription";
 		private const string removesubscription = "RemoveSubscription";
 
+		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
+		public const string ConnectionReconnected = "Connection reconnected successfully";
+
 		private readonly IHubProxy _hubProxy;
 		private readonly IHubConnectionWrapper _hubConnection;
 		private readonly TimeSpan _reconnectDelay;
-
-		protected ILog Logger ;
 		private readonly Task emptyTask;
 
-		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
-		public const string ConnectionReconnected = "Connection reconnected successfully";
+		protected ILog Logger ;
+		private int reconnectAttempts;
 
 		public SignalConnectionHandler(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger, TimeSpan reconnectDelay)
 		{

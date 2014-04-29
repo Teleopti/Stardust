@@ -168,6 +168,22 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 
 		[Test]
+		public void ShouldNotRestartHubConnectionMoreThanThreeTimes()
+		{
+			var hubproxy = stubProxy();
+			var hubConnection = stubHubConnection(hubproxy);
+			var target = makeSignalSender(hubConnection);
+			target.StartBrokerService(TimeSpan.FromSeconds(0));
+
+			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
+			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
+			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
+			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
+
+			hubConnection.AssertWasCalled(x => x.Start(), a => a.Repeat.Times(4));
+		}
+
+		[Test]
 		public void ShouldRestartHubConnectionWhenStartFails()
 		{
 			var hubProxy = stubProxy();
