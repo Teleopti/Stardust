@@ -2,93 +2,93 @@
 @{
     Layout = null;
 }
-
-<div class="navbar navbar-default">
-    <div class="container">
-        <div class="navbar-left">
-            <div class="navbar-form">
-                <div class="input-group" style="max-width: 294px;">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" data-bind="click: previousMonth">
-                            <i class="glyphicon glyphicon-chevron-left"></i>
-                        </button>
-                    </span>
-                    <input id="CurrentMonth" class="form-control text-center" type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" />
-                    <div class="input-group-btn">
-                        <button class="btn btn-default" type="button" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }">
-                            <i class="glyphicon glyphicon-calendar"></i>
-                        </button>
-                        <button class="btn btn-default" type="button" data-bind="click: nextMonth">
-                            <i class="glyphicon glyphicon-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
-            <li><a href="#" id="month-schedule-week" data-bind="click: week">@Resources.Week</a></li>
-            <li class="active"><a href="#" id="month-schedule-month" data-bind="click: month">@Resources.Month</a></li>
-        </ul>
-    </div>
-</div>
-
-<div id="calendar" style="width: 100%;">
-    <div class="cal-row-fluid cal-row-head visible-lg" data-bind="foreach: weekDayNames">
-	    <div class="cal-cell weekday-name" data-bind="text: Name"></div>
-    </div>
-	<div class="cal-row-fluid cal-row-head visible-md" data-bind="foreach: weekDayNames">
-		<div class="cal-cell weekday-name" data-bind="text: Name"></div>
+<div class="container">
+	<div class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-left">
+				<div class="navbar-form">
+					<div class="input-group" style="max-width: 294px;">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" data-bind="click: previousMonth">
+								<i class="glyphicon glyphicon-chevron-left"></i>
+							</button>
+						</span>
+						<input id="CurrentMonth" class="form-control text-center" type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" />
+						<div class="input-group-btn">
+							<button class="btn btn-default" type="button" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+							<button class="btn btn-default" type="button" data-bind="click: nextMonth">
+								<i class="glyphicon glyphicon-chevron-right"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<ul class="nav navbar-nav">
+				<li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
+				<li><a href="#" id="month-schedule-week" data-bind="click: week">@Resources.Week</a></li>
+				<li class="active"><a href="#" id="month-schedule-month" data-bind="click: month">@Resources.Month</a></li>
+			</ul>
+		</div>
 	</div>
 
-    <div class="cal-row-fluid cal-row-head hidden-lg hidden-md" data-bind="foreach: weekDayNames">
-	    <div class="cal-cell weekday-shortname" data-bind="text: ShortName"></div>
-    </div>
 
-    <div class="cal-month-box" data-bind="foreach: weekViewModels">
-	    <div class="cal-row-fluid" data-bind="foreach: dayViewModels">
-		    <div class="cal-cell" data-bind="attr: { 'data-cal-date': date }">
-			    <div class="cal-month-day" data-bind="
+	<div id="calendar" style="width: 100%;">
+		<div class="cal-row-fluid cal-row-head visible-lg" data-bind="foreach: weekDayNames">
+			<div class="cal-cell weekday-name" data-bind="text: Name"></div>
+		</div>
+		<div class="cal-row-fluid cal-row-head visible-md" data-bind="foreach: weekDayNames">
+			<div class="cal-cell weekday-name" data-bind="text: Name"></div>
+		</div>
+
+		<div class="cal-row-fluid cal-row-head hidden-lg hidden-md" data-bind="foreach: weekDayNames">
+			<div class="cal-cell weekday-shortname" data-bind="text: ShortName"></div>
+		</div>
+
+		<div class="cal-month-box" data-bind="foreach: weekViewModels">
+			<div class="cal-row-fluid" data-bind="foreach: dayViewModels">
+				<div class="cal-cell" data-bind="attr: { 'data-cal-date': date }">
+					<div class="cal-month-day" data-bind="
     click: $root.week,
     css: {
         'cal-day-outmonth': isOutsideMonth,
     }
 						    ">
 
-				    <!-- ko if: hasAbsence -->
-				    <div class="absence" data-bind="css: { 'part-time': hasShift && !isFullDayAbsence, 'dayoff': isDayOff }">
-					    <!-- ko if: !hasShift || isFullDayAbsence -->
-					    <strong class="visible-lg" data-bind="text: absenceName" />
-					    <strong class="visible-md" data-bind="text: absenceName" />
-					    <div class="hidden-md hidden-lg">
-						    <strong data-bind="text: absenceShortName"></strong>
-					    </div>
-					    <!-- /ko -->
-				    </div>
-				    <!-- /ko -->
+						<!-- ko if: hasAbsence -->
+						<div class="absence" data-bind="css: { 'part-time': hasShift && !isFullDayAbsence, 'dayoff': isDayOff }">
+							<!-- ko if: !hasShift || isFullDayAbsence -->
+							<strong class="visible-lg" data-bind="text: absenceName" />
+							<strong class="visible-md" data-bind="text: absenceName" />
+							<div class="hidden-md hidden-lg">
+								<strong data-bind="text: absenceShortName"></strong>
+							</div>
+							<!-- /ko -->
+						</div>
+						<!-- /ko -->
+						<!-- ko if: hasShift && !isFullDayAbsence -->
+						<div class="shift" data-bind="style: { backgroundColor: shiftColor, color: shiftTextColor }, css: { 'part-time': hasAbsence }">
+							<div>
+								<strong class="visible-lg" data-bind="text: shiftName"></strong>
+								<strong class="visible-md" data-bind="text: shiftName"></strong>
+								<div class="hidden-md hidden-lg">
+									<strong data-bind="text: shiftShortName"></strong>
+								</div>
+							</div>
+							<div class="hidden-xs hidden-sm" data-bind="text: shiftTimeSpan"></div>
+							<div class="hidden-xs hidden-sm" data-bind="text: shiftWorkingHours"></div>
+						</div>
+						<!-- /ko -->
+						<!-- ko if: isDayOff && !hasAbsence -->
+						<div class="dayoff">
+						</div>
+						<!-- /ko -->
 
-				    <!-- ko if: hasShift && !isFullDayAbsence -->
-				    <div class="shift" data-bind="style: { backgroundColor: shiftColor, color: shiftTextColor }, css: { 'part-time': hasAbsence }">
-					    <div>
-						    <strong class="visible-lg" data-bind="text: shiftName"></strong>
-						    <strong class="visible-md" data-bind="text: shiftName"></strong>
-						    <div class="hidden-md hidden-lg">
-							    <strong data-bind="text: shiftShortName"></strong>
-						    </div>
-					    </div>
-					    <div class="hidden-xs hidden-sm" data-bind="text: shiftTimeSpan"></div>
-					    <div class="hidden-xs hidden-sm" data-bind="text: shiftWorkingHours"></div>
-				    </div>
-				    <!-- /ko -->
-
-				    <!-- ko if: isDayOff && !hasAbsence -->
-				    <div class="dayoff">
-				    </div>
-				    <!-- /ko -->
-
-				    <span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date }" class="date-number label label-default"></span>
-			    </div>
-		    </div>
-	    </div>
-    </div>
+						<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date }" class="date-number label label-default"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

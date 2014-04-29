@@ -8,99 +8,101 @@
     const int scheduleWidth = 803;
     var left = Html.HtmlStyleLeft();
 }
-<div class="navbar navbar-default">
-    <div class="container">
-        <div class="navbar-left">
-            <div class="navbar-form">
-                <div class="input-group" style="max-width: 294px;">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" data-bind="click: previousDay, css: 'done'"><i class="glyphicon glyphicon-chevron-left"></i></button>
-                    </span>
-                    <input data-bind="value: displayDate" style="width: 100%" type="text" class="text-center form-control" readonly="readonly" />
-                    <div class="input-group-btn">
-                        <button class="btn btn-default moment-datepicker"><i class="glyphicon glyphicon-calendar"></i></button>
-                        <button class="btn btn-default" data-bind="click: nextDay, css: 'done'"><i class="glyphicon glyphicon-chevron-right"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <ul class="nav navbar-nav">
-            <!-- ko if: showTeamPicker -->
-            <li data-bind="if: showGroupings" class="ie8style">
-                <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
-                    <optgroup data-bind="attr: { label: text }, foreach: children">
-                        <option data-bind="text: text, value: id"></option>
-                    </optgroup>
-                </select>
-            </li>
-            <li data-bind="ifnot: showGroupings" class="ie8style">
-                <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
-                    <option data-bind="text: text, value: id"></option>
-                </select>
-            </li>
-            <!-- /ko -->
+<div class="container fixed-non-responsive">
+	<div class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-left">
+				<div class="navbar-form">
+					<div class="input-group" style="max-width: 294px;">
+						<span class="input-group-btn">
+							<button class="btn btn-default" data-bind="click: previousDay, css: 'done'"><i class="glyphicon glyphicon-chevron-left"></i></button>
+						</span>
+						<input data-bind="value: displayDate" style="width: 100%" type="text" class="text-center form-control" readonly="readonly" />
+						<div class="input-group-btn">
+							<button class="btn btn-default moment-datepicker"><i class="glyphicon glyphicon-calendar"></i></button>
+							<button class="btn btn-default" data-bind="click: nextDay, css: 'done'"><i class="glyphicon glyphicon-chevron-right"></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<ul class="nav navbar-nav">
+				<!-- ko if: showTeamPicker -->
+				<li data-bind="if: showGroupings" class="ie8style">
+					<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+						<optgroup data-bind="attr: { label: text }, foreach: children">
+							<option data-bind="text: text, value: id"></option>
+						</optgroup>
+					</select>
+				</li>
+				<li data-bind="ifnot: showGroupings" class="ie8style">
+					<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+						<option data-bind="text: text, value: id"></option>
+					</select>
+				</li>
+				<!-- /ko -->
+				@if (Model.ShiftTradePermisssion)
+				{
+					<li class="divider" data-bind="if: showTeamPicker"></li>
+					<li>
+						<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+					</li>
+				}
+			</ul>
+		</div>
+	</div>
+	<div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
+		<div>
 
-            @if (Model.ShiftTradePermisssion)
-            {
-                <li class="divider" data-bind="if: showTeamPicker"></li>
-                <li>
-                    <a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-                </li>
-            }
-        </ul>
-    </div>
-</div>
-<div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
-    <div>
+			<div class="teamschedule relative ui-corner-all">
 
-        <div class="teamschedule relative ui-corner-all">
+				<div class="teamschedule-timeline absolute">
+					<div class="teamschedule-timeline-spacer floatleft">&nbsp;</div>
+					<ul class="teamschedule-timeline-times floatleft relative">
+						@foreach (var time in Model.TimeLine)
+						{
+							<li class="teamschedule-timeline-time @(time.IsFullHour? "hour": "minute") absolute" style="@left: @(Math.Round(scheduleWidth * time.PositionPercent))px;">
+								<div class="teamschedule-timeline-label label label-info ui-corner-all">@time.ShortTime</div>
+							</li>
+						}
+					</ul>
+				</div>
 
-            <div class="teamschedule-timeline absolute">
-                <div class="teamschedule-timeline-spacer floatleft">&nbsp;</div>
-                <ul class="teamschedule-timeline-times floatleft relative">
-                    @foreach (var time in Model.TimeLine)
-                    {
-                        <li class="teamschedule-timeline-time @(time.IsFullHour? "hour": "minute") absolute" style="@left: @(Math.Round(scheduleWidth * time.PositionPercent))px;">
-                            <div class="teamschedule-timeline-label label label-info ui-corner-all">@time.ShortTime</div>
-                        </li>
-                    }
-                </ul>
-            </div>
+				<ul class="teamschedule-agents">
 
-            <ul class="teamschedule-agents">
+					@foreach (var agentSchedule in Model.AgentSchedules)
+					{
+						<li class="teamschedule-agent relative">
+							<div class="teamschedule-agent-name floatleft">@agentSchedule.AgentName</div>
+							<ul class="teamschedule-agent-schedule floatleft relative">
+								@if (agentSchedule.DayOffText != null)
+								{
+									<li class="dayoff ui-corner-all absolute">@agentSchedule.DayOffText</li>
+								}
+								else
+								{
+									foreach (var layer in agentSchedule.Layers)
+									{
+										var leftPixel = (Math.Round(scheduleWidth * layer.PositionPercent));
+										var rightPixel = (Math.Round(scheduleWidth * layer.EndPositionPercent));
+										var widthPixel = rightPixel - leftPixel;
+										var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
+										<li class="layer absolute qtip-tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
+											 style="
+											 width @(widthPixel) px;
+											 @left
+											 @(leftPixel) px;
+											 background-color @layer.Color ;
+											 @(!agentSchedule.HasDayOffUnder ? IEString : "") "></li>
+									}
+								}
+							</ul>
+						</li>
+					}
 
-                @foreach (var agentSchedule in Model.AgentSchedules)
-                {
-                    <li class="teamschedule-agent relative">
-                        <div class="teamschedule-agent-name floatleft">@agentSchedule.AgentName</div>
-                        <ul class="teamschedule-agent-schedule floatleft relative">
-                            @if (agentSchedule.DayOffText != null)
-                            {
-                                <li class="dayoff ui-corner-all absolute">@agentSchedule.DayOffText</li>
-                            }
-                            else
-                            {
-                                foreach (var layer in agentSchedule.Layers)
-                                {
-                                    var leftPixel = (Math.Round(scheduleWidth * layer.PositionPercent));
-                                    var rightPixel = (Math.Round(scheduleWidth * layer.EndPositionPercent));
-                                    var widthPixel = rightPixel - leftPixel;
-                                    var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
-                                <li class="layer absolute qtip-tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
-								        style="
-                                            width: @(widthPixel)px;
-                                            @left: @(leftPixel)px;
-                                            background-color: @layer.Color;
-                                            @(!agentSchedule.HasDayOffUnder ? IEString : "")"></li>
-                                }
-                            }
-                        </ul>
-                    </li>
-                }
+				</ul>
 
-            </ul>
+			</div>
 
-        </div>
-
-    </div>
+		</div>
+	</div>
 </div>
