@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
         /// <summary>
         /// Gets or sets active skills for a person during a period. Only the <see cref="PersonSkillPeriodDto.SkillCollection"/> is used.
         /// </summary>
-        [DataMember]
+        [DataMember, Obsolete("Use PersonSkillCollection instead.")]
         public IList<PersonSkillPeriodDto> PersonSkillPeriodCollection { get; set; }
 
         /// <summary>
@@ -58,5 +59,11 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
         /// </summary>
         [DataMember]
         public string Note { get; set; }
+
+        /// <summary>
+        /// Gets or sets skills for a person during the period affected by this command.
+        /// </summary>
+        [DataMember(Order = 1,IsRequired = false)]
+        public IList<PersonSkillDto> PersonSkillCollection { get; set; }
     }
 }

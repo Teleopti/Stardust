@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                                                    command.PersonContract == null
                                                        ? lastPersonPeriod.PersonContract
                                                        : createPersonContract(command.PersonContract),team);
+                person.AddPersonPeriod(newPersonPeriod);
                 var externalLogOnDtos = new List<ExternalLogOnDto>();
                 lastPersonPeriod.ExternalLogOnCollection.ForEach(
                     e => externalLogOnDtos.Add(new ExternalLogOnDto
@@ -90,9 +91,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                         }));
 
                 var personSkillPeriodDtos = _personSkillPeriodAssembler.DomainEntityToDto(lastPersonPeriod);
+                addDefaultPersonSkillsWhenNoDefined(command, personSkillPeriodDtos);
+
                 resetExternalLogOns(command.ExternalLogOn ?? externalLogOnDtos, newPersonPeriod, person);
-                resetPersonSkills(command.PersonSkillPeriodCollection ??
-                                  new List<PersonSkillPeriodDto> {personSkillPeriodDtos}, person, newPersonPeriod);
+                resetPersonSkills(command, person, newPersonPeriod);
 
                 newPersonPeriod.Note = string.IsNullOrEmpty(command.Note) ? lastPersonPeriod.Note : command.Note;
             }
@@ -102,16 +104,25 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     throw new FaultException(
                         "There is no person period existed before, you have to specify both person contract and team.");
                 newPersonPeriod = createPersonPeriod(command);
+                person.AddPersonPeriod(newPersonPeriod);
                 if (command.ExternalLogOn != null) resetExternalLogOns(command.ExternalLogOn, newPersonPeriod, person);
-                if (command.PersonSkillPeriodCollection != null)
-                    resetPersonSkills(command.PersonSkillPeriodCollection, person, newPersonPeriod);
+                if (command.PersonSkillPeriodCollection != null || command.PersonSkillCollection != null)
+                    resetPersonSkills(command, person, newPersonPeriod);
                 if (!string.IsNullOrEmpty(command.Note)) newPersonPeriod.Note = command.Note;
             }
-            if (newPersonPeriod == null) throw new FaultException("Create person period error.");
-
-            person.AddPersonPeriod(newPersonPeriod);
+            
             uow.PersistAll();
             return newPersonPeriod.Id;
+        }
+
+        private void addDefaultPersonSkillsWhenNoDefined(ChangePersonEmploymentCommandDto command, PersonSkillPeriodDto personSkillPeriodDto)
+        {
+            if (command.PersonSkillCollection.IsNullOrEmpty() &&
+                (command.PersonSkillPeriodCollection.IsNullOrEmpty() ||
+                 command.PersonSkillPeriodCollection.All(s => s.SkillCollection.IsNullOrEmpty())))
+            {
+                command.PersonSkillCollection = personSkillPeriodDto.PersonSkillCollection;
+            }
         }
 
         private Guid? updateExistingPersonPeriod(ChangePersonEmploymentCommandDto command, IPerson person, IPersonPeriod existPersonPeriod,
@@ -130,9 +141,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
                 resetExternalLogOns(command.ExternalLogOn, existPersonPeriod, person);
             }
-            if (command.PersonSkillPeriodCollection != null)
+            if (command.PersonSkillPeriodCollection != null || command.PersonSkillCollection != null)
             {
-                resetPersonSkills(command.PersonSkillPeriodCollection, person, existPersonPeriod);
+                resetPersonSkills(command, person, existPersonPeriod);
             }
             if (!string.IsNullOrEmpty(command.Note))
                 existPersonPeriod.Note = command.Note;
@@ -175,19 +186,30 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             return new PersonContract(contract, partTimePercentage, contractSchedule);
         }
 
-        private void resetPersonSkills(IEnumerable<PersonSkillPeriodDto> personSkillPeriodDtos, IPerson person, IPersonPeriod personPeriod)
+        private void resetPersonSkills(ChangePersonEmploymentCommandDto commandDto, IPerson person, IPersonPeriod personPeriod)
         {
 			person.ResetPersonSkills(personPeriod);
-            foreach (var personSkills in from personSkillPeriodDto in personSkillPeriodDtos
-                                         select personSkillPeriodDto.SkillCollection.Distinct())
+            foreach (var personSkills in PersonSkills(commandDto))
             {
-                personSkills.ForEach(s =>
-                    {
-                        var skill = _skillRepository.Load(s);
-                        checkBusinessUnitConsistency(skill);
-                        person.AddSkill(new PersonSkill(skill, new Percent(1)){Active = true},personPeriod);
-                    });
+                var skill = _skillRepository.Load(personSkills.SkillId);
+                checkBusinessUnitConsistency(skill);
+                person.AddSkill(new PersonSkill(skill, new Percent(personSkills.Proficiency)) {Active = personSkills.Active}, personPeriod);
             }
+        }
+
+        private static IEnumerable<PersonSkillDto> PersonSkills(ChangePersonEmploymentCommandDto commandDto)
+        {
+            if (commandDto.PersonSkillPeriodCollection!=null && commandDto.PersonSkillPeriodCollection.Any(s => s.PersonSkillCollection.Any()))
+            {
+                throw new FaultException("This collection is not allowed. Use the PersonSkillCollection directly on the command instead.");
+            }
+            if (commandDto.PersonSkillCollection!=null && commandDto.PersonSkillCollection.Any())
+            {
+                return commandDto.PersonSkillCollection;
+            }
+            return from personSkillPeriodDto in commandDto.PersonSkillPeriodCollection
+                from s in personSkillPeriodDto.SkillCollection
+                select new PersonSkillDto {Active = true, Proficiency = 1, SkillId = s};
         }
 
         private void resetExternalLogOns(IEnumerable<ExternalLogOnDto> externalLogOnDtos, IPersonPeriod personPeriod, IPerson person)
