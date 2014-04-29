@@ -45,10 +45,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		{
 			var person1 = PersonFactory.CreatePerson("Bertil");
 			var person2 = PersonFactory.CreatePerson("Adam");
-			var filteredPersons = new List<IPerson> {person1, person2};
-			_target.SetFilteredPersons(filteredPersons);
-			Assert.AreEqual(person2, _target.GetSortedPersons(true)[0]);
-			Assert.AreEqual(person1, _target.GetSortedPersons(false)[0]);
+			var filteredPersons = new List<IPerson> { person1, person2 };
+			
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons)).Repeat.AtLeastOnce();
+				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons)).Repeat.AtLeastOnce();
+				Expect.Call(_schedulerStateHolder.CommonAgentName(person1)).Return("Bertil").Repeat.AtLeastOnce();
+				Expect.Call(_schedulerStateHolder.CommonAgentName(person2)).Return("Adam").Repeat.AtLeastOnce();
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.SetFilteredPersons(filteredPersons);
+				Assert.AreEqual(person2, _target.GetSortedPersons(true)[0]);
+				Assert.AreEqual(person1, _target.GetSortedPersons(false)[0]);
+			}
 		}
 
 		[Test]
@@ -182,7 +194,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
 				Expect.Call(_cachedShiftCategoryDistribution.AllShiftCategories).Return(new List<IShiftCategory> { cat1, cat2 }).Repeat.AtLeastOnce();
 				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(dic).Repeat.AtLeastOnce();
-
+				Expect.Call(_schedulerStateHolder.CommonAgentName(person1)).Return("Bertil").Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
