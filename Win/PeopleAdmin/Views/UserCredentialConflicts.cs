@@ -45,11 +45,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         {
             var item = new ListViewItem(person.Name.ToString());
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item,
-                                                               person.WindowsAuthenticationInfo == null ? "" :
-                                                               person.WindowsAuthenticationInfo.DomainName));
-            item.SubItems.Add(new ListViewItem.ListViewSubItem(item,
-                                                                    person.WindowsAuthenticationInfo == null ? "" :
-                                                                    person.WindowsAuthenticationInfo.WindowsLogOnName));
+                                                               person.AuthenticationInfo == null ? "" :
+                                                               person.AuthenticationInfo.Identity));
             item.SubItems.Add(new ListViewItem.ListViewSubItem(item,
                                                                person.ApplicationAuthenticationInfo == null ? "" :
                                                                person.ApplicationAuthenticationInfo.ApplicationLogOnName));

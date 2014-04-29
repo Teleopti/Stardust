@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
                     return result;
                 }
                 IPerson foundPerson;
-                if (RepositoryFactory.CreatePersonRepository(unitOfWork).TryFindWindowsAuthenticatedPerson(userNameParts[0], userNameParts[1], out foundPerson))
+                if (RepositoryFactory.CreatePersonRepository(unitOfWork).TryFindIdentityAuthenticatedPerson(userNameParts[0], out foundPerson))
                 {
                     result.Successful = true;
                     result.Person = foundPerson;

@@ -108,17 +108,8 @@ namespace Teleopti.Analytics.Etl.Transformer
 
         private static string getPersonWindowsLogOn(IPerson person)
         {
-            if (person.WindowsAuthenticationInfo == null) return null;
-            if (( string.IsNullOrEmpty(person.WindowsAuthenticationInfo.WindowsLogOnName))
-                | (string.IsNullOrEmpty(person.WindowsAuthenticationInfo.DomainName)))
-            {
-                // User has no valid windows authetication info
-                return null;
-            }
-
-            return string.Format(CultureInfo.InvariantCulture, "{0}\\{1}",
-                                 person.WindowsAuthenticationInfo.DomainName,
-                                 person.WindowsAuthenticationInfo.WindowsLogOnName);
+            if (person.AuthenticationInfo == null) return null;
+			return !person.AuthenticationInfo.Identity.Contains(@"\") ? null : person.AuthenticationInfo.Identity;
         }
 
         private static string getPersonApplicationLogOn(IPerson person)

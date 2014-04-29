@@ -26,12 +26,23 @@ namespace Teleopti.Analytics.Etl.Transformer
             	row["password"] = person.ApplicationAuthenticationInfo == null
             	                  	? string.Empty
             	                  	: person.ApplicationAuthenticationInfo.Password;
-            	row["windows_logon_name"] = person.WindowsAuthenticationInfo == null
-            	                            	? string.Empty
-            	                            	: person.WindowsAuthenticationInfo.WindowsLogOnName;
-            	row["windows_domain_name"] = person.WindowsAuthenticationInfo == null
-            	                             	? string.Empty
-            	                             	: person.WindowsAuthenticationInfo.DomainName;
+	            var logOn = string.Empty;
+	            var domain = string.Empty;
+	            if (person.AuthenticationInfo != null)
+	            {
+		            var parts = person.AuthenticationInfo.Identity.Split('\\');
+		            if (parts.Length > 1)
+		            {
+			            domain = parts[0];
+			            logOn = parts[1];
+		            }
+		            else
+		            {
+			            logOn = parts[0];
+		            }
+	            }
+            	row["windows_logon_name"] = logOn;
+            	row["windows_domain_name"] = domain;
                 row["email"] = person.Email;
                 row["language_id"] = person.PermissionInformation.UICultureLCID().GetValueOrDefault(-1);
                 row["language_name"] = System.DBNull.Value;

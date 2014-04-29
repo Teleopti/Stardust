@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 	public class DataSourcesProvider : IDataSourcesProvider
 	{
 		private readonly IApplicationData _applicationData;
-		private readonly IAvailableWindowsDataSources _availableWindowsDataSources;
+		private readonly IAvailableIdentityDataSources _availableIdentityDataSources;
 		private readonly IAvailableApplicationTokenDataSource _availableApplicationTokenDataSource;
 		private readonly ITokenIdentityProvider _tokenIdentityProvider;
 
-		public DataSourcesProvider(IApplicationData applicationData, IAvailableWindowsDataSources availableWindowsDataSources, IAvailableApplicationTokenDataSource availableApplicationTokenDataSource, ITokenIdentityProvider tokenIdentityProvider)
+		public DataSourcesProvider(IApplicationData applicationData, IAvailableIdentityDataSources _availableIdentityDataSources, IAvailableApplicationTokenDataSource availableApplicationTokenDataSource, ITokenIdentityProvider tokenIdentityProvider)
 		{
 			_applicationData = applicationData;
-			_availableWindowsDataSources = availableWindowsDataSources;
+			this._availableIdentityDataSources = _availableIdentityDataSources;
 			_availableApplicationTokenDataSource = availableApplicationTokenDataSource;
 			_tokenIdentityProvider = tokenIdentityProvider;
 		}
@@ -25,14 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 			return _applicationData.RegisteredDataSourceCollection;
 		}
 
-		public IEnumerable<IDataSource> RetrieveDatasourcesForWindows()
+		public IEnumerable<IDataSource> RetrieveDatasourcesForIdentity()
 		{
-			var winAccount = _tokenIdentityProvider.RetrieveToken();
-			return winAccount == null
-			       	? null
-			       	: _availableWindowsDataSources.AvailableDataSources(_applicationData.RegisteredDataSourceCollection,
-			       	                                                    winAccount.UserDomain,
-			       	                                                    winAccount.UserIdentifier);
+			var token = _tokenIdentityProvider.RetrieveToken();
+			return token == null
+				? null
+				: _availableIdentityDataSources.AvailableDataSources(_applicationData.RegisteredDataSourceCollection,
+					token.OriginalToken);
 		}
 
 		public IDataSource RetrieveDataSourceByName(string dataSourceName)

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
                 Expect.Call(repositoryFactory.CreatePersonRepository(unitOfWork)).Return(personRepository);
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
-                Expect.Call(personRepository.TryFindWindowsAuthenticatedPerson("toptinet", "robink", out person)).OutRef
+                Expect.Call(personRepository.TryFindIdentityAuthenticatedPerson("toptinet", out person)).OutRef
                     (foundPerson).Return(true);
 				Expect.Call(dataSource.AuthenticationTypeOption).Return(AuthenticationTypeOption.Windows);
                 Expect.Call(unitOfWork.Dispose);

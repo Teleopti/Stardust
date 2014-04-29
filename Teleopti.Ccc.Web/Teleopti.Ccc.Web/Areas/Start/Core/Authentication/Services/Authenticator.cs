@@ -36,8 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			{
 				IPerson foundUser;
 				var winAccount = _tokenIdentityProvider.RetrieveToken();
-				if (_repositoryFactory.CreatePersonRepository(uow).TryFindWindowsAuthenticatedPerson(winAccount.UserDomain,
-					winAccount.UserIdentifier,
+				if (_repositoryFactory.CreatePersonRepository(uow).TryFindIdentityAuthenticatedPerson(winAccount.OriginalToken,
 					out foundUser))
 				{
 					return new AuthenticateResult {Successful = true, Person = foundUser, DataSource = dataSource};

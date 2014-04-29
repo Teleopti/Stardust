@@ -119,6 +119,7 @@
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
+    <Compile Include="Domain\IAuthenticationInfo.cs" />
     <Compile Include="Domain\SchedulingServiceSuccessfulEventArgs.cs" />
     <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="Domain\SchedulingServiceFailedEventArgs.cs" />
@@ -696,7 +697,6 @@
     <Compile Include="Domain\IPayload.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Domain\IWindowsAuthenticationInfo.cs" />
     <Compile Include="Domain\IWorkload.cs" />
     <Compile Include="Domain\IWorkloadDayTemplate.cs" />
     <Compile Include="Domain\IWorkShift.cs" />

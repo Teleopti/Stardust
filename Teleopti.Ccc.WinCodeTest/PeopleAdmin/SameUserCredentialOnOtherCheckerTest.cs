@@ -116,8 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
         {
             var person = new Person
                              {
-                                 WindowsAuthenticationInfo = new WindowsAuthenticationInfo
-                                                                 {WindowsLogOnName = winLogOn, DomainName = domain}
+								 AuthenticationInfo = new AuthenticationInfo { Identity = domain + @"\" + winLogOn }
                              };
 
             person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo {ApplicationLogOnName = appLogOn};

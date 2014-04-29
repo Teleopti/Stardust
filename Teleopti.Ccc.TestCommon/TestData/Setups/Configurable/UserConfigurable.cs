@@ -56,12 +56,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (WindowsAuthentication)
 			{
-				var authenticationInfo = new WindowsAuthenticationInfo
-					{
-						WindowsLogOnName = Environment.UserName, 
-						DomainName = Environment.UserDomainName
-					};
-				user.WindowsAuthenticationInfo = authenticationInfo;
+				var authenticationInfo = new AuthenticationInfo
+				{
+					Identity = Environment.UserDomainName + @"\" + Environment.UserName
+				};
+				user.AuthenticationInfo = authenticationInfo;
 			}
 
 			if (!string.IsNullOrEmpty(Role))

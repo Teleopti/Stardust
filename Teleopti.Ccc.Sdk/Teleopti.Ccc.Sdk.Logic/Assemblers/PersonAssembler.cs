@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -71,10 +72,19 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 personDto.ApplicationLogOnName = "";
                 personDto.ApplicationLogOnPassword = "";
             }
-            if (entity.WindowsAuthenticationInfo != null)
+            if (entity.AuthenticationInfo != null)
             {
-                personDto.WindowsDomain = entity.WindowsAuthenticationInfo.DomainName;
-                personDto.WindowsLogOnName = entity.WindowsAuthenticationInfo.WindowsLogOnName;
+	            var identities = entity.AuthenticationInfo.Identity.Split('\\');
+	            if (identities.Length > 1)
+	            {
+		            personDto.WindowsDomain = identities[0];
+		            personDto.WindowsLogOnName = identities[1];
+	            }
+	            else
+	            {
+		            personDto.WindowsDomain = "";
+		            personDto.WindowsLogOnName = identities[0];
+	            }
             }
             else
             {
@@ -156,12 +166,17 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 person.Email = dto.Email;
             if (!string.IsNullOrEmpty(dto.EmploymentNumber))
                 person.EmploymentNumber = dto.EmploymentNumber;
-            if (!string.IsNullOrEmpty(dto.WindowsDomain) && !string.IsNullOrEmpty(dto.WindowsLogOnName))
-                person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
-                                                       {
-                                                           DomainName = dto.WindowsDomain,
-                                                           WindowsLogOnName = dto.WindowsLogOnName
-                                                       };
+	        if (!string.IsNullOrEmpty(dto.WindowsDomain) && !string.IsNullOrEmpty(dto.WindowsLogOnName))
+		        person.AuthenticationInfo = new AuthenticationInfo
+		        {
+			        Identity = dto.WindowsDomain + @"\" + dto.WindowsLogOnName
+		        };
+			if (string.IsNullOrEmpty(dto.WindowsDomain) && !string.IsNullOrEmpty(dto.WindowsLogOnName))
+				person.AuthenticationInfo = new AuthenticationInfo
+				{
+					Identity = dto.WindowsLogOnName
+				};
+
             if(personTerminated(dto, person))
                 person.TerminatePerson(dto.TerminationDate.ToDateOnly(), _personAccountUpdater) ;
             if(personActivated(dto, person))

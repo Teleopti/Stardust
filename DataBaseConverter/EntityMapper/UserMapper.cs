@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
 
             newPerson =
                     _existingPersons.FirstOrDefault(
-                        p => ((p.WindowsAuthenticationInfo != null && p.WindowsAuthenticationInfo.DomainName.ToUpperInvariant() == oldEntity.LoginDomain.ToUpperInvariant()) &&
-                               p.WindowsAuthenticationInfo.WindowsLogOnName.ToUpperInvariant() == oldEntity.LoginName.ToUpperInvariant()) ||
+						p => ((p.AuthenticationInfo != null && p.AuthenticationInfo.Identity.ToUpperInvariant() == oldEntity.LoginDomain.ToUpperInvariant() + @"\" + oldEntity.LoginName.ToUpperInvariant())) 
+							||
                              (p.ApplicationAuthenticationInfo != null && p.ApplicationAuthenticationInfo.ApplicationLogOnName.ToUpperInvariant() ==
                               oldEntity.LoginName.ToUpperInvariant() &&
                               string.IsNullOrEmpty(oldEntity.LoginDomain)));
@@ -84,10 +84,9 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             newPerson.ApplicationAuthenticationInfo = appAuthInfo;
             if (!String.IsNullOrEmpty(oldEntity.LoginDomain))
             {
-                WindowsAuthenticationInfo winAuthInfo = new WindowsAuthenticationInfo();
-                winAuthInfo.WindowsLogOnName = oldEntity.LoginName;
-                winAuthInfo.DomainName = oldEntity.LoginDomain;
-                newPerson.WindowsAuthenticationInfo = winAuthInfo;
+                AuthenticationInfo winAuthInfo = new AuthenticationInfo();
+				winAuthInfo.Identity = oldEntity.LoginDomain + @"\" + oldEntity.LoginName;
+                newPerson.AuthenticationInfo = winAuthInfo;
             }
 
             if (oldEntity.IsAdmin)

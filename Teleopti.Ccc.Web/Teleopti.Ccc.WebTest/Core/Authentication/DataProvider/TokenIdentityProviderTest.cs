@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 						}));
 			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo("kunningm");
 			target.RetrieveToken().UserDomain.Should().Be.EqualTo("TOPTINET");
-			target.RetrieveToken().OriginalToken.Should().Be.EqualTo("http://fakeschema.com/kunningm#TOPTINET");
+			target.RetrieveToken().OriginalToken.Should().Be.EqualTo(@"TOPTINET\kunningm");
 		}
 
 		[Test]
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, "http://fakeschema.com/kunningm#TOPTINET"), null);
 			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo("kunningm");
 			target.RetrieveToken().UserDomain.Should().Be.EqualTo("TOPTINET");
-			target.RetrieveToken().OriginalToken.Should().Be.EqualTo("http://fakeschema.com/kunningm#TOPTINET");
+			target.RetrieveToken().OriginalToken.Should().Be.EqualTo(@"TOPTINET\kunningm");
 		}
 
 		[Test]

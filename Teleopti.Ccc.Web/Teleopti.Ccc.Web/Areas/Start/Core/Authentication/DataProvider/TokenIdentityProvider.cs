@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 			{
 				UserDomain = nameAndDomain[1],
 				UserIdentifier = nameAndDomain[0],
-				OriginalToken = nameClaimValue
+				OriginalToken = nameAndDomain[1] + @"\" + nameAndDomain[0]
 			};
 		}
 	}

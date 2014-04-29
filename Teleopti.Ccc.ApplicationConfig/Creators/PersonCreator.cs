@@ -102,13 +102,12 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
     	}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool WindowsUserExists(IWindowsAuthenticationInfo windowsAuthInfo)
+		public bool WindowsUserExists(IAuthenticationInfo windowsAuthInfo)
     	{
 			ISession session = _sessionFactory.OpenSession();
 
 			var person = session.CreateCriteria<IPerson>()
-						.Add(Restrictions.Eq("WindowsAuthenticationInfo.WindowsLogOnName", windowsAuthInfo.WindowsLogOnName))
-						.Add(Restrictions.Eq("WindowsAuthenticationInfo.DomainName", windowsAuthInfo.DomainName))
+						.Add(Restrictions.Eq("AuthenticationInfo.Identity", windowsAuthInfo.Identity))
 						.UniqueResult<IPerson>();
 
     		session.Close();

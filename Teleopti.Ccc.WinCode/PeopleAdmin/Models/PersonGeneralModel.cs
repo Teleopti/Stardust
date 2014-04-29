@@ -295,59 +295,31 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets the name of the windows log on.
-        /// </summary>
-        /// <value>The name of the windows log on.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2/20/2008
-        /// </remarks>
-        public string WindowsLogOnName
+        public string LogOnName
         {
             get
             {
-                if (ContainedEntity.WindowsAuthenticationInfo == null) return "";
-                return ContainedEntity.WindowsAuthenticationInfo.WindowsLogOnName;
+                if (ContainedEntity.AuthenticationInfo == null) return "";
+                return ContainedEntity.AuthenticationInfo.Identity;
             }
             set
             {
                 if (!logonDataCanBeChanged())
                     return;
-                if (ContainedEntity.WindowsAuthenticationInfo == null)
-                    ContainedEntity.WindowsAuthenticationInfo = new WindowsAuthenticationInfo { WindowsLogOnName = value };
+                if (ContainedEntity.AuthenticationInfo == null)
+                    ContainedEntity.AuthenticationInfo = new AuthenticationInfo { Identity = value };
                 else
-                    ContainedEntity.WindowsAuthenticationInfo.WindowsLogOnName = value;
-                checkWinLogon();
+                    ContainedEntity.AuthenticationInfo.Identity = value;
+                checkIdentity();
             }
         }
 
-        public string DomainName
+        private void checkIdentity()
         {
-            get
+            if (ContainedEntity.AuthenticationInfo != null)
             {
-                if (ContainedEntity.WindowsAuthenticationInfo == null) return "";
-                return ContainedEntity.WindowsAuthenticationInfo.DomainName;
-            }
-            set
-            {
-                if (!logonDataCanBeChanged())
-                    return;
-                if (ContainedEntity.WindowsAuthenticationInfo == null)
-                    ContainedEntity.WindowsAuthenticationInfo = new WindowsAuthenticationInfo {DomainName = value};
-                else
-                    ContainedEntity.WindowsAuthenticationInfo.DomainName = value;
-                checkWinLogon();
-            }
-        }
-
-        private void checkWinLogon()
-        {
-            if (ContainedEntity.WindowsAuthenticationInfo != null)
-            {
-                if(string.IsNullOrEmpty(ContainedEntity.WindowsAuthenticationInfo.DomainName) 
-                    && string.IsNullOrEmpty(ContainedEntity.WindowsAuthenticationInfo.WindowsLogOnName))
-                ContainedEntity.WindowsAuthenticationInfo = null;
+                if(string.IsNullOrEmpty(ContainedEntity.AuthenticationInfo.Identity))
+					ContainedEntity.AuthenticationInfo = null;
             }
         }
         public string ApplicationLogOnName

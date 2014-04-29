@@ -32,8 +32,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
                 {
                     var personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);
                     availableForUser =
-                        personRepository.TryFindWindowsAuthenticatedPerson(_windowsUserProvider.DomainName,
-                                                                           _windowsUserProvider.UserName, out person);
+                        personRepository.TryFindIdentityAuthenticatedPerson(_windowsUserProvider.DomainName, out person);
                 }
                 if (availableForUser)
                 {

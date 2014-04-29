@@ -182,14 +182,13 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 
 				if (!string.IsNullOrEmpty(Environment.UserDomainName) && !string.IsNullOrEmpty(Environment.UserName))
 				{
-					var windowsAuthInfo = new WindowsAuthenticationInfo
+					var windowsAuthInfo = new AuthenticationInfo
 								{
-									DomainName = Environment.UserDomainName,
-									WindowsLogOnName = Environment.UserName
+									Identity = Environment.UserDomainName+@"\"+Environment.UserName
 								};
 					if (!_personCreator.WindowsUserExists(windowsAuthInfo))
 					{
-						sysAdmin.WindowsAuthenticationInfo = windowsAuthInfo;
+						sysAdmin.AuthenticationInfo = windowsAuthInfo;
 					}
 				}
 
