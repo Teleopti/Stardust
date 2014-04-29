@@ -24,12 +24,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 		public void Handle(GrantPersonRoleCommandDto command)
 		{
+            var result = new CommandResultDto { AffectedItems = 0, AffectedId = command.PersonId };
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				var person = _personRepository.Load(command.PersonId);
+				var person = _personRepository.Get(command.PersonId);
 				checkIfAuthorized(person);
 
-				var role = _applicationRoleRepository.Load(command.RoleId);
+				var role = _applicationRoleRepository.Get(command.RoleId);
 				if (person != null && role != null)
 				{
 					var permissionInformation = person.PermissionInformation;
@@ -37,9 +38,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					{
 						permissionInformation.AddApplicationRole(role);
 						uow.PersistAll();
+
+					    result.AffectedItems = 1;
 					}
 				}
 			}
+		    command.Result = result;
 		}
 
 		private static void checkIfAuthorized(IPerson person)
