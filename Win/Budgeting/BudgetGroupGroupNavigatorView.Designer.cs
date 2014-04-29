@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemOpenBudgetGroup = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItemDeletePlanningGroup = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemProperty = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStripManagePlanningGroupFromSkill = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -58,12 +58,6 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripRoot = new System.Windows.Forms.ToolStrip();
 			this.toolStripLabelNewPlanningGroup = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripButtonNewBudgetGroup2 = new System.Windows.Forms.ToolStripButton();
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStripBudgetGroup.SuspendLayout();
 			this.contextMenuBudgetGroup.SuspendLayout();
 			this.contextMenuStripManagePlanningGroupFromSkill.SuspendLayout();
@@ -107,16 +101,10 @@ namespace Teleopti.Ccc.Win.Budgeting
             this.toolStripMenuItemOpenBudgetGroup,
             this.toolStripSeparator4,
             this.toolStripMenuItem6,
-            this.toolStripMenuItem5,
-            this.toolStripMenuItem4,
-            this.toolStripMenuItem3,
-            this.toolStripMenuItem2,
-            this.toolStripMenuItem1,
-            this.toolStripMenuItemDeletePlanningGroup,
             this.toolStripSeparator3,
             this.toolStripMenuItemProperty});
 			this.contextMenuBudgetGroup.Name = "contextMenuStrip1";
-			this.contextMenuBudgetGroup.Size = new System.Drawing.Size(239, 234);
+			this.contextMenuBudgetGroup.Size = new System.Drawing.Size(239, 126);
 			// 
 			// toolStripMenuItemNewBudgetGroup
 			// 
@@ -146,14 +134,14 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripSeparator4.Name = "toolStripSeparator4";
 			this.toolStripSeparator4.Size = new System.Drawing.Size(235, 6);
 			// 
-			// toolStripMenuItemDeletePlanningGroup
+			// toolStripMenuItem6
 			// 
-			this.toolStripMenuItemDeletePlanningGroup.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Delete;
-			this.toolStripMenuItemDeletePlanningGroup.Name = "toolStripMenuItemDeletePlanningGroup";
-			this.toolStripMenuItemDeletePlanningGroup.Padding = new System.Windows.Forms.Padding(0);
-			this.toolStripMenuItemDeletePlanningGroup.Size = new System.Drawing.Size(238, 20);
-			this.toolStripMenuItemDeletePlanningGroup.Text = "xxDelete";
-			this.toolStripMenuItemDeletePlanningGroup.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
+			this.toolStripMenuItem6.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Delete;
+			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+			this.toolStripMenuItem6.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(238, 22);
+			this.toolStripMenuItem6.Text = "xxDelete";
+			this.toolStripMenuItem6.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
 			// 
 			// toolStripSeparator3
 			// 
@@ -205,7 +193,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.splitContainer1.Panel2.Controls.Add(this.toolStripRoot);
 			this.splitContainer1.Panel2.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
 			this.splitContainer1.Size = new System.Drawing.Size(198, 536);
-			this.splitContainer1.SplitterDistance = 411;
+			this.splitContainer1.SplitterDistance = 413;
 			this.splitContainer1.SplitterWidth = 2;
 			this.splitContainer1.TabIndex = 5;
 			// 
@@ -227,7 +215,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.treeViewAdvBudgetGroups.Location = new System.Drawing.Point(0, 0);
 			this.treeViewAdvBudgetGroups.Name = "treeViewAdvBudgetGroups";
 			this.treeViewAdvBudgetGroups.ShowFocusRect = true;
-			this.treeViewAdvBudgetGroups.Size = new System.Drawing.Size(198, 411);
+			this.treeViewAdvBudgetGroups.Size = new System.Drawing.Size(198, 413);
 			this.treeViewAdvBudgetGroups.TabIndex = 0;
 			this.treeViewAdvBudgetGroups.Text = "treeViewAdv1";
 			this.treeViewAdvBudgetGroups.ThemesEnabled = true;
@@ -363,60 +351,6 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripButtonNewBudgetGroup2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonNewBudgetGroup2.Click += new System.EventHandler(this.toolStripButtonNewBudgetGroup_Click);
 			// 
-			// toolStripMenuItem1
-			// 
-			this.toolStripMenuItem1.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_New2;
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(238, 22);
-			this.toolStripMenuItem1.Text = "xxNewBudgetGroupThreeDots";
-			this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItemNewBudgetGroup_Click);
-			// 
-			// toolStripMenuItem2
-			// 
-			this.toolStripMenuItem2.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Open_small;
-			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(238, 22);
-			this.toolStripMenuItem2.Text = "xxOpenBudgetGroupThreeDots";
-			this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripButtonOpenBudgetGroup_Click);
-			// 
-			// toolStripMenuItem3
-			// 
-			this.toolStripMenuItem3.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Delete;
-			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(238, 22);
-			this.toolStripMenuItem3.Text = "xxDelete";
-			this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
-			// 
-			// toolStripMenuItem4
-			// 
-			this.toolStripMenuItem4.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_New2;
-			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(238, 22);
-			this.toolStripMenuItem4.Text = "xxNewBudgetGroupThreeDots";
-			this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItemNewBudgetGroup_Click);
-			// 
-			// toolStripMenuItem5
-			// 
-			this.toolStripMenuItem5.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Open_small;
-			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(238, 22);
-			this.toolStripMenuItem5.Text = "xxOpenBudgetGroupThreeDots";
-			this.toolStripMenuItem5.Click += new System.EventHandler(this.toolStripButtonOpenBudgetGroup_Click);
-			// 
-			// toolStripMenuItem6
-			// 
-			this.toolStripMenuItem6.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Delete;
-			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(238, 22);
-			this.toolStripMenuItem6.Text = "xxDelete";
-			this.toolStripMenuItem6.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
-			// 
 			// BudgetGroupGroupNavigatorView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -457,8 +391,7 @@ namespace Teleopti.Ccc.Win.Budgeting
         private System.Windows.Forms.ImageList imageListBudgetGroup;
         private System.Windows.Forms.ContextMenuStrip contextMenuBudgetGroup;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemOpenBudgetGroup;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDeletePlanningGroup;
+		  private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemProperty;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripManagePlanningGroupFromSkill;
@@ -471,10 +404,5 @@ namespace Teleopti.Ccc.Win.Budgeting
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNewBudgetGroup;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
     }
 }

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
@@ -52,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				Log.Debug("Starting test run");
 			}
 		}
-
+		
 		[BeforeScenario]
 		public static void BeforeScenario()
 		{
@@ -70,8 +74,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			ScenarioUnitOfWorkState.OpenUnitOfWork();
 
 			Log.Debug("Starting scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+			
+			if (shouldIgnoreTest("OnlyRunIfDisabled", false) || shouldIgnoreTest("OnlyRunIfEnabled", true))
+			{
+				Assert.Ignore("Ignored because of featureflags");
+			}
 		}
 
+		private static bool shouldIgnoreTest(string featureName, bool shouldBeEnabled)
+		{
+			var scenario = ScenarioContext.Current.ScenarioInfo.Tags.Where(s => s.StartsWith(featureName));
+			var regex = new Regex(@"\(.*\)");
+			foreach (var tags in scenario)
+			{
+				var toggleQuerier1 = new ToggleQuerier(new Uri(TestSiteConfigurationSetup.Url, "ToggleHandler/IsEnabled").ToString());
+				var foo = regex.Match(tags).ToString();
+				foo = foo.Substring(2, foo.Length - 4);
+				var isEnabled = toggleQuerier1.IsEnabled((Toggles)Enum.Parse(typeof(Toggles), foo));
+
+				return shouldBeEnabled ? !isEnabled : isEnabled;
+			}
+			return false;
+		}
+		
 		[AfterScenario]
 		public static void AfterScenario()
 		{
@@ -125,5 +150,4 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 	}
-
 }

@@ -10,3 +10,15 @@ Scenario: Enabled feature in process
 Scenario: Enabled feature out of process
 	When I query outofprocess toggle service for 'EnabledFeature'
 	Then I should get 'true' back
+
+@OnlyRunIfEnabled('EnabledFeature')
+Scenario: Only run featuretest if a certain feature is enabled
+	When I query inprocess toggle service for 'EnabledFeature'
+	Then I should get 'true' back
+
+@OnlyRunIfDisabled('DisabledFeature')
+Scenario: Only run featuretest if a certain feature is disabled
+	When I query inprocess toggle service for 'DisabledFeature'
+	Then I should get 'false' back
+
+
