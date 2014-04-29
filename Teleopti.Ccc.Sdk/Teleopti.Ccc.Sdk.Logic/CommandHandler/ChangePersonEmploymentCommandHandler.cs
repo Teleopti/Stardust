@@ -106,7 +106,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 newPersonPeriod = createPersonPeriod(command);
                 person.AddPersonPeriod(newPersonPeriod);
                 if (command.ExternalLogOn != null) resetExternalLogOns(command.ExternalLogOn, newPersonPeriod, person);
+#pragma warning disable 618
                 if (command.PersonSkillPeriodCollection != null || command.PersonSkillCollection != null)
+#pragma warning restore 618
                     resetPersonSkills(command, person, newPersonPeriod);
                 if (!string.IsNullOrEmpty(command.Note)) newPersonPeriod.Note = command.Note;
             }
@@ -118,8 +120,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private void addDefaultPersonSkillsWhenNoDefined(ChangePersonEmploymentCommandDto command, PersonSkillPeriodDto personSkillPeriodDto)
         {
             if (command.PersonSkillCollection.IsNullOrEmpty() &&
+#pragma warning disable 618
                 (command.PersonSkillPeriodCollection.IsNullOrEmpty() ||
                  command.PersonSkillPeriodCollection.All(s => s.SkillCollection.IsNullOrEmpty())))
+#pragma warning restore 618
             {
                 command.PersonSkillCollection = personSkillPeriodDto.PersonSkillCollection;
             }
@@ -141,7 +145,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
                 resetExternalLogOns(command.ExternalLogOn, existPersonPeriod, person);
             }
+#pragma warning disable 618
             if (command.PersonSkillPeriodCollection != null || command.PersonSkillCollection != null)
+#pragma warning restore 618
             {
                 resetPersonSkills(command, person, existPersonPeriod);
             }
@@ -199,7 +205,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
         private static IEnumerable<PersonSkillDto> PersonSkills(ChangePersonEmploymentCommandDto commandDto)
         {
+#pragma warning disable 618
             if (commandDto.PersonSkillPeriodCollection!=null && commandDto.PersonSkillPeriodCollection.Any(s => s.PersonSkillCollection.Any()))
+#pragma warning restore 618
             {
                 throw new FaultException("This collection is not allowed. Use the PersonSkillCollection directly on the command instead.");
             }
@@ -207,7 +215,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
                 return commandDto.PersonSkillCollection;
             }
+#pragma warning disable 618
             return from personSkillPeriodDto in commandDto.PersonSkillPeriodCollection
+#pragma warning restore 618
                 from s in personSkillPeriodDto.SkillCollection
                 select new PersonSkillDto {Active = true, Proficiency = 1, SkillId = s};
         }

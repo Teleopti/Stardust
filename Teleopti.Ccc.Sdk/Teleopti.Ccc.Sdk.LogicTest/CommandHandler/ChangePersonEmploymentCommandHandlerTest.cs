@@ -105,7 +105,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Period = _dateOnlyPeriodDto,
                 Person = _personDto,
                 PersonContract = _personContractDto,
+#pragma warning disable 618
                 PersonSkillPeriodCollection = _personSkillPeriodCollection,
+#pragma warning restore 618
                 PersonSkillCollection = new List<PersonSkillDto>(),
                 Team = _teamDto,
                 Note = "test Note"
@@ -174,7 +176,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(_team);
             _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
             _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
+#pragma warning disable 618
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].PersonSkillCollection.Add(new PersonSkillDto { Active = false, Proficiency = 0.9, SkillId = _skill.Id.GetValueOrDefault() });
+#pragma warning restore 618
             
             Assert.Throws<FaultException>(() => _target.Handle(_changePersonEmploymentCommandDto));
         }
@@ -204,7 +208,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(_team);
             _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
             _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
+#pragma warning disable 618
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].SkillCollection.Add(_skill.Id.GetValueOrDefault());
+#pragma warning restore 618
             _changePersonEmploymentCommandDto.PersonSkillCollection.Add(new PersonSkillDto{Active = false,Proficiency = 0.9,SkillId = _skill.Id.GetValueOrDefault()});
             _target.Handle(_changePersonEmploymentCommandDto);
 
@@ -239,7 +245,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(_team);
             _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
             _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
+#pragma warning disable 618
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection = null;
+#pragma warning restore 618
             _changePersonEmploymentCommandDto.PersonSkillCollection.Add(new PersonSkillDto { Active = false, Proficiency = 0.9, SkillId = _skill.Id.GetValueOrDefault() });
             _target.Handle(_changePersonEmploymentCommandDto);
 
@@ -274,7 +282,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 .Return(_team);
             _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
             _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
+#pragma warning disable 618
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].SkillCollection.Add(_skill.Id.GetValueOrDefault());
+#pragma warning restore 618
             _changePersonEmploymentCommandDto.PersonSkillCollection = null;
             _target.Handle(_changePersonEmploymentCommandDto);
 
@@ -311,7 +321,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
 
             _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
+#pragma warning disable 618
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].SkillCollection.Add( _skill.Id.GetValueOrDefault());
+#pragma warning restore 618
             _target.Handle(_changePersonEmploymentCommandDto);
 
             var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
@@ -390,7 +402,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
             _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
 
+#pragma warning disable 618
             _changePersonEmploymentCommandDto.PersonSkillPeriodCollection = null;
+#pragma warning restore 618
             _changePersonEmploymentCommandDto.PersonSkillCollection.Add(new PersonSkillDto{Active = false,Proficiency = .9,SkillId = _skill.Id.GetValueOrDefault()});
             
             _target.Handle(_changePersonEmploymentCommandDto);
