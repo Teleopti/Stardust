@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var selectedBlockDays =
 				teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Where(x => selectedPeriod.DayCollection().Contains(x)).ToList();
 
-			bool success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays,
+			bool success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPersons, selectedBlockDays,
 				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
 
 			if (!success && _teamBlockSchedulingOptions.IsBlockWithSameShiftCategoryInvolved(schedulingOptions))
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
 					roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
 						schedulingOptions, shiftNudgeDirective.EffectiveRestriction);
-					success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays,
+					success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPersons, selectedBlockDays,
 						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
 				}
 				schedulingOptions.NotAllowedShiftCategories.Clear();	
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		private bool tryScheduleBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
-			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IList<DateOnly> selectedBlockDays,
+			IList<IPerson> selectedPersons, IList<DateOnly> selectedBlockDays,
 			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			ShiftNudgeDirective shiftNudgeDirective)
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				
 				_singleDayScheduler.DayScheduled += OnDayScheduled;
 				bool successful = _singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day,
-					roleModelShift, selectedPeriod, rollbackService,
+					roleModelShift, rollbackService,
 					resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeRestriction);
 				_singleDayScheduler.DayScheduled -= OnDayScheduled;
 

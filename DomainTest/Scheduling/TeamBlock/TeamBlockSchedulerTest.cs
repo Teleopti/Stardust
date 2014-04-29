@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(_shift);
 				Expect.Call(() => _singleDayScheduler.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly,
-					_shift, _blockPeriod, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer,
+					_shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer,
 					_schedulingResultStateHolder, _shiftNudgeDirective.EffectiveRestriction)).Return(true);
 				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
 			}
