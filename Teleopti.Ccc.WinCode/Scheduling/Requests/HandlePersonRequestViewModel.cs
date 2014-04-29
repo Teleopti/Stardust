@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 		private readonly IPersonRequestCheckAuthorization _authorization;
 		private readonly TimeZoneInfo _timeZoneInfo;
 		private static readonly object FilterLock = new object();
+        private bool _skipFilter;
 
 	    public ListCollectionView PersonRequestViewModels { get; set; }
 
@@ -49,7 +50,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			get { return PersonRequestViewModels.CurrentItem as PersonRequestViewModel; }
 		}
 
-		public HandlePersonRequestViewModel(DateTimePeriod schedulePeriod, 
+	    public bool SkipFilter
+	    {
+	        get { return _skipFilter; }
+	        set
+	        {
+	            _skipFilter = value; 
+	            if(!_skipFilter)
+                    filterItems();
+	        }
+	    }
+
+	    public HandlePersonRequestViewModel(DateTimePeriod schedulePeriod, 
 												IList<IPerson> permittedPersons, 
 												IUndoRedoContainer undoRedoContainer,
 												IDictionary<IPerson, IPersonAccountCollection> allAccounts,
@@ -109,7 +121,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 					InsertPersonRequestViewModel(request, statusChecker, authorization);
 				}	
 			}
-			filterItems();
+            filterItems();
 		}
 
 		public void UpdateSorting(IList<SortDescription> sortDescriptions)
@@ -139,7 +151,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			personRequestViewModel.ValidateIfWithinSchedulePeriod(_schedulePeriod, _permittedPersons);
 			RequestViewModels.Add(personRequestViewModel);
 			_showOnlymodels.Add(personRequestViewModel);
-			filterItems();
+            filterItems();
 		}
 
 		public void FilterOutOlderThan(TimeSpan timeSpan)
@@ -165,13 +177,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
 		private void filterItems()
 		{
-			lock (FilterLock)
-			{
-				var updatedOnFilter = new PersonRequestViewModelFilter(_filterTimeSpan);
-				var showOnlyfilter = new ShowOnlyPersonRequestViewModelSpecification(_showOnlymodels);
-				RequestViewModels.FilterOutBySpecification(updatedOnFilter.Or(showOnlyfilter));
-				//PersonRequestViewModels = RequestViewModels.CreateFilteredView(updatedOnFilter.Or(showOnlyfilter));
-			}
+		    if (_skipFilter)
+		        return;
+
+            lock (FilterLock)
+            {
+                var updatedOnFilter = new PersonRequestViewModelFilter(_filterTimeSpan);
+                var showOnlyfilter = new ShowOnlyPersonRequestViewModelSpecification(_showOnlymodels);
+                RequestViewModels.FilterOutBySpecification(updatedOnFilter.Or(showOnlyfilter));
+                //PersonRequestViewModels = RequestViewModels.CreateFilteredView(updatedOnFilter.Or(showOnlyfilter));
+            }
 		}
 
 		/// <summary>

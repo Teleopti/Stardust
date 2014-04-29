@@ -5734,9 +5734,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_dateNavigateControl.SelectedDateChanged -= dateNavigateControlSelectedDateChanged;
 			if (_schedulerMessageBrokerHandler != null)
 			{
-				_schedulerMessageBrokerHandler.RequestDeletedFromBroker -= schedulerMessageBrokerHandlerRequestDeletedFromBroker;
-				_schedulerMessageBrokerHandler.SchedulesUpdatedFromBroker -= schedulerMessageBrokerHandlerSchedulesUpdatedFromBroker;
+			    _schedulerMessageBrokerHandler.RequestDeletedFromBroker -= schedulerMessageBrokerHandlerRequestDeletedFromBroker;			
                 _schedulerMessageBrokerHandler.RequestInsertedFromBroker -= schedulerMessageBrokerHandlerRequestInsertedFromBroker;
+                _schedulerMessageBrokerHandler.SchedulesUpdatedFromBroker -= schedulerMessageBrokerHandlerSchedulesUpdatedFromBroker;
 
 				_schedulerMessageBrokerHandler.Dispose();
 				_schedulerMessageBrokerHandler = null; // referens till SchedulingScreen
@@ -6381,8 +6381,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var conflictsBuffer = new List<PersistConflict>();
 			var refreshedEntitiesBuffer = new List<IPersistableScheduleData>();
+		    _requestView.DisableFilter(true);
 			refreshEntitiesUsingMessageBroker(refreshedEntitiesBuffer, conflictsBuffer);
 			handleConflicts(refreshedEntitiesBuffer, conflictsBuffer);
+            _requestView.DisableFilter(false);
 		}
 
 		private void handleConflicts(IEnumerable<IPersistableScheduleData> refreshedEntities, IEnumerable<PersistConflict> conflicts)
