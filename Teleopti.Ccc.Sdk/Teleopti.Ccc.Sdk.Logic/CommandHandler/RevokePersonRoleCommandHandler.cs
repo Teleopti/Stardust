@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 		private static void checkIfAuthorized(IPerson person)
 		{
-			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, DateOnly.Today, person))
+			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage, DateOnly.Today, person))
 			{
 				throw new FaultException("You're not allowed to modify roles for this person.");
 			}
