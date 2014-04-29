@@ -2,3 +2,4 @@
 #
 # Note: If you change this file in production, app pool will recycle!
 WeeklyRestRuleSolver=true
+TeamBlockMoveTimeBetweenDays=false
