@@ -18,7 +18,9 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
 	        foreach (var personSkill in entity.PersonSkillCollection)
             {
-                dto.SkillCollection.Add(personSkillDoToDto(personSkill));
+                var skillDoToDto = personSkillDoToDto(personSkill);
+                dto.SkillCollection.Add(skillDoToDto.SkillId);
+                dto.PersonSkillCollection.Add(skillDoToDto);
             }
 
             return dto;
@@ -29,9 +31,14 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             throw new NotSupportedException("This function is not supported yet.");
         }
 
-        private static Guid personSkillDoToDto(IPersonSkill entity)
+        private static PersonSkillDto personSkillDoToDto(IPersonSkill entity)
         {
-            return entity.Skill.Id.GetValueOrDefault(Guid.Empty);
+            return new PersonSkillDto
+            {
+                Active = entity.Active,
+                Proficiency = entity.SkillPercentage.Value,
+                SkillId = entity.Skill.Id.GetValueOrDefault()
+            };
         }
     }
 }
