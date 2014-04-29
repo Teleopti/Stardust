@@ -252,8 +252,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			CultureInfo loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
 			IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
 
-			var sortedFilteredPersons =
-				_filteredPersons.OrderBy(p => p.Name, comparer).ToList();
+			var sortedFilteredPersons = _filteredPersons.OrderBy(CommonAgentName, comparer).ToList();
 
 			if (!ascending)
 				sortedFilteredPersons.Reverse();
