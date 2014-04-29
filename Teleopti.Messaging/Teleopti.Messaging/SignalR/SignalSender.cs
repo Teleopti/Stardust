@@ -48,7 +48,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartBrokerService(int reconnectAttempts)
 		{
-			StartBrokerService(TimeSpan.FromSeconds(240), 3);
+			StartBrokerService(TimeSpan.FromSeconds(20), 3);
 		}
 
 		public void StartBrokerService(TimeSpan reconnectDelay, int reconnectAttempts = 0)
