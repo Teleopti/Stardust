@@ -54,13 +54,43 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 	        _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-	        _personRepository.Stub(x => x.Load(_person.Id.GetValueOrDefault())).Return(_person);
-	        _applicationRoleRepository.Stub(x => x.Load(_role.Id.GetValueOrDefault())).Return(_role);
+	        _personRepository.Stub(x => x.Get(_person.Id.GetValueOrDefault())).Return(_person);
+	        _applicationRoleRepository.Stub(x => x.Get(_role.Id.GetValueOrDefault())).Return(_role);
 
 			_target.Handle(_commandDto);
 
 	        _person.PermissionInformation.ApplicationRoleCollection.Should().Contain(_role);
+            _commandDto.Result.AffectedItems.Should().Be.EqualTo(1);
+            _commandDto.Result.AffectedId.Should().Be.EqualTo(_person.Id.GetValueOrDefault());
 			unitOfWork.AssertWasCalled(x => x.PersistAll());
+        }
+
+        [Test]
+        public void ShouldHandleGrantPersonRoleCommandWhenPersonNotFound()
+        {
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            _personRepository.Stub(x => x.Get(_person.Id.GetValueOrDefault())).Return(null);
+            _applicationRoleRepository.Stub(x => x.Get(_role.Id.GetValueOrDefault())).Return(_role);
+
+            _target.Handle(_commandDto);
+
+            _commandDto.Result.AffectedItems.Should().Be.EqualTo(0);
+            unitOfWork.AssertWasNotCalled(x => x.PersistAll());
+        }
+
+        [Test]
+        public void ShouldHandleGrantPersonRoleCommandWhenRoleNotFound()
+        {
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            _personRepository.Stub(x => x.Get(_person.Id.GetValueOrDefault())).Return(_person);
+            _applicationRoleRepository.Stub(x => x.Get(_role.Id.GetValueOrDefault())).Return(null);
+
+            _target.Handle(_commandDto);
+
+            _commandDto.Result.AffectedItems.Should().Be.EqualTo(0);
+            unitOfWork.AssertWasNotCalled(x => x.PersistAll());
         }
 
 		[Test]
@@ -68,8 +98,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			_personRepository.Stub(x => x.Load(_person.Id.GetValueOrDefault())).Return(_person);
-			_applicationRoleRepository.Stub(x => x.Load(_role.Id.GetValueOrDefault())).Return(_role);
+			_personRepository.Stub(x => x.Get(_person.Id.GetValueOrDefault())).Return(_person);
+			_applicationRoleRepository.Stub(x => x.Get(_role.Id.GetValueOrDefault())).Return(_role);
 
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
 			{
