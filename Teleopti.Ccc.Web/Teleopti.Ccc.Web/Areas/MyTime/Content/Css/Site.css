@@ -753,6 +753,7 @@ End personal drop down menu
 
 .fixed-non-responsive.container{
 	width: 965px;
+	padding-top: 10px;
 }
 
 .visibility {
@@ -775,6 +776,17 @@ End personal drop down menu
 @media (max-width: 767px) {
     body {
     }
+	.navbar {
+		margin-bottom: 0;
+	}
+	
+	#page {
+		padding-top: 0px;
+	}
+
+	.navbar-collapse.subnavbar {
+		padding: 0;
+	}
 }
 
 /* Landscape phones and down */
