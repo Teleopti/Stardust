@@ -151,6 +151,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			target.AddOrUpdateActualAgentState(agentState);
 		}
 
+	    [Test]
+	    public void ShouldLoadLastAgentState()
+	    {
+			var person = PersonFactory.CreatePerson("Ashlee", "Andeen");
+			person.SetId(Guid.NewGuid());
+			var result = target.LoadLastAgentState(new List<Guid> { person.Id.GetValueOrDefault() });
+			Assert.IsNotNull(result);
+	    }
+
         protected override void SetupForRepositoryTest()
         {
             target = StatisticRepositoryFactory.Create();
