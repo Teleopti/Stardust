@@ -97,21 +97,40 @@ namespace Teleopti.MessagingTest.SignalR
 			hubConnection.AssertWasCalled(x => x.Start(), a => a.Repeat.Twice());
 		}
 
-		[Test, Ignore]
-		public void ShouldNotRestartHubConnectionMoreThanThreeTimes()
+		[Test]
+		public void ShouldNotRestartHubConnectionMoreThanXTimes()
+		{
+			const int x = 3;
+			var hubproxy = stubProxy();
+			var hubConnection = stubHubConnection(hubproxy);
+			var target = makeSignalSender(hubConnection);
+			target.StartBrokerService(TimeSpan.FromSeconds(0), x);
+
+			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
+			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
+			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
+			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
+
+			hubConnection.AssertWasCalled(c => c.Start(), a => a.Repeat.Times(4));
+		}
+
+		[Test]
+		public void ShouldContinueToRestartWhenReconnectAttemptsIsNotSet()
 		{
 			var hubproxy = stubProxy();
 			var hubConnection = stubHubConnection(hubproxy);
 			var target = makeSignalSender(hubConnection);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
-			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
-			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
-			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
-			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
+			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
+			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
+			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
+			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
+			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
 
-			hubConnection.AssertWasCalled(x => x.Start(), a => a.Repeat.Times(4));
+			hubConnection.AssertWasCalled(c => c.Start(), a => a.Repeat.Times(6));
 		}
+
 
 		[Test]
 		public void ShouldRestartHubConnectionWhenStartFails()

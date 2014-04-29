@@ -46,7 +46,12 @@ namespace Teleopti.Messaging.SignalR
 			StartBrokerService(TimeSpan.FromSeconds(240));
 		}
 
-		public void StartBrokerService(TimeSpan reconnectDelay)
+		public void StartBrokerService(int reconnectAttempts)
+		{
+			StartBrokerService(TimeSpan.FromSeconds(240), 3);
+		}
+
+		public void StartBrokerService(TimeSpan reconnectDelay, int reconnectAttempts = 0)
 		{
 			if (string.IsNullOrEmpty(_serverUrl))
 				return;
@@ -56,7 +61,7 @@ namespace Teleopti.Messaging.SignalR
 				{
 					var connection = MakeHubConnection();
 					var proxy = connection.CreateHubProxy("MessageBrokerHub");
-					_connectionHandler = new SignalConnectionHandler(proxy, connection, Logger, reconnectDelay);
+					_connectionHandler = new SignalConnectionHandler(proxy, connection, Logger, reconnectDelay, reconnectAttempts);
 				}
 
 				_connectionHandler.StartConnection();
