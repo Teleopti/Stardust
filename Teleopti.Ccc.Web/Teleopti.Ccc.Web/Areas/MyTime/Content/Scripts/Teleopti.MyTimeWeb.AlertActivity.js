@@ -30,15 +30,15 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 	function notificationActivities() {
 		var self = this;
-		self.getCurrentTime = function () {
+		self.getCurrentTime = function() {
 			return new Date().getTeleoptiTime();
-		}
+		};
 		self.timeZero = moment(self.getCurrentTime()).add('days', -1).startOf('day').toDate();
 
 		self.alertTimeSetting = 60; //default setting 60secs
 		self.alertMessage = "";
 		self.restartAlertDelayTime = 60;
-		self.layers = new Array();
+		self.layers = [];
 
 		self.getCurrentLayerIndex = function () {
 			var now = (self.getCurrentTime() - self.timeZero) / 1000;
@@ -72,7 +72,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 		self.getCurrentAlert = function () {
 			var layerCount = self.layers.length;
-			if (layerCount == 0) {
+			if (layerCount === 0) {
 				// No shift scheduled today
 				return {
 					message: "",
@@ -103,7 +103,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 				var nextActivityStartTime = layer.startMinutesSinceAsmZero * 60;
 				timeDiff = nextActivityStartTime - secondsSinceStart;
-			} else if (layerIndex == layerCount - 1) {
+			} else if (layerIndex === (layerCount - 1)) {
 				// Now is in latest activity
 				layer = self.layers[layerCount - 1];
 				activityName = layer.activityName;
@@ -148,7 +148,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		};
 
 		self._createLayers = function (layers) {
-			var newLayers = new Array();
+			var newLayers = [];
 			$.each(layers, function (key, layer) {
 				newLayers.push(new activityLayer(layer));
 			});
