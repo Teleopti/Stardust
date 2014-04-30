@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			_groupPagePerDate = _mocks.StrictMock<IGroupPagePerDate>();
             _groupPagePerDateHolder = _mocks.StrictMock<IGroupPagePerDateHolder>();
 			_allPerson = new List<IPerson> {_person1, _person2, _person3, _person4, _person5};
-	    	_schedulingOptions = new SchedulingOptions {UseGroupSchedulingCommonCategory = true};
+	    	_schedulingOptions = new SchedulingOptions {TeamSameShiftCategory = true};
 		    _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_groupPersonFactory = _mocks.StrictMock<IGroupPersonFactory>();

@@ -200,9 +200,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             this.schedulingSessionPreferencesTabPanel1.Size = new System.Drawing.Size(437, 478);
             this.schedulingSessionPreferencesTabPanel1.TabIndex = 0;
             //this.schedulingSessionPreferencesTabPanel1.UseBlockSchedulingVisible = true;
-            //this.schedulingSessionPreferencesTabPanel1.UseGroupSchedulingCommonCategory = false;
-            //this.schedulingSessionPreferencesTabPanel1.UseGroupSchedulingCommonEnd = false;
-            //this.schedulingSessionPreferencesTabPanel1.UseGroupSchedulingCommonStart = false;
+            //this.schedulingSessionPreferencesTabPanel1.TeamSameShiftCategory = false;
+            //this.schedulingSessionPreferencesTabPanel1.TeamSameEndTime = false;
+            //this.schedulingSessionPreferencesTabPanel1.TeamSameStartTime = false;
             //this.schedulingSessionPreferencesTabPanel1.UseSameDayOffsVisible = false;
             // 
             // SchedulingSessionPreferencesDialog

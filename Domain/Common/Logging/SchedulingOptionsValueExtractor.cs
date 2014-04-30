@@ -18,13 +18,13 @@ namespace Teleopti.Ccc.Domain.Common.Logging
         public string GetTeamOptions()
         {
             var result = _schedulingOptions.GroupOnGroupPageForTeamBlockPer.Name;
-            if (_schedulingOptions.UseGroupSchedulingCommonCategory)
+            if (_schedulingOptions.TeamSameShiftCategory)
                 result += ",Same shift category";
-            if (_schedulingOptions.UseGroupSchedulingCommonStart)
+            if (_schedulingOptions.TeamSameStartTime)
                 result += ",Same start time";
-            if (_schedulingOptions.UseCommonActivity)
+            if (_schedulingOptions.TeamSameActivity)
                 result += ",Same activity";
-            if (_schedulingOptions.UseGroupSchedulingCommonEnd)
+            if (_schedulingOptions.TeamSameEndTime)
                 result += ",Same end time";
             return result;
         }
@@ -32,11 +32,11 @@ namespace Teleopti.Ccc.Domain.Common.Logging
         public string GetBlockOptions()
         {
             var result = _schedulingOptions.BlockFinderTypeForAdvanceScheduling.ToString();
-            if (_schedulingOptions.UseTeamBlockSameShiftCategory)
+            if (_schedulingOptions.BlockSameShiftCategory)
                 result += ",Same shift category";
-            if (_schedulingOptions.UseTeamBlockSameShift)
+				if (_schedulingOptions.BlockSameShift)
                 result += ",Same shift";
-            if (_schedulingOptions.UseTeamBlockSameStartTime)
+            if (_schedulingOptions.BlockSameStartTime)
                 result += ",Same start time";
             return result;
         }
