@@ -918,3 +918,8 @@ End personal drop down menu
   -o-transition: height 0.001s;
   transition: height 0.001s;
 }
+
+.collapse-sub-navbar {
+	margin-left: 16px; 
+	margin-right: 16px
+}
