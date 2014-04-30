@@ -64,8 +64,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         public void VerifyDomainEntityToDto()
         {
             var person = CreatePerson(true);
-            person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
-                                                   {DomainName = "DOM", WindowsLogOnName = "AIN"};
+	        person.AuthenticationInfo = new AuthenticationInfo {Identity = @"DOM\AIN"};
             person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
                                                        {ApplicationLogOnName = "App", Password = "Pass"};
             using (_mocks.Record())
@@ -92,8 +91,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(person.PermissionInformation.UICultureLCID(), personDto.UICultureLanguageId);
             Assert.AreEqual(person.PermissionInformation.DefaultTimeZone().Id, personDto.TimeZoneId);
             Assert.AreEqual(person.ApplicationAuthenticationInfo.ApplicationLogOnName,personDto.ApplicationLogOnName);
-            Assert.AreEqual(person.WindowsAuthenticationInfo.WindowsLogOnName,personDto.WindowsLogOnName);
-            Assert.AreEqual(person.WindowsAuthenticationInfo.DomainName,personDto.WindowsDomain);
+	        Assert.AreEqual(person.AuthenticationInfo.Identity, personDto.WindowsDomain + @"\" + personDto.WindowsLogOnName);
             Assert.AreEqual(person.PersonPeriodCollection.Count(), personDto.PersonPeriodCollection.Count);
             Assert.AreEqual(person.WorkflowControlSet.Id, personDto.WorkflowControlSet.Id);
             Assert.AreEqual(person.Note, personDto.Note);
@@ -121,8 +119,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         public void VerifyCanTransformToDomainObject()
         {
             var person = CreatePerson(true);
-            person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
-                                                   {DomainName = "DOMATRIX", WindowsLogOnName = "DONNA"};
+	        person.AuthenticationInfo = new AuthenticationInfo {Identity = @"DOMATRIX\DONNA"};
             using (_mocks.Record())
             {
                 Expect.Call(_personRepository.Get(person.Id.Value))
@@ -155,8 +152,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(personDo.PermissionInformation.CultureLCID(), 1053);
             Assert.AreEqual(personDto.ApplicationLogOnName, "");
             Assert.AreEqual(personDto.ApplicationLogOnPassword, "");
-            Assert.AreEqual(personDto.WindowsLogOnName, personDo.WindowsAuthenticationInfo.WindowsLogOnName);
-            Assert.AreEqual(personDto.WindowsDomain, personDo.WindowsAuthenticationInfo.DomainName);
+			Assert.AreEqual(personDto.WindowsDomain + @"\" + personDto.WindowsLogOnName, personDo.AuthenticationInfo.Identity);
             Assert.AreEqual(personDto.Note, personDo.Note);
             Assert.AreEqual(personDto.TimeZoneId, personDo.PermissionInformation.DefaultTimeZone().DisplayName);
             Assert.AreEqual(personDto.TerminationDate.DateTime, personDo.TerminalDate.Value.Date);
@@ -195,7 +191,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(personDto.UICultureLanguageId, personDo.PermissionInformation.UICultureLCID());
             Assert.AreEqual(personDto.CultureLanguageId, personDo.PermissionInformation.CultureLCID());
             //Because it is deleted
-            Assert.That(personDo.WindowsAuthenticationInfo, Is.Null);
+            Assert.That(personDo.AuthenticationInfo, Is.Null);
             Assert.That( personDo.ApplicationAuthenticationInfo, Is.Null);
             Assert.AreEqual(personDto.CultureLanguageId, personDo.PermissionInformation.CultureLCID());
             Assert.AreEqual(personDto.UICultureLanguageId, personDo.PermissionInformation.UICultureLCID());

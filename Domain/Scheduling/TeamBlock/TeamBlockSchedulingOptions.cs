@@ -29,89 +29,89 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		public bool IsBlockScheduling(ISchedulingOptions schedulingOptions)
 		{
-			return schedulingOptions.UseTeamBlockPerOption && !schedulingOptions.UseGroupScheduling;
+			return schedulingOptions.UseBlock && !schedulingOptions.UseTeam;
 		}
 
 		public bool IsTeamScheduling(ISchedulingOptions schedulingOptions)
 		{
-			return !schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseGroupScheduling;
+			return !schedulingOptions.UseBlock && schedulingOptions.UseTeam;
 		}
 
 		public bool IsTeamBlockScheduling(ISchedulingOptions schedulingOptions)
 		{
-			return schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseGroupScheduling;
+			return schedulingOptions.UseBlock && schedulingOptions.UseTeam;
 		}
 
 		public bool IsBlockSchedulingWithSameShift(ISchedulingOptions schedulingOptions)
 		{
 			return IsBlockScheduling(schedulingOptions) &&
-				   schedulingOptions.UseTeamBlockSameShift;
+					schedulingOptions.BlockSameShift;
 		}
 
 		public bool IsBlockSchedulingWithSameShiftCategory(ISchedulingOptions schedulingOptions)
 		{
 			return IsBlockScheduling(schedulingOptions) &&
-				   schedulingOptions.UseTeamBlockSameShiftCategory;
+				   schedulingOptions.BlockSameShiftCategory;
 		}
 
 		public bool IsBlockSchedulingWithSameStartTime(ISchedulingOptions schedulingOptions)
 		{
 			return IsBlockScheduling(schedulingOptions) &&
-				   schedulingOptions.UseTeamBlockSameStartTime;
+				   schedulingOptions.BlockSameStartTime;
 		}
 
 		public bool IsTeamSchedulingWithSameStartTime(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamScheduling(schedulingOptions) &&
-				   schedulingOptions.UseGroupSchedulingCommonStart;
+				   schedulingOptions.TeamSameStartTime;
 		}
 
 		public bool IsTeamSchedulingWithSameEndTime(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamScheduling(schedulingOptions) &&
-				   schedulingOptions.UseGroupSchedulingCommonEnd;
+				   schedulingOptions.TeamSameEndTime;
 		}
 
 		public bool IsTeamSchedulingWithSameShiftCategory(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamScheduling(schedulingOptions) &&
-				   schedulingOptions.UseGroupSchedulingCommonCategory;
+				   schedulingOptions.TeamSameShiftCategory;
 		}
 
 		public bool IsBlockSameStartTimeInTeamBlock(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamBlockScheduling(schedulingOptions) &&
-			       schedulingOptions.UseTeamBlockSameStartTime;
+			       schedulingOptions.BlockSameStartTime;
 		}
 
 		public bool IsTeamSameStartTimeInTeamBlock(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamBlockScheduling(schedulingOptions) &&
-			       schedulingOptions.UseGroupSchedulingCommonStart;
+			       schedulingOptions.TeamSameStartTime;
 		}
 	
 		public bool IsBlockSameShiftCategoryInTeamBlock(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamBlockScheduling(schedulingOptions) &&
-			       schedulingOptions.UseTeamBlockSameShiftCategory;
+			       schedulingOptions.BlockSameShiftCategory;
 		}
 
 		public bool IsTeamSameEndTimeInTeamBlock(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamBlockScheduling(schedulingOptions) &&
-			       schedulingOptions.UseGroupSchedulingCommonEnd;
+			       schedulingOptions.TeamSameEndTime;
 		}
 	
 		public bool IsBlockSameShiftInTeamBlock(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamBlockScheduling(schedulingOptions) &&
-			       schedulingOptions.UseTeamBlockSameShift;
+					 schedulingOptions.BlockSameShift;
 		}
 
 		public bool IsTeamSameShiftCategoryInTeamBlock(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamBlockScheduling(schedulingOptions) &&
-			       schedulingOptions.UseGroupSchedulingCommonCategory;
+			       schedulingOptions.TeamSameShiftCategory;
 		}
 		
         public bool IsSingleAgentTeam(ISchedulingOptions schedulingOptions)
@@ -123,20 +123,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public bool IsTeamSameActivityInTeamBlock(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamBlockScheduling(schedulingOptions) &&
-			       schedulingOptions.UseCommonActivity;
+			       schedulingOptions.TeamSameActivity;
 		}
 
 		public bool IsTeamSchedulingWithSameActivity(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamScheduling(schedulingOptions) &&
-			       schedulingOptions.UseCommonActivity;
+			       schedulingOptions.TeamSameActivity;
 		}
 
 		public bool IsBlockWithSameShiftCategoryInvolved(ISchedulingOptions schedulingOptions)
 		{
 			var blockFinder = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
 			var isNoneOrSingleDay = (blockFinder == BlockFinderType.None || blockFinder == BlockFinderType.SingleDay);
-			return (!isNoneOrSingleDay && schedulingOptions.UseTeamBlockSameShiftCategory);
+			return (!isNoneOrSingleDay && schedulingOptions.BlockSameShiftCategory);
 		}
 	}
 }

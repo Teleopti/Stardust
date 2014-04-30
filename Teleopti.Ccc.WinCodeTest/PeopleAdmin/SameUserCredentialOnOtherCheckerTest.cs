@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Interfaces.Domain;
@@ -116,8 +117,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
         {
             var person = new Person
                              {
-                                 WindowsAuthenticationInfo = new WindowsAuthenticationInfo
-                                                                 {WindowsLogOnName = winLogOn, DomainName = domain}
+								 AuthenticationInfo = new AuthenticationInfo { Identity = IdentityHelper.Merge(domain, winLogOn) }
                              };
 
             person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo {ApplicationLogOnName = appLogOn};

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 
             _target.BlockFinderTypeForAdvanceScheduling  = BlockFinderType.BetweenDayOff;
-	        _target.UseTeamBlockPerOption = true;
+	        _target.UseBlock = true;
             Assert.AreEqual(BlockFinderType.BetweenDayOff, _target.BlockFinderTypeForAdvanceScheduling);
 
             _target.UsePreferences = true;
@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.IsTrue(_target.DoNotBreakMaxSeats);
         	_target.UseMaxSeats = false;
 			Assert.IsFalse(_target.UseMaxSeats);
-        	_target.UseGroupScheduling = true;
-            Assert.IsTrue(_target.UseGroupScheduling);
+        	_target.UseTeam = true;
+            Assert.IsTrue(_target.UseTeam);
             Assert.IsFalse(_target.UseSameDayOffs);
             _target.UseSameDayOffs = true;
             Assert.IsTrue(_target.UseSameDayOffs);
@@ -135,24 +135,24 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
         public void VerifyPreferenceToBeSavedForTeamBlock()
         {
-            _target.UseTeamBlockSameEndTime  = true;
-            _target.UseTeamBlockSameShift = true;
-            _target.UseTeamBlockSameStartTime = true;
-            _target.UseTeamBlockSameShiftCategory = true;
-            Assert.IsTrue(_target.UseTeamBlockSameEndTime );
-            Assert.IsTrue(_target.UseTeamBlockSameShift );
-            Assert.IsTrue(_target.UseTeamBlockSameShiftCategory );
-            Assert.IsTrue(_target.UseTeamBlockSameStartTime );
+            _target.BlockSameEndTime  = true;
+				_target.BlockSameShift = true;
+            _target.BlockSameStartTime = true;
+            _target.BlockSameShiftCategory = true;
+            Assert.IsTrue(_target.BlockSameEndTime );
+				Assert.IsTrue(_target.BlockSameShift);
+            Assert.IsTrue(_target.BlockSameShiftCategory );
+            Assert.IsTrue(_target.BlockSameStartTime );
 
 
-            _target.UseTeamBlockSameEndTime = false;
-            _target.UseTeamBlockSameShift = false;
-            _target.UseTeamBlockSameStartTime = false;
-            _target.UseTeamBlockSameShiftCategory = false;
-            Assert.IsFalse(_target.UseTeamBlockSameEndTime);
-            Assert.IsFalse(_target.UseTeamBlockSameShift);
-            Assert.IsFalse(_target.UseTeamBlockSameShiftCategory);
-            Assert.IsFalse(_target.UseTeamBlockSameStartTime);
+            _target.BlockSameEndTime = false;
+				_target.BlockSameShift = false;
+            _target.BlockSameStartTime = false;
+            _target.BlockSameShiftCategory = false;
+            Assert.IsFalse(_target.BlockSameEndTime);
+				Assert.IsFalse(_target.BlockSameShift);
+            Assert.IsFalse(_target.BlockSameShiftCategory);
+            Assert.IsFalse(_target.BlockSameStartTime);
         }
 
         [Test]

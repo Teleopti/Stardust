@@ -208,27 +208,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
                _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
                                                    DateOnly.Today, _base)).Return(true);
             _mocks.ReplayAll();
-            _target.WindowsLogOnName = setValue;
+            _target.LogOnName = setValue;
 
             //Test get method
-            var getValue = _target.WindowsLogOnName;
-
-            //Perform Test
-            Assert.AreEqual(setValue, getValue);
-        }
-
-        [Test]
-        public void VerifyDomainName()
-        {
-            const string setValue = "toptinet";
-            Expect.Call(
-               _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
-                                                   DateOnly.Today, _base)).Return(true);
-            _mocks.ReplayAll();
-            _target.DomainName = setValue;
-
-            //Test get method
-            var getValue = _target.DomainName;
+            var getValue = _target.LogOnName;
 
             //Perform Test
             Assert.AreEqual(setValue, getValue);
@@ -447,22 +430,19 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             const string oldLogOnInfo = "oldLogOnInfo";
             _base.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
                                                       {ApplicationLogOnName = oldLogOnInfo, Password = oldLogOnInfo};
-            _base.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
-                                                  {DomainName = oldLogOnInfo, WindowsLogOnName = oldLogOnInfo};
+	        _base.AuthenticationInfo = new AuthenticationInfo {Identity = oldLogOnInfo};
             Expect.Call(
                 _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
                                                     DateOnly.Today, _base)).Return(false);
 
             _mocks.ReplayAll();
             _target.ApplicationLogOnName = "";
-            _target.WindowsLogOnName = "";
+            _target.LogOnName = "";
             _target.Password = "";
-            _target.DomainName = "";
             
             Assert.That(_target.ApplicationLogOnName, Is.EqualTo(oldLogOnInfo));
-            Assert.That(_target.WindowsLogOnName, Is.EqualTo(oldLogOnInfo));
+            Assert.That(_target.LogOnName, Is.EqualTo(oldLogOnInfo));
             Assert.That(_target.Password, Is.EqualTo(oldLogOnInfo));
-            Assert.That(_target.DomainName, Is.EqualTo(oldLogOnInfo));
             _mocks.VerifyAll();
 
         }

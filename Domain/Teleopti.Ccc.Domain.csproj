@@ -1176,6 +1176,7 @@
     <Compile Include="Security\Authentication\ICheckUserDetail.cs" />
     <Compile Include="Security\Authentication\IDataSourceContainer.cs" />
     <Compile Include="Security\Authentication\IDataSourceProvider.cs" />
+    <Compile Include="Security\Authentication\IdentityHelper.cs" />
     <Compile Include="Security\Authentication\IFindApplicationUser.cs" />
     <Compile Include="Security\Authentication\IFindUserDetail.cs" />
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
@@ -1186,6 +1187,7 @@
     <Compile Include="Security\Authentication\UtcTimeZone.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettings.cs" />
+    <Compile Include="Security\AuthorizationEntities\AuthenticationInfo.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccCalendarLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccVersion8LicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOption.cs" />
@@ -1497,7 +1499,6 @@
     <Compile Include="Scheduling\Assignment\ActivityLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\SiteAuthorizationEntityConverter.cs" />
-    <Compile Include="Security\AuthorizationEntities\WindowsAuthenticationInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\BusinessUnitAuthorizationEntityConverter.cs">
       <SubType>Code</SubType>
     </Compile>

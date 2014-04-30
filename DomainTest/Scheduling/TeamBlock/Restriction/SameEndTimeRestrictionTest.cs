@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         {
             _mocks = new MockRepository();
             _schedulingOptions = new SchedulingOptions();
-            _schedulingOptions.UseTeamBlockPerOption = true;
+				_schedulingOptions.UseBlock = true;
             _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
             _target = new SameEndTimeRestriction(_timeZoneInfo);
             _dateOnly = new DateOnly(2012, 12, 7);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [Test]
         public void ShouldExtractEmptyRestrictionWhenHasTwoDifferentEndTimeSchedules()
         {
-            _schedulingOptions.UseTeamBlockSameEndTime = true;
+            _schedulingOptions.BlockSameEndTime = true;
             var dateList = new List<DateOnly> { _dateOnly, _dateOnly.AddDays(1) };
             
             var period2 = new DateTimePeriod(new DateTime(2012, 12, 8, 7, 0, 0, DateTimeKind.Utc),
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [Test]
         public void ShouldExtractSameStartAndEndTimeRestrictionFromScheduleDay()
         {
-            _schedulingOptions.UseTeamBlockSameEndTime = true;
+            _schedulingOptions.BlockSameEndTime = true;
             var dateList = new List<DateOnly> { _dateOnly, _dateOnly.AddDays(1) };
             var period1 = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
                                             new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
@@ -120,8 +120,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [Test]
         public void ShouldExtractSameStartAndEndTimeRestrictionFromOneTeamOneDay()
         {
-            _schedulingOptions.UseGroupScheduling = true;
-            _schedulingOptions.UseGroupSchedulingCommonEnd = true;
+			  _schedulingOptions.UseTeam = true;
+            _schedulingOptions.TeamSameEndTime = true;
             var period1 = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
                                             new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [Test]
         public void ShouldExtractSameEndTimeWhenScheduleIsNull()
         {
-            _schedulingOptions.UseTeamBlockSameEndTime = true;
+            _schedulingOptions.BlockSameEndTime = true;
             var dateList = new List<DateOnly> { _dateOnly };
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             using (_mocks.Record())
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [Test]
         public void ShouldExtractSameEndTimeWhenSchedulePartPeriodIsNull()
         {
-            _schedulingOptions.UseTeamBlockSameEndTime = true;
+            _schedulingOptions.BlockSameEndTime = true;
             var dateList = new List<DateOnly> { _dateOnly };
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             using (_mocks.Record())

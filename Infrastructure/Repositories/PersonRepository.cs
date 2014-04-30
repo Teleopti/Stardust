@@ -72,18 +72,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        /// <summary>
-        /// Tries to find a windows authenticated user.
-        /// </summary>
-        /// <param name="domainName">Name of the domain.</param>
-        /// <param name="logOnName">Name of the log on.</param>
-        /// <param name="foundPerson">The found user.</param>
-        /// <returns></returns>
-        public bool TryFindWindowsAuthenticatedPerson(string domainName, string logOnName, out IPerson foundPerson)
+	    /// <summary>
+	    /// Tries to find a windows authenticated user.
+	    /// </summary>
+	    /// <param name="identity"></param>
+	    /// <param name="foundPerson">The found user.</param>
+	    /// <returns></returns>
+	    public bool TryFindIdentityAuthenticatedPerson(string identity, out IPerson foundPerson)
         {
             using (PerformanceOutput.ForOperation("Trying to find windows auth person in db"))
             {
-                foundPerson = createWindowsLogonNameCriteria(domainName, logOnName).UniqueResult<Person>();
+                foundPerson = createIdentityLogonNameCriteria(identity).UniqueResult<Person>();
 
                 if (foundPerson == null) return false;
 
@@ -146,33 +145,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                  "ApplicationAuthenticationInfo.ApplicationLogOnName",
                                  String.Empty)),
                          Restrictions.Not(
-                             Restrictions.Eq("WindowsAuthenticationInfo.WindowsLogOnName",
+                             Restrictions.Eq("AuthenticationInfo.Identity",
                                              String.Empty)))).SetResultTransformer(Transformers.DistinctRootEntity).List<IPerson>();
         }
 
-		public bool DoesWindowsUserExists(string domainName, string userName)
+		public bool DoesIdentityExists(string identity)
 		{
-			var res = Session.GetNamedQuery("CheckIfWindowsUserExists")
-					.SetString("userName", userName)
-					.SetString("domainName", domainName)
+			var res = Session.GetNamedQuery("CheckIfIdentityExists")
+					.SetString("identity", identity)
 					.SetDateTime("dateNow", DateOnly.Today)
 					.UniqueResult();
 
 			return res != null;
 		}
 
-    	private ICriteria createWindowsLogonNameCriteria(string domainName, string logOnName)
+    	private ICriteria createIdentityLogonNameCriteria(string identity)
         {
-
-            //todo
-            //should be case sensitive in password but not on user name
-            //what if sql server instance is case insensitive - should the username still be incasesensitive?
             return Session.CreateCriteria(typeof(Person), "person")
-                .Add(Restrictions.Eq("WindowsAuthenticationInfo.WindowsLogOnName", logOnName))
+                .Add(Restrictions.Eq("AuthenticationInfo.Identity", identity))
                 .Add(Restrictions.Disjunction()
                         .Add(Restrictions.IsNull("TerminalDate"))
-                        .Add(Restrictions.Ge("TerminalDate", DateOnly.Today)))
-                .Add(Restrictions.Eq("WindowsAuthenticationInfo.DomainName", domainName));
+                        .Add(Restrictions.Ge("TerminalDate", DateOnly.Today)));
         }
 
 
@@ -722,22 +715,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             foreach (var personCollection in persons.Batch(200))
             {
                 var personInfoList = personCollection.Select(p => new {
-                                                                 WindowsAuthenticationName = p.WindowsAuthenticationInfo == null ? "" : p.WindowsAuthenticationInfo.WindowsLogOnName,
-                                                                 WindowsAuthenticationDomain = p.WindowsAuthenticationInfo == null ? "" : p.WindowsAuthenticationInfo.DomainName,
-                                                                 ApplicationAuthentication = p.ApplicationAuthenticationInfo == null ? "" : p.ApplicationAuthenticationInfo.ApplicationLogOnName, p.Id
+                                                                 Identity = p.AuthenticationInfo == null ? "" : p.AuthenticationInfo.Identity,
+                                                                ApplicationAuthentication = p.ApplicationAuthenticationInfo == null ? "" : p.ApplicationAuthenticationInfo.ApplicationLogOnName, p.Id
                                                              }).ToList();
 
-				string[] windowsLogOns = personInfoList.Where(p => !String.IsNullOrEmpty(p.WindowsAuthenticationDomain)).Select(p => p.WindowsAuthenticationName).ToArray();
-	            string[] domains = personInfoList.Where(p => !String.IsNullOrEmpty(p.WindowsAuthenticationDomain)).Select(p=>p.WindowsAuthenticationDomain).ToArray();
+				string[] windowsLogOns = personInfoList.Where(p => !String.IsNullOrEmpty(p.Identity)).Select(p => p.Identity).ToArray();
 				string[] applicationLogOns = personInfoList.Where(p => !String.IsNullOrEmpty(p.ApplicationAuthentication)).Select(p => p.ApplicationAuthentication).ToArray();
                 Guid[] winlogonNullIds =
                     (from p in personInfoList
-                     where String.IsNullOrEmpty(p.WindowsAuthenticationName) && String.IsNullOrEmpty(p.WindowsAuthenticationDomain)
+                     where String.IsNullOrEmpty(p.Identity) 
                      select p.Id.GetValueOrDefault()).ToArray();
                 Guid[] ids = (from p in personInfoList
                               where
                                   p.Id.HasValue && 
-                                  !String.IsNullOrEmpty(p.WindowsAuthenticationDomain)
+                                  !String.IsNullOrEmpty(p.Identity)
                               select p.Id.GetValueOrDefault()).ToArray();
 
                 int idsBeforeLength = ids.Length;
@@ -756,16 +747,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                         Restrictions.In(
                                             "ApplicationAuthenticationInfo.ApplicationLogOnName",
                                             applicationLogOns),
-
-                                        Restrictions.And
-                                            (
-                                                Restrictions.In(
-                                                    "WindowsAuthenticationInfo.WindowsLogOnName",
-                                                    windowsLogOns),
-                                                Restrictions.In(
-                                                    "WindowsAuthenticationInfo.DomainName",
-                                                    domains)
-                                            )
+                                        Restrictions.In(
+                                                    "AuthenticationInfo.Identity",
+                                                    windowsLogOns)
                                     ),
                                 Restrictions.Not(Restrictions.In("Id", ids))
                             )

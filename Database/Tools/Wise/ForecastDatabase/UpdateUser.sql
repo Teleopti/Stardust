@@ -79,20 +79,19 @@ WHERE p.Id = dbo.ApplicationAuthenticationInfo.person
 AND p.Id = @FreemiumGUID
 
 --add if not already exist
-INSERT INTO dbo.WindowsAuthenticationInfo (person,DomainName,WindowsLogOnName)
-SELECT p.Id,'$(USERDOMAIN)','$(USERNAME)'
+INSERT INTO dbo.AuthenticationInfo (person,[Identity])
+SELECT p.Id,'$(USERDOMAIN)\$(USERNAME)'
 FROM dbo.person p
 WHERE
-   NOT EXISTS (SELECT * FROM dbo.WindowsAuthenticationInfo win
+   NOT EXISTS (SELECT * FROM dbo.AuthenticationInfo win
               WHERE win.person = p.Id)
 AND p.Id = @FreemiumGUID
 
 --if exist, update to current Windows user
-UPDATE dbo.WindowsAuthenticationInfo
-SET 	DomainName			= '$(USERDOMAIN)',
-	WindowsLogOnName		= '$(USERNAME)'
+UPDATE dbo.AuthenticationInfo
+SET 	[Identity] = '$(USERDOMAIN)\$(USERNAME)'
 FROM dbo.Person p
-WHERE p.Id = dbo.WindowsAuthenticationInfo.person
+WHERE p.Id = dbo.AuthenticationInfo.person
 AND p.Id = @FreemiumGUID
 
 --Add temporary license

@@ -20,11 +20,10 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// <summary>
 		/// Tries to find a windows authenticated person.
 		/// </summary>
-		/// <param name="logOnName">Name of the log on.</param>
-		/// <param name="domainName">Name of the domain.</param>
+		/// <param name="identity"></param>
 		/// <param name="foundPerson">The found person.</param>
 		/// <returns></returns>
-		bool TryFindWindowsAuthenticatedPerson(string domainName, string logOnName, out IPerson foundPerson);
+		bool TryFindIdentityAuthenticatedPerson(string identity, out IPerson foundPerson);
 
 
 		/// <summary>
@@ -111,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ICollection<IPerson> FindPeopleInOrganizationLight(DateOnlyPeriod period);
 		ICollection<IPerson> FindPeople(IEnumerable<Guid> peopleId);
 		ICollection<IPerson> FindPeople(IEnumerable<IPerson> people);
-		bool DoesWindowsUserExists(string domainName, string userName);
+		bool DoesIdentityExists(string identity);
 		int SaveLoginAttempt(LoginAttemptModel model);
 	    bool DoesPersonHaveExternalLogOn(DateOnly dateTime, Guid personId);
 	    ICollection<IPerson> FindAllSortByName(bool includeSuperUserThatAlsoIsAgent);

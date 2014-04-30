@@ -31,16 +31,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool UseShiftCategoryLimitations { get; set; }
         public Percent Fairness { get; set; }
         public bool UseStudentAvailability { get; set; }
-		public bool UseGroupScheduling { get; set; }
+		public bool UseTeam { get; set; }
 		public IGroupPageLight GroupOnGroupPage { get; set; }
 
 
         public IGroupPageLight GroupOnGroupPageForTeamBlockPer { get; set; }
-        public bool UseTeamBlockSameEndTime { get; set; }
-        public bool UseTeamBlockSameShiftCategory { get; set; }
-        public bool UseTeamBlockSameStartTime { get; set; }
-        public bool UseTeamBlockSameShift { get; set; }
-        public bool UseTeamBlockPerOption { get; set; }
+        public bool BlockSameEndTime { get; set; }
+        public bool BlockSameShiftCategory { get; set; }
+        public bool BlockSameStartTime { get; set; }
+		  public bool BlockSameShift { get; set; }
+        public bool UseBlock { get; set; }
 
         public bool DoNotBreakMaxStaffing { get; set; }
         public IGroupPageLight GroupPageForShiftCategoryFairness { get; set; }
@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     	public int ResourceCalculateFrequency { get; set; }
     	public TimeSpan? UseCustomTargetTime { get; set; }
     	public bool ShowTroubleshot { get; set; }
-		public bool UseGroupSchedulingCommonStart { get; set; }
-		public bool UseGroupSchedulingCommonEnd { get; set; }
-		public bool UseGroupSchedulingCommonCategory { get; set; }
+		public bool TeamSameStartTime { get; set; }
+		public bool TeamSameEndTime { get; set; }
+		public bool TeamSameShiftCategory { get; set; }
 
         public IActivity CommonActivity { get; set; }
-        public bool UseCommonActivity { get; set; }
+        public bool TeamSameActivity { get; set; }
 		public bool UseAverageShiftLengths { get; set; }
 
         private BlockFinderType _blockFinderTypeForAdvanceScheduling;
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
 	        get
 	        {
-				if(!UseTeamBlockPerOption)
+				if(!UseBlock)
 					return BlockFinderType.SingleDay;
 
 		        return _blockFinderTypeForAdvanceScheduling;

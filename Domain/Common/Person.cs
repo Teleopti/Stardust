@@ -31,11 +31,11 @@ namespace Teleopti.Ccc.Domain.Common
         private static readonly DateOnly MaxDate = new DateOnly(DateTime.MaxValue);
         private IWorkflowControlSet _workflowControlSet;
         private DayOfWeek _firstDayOfWeek;
-        private IWindowsAuthenticationInfo _windowsAuthenticationInfo;
         private IApplicationAuthenticationInfo _applicationAuthenticationInfo;
 		private readonly IList<IOptionalColumnValue> _optionalColumnValueCollection = new List<IOptionalColumnValue>();
+	    private IAuthenticationInfo _authenticationInfo;
 
-        public Person()
+	    public Person()
         {
             _permissionInformation = new PermissionInformation(this);
             _personPeriodCollection = new SortedList<DateOnly, IPersonPeriod>();
@@ -805,14 +805,14 @@ namespace Teleopti.Ccc.Domain.Common
 		    return encryption.EncryptString(newPassword) == _applicationAuthenticationInfo.Password;
 	    }
 
-	    public virtual IWindowsAuthenticationInfo WindowsAuthenticationInfo
-        {
-            get
-            {
-                return _windowsAuthenticationInfo;
-            }
-            set { _windowsAuthenticationInfo = value; }
-        }
+	    public virtual IAuthenticationInfo AuthenticationInfo
+		{
+			get
+			{
+				return _authenticationInfo;
+			}
+			set { _authenticationInfo = value; }
+		}
 
         public virtual IApplicationAuthenticationInfo ApplicationAuthenticationInfo
         {
@@ -909,9 +909,8 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual void SetDeleted()
 	    {
-		    _windowsAuthenticationInfo = null;
 		    _applicationAuthenticationInfo = null;
-
+			_authenticationInfo = null;
 		    var personPeriodsBefore = gatherPersonPeriodDetails();
 		    _isDeleted = true;
 

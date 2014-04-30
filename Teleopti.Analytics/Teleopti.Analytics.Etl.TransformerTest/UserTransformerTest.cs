@@ -3,7 +3,6 @@ using System.Data;
 using System.Threading;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Transformer;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Interfaces.Domain;
 
@@ -47,9 +46,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			Assert.AreEqual(personUser.Name.LastName, row["person_last_name"]);
 			Assert.AreEqual(personUser.ApplicationAuthenticationInfo.ApplicationLogOnName,
 							row["application_logon_name"]);
-			Assert.AreEqual(personUser.WindowsAuthenticationInfo.WindowsLogOnName,
+			var windowsIdentity = personUser.AuthenticationInfo.Identity.Split('\\');
+			Assert.AreEqual(windowsIdentity[1],
 							row["windows_logon_name"]);
-			Assert.AreEqual(personUser.WindowsAuthenticationInfo.DomainName,
+			Assert.AreEqual(windowsIdentity[0],
 							row["windows_domain_name"]);
 			Assert.AreEqual(personUser.ApplicationAuthenticationInfo.Password, row["password"]);
 			Assert.AreEqual(personUser.Email, row["email"]);

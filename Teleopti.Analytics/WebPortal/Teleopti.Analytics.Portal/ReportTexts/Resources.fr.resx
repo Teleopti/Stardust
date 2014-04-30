@@ -1086,4 +1086,19 @@
   <data name="RepViewerZoom" xml:space="preserve">
     <value>Zoom</value>
   </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>Seulement Compétences Actives</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Compétences Agent</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>Compétences Actives seulement:</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Temps en Statut par Agent</value>
+  </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>Groupes de statuts:</value>
+  </data>
 </root>

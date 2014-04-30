@@ -33,11 +33,10 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
                 if (conflicts.Contains(person))
                     continue;
 
-                var domain = person.WindowsAuthenticationInfo == null ? "" : person.WindowsAuthenticationInfo.DomainName;
-                var logOnName = person.WindowsAuthenticationInfo == null ? "" : person.WindowsAuthenticationInfo.WindowsLogOnName;
+                var identity = person.AuthenticationInfo == null ? "" : person.AuthenticationInfo.Identity;
                 var appLogOnName = person.ApplicationAuthenticationInfo == null ? "" : person.ApplicationAuthenticationInfo.ApplicationLogOnName;
 
-                if ((!string.IsNullOrEmpty(domain)) || !string.IsNullOrEmpty(appLogOnName))
+                if ((!string.IsNullOrEmpty(identity)) || !string.IsNullOrEmpty(appLogOnName))
                 {
                     foreach (var conflictPerson in potentialConlicts)
                     {
@@ -45,8 +44,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
                             continue;
                         if (conflicts.Contains(conflictPerson))
                             continue;
-                        var conflictdomain = conflictPerson.WindowsAuthenticationInfo == null ? "" : conflictPerson.WindowsAuthenticationInfo.DomainName.ToUpperInvariant();
-                        var conflictlogOnName = conflictPerson.WindowsAuthenticationInfo == null ? "" : conflictPerson.WindowsAuthenticationInfo.WindowsLogOnName.ToUpperInvariant();
+                        var conflictIdentity = conflictPerson.AuthenticationInfo == null ? "" : conflictPerson.AuthenticationInfo.Identity;
                         var conflictAppLogOnName = conflictPerson.ApplicationAuthenticationInfo == null ? "" : conflictPerson.ApplicationAuthenticationInfo.ApplicationLogOnName.ToUpperInvariant();
                         if (!string.IsNullOrEmpty(appLogOnName) && appLogOnName.ToUpperInvariant().Equals(conflictAppLogOnName))
                         {
@@ -56,9 +54,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
                             continue;
                         }
 						
-                        if(!string.IsNullOrEmpty(domain))
+                        if(!string.IsNullOrEmpty(identity))
                         {
-                            if (domain.ToUpperInvariant().Equals(conflictdomain) && logOnName.ToUpperInvariant().Equals(conflictlogOnName))
+                            if (identity.ToUpperInvariant().Equals(conflictIdentity.ToUpperInvariant()))
                             {
                                 retList.Add(new SameUserCredentialOnOther(person, conflictPerson));
                                 conflicts.Add(person);

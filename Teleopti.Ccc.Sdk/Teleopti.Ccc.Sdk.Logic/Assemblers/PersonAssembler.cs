@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
@@ -71,17 +73,18 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 personDto.ApplicationLogOnName = "";
                 personDto.ApplicationLogOnPassword = "";
             }
-            if (entity.WindowsAuthenticationInfo != null)
-            {
-                personDto.WindowsDomain = entity.WindowsAuthenticationInfo.DomainName;
-                personDto.WindowsLogOnName = entity.WindowsAuthenticationInfo.WindowsLogOnName;
-            }
-            else
-            {
-                personDto.WindowsDomain = "";
-                personDto.WindowsLogOnName = "";
-            }
-            personDto.Note = entity.Note;
+	        if (entity.AuthenticationInfo != null)
+	        {
+		        var identities = IdentityHelper.Split(entity.AuthenticationInfo.Identity);
+		        personDto.WindowsDomain = identities.Item1;
+		        personDto.WindowsLogOnName = identities.Item2;
+	        }
+	        else
+	        {
+		        personDto.WindowsDomain = "";
+		        personDto.WindowsLogOnName = "";
+	        }
+	        personDto.Note = entity.Note;
             personDto.IsDeleted = ((IDeleteTag)entity).IsDeleted;
             
             if (entity.WorkflowControlSet != null)
@@ -156,12 +159,17 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 person.Email = dto.Email;
             if (!string.IsNullOrEmpty(dto.EmploymentNumber))
                 person.EmploymentNumber = dto.EmploymentNumber;
-            if (!string.IsNullOrEmpty(dto.WindowsDomain) && !string.IsNullOrEmpty(dto.WindowsLogOnName))
-                person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
-                                                       {
-                                                           DomainName = dto.WindowsDomain,
-                                                           WindowsLogOnName = dto.WindowsLogOnName
-                                                       };
+	        if (!string.IsNullOrEmpty(dto.WindowsDomain) && !string.IsNullOrEmpty(dto.WindowsLogOnName))
+		        person.AuthenticationInfo = new AuthenticationInfo
+		        {
+			        Identity = IdentityHelper.Merge(dto.WindowsDomain, dto.WindowsLogOnName)
+		        };
+			if (string.IsNullOrEmpty(dto.WindowsDomain) && !string.IsNullOrEmpty(dto.WindowsLogOnName))
+				person.AuthenticationInfo = new AuthenticationInfo
+				{
+					Identity = dto.WindowsLogOnName
+				};
+
             if(personTerminated(dto, person))
                 person.TerminatePerson(dto.TerminationDate.ToDateOnly(), _personAccountUpdater) ;
             if(personActivated(dto, person))

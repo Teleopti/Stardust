@@ -217,10 +217,10 @@ namespace Teleopti.Interfaces.Domain
 		/// Gets or sets a value indicating whether [use group scheduling].
 		/// </summary>
 		/// <value><c>true</c> if [use group scheduling]; otherwise, <c>false</c>.</value>
-		bool UseGroupScheduling { get; set; }
+		bool UseTeam { get; set; }
 
 		/// <summary>
-		/// Gets or sets the group page used for grouping when UseGroupScheduling = true.
+		/// Gets or sets the group page used for grouping when UseTeam = true.
 		/// </summary>
 		/// <value>The group page.</value>
 		IGroupPageLight GroupOnGroupPage { get; set; }
@@ -301,20 +301,20 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
 		/// 
 		/// </summary>
-		bool UseGroupSchedulingCommonStart { get; set; }
+		bool TeamSameStartTime { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>
-		bool UseGroupSchedulingCommonEnd { get; set; }
+		bool TeamSameEndTime { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>
-		bool UseGroupSchedulingCommonCategory { get; set; }
+		bool TeamSameShiftCategory { get; set; }
 
         /// <summary>
         /// Common Activty
         /// </summary>
-        bool UseCommonActivity { get; set; }
+        bool TeamSameActivity { get; set; }
 
         /// <summary>
         /// Common Activity
@@ -355,26 +355,26 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Used in TeamBlock per same end time
         /// </summary>
-        bool UseTeamBlockSameEndTime { get; set; }
+        bool BlockSameEndTime { get; set; }
 
         /// <summary>
         /// Used in TeamBlock per same shift category
         /// </summary>
-        bool UseTeamBlockSameShiftCategory { get; set; }
+        bool BlockSameShiftCategory { get; set; }
 
         /// <summary>
         /// Used in TeamBlock per same start time
         /// </summary>
-        bool UseTeamBlockSameStartTime { get; set; }
+        bool BlockSameStartTime { get; set; }
 
         /// <summary>
         /// Used in TeamBlock per same shift
         /// </summary>
-        bool UseTeamBlockSameShift { get; set; }
+		  bool BlockSameShift { get; set; }
 
         /// <summary>
         /// Used if the TeamBlock option is checked or not
         /// </summary>
-        bool UseTeamBlockPerOption { get; set; }
+		  bool UseBlock { get; set; }
     }
 }

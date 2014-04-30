@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Authentication.ViewModelFactory
 			var target = Target(dataSourcesProvider);
 			var dataSource = new FakeDataSource { DataSourceName = "Datasource" };
 
-			dataSourcesProvider.Stub(x => x.RetrieveDatasourcesForWindows()).Return(new[] { dataSource });
+			dataSourcesProvider.Stub(x => x.RetrieveDatasourcesForIdentity()).Return(new[] { dataSource });
 
 			var result = target.DataSources();
 
