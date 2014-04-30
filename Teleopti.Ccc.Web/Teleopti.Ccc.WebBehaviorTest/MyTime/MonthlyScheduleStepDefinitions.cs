@@ -116,13 +116,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         [When(@"I choose to go to next month")]
         public void WhenIChooseToGoToNextMonth()
         {
-            Browser.Interactions.Click(".glyphicon-chevron-right");
+            Browser.Interactions.Click(".hidden-sm .glyphicon-chevron-right");
         }
 
         [When(@"I choose to go to previous month")]
         public void WhenIChooseToGoToPreviousMonth()
         {
-            Browser.Interactions.Click(".glyphicon-chevron-left");
+            Browser.Interactions.Click(".hidden-sm .glyphicon-chevron-left");
         }
 
 
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         [When(@"I select the month '(.*)' in the calendar")]
         public void WhenISelectTheMonthInTheCalendar(string monthName)
         {
-            Browser.Interactions.Click(".glyphicon-calendar");
+            Browser.Interactions.Click(".hidden-sm .glyphicon-calendar");
             string selector = string.Format(".datepicker-months .month:contains('{0}')",monthName);
             Browser.Interactions.AssertVisibleUsingJQuery(selector);
             Browser.Interactions.ClickUsingJQuery(selector);
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I navigate to week schedule by click Week tab")]
 		public void WhenINavigateToWeekScheduleByClickTab()
 		{
-			Browser.Interactions.Click("#month-schedule-week");
+			Browser.Interactions.Click(".hidden-sm #month-schedule-week");
 		}
 
 	 }
