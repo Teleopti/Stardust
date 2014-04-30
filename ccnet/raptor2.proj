@@ -412,7 +412,7 @@
 		<Message Importance="high" Text="NCoverReporting finished." />
 	</Target> 
 	
-	<Target Name="NDepend" Condition="'$(CCNetProject)' == 'RaptorMain'" DependsOnTargets="Compile" >
+	<Target Name="NDepend" Condition="'$(CCNetProject)' == 'CCC-Main'" DependsOnTargets="Compile" >
     <PropertyGroup>
       <NDPath>C:\NDepend\NDepend.console.exe</NDPath>
       <NDProject>$(CCNetWorkingDirectory)\ccc.ndproj</NDProject>
@@ -422,7 +422,7 @@
     <Exec
       Command='"$(NDPath)" "$(NDProject)" /OutDir "$(NDOut)"'/>
   </Target>
-	<Target Name="CopyNDependStatisticsToDatabase" Condition="'$(CCNetProject)' == 'RaptorMain'" DependsOnTargets="NDepend">
+	<Target Name="CopyNDependStatisticsToDatabase" Condition="'$(CCNetProject)' == 'CCC-Main'" DependsOnTargets="NDepend">
 		<PropertyGroup>
 			<RevisionOutput>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs\Ndepend\Revision.txt</RevisionOutput>
 			<NDependOutput>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs\Ndepend\\</NDependOutput>
