@@ -278,6 +278,7 @@
     <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
     <Compile Include="Rta\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\IPersonOrganizationReader.cs" />
+    <Compile Include="Rta\ISiteAdherenceAggregator.cs" />
     <Compile Include="Rta\NumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\NumberOfAgentsInTeamReader.cs" />
     <Compile Include="Rta\PersonOrganizationData.cs" />

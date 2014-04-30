@@ -85,7 +85,9 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
-
+			builder.RegisterType<PersonOrganizationReader>().As<IPersonOrganizationReader>().SingleInstance();
+			builder.RegisterType<SiteAdherenceAggregator>().As<ISiteAdherenceAggregator>().SingleInstance();
+			
 			// ErikS: Bug 25359
 			var useNewResourceCalculationConfiguration = ConfigurationManager.AppSettings["EnableNewResourceCalculation"];
 			if (useNewResourceCalculationConfiguration != null && bool.Parse(useNewResourceCalculationConfiguration))

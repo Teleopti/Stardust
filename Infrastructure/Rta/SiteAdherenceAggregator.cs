@@ -4,10 +4,6 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
-	public interface ISiteAdherenceAggregator
-	{
-	}
-	
 	public class SiteAdherenceAggregator : ISiteAdherenceAggregator
 	{
 		private readonly IStatisticRepository _statisticRepository;

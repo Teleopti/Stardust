@@ -12,11 +12,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	{
 		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInSiteReader _numberOfAgentsInSiteReader;
+		private readonly ISiteAdherenceAggregator _siteAdherenceAggregator;
 
-		public SitesController(ISiteRepository siteRepository, INumberOfAgentsInSiteReader numberOfAgentsInSiteReader)
+		public SitesController(ISiteRepository siteRepository, INumberOfAgentsInSiteReader numberOfAgentsInSiteReader, ISiteAdherenceAggregator siteAdherenceAggregator)
 		{
 			_siteRepository = siteRepository;
 			_numberOfAgentsInSiteReader = numberOfAgentsInSiteReader;
+			_siteAdherenceAggregator = siteAdherenceAggregator;
 		}
 
 		[UnitOfWorkAction, HttpGet]
@@ -43,6 +45,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				Id = site.Id.Value.ToString(),
 				Name = site.Description.Name
 			}, JsonRequestBehavior.AllowGet);
+		}
+
+		[HttpGet]
+		public JsonResult GetOutOfAdherence(string siteId)
+		{
+			var outOfAdherence = _siteAdherenceAggregator.Aggregate(Guid.Parse(siteId));
+			return Json(outOfAdherence);
 		}
 	}
 }
