@@ -220,7 +220,7 @@ namespace Teleopti.Interfaces.Domain
 		bool UseTeam { get; set; }
 
 		/// <summary>
-		/// Gets or sets the group page used for grouping when UseGroupScheduling = true.
+		/// Gets or sets the group page used for grouping when UseTeam = true.
 		/// </summary>
 		/// <value>The group page.</value>
 		IGroupPageLight GroupOnGroupPage { get; set; }
