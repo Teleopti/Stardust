@@ -1766,7 +1766,7 @@ Dato</value>
     <value>År</value>
   </data>
   <data name="YearlyTrend" xml:space="preserve">
-    <value>År trend</value>
+    <value>Årlig trend</value>
   </data>
   <data name="Years" xml:space="preserve">
     <value>År</value>
@@ -2381,7 +2381,7 @@ Dato</value>
     <value>Tilgjengelighet</value>
   </data>
   <data name="Early" xml:space="preserve">
-    <value>Årlig</value>
+    <value>Tidlig</value>
   </data>
   <data name="Late" xml:space="preserve">
     <value>Siste</value>
@@ -2438,16 +2438,16 @@ Dato</value>
     <value>Endre dine rotasjoner</value>
   </data>
   <data name="EarlyEndTime" xml:space="preserve">
-    <value>Årlig sluttid</value>
+    <value>Tidligste sluttid</value>
   </data>
   <data name="EarlyStartTime" xml:space="preserve">
-    <value>Tidlig starttid</value>
+    <value>Tidligste starttid</value>
   </data>
   <data name="LateEndTime" xml:space="preserve">
-    <value>Sen sluttid</value>
+    <value>Seneste sluttid</value>
   </data>
   <data name="LateStartTime" xml:space="preserve">
-    <value>Sen starttid</value>
+    <value>Seneste starttid</value>
   </data>
   <data name="MaxWorkTime" xml:space="preserve">
     <value>Maks. arbeidstid</value>
@@ -3446,7 +3446,7 @@ Dato</value>
     <value>Ny forespørsel skiftbytte</value>
   </data>
   <data name="EarlyStart" xml:space="preserve">
-    <value>Årlig start</value>
+    <value>Tidligste start</value>
   </data>
   <data name="LateStart" xml:space="preserve">
     <value>Sen start</value>
