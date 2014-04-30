@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         [When(@"I choose to go to month view")]
         public void WhenIChooseToGoToMonthView()
         {
-            Browser.Interactions.Click("#week-schedule-month");
+            Browser.Interactions.Click(".hidden-sm #week-schedule-month");
         }
         
         [Then(@"I should end up in month view for '(.*)'")]
