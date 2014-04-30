@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			var startTime = new TimeSpan(8, 0, 0);
 			var endTime = new TimeSpan(17, 0, 0);
-			_schedulingOptions.UseGroupScheduling = true;
+			_schedulingOptions.UseTeam = true;
 			_schedulingOptions.TeamSameStartTime = true;
 			_schedulingOptions.TeamSameEndTime = true;
 			using (_mocks.Record())
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			var startTime = new TimeSpan(8, 0, 0);
 			var endTime = new TimeSpan(17, 0, 0);
-			_schedulingOptions.UseGroupScheduling = true;
+			_schedulingOptions.UseTeam = true;
 			_schedulingOptions.TeamSameStartTime = true;
 			_schedulingOptions.TeamSameEndTime = true;
 			using (_mocks.Record())
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			_schedulingOptions.UseBlock = true;
 			_schedulingOptions.BlockSameShiftCategory = true;
-			_schedulingOptions.UseGroupScheduling = true;
+			_schedulingOptions.UseTeam = true;
 			_schedulingOptions.TeamSameShiftCategory = true;
 			var activity = ActivityFactory.CreateActivity("sd");
 			activity.SetId(Guid.NewGuid());

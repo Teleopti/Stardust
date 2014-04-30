@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
 			  _schedulingOptions.BlockSameShift = true;
 			  _schedulingOptions.UseBlock = true;
-            _schedulingOptions.UseGroupScheduling = true;
+            _schedulingOptions.UseTeam = true;
             var dateOnly = new DateOnly(2012, 12, 7);
             var dateList = new List<DateOnly> { dateOnly };
             var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldExtractSameShiftCategoryRestrictionFromOneTeamOneDay()
         {
-            _schedulingOptions.UseGroupScheduling = true;
+            _schedulingOptions.UseTeam = true;
             _schedulingOptions.TeamSameShiftCategory = true;
             var dateOnly = new DateOnly(2012, 12, 7);
             var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -598,7 +598,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test]
         public void ShouldExtractSameStartAndEndTimeRestrictionFromOneTeamOneDay()
         {
-            _schedulingOptions.UseGroupScheduling = true;
+            _schedulingOptions.UseTeam = true;
             _schedulingOptions.TeamSameStartTime = true;
             _schedulingOptions.TeamSameEndTime = true;
             var dateOnly = new DateOnly(2012, 12, 7);

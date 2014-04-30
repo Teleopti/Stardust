@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             //    ? optimizationPreferences.Extra.BlockFinderTypeValue 
             //    : BlockFinderType.None;
 
-            schedulingOptions.UseGroupScheduling = optimizationPreferences.Extra.UseTeams;
+            schedulingOptions.UseTeam = optimizationPreferences.Extra.UseTeams;
         	schedulingOptions.TeamSameShiftCategory =
         		optimizationPreferences.Extra.UseGroupSchedulingCommonCategory;
         	schedulingOptions.TeamSameStartTime = optimizationPreferences.Extra.UseGroupSchedulingCommonStart;

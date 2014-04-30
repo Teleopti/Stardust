@@ -25,14 +25,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
             IEditableShift commonMainShift = null;
             IShiftCategory shiftCategory = null;
 				if ((schedulingOptions.UseBlock && schedulingOptions.BlockSameStartTime)
-                || (schedulingOptions.UseGroupScheduling && schedulingOptions.TeamSameStartTime))
+                || (schedulingOptions.UseTeam && schedulingOptions.TeamSameStartTime))
             {
                 TimeSpan startTime = shift.WorkShiftStartTime;
                 startTimeLimitation = new StartTimeLimitation(startTime, startTime);
             }
 
 				if ((schedulingOptions.UseBlock && schedulingOptions.BlockSameEndTime)
-                || (schedulingOptions.UseGroupScheduling && schedulingOptions.TeamSameEndTime))
+                || (schedulingOptions.UseTeam && schedulingOptions.TeamSameEndTime))
             {
                 TimeSpan endTime = shift.WorkShiftEndTime;
                 endTimeLimitation = new EndTimeLimitation(endTime, endTime);
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
             }
 
 				if ((schedulingOptions.UseBlock && schedulingOptions.BlockSameShiftCategory) ||
-                (schedulingOptions.UseGroupScheduling && schedulingOptions.TeamSameShiftCategory))
+                (schedulingOptions.UseTeam && schedulingOptions.TeamSameShiftCategory))
             {
                 shiftCategory = shift.TheWorkShift.ShiftCategory;
             }
@@ -108,19 +108,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
             var endTimeLimitation = new EndTimeLimitation();
             var workTimeLimitation = new WorkTimeLimitation();
             IShiftCategory shiftCategory = null;
-            if (schedulingOptions.UseGroupScheduling && schedulingOptions.TeamSameStartTime)
+            if (schedulingOptions.UseTeam && schedulingOptions.TeamSameStartTime)
             {
                 TimeSpan startTime = shift.WorkShiftStartTime;
                 startTimeLimitation = new StartTimeLimitation(startTime, startTime);
             }
 
-            if (schedulingOptions.UseGroupScheduling && schedulingOptions.TeamSameEndTime)
+            if (schedulingOptions.UseTeam && schedulingOptions.TeamSameEndTime)
             {
                 TimeSpan endTime = shift.WorkShiftEndTime;
                 endTimeLimitation = new EndTimeLimitation(endTime, endTime);
             }
 
-            if (schedulingOptions.UseGroupScheduling && schedulingOptions.TeamSameShiftCategory)
+            if (schedulingOptions.UseTeam && schedulingOptions.TeamSameShiftCategory)
             {
                 shiftCategory = shift.TheWorkShift.ShiftCategory;
             }

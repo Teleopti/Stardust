@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             //schedulingOptions.UseBlockScheduling = _blockFinderType;
             schedulingOptions.BlockFinderTypeForAdvanceScheduling = _blockFinderTypeForAdvanceScheduling;
-            schedulingOptions.UseGroupScheduling = _useGroupScheduling;
+            schedulingOptions.UseTeam = _useGroupScheduling;
 
             foreach (var groupPage in groupPages)
             {
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _scheduleTagId = schedulingOptions.TagToUseOnScheduling.Id;
              //_blockFinderType = schedulingOptions.UseBlockScheduling;
             _blockFinderTypeForAdvanceScheduling = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
-            _useGroupScheduling = schedulingOptions.UseGroupScheduling;
+            _useGroupScheduling = schedulingOptions.UseTeam;
             _groupSchedulingGroupPageKey = schedulingOptions.GroupOnGroupPage.Key;
            _useGroupSchedulingCommonStart = schedulingOptions.TeamSameStartTime;
             _useGroupSchedulingCommonEnd = schedulingOptions.TeamSameEndTime;
