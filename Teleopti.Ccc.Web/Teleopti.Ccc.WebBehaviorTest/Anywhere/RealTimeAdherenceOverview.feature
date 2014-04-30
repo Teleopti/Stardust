@@ -154,6 +154,7 @@ Scenario: Should be able to go to Real time adherence overview
 	When I view Anywhere
 	Then I should see Real time adherence overview in the menu
 
+@OnlyRunIfEnabled('RtaLastStatesOverview')
 Scenario: View current state of sum of employees not adhering to schedule for each site
 	Given the current time is '2014-01-21 13:00'
 	And I have a role with
