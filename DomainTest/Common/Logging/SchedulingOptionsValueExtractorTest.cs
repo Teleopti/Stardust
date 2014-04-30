@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Logging
                 BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff ,
                 BlockSameShiftCategory = true,
 					 BlockSameShift = true,
-                BlockSameStartTime = true
+                BlockSameStartTime = true,
 				UseTeamBlockPerOption = true
             };
             _target = new SchedulingOptionsValueExtractor(schedulingOptions);
