@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			    var allTeamInfoListOnStartDate = getAllTeamInfoList(allPersonMatrixList, selectedPeriod, selectedPersons);
 
-			    runSchedulingForAllTeamInfoOnStartDate(allPersonMatrixList, selectedPersons,
+			    runSchedulingForAllTeamInfoOnStartDate(allPersonMatrixList, selectedPersons, selectedPeriod,
 			                                           schedulePartModifyAndRollbackService,
 			                                           allTeamInfoListOnStartDate, datePointer, dateOnlySkipList,
 			                                           resourceCalculateDelayer, schedulingResultStateHolder);
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    return true;
 	    }
 
-	    private void runSchedulingForAllTeamInfoOnStartDate(IList<IScheduleMatrixPro> allPersonMatrixList, IList<IPerson> selectedPersons,
+		private void runSchedulingForAllTeamInfoOnStartDate(IList<IScheduleMatrixPro> allPersonMatrixList, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
                                      ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
                                      HashSet<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList,
 										IResourceCalculateDelayer resourceCalculateDelayer,
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
             foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
             {
-                var teamBlockInfo = _validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfo,datePointer, allPersonMatrixList,_schedulingOptions );
+                var teamBlockInfo = _validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfo,datePointer, allPersonMatrixList,_schedulingOptions, selectedPeriod);
                 if (teamBlockInfo == null) continue;
 
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
