@@ -162,9 +162,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 //_schedulingOptions.UseBlockScheduling = BlockFinderType.None;
                 _schedulingOptions.UseGroupScheduling = false;
 
-                _schedulingOptions.UseGroupSchedulingCommonStart = false;
-                _schedulingOptions.UseGroupSchedulingCommonEnd = false;
-                _schedulingOptions.UseGroupSchedulingCommonCategory = false;
+                _schedulingOptions.TeamSameStartTime = false;
+                _schedulingOptions.TeamSameEndTime = false;
+                _schedulingOptions.TeamSameShiftCategory = false;
                 schedulingSessionPreferencesTabPanel1.HideTeamAndBlockSchedulingOptions();
             }
         }

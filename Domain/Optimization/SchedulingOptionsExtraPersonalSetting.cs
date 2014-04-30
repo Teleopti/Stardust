@@ -63,16 +63,16 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (_groupSchedlingForTeamBlockPerKey  == groupPage.Key)
                     schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPage;
             }
-            schedulingOptions.UseTeamBlockSameEndTime = _useTeamBlockSameEndTime;
-            schedulingOptions.UseTeamBlockSameShift = _useTeamBlockSameShift;
-            schedulingOptions.UseTeamBlockSameShiftCategory = _useTeamBlockSameShiftCategory;
-            schedulingOptions.UseTeamBlockSameStartTime = _useTeamBlockSameStartTime;
+            schedulingOptions.BlockSameEndTime = _useTeamBlockSameEndTime;
+				schedulingOptions.BlockSameShift = _useTeamBlockSameShift;
+            schedulingOptions.BlockSameShiftCategory = _useTeamBlockSameShiftCategory;
+            schedulingOptions.BlockSameStartTime = _useTeamBlockSameStartTime;
             schedulingOptions.UseTeamBlockPerOption = _useTeamBlockPerOption;
 
-            schedulingOptions.UseGroupSchedulingCommonStart = _useGroupSchedulingCommonStart;
-            schedulingOptions.UseGroupSchedulingCommonEnd = _useGroupSchedulingCommonEnd;
-            schedulingOptions.UseGroupSchedulingCommonCategory = _useGroupSchedulingCommonCategory;
-            schedulingOptions.UseCommonActivity = _useCommmonActivity;
+            schedulingOptions.TeamSameStartTime = _useGroupSchedulingCommonStart;
+            schedulingOptions.TeamSameEndTime = _useGroupSchedulingCommonEnd;
+            schedulingOptions.TeamSameShiftCategory = _useGroupSchedulingCommonCategory;
+            schedulingOptions.TeamSameActivity = _useCommmonActivity;
             if (activityList != null & _commonActivtyId.HasValue)
                 schedulingOptions.CommonActivity = activityList.FirstOrDefault(x => x.Id == _commonActivtyId);
 
@@ -102,10 +102,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             _blockFinderTypeForAdvanceScheduling = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
             _useGroupScheduling = schedulingOptions.UseGroupScheduling;
             _groupSchedulingGroupPageKey = schedulingOptions.GroupOnGroupPage.Key;
-           _useGroupSchedulingCommonStart = schedulingOptions.UseGroupSchedulingCommonStart;
-            _useGroupSchedulingCommonEnd = schedulingOptions.UseGroupSchedulingCommonEnd;
-            _useGroupSchedulingCommonCategory = schedulingOptions.UseGroupSchedulingCommonCategory;
-            _useCommmonActivity = schedulingOptions.UseCommonActivity;
+           _useGroupSchedulingCommonStart = schedulingOptions.TeamSameStartTime;
+            _useGroupSchedulingCommonEnd = schedulingOptions.TeamSameEndTime;
+            _useGroupSchedulingCommonCategory = schedulingOptions.TeamSameShiftCategory;
+            _useCommmonActivity = schedulingOptions.TeamSameActivity;
 
             _fairnessValue = schedulingOptions.Fairness.Value;
             _fairnessGroupPageKey = schedulingOptions.GroupPageForShiftCategoryFairness.Key;
@@ -115,10 +115,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (schedulingOptions.GroupOnGroupPageForTeamBlockPer!=null)
                 _groupSchedlingForTeamBlockPerKey = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key;
-            _useTeamBlockSameEndTime = schedulingOptions.UseTeamBlockSameEndTime;
-            _useTeamBlockSameShift = schedulingOptions.UseTeamBlockSameShift;
-            _useTeamBlockSameShiftCategory = schedulingOptions.UseTeamBlockSameShiftCategory;
-            _useTeamBlockSameStartTime  = schedulingOptions.UseTeamBlockSameStartTime ;
+            _useTeamBlockSameEndTime = schedulingOptions.BlockSameEndTime;
+				_useTeamBlockSameShift = schedulingOptions.BlockSameShift;
+            _useTeamBlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory;
+            _useTeamBlockSameStartTime  = schedulingOptions.BlockSameStartTime ;
             _useTeamBlockPerOption = schedulingOptions.UseTeamBlockPerOption;
         }
     }

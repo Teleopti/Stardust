@@ -23,10 +23,10 @@ namespace Teleopti.Ccc.DomainTest.Common.Logging
             groupPage.Name = "Test1";
             ISchedulingOptions schedulingOptions = new SchedulingOptions
                 {
-                    UseGroupSchedulingCommonCategory = true,
-                    UseGroupSchedulingCommonStart = true,
-                    UseCommonActivity = true,
-                    UseGroupSchedulingCommonEnd = true,
+                    TeamSameShiftCategory = true,
+                    TeamSameStartTime = true,
+                    TeamSameActivity = true,
+                    TeamSameEndTime = true,
                     GroupOnGroupPageForTeamBlockPer = groupPage
                 };
             _target = new SchedulingOptionsValueExtractor(schedulingOptions );
@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.DomainTest.Common.Logging
             ISchedulingOptions schedulingOptions = new SchedulingOptions
             {
                 BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff ,
-                UseTeamBlockSameShiftCategory = true,
-                UseTeamBlockSameShift = true,
-                UseTeamBlockSameStartTime = true
+                BlockSameShiftCategory = true,
+					 BlockSameShift = true,
+                BlockSameStartTime = true
             };
             _target = new SchedulingOptionsValueExtractor(schedulingOptions);
 

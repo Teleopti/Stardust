@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			_schedulingOptions.UseAverageShiftLengths = false;
 			//should filter becouse we are using teamblock and same shift
 			_schedulingOptions.UseTeamBlockPerOption = true;
-			_schedulingOptions.UseTeamBlockSameShift = true;
+			_schedulingOptions.BlockSameShift = true;
 
 			using (_mocks.Record())
 			{

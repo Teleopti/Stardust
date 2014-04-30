@@ -327,19 +327,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _optimizationPreferences.Extra.UseTeamBlockSameEndTime  = false;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.IsFalse(_schedulingOptions.UseTeamBlockSameEndTime);
+            Assert.IsFalse(_schedulingOptions.BlockSameEndTime);
 
             _optimizationPreferences.Extra.UseTeamBlockSameShift  = false ;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.IsFalse(_schedulingOptions.UseTeamBlockSameShift);
+				Assert.IsFalse(_schedulingOptions.BlockSameShift);
 
             _optimizationPreferences.Extra.UseTeamBlockSameShiftCategory  = true;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.IsTrue(_schedulingOptions.UseTeamBlockSameShiftCategory);
+            Assert.IsTrue(_schedulingOptions.BlockSameShiftCategory);
 
             _optimizationPreferences.Extra.UseTeamBlockSameStartTime  = true;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.IsTrue(_schedulingOptions.UseTeamBlockSameStartTime);
+            Assert.IsTrue(_schedulingOptions.BlockSameStartTime);
 
         }
 

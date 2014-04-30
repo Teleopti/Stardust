@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (shiftList == null) return null;
 			if (shiftList.Count == 0) return shiftList;
 			if (effectiveRestriction == null) return shiftList;
-			if (!(schedulingOptions.UseCommonActivity && schedulingOptions.UseGroupScheduling)) return shiftList;
+			if (!(schedulingOptions.TeamSameActivity && schedulingOptions.UseGroupScheduling)) return shiftList;
 
 			if (effectiveRestriction.CommonActivity != null)
 			{

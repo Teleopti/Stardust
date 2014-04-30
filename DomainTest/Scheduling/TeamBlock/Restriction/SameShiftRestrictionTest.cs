@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldExtractSameShiftRestrictionFromScheduleDay()
         {
-            _schedulingOptions.UseTeamBlockSameShift = true;
+			  _schedulingOptions.BlockSameShift = true;
             var dateList = new List<DateOnly> { _dateOnly };
             var mainShift = EditableShiftFactory.CreateEditorShift(_activity, _period, new ShiftCategory("cat"));
             var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldExtractSameShiftRestrictionFromOnePersonOneBlock()
         {
-            _schedulingOptions.UseTeamBlockSameShift = true;
+			  _schedulingOptions.BlockSameShift = true;
             var dateList = new List<DateOnly> { _dateOnly };
             var mainShift = EditableShiftFactory.CreateEditorShift(_activity, _period, new ShiftCategory("cat"));
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldExtractSameShiftRestrictionFromOneBlockWhenBothBlockAndTeamScheduling()
         {
-            _schedulingOptions.UseTeamBlockSameShift = true;
+			  _schedulingOptions.BlockSameShift = true;
             _schedulingOptions.UseTeamBlockPerOption = true;
             _schedulingOptions.UseGroupScheduling = true;
             var dateList = new List<DateOnly> { _dateOnly };
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [Test]
         public void ShouldExtractNullRestrictionWhenHasTwoDifferentSchedules()
         {
-            _schedulingOptions.UseTeamBlockSameShift = true;
+			  _schedulingOptions.BlockSameShift = true;
             var dateList = new List<DateOnly> { _dateOnly, _dateOnly.AddDays(1) };
             var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
             var mainShift1 = EditableShiftFactory.CreateEditorShift(_activity, _period, new ShiftCategory("cat"));
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [Test]
         public void ShouldExtractSameShiftRestrictionWhenPersonAssignmentIsNull()
         {
-            _schedulingOptions.UseTeamBlockSameShift = true;
+			  _schedulingOptions.BlockSameShift = true;
             var dateList = new List<DateOnly> { _dateOnly };
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             using (_mocks.Record())
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [Test]
         public void ShouldExtractSameShiftRestrictionWhenMainShiftIsNull()
         {
-            _schedulingOptions.UseTeamBlockSameShift = true;
+			  _schedulingOptions.BlockSameShift = true;
             var dateList = new List<DateOnly> { _dateOnly };
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             using (_mocks.Record())
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [Test]
         public void ShouldExtractSameShiftRestrictionWhenScheduleIsNull()
         {
-            _schedulingOptions.UseTeamBlockSameShift = true;
+			  _schedulingOptions.BlockSameShift = true;
             var dateList = new List<DateOnly> { _dateOnly };
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             using (_mocks.Record())
