@@ -2,8 +2,39 @@
 @{
     Layout = null;
 }
-<div class="container">
-	<div class="navbar navbar-default">
+
+<div class=" hidden-lg hidden-md topbarparent">
+	<div class="navbar navbar-default collapse navbar-collapse subnavbar">
+		<div class="container">
+			<ul class="nav navbar-nav">
+				<li>
+					<div class="input-group collapse-sub-navbar" style="max-width: 294px;">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" data-bind="click: previousMonth">
+								<i class="glyphicon glyphicon-chevron-left"></i>
+							</button>
+						</span>
+						<input id="CurrentMonth" class="form-control text-center" type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" />
+						<div class="input-group-btn">
+							<button class="btn btn-default" type="button" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+							<button class="btn btn-default" type="button" data-bind="click: nextMonth">
+								<i class="glyphicon glyphicon-chevron-right"></i>
+							</button>
+						</div>
+					</div>
+				</li>
+				<li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
+				<li><a href="#" id="month-schedule-week" data-bind="click: week">@Resources.Week</a></li>
+				<li class="active"><a href="#" id="month-schedule-month" data-bind="click: month">@Resources.Month</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="padding-top: 10px;">
+	<div class="navbar navbar-default hidden-sm hidden-xs">
 		<div class="container">
 			<div class="navbar-left">
 				<div class="navbar-form">
@@ -32,8 +63,6 @@
 			</ul>
 		</div>
 	</div>
-
-
 	<div id="calendar" style="width: 100%;">
 		<div class="cal-row-fluid cal-row-head visible-lg" data-bind="foreach: weekDayNames">
 			<div class="cal-cell weekday-name" data-bind="text: Name"></div>
