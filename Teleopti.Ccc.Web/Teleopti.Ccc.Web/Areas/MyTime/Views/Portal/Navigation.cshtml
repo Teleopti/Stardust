@@ -4,16 +4,18 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 @model PortalViewModel
 
-<div id="autocollapse" class="navbar navbar-default navbar-fixed-top bdd-mytime-top-menu">
+<div id="autocollapse" class="navbar navbar-default navbar-fixed-top bdd-mytime-top-menu topbarparent">
 	<div class="container">
 		<div class="hidden" data-culture-show-meridian="@Model.ShowMeridian.ToString().ToLowerInvariant()"></div>
 
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".topnav">
-				<span class="sr-only">Toggle navigation</span>
+			<button type="button" class="navbar-toggle topToggler" data-toggle="collapse" data-parent=".topbarparent" data-target=".topnav">
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
+			</button>
+			<button style="font-size: 10px;" type="button" class="navbar-toggle topToggler" data-toggle="collapse" data-parent=".topbarparent" data-target=".subnavbar">
+				<span class="glyphicon glyphicon-chevron-down"></span>
 			</button>
 			<a class="navbar-brand" href="@string.Format("#{0}Tab", Model.NavigationItems.FirstOrDefault().Controller)">Teleopti</a>
 		</div>
