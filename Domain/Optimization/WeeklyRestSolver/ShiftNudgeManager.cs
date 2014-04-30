@@ -89,14 +89,14 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				{
 					leftNudgeSuccess = _shiftNudgeEarlier.Nudge(leftScheduleDay, rollbackService, schedulingOptions,
 						resourceCalculateDelayer, leftTeamBlock,
-						schedulingResultStateHolder, selectedPeriod, selectedPersons);
+						schedulingResultStateHolder, selectedPersons);
 					restTimeEnsured = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 				}
 
 				if (rightNudgeSuccess && !restTimeEnsured)
 				{
 					rightNudgeSuccess = _shiftNudgeLater.Nudge(rightScheduleDay, rollbackService, schedulingOptions,
-						resourceCalculateDelayer, rightTeamBlock, schedulingResultStateHolder, selectedPeriod, selectedPersons);
+						resourceCalculateDelayer, rightTeamBlock, schedulingResultStateHolder, selectedPersons);
 					restTimeEnsured = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 				}
 

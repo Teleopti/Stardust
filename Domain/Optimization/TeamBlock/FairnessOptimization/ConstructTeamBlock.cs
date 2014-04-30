@@ -52,8 +52,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
                     ITeamInfo teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
                 {
                     if (teamInfo == null) continue;
-                    //if (!teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson))
-                    //    continue;
 
                     bool singleAgentTeam = groupOnGroupPageForTeamBlockPer != null &&
                                            groupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
@@ -67,11 +65,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
                         teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
                                                                                   BlockFinderType.SingleDay,
                                                                                   singleAgentTeam, allPersonMatrixList);
-                    if (teamBlockInfo == null) continue;
+                    if (teamBlockInfo == null) 
+						continue;
+
+	                var blockInfo = teamBlockInfo.BlockInfo;
+					foreach (var dateOnly in blockInfo.BlockPeriod.DayCollection())
+	                {
+		                if(!selectedPeriod.Contains(dateOnly))
+							blockInfo.LockDate(dateOnly);
+	                }
 
                     listOfAllTeamBlock.Add(teamBlockInfo);
                 }
             }
+
             return listOfAllTeamBlock;
         }
         

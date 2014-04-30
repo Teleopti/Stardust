@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -6,20 +7,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public interface IBlockInfo
 	{
 		DateOnlyPeriod BlockPeriod { get; }
-		 [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		 IList<double?> StandardDeviations { get; set; }
+		IList<double?> StandardDeviations { get; set; }
 		double SumOfStandardDeviations { get; }
 		double AverageOfStandardDeviations { get; }
+		void LockDate(DateOnly date);
+		IList<DateOnly> UnLockedDates();
 	}
 
 	public class BlockInfo : IBlockInfo
 	{
 		private readonly DateOnlyPeriod _blockPeriod;
+		private readonly HashSet<DateOnly> _lockedDates; 
 
 		public BlockInfo(DateOnlyPeriod blockPeriod)
 		{
 			_blockPeriod = blockPeriod;
 		    StandardDeviations = new List<double?>();
+			_lockedDates = new HashSet<DateOnly>();
 		}
 
 		public DateOnlyPeriod BlockPeriod
@@ -62,7 +66,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 		}
 
-        public override int GetHashCode()
+		public void LockDate(DateOnly date)
+		{
+			if(_blockPeriod.Contains(date))
+			{
+				_lockedDates.Add(date);
+			}
+			else
+			{
+				throw new ArgumentOutOfRangeException("date", "Must be within the block period");
+			}
+		}
+
+		public IList<DateOnly> UnLockedDates()
+		{
+			var ret = new List<DateOnly>();
+			foreach (var dateOnly in _blockPeriod.DayCollection())
+			{
+				if(!_lockedDates.Contains(dateOnly))
+					ret.Add(dateOnly);
+			}
+
+			return ret;
+		}
+
+		public override int GetHashCode()
         {
             return _blockPeriod.GetHashCode();
         }

@@ -7,36 +7,47 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface ITeamScheduling
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, DateOnlyPeriod selectedPeriod, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
+
+	    void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+		    IShiftProjectionCache shiftProjectionCache,
+		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+		    IResourceCalculateDelayer resourceCalculateDelayer);
     }
 
     public  class TeamScheduling : ITeamScheduling
     {
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-		public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, DateOnlyPeriod selectedPeriod, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
-		{
-		    
-            
-            var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly).Where(scheduleMatrixPro => scheduleMatrixPro.Person == person).ToList();
-			if (!tempMatrixList.Any()) 
-				return;
+	    public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+		    IShiftProjectionCache shiftProjectionCache,
+		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+		    IResourceCalculateDelayer resourceCalculateDelayer)
+	    {
 
-			var matrix = tempMatrixList.First();
-			var scheduleDayPro = matrix.GetScheduleDayByKey(dateOnly);
-			var scheduleDay = scheduleDayPro.DaySchedulePart();
-			if (!matrix.UnlockedDays.Contains(scheduleDayPro))
-				return;
 
-			if (scheduleDay.IsScheduled())
-				return;
+		    var tempMatrixList =
+			    teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly)
+				    .Where(scheduleMatrixPro => scheduleMatrixPro.Person == person)
+				    .ToList();
+		    if (!tempMatrixList.Any())
+			    return;
 
-            var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
-			assignShiftProjection(shiftProjectionCache, agentTimeZone, scheduleDay, dateOnly, schedulePartModifyAndRollbackService);
-			OnDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
-			resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
-			                                            shiftProjectionCache.WorkShiftProjectionPeriod);
-		}
+		    var matrix = tempMatrixList.First();
+		    var scheduleDayPro = matrix.GetScheduleDayByKey(dateOnly);
+		    var scheduleDay = scheduleDayPro.DaySchedulePart();
+		    if (!matrix.UnlockedDays.Contains(scheduleDayPro))
+			    return;
+
+		    if (scheduleDay.IsScheduled())
+			    return;
+
+		    var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
+		    assignShiftProjection(shiftProjectionCache, agentTimeZone, scheduleDay, dateOnly,
+			    schedulePartModifyAndRollbackService);
+		    OnDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
+		    resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
+			    shiftProjectionCache.WorkShiftProjectionPeriod);
+	    }
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
