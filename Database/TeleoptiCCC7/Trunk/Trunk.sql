@@ -1,9 +1,9 @@
 --Name: Ola, Jonas, Kunning
 --Date: 2014-04-29
 --Desc: Add the authentication info table to prepare for single sign on
--- SHOULD DELETE WindowsAuthenticationInfo table later on.
 ----------------  
-
+IF  NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AuthenticationInfo]') AND type in (N'U'))
+BEGIN
 CREATE TABLE [dbo].[AuthenticationInfo](
 	[Person] [uniqueidentifier] NOT NULL,
 	[Identity] [nvarchar](100) NOT NULL,
@@ -17,19 +17,17 @@ CREATE TABLE [dbo].[AuthenticationInfo](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
-GO
-
 ALTER TABLE [dbo].[AuthenticationInfo] WITH CHECK ADD CONSTRAINT [FK_AuthenticationInfo_Person] FOREIGN KEY([Person])
 REFERENCES [dbo].[Person] ([Id])
-GO
 
 ALTER TABLE [dbo].[AuthenticationInfo] CHECK CONSTRAINT [FK_AuthenticationInfo_Person]
-GO
 
 INSERT INTO [AuthenticationInfo] 
 SELECT Person, DomainName+'\'+WindowsLogOnName
 FROM WindowsAuthenticationInfo
 
-GO
+END
 
-DROP TABLE WindowsAuthenticationInfo
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[WindowsAuthenticationInfo]') AND type in (N'U'))
+DROP TABLE [dbo].[WindowsAuthenticationInfo]
+GO

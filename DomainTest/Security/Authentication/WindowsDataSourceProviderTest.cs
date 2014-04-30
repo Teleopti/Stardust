@@ -41,12 +41,12 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             using(mocks.Record())
             {
                 Expect.Call(availableDataSourcesProvider.AvailableDataSources()).Return(new List<IDataSource> {dataSource});
-                Expect.Call(windowsUserProvider.DomainName).Return("toptinet").Repeat.Twice();
-                Expect.Call(windowsUserProvider.UserName).Return("robink").Repeat.Twice();
+                Expect.Call(windowsUserProvider.DomainName).Return("toptinet").Repeat.Once();
+				Expect.Call(windowsUserProvider.UserName).Return("robink").Repeat.Once();
                 Expect.Call(repositoryFactory.CreatePersonRepository(unitOfWork)).Return(personRepository);
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
-                Expect.Call(personRepository.TryFindIdentityAuthenticatedPerson("toptinet", out person)).OutRef
+                Expect.Call(personRepository.TryFindIdentityAuthenticatedPerson(@"toptinet\robink", out person)).OutRef
                     (foundPerson).Return(true);
 				Expect.Call(dataSource.AuthenticationTypeOption).Return(AuthenticationTypeOption.Windows);
                 Expect.Call(unitOfWork.Dispose);
