@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(winAccount);
 
-			personRep.Stub(x => x.TryFindIdentityAuthenticatedPerson(winAccount.OriginalToken,
+			personRep.Stub(x => x.TryFindIdentityAuthenticatedPerson(winAccount.UserIdentifier,
 				out person)).Return(true);
 
 			var result = target.AuthenticateWindowsUser(dataSourceName);
