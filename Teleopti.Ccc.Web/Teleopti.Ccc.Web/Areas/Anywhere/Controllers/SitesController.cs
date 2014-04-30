@@ -51,7 +51,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public JsonResult GetOutOfAdherence(string siteId)
 		{
 			var outOfAdherence = _siteAdherenceAggregator.Aggregate(Guid.Parse(siteId));
-			return Json(outOfAdherence);
+			return Json(new SiteOutOfAdherence
+			{
+				Id = siteId,
+				OutOfAdherence = outOfAdherence
+			}, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

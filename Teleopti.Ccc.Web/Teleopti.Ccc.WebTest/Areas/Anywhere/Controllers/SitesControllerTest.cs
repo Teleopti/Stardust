@@ -76,9 +76,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var target = new SitesController(siteRepository, null, siteAdherenceAggregator);
 
-			var result =(int)target.GetOutOfAdherence(siteId.ToString()).Data;
+			var result = target.GetOutOfAdherence(siteId.ToString()).Data as SiteOutOfAdherence;
 
-			result.Should().Be(expected);
+			result.Id.Should().Be(siteId.ToString());
+			result.OutOfAdherence.Should().Be(expected);
 		}
 	}
 }
