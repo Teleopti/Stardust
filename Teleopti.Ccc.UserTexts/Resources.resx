@@ -12029,4 +12029,16 @@ Reduce the complexity to use these shifts.</value>
     <value>Resolving weekly rest for {0} {1}</value>
     <comment>A message that will shown when the weekly rest resolver service is kicked.</comment>
   </data>
+  <data name="TeamScheduling" xml:space="preserve">
+    <value>Team Scheduling</value>
+    <comment>New name of team scheduling</comment>
+  </data>
+  <data name="NoBlock" xml:space="preserve">
+    <value>No Block</value>
+    <comment>No block option in team scheduling/optimization</comment>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>No Team</value>
+    <comment>No team option in team scheduling /optimization</comment>
+  </data>
 </root>
