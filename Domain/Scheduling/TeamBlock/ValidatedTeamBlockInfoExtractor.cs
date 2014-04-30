@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private ITeamBlockInfo createTeamBlockInfo(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnly datePointer, ITeamInfo teamInfo, ISchedulingOptions schedulingOptions)
         {
             ITeamBlockInfo teamBlockInfo;
-            if (schedulingOptions.UseTeamBlockPerOption)
+				if (schedulingOptions.UseBlock)
                 teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
                                                                           schedulingOptions
                                                                               .BlockFinderTypeForAdvanceScheduling,

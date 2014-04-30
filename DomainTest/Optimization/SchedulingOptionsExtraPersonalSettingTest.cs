@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private void MapFromExpectations()
         {
             //Expect.Call(_schedulingOptions.UseBlockScheduling).Return(BlockFinderType.BetweenDayOff);
-            Expect.Call(_schedulingOptions.UseGroupScheduling).Return(true);
+            Expect.Call(_schedulingOptions.UseTeam).Return(true);
             Expect.Call(_groupPageLight.Key).Return("groupPageKey");
             Expect.Call(_schedulingOptions.GroupOnGroupPage).Return(_groupPageLight);
             Expect.Call(_schedulingOptions.Fairness).Return(_fairnessValue);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulingOptions.BlockFinderTypeForAdvanceScheduling ).Return(BlockFinderType.BetweenDayOff);
             
             Expect.Call(_schedulingOptions.GroupOnGroupPageForTeamBlockPer ).Return(_groupPageLight).Repeat.AtLeastOnce();
-            Expect.Call(_schedulingOptions.UseTeamBlockPerOption).Return(true);
+				Expect.Call(_schedulingOptions.UseBlock).Return(true);
             Expect.Call(_schedulingOptions.BlockSameEndTime).Return(true);
 				Expect.Call(_schedulingOptions.BlockSameShift).Return(false);
             Expect.Call(_schedulingOptions.BlockSameShiftCategory).Return(true);
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private void MapToExpectations()
         {
             //Expect.Call(() => _schedulingOptions.UseBlockScheduling = BlockFinderType.BetweenDayOff);
-            Expect.Call(() => _schedulingOptions.UseGroupScheduling = true);
+            Expect.Call(() => _schedulingOptions.UseTeam = true);
             Expect.Call(_groupPageLight.Key).Return("groupPageKey").Repeat.AtLeastOnce();
             //Expect.Call(() => _schedulingOptions.GroupOnGroupPage = _groupPageLight);
             //Expect.Call(() => _schedulingOptions.GroupPageForShiftCategoryFairness = _groupPageLight);
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(() => _schedulingOptions.Fairness = _fairnessValue);
 
             Expect.Call(() => _schedulingOptions.GroupOnGroupPageForTeamBlockPer  = _groupPageLight);
-            Expect.Call(() => _schedulingOptions.UseTeamBlockPerOption = true);
+				Expect.Call(() => _schedulingOptions.UseBlock = true);
             Expect.Call(() => _schedulingOptions.BlockSameEndTime  = true);
 				Expect.Call(() => _schedulingOptions.BlockSameShift = false);
             Expect.Call(() => _schedulingOptions.BlockSameShiftCategory  = true);

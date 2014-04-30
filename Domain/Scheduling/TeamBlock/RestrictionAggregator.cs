@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		    var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
 		    var matrixes = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod);
-            if (schedulingOptions.UseGroupScheduling)
+            if (schedulingOptions.UseTeam)
 		    {
 			    var teamMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
 			    var restrictionFromOneTeam = _scheduleRestrictionExtractor.ExtractForOneTeamOneDay(dateOnly, teamMatrixList,
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    if (suggestedShiftProjectionCache != null)
 		    {
 
-                if (schedulingOptions.UseGroupScheduling)
+                if (schedulingOptions.UseTeam)
 			    {
 				    var suggestedShiftRestrictionForOneTeam =
 					    _suggestedShiftRestrictionExtractor.ExtractForOneTeam(suggestedShiftProjectionCache, schedulingOptions);

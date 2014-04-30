@@ -46,11 +46,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldUseGroupingChangesSetInSchedulingOptions()
         {
-            Assert.IsFalse(_schedulingOptions.UseGroupScheduling);
+            Assert.IsFalse(_schedulingOptions.UseTeam);
             _optimizationPreferences.Extra.UseTeams = true;
 	        _optimizationPreferences.Extra.KeepSameDaysOffInTeam = false;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-			Assert.IsTrue(_schedulingOptions.UseGroupScheduling);
+			Assert.IsTrue(_schedulingOptions.UseTeam);
 			Assert.IsFalse(_schedulingOptions.UseSameDayOffs);
         }
 
@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _optimizationPreferences.Extra.UseTeamBlockOption = true;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.IsTrue(_schedulingOptions.UseTeamBlockPerOption );
+				Assert.IsTrue(_schedulingOptions.UseBlock);
 			Assert.IsTrue(_schedulingOptions.UseSameDayOffs);
 
             _optimizationPreferences.Extra.UseTeamBlockSameEndTime  = false;

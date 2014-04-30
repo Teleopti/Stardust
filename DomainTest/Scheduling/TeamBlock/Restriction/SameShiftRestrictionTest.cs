@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         {
             _mocks = new MockRepository();
             _schedulingOptions = new SchedulingOptions();
-            _schedulingOptions.UseTeamBlockPerOption = true;
+				_schedulingOptions.UseBlock = true;
             _mainShiftEquator = _mocks.StrictMock<IScheduleDayEquator>();
             _target = new SameShiftRestriction( _mainShiftEquator);
             _dateOnly = new DateOnly(2012, 12, 7);
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         public void ShouldExtractSameShiftRestrictionFromOneBlockWhenBothBlockAndTeamScheduling()
         {
 			  _schedulingOptions.BlockSameShift = true;
-            _schedulingOptions.UseTeamBlockPerOption = true;
+			  _schedulingOptions.UseBlock = true;
             _schedulingOptions.UseGroupScheduling = true;
             var dateList = new List<DateOnly> { _dateOnly };
             var mainShift = EditableShiftFactory.CreateEditorShift(_activity, _period, new ShiftCategory("cat"));

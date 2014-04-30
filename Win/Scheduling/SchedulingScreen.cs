@@ -3694,7 +3694,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-				if (schedulingOptions.UseTeamBlockPerOption || schedulingOptions.UseGroupScheduling)
+				if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
                 {
 					var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
@@ -3764,7 +3764,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
 
-					if (schedulingOptions.UseGroupScheduling)
+					if (schedulingOptions.UseTeam)
 					{
 						allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
 					}

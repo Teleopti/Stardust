@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			IList<IShiftProjectionCache> shiftList = new List<IShiftProjectionCache> {c1, c2, c3};
 			_schedulingOptions.UseAverageShiftLengths = false;
 			//should filter becouse we are using teamblock and same shift
-			_schedulingOptions.UseTeamBlockPerOption = true;
+			_schedulingOptions.UseBlock = true;
 			_schedulingOptions.BlockSameShift = true;
 
 			using (_mocks.Record())
