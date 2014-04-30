@@ -140,6 +140,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			{
 				var wctx = HttpUtility.ParseQueryString(wsFederationMessage.Context);
 				string returnUrl = wctx["ru"];
+				if (!returnUrl.EndsWith("/"))
+						returnUrl += "/";
 
 				return new RedirectResult(returnUrl);
 			}
