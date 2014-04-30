@@ -5,7 +5,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface IValidatedTeamBlockInfoExtractor
     {
-        ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions);
+	    ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer,
+		    IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod);
     }
 
     public class ValidatedTeamBlockInfoExtractor : IValidatedTeamBlockInfoExtractor
@@ -26,29 +27,43 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    _teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 	    }
 
-	    public ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions )
-        {
-            if (teamInfo == null || schedulingOptions == null) return null;
-            var teamBlockInfo = createTeamBlockInfo(allPersonMatrixList, datePointer, teamInfo, schedulingOptions);
-            if (teamBlockInfo == null) return null;
-            if (_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer)) return null;
-            if (!_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions)) return null;
+	    public ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer,
+		    IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
+	    {
+		    if (teamInfo == null || schedulingOptions == null) return null;
+		    var teamBlockInfo = createTeamBlockInfo(allPersonMatrixList, datePointer, teamInfo, schedulingOptions,
+			    selectedPeriod);
+		    if (teamBlockInfo == null) return null;
+		    if (_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer)) return null;
+		    if (!_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions)) return null;
 
-            return teamBlockInfo;
-        }
+		    return teamBlockInfo;
+	    }
 
-        private ITeamBlockInfo createTeamBlockInfo(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnly datePointer, ITeamInfo teamInfo, ISchedulingOptions schedulingOptions)
-        {
-            ITeamBlockInfo teamBlockInfo;
+	    private ITeamBlockInfo createTeamBlockInfo(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnly datePointer,
+		    ITeamInfo teamInfo, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
+	    {
+		    ITeamBlockInfo teamBlockInfo;
 				if (schedulingOptions.UseBlock)
-                teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
-                                                                          schedulingOptions
-                                                                              .BlockFinderTypeForAdvanceScheduling,
-                                                                          _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions), allPersonMatrixList);
-            else
-                teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer, BlockFinderType.SingleDay,
-                                                                           _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions), allPersonMatrixList);
-            return teamBlockInfo;
-        }
+			    teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
+				    schedulingOptions
+					    .BlockFinderTypeForAdvanceScheduling,
+				    _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions), allPersonMatrixList);
+		    else
+			    teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer, BlockFinderType.SingleDay,
+				    _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions), allPersonMatrixList);
+
+		    if (teamBlockInfo == null)
+			    return null;
+
+		    var blockInfo = teamBlockInfo.BlockInfo;
+		    foreach (var dateOnly in blockInfo.BlockPeriod.DayCollection())
+		    {
+			    if (!selectedPeriod.Contains(dateOnly))
+				    blockInfo.LockDate(dateOnly);
+		    }
+
+		    return teamBlockInfo;
+	    }
     }
 }

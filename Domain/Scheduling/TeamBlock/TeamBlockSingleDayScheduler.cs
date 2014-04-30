@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
 											   IList<IPerson> selectedPersons, DateOnly day,
-											   IShiftProjectionCache roleModelShift, DateOnlyPeriod selectedPeriod, 
+											   IShiftProjectionCache roleModelShift, 
 												ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 												IResourceCalculateDelayer resourceCalculateDelayer,
 												ISchedulingResultStateHolder schedulingResultStateHolder,
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
 									  IList<IPerson> selectedPersons, DateOnly day,
-									  IShiftProjectionCache roleModelShift, DateOnlyPeriod selectedPeriod, 
+									  IShiftProjectionCache roleModelShift, 
 										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 										IResourceCalculateDelayer resourceCalculateDelayer,
 										ISchedulingResultStateHolder schedulingResultStateHolder,
@@ -98,7 +98,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
 
 				_teamScheduling.DayScheduled += OnDayScheduled;
-				_teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, selectedPeriod, schedulePartModifyAndRollbackService, resourceCalculateDelayer);
+				_teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache,
+					schedulePartModifyAndRollbackService, resourceCalculateDelayer);
 				_teamScheduling.DayScheduled -= OnDayScheduled;
 			}
 
