@@ -306,6 +306,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_tmpTimer.Enabled = false;
 			updateShiftEditor();
+		}
+
+		private void dateNavigateControlClosedPopup(object sender, EventArgs e)
+		{
 			_grid.Focus();
 		}
 
@@ -313,7 +317,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_scheduleView.SetSelectedDateLocal(e.Value);
 			_grid.Invalidate();
-			//if (_intradayMode && _scheduleView is DayViewNew)
+			
 			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday) && _scheduleView is DayViewNew)
 			{
 				drawSkillGrid();
@@ -487,6 +491,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_dateNavigateControl.SetAvailableTimeSpan(loadingPeriod);
 			_dateNavigateControl.SetSelectedDateNoInvoke(loadingPeriod.StartDate);
 			_dateNavigateControl.SelectedDateChanged += dateNavigateControlSelectedDateChanged;
+			_dateNavigateControl.ClosedPopup += dateNavigateControlClosedPopup;
+		
+			
 
 			_backgroundWorkerDelete.WorkerSupportsCancellation = true;
 			_backgroundWorkerDelete.DoWork += _backgroundWorkerDelete_DoWork;
@@ -5732,6 +5739,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void setEventHandlersOff()
 		{
 			_dateNavigateControl.SelectedDateChanged -= dateNavigateControlSelectedDateChanged;
+			_dateNavigateControl.ClosedPopup -= dateNavigateControlClosedPopup;
+
 			if (_schedulerMessageBrokerHandler != null)
 			{
 			    _schedulerMessageBrokerHandler.RequestDeletedFromBroker -= schedulerMessageBrokerHandlerRequestDeletedFromBroker;			
