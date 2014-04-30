@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
         public static void CheckCorrectNumberOfOptions()
         {
-            Assert.AreEqual(BlockFinderTypeCreator.GetBlockFinderTypes.Count, 2);
+            Assert.AreEqual(3, BlockFinderTypeCreator.GetBlockFinderTypes.Count);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
