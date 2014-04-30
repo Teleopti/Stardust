@@ -7,6 +7,7 @@ using Teleopti.Ccc.DatabaseConverter;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Kpi;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
@@ -184,7 +185,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 				{
 					var windowsAuthInfo = new AuthenticationInfo
 								{
-									Identity = Environment.UserDomainName+@"\"+Environment.UserName
+									Identity = IdentityHelper.Merge(Environment.UserDomainName,Environment.UserName)
 								};
 					if (!_personCreator.WindowsUserExists(windowsAuthInfo))
 					{

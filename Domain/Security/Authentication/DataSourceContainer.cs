@@ -73,18 +73,13 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
             return result;
         }
 
-	    public AuthenticationResult LogOn(string windowsLogOnName)
+	    public AuthenticationResult LogOn(string identityLogOnName)
         {
             var result = new AuthenticationResult{Successful = false,HasMessage = false};
             using (var unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork())
             {
-                var userNameParts = windowsLogOnName.Split('\\');
-                if (userNameParts.Length != 2)
-                {
-                    return result;
-                }
                 IPerson foundPerson;
-                if (RepositoryFactory.CreatePersonRepository(unitOfWork).TryFindIdentityAuthenticatedPerson(userNameParts[0], out foundPerson))
+                if (RepositoryFactory.CreatePersonRepository(unitOfWork).TryFindIdentityAuthenticatedPerson(identityLogOnName, out foundPerson))
                 {
                     result.Successful = true;
                     result.Person = foundPerson;

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
@@ -72,26 +73,18 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 personDto.ApplicationLogOnName = "";
                 personDto.ApplicationLogOnPassword = "";
             }
-            if (entity.AuthenticationInfo != null)
-            {
-	            var identities = entity.AuthenticationInfo.Identity.Split('\\');
-	            if (identities.Length > 1)
-	            {
-		            personDto.WindowsDomain = identities[0];
-		            personDto.WindowsLogOnName = identities[1];
-	            }
-	            else
-	            {
-		            personDto.WindowsDomain = "";
-		            personDto.WindowsLogOnName = identities[0];
-	            }
-            }
-            else
-            {
-                personDto.WindowsDomain = "";
-                personDto.WindowsLogOnName = "";
-            }
-            personDto.Note = entity.Note;
+	        if (entity.AuthenticationInfo != null)
+	        {
+		        var identities = IdentityHelper.Split(entity.AuthenticationInfo.Identity);
+		        personDto.WindowsDomain = identities.Item1;
+		        personDto.WindowsLogOnName = identities.Item2;
+	        }
+	        else
+	        {
+		        personDto.WindowsDomain = "";
+		        personDto.WindowsLogOnName = "";
+	        }
+	        personDto.Note = entity.Note;
             personDto.IsDeleted = ((IDeleteTag)entity).IsDeleted;
             
             if (entity.WorkflowControlSet != null)
@@ -169,7 +162,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 	        if (!string.IsNullOrEmpty(dto.WindowsDomain) && !string.IsNullOrEmpty(dto.WindowsLogOnName))
 		        person.AuthenticationInfo = new AuthenticationInfo
 		        {
-			        Identity = dto.WindowsDomain + @"\" + dto.WindowsLogOnName
+			        Identity = IdentityHelper.Merge(dto.WindowsDomain, dto.WindowsLogOnName)
 		        };
 			if (string.IsNullOrEmpty(dto.WindowsDomain) && !string.IsNullOrEmpty(dto.WindowsLogOnName))
 				person.AuthenticationInfo = new AuthenticationInfo

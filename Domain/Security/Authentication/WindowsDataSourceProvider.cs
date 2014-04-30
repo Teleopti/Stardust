@@ -28,7 +28,9 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 
                 bool availableForUser;
                 IPerson person;
-				var logOnName = _windowsUserProvider.DomainName + "\\" + _windowsUserProvider.UserName;
+	            var domainName = _windowsUserProvider.DomainName;
+	            var userName = _windowsUserProvider.UserName;
+	            var logOnName = IdentityHelper.Merge(domainName, userName);
                 using (var unitOfWork = availableDataSource.Application.CreateAndOpenUnitOfWork())
                 {
                     var personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);

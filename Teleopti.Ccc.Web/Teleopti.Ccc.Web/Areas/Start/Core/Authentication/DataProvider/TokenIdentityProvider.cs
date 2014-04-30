@@ -60,12 +60,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 
 		private static TokenIdentity getWindowsTokenIdentity(string nameClaimValue)
 		{
-			var nameAndDomain = nameClaimValue.Split('/').Last().Split('#');
+			if (nameClaimValue.Contains('§')) return null;
+			var nameAndDomain = nameClaimValue.Split('/').Last();
 			return new TokenIdentity
 			{
-				UserDomain = nameAndDomain[1],
-				UserIdentifier = nameAndDomain[0],
-				OriginalToken = nameAndDomain[1] + @"\" + nameAndDomain[0]
+				UserIdentifier = nameAndDomain.Replace('#','\\'),
+				OriginalToken = nameClaimValue
 			};
 		}
 	}
@@ -73,7 +73,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 	public class TokenIdentity
 	{
 		public string UserIdentifier { get; set; }
-		public string UserDomain { get; set; }
 		public string OriginalToken { get; set; }
 		public string DataSource { get; set; }
 	}

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 			return token == null
 				? null
 				: _availableIdentityDataSources.AvailableDataSources(_applicationData.RegisteredDataSourceCollection,
-					token.OriginalToken);
+					token.UserIdentifier);
 		}
 
 		public IDataSource RetrieveDataSourceByName(string dataSourceName)

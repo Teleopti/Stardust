@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Transformer
@@ -26,23 +28,13 @@ namespace Teleopti.Analytics.Etl.Transformer
             	row["password"] = person.ApplicationAuthenticationInfo == null
             	                  	? string.Empty
             	                  	: person.ApplicationAuthenticationInfo.Password;
-	            var logOn = string.Empty;
-	            var domain = string.Empty;
-	            if (person.AuthenticationInfo != null)
-	            {
-		            var parts = person.AuthenticationInfo.Identity.Split('\\');
-		            if (parts.Length > 1)
-		            {
-			            domain = parts[0];
-			            logOn = parts[1];
-		            }
-		            else
-		            {
-			            logOn = parts[0];
-		            }
-	            }
-            	row["windows_logon_name"] = logOn;
-            	row["windows_domain_name"] = domain;
+			
+				var logOn = person.AuthenticationInfo == null
+				? new Tuple<string, string>(string.Empty, string.Empty)
+				: IdentityHelper.Split(person.AuthenticationInfo.Identity);
+			
+            	row["windows_logon_name"] = logOn.Item2;
+            	row["windows_domain_name"] = logOn.Item1;
                 row["email"] = person.Email;
                 row["language_id"] = person.PermissionInformation.UICultureLCID().GetValueOrDefault(-1);
                 row["language_name"] = System.DBNull.Value;

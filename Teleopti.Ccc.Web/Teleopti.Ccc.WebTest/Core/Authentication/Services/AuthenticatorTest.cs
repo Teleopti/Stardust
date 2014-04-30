@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var personRep = MockRepository.GenerateMock<IPersonRepository>();
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			var winAccount = new TokenIdentity { UserDomain = "domain", UserIdentifier = "user", OriginalToken = @"domain\user" };
+			var winAccount = new TokenIdentity { UserIdentifier = @"domain\user", OriginalToken = @"http://fake/domain#user" };
 
 			IPerson person = null;
 

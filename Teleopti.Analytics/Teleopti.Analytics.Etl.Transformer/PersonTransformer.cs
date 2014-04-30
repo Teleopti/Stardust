@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -79,23 +80,11 @@ namespace Teleopti.Analytics.Etl.Transformer
             row["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.
             row["datasource_update_date"] = RaptorTransformerHelper.GetUpdatedDate(person);
 
-			var logOn = string.Empty;
-			var domain = string.Empty;
-			if (person.AuthenticationInfo != null)
-			{
-				var parts = person.AuthenticationInfo.Identity.Split('\\');
-				if (parts.Length > 1)
-				{
-					domain = parts[0];
-					logOn = parts[1];
-				}
-				else
-				{
-					logOn = parts[0];
-				}
-			}
-			row["windows_domain"] = domain;
-	        row["windows_username"] = logOn;
+	        var logOn = person.AuthenticationInfo == null
+		        ? new Tuple<string, string>(string.Empty, string.Empty)
+		        : IdentityHelper.Split(person.AuthenticationInfo.Identity);
+			row["windows_domain"] = logOn.Item1;
+	        row["windows_username"] = logOn.Item2;
             table.Rows.Add(row);
         }
 

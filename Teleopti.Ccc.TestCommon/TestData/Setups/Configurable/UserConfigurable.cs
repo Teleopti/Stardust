@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				var authenticationInfo = new AuthenticationInfo
 				{
-					Identity = Environment.UserDomainName + @"\" + Environment.UserName
+					Identity = IdentityHelper.Merge(Environment.UserDomainName, Environment.UserName)
 				};
 				user.AuthenticationInfo = authenticationInfo;
 			}

@@ -46,11 +46,11 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var validDs = MockRepository.GenerateMock<IDataSource>();
 			var invalidDs = MockRepository.GenerateMock<IDataSource>();
 			var dsList = new[] {validDs, invalidDs};
-			var token = new TokenIdentity {OriginalToken = @"domain\user"};
+			var token = new TokenIdentity {UserIdentifier = @"domain\user"};
 
 			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(dsList);
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(token);
-			_availableIdentityDataSources.Stub(x => x.AvailableDataSources(dsList, token.OriginalToken)).Return(new[] {validDs});
+			_availableIdentityDataSources.Stub(x => x.AvailableDataSources(dsList, token.UserIdentifier)).Return(new[] {validDs});
 
 			target.RetrieveDatasourcesForIdentity().Should().Have.SameValuesAs(new[] {validDs});
 		}

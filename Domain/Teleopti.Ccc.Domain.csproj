@@ -1176,6 +1176,7 @@
     <Compile Include="Security\Authentication\ICheckUserDetail.cs" />
     <Compile Include="Security\Authentication\IDataSourceContainer.cs" />
     <Compile Include="Security\Authentication\IDataSourceProvider.cs" />
+    <Compile Include="Security\Authentication\IdentityHelper.cs" />
     <Compile Include="Security\Authentication\IFindApplicationUser.cs" />
     <Compile Include="Security\Authentication\IFindUserDetail.cs" />
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
 
             newPerson =
                     _existingPersons.FirstOrDefault(
-						p => ((p.AuthenticationInfo != null && p.AuthenticationInfo.Identity.ToUpperInvariant() == oldEntity.LoginDomain.ToUpperInvariant() + @"\" + oldEntity.LoginName.ToUpperInvariant())) 
+						p => ((p.AuthenticationInfo != null && p.AuthenticationInfo.Identity.ToUpperInvariant() == IdentityHelper.Merge(oldEntity.LoginDomain, oldEntity.LoginName).ToUpperInvariant())) 
 							||
                              (p.ApplicationAuthenticationInfo != null && p.ApplicationAuthenticationInfo.ApplicationLogOnName.ToUpperInvariant() ==
                               oldEntity.LoginName.ToUpperInvariant() &&
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             if (!String.IsNullOrEmpty(oldEntity.LoginDomain))
             {
                 AuthenticationInfo winAuthInfo = new AuthenticationInfo();
-				winAuthInfo.Identity = oldEntity.LoginDomain + @"\" + oldEntity.LoginName;
+				winAuthInfo.Identity = IdentityHelper.Merge(oldEntity.LoginDomain, oldEntity.LoginName);
                 newPerson.AuthenticationInfo = winAuthInfo;
             }
 
