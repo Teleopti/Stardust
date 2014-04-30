@@ -11909,4 +11909,16 @@ Reduce the complexity to use these shifts.</value>
     <value>On available agents only</value>
     <comment>only those agents will be included in schedule overtime who have defined the overtime availability</comment>
   </data>
+  <data name="TeamScheduling" xml:space="preserve">
+    <value>Team Scheduling</value>
+    <comment>New name of team scheduling</comment>
+  </data>
+  <data name="NoBlock" xml:space="preserve">
+    <value>No Block</value>
+    <comment>No block option in team scheduling/optimization</comment>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>No Team</value>
+    <comment>No team option in team scheduling /optimization</comment>
+  </data>
 </root>
