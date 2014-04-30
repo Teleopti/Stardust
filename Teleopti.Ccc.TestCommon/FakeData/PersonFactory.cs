@@ -225,21 +225,20 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return ret;
         }
 
-        /// <summary>
-        /// Creates the person with windows permission info.
-        /// </summary>
-        /// <param name="logOnName">Name of the log on.</param>
-        /// <param name="domainName">Name of the domain.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: tamasb
-        /// Created date: 12/4/2007
-        /// </remarks>
-        public static IPerson CreatePersonWithWindowsPermissionInfo(string logOnName, string domainName)
+	    /// <summary>
+	    /// Creates the person with windows permission info.
+	    /// </summary>
+	    /// <param name="logOnName">Name of the log on.</param>
+	    /// <returns></returns>
+	    /// <remarks>
+	    /// Created by: tamasb
+	    /// Created date: 12/4/2007
+	    /// </remarks>
+	    public static IPerson CreatePersonWithIdentityPermissionInfo(string logOnName)
         {
-            var winPer = new WindowsAuthenticationInfo {WindowsLogOnName = logOnName, DomainName = domainName};
+            var winPer = new AuthenticationInfo {Identity = logOnName};
             IPerson ret = CreatePerson("Created", "by object mother");
-            ret.WindowsAuthenticationInfo = winPer;
+            ret.AuthenticationInfo = winPer;
             return ret;
         }
 

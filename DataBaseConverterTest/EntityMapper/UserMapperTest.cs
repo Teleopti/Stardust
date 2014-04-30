@@ -39,10 +39,9 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             _oldDomainUser = new User(99, "UserKalle", "Kula", "ukuleleKalle@Kula.nu", 40, null, MessageLevel.High, "", "Knut", "Kulanet", "", false);
             _newDomainUser = new Person
                                  {
-                                     WindowsAuthenticationInfo = new WindowsAuthenticationInfo
+                                     AuthenticationInfo = new AuthenticationInfo
                                                                      {
-                                                                         DomainName = "KulaNet",
-                                                                         WindowsLogOnName = "Knut"
+                                                                         Identity = @"KulaNet\Knut"
                                                                      }
                                  };
             _newApplicationUser = new Person
@@ -109,12 +108,12 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         }
 
         [Test]
-        public void UserShouldBeWinAuthenticatedIfHavingDomain()
+        public void UserShouldBeAuthenticatedIfHavingDomainAndUser()
         {
             _oldUser = new User(99, "UserKalle", "Kula", "Kalle@Kula.nu", 40, null, MessageLevel.High, "", "Knut", "workgroup", "", false);
             UserMapper uMap = new UserMapper(_mapped, (TimeZoneInfo.Utc), _agentRole, _administratorRole, new List<IPerson>());
             IPerson newUser = uMap.Map(_oldUser);
-            Assert.AreEqual("workgroup", newUser.WindowsAuthenticationInfo.DomainName);
+            Assert.AreEqual(@"workgroup\Knut", newUser.AuthenticationInfo.Identity);
         }
 
         [Test]

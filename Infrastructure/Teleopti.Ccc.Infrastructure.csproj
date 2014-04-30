@@ -178,9 +178,9 @@
     <Compile Include="Licensing\LicenseStatusXml.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetter.cs" />
     <Compile Include="Config\LoadPasswordPolicyService.cs" />
-    <Compile Include="Foundation\AvailableWindowsDataSources.cs" />
+    <Compile Include="Foundation\AvailableIdentityDataSources.cs" />
     <Compile Include="Foundation\ForeignKeyException.cs" />
-    <Compile Include="Foundation\IAvailableWindowsDataSources.cs" />
+    <Compile Include="Foundation\IAvailableIdentityDataSources.cs" />
     <Compile Include="Foundation\IInitializeApplication.cs" />
     <Compile Include="Foundation\ICurrentPrincipalContext.cs" />
     <Compile Include="Foundation\IRoleToPrincipalCommand.cs" />

@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			windowsAccountProvider.Stub(x => x.RetrieveWindowsAccount()).Return(new WindowsAccount("domainName", "userName"));
 
 			var httpResponse = MockRepository.GenerateStub<HttpResponseBase>();
-			httpResponse.Stub(x => x.ApplyAppPathModifier("~/OpenId/AskUser/userName%23domainName")).Return("/OpenId/AskUser/userName#domainName");
+			httpResponse.Stub(x => x.ApplyAppPathModifier("~/OpenId/AskUser/domainName%23userName")).Return("/OpenId/AskUser/domainName#userName");
 			var httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
 			httpRequest.Stub(x => x.Url).Return(new Uri("http://mock"));
 			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			target.TriggerWindowsAuthorization();
 
 			request.IsAuthenticated.Should().Be.EqualTo(true);
-			request.LocalIdentifier.ToString().Should().Be("http://mock/OpenId/AskUser/userName#domainName");
+			request.LocalIdentifier.ToString().Should().Be("http://mock/OpenId/AskUser/domainName#userName");
 			openIdProviderWapper.AssertWasCalled(x => x.SendResponse(request));
 		}
 

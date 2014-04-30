@@ -200,29 +200,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		}
 
+		
 		[Test]
-		public void VerifyCorrectWindowsUser()
+		public void VerifyCorrectAuthentication()
 		{
 			var person = PersonFactory.CreatePerson("test person");
-            person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo { DomainName = "domain", WindowsLogOnName = "username" };
+			person.AuthenticationInfo = new AuthenticationInfo { Identity = @"DOMAIN\UserName"};
 			PersistAndRemoveFromUnitOfWork(person);
 
-			target.DoesWindowsUserExists("domain", "username").Should().Be.True();
-			target.DoesWindowsUserExists("domain1", "username").Should().Be.False();
-			target.DoesWindowsUserExists("domain", "usrname").Should().Be.False();
+			target.DoesIdentityExists(@"DOMAIN\UserName").Should().Be.True();
+			target.DoesIdentityExists(@"DOMAIN1\UserName").Should().Be.False();
 		}
 
 		[Test]
 		public void DeadPersonShouldNotBeFound()
 		{
 			var person = PersonFactory.CreatePerson("test person");
-		    person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
-		                                           {DomainName = "domain", WindowsLogOnName = "username"};
+		    person.AuthenticationInfo = new AuthenticationInfo { Identity = @"DOMAIN\UserName" };
 
             person.TerminatePerson(DateOnly.Today.AddDays(-2), _personAccountUpdater);
 			PersistAndRemoveFromUnitOfWork(person);
 
-			target.DoesWindowsUserExists("domain", "username").Should().Be.False();
+			target.DoesIdentityExists(@"DOMAIN\UserName").Should().Be.False();
 		}
 
 		[Test]
@@ -406,10 +405,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void ShouldLoadPermissionData()
         {
-            string okDomain = "okDomain";
-            string okLogon = "ok";
+			string okLogon = @"okDomain\ok";
             IPerson userRetOk;
-            IPerson userOk = PersonFactory.CreatePersonWithWindowsPermissionInfo(okLogon, okDomain);
+            IPerson userOk = PersonFactory.CreatePersonWithIdentityPermissionInfo(okLogon);
             userOk.PermissionInformation.AddApplicationRole(createAndPersistApplicationRole());
 
             // CreateProjection Team belong to a  site 
@@ -455,7 +453,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			// Persist the Person
             PersistAndRemoveFromUnitOfWork(userOk);
             
-            Assert.IsTrue(target.TryFindWindowsAuthenticatedPerson(okDomain, okLogon, out userRetOk));
+            Assert.IsTrue(target.TryFindIdentityAuthenticatedPerson(okLogon, out userRetOk));
             Session.Close();
             Assert.AreEqual(userOk, userRetOk);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation));
@@ -480,38 +478,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson retPer;
 			var okDomain = Guid.NewGuid().ToString();
 			var okLogon = Guid.NewGuid().ToString();
-			var person = PersonFactory.CreatePersonWithWindowsPermissionInfo(okLogon, okDomain);
+			var person = PersonFactory.CreatePersonWithIdentityPermissionInfo(okLogon);
 			person.TerminatePerson(new DateOnly(1800, 1, 1), _personAccountUpdater);
 			PersistAndRemoveFromUnitOfWork(person);
-			Assert.IsFalse(target.TryFindWindowsAuthenticatedPerson(okDomain, okLogon, out retPer));
+			Assert.IsFalse(target.TryFindIdentityAuthenticatedPerson(okLogon, out retPer));
 		}
 
-		/// <summary>
-		/// Verifies that Find based on logonname and password works when win auth is used.
-		/// </summary>
 		[Test]
-		public void VerifyFindLogOnNameAndPasswordWorksUsingWindowsAuthentication()
+		public void VerifyFindLogOnNameAndPasswordWorksUsingIdentityAuthentication()
 		{
-			string okDomain = "okDomain";
-			string okLogon = "ok";
-			string falseDomain = "hejhej";
-			string falseLogon = "sdfklj";
+			string okIdentity = "okDomain";
+			
+			string falseIdentity = "hejhej";
+			
 			IPerson userRetOk, userRetNo;
-			IPerson userOk = PersonFactory.CreatePersonWithWindowsPermissionInfo(okLogon, okDomain);
+			IPerson userOk = PersonFactory.CreatePersonWithIdentityPermissionInfo(okIdentity);
 			userOk.PermissionInformation.AddApplicationRole(createAndPersistApplicationRole());
 			createSiteAndTeam();
 			PersistAndRemoveFromUnitOfWork(userOk);
 
-			Assert.IsFalse(target.TryFindWindowsAuthenticatedPerson(falseDomain, falseLogon, out userRetNo));
+			Assert.IsFalse(target.TryFindIdentityAuthenticatedPerson(falseIdentity, out userRetNo));
 			Assert.IsNull(userRetNo);
-			Assert.IsFalse(target.TryFindWindowsAuthenticatedPerson(falseDomain, okLogon, out userRetNo));
-			Assert.IsNull(userRetNo);
-			Assert.IsFalse(target.TryFindWindowsAuthenticatedPerson(okDomain, falseLogon, out userRetNo));
-			Assert.IsNull(userRetNo);
-
-			Assert.IsTrue(target.TryFindWindowsAuthenticatedPerson(okDomain, okLogon, out userRetOk));
+			Assert.IsTrue(target.TryFindIdentityAuthenticatedPerson(okIdentity, out userRetOk));
 			Assert.AreEqual(userOk, userRetOk);
-
+			
 			IList<IBusinessUnit> buAccess = userRetOk.PermissionInformation.BusinessUnitAccessCollection();
 			Assert.AreEqual(1, userRetOk.PermissionInformation.ApplicationRoleCollection.Count);
 			Assert.AreEqual(2, userRetOk.PermissionInformation.ApplicationRoleCollection[0].ApplicationFunctionCollection.Count);
@@ -1393,37 +1383,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test, ExpectedException(typeof(ConstraintViolationException))]
 		public void VerifyCannotSaveTwoUsersWithSameDomainAuthentication()
 		{
-			IPerson person1 = PersonFactory.CreatePersonWithWindowsPermissionInfo("robink", "toptinet");
+			IPerson person1 = PersonFactory.CreatePersonWithIdentityPermissionInfo("robink");
 			PersistAndRemoveFromUnitOfWork(person1);
 
-			IPerson person2 = PersonFactory.CreatePersonWithWindowsPermissionInfo("robink", "toptinet");
+			IPerson person2 = PersonFactory.CreatePersonWithIdentityPermissionInfo("robink");
 			PersistAndRemoveFromUnitOfWork(person2);
 		}
-
-		[Test]
-		public void VerifyCanSaveTwoUsersWithSameNameAndDifferentDomain()
-		{
-			IPerson person1 = PersonFactory.CreatePersonWithWindowsPermissionInfo("robink", "toptinet1");
-			PersistAndRemoveFromUnitOfWork(person1);
-
-			IPerson person2 = PersonFactory.CreatePersonWithWindowsPermissionInfo("robink", "toptinet2");
-			PersistAndRemoveFromUnitOfWork(person2);
-		}
-
+		
 		[Test]
 		public void VerifyFindPersonsWithGivenUserCredentials()
 		{
-			IPerson person1 = PersonFactory.CreatePersonWithWindowsPermissionInfo("sunil", "toptinet1");
+			IPerson person1 = PersonFactory.CreatePersonWithIdentityPermissionInfo("sunil");
 			PersistAndRemoveFromUnitOfWork(person1);
-			IPerson person2 = PersonFactory.CreatePersonWithWindowsPermissionInfo("kamal", "toptinet1");
+			IPerson person2 = PersonFactory.CreatePersonWithIdentityPermissionInfo("kamal");
 			PersistAndRemoveFromUnitOfWork(person2);
-			IPerson person3 = PersonFactory.CreatePersonWithWindowsPermissionInfo("nimal", "toptinet1");
+			IPerson person3 = PersonFactory.CreatePersonWithIdentityPermissionInfo("nimal");
 			PersistAndRemoveFromUnitOfWork(person3);
 
 			var pr = new PersonRepository(UnitOfWork);
 
 			IList<IPerson> personList = new List<IPerson>(1);
-			person1.WindowsAuthenticationInfo.WindowsLogOnName = "kamal";
+			person1.AuthenticationInfo.Identity = "kamal";
 			personList.Add(person1);
 
 			var returned = pr.FindPersonsWithGivenUserCredentials(personList);
@@ -1435,23 +1415,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldFindPersonsWithGivenUseCredentialsWithEmptyLogOnName()
+		public void ShouldNotFindPersonsWithGivenUserCredentialsWithEmptyLogOnName()
 		{
-			IPerson person1 = PersonFactory.CreatePersonWithWindowsPermissionInfo("sunil", "toptinet1");
+			IPerson person1 = PersonFactory.CreatePersonWithIdentityPermissionInfo("sunil");
 			PersistAndRemoveFromUnitOfWork(person1);
-			IPerson person2 = PersonFactory.CreatePersonWithWindowsPermissionInfo("", "toptinet1");
+			IPerson person2 = PersonFactory.CreatePersonWithIdentityPermissionInfo("");
 			PersistAndRemoveFromUnitOfWork(person2);
-			IPerson person3 = PersonFactory.CreatePersonWithWindowsPermissionInfo("nimal", "toptinet1");
+			IPerson person3 = PersonFactory.CreatePersonWithIdentityPermissionInfo("nimal");
 			PersistAndRemoveFromUnitOfWork(person3);
 
 			var pr = new PersonRepository(UnitOfWork);
 
 			IList<IPerson> personList = new List<IPerson>(1);
-			person1.WindowsAuthenticationInfo.WindowsLogOnName = "";
+			person1.AuthenticationInfo.Identity = "";
 			personList.Add(person1);
 
 			var returned = pr.FindPersonsWithGivenUserCredentials(personList);
-			Assert.That(returned.Count(), Is.EqualTo(1));
+			Assert.That(returned.Count(), Is.EqualTo(0));
 		}
 
 
@@ -1539,7 +1519,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyFindPersonUser()
 		{
-			IPerson person1 = PersonFactory.CreatePersonWithWindowsPermissionInfo("sunil", "toptinet1");
+			IPerson person1 = PersonFactory.CreatePersonWithIdentityPermissionInfo("sunil");
 			PersistAndRemoveFromUnitOfWork(person1);
 			IPerson person2 = PersonFactory.CreatePersonWithBasicPermissionInfo("kamal", "pwd1");
 			PersistAndRemoveFromUnitOfWork(person2);
@@ -1579,7 +1559,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IExternalLogOn logOn1 = ExternalLogOnFactory.CreateExternalLogOn();
 			IExternalLogOn logOn2 = ExternalLogOnFactory.CreateExternalLogOn();
 
-			IPerson person = PersonFactory.CreatePersonWithWindowsPermissionInfo("sunil", "toptinet1");
+			IPerson person = PersonFactory.CreatePersonWithIdentityPermissionInfo("sunil");
 			IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team);
 			var personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 3, 31), team);
 			person.AddPersonPeriod(personPeriod1);

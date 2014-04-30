@@ -219,6 +219,6 @@ END
 	--===================
 	--delete all login information
 	delete from ApplicationAuthenticationInfo where Person='3F0886AB-7B25-4E95-856A-0D726EDC2A67'
-	delete from WindowsAuthenticationInfo
+	delete from AuthenticationInfo
 END
 

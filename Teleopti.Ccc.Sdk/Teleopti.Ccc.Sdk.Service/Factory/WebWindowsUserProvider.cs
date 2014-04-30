@@ -51,14 +51,14 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                     }
                 }
 
-                string[] windowsNameArray = windowsName.Split('\\');
+                var windowsNameArray = IdentityHelper.Split(windowsName);
                 _domainName = ".";
                 _userName = ".";
 
-                if (windowsNameArray.Length > 1)
+                if (!string.IsNullOrEmpty(windowsNameArray.Item1))
                 {
-                    _domainName = windowsNameArray[0];
-                    _userName = windowsNameArray[1];
+                    _domainName = windowsNameArray.Item1;
+                    _userName = windowsNameArray.Item2;
                 }
                 _initialized = true;
             }

@@ -35,11 +35,11 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
         private void SetupPersons()
         {
             var personAccountUpdater = new MockRepository().StrictMock<IPersonAccountUpdater>();
-            findPerson1 = PersonFactory.CreatePersonWithWindowsPermissionInfo("tommy", "TOPTI");
-            findPerson2 = PersonFactory.CreatePersonWithWindowsPermissionInfo("jonny", "TOPTI");
-            findPerson3 = PersonFactory.CreatePersonWithWindowsPermissionInfo("conny", "TOPTI");
-            findPerson4 = PersonFactory.CreatePersonWithWindowsPermissionInfo("ronny", "TOPTI");
-            findPerson5 = PersonFactory.CreatePersonWithWindowsPermissionInfo("benny", "TOPTI");
+            findPerson1 = PersonFactory.CreatePersonWithIdentityPermissionInfo("tommy");
+            findPerson2 = PersonFactory.CreatePersonWithIdentityPermissionInfo("jonny");
+            findPerson3 = PersonFactory.CreatePersonWithIdentityPermissionInfo("conny");
+            findPerson4 = PersonFactory.CreatePersonWithIdentityPermissionInfo("ronny");
+            findPerson5 = PersonFactory.CreatePersonWithIdentityPermissionInfo("benny");
             findPerson4.TerminatePerson(new DateOnly(2009,12,30), personAccountUpdater);
            
             findPerson1.AddPersonPeriod(new PersonPeriod(new DateOnly(new DateTime(2010,12,23)),new PersonContract(new Contract("Contract1"),new PartTimePercentage("PartTime3"),new ContractSchedule("CS3")), new Team {Description = new Description("Team1")} ));
@@ -75,10 +75,10 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
         {
             //Exposure of a bug 
             var applicationFunction = ApplicationFunctionFactory.CreateApplicationFunction("dontknow?");
-            var per = PersonFactory.CreatePersonWithWindowsPermissionInfo("tommy", "TOPTI");
+            var per = PersonFactory.CreatePersonWithIdentityPermissionInfo("tommy");
             per.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
                                                     {ApplicationLogOnName = "pa", Password = "pass"};
-            per.WindowsAuthenticationInfo.DomainName = "a";
+            per.AuthenticationInfo.Identity = "a";
             var isolatedtarget = new PersonFinderService(new PersonIndexBuilder(applicationFunction, new List<IPerson>{per}, new DateOnlyPeriod(2010, 1, 1, 2011, 1, 1)));
             var result = isolatedtarget.Find("apa");
             result.Count.Should().Be.EqualTo(0);

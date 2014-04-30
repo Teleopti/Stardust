@@ -138,22 +138,17 @@
       <one-to-many class="OptionalColumnValue"/>
     </bag>
 	  
-    <join table="WindowsAuthenticationInfo" fetch="join" optional="true">
-      <key column="Person"></key>
-      <component name="WindowsAuthenticationInfo"
-           class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.WindowsAuthenticationInfo">
-        <property name="WindowsLogOnName"
-				  not-null="false"
-				  length="50"
-				  type="string"
-						  unique-key="Unique_WinLogOn"/>
-        <property name="DomainName"
-				  not-null="false"
-				  length="50"
-				  type="string"
-						  unique-key="Unique_WinLogOn"/>
-      </component>
-    </join>
+    <join table="AuthenticationInfo" fetch="join" optional="true">
+		<key column="Person"></key>
+		<component name="AuthenticationInfo"
+			class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.AuthenticationInfo">
+			<property column="[Identity]" name="Identity"
+					not-null="false"
+					length="100"
+					type="string"
+							unique-key="Unique_Identity"/>
+		</component>
+	</join>
     
     <join table="ApplicationAuthenticationInfo"  fetch="join" optional="true">
       <key column="Person"/>
@@ -176,14 +171,14 @@
     
 	</class>
 
-	<query name="CheckIfWindowsUserExists">
+	<query name="CheckIfIdentityExists">
 		<![CDATA[
 		select 1 from Person p 
-						where p.WindowsAuthenticationInfo.WindowsLogOnName = :userName and
-							p.WindowsAuthenticationInfo.DomainName = :domainName and
+						where p.AuthenticationInfo.Identity = :identity and
 							(p.TerminalDate is null or p.TerminalDate >= :dateNow)
 		]]>
 	</query>
+
 	
 	<query name="ActiveAgents">
 		<![CDATA[    

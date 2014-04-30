@@ -51,8 +51,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private ColumnBase<PersonGeneralModel> _languageColumn;
 		private ColumnBase<PersonGeneralModel> _uiCultureColumn;
 		private ColumnBase<PersonGeneralModel> _timeZoneColumn;
-		private ColumnBase<PersonGeneralModel> _domainNameColumn;
-		private ColumnBase<PersonGeneralModel> _windowsUserColumn;
+		private ColumnBase<PersonGeneralModel> _identityUserColumn;
 		private ColumnBase<PersonGeneralModel> _applicationUserColumn;
 		private ColumnBase<PersonGeneralModel> _applicationPasswordColumn;
 		private ColumnBase<PersonGeneralModel> _roleColumn;
@@ -198,20 +197,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private void createPermissionInformationHeaders()
 		{
 			if (_hasRights) 
-                _domainNameColumn = new EditableTextColumn<PersonGeneralModel>("DomainName", 50, Resources.DomainName);
-			else 
-                _domainNameColumn = new ReadOnlyTextColumn<PersonGeneralModel>("DomainName", Resources.DomainName);
-			_domainNameColumn.CellDisplayChanged += columnCellDisplayChanged;
-			_domainNameColumn.CellChanged += domainNameColumnCellChanged;
-			_gridColumns.Add(_domainNameColumn);
-
-			if (_hasRights) 
-                _windowsUserColumn = new EditableTextColumn<PersonGeneralModel>("WindowsLogOnName", 50, Resources.WinLoginNameDot);
-			else 
-                _windowsUserColumn = new ReadOnlyTextColumn<PersonGeneralModel>("WindowsLogOnName", Resources.WinLoginNameDot);
-			_windowsUserColumn.CellDisplayChanged += windowsLogOnNameColumnCellDisplayChanged;
-			_windowsUserColumn.CellChanged += windowsLogOnNameColumnCellChanged;
-			_gridColumns.Add(_windowsUserColumn);
+                _identityUserColumn = new EditableTextColumn<PersonGeneralModel>("LogOnName", 100, Resources.LogOn);
+			else
+				_identityUserColumn = new ReadOnlyTextColumn<PersonGeneralModel>("LogOnName", Resources.LogOn);
+			_identityUserColumn.CellDisplayChanged += columnCellDisplayChanged;
+			_identityUserColumn.CellChanged += logOnNameColumnCellChanged;
+			_gridColumns.Add(_identityUserColumn);
 
 			if (_hasRights) 
                 _applicationUserColumn = new EditableTextColumn<PersonGeneralModel>("ApplicationLogOnName", 50, Resources.ApplicationLogInName);
@@ -316,28 +307,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				e.QueryCellInfoEventArg.Style.ResetBackColor();	
 			}
 		}
-
-		private static void windowsLogOnNameColumnCellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<PersonGeneralModel> e)
-		{
-			if (e.DataItem.CanBold)
-			{
-				e.QueryCellInfoEventArg.Style.Font.Bold = true;
-			}
-			if (string.IsNullOrEmpty(e.DataItem.DomainName))
-			{
-				e.QueryCellInfoEventArg.Style.ReadOnly = true;
-				e.QueryCellInfoEventArg.Style.BackColor = Color.Silver;
-			}
-			else
-			{
-				e.QueryCellInfoEventArg.Style.ReadOnly = false;
-				e.QueryCellInfoEventArg.Style.ResetBackColor();
-
-				if (string.IsNullOrEmpty(e.DataItem.WindowsLogOnName)) e.QueryCellInfoEventArg.Style.BackColor = Color.Red;
-				else e.QueryCellInfoEventArg.Style.ResetBackColor();
-			}
-		}
-
+		
 		private void columnCellChanged(object sender, ColumnCellChangedEventArgs<PersonGeneralModel> e)
 		{
 			e.DataItem.CanBold = true;
@@ -354,25 +324,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			refreshCell(e.SaveCellInfoEventArgs.RowIndex);
 		}
 
-		private void domainNameColumnCellChanged(object sender, ColumnCellChangedEventArgs<PersonGeneralModel> e)
-		{
-			IPerson changedPerson = e.DataItem.ContainedEntity;
-			if (!FilteredPeopleHolder.ValidateUserCredentialsCollection.Contains(changedPerson))
-				FilteredPeopleHolder.ValidateUserCredentialsCollection.Add(changedPerson);
-			e.DataItem.CanBold = true;
-
-			if (string.IsNullOrEmpty(e.DataItem.DomainName)) e.DataItem.WindowsLogOnName = string.Empty;
-			//RefreshCell(e.SaveCellInfoEventArgs.ColIndex + 1, e.SaveCellInfoEventArgs.RowIndex);
-			refreshCell(e.SaveCellInfoEventArgs.RowIndex);
-		}
-
-		private void windowsLogOnNameColumnCellChanged(object sender, ColumnCellChangedEventArgs<PersonGeneralModel> e)
+		private void logOnNameColumnCellChanged(object sender, ColumnCellChangedEventArgs<PersonGeneralModel> e)
 		{
 			IPerson changedPerson = e.DataItem.ContainedEntity;
 			if (!FilteredPeopleHolder.ValidateUserCredentialsCollection.Contains(changedPerson))
 				FilteredPeopleHolder.ValidateUserCredentialsCollection.Add(changedPerson);
 
-			if (e.SaveCellInfoEventArgs.Style.ReadOnly) e.DataItem.WindowsLogOnName = string.Empty;
+			if (e.SaveCellInfoEventArgs.Style.ReadOnly) e.DataItem.LogOnName = string.Empty;
 			else
 			{
 				e.DataItem.CanBold = true;
@@ -515,7 +473,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		{
 			if (ValidCell(e.ColIndex, e.RowIndex))
 			{
-				//FilteredPeopleHolder.ReassociateOptionalColumnCollection();
 				_gridColumns[e.ColIndex].GetCellInfo(e, new ReadOnlyCollection<PersonGeneralModel>(FilteredPeopleHolder.FilteredPeopleGridData));
 			}
 			base.QueryCellInfo(e);
