@@ -40,9 +40,20 @@
 			ajax.ajax({
 				url: "Sites",
 				success: function (data) {
-					viewModel.fill(data);
+				    viewModel.fill(data);
+					for (var i = 0; i < viewModel.sites().length; i++) {
+				    	(function (s) {
+				    		ajax.ajax({
+				    			url: "Sites/GetOutOfAdherence?siteId=" + s.Id,
+				    			success: function (d) {
+				    				viewModel.update(d);
+				    			}
+				    		});
+				    	})(viewModel.sites()[i]);
+				    }
 				}
 			});
+
 
 			subscriptions.subscribeAdherence(function (notification) {
 				viewModel.updateFromNotification(notification);
