@@ -266,17 +266,17 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions.TagToUseOnScheduling = _localSchedulingOptions.TagToUseOnScheduling;
         	_schedulingOptions.ResourceCalculateFrequency = _localSchedulingOptions.ResourceCalculateFrequency;
 			_schedulingOptions.ShowTroubleshot = _localSchedulingOptions.ShowTroubleshot;
-            _schedulingOptions.UseGroupSchedulingCommonCategory =
-                _localSchedulingOptions.UseGroupSchedulingCommonCategory;
-            _schedulingOptions.UseGroupSchedulingCommonEnd = _localSchedulingOptions.UseGroupSchedulingCommonEnd;
-            _schedulingOptions.UseGroupSchedulingCommonStart = _localSchedulingOptions.UseGroupSchedulingCommonStart;
-            _schedulingOptions.UseCommonActivity = _localSchedulingOptions.UseCommonActivity;
+            _schedulingOptions.TeamSameShiftCategory =
+                _localSchedulingOptions.TeamSameShiftCategory;
+            _schedulingOptions.TeamSameEndTime = _localSchedulingOptions.TeamSameEndTime;
+            _schedulingOptions.TeamSameStartTime = _localSchedulingOptions.TeamSameStartTime;
+            _schedulingOptions.TeamSameActivity = _localSchedulingOptions.TeamSameActivity;
             _schedulingOptions.CommonActivity = _localSchedulingOptions.CommonActivity;
         	_schedulingOptions.UseAverageShiftLengths = _localSchedulingOptions.UseAverageShiftLengths;
-            _schedulingOptions.UseTeamBlockSameEndTime = _localSchedulingOptions.UseTeamBlockSameEndTime;
-            _schedulingOptions.UseTeamBlockSameShift = _localSchedulingOptions.UseTeamBlockSameShift;
-            _schedulingOptions.UseTeamBlockSameShiftCategory = _localSchedulingOptions.UseTeamBlockSameShiftCategory;
-            _schedulingOptions.UseTeamBlockSameStartTime = _localSchedulingOptions.UseTeamBlockSameStartTime;
+            _schedulingOptions.BlockSameEndTime = _localSchedulingOptions.BlockSameEndTime;
+				_schedulingOptions.BlockSameShift = _localSchedulingOptions.BlockSameShift;
+            _schedulingOptions.BlockSameShiftCategory = _localSchedulingOptions.BlockSameShiftCategory;
+            _schedulingOptions.BlockSameStartTime = _localSchedulingOptions.BlockSameStartTime;
             _schedulingOptions.UseTeamBlockPerOption = _localSchedulingOptions.UseTeamBlockPerOption;
             
         }
@@ -314,10 +314,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _localSchedulingOptions.TagToUseOnScheduling = (IScheduleTag)comboBoxAdvTag.SelectedItem;
             _localSchedulingOptions.ResourceCalculateFrequency = (int)numericUpDownResourceCalculateEvery.Value;
 			_localSchedulingOptions.ShowTroubleshot = checkBoxShowTroubleShot.Checked;
-            _localSchedulingOptions.UseGroupSchedulingCommonCategory = checkBoxTeamSameShiftCategory.Checked;
-            _localSchedulingOptions.UseGroupSchedulingCommonStart = checkBoxTeamSameStartTime.Checked;
-            _localSchedulingOptions.UseGroupSchedulingCommonEnd = checkBoxTeamSameEndTime.Checked;
-            _localSchedulingOptions.UseCommonActivity = checkBoxTeamSameActivity.Checked;
+            _localSchedulingOptions.TeamSameShiftCategory = checkBoxTeamSameShiftCategory.Checked;
+            _localSchedulingOptions.TeamSameStartTime = checkBoxTeamSameStartTime.Checked;
+            _localSchedulingOptions.TeamSameEndTime = checkBoxTeamSameEndTime.Checked;
+            _localSchedulingOptions.TeamSameActivity = checkBoxTeamSameActivity.Checked;
             if (checkBoxTeamSameActivity.Checked)
                 _localSchedulingOptions.CommonActivity = (IActivity) comboBoxTeamActivity.SelectedItem;
         	_localSchedulingOptions.UseAverageShiftLengths = checkBoxUseAverageShiftLengths.Checked;
@@ -375,11 +375,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			checkBoxShowTroubleShot.Checked = _localSchedulingOptions.ShowTroubleshot;
             if(_localSchedulingOptions.UseGroupScheduling )
             {
-                checkBoxTeamSameShiftCategory.Checked = _localSchedulingOptions.UseGroupSchedulingCommonCategory;
-                checkBoxTeamSameEndTime.Checked = _localSchedulingOptions.UseGroupSchedulingCommonEnd;
-                checkBoxTeamSameStartTime.Checked = _localSchedulingOptions.UseGroupSchedulingCommonStart;
-                checkBoxTeamSameActivity.Checked = _localSchedulingOptions.UseCommonActivity;
-                comboBoxTeamActivity.Enabled = _localSchedulingOptions.UseCommonActivity;
+                checkBoxTeamSameShiftCategory.Checked = _localSchedulingOptions.TeamSameShiftCategory;
+                checkBoxTeamSameEndTime.Checked = _localSchedulingOptions.TeamSameEndTime;
+                checkBoxTeamSameStartTime.Checked = _localSchedulingOptions.TeamSameStartTime;
+                checkBoxTeamSameActivity.Checked = _localSchedulingOptions.TeamSameActivity;
+                comboBoxTeamActivity.Enabled = _localSchedulingOptions.TeamSameActivity;
             }
         	checkBoxUseAverageShiftLengths.Checked = _localSchedulingOptions.UseAverageShiftLengths;
 
@@ -618,10 +618,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer = _singleAgentEntry;
             else
                 _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer = (IGroupPageLight)comboBoxTeamGroupPage.SelectedItem;
-            _localSchedulingOptions.UseTeamBlockSameEndTime = false;
-            _localSchedulingOptions.UseTeamBlockSameShiftCategory = checkBoxBlockSameShiftCategory.Checked ;
-            _localSchedulingOptions.UseTeamBlockSameStartTime = checkBoxBlockSameStartTime.Checked ;
-			_localSchedulingOptions.UseTeamBlockSameShift = checkBoxBlockSameShift.Checked;
+            _localSchedulingOptions.BlockSameEndTime = false;
+            _localSchedulingOptions.BlockSameShiftCategory = checkBoxBlockSameShiftCategory.Checked ;
+            _localSchedulingOptions.BlockSameStartTime = checkBoxBlockSameStartTime.Checked ;
+				_localSchedulingOptions.BlockSameShift = checkBoxBlockSameShift.Checked;
 
         }
 
@@ -630,9 +630,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             if (_localSchedulingOptions.BlockFinderTypeForAdvanceScheduling != BlockFinderType.None)
                 comboBoxBlockType.SelectedValue =
                     _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling.ToString();
-            checkBoxBlockSameShiftCategory.Checked = _localSchedulingOptions.UseTeamBlockSameShiftCategory;
-            checkBoxBlockSameStartTime.Checked = _localSchedulingOptions.UseTeamBlockSameStartTime;
-			checkBoxBlockSameShift.Checked = _localSchedulingOptions.UseTeamBlockSameShift;
+            checkBoxBlockSameShiftCategory.Checked = _localSchedulingOptions.BlockSameShiftCategory;
+            checkBoxBlockSameStartTime.Checked = _localSchedulingOptions.BlockSameStartTime;
+				checkBoxBlockSameShift.Checked = _localSchedulingOptions.BlockSameShift;
         }
     }
     
