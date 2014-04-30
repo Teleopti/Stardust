@@ -504,7 +504,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 		private void comboBoxGroupingSelectedIndexChanged(object sender, EventArgs e)
 		{
-			bool isTeamEnabled = comboBoxTeamGroupPage.SelectedValue != _noTeamsGroupPage.Key;
+			bool isTeamEnabled = (string) comboBoxTeamGroupPage.SelectedValue != _noTeamsGroupPage.Key;
 			changeGrpSchedulingCommonOptionState(isTeamEnabled);
 
 			if (_dataLoaded)
@@ -534,7 +534,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         public bool ValidateTeamSchedulingOption()
         {
-			  if (comboBoxTeamGroupPage.SelectedValue != _noTeamsGroupPage.Key)
+			  if ((string) comboBoxTeamGroupPage.SelectedValue != _noTeamsGroupPage.Key)
             {
                 if (!(checkBoxTeamSameShiftCategory.Checked || checkBoxTeamSameStartTime.Checked || checkBoxTeamSameEndTime.Checked || checkBoxTeamSameActivity.Checked ))
                     return false;
@@ -544,7 +544,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         public bool ValidateBlockOption()
         {
-            if (comboBoxBlockType.SelectedValue != BlockFinderType.SingleDay.ToString( )  )
+            if ((string) comboBoxBlockType.SelectedValue != BlockFinderType.SingleDay.ToString( )  )
             {
                 if (!(checkBoxBlockSameShiftCategory .Checked || checkBoxBlockSameStartTime .Checked || checkBoxBlockSameShift .Checked ))
                     return false;
@@ -574,7 +574,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private void getTeamBlockDataToSave()
         {
 			  //team
-			  _localSchedulingOptions.UseTeam = comboBoxTeamGroupPage.SelectedValue != _noTeamsGroupPage.Key;
+			  _localSchedulingOptions.UseTeam = (string) comboBoxTeamGroupPage.SelectedValue != _noTeamsGroupPage.Key;
 			  _localSchedulingOptions.GroupOnGroupPage = (IGroupPageLight)comboBoxTeamGroupPage.SelectedItem;
 			  _localSchedulingOptions.TeamSameShiftCategory = checkBoxTeamSameShiftCategory.Checked;
 			  _localSchedulingOptions.TeamSameStartTime = checkBoxTeamSameStartTime.Checked;
@@ -582,7 +582,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			  _localSchedulingOptions.TeamSameActivity = checkBoxTeamSameActivity.Checked;
 
 			  //block
-	        if (comboBoxBlockType.SelectedValue == BlockFinderType.SingleDay.ToString())
+	        if ((string) comboBoxBlockType.SelectedValue == BlockFinderType.SingleDay.ToString())
 		        _localSchedulingOptions.UseBlock = false;
 	        else
 				  _localSchedulingOptions.UseBlock = true;
@@ -591,7 +591,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
             else if ((string) comboBoxBlockType.SelectedValue == BlockFinderType.SchedulePeriod.ToString())
                 _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
-			  if (comboBoxTeamGroupPage.SelectedValue == _noTeamsGroupPage.Key)
+			  if ((string) comboBoxTeamGroupPage.SelectedValue == _noTeamsGroupPage.Key)
                 _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer = _singleAgentEntry;
             else
                 _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer = (IGroupPageLight)comboBoxTeamGroupPage.SelectedItem;
@@ -628,7 +628,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		  private void comboBoxBlockType_SelectedValueChanged(object sender, EventArgs e)
 		  {
 			  var isEnabled = false;
-			  if (comboBoxBlockType.SelectedValue != BlockFinderType.SingleDay.ToString())
+			  if ((string) comboBoxBlockType.SelectedValue != BlockFinderType.SingleDay.ToString())
 			  {
 				  checkBoxBlockSameShiftCategory.Checked = true;
 				  isEnabled = true;

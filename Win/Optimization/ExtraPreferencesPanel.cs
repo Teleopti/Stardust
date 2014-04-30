@@ -292,12 +292,12 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		private bool isTeamEnabled()
 		{
-			return comboBoxGroupPageOnTeams.SelectedValue != _noTeamsGroupPage.Key;
+			return (string) comboBoxGroupPageOnTeams.SelectedValue != _noTeamsGroupPage.Key;
 		}
 
 		private bool isBlockEnabled()
 		{
-			return comboBoxTeamBlockType.SelectedValue != BlockFinderType.SingleDay.ToString();
+			return (string) comboBoxTeamBlockType.SelectedValue != BlockFinderType.SingleDay.ToString();
 		}
 
 		
