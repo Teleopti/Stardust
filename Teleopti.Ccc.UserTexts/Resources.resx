@@ -11979,7 +11979,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>In the context, navigate back and forward...</comment>
   </data>
   <data name="SelectAtleastOnePerson" xml:space="preserve">
-    <value>Select atleast one person</value>
+    <value>Select at least one person</value>
     <comment>Message shown when no person is selected in permisson</comment>
   </data>
   <data name="OnAvailableAgentsOnly" xml:space="preserve">
@@ -12002,7 +12002,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Allow Desktop Notifications</value>
   </data>
   <data name="NoDatasource" xml:space="preserve">
-    <value>No datasource available for you, my friend.</value>
+    <value>No datasource is available.</value>
     <comment>Message displayed when no datasource is available after sign in</comment>
   </data>
   <data name="SignInAsAnotherUser" xml:space="preserve">
