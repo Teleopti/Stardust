@@ -2059,7 +2059,7 @@
     <value>Hiérarchie d'unité opérationnelle</value>
   </data>
   <data name="CalculatedOccupancyPercentSign" xml:space="preserve">
-    <value>Taux d'activité calculé %</value>
+    <value>Taux d'occupation calculé %</value>
   </data>
   <data name="CampaignACWPercentSign" xml:space="preserve">
     <value>TPA campagne  %</value>
@@ -2155,7 +2155,7 @@
     <value>Une erreur s'est produite lors de l'accès à la source de données</value>
   </data>
   <data name="EstimatedOccupancy" xml:space="preserve">
-    <value>Taux d'activité estimé</value>
+    <value>Taux d'occupation estimé</value>
   </data>
   <data name="Filters" xml:space="preserve">
     <value>Filtres</value>
@@ -5323,16 +5323,16 @@
     <value>Après minuit</value>
   </data>
   <data name="EarlyEndTime" xml:space="preserve">
-    <value>Heure fin tôt</value>
+    <value>Fin au plus tôt</value>
   </data>
   <data name="EarlyStartTime" xml:space="preserve">
-    <value>Début Période tôt</value>
+    <value>Début au plus tôt</value>
   </data>
   <data name="LateEndTime" xml:space="preserve">
-    <value>Heure fin tard</value>
+    <value>Fin au plus tard</value>
   </data>
   <data name="LateStartTime" xml:space="preserve">
-    <value>Début Période tard</value>
+    <value>Début au plus tôt</value>
   </data>
   <data name="MaxWorkTime" xml:space="preserve">
     <value>Temps contrat max</value>
@@ -7841,7 +7841,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Label par défaut</value>
   </data>
   <data name="LockTags" xml:space="preserve">
-    <value>Verrouiller Labels</value>
+    <value>Bloquer Labels</value>
   </data>
   <data name="Tags" xml:space="preserve">
     <value>Labels</value>
@@ -8543,7 +8543,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>La distribution entre sub compétences doit être égale à 100%</value>
   </data>
   <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
-    <value>Le taux d'occupation maximum doit être supérieur ou égal au taux d'activité minimum</value>
+    <value>Le taux d'occupation maximum doit être supérieur ou égal au taux d'occupation minimum</value>
   </data>
   <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
     <value>Agents Maximum doit être suérieur à Agents Minimum</value>
@@ -9137,5 +9137,152 @@ Réduisez la complexité pour utiliser ces horaires.</value>
   </data>
   <data name="SelectAtleastOneBlockOption" xml:space="preserve">
     <value>Merci de sélectionner au moins une des options "Catégorie d'Horaire", "Heure de début" ou "Même Horaire" dans la planification par Blocs.</value>
+  </data>
+  <data name="KeepTag" xml:space="preserve">
+    <value>&lt;Garder&gt;</value>
+  </data>
+  <data name="UseDayOfMonthSeasonality" xml:space="preserve">
+    <value>Utiliser Saisonalité Jour de Mois</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Compétences Agent</value>
+  </data>
+  <data name="BudgetGroupMissing" xml:space="preserve">
+    <value>Il n'y a pas de Groupe Budget pour vous.</value>
+  </data>
+  <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
+    <value>Tente de résoudre jours non planifiés...</value>
+  </data>
+  <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
+    <value>Echange d'horaires refusé car les horaires sont à des dates différentes.</value>
+  </data>
+  <data name="AddIntradayAbsence" xml:space="preserve">
+    <value>Ajouter Absence Intra-Journalière</value>
+  </data>
+  <data name="IntradayAbsence" xml:space="preserve">
+    <value>Absence Intra-Journalière</value>
+  </data>
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
+    <value>Optimiser avec Blocs entre jours libres tout en ne gardant pas les jours libres d'équipe ensemble n'est pas supporté</value>
+  </data>
+  <data name="TeamToCompareWith" xml:space="preserve">
+    <value>Groupe avec qui comparer</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Temps en Statut par Agent</value>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>Adhérence détaillée</value>
+  </data>
+  <data name="MyReportWeb" xml:space="preserve">
+    <value>MonRapport</value>
+  </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>Agents Actifs</value>
+  </data>
+  <data name="NoPeriodPresent" xml:space="preserve">
+    <value>Pas de période présente</value>
+  </data>
+  <data name="InvalidEndTime" xml:space="preserve">
+    <value>Temps de fin non valide.</value>
+  </data>
+  <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
+    <value>Merci d'ajouter absence intra-journalière sur horaire existant.</value>
+  </data>
+  <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
+    <value>Vous ne pouvez pas créer un second horaire avec Ajouter Activité.</value>
+  </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>A cette date vous n'êtes plus un employé</value>
+  </data>
+  <data name="Metric" xml:space="preserve">
+    <value>Métrique</value>
+  </data>
+  <data name="Readiness" xml:space="preserve">
+    <value>Readiness</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Valeur</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Hier</value>
+  </data>
+  <data name="TaskTime" xml:space="preserve">
+    <value>Temps Tâche</value>
+  </data>
+  <data name="TotalTaskTime" xml:space="preserve">
+    <value>Total temps Tâche</value>
+  </data>
+  <data name="ChatTime" xml:space="preserve">
+    <value>Temps Chat</value>
+  </data>
+  <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
+    <value>Vous n'avez accès à aucune équipe.</value>
+  </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>Comparer avec groupes de</value>
+  </data>
+  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>Temps Ready / Temps Ready Planifié (%)</value>
+  </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>Le planning doit être rechargé</value>
+  </data>
+  <data name="DayOffPoints" xml:space="preserve">
+    <value>Points Jour Libre:</value>
+  </data>
+  <data name="SeniorityPoints" xml:space="preserve">
+    <value>Points de Séniorité:</value>
+  </data>
+  <data name="ShiftCategoryPoints" xml:space="preserve">
+    <value>Points de Catégorie Horaire:</value>
+  </data>
+  <data name="MyReportAdherenceTab" xml:space="preserve">
+    <value>Adhérence Détaillée</value>
+  </data>
+  <data name="MyReportSummaryTab" xml:space="preserve">
+    <value>Résumé</value>
+  </data>
+  <data name="MonthSchedule" xml:space="preserve">
+    <value>Planning Mensuel</value>
+  </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>Rang</value>
+  </data>
+  <data name="RealTimeAdherenceOverview" xml:space="preserve">
+    <value>Aperçu Adhérence Temps Réel</value>
+  </data>
+  <data name="ViewPersonalAccount" xml:space="preserve">
+    <value>Voir Compte Personnel</value>
+  </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>Naviguer</value>
+  </data>
+  <data name="SelectAtleastOnePerson" xml:space="preserve">
+    <value>Sélectionnez au moins une personne</value>
+  </data>
+  <data name="OnAvailableAgentsOnly" xml:space="preserve">
+    <value>Sur Agents disponibles seulement</value>
+  </data>
+  <data name="OutOfAdherence" xml:space="preserve">
+    <value>Hors adhérence</value>
+  </data>
+  <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
+    <value>Alerte temps avant changement d'activité (secondes)</value>
+  </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>Au moins un jour ne peut pas être planifié</value>
+  </data>
+  <data name="AllowDesktopNotifications" xml:space="preserve">
+    <value>Permettre Notifications Bureau</value>
+  </data>
+  <data name="NoDatasource" xml:space="preserve">
+    <value>Pas de datasource disponible.</value>
+  </data>
+  <data name="SignInAsAnotherUser" xml:space="preserve">
+    <value>Se loguer en tant qu'autre utilisateur</value>
+  </data>
+  <data name="SignInWith" xml:space="preserve">
+    <value>Se loguer avec:</value>
   </data>
 </root>
