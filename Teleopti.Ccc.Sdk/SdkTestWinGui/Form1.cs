@@ -30,8 +30,9 @@ namespace SdkTestWinGui
         private string _passWord;
         private DateTime _currentDate;
         private WriteProtectionView _writeProtctectionView;
+	    private PermissionView _permissionView;
 
-        public Form1()
+	    public Form1()
         {
             InitializeComponent();
             _skillDataView = new SkillDataView(tabControl2, dataGridViewSkillDay, dataGridViewIntraday, tableLayoutPanelSkillData, _timeZoneInfo);      
@@ -123,6 +124,7 @@ namespace SdkTestWinGui
             _personView = new PersonView(_service, listView1, listView2, _currentDate, splitContainer1, _organization);
             _writeProtctectionView = new WriteProtectionView(_service, listViewWriteProtect,
                                                              dateTimePickerSetProtectDate, _organization);
+	        _permissionView = new PermissionView(_service, listViewPermissionPerson, listViewPermissionRole, _organization, comboBoxRoles);
             //Enabled = true;
             tryEnable();
         }
@@ -376,14 +378,10 @@ namespace SdkTestWinGui
 
 	        if (tabControl1.SelectedTab == tabPagePermissions)
 	        {
-		        loadRoles();
+		        _permissionView.LoadAllRoles();
 	        }
         }
-
-	    private void loadRoles()
-	    {
-		    var roles = Service.OrganizationService.GetRolesByQuery(new GetAllRolesQueryDto());
-	    }
+		 
 
 	    private void button2_Click(object sender, EventArgs e)
         {
@@ -716,5 +714,16 @@ namespace SdkTestWinGui
 				}
 			}
 		}
+
+		private void buttonGrantRole_Click(object sender, EventArgs e)
+		{
+			_permissionView.GrantRole();
+		}
+
+		private void buttonRevokeRole_Click(object sender, EventArgs e)
+		{
+			_permissionView.RevokeRole();
+		}
+
     }
 }

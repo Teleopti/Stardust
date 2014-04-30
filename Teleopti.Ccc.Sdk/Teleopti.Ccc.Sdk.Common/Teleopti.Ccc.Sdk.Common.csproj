@@ -187,6 +187,7 @@
     <Compile Include="DataTransferObject\PayrollResultDto.cs" />
     <Compile Include="DataTransferObject\GroupPageDto.cs" />
     <Compile Include="DataTransferObject\PersonOptionalValuesDto.cs" />
+    <Compile Include="DataTransferObject\PersonSkillDto.cs" />
     <Compile Include="DataTransferObject\PersonWriteProtectionDto.cs" />
     <Compile Include="DataTransferObject\PlanningTimeBankDto.cs" />
     <Compile Include="DataTransferObject\PublicNoteLoadOptionDto.cs" />

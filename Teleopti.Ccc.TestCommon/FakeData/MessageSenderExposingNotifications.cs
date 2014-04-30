@@ -17,6 +17,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new System.NotImplementedException();
 		}
 
+		public void StartBrokerService(int reconnectAttempts)
+		{
+			throw new System.NotImplementedException();
+		}
+
 		public Notification LastNotification;
 		public Notification LastTeamNotification;
 		public Notification LastSiteNotification;

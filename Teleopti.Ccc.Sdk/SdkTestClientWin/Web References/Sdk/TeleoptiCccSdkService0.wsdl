@@ -739,6 +739,18 @@
   <wsdl:message name="TeleoptiOrganizationService_GetRolesByQuery_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetRolesByQueryResponse" />
   </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GrantPersonRole_InputMessage">
+    <wsdl:part name="parameters" element="tns:GrantPersonRole" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GrantPersonRole_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GrantPersonRoleResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_RevokePersonRole_InputMessage">
+    <wsdl:part name="parameters" element="tns:RevokePersonRole" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_RevokePersonRole_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RevokePersonRoleResponse" />
+  </wsdl:message>
   <wsdl:message name="TeleoptiCccSdkInternal_GetPayrollFormats_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPayrollFormats" />
   </wsdl:message>
@@ -1273,6 +1285,14 @@
     <wsdl:operation name="GetRolesByQuery">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetRolesByQuery" message="tns:TeleoptiOrganizationService_GetRolesByQuery_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetRolesByQueryResponse" message="tns:TeleoptiOrganizationService_GetRolesByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GrantPersonRole">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GrantPersonRole" message="tns:TeleoptiOrganizationService_GrantPersonRole_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GrantPersonRoleResponse" message="tns:TeleoptiOrganizationService_GrantPersonRole_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RevokePersonRole">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/RevokePersonRole" message="tns:TeleoptiOrganizationService_RevokePersonRole_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/RevokePersonRoleResponse" message="tns:TeleoptiOrganizationService_RevokePersonRole_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="TeleoptiCccSdkInternal">

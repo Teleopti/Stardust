@@ -24,12 +24,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 		public void Handle(RevokePersonRoleCommandDto command)
 		{
+		    var result = new CommandResultDto {AffectedId = command.PersonId, AffectedItems = 0};
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				var person = _personRepository.Load(command.PersonId);
+				var person = _personRepository.Get(command.PersonId);
 				checkIfAuthorized(person);
 
-				var role = _applicationRoleRepository.Load(command.RoleId);
+				var role = _applicationRoleRepository.Get(command.RoleId);
 				if (person != null && role != null)
 				{
 					var permissionInformation = person.PermissionInformation;
@@ -37,14 +38,17 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					{
 						permissionInformation.RemoveApplicationRole(role);
 						uow.PersistAll();
+
+					    result.AffectedItems = 1;
 					}
 				}
 			}
+		    command.Result = result;
 		}
 
 		private static void checkIfAuthorized(IPerson person)
 		{
-			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, DateOnly.Today, person))
+			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage, DateOnly.Today, person))
 			{
 				throw new FaultException("You're not allowed to modify roles for this person.");
 			}

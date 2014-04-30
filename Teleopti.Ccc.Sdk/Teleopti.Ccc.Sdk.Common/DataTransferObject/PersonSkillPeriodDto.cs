@@ -6,7 +6,7 @@ using Teleopti.Ccc.Sdk.Common.Contracts;
 namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 {
     /// <summary>
-    /// Details about active skills for a person during a period.
+    /// Details about skills for a person during a period.
     /// </summary>
     [DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2010/04/")]
     public class PersonSkillPeriodDto : Dto
@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         public PersonSkillPeriodDto()
         {
             SkillCollection = new List<Guid>();
+            PersonSkillCollection = new List<PersonSkillDto>();
         }
 
         /// <summary>
@@ -40,5 +41,11 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// <remarks>Skill id's can be matched to skills fetched from <see cref="ITeleoptiForecastingService.GetSkills"/> using Id for more details.</remarks>
         [DataMember]
         public IList<Guid> SkillCollection { get; private set; }
+
+        /// <summary>
+        /// Gets the list of skills for this person period with proficiency and active information.
+        /// </summary>
+        [DataMember(IsRequired = false,Order = 1)]
+        public IList<PersonSkillDto> PersonSkillCollection { get; private set; } 
     }
 }

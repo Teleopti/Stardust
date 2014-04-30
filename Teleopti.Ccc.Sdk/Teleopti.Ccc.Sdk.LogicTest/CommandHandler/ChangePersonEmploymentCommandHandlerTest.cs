@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -20,7 +22,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     [TestFixture]
     public class ChangePersonEmploymentCommandHandlerTest
     {
-        private MockRepository _mock;
         private IAssembler<IPersonPeriod, PersonSkillPeriodDto> _personSkillPeriodAssembler;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private ISkillRepository _skillRepository;
@@ -53,17 +54,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         [SetUp]
         public void Setup()
         {
-            _mock = new MockRepository();
-            _personSkillPeriodAssembler = _mock.StrictMock<IAssembler<IPersonPeriod,PersonSkillPeriodDto>>();
-            _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
-            _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
-            _skillRepository = _mock.StrictMock<ISkillRepository>();
-            _externalLogOnRepository = _mock.StrictMock<IExternalLogOnRepository>();
-            _personRepository = _mock.StrictMock<IPersonRepository>();
-            _teamRepository = _mock.StrictMock<ITeamRepository>();
-            _partTimePercentageRepository = _mock.StrictMock<IPartTimePercentageRepository>();
-            _contractScheduleRepository = _mock.StrictMock<IContractScheduleRepository>();
-            _contractRepository = _mock.StrictMock<IContractRepository>();
+            _personSkillPeriodAssembler =  MockRepository.GenerateMock<IAssembler<IPersonPeriod,PersonSkillPeriodDto>>();
+            _unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+            _currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+            _skillRepository = MockRepository.GenerateMock<ISkillRepository>();
+            _externalLogOnRepository = MockRepository.GenerateMock<IExternalLogOnRepository>();
+            _personRepository = MockRepository.GenerateMock<IPersonRepository>();
+            _teamRepository = MockRepository.GenerateMock<ITeamRepository>();
+            _partTimePercentageRepository = MockRepository.GenerateMock<IPartTimePercentageRepository>();
+            _contractScheduleRepository = MockRepository.GenerateMock<IContractScheduleRepository>();
+            _contractRepository = MockRepository.GenerateMock<IContractRepository>();
             _target = new ChangePersonEmploymentCommandHandler(_personSkillPeriodAssembler,_currentUnitOfWorkFactory,_skillRepository,_externalLogOnRepository,_personRepository,_teamRepository,_partTimePercentageRepository,_contractScheduleRepository,_contractRepository);
 
             _externalLogOnDto = new ExternalLogOnDto { Id = Guid.NewGuid(), AcdLogOnOriginalId = "test Id", AcdLogOnName="test Acd"};
@@ -105,7 +105,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Period = _dateOnlyPeriodDto,
                 Person = _personDto,
                 PersonContract = _personContractDto,
+#pragma warning disable 618
                 PersonSkillPeriodCollection = _personSkillPeriodCollection,
+#pragma warning restore 618
+                PersonSkillCollection = new List<PersonSkillDto>(),
                 Team = _teamDto,
                 Note = "test Note"
             };
@@ -123,190 +126,344 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today);
             _person.AddPersonPeriod(personPeriod);
-            
-            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
 
-            using(_mock.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-                Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
-                    Return(_person);
-                Expect.Call(
-                    _partTimePercentageRepository.Load(
-                        _changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).
-                    Return(_partTimePercentage);
-                Expect.Call(
-                    _contractRepository.Load(
-                        _changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault())).Return(
-                            _contract);
-                Expect.Call(
-                    _contractScheduleRepository.Load(
-                        _changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(
-                            _contractSchedule);              
-                Expect.Call(_teamRepository.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(
-                    _team);
-                Expect.Call(_externalLogOnRepository.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
-                Expect.Call((() => unitOfWork.PersistAll()));
-                Expect.Call(unitOfWork.Dispose);
-            }
-            using(_mock.Playback())
-            {
-                _target.Handle(_changePersonEmploymentCommandDto);
-            }
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
+                .Return(_person);
+            _partTimePercentageRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault()))
+                .Return(_partTimePercentage);
+            _contractRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault()))
+                .Return(_contract);
+            _contractScheduleRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault()))
+                .Return(_contractSchedule);
+            _teamRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
+                .Return(_team);
+            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+
+            _target.Handle(_changePersonEmploymentCommandDto);
+
+            unitOfWork.AssertWasCalled(x => x.PersistAll());
         }
 
         [Test]
+        public void ShouldThrowExceptionWhenTryingToSetSkillsUsingTheWrongCollection()
+        {
+            var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today);
+            _person.AddPersonPeriod(personPeriod);
+
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
+                .Return(_person);
+            _partTimePercentageRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault()))
+                .Return(_partTimePercentage);
+            _contractRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault()))
+                .Return(_contract);
+            _contractScheduleRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault()))
+                .Return(_contractSchedule);
+            _teamRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
+                .Return(_team);
+            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+            _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
+#pragma warning disable 618
+            _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].PersonSkillCollection.Add(new PersonSkillDto { Active = false, Proficiency = 0.9, SkillId = _skill.Id.GetValueOrDefault() });
+#pragma warning restore 618
+            
+            Assert.Throws<FaultException>(() => _target.Handle(_changePersonEmploymentCommandDto));
+        }
+
+        [Test]
+        public void ShouldUseDetailedPersonSkillIfAvailable()
+        {
+            var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today);
+            _person.AddPersonPeriod(personPeriod);
+
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
+                .Return(_person);
+            _partTimePercentageRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault()))
+                .Return(_partTimePercentage);
+            _contractRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault()))
+                .Return(_contract);
+            _contractScheduleRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault()))
+                .Return(_contractSchedule);
+            _teamRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
+                .Return(_team);
+            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+            _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
+#pragma warning disable 618
+            _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].SkillCollection.Add(_skill.Id.GetValueOrDefault());
+#pragma warning restore 618
+            _changePersonEmploymentCommandDto.PersonSkillCollection.Add(new PersonSkillDto{Active = false,Proficiency = 0.9,SkillId = _skill.Id.GetValueOrDefault()});
+            _target.Handle(_changePersonEmploymentCommandDto);
+
+            var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
+            Assert.AreEqual(_skill, personSkill.Skill);
+            Assert.AreEqual(.9, personSkill.SkillPercentage.Value);
+            Assert.AreEqual(false, personSkill.Active);
+        }
+
+        [Test]
+        public void ShouldHandlePersonSkillPeriodCollectionIsNotSet()
+        {
+            var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today);
+            _person.AddPersonPeriod(personPeriod);
+
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
+                .Return(_person);
+            _partTimePercentageRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault()))
+                .Return(_partTimePercentage);
+            _contractRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault()))
+                .Return(_contract);
+            _contractScheduleRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault()))
+                .Return(_contractSchedule);
+            _teamRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
+                .Return(_team);
+            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+            _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
+#pragma warning disable 618
+            _changePersonEmploymentCommandDto.PersonSkillPeriodCollection = null;
+#pragma warning restore 618
+            _changePersonEmploymentCommandDto.PersonSkillCollection.Add(new PersonSkillDto { Active = false, Proficiency = 0.9, SkillId = _skill.Id.GetValueOrDefault() });
+            _target.Handle(_changePersonEmploymentCommandDto);
+
+            var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
+            Assert.AreEqual(_skill, personSkill.Skill);
+            Assert.AreEqual(.9, personSkill.SkillPercentage.Value);
+            Assert.AreEqual(false, personSkill.Active);
+        }
+
+        [Test]
+        public void ShouldHandlePersonSkillCollectionIsNotSet()
+        {
+            var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today);
+            _person.AddPersonPeriod(personPeriod);
+
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
+                .Return(_person);
+            _partTimePercentageRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault()))
+                .Return(_partTimePercentage);
+            _contractRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault()))
+                .Return(_contract);
+            _contractScheduleRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault()))
+                .Return(_contractSchedule);
+            _teamRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
+                .Return(_team);
+            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+            _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
+#pragma warning disable 618
+            _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].SkillCollection.Add(_skill.Id.GetValueOrDefault());
+#pragma warning restore 618
+            _changePersonEmploymentCommandDto.PersonSkillCollection = null;
+            _target.Handle(_changePersonEmploymentCommandDto);
+
+            var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
+            Assert.AreEqual(_skill, personSkill.Skill);
+            Assert.AreEqual(1, personSkill.SkillPercentage.Value);
+            Assert.AreEqual(true, personSkill.Active);
+        }
+
+        [Test]
+        public void ShouldHaveSkill()
+        {
+            var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today);
+            _person.AddPersonPeriod(personPeriod);
+
+
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
+                .Return(_person);
+            _partTimePercentageRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault()))
+                .Return(_partTimePercentage);
+            _contractRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault()))
+                .Return(_contract);
+            _contractScheduleRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault()))
+                .Return(_contractSchedule);
+            _teamRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
+                .Return(_team);
+            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+
+            _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
+#pragma warning disable 618
+            _changePersonEmploymentCommandDto.PersonSkillPeriodCollection[0].SkillCollection.Add( _skill.Id.GetValueOrDefault());
+#pragma warning restore 618
+            _target.Handle(_changePersonEmploymentCommandDto);
+
+            var personSkill = _person.PersonPeriodCollection.First().PersonSkillCollection.First();
+            Assert.AreEqual(_skill, personSkill.Skill);
+            Assert.AreEqual(1, personSkill.SkillPercentage.Value);
+            Assert.AreEqual(true, personSkill.Active);
+
+        }
+        [Test]
         public void ShouldAddNewPersonPeriodIfExistingPersonPeriodNotExists()
         {
-            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
-				_person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
+            _person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
             _person.AddPersonPeriod(personPeriod);
-            
-            using (_mock.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-                Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
-                    Return(_person);
-                Expect.Call(_teamRepository.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(
-                    _team);
-                Expect.Call(
-                    _partTimePercentageRepository.Load(
-                        _changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).
-                    Return(_partTimePercentage);
-                Expect.Call(
-                    _contractRepository.Load(
-                        _changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault())).Return(
-                            _contract);
-                Expect.Call(
-                    _contractScheduleRepository.Load(
-                        _changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(
-                            _contractSchedule);
-                Expect.Call(_personSkillPeriodAssembler.DomainEntityToDto(personPeriod)).IgnoreArguments().Return(
-                    new PersonSkillPeriodDto());
-                Expect.Call(_externalLogOnRepository.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
-                Expect.Call((() => unitOfWork.PersistAll()));
-                Expect.Call(unitOfWork.Dispose);
-            
-            }
-            using(_mock.Playback())
-            {
-                _target.Handle(_changePersonEmploymentCommandDto);
-            }
+
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
+                .Return(_person);
+            _teamRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
+                .Return(_team);
+            _partTimePercentageRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault()))
+                .Return(_partTimePercentage);
+            _contractRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault()))
+                .Return(_contract);
+            _contractScheduleRepository.Stub(
+                x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault()))
+                .Return(_contractSchedule);
+            _personSkillPeriodAssembler.Stub(x => x.DomainEntityToDto(personPeriod))
+                .IgnoreArguments()
+                .Return(new PersonSkillPeriodDto());
+            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+
+            _target.Handle(_changePersonEmploymentCommandDto);
+            unitOfWork.AssertWasCalled(x => x.PersistAll());
         }
 
         [Test]
         public void ShouldResetExternalLogOnsAndPersonSkillsIfPersonPeriodIsNew()
         {
-            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
 				_person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
             
-            using (_mock.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-                Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
-                    Return(_person);
-                Expect.Call(_teamRepository.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(
-                    _team);
-                Expect.Call(
-                    _partTimePercentageRepository.Load(
-                        _changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).
-                    Return(_partTimePercentage);
-                Expect.Call(
-                    _contractRepository.Load(
-                        _changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault())).Return(
-                            _contract);
-                Expect.Call(
-                    _contractScheduleRepository.Load(
-                        _changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(
-                            _contractSchedule);
-                Expect.Call(_externalLogOnRepository.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
-                Expect.Call((() => unitOfWork.PersistAll()));
-                Expect.Call(unitOfWork.Dispose);
-            }
-            using (_mock.Playback())
-            {
+                _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+                _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).Return(_person);
+                _teamRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(_team);
+                _partTimePercentageRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).Return(_partTimePercentage);
+                _contractRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault())).Return(_contract);
+                _contractScheduleRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(_contractSchedule);
+                _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+                
                 _target.Handle(_changePersonEmploymentCommandDto);
-            }
+
+                unitOfWork.AssertWasCalled(x => x.PersistAll());
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
+        public void ShouldResetPersonSkillsIfPersonSkillsCollectionIsSetAndPeriodIsNew()
+        {
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+            var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
+            _person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
+
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).Return(_person);
+            _teamRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(_team);
+            _partTimePercentageRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).Return(_partTimePercentage);
+            _contractRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault())).Return(_contract);
+            _contractScheduleRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(_contractSchedule);
+            _externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+            _skillRepository.Stub(x => x.Load(_skill.Id.GetValueOrDefault())).Return(_skill);
+
+#pragma warning disable 618
+            _changePersonEmploymentCommandDto.PersonSkillPeriodCollection = null;
+#pragma warning restore 618
+            _changePersonEmploymentCommandDto.PersonSkillCollection.Add(new PersonSkillDto{Active = false,Proficiency = .9,SkillId = _skill.Id.GetValueOrDefault()});
+            
+            _target.Handle(_changePersonEmploymentCommandDto);
+            _person.PersonPeriodCollection[0].PersonSkillCollection.Count().Should().Be.EqualTo(1);
+            unitOfWork.AssertWasCalled(x => x.PersistAll());
+        }
+
+        [Test]
+        [ExpectedException(typeof (FaultException))]
         public void ShouldThrowExceptionIfPersonContractIsNull()
         {
-            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
-				_person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
+            _person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
             _changePersonEmploymentCommandDto.PersonContract = null;
 
-            using (_mock.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-                Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
-                    Return(_person);
-                Expect.Call((() => unitOfWork.PersistAll()));
-                Expect.Call(unitOfWork.Dispose);
-            }
-            using (_mock.Playback())
-            {
-                _target.Handle(_changePersonEmploymentCommandDto);
-            }
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
+                .Return(_person);
+
+            _target.Handle(_changePersonEmploymentCommandDto);
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
+        [ExpectedException(typeof (FaultException))]
         public void ShouldThrowExceptionIfTeamIsNull()
         {
-            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
-				_person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
+            _person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
             _changePersonEmploymentCommandDto.Team = null;
 
-            using (_mock.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-                Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
-                    Return(_person);
-                Expect.Call((() => unitOfWork.PersistAll()));
-                Expect.Call(unitOfWork.Dispose);
-            }
-            using (_mock.Playback())
-            {
-                _target.Handle(_changePersonEmploymentCommandDto);
-            }
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
+                .Return(_person);
+
+            _target.Handle(_changePersonEmploymentCommandDto);
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
+        [ExpectedException(typeof (FaultException))]
         public void ShouldThrowExceptionIfTeamIsFromWrongBusinessUnit()
         {
-            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
-				_person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
+            _person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
             _team.Site.SetBusinessUnit(new BusinessUnit("asdf"));
             _team.Site.BusinessUnit.SetId(Guid.NewGuid());
 
-            using (_mock.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-                Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
-                    Return(_person);
-                Expect.Call(_teamRepository.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(
-                    _team);
-                Expect.Call((() => unitOfWork.PersistAll()));
-                Expect.Call(unitOfWork.Dispose);
-            }
-            using (_mock.Playback())
-            {
-                _target.Handle(_changePersonEmploymentCommandDto);
-            }
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
+                .Return(_person);
+            _teamRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
+                .Return(_team);
+
+            _target.Handle(_changePersonEmploymentCommandDto);
         }
     }
 }

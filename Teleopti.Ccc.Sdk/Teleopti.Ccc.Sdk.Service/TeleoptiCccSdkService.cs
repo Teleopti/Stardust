@@ -1110,12 +1110,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 	    private static void deletePreference(PreferenceRestrictionDto preferenceRestrictionDto,
 	                                         IRepositoryFactory repositoryFactory, IUnitOfWork uow)
 	    {
-		    IPersonRepository personRepository = repositoryFactory.CreatePersonRepository(uow);
-		    IPreferenceDayRepository repository = repositoryFactory.CreatePreferenceDayRepository(uow);
+		    var personRepository = repositoryFactory.CreatePersonRepository(uow);
+		    var repository = repositoryFactory.CreatePreferenceDayRepository(uow);
 
 		    var person = personRepository.Get(preferenceRestrictionDto.Person.Id.GetValueOrDefault());
 		    if (person == null) throw new FaultException("Given person was not found.");
-		    IList<IPreferenceDay> days = repository.Find(preferenceRestrictionDto.RestrictionDate.ToDateOnly(), person);
+		    var days = repository.FindAndLock(preferenceRestrictionDto.RestrictionDate.ToDateOnly(), person);
 		    foreach (IPreferenceDay day in days)
 		    {
 			    repository.Remove(day);
@@ -1609,6 +1609,16 @@ namespace Teleopti.Ccc.Sdk.WcfService
 	    {
 			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<RoleDto>>>();
 			return invoker.Invoke(queryDto);
+	    }
+
+	    public CommandResultDto GrantPersonRole(GrantPersonRoleCommandDto grantPersonRoleCommandDto)
+	    {
+			 return ExecuteCommand(grantPersonRoleCommandDto);
+	    }
+
+	    public CommandResultDto RevokePersonRole(RevokePersonRoleCommandDto revokePersonRoleCommandDto)
+	    {
+			 return ExecuteCommand(revokePersonRoleCommandDto);
 	    }
 
 	    [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

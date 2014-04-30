@@ -28,7 +28,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void BeforeTestRun()
 		{
-			Navigation.GotoRaw("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"));
+			//RK - reamrking this. 
+			//Path to file will be messed up if running locally in a path with spaces (or too long? don't really know)
+
+			//Navigation.GotoRaw("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"));
 		}
 
 		public static void BeforeScenario()

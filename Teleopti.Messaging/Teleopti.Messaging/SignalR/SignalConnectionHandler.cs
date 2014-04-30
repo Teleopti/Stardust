@@ -20,27 +20,32 @@ namespace Teleopti.Messaging.SignalR
 		private const string addsubscription = "AddSubscription";
 		private const string removesubscription = "RemoveSubscription";
 
-		private readonly IHubProxy _hubProxy;
-		private readonly IHubConnectionWrapper _hubConnection;
-		private readonly TimeSpan _reconnectDelay;
-
-		protected ILog Logger ;
-		private readonly Task emptyTask;
-
 		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
 		public const string ConnectionReconnected = "Connection reconnected successfully";
 
-		public SignalConnectionHandler(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger, TimeSpan reconnectDelay)
+		private readonly IHubProxy _hubProxy;
+		private readonly IHubConnectionWrapper _hubConnection;
+		private readonly TimeSpan _reconnectDelay;
+		private readonly Task emptyTask;
+
+		protected ILog Logger;
+		private readonly int _maxReconnectAttempts;
+		private int _reconnectAttempts;
+
+
+		public SignalConnectionHandler(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger,
+			TimeSpan reconnectDelay, int maxReconnectAttempts = 0)
 		{
 			_hubProxy = hubProxy;
 			_hubConnection = hubConnection;
 			_reconnectDelay = reconnectDelay;
+			_maxReconnectAttempts = maxReconnectAttempts;
 
 			Logger = logger ?? LogManager.GetLogger(typeof(SignalConnectionHandler));
 
 			emptyTask = TaskHelper.MakeEmptyTask();
 		}
-		
+
 		public void StartConnection()
 		{
 			_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
@@ -96,9 +101,13 @@ namespace Teleopti.Messaging.SignalR
 			// ErikS: 2014-02-17
 			// To handle lots of MyTime and MyTimeWeb clients we dont want to flood with reconnect attempts
 			// Closed event triggers when the broker is actually down, IE the server died not from recycles
-			TaskHelper.Delay(_reconnectDelay).Wait();
-			Logger.Error(ConnectionRestartedErrorMessage);
-			_hubConnection.Start();
+			if(_maxReconnectAttempts == 0 || _reconnectAttempts < _maxReconnectAttempts)
+			{
+				TaskHelper.Delay(_reconnectDelay).Wait();
+				Logger.Error(ConnectionRestartedErrorMessage);
+				_hubConnection.Start();
+				_reconnectAttempts++;
+			}
 		}
 
 		private void hubConnectionOnReconnected()
