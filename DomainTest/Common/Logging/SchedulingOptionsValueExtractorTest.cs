@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Logging
                 BlockSameShiftCategory = true,
 					 BlockSameShift = true,
                 BlockSameStartTime = true,
-				UseTeamBlockPerOption = true
+				UseBlock = true
             };
             _target = new SchedulingOptionsValueExtractor(schedulingOptions);
 

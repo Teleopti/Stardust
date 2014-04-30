@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		public void ShouldReturnFalseIfBlockIsSchedulePeriod()
 		{
 			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
-			_schedulingOptions.UseTeamBlockPerOption = true;
+			_schedulingOptions.UseBlock = true;
 
 			bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,

@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
 	        get
 	        {
-				if(!UseTeamBlockPerOption)
+				if(!UseBlock)
 					return BlockFinderType.SingleDay;
 
 		        return _blockFinderTypeForAdvanceScheduling;

@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [Test]
         public void ShouldExtractSameStartAndEndTimeRestrictionFromOneTeamOneDay()
         {
-            _schedulingOptions.UseGroupScheduling = true;
+			  _schedulingOptions.UseTeam = true;
             _schedulingOptions.TeamSameEndTime = true;
             var period1 = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
                                             new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));

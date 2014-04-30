@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
                 GlobalContext.Properties["BlockOptions"] =
                     schedulingOptionsValueExtractor.GetBlockOptions();
             }
-            else if (schedulingOptions.UseGroupScheduling)
+			  else if (schedulingOptions.UseTeam)
             {
                 GlobalContext.Properties["TeamOptions"] = schedulingOptionsValueExtractor.GetTeamOptions();
             }

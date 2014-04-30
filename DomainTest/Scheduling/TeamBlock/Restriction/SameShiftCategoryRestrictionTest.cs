@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldExtractSameShiftCategoryRestrictionFromOneTeamOneDay()
         {
-            _schedulingOptions.UseGroupScheduling = true;
+			  _schedulingOptions.UseTeam = true;
             _schedulingOptions.TeamSameShiftCategory = true;
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             using (_mocks.Record())

@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         {
 			  _schedulingOptions.BlockSameShift = true;
 			  _schedulingOptions.UseBlock = true;
-            _schedulingOptions.UseGroupScheduling = true;
+			  _schedulingOptions.UseTeam = true;
             var dateList = new List<DateOnly> { _dateOnly };
             var mainShift = EditableShiftFactory.CreateEditorShift(_activity, _period, new ShiftCategory("cat"));
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
