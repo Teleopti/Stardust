@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private static void setTeamBlockOptions(IOptimizationPreferences optimizationPreferences,
                                                 ISchedulingOptions schedulingOptions)
         {
-            schedulingOptions.UseTeamBlockPerOption = optimizationPreferences.Extra.UseTeamBlockOption;
+			  schedulingOptions.UseBlock = optimizationPreferences.Extra.UseTeamBlockOption;
             schedulingOptions.BlockSameEndTime = optimizationPreferences.Extra.UseTeamBlockSameEndTime;
             schedulingOptions.BlockSameStartTime = optimizationPreferences.Extra.UseTeamBlockSameStartTime;
 				schedulingOptions.BlockSameShift = optimizationPreferences.Extra.UseTeamBlockSameShift;

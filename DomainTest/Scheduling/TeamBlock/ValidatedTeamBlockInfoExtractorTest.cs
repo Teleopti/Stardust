@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
             _schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
-            _schedulingOptions.UseTeamBlockPerOption = false;
+				_schedulingOptions.UseBlock = false;
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(),
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
             _schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
-            _schedulingOptions.UseTeamBlockPerOption = false;
+				_schedulingOptions.UseBlock = false;
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
             _schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
-            _schedulingOptions.UseTeamBlockPerOption = false;
+				_schedulingOptions.UseBlock = false;
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
             _schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
-            _schedulingOptions.UseTeamBlockPerOption = false;
+				_schedulingOptions.UseBlock = false;
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
                                            groupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
 
                     ITeamBlockInfo teamBlockInfo;
-                    if (useTeamBlockPerOption)
+						  if (schedulingOptions.UseBlock)
                         teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
                                                                                   blockFinderTypeForAdvanceScheduling,
                                                                                   singleAgentTeam, allPersonMatrixList);

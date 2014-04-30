@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				schedulingOptions.BlockSameShift = _useTeamBlockSameShift;
             schedulingOptions.BlockSameShiftCategory = _useTeamBlockSameShiftCategory;
             schedulingOptions.BlockSameStartTime = _useTeamBlockSameStartTime;
-            schedulingOptions.UseTeamBlockPerOption = _useTeamBlockPerOption;
+				schedulingOptions.UseBlock = _useTeamBlockPerOption;
 
             schedulingOptions.TeamSameStartTime = _useGroupSchedulingCommonStart;
             schedulingOptions.TeamSameEndTime = _useGroupSchedulingCommonEnd;
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_useTeamBlockSameShift = schedulingOptions.BlockSameShift;
             _useTeamBlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory;
             _useTeamBlockSameStartTime  = schedulingOptions.BlockSameStartTime ;
-            _useTeamBlockPerOption = schedulingOptions.UseTeamBlockPerOption;
+				_useTeamBlockPerOption = schedulingOptions.UseBlock;
         }
     }
 }

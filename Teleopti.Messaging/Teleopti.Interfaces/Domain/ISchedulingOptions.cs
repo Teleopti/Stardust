@@ -375,6 +375,6 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Used if the TeamBlock option is checked or not
         /// </summary>
-        bool UseTeamBlockPerOption { get; set; }
+		  bool UseBlock { get; set; }
     }
 }

@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 comboBoxBlockType.SelectedValue = BlockFinderType.BetweenDayOff.ToString();
             else
                 comboBoxBlockType.SelectedValue = _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling;
-            comboBoxBlockType.Enabled = _localSchedulingOptions.UseTeamBlockPerOption;
+				comboBoxBlockType.Enabled = _localSchedulingOptions.UseBlock;
         }
 
 		private void initGroupPages()
@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				_schedulingOptions.BlockSameShift = _localSchedulingOptions.BlockSameShift;
             _schedulingOptions.BlockSameShiftCategory = _localSchedulingOptions.BlockSameShiftCategory;
             _schedulingOptions.BlockSameStartTime = _localSchedulingOptions.BlockSameStartTime;
-            _schedulingOptions.UseTeamBlockPerOption = _localSchedulingOptions.UseTeamBlockPerOption;
+				_schedulingOptions.UseBlock = _localSchedulingOptions.UseBlock;
             
         }
 
@@ -302,7 +302,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             else
                 _localSchedulingOptions.ShiftCategory = null;
 
-            _localSchedulingOptions.UseTeamBlockPerOption = checkBoxBlock.Checked;
+				_localSchedulingOptions.UseBlock = checkBoxBlock.Checked;
             _localSchedulingOptions.Fairness = new Percent(trackBar1.Value / 100d);
             _localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
 			_localSchedulingOptions.UseGroupScheduling = checkBoxTeam.Checked;
@@ -383,7 +383,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             }
         	checkBoxUseAverageShiftLengths.Checked = _localSchedulingOptions.UseAverageShiftLengths;
 
-            checkBoxBlock.Checked = _localSchedulingOptions.UseTeamBlockPerOption;
+			checkBoxBlock.Checked = _localSchedulingOptions.UseBlock;
             setTeamBlockPerDataToSave();
         }
 

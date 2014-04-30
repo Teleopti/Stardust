@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void ShouldFilterShiftsAccordingToCommonActivity()
 		{
 			_schedulingOptions.TeamSameActivity = true;
-			_schedulingOptions.UseGroupScheduling = true;
+			_schedulingOptions.UseTeam = true;
 			_schedulingOptions.CommonActivity = _activity;
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
 			                                           new EndTimeLimitation(),

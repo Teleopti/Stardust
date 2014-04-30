@@ -29,17 +29,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		public bool IsBlockScheduling(ISchedulingOptions schedulingOptions)
 		{
-			return schedulingOptions.UseTeamBlockPerOption && !schedulingOptions.UseGroupScheduling;
+			return schedulingOptions.UseBlock && !schedulingOptions.UseGroupScheduling;
 		}
 
 		public bool IsTeamScheduling(ISchedulingOptions schedulingOptions)
 		{
-			return !schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseGroupScheduling;
+			return !schedulingOptions.UseBlock && schedulingOptions.UseGroupScheduling;
 		}
 
 		public bool IsTeamBlockScheduling(ISchedulingOptions schedulingOptions)
 		{
-			return schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseGroupScheduling;
+			return schedulingOptions.UseBlock && schedulingOptions.UseGroupScheduling;
 		}
 
 		public bool IsBlockSchedulingWithSameShift(ISchedulingOptions schedulingOptions)

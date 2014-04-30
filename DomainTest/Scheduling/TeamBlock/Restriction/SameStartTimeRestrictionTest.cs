@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         {
             _mocks = new MockRepository();
             _schedulingOptions = new SchedulingOptions();
-            _schedulingOptions.UseTeamBlockPerOption = true;
+				_schedulingOptions.UseBlock = true;
             _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
             _target = new SameStartTimeRestriction(_timeZoneInfo);
             _dateOnly = new DateOnly(2012, 12, 7);

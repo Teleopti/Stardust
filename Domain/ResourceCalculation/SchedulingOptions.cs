@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool UseShiftCategoryLimitations { get; set; }
         public Percent Fairness { get; set; }
         public bool UseStudentAvailability { get; set; }
-		public bool UseGroupScheduling { get; set; }
+		public bool UseTeam { get; set; }
 		public IGroupPageLight GroupOnGroupPage { get; set; }
 
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool BlockSameShiftCategory { get; set; }
         public bool BlockSameStartTime { get; set; }
 		  public bool BlockSameShift { get; set; }
-        public bool UseTeamBlockPerOption { get; set; }
+        public bool UseBlock { get; set; }
 
         public bool DoNotBreakMaxStaffing { get; set; }
         public IGroupPageLight GroupPageForShiftCategoryFairness { get; set; }

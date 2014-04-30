@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
         private static void getTeamBlockOptions(SchedulingOptionsValueExtractor schedulingOptionsValueExtractor, ISchedulingOptions schedulingOptions)
         {
 
-            if (schedulingOptions.UseTeamBlockPerOption && schedulingOptions.BlockFinderTypeForAdvanceScheduling != BlockFinderType.None)
+			  if (schedulingOptions.UseBlock && schedulingOptions.BlockFinderTypeForAdvanceScheduling != BlockFinderType.None)
             {
                 GlobalContext.Properties["BlockOptions"] =
                     schedulingOptionsValueExtractor.GetBlockOptions();

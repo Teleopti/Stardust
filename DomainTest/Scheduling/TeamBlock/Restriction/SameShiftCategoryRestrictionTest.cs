@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
             _mocks = new MockRepository();
             _shiftCategory = new ShiftCategory("cat");
             _schedulingOptions = new SchedulingOptions();
-            _schedulingOptions.UseTeamBlockPerOption = true;
+				_schedulingOptions.UseBlock = true;
             _target = new SameShiftCategoryRestriction();
             _dateOnly = new DateOnly(2012, 12, 7);
             _scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();

@@ -47,19 +47,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (sameShiftRestriction == null) return null;
 				restriction = restriction.Combine(sameShiftRestriction);
 			}
-			if ((schedulingOptions.UseTeamBlockPerOption &&  schedulingOptions.BlockSameStartTime) || (schedulingOptions.UseGroupScheduling && schedulingOptions.TeamSameStartTime ))
+			if ((schedulingOptions.UseBlock && schedulingOptions.BlockSameStartTime) || (schedulingOptions.UseGroupScheduling && schedulingOptions.TeamSameStartTime))
 			{
 				var sameStartRestriction = extractSameStartTime(dateOnlyList, matrixList, timeZone);
 				if (sameStartRestriction == null) return null;
 				restriction = restriction.Combine(sameStartRestriction);
 			}
-			if ((schedulingOptions.UseTeamBlockPerOption && schedulingOptions.BlockSameEndTime) || (schedulingOptions.UseGroupScheduling && schedulingOptions.TeamSameEndTime ))
+			if ((schedulingOptions.UseBlock && schedulingOptions.BlockSameEndTime) || (schedulingOptions.UseGroupScheduling && schedulingOptions.TeamSameEndTime))
 			{
 				var sameEndRestriction = extractSameEndTime(dateOnlyList, matrixList, timeZone);
 				if (sameEndRestriction == null) return null;
 				restriction = restriction.Combine(sameEndRestriction);
 			}
-			if ((schedulingOptions.UseTeamBlockPerOption && schedulingOptions.BlockSameShiftCategory) || (schedulingOptions.UseGroupScheduling && schedulingOptions.TeamSameShiftCategory ))
+			if ((schedulingOptions.UseBlock && schedulingOptions.BlockSameShiftCategory) || (schedulingOptions.UseGroupScheduling && schedulingOptions.TeamSameShiftCategory))
 			{
 				var sameShiftCategory = extractSameShiftCategory(dateOnlyList, matrixList);
 				if (sameShiftCategory == null) return null;
@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			                                                             new List<IActivityRestriction>());
 			if (dateOnlyList == null)
 				return restriction;
-			
-			if (!schedulingOptions.UseTeamBlockPerOption) 
+
+			if (!schedulingOptions.UseBlock) 
 				return restriction;
 
 			if (schedulingOptions.BlockSameShift)

@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.IsTrue(_target.DoNotBreakMaxSeats);
         	_target.UseMaxSeats = false;
 			Assert.IsFalse(_target.UseMaxSeats);
-        	_target.UseGroupScheduling = true;
-            Assert.IsTrue(_target.UseGroupScheduling);
+        	_target.UseTeam = true;
+            Assert.IsTrue(_target.UseTeam);
             Assert.IsFalse(_target.UseSameDayOffs);
             _target.UseSameDayOffs = true;
             Assert.IsTrue(_target.UseSameDayOffs);

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			var startTime = new TimeSpan(8, 0, 0);
 			_schedulingOptions.BlockSameStartTime = true;
-			_schedulingOptions.UseTeamBlockPerOption = true;
+			_schedulingOptions.UseBlock = true;
 			using (_mocks.Record())
 			{
 				Expect.Call(shift.WorkShiftStartTime).Return(startTime);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			var startTime = new TimeSpan(8, 0, 0);
 			var endTime = new TimeSpan(17, 0, 0);
-			_schedulingOptions.UseTeamBlockPerOption = true;
+			_schedulingOptions.UseBlock = true;
 			_schedulingOptions.BlockSameStartTime = true;
 			_schedulingOptions.BlockSameEndTime = true;
 			using (_mocks.Record())
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			var endTime = new TimeSpan(17, 0, 0);
 			_schedulingOptions.BlockSameEndTime = true;
-			_schedulingOptions.UseTeamBlockPerOption = true;
+			_schedulingOptions.UseBlock = true;
 			using (_mocks.Record())
 			{
 				Expect.Call(shift.WorkShiftEndTime).Return(endTime);
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			var startTime = new TimeSpan(8, 0, 0);
 			var endTime = new TimeSpan(17, 0, 0);
 
-			_schedulingOptions.UseTeamBlockPerOption = true;
+			_schedulingOptions.UseBlock = true;
 			_schedulingOptions.BlockSameStartTime = true;
 			_schedulingOptions.BlockSameEndTime = true;
 
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			category.SetId(Guid.NewGuid());
 			var mainShift = EditableShiftFactory.CreateEditorShift(new TimeSpan(11, 0, 0), new TimeSpan(19, 0, 0),
 														 activity, category);
-			_schedulingOptions.UseTeamBlockPerOption = true;
+			_schedulingOptions.UseBlock = true;
 			_schedulingOptions.BlockSameShift = true;
 
 			using (_mocks.Record())
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		public void ShouldExtractSameShiftCategoryRestrictionFromSuggestedShift()
 		{
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
-			_schedulingOptions.UseTeamBlockPerOption = true;
+			_schedulingOptions.UseBlock = true;
 			_schedulingOptions.BlockSameShiftCategory = true;
 			_schedulingOptions.UseGroupScheduling = true;
 			_schedulingOptions.TeamSameShiftCategory = true;

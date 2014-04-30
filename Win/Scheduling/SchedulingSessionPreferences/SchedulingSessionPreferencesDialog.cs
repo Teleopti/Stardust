@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.None; 
 
                 //_schedulingOptions.UseBlockScheduling = BlockFinderType.None;
-                _schedulingOptions.UseGroupScheduling = false;
+                _schedulingOptions.UseTeam = false;
 
                 _schedulingOptions.TeamSameStartTime = false;
                 _schedulingOptions.TeamSameEndTime = false;
