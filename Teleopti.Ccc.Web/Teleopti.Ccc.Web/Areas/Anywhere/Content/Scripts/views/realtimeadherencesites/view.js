@@ -40,17 +40,7 @@
 			ajax.ajax({
 				url: "Sites",
 				success: function (data) {
-				    viewModel.fill(data);
-					for (var i = 0; i < viewModel.sites().length; i++) {
-				    	(function (s) {
-				    		ajax.ajax({
-				    			url: "Sites/GetOutOfAdherence?siteId=" + s.Id,
-				    			success: function (d) {
-				    				viewModel.update(d);
-				    			}
-				    		});
-				    	})(viewModel.sites()[i]);
-				    }
+					viewModel.fill(data);
 				}
 			});
 
