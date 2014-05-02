@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Win.Optimization
         	_eventAggregator = eventAggregator;
 
 			if(_eventAggregator != null)
-			_eventAggregator.GetEvent<GenericEvent<ExtraPreferencesPanelUseBlockScheduling>>().Subscribe(EnableDisableShiftCategoryLimitations);
+			_eventAggregator.GetEvent<GenericEvent<ExtraPreferencesPanelUseBlockScheduling>>().Subscribe(enableDisableShiftCategoryLimitations);
 
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             setInitialControlStatus();
@@ -41,10 +41,10 @@ namespace Teleopti.Ccc.Win.Optimization
 		public void UnsubscribeEvents()
 		{
 			if (_eventAggregator == null) return;
-			_eventAggregator.GetEvent<GenericEvent<ExtraPreferencesPanelUseBlockScheduling>>().Unsubscribe(EnableDisableShiftCategoryLimitations); 
+			_eventAggregator.GetEvent<GenericEvent<ExtraPreferencesPanelUseBlockScheduling>>().Unsubscribe(enableDisableShiftCategoryLimitations); 
 		}
 
-		private void EnableDisableShiftCategoryLimitations(EventParameters<ExtraPreferencesPanelUseBlockScheduling> obj)
+		private void enableDisableShiftCategoryLimitations(EventParameters<ExtraPreferencesPanelUseBlockScheduling> obj)
 		{
 			checkBoxShiftCategoryLimitations.Enabled = !obj.Value.Use;
 			if (!obj.Value.Use) return;

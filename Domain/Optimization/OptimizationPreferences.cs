@@ -79,18 +79,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	public class ExtraPreferences : IExtraPreferences
 	{
-
-		//public bool UseBlockScheduling { get; set; }
-
 		public BlockFinderType BlockFinderTypeValue { get; set; }
 
 		public bool UseTeams { get; set; }
 		public bool KeepSameDaysOffInTeam { get; set; }
 		public IGroupPageLight GroupPageOnTeam { get; set; }
 
+		public IGroupPageLight GroupPageOnCompareWith { get; set; }
 		public double FairnessValue { get; set; }
 
-		public IGroupPageLight GroupPageOnCompareWith { get; set; }
+		
 		public bool UseGroupSchedulingCommonStart { get; set; }
 		public bool UseGroupSchedulingCommonEnd { get; set; }
 		public bool UseGroupSchedulingCommonCategory { get; set; }
