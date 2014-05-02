@@ -34,6 +34,7 @@ using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.Win.Scheduling.LockMenuBuilders;
 using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
+using Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals;
 using Teleopti.Ccc.Win.Scheduling.SkillResult;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
@@ -199,54 +200,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
 
-		#region enums
-		private enum ZoomLevel
-		{
-			Level1,
-			Level2,
-			Level3,
-			Level4,
-			Level5,
-			Level6,
-			Level7
-		}
-		private enum ControlType
-		{
-			ShiftEditor,
-			SchedulerGridMain,
-			SchedulerGridSkillData,
-			Request
-		}
-		private enum OptimizationMethod
-		{
-			BackToLegalState,
-			ReOptimize
-		}
-		#endregion
-		#region private classes
-		private class LoaderMethod
-		{
-			private readonly Action<IUnitOfWork, ISchedulerStateHolder, IPeopleAndSkillLoaderDecider> _action;
-			private readonly string _statusStripString;
-
-			public LoaderMethod(Action<IUnitOfWork, ISchedulerStateHolder, IPeopleAndSkillLoaderDecider> action,
-								string statusStripString)
-			{
-				_action = action;
-				_statusStripString = statusStripString;
-			}
-
-			public Action<IUnitOfWork, ISchedulerStateHolder, IPeopleAndSkillLoaderDecider> Action
-			{
-				get { return _action; }
-			}
-
-			public string StatusStripString
-			{
-				get { return _statusStripString; }
-			}
-		}
-		#endregion
 		#region Constructors
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -1100,7 +1053,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					Cursor = Cursors.WaitCursor;
 					disableAllExceptCancelInRibbon();
 					_backgroundWorkerRunning = true;
-					_backgroundWorkerOptimization.RunWorkerAsync(new schedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
+					_backgroundWorkerOptimization.RunWorkerAsync(new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 							 {
 								 OptimizationMethod = OptimizationMethod.BackToLegalState,
 								 DaysOffPreferences = daysOffPreferences
@@ -1127,7 +1080,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
-						var optimizationPreferences = new schedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
+						var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 							{
 								OptimizationMethod = OptimizationMethod.ReOptimize
 							};
@@ -2517,7 +2470,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (_requestView != null)
 					_requestView.NeedUpdate = true;
 				reloadRequestView();
-				if (_currentZoomLevel == ZoomLevel.Level7)
+				if (_currentZoomLevel == ZoomLevel.RestrictionView)
 				{
 					schedulerSplitters1.AgentRestrictionGrid.LoadData(schedulerSplitters1.SchedulingOptions, _restrictionPersonsToReload);
 					_restrictionPersonsToReload.Clear();
@@ -2724,7 +2677,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setupContextMenuAvailTimeZones();
 
 
-			zoom(ZoomLevel.Level4);
+			zoom(ZoomLevel.PeriodView);
 			DateOnly dateOnly = SchedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
 			_scheduleView.SetSelectedDateLocal(dateOnly);
 			_scheduleView.ViewPasteCompleted += _currentView_viewPasteCompleted;
@@ -2864,7 +2817,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void reloadRequestView()
 		{
-			if (_currentZoomLevel == ZoomLevel.Level6)
+			if (_currentZoomLevel == ZoomLevel.RequestView)
 			{
 				if (_requestView != null && _requestView.NeedUpdate)
 				{
@@ -2999,10 +2952,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView != null)
 			{
 				_scheduleView.Presenter.UpdateFromEditor();
-				if (_currentZoomLevel == ZoomLevel.Level7)
+				if (_currentZoomLevel == ZoomLevel.RestrictionView)
 					schedulerSplitters1.AgentRestrictionGrid.LoadData(schedulerSplitters1.SchedulingOptions);
 
-				if (_currentZoomLevel == ZoomLevel.Level1 && !(_scheduleView.Presenter.SortCommand is NoSortCommand))
+				if (_currentZoomLevel == ZoomLevel.DayView && !(_scheduleView.Presenter.SortCommand is NoSortCommand))
 					_scheduleView.SetSelectionFromParts(new List<IScheduleDay> { e.SchedulePart });
 
 				updateShiftEditor();
@@ -3402,7 +3355,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
 							options.Refresh();
-							startBackgroundScheduleWork(_backgroundWorkerScheduling, new schedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
+							startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
 						}
 					}
 				}
@@ -3435,7 +3388,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					{
 						_optimizerOriginalPreferences.SchedulingOptions.OnlyShiftsWhenUnderstaffed = true;
 						Refresh();
-						startBackgroundScheduleWork(_backgroundWorkerScheduling, new schedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
+						startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
 					}
 				}
 			}
@@ -3445,7 +3398,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_backgroundWorkerRunning) return;
 
-			var scheduleDays = ((schedulingAndOptimizeArgument)argument).SelectedScheduleDays;
+			var scheduleDays = ((SchedulingAndOptimizeArgument)argument).SelectedScheduleDays;
 			int selectedScheduleCount = scheduleDays.Count;
 
 			var startDay = scheduleDays.FirstOrDefault();
@@ -3519,25 +3472,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private class schedulingAndOptimizeArgument
-		{
-			public IList<IScheduleDay> SelectedScheduleDays { get; private set; }
-			public OptimizationMethod OptimizationMethod { get; set; }
-			public IDaysOffPreferences DaysOffPreferences { get; set; }
-			public IOvertimePreferences OvertimePreferences { get; set; }
-
-			public schedulingAndOptimizeArgument(IList<IScheduleDay> selectedScheduleDays)
-			{
-				SelectedScheduleDays = selectedScheduleDays;
-			}
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void _backgroundWorkerScheduling_DoWork(object sender, DoWorkEventArgs e)
 		{
 			_totalScheduled = 0;
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
-			var argument = (schedulingAndOptimizeArgument)e.Argument;
+			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
 			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
 			turnOffCalculateMinMaxCacheIfNeeded(_optimizerOriginalPreferences.SchedulingOptions);
@@ -3551,7 +3491,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void runBackgroundWorkerScheduling(DoWorkEventArgs e)
 		{
-			var argument = (schedulingAndOptimizeArgument)e.Argument;
+			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 			var scheduleCommand = _container.Resolve<ScheduleCommand>();
 			scheduleCommand.Execute(_optimizerOriginalPreferences, _backgroundWorkerScheduling, _schedulerState,
 			                        argument.SelectedScheduleDays, _groupPagePerDateHolder, _scheduleOptimizerHelper,
@@ -3743,7 +3683,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			_totalScheduled = 0;
-			var argument = (schedulingAndOptimizeArgument)e.Argument;
+			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 
 			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
 
@@ -3808,7 +3748,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void _backgroundWorkerOptimization_DoWork(object sender, DoWorkEventArgs e)
 		{
 			_undoRedo.CreateBatch(Resources.UndoRedoReOptimize);
-			var argument = (schedulingAndOptimizeArgument)e.Argument;
+			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
 			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
 			var dateOnlyList = selectedPeriod.DayCollection();
@@ -3823,7 +3763,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
-			var argument = (schedulingAndOptimizeArgument)e.Argument;
+			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 			var optimizationCommand = _container.Resolve<OptimizationCommand>();
 			optimizationCommand.Execute(_optimizerOriginalPreferences, _backgroundWorkerOptimization, _schedulerState,
 									argument.SelectedScheduleDays, _groupPagePerDateHolder, _scheduleOptimizerHelper,
@@ -4529,12 +4469,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setUpZomMenu()
 		{
-			toolStripButtonDayView.Tag = ZoomLevel.Level1;
-			toolStripButtonWeekView.Tag = ZoomLevel.Level2;
-			toolStripButtonPeriodView.Tag = ZoomLevel.Level4;
-			toolStripButtonSummaryView.Tag = ZoomLevel.Level5;
-			toolStripButtonRequestView.Tag = ZoomLevel.Level6;
-			toolStripButtonRestrictions.Tag = ZoomLevel.Level7;
+			toolStripButtonDayView.Tag = ZoomLevel.DayView;
+			toolStripButtonWeekView.Tag = ZoomLevel.WeekView;
+			toolStripButtonPeriodView.Tag = ZoomLevel.PeriodView;
+			toolStripButtonSummaryView.Tag = ZoomLevel.Overview;
+			toolStripButtonRequestView.Tag = ZoomLevel.RequestView;
+			toolStripButtonRestrictions.Tag = ZoomLevel.RestrictionView;
 		}
 
 		#region ribbon
@@ -4731,13 +4671,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			enableRibbonForRequests(false);
-			var isRestrictionView = level == ZoomLevel.Level7;
+			var isRestrictionView = level == ZoomLevel.RestrictionView;
 			SchedulerRibbonHelper.EnableRibbonControls(toolStripExClipboard, toolStripExEdit2, toolStripExActions, toolStripExLocks, toolStripButtonFilterAgents, toolStripMenuItemLock, toolStripMenuItemLoggedOnUserTimeZone, isRestrictionView);
 
 			var callback = new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState);
 			switch (level)
 			{
-				case ZoomLevel.Level1:
+				case ZoomLevel.DayView:
 					restrictionViewMode(false);
 					_grid.BringToFront();
 					_scheduleView = new DayViewNew(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
@@ -4745,28 +4685,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_grid.ContextMenuStrip = contextMenuViews;
 					ActiveControl = _grid;
 					break;
-				case ZoomLevel.Level2:
+				case ZoomLevel.WeekView:
 					restrictionViewMode(false);
 					_grid.BringToFront();
 					_scheduleView = new WeekView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
 					_grid.ContextMenuStrip = contextMenuViews;
 					ActiveControl = _grid;
 					break;
-				case ZoomLevel.Level4:
+				case ZoomLevel.PeriodView:
 					restrictionViewMode(false);
 					_grid.BringToFront();
 					_scheduleView = new PeriodView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
 					_grid.ContextMenuStrip = contextMenuViews;
 					ActiveControl = _grid;
 					break;
-				case ZoomLevel.Level5:
+				case ZoomLevel.Overview:
 					restrictionViewMode(false);
 					_grid.BringToFront();
 					_scheduleView = new OverviewView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
 					_grid.ContextMenuStrip = contextMenuViews;
 					ActiveControl = _grid;
 					break;
-				case ZoomLevel.Level6:
+				case ZoomLevel.RequestView:
 					restrictionViewMode(false);
 					_scheduleView = new PeriodView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag);
 					_elementHostRequests.BringToFront();
@@ -4774,7 +4714,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					enableRibbonForRequests(true);
 					ActiveControl = _elementHostRequests;
 					break;
-				case ZoomLevel.Level7:
+				case ZoomLevel.RestrictionView:
 					//restriction view
 					Cursor = Cursors.WaitCursor;
 					_grid.BringToFront();
@@ -4800,7 +4740,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_previousZoomLevel = _currentZoomLevel;
 			_currentZoomLevel = level;
 
-			if (_currentZoomLevel == ZoomLevel.Level6)
+			if (_currentZoomLevel == ZoomLevel.RequestView)
 				reloadRequestView();
 
 			foreach (ToolStripItem item in toolStripPanelItemViews2.Items)
@@ -4828,7 +4768,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			schedulerSplitters1.ResumeLayout(true);
 
-			if (level == ZoomLevel.Level1)
+			if (level == ZoomLevel.DayView)
 			{
 
 				_grid.Model.Selections.Clear(true);
@@ -6782,7 +6722,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 							options.Refresh();
 
 							startBackgroundScheduleWork(_backgroundWorkerOvertimeScheduling,
-																					new schedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
+																					new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 																						{
 																							OvertimePreferences = overtimePreferences
 																						}, true);
