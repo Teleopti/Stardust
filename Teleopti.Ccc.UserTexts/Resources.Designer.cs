@@ -3036,15 +3036,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Between days off.
-        /// </summary>
-        public static string BetweenDayOff {
-            get {
-                return ResourceManager.GetString("BetweenDayOff", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Blank Description.
         /// </summary>
         public static string BlankDescription {
@@ -3068,6 +3059,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string BlockAndTeamScheduling {
             get {
                 return ResourceManager.GetString("BlockAndTeamScheduling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Between days off.
+        /// </summary>
+        public static string BlockFinderTypeBetweenDayOff {
+            get {
+                return ResourceManager.GetString("BlockFinderTypeBetweenDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SchedulePeriod.
+        /// </summary>
+        public static string BlockFinderTypeSchedulePeriod {
+            get {
+                return ResourceManager.GetString("BlockFinderTypeSchedulePeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;No Block&gt;.
+        /// </summary>
+        public static string BlockFinderTypeSingleDay {
+            get {
+                return ResourceManager.GetString("BlockFinderTypeSingleDay", resourceCulture);
             }
         }
         
@@ -15139,6 +15157,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;No Team&gt;.
+        /// </summary>
+        public static string NoTeam {
+            get {
+                return ResourceManager.GetString("NoTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no teams available.
         /// </summary>
         public static string NoTeamsAvailable {
@@ -23840,6 +23867,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TeamSchedule {
             get {
                 return ResourceManager.GetString("TeamSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Scheduling.
+        /// </summary>
+        public static string TeamScheduling {
+            get {
+                return ResourceManager.GetString("TeamScheduling", resourceCulture);
             }
         }
         

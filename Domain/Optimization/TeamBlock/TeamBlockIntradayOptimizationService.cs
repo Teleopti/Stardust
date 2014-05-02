@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
 				var firstSelectedDay = selectedPeriod.DayCollection().First();
 				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
-                                var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePoint, schedulingOptions, selectedPeriod,
+                                var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePoint, schedulingOptions,
 				                                                       selectedPersons, schedulePartModifyAndRollbackService,
 				                                                       resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective());
 				if (!success)

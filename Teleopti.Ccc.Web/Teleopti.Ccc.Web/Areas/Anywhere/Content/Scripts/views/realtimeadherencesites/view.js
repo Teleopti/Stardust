@@ -44,6 +44,7 @@
 				}
 			});
 
+
 			subscriptions.subscribeAdherence(function (notification) {
 				viewModel.updateFromNotification(notification);
 			}, function() {

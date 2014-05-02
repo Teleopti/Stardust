@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project DefaultTargets="Execute" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+	<PropertyGroup>
+		<DestinationFolder>D:\PipelineState\$(CCNetLabel)</DestinationFolder>
+		<HgChangesetFile>$(DestinationFolder)\hgchangeset.txt</HgChangesetFile>
+		<MSBuildMercurialTasksPath>$(CCNetWorkingDirectory)\ccnet\MSBuild\MSBuild.Mercurial</MSBuildMercurialTasksPath>
+	</PropertyGroup>
+
+	<Import Project="$(CCNetWorkingDirectory)\ccnet\MSBuild\MSBuild.Mercurial\MSBuild.Mercurial.Tasks"/>
+	
+	<Target Name="Execute">
+		<CallTarget Targets="RevertRepo"/>
+		<CallTarget Targets="MoveFiles"/>
+		<CallTarget Targets="CreateHgChangesetFile"/>
+	</Target>
+	
+	<Target Name="RevertRepo">
+		<exec command="hg revert -a" WorkingDirectory="$(CCNetWorkingDirectory)"/>
+	</Target>
+	
+	<Target Name="MoveFiles">
+		<ItemGroup>
+			<MainFiles Include="$(CCNetWorkingDirectory)\**\*.dll;
+									$(CCNetWorkingDirectory)\**\*.exe;
+									$(CCNetWorkingDirectory)\**\*.config;"
+						Exclude="$(CCNetWorkingDirectory)\packages\**\*.*;
+								$(CCNetWorkingDirectory)\**\obj\**\*.*;
+								$(CCNetWorkingDirectory)\*.dll"/>
+			<WebFiles Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\**\*.*"/>
+			<CcnetFiles Include="$(CCNetWorkingDirectory)\ccnet\**\*.*"/>
+			<FeatureFiles Include="$(CCNetWorkingDirectory)\Domain\FeatureFlags\*.txt"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(MainFiles)"
+    			DestinationFiles="@(MainFiles->'$(DestinationFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(WebFiles)"
+    			DestinationFiles="@(WebFiles->'$(DestinationFolder)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(CcnetFiles)"
+    			DestinationFiles="@(CcnetFiles->'$(DestinationFolder)\ccnet\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(FeatureFiles)"
+    			DestinationFiles="@(FeatureFiles->'$(DestinationFolder)\Domain\FeatureFlags\%(RecursiveDir)%(Filename)%(Extension)')" />
+	</Target>
+	
+	<Target Name="CreateHgChangesetFile">
+		<HgVersion LocalPath="$(CCNetWorkingDirectory)">
+			<Output TaskParameter="Changeset" PropertyName="HgChangeset" />
+		</HgVersion>
+		<WriteLinesToFile File="$(HgChangesetFile)"
+						Lines="$(HgChangeset)" />
+	</Target>
+</Project>

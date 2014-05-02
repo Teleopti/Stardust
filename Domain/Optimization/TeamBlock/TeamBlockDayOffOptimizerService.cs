@@ -110,14 +110,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 					teamInfosToRemove = runOneOptimizationRound(optimizationPreferences, rollbackService,
 					                                            remainingInfoList, schedulingOptions,
-					                                            selectedPeriod, selectedPersons, allPersonMatrixList,
+					                                            selectedPersons, allPersonMatrixList,
 					                                            resourceCalculateDelayer, schedulingResultStateHolder);
 				}
 				else
 				{
 					teamInfosToRemove = runOneOptimizationRoundWithFreeDaysOff(optimizationPreferences, rollbackService,
 					                                                           remainingInfoList, schedulingOptions,
-					                                                           selectedPeriod, selectedPersons, allPersonMatrixList,
+					                                                           selectedPersons, allPersonMatrixList,
 					                                                           resourceCalculateDelayer, schedulingResultStateHolder);
 				}
 
@@ -147,7 +147,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 															   ISchedulePartModifyAndRollbackService rollbackService,
 															   List<ITeamInfo> remainingInfoList,
 															   ISchedulingOptions schedulingOptions,
-															   DateOnlyPeriod selectedPeriod,
 															   IList<IPerson> selectedPersons,
 															   IList<IScheduleMatrixPro> allPersonMatrixList,
 																IResourceCalculateDelayer resourceCalculateDelayer,
@@ -171,7 +170,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						rollbackService.ClearModificationCollection();
 
 						var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix, schedulingOptions, teamInfo,
-						                               selectedPeriod, selectedPersons, allPersonMatrixList, resourceCalculateDelayer,
+						                               selectedPersons, allPersonMatrixList, resourceCalculateDelayer,
 						                               schedulingResultStateHolder);
 
 						previousPeriodValue = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
@@ -191,7 +190,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                                       ISchedulePartModifyAndRollbackService rollbackService,
 		                                                       List<ITeamInfo> remainingInfoList,
 		                                                       ISchedulingOptions schedulingOptions,
-		                                                       DateOnlyPeriod selectedPeriod,
 		                                                       IList<IPerson> selectedPersons,
 															   IList<IScheduleMatrixPro> allPersonMatrixList,
 																IResourceCalculateDelayer resourceCalculateDelayer,
@@ -212,7 +210,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					{
 						rollbackService.ClearModificationCollection();
 						var success = runOneTeam(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
-						                         selectedPeriod, selectedPersons, allPersonMatrixList, resourceCalculateDelayer,
+						                         selectedPersons, allPersonMatrixList, resourceCalculateDelayer,
 						                         schedulingResultStateHolder);
 
 						previousPeriodValue = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
@@ -257,8 +255,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		private bool runOneMatrixOnly(IOptimizationPreferences optimizationPreferences,
 		                              ISchedulePartModifyAndRollbackService rollbackService, IScheduleMatrixPro matrix,
-		                              ISchedulingOptions schedulingOptions, ITeamInfo teamInfo, DateOnlyPeriod selectedPeriod,
-		                              IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allPersonMatrixList,
+		                              ISchedulingOptions schedulingOptions, ITeamInfo teamInfo, 
+										IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allPersonMatrixList,
 		                              IResourceCalculateDelayer resourceCalculateDelayer,
 										ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
@@ -270,7 +268,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			removeAllDecidedDaysOffForMember(rollbackService, movedDaysOff.RemovedDaysOff, person);
 			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, person);
 
-			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPeriod, selectedPersons,
+			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPersons,
 			                                         movedDaysOff.RemovedDaysOff,
 			                                         rollbackService, allPersonMatrixList, resourceCalculateDelayer,
 			                                         schedulingResultStateHolder);
@@ -313,7 +311,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private bool runOneTeam(IOptimizationPreferences optimizationPreferences,
 		                        ISchedulePartModifyAndRollbackService rollbackService,
 		                        ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix,
-		                        ITeamInfo teamInfo, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+		                        ITeamInfo teamInfo, IList<IPerson> selectedPersons,
 		                        IList<IScheduleMatrixPro> allPersonMatrixList,
 								IResourceCalculateDelayer resourceCalculateDelayer,
 								ISchedulingResultStateHolder schedulingResultStateHolder)
@@ -325,7 +323,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			removeAllDecidedDaysOffForTeam(rollbackService, teamInfo, movedDaysOff.RemovedDaysOff);
 			addAllDecidedDaysOffForTeam(rollbackService, schedulingOptions, teamInfo, movedDaysOff.AddedDaysOff);
 
-			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPeriod, selectedPersons,
+			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPersons,
 			                                         movedDaysOff.RemovedDaysOff,
 			                                         rollbackService, allPersonMatrixList, resourceCalculateDelayer,
 			                                         schedulingResultStateHolder);
@@ -382,7 +380,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 		private bool reScheduleAllMovedDaysOff(ISchedulingOptions schedulingOptions, ITeamInfo teamInfo,
-		                                       DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+		                                       IList<IPerson> selectedPersons,
 		                                       IEnumerable<DateOnly> removedDaysOff,
 		                                       ISchedulePartModifyAndRollbackService rollbackService
 		                                       , IList<IScheduleMatrixPro> allPersonMatrixList,
@@ -402,9 +400,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 
-				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
-					selectedPersons, rollbackService, resourceCalculateDelayer, 
-				                                                        schedulingResultStateHolder, new ShiftNudgeDirective());
+				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions,
+					selectedPersons, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective());
 				if (!success)
 					return false;
 			}

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldReturnNullIfTeamInfoIsNull()
 		{
-			ITeamBlockInfo result = _target.CreateTeamBlockInfo(null, new DateOnly(2013, 2, 27), BlockFinderType.None, false, _allMatrixList);
+			ITeamBlockInfo result = _target.CreateTeamBlockInfo(null, new DateOnly(2013, 2, 27), BlockFinderType.SingleDay, false, _allMatrixList);
 			Assert.IsNull(result);
 		}
 
@@ -48,13 +48,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-                Expect.Call(_dynamicBlockFinder.ExtractBlockInfo(new DateOnly(2013, 2, 27), _teamInfo, BlockFinderType.None, false))
+                Expect.Call(_dynamicBlockFinder.ExtractBlockInfo(new DateOnly(2013, 2, 27), _teamInfo, BlockFinderType.SingleDay, false))
 				      .Return(null);
 			}
 
 			using (_mocks.Playback())
 			{
-				ITeamBlockInfo result = _target.CreateTeamBlockInfo(_teamInfo, new DateOnly(2013, 2, 27), BlockFinderType.None, false, _allMatrixList);
+				ITeamBlockInfo result = _target.CreateTeamBlockInfo(_teamInfo, new DateOnly(2013, 2, 27), BlockFinderType.SingleDay, false, _allMatrixList);
 				Assert.IsNull(result);
 			}
 		}

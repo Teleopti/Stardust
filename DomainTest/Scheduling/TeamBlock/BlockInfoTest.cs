@@ -63,5 +63,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			IBlockInfo blockInfo = null;
 			Assert.IsFalse(_target.Equals(blockInfo));
 		}
+
+		[Test]
+		public void AllBlockDaysShouldBeUnlockedToStartWith()
+		{
+			_target = new BlockInfo(new DateOnlyPeriod(new DateOnly(2013, 2, 27), new DateOnly(2013, 2, 28)));
+			Assert.AreEqual(2, _target.UnLockedDates().Count);
+		}
+
+		[Test]
+		public void DatesShouldBeLockable()
+		{
+			_target = new BlockInfo(new DateOnlyPeriod(new DateOnly(2013, 2, 27), new DateOnly(2013, 2, 28)));
+			_target.LockDate(new DateOnly(2013, 2, 28));
+			Assert.AreEqual(1, _target.UnLockedDates().Count);
+			Assert.AreEqual(new DateOnly(2013, 2, 27), _target.UnLockedDates()[0]);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void TryingToLocDateOutsideBlockShouldThrow()
+		{
+			_target = new BlockInfo(new DateOnlyPeriod(new DateOnly(2013, 2, 27), new DateOnly(2013, 2, 28)));
+			_target.LockDate(new DateOnly(2013, 2, 29));
+		}
 	}
 }

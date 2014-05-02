@@ -16,15 +16,18 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
             {
                 switch (sqle.Number)
                 {
+					case -2:
+						return new DataSourceException(adoExceptionContextInfo.Message, sqle);
                     case 2627:
                         return new ConstraintViolationException(adoExceptionContextInfo.Message, sqle, adoExceptionContextInfo.Sql);
 					case 547:
                 		return new ForeignKeyException(adoExceptionContextInfo.Message, sqle, adoExceptionContextInfo.Sql);
                 }
-            	return new DataSourceException(adoExceptionContextInfo.Message, sqle);
+
+				return new Exception(adoExceptionContextInfo.Message, sqle);
             }
-            var nhEx = SQLStateConverter.HandledNonSpecificException(adoExceptionContextInfo.SqlException, adoExceptionContextInfo.Message, adoExceptionContextInfo.Sql);
-        	return new DataSourceException(nhEx.Message, nhEx);
+			var nhEx = SQLStateConverter.HandledNonSpecificException(adoExceptionContextInfo.SqlException, adoExceptionContextInfo.Message, adoExceptionContextInfo.Sql);
+			return new DataSourceException(nhEx.Message, nhEx);
         }
     }
 }

@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInSiteReader>();
-			var target = new SitesController(siteRepository, numberOfAgentsQuery);
+			var target = new SitesController(siteRepository, numberOfAgentsQuery,null);
 			var site = new Site("London");
 			site.SetId(Guid.NewGuid());
 			siteRepository.Stub(x => x.LoadAll()).Return(new[] { site });
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInSiteReader>();
-			var target = new SitesController(siteRepository, numberOfAgentsQuery);
+			var target = new SitesController(siteRepository, numberOfAgentsQuery, null);
 
 			var site = new Site("London");
 			site.SetId(Guid.NewGuid());
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			var expected = Guid.NewGuid().ToString();
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var target = new SitesController(siteRepository, null);
+			var target = new SitesController(siteRepository, null, null);
 			var site = new Site(expected);
 			site.SetId(Guid.NewGuid());
 			siteRepository.Stub(x => x.Get(site.Id.Value)).Return(site);
@@ -65,6 +64,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			result.Id.Should().Be.EqualTo(site.Id.Value.ToString());
 			result.Name.Should().Be.EqualTo(expected);
+		}
+
+		[Test]
+		public void ShouldGetOutOfAdherenceForSite()
+		{
+			const int expected = 1;
+			var siteId = Guid.NewGuid();
+			var siteAdherenceAggregator = MockRepository.GenerateMock<ISiteAdherenceAggregator>();
+			siteAdherenceAggregator.Stub(x => x.Aggregate(siteId)).Return(expected);
+			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+			var target = new SitesController(siteRepository, null, siteAdherenceAggregator);
+
+			var result = target.GetOutOfAdherence(siteId.ToString()).Data as SiteOutOfAdherence;
+
+			result.Id.Should().Be(siteId.ToString());
+			result.OutOfAdherence.Should().Be(expected);
 		}
 	}
 }
