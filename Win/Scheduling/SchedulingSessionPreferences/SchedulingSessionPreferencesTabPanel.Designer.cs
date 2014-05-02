@@ -481,7 +481,6 @@
 			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(178, 19);
 			this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxGroupingFairness.TabIndex = 40;
-			this.comboBoxGroupingFairness.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingFairnessSelectedIndexChanged);
 			// 
 			// pnlBlockTeamScheduling
 			// 
@@ -604,7 +603,7 @@
 			this.comboBoxTeamGroupPage.Size = new System.Drawing.Size(178, 19);
 			this.comboBoxTeamGroupPage.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxTeamGroupPage.TabIndex = 35;
-			this.comboBoxTeamGroupPage.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingSelectedIndexChanged);
+			this.comboBoxTeamGroupPage.SelectedIndexChanged += new System.EventHandler(this.comboBoxTeamGroupPageSelectedIndexChanged);
 			// 
 			// comboBoxBlockType
 			// 
