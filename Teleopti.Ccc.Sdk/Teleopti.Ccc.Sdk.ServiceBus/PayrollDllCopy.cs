@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				var destination = new SearchPath().Path;
 				var source = new SearchPath().PayrollDeployNewPath;
-				CopyFiles(source, destination);
+				copyFiles(source, destination);
 			}
 
 			catch (Exception exception)
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			try
 			{
-				CopyFiles(source, destination);
+				copyFiles(source, destination);
 			}
 			catch (Exception exception)
 			{
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 		}
 
-		private static void CopyFiles(string source, string destination)
+		private static void copyFiles(string source, string destination)
 		{
 			foreach (var folder in Directory.GetDirectories(source))
 			{
@@ -48,13 +48,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				if (!Directory.Exists(newFolderPath))
 					Directory.CreateDirectory(newFolderPath);
 
-				CopyFiles(folder, newFolderPath);
+				copyFiles(folder, newFolderPath);
 			}
 			foreach (var file in Directory.GetFiles(source))
 			{
 				var totalSleepTime = 0;
 				var fileInfo = new FileInfo(file);
-				while (IsFileLocked(fileInfo))
+				while (isFileLocked(fileInfo))
 				{
 					Thread.Sleep(20);
 					totalSleepTime += 20;
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 		}
 
-		private static bool IsFileLocked(FileInfo file)
+		private static bool isFileLocked(FileInfo file)
 		{
 			FileStream stream = null;
 			try
