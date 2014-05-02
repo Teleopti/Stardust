@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 
 		private static TokenIdentity getTokenIdentity(string nameClaimValue)
 		{
-			return nameClaimValue.Contains("#")
-				? getWindowsTokenIdentity(nameClaimValue)
-				: getApplicationTokenIdentity(nameClaimValue);
+			return nameClaimValue.Contains("§")
+				? getApplicationTokenIdentity(nameClaimValue)
+				: getWindowsTokenIdentity(nameClaimValue);
 		}
 
 		private static TokenIdentity getApplicationTokenIdentity(string nameClaimValue)
