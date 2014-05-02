@@ -42,6 +42,8 @@
 			this.checkBoxSameStartTime = new System.Windows.Forms.CheckBox();
 			this.comboBoxTeamBlockType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.checkBoxTeamBlockSameShift = new System.Windows.Forms.CheckBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.label3 = new System.Windows.Forms.Label();
@@ -50,8 +52,6 @@
 			this.comboBoxGroupPageOnCompareWith = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.labelCompareWith = new System.Windows.Forms.Label();
 			this.labelFairness = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxActivity)).BeginInit();
@@ -141,11 +141,12 @@
 			// comboBoxActivity
 			// 
 			this.comboBoxActivity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxActivity.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxActivity.Enabled = false;
 			this.comboBoxActivity.Location = new System.Drawing.Point(216, 243);
 			this.comboBoxActivity.Name = "comboBoxActivity";
-			this.comboBoxActivity.Size = new System.Drawing.Size(173, 21);
+			this.comboBoxActivity.Size = new System.Drawing.Size(179, 21);
 			this.comboBoxActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxActivity.TabIndex = 41;
 			// 
@@ -181,8 +182,8 @@
 			// 
 			// comboBoxGroupPageOnTeams
 			// 
-			this.comboBoxGroupPageOnTeams.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBoxGroupPageOnTeams.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxGroupPageOnTeams.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxGroupPageOnTeams.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxGroupPageOnTeams.Location = new System.Drawing.Point(216, 137);
 			this.comboBoxGroupPageOnTeams.Name = "comboBoxGroupPageOnTeams";
@@ -216,11 +217,12 @@
 			// comboBoxTeamBlockType
 			// 
 			this.comboBoxTeamBlockType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxTeamBlockType.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamBlockType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamBlockType.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
 			this.comboBoxTeamBlockType.Location = new System.Drawing.Point(216, 3);
 			this.comboBoxTeamBlockType.Name = "comboBoxTeamBlockType";
-			this.comboBoxTeamBlockType.Size = new System.Drawing.Size(117, 21);
+			this.comboBoxTeamBlockType.Size = new System.Drawing.Size(179, 21);
 			this.comboBoxTeamBlockType.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxTeamBlockType.TabIndex = 50;
 			this.comboBoxTeamBlockType.SelectedValueChanged += new System.EventHandler(this.comboBoxTeamBlockType_SelectedValueChanged);
@@ -235,6 +237,28 @@
 			this.checkBoxTeamBlockSameShift.TabIndex = 51;
 			this.checkBoxTeamBlockSameShift.Text = "xxSameShift";
 			this.checkBoxTeamBlockSameShift.UseVisualStyleBackColor = true;
+			// 
+			// label1
+			// 
+			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label1.AutoSize = true;
+			this.tableLayoutPanel5.SetColumnSpan(this.label1, 2);
+			this.label1.Location = new System.Drawing.Point(3, 6);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(97, 13);
+			this.label1.TabIndex = 52;
+			this.label1.Text = "xxBlockScheduling";
+			// 
+			// label2
+			// 
+			this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label2.AutoSize = true;
+			this.tableLayoutPanel5.SetColumnSpan(this.label2, 2);
+			this.label2.Location = new System.Drawing.Point(3, 141);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(97, 13);
+			this.label2.TabIndex = 53;
+			this.label2.Text = "xxTeamScheduling";
 			// 
 			// tableLayoutPanel6
 			// 
@@ -306,8 +330,8 @@
 			// 
 			// comboBoxGroupPageOnCompareWith
 			// 
-			this.comboBoxGroupPageOnCompareWith.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBoxGroupPageOnCompareWith.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxGroupPageOnCompareWith.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxGroupPageOnCompareWith.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxGroupPageOnCompareWith.Location = new System.Drawing.Point(216, 116);
 			this.comboBoxGroupPageOnCompareWith.Name = "comboBoxGroupPageOnCompareWith";
@@ -336,28 +360,6 @@
 			this.labelFairness.Size = new System.Drawing.Size(56, 13);
 			this.labelFairness.TabIndex = 24;
 			this.labelFairness.Text = "xxFairness";
-			// 
-			// label1
-			// 
-			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.label1.AutoSize = true;
-			this.tableLayoutPanel5.SetColumnSpan(this.label1, 2);
-			this.label1.Location = new System.Drawing.Point(3, 6);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(44, 13);
-			this.label1.TabIndex = 52;
-			this.label1.Text = "xxBlock";
-			// 
-			// label2
-			// 
-			this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.label2.AutoSize = true;
-			this.tableLayoutPanel5.SetColumnSpan(this.label2, 2);
-			this.label2.Location = new System.Drawing.Point(3, 141);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(44, 13);
-			this.label2.TabIndex = 53;
-			this.label2.Text = "xxTeam";
 			// 
 			// ExtraPreferencesPanel
 			// 

@@ -3027,15 +3027,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Between days off.
-        /// </summary>
-        public static string BetweenDayOff {
-            get {
-                return ResourceManager.GetString("BetweenDayOff", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Blank Description.
         /// </summary>
         public static string BlankDescription {
@@ -3059,6 +3050,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string BlockAndTeamScheduling {
             get {
                 return ResourceManager.GetString("BlockAndTeamScheduling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Between days off.
+        /// </summary>
+        public static string BlockFinderTypeBetweenDayOff {
+            get {
+                return ResourceManager.GetString("BlockFinderTypeBetweenDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SchedulePeriod.
+        /// </summary>
+        public static string BlockFinderTypeSchedulePeriod {
+            get {
+                return ResourceManager.GetString("BlockFinderTypeSchedulePeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;No Block&gt;.
+        /// </summary>
+        public static string BlockFinderTypeSingleDay {
+            get {
+                return ResourceManager.GetString("BlockFinderTypeSingleDay", resourceCulture);
             }
         }
         
@@ -14554,15 +14572,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Block.
-        /// </summary>
-        public static string NoBlock {
-            get {
-                return ResourceManager.GetString("NoBlock", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to One or more days during this requested period {0} has no budget allowance..
         /// </summary>
         public static string NoBudgetDefineForSomeRequestedDays {
@@ -15031,7 +15040,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Team.
+        ///   Looks up a localized string similar to &lt;No Team&gt;.
         /// </summary>
         public static string NoTeam {
             get {

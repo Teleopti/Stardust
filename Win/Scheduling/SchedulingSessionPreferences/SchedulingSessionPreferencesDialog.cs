@@ -34,20 +34,16 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
         private SchedulingOptionsExtraPersonalSetting _defaultExtraSettings;
 	    private SchedulingOptionsDayOffPlannerPersonalSettings _defaultDayOffPlannerSettings;
-    	
-
-        private readonly bool _reschedule;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public SchedulingSessionPreferencesDialog(ISchedulingOptions schedulingOptions, IDaysOffPreferences daysOffPreferences, IEnumerable<IShiftCategory> shiftCategories,
-            bool reschedule, bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider,
+            bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider,
             IEnumerable<IScheduleTag> scheduleTags, string settingValue, IEnumerable<IActivity> availableActivity)
             : this()
         {
             _schedulingOptions = schedulingOptions;
         	_daysOffPreferences = daysOffPreferences;
         	_shiftCategories = shiftCategories;
-            _reschedule = reschedule;
             
             _backToLegal = backToLegal;
         	_groupPagesProvider = groupPagesProvider;
@@ -138,30 +134,30 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private void Form_Load(object sender, EventArgs e)
         {
+			if (!_backToLegal)
+				tabControlTopLevel.TabPages.Remove(tabPageDayOffPlanningOptions);
+
         	loadPersonalSettings();
 
-			schedulingSessionPreferencesTabPanel1.Initialize(_schedulingOptions, _shiftCategories, _reschedule,
+			schedulingSessionPreferencesTabPanel1.Initialize(_schedulingOptions, _shiftCategories,
                 _backToLegal, _groupPagesProvider, _scheduleTags, _availableActivity);
+
             dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
             dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;
 			dayOffPreferencesPanel1.Initialize(_daysOffPreferences);
-            AddToHelpContext();
-            SetColor();
-            SetOnOff(dayOffPreferencesPanel1);
+            addToHelpContext();
+            setColor();
+            setOnOff(dayOffPreferencesPanel1);
             // don not use for now in scheduling
-            if (!_backToLegal)
-                tabControlTopLevel.TabPages.Remove(tabPageDayOffPlanningOptions);
+            
             schedulingSessionPreferencesTabPanel1.ShiftCategoryVisible = true;
             schedulingSessionPreferencesTabPanel1.ScheduleOnlyAvailableDaysVisible = true;
             schedulingSessionPreferencesTabPanel1.ScheduleOnlyPreferenceDaysVisible = true;
             schedulingSessionPreferencesTabPanel1.ScheduleOnlyRotationDaysVisible = true;
             if (_schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff)
             {
-                _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.None; 
-
-                //_schedulingOptions.UseBlockScheduling = BlockFinderType.None;
+                _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay; 
                 _schedulingOptions.UseTeam = false;
-
                 _schedulingOptions.TeamSameStartTime = false;
                 _schedulingOptions.TeamSameEndTime = false;
                 _schedulingOptions.TeamSameShiftCategory = false;
@@ -169,7 +165,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             }
         }
 
-        private void AddToHelpContext()
+        private void addToHelpContext()
         {
             for (int i = 0; i < tabControlTopLevel.TabPages.Count; i++)
             {
@@ -177,7 +173,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             }
         }
 
-        private void SetColor()
+        private void setColor()
         {
             BackColor = ColorHelper.DialogBackColor();
             dayOffPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
@@ -194,12 +190,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
             if (!schedulingSessionPreferencesTabPanel1.ValidateTeamSchedulingOption())
             {
-                MessageBox.Show(UserTexts.Resources.SelectAtleastOneSchedulingOption, UserTexts.Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
+                MessageBox.Show(Resources.SelectAtleastOneSchedulingOption, Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
                 DialogResult = DialogResult.None;
             }
             else if (!schedulingSessionPreferencesTabPanel1.ValidateBlockOption())
             {
-                MessageBox.Show(UserTexts.Resources.SelectAtleastOneBlockOption, UserTexts.Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
+                MessageBox.Show(Resources.SelectAtleastOneBlockOption, Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
                 DialogResult = DialogResult.None;
             }
             else 
@@ -209,7 +205,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 if (dayOffPreferencesPanel1.ValidateData(ExchangeDataOption.ClientToServer))
                 {
                     dayOffPreferencesPanel1.ExchangeData(ExchangeDataOption.ClientToServer);
-                    DialogResult = System.Windows.Forms.DialogResult.OK;
+                    DialogResult = DialogResult.OK;
                     savePersonalSettings();
                 }
 
@@ -226,10 +222,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private void dayOffPreferencesPanel1_StatusChanged(object sender, EventArgs e)
         {
             var panel = (ResourceOptimizerDayOffPreferencesPanel) sender;
-            SetOnOff(panel);
+            setOnOff(panel);
         }
 
-        private void SetOnOff(ResourceOptimizerDayOffPreferencesPanel panel)
+        private void setOnOff(ResourceOptimizerDayOffPreferencesPanel panel)
         {
             if(panel.StatusIsOn())
             {

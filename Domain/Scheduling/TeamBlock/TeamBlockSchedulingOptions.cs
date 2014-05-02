@@ -135,8 +135,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public bool IsBlockWithSameShiftCategoryInvolved(ISchedulingOptions schedulingOptions)
 		{
 			var blockFinder = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
-			var isNoneOrSingleDay = (blockFinder == BlockFinderType.None || blockFinder == BlockFinderType.SingleDay);
-			return (!isNoneOrSingleDay && schedulingOptions.BlockSameShiftCategory);
+			var isSingleDay = (blockFinder == BlockFinderType.SingleDay);
+			return (!isSingleDay && schedulingOptions.BlockSameShiftCategory);
 		}
 	}
 }

@@ -65,9 +65,11 @@
 			this.checkBoxTeamSameStartTime = new System.Windows.Forms.CheckBox();
 			this.checkBoxTeamSameShiftCategory = new System.Windows.Forms.CheckBox();
 			this.comboBoxTeamGroupPage = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+			this.comboBoxBlockType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.checkBoxBlockSameShiftCategory = new System.Windows.Forms.CheckBox();
 			this.checkBoxBlockSameStartTime = new System.Windows.Forms.CheckBox();
 			this.checkBoxBlockSameShift = new System.Windows.Forms.CheckBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
 			this.tabPageAdvance = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -89,8 +91,6 @@
 			this.checkBoxUseMinimumPersons = new System.Windows.Forms.CheckBox();
 			this.checkBoxDoNotBreakMaxSeats = new System.Windows.Forms.CheckBox();
 			this.checkBoxUseAverageShiftLengths = new System.Windows.Forms.CheckBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.comboBoxBlockType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.tabControl1.SuspendLayout();
 			this.tabPageGeneral.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -107,6 +107,7 @@
 			this.tableLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxTeamActivity)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxTeamGroupPage)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxBlockType)).BeginInit();
 			this.tabPageAdvance.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.pnlShiftCategory.SuspendLayout();
@@ -116,7 +117,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).BeginInit();
 			this.tableLayoutPanel6.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxBlockType)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tabControl1
@@ -397,9 +397,9 @@
 			// tableLayoutPanel5
 			// 
 			this.tableLayoutPanel5.ColumnCount = 3;
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 162F));
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 72F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 222F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel5.Controls.Add(this.panel1, 0, 0);
 			this.tableLayoutPanel5.Controls.Add(this.label5, 0, 1);
 			this.tableLayoutPanel5.Controls.Add(this.comboBoxGroupingFairness, 1, 1);
@@ -420,9 +420,10 @@
 			this.panel1.Controls.Add(this.label3);
 			this.panel1.Controls.Add(this.label4);
 			this.panel1.Controls.Add(this.trackBar1);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(3, 3);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(395, 84);
+			this.panel1.Size = new System.Drawing.Size(400, 84);
 			this.panel1.TabIndex = 21;
 			// 
 			// label3
@@ -440,7 +441,7 @@
 			// 
 			this.label4.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(336, 63);
+			this.label4.Location = new System.Drawing.Point(341, 63);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(56, 13);
 			this.label4.TabIndex = 2;
@@ -455,7 +456,7 @@
 			this.trackBar1.Location = new System.Drawing.Point(6, 15);
 			this.trackBar1.Maximum = 100;
 			this.trackBar1.Name = "trackBar1";
-			this.trackBar1.Size = new System.Drawing.Size(386, 45);
+			this.trackBar1.Size = new System.Drawing.Size(391, 45);
 			this.trackBar1.TabIndex = 39;
 			this.trackBar1.TickFrequency = 5;
 			this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1ValueChanged);
@@ -472,12 +473,12 @@
 			// 
 			// comboBoxGroupingFairness
 			// 
-			this.comboBoxGroupingFairness.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxGroupingFairness.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxGroupingFairness.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxGroupingFairness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxGroupingFairness.Location = new System.Drawing.Point(165, 94);
+			this.comboBoxGroupingFairness.Location = new System.Drawing.Point(225, 93);
 			this.comboBoxGroupingFairness.Name = "comboBoxGroupingFairness";
-			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 21);
+			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(178, 19);
 			this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxGroupingFairness.TabIndex = 40;
 			this.comboBoxGroupingFairness.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingFairnessSelectedIndexChanged);
@@ -494,9 +495,8 @@
 			// tableLayoutPanel4
 			// 
 			this.tableLayoutPanel4.ColumnCount = 3;
-			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 184F));
-			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 123F));
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 222F));
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel4.Controls.Add(this.checkBoxTeamSameActivity, 0, 9);
 			this.tableLayoutPanel4.Controls.Add(this.comboBoxTeamActivity, 1, 9);
@@ -531,11 +531,12 @@
 			// checkBoxTeamSameActivity
 			// 
 			this.checkBoxTeamSameActivity.AutoSize = true;
+			this.checkBoxTeamSameActivity.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxTeamSameActivity.Enabled = false;
 			this.checkBoxTeamSameActivity.Location = new System.Drawing.Point(3, 220);
 			this.checkBoxTeamSameActivity.Name = "checkBoxTeamSameActivity";
-			this.checkBoxTeamSameActivity.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-			this.checkBoxTeamSameActivity.Size = new System.Drawing.Size(117, 17);
+			this.checkBoxTeamSameActivity.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+			this.checkBoxTeamSameActivity.Size = new System.Drawing.Size(216, 19);
 			this.checkBoxTeamSameActivity.TabIndex = 39;
 			this.checkBoxTeamSameActivity.Text = "xxSameActivity";
 			this.checkBoxTeamSameActivity.UseVisualStyleBackColor = true;
@@ -544,22 +545,24 @@
 			// comboBoxTeamActivity
 			// 
 			this.comboBoxTeamActivity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxTeamActivity.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamActivity.Enabled = false;
-			this.comboBoxTeamActivity.Location = new System.Drawing.Point(155, 220);
+			this.comboBoxTeamActivity.Location = new System.Drawing.Point(225, 220);
 			this.comboBoxTeamActivity.Name = "comboBoxTeamActivity";
-			this.comboBoxTeamActivity.Size = new System.Drawing.Size(173, 21);
+			this.comboBoxTeamActivity.Size = new System.Drawing.Size(178, 19);
 			this.comboBoxTeamActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxTeamActivity.TabIndex = 40;
 			// 
 			// checkBoxTeamSameEndTime
 			// 
 			this.checkBoxTeamSameEndTime.AutoSize = true;
+			this.checkBoxTeamSameEndTime.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxTeamSameEndTime.Enabled = false;
 			this.checkBoxTeamSameEndTime.Location = new System.Drawing.Point(3, 196);
 			this.checkBoxTeamSameEndTime.Name = "checkBoxTeamSameEndTime";
-			this.checkBoxTeamSameEndTime.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-			this.checkBoxTeamSameEndTime.Size = new System.Drawing.Size(125, 17);
+			this.checkBoxTeamSameEndTime.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+			this.checkBoxTeamSameEndTime.Size = new System.Drawing.Size(216, 18);
 			this.checkBoxTeamSameEndTime.TabIndex = 38;
 			this.checkBoxTeamSameEndTime.Text = "xxSameEndTime";
 			this.checkBoxTeamSameEndTime.UseVisualStyleBackColor = true;
@@ -567,11 +570,12 @@
 			// checkBoxTeamSameStartTime
 			// 
 			this.checkBoxTeamSameStartTime.AutoSize = true;
+			this.checkBoxTeamSameStartTime.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxTeamSameStartTime.Enabled = false;
 			this.checkBoxTeamSameStartTime.Location = new System.Drawing.Point(3, 169);
 			this.checkBoxTeamSameStartTime.Name = "checkBoxTeamSameStartTime";
-			this.checkBoxTeamSameStartTime.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-			this.checkBoxTeamSameStartTime.Size = new System.Drawing.Size(128, 17);
+			this.checkBoxTeamSameStartTime.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+			this.checkBoxTeamSameStartTime.Size = new System.Drawing.Size(216, 21);
 			this.checkBoxTeamSameStartTime.TabIndex = 37;
 			this.checkBoxTeamSameStartTime.Text = "xxSameStartTime";
 			this.checkBoxTeamSameStartTime.UseVisualStyleBackColor = true;
@@ -579,11 +583,12 @@
 			// checkBoxTeamSameShiftCategory
 			// 
 			this.checkBoxTeamSameShiftCategory.AutoSize = true;
+			this.checkBoxTeamSameShiftCategory.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxTeamSameShiftCategory.Enabled = false;
 			this.checkBoxTeamSameShiftCategory.Location = new System.Drawing.Point(3, 142);
 			this.checkBoxTeamSameShiftCategory.Name = "checkBoxTeamSameShiftCategory";
-			this.checkBoxTeamSameShiftCategory.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-			this.checkBoxTeamSameShiftCategory.Size = new System.Drawing.Size(146, 17);
+			this.checkBoxTeamSameShiftCategory.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+			this.checkBoxTeamSameShiftCategory.Size = new System.Drawing.Size(216, 21);
 			this.checkBoxTeamSameShiftCategory.TabIndex = 36;
 			this.checkBoxTeamSameShiftCategory.Text = "xxSameShiftCategory";
 			this.checkBoxTeamSameShiftCategory.UseVisualStyleBackColor = true;
@@ -591,23 +596,38 @@
 			// comboBoxTeamGroupPage
 			// 
 			this.comboBoxTeamGroupPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxTeamGroupPage.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamGroupPage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamGroupPage.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
-			this.comboBoxTeamGroupPage.Location = new System.Drawing.Point(155, 114);
+			this.comboBoxTeamGroupPage.Location = new System.Drawing.Point(225, 114);
 			this.comboBoxTeamGroupPage.Name = "comboBoxTeamGroupPage";
-			this.comboBoxTeamGroupPage.Size = new System.Drawing.Size(173, 21);
+			this.comboBoxTeamGroupPage.Size = new System.Drawing.Size(178, 19);
 			this.comboBoxTeamGroupPage.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxTeamGroupPage.TabIndex = 35;
 			this.comboBoxTeamGroupPage.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingSelectedIndexChanged);
 			// 
+			// comboBoxBlockType
+			// 
+			this.comboBoxBlockType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxBlockType.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.comboBoxBlockType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxBlockType.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
+			this.comboBoxBlockType.Location = new System.Drawing.Point(225, 3);
+			this.comboBoxBlockType.Name = "comboBoxBlockType";
+			this.comboBoxBlockType.Size = new System.Drawing.Size(178, 19);
+			this.comboBoxBlockType.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+			this.comboBoxBlockType.TabIndex = 47;
+			this.comboBoxBlockType.SelectedValueChanged += new System.EventHandler(this.comboBoxBlockType_SelectedValueChanged);
+			// 
 			// checkBoxBlockSameShiftCategory
 			// 
 			this.checkBoxBlockSameShiftCategory.AutoSize = true;
+			this.checkBoxBlockSameShiftCategory.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxBlockSameShiftCategory.Enabled = false;
 			this.checkBoxBlockSameShiftCategory.Location = new System.Drawing.Point(3, 28);
 			this.checkBoxBlockSameShiftCategory.Name = "checkBoxBlockSameShiftCategory";
-			this.checkBoxBlockSameShiftCategory.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-			this.checkBoxBlockSameShiftCategory.Size = new System.Drawing.Size(146, 17);
+			this.checkBoxBlockSameShiftCategory.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+			this.checkBoxBlockSameShiftCategory.Size = new System.Drawing.Size(216, 21);
 			this.checkBoxBlockSameShiftCategory.TabIndex = 48;
 			this.checkBoxBlockSameShiftCategory.Text = "xxSameShiftCategory";
 			this.checkBoxBlockSameShiftCategory.UseVisualStyleBackColor = true;
@@ -615,11 +635,12 @@
 			// checkBoxBlockSameStartTime
 			// 
 			this.checkBoxBlockSameStartTime.AutoSize = true;
+			this.checkBoxBlockSameStartTime.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxBlockSameStartTime.Enabled = false;
 			this.checkBoxBlockSameStartTime.Location = new System.Drawing.Point(3, 55);
 			this.checkBoxBlockSameStartTime.Name = "checkBoxBlockSameStartTime";
-			this.checkBoxBlockSameStartTime.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-			this.checkBoxBlockSameStartTime.Size = new System.Drawing.Size(128, 17);
+			this.checkBoxBlockSameStartTime.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+			this.checkBoxBlockSameStartTime.Size = new System.Drawing.Size(216, 24);
 			this.checkBoxBlockSameStartTime.TabIndex = 49;
 			this.checkBoxBlockSameStartTime.Text = "xxSameStartTime";
 			this.checkBoxBlockSameStartTime.UseVisualStyleBackColor = true;
@@ -627,24 +648,39 @@
 			// checkBoxBlockSameShift
 			// 
 			this.checkBoxBlockSameShift.AutoSize = true;
+			this.checkBoxBlockSameShift.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxBlockSameShift.Enabled = false;
 			this.checkBoxBlockSameShift.Location = new System.Drawing.Point(3, 85);
 			this.checkBoxBlockSameShift.Name = "checkBoxBlockSameShift";
-			this.checkBoxBlockSameShift.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-			this.checkBoxBlockSameShift.Size = new System.Drawing.Size(104, 17);
+			this.checkBoxBlockSameShift.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+			this.checkBoxBlockSameShift.Size = new System.Drawing.Size(216, 23);
 			this.checkBoxBlockSameShift.TabIndex = 50;
 			this.checkBoxBlockSameShift.Text = "xxSameShift";
 			this.checkBoxBlockSameShift.UseVisualStyleBackColor = true;
 			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label2.Location = new System.Drawing.Point(3, 3);
+			this.label2.Margin = new System.Windows.Forms.Padding(3);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(216, 19);
+			this.label2.TabIndex = 51;
+			this.label2.Text = "xxBlockScheduling";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// label7
 			// 
 			this.label7.AutoSize = true;
+			this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label7.Location = new System.Drawing.Point(3, 114);
 			this.label7.Margin = new System.Windows.Forms.Padding(3);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(97, 13);
+			this.label7.Size = new System.Drawing.Size(216, 22);
 			this.label7.TabIndex = 52;
 			this.label7.Text = "xxTeamScheduling";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// tabPageAdvance
 			// 
@@ -924,28 +960,6 @@
 			this.checkBoxUseAverageShiftLengths.Text = "xxUseAverageShiftLengths";
 			this.checkBoxUseAverageShiftLengths.UseVisualStyleBackColor = true;
 			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(3, 3);
-			this.label2.Margin = new System.Windows.Forms.Padding(3);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(97, 13);
-			this.label2.TabIndex = 51;
-			this.label2.Text = "xxBlockScheduling";
-			// 
-			// comboBoxBlockType
-			// 
-			this.comboBoxBlockType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
-			this.comboBoxBlockType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxBlockType.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
-			this.comboBoxBlockType.Location = new System.Drawing.Point(155, 3);
-			this.comboBoxBlockType.Name = "comboBoxBlockType";
-			this.comboBoxBlockType.Size = new System.Drawing.Size(117, 21);
-			this.comboBoxBlockType.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
-			this.comboBoxBlockType.TabIndex = 47;
-			this.comboBoxBlockType.SelectedValueChanged += new System.EventHandler(this.comboBoxBlockType_SelectedValueChanged);
-			// 
 			// SchedulingSessionPreferencesTabPanel
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -977,6 +991,7 @@
 			this.tableLayoutPanel4.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxTeamActivity)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxTeamGroupPage)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxBlockType)).EndInit();
 			this.tabPageAdvance.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
@@ -989,7 +1004,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).EndInit();
 			this.tableLayoutPanel6.ResumeLayout(false);
 			this.tableLayoutPanel6.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxBlockType)).EndInit();
 			this.ResumeLayout(false);
 
         }

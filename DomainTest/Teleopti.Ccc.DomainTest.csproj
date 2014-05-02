@@ -799,7 +799,6 @@
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplateTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferencesTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePrefernecesGeneralPersonalSettingTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\BlockFinderTypeCreatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockPeriodFinderBetweenDayOffTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MaxMovedDaysOverLimitValidatorTest.cs" />

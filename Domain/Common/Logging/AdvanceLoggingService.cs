@@ -40,21 +40,23 @@ namespace Teleopti.Ccc.Domain.Common.Logging
             GlobalContext.Properties["GeneralOptions"] = schedulingOptionsValueExtractor.GetGeneralSchedulingOptions();
         }
 
-        private static void getTeamBlockOptions(SchedulingOptionsValueExtractor schedulingOptionsValueExtractor, ISchedulingOptions schedulingOptions)
-        {
+	    private static void getTeamBlockOptions(SchedulingOptionsValueExtractor schedulingOptionsValueExtractor,
+		    ISchedulingOptions schedulingOptions)
+	    {
 
-			  if (schedulingOptions.UseBlock && schedulingOptions.BlockFinderTypeForAdvanceScheduling != BlockFinderType.None)
-            {
-                GlobalContext.Properties["BlockOptions"] =
-                    schedulingOptionsValueExtractor.GetBlockOptions();
-            }
-            else if (schedulingOptions.UseTeam)
-            {
-                GlobalContext.Properties["TeamOptions"] = schedulingOptionsValueExtractor.GetTeamOptions();
-            }
-        }
+		    if (schedulingOptions.UseBlock &&
+		        schedulingOptions.BlockFinderTypeForAdvanceScheduling != BlockFinderType.SingleDay)
+		    {
+			    GlobalContext.Properties["BlockOptions"] =
+				    schedulingOptionsValueExtractor.GetBlockOptions();
+		    }
+		    else if (schedulingOptions.UseTeam)
+		    {
+			    GlobalContext.Properties["TeamOptions"] = schedulingOptionsValueExtractor.GetTeamOptions();
+		    }
+	    }
 
-        private static void populateOptimizationOptions(IOptimizationPreferences optimizationPreferences )
+	    private static void populateOptimizationOptions(IOptimizationPreferences optimizationPreferences )
         {
             var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
             var schedulingOptionsValueExtractor = new SchedulingOptionsValueExtractor(schedulingOptions);
