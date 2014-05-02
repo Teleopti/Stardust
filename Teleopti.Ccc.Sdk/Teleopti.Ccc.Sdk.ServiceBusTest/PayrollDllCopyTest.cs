@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Sdk.ServiceBus;
+using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
@@ -54,14 +56,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			_createdTestFiles.ForEach(f => File.Create(f).Dispose());
 		}
-		
+
+		private ISearchPath createStubbedSearchPath()
+		{
+			var searchPath = MockRepository.GenerateStub<ISearchPath>();
+			searchPath.Stub(x => x.PayrollDeployNewPath).Return(_source);
+			searchPath.Stub(x => x.Path).Return(_destination);
+			return searchPath;
+		}
+
 		[Test]
 		public void ShouldCopyXmlAndSettingsFileToPayroll()
 		{
 			var xmlFileInfo = getSourceFileEndingWith(".xml");
 			var settingsFileInfo = getSourceFileEndingWith(".settings");
 
-			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
+			var target = new PayrollDllCopy(createStubbedSearchPath());
+
+			target.CopyPayrollDll();
 			
 			Assert.IsTrue(File.Exists(Path.GetFullPath(_destination + xmlFileInfo)));
 			Assert.IsTrue(File.Exists(Path.GetFullPath(_destination + settingsFileInfo)));
@@ -76,8 +88,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		public void ShouldHaveSameDllFileStructure()
 		{
 			var createdDllFiles = getDllFilesWithFolderStructure();
+			var target = new PayrollDllCopy(createStubbedSearchPath());
 
-			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
+			target.CopyPayrollDll();
 			
 			Assert.IsNotEmpty(createdDllFiles);
 			foreach (var path in createdDllFiles)
@@ -101,8 +114,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var fileName = Guid.NewGuid() + ".dll";
 			var filePath = _source + fileName;
 			var file = File.Create(filePath);
+			var target = new PayrollDllCopy(createStubbedSearchPath());
 
-			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
+			target.CopyPayrollDll();
 			
 			Assert.That(!File.Exists(_destination + fileName));
 
@@ -129,8 +143,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		{
 			foreach (var folder in Directory.GetDirectories(_destination))
 			{
-				foreach (var file in
-					Directory.GetFiles(folder))
+				foreach (var file in Directory.GetFiles(folder))
 				{
 					File.Delete(file);
 				}

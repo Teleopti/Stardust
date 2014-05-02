@@ -6,39 +6,32 @@ using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-	public static class PayrollDllCopy
+	public class PayrollDllCopy
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ServiceBusRunner));
+		private readonly ISearchPath _searchPath;
+
+		public PayrollDllCopy(ISearchPath searchPath)
+		{
+			_searchPath = searchPath;
+		}
+
+		public void CopyPayrollDll()
+		{
+			try
+			{
+				var destination = _searchPath.Path;
+				var source = _searchPath.PayrollDeployNewPath;
+				copyFiles(source, destination);
+			}
+
+			catch (Exception exception)
+			{
+				Log.Error("An exception was encountered when trying to load new payroll dll", exception);
+				throw;
+			}
+		}
 		
-		public static void CopyPayrollDll()
-		{
-			try
-			{
-				var destination = new SearchPath().Path;
-				var source = new SearchPath().PayrollDeployNewPath;
-				copyFiles(source, destination);
-			}
-
-			catch (Exception exception)
-			{
-				Log.Error("An exception was encountered when trying to load new payroll dll", exception);
-				throw;
-			}
-		}
-
-		public static void CopyPayrollDllTest(string source, string destination)
-		{
-			try
-			{
-				copyFiles(source, destination);
-			}
-			catch (Exception exception)
-			{
-				Log.Error("An exception was encountered when trying to load new payroll dll", exception);
-				throw;
-			}
-		}
-
 		private static void copyFiles(string source, string destination)
 		{
 			foreach (var folder in Directory.GetDirectories(source))
