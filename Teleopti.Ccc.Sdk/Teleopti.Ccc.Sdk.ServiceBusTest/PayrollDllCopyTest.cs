@@ -3,133 +3,146 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Sdk.ServiceBus;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
-	[TestFixture, Ignore]
 	public class PayrollDllCopyTest
 	{
 		private string _source;
 		private string _destination;
-		private List<string> _originalFiles;
-		
+		private IList<string> _createdTestFiles;
+		private IList<string> _createdFolders;
+			
 		[SetUp]
 		public void Setup()
 		{
-			_source = Path.GetFullPath(Environment.CurrentDirectory + "\\..\\" + "\\..\\" + "\\..\\"
-			                           + "\\Teleopti.Ccc.Sdk.ServiceBus.Host\\bin\\Debug\\Payroll.DeployNew\\");
-			_destination = Path.GetFullPath(Environment.CurrentDirectory + "\\..\\" + "\\..\\" + "\\..\\"
-			                                + "\\Teleopti.Ccc.Sdk.ServiceBus.Host\\bin\\Debug\\Payroll\\");
-			_originalFiles = new List<string>();
-			_originalFiles.AddRange(Directory.GetFiles(_source, "*.*", SearchOption.AllDirectories));
-			_originalFiles.AddRange(Directory.GetFiles(_destination, "*.*", SearchOption.AllDirectories));
-			
-			Teardown();
-			
-			for (var i = 0; i <= 1; i++)
+			_source = Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll.DeployNew\\");
+			if (!Directory.Exists(_source))
 			{
-				var folder = Guid.NewGuid();
-				var folderPath = Path.GetFullPath(_source + folder);
-				Directory.CreateDirectory(folderPath);
-
-				for (var j = 0; j <= 2; j++)
-				{
-					var file = Guid.NewGuid();
-					var filePath = Path.GetFullPath(folderPath + "\\" + file);
-					if (j == 1 && i == 1)
-						File.Create(filePath + ".xml").Dispose();
-					else if (j == 2 && i == 1)
-						File.Create(filePath + ".settings").Dispose();
-					else
-						File.Create(filePath + ".dll").Dispose();
-				}
+				Directory.CreateDirectory(_source);
 			}
-		}
 
-		[TearDown]
-		public void Teardown()
-		{
-			RemoveAllFiles(_source);
-			RemoveAllFiles(_destination);
-		}
-
-		private void RemoveAllFiles(string path)
-		{
-			foreach (var folder in Directory.GetDirectories(path).Where(f => !_originalFiles.Contains(f)))
+			_destination = Path.GetFullPath(Environment.CurrentDirectory + "\\Payroll\\");
+			if (!Directory.Exists(_destination))
 			{
-				foreach (
-					var file in
-						Directory.GetFiles(folder).Where(f => !_originalFiles.Contains(f)))
-					File.Delete(file);
-				if (!Directory.GetFiles(folder).Any())
-					Directory.Delete(folder);
+				Directory.CreateDirectory(_destination);
 			}
-			foreach (var file in Directory.GetFiles(path).Where(f => !_originalFiles.Contains(f)))
-				File.Delete(file);
+
+			createTestFilesToCopy();
 		}
 
-		private IEnumerable<string> CopiedFiles()
+		private void createTestFilesToCopy()
 		{
-			var copiedFiles = new List<string>();
-			var filesInTopFolder = Directory.GetFiles(_destination)
-				.Where(f => !_originalFiles.Contains(f) && !f.EndsWith("Teleopti.Ccc.Payroll.dll", StringComparison.OrdinalIgnoreCase))
-				.ToList();
-			if (filesInTopFolder.Any())
-				copiedFiles.AddRange(filesInTopFolder);
+			_createdFolders = new[]
+			{
+				Path.GetFullPath(_source + Guid.NewGuid()),
+				Path.GetFullPath(_source + Guid.NewGuid())
+			};
+			_createdFolders.ForEach(f => Directory.CreateDirectory(f));
 
-			copiedFiles.AddRange(
-				Directory.GetDirectories(_destination)
-				.SelectMany(folder => Directory.GetFiles(folder)
-					.Where(f => !_originalFiles.Contains(f))));
+			_createdTestFiles = new[]
+			{
+				Path.GetFullPath(_createdFolders[0] + "\\" + Guid.NewGuid() + ".dll"),
+				Path.GetFullPath(_createdFolders[0] + "\\" + Guid.NewGuid() + ".dll"),
+				Path.GetFullPath(_createdFolders[0] + "\\" + Guid.NewGuid() + ".dll"),
+				Path.GetFullPath(_createdFolders[1] + "\\" + Guid.NewGuid() + ".xml"),
+				Path.GetFullPath(_createdFolders[1] + "\\" + Guid.NewGuid() + ".dll"),
+				Path.GetFullPath(_createdFolders[1] + "\\" + Guid.NewGuid() + ".settings")
+			};
 
-			return copiedFiles;
+			_createdTestFiles.ForEach(f => File.Create(f).Dispose());
 		}
-
+		
 		[Test]
 		public void ShouldCopyXmlAndSettingsFileToPayroll()
 		{
+			var xmlFileInfo = getSourceFileEndingWith(".xml");
+			var settingsFileInfo = getSourceFileEndingWith(".settings");
+
 			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
-			var xmlFile = CopiedFiles().Single(x => x.EndsWith(".xml", StringComparison.OrdinalIgnoreCase));
-			var xmlFileInfo = new FileInfo(xmlFile);
-			var settingsFile = CopiedFiles().Single(x => x.EndsWith(".settings", StringComparison.OrdinalIgnoreCase));
-			var settingsFileInfo = new FileInfo(settingsFile);
-			Assert.That(File.Exists(Path.GetFullPath(_destination + xmlFileInfo.Name)), Is.True);
-			Assert.That(File.Exists(Path.GetFullPath(_destination + settingsFileInfo.Name)), Is.True);
+			
+			Assert.IsTrue(File.Exists(Path.GetFullPath(_destination + xmlFileInfo)));
+			Assert.IsTrue(File.Exists(Path.GetFullPath(_destination + settingsFileInfo)));
+		}
+
+		private string getSourceFileEndingWith(string fileEnding)
+		{
+			return new FileInfo(_createdTestFiles.Single(x => x.EndsWith(fileEnding, StringComparison.OrdinalIgnoreCase))).Name;
 		}
 
 		[Test]
 		public void ShouldHaveSameDllFileStructure()
 		{
+			var createdDllFiles = getDllFilesWithFolderStructure();
+
 			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
-			foreach (var path in CopiedFiles()
+			
+			Assert.IsNotEmpty(createdDllFiles);
+			foreach (var path in createdDllFiles)
+			{
+				Assert.IsTrue(File.Exists(Path.GetFullPath(_destination + path)));
+			}
+		}
+
+		private IList<string> getDllFilesWithFolderStructure()
+		{
+			return _createdTestFiles
 				.Where(x => x.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
 				.Select(file => new FileInfo(file))
-				.Select(fileInfo => fileInfo.Directory != null ? fileInfo.Directory.Name + "\\" + fileInfo.Name : null))
-				Assert.That(File.Exists(Path.GetFullPath(_destination + path)), Is.True);
-		}
-
-		[Test, ExpectedException(typeof(DirectoryNotFoundException))]
-		public void ShouldThrowException()
-		{
-			// path gets messed up when running from testproj
-			PayrollDllCopy.CopyPayrollDll();
-		}
-
-		[Test, ExpectedException(typeof(DirectoryNotFoundException))]
-		public void ShouldThrowExceptionWithWrongPath()
-		{
-			PayrollDllCopy.CopyPayrollDllTest(_source + Guid.NewGuid(), _destination + Guid.NewGuid());
+				.Select(fileInfo => fileInfo.Directory.Name + "\\" + fileInfo.Name)
+				.ToList();
 		}
 
 		[Test]
 		public void ShouldSkipLockedFile()
 		{
-			var guid = Guid.NewGuid() + ".dll";
-			var file = File.Create(_source + guid);
+			var fileName = Guid.NewGuid() + ".dll";
+			var filePath = _source + fileName;
+			var file = File.Create(filePath);
+
 			PayrollDllCopy.CopyPayrollDllTest(_source, _destination);
+			
+			Assert.That(!File.Exists(_destination + fileName));
+
 			file.Dispose();
-			Assert.That(!File.Exists(_destination + guid));
+			File.Delete(filePath);
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			foreach (var createdFile in _createdTestFiles)
+			{
+				File.Delete(createdFile);
+			}
+			foreach (var createdFolder in _createdFolders)
+			{
+				Directory.Delete(createdFolder);
+			}
+
+			deleteCopiedFiles();
+		}
+
+		private void deleteCopiedFiles()
+		{
+			foreach (var folder in Directory.GetDirectories(_destination))
+			{
+				foreach (var file in
+					Directory.GetFiles(folder))
+				{
+					File.Delete(file);
+				}
+				if (!Directory.GetFiles(folder).Any())
+				{
+					Directory.Delete(folder);
+				}
+			}
+			foreach (var file in Directory.GetFiles(_destination))
+			{
+				File.Delete(file);
+			}
 		}
 	}
 }
