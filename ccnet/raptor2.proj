@@ -142,7 +142,7 @@
 	
 	<Target Name="SetUpConfigFiles">
 		<Message Importance="high" Text="Fixing config files"/>
-		<Exec Command = "&quot;$(CCNetWorkingDirectory)\Teleopti.Support.Tool\bin\Debug\Teleopti.Support.Tool.exe&quot; -MODevelop" />
+		<Exec Command = "&quot;$(CCNetWorkingDirectory)\Teleopti.Support.Tool\bin\Release\Teleopti.Support.Tool.exe&quot; -MODevelop" />
 	</Target>
 	
 	<Target Name="BuildDBManager">
