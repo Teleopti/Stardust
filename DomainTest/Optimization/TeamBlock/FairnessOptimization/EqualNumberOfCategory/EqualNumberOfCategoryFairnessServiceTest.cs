@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		{
 
 			Expect.Call(_filterPersonsForTotalDistribution.Filter(_allMatrixes)).Return(_selectedPersons);
-			Expect.Call(_constructTeamBlock.Construct(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions.UseBlock,
+			Expect.Call(_constructTeamBlock.Construct(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, 
 																 _schedulingOptions.BlockFinderTypeForAdvanceScheduling,
 																 _schedulingOptions.GroupOnGroupPageForTeamBlockPer))
 				  .Return(_teamBlockInfos);

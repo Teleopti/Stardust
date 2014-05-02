@@ -38,6 +38,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (teamInfo != null)
 					allTeamInfoListOnStartDate.Add(teamInfo);
 			}
+
+			foreach (var teamInfo in allTeamInfoListOnStartDate)
+			{
+				foreach (var groupMember in teamInfo.GroupMembers)
+				{
+					if(!selectedPersons.Contains(groupMember))
+						teamInfo.LockMember(groupMember);
+				}
+			}
+
 			var allTeamBlocksInHashSet = new HashSet<ITeamBlockInfo>();
 			foreach (var teamInfo in allTeamInfoListOnStartDate)
 			{

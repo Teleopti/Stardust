@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Interfaces.Domain;
 
@@ -8,12 +10,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 
 		IEnumerable<IPerson> GroupMembers { get; }
+		IEnumerable<IPerson> UnLockedMembers();
+		void LockMember(IPerson member);
 		string Name { get; }
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroup();
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroupMember(int index);
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndDate(DateOnly dateOnly);
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndPeriod(DateOnlyPeriod period);
-
 		IScheduleMatrixPro MatrixForMemberAndDate(IPerson groupMember, DateOnly dateOnly);
 		IEnumerable<IScheduleMatrixPro> MatrixesForMemberAndPeriod(IPerson groupMember, DateOnlyPeriod period);
 	}
@@ -22,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		private readonly IList<IList<IScheduleMatrixPro>> _matrixesForMembers;
 		private readonly IList<IPerson> _groupMembers= new List<IPerson>();
+		private readonly IList<IPerson> _lockedMembers = new List<IPerson>();
 		private readonly string _name;
 			 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
@@ -41,6 +45,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				return _groupMembers;
 			}
+		}
+
+		public void LockMember(IPerson member)
+		{
+			if(!GroupMembers.Contains(member))
+				throw new ArgumentOutOfRangeException("member", "Must be within group members");
+
+			_lockedMembers.Add(member);
+		}
+
+		public IEnumerable<IPerson> UnLockedMembers()
+		{
+			var ret = new List<IPerson>();
+			foreach (var groupMember in GroupMembers)
+			{
+				if (!_lockedMembers.Contains(groupMember))
+					ret.Add(groupMember);
+			}
+
+			return ret;
 		}
 
 		public string Name

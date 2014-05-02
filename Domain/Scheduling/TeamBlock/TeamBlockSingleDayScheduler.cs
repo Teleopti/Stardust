@@ -11,9 +11,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockSingleDayScheduler
 	{
-		bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
-											   IList<IPerson> selectedPersons, DateOnly day,
-											   IShiftProjectionCache roleModelShift, 
+		bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, 
+												ISchedulingOptions schedulingOptions,
+												DateOnly day,
+												IShiftProjectionCache roleModelShift, 
 												ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 												IResourceCalculateDelayer resourceCalculateDelayer,
 												ISchedulingResultStateHolder schedulingResultStateHolder,
@@ -52,9 +53,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_activityIntervalDataCreator = activityIntervalDataCreator;
 		}
 
-		public bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
-									  IList<IPerson> selectedPersons, DateOnly day,
-									  IShiftProjectionCache roleModelShift, 
+		public bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, 
+										ISchedulingOptions schedulingOptions,
+										DateOnly day,
+										IShiftProjectionCache roleModelShift, 
 										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 										IResourceCalculateDelayer resourceCalculateDelayer,
 										ISchedulingResultStateHolder schedulingResultStateHolder,
@@ -65,8 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var teamBlockSingleDayInfo = new TeamBlockSingleDayInfo(teamInfo, day);
 			
 			var bestShiftProjectionCache = roleModelShift;
-			var groupMembers = teamInfo.GroupMembers;
-			var selectedTeamMembers = groupMembers.Intersect(selectedPersons).ToList();
+			var selectedTeamMembers = teamInfo.UnLockedMembers().ToList();
 			if (selectedTeamMembers.IsEmpty()) return true;
 			if (isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo))
 				return true;

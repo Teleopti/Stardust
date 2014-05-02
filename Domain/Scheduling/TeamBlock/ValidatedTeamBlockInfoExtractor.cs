@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    }
 
 	    public ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer,
-		    IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
+		    IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions, 
+			DateOnlyPeriod selectedPeriod)
 	    {
 		    if (teamInfo == null || schedulingOptions == null) return null;
 		    var teamBlockInfo = createTeamBlockInfo(allPersonMatrixList, datePointer, teamInfo, schedulingOptions,
