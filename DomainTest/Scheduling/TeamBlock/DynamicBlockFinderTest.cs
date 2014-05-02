@@ -95,21 +95,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
-
-		[Test]
-		public void ShouldReturnNullIfBlockFinderTypeNone()
-		{
-            var result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.None, false);
-			Assert.IsNull(result);
-		}
-
-        [Test]
-        public void ShouldReturnNullIfIfBlockFinderIsNone()
-        {
-            var result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.None, false);
-			Assert.IsNull(result);
-        }
-
         [Test]
         public void ShouldReturnNullIfIfNoMatrixFound()
         {

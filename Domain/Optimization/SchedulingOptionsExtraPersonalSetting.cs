@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private bool _useGroupSchedulingCommonCategory;
         private bool _useCommmonActivity;
         private Guid?  _commonActivtyId;
-        private BlockFinderType _blockFinderTypeForAdvanceScheduling = BlockFinderType.None;
+        private BlockFinderType _blockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
 
         private double _fairnessValue;
         private string _fairnessGroupPageKey;
