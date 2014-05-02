@@ -33,7 +33,6 @@
             <div id="DataSources" data-bind="visible: HasDataSources, foreach: DataSources" class="list-group">
                 <a href="#" class="list-group-item" data-bind="click: $parent.SignIn">
                     <span data-bind="text: Name"></span>
-                    <span data-bind="if: IsWindows">@Resources.WindowsLogonWithBrackets</span>
                 </a>
             </div>
             <div id="Signin-error" 
