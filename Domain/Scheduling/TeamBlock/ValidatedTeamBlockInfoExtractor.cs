@@ -28,10 +28,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    }
 
 	    public ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer,
-		    IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
+		    IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions, 
+			DateOnlyPeriod selectedPeriod)
 	    {
 		    if (teamInfo == null || schedulingOptions == null) return null;
-		    var teamBlockInfo = createTeamBlockInfo(allPersonMatrixList, datePointer, teamInfo, schedulingOptions,
+		    var teamBlockInfo = createTeamBlockInfo(datePointer, teamInfo, schedulingOptions,
 			    selectedPeriod);
 		    if (teamBlockInfo == null) return null;
 		    if (_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer)) return null;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    return teamBlockInfo;
 	    }
 
-	    private ITeamBlockInfo createTeamBlockInfo(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnly datePointer,
+	    private ITeamBlockInfo createTeamBlockInfo(DateOnly datePointer,
 		    ITeamInfo teamInfo, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
 	    {
 		    ITeamBlockInfo teamBlockInfo;
@@ -48,10 +49,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
 				    schedulingOptions
 					    .BlockFinderTypeForAdvanceScheduling,
-				    _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions), allPersonMatrixList);
+				    _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
 		    else
 			    teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer, BlockFinderType.SingleDay,
-				    _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions), allPersonMatrixList);
+				    _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
 
 		    if (teamBlockInfo == null)
 			    return null;

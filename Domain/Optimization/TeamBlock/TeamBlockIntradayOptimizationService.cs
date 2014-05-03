@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				if (_cancelMe)
 					break;
-				var teamBlocksToRemove = optimizeOneRound(selectedPeriod, selectedPersons, optimizationPreferences,
+				var teamBlocksToRemove = optimizeOneRound(selectedPeriod, optimizationPreferences,
 														  schedulingOptions, remainingInfoList, 
 				                                          schedulePartModifyAndRollbackService,
 														  resourceCalculateDelayer,
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Optimization.TeamBlock.TeamBlockIntradayOptimizationService.OnReportProgress(System.String)")]
 		private IEnumerable<ITeamBlockInfo> optimizeOneRound(DateOnlyPeriod selectedPeriod,
-							 IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
+							 IOptimizationPreferences optimizationPreferences,
 									  ISchedulingOptions schedulingOptions, IList<ITeamBlockInfo> allTeamBlockInfos,
 										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 										IResourceCalculateDelayer resourceCalculateDelayer,
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var firstSelectedDay = selectedPeriod.DayCollection().First();
 				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
                                 var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePoint, schedulingOptions,
-				                                                       selectedPersons, schedulePartModifyAndRollbackService,
+				                                                       schedulePartModifyAndRollbackService,
 				                                                       resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective());
 				if (!success)
 				{

@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 	    private ITeamBlockInfo _teamBlockInfo;
 	    private IPersonAssignment _personAssignment;
 	    private ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private IList<IPerson> _selectedPersons;
 	    private IBlockInfo _blockInfo;
 
 	    [SetUp]
@@ -48,7 +47,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		        new DateTime(2014, 3, 19, 16, 0, 0, DateTimeKind.Utc));
 			_personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonFactory.CreatePerson(), period);
 	        _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_selectedPersons = new List<IPerson> {_personAssignment.Person};
 			_blockInfo = _mocks.StrictMock<IBlockInfo>();
 
         }
@@ -65,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				commonMocks(effectiveRestriction);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _personAssignment.Date, _schedulingOptions,
-					_selectedPersons, _rollbackService, _resourceCalculateDelayer,
+					_rollbackService, _resourceCalculateDelayer,
 					_schedulingResultStateHolder,
 					new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left)))
 					.IgnoreArguments()
@@ -75,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 	        using (_mocks.Playback())
 			{
 				bool result = _target.Nudge(_scheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer,
-					_teamBlockInfo, _schedulingResultStateHolder, _selectedPersons);
+					_teamBlockInfo, _schedulingResultStateHolder);
 				Assert.IsTrue(result);
 			}
         }
@@ -92,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				commonMocks(effectiveRestriction);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _personAssignment.Date, _schedulingOptions,
-					_selectedPersons, _rollbackService, _resourceCalculateDelayer,
+					_rollbackService, _resourceCalculateDelayer,
 					_schedulingResultStateHolder,
 					new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left)))
 					.IgnoreArguments()
@@ -107,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			using (_mocks.Playback())
 			{
 				bool result = _target.Nudge(_scheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer,
-					_teamBlockInfo, _schedulingResultStateHolder, _selectedPersons);
+					_teamBlockInfo, _schedulingResultStateHolder);
 				Assert.IsFalse(result);
 			}
 		}
@@ -127,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			using (_mocks.Playback())
 			{
 				bool result = _target.Nudge(_scheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer,
-					_teamBlockInfo, _schedulingResultStateHolder, _selectedPersons);
+					_teamBlockInfo, _schedulingResultStateHolder);
 				Assert.IsFalse(result);
 			}
 		}

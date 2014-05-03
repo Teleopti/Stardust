@@ -85,7 +85,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_teamInfo.GroupMembers).Return(new[] {_person});
 				Expect.Call(_constructTeamBlock.Construct(new List<IScheduleMatrixPro> { _matrix }, _period,
 				                                          new List<IPerson> {_person},
-				                                          _optimizationPreferences.Extra.UseTeamBlockOption,
 				                                          _optimizationPreferences.Extra.BlockFinderTypeForAdvanceOptimization,
 				                                          _optimizationPreferences.Extra.GroupPageOnTeamBlockPer))
 				      .IgnoreArguments().Return(new List<ITeamBlockInfo> {_teamBlockInfo});
@@ -115,7 +114,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_teamInfo.GroupMembers).Return(new[] { _person });
 				Expect.Call(_constructTeamBlock.Construct(new List<IScheduleMatrixPro> { _matrix }, _period,
 														  new List<IPerson> { _person },
-														  _optimizationPreferences.Extra.UseTeamBlockOption,
 														  _optimizationPreferences.Extra.BlockFinderTypeForAdvanceOptimization,
 														  _optimizationPreferences.Extra.GroupPageOnTeamBlockPer))
 					  .IgnoreArguments().Return(new List<ITeamBlockInfo> { _teamBlockInfo });

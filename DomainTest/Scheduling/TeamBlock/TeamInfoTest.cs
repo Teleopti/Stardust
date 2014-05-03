@@ -174,5 +174,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Assert.That(teamInfo3.Equals(teamInfo4), Is.False);
 		}
 
+		[Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
+		public void ShouldTrowIfTryingToLockAPersonThatIsNotMember()
+		{
+			Group group1 = new Group(new List<IPerson> { _person1 }, "Hej");
+			var teamInfo1 = new TeamInfo(group1, _groupMatrixes);
+			teamInfo1.LockMember(_person2);
+		}
+
+		[Test]
+		public void ShouldExposeUnLockedMembers()
+		{
+			Group groupPerson4 = new Group(new List<IPerson> { _person1, _person2 }, "Hej");
+			var teamInfo4 = new TeamInfo(groupPerson4, _groupMatrixes);
+			teamInfo4.LockMember(_person1);
+			var result = teamInfo4.UnLockedMembers();
+			Assert.AreEqual(_person2, result.First());
+			Assert.AreEqual(1, result.Count());
+		}
+
 	}
 }

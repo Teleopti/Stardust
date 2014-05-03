@@ -38,13 +38,25 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (teamInfo != null)
 					allTeamInfoListOnStartDate.Add(teamInfo);
 			}
+
+			foreach (var teamInfo in allTeamInfoListOnStartDate)
+			{
+				foreach (var groupMember in teamInfo.GroupMembers)
+				{
+					if(!selectedPersons.Contains(groupMember))
+						teamInfo.LockMember(groupMember);
+				}
+			}
+
 			var allTeamBlocksInHashSet = new HashSet<ITeamBlockInfo>();
 			foreach (var teamInfo in allTeamInfoListOnStartDate)
 			{
 				foreach (var day in selectedPeriod.DayCollection())
 				{
-				    var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, day,
-                                                                              schedulingOptions.BlockFinderTypeForAdvanceScheduling, _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions), allPersonMatrixList);
+					var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, day,
+						schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+						_teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
+					
 					if (teamBlock == null) continue;
 					allTeamBlocksInHashSet.Add(teamBlock);
 				}
