@@ -4,7 +4,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(person, selectedPeriod, matrixes)).Return(teaminfo);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teaminfo, dateOnly,
-																	  schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, matrixes))
+																	  schedulingOptions.BlockFinderTypeForAdvanceScheduling, false))
 				      .Return(teamBlockInfo);
 			}
 			using (_mocks.Playback())
@@ -106,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(person, selectedPeriod, matrixes)).Return(teaminfo);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teaminfo, dateOnly,
-																	  schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, matrixes))
+																	  schedulingOptions.BlockFinderTypeForAdvanceScheduling, false))
 					  .Return(null);
 			}
 			using (_mocks.Playback())

@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(() => _teamDayOffModifier.RemoveDayOffForMember(_rollbackService, _person, DateOnly.MinValue.AddDays(1))).IgnoreArguments()  ;
 				Expect.Call(() => _teamDayOffModifier.AddDayOffForMember(_rollbackService, _person, DateOnly.MinValue, _schedulingOptions.DayOffTemplate, true)).IgnoreArguments() ;
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1),
-					_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, _matrixList)).Return(_teamBlockInfo);
+					_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
 				Expect.Call(_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1),
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(() =>_teamDayOffModifier.RemoveDayOffForMember(_rollbackService,_person,DateOnly.MinValue.AddDays(1)));
 				Expect.Call(() =>_teamDayOffModifier.AddDayOffForMember(_rollbackService, _person, DateOnly.MinValue,_schedulingOptions.DayOffTemplate, true));
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1),
-					_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, _matrixList)).Return(_teamBlockInfo);
+					_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
 				Expect.Call(_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1),
@@ -458,9 +458,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			      .IgnoreArguments()
 				  .Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
 
-
-			
-
 			Expect.Call(
 				() =>
 				_teamDayOffModifier.RemoveDayOffForTeam(_rollbackService, _teamInfo, DateOnly.MinValue.AddDays(1)));
@@ -468,7 +465,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				() =>
 				_teamDayOffModifier.AddDayOffForTeamAndResourceCalculate(_rollbackService, _teamInfo, DateOnly.MinValue, _schedulingOptions.DayOffTemplate)).IgnoreArguments();
 			Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1),
-																  _schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, _matrixList))
+																  _schedulingOptions.BlockFinderTypeForAdvanceScheduling, false))
 			      .Return(_teamBlockInfo);
 
 			Expect.Call(_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
