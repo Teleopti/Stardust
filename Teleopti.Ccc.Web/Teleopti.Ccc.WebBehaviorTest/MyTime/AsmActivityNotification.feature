@@ -25,8 +25,9 @@ Background:
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
 	And there are shift categories
-	| Name |
-	| Day  |
+	| Name  |
+	| Day   |
+	| Night |
 	And there is an activity with
 	| Field | Value |
 	| Name  | Phone |
@@ -44,6 +45,24 @@ Background:
 	| Scheduled activity            | Lunch            |
 	| Scheduled activity start time | 2030-01-01 11:00 |
 	| Scheduled activity end time   | 2030-01-01 12:00 |
+	And I have a shift with
+	| Field                         | Value            |
+	| Shift category                | Night              |
+	| Activity                      | Phone            |
+	| StartTime                     | 2030-01-02 23:00 |
+	| EndTime                       | 2030-01-03 07:00 |
+	| Scheduled activity            | Lunch            |
+	| Scheduled activity start time | 2030-01-03 03:00 |
+	| Scheduled activity end time   | 2030-01-03 03:30 |
+	And I have a shift with
+	| Field                         | Value            |
+	| Shift category                | Day            |
+	| Activity                      | Phone            |
+	| StartTime                     | 2030-01-03 15:00 |
+	| EndTime                       | 2030-01-03 23:00 |
+	| Scheduled activity            | Lunch            |
+	| Scheduled activity start time | 2030-01-03 18:00 |
+	| Scheduled activity end time   | 2030-01-03 18:30 |
 	And I am american
 
 Scenario: Alert agent before first activity starts
@@ -54,6 +73,7 @@ Scenario: Alert agent before first activity starts
 	And current browser time has changed to '2030-01-01 07:57:00'
 	Then I should see a notify message contains text Phone
 	And I should see a notify message contains text coming
+	And I should see a notify message contains text 8:00 AM
 
 Scenario: Alert agent before next activity starts
 	Given I have the role 'Full access to mytime'
@@ -63,6 +83,7 @@ Scenario: Alert agent before next activity starts
 	And current browser time has changed to '2030-01-01 10:56:00'
 	Then I should see a notify message contains text Lunch
 	And I should see a notify message contains text coming
+	And I should see a notify message contains text 11:00 AM
 
 Scenario: Alert agent before last activity ends
 	Given I have the role 'Full access to mytime'
@@ -70,8 +91,8 @@ Scenario: Alert agent before last activity ends
 	And Alert Time setting is '60' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 16:59:00'
-	Then I should see a notify message contains text Phone
-	And I should see a notify message contains text finished
+	Then I should see a notify message contains text Current shift will end
+	And I should see a notify message contains text 5:00 PM
 
 Scenario: Do not alert agent Before Alert Time
 	Given I have the role 'Full access to mytime'
@@ -107,3 +128,22 @@ Scenario: Automatical close pop up notify message
 	And I should see a notify message contains text coming
 	When current browser time has changed to '2030-01-01 10:58:30'
 	Then I should not see pop up notify message
+
+Scenario: Should alert agent when now is between 2 shift
+	Given I have the role 'Full access to mytime'
+	And the current time is '2030-01-03 14:56:59'
+	And Alert Time setting is '180' seconds                      
+	When I am viewing week schedule
+	And current browser time has changed to '2030-01-01 14:57:00'
+	Then I should see a notify message contains text Phone
+	And I should see a notify message contains text coming
+	And I should see a notify message contains text 3:00 PM
+
+Scenario: Should alert agent latest activity when now is at latest activity of 2 nearby shift
+	Given I have the role 'Full access to mytime'
+	And the current time is '2030-01-03 06:56:59'
+	And Alert Time setting is '180' seconds                      
+	When I am viewing week schedule
+	And current browser time has changed to '2030-01-03 06:57:00'
+	Then I should see a notify message contains text Current shift will end
+	And I should see a notify message contains text 7:00 AM

@@ -82,7 +82,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 			var layerIndex = self.getCurrentLayerIndex();
 			var secondsSinceStart = (self.getCurrentTime() - self.timeZero) / 1000;
-
+			
 			var layer;
 			var activityName, alertMessage;
 			var timeDiff;
@@ -106,8 +106,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			} else if (layerIndex === (layerCount - 1)) {
 				// Now is in latest activity
 				layer = self.layers[layerCount - 1];
-				activityName = layer.activityName;
-				alertMessage = notifyOptions.endingMessageTemplate.format(activityName, layer.endTimeText);
+				alertMessage = notifyOptions.endingMessageTemplate.format(layer.endTimeText);
 
 				var shiftEndTime = layer.endMinutesSinceAsmZero * 60;
 				timeDiff = shiftEndTime - secondsSinceStart;
@@ -212,7 +211,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			// Then re-start alert when tomorrow comes.
 			var timeZeroTomorrow = moment(alertvm.getCurrentTime()).add('days', 1).startOf('day').toDate();
 			var intervalForTomorrowInSecond = (timeZeroTomorrow - alertvm.getCurrentTime()) / 1000;
-
+			
 			setTimeout(function() {
 				initNotificationViewModel(options);
 				startAlert();

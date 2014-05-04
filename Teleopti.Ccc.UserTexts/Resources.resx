@@ -12025,8 +12025,8 @@ Reduce the complexity to use these shifts.</value>
     <value>s</value>
     <comment>Shortening for seconds used in reports</comment>
   </data>
-  <data name="ActivityEndingMessage" xml:space="preserve">
-    <value>Current activity {0} will finished at {1}</value>
+  <data name="ShiftEndingMessage" xml:space="preserve">
+    <value>Current shift will end at {0}</value>
     <comment>The notify message show in MyTimeWeb when latest activity ending</comment>
   </data>
   <data name="NextActivityComingMessage" xml:space="preserve">

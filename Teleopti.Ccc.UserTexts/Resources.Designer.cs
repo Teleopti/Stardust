@@ -484,15 +484,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Current activity {0} will finished at {1}.
-        /// </summary>
-        public static string ActivityEndingMessage {
-            get {
-                return ResourceManager.GetString("ActivityEndingMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Activity.
         /// </summary>
         public static string ActivityGrid {
@@ -21857,6 +21848,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftEditor {
             get {
                 return ResourceManager.GetString("ShiftEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current shift will end at {0}.
+        /// </summary>
+        public static string ShiftEndingMessage {
+            get {
+                return ResourceManager.GetString("ShiftEndingMessage", resourceCulture);
             }
         }
         

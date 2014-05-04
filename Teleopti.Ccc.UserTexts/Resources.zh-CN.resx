@@ -10567,8 +10567,8 @@ Teleopti R&amp;D</value>
   <data name="AllowDesktopNotifications" xml:space="preserve">
     <value>允许桌面提醒</value>
   </data>
-  <data name="ActivityEndingMessage" xml:space="preserve">
-    <value>当前活动“{0}”将于 {1} 结束</value>
+  <data name="ShiftEndingMessage" xml:space="preserve">
+    <value>当前班次将于 {0} 结束</value>
     <comment>The notify message show in MyTimeWeb when latest activity ending</comment>
   </data>
   <data name="NextActivityComingMessage" xml:space="preserve">
