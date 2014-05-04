@@ -26,6 +26,9 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		self.startMinutesSinceAsmZero = layer.StartMinutesSinceAsmZero;
 		self.endTimeText = layer.EndTimeText;
 		self.endMinutesSinceAsmZero = layer.StartMinutesSinceAsmZero + layer.LengthInMinutes;
+		self.isIdleLayer = function () {
+			return self.activityName === "-=IDLE=-";
+		};
 	}
 
 	function notificationActivities() {
@@ -97,18 +100,26 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				timeDiff = shiftStartTime - secondsSinceStart;
 			} else if (layerIndex >= 0 && layerIndex < layerCount - 1) {
 				// The shift is passing...
-				layer = self.layers[layerIndex + 1];
-				activityName = layer.activityName;
-				alertMessage = notifyOptions.comingMessageTemplate.format(activityName, layer.startTimeText);
+				if (self.layers[layerIndex + 1].isIdleLayer()) {
+					var currentLayer = self.layers[layerIndex];
+					alertMessage = notifyOptions.endingMessageTemplate.format(currentLayer.endTimeText);
 
-				var nextActivityStartTime = layer.startMinutesSinceAsmZero * 60;
-				timeDiff = nextActivityStartTime - secondsSinceStart;
+					var shiftEndTime = currentLayer.endMinutesSinceAsmZero * 60;
+					timeDiff = shiftEndTime - secondsSinceStart;
+				} else {
+					var nextLayer = self.layers[layerIndex + 1];
+					activityName = nextLayer.activityName;
+					alertMessage = notifyOptions.comingMessageTemplate.format(activityName, nextLayer.startTimeText);
+
+					var nextActivityStartTime = nextLayer.startMinutesSinceAsmZero * 60;
+					timeDiff = nextActivityStartTime - secondsSinceStart;
+				}
 			} else if (layerIndex === (layerCount - 1)) {
 				// Now is in latest activity
-				layer = self.layers[layerCount - 1];
-				alertMessage = notifyOptions.endingMessageTemplate.format(layer.endTimeText);
+				currentLayer = self.layers[layerIndex];
+				alertMessage = notifyOptions.endingMessageTemplate.format(currentLayer.endTimeText);
 
-				var shiftEndTime = layer.endMinutesSinceAsmZero * 60;
+				shiftEndTime = currentLayer.endMinutesSinceAsmZero * 60;
 				timeDiff = shiftEndTime - secondsSinceStart;
 			} else {
 				// Entire shift already finished!
@@ -147,11 +158,28 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		};
 
 		self._createLayers = function (layers) {
-			var newLayers = [];
-			$.each(layers, function (key, layer) {
-				newLayers.push(new activityLayer(layer));
-			});
-			self.layers = newLayers;
+			self.layers = [];
+			
+			var previousLayerEndTime = layers[0].StartMinutesSinceAsmZero + layers[0].LengthInMinutes;
+			for (var i = 0; i < layers.length; i++) {
+				var currentLayer = layers[i];
+				var currentLayerStartTime = currentLayer.StartMinutesSinceAsmZero;
+
+				if (i > 0 && currentLayerStartTime > previousLayerEndTime) {
+					// Add fake idle layer for time interval between 2 shifts
+					var idleLayer = new activityLayer({
+						Payload: '-=IDLE=-',
+						StartTimeText: layers[i - 1].EndTimeText,
+						EndTimeText: currentLayer.StartTimeText,
+						StartMinutesSinceAsmZero: previousLayerEndTime,
+						LengthInMinutes: currentLayerStartTime - previousLayerEndTime
+					});
+					self.layers.push(idleLayer);
+				}
+				previousLayerEndTime = currentLayer.StartMinutesSinceAsmZero + currentLayer.LengthInMinutes;
+				var newLayer = new activityLayer(currentLayer);
+				self.layers.push(newLayer);
+			}
 		};
 	}
 
@@ -188,10 +216,10 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 	}
 
 	function startAlert() {
-		var alert = alertvm.getCurrentAlert();
 		var interval = 0;
 		var delayTime = alertvm.alertTimeSetting;
 
+		var alert = alertvm.getCurrentAlert();
 		if (alert.timespan >= 0) {
 			if (alert.timespan >= alertvm.alertTimeSetting) {
 				interval = alert.timespan - alertvm.alertTimeSetting;
