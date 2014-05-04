@@ -123,7 +123,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new List<IActualAgentState>();
         }
 
-        public IActualAgentState LoadOneActualAgentState(Guid value)
+	    public IList<IActualAgentState> LoadLastAgentState(IEnumerable<Guid> personGuids)
+	    {
+			return new List<IActualAgentState>();
+	    }
+
+	    public IActualAgentState LoadOneActualAgentState(Guid value)
         {
             return new ActualAgentState();
         }

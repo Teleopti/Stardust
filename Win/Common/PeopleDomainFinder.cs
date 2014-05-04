@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Win.Common
                         person.Note.Contains(searchCriteria.SearchText) ||
                         person.CultureInfo.DisplayName.Contains(searchCriteria.SearchText) ||
                         person.TimeZone.Contains(searchCriteria.SearchText) ||
-                        person.WindowsLogOnName.Contains(searchCriteria.SearchText) ||
+                        person.LogOnName.Contains(searchCriteria.SearchText) ||
                         person.ApplicationLogOnName.Contains(searchCriteria.SearchText)
                     select person;
             }
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Win.Common
                         person.Note.ToLower(CultureInfo.CurrentCulture).Contains(searchCriteria.SearchText.ToLower(CultureInfo.CurrentCulture)) ||
                         person.CultureInfo.DisplayName.ToLower(CultureInfo.CurrentCulture).Contains(searchCriteria.SearchText.ToLower(CultureInfo.CurrentCulture)) ||
                         person.TimeZone.ToLower(CultureInfo.CurrentCulture).Contains(searchCriteria.SearchText.ToLower(CultureInfo.CurrentCulture)) ||
-                        person.WindowsLogOnName.ToLower(CultureInfo.CurrentCulture).Contains(searchCriteria.SearchText.ToLower(CultureInfo.CurrentCulture)) ||
+                        person.LogOnName.ToLower(CultureInfo.CurrentCulture).Contains(searchCriteria.SearchText.ToLower(CultureInfo.CurrentCulture)) ||
                         person.ApplicationLogOnName.ToLower(CultureInfo.CurrentCulture).Contains(searchCriteria.SearchText.ToLower(CultureInfo.CurrentCulture))
 
                     select person;

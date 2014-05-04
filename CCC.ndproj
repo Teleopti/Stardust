@@ -180,82 +180,82 @@
   <Dirs>
     <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319</Dir>
     <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\WPF</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Domain\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Infrastructure\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\DataBaseConverter\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Win\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.WinCode\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.SmartClientPortal\Teleopti.Common.UI.SmartPartControls\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\AgentPortal\Teleopti.Ccc.AgentPortal\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.WpfControls\bin\Debug</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Domain\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Infrastructure\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\DataBaseConverter\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Win\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.WinCode\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.SmartClientPortal\Teleopti.Common.UI.SmartPartControls\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\AgentPortal\Teleopti.Ccc.AgentPortal\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.WpfControls\bin\Release</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Messaging\TeleOpti.Messaging.Bin</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.Common\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.Transformer\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.TransformerInfrastructure\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.SmartParts\bin\Debug</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.Common\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.Transformer\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.TransformerInfrastructure\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.SmartParts\bin\Release</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\bin</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Service\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.ApplicationConfig\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.DbConverter\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ClientProxies\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Obfuscated\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\AgentPortal\Teleopti.Ccc.AgentPortalCode\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.PerformanceManagerProxy\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatter\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.AnalysisServicesManager\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClientProxy\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClient\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Server\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.TestApplication\bin\Debug</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Service\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.ApplicationConfig\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.DbConverter\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ClientProxies\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Obfuscated\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\AgentPortal\Teleopti.Ccc.AgentPortalCode\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.PerformanceManagerProxy\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatter\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.AnalysisServicesManager\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClientProxy\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClient\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Server\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.TestApplication\bin\Release</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\bin</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Logic\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigToolCode\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Support.Tool\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.DayOffPlanning\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.IocCommon\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.OnlineReporting\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Support.Security\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.SyncfusionGridBinding\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceLogic\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Client\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\WISE\tools\ClickOnceSign\ClickOnceSign\bin\Debug</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Logic\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigToolCode\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Support.Tool\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.DayOffPlanning\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.IocCommon\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.OnlineReporting\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Support.Security\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.SyncfusionGridBinding\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceLogic\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Client\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\WISE\tools\ClickOnceSign\ClickOnceSign\bin\Release</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Web\Teleopti.Ccc.Web\bin</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Support.LicTool\bin\Debug</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Support.LicTool\bin\Release</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Web.Broker\bin</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\bin</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\bin</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Parameter\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal.AnalyzerProxy\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.Library\bin\Debug</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Notification\bin\Debug</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Parameter\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal.AnalyzerProxy\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.Library\bin\Release</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Notification\bin\Release</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Startpage\bin</Dir>
-    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug</Dir>
+    <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Release</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Web.Broker.Backplane\bin</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\DomainTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\InfrastructureTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\DataBaseConverterTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.WinCodeTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.CommonTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.TransformerTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatterTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClientTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.ServerTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.LogicTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\AgentPortal\Teleopti.Ccc.AgentPortalCodeTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.TestCommon\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.DayOffPlanningTest\bin\Debug</Dir>
-	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.IocCommonTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\DomainTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\InfrastructureTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\DataBaseConverterTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.WinCodeTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.CommonTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.TransformerTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatterTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClientTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.ServerTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.LogicTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\AgentPortal\Teleopti.Ccc.AgentPortalCodeTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.TestCommon\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.DayOffPlanningTest\bin\Release</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.IocCommonTest\bin\Release</Dir>
   </Dirs>
   <Report Kind="0" SectionsEnabled="2563" XslPath="" Flags="63488">
     <Section Enabled="True">Application Metrics</Section>

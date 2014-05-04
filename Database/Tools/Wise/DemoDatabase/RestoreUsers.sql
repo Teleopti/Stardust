@@ -46,24 +46,16 @@ DECLARE @csv varchar(100)
 DECLARE @userid uniqueidentifier
 
 SET @userid = '10957ad5-5489-48e0-959a-9b5e015b2b5c'
-SET @delim = '\'
 SELECT @csv=system_user
 
-SELECT @commaindex = CHARINDEX(@delim, @csv)
-	
-SELECT @WinDomain = LEFT(@csv, @commaindex-1)
-
-SELECT @WinUser = RIGHT(@csv, LEN(@csv) - @commaindex)
-
 --delete all Windows domains as they stall IIS -> AD-lookup in TeleoptiPM
-DELETE FROM TeleoptiCCC7_Demo.dbo.WindowsAuthenticationInfo
+DELETE FROM TeleoptiCCC7_Demo.dbo.AuthenticationInfo
 
 --insert current user and connect to @userid
-INSERT INTO TeleoptiCCC7_Demo.dbo.WindowsAuthenticationInfo
+INSERT INTO TeleoptiCCC7_Demo.dbo.AuthenticationInfo
 SELECT
 	Person=@userid,
-	WindowsLogOnName=@WinUser,
-	DomainName=@WinDomain
+	[Identity]=@csv
 
 --Add currect user to IIS-users: update aspnet_users
 UPDATE TeleoptiAnalytics_Demo.dbo.aspnet_Users

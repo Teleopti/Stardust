@@ -16,8 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType, bool singleAgentTeam)
 	    {
 	        DateOnlyPeriod? blockPeriod = null;
-		    if (blockType == BlockFinderType.None)
-			    return null;
 
 			IEnumerable<IScheduleMatrixPro> tempMatrixes = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
             if (!tempMatrixes.Any())

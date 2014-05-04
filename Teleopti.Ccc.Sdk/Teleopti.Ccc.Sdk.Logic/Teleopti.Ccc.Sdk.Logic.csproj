@@ -176,6 +176,7 @@
     <Compile Include="CommandHandler\CancelPersonalActivityCommandHandler.cs" />
     <Compile Include="CommandHandler\ChangePersonEmploymentCommandHandler.cs" />
     <Compile Include="CommandHandler\ClearMainShiftCommandHandler.cs" />
+    <Compile Include="CommandHandler\GrantPersonRoleCommandHandler.cs" />
     <Compile Include="CommandHandler\QuickForecastCommandHandler.cs" />
     <Compile Include="CommandHandler\CreatePayrollExportCommandHandler.cs" />
     <Compile Include="CommandHandler\DeletePersonAccountForPersonCommandHandler.cs" />
@@ -188,6 +189,7 @@
     <Compile Include="CommandHandler\ImportForecastsFileCommandHandler.cs" />
     <Compile Include="CommandHandler\NewMainShiftCommandHandler.cs" />
     <Compile Include="CommandHandler\RecalculateForecastOnSkillCommandHandler.cs" />
+    <Compile Include="CommandHandler\RevokePersonRoleCommandHandler.cs" />
     <Compile Include="CommandHandler\SaveAgentPortalSettingsCommandHandler.cs" />
     <Compile Include="CommandHandler\SavePersonAbsenceRequestCommandHandler.cs" />
     <Compile Include="CommandHandler\SendPushMessageToPersonCommandHandler.cs" />
@@ -202,12 +204,14 @@
     <Compile Include="Payroll\PayrollResultService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryHandler\DateOnlyDtoExtensions.cs" />
+    <Compile Include="QueryHandler\GetAllRolesQueryHandler.cs" />
     <Compile Include="QueryHandler\GetAllScheduleTagsQueryHandler.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorDefinitionSetOvertimeQueryHandler.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorDefinitionSetShiftAllowanceQueryHandler.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorOvertimeQueryHandler.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorShiftAllowanceQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPeopleOptionalValuesByPersonIdQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPersonRolesQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesByGroupPageGroupQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesBySiteQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesForAllPeopleQueryHandler.cs" />

@@ -74,8 +74,8 @@ FROM Person WHERE IsDeleted = 0
 AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'EmploymentNumber')
 
 INSERT [ReadModel].[FindPerson]
-SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, WindowsLogOnName, 'WindowsLogOnName', NULL, NULL, NULL, NULL  
-FROM Person INNER JOIN WindowsAuthenticationInfo On Id = Person AND IsDeleted = 0
+SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, [Identity] as WindowsLogOnName, 'WindowsLogOnName', NULL, NULL, NULL, NULL  
+FROM Person INNER JOIN AuthenticationInfo On Id = Person AND IsDeleted = 0
 AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'WindowsLogOnName')
 
 INSERT [ReadModel].[FindPerson]

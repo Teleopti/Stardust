@@ -85,8 +85,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection());
 				Expect.Call(
 					() => _teamBlockClearer.ClearTeamBlock(schedulingOptions, _schedulePartModifyAndRollbackService, teamBlockInfo));
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
-					persons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective()))
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions,
+					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective()))
 					.IgnoreArguments()
 					.Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
@@ -131,8 +131,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection());
 				Expect.Call(
 					() => _teamBlockClearer.ClearTeamBlock(schedulingOptions, _schedulePartModifyAndRollbackService, teamBlockInfo));
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
-					persons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective()))
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions,
+					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective()))
 					.IgnoreArguments()
 					.Return(false);
                 Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
@@ -174,8 +174,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection());
 				Expect.Call(
 					() => _teamBlockClearer.ClearTeamBlock(schedulingOptions, _schedulePartModifyAndRollbackService, teamBlockInfo));
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
-					persons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective()))
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions,
+					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective()))
 					.IgnoreArguments()
 					.Return(true);
 				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
@@ -251,8 +251,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_teamBlockIntradayDecisionMaker.Decide(teamBlocks, optimizationPreferences,schedulingOptions)).Return(teamBlocks);
 				Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection());
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(schedulingOptions, _schedulePartModifyAndRollbackService, teamBlockInfo));
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
-					persons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions,
+					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
 					new ShiftNudgeDirective())).IgnoreArguments().Return(true);
 				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences)).Return(false);
 				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced)).Return(5.0);

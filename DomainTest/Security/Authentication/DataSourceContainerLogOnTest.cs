@@ -82,15 +82,20 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
         }
 
         [Test]
-        public void ShouldNotLogOnWindowsUserWithoutDomain()
+        public void ShouldNotLogOnWithUnknownIdentity()
         {
             IUnitOfWorkFactory unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
             IUnitOfWork unitOfWork = mocks.StrictMock<IUnitOfWork>();
+			IPerson person = null;
+			IPersonRepository repository = mocks.StrictMock<IPersonRepository>();
             using (mocks.Record())
             {
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
                 Expect.Call(unitOfWork.Dispose);
+				Expect.Call(repositoryFactory.CreatePersonRepository(unitOfWork)).Return(repository);
+				Expect.Call(repository.TryFindIdentityAuthenticatedPerson("robink", out person)).Return(false).
+					OutRef(person);
             }
             using (mocks.Playback())
             {
@@ -112,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
                 Expect.Call(repositoryFactory.CreatePersonRepository(unitOfWork)).Return(repository);
-                Expect.Call(repository.TryFindWindowsAuthenticatedPerson("toptinet", "robink", out person)).Return(true).
+                Expect.Call(repository.TryFindIdentityAuthenticatedPerson(@"toptinet\robink", out person)).Return(true).
                     OutRef(person);
                 Expect.Call(unitOfWork.Dispose);
             }

@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 			}
 		}
 
-		public int MainHeaderRow
+		public virtual int MainHeaderRow
 		{
 			get
 			{

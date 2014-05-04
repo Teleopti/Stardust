@@ -43,91 +43,93 @@
 
 <input id="Request-detail-datepicker-format" type="hidden" value="@Model.DatePickerFormat"/>
 
-<div class="navbar navbar-default">
-    <div class="container">
-        <ul class="nav navbar-nav">
-            @if (Model.RequestPermission.TextRequestPermission)
-            {
-                <li data-bind="css: { active: addTextRequestActive }">
-                    <a href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
-                </li>
-            }
-            @if (Model.RequestPermission.AbsenceRequestPermission)
-            {
-                <li data-bind="css: { active: addAbsenceRequestActive }">
-                    <a href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
-                </li>
-            }
-            @if (Model.RequestPermission.ShiftTradeRequestPermission)
-            {
-                <li data-bind="css: { active: addShiftTradeRequestActive }">
-                    <a href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-                </li>
-            }
-        </ul>
-    </div>
-</div>
-<div id="Requests-body-inner" class="request-body-inner relative">
-	@Html.Partial("NewShiftTradeRequest")
-    <div>
-        <div id="Request-add-data-binding-area" data-bind="with: requestViewModel">
-            <div id="Request-add-section" class="well well-small clearfix">
-                <div data-bind="template: Template">
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="Requests-data-binding-area" >
-        <div class="alert alert-warning" data-bind="visible: Requests().length == 0 && !isLoadingRequests(), hideWhenFadedOut: true" id="Requests-no-requests-found">
-            @Resources.NoRequestsFound
-        </div>
-        
-        <div id="loadingRequestIndicator" class="loading-gradient" data-bind="visible: isLoadingRequests">	   
-            <div class="loading"></div>
+<div class="container fixed-non-responsive">
+	<div class="navbar navbar-default">
+		<div class="container">
+			<ul class="nav navbar-nav">
+				@if (Model.RequestPermission.TextRequestPermission)
+				{
+					<li data-bind="css: { active: addTextRequestActive }">
+						<a href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+					</li>
+				}
+				@if (Model.RequestPermission.AbsenceRequestPermission)
+				{
+					<li data-bind="css: { active: addAbsenceRequestActive }">
+						<a href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+					</li>
+				}
+				@if (Model.RequestPermission.ShiftTradeRequestPermission)
+				{
+					<li data-bind="css: { active: addShiftTradeRequestActive }">
+						<a href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+					</li>
+				}
+			</ul>
+		</div>
+	</div>
+	<div id="Requests-body-inner" class="request-body-inner relative">
+		@Html.Partial("NewShiftTradeRequest")
+		<div>
+			<div id="Request-add-data-binding-area" data-bind="with: requestViewModel">
+				<div id="Request-add-section" class="well well-small clearfix">
+					<div data-bind="template: Template">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="Requests-data-binding-area">
+			<div class="alert alert-warning" data-bind="visible: Requests().length == 0 && !isLoadingRequests(), hideWhenFadedOut: true" id="Requests-no-requests-found">
+				@Resources.NoRequestsFound
+			</div>
 
-        </div>
-	    <div class="request-list" data-bind="foreach: ColumnRequests">
-		    <div class="row" data-bind="foreach: Items">
-			    <div class="request col-xs-6">
-				    <div class="well well-small">
-					    <div class="request-body" data-bind="click: ShowDetails" style="cursor: pointer">
-						    <div data-bind="if: CanDelete">
-							    <button class="request-delete close" data-bind="click: $root.Delete,clickBubble: false" title="@Resources.Delete">&times;</button>
-						    </div>
-						    <div class="request-subject">
-							    <h5 class="request-data-subject" data-bind="html: Subject"></h5>
-						    </div>
-						    <div class="request-details" >
-							    <div>
-								    <span class="request-caption">@Resources.Type: </span><span data-bind="text: Type" class="request-data-type"></span>
-								    <span class="request-caption">@Resources.Status: </span><span class="request-caption" data-bind="visible: isProcessing"> (@Resources.ProcessingDotDotDot) </span><span class="label" data-bind="text: Status, css: StatusClass"></span>
-                       
-							    </div>
-							    <span class="request-caption">@Resources.Date: </span><span class="request-data-date" data-bind="text: Dates"></span>
-							    <span class="request-caption">@Resources.UpdatedOn: </span><span data-bind="text: UpdatedOn" ></span>
-						    </div>
-						    <div class="request-data-message request-text" data-bind="text: (IsSelected() && !IsEditable()) ? Text : ListText">
-						    </div>
-					    </div>
-					    <div class="request-edit" data-bind="visible: IsSelected, with: DetailItem">
-						    <hr />
-						    <div data-bind="template : Template">
-						    </div>
-					    </div>
-				    </div>    
-			    </div>
-		    </div>
-	    </div>
-		 <div class="bottom-of-requests-page"></div>
+			<div id="loadingRequestIndicator" class="loading-gradient" data-bind="visible: isLoadingRequests">
+				<div class="loading"></div>
 
-        <div class="loading-gradient" style="display: none">
-            <div class="loading">
-            </div>
-        </div>
-	    
-        <div id="pagingIndicator" class="arrow-down displaynone" data-bind="fadeInIf: MoreToLoad, hideWhenFadedOut: true">
-        </div>
-        <div class="clearboth">
-        </div>
-    </div>		
+			</div>
+			<div class="request-list" data-bind="foreach: ColumnRequests">
+				<div class="row" data-bind="foreach: Items">
+					<div class="request col-xs-6">
+						<div class="well well-small">
+							<div class="request-body" data-bind="click: ShowDetails" style="cursor: pointer">
+								<div data-bind="if: CanDelete">
+									<button class="request-delete close" data-bind="click: $root.Delete,clickBubble: false" title="@Resources.Delete">&times;</button>
+								</div>
+								<div class="request-subject">
+									<h5 class="request-data-subject" data-bind="html: Subject"></h5>
+								</div>
+								<div class="request-details">
+									<div>
+										<span class="request-caption">@Resources.Type: </span><span data-bind="text: Type" class="request-data-type"></span>
+										<span class="request-caption">@Resources.Status: </span><span class="request-caption" data-bind="visible: isProcessing"> (@Resources.ProcessingDotDotDot) </span><span class="label" data-bind="text: Status, css: StatusClass"></span>
+
+									</div>
+									<span class="request-caption">@Resources.Date: </span><span class="request-data-date" data-bind="text: Dates"></span>
+									<span class="request-caption">@Resources.UpdatedOn: </span><span data-bind="text: UpdatedOn"></span>
+								</div>
+								<div class="request-data-message request-text" data-bind="text: (IsSelected() && !IsEditable()) ? Text : ListText">
+								</div>
+							</div>
+							<div class="request-edit" data-bind="visible: IsSelected, with: DetailItem">
+								<hr />
+								<div data-bind="template : Template">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="bottom-of-requests-page"></div>
+
+			<div class="loading-gradient" style="display: none">
+				<div class="loading">
+				</div>
+			</div>
+
+			<div id="pagingIndicator" class="arrow-down displaynone" data-bind="fadeInIf: MoreToLoad, hideWhenFadedOut: true">
+			</div>
+			<div class="clearboth">
+			</div>
+		</div>
+	</div>
 </div>

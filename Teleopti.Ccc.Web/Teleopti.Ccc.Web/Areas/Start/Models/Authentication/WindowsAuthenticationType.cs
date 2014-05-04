@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 
 		public IEnumerable<IDataSource> DataSources()
 		{
-			return _dataSourcesProvider.Value.RetrieveDatasourcesForWindows();
+			return _dataSourcesProvider.Value.RetrieveDatasourcesForIdentity();
 		}
 
 		public IAuthenticationModel BindModel(ModelBindingContext bindingContext)

@@ -28,18 +28,20 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 
                 bool availableForUser;
                 IPerson person;
+	            var domainName = _windowsUserProvider.DomainName;
+	            var userName = _windowsUserProvider.UserName;
+	            var logOnName = IdentityHelper.Merge(domainName, userName);
                 using (var unitOfWork = availableDataSource.Application.CreateAndOpenUnitOfWork())
                 {
                     var personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);
                     availableForUser =
-                        personRepository.TryFindWindowsAuthenticatedPerson(_windowsUserProvider.DomainName,
-                                                                           _windowsUserProvider.UserName, out person);
+						personRepository.TryFindIdentityAuthenticatedPerson(logOnName, out person);
                 }
                 if (availableForUser)
                 {
                     var container = new DataSourceContainer(availableDataSource, _repositoryFactory, null,
                                                             AuthenticationTypeOption.Windows);
-					container.LogOnName = _windowsUserProvider.DomainName + "\\" + _windowsUserProvider.UserName;
+	                container.LogOnName = logOnName;
                     container.SetUser(person);
                     dataSourceList.Add(container);
                 }

@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -56,12 +57,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (WindowsAuthentication)
 			{
-				var authenticationInfo = new WindowsAuthenticationInfo
-					{
-						WindowsLogOnName = Environment.UserName, 
-						DomainName = Environment.UserDomainName
-					};
-				user.WindowsAuthenticationInfo = authenticationInfo;
+				var authenticationInfo = new AuthenticationInfo
+				{
+					Identity = IdentityHelper.Merge(Environment.UserDomainName, Environment.UserName)
+				};
+				user.AuthenticationInfo = authenticationInfo;
 			}
 
 			if (!string.IsNullOrEmpty(Role))

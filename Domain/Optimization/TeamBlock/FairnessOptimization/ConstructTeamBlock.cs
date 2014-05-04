@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
     public interface IConstructTeamBlock
     {
 	    IList<ITeamBlockInfo> Construct(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
-	                                    IList<IPerson> selectedPersons, bool useTeamBlockPerOption,
+	                                    IList<IPerson> selectedPersons,
 	                                    BlockFinderType blockFinderTypeForAdvanceScheduling,
 	                                    IGroupPageLight groupOnGroupPageForTeamBlockPer);
     }
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
         public IList<ITeamBlockInfo> Construct(IList<IScheduleMatrixPro> allPersonMatrixList,
                                                DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-											   bool useTeamBlockPerOption, BlockFinderType blockFinderTypeForAdvanceScheduling,
+											   BlockFinderType blockFinderTypeForAdvanceScheduling,
 												IGroupPageLight groupOnGroupPageForTeamBlockPer)
         {
             var listOfAllTeamBlock = new List<ITeamBlockInfo>();
@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             {
                 if (listOfAllTeamBlock.Count(s => s.BlockInfo.BlockPeriod.DayCollection().Contains(datePointer)) > 0)
                     continue;
+
                 var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
                 foreach (IPerson selectedPerson in selectedPersons)
                 {
@@ -52,26 +53,33 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
                     ITeamInfo teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
                 {
                     if (teamInfo == null) continue;
-                    //if (!teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson))
-                    //    continue;
+
+	                foreach (var groupMember in teamInfo.GroupMembers)
+	                {
+		                if(!selectedPersons.Contains(groupMember))
+							teamInfo.LockMember(groupMember);
+	                }
 
                     bool singleAgentTeam = groupOnGroupPageForTeamBlockPer != null &&
                                            groupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
 
-                    ITeamBlockInfo teamBlockInfo;
-                    if (useTeamBlockPerOption)
-                        teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
-                                                                                  blockFinderTypeForAdvanceScheduling,
-                                                                                  singleAgentTeam, allPersonMatrixList);
-                    else
-                        teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
-                                                                                  BlockFinderType.SingleDay,
-                                                                                  singleAgentTeam, allPersonMatrixList);
-                    if (teamBlockInfo == null) continue;
+	                ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
+		                blockFinderTypeForAdvanceScheduling, singleAgentTeam);
+
+                    if (teamBlockInfo == null) 
+						continue;
+
+	                var blockInfo = teamBlockInfo.BlockInfo;
+					foreach (var dateOnly in blockInfo.BlockPeriod.DayCollection())
+	                {
+		                if(!selectedPeriod.Contains(dateOnly))
+							blockInfo.LockDate(dateOnly);
+	                }
 
                     listOfAllTeamBlock.Add(teamBlockInfo);
                 }
             }
+
             return listOfAllTeamBlock;
         }
         

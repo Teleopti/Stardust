@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 	{
 		private IApplicationData applicationData;
 		private IDataSourcesProvider target;
-		private IAvailableWindowsDataSources availableWindowsDataSources;
+		private IAvailableIdentityDataSources _availableIdentityDataSources;
 		private ITokenIdentityProvider tokenIdentityProvider;
 		private IAvailableApplicationTokenDataSource availableApplicationTokenDataSource;
 
@@ -23,10 +23,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		public void Setup()
 		{
 			applicationData = MockRepository.GenerateMock<IApplicationData>();
-			availableWindowsDataSources = MockRepository.GenerateMock<IAvailableWindowsDataSources>();
+			_availableIdentityDataSources = MockRepository.GenerateMock<IAvailableIdentityDataSources>();
 			availableApplicationTokenDataSource = MockRepository.GenerateMock<IAvailableApplicationTokenDataSource>();
 			tokenIdentityProvider = MockRepository.GenerateMock<ITokenIdentityProvider>();
-			target = new DataSourcesProvider(applicationData, availableWindowsDataSources, availableApplicationTokenDataSource, tokenIdentityProvider);
+			target = new DataSourcesProvider(applicationData, _availableIdentityDataSources, availableApplicationTokenDataSource, tokenIdentityProvider);
 		}
 
 		[Test]
@@ -46,13 +46,13 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var validDs = MockRepository.GenerateMock<IDataSource>();
 			var invalidDs = MockRepository.GenerateMock<IDataSource>();
 			var dsList = new[] {validDs, invalidDs};
-			var winAccount = new TokenIdentity {UserIdentifier = "user", UserDomain = "domain"};
+			var token = new TokenIdentity {UserIdentifier = @"domain\user"};
 
 			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(dsList);
-			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(winAccount);
-			availableWindowsDataSources.Stub(x => x.AvailableDataSources(dsList, winAccount.UserDomain, winAccount.UserIdentifier)).Return(new[] {validDs});
+			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(token);
+			_availableIdentityDataSources.Stub(x => x.AvailableDataSources(dsList, token.UserIdentifier)).Return(new[] {validDs});
 
-			target.RetrieveDatasourcesForWindows().Should().Have.SameValuesAs(new[] {validDs});
+			target.RetrieveDatasourcesForIdentity().Should().Have.SameValuesAs(new[] {validDs});
 		}
 
 		[Test]
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		{
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(null);
 
-			target.RetrieveDatasourcesForWindows().Should().Be.Null();
+			target.RetrieveDatasourcesForIdentity().Should().Be.Null();
 		}
 
 		[Test]

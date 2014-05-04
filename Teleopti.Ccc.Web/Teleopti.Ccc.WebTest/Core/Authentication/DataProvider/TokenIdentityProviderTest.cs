@@ -35,21 +35,19 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				new ClaimsPrincipal(
 					new ClaimsIdentityCollection(new Collection<IClaimsIdentity>
 						{
-							new ClaimsIdentity(new[] {new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/kunningm#TOPTINET")})
+							new ClaimsIdentity(new[] {new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/TOPTINET#kunningm")})
 						}));
-			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo("kunningm");
-			target.RetrieveToken().UserDomain.Should().Be.EqualTo("TOPTINET");
-			target.RetrieveToken().OriginalToken.Should().Be.EqualTo("http://fakeschema.com/kunningm#TOPTINET");
+			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo(@"TOPTINET\kunningm");
+			target.RetrieveToken().OriginalToken.Should().Be.EqualTo(@"http://fakeschema.com/TOPTINET#kunningm");
 		}
 
 		[Test]
 		public void ShouldExtractWindowsAccountInformationFromTeleoptiIdentity()
 		{
 			httpContext.User =
-				new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, "http://fakeschema.com/kunningm#TOPTINET"), null);
-			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo("kunningm");
-			target.RetrieveToken().UserDomain.Should().Be.EqualTo("TOPTINET");
-			target.RetrieveToken().OriginalToken.Should().Be.EqualTo("http://fakeschema.com/kunningm#TOPTINET");
+				new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, "http://fakeschema.com/TOPTINET#kunningm"), null);
+			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo(@"TOPTINET\kunningm");
+			target.RetrieveToken().OriginalToken.Should().Be.EqualTo(@"http://fakeschema.com/TOPTINET#kunningm");
 		}
 
 		[Test]

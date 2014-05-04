@@ -1019,7 +1019,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         public void MarkForRemove(IPerson person)
         {
-            person.WindowsAuthenticationInfo = null;
+            person.AuthenticationInfo = null;
             person.ApplicationAuthenticationInfo = null;
             new Repository(GetUnitOfWork).Remove(person);
         }

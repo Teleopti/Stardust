@@ -2,10 +2,14 @@
 {
 	public enum Toggles
 	{
-		//Don't remove this one - used in tests
+		//Don't remove these one - used in tests
 		EnabledFeature,
 		DisabledFeature,
 		//////
-		WeeklyRestRuleSolver
+		
+		WeeklyRestRuleSolver,
+		TeamBlockMoveTimeBetweenDays,
+		//Show last updated states of realtime adherence overview
+		RtaLastStatesOverview
 	}
 }

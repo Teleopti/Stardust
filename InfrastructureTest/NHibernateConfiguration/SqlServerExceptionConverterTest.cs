@@ -58,12 +58,13 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			{
 				Session.CreateSQLQuery("select foo from bar").List();
 			}
-			catch (DataSourceException)
+			
+			catch(Exception)
 			{
 				ok = true;
 			}
 			if (!ok)
-				Assert.Fail("DataSourceException was not thrown!");
+				Assert.Fail("Exception was not thrown!");
 		}
 
 		[Test]

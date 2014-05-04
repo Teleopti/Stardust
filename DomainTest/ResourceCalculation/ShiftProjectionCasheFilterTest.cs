@@ -757,7 +757,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_cashe4.WorkShiftStartTime).Return(_start4);
             _mocks.ReplayAll();
             var possibleStartEndCategory = new PossibleStartEndCategory { StartTime = new TimeSpan(8,0,0) };
-            var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonStart = true };
+            var schedulingOptions = new SchedulingOptions { TeamSameStartTime = true };
 
             var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
                                                                           possibleStartEndCategory,
@@ -780,7 +780,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_cashe4.WorkShiftEndTime).Return(_end4);
             _mocks.ReplayAll();
             var possibleStartEndCategory = new PossibleStartEndCategory { EndTime  = TimeSpan.FromHours(15) };
-            var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonEnd = true };
+            var schedulingOptions = new SchedulingOptions { TeamSameEndTime = true };
 
             var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
                                                                           possibleStartEndCategory,
@@ -807,7 +807,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_cashe4.WorkShiftEndTime).Return(_end4).Repeat.Any();
             _mocks.ReplayAll();
 			var possibleStartEndCategory = new PossibleStartEndCategory { EndTime = TimeSpan.FromHours(15), StartTime = TimeSpan.FromHours(8) };
-            var schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonEnd = true, UseGroupSchedulingCommonStart = true };
+            var schedulingOptions = new SchedulingOptions { TeamSameEndTime = true, TeamSameStartTime = true };
 
             var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
                                                                           possibleStartEndCategory,

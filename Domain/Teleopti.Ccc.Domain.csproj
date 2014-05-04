@@ -524,6 +524,7 @@
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictor.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
+    <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeBetweenDaysService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockScheduleCloner.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\BrokenWeekOutsideSelectionSpecification.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ContractWeeklyRestForPersonWeek.cs" />
@@ -1075,7 +1076,6 @@
     <Compile Include="Scheduling\ShiftTradeChecksumCalculator.cs" />
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplate.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduler.cs" />
-    <Compile Include="Scheduling\TeamBlock\BlockFinderTypeHelper.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockPeriodFinderBetweenDayOff.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateValidator.cs" />
@@ -1095,7 +1095,6 @@
     <Compile Include="Scheduling\TeamBlock\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SuggestedShiftRestrictionExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockClearer.cs" />
-    <Compile Include="Scheduling\TeamBlock\BlockFinderTypeCreator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamDayOffModifier.cs" />
@@ -1175,6 +1174,7 @@
     <Compile Include="Security\Authentication\ICheckUserDetail.cs" />
     <Compile Include="Security\Authentication\IDataSourceContainer.cs" />
     <Compile Include="Security\Authentication\IDataSourceProvider.cs" />
+    <Compile Include="Security\Authentication\IdentityHelper.cs" />
     <Compile Include="Security\Authentication\IFindApplicationUser.cs" />
     <Compile Include="Security\Authentication\IFindUserDetail.cs" />
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
@@ -1185,6 +1185,7 @@
     <Compile Include="Security\Authentication\UtcTimeZone.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettings.cs" />
+    <Compile Include="Security\AuthorizationEntities\AuthenticationInfo.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccCalendarLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccVersion8LicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOption.cs" />
@@ -1496,7 +1497,6 @@
     <Compile Include="Scheduling\Assignment\ActivityLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\SiteAuthorizationEntityConverter.cs" />
-    <Compile Include="Security\AuthorizationEntities\WindowsAuthenticationInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\BusinessUnitAuthorizationEntityConverter.cs">
       <SubType>Code</SubType>
     </Compile>

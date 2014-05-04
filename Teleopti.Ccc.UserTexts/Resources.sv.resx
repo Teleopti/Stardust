@@ -11486,4 +11486,33 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Uppdatera giltigt läge</value>
     <comment>Calculate Legal State</comment>
   </data>
+  <data name="AllowDesktopNotifications" xml:space="preserve">
+    <value>Tillåt skrivbordsnotifieringar</value>
+  </data>
+  <data name="NoDatasource" xml:space="preserve">
+    <value>Ingen datakälla är tillgänglig.</value>
+  </data>
+  <data name="SignInAsAnotherUser" xml:space="preserve">
+    <value>Logga in som en annan användare</value>
+  </data>
+  <data name="SignInWith" xml:space="preserve">
+    <value>Logga in med:</value>
+  </data>
+  <data name="SignInAsAnotherUserInPermission" xml:space="preserve">
+    <value>Logga in som annan användare</value>
+  </data>
+  <data name="SecondShort" xml:space="preserve">
+    <value>s</value>
+  </data>
+  <data name="ResolvingWeeklyRestFor" xml:space="preserve">
+    <value>Löser veckovila för {0} {1}</value>
+  </data>
+  <data name="NoBlock" xml:space="preserve">
+    <value>&lt;Inga block&gt;</value>
+    <comment>No Block</comment>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>&lt;Inga team&gt;</value>
+    <comment>No Team</comment>
+  </data>
 </root>

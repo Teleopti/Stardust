@@ -839,7 +839,6 @@
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplateTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferencesTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePrefernecesGeneralPersonalSettingTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\BlockFinderTypeCreatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockPeriodFinderBetweenDayOffTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MaxMovedDaysOverLimitValidatorTest.cs" />
@@ -1152,7 +1151,6 @@
     <Compile Include="Security\AuthorizationEntities\ApplicationRoleTest.cs" />
     <Compile Include="Scheduling\ActivityTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignmentTest.cs" />
-    <Compile Include="Security\AuthorizationEntities\WindowsAuthenticationInfoTest.cs" />
     <Compile Include="Security\RegExpSpecificationTest.cs" />
     <Compile Include="Security\UserDetailTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />

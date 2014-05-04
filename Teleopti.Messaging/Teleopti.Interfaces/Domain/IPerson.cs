@@ -247,10 +247,10 @@ namespace Teleopti.Interfaces.Domain
 		IChangePasswordResultInfo ChangePassword(string oldPassword, string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail);
 
         /// <summary>
-        /// Gets or sets the windows authentication info.
-        /// </summary>
-        /// <value>The windows authentication info.</value>
-        IWindowsAuthenticationInfo WindowsAuthenticationInfo { get; set; }
+		/// Gets or sets the identity authentication info.
+		/// </summary>
+		/// <value>The identity authentication info.</value>
+		IAuthenticationInfo AuthenticationInfo { get; set; }
 
         /// <summary>
         /// Gets or sets the application authentication info.

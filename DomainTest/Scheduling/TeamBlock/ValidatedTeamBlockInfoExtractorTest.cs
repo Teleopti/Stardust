@@ -65,13 +65,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test] 
         public void ReturnNullWhenTeamBlockIsNull()
         {
-            Assert.IsNull(_target.GetTeamBlockInfo(null,new DateOnly(),new List<IScheduleMatrixPro>(),null));
+            Assert.IsNull(_target.GetTeamBlockInfo(null,new DateOnly(),new List<IScheduleMatrixPro>(),null, new DateOnlyPeriod()));
         }
 
         [Test]
         public void ReturnNullWhenSchedulingOptionsIsNull()
         {
-            Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo, new DateOnly(), new List<IScheduleMatrixPro>(), null));
+            Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo, new DateOnly(), new List<IScheduleMatrixPro>(), null, new DateOnlyPeriod()));
         }
 
         
@@ -82,14 +82,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
             _schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
-            _schedulingOptions.UseTeamBlockPerOption = false;
+				_schedulingOptions.UseBlock = false;
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(),
-                                                                      BlockFinderType.SingleDay, false,
-                                                                      new List<IScheduleMatrixPro>())).IgnoreArguments().Return(null);
+                                                                      BlockFinderType.SingleDay, false)).IgnoreArguments().Return(null);
             }
-            Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo, new DateOnly(), new List<IScheduleMatrixPro>(), _schedulingOptions));
+            Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo, new DateOnly(), new List<IScheduleMatrixPro>(), _schedulingOptions, new DateOnlyPeriod()));
         }
 
         [Test]
@@ -97,12 +96,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
             _schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
-            _schedulingOptions.UseTeamBlockPerOption = false;
+				_schedulingOptions.UseBlock = false;
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
-                                                                      BlockFinderType.SingleDay, false,
-                                                                      new List<IScheduleMatrixPro>())).IgnoreArguments().Return(_teamBlockInfo);
+                                                                      BlockFinderType.SingleDay, false)).IgnoreArguments().Return(_teamBlockInfo);
 
                 Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
@@ -116,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlock(_teamBlockInfo, _date))
 					 .Return(true);
             }
-            Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo, _date, new List<IScheduleMatrixPro>(), _schedulingOptions));
+            Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo, _date, new List<IScheduleMatrixPro>(), _schedulingOptions, new DateOnlyPeriod()));
         }
 
 
@@ -125,12 +123,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
             _schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
-            _schedulingOptions.UseTeamBlockPerOption = false;
+				_schedulingOptions.UseBlock = false;
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
-                                                                      BlockFinderType.SingleDay, false,
-                                                                      new List<IScheduleMatrixPro>())).IgnoreArguments().Return(_teamBlockInfo);
+                                                                      BlockFinderType.SingleDay, false)).IgnoreArguments().Return(_teamBlockInfo);
 
                 Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
@@ -146,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).IgnoreArguments() 
                       .Return(false);
             }
-            Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo, _date, new List<IScheduleMatrixPro>(), _schedulingOptions));
+            Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo, _date, new List<IScheduleMatrixPro>(), _schedulingOptions, new DateOnlyPeriod()));
         }
 
         [Test]
@@ -154,12 +151,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
             _schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
-            _schedulingOptions.UseTeamBlockPerOption = false;
+				_schedulingOptions.UseBlock = false;
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
-                                                                      BlockFinderType.SingleDay, false,
-                                                                      new List<IScheduleMatrixPro>())).IgnoreArguments().Return(_teamBlockInfo);
+                                                                      BlockFinderType.SingleDay, false)).IgnoreArguments().Return(_teamBlockInfo);
 
                 Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
@@ -175,7 +171,43 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).IgnoreArguments()
                       .Return(true);
             }
-            Assert.AreEqual( _target.GetTeamBlockInfo(_teamInfo, _date, new List<IScheduleMatrixPro>(), _schedulingOptions),_teamBlockInfo );
+
+	        var result = _target.GetTeamBlockInfo(_teamInfo, _date, new List<IScheduleMatrixPro>(), _schedulingOptions,
+		        _dateOnlyPeriod);
+            Assert.AreEqual(_teamBlockInfo, result );
+			Assert.AreEqual(1, result.BlockInfo.UnLockedDates().Count);
         }
+
+		[Test]
+		public void ShouldLockUnselectedDays()
+		{
+			IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
+			_schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
+			_schedulingOptions.UseBlock = false;
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
+																	  BlockFinderType.SingleDay, false)).IgnoreArguments().Return(_teamBlockInfo);
+
+				Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
+				Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+				Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
+				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+				Expect.Call(_matrixPro.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleRange.ScheduledDay(_date)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlock(_teamBlockInfo, _date))
+					  .Return(false);
+				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).IgnoreArguments()
+					  .Return(true);
+			}
+
+			var result = _target.GetTeamBlockInfo(_teamInfo, _date, new List<IScheduleMatrixPro>(), _schedulingOptions,
+				new DateOnlyPeriod());
+			Assert.AreEqual(_teamBlockInfo, result);
+			Assert.AreEqual(0, result.BlockInfo.UnLockedDates().Count);
+		}
     }
 }

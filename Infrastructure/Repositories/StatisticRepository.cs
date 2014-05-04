@@ -301,6 +301,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
+        public IList<IActualAgentState> LoadLastAgentState(IEnumerable<Guid> personGuids)
+        {
+            using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+            {
+                var ret = new List<IActualAgentState>();
+				foreach (var personList in personGuids.Batch(400))
+				{
+					ret.AddRange(((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+						"SELECT * FROM RTA.ActualAgentState WHERE PersonId IN(:persons)")
+						.SetParameterList("persons", personList)
+						.SetResultTransformer(Transformers.AliasToBean(typeof (ActualAgentState)))
+						.SetReadOnly(true)
+						.List<IActualAgentState>().GroupBy(x => x.PersonId, (key, group) => group.First()));
+				}
+                return ret;
+            }
+        }
+
         public IActualAgentState LoadOneActualAgentState(Guid value)
         {
             using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())

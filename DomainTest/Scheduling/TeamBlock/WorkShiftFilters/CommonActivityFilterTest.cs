@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			result = _target.Filter(new List<IShiftProjectionCache>(), _schedulingOptions, null);
 			Assert.That(result.Count, Is.EqualTo(0));
 
-			_schedulingOptions.UseCommonActivity = true;
+			_schedulingOptions.TeamSameActivity = true;
 			result = _target.Filter(new List<IShiftProjectionCache> { shift }, _schedulingOptions, restriction);
 			Assert.That(result.Count, Is.EqualTo(1));
 		}
@@ -69,8 +69,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldFilterShiftsAccordingToCommonActivity()
 		{
-			_schedulingOptions.UseCommonActivity = true;
-			_schedulingOptions.UseGroupScheduling = true;
+			_schedulingOptions.TeamSameActivity = true;
+			_schedulingOptions.UseTeam = true;
 			_schedulingOptions.CommonActivity = _activity;
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
 			                                           new EndTimeLimitation(),

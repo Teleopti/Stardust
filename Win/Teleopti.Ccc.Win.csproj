@@ -382,6 +382,7 @@
     <Compile Include="Commands\MatrixListFactory.cs" />
     <Compile Include="Commands\OptimizationCommand.cs" />
     <Compile Include="Commands\ScheduleCommand.cs" />
+    <Compile Include="Commands\TeamBlockMoveTimeBetweenDaysCommand.cs" />
     <Compile Include="Commands\TeamBlockOptimizationCommand.cs" />
     <Compile Include="Commands\WeeklyRestSolverCommand.cs" />
     <Compile Include="Common\AvailableSkillWithPreselectedSkill.cs" />
@@ -1438,6 +1439,9 @@
     <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
     <Compile Include="Scheduling\SchedulerStateScheduleDayChangedCallback.cs" />
     <Compile Include="Scheduling\ScheduleTimeType.cs" />
+    <Compile Include="Scheduling\SchedulingScreenInternals\LoaderMethod.cs" />
+    <Compile Include="Scheduling\SchedulingScreenInternals\SchedulingAndOptimizeArgument.cs" />
+    <Compile Include="Scheduling\SchedulingScreenInternals\SchedulingScreenEnums.cs" />
     <Compile Include="Scheduling\SkillResult\SkillFullPeriodGridControl.cs">
       <SubType>Component</SubType>
     </Compile>

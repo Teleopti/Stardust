@@ -62,6 +62,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _initNavigation() {
+		initNavBarCollapsToggle();
+
 		$('.dropdown-menu a[data-mytime-action]')
 			.click(function (e) {
 				e.preventDefault();
@@ -89,6 +91,27 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			return false;
 		});
 
+	}
+
+	function initNavBarCollapsToggle() {
+		$('.topToggler').click(function () {
+			var $this = $(this);
+			var target = $this.attr('data-target');
+			var $target = $(target);
+			var parent = $this.attr('data-parent');
+			var $parent = $(parent);
+
+			$this[$target.hasClass('in') ? 'addClass' : 'removeClass']('collapsed');
+
+			$target.collapse('toggle');
+			$parent.find('.topToggler').not($this).addClass('collapsed');
+
+			var actives = $parent.find('.in');
+			if (actives && actives.length) {
+				actives.collapse('hide');
+			}
+
+		});
 	}
 
 	function pareseUrlDate(str) {

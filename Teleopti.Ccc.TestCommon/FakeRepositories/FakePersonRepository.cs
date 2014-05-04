@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public bool TryFindWindowsAuthenticatedPerson(string domainName, string logOnName, out IPerson foundPerson)
+		public bool TryFindIdentityAuthenticatedPerson(string identity, out IPerson foundPerson)
 		{
 			throw new NotImplementedException();
 		}
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public bool DoesWindowsUserExists(string domainName, string userName)
+		public bool DoesIdentityExists(string identity)
 		{
 			throw new NotImplementedException();
 		}

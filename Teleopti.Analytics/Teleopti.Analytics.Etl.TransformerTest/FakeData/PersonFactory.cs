@@ -86,8 +86,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             // User with permission to view Performance Mangager reports (both windows and application logon info!)
             person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("John", "Doe");
-            person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
-                                                   {DomainName = "domain", WindowsLogOnName = "johnd"};
+            person.AuthenticationInfo = new AuthenticationInfo
+                                                   {Identity = @"domain\johnd"};
 
             person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
                                                        {
@@ -101,7 +101,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             // User with permission to create AND view Performance Mangager reports
             person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("Belinda", "Bend");
-            person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo { DomainName = "domain", WindowsLogOnName = "belindab" };
+            person.AuthenticationInfo = new AuthenticationInfo { Identity = @"domain\belindab" };
             
             person.SetId(Guid.NewGuid());
             person.PermissionInformation.AddApplicationRole(getApplicationRole("PM Users", false, true));
@@ -141,7 +141,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             // User with Windows logon credentials but NO permission to Performance Mangager reports
             person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("Greg", "Gong");
-            person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo { DomainName = "Gdomain", WindowsLogOnName = "GregG" };
+            person.AuthenticationInfo = new AuthenticationInfo { Identity = @"Gdomain\GregG" };
 
             person.SetId(Guid.NewGuid());
             RaptorTransformerHelper.SetUpdatedOn(person, DateTime.Now);

@@ -12,11 +12,11 @@
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd6" namespace="http://schemas.ccc.teleopti.com/sdk/2010/08/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd7" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd8" namespace="http://schemas.ccc.teleopti.com/sdk/2011/07/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd10" namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd11" namespace="http://schemas.ccc.teleopti.com/sdk/2013/03/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd12" namespace="http://schemas.ccc.teleopti.com/sdk/2012/04/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd13" namespace="http://schemas.ccc.teleopti.com/sdk/2014/04/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd9" namespace="http://schemas.ccc.teleopti.com/sdk/2014/04/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd10" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd11" namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd12" namespace="http://schemas.ccc.teleopti.com/sdk/2013/03/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd13" namespace="http://schemas.ccc.teleopti.com/sdk/2012/04/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd14" namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd15" namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd16" namespace="http://schemas.ccc.teleopti.com/sdk/2010/10/" />
@@ -733,6 +733,24 @@
   <wsdl:message name="TeleoptiOrganizationService_SetSchedulePeriodWorktimeOverride_OutputMessage">
     <wsdl:part name="parameters" element="tns:SetSchedulePeriodWorktimeOverrideResponse" />
   </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GetRolesByQuery_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRolesByQuery" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GetRolesByQuery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRolesByQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GrantPersonRole_InputMessage">
+    <wsdl:part name="parameters" element="tns:GrantPersonRole" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_GrantPersonRole_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GrantPersonRoleResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_RevokePersonRole_InputMessage">
+    <wsdl:part name="parameters" element="tns:RevokePersonRole" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiOrganizationService_RevokePersonRole_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RevokePersonRoleResponse" />
+  </wsdl:message>
   <wsdl:message name="TeleoptiCccSdkInternal_GetPayrollFormats_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPayrollFormats" />
   </wsdl:message>
@@ -1263,6 +1281,18 @@
     <wsdl:operation name="SetSchedulePeriodWorktimeOverride">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/SetSchedulePeriodWorktimeOverride" message="tns:TeleoptiOrganizationService_SetSchedulePeriodWorktimeOverride_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/SetSchedulePeriodWorktimeOverrideResponse" message="tns:TeleoptiOrganizationService_SetSchedulePeriodWorktimeOverride_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRolesByQuery">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetRolesByQuery" message="tns:TeleoptiOrganizationService_GetRolesByQuery_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GetRolesByQueryResponse" message="tns:TeleoptiOrganizationService_GetRolesByQuery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GrantPersonRole">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GrantPersonRole" message="tns:TeleoptiOrganizationService_GrantPersonRole_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/GrantPersonRoleResponse" message="tns:TeleoptiOrganizationService_GrantPersonRole_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RevokePersonRole">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/RevokePersonRole" message="tns:TeleoptiOrganizationService_RevokePersonRole_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiOrganizationService/RevokePersonRoleResponse" message="tns:TeleoptiOrganizationService_RevokePersonRole_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="TeleoptiCccSdkInternal">

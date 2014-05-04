@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldRegisterAvailableWindowsDataSources()
 		{
-			requestContainer.Resolve<IAvailableWindowsDataSources>()
+			requestContainer.Resolve<IAvailableIdentityDataSources>()
 				.Should().Not.Be.Null();
 		}
 

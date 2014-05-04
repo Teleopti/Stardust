@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 	[TestFixture]
 	public class AvailableWindowsDataSourcesTest
 	{
-		private IAvailableWindowsDataSources target;
+		private IAvailableIdentityDataSources target;
 		private MockRepository mocks;
 		private IRepositoryFactory repositoryFactory;
 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		{
 			mocks = new MockRepository();
 			repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();
-			target = new AvailableWindowsDataSources(repositoryFactory);
+			target = new AvailableIdentityDataSources(repositoryFactory);
 		}
 
 		[Test]
@@ -45,13 +45,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 				Expect.Call(uowFactory2.CreateAndOpenUnitOfWork()).Return(uow2);
 				Expect.Call(repositoryFactory.CreatePersonRepository(uow2)).Return(personRep2);
 
-				Expect.Call(personRep1.DoesWindowsUserExists("roger", "moore")).Return(true);
-				Expect.Call(personRep2.DoesWindowsUserExists("roger", "moore")).Return(false);
+				Expect.Call(personRep1.DoesIdentityExists(@"roger\moore")).Return(true);
+				Expect.Call(personRep2.DoesIdentityExists(@"roger\moore")).Return(false);
 			}
 
 			using(mocks.Playback())
 			{
-				var res = target.AvailableDataSources(new[] {correctDs, incorrectDs}, "roger", "moore");
+				var res = target.AvailableDataSources(new[] {correctDs, incorrectDs}, @"roger\moore");
 				res.Should().Have.SameValuesAs(new[] {correctDs});
 			}
 		}

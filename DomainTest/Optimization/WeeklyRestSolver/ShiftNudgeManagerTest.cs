@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -105,11 +104,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 				Expect.Call(_shiftNudgeEarlier.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons))
+					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder))
 					.Return(true);
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 				Expect.Call(_shiftNudgeLater.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons))
+					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder))
 					.Return(true);
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
 
@@ -138,11 +137,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 				Expect.Call(_shiftNudgeEarlier.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons))
+					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder))
 					.Return(false);
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 				Expect.Call(_shiftNudgeLater.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons))
+					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder))
 					.Return(false);
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 
@@ -195,11 +194,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 				Expect.Call(_shiftNudgeEarlier.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons))
+					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder))
 					.Return(true);
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 				Expect.Call(_shiftNudgeLater.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons))
+					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder))
 					.Return(true);
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
 
@@ -226,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		public void ShouldReturnFalseIfBlockIsSchedulePeriod()
 		{
 			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
-			_schedulingOptions.UseTeamBlockPerOption = true;
+			_schedulingOptions.UseBlock = true;
 
 			bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         {
             _mocks = new MockRepository();
             _schedulingOptions = new SchedulingOptions();
-            _schedulingOptions.UseTeamBlockPerOption = true;
+				_schedulingOptions.UseBlock = true;
             _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
             _target = new SameStartTimeRestriction(_timeZoneInfo);
             _dateOnly = new DateOnly(2012, 12, 7);
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [Test]
         public void ShouldExtractSameStartTimeRestrictionFromScheduleDay()
         {
-            _schedulingOptions.UseTeamBlockSameStartTime = true;
+            _schedulingOptions.BlockSameStartTime = true;
             var dateList = new List<DateOnly> { _dateOnly, _dateOnly.AddDays(1) };
             var period2 = new DateTimePeriod(new DateTime(2012, 12, 8, 8, 0, 0, DateTimeKind.Utc),
                                             new DateTime(2012, 12, 8, 8, 30, 0, DateTimeKind.Utc));
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [Test]
         public void ShouldExtractEmptyRestrictionWhenHasTwoDifferentStartTimeSchedules()
         {
-            _schedulingOptions.UseTeamBlockSameStartTime = true;
+            _schedulingOptions.BlockSameStartTime = true;
             var dateList = new List<DateOnly> { _dateOnly, _dateOnly.AddDays(1) };
             var period2 = new DateTimePeriod(new DateTime(2012, 12, 8, 7, 0, 0, DateTimeKind.Utc),
                                             new DateTime(2012, 12, 8, 8, 30, 0, DateTimeKind.Utc));

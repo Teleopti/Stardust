@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -140,6 +141,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			{
 				var wctx = HttpUtility.ParseQueryString(wsFederationMessage.Context);
 				string returnUrl = wctx["ru"];
+				if (!returnUrl.EndsWith("/"))
+						returnUrl += "/";
 
 				return new RedirectResult(returnUrl);
 			}

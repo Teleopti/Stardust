@@ -13,8 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	{
 		bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
-			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder,
-			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons);
+			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder);
 	}
 
 	public class ShiftNudgeLater : IShiftNudgeLater
@@ -33,8 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 		public bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
-			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder, 
-			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
+			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			var personAssignment = scheduleDay.PersonAssignment();
 			var projectionPeriod = personAssignment.ProjectionService().CreateProjection().Period().Value;
@@ -61,8 +59,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				effectiveRestriction.DayOffTemplate, effectiveRestriction.Absence,
 				new List<IActivityRestriction>(effectiveRestriction.ActivityRestrictionCollection));
 
-			bool result = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, shiftDate, schedulingOptions, selectedPeriod,
-				selectedPersons, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder,
+			bool result = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, shiftDate, schedulingOptions,
+				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder,
 				new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Right));
 			if (!result)
 			{

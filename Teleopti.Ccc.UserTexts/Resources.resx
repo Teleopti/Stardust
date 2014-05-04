@@ -8240,7 +8240,7 @@ Period</value>
     <value>No existing shift was selected</value>
     <comment>No existing shift was selected</comment>
   </data>
-  <data name="BetweenDayOff" xml:space="preserve">
+  <data name="BlockFinderTypeBetweenDayOff" xml:space="preserve">
     <value>Between days off</value>
     <comment>Between days off</comment>
   </data>
@@ -11979,7 +11979,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>In the context, navigate back and forward...</comment>
   </data>
   <data name="SelectAtleastOnePerson" xml:space="preserve">
-    <value>Select atleast one person</value>
+    <value>Select at least one person</value>
     <comment>Message shown when no person is selected in permisson</comment>
   </data>
   <data name="OnAvailableAgentsOnly" xml:space="preserve">
@@ -12002,7 +12002,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Allow Desktop Notifications</value>
   </data>
   <data name="NoDatasource" xml:space="preserve">
-    <value>No datasource available for you, my friend.</value>
+    <value>No datasource is available.</value>
     <comment>Message displayed when no datasource is available after sign in</comment>
   </data>
   <data name="SignInAsAnotherUser" xml:space="preserve">
@@ -12036,5 +12036,20 @@ Reduce the complexity to use these shifts.</value>
   <data name="ResolvingWeeklyRestFor" xml:space="preserve">
     <value>Resolving weekly rest for {0} {1}</value>
     <comment>A message that will shown when the weekly rest resolver service is kicked.</comment>
+  </data>
+  <data name="TeamScheduling" xml:space="preserve">
+    <value>Team Scheduling</value>
+    <comment>New name of team scheduling</comment>
+  </data>
+  <data name="BlockFinderTypeSingleDay" xml:space="preserve">
+    <value>&lt;No Block&gt;</value>
+    <comment>No block option in team scheduling/optimization</comment>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>&lt;No Team&gt;</value>
+    <comment>No team option in team scheduling /optimization</comment>
+  </data>
+  <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
+    <value>SchedulePeriod</value>
   </data>
 </root>

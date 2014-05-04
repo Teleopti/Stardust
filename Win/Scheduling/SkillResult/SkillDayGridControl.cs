@@ -321,5 +321,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
         {
             get { return _dates.Count > 0; }
         }
+
+		public override int MainHeaderRow
+		{
+			get { return 1; }
+		}
     }
 }

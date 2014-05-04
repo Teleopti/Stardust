@@ -15,8 +15,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 			person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
 													   {ApplicationLogOnName = "karl", Password = "secret"};
 			
-			person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
-												   {WindowsLogOnName = "winLogon", DomainName = "myDomain"};
+			person.AuthenticationInfo = new AuthenticationInfo { Identity = @"myDomain\winLogon" };
 			person.Email = "kalle.kula@myDomain.com";
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo(1033));
 			person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo(1053));
@@ -31,7 +30,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 			person.SetId(Guid.NewGuid());
 			person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo { ApplicationLogOnName = "perra", Password = "ts" };
 
-			person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo { WindowsLogOnName = "pepi", DomainName = "Domain1" };
+			person.AuthenticationInfo = new AuthenticationInfo { Identity = @"Domain1\pepi" };
 			person.Email = "pella.pilla@Domain1.com";
 			RaptorTransformerHelper.SetUpdatedOn(person, DateTime.Now);
 
@@ -52,7 +51,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 		{
 			IPerson person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("kalle", "kula");
 			person.SetId(Guid.NewGuid());
-			person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo { WindowsLogOnName = "kk", DomainName = "Domain1" };
+			person.AuthenticationInfo = new AuthenticationInfo { Identity = @"Domain1\kk" };
 			RaptorTransformerHelper.SetUpdatedOn(person, DateTime.Now);
 
 			return person;

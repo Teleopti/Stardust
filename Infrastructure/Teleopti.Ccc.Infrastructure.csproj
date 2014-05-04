@@ -178,9 +178,9 @@
     <Compile Include="Licensing\LicenseStatusXml.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetter.cs" />
     <Compile Include="Config\LoadPasswordPolicyService.cs" />
-    <Compile Include="Foundation\AvailableWindowsDataSources.cs" />
+    <Compile Include="Foundation\AvailableIdentityDataSources.cs" />
     <Compile Include="Foundation\ForeignKeyException.cs" />
-    <Compile Include="Foundation\IAvailableWindowsDataSources.cs" />
+    <Compile Include="Foundation\IAvailableIdentityDataSources.cs" />
     <Compile Include="Foundation\IInitializeApplication.cs" />
     <Compile Include="Foundation\ICurrentPrincipalContext.cs" />
     <Compile Include="Foundation\IRoleToPrincipalCommand.cs" />
@@ -278,10 +278,12 @@
     <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
     <Compile Include="Rta\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\IPersonOrganizationReader.cs" />
+    <Compile Include="Rta\ISiteAdherenceAggregator.cs" />
     <Compile Include="Rta\NumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\NumberOfAgentsInTeamReader.cs" />
     <Compile Include="Rta\PersonOrganizationData.cs" />
     <Compile Include="Rta\PersonOrganizationReader.cs" />
+    <Compile Include="Rta\SiteAdherenceAggregator.cs" />
     <Compile Include="UnitOfWork\ClearEvents.cs" />
     <Compile Include="UnitOfWork\CurrentInitiatorIdentifier.cs" />
     <Compile Include="UnitOfWork\EmptyInitiatorIdentifier.cs" />

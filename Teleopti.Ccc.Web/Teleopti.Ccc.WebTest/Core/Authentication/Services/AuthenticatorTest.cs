@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var personRep = MockRepository.GenerateMock<IPersonRepository>();
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			var winAccount = new TokenIdentity {UserDomain = "domain", UserIdentifier = "user"};
+			var winAccount = new TokenIdentity { UserIdentifier = @"domain\user", OriginalToken = @"http://fake/domain#user" };
 
 			IPerson person = null;
 
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(winAccount);
 
-			personRep.Stub(x => x.TryFindWindowsAuthenticatedPerson(winAccount.UserDomain, winAccount.UserIdentifier,
+			personRep.Stub(x => x.TryFindIdentityAuthenticatedPerson(winAccount.UserIdentifier,
 				out person)).Return(true);
 
 			var result = target.AuthenticateWindowsUser(dataSourceName);

@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldBeBlockScheduling()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = true;
-			_schedulingOptions.UseGroupScheduling = false;
+			_schedulingOptions.UseBlock = true;
+			_schedulingOptions.UseTeam = false;
 
 			var result = _target.IsBlockScheduling(_schedulingOptions);
 
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldBeTeamScheduling()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = false;
-			_schedulingOptions.UseGroupScheduling = true;
+			_schedulingOptions.UseBlock = false;
+			_schedulingOptions.UseTeam = true;
 
 			var result = _target.IsTeamScheduling(_schedulingOptions);
 
@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldBeTeamBlockScheduling()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = true;
-			_schedulingOptions.UseGroupScheduling = true;
+			_schedulingOptions.UseBlock = true;
+			_schedulingOptions.UseTeam = true;
 
 			var result = _target.IsTeamBlockScheduling(_schedulingOptions);
 			Assert.IsTrue(result);
@@ -59,9 +59,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeBlockSchedulingWithSameShift()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = true;
-			_schedulingOptions.UseGroupScheduling = false;
-			_schedulingOptions.UseTeamBlockSameShift = true;
+			_schedulingOptions.UseBlock = true;
+			_schedulingOptions.UseTeam = false;
+			_schedulingOptions.BlockSameShift = true;
 
 			var result = _target.IsBlockSchedulingWithSameShift(_schedulingOptions);
 
@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeBlockSchedulingWithSameShiftCategory()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = true;
-			_schedulingOptions.UseGroupScheduling = false;
-			_schedulingOptions.UseTeamBlockSameShiftCategory = true;
+			_schedulingOptions.UseBlock = true;
+			_schedulingOptions.UseTeam = false;
+			_schedulingOptions.BlockSameShiftCategory = true;
 
 			var result = _target.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions);
 
@@ -83,9 +83,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeBlockSchedulingWithSameStartTime()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = true;
-			_schedulingOptions.UseGroupScheduling = false;
-			_schedulingOptions.UseTeamBlockSameStartTime = true;
+			_schedulingOptions.UseBlock = true;
+			_schedulingOptions.UseTeam = false;
+			_schedulingOptions.BlockSameStartTime = true;
 
 			var result = _target.IsBlockSchedulingWithSameStartTime(_schedulingOptions);
 
@@ -95,9 +95,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeTeamSchedulingWithSameStartTime()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = false;
-			_schedulingOptions.UseGroupScheduling = true;
-			_schedulingOptions.UseGroupSchedulingCommonStart = true;
+			_schedulingOptions.UseBlock = false;
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.TeamSameStartTime = true;
 
 			var result = _target.IsTeamSchedulingWithSameStartTime(_schedulingOptions);
 
@@ -107,9 +107,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeTeamSchedulingWithSameEndTime()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = false;
-			_schedulingOptions.UseGroupScheduling = true;
-			_schedulingOptions.UseGroupSchedulingCommonEnd = true;
+			_schedulingOptions.UseBlock = false;
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.TeamSameEndTime = true;
 
 			var result = _target.IsTeamSchedulingWithSameEndTime(_schedulingOptions);
 
@@ -119,9 +119,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeTeamSchedulingWithSameShiftCategory()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = false;
-			_schedulingOptions.UseGroupScheduling = true;
-			_schedulingOptions.UseGroupSchedulingCommonCategory = true;
+			_schedulingOptions.UseBlock = false;
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.TeamSameShiftCategory = true;
 
 			var result = _target.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions);
 
@@ -131,9 +131,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeTeamBlockSchedulingWithTeamSameShiftCategory()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = true;
-			_schedulingOptions.UseGroupScheduling = true;
-			_schedulingOptions.UseGroupSchedulingCommonCategory = true;
+			_schedulingOptions.UseBlock = true;
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.TeamSameShiftCategory = true;
 
 			var result = _target.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions);
 
@@ -143,9 +143,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeTeamBlockSchedulingWithTeamSameStartTime()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = true;
-			_schedulingOptions.UseGroupScheduling = true;
-			_schedulingOptions.UseGroupSchedulingCommonStart = true;
+			_schedulingOptions.UseBlock = true;
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.TeamSameStartTime = true;
 
 			var result = _target.IsTeamSameStartTimeInTeamBlock(_schedulingOptions);
 
@@ -155,9 +155,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeTeamBlockSchedulingWithTeamSameEndTime()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = true;
-			_schedulingOptions.UseGroupScheduling = true;
-			_schedulingOptions.UseGroupSchedulingCommonEnd = true;
+			_schedulingOptions.UseBlock = true;
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.TeamSameEndTime = true;
 
 			var result = _target.IsTeamSameEndTimeInTeamBlock(_schedulingOptions);
 
@@ -167,9 +167,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeTeamBlockSchedulingWithBlockSameStartTime()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = true;
-			_schedulingOptions.UseGroupScheduling = true;
-			_schedulingOptions.UseTeamBlockSameStartTime = true;
+			_schedulingOptions.UseBlock = true;
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.BlockSameStartTime = true;
 
 			var result = _target.IsBlockSameStartTimeInTeamBlock(_schedulingOptions);
 
@@ -179,9 +179,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeTeamBlockSchedulingWithBlockSameShift()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = true;
-			_schedulingOptions.UseGroupScheduling = true;
-			_schedulingOptions.UseTeamBlockSameShift = true;
+			_schedulingOptions.UseBlock = true;
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.BlockSameShift = true;
 
 			var result = _target.IsBlockSameShiftInTeamBlock(_schedulingOptions);
 
@@ -191,9 +191,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeTeamBlockSchedulingWithBlockSameShiftCategory()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = true;
-			_schedulingOptions.UseGroupScheduling = true;
-			_schedulingOptions.UseTeamBlockSameShiftCategory = true;
+			_schedulingOptions.UseBlock = true;
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.BlockSameShiftCategory = true;
 
 			var result = _target.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions);
 
@@ -203,9 +203,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeTeamSchedulingWithBlockSameActivity()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = false;
-			_schedulingOptions.UseGroupScheduling = true;
-			_schedulingOptions.UseCommonActivity = true;
+			_schedulingOptions.UseBlock = false;
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.TeamSameActivity = true;
 
 			var result = _target.IsTeamSchedulingWithSameActivity(_schedulingOptions);
 
@@ -215,9 +215,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouleBeTeamBlockSchedulingWithBlockSameActivity()
 		{
-			_schedulingOptions.UseTeamBlockPerOption = true;
-			_schedulingOptions.UseGroupScheduling = true;
-			_schedulingOptions.UseCommonActivity = true;
+			_schedulingOptions.UseBlock = true;
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.TeamSameActivity = true;
 
 			var result = _target.IsTeamSameActivityInTeamBlock(_schedulingOptions);
 
@@ -249,18 +249,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void IsBlockWithSameShiftCategoryInvolvedShouldReturnTrueIfBlockIsNotSingleDay()
 		{
-			_schedulingOptions.UseTeamBlockSameShiftCategory = false;
+			_schedulingOptions.BlockSameShiftCategory = false;
 			Assert.IsFalse(_target.IsBlockWithSameShiftCategoryInvolved(_schedulingOptions));
 
-			_schedulingOptions.UseTeamBlockSameShiftCategory = true;
-
-			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.None;
-			Assert.IsFalse(_target.IsBlockWithSameShiftCategoryInvolved(_schedulingOptions));
+			_schedulingOptions.BlockSameShiftCategory = true;
 
 			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
 			Assert.IsFalse(_target.IsBlockWithSameShiftCategoryInvolved(_schedulingOptions));
 
-			_schedulingOptions.UseTeamBlockPerOption = true;
+			_schedulingOptions.UseBlock = true;
 			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
 			Assert.IsTrue(_target.IsBlockWithSameShiftCategoryInvolved(_schedulingOptions));
 
