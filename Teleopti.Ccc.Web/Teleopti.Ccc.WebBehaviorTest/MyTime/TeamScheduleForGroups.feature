@@ -112,6 +112,7 @@ Scenario: Sort late shifts after early shifts
 	And I select 'Kontrakt/A contract' in the team picker
 	Then I should see 'John Smith' before myself
 
+@ignore
 Scenario: Default to my team
 	Given I have the role 'Access to view all group pages'
 	When I view group schedule for '2013-03-25'
