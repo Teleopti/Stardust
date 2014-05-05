@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DateTimePeriod _selectedPeriod;
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
-		private SchedulingScreenPermissionHelper _permissionHelper;
+		private readonly SchedulingScreenPermissionHelper _permissionHelper;
 
 		#region Constructors
 
@@ -2003,10 +2003,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView == null)
 				e.Cancel = true;
 
-			ToolStripMenuItemCreateMeeting.Enabled = toolStripMenuItemDeleteMeeting.Enabled = toolStripMenuItemRemoveParticipant.Enabled = isPermittedToEditMeeting();
-			toolStripMenuItemMeetingOrganizer.Enabled = toolStripMenuItemEditMeeting.Enabled = isPermittedToViewMeeting();
-
-			toolStripMenuItemWriteProtectSchedule.Enabled = toolStripMenuItemWriteProtectSchedule2.Enabled = isPermittedToWriteProtect();
+			ToolStripMenuItemCreateMeeting.Enabled = toolStripMenuItemDeleteMeeting.Enabled = toolStripMenuItemRemoveParticipant.Enabled = _permissionHelper.IsPermittedToEditMeeting(_scheduleView, _temporarySelectedEntitiesFromTreeView, _scenario);
+			toolStripMenuItemMeetingOrganizer.Enabled = toolStripMenuItemEditMeeting.Enabled = _permissionHelper.IsPermittedToViewMeeting(_scheduleView, _temporarySelectedEntitiesFromTreeView);
+			toolStripMenuItemWriteProtectSchedule.Enabled = toolStripMenuItemWriteProtectSchedule2.Enabled = _permissionHelper.IsPermittedToWriteProtect(_scheduleView, _temporarySelectedEntitiesFromTreeView);
 
 			toolStripMenuItemViewHistory.Enabled = false;
 			if (_scenario.DefaultScenario)
@@ -2018,65 +2017,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
 			}
-		}
-
-		private bool isPermittedToViewMeeting()
-		{
-			const string functionPath = DefinedRaptorApplicationFunctionPaths.ModifyMeetings;
-			return _permissionHelper.CheckPermission(functionPath, _scheduleView, _temporarySelectedEntitiesFromTreeView);
-		}
-
-		private bool isPermittedToEditMeeting()
-		{
-			if (!isPermittedToViewMeeting())
-				return false;
-			return !_scenario.Restricted || PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario);
-		}
-
-		private bool isPermittedToWriteProtect()
-		{
-			const string functionPath = DefinedRaptorApplicationFunctionPaths.SetWriteProtection;
-			return _permissionHelper.CheckPermission(functionPath, _scheduleView, _temporarySelectedEntitiesFromTreeView);
-		}
-
-		private bool isPermittedToViewSchedules()
-		{
-			var viewSchedulesFunction = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
-			if (_permissionHelper.HasFunctionPermissionForTeams(_temporarySelectedEntitiesFromTreeView.OfType<ITeam>(), viewSchedulesFunction)) return true;
-			return false;
-		}
-
-
-		private static bool isPermittedApproveRequest(IEnumerable<PersonRequestViewModel> models)
-		{
-			foreach (var model in models)
-			{
-				if (!isThisPermittedApproveRequest(model))
-					return false;
-			}
-			return true;
-		}
-
-		private static bool isThisPermittedApproveRequest(PersonRequestViewModel model)
-		{
-			return new PersonRequestAuthorization(PrincipalAuthorization.Instance()).IsPermittedRequestApprove(model.RequestType);
-		}
-
-		private static bool isPermittedViewRequest()
-		{
-			return new PersonRequestAuthorization(PrincipalAuthorization.Instance()).IsPermittedRequestView();
-		}
-
-		private bool isViewRequestDetailsAvailable()
-		{
-			if (_requestView.SelectedAdapters() == null || _requestView.SelectedAdapters().Count != 1)
-				return false;
-			var selectedModel = _requestView.SelectedAdapters().First();
-			if (!selectedModel.IsWithinSchedulePeriod)
-				return false;
-			if (!isPermittedViewRequest())
-				return false;
-			return true;
 		}
 
 		#region Virtual skill handling
@@ -2845,8 +2785,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 						meeting = meeting.EntityClone();
 						//We don't want to work with the actual meeting, that will be a bad idea!
 						IList<ITeam> meetingPersonsTeams = getDistinctTeamList(meeting);
-						bool editPermission = _permissionHelper.HasFunctionPermissionForTeams(meetingPersonsTeams, DefinedRaptorApplicationFunctionPaths.ModifyMeetings) && isPermittedToEditMeeting();
-						bool viewSchedulesPermission = isPermittedToViewSchedules();
+						bool editPermission = _permissionHelper.HasFunctionPermissionForTeams(meetingPersonsTeams, DefinedRaptorApplicationFunctionPaths.ModifyMeetings) && _permissionHelper.IsPermittedToEditMeeting(_scheduleView, _temporarySelectedEntitiesFromTreeView, _scenario);
+						bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
 						_schedulerMeetingHelper.MeetingComposerStart(meeting, _scheduleView, editPermission, viewSchedulesPermission);
 					}
 				}
@@ -4791,7 +4731,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_requestView != null)
 			{
-				toolStripExHandleRequests.Enabled = _requestView.IsSelectionEditable() && isPermittedApproveRequest(_requestView.SelectedAdapters());
+				toolStripExHandleRequests.Enabled = _requestView.IsSelectionEditable() && _permissionHelper.IsPermittedApproveRequest(_requestView.SelectedAdapters());
 			}
 		}
 
@@ -5519,8 +5459,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void requestSelectionChanged(EventParameters<HandlePersonRequestSelectionChanged> eventParameters)
 		{
-			toolStripExHandleRequests.Enabled = eventParameters.Value.SelectionIsEditable && isPermittedApproveRequest(_requestView.SelectedAdapters());
-			ToolStripMenuItemViewDetails.Enabled = toolStripButtonViewDetails.Enabled = isViewRequestDetailsAvailable();
+			toolStripExHandleRequests.Enabled = eventParameters.Value.SelectionIsEditable && _permissionHelper.IsPermittedApproveRequest(_requestView.SelectedAdapters());
+			ToolStripMenuItemViewDetails.Enabled = toolStripButtonViewDetails.Enabled = _permissionHelper.IsViewRequestDetailsAvailable(_requestView);
 		}
 
 		private void wpfShiftEditor1_DeleteMeeting(object sender, CustomEventArgs<IPersonMeeting> e)
@@ -5536,14 +5476,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void wpfShiftEditor1_EditMeeting(object sender, CustomEventArgs<IPersonMeeting> e)
 		{
-			bool editPermission = isPermittedToEditMeeting();
-			bool viewSchedulesPermission = isPermittedToViewSchedules();
+			bool editPermission = _permissionHelper.IsPermittedToEditMeeting(_scheduleView, _temporarySelectedEntitiesFromTreeView, _scenario);
+			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
 			_schedulerMeetingHelper.MeetingComposerStart(e.Value.BelongsToMeeting, _scheduleView, editPermission, viewSchedulesPermission);
 		}
 
 		private void wpfShiftEditor1_CreateMeeting(object sender, CustomEventArgs<IPersonMeeting> e)
 		{
-			bool viewSchedulesPermission = isPermittedToViewSchedules();
+			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
 			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission);
 		}
 
@@ -6234,7 +6174,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void showRequestDetailsView(EventParameters<ShowRequestDetailsView> eventParameters)
 		{
-			if (!isViewRequestDetailsAvailable()) return;
+			if (!_permissionHelper.IsViewRequestDetailsAvailable(_requestView)) return;
 			var requestDetailsView = new RequestDetailsView(_eventAggregator, _requestView.SelectedAdapters().First(), _schedulerState.Schedules);
 			requestDetailsView.Show(this);
 		}
@@ -6293,7 +6233,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripMenuItemCreateMeetingMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
-			bool viewSchedulesPermission = isPermittedToViewSchedules();
+			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
 			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission);
 
 		}
