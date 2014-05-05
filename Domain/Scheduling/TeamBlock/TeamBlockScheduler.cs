@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		{
 			_cancelMe = false;
+			var teamInfo = teamBlockInfo.TeamInfo;
 			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers()).ToList();
 			if (selectedTeamMembers.IsEmpty())
 				return true;
