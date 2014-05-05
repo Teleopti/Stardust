@@ -49,7 +49,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    }
 
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
-			$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
+			$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ', calendarPlacement: "left" }');
 			ko.applyBindings(selectionViewModel, $('div.navbar')[1]);
 			ko.applyBindings(selectionViewModel, $('div.navbar')[2]);
 		});
