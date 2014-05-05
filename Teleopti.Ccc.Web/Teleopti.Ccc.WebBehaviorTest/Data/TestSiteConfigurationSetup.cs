@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static int PortAuthenticationBridge = 52857;
 		public static Uri UrlAuthenticationBridge;
 		public static int PortWindowsIdentityProvider = 52859;
-		public static Uri UrlWindowsIdentityProvider;
+		public static string WindowsClaimProvider;
+		public static string TeleoptiClaimProvider;
 
 		private static IISExpress _server;
 		private static IDisposable _portsConfiguration;
@@ -38,7 +39,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			PortAuthenticationBridge = Port - new Random().Next(1, 100);
 			UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
 			PortWindowsIdentityProvider = Port + new Random().Next(1, 100);
-			UrlWindowsIdentityProvider = new Uri(string.Format("http://localhost:{0}/", PortWindowsIdentityProvider));
+			WindowsClaimProvider = string.Format("<add identifier=\"urn:Windows\" displayName=\"Windows\" url=\"http://localhost:{0}/\" protocolHandler=\"OpenIdHandler\" />", PortWindowsIdentityProvider);
+			TeleoptiClaimProvider = string.Format("<add identifier=\"urn:Teleopti\" displayName=\"Teleopti application\" url=\"http://localhost:{0}/sso\" protocolHandler=\"OpenIdHandler\" />", Port);
 
 			return new GenericDisposable(() =>
 			{
@@ -47,7 +49,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				PortAuthenticationBridge = originalAuthenticationBridgePort;
 				UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
 				PortWindowsIdentityProvider = originalWindowsIdentityProviderPort;
-				UrlWindowsIdentityProvider = new Uri(string.Format("http://localhost:{0}/", PortWindowsIdentityProvider));
+				WindowsClaimProvider = string.Format("<add identifier=\"urn:Windows\" displayName=\"Windows\" url=\"http://localhost:{0}/\" protocolHandler=\"OpenIdHandler\" />", PortWindowsIdentityProvider);
+				TeleoptiClaimProvider = string.Format("<add identifier=\"urn:Teleopti\" displayName=\"Teleopti application\" url=\"http://localhost:{0}/sso\" protocolHandler=\"OpenIdHandler\" />", Port);
 			});
 		}
 

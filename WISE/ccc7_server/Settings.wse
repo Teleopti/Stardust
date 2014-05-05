@@ -313,6 +313,23 @@ item: Set Variable
   Variable=URL_TMP
   Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web/
 end
+item: Set Variable
+  Variable=TELEOPTI_CLAIM_PROVIDER_TMP
+  Value=<add identifier="urn:Teleopti" displayName="Teleopti application" url="%DNS_ALIAS_TMP%TeleoptiCCC/Web/sso" protocolHandler="OpenIdHandler" />
+end
+item: Set Variable
+  Variable=WINDOWS_CLAIM_PROVIDER_TMP
+  Value=<add identifier="urn:Windows" displayName="Windows" url="%URLWINDOWSIDENTITYPROVIDER_TMP%" protocolHandler="OpenIdHandler" />
+end
+item: If/While Statement
+  Variable=IDENTITY_PROVIDERS_TMP
+  Value=Teleopti
+end
+item: Set Variable
+  Variable=WINDOWS_CLAIM_PROVIDER_TMP
+end
+item: End Block
+end
 item: If/While Statement
   Variable=DMZ_TMP
   Value=YES
@@ -383,7 +400,12 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(IDENTITY_PROVIDERS)|%IDENTITY_PROVIDERS_TMP%
+  New Text=$(WindowsClaimProvider)|%WINDOWS_CLAIM_PROVIDER_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(TeleoptiClaimProvider)|%TELEOPTI_CLAIM_PROVIDER_TMP%
   Line Number=0
 end
 item: Insert Line into Text File
@@ -541,7 +563,6 @@ item: Insert Line into Text File
   New Text=$(TOGGLE_URL)|%DNS_ALIAS_TMP%TeleoptiCCC/Web/ToggleHandler/IsEnabled
   Line Number=0
 end
-
 item: Remark
   Text===============================================
 end
