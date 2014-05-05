@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		double AverageOfStandardDeviations { get; }
 		void LockDate(DateOnly date);
 		IList<DateOnly> UnLockedDates();
+		void ClearLocks();
 	}
 
 	public class BlockInfo : IBlockInfo
@@ -88,6 +89,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 
 			return ret;
+		}
+
+		public void ClearLocks()
+		{
+			_lockedDates.Clear();
 		}
 
 		public override int GetHashCode()

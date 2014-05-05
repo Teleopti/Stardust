@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -25,14 +24,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IPerson _groupMember;
 	    private IPerson _person1;
 		private List<IList<IScheduleMatrixPro>> _groupMatrixes;
-		private Guid _groupPersonId;
 		private IPerson _person2;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_groupPersonId = Guid.NewGuid();
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), new DateOnly());
 			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), new DateOnly());
 			_group = new Group(new List<IPerson> { _person1 }, "Hej");
@@ -193,5 +190,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Assert.AreEqual(1, result.Count());
 		}
 
+		[Test]
+		public void LockedShouldBeCleared()
+		{
+			Group groupPerson4 = new Group(new List<IPerson> { _person1, _person2 }, "Hej");
+			var teamInfo4 = new TeamInfo(groupPerson4, _groupMatrixes);
+			teamInfo4.LockMember(_person1);
+			Assert.AreEqual(1, teamInfo4.UnLockedMembers().Count());
+
+			teamInfo4.ClearLocks();
+			Assert.AreEqual(2, teamInfo4.UnLockedMembers().Count());
+		}
 	}
 }
