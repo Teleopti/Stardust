@@ -28,3 +28,6 @@
 	direction: ltr;
 	text-align: right;
 }
+.culture-setting {
+    min-width: 250px;
+}

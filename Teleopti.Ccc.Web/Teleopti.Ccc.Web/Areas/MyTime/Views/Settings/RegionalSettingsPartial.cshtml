@@ -4,20 +4,20 @@
 @{
     Layout = null;
 }
-<div class="container fixed-non-responsive">
+<div class="container">
 	<div id="settings" class="well well-sm">
 		<div class="clearfix">
 			<label for="CultureUi-Picker" class="col-xs-12 control-label">@Resources.Language</label>
-			<select id="CultureUi-Picker" class="col-xs-4" data-bind="foreach: cultures, select2: { value: selectedUiCulture }, enable: culturesLoaded ">
+			<select id="CultureUi-Picker" class="col-xs-4 culture-setting" data-bind="foreach: cultures, select2: { value: selectedUiCulture }, enable: culturesLoaded ">
 				<option data-bind="text: text, value: id"></option>
 			</select>
 		</div>
 		<br />
 		<div class="clearfix">
 			<label for="Culture-Picker" class="col-xs-12 control-label">@Resources.DateFormat</label>
-			<select id="Culture-Picker" class="col-xs-4" data-bind="foreach: cultures, select2: { value: selectedCulture }, enable: culturesLoaded">
-				<option data-bind="text: text, value: id"></option>
-			</select>
+            <select id="Culture-Picker" class="col-xs-4 culture-setting" data-bind="foreach: cultures, select2: { value: selectedCulture }, enable: culturesLoaded">
+                <option data-bind="text: text, value: id"></option>
+            </select>
 		</div>
 		<br />
 
@@ -27,7 +27,7 @@
 				<button class="btn btn-default" data-bind="click: RequestNotificationPermission">@Resources.AllowDesktopNotifications</button>
 			</span>
 			<!-- /ko -->
-			@if (Model.ShareCalendarPermission)
+			@if (!Model.ShareCalendarPermission)
 			{
 				<div class="btn-group">
 					<button class="btn btn-default share-my-calendar" data-bind="css: { active: CalendarSharingActive() }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</button>
