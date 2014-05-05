@@ -5,6 +5,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using log4net;
 using log4net.Config;
+using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_rtaBus.UseFileBasedBusConfiguration("RtaQueue.config");
 			_rtaBus.Start<RtaBusBootStrapper>();
 			
-			PayrollDllCopy.CopyPayrollDll();
+			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
 
 			_payrollBus = new ConfigFileDefaultHost();
 			_payrollBus.UseFileBasedBusConfiguration("PayrollQueue.config");

@@ -6,40 +6,33 @@ using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-	public static class PayrollDllCopy
+	public class PayrollDllCopy
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ServiceBusRunner));
+		private readonly ISearchPath _searchPath;
+
+		public PayrollDllCopy(ISearchPath searchPath)
+		{
+			_searchPath = searchPath;
+		}
+
+		public void CopyPayrollDll()
+		{
+			try
+			{
+				var destination = _searchPath.Path;
+				var source = _searchPath.PayrollDeployNewPath;
+				copyFiles(source, destination);
+			}
+
+			catch (Exception exception)
+			{
+				Log.Error("An exception was encountered when trying to load new payroll dll", exception);
+				throw;
+			}
+		}
 		
-		public static void CopyPayrollDll()
-		{
-			try
-			{
-				var destination = new SearchPath().Path;
-				var source = new SearchPath().PayrollDeployNewPath;
-				CopyFiles(source, destination);
-			}
-
-			catch (Exception exception)
-			{
-				Log.Error("An exception was encountered when trying to load new payroll dll", exception);
-				throw;
-			}
-		}
-
-		public static void CopyPayrollDllTest(string source, string destination)
-		{
-			try
-			{
-				CopyFiles(source, destination);
-			}
-			catch (Exception exception)
-			{
-				Log.Error("An exception was encountered when trying to load new payroll dll", exception);
-				throw;
-			}
-		}
-
-		private static void CopyFiles(string source, string destination)
+		private static void copyFiles(string source, string destination)
 		{
 			foreach (var folder in Directory.GetDirectories(source))
 			{
@@ -48,13 +41,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				if (!Directory.Exists(newFolderPath))
 					Directory.CreateDirectory(newFolderPath);
 
-				CopyFiles(folder, newFolderPath);
+				copyFiles(folder, newFolderPath);
 			}
 			foreach (var file in Directory.GetFiles(source))
 			{
 				var totalSleepTime = 0;
 				var fileInfo = new FileInfo(file);
-				while (IsFileLocked(fileInfo))
+				while (isFileLocked(fileInfo))
 				{
 					Thread.Sleep(20);
 					totalSleepTime += 20;
@@ -87,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 		}
 
-		private static bool IsFileLocked(FileInfo file)
+		private static bool isFileLocked(FileInfo file)
 		{
 			FileStream stream = null;
 			try

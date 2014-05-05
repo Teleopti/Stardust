@@ -80,12 +80,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
             foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
             {
-                var teamBlockInfo = _validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfo,datePointer, allPersonMatrixList,_schedulingOptions, selectedPeriod);
+				var teamBlockInfo = _validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfo, datePointer, allPersonMatrixList, _schedulingOptions, selectedPeriod);
                 if (teamBlockInfo == null) continue;
 
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
 	            if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions,
-	                                                         selectedPersons, schedulePartModifyAndRollbackService,
+	                                                         schedulePartModifyAndRollbackService,
 	                                                         resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective()))
 		            verfiyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,
 		                                     dateOnlySkipList, teamBlockInfo);
@@ -142,6 +142,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 if (teamInfo != null)
                     allTeamInfoListOnStartDate.Add(teamInfo);
             }
+
+	        foreach (var teamInfo in allTeamInfoListOnStartDate)
+	        {
+		        foreach (var groupMember in teamInfo.GroupMembers)
+		        {
+			        if(!selectedPersons.Contains(groupMember))
+						teamInfo.LockMember(groupMember);
+		        }
+	        }
+
             return allTeamInfoListOnStartDate;
         }
 

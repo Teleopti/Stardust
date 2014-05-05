@@ -19,7 +19,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			var alertTimeSetting = globalSettingRep.FindValueByKey("AsmAlertTime", new AsmAlertTime());
 			alertTimeSetting.SecondsBeforeChange = AlertTime;
-			new GlobalSettingDataRepository(uow).PersistSettingValue(alertTimeSetting).GetValue(new AsmAlertTime());
+
+			globalSettingRep.PersistSettingValue(alertTimeSetting);
 		}
 	}
 }

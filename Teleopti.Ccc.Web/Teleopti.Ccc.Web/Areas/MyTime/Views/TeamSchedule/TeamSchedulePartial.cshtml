@@ -4,12 +4,55 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 @model TeamScheduleViewModel
 @{
-    Layout = null;
-    const int scheduleWidth = 803;
-    var left = Html.HtmlStyleLeft();
+	Layout = null;
+	const int scheduleWidth = 803;
+	var left = Html.HtmlStyleLeft();
 }
-<div class="container fixed-non-responsive">
-	<div class="navbar navbar-default">
+
+<div class="hidden-lg hidden-md topbarparent">
+	<div class="navbar navbar-default collapse navbar-collapse subnavbar">
+		<div class="container">
+			<ul class="nav navbar-nav">
+				<li>
+					<div class="input-group collapse-sub-navbar" style="max-width: 255px;">
+						<span class="input-group-btn">
+							<button class="btn btn-default" data-bind="click: previousDay, css: 'done'"><i class="glyphicon glyphicon-chevron-left"></i></button>
+						</span>
+						<input data-bind="value: displayDate" style="width: 100%" type="text" class="text-center form-control" readonly="readonly" />
+						<div class="input-group-btn">
+							<button class="btn btn-default moment-datepicker"><i class="glyphicon glyphicon-calendar"></i></button>
+							<button class="btn btn-default" data-bind="click: nextDay, css: 'done'"><i class="glyphicon glyphicon-chevron-right"></i></button>
+						</div>
+					</div>
+				</li>
+				<!-- ko if: showTeamPicker -->
+				<li data-bind="if: showGroupings" class="ie8style collapse-sub-navbar">
+					<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+						<optgroup data-bind="attr: { label: text }, foreach: children">
+							<option data-bind="text: text, value: id"></option>
+						</optgroup>
+					</select>
+				</li>
+				<li data-bind="ifnot: showGroupings" class="ie8style collapse-sub-navbar">
+					<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+						<option data-bind="text: text, value: id"></option>
+					</select>
+				</li>
+				<!-- /ko -->
+				@if (Model.ShiftTradePermisssion)
+				{
+					<li class="divider" data-bind="if: showTeamPicker"></li>
+					<li>
+						<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+					</li>
+				}
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="container fixed-non-responsive" style="padding-top: 10px;">
+	<div class="navbar navbar-default hidden-sm hidden-xs">
 		<div class="container">
 			<div class="navbar-left">
 				<div class="navbar-form">

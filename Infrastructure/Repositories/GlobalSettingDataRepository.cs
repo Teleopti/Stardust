@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             return Session.CreateCriteria(typeof(GlobalSettingData))
                         .Add(Restrictions.Eq("Key", key))
-                        .SetCacheable(true)
                         .UniqueResult<ISettingData>();
         }
 

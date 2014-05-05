@@ -155,6 +155,7 @@ Scenario: Show team-picker with multiple teams
 	Then I should see the team-picker with both teams
 	And the teams should be sorted alphabetically
 	
+@ignore
 Scenario: Show other team's schedule
 	Given I am an agent in a team with access to the whole site
 	And I have a colleague in another team
@@ -163,6 +164,7 @@ Scenario: Show other team's schedule
 	Then I should see my colleague
 	And I should not see myself
 
+@ignore
 Scenario: Keep selected date when changing team
 	Given I am an agent in a team with access to the whole site
 	And the site has another team
@@ -170,6 +172,7 @@ Scenario: Keep selected date when changing team
 	When I select the other team in the team picker
 	Then I should see tomorrow
 
+@ignore
 Scenario: Show team-picker with teams for my site for another day
 	Given I am an agent in a team with access to the whole site
 	And I belong to another site's team tomorrow
@@ -186,12 +189,14 @@ Scenario: Show default team when no access to a team on a date
 	When I click the next day button
 	Then I should see the other site's team
 
+@ignore
 Scenario: Default to my team
 	Given I am an agent in a team with access to the whole site
 	And the site has another team
 	And I am viewing team schedule
 	Then the team-picker should have my team selected
 
+@ignore
 Scenario: Default to first team if no access to my team
 	Given I am an agent in a team with access to another site
 	And the other site has 2 teams

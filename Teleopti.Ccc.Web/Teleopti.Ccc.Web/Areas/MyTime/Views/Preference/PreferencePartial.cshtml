@@ -5,18 +5,18 @@
 @{
     Layout = null;
 }
-<div class="container fixed-non-responsive">
-	<div class="navbar navbar-default">
+<div class="hidden-lg hidden-md topbarparent">
+	<div class="navbar navbar-default collapse navbar-collapse subnavbar">
 		<div class="container">
-			<div class="navbar-left">
-				<div class="navbar-form">
-					<div class="input-group" style="max-width: 390px;">
+			<ul class="nav navbar-nav">
+				<li>
+					<div class="input-group collapse-sub-navbar" style="max-width: 390px;">
 						<span class="input-group-btn">
 							<button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'" type="button">
 								<i class="glyphicon glyphicon-chevron-left"></i>
 							</button>
 						</span>
-						<input class="form-control text-center" style="width: 100%" data-bind="value: displayDate" type="text" readonly="readonly" />
+						<input class="form-control text-center" style="width: 100%; font-size: 13px;" data-bind="value: displayDate" type="text" readonly="readonly" />
 						<span class="input-group-btn">
 							<button class="btn btn-default moment-datepicker" type="button">
 								<i class="glyphicon glyphicon-calendar"></i>
@@ -26,16 +26,14 @@
 							</button>
 						</span>
 					</div>
-				</div>
-			</div>
-			<ul class="nav navbar-nav">
+				</li>
 				@if (Model.ExtendedPreferencesPermission)
 				{
-					<li><a href="#" id="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Preference</a></li>
+					<li><a href="#" class="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Preference</a></li>
 				}
 				else
 				{
-					<li class="dropdown" id="preference-split-button" data-mytime-preference-option="[@{
+					<li class="dropdown preference-split-button" data-mytime-preference-option="[@{
 						                                                                                  var oIdx = 0;
 						                                                                                  foreach (var optionGroup in Model.Options.PreferenceOptions)
 						                                                                                  {
@@ -59,10 +57,10 @@
 							                                                                                  }
 						                                                                                  }
 					                                                                                  }]">
-						<button type="button" data-toggle="dropdown" class="btn btn-default navbar-btn dropdown-toggle">
-							<span data-bind="'text': selectedPreferenceText()"></span>
-							<span class="caret"></span>
-						</button>
+							<button type="button" data-toggle="dropdown" style="margin-left: 15px" class="btn btn-default navbar-btn dropdown-toggle">
+								<span data-bind="'text': selectedPreferenceText()"></span>
+								<span class="caret"></span>
+							</button>
 						<ul role="menu" class="dropdown-menu" data-bind="foreach: availablePreferences">
 							<!-- ko if: Value != '-' -->
 							<li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
@@ -76,8 +74,90 @@
 				<li><a href="#" data-bind="click: deletePreference"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
 			</ul>
 			<!-- ko if: mustHaveEnabled -->
+				<ul class="list-inline musthave-textcolor">
+					<li>
+						<i class="glyphicon glyphicon-heart"></i>&nbsp;<span>@Resources.MustHave</span>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="	text: maxMustHave" class="musthave-max"></span>)
+					</li>
+					<li><a href="#" class="musthave-textcolor" data-bind="click: removeMustHave"><i class="glyphicon glyphicon-minus"></i></a></li>
+					<li><a href="#" class="musthave-textcolor add-musthave" data-bind="click: addMustHave, enabled: addMustHaveEnabled"><i class="glyphicon glyphicon-plus"></i></a></li>
+				</ul>
+			<!-- /ko -->
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="navbar navbar-default hidden-sm hidden-xs">
+		<div class="container">
+			<div class="navbar-left">
+				<div class="navbar-form">
+					<div class="input-group" style="max-width: 390px;">
+						<span class="input-group-btn">
+							<button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'" type="button">
+								<i class="glyphicon glyphicon-chevron-left"></i>
+							</button>
+						</span>
+						<input class="form-control text-center" style="width: 100%" data-bind="value: displayDate" type="text" readonly="readonly" />
+						<span class="input-group-btn">
+							<button class="btn btn-default moment-datepicker" type="button">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+							<button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'" type="button">
+								<i class="glyphicon glyphicon-chevron-right"></i>
+							</button>
+						</span>
+					</div>
+				</div>
+			</div>
+			<ul class="nav navbar-nav">
+				@if (Model.ExtendedPreferencesPermission)
+	{
+					<li><a href="#" class="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Preference</a></li>
+			}
+	else
+	{
+					<li class="dropdown preference-split-button" data-mytime-preference-option="[@{
+				var oIdx = 0;
+				foreach (var optionGroup in Model.Options.PreferenceOptions)
+				{
+					oIdx++;
+					if (optionGroup.Text != Resources.ShiftCategory)
+					{
+							                                                                                  @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},")
+																										  }
+																										  var idx = 0;
+																										  foreach (var option in optionGroup.Options)
+																										  {
+																											  if (idx + 1 == optionGroup.Options.Count() && Model.Options.PreferenceOptions.Count() == oIdx)
+																											  {
+								                                                                                  @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'}")
+																											  }
+																											  else
+																											  {
+								                                                                                  @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},")
+																											  }
+																											  idx++;
+																										  }
+																									  }
+				                                                                                  }]">
+						<button type="button" data-toggle="dropdown" class="btn btn-default navbar-btn dropdown-toggle">
+							<span data-bind="'text': selectedPreferenceText()"></span>
+							<span class="caret"></span>
+						</button>
+						<ul role="menu" class="dropdown-menu" data-bind="foreach: availablePreferences">
+							<!-- ko if: Value != '-' -->
+							<li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
+							<!-- /ko -->
+							<!-- ko if: Value == '-' -->
+							<li class="divider"></li>
+							<!-- /ko -->
+						</ul>
+					</li>
+			}
+				<li><a href="#" data-bind="click: deletePreference"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
+			</ul>
+			<!-- ko if: mustHaveEnabled -->
 			<div class="nav navbar-text">
-				<i class="glyphicon glyphicon-heart"></i>&nbsp;<span>@Resources.MustHave</span>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="    text: maxMustHave" class="musthave-max"></span>)
+				<i class="glyphicon glyphicon-heart"></i>&nbsp;<span>@Resources.MustHave</span>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="	text: maxMustHave" class="musthave-max"></span>)
 			</div>
 			<ul class="nav navbar-nav">
 				<li><a href="#" data-bind="click: removeMustHave"><i class="glyphicon glyphicon-minus"></i></a></li>
@@ -86,8 +166,8 @@
 			<!-- /ko -->
 		</div>
 	</div>
-
-
+</div>
+<div class="container fixed-non-responsive">
 	<div id="Preference-add-extended-form" class="well well-small clearfix form-preference" data-bind="visible: AddPreferenceFormVisible">
 		@Html.Partial("AddPreferencesPartial")
 	</div>

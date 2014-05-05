@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private IList<ITeamBlockInfo> constructTeamBlock(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, 
                                                             DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
         {
-            return _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, true, BlockFinderType.SchedulePeriod,schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+            return _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, BlockFinderType.SchedulePeriod,schedulingOptions.GroupOnGroupPageForTeamBlockPer);
         }
 
     }

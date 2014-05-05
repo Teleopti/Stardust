@@ -12025,6 +12025,14 @@ Reduce the complexity to use these shifts.</value>
     <value>s</value>
     <comment>Shortening for seconds used in reports</comment>
   </data>
+  <data name="ShiftEndingMessage" xml:space="preserve">
+    <value>Current shift will end at {0}</value>
+    <comment>The notify message show in MyTimeWeb when latest activity ending</comment>
+  </data>
+  <data name="NextActivityComingMessage" xml:space="preserve">
+    <value>Next activity {0} will coming at {1}</value>
+    <comment>The notify message show in MyTimeWeb when next activity coming</comment>
+  </data>
   <data name="ResolvingWeeklyRestFor" xml:space="preserve">
     <value>Resolving weekly rest for {0} {1}</value>
     <comment>A message that will shown when the weekly rest resolver service is kicked.</comment>

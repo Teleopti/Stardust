@@ -86,5 +86,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_target = new BlockInfo(new DateOnlyPeriod(new DateOnly(2013, 2, 27), new DateOnly(2013, 2, 28)));
 			_target.LockDate(new DateOnly(2013, 2, 29));
 		}
+
+		[Test]
+		public void LockShouldBeCleared()
+		{
+			_target = new BlockInfo(new DateOnlyPeriod(new DateOnly(2013, 2, 27), new DateOnly(2013, 2, 28)));
+			_target.LockDate(new DateOnly(2013, 2, 28));
+			Assert.AreEqual(1, _target.UnLockedDates().Count);
+
+			_target.ClearLocks();
+			Assert.AreEqual(2, _target.UnLockedDates().Count);
+		}
 	}
 }

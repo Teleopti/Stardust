@@ -4,7 +4,6 @@
                    namespace="Teleopti.Ccc.Domain.SystemSetting"
                    default-access="field.camelcase-underscore">
   <class name="GlobalSettingData">
-    <cache usage="read-write" />
     <id name="Id"
 		  access="nosetter.camelcase-underscore"
          type="guid"

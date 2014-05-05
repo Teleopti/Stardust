@@ -28,3 +28,11 @@
 	direction: ltr;
 	text-align: right;
 }
+
+.culture-setting {
+    min-width: 250px;
+}
+
+.setting-padding {
+    padding-top: 20px;
+}

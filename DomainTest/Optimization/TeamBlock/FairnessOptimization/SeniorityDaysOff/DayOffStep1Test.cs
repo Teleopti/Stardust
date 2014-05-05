@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         {
 	        Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences))
 	              .Return(_schedulingOptions);
-            Expect.Call(_constructTeamBlock.Construct(_matrixList, new DateOnlyPeriod(), _selectedPersons, true,
+            Expect.Call(_constructTeamBlock.Construct(_matrixList, new DateOnlyPeriod(), _selectedPersons,
                                                       BlockFinderType.SchedulePeriod,
                                                       _schedulingOptions.GroupOnGroupPageForTeamBlockPer)).IgnoreArguments() 
                   .Return(_teamBlocksFirstLoop);

@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Alert agent before change of activity
+﻿Feature: Alert agent activity is changing
 As an agent 
 I need to be alerted before change in activity,
 so that I do not forget to switch from Backoffice to Phone at the right time,
@@ -27,7 +26,8 @@ Background:
 	| Start date | 2012-06-18 |
 	And there are shift categories
 	| Name  |
-	| Day  |
+	| Day   |
+	| Night |
 	And there is an activity with
 	| Field | Value |
 	| Name  | Phone |
@@ -45,23 +45,54 @@ Background:
 	| Scheduled activity            | Lunch            |
 	| Scheduled activity start time | 2030-01-01 11:00 |
 	| Scheduled activity end time   | 2030-01-01 12:00 |
+	And I have a shift with
+	| Field                         | Value            |
+	| Shift category                | Night              |
+	| Activity                      | Phone            |
+	| StartTime                     | 2030-01-02 23:00 |
+	| EndTime                       | 2030-01-03 07:00 |
+	| Scheduled activity            | Lunch            |
+	| Scheduled activity start time | 2030-01-03 03:00 |
+	| Scheduled activity end time   | 2030-01-03 03:30 |
+	And I have a shift with
+	| Field                         | Value            |
+	| Shift category                | Day            |
+	| Activity                      | Phone            |
+	| StartTime                     | 2030-01-03 15:00 |
+	| EndTime                       | 2030-01-03 23:00 |
+	| Scheduled activity            | Lunch            |
+	| Scheduled activity start time | 2030-01-03 18:00 |
+	| Scheduled activity end time   | 2030-01-03 18:30 |
+	And I am american
 
-@ignore
-Scenario: Alert agent before next activity happens
+Scenario: Alert agent before first activity starts
 	Given I have the role 'Full access to mytime'
-	And the current time is '2030-01-01 10:57:59'
-	And Alert Time setting is '120' seconds                      
+	And the current time is '2030-01-01 07:56:59'
+	And Alert Time setting is '180' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 10:58:00'
-	Then I should see one notify message
+	And current browser time has changed to '2030-01-01 07:57:00'
+	Then I should see a notify message contains text Phone
+	And I should see a notify message contains text coming
+	And I should see a notify message contains text 8:00 AM
 
-Scenario: Do not alert agent without permission for ASM
-	Given I have the role 'No access to ASM'
-	And the current time is '2030-01-01 10:57:59'
-	And Alert Time setting is '120' seconds                      
+Scenario: Alert agent before next activity starts
+	Given I have the role 'Full access to mytime'
+	And the current time is '2030-01-01 10:55:59'
+	And Alert Time setting is '240' seconds    
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 10:58:00'
-	Then I should not see any alert
+	And current browser time has changed to '2030-01-01 10:56:00'
+	Then I should see a notify message contains text Lunch
+	And I should see a notify message contains text coming
+	And I should see a notify message contains text 11:00 AM
+
+Scenario: Alert agent before last activity ends
+	Given I have the role 'Full access to mytime'
+	And the current time is '2030-01-01 16:58:59'
+	And Alert Time setting is '60' seconds                      
+	When I am viewing week schedule
+	And current browser time has changed to '2030-01-01 16:59:00'
+	Then I should see a notify message contains text Current shift will end
+	And I should see a notify message contains text 5:00 PM
 
 Scenario: Do not alert agent Before Alert Time
 	Given I have the role 'Full access to mytime'
@@ -69,39 +100,50 @@ Scenario: Do not alert agent Before Alert Time
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 10:57:00'
-	Then I should not see any alert
+	Then I should not see any notify
 
 Scenario: Do not alert agent After Alert Time 
 	Given I have the role 'Full access to mytime'
 	And the current time is '2030-01-01 11:45:00'
+	And Alert Time setting is '60' seconds                      
+	When I am viewing week schedule
+	And current browser time has changed to '2030-01-01 11:45:01'
+	Then I should not see any notify
+
+Scenario: Do not alert agent without permission for ASM
+	Given I have the role 'No access to ASM'
+	And the current time is '2030-01-01 10:57:59'
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 11:45:00'
-	Then I should not see any alert
+	And current browser time has changed to '2030-01-01 10:58:00'
+	Then I should not see any notify
 
-@ignore
-Scenario: Alert agent before first activity happens
+Scenario: Automatical close pop up notify message
 	Given I have the role 'Full access to mytime'
-	And the current time is '2030-01-01 07:57:59'
+	And the current time is '2030-01-01 10:57:59'
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 07:58:00'
-	Then I should see one notify message
+	And current browser time has changed to '2030-01-01 10:58:00'
+	Then I should see a notify message contains text Lunch
+	And I should see a notify message contains text coming
+	When current browser time has changed to '2030-01-01 10:58:30'
+	Then I should not see pop up notify message
 
-@ignore
-Scenario: Alert agent before last activity happens
+Scenario: Should alert agent when now is between 2 shift
 	Given I have the role 'Full access to mytime'
-	And the current time is '2030-01-01 16:57:59'
-	And Alert Time setting is '120' seconds                      
+	And the current time is '2030-01-03 14:56:59'
+	And Alert Time setting is '180' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 16:58:00'
-	Then I should see one notify message
+	And current browser time has changed to '2030-01-01 14:57:00'
+	Then I should see a notify message contains text Phone
+	And I should see a notify message contains text coming
+	And I should see a notify message contains text 3:00 PM
 
-@ignore
-Scenario: Pop up box disappear automaticly
+Scenario: Should alert agent latest activity when now is at latest activity of 2 nearby shift
 	Given I have the role 'Full access to mytime'
-	And the current time is '2030-01-01 16:59:15'
-	And Alert Time setting is '45 seconds' 
-	And Auto Disappear setting is '30 seconds'                       
+	And the current time is '2030-01-03 06:56:59'
+	And Alert Time setting is '180' seconds                      
 	When I am viewing week schedule
-	Then I should not see pop up box
+	And current browser time has changed to '2030-01-03 06:57:00'
+	Then I should see a notify message contains text Current shift will end
+	And I should see a notify message contains text 7:00 AM

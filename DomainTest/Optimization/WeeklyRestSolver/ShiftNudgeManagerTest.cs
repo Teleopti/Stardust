@@ -49,6 +49,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		private ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
 		private IOptimizationPreferences _optimizationPreferences;
 		private ISchedulingOptionsCreator _schedulingOptionsCreator;
+		private IBlockInfo _leftBlockInfo;
+		private IBlockInfo _rightBlockInfo;
+		private ITeamInfo _rightTeamInfo;
 
 		[SetUp]
 		public void Setup()
@@ -67,27 +70,30 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				_teamBlockRestrictionOverLimitValidator, _schedulingOptionsCreator);
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
 			_person.Period(DateOnly.MinValue).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(48), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-			_personWeek = new PersonWeek(_person, new DateOnlyPeriod(2014, 03, 24, 2014, 03, 30));
+			_personWeek = new PersonWeek(_person, new DateOnlyPeriod(2014, 03, 24, 2014, 03, 31));
 			_teamBlockGenerator = _mocks.StrictMock<ITeamBlockGenerator>();
 			_schedulingOptions = new SchedulingOptions();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_allPersonMatrixList = new List<IScheduleMatrixPro>();
-			_selectedPeriod = new DateOnlyPeriod();
-			_selectedPersons = new List<IPerson>();
+			_selectedPeriod = new DateOnlyPeriod(2014, 03, 24, 2014, 03, 31);
+			_selectedPersons = new List<IPerson> {_person};
 			_leftTeamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_leftTeamBlockInfoList = new List<ITeamBlockInfo> {_leftTeamBlockInfo};
 			_rightTeamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_rightTeamBlockInfoList = new List<ITeamBlockInfo> { _rightTeamBlockInfo };
 			_leftTeamInfo = _mocks.StrictMock<ITeamInfo>();
+			_rightTeamInfo = _mocks.StrictMock<ITeamInfo>();
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_range = _mocks.StrictMock<IScheduleRange>();
 			_leftScheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_rightScheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_dateOnlyAsPeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
 			_optimizationPreferences = new OptimizationPreferences();
-			
+			_leftBlockInfo = _mocks.StrictMock<IBlockInfo>();
+			_rightBlockInfo = _mocks.StrictMock<IBlockInfo>();
+
 		}
 
 		[Test]
@@ -104,11 +110,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 				Expect.Call(_shiftNudgeEarlier.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, _selectedPersons))
+					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder))
 					.Return(true);
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 				Expect.Call(_shiftNudgeLater.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder, _selectedPersons))
+					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder))
 					.Return(true);
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
 
@@ -137,11 +143,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 				Expect.Call(_shiftNudgeEarlier.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, _selectedPersons))
+					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder))
 					.Return(false);
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 				Expect.Call(_shiftNudgeLater.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder, _selectedPersons))
+					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder))
 					.Return(false);
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 
@@ -194,11 +200,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 				Expect.Call(_shiftNudgeEarlier.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, _selectedPersons))
+					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder))
 					.Return(true);
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
 				Expect.Call(_shiftNudgeLater.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder, _selectedPersons))
+					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder))
 					.Return(true);
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
 
@@ -250,22 +256,30 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			if (useOptimizationPreferences)
 			{
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
+				
+			}
+			//else
+			//{
 				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29),
 				new List<IPerson> { _person }, _schedulingOptions))
 				.Return(_leftTeamBlockInfoList);
+				Expect.Call(_leftTeamBlockInfo.BlockInfo).Return(_leftBlockInfo);
+				Expect.Call(() => _leftBlockInfo.ClearLocks());
+				Expect.Call(_leftTeamBlockInfo.TeamInfo).Return(_leftTeamInfo);
+				Expect.Call(() => _leftTeamInfo.ClearLocks());
+				Expect.Call(_leftBlockInfo.BlockPeriod).Return(new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29));
+				Expect.Call(_leftTeamInfo.GroupMembers).Return(new List<IPerson> {_person});
+
 				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31),
 					new List<IPerson> { _person }, _schedulingOptions))
 					.Return(_rightTeamBlockInfoList);
-			}
-			else
-			{
-				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29),
-					new List<IPerson> {_person}, _schedulingOptions))
-					.Return(_leftTeamBlockInfoList);
-				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31),
-					new List<IPerson> { _person }, _schedulingOptions))
-					.Return(_rightTeamBlockInfoList);
-			}
+				Expect.Call(_rightTeamBlockInfo.BlockInfo).Return(_rightBlockInfo);
+				Expect.Call(() => _rightBlockInfo.ClearLocks());
+				Expect.Call(_rightTeamBlockInfo.TeamInfo).Return(_rightTeamInfo);
+				Expect.Call(() => _rightTeamInfo.ClearLocks());
+				Expect.Call(_rightBlockInfo.BlockPeriod).Return(new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31));
+				Expect.Call(_rightTeamInfo.GroupMembers).Return(new List<IPerson> { _person });
+			//}
 		}
 
 		private void middleMocks()

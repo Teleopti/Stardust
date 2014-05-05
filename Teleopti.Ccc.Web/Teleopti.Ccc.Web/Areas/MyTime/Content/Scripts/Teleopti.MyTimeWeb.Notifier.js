@@ -2,6 +2,7 @@
 	var originalDocumentTitle;
 	var baseUrl;
 	var header = '';
+	var autoCloseTimeout = false;
 	var blinkTitleTimer;
 	var webNotification = function () { return true; }; //default also send as web notification if possible
 	var webNotifications = new Array();
@@ -21,12 +22,16 @@
 		if (options && options.header) {
 			header = options.header;
 		}
+		if (options && options.timeout) {
+			autoCloseTimeout = options.timeout;
+		}
 	}
 	function _notify(notifyText) {
 		return noty({
 			text: notifyText,
 			layout: 'bottom',
 			closeWith: ['button'],
+			timeout: autoCloseTimeout,
 			callback: {
 				afterClose: _messageClosed
 			}

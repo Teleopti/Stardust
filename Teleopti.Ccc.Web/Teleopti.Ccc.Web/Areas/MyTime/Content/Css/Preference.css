@@ -250,3 +250,11 @@ div.qtip-content {
 .preference-input-icon-cell {
     width: 16px;
 }
+
+.musthave-textcolor {
+	color: #777777;
+}
+
+.musthave-textcolor>li>a:hover {
+color: #333333;
+}

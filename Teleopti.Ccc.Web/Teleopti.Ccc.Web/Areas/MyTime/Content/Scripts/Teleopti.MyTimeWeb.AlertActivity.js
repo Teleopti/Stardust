@@ -3,7 +3,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Notifier.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js" />
-/// <reference path="../../../../Content/moment/moment.js" />
+/// <reference path="~/Content/moment/moment.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/noty/jquery.noty.js" />
 
 if (typeof (Teleopti) === 'undefined') {
@@ -14,76 +14,123 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.AlertActivity = (function () {
-	var timeLineMarkerWidth = 40;
-	var pixelPerHours = 40;
 	var alertvm;
 	var notifyOptions;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 
-	function activityLayer(layer, canvasPosition) {
+	function activityLayer(layer) {
 		var self = this;
 
-		self.leftPx = (layer.StartMinutesSinceAsmZero * pixelPerHours / 60 + timeLineMarkerWidth) + 'px';
-		self.paddingLeft = (layer.LengthInMinutes * pixelPerHours) / 60 + 'px';
-		self.payload = layer.Payload;
-		self.lengthInMinutes = layer.LengthInMinutes;
+		self.activityName = layer.Payload;
 		self.startTimeText = layer.StartTimeText;
 		self.startMinutesSinceAsmZero = layer.StartMinutesSinceAsmZero;
-
-		self.visible = function () {
-			var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition);
-			var startPos = parseFloat(self.leftPx);
-			var endPos = startPos + parseFloat(self.paddingLeft);
-			return endPos > timelinePosition;
-		};
-		self.active = function () {
-			if (!self.visible)
-				return false;
-			var startPos = parseFloat(self.leftPx);
-			var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition);
-			var isActive = startPos <= timelinePosition;
-			return isActive;
+		self.endTimeText = layer.EndTimeText;
+		self.endMinutesSinceAsmZero = layer.StartMinutesSinceAsmZero + layer.LengthInMinutes;
+		self.isIdleLayer = function () {
+			return self.activityName === "-=IDLE=-";
 		};
 	}
 
-	function notificationActivities(yesterday) {
+	function notificationActivities() {
 		var self = this;
-		self.now = new Date().getTeleoptiTime();
-		self.yesterday = yesterday;
+		self.getCurrentTime = function() {
+			return new Date().getTeleoptiTime();
+		};
+		self.timeZero = moment(self.getCurrentTime()).add('days', -1).startOf('day').toDate();
+
 		self.alertTimeSetting = 60; //default setting 60secs
-		self.canvasPosition = function () {
-			var msSinceStart = self.now - self.yesterday.getTime();
-			var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
-			return -(pixelPerHours * hoursSinceStart) + 'px';
-		};
-		self.layers = new Array();
-		self.layersRemovedPassed = function () {
-			return $.grep(self.layers, function (n, i) {
-				return n.visible();
-			});
-		};
+		self.alertMessage = "";
+		self.restartAlertDelayTime = 60;
+		self.layers = [];
 
-		self.getTimeInterval = function (index) {
-			var interval = 0;
-			var length = self.layersRemovedPassed().length;
-			if (index >= 0 && index < length) {
-				var secondsSinceStart = (self.now - self.yesterday.getTime()) / 1000;
-				var timeDiffrenceBetweenAsmZeroAndStart = self.layersRemovedPassed()[index].startMinutesSinceAsmZero * 60 - secondsSinceStart;
+		self.getCurrentLayerIndex = function () {
+			var now = (self.getCurrentTime() - self.timeZero) / 1000;
+			var layerCount = self.layers.length;
 
-				if (timeDiffrenceBetweenAsmZeroAndStart < 0) {
-					interval = -1;
-				} else if (timeDiffrenceBetweenAsmZeroAndStart > self.alertTimeSetting) {
-					interval = timeDiffrenceBetweenAsmZeroAndStart - self.alertTimeSetting;
-				} else {
-					interval = self.alertTimeSetting - timeDiffrenceBetweenAsmZeroAndStart;
+			var shiftStartTime = self.layers[0].startMinutesSinceAsmZero * 60;
+			var shiftEndTime = self.layers[layerCount - 1].endMinutesSinceAsmZero * 60;
+
+			var currentLayer = -1;
+			if (now < shiftStartTime) {
+				// First activity not started;
+				currentLayer = -1;
+			} else if (now >= shiftEndTime) {
+				// Last activity already finished;
+				currentLayer = layerCount;
+			} else {
+				for (var i = 0; i < layerCount; i++) {
+					var layer = self.layers[i];
+					var layerStartTime = layer.startMinutesSinceAsmZero * 60;
+					var layerEndTime = layer.endMinutesSinceAsmZero * 60;
+
+					if (now >= layerStartTime && now < layerEndTime) {
+						currentLayer = i;
+						break;
+					}
 				}
 			}
-			return interval;
+
+			return currentLayer;
 		};
 
-		self.alertMessage = function (index) {
-			// TODO: replace the text with localed text
-			return self.layersRemovedPassed()[index].payload + " at " + self.layersRemovedPassed()[index].startTimeText + "!";
+		self.getCurrentAlert = function () {
+			var layerCount = self.layers.length;
+			if (layerCount === 0) {
+				// No shift scheduled today
+				return {
+					message: "",
+					timespan: -1
+				};
+			}
+
+			var layerIndex = self.getCurrentLayerIndex();
+			var secondsSinceStart = (self.getCurrentTime() - self.timeZero) / 1000;
+			
+			var layer;
+			var activityName, alertMessage;
+			var timeDiff;
+
+			if (layerIndex < 0) {
+				// First activity not started
+				layer = self.layers[0];
+				activityName = layer.activityName;
+				alertMessage = notifyOptions.comingMessageTemplate.format(activityName, layer.startTimeText);
+
+				var shiftStartTime = layer.startMinutesSinceAsmZero * 60;
+				timeDiff = shiftStartTime - secondsSinceStart;
+			} else if (layerIndex >= 0 && layerIndex < layerCount - 1) {
+				// The shift is passing...
+				if (self.layers[layerIndex + 1].isIdleLayer()) {
+					var currentLayer = self.layers[layerIndex];
+					alertMessage = notifyOptions.endingMessageTemplate.format(currentLayer.endTimeText);
+
+					var shiftEndTime = currentLayer.endMinutesSinceAsmZero * 60;
+					timeDiff = shiftEndTime - secondsSinceStart;
+				} else {
+					var nextLayer = self.layers[layerIndex + 1];
+					activityName = nextLayer.activityName;
+					alertMessage = notifyOptions.comingMessageTemplate.format(activityName, nextLayer.startTimeText);
+
+					var nextActivityStartTime = nextLayer.startMinutesSinceAsmZero * 60;
+					timeDiff = nextActivityStartTime - secondsSinceStart;
+				}
+			} else if (layerIndex === (layerCount - 1)) {
+				// Now is in latest activity
+				currentLayer = self.layers[layerIndex];
+				alertMessage = notifyOptions.endingMessageTemplate.format(currentLayer.endTimeText);
+
+				shiftEndTime = currentLayer.endMinutesSinceAsmZero * 60;
+				timeDiff = shiftEndTime - secondsSinceStart;
+			} else {
+				// Entire shift already finished!
+				alertMessage = "";
+				timeDiff = -1;
+			}
+
+			return {
+				message: alertMessage,
+				timespan: timeDiff
+			};
 		};
 
 		self.loadViewModel = function (date, callback) {
@@ -111,24 +158,40 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		};
 
 		self._createLayers = function (layers) {
-			var newLayers = new Array();
-			var canvasPosition = self.canvasPosition();
-			$.each(layers, function (key, layer) {
-				newLayers.push(new activityLayer(layer, canvasPosition));
-			});
-			self.layers = newLayers;
-			self.layersRemovedPassed();
+			self.layers = [];
+			
+			var previousLayerEndTime = layers[0].StartMinutesSinceAsmZero + layers[0].LengthInMinutes;
+			for (var i = 0; i < layers.length; i++) {
+				var currentLayer = layers[i];
+				var currentLayerStartTime = currentLayer.StartMinutesSinceAsmZero;
+
+				if (i > 0 && currentLayerStartTime > previousLayerEndTime) {
+					// Add fake idle layer for time interval between 2 shifts
+					var idleLayer = new activityLayer({
+						Payload: '-=IDLE=-',
+						StartTimeText: layers[i - 1].EndTimeText,
+						EndTimeText: currentLayer.StartTimeText,
+						StartMinutesSinceAsmZero: previousLayerEndTime,
+						LengthInMinutes: currentLayerStartTime - previousLayerEndTime
+					});
+					self.layers.push(idleLayer);
+				}
+				previousLayerEndTime = currentLayer.StartMinutesSinceAsmZero + currentLayer.LengthInMinutes;
+				var newLayer = new activityLayer(currentLayer);
+				self.layers.push(newLayer);
+			}
 		};
 	}
-	function _initNotificationViewModel() {
-		var yesterdayFromNow = moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day').toDate();
-		alertvm = new notificationActivities(yesterdayFromNow);
+
+	function initNotificationViewModel() {
+		alertvm = new notificationActivities();
+
 		var activityData;
 		var alertSetting;
 
 		var dataLoadDeffered = $.Deferred();
 		alertvm.loadViewModel(
-			yesterdayFromNow,
+			alertvm.timeZero,
 			function (data) {
 				activityData = data.Layers;
 				dataLoadDeffered.resolve();
@@ -141,40 +204,53 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		$.when(dataLoadDeffered, settingLoadDeffered).done(function () {
 			alertvm._createLayers(activityData);
 			alertvm._readAlertTimeSetting(alertSetting);
-			_startAlert();
+			startAlert();
 		});
 	}
 
-	var alertTimeInterval = 0;
-	var currentLayerIndex = 0;
-	function _alertActivity() {
-		if (currentLayerIndex < alertvm.layersRemovedPassed().length) {
-			alertTimeInterval = alertvm.getTimeInterval(currentLayerIndex) * 1000;
-			if (alertTimeInterval < 0) {
-				currentLayerIndex++;
-				alertTimeInterval = alertvm.getTimeInterval(currentLayerIndex) * 1000;
-			}
+	function alertActivity() {
+		Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage);
 
-			if ((alertTimeInterval <= alertvm.alertTimeSetting * 1000) && (alertTimeInterval > 0)) {
-				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage(currentLayerIndex));
-			} else if (alertTimeInterval > 0) {
-				setTimeout(function () {
-					Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage(currentLayerIndex - 1));
-					_alertActivity();
-				}, alertTimeInterval);
-			}
-			currentLayerIndex++;
-		}
+		// Restart alert after delayTime.
+		setTimeout(startAlert, alertvm.restartAlertDelayTime * 1000);
 	}
 
-	function _startAlert() {
-		setTimeout(_alertActivity, alertTimeInterval);
+	function startAlert() {
+		var interval = 0;
+		var delayTime = alertvm.alertTimeSetting;
+
+		var alert = alertvm.getCurrentAlert();
+		if (alert.timespan >= 0) {
+			if (alert.timespan >= alertvm.alertTimeSetting) {
+				interval = alert.timespan - alertvm.alertTimeSetting;
+				delayTime = alertvm.alertTimeSetting + 5;
+			}
+			if (alert.timespan < alertvm.alertTimeSetting) {
+				interval = 0;
+				delayTime = alert.timespan + 5;
+			}
+
+			alertvm.alertMessage = alert.message;
+			alertvm.restartAlertDelayTime = delayTime;
+
+			setTimeout(alertActivity, interval * 1000);
+		} else {
+			// timespan in negative number means no schedule today or all activity finished.
+			// Then re-start alert when tomorrow comes.
+			var timeZeroTomorrow = moment(alertvm.getCurrentTime()).add('days', 1).startOf('day').toDate();
+			var intervalForTomorrowInSecond = (timeZeroTomorrow - alertvm.getCurrentTime()) / 1000;
+			
+			setTimeout(function() {
+				initNotificationViewModel(options);
+				startAlert();
+			}, intervalForTomorrowInSecond * 1000);
+		}
 	}
 
 	return {
 		StartAlert: function (options) {
 			notifyOptions = options;
-			_initNotificationViewModel(options);
+			initNotificationViewModel(options);
 		}
 	};
 })(jQuery);
