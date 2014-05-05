@@ -34,12 +34,25 @@ namespace Teleopti.Support.Tool
                     new HelpWindow(commandLineArgument.Help).ShowDialog();
                 else
                 {
-                    var refreshRunner = new RefreshConfigsRunner(new SettingsFileManager(new SettingsReader()),
-                                                                 new RefreshConfigFile(new ConfigFileTagReplacer(),
-                                                                                       new MachineKeyChecker()));
-                    refreshRunner.RefreshThem(commandLineArgument.Mode);
+					if (commandLineArgument.SaveSsoConfig)
+					{
+						new SaveSsoRunner().Save(commandLineArgument.Mode);
+					}
+					else
+					{
+						var refreshRunner = new RefreshConfigsRunner(new SettingsFileManager(new SettingsReader()),
+																new RefreshConfigFile(new ConfigFileTagReplacer(),
+																					  new MachineKeyChecker()));
+						refreshRunner.RefreshThem(commandLineArgument.Mode);
+					}
                 }
+
+	            
             }
         }
+
+		
     }
+
+	
 }
