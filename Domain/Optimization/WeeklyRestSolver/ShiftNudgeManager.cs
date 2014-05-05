@@ -63,9 +63,11 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var leftTeamBlock =
 				teamBlockGenerator.Generate(allPersonMatrixList, new DateOnlyPeriod(leftDate, leftDate), new List<IPerson> {person},
 					schedulingOptions).First();
+			lockUnSelectedInTeamBlock(leftTeamBlock, selectedPersons, selectedPeriod);
 			var rightTeamBlock =
 				teamBlockGenerator.Generate(allPersonMatrixList, new DateOnlyPeriod(rightDate, rightDate),
 					new List<IPerson> {person}, schedulingOptions).First();
+			lockUnSelectedInTeamBlock(rightTeamBlock, selectedPersons, selectedPeriod);
 
 			var fullySelectedBlocks =
 				_filterForTeamBlockInSelection.Filter(new List<ITeamBlockInfo> {leftTeamBlock, rightTeamBlock}, selectedPersons,
@@ -136,6 +138,26 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	        }
             return false;
 	    }
+
+		private void lockUnSelectedInTeamBlock(ITeamBlockInfo teamBlockInfo, IList<IPerson> selectedPersons,
+			DateOnlyPeriod selectedPeriod)
+		{
+			var blockInfo = teamBlockInfo.BlockInfo;
+			blockInfo.ClearLocks();
+			var teamInfo = teamBlockInfo.TeamInfo;
+			teamInfo.ClearLocks();
+			foreach (var dateOnly in blockInfo.BlockPeriod.DayCollection())
+			{
+				
+				if(!selectedPeriod.Contains(dateOnly))
+					blockInfo.LockDate(dateOnly);
+			}
+			foreach (var groupMember in teamInfo.GroupMembers)
+			{
+				if(!selectedPersons.Contains(groupMember))
+					teamInfo.LockMember(groupMember);
+			}
+		}
 
 		private static void rollBackAndResourceCalculate(ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> clonedSchedules)
