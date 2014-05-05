@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
-	public class TeamAdherenceAggregator
+	public class TeamAdherenceAggregator : ITeamAdherenceAggregator
 	{
 		private readonly IStatisticRepository _statisticRepository;
 		private readonly ITeamRepository _teamRepository;

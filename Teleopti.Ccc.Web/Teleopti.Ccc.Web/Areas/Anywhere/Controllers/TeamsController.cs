@@ -14,11 +14,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	{
 		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
+		private readonly ITeamAdherenceAggregator _teamAdherenceAggregator;
 
-		public TeamsController(ISiteRepository siteRepository, INumberOfAgentsInTeamReader numberOfAgentsInTeamReader)
+		public TeamsController(ISiteRepository siteRepository, INumberOfAgentsInTeamReader numberOfAgentsInTeamReader, ITeamAdherenceAggregator teamAdherenceAggregator)
 		{
 			_siteRepository = siteRepository;
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
+			_teamAdherenceAggregator = teamAdherenceAggregator;
 		}
 
 		[UnitOfWorkAction, HttpGet]
@@ -43,6 +45,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private static int tryGetNumberOfAgents(IDictionary<Guid, int> numberOfAgents, ITeam team)
 		{
 			return numberOfAgents != null && numberOfAgents.ContainsKey(team.Id.Value) ? numberOfAgents[team.Id.Value] : 0;
+		}
+
+
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult GetOutOfAdherence(string teamId)
+		{
+			var outOfAdherence = _teamAdherenceAggregator.Aggregate(Guid.Parse(teamId));
+			return Json(new TeamOutOfAdherence
+			{
+				Id = teamId,
+				OutOfAdherence = outOfAdherence
+			}, JsonRequestBehavior.AllowGet);
 		}
 	}
 }
