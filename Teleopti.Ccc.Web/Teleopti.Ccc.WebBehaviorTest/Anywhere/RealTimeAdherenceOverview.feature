@@ -36,6 +36,7 @@ Scenario: Show site without loading status
 	When I view Real time adherence overview
 	Then I should see the site 'London'
 
+@OnlyRunIfDisabled('RtaLastStatesOverview')
 Scenario: Show team
 	Given the current time is '2014-01-21 13:00'
 	And I have a role with
