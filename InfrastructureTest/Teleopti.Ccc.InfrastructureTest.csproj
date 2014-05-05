@@ -392,6 +392,7 @@
     <Compile Include="Rta\NumberOfAgentsInTeamReaderTest.cs" />
     <Compile Include="Rta\NumberOfAgentsInSiteReaderTest.cs" />
     <Compile Include="Rta\PersonOrganizationReaderTest.cs" />
+    <Compile Include="Rta\TeamAdherenceAggregatorTest.cs" />
     <Compile Include="Rta\SiteAdherenceAggregatorTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\ExecuteTarget.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\FetchPersonIdAndTimeZoneTest.cs" />
