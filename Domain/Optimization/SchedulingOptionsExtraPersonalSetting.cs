@@ -101,7 +101,8 @@ namespace Teleopti.Ccc.Domain.Optimization
              //_blockFinderType = schedulingOptions.UseBlockScheduling;
             _blockFinderTypeForAdvanceScheduling = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
             _useGroupScheduling = schedulingOptions.UseTeam;
-            _groupSchedulingGroupPageKey = schedulingOptions.GroupOnGroupPage.Key;
+			if (schedulingOptions.GroupOnGroupPage != null)
+				_groupSchedulingGroupPageKey = schedulingOptions.GroupOnGroupPage.Key;
            _useGroupSchedulingCommonStart = schedulingOptions.TeamSameStartTime;
             _useGroupSchedulingCommonEnd = schedulingOptions.TeamSameEndTime;
             _useGroupSchedulingCommonCategory = schedulingOptions.TeamSameShiftCategory;
