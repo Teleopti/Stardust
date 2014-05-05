@@ -39,11 +39,36 @@
 
 			ajax.ajax({
 				url: "Sites",
-				success: function (data) {
+				success: function(data) {
 					viewModel.fill(data);
+					checkFeature();
 				}
 			});
+			
+			var checkFeature = function() {
+				ajax.ajax({
+					dataType: "text",
+					url: "ToggleHandler/IsEnabled?toggle=RtaLastStatesOverview",
+					success: function(data) {
+						if (data === "True") {
+							loadLastStates();
+						}
+					}
+				});
+			};
 
+			var loadLastStates = function () {
+				for (var i = 0; i < viewModel.sites().length; i++) {
+					(function(s) {
+						ajax.ajax({
+							url: "Sites/GetOutOfAdherence?siteId=" + s.Id,
+							success: function(d) {
+								viewModel.update(d);
+							}
+						});
+					})(viewModel.sites()[i]);
+				}
+			};
 
 			subscriptions.subscribeAdherence(function (notification) {
 				viewModel.updateFromNotification(notification);

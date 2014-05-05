@@ -279,11 +279,13 @@
     <Compile Include="Rta\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\IPersonOrganizationReader.cs" />
     <Compile Include="Rta\ISiteAdherenceAggregator.cs" />
+    <Compile Include="Rta\ITeamAdherenceAggregator.cs" />
     <Compile Include="Rta\NumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\NumberOfAgentsInTeamReader.cs" />
     <Compile Include="Rta\PersonOrganizationData.cs" />
     <Compile Include="Rta\PersonOrganizationReader.cs" />
     <Compile Include="Rta\SiteAdherenceAggregator.cs" />
+    <Compile Include="Rta\TeamAdherenceAggregator.cs" />
     <Compile Include="UnitOfWork\ClearEvents.cs" />
     <Compile Include="UnitOfWork\CurrentInitiatorIdentifier.cs" />
     <Compile Include="UnitOfWork\EmptyInitiatorIdentifier.cs" />

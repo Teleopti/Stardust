@@ -30,6 +30,7 @@
 				url: "Teams/ForSite?siteId=" + siteId,
 				success: function (data) {
 					viewModel.fill(data);
+					checkFeature();
 				}
 			});
 
@@ -39,6 +40,32 @@
 					viewModel.setSiteName(data);
 				}
 			});
+
+
+			var checkFeature = function () {
+				ajax.ajax({
+					dataType: "text",
+					url: "ToggleHandler/IsEnabled?toggle=RtaLastStatesOverview",
+					success: function (data) {
+						if (data === "True") {
+							loadLastStates();
+						}
+					}
+				});
+			};
+
+			var loadLastStates = function () {
+				for (var i = 0; i < viewModel.teams().length; i++) {
+					(function (team) {
+						ajax.ajax({
+							url: "Teams/GetOutOfAdherence?teamId=" + team.Id,
+							success: function (d) {
+								viewModel.update(d);
+							}
+						});
+					})(viewModel.teams()[i]);
+				}
+			};
 
 			subscriptions.subscribeAdherence(function (notification) {
 				viewModel.updateFromNotification(notification);

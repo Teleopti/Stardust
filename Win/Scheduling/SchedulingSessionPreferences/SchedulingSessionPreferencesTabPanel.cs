@@ -521,8 +521,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 		    //block
 			_localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = (BlockFinderType)comboBoxBlockType.SelectedValue;
-		    _localSchedulingOptions.UseBlock = (_localSchedulingOptions.BlockFinderTypeForAdvanceScheduling !=
-		                                        BlockFinderType.SingleDay);
+			_localSchedulingOptions.UseBlock = ((BlockFinderType)comboBoxBlockType.SelectedValue != BlockFinderType.SingleDay);
 
 		    _localSchedulingOptions.BlockSameEndTime = false;
 		    _localSchedulingOptions.BlockSameShiftCategory = checkBoxBlockSameShiftCategory.Checked;

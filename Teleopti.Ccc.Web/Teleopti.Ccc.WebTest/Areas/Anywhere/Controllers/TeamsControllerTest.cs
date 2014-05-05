@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldGetTeamsForSite()
 		{
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var target = new TeamsController(siteRepository, null);
+			var target = new TeamsController(siteRepository, null,null);
 			var site = new Site(" ");
 			site.SetId(Guid.NewGuid());
 			var team = new Team {Description = new Description("team1")};
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInTeamReader>();
-			var target = new TeamsController(siteRepository, numberOfAgentsQuery);
+			var target = new TeamsController(siteRepository, numberOfAgentsQuery,null);
 			var site = new Site(" ");
 			site.SetId(Guid.NewGuid());
 			var team = new Team { Description = new Description(" ") };
@@ -53,6 +53,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var result = target.ForSite(site.Id.Value.ToString()).Data as IEnumerable<TeamViewModel>;
 
 			result.Single().NumberOfAgents.Should().Be.EqualTo(expected);
+		}
+
+
+		[Test]
+		public void ShouldGetOutOfAdherenceForTeam()
+		{
+			const int expected = 1;
+			var teamId = Guid.NewGuid();
+			var teamAdherenceAggregator = MockRepository.GenerateMock<ITeamAdherenceAggregator>();
+			teamAdherenceAggregator.Stub(x => x.Aggregate(teamId)).Return(expected);
+			var target = new TeamsController(null, null, teamAdherenceAggregator);
+
+			var result = target.GetOutOfAdherence(teamId.ToString()).Data as TeamOutOfAdherence;
+
+			result.Id.Should().Be(teamId.ToString());
+			result.OutOfAdherence.Should().Be(expected);
 		}
 	}
 }

@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             //Expect.Call(_schedulingOptions.UseBlockScheduling).Return(BlockFinderType.BetweenDayOff);
             Expect.Call(_schedulingOptions.UseTeam).Return(true);
             Expect.Call(_groupPageLight.Key).Return("groupPageKey");
-            Expect.Call(_schedulingOptions.GroupOnGroupPage).Return(_groupPageLight);
+            Expect.Call(_schedulingOptions.GroupOnGroupPage).Return(_groupPageLight).Repeat.AtLeastOnce();
             Expect.Call(_schedulingOptions.Fairness).Return(_fairnessValue);
             Expect.Call(_schedulingOptions.GroupPageForShiftCategoryFairness).Return(_groupPageLight);
             Expect.Call(_schedulingOptions.ResourceCalculateFrequency).Return(_resourceCalculateFrequency);
