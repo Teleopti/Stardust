@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 										 ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod,
 										 IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService)
 		{
+			_cancelMe = false;
 			var selectedTeamMembers = teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.Intersect(selectedPersons).ToList();
 			if (selectedTeamMembers.IsEmpty())
 				return true;
@@ -61,6 +62,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					schedulingOptions.NotAllowedShiftCategories.Clear();
 					while (roleModelShift != null && !success)
 					{
+						if(_cancelMe)
+							break;
+
 						_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 						schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
 						roleModelShift = _roleModelSelector.Select(teamBlockInfo, firstSelectedDayInBlock, selectedTeamMembers.First(), schedulingOptions);
@@ -110,11 +114,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public void OnDayScheduledFailed()
 		{
+			var args = new SchedulingServiceFailedEventArgs();
 			var temp = DayScheduled;
 			if (temp != null)
 			{
-				temp(this, new SchedulingServiceFailedEventArgs());
+				temp(this, args);
 			}
+			_cancelMe = args.Cancel;
 		}
 	}
 }
