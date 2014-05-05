@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click the standard preference split-button")]
 		public void WhenIClickTheStandardPreferenceSplit_Button()
 		{
-			Browser.Interactions.ClickUsingJQuery("#preference-split-button .dropdown-toggle");
+			Browser.Interactions.ClickUsingJQuery(".preference-split-button .dropdown-toggle");
 		}
 
 		[When(@"I change standard preference")]
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I try to select a standard preference")]
 		public void WhenIChangeStandardPreference()
 		{
-			Browser.Interactions.ClickUsingJQuery("#preference-split-button .dropdown-toggle");
+			Browser.Interactions.ClickUsingJQuery(".preference-split-button .dropdown-toggle");
 			var shiftCategory = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
 			Browser.Interactions.ClickUsingJQuery(string.Format("a:contains('{0}')", shiftCategory.Description.Name));
 		}
@@ -96,16 +96,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheWorkflowControlSetSStandardPreferencesList()
 		{
 			var data = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
-			Browser.Interactions.AssertFirstContains("#preference-split-button", data.ShiftCategory.Description.Name);
-			Browser.Interactions.AssertFirstContains("#preference-split-button", data.DayOffTemplate.Description.Name);
-			Browser.Interactions.AssertFirstContains("#preference-split-button", data.Absence.Description.Name);
+			Browser.Interactions.AssertFirstContains(".hidden-sm .preference-split-button", data.ShiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(".hidden-sm .preference-split-button", data.DayOffTemplate.Description.Name);
+			Browser.Interactions.AssertFirstContains(".hidden-sm .preference-split-button", data.Absence.Description.Name);
 		}
 
 		[Then(@"I should see the selected standard preference in the split-button")]
 		public void ThenIShouldSeeTheSelectedStandardPreferenceInTheSplit_Button()
 		{
 			var data = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
-			Browser.Interactions.AssertFirstContains("#preference-split-button button", data.ShiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(".hidden-sm .preference-split-button button", data.ShiftCategory.Description.Name);
 		}
 
 		[Then(@"I should see the standard preference in the calendar")]

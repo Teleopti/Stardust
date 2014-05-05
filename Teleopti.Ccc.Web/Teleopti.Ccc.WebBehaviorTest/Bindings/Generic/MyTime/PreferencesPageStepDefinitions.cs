@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click the add extended preference button")]
 		public void WhenIClickTheAddExtendedPreferenceButton()
 		{
-			Browser.Interactions.Click("#Preference-add-extended-button");
+			Browser.Interactions.Click(".hidden-sm .Preference-add-extended-button");
 		}
 
 		[When(@"I click the apply extended preferences button")]
@@ -141,19 +141,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see I have (\d) available must haves")]
 		public void ThenIShouldSeeIHave1AvailableMustHaves(int mustHave)
 		{
-            Browser.Interactions.AssertFirstContains(".musthave-max",mustHave.ToString());
+            Browser.Interactions.AssertFirstContains(".hidden-sm .musthave-max",mustHave.ToString());
 		}
 
 		[Then(@"I should see I have (\d) must haves")]
 		public void ThenIShouldSeeIHave1MustHaves(int mustHave)
 		{
-            Browser.Interactions.AssertFirstContains(".musthave-current", mustHave.ToString());
+            Browser.Interactions.AssertFirstContains(".hidden-sm .musthave-current", mustHave.ToString());
 		}
 
 		[Then(@"I should not see the extended preference button")]
 		public void ThenIShouldNotSeeTheExtendedPreferenceButton()
 		{
-			Browser.Interactions.AssertNotExists("#preference-split-button", "#Preference-add-extended-button");
+			Browser.Interactions.AssertNotExists(".preference-split-button", ".Preference-add-extended-button");
 		}
 
 		[When(@"I click to open thee extended preference drop down list")]
@@ -369,13 +369,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click set must have button")]
 		public void WhenIClickOnMustHaveButton()
 		{
-			Browser.Interactions.Click(".add-musthave");
+			Browser.Interactions.Click(".hidden-sm .add-musthave");
 		}
 
 		[When(@"I click remove must have button")]
 		public void WhenIClickOnRemoveMustHaveButton()
 		{
-            Browser.Interactions.Click(".glyphicon-minus");
+            Browser.Interactions.Click(".hidden-sm .glyphicon-minus");
 		}
 
 		[When(@"I select preference template with '(.*)'")]
