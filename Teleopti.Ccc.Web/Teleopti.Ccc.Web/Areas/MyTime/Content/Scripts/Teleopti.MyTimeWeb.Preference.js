@@ -41,7 +41,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    selectionViewModel.previousPeriodDate(moment(periodData.PeriodNavigation.PrevPeriod));
 	    selectionViewModel.setCurrentDate(moment(periodData.Date));
 
-	    var availablePreferences = eval($("#preference-split-button").data("mytime-preference-option"));
+	    var availablePreferences = eval($(".preference-split-button").data("mytime-preference-option"));
 	    selectionViewModel.availablePreferences(availablePreferences);
 
 	    if (availablePreferences && availablePreferences.length > 0) {
@@ -51,6 +51,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
 			$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
 			ko.applyBindings(selectionViewModel, $('div.navbar')[1]);
+			ko.applyBindings(selectionViewModel, $('div.navbar')[2]);
 		});
 	}
 
@@ -148,7 +149,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	}
 
 	function _initAddExtendedButton() {
-		var button = $('#Preference-add-extended-button');
+		var button = $('.Preference-add-extended-button');
 
 	    var showMeridian = $('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true';
 		addExtendedPreferenceFormViewModel = new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(ajax, showMeridian, _savePreferenceTemplate, _deletePreferenceTemplate, _setPreference, _isShiftCategorySelectedAsStandardPreference);
