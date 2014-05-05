@@ -199,6 +199,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DateTimePeriod _selectedPeriod;
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
+		private SchedulingScreenPermissionHelper _permissionHelper;
 
 		#region Constructors
 
@@ -472,6 +473,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setShowRibbonTexts();
 
 			_personRequestAuthorizationChecker = new PersonRequestCheckAuthorization();
+
+			_permissionHelper = new SchedulingScreenPermissionHelper();
 		}
 
 		//flytta ut till modul
@@ -2017,24 +2020,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private static bool hasFunctionPermissionForTeams(IEnumerable<ITeam> teams, string functionPath)
-		{
-			var authorization = PrincipalAuthorization.Instance();
-			foreach (ITeam team in teams)
-			{
-				if (!authorization.IsPermitted(functionPath, DateOnly.Today, team))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
 		private bool isPermittedToViewMeeting()
 		{
 			const string functionPath = DefinedRaptorApplicationFunctionPaths.ModifyMeetings;
-			return checkPermission(functionPath);
+			return _permissionHelper.CheckPermission(functionPath, _scheduleView, _temporarySelectedEntitiesFromTreeView);
 		}
+
 		private bool isPermittedToEditMeeting()
 		{
 			if (!isPermittedToViewMeeting())
@@ -2045,31 +2036,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private bool isPermittedToWriteProtect()
 		{
 			const string functionPath = DefinedRaptorApplicationFunctionPaths.SetWriteProtection;
-			return checkPermission(functionPath);
-		}
-
-		private bool checkPermission(string functionPath)
-		{
-			var schedulePart = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
-			if (schedulePart != null)
-			{
-				if (schedulePart.Person.PersonPeriodCollection.Count > 0)
-				{
-					IList<ITeam> teams = (from personPeriod in schedulePart.Person.PersonPeriodCollection
-																where personPeriod.Period.Contains(schedulePart.DateOnlyAsPeriod.DateOnly)
-																select personPeriod.Team).ToList();
-					var permission = hasFunctionPermissionForTeams(teams, functionPath);
-					return permission;
-				}
-			}
-
-			return hasFunctionPermissionForTeams(_temporarySelectedEntitiesFromTreeView.OfType<ITeam>(), functionPath);
+			return _permissionHelper.CheckPermission(functionPath, _scheduleView, _temporarySelectedEntitiesFromTreeView);
 		}
 
 		private bool isPermittedToViewSchedules()
 		{
 			var viewSchedulesFunction = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
-			if (hasFunctionPermissionForTeams(_temporarySelectedEntitiesFromTreeView.OfType<ITeam>(), viewSchedulesFunction)) return true;
+			if (_permissionHelper.HasFunctionPermissionForTeams(_temporarySelectedEntitiesFromTreeView.OfType<ITeam>(), viewSchedulesFunction)) return true;
 			return false;
 		}
 
@@ -2872,7 +2845,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						meeting = meeting.EntityClone();
 						//We don't want to work with the actual meeting, that will be a bad idea!
 						IList<ITeam> meetingPersonsTeams = getDistinctTeamList(meeting);
-						bool editPermission = hasFunctionPermissionForTeams(meetingPersonsTeams, DefinedRaptorApplicationFunctionPaths.ModifyMeetings) && isPermittedToEditMeeting();
+						bool editPermission = _permissionHelper.HasFunctionPermissionForTeams(meetingPersonsTeams, DefinedRaptorApplicationFunctionPaths.ModifyMeetings) && isPermittedToEditMeeting();
 						bool viewSchedulesPermission = isPermittedToViewSchedules();
 						_schedulerMeetingHelper.MeetingComposerStart(meeting, _scheduleView, editPermission, viewSchedulesPermission);
 					}
@@ -4929,7 +4902,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemSwap.Enabled = true;
 			var automaticScheduleFunction = DefinedRaptorApplicationFunctionPaths.AutomaticScheduling;
 
-			toolStripMenuItemSwapAndReschedule.Enabled = hasFunctionPermissionForTeams(_temporarySelectedEntitiesFromTreeView.OfType<ITeam>(), automaticScheduleFunction);
+			toolStripMenuItemSwapAndReschedule.Enabled = _permissionHelper.HasFunctionPermissionForTeams(_temporarySelectedEntitiesFromTreeView.OfType<ITeam>(), automaticScheduleFunction);
 			if (_teamLeaderMode)
 				toolStripMenuItemSwapAndReschedule.Enabled = false;
 
