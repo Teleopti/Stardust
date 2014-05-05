@@ -770,6 +770,16 @@ End personal drop down menu
 @media (min-width: 768px) and (max-width: 992px) {
     body {
     }
+    .navbar {
+		margin-bottom: 0;
+	}
+    #page {
+		padding-top: 0px;
+	}
+
+	.navbar-collapse.subnavbar {
+		padding: 0;
+	}
 }
 
 /* Landscape phone to portrait tablet */
