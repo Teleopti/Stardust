@@ -3,6 +3,7 @@
 	As a real time analyst
 	I want to see which parts of the organization currently not adhering to the schedule
 
+@OnlyRunIfDisabled('RtaLastStatesOverview')
 Scenario: Show site
 	Given the current time is '2014-01-21 13:00'
 	And I have a role with
@@ -18,6 +19,22 @@ Scenario: Show site
 	When I view Real time adherence overview
 	Then I should see the site 'London'
 	And I should see the overlay 'waiting three dots'
+
+@OnlyRunIfEnabled('RtaLastStatesOverview')
+Scenario: Show site without loading status
+	Given the current time is '2014-01-21 13:00'
+	And I have a role with
+	| Field                                  | Value             |
+	| Name                                   | Real time analyst |
+	| Access to real time adherence overview | True              |
+	And there is a site named 'London'
+	And there is a team named 'Red' on site 'London'
+	And Guy London has a person period with
+	| Field      | Value      |
+	| Team       | Red      |
+	| Start Date | 2014-01-01 |
+	When I view Real time adherence overview
+	Then I should see the site 'London'
 
 Scenario: Show team
 	Given the current time is '2014-01-21 13:00'
@@ -154,7 +171,7 @@ Scenario: Should be able to go to Real time adherence overview
 	When I view Anywhere
 	Then I should see Real time adherence overview in the menu
 
-@ignore
+@OnlyRunIfEnabled('RtaLastStatesOverview')
 Scenario: View current state of sum of employees not adhering to schedule for each site
 	Given the current time is '2014-01-21 13:00'
 	And I have a role with
