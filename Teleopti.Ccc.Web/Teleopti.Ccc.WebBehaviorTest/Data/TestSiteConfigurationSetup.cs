@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class TestSiteConfigurationSetup
 	{
-		private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData.nhib.xml");
+		private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.NhibPath(), "TestData.nhib.xml");
 		private static readonly string TargetWebConfig = Path.Combine(Paths.WebPath(), "web.config");
 		private static readonly string BackupWebConfig = Path.Combine(Paths.WebPath(), "web.backup.config");
 		private static readonly string BehaviorTestWebConfig = Path.Combine(Paths.WebPath(), "web.fromtest.config");
@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			if (IniFileInfo.IISExpress)
 				AttemptToUseIISExpress();
 
-			UpdateWebConfigFromTemplate();
-			GenerateAndWriteTestDataNHibFileFromTemplate();
+			updateWebConfigFromTemplate();
+			//GenerateAndWriteTestDataNHibFileFromTemplate();
 		}
 
 		private static void AttemptToUseIISExpress()
@@ -57,8 +57,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			if (_server != null)
 				_server.Dispose();
-
-			RevertWebConfig();
 		}
 
 		public static void RecycleApplication()
@@ -77,18 +75,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				);
 		}
 		
-		private static void UpdateWebConfigFromTemplate()
+		private static void updateWebConfigFromTemplate()
 		{
 			var sourceFile = Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), "web.root.web.config");
 			var tags = new AllTags();
-			if (!IniFileInfo.ServiceBus)
-			{
+			
 				const string module = @"<module type=""Teleopti.Ccc.IocCommon.Configuration.LocalInMemoryEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
 				tags.Add(
 					"LocalInMemoryEventsPublisherModule",
 					module
 					);
-			}
+			
 
 			if (File.Exists(TargetWebConfig))
 				File.Copy(TargetWebConfig, BackupWebConfig, true);
@@ -102,10 +99,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			File.Copy(TargetWebConfig, BehaviorTestWebConfig, true);
 		}
 
-		private static void RevertWebConfig()
-		{
-			if (File.Exists(BackupWebConfig))
-				File.Copy(BackupWebConfig, TargetWebConfig, true);
-		}
+		
 	}
 }

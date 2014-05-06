@@ -192,7 +192,7 @@
   -->
   <PropertyGroup>
     <PreBuildEvent>xcopy "$(ProjectDir)Common\Test.xml" "$(TargetDir)" /y
-if not exist "$(ProjectDir)App.Config" copy "$(ProjectDir)..\.debug-Setup\config\CruiseControl.config" "$(ProjectDir)App.Config"</PreBuildEvent>
+if not exist "$(ProjectDir)App.Config" copy "$(ProjectDir)..\BuildArtifacts\Teleopti.Ccc.TestCommon.App.config" "$(ProjectDir)App.Config"</PreBuildEvent>
     <PostBuildEvent>xcopy "$(ProjectDir)..\Database\TeleoptiCCC7\*.*" "$(TargetDir)TeleoptiCCC7" /y /r /e /i /D</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

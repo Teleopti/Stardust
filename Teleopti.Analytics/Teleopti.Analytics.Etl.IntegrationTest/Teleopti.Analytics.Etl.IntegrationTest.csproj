@@ -428,7 +428,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\ccnet\Teleopti.Analytics.Etl.IntegrationTest.App.config" "$(ProjectDir)App.config"</PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\Teleopti.Ccc.TestCommon.App.config" "$(ProjectDir)App.config"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

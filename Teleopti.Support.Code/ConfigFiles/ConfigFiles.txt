@@ -1,6 +1,5 @@
 ﻿..\..\..\AgentPortal\Teleopti.Ccc.AgentPortal\app.config,BuildArtifacts\AppMytime.config
 ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config,BuildArtifacts\AppETLTool.config
-..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config,BuildArtifacts\Teleopti.Analytics.Etl.IntegrationTest.App.config
 ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\App.config,BuildArtifacts\AppETLService.config
 ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\debug\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 ..\..\..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\web.config,BuildArtifacts\PMWeb.config
@@ -16,10 +15,6 @@
 ..\..\..\Teleopti.Ccc.Web.Broker\web.config,BuildArtifacts\BrokerWeb.config
 ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.config,BuildArtifacts\Web.Root.Web.config
 ..\..\..\TeleoptiCCC\Web\Web.config,BuildArtifacts\Web.Root.Web.config
-..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config,BuildArtifacts\Teleopti.Ccc.WebBehaviorTest.App.config
-..\..\..\InfrastructureTest\App.Config,BuildArtifacts\CruiseControl.config
-..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.Config,BuildArtifacts\CruiseControl.config
-..\..\..\Teleopti.Ccc.ApplicationConfigTest\App.Config,BuildArtifacts\CruiseControl.config
 c:\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 
 
