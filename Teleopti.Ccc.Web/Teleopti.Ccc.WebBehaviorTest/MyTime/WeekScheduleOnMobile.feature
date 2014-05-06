@@ -24,6 +24,10 @@ Background:
 	| Field                      | Value              |
 	| Name                       | Published schedule |
 	| Schedule published to date | 2040-06-24         |
+	And there is a workflow control set with
+	| Field                      | Value                               |
+	| Name                       | Published schedule until 2014-04-30 |
+	| Schedule published to date | 2014-04-30                          |
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2014-04-14 |
@@ -38,6 +42,11 @@ Background:
 	And there is a dayoff with
 	| Field | Value  |
 	| Name  | DayOff |
+	And there is an absence with
+	| Field      | Value   |
+	| Name       | Illness |
+	| Short name | IL      |
+	| Color      | Red     |
 
 Scenario: No access to schedule page
 	Given I have the role 'Only access to Anywhere'
@@ -82,3 +91,74 @@ Scenario: View when you have a day off
 	| Shift category | Early            |
 	When I view my mobile week schedule
 	Then I should see the day off on '2014-04-22'
+
+Scenario: View when you have full day absence
+   Given I have the role 'Full access to mytime'
+   And I have the workflow control set 'Published schedule'
+   And I have an absence with
+   | Field      | Value            |
+   | Name       | Illness          |
+   | Start time | 2014-04-15 00:00 |
+   | End time   | 2014-04-15 23:59 |
+   When I view my mobile week schedule for date '2014-04-15'
+   Then I should see the absence with
+   | Field | Value      |
+   | Name  | Illness    |
+   | Date  | 2014-04-15 |
+
+Scenario: View when you have a full day absence on working day
+   Given I have the role 'Full access to mytime'
+   And I have the workflow control set 'Published schedule'
+   And I have a shift with
+   | Field          | Value            |
+   | StartTime      | 2014-04-15 09:00 |
+   | EndTime        | 2014-04-15 18:00 |
+   | Shift category | Early            |
+   And I have an absence with
+   | Field                   | Value            |
+   | Name      | Illness          |
+   | StartTime | 2014-04-15 09:00 |
+   | EndTime   | 2014-04-15 18:00 |
+   When I view my mobile week schedule for date '2014-04-15'
+   Then I should not see a shift on date '2014-04-15'
+   And I should see the absence with
+   | Field | Value      |
+   | Name  | Illness    |
+   | Date  | 2014-04-15 |
+
+Scenario: View when you are in absence on day off
+   Given I have the role 'Full access to mytime'
+   And I have the workflow control set 'Published schedule'
+   And I have a day off with
+   | Field | Value      |
+   | Name  | DayOff     |
+   | Date  | 2014-04-15 |
+   And I have an absence with
+   | Field     | Value            |
+   | Name      | Illness          |
+   | StartTime | 2014-04-15 00:00 |
+   | EndTime   | 2014-04-15 23:59 |
+   When I view my mobile week schedule for date '2014-04-15'
+	Then I should not see dayoff on date '2014-04-15'
+   And I should see the absence with
+   | Field | Value      |
+   | Name  | Illness    |
+   | Date  | 2014-04-15 |
+
+Scenario: Do not show unpublished schedule
+   Given I have the role 'Full access to mytime'
+   And I have the workflow control set 'Published schedule until 2014-04-30'
+   And I have a shift with
+   | Field          | Value            |
+   | StartTime      | 2014-05-01 09:00 |
+   | EndTime        | 2014-05-01 18:00 |
+   | Shift category | Early            |
+   When I view my mobile week schedule for date '2014-05-01'
+   Then I should not see any shift for day '2014-05-01'
+
+Scenario: Language setting
+   Given I have the role 'Full access to mytime'
+   And I have the workflow control set 'Published schedule'
+   And I am german
+   When I view my mobile week schedule for date '2014-01-01'
+   Then I should see a day name being 'MONTAG'

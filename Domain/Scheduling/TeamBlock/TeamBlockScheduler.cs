@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ShiftNudgeDirective shiftNudgeDirective)
 
 		{
+			_cancelMe = false;
 			var teamInfo = teamBlockInfo.TeamInfo;
 			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers()).ToList();
 			if (selectedTeamMembers.IsEmpty())
@@ -76,6 +77,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				schedulingOptions.NotAllowedShiftCategories.Clear();
 				while (roleModelShift != null && !success)
 				{
+						if(_cancelMe)
+							break;
+
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
 					roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
@@ -142,11 +146,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public void OnDayScheduledFailed()
 		{
+			var args = new SchedulingServiceFailedEventArgs();
 			var temp = DayScheduled;
 			if (temp != null)
 			{
-				temp(this, new SchedulingServiceFailedEventArgs());
+				temp(this, args);
 			}
+			_cancelMe = args.Cancel;
 		}
 	}
 }

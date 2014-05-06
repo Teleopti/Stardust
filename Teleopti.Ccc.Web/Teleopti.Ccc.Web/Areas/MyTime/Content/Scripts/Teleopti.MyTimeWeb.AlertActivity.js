@@ -159,7 +159,11 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 		self._createLayers = function (layers) {
 			self.layers = [];
-			
+
+			if (layers.length === 0) {
+				return;
+			}
+
 			var previousLayerEndTime = layers[0].StartMinutesSinceAsmZero + layers[0].LengthInMinutes;
 			for (var i = 0; i < layers.length; i++) {
 				var currentLayer = layers[i];

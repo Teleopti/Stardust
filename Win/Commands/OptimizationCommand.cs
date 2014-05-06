@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Win.Commands
         {
             var singleAgentEntry = new GroupPageLight { Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam };
             optimizationPreferences.Extra.GroupPageOnTeamBlockPer = singleAgentEntry;
-            optimizationPreferences.Extra.BlockFinderTypeForAdvanceOptimization = BlockFinderType.SingleDay;
+            optimizationPreferences.Extra.BlockTypeValue  = BlockFinderType.SingleDay;
             _weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, allMatrixes, backgroundWorker);
         }
 

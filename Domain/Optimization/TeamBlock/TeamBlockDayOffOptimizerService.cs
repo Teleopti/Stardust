@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			foreach (var selectedPerson in selectedPersons)
 			{
 				var teamInfo = _teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList);
-				if(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.KeepSameDaysOffInTeam )
+				if(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff  )
 				{
 					if (!_allTeamMembersInSelectionSpecification.IsSatifyBy(teamInfo, selectedPersons))
 						continue;
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			while (remainingInfoList.Count > 0)
 			{
 				IEnumerable<ITeamInfo> teamInfosToRemove;
-				if(optimizationPreferences.Extra.KeepSameDaysOffInTeam)
+				if(optimizationPreferences.Extra.UseTeamSameDaysOff)
 				{
 					teamInfosToRemove = runOneOptimizationRound(optimizationPreferences, rollbackService,
 					                                            remainingInfoList, schedulingOptions,
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 					foreach (var matrix in teamInfo.MatrixesForGroup())
 					{
-						if (!(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.KeepSameDaysOffInTeam))
+						if (!(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff ))
 						{
 							if (!selectedPersons.Contains(matrix.Person)) 
 								continue;
