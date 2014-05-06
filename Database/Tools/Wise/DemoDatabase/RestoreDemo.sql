@@ -77,3 +77,31 @@ REPLACE,
 STATS = 10'
 
 EXEC (@SQLString)
+
+--Re-move TeleoptiDemoUser. Will be re-added by DBManager
+USE [TeleoptiAnalytics_Demo]
+IF  EXISTS (SELECT * FROM sys.database_principals WHERE name = N'TeleoptiDemoUser')
+DROP USER [TeleoptiDemoUser]
+
+USE [TeleoptiCCC7Agg_Demo]
+IF  EXISTS (SELECT * FROM sys.database_principals WHERE name = N'TeleoptiDemoUser')
+DROP USER [TeleoptiDemoUser]
+
+USE [TeleoptiCCC7_Demo]
+IF  EXISTS (SELECT * FROM sys.database_principals WHERE name = N'TeleoptiDemoUser')
+DROP USER [TeleoptiDemoUser]
+
+--Only for Analytics so far.
+--In RTA we use MERGE t-sql
+DECLARE @max_compatibility_level tinyint
+DECLARE @DBName sysname;
+DECLARE @SQL nvarchar(1000);
+SELECT @max_compatibility_level=max(compatibility_level) FROM sys.databases
+SET @DBName = (SELECT db_name());
+SELECT @SQL = 'ALTER DATABASE ' +@DBName +' SET COMPATIBILITY_LEVEL = ' + cast(@max_compatibility_level as varchar(10))
+
+--Change demo databases to highest available compatibility_level. RTA needs this => MERGE statment is used (is under v8 licenses => SQL 2012)
+IF (@max_compatibility_level) > (SELECT compatibility_level FROM sys.databases WHERE name = DB_NAME())
+BEGIN
+	EXEC sp_executesql @statement=@SQL
+END

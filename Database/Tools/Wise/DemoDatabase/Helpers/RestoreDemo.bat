@@ -14,11 +14,12 @@ cd "%ProgRoot%\Teleopti\DatabaseInstaller\DemoDatabase"
 net start MSSQLSERVER
 
 SQLCMD -S. -E -v BakDir = "%ProgRoot%\Teleopti\DatabaseInstaller\DemoDatabase" -i"RestoreDemo.sql"
-SQLCMD -S. -E -v BakDir = "%ProgRoot%\Teleopti\DatabaseInstaller\DemoDatabase" -i"RestoreUsers.sql"
 
 "%ProgRoot%\Teleopti\DatabaseInstaller\DBManager.exe" -S. -DTeleoptiCCC7_Demo -OTeleoptiCCC7 -E -T -R -LTeleoptiDemoUser:TeleoptiDemoPwd2
 "%ProgRoot%\Teleopti\DatabaseInstaller\DBManager.exe" -S. -DTeleoptiCCC7Agg_Demo -OTeleoptiCCCAgg -E -T -R -LTeleoptiDemoUser:TeleoptiDemoPwd2
 "%ProgRoot%\Teleopti\DatabaseInstaller\DBManager.exe" -S. -DTeleoptiAnalytics_Demo -OTeleoptiAnalytics -E -T -R -LTeleoptiDemoUser:TeleoptiDemoPwd2
+
+SQLCMD -S. -E -v BakDir = "%ProgRoot%\Teleopti\DatabaseInstaller\DemoDatabase" -i"RestoreUsers.sql"
 
 "%ProgRoot%\Teleopti\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS. -DD"TeleoptiCCC7_Demo" -EE
 echo re-add CrossDb views
