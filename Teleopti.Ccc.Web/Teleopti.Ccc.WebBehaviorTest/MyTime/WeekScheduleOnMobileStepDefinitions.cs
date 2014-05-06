@@ -48,5 +48,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
                 Browser.Interactions.AssertExistsUsingJQuery(string.Format(".day:contains('{0}')", date.ToString("yyyy-MM-dd")));
             }
         }
+
+		  [Then(@"I should see the absence with")]
+		  public void ThenIShouldSeeTheAbsenceWith(Table table)
+		  {
+			  var absence = table.CreateInstance<AbsenceListItem>();
+			  Browser.Interactions.AssertAnyContains(string.Format("[data-mytime-date='{0}'] .absence", absence.Date), absence.Name);
+		  }
+
+		  public class AbsenceListItem
+		  {
+			  public string Name { get; set; }
+			  public string Date { get; set; }
+		  }
     }
 }

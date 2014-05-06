@@ -38,6 +38,11 @@ Background:
 	And there is a dayoff with
 	| Field | Value  |
 	| Name  | DayOff |
+	And there is an absence with
+	| Field      | Value   |
+	| Name       | Illness |
+	| Short name | IL      |
+	| Color      | Red     |
 
 Scenario: No access to schedule page
 	Given I have the role 'Only access to Anywhere'
@@ -82,3 +87,17 @@ Scenario: View when you have a day off
 	| Shift category | Early            |
 	When I view my mobile week schedule
 	Then I should see the day off on '2014-04-22'
+
+Scenario: View when you have full day absence
+   Given I have the role 'Full access to mytime'
+   And I have the workflow control set 'Published schedule'
+   And I have an absence with
+   | Field      | Value            |
+   | Name       | Illness          |
+   | Start time | 2014-04-15 00:00 |
+   | End time   | 2014-04-15 23:59 |
+   When I view my mobile week schedule for date '2014-04-15'
+   Then I should see the absence with
+   | Field | Value      |
+   | Name  | Illness    |
+   | Date  | 2014-04-15 |

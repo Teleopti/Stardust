@@ -49,6 +49,12 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay) {
 			return true;
 		return false;
 	});
+	self.hasFulldayAbsence = ko.computed(function() {
+		if (self.summaryTimeSpan != undefined && scheduleDay.Periods != null) {
+			return true;
+		}
+		return false;
+	});
 
     self.backgroundColor = scheduleDay.Summary ? scheduleDay.Summary.Color : null;
     self.summaryTextColor = ko.observable(self.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor) : 'black');
