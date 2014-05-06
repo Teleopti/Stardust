@@ -200,12 +200,20 @@ namespace Teleopti.Ccc.Win.Optimization
 		}
 
 		private void comboBoxTeamBlockType_SelectedValueChanged(object sender, EventArgs e)
-		  {
+		{
 			  var isEnabled = isBlockEnabled();
 			  checkBoxBlockSameShiftCategory.Enabled = isEnabled;
 			  checkBoxBlockSameStartTime.Enabled = isEnabled;
 			  checkBoxBlockSameShift.Enabled = isEnabled;
-		  }
+			if(isBlockEnabled() &&  !(checkBoxBlockSameShiftCategory.Checked  || checkBoxBlockSameStartTime.Checked || checkBoxBlockSameShift.Checked  ))
+				checkBoxBlockSameShiftCategory.Checked = true;
+			else if (!isBlockEnabled())
+			{
+				checkBoxBlockSameShiftCategory.Checked  = false ;
+				checkBoxBlockSameStartTime.Checked = false;
+				checkBoxBlockSameShift.Checked = false;
+			}
+		}
 
 		  private void comboBoxGroupPageOnTeams_SelectedValueChanged(object sender, EventArgs e)
 		  {
@@ -215,6 +223,16 @@ namespace Teleopti.Ccc.Win.Optimization
 			  checkBoxTeamSameStartTime.Enabled = isEnabled;
 			  checkBoxTeamSameEndTime.Enabled = isEnabled;
 			  checkBoxTeamSameActivity.Enabled = isEnabled;
+			  if (isTeamEnabled() && !(checkBoxTeamSameShiftCategory.Checked || checkBoxTeamSameStartTime.Checked || checkBoxTeamSameEndTime.Checked || checkBoxTeamSameActivity.Checked ))
+				  checkBoxTeamSameShiftCategory.Checked = true;
+			  else if (!isTeamEnabled())
+			  {
+				  checkBoxTeamSameDaysOff.Checked  = false;
+				  checkBoxTeamSameShiftCategory.Checked = false;
+				  checkBoxTeamSameStartTime.Checked = false;
+				  checkBoxTeamSameEndTime.Checked = false;
+				  checkBoxTeamSameActivity.Checked = false;
+			  }
 		  }
 
 		private bool isTeamEnabled()

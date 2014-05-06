@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         //private BlockFinderType _blockFinderType = BlockFinderType.None;
         private bool _useGroupScheduling;
-        private string _groupSchedulingGroupPageKey;
+        //private string _groupSchedulingGroupPageKey;
 
         private string _groupSchedlingForTeamBlockPerKey;
         private bool _useTeamBlockSameEndTime;
@@ -51,11 +51,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.BlockFinderTypeForAdvanceScheduling = _blockFinderTypeForAdvanceScheduling;
             schedulingOptions.UseTeam = _useGroupScheduling;
 
-            foreach (var groupPage in groupPages)
-            {
-                if (_groupSchedulingGroupPageKey == groupPage.Key)
-                    schedulingOptions.GroupOnGroupPage = groupPage;
-            }
+				//foreach (var groupPage in groupPages)
+				//{
+				//	 if (_groupSchedulingGroupPageKey == groupPage.Key)
+				//		  schedulingOptions.GroupOnGroupPage = groupPage;
+				//}
 
             //for leve per
             foreach (var groupPage in groupPagesForTeamBlockPer)
@@ -101,8 +101,8 @@ namespace Teleopti.Ccc.Domain.Optimization
              //_blockFinderType = schedulingOptions.UseBlockScheduling;
             _blockFinderTypeForAdvanceScheduling = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
             _useGroupScheduling = schedulingOptions.UseTeam;
-			if (schedulingOptions.GroupOnGroupPage != null)
-				_groupSchedulingGroupPageKey = schedulingOptions.GroupOnGroupPage.Key;
+			//if (schedulingOptions.GroupOnGroupPage != null)
+			//	_groupSchedulingGroupPageKey = schedulingOptions.GroupOnGroupPage.Key;
            _useGroupSchedulingCommonStart = schedulingOptions.TeamSameStartTime;
             _useGroupSchedulingCommonEnd = schedulingOptions.TeamSameEndTime;
             _useGroupSchedulingCommonCategory = schedulingOptions.TeamSameShiftCategory;

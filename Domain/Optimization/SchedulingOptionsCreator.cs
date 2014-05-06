@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if(schedulingOptions.TeamSameActivity )
                 schedulingOptions.CommonActivity = optimizationPreferences.Extra.TeamActivityValue;
             
-            schedulingOptions.GroupOnGroupPage = optimizationPreferences.Extra.TeamGroupPage;
+            schedulingOptions.GroupOnGroupPageForTeamBlockPer = optimizationPreferences.Extra.TeamGroupPage;
             
 
             setPreferencesInSchedulingOptions(optimizationPreferences, schedulingOptions);
@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			schedulingOptions.BlockFinderTypeForAdvanceScheduling =
 			   optimizationPreferences.Extra.BlockTypeValue;
-	        schedulingOptions.GroupOnGroupPageForTeamBlockPer = optimizationPreferences.Extra.GroupPageOnTeamBlockPer;
 			if (optimizationPreferences.Extra.UseTeamBlockOption)
 			{
 				schedulingOptions.UseSameDayOffs = true;

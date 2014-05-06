@@ -3668,6 +3668,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 			var schedulingOptions = _container.Resolve<ISchedulingOptionsCreator>().CreateSchedulingOptions(optimizerPreferences);
+				selectedGroupPage = _optimizationPreferences.Extra.TeamGroupPage;
 			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
 			AdvanceLoggingService.LogOptimizationInfo(optimizerPreferences, scheduleDays.Select(x => x.Person).Distinct().Count(),
 			                                          dateOnlyList.Count(), () => runBackgroupWorkerOptimization(e));

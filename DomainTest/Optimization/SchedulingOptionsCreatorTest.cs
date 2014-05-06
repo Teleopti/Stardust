@@ -35,12 +35,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldUseBlockSchedulingSetInSchedulingOptions()
         {
-          //  _schedulingOptions.UseBlockScheduling = BlockFinderType.None;
-            //Assert.AreEqual(_schedulingOptions.UseBlockScheduling, BlockFinderType.None);
-            //_optimizationPreferences.Extra.UseBlockScheduling = true;
-            _optimizationPreferences.Extra.BlockFinderTypeValue = BlockFinderType.BetweenDayOff;
+			  _optimizationPreferences.Extra.UseTeamBlockOption  = true;
+            _optimizationPreferences.Extra.BlockTypeValue = BlockFinderType.BetweenDayOff;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            //Assert.AreEqual(_schedulingOptions.UseBlockScheduling, BlockFinderType.BetweenDayOff);
+            Assert.AreEqual(_schedulingOptions.BlockFinderTypeForAdvanceScheduling  , BlockFinderType.BetweenDayOff);
         }
 
         [Test]
@@ -58,10 +56,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void ShouldGroupOnGroupPageChangesSetInSchedulingOptions()
         {
             IGroupPageLight groupPage = new GroupPageLight{Name = "Test"}; 
-            Assert.AreNotEqual(_schedulingOptions.GroupOnGroupPage, groupPage);
             _optimizationPreferences.Extra.TeamGroupPage = groupPage;
+	        _optimizationPreferences.Extra.UseTeams = true;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.AreEqual(_schedulingOptions.GroupOnGroupPage, groupPage);
+				Assert.AreEqual(_schedulingOptions.GroupOnGroupPageForTeamBlockPer, groupPage);
         }
 
         [Test]

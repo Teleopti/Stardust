@@ -294,12 +294,6 @@ namespace Teleopti.Interfaces.Domain
         //bool UseBlockScheduling { get; set; }
 
         /// <summary>
-        /// Gets or sets the block finder type.
-        /// </summary>
-        /// <value>The block finder type.</value>
-        BlockFinderType BlockFinderTypeValue { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether to use team scheduling.
         /// </summary>
         /// <value><c>true</c> if use team scheduling; otherwise, <c>false</c>.</value>
@@ -357,10 +351,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         BlockFinderType BlockTypeValue { get; set; }
 
-        /// <summary>
-        /// Group page for TeamBlock property used for block optimization
-        /// </summary>
-        IGroupPageLight GroupPageOnTeamBlockPer { get; set; }
         /// <summary>
         /// Use TeamBlock same end time
         /// </summary>

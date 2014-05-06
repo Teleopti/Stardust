@@ -97,7 +97,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public BlockFinderType BlockTypeValue { get; set; }
 
-	    public IGroupPageLight GroupPageOnTeamBlockPer{get ; set; }
 	    public bool UseBlockSameEndTime { get; set; }
 	    public bool UseBlockSameShiftCategory { get; set; }
 	    public bool UseBlockSameStartTime { get; set; }

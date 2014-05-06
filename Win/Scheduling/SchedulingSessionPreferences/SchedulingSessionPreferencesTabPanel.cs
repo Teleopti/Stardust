@@ -441,6 +441,17 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             checkBoxTeamSameEndTime.Enabled = value;
             checkBoxTeamSameStartTime.Enabled = value;
             checkBoxTeamSameActivity.Enabled = value;
+	        if (!value)
+	        {
+				  checkBoxTeamSameShiftCategory.Checked  = false;
+				  checkBoxTeamSameEndTime.Checked = false;
+				  checkBoxTeamSameStartTime.Checked = false;
+				  checkBoxTeamSameActivity.Checked = false;
+	        }else if (
+		        !(checkBoxTeamSameShiftCategory.Checked || checkBoxTeamSameStartTime.Checked ||
+		          checkBoxTeamSameEndTime.Checked ||
+		          checkBoxTeamSameActivity.Checked))
+		        checkBoxTeamSameShiftCategory.Checked = true;
         }
 
 		private void comboBoxTeamGroupPageSelectedIndexChanged(object sender, EventArgs e)
@@ -554,13 +565,22 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 	    private void comboBoxBlockType_SelectedValueChanged(object sender, EventArgs e)
 	    {
-		    if (comboBoxBlockType.SelectedValue == null)
+			 if (comboBoxBlockType.SelectedValue == null)
 			    return;
-
-			var isEnabled = (BlockFinderType)comboBoxBlockType.SelectedValue != BlockFinderType.SingleDay;
+			 var isEnabled = (BlockFinderType)comboBoxBlockType.SelectedValue != BlockFinderType.SingleDay;
 		    checkBoxBlockSameStartTime.Enabled = isEnabled;
 		    checkBoxBlockSameShift.Enabled = isEnabled;
 		    checkBoxBlockSameShiftCategory.Enabled = isEnabled;
+		    if (isEnabled &&
+		        !(checkBoxBlockSameStartTime.Checked || checkBoxBlockSameShift.Checked ||
+		          checkBoxBlockSameShiftCategory.Checked))
+			    checkBoxBlockSameShiftCategory.Checked = true;
+			 else if (!isEnabled)
+			 {
+				 checkBoxBlockSameStartTime.Checked = false;
+				 checkBoxBlockSameShift.Checked = false;
+				 checkBoxBlockSameShiftCategory.Checked = false;
+			 }
 	    }
     }
     
