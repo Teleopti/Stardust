@@ -216,6 +216,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 return commandDto.PersonSkillCollection;
             }
 #pragma warning disable 618
+				if (commandDto.PersonSkillPeriodCollection == null)
+					return new List<PersonSkillDto>();
+
             return from personSkillPeriodDto in commandDto.PersonSkillPeriodCollection
 #pragma warning restore 618
                 from s in personSkillPeriodDto.SkillCollection
