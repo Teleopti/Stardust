@@ -136,10 +136,10 @@ namespace Teleopti.Ccc.Win.Main
 			var rep = new LicenseRepository(UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory());
 			var arr = rep.GetActiveAgents();
 			
-			var strings = new string[arr.Count];
+			var strings = new string[arr.Count+1];
 			strings[0] = string.Join(",", Resources.BusinessUnit, Resources.FirstName, Resources.LastName, Resources.Email,
 									Resources.EmployeeNumber, Resources.Start, Resources.TerminalDate);
-			for (var i = 0; i < arr.Count-1; i++)
+			for (var i = 0; i < arr.Count; i++)
 			{
 				var a = arr[i];
 				strings[i+1] = string.Join(",", a.BusinessUnit, a.FirstName, a.LastName, a.Email, a.EmploymentNumber, a.StartDate,
