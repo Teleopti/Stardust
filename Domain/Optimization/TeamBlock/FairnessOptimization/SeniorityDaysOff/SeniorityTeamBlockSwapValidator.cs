@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			var teamBlocksToCheck = _constructTeamBlock.Construct(matrixesToCheck, totalPeriod,
 			                                                      teamBlockInfo.TeamInfo.GroupMembers.ToList(),
 			                                                      optimizationPreferences.Extra
-			                                                                             .BlockFinderTypeForAdvanceOptimization,
+			                                                                             .BlockTypeValue ,
 			                                                      optimizationPreferences.Extra.GroupPageOnTeamBlockPer);
 
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);

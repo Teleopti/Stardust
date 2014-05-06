@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				_optimizationPreferences.Extra.KeepSameDaysOffInTeam = false;
+				_optimizationPreferences.Extra.UseTeamSameDaysOff  = false;
 				_target.OptimizeDaysOff(_matrixList, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _selectedPersons, _optimizationPreferences, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _schedulingResultStateHolder);
 			}
 		}
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				IOptimizationPreferences optimizationPreferences = new OptimizationPreferences();
 				optimizationPreferences.Extra.UseTeamBlockOption = true;
-				optimizationPreferences.Extra.KeepSameDaysOffInTeam = true;
+				optimizationPreferences.Extra.UseTeamSameDaysOff = true;
 				_target.OptimizeDaysOff(_matrixList, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _selectedPersons, optimizationPreferences, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _schedulingResultStateHolder);
 			}
 		}
