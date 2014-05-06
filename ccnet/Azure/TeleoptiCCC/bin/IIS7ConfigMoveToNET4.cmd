@@ -11,6 +11,8 @@ Call :ChangeAppPoolVersion RTA v4.0
 Call :ChangeAppPoolVersion MyTime v4.0
 Call :ChangeAppPoolVersion Client v4.0
 Call :ChangeAppPoolVersion Broker.backplane v4.0
+Call :ChangeAppPoolVersion AuthenticationBridge v4.0
+Call :ChangeAppPoolVersion WindowsIdentityProvider v4.0
 goto :eof
 
 :ChangeAppPoolVersion
