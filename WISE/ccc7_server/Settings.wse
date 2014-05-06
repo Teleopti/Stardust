@@ -375,12 +375,12 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(UrlWindowsIdentityProvider)|%UrlWindowsIdentityProvider_TMP%
+  New Text=$(UrlWindowsIdentityProvider)|%URLWINDOWSIDENTITYPROVIDER_TMP%
   Line Number=0
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(UrlAuthenticationBridge)|%UrlAuthenticationBridge_TMP%
+  New Text=$(UrlAuthenticationBridge)|%URLAUTHENTICATIONBRIDGE_TMP%
   Line Number=0
 end
 item: Insert Line into Text File
