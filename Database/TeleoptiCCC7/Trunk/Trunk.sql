@@ -2,8 +2,10 @@
 --Date: 2014-04-29
 --Desc: Add the authentication info table to prepare for single sign on
 ----------------  
-IF  NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AuthenticationInfo]') AND type in (N'U'))
-BEGIN
+IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = N'Removed')
+EXEC sp_executesql N'CREATE SCHEMA [Removed] AUTHORIZATION [dbo]'
+GO
+
 CREATE TABLE [dbo].[AuthenticationInfo](
 	[Person] [uniqueidentifier] NOT NULL,
 	[Identity] [nvarchar](100) NOT NULL,
@@ -22,12 +24,9 @@ REFERENCES [dbo].[Person] ([Id])
 
 ALTER TABLE [dbo].[AuthenticationInfo] CHECK CONSTRAINT [FK_AuthenticationInfo_Person]
 
-INSERT INTO [AuthenticationInfo] 
+INSERT INTO dbo.[AuthenticationInfo] 
 SELECT Person, DomainName+'\'+WindowsLogOnName
-FROM WindowsAuthenticationInfo
+FROM dbo.WindowsAuthenticationInfo
 
-END
-
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[WindowsAuthenticationInfo]') AND type in (N'U'))
-DROP TABLE [dbo].[WindowsAuthenticationInfo]
-GO
+ALTER SCHEMA Removed 
+TRANSFER [dbo].[WindowsAuthenticationInfo]
