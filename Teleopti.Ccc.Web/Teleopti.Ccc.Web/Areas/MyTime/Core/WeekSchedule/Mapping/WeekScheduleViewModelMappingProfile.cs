@@ -213,7 +213,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.StyleClassName, c => c.MapFrom(s => s.ScheduleDay.PersonAbsenceCollection().OrderBy(a => a.Layer.Payload.Priority).ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a)).First().Layer.Payload.DisplayColor.ToStyleClass()))
 				.ForMember(d => d.StartPositionPercentage, c => c.Ignore())
 				.ForMember(d => d.EndPositionPercentage, c => c.Ignore())
-				.ForMember(d => d.Color, c => c.Ignore())
+				.ForMember(d => d.Color, c => c.ResolveUsing(s =>
+				{
+					var personAbsenceCollection = s.ScheduleDay.PersonAbsenceCollection();
+					if (personAbsenceCollection == null) return null;
+
+					var orgColor = personAbsenceCollection.OrderBy(a => a.Layer.Payload.Priority).ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a)).First().Layer.Payload.DisplayColor;
+					var color = string.Format("rgb({0},{1},{2})", orgColor.R, orgColor.G, orgColor.B);
+					return color;
+				}))
 				;
 
 			CreateMap<IAbsence, AbsenceTypeViewModel>()
