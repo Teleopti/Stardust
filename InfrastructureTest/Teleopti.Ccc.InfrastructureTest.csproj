@@ -148,6 +148,10 @@
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <HintPath>..\packages\Teleopti.Secrets.7.5.800.28\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
+    <Reference Include="Toggle.Net, Version=0.4.0.0, Culture=neutral, PublicKeyToken=edf35f5974b06d9f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Toggle.Net.0.4.0\lib\net40\Toggle.Net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationLayer\AutofacResolveTest.cs" />
@@ -165,6 +169,7 @@
     <Compile Include="Config\LoadPasswordPolicyServiceTest.cs" />
     <Compile Include="Config\XmlDefaultsTest.cs" />
     <Compile Include="CoverAllAssemblies.cs" />
+    <Compile Include="FeatureFlags\ToggleUserProviderTest.cs" />
     <Compile Include="Foundation\AvailableApplicationIdentityDataSourcesTest.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
