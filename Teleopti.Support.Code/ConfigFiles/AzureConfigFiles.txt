@@ -12,6 +12,8 @@
 ..\..\..\sitesroot\6\web.config,BuildArtifacts\RTAWeb.config
 ..\..\..\sitesroot\7\web.config,BuildArtifacts\BrokerWeb.config
 ..\..\..\sitesroot\8\web.config,BuildArtifacts\BrokerBackplaneWeb.config
+..\..\..\sitesroot\9\web.config,BuildArtifacts\Web.AuthenticationBridge.Web.config
+..\..\..\sitesroot\10\web.config,BuildArtifacts\Web.WindowsIdentityProvider.Web.config
 ..\..\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe.config,BuildArtifacts\AppETLService.config
 ..\..\Services\ETL\Service\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 ..\..\Services\ETL\Tool\Teleopti.Analytics.Etl.ConfigTool.exe.config,BuildArtifacts\AppETLTool.config
