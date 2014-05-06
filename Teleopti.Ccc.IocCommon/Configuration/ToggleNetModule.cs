@@ -3,6 +3,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Toggle.Net;
+using Toggle.Net.Configuration;
 using Toggle.Net.Internal;
 using Toggle.Net.Providers.TextFile;
 
@@ -35,7 +36,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				}
 				else
 				{
-					var toggleChecker = new ToggleChecker(new FileProvider(new FileReader(_pathToToggleFile)));
+					var toggleConfiguration =
+						new ToggleConfiguration(new FileProviderFactory(new FileReader(_pathToToggleFile),
+							new DefaultSpecificationMappings()));
+					var toggleChecker = toggleConfiguration.Create();
 					builder.Register(_ => new toggleCheckerWrapper(toggleChecker))
 						.SingleInstance()
 						.As<IToggleManager>();
