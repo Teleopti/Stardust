@@ -27,15 +27,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             schedulingOptions.UseTeam = optimizationPreferences.Extra.UseTeams;
         	schedulingOptions.TeamSameShiftCategory =
-        		optimizationPreferences.Extra.UseGroupSchedulingCommonCategory;
-        	schedulingOptions.TeamSameStartTime = optimizationPreferences.Extra.UseGroupSchedulingCommonStart;
-        	schedulingOptions.TeamSameEndTime = optimizationPreferences.Extra.UseGroupSchedulingCommonEnd;
-        	schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.KeepSameDaysOffInTeam;
-            schedulingOptions.TeamSameActivity = optimizationPreferences.Extra.UseCommonActivity;
+        		optimizationPreferences.Extra.UseTeamSameShiftCategory;
+        	schedulingOptions.TeamSameStartTime = optimizationPreferences.Extra.UseTeamSameStartTime;
+        	schedulingOptions.TeamSameEndTime = optimizationPreferences.Extra.UseTeamSameEndTime;
+        	schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.UseTeamSameDaysOff;
+            schedulingOptions.TeamSameActivity = optimizationPreferences.Extra.UseTeamSameActivity;
             if(schedulingOptions.TeamSameActivity )
-                schedulingOptions.CommonActivity = optimizationPreferences.Extra.CommonActivity;
+                schedulingOptions.CommonActivity = optimizationPreferences.Extra.TeamActivityValue;
             
-            schedulingOptions.GroupOnGroupPage = optimizationPreferences.Extra.GroupPageOnTeam;
+            schedulingOptions.GroupOnGroupPage = optimizationPreferences.Extra.TeamGroupPage;
             
 
             setPreferencesInSchedulingOptions(optimizationPreferences, schedulingOptions);
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.GroupPageForShiftCategoryFairness = optimizationPreferences.Extra.GroupPageOnCompareWith;
 
 			schedulingOptions.BlockFinderTypeForAdvanceScheduling =
-			   optimizationPreferences.Extra.BlockFinderTypeForAdvanceOptimization;
+			   optimizationPreferences.Extra.BlockTypeValue;
 	        schedulingOptions.GroupOnGroupPageForTeamBlockPer = optimizationPreferences.Extra.GroupPageOnTeamBlockPer;
 			if (optimizationPreferences.Extra.UseTeamBlockOption)
 			{
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			else
 			{
-				schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.KeepSameDaysOffInTeam;
+				schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.UseTeamSameDaysOff;
 			}
 
 			//if (optimizationPreferences.Shifts.KeepShiftCategories)
@@ -133,10 +133,10 @@ namespace Teleopti.Ccc.Domain.Optimization
                                                 ISchedulingOptions schedulingOptions)
         {
 			  schedulingOptions.UseBlock = optimizationPreferences.Extra.UseTeamBlockOption;
-            schedulingOptions.BlockSameEndTime = optimizationPreferences.Extra.UseTeamBlockSameEndTime;
-            schedulingOptions.BlockSameStartTime = optimizationPreferences.Extra.UseTeamBlockSameStartTime;
-				schedulingOptions.BlockSameShift = optimizationPreferences.Extra.UseTeamBlockSameShift;
-            schedulingOptions.BlockSameShiftCategory = optimizationPreferences.Extra.UseTeamBlockSameShiftCategory;
+            schedulingOptions.BlockSameEndTime = optimizationPreferences.Extra.UseBlockSameEndTime;
+            schedulingOptions.BlockSameStartTime = optimizationPreferences.Extra.UseBlockSameStartTime;
+				schedulingOptions.BlockSameShift = optimizationPreferences.Extra.UseBlockSameShift;
+            schedulingOptions.BlockSameShiftCategory = optimizationPreferences.Extra.UseBlockSameShiftCategory;
 
 	        if (!optimizationPreferences.Extra.UseTeams)
 	        {

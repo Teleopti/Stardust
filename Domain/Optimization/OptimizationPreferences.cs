@@ -82,26 +82,26 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public BlockFinderType BlockFinderTypeValue { get; set; }
 
 		public bool UseTeams { get; set; }
-		public bool KeepSameDaysOffInTeam { get; set; }
-		public IGroupPageLight GroupPageOnTeam { get; set; }
+		public bool UseTeamSameDaysOff { get; set; }
+		public IGroupPageLight TeamGroupPage { get; set; }
 
 		public IGroupPageLight GroupPageOnCompareWith { get; set; }
 		public double FairnessValue { get; set; }
 
 		
-		public bool UseGroupSchedulingCommonStart { get; set; }
-		public bool UseGroupSchedulingCommonEnd { get; set; }
-		public bool UseGroupSchedulingCommonCategory { get; set; }
-        public bool UseCommonActivity { get; set; }
-        public IActivity CommonActivity { get; set; }
+		public bool UseTeamSameStartTime { get; set; }
+		public bool UseTeamSameEndTime { get; set; }
+		public bool UseTeamSameShiftCategory { get; set; }
+        public bool UseTeamSameActivity { get; set; }
+        public IActivity TeamActivityValue { get; set; }
 
-        public BlockFinderType BlockFinderTypeForAdvanceOptimization { get; set; }
+        public BlockFinderType BlockTypeValue { get; set; }
 
 	    public IGroupPageLight GroupPageOnTeamBlockPer{get ; set; }
-	    public bool UseTeamBlockSameEndTime { get; set; }
-	    public bool UseTeamBlockSameShiftCategory { get; set; }
-	    public bool UseTeamBlockSameStartTime { get; set; }
-	    public bool UseTeamBlockSameShift { get; set; }
+	    public bool UseBlockSameEndTime { get; set; }
+	    public bool UseBlockSameShiftCategory { get; set; }
+	    public bool UseBlockSameStartTime { get; set; }
+	    public bool UseBlockSameShift { get; set; }
 	    public bool UseTeamBlockOption { get; set; }
 	}
 
