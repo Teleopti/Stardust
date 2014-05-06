@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			foreach (var groupPage in groupPages)
 			{
 				if (_groupPageOnTeamKey == groupPage.Key)
-					target.GroupPageOnTeam = groupPage;
+					target.TeamGroupPage = groupPage;
 				if (_groupPageOnCompareWithKey == groupPage.Key)
 					target.GroupPageOnCompareWith = groupPage;
 			}
@@ -60,28 +60,28 @@ namespace Teleopti.Ccc.Domain.Optimization
 			target.BlockFinderTypeValue = _blockFinderTypeValue;
 			//target.UseBlockScheduling = _useBlockScheduling;
 			target.UseTeams = _useTeams;
-			target.KeepSameDaysOffInTeam = _useSameDaysOffForTeams;
+			target.UseTeamSameDaysOff = _useSameDaysOffForTeams;
             
            
 			target.FairnessValue = _fairnessValue;
 
-		    target.UseGroupSchedulingCommonCategory = _useGroupSchedulingCommonCategory;
-		    target.UseGroupSchedulingCommonEnd = _useGroupSchedulingCommonEnd;
-		    target.UseGroupSchedulingCommonStart = _useGroupSchedulingCommonStart;
+		    target.UseTeamSameShiftCategory = _useGroupSchedulingCommonCategory;
+		    target.UseTeamSameEndTime = _useGroupSchedulingCommonEnd;
+		    target.UseTeamSameStartTime = _useGroupSchedulingCommonStart;
 
-		    target.BlockFinderTypeForAdvanceOptimization = _blockFinderTypeForAdvanceOptimization;
+		    target.BlockTypeValue = _blockFinderTypeForAdvanceOptimization;
 
 		    target.UseTeamBlockOption = _useTeamBlockOption;
-		    target.UseTeamBlockSameEndTime = _useTeamBlockSameEndTime;
-		    target.UseTeamBlockSameShift = _useTeamBlockSameShift;
-		    target.UseTeamBlockSameShiftCategory = _useTeamBlockSameShiftCategory;
-		    target.UseTeamBlockSameStartTime = _useTeamBlockSameStartTime;
+		    target.UseBlockSameEndTime = _useTeamBlockSameEndTime;
+		    target.UseBlockSameShift = _useTeamBlockSameShift;
+		    target.UseBlockSameShiftCategory = _useTeamBlockSameShiftCategory;
+		    target.UseBlockSameStartTime = _useTeamBlockSameStartTime;
 		}
 
 		public void MapFrom(IExtraPreferences source)
 		{
-			if (source.GroupPageOnTeam != null)
-				_groupPageOnTeamKey = source.GroupPageOnTeam.Key;
+			if (source.TeamGroupPage != null)
+				_groupPageOnTeamKey = source.TeamGroupPage.Key;
 			if (source.GroupPageOnCompareWith != null)
 				_groupPageOnCompareWithKey = source.GroupPageOnCompareWith.Key;
             if (source.GroupPageOnTeamBlockPer != null)
@@ -90,21 +90,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_blockFinderTypeValue = source.BlockFinderTypeValue;
 			//_useBlockScheduling = source.UseBlockScheduling;
 			_useTeams = source.UseTeams;
-			_useSameDaysOffForTeams = source.KeepSameDaysOffInTeam;
+			_useSameDaysOffForTeams = source.UseTeamSameDaysOff;
 
             _fairnessValue = source.FairnessValue;
 
-		    _useGroupSchedulingCommonCategory = source.UseGroupSchedulingCommonCategory;
-		    _useGroupSchedulingCommonEnd = source.UseGroupSchedulingCommonEnd;
-		    _useGroupSchedulingCommonStart = source.UseGroupSchedulingCommonStart;
+		    _useGroupSchedulingCommonCategory = source.UseTeamSameShiftCategory;
+		    _useGroupSchedulingCommonEnd = source.UseTeamSameEndTime;
+		    _useGroupSchedulingCommonStart = source.UseTeamSameStartTime;
 
-		    _blockFinderTypeForAdvanceOptimization = source.BlockFinderTypeForAdvanceOptimization;
+		    _blockFinderTypeForAdvanceOptimization = source.BlockTypeValue;
 
 		    _useTeamBlockOption = source.UseTeamBlockOption;
-		    _useTeamBlockSameEndTime = source.UseTeamBlockSameEndTime;
-		    _useTeamBlockSameShift = source.UseTeamBlockSameShift;
-		    _useTeamBlockSameShiftCategory = source.UseTeamBlockSameShiftCategory;
-		    _useTeamBlockSameStartTime = source.UseTeamBlockSameStartTime;
+		    _useTeamBlockSameEndTime = source.UseBlockSameEndTime;
+		    _useTeamBlockSameShift = source.UseBlockSameShift;
+		    _useTeamBlockSameShiftCategory = source.UseBlockSameShiftCategory;
+		    _useTeamBlockSameStartTime = source.UseBlockSameStartTime;
 		}
 
 		/// <summary>
