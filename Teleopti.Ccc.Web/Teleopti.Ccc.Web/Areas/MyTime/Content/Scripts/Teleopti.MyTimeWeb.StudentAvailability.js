@@ -1,12 +1,10 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
+﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
-/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
-
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -65,7 +63,8 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	    	type: 'GET',
 	    	success: function (data) {
 	    		$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
-	    		ko.applyBindings(vm, $('div.navbar')[1]);
+	    		ko.applyBindings(vm, $('div.subnavbar')[0]);
+	    		ko.applyBindings(vm, $('div.hidden-sm')[0]);
 	    	}
 	    });
 	}
