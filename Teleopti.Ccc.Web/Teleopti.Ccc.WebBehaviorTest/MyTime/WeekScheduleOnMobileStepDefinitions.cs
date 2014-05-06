@@ -76,5 +76,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			  Browser.Interactions.AssertNotExists(".weekview-mobile", string.Format("[data-mytime-date='{0}'] .dayoff", date));
 		  }
 
+		  [Then(@"I should see a day name being '(.*)'")]
+		  public void ThenIShouldSeeADayNameBeing(string name)
+		  {
+			  Browser.Interactions.AssertAnyContains(".weekday", name);
+		  }
+
     }
 }

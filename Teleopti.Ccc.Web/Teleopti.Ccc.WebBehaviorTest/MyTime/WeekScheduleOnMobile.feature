@@ -155,3 +155,10 @@ Scenario: Do not show unpublished schedule
    | Shift category | Early            |
    When I view my mobile week schedule for date '2014-05-01'
    Then I should not see any shift for day '2014-05-01'
+
+Scenario: Language setting
+   Given I have the role 'Full access to mytime'
+   And I have the workflow control set 'Published schedule'
+   And I am german
+   When I view my mobile week schedule for date '2014-01-01'
+   Then I should see a day name being 'MONTAG'
