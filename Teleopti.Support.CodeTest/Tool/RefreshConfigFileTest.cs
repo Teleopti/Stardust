@@ -65,7 +65,7 @@ namespace Teleopti.Support.CodeTest.Tool
             const string files = @"..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\App.config,ConfigFiles\AppETLService.config
 ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\app.config,ConfigFiles\AppRaptor.config
 ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config,ConfigFiles\AppETLTool.config";
-            _refresher.ReadLinesFromString(files, _lst, true);
+			_refresher.SplitAndReplace(files, _lst, true);
         }
 
         [Test]

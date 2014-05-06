@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Reflection;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Support.Code.Tool;
 
@@ -17,7 +14,7 @@ namespace Teleopti.Support.CodeTest.Tool
             var args = new[] { "-MODeploy", "-?" };
             ICommandLineArgument target = new CommandLineArgument(args);
 
-            target.Mode.Should().Be("Deploy");
+            target.Mode.Type.Should().Be("Deploy");
     
             target.ShowHelp.Should().Be.True();
             target.Help.Should().Not.Be.Empty();

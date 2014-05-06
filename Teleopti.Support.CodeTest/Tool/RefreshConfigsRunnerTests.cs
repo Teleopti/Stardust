@@ -27,9 +27,9 @@ namespace Teleopti.Support.CodeTest.Tool
         public void RefreshThemTest()
         {
             Expect.Call(_fileMan.GetReplaceList()).Return(new List<SearchReplace>());
-            Expect.Call(() => _refreshConfig.ReadLinesFromString("", new List<SearchReplace>(), false)).IgnoreArguments();
+            Expect.Call(() => _refreshConfig.SplitAndReplace("", new List<SearchReplace>(), false)).IgnoreArguments();
             _mocks.ReplayAll();
-            _refresher.RefreshThem("DEV");
+			_refresher.RefreshThem(new ModeFile("DEV"));
             _mocks.VerifyAll();
         }
 
@@ -37,9 +37,9 @@ namespace Teleopti.Support.CodeTest.Tool
         public void RefreshThemDeployTest()
         {
             Expect.Call(_fileMan.GetReplaceList()).Return(new List<SearchReplace>());
-            Expect.Call(() => _refreshConfig.ReadLinesFromString("", new List<SearchReplace>(), false)).IgnoreArguments();
+			Expect.Call(() => _refreshConfig.SplitAndReplace("", new List<SearchReplace>(), false)).IgnoreArguments();
             _mocks.ReplayAll();
-            _refresher.RefreshThem("DEPLOY");
+			_refresher.RefreshThem(new ModeFile("DEPLOY"));
             _mocks.VerifyAll();
         }
 
@@ -47,9 +47,9 @@ namespace Teleopti.Support.CodeTest.Tool
         public void RefreshThemTestTest()
         {
             Expect.Call(_fileMan.GetReplaceList()).Return(new List<SearchReplace>());
-            Expect.Call(() => _refreshConfig.ReadLinesFromString("", new List<SearchReplace>(), false)).IgnoreArguments();
+			Expect.Call(() => _refreshConfig.SplitAndReplace("", new List<SearchReplace>(), false)).IgnoreArguments();
             _mocks.ReplayAll();
-            _refresher.RefreshThem("TEST");
+			_refresher.RefreshThem(new ModeFile("TEST"));
             _mocks.VerifyAll();
         }
 
@@ -57,9 +57,9 @@ namespace Teleopti.Support.CodeTest.Tool
         public void RefreshThemErrorTest()
         {
             Expect.Call(_fileMan.GetReplaceList()).Return(new List<SearchReplace>());
-            Expect.Call(() => _refreshConfig.ReadLinesFromString("", new List<SearchReplace>(), false)).IgnoreArguments().Throw(new FileNotFoundException("Borta?"));
+			Expect.Call(() => _refreshConfig.SplitAndReplace("", new List<SearchReplace>(), false)).IgnoreArguments().Throw(new FileNotFoundException("Borta?"));
             _mocks.ReplayAll();
-            _refresher.RefreshThem("TEST");
+			_refresher.RefreshThem(new ModeFile("TEST"));
             _mocks.VerifyAll();
         }
     }

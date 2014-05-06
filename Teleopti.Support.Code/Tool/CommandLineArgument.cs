@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Globalization;
-using System.IO;
+﻿using System.Globalization;
 
 namespace Teleopti.Support.Code.Tool
 {
@@ -13,30 +9,7 @@ namespace Teleopti.Support.Code.Tool
         bool ShowHelp { get; }
     }
 
-	public class ModeFile
-	{
-		private readonly string _mode;
-
-		public ModeFile(string mode)
-		{
-			_mode = mode;
-		}
-
-		public string[] FileContents()
-		{
-			var file = "ConfigFiles.txt";
-			if (_mode.ToUpper(CultureInfo.InvariantCulture).Equals("DEPLOY"))
-				file = "DeployConfigFiles.txt";
-			if (_mode.ToUpper(CultureInfo.InvariantCulture).Equals("TEST"))
-				file = "BuildServerConfigFiles.txt";
-			if (_mode.ToUpper(CultureInfo.InvariantCulture).Equals("AZURE"))
-				file = "AzureConfigFiles.txt";
-
-			return File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"ConfigFiles\" + file));
-		}
-	}
-
-    public class CommandLineArgument : ICommandLineArgument
+	public class CommandLineArgument : ICommandLineArgument
     {
        private readonly string[] _argumentCollection;
         
