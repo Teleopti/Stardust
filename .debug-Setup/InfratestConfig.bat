@@ -22,8 +22,8 @@ SET AnalyticsDB=Infratest_Analytics
 )
 
 ::init toggle values to "ALL"
-SET TOGGLEURL="ALL"
-SET TOGGLE_FILE="ALL" 
+SET TOGGLEURL=ALL
+SET TOGGLE_FILE=ALL
 
 if "%FEATURETOGGLE%" == "RC" (
 SET TOGGLE_FILE=RC.toggles.txt
