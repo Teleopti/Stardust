@@ -32,25 +32,26 @@ namespace Teleopti.Ccc.TestCommon
 
 		private static void readIniFile()
 		{
-			const string testDatabaseSection = "TestDatabase";
-			var iniFileHelper = new IniFileHelper(ConfigurationManager.AppSettings["dbFile"]);
+			SitePath = ConfigurationManager.AppSettings["SitePath"];
+			DB_ANALYTICS = ConfigurationManager.AppSettings["DB_ANALYTICS"];
+			DB_CCC7 = ConfigurationManager.AppSettings["DB_CCC7"];
 
-			DB_ANALYTICS = iniFileHelper.ReadIniValue(testDatabaseSection, "DB_ANALYTICS");
-			DB_CCC7 = iniFileHelper.ReadIniValue(testDatabaseSection, "DB_CCC7");
-			SQL_SERVER_NAME = iniFileHelper.ReadIniValue(testDatabaseSection, "SQL_SERVER_NAME");
-			SQL_LOGIN = iniFileHelper.ReadIniValue(testDatabaseSection, "SQL_LOGIN");
-			SQL_PASSWORD = iniFileHelper.ReadIniValue(testDatabaseSection, "SQL_PASSWORD");
-			WEB_BROKER_BACKPLANE = iniFileHelper.ReadIniValue(testDatabaseSection, "WEB_BROKER_BACKPLANE");
-			WEB_BROKER_FOR_WEB = iniFileHelper.ReadIniValue(testDatabaseSection, "WEB_BROKER");
-			Create = iniFileHelper.ReadIniValue(testDatabaseSection, "create") != "false";
-			CreateByNHib = iniFileHelper.ReadIniValue(testDatabaseSection, "createmode") == "nhib";
-			SqlOutput = iniFileHelper.ReadIniValue(testDatabaseSection, "sqloutput") == "true";
-			Url = iniFileHelper.ReadIniValue(testDatabaseSection, "url");
-			AGENTPORTALWEB_nhibConfPath = iniFileHelper.ReadIniValue(testDatabaseSection, "AGENTPORTALWEB_nhibConfPath");			
-			SitePath = iniFileHelper.ReadIniValue(testDatabaseSection, "sitepath");
-			var iisexpress = iniFileHelper.ReadIniValue(testDatabaseSection, "iisexpress");
-			IISExpress = iisexpress == "true" || string.IsNullOrEmpty(iisexpress);
-			ServiceBus = iniFileHelper.ReadIniValue(testDatabaseSection, "servicebus") == "true";
+			SQL_SERVER_NAME = ConfigurationManager.AppSettings["SQL_SERVER_NAME"];
+			SQL_LOGIN = ConfigurationManager.AppSettings["SQL_LOGIN"];
+			SQL_PASSWORD = ConfigurationManager.AppSettings["SQL_PASSWORD"];
+
+			WEB_BROKER_BACKPLANE = ConfigurationManager.AppSettings["WEB_BROKER_BACKPLANE"];
+			WEB_BROKER_FOR_WEB = ConfigurationManager.AppSettings["WEB_BROKER"];
+
+			Url = ConfigurationManager.AppSettings["WEB_URL"];
+			Create = true;
+			CreateByNHib = false;
+			SqlOutput = ConfigurationManager.AppSettings["sqloutput"] == "true";
+
+
+			AGENTPORTALWEB_nhibConfPath = ConfigurationManager.AppSettings["AGENTPORTALWEB_nhibConfPath"];
+			IISExpress = true;
+			ServiceBus = ConfigurationManager.AppSettings["servicebus"] == "true";
 
 			buildConnectionString();
 

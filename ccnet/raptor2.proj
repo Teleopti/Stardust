@@ -139,12 +139,7 @@
 		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_analytics]&quot;"/>
 		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_ccc7]&quot;"/>
 	</Target>
-	
-	<Target Name="SetUpConfigFiles">
-		<Message Importance="high" Text="Fixing config files"/>
-		<Exec Command = "&quot;$(CCNetWorkingDirectory)\Teleopti.Support.Tool\bin\$(Configuration)\Teleopti.Support.Tool.exe&quot; -MODevelop" />
-	</Target>
-	
+
 	<Target Name="BuildDBManager">
 		<Message Importance="high" Text="Compile of Db Manager starting..." />
 
@@ -285,71 +280,13 @@
 	</Target>
 
 	<Target Name="FixConfigFiles">
-		<Message Importance="high" Text="Fixing config files..." />	
+		<Message Importance="high" Text="Fixing config files..." />
+		<Message Importance="high" Text="$(CCNetWorkingDirectory)\.debug-Setup\InfratestConfig.bat %22$(DBNamePrefix)_ccc7%22 %22$(DBNamePrefix)_analytics%22 ALL %22$(DBNamePrefix)%22"/>
+			<Exec Command="$(CCNetWorkingDirectory)\.debug-Setup\InfratestConfig.bat %22$(DBNamePrefix)_ccc7%22 %22$(DBNamePrefix)_analytics%22 ALL %22$(DBNamePrefix)%22">
+		</Exec>
+		<Message Importance="high" Text="Fixing config files. Done!" />	
+	</Target>
 
-		<PropertyGroup>
-			<WEB_BROKER>http://localhost:52858/</WEB_BROKER>
-			<WEB_BROKER_BACKPLANE></WEB_BROKER_BACKPLANE>
-			<InfraTestIni>$(CCNetWorkingDirectory)\ccnet\InfraTest.ini</InfraTestIni>
-			<SitePath>$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web</SitePath>		
-		</PropertyGroup>		
-
-		<ItemGroup>
-			<!-- MSBuild escape sequence is "% + ASCIIVALUE". e.g [$] = "%24"  -->
-			<InfraTestIniLines Include="[TestDatabase]" />
-			<InfraTestIniLines Include="SQL_SERVER_NAME=%22$(DBServer)%22" />
-			<InfraTestIniLines Include="DB_CCC7=%22$(DBNamePrefix)_ccc7%22" />
-			<InfraTestIniLines Include="AGENTPORTALWEB_nhibConfPath=%22bin%22" />
-			<InfraTestIniLines Include="DB_ANALYTICS=%22$(DBNamePrefix)_analytics%22" />
-			<InfraTestIniLines Include="WEB_BROKER=%22$(WEB_BROKER)%22" />
-			<InfraTestIniLines Include="WEB_BROKER_BACKPLANE=%22$(WEB_BROKER_BACKPLANE)%22" />	
-			<InfraTestIniLines Include="SitePath=%22$(SitePath)%22" />
-			<InfraTestIniLines Include="url=%22$(WEB_BROKER)%22" />
-			<InfraTestIniLines Include="servicebus=%22false%22" />
-			<InfraTestIniLines Include="create=%22true%22" />
-			<InfraTestIniLines Include="sqloutput=%22false%22" />
-			<InfraTestIniLines Include="dbFile=%22$(InfraTestIni)%22" />
-		</ItemGroup> 
-		
-		<WriteLinesToFile File="$(InfraTestIni)" 
-		Lines="@(InfraTestIniLines)" 
-		Overwrite="true" />
-
-
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\App.config" />
-
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\InfrastructureTest\App.Config" />
-
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\Teleopti.Ccc.WebBehaviorTest.App.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config" />
-			
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\Teleopti.Analytics.Etl.IntegrationTest.App.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config" />
-		
-		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config"
-			Encoding="windows-1252"
-			Regex="_replace_"
-			ReplacementText="$(InfraTestIni)"/>
-
-		<FileUpdate Files="$(CCNetWorkingDirectory)\InfrastructureTest\App.Config"
-			Encoding="windows-1252"
-			Regex="_replace_"
-			ReplacementText="$(InfraTestIni)"/>
-			
-		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\App.config"
-			Encoding="windows-1252"
-			Regex="_replace_"
-			ReplacementText="$(InfraTestIni)"/>			
-		
-		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config"
-			Encoding="windows-1252"
-			Regex="_replace_"
-			ReplacementText="$(InfraTestIni)"/>
-			
-		</Target>
-		
 	<!--This is how we "går över ån och runt sjön för att hämta vatten"
 		We run into something like this: http://www.mail-archive.com/rhinomocks@googlegroups.com/msg02457.html 
 		So instead, try to run tests One By One to mimimize numbers of Mocks included.
@@ -366,7 +303,7 @@
 		 />
 	</ItemGroup>
 	
-	<Target Name="NCover" DependsOnTargets="FixConfigFiles;Compile;SetUpConfigFiles">
+	<Target Name="NCover" DependsOnTargets="FixConfigFiles;Compile">
 		
 		<MakeDir Directories="$(CCNetWorkingDirectory)\NcoverResult"/>
 		<MakeDir Directories="$(CCNetWorkingDirectory)\NUnitResult"/>
