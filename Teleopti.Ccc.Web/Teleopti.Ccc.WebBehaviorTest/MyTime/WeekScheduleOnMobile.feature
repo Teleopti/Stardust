@@ -24,6 +24,10 @@ Background:
 	| Field                      | Value              |
 	| Name                       | Published schedule |
 	| Schedule published to date | 2040-06-24         |
+	And there is a workflow control set with
+	| Field                                 | Value                            |
+	| Name                                  | Published schedule until 2014-04-30 |
+	| Schedule published to date            | 2014-04-30                       |
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2014-04-14 |
@@ -101,3 +105,14 @@ Scenario: View when you have full day absence
    | Field | Value      |
    | Name  | Illness    |
    | Date  | 2014-04-15 |
+
+Scenario: Do not show unpublished schedule
+   Given I have the role 'Full access to mytime'
+   And I have the workflow control set 'Published schedule until 2014-04-30'
+   And I have a shift with
+   | Field          | Value            |
+   | StartTime      | 2014-05-01 09:00 |
+   | EndTime        | 2014-05-01 18:00 |
+   | Shift category | Early            |
+   When I view my mobile week schedule for date '2014-05-01'
+   Then I should not see any shift for day '2014-05-01'

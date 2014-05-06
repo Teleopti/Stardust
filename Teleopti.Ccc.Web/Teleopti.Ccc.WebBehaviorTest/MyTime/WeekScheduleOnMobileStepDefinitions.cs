@@ -61,5 +61,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			  public string Name { get; set; }
 			  public string Date { get; set; }
 		  }
+
+		  [Then(@"I should not see any shift for day '(.*)'")]
+		  public void ThenIShouldNotSeeAnyShiftForDay(DateTime date)
+		  {
+			  Browser.Interactions.AssertNotExists(".weekview-mobile",
+													string.Format("'[data-mytime-date='{0}']' .shift", date.ToString("yyyy-MM-dd")));
+		  }
+
     }
 }
