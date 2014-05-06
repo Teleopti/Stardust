@@ -188,6 +188,7 @@
                         and exists(from PersonAssignment pa
                                     inner join pa.Scenario s
                                 where pa.Person = p
+                                    and pa.ShiftCategory is not null 
                                     and s.DefaultScenario = 1)
     ]]>
 	</query>
