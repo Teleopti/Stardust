@@ -25,9 +25,9 @@ Background:
 	| Name                       | Published schedule |
 	| Schedule published to date | 2040-06-24         |
 	And there is a workflow control set with
-	| Field                                 | Value                            |
-	| Name                                  | Published schedule until 2014-04-30 |
-	| Schedule published to date            | 2014-04-30                       |
+	| Field                      | Value                               |
+	| Name                       | Published schedule until 2014-04-30 |
+	| Schedule published to date | 2014-04-30                          |
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2014-04-14 |
@@ -102,6 +102,26 @@ Scenario: View when you have full day absence
    | End time   | 2014-04-15 23:59 |
    When I view my mobile week schedule for date '2014-04-15'
    Then I should see the absence with
+   | Field | Value      |
+   | Name  | Illness    |
+   | Date  | 2014-04-15 |
+
+Scenario: View when you have a full day absence on working day
+   Given I have the role 'Full access to mytime'
+   And I have the workflow control set 'Published schedule'
+   And I have a shift with
+   | Field          | Value            |
+   | StartTime      | 2014-04-15 09:00 |
+   | EndTime        | 2014-04-15 18:00 |
+   | Shift category | Early            |
+   And I have an absence with
+   | Field                   | Value            |
+   | Name      | Illness          |
+   | StartTime | 2014-04-15 09:00 |
+   | EndTime   | 2014-04-15 18:00 |
+   When I view my mobile week schedule for date '2014-04-15'
+   Then I should not see a shift on date '2014-04-15'
+   And I should see the absence with
    | Field | Value      |
    | Name  | Illness    |
    | Date  | 2014-04-15 |
