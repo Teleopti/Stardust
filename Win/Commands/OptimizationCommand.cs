@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Win.Commands
 			}
 			else
 			{
-				selectedGroupPage = optimizationPreferences.Extra.GroupPageOnTeamBlockPer;
+				selectedGroupPage = optimizationPreferences.Extra.TeamGroupPage ;
 			}
 
 			groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _groupScheduleGroupPageDataProvider, selectedGroupPage);
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Win.Commands
         private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, BackgroundWorker backgroundWorker)
         {
             var singleAgentEntry = new GroupPageLight { Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam };
-            optimizationPreferences.Extra.GroupPageOnTeamBlockPer = singleAgentEntry;
+            optimizationPreferences.Extra.TeamGroupPage  = singleAgentEntry;
             optimizationPreferences.Extra.BlockTypeValue  = BlockFinderType.SingleDay;
             _weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, allMatrixes, backgroundWorker);
         }

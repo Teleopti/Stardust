@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_constructTeamBlock.Construct(new List<IScheduleMatrixPro> { _matrix }, _period,
 				                                          new List<IPerson> {_person},
 				                                          _optimizationPreferences.Extra.BlockTypeValue ,
-				                                          _optimizationPreferences.Extra.GroupPageOnTeamBlockPer))
+				                                          _optimizationPreferences.Extra.TeamGroupPage ))
 				      .IgnoreArguments().Return(new List<ITeamBlockInfo> {_teamBlockInfo});
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions))
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_constructTeamBlock.Construct(new List<IScheduleMatrixPro> { _matrix }, _period,
 														  new List<IPerson> { _person },
 														  _optimizationPreferences.Extra.BlockTypeValue ,
-														  _optimizationPreferences.Extra.GroupPageOnTeamBlockPer))
+														  _optimizationPreferences.Extra.TeamGroupPage ))
 					  .IgnoreArguments().Return(new List<ITeamBlockInfo> { _teamBlockInfo });
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions))

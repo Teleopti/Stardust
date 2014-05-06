@@ -198,6 +198,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 MessageBox.Show(Resources.SelectAtleastOneBlockOption, Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
                 DialogResult = DialogResult.None;
             }
+            else if(!schedulingSessionPreferencesTabPanel1.ValidateUnsupportedRestrictions())
+            {
+                MessageBox.Show(Resources.ValidateUnsupportedRestrictions, Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
+                DialogResult = DialogResult.None;
+            }
             else 
             {
                 schedulingSessionPreferencesTabPanel1.ExchangeData(ExchangeDataOption.ControlsToDataSource);

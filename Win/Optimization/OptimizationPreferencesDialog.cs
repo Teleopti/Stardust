@@ -215,6 +215,13 @@ namespace Teleopti.Ccc.Win.Optimization
 				return;
 			}
 
+		    if (!validateOptimizationSteps())
+		    {
+                MessageBox.Show(this, UserTexts.Resources.UnsupportedOptimizationSteps, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK);
+                DialogResult = DialogResult.None; 
+                return;
+		    }
+
 			if (ValidateData(ExchangeDataOption.ControlsToDataSource))
 			{
 				ExchangeData(ExchangeDataOption.ControlsToDataSource);
@@ -235,6 +242,13 @@ namespace Teleopti.Ccc.Win.Optimization
 				Close();
 			}
 		}
+
+	    private bool validateOptimizationSteps()
+	    {
+	        if (extraPreferencesPanel1.IsTeamOrBlockChecked() && generalPreferencesPanel1.IsOptimizationStepsChecked())
+	            return false;
+	        return true;
+	    }
 
 		private void tabControlTopLevel_SelectedIndexChanged(object sender, EventArgs e)
 		{

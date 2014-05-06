@@ -95,10 +95,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void MapFromExpectations()
         {
-            //Expect.Call(_schedulingOptions.UseBlockScheduling).Return(BlockFinderType.BetweenDayOff);
             Expect.Call(_schedulingOptions.UseTeam).Return(true);
             Expect.Call(_groupPageLight.Key).Return("groupPageKey");
-            Expect.Call(_schedulingOptions.GroupOnGroupPage).Return(_groupPageLight).Repeat.AtLeastOnce();
             Expect.Call(_schedulingOptions.Fairness).Return(_fairnessValue);
             Expect.Call(_schedulingOptions.GroupPageForShiftCategoryFairness).Return(_groupPageLight);
             Expect.Call(_schedulingOptions.ResourceCalculateFrequency).Return(_resourceCalculateFrequency);
@@ -120,11 +118,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void MapToExpectations()
         {
-            //Expect.Call(() => _schedulingOptions.UseBlockScheduling = BlockFinderType.BetweenDayOff);
             Expect.Call(() => _schedulingOptions.UseTeam = true);
             Expect.Call(_groupPageLight.Key).Return("groupPageKey").Repeat.AtLeastOnce();
-            //Expect.Call(() => _schedulingOptions.GroupOnGroupPage = _groupPageLight);
-            //Expect.Call(() => _schedulingOptions.GroupPageForShiftCategoryFairness = _groupPageLight);
             Expect.Call(() => _schedulingOptions.ResourceCalculateFrequency = _resourceCalculateFrequency);
             Expect.Call(_schedulingOptions.RefreshRate = 1);
 

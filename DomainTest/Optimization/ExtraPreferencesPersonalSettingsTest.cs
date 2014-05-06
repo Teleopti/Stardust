@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private string _groupPage1Key;
 		private string _groupPage2Key;
 		private IGroupPageLight _groupPage1;
-		//private IGroupPage _groupPage2;
 		private IExtraPreferences _extraPreferencesSource;
 		private IExtraPreferences _extraPreferencesTarget;
 	    private IList<IGroupPageLight> _groupPagesForTeamBlockPer;
@@ -42,15 +41,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void VerifyDefaultValues()
 		{
             _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
-			Assert.AreEqual(BlockFinderType.BetweenDayOff, _extraPreferencesTarget.BlockFinderTypeValue);
+			Assert.AreEqual(BlockFinderType.SingleDay, _extraPreferencesTarget.BlockTypeValue );
 			
 		}
 
 		[Test]
 		public void MappingShouldGetAndSetSimpleProperties()
 		{
-			_extraPreferencesSource.BlockFinderTypeValue = BlockFinderType.SchedulePeriod;
-			//_extraPreferencesSource.UseBlockScheduling = !_extraPreferencesSource.UseBlockScheduling;
+			_extraPreferencesSource.BlockTypeValue = BlockFinderType.SchedulePeriod;
 			_extraPreferencesSource.UseTeams = !_extraPreferencesSource.UseTeams;
 
             _extraPreferencesSource.FairnessValue = 102d;
@@ -60,8 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_target.MapFrom(_extraPreferencesSource);
             _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
 
-			Assert.AreEqual(_extraPreferencesSource.BlockFinderTypeValue, _extraPreferencesTarget.BlockFinderTypeValue);
-			//Assert.AreEqual(_extraPreferencesSource.UseBlockScheduling, _extraPreferencesTarget.UseBlockScheduling);
+				Assert.AreEqual(_extraPreferencesSource.BlockTypeValue, _extraPreferencesTarget.BlockTypeValue);
 			Assert.AreEqual(_extraPreferencesSource.UseTeams, _extraPreferencesTarget.UseTeams);
             
             Assert.AreEqual(_extraPreferencesSource.FairnessValue, _extraPreferencesTarget.FairnessValue);
@@ -79,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _extraPreferencesSource.UseBlockSameShift = true;
             _extraPreferencesSource.UseBlockSameShiftCategory  = false;
             _extraPreferencesSource.BlockTypeValue = BlockFinderType.BetweenDayOff;
-            _extraPreferencesSource.GroupPageOnTeamBlockPer = _groupPage1;
+            _extraPreferencesSource.TeamGroupPage  = _groupPage1;
             _target.MapFrom(_extraPreferencesSource);
 
             _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
@@ -89,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreEqual(_extraPreferencesSource.UseBlockSameStartTime, _extraPreferencesTarget.UseBlockSameStartTime);
             Assert.AreEqual(_extraPreferencesSource.UseBlockSameShift, _extraPreferencesTarget.UseBlockSameShift);
             Assert.AreEqual(_extraPreferencesSource.UseBlockSameShiftCategory, _extraPreferencesTarget.UseBlockSameShiftCategory);
-            Assert.AreEqual(_extraPreferencesSource.GroupPageOnTeamBlockPer , _extraPreferencesTarget.GroupPageOnTeamBlockPer);
+				Assert.AreEqual(_extraPreferencesSource.TeamGroupPage, _extraPreferencesTarget.TeamGroupPage);
             Assert.AreEqual(_extraPreferencesSource.BlockTypeValue, _extraPreferencesTarget.BlockTypeValue);
         }
 
@@ -97,12 +94,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void MappingShouldGetAndSetForTeamBlockOptionsForSingleAgentPage()
         {
             var singleAgentTeamGroupPage = new GroupPageLight { Key = "SingleAgentTeam" ,Name = "Single Agent Team" };
-            _extraPreferencesSource.GroupPageOnTeamBlockPer = singleAgentTeamGroupPage;
+				_extraPreferencesSource.TeamGroupPage = singleAgentTeamGroupPage;
             _target.MapFrom(_extraPreferencesSource);
 
             _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
 
-            Assert.AreEqual(_extraPreferencesSource.GroupPageOnTeamBlockPer.Key , _extraPreferencesTarget.GroupPageOnTeamBlockPer.Key );
+				Assert.AreEqual(_extraPreferencesSource.TeamGroupPage.Key, _extraPreferencesTarget.TeamGroupPage.Key);
             
         }
 
@@ -111,10 +108,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_target.SetGroupPageOnTeamKey(_groupPage1Key);
 			_target.SetGroupPageOnCompareWithKey(_groupPage1Key);
-            _target.SetGroupPageOnTeamBlockPerKey( _groupPage1Key);
             _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
 			Assert.AreEqual(_extraPreferencesTarget.TeamGroupPage.Key, _groupPage1Key);
-			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnTeamBlockPer.Key, _groupPage1Key);
 			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnCompareWith.Key, _groupPage1Key);
 		}
 
@@ -123,10 +118,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_target.SetGroupPageOnTeamKey(_groupPage2Key);
 			_target.SetGroupPageOnCompareWithKey(_groupPage2Key);
-            _target.SetGroupPageOnTeamBlockPerKey(_groupPage2Key);
             _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
 			Assert.IsNull(_extraPreferencesTarget.TeamGroupPage);
-            Assert.IsNull(_extraPreferencesTarget.GroupPageOnTeamBlockPer);
 			Assert.IsNull(_extraPreferencesTarget.GroupPageOnCompareWith);
 		}
 	}

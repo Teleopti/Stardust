@@ -10,11 +10,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private string _groupPageOnTeamKey;
 		private string _groupPageOnCompareWithKey;
-        private string _groupPageOnTeamBlockPerKey;
-
-		private BlockFinderType _blockFinderTypeValue;
-
-		//private bool _useBlockScheduling;
 		private bool _useTeams;
 		private bool _useSameDaysOffForTeams;
        	private double _fairnessValue;
@@ -32,12 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private BlockFinderType _blockFinderTypeForAdvanceOptimization;
 	    
 
-	    public ExtraPreferencesPersonalSettings()
-		{
-			SetDefaultValues();
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+	   [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public void MapTo(IExtraPreferences target, IList<IGroupPageLight> groupPages, IList<IGroupPageLight> groupPagesForTeamBlockPer)
 		{
 		    if (groupPagesForTeamBlockPer == null) throw new ArgumentNullException("groupPagesForTeamBlockPer");
@@ -51,14 +41,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					target.GroupPageOnCompareWith = groupPage;
 			}
 
-            foreach (var groupPage in groupPagesForTeamBlockPer)
-            {
-                if (_groupPageOnTeamBlockPerKey == groupPage.Key)
-                    target.GroupPageOnTeamBlockPer = groupPage;
-            }
-
-			target.BlockFinderTypeValue = _blockFinderTypeValue;
-			//target.UseBlockScheduling = _useBlockScheduling;
 			target.UseTeams = _useTeams;
 			target.UseTeamSameDaysOff = _useSameDaysOffForTeams;
             
@@ -84,11 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_groupPageOnTeamKey = source.TeamGroupPage.Key;
 			if (source.GroupPageOnCompareWith != null)
 				_groupPageOnCompareWithKey = source.GroupPageOnCompareWith.Key;
-            if (source.GroupPageOnTeamBlockPer != null)
-                _groupPageOnTeamBlockPerKey = source.GroupPageOnTeamBlockPer.Key;
 
-			_blockFinderTypeValue = source.BlockFinderTypeValue;
-			//_useBlockScheduling = source.UseBlockScheduling;
 			_useTeams = source.UseTeams;
 			_useSameDaysOffForTeams = source.UseTeamSameDaysOff;
 
@@ -126,22 +104,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			_groupPageOnCompareWithKey = key;
 		}
-
-        /// <summary>
-        /// Sets the group page on TeamBlock per.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <remarks>Used in tests only</remarks>
-        public void SetGroupPageOnTeamBlockPerKey(string key)
-        {
-            _groupPageOnTeamBlockPerKey = key;
-        }
-
-		private void SetDefaultValues()
-		{
-			_blockFinderTypeValue = BlockFinderType.BetweenDayOff;
-			
-		}
+		
 
 	}
 }

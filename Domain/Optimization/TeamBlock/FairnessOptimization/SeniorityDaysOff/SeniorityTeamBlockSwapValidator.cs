@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			                                                      teamBlockInfo.TeamInfo.GroupMembers.ToList(),
 			                                                      optimizationPreferences.Extra
 			                                                                             .BlockTypeValue ,
-			                                                      optimizationPreferences.Extra.GroupPageOnTeamBlockPer);
+			                                                      optimizationPreferences.Extra.TeamGroupPage );
 
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			foreach (var teamBlock in teamBlocksToCheck)
