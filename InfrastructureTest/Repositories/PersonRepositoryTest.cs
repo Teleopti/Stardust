@@ -1452,6 +1452,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			}
 		}
 
+        [Test]
+        public void VerifyNumberOfActiveAgentsNotIncreasedWhenEmptyAssignmentsExists()
+        {
+            SetupPersonsInOrganizationWithContract();
+            IList<IPerson> resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
+
+            IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
+            scenario.DefaultScenario = true;
+            IActivity act = new Activity("df");
+            IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Scheduled");
+            PersistAndRemoveFromUnitOfWork(shiftCategory);
+            PersistAndRemoveFromUnitOfWork(scenario);
+            PersistAndRemoveFromUnitOfWork(act);
+            IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(act,
+                                                                    resTemp[0],
+                                                                    new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+                                                                    shiftCategory,
+                                                                    scenario);
+            ass.Clear();
+            PersistAndRemoveFromUnitOfWork(ass);
+
+            Assert.AreEqual(0, target.NumberOfActiveAgents());
+        }
+
 		[Test]
 		public void VerifyNumberOfActiveAgentsNormalCulture()
 		{
@@ -1468,11 +1492,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			scenario.DefaultScenario = true;
 			IActivity act = new Activity("df");
+		    IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Scheduled");
+            PersistAndRemoveFromUnitOfWork(shiftCategory);
 			PersistAndRemoveFromUnitOfWork(scenario);
 			PersistAndRemoveFromUnitOfWork(act);
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(act, 
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(act, 
 																	resTemp[0],
 																	new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+                                                                    shiftCategory,
 																	scenario);
 			PersistAndRemoveFromUnitOfWork(ass);
 
@@ -1501,10 +1528,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(p);
 			IScenario scenarioNew = ScenarioFactory.CreateScenarioAggregate("sdf",true);
 			PersistAndRemoveFromUnitOfWork(scenarioNew);
-			IPersonAssignment assNew = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(act,
+			IPersonAssignment assNew = PersonAssignmentFactory.CreateAssignmentWithMainShift(act,
 																	p,
 																	new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
-																	scenario);
+                                                                    shiftCategory,
+																	scenarioNew);
 			PersistAndRemoveFromUnitOfWork(assNew);
 			Assert.AreEqual(2, target.NumberOfActiveAgents());
 		}
