@@ -28,6 +28,4 @@ SET DB_EndUserAccess=WINAUTH
 
 
 SET DEFAULT_IDENTITY_PROVIDER=Teleopti
-SET WINDOWS_CLAIM_PROVIDER=<add identifier="urn:Windows" displayName="Windows" url="http://%AppServer%/TeleoptiCCC/WindowsIdentityProvider" protocolHandler="OpenIdHandler" />
-SET TELEOPTI_CLAIM_PROVIDER=<add identifier="urn:Teleopti" displayName="Teleopti application" url="http://%AppServer%/TeleoptiCCC/Web/sso/" protocolHandler="OpenIdHandler" />
 SET HOST_NAME=%COMPUTERNAME%
