@@ -57,6 +57,14 @@ namespace Teleopti.Ccc.Win.Optimization
             return true;
         }
 
+        public bool IsOptimizationStepsChecked()
+        {
+            if (checkBoxTimeBetweenDays.Checked || checkBoxShiftsForFlexibleWorkTime.Checked ||
+                checkBoxDaysOffFromFlexibleWorkTime.Checked || checkBoxShiftCategoryLimitations.Checked)
+                return true;
+            return false;
+        }
+
         public void ExchangeData(ExchangeDataOption direction)
         {
             if (direction == ExchangeDataOption.DataSourceToControls)

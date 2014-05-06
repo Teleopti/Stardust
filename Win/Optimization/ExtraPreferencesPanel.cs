@@ -141,6 +141,14 @@ namespace Teleopti.Ccc.Win.Optimization
 			return false;
 		}
 
+	    public bool IsTeamOrBlockChecked()
+	    {
+            if (BlockFinderType.SingleDay != (BlockFinderType)comboBoxTeamBlockType.SelectedValue || isTeamEnabled())
+                return true;
+            return false;
+	    }
+
+
 		public bool ValidateDefaultValuesForTeam()
 		{
 			if (isTeamEnabled())
