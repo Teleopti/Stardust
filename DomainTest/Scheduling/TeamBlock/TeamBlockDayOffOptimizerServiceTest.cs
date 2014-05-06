@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_teamBlockClearer = _mocks.StrictMock<ITeamBlockClearer>();
 			_restrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
 			_optimizationPreferences = new OptimizationPreferences();
-			_optimizationPreferences.Extra.KeepSameDaysOffInTeam = true;
+			_optimizationPreferences.Extra.UseTeamSameDaysOff = true;
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_teamBlockMaxSeatChecker = _mocks.StrictMock<ITeamBlockMaxSeatChecker>();
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				_optimizationPreferences.Extra.KeepSameDaysOffInTeam = false;
+				_optimizationPreferences.Extra.UseTeamSameDaysOff = false;
 				_target.OptimizeDaysOff(_matrixList, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _selectedPersons, _optimizationPreferences, _rollbackService, _schedulingOptions, _resourceCalculateDelayer,_schedulingResultStateHolder);
 			}
 		}

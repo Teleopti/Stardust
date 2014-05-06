@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             Assert.IsFalse(_schedulingOptions.UseTeam);
             _optimizationPreferences.Extra.UseTeams = true;
-	        _optimizationPreferences.Extra.KeepSameDaysOffInTeam = false;
+	        _optimizationPreferences.Extra.UseTeamSameDaysOff = false;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
 			Assert.IsTrue(_schedulingOptions.UseTeam);
 			Assert.IsFalse(_schedulingOptions.UseSameDayOffs);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             IGroupPageLight groupPage = new GroupPageLight{Name = "Test"}; 
             Assert.AreNotEqual(_schedulingOptions.GroupOnGroupPage, groupPage);
-            _optimizationPreferences.Extra.GroupPageOnTeam = groupPage;
+            _optimizationPreferences.Extra.TeamGroupPage = groupPage;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
             Assert.AreEqual(_schedulingOptions.GroupOnGroupPage, groupPage);
         }
@@ -318,26 +318,26 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
         public void VerifyTeamBlockOptions()
 		{
-			_optimizationPreferences.Extra.KeepSameDaysOffInTeam = false;
+			_optimizationPreferences.Extra.UseTeamSameDaysOff = false;
 
             _optimizationPreferences.Extra.UseTeamBlockOption = true;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
 				Assert.IsTrue(_schedulingOptions.UseBlock);
 			Assert.IsTrue(_schedulingOptions.UseSameDayOffs);
 
-            _optimizationPreferences.Extra.UseTeamBlockSameEndTime  = false;
+            _optimizationPreferences.Extra.UseBlockSameEndTime  = false;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
             Assert.IsFalse(_schedulingOptions.BlockSameEndTime);
 
-            _optimizationPreferences.Extra.UseTeamBlockSameShift  = false ;
+            _optimizationPreferences.Extra.UseBlockSameShift  = false ;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
 				Assert.IsFalse(_schedulingOptions.BlockSameShift);
 
-            _optimizationPreferences.Extra.UseTeamBlockSameShiftCategory  = true;
+            _optimizationPreferences.Extra.UseBlockSameShiftCategory  = true;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
             Assert.IsTrue(_schedulingOptions.BlockSameShiftCategory);
 
-            _optimizationPreferences.Extra.UseTeamBlockSameStartTime  = true;
+            _optimizationPreferences.Extra.UseBlockSameStartTime  = true;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
             Assert.IsTrue(_schedulingOptions.BlockSameStartTime);
 

@@ -311,13 +311,13 @@ namespace Teleopti.Interfaces.Domain
 		/// <value>
 		/// 	<c>true</c> if [keep same days off in team]; otherwise, <c>false</c>.
 		/// </value>
-		bool KeepSameDaysOffInTeam { get; set; }
+		bool UseTeamSameDaysOff { get; set; }
 
         /// <summary>
         /// Gets or sets the group page on team.
         /// </summary>
         /// <value>The group page on team.</value>
-        IGroupPageLight GroupPageOnTeam { get; set; }
+        IGroupPageLight TeamGroupPage { get; set; }
 
         /// <summary>
         /// Gets or sets the fairness value.
@@ -334,28 +334,28 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// 
 		/// </summary>
-		bool UseGroupSchedulingCommonStart { get; set; }
+		bool UseTeamSameStartTime { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>
-		bool UseGroupSchedulingCommonEnd { get; set; }
+		bool UseTeamSameEndTime { get; set; }
 		/// <summary>
 		/// 
 		/// </summary>
-		bool UseGroupSchedulingCommonCategory { get; set; }
+		bool UseTeamSameShiftCategory { get; set; }
         /// <summary>
         /// Use Common Activity
         /// </summary>
-        bool UseCommonActivity { get; set; }
+        bool UseTeamSameActivity { get; set; }
         /// <summary>
         /// The actual common activity
         /// </summary>
-        IActivity CommonActivity { get; set; }
+        IActivity TeamActivityValue { get; set; }
 
         /// <summary>
         /// Block finder service for advance optimization service
         /// </summary>
-        BlockFinderType BlockFinderTypeForAdvanceOptimization { get; set; }
+        BlockFinderType BlockTypeValue { get; set; }
 
         /// <summary>
         /// Group page for TeamBlock property used for block optimization
@@ -364,19 +364,19 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Use TeamBlock same end time
         /// </summary>
-        bool UseTeamBlockSameEndTime { get; set; }
+        bool UseBlockSameEndTime { get; set; }
         /// <summary>
         /// Use TeamBlock same shift category
         /// </summary>
-        bool UseTeamBlockSameShiftCategory { get; set; }
+        bool UseBlockSameShiftCategory { get; set; }
         /// <summary>
         /// Use TeamBlock same start time
         /// </summary>
-        bool UseTeamBlockSameStartTime { get; set; }
+        bool UseBlockSameStartTime { get; set; }
         /// <summary>
         /// Use TeamBlock same shift
         /// </summary>
-        bool UseTeamBlockSameShift { get; set; }
+        bool UseBlockSameShift { get; set; }
         /// <summary>
         /// This is  used if TeamBlock per is used
         /// </summary>
