@@ -219,12 +219,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <value><c>true</c> if [use group scheduling]; otherwise, <c>false</c>.</value>
 		bool UseTeam { get; set; }
 
-		/// <summary>
-		/// Gets or sets the group page used for grouping when UseTeam = true.
-		/// </summary>
-		/// <value>The group page.</value>
-		IGroupPageLight GroupOnGroupPage { get; set; }
-
         /// <summary>
         /// Gets or sets a value indicating whether [not break max staffing].
         /// </summary>
@@ -265,9 +259,9 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         bool UseSameDayOffs { get; set; }
 
-        ///<summary>
-        ///</summary>
-        BlockFinderType UseBlockOptimizing { get; set; }
+		  /////<summary>
+		  /////</summary>
+		  //BlockFinderType UseBlockOptimizing { get; set; }
 
         ///<summary>
         ///</summary>

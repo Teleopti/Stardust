@@ -4059,7 +4059,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			else
 			{
-				selectedGroupPage = _optimizationPreferences.Extra.GroupPageOnTeamBlockPer;
+				selectedGroupPage = _optimizationPreferences.Extra.TeamGroupPage;
 			}
 
 			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), selectedGroupPage);
