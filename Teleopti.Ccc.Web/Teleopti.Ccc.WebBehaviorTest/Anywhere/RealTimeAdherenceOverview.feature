@@ -21,7 +21,7 @@ Scenario: Show site
 	And I should see the overlay 'waiting three dots'
 
 @OnlyRunIfEnabled('RtaLastStatesOverview')
-Scenario: Show site without loading status
+Scenario: Show site without always loading status
 	Given the current time is '2014-01-21 13:00'
 	And I have a role with
 	| Field                                  | Value             |
@@ -54,7 +54,7 @@ Scenario: Show team
 	And I should see the overlay 'waiting three dots'
 
 @OnlyRunIfEnabled('RtaLastStatesOverview')
-Scenario: Show team without loading status
+Scenario: Show team without always loading status
 	Given the current time is '2014-01-21 13:00'
 	And I have a role with
 	| Field                                  | Value             |
