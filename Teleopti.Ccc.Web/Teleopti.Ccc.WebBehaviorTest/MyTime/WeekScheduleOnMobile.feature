@@ -126,6 +126,25 @@ Scenario: View when you have a full day absence on working day
    | Name  | Illness    |
    | Date  | 2014-04-15 |
 
+Scenario: View when you are in absence on day off
+   Given I have the role 'Full access to mytime'
+   And I have the workflow control set 'Published schedule'
+   And I have a day off with
+   | Field | Value      |
+   | Name  | DayOff     |
+   | Date  | 2014-04-15 |
+   And I have an absence with
+   | Field     | Value            |
+   | Name      | Illness          |
+   | StartTime | 2014-04-15 00:00 |
+   | EndTime   | 2014-04-15 23:59 |
+   When I view my mobile week schedule for date '2014-04-15'
+	Then I should not see dayoff on date '2014-04-15'
+   And I should see the absence with
+   | Field | Value      |
+   | Name  | Illness    |
+   | Date  | 2014-04-15 |
+
 Scenario: Do not show unpublished schedule
    Given I have the role 'Full access to mytime'
    And I have the workflow control set 'Published schedule until 2014-04-30'
