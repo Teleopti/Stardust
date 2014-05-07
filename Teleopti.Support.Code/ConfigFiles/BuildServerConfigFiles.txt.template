@@ -1,6 +1,3 @@
-..\..\..\Teleopti.Ccc.Web.Broker.Backplane\Web.config,BuildArtifacts\BrokerBackplaneWeb.config
-..\..\..\Teleopti.Ccc.Web.Broker\web.config,BuildArtifacts\BrokerWeb.config
-..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.config,BuildArtifacts\Web.Root.Web.config
 ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\InfrastructureTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.ApplicationConfigTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config

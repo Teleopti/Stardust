@@ -57,6 +57,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			if (_server != null)
 				_server.Dispose();
+
+			RevertWebConfig();
 		}
 
 		public static void RecycleApplication()
@@ -79,13 +81,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			var sourceFile = Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), "web.root.web.config");
 			var tags = new AllTags();
-			
-				const string module = @"<module type=""Teleopti.Ccc.IocCommon.Configuration.LocalInMemoryEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
+			if (!IniFileInfo.ServiceBus)
+			{
+				const string module =
+					@"<module type=""Teleopti.Ccc.IocCommon.Configuration.LocalInMemoryEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
 				tags.Add(
 					"LocalInMemoryEventsPublisherModule",
 					module
 					);
-			
+			}
 
 			if (File.Exists(TargetWebConfig))
 				File.Copy(TargetWebConfig, BackupWebConfig, true);
@@ -99,6 +103,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			File.Copy(TargetWebConfig, BehaviorTestWebConfig, true);
 		}
 
-		
+		private static void RevertWebConfig()
+		{
+			if (File.Exists(BackupWebConfig))
+				File.Copy(BackupWebConfig, TargetWebConfig, true);
+		}		
 	}
 }

@@ -22,8 +22,8 @@ SET AnalyticsDB=Infratest_Analytics
 )
 
 ::init toggle values to "ALL"
-SET TOGGLEURL="ALL"
-SET TOGGLE_FILE="ALL" 
+SET TOGGLEURL=ALL
+SET TOGGLE_FILE=ALL
 
 if "%FEATURETOGGLE%" == "RC" (
 SET TOGGLE_FILE=RC.toggles.txt
@@ -53,8 +53,7 @@ if not exist "%nhibFolder%" mkdir "%nhibFolder%"
 
 ::Ugly Betty Was here!
 ::Copy dynamic parameters into file structure in order to run parallel builds 
-if exist del "%ROOTDIR%\..\Teleopti.Support.Code\ConfigFiles\BuildServerConfigFiles.txt"  /F /Q
-if not exist "%ROOTDIR%\..\Teleopti.Support.Code\ConfigFiles\BuildServerConfigFiles.txt" copy "%ROOTDIR%\..\Teleopti.Support.Code\ConfigFiles\BuildServerConfigFiles.txt.template" "%ROOTDIR%\..\Teleopti.Support.Code\ConfigFiles\BuildServerConfigFiles.txt"
+copy "%ROOTDIR%\..\Teleopti.Support.Code\ConfigFiles\BuildServerConfigFiles.txt.template" "%ROOTDIR%\..\Teleopti.Support.Code\ConfigFiles\BuildServerConfigFiles.txt"
 ECHO. >> "%ROOTDIR%\..\Teleopti.Support.Code\ConfigFiles\BuildServerConfigFiles.txt"
 ECHO %nhibFolder%\TestData.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml >> "%ROOTDIR%\..\Teleopti.Support.Code\ConfigFiles\BuildServerConfigFiles.txt"
 
