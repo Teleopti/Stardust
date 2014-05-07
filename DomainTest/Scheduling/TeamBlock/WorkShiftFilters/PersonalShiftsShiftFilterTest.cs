@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private ISchedulingResultStateHolder _resultStateHolder;
 		private IPersonalShiftsShiftFilter _target;
 		private IPersonAssignment _personAssignment;
-		private List<IPersonAssignment> _personAssignments;
 		private IScheduleRange _scheduleRange;
 		private IScheduleDictionary _scheduleDictionary;
 		private IScheduleDay _part;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2013, 3, 1);
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			_personAssignments = new List<IPersonAssignment>();
 			_scheduleRange = _mocks.StrictMock<IScheduleRange>();
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_part = _mocks.StrictMock<IScheduleDay>();
@@ -106,7 +104,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void ShouldSkipIfThereIsNoMeetingAndPersonalShift()
 		{
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			_personAssignments = new List<IPersonAssignment> { _personAssignment };
 
 			var phone = ActivityFactory.CreateActivity("phone");
 			phone.AllowOverwrite = true;
