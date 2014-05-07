@@ -260,7 +260,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			_tmpTimer.Enabled = true;
-
 		}
 
 		private void setShowRibbonTexts()
@@ -349,8 +348,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_dateNavigateControl.SelectedDateChanged += dateNavigateControlSelectedDateChanged;
 			_dateNavigateControl.ClosedPopup += dateNavigateControlClosedPopup;
 		
-			
-
 			_backgroundWorkerDelete.WorkerSupportsCancellation = true;
 			_backgroundWorkerDelete.DoWork += _backgroundWorkerDelete_DoWork;
 			_backgroundWorkerDelete.RunWorkerCompleted += _backgroundWorkerDelete_RunWorkerCompleted;
@@ -510,14 +507,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var editControlHostRestrictions = new ToolStripControlHost(_editControlRestrictions);
 			toolStripExEdit2.Items.Add(editControlHostRestrictions);
 			editControlHostRestrictions.Visible = false;
-		}
-
-		private void setPermissionOnEditControl()
-		{
-			var permissionSetter = new PermissionEditControl(_editControl);
-			var permissionSetterRestriction = new PermissionEditRestrictionControl(_editControlRestrictions);
-			permissionSetter.SetPermission();
-			permissionSetterRestriction.SetPermission();
 		}
 
 		private void editControlDeleteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -728,14 +717,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void setPermissionOnClipboardControl()
-		{
-			var permissionSetter = new PermissionClipboardControl(_clipboardControl);
-			var permissionSetterRestriction = new PermissionClipboardRestrictionControl(_clipboardControlRestrictions);
-			permissionSetter.SetPermission();
-			permissionSetterRestriction.SetPermission();
-		}
-
 		private void clipboardControlCutClicked(object sender, EventArgs e)
 		{
 			cutSwitch();
@@ -865,10 +846,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemAddOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
 
 			setPermissionOnControls();
-
 			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += agentRestrictionGridSelectedAgentIsReady;
-
-
 			_backgroundWorkerRunning = true;
 			backgroundWorkerLoadData.RunWorkerAsync();
 			//No code after the call to runworkerasynk
@@ -941,7 +919,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					Log.Error("An error occurred when trying to save settings on closing scheduler.", dataSourceException);
 				}
-
 			}
 
 			Cursor.Current = Cursors.Default;
@@ -1267,7 +1244,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView != null)
 			{
 				_scheduleView.GridClipboardCopy(false);
-				checkPastePermissions();
+				_permissionHelper.CheckPastePermissions(toolStripMenuItemPaste, toolStripMenuItemPasteSpecial);
 				_clipboardControl.SetButtonState(ClipboardAction.Paste, true);
 				_clipboardControlRestrictions.SetButtonState(ClipboardAction.Paste, true);
 			}
@@ -1281,7 +1258,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					if (_scheduleView != null)
 					{
 						_scheduleView.GridClipboardCopy(false);
-						checkPastePermissions();
+						_permissionHelper.CheckPastePermissions(toolStripMenuItemPaste, toolStripMenuItemPasteSpecial);
 						_clipboardControl.SetButtonState(ClipboardAction.Paste, true);
 					}
 					break;
@@ -2454,17 +2431,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_editControlRestrictions.Enabled = isEditable;
 			_clipboardControl.Enabled = isEditable;
 			_clipboardControlRestrictions.Enabled = isEditable;
-
-			checkModifyPermissions();
-		}
-
-		private void checkModifyPermissions()
-		{
-			var authorization = PrincipalAuthorization.Instance();
-			ToolStripMenuItemAddActivity.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
-			toolStripMenuItemAddOverTime.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
-			toolStripMenuItemInsertAbsence.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
-			toolStripMenuItemInsertDayOff.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+			_permissionHelper.CheckModifyPermissions(ToolStripMenuItemAddActivity, toolStripMenuItemAddOverTime, toolStripMenuItemInsertAbsence, toolStripMenuItemInsertDayOff);
 		}
 
 		#endregion
@@ -3616,7 +3583,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_scheduleView.GridClipboardCopy(true);
 				ClipsHandlerSchedule.IsInCutMode = true;
 				ClipsHandlerSchedule.CutMode = cutMode;
-				checkPastePermissions();
+				_permissionHelper.CheckPastePermissions(toolStripMenuItemPaste, toolStripMenuItemPasteSpecial);
 			}
 			else
 				ClipsHandlerSchedule.IsInCutMode = false;
@@ -3624,52 +3591,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setPermissionOnControls()
 		{
-			setPermissionOnClipboardControl();
-			setPermissionOnEditControl();
-			setPermissionOnContextMenuItems();
-			setPermissionOnMenuButtons();
+			_permissionHelper.SetPermissionOnClipboardControl(_clipboardControl, _clipboardControlRestrictions);
+			_permissionHelper.SetPermissionOnEditControl(_editControl, _editControlRestrictions);
+			_permissionHelper.SetPermissionOnContextMenuItems(toolStripMenuItemInsertAbsence, toolStripMenuItemInsertDayOff, toolStripMenuItemDelete, toolStripMenuItemDeleteSpecial, toolStripMenuItemWriteProtectSchedule,
+															  toolStripMenuItemWriteProtectSchedule2, toolStripMenuItemAddStudentAvailabilityRestriction, toolStripMenuItemAddStudentAvailability,
+															  toolStripMenuItemAddPreferenceRestriction, toolStripMenuItemAddPreference, toolStripMenuItemViewReport, toolStripMenuItemScheduledTimePerActivity);
+			_permissionHelper.SetPermissionOnMenuButtons(toolStripButtonRequestView, toolStripButtonOptions, toolStripButtonFilterOvertimeAvailability, ToolStripMenuItemScheduleOvertime, toolStripButtonFilterStudentAvailability);
 			setPermissionOnScheduleControl();
-		}
-
-		private void checkPastePermissions()
-		{
-			bool permitted = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
-			toolStripMenuItemPaste.Enabled = permitted;
-			toolStripMenuItemPasteSpecial.Enabled = permitted;
 		}
 
 		private void setPermissionOnScheduleControl()
 		{
-			toolStripExActions.Enabled = true;
-			toolStripSplitButtonSchedule.Enabled = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling);
-			if (_scheduleView != null)
-				enableSwapButtons(_scheduleView.SelectedSchedules());
-		}
-
-		private void setPermissionOnContextMenuItems()
-		{
-			var authorization = PrincipalAuthorization.Instance();
-			toolStripMenuItemInsertAbsence.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
-			toolStripMenuItemInsertDayOff.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
-			toolStripMenuItemDelete.Enabled = toolStripMenuItemDeleteSpecial.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
-			toolStripMenuItemWriteProtectSchedule.Enabled = toolStripMenuItemWriteProtectSchedule2.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
-			toolStripMenuItemAddStudentAvailabilityRestriction.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
-			toolStripMenuItemAddStudentAvailability.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
-			toolStripMenuItemAddPreferenceRestriction.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
-			toolStripMenuItemAddPreference.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
-			//reports
-			toolStripMenuItemViewReport.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AccessToOnlineReports);
-			toolStripMenuItemScheduledTimePerActivity.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport);
-		}
-
-		private void setPermissionOnMenuButtons()
-		{
-			var authorization = PrincipalAuthorization.Instance();
-			toolStripButtonRequestView.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler);
-			toolStripButtonOptions.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
-			toolStripButtonFilterOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
-			ToolStripMenuItemScheduleOvertime.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
-			toolStripButtonFilterStudentAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
+			_permissionHelper.SetPermissionOnScheduleControl(toolStripExActions, toolStripSplitButtonSchedule);
+			if (_scheduleView != null) enableSwapButtons(_scheduleView.SelectedSchedules());
 		}
 
 		private void loadAndOptimizeData(DoWorkEventArgs e)
@@ -4740,33 +4674,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void enableSwapButtons(IList<IScheduleDay> selectedSchedules)
 		{
-			if (_scheduleView == null) return;
-			toolStripMenuItemSwap.Enabled = false;
-			toolStripMenuItemSwapAndReschedule.Enabled = false;
-			ToolStripMenuItemSwapRaw.Enabled = false;
-			toolStripDropDownButtonSwap.Enabled = false;
-			var gridRangeInfoList = GridHelper.GetGridSelectedRanges(_grid, true);
-
-			if (gridRangeInfoList.Count == 2 && GridHelper.IsRangesSameSize(gridRangeInfoList[0], gridRangeInfoList[1]))
-			{
-				if (!GridHelper.SelectionContainsOnlyHeadersAndScheduleDays(_grid, gridRangeInfoList)) return;
-				toolStripDropDownButtonSwap.Enabled = true;
-				ToolStripMenuItemSwapRaw.Enabled = true;
-			}
-			if (selectedSchedules.Count <= 1 || _scheduleView.AllSelectedPersons(selectedSchedules).Count() != 2)
-				return;
-
-			toolStripDropDownButtonSwap.Enabled = true;
-			toolStripMenuItemSwap.Enabled = true;
-			var automaticScheduleFunction = DefinedRaptorApplicationFunctionPaths.AutomaticScheduling;
-
-			toolStripMenuItemSwapAndReschedule.Enabled = _permissionHelper.HasFunctionPermissionForTeams(_temporarySelectedEntitiesFromTreeView.OfType<ITeam>(), automaticScheduleFunction);
-			if (_teamLeaderMode)
-				toolStripMenuItemSwapAndReschedule.Enabled = false;
-
-			if (!toolStripMenuItemSwapAndReschedule.Enabled) return;
-			var schedulesWithinValidPeriod = ScheduleHelper.SchedulesWithinValidSchedulePeriod(selectedSchedules);
-			toolStripMenuItemSwapAndReschedule.Enabled = schedulesWithinValidPeriod.Count == selectedSchedules.Count;
+			SchedulerRibbonHelper.EnableSwapButtons(selectedSchedules, _scheduleView, toolStripMenuItemSwap, toolStripMenuItemSwapAndReschedule, 
+				ToolStripMenuItemSwapRaw, toolStripDropDownButtonSwap, _permissionHelper, _teamLeaderMode, _temporarySelectedEntitiesFromTreeView,_grid);
 		}
 
 		private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)

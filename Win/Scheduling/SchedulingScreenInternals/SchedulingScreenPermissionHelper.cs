@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Interfaces.Domain;
@@ -95,6 +98,71 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		{
 			if (HasFunctionPermissionForTeams(selectedEntitiesFromTreeView.OfType<ITeam>(), DefinedRaptorApplicationFunctionPaths.ViewSchedules)) return true;
 			return false;
+		}
+
+		public void SetPermissionOnClipboardControl(ClipboardControl clipboardControl, ClipboardControl clipboardControlRestrictions)
+		{
+			var permissionSetter = new PermissionClipboardControl(clipboardControl);
+			var permissionSetterRestriction = new PermissionClipboardRestrictionControl(clipboardControlRestrictions);
+			permissionSetter.SetPermission();
+			permissionSetterRestriction.SetPermission();
+		}
+
+		public void SetPermissionOnEditControl(EditControl editControl, EditControl editControlRestrictions)
+		{
+			var permissionSetter = new PermissionEditControl(editControl);
+			var permissionSetterRestriction = new PermissionEditRestrictionControl(editControlRestrictions);
+			permissionSetter.SetPermission();
+			permissionSetterRestriction.SetPermission();
+		}
+
+		public void SetPermissionOnContextMenuItems(ToolStripMenuItem insertAbsence, ToolStripMenuItem insertDayOff, ToolStripMenuItem delete, ToolStripMenuItem deleteSpecial,
+			ToolStripMenuItem writeProtectSchedule, ToolStripMenuItem writeProtectSchedule2, ToolStripMenuItem addStudentAvailabilityRestriction, ToolStripMenuItem addStudentAvailability,
+			ToolStripMenuItem addPreferenceRestriction, ToolStripMenuItem addPreference, ToolStripMenuItem viewReport, ToolStripMenuItem scheduledTimePerActivity)
+		{
+			var authorization = PrincipalAuthorization.Instance();
+			insertAbsence.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
+			insertDayOff.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+			delete.Enabled = deleteSpecial.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+			writeProtectSchedule.Enabled = writeProtectSchedule2.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
+			addStudentAvailabilityRestriction.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
+			addStudentAvailability.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
+			addPreferenceRestriction.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
+			addPreference.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
+			viewReport.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AccessToOnlineReports);
+			scheduledTimePerActivity.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport);
+		}
+
+		public void SetPermissionOnMenuButtons(ToolStripButton requestView, ToolStripButton options, ToolStripButton filterOvertimeAvailability, ToolStripMenuItem scheduleOvertime, ToolStripButton filterStudentAvailability)
+		{
+			var authorization = PrincipalAuthorization.Instance();
+			requestView.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler);
+			options.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+			filterOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
+			scheduleOvertime.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
+			filterStudentAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
+		}
+
+		public void SetPermissionOnScheduleControl(ToolStripEx actions, ToolStripSplitButton schedule)
+		{
+			actions.Enabled = true;
+			schedule.Enabled = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling);
+		}
+
+		public void CheckPastePermissions(ToolStripMenuItem paste, ToolStripMenuItem pasteSpecial)
+		{
+			bool permitted = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+			paste.Enabled = permitted;
+			pasteSpecial.Enabled = permitted;
+		}
+
+		public void CheckModifyPermissions(ToolStripMenuItem addActivity, ToolStripMenuItem addOverTime, ToolStripMenuItem insertAbsence, ToolStripMenuItem insertDayOff )
+		{
+			var authorization = PrincipalAuthorization.Instance();
+			addActivity.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+			addOverTime.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+			insertAbsence.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
+			insertDayOff.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
 		}
 	}
 }

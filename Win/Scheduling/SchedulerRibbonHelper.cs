@@ -1,8 +1,15 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
+using Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
@@ -174,6 +181,39 @@ namespace Teleopti.Ccc.Win.Scheduling
 				item.AutoSize = false;
 				item.Width = maxWidth;
 			}
+		}
+
+		public static void EnableSwapButtons(IList<IScheduleDay> selectedSchedules, ScheduleViewBase scheduleView, ToolStripMenuItem swap,
+			ToolStripMenuItem swapAndReschedule, ToolStripMenuItem swapRaw, ToolStripSplitButton dropDownButtonSwap, SchedulingScreenPermissionHelper permissionHelper,
+			bool teamLeaderMode, IList<IEntity> selectedEntitiesFromTreeView, GridControl grid )
+		{
+			if (scheduleView == null) return;
+			swap.Enabled = false;
+			swapAndReschedule.Enabled = false;
+			swapRaw.Enabled = false;
+			dropDownButtonSwap.Enabled = false;
+			var gridRangeInfoList = GridHelper.GetGridSelectedRanges(grid, true);
+
+			if (gridRangeInfoList.Count == 2 && GridHelper.IsRangesSameSize(gridRangeInfoList[0], gridRangeInfoList[1]))
+			{
+				if (!GridHelper.SelectionContainsOnlyHeadersAndScheduleDays(grid, gridRangeInfoList)) return;
+				dropDownButtonSwap.Enabled = true;
+				swapRaw.Enabled = true;
+			}
+			if (selectedSchedules.Count <= 1 || scheduleView.AllSelectedPersons(selectedSchedules).Count() != 2)
+				return;
+
+			dropDownButtonSwap.Enabled = true;
+			swap.Enabled = true;
+			var automaticScheduleFunction = DefinedRaptorApplicationFunctionPaths.AutomaticScheduling;
+
+			swapAndReschedule.Enabled = permissionHelper.HasFunctionPermissionForTeams(selectedEntitiesFromTreeView.OfType<ITeam>(), automaticScheduleFunction);
+			if (teamLeaderMode)
+				swapAndReschedule.Enabled = false;
+
+			if (!swapAndReschedule.Enabled) return;
+			var schedulesWithinValidPeriod = ScheduleHelper.SchedulesWithinValidSchedulePeriod(selectedSchedules);
+			swapAndReschedule.Enabled = schedulesWithinValidPeriod.Count == selectedSchedules.Count;
 		}
 	}
 }
