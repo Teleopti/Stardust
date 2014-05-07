@@ -77,19 +77,19 @@
 				@if (Model.RequestPermission.TextRequestPermission)
 				{
 					<li data-bind="css: { active: addTextRequestActive }">
-						<a href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+						<a href="#" id="addTextRequest" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
 					</li>
 				}
 				@if (Model.RequestPermission.AbsenceRequestPermission)
 				{
 					<li data-bind="css: { active: addAbsenceRequestActive }">
-						<a href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+						<a href="#" id="addAbsenceRequest" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
 					</li>
 				}
 				@if (Model.RequestPermission.ShiftTradeRequestPermission)
 				{
 					<li data-bind="css: { active: addShiftTradeRequestActive }">
-						<a href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+						<a href="#" id="addShiftTradeRequest" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
 					</li>
 				}
 			</ul>
