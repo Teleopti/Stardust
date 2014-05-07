@@ -162,3 +162,11 @@ Scenario: Language setting
    And I am german
    When I view my mobile week schedule for date '2014-01-01'
    Then I should see a day name being 'MONTAG'
+
+Scenario: First day of week
+   Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+   And I am american
+   When I view my mobile week schedule for date '2014-04-15'
+   Then I should see '2014-04-13' as the first day
+   And I should see 'SUNDAY' as the first day of week label

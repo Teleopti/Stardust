@@ -82,5 +82,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			  Browser.Interactions.AssertAnyContains(".weekday", name);
 		  }
 
+		  [Then(@"I should see '(.*)' as the first day")]
+		  public void ThenIShouldSeeAsTheFirstDay(string date)
+		  {
+			  Browser.Interactions.AssertFirstContains(".date", date);
+		  }
+
+		  [Then(@"I should see '(.*)' as the first day of week label")]
+		  public void ThenIShouldSeeAsTheFirstDayOfWeekLabel(string weekDayName)
+		  {
+			  Browser.Interactions.AssertFirstContains(".weekday", weekDayName);
+		  }
+
+
     }
 }
