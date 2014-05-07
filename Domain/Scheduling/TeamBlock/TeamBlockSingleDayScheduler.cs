@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
@@ -84,8 +85,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (shifts.IsNullOrEmpty()) continue;
 
 					//transform
-					var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo,
+					var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockSingleDayInfo,
 																										   _schedulingResultStateHolder);
+					
 					var activities = new HashSet<IActivity>();
 					foreach (var dicPerActivity in skillIntervalDataPerDateAndActivity.Values)
 					{
@@ -113,6 +115,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 						IDictionary<DateTime, ISkillIntervalData> dataForActivity = _dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity, day);
 						activityInternalData.Add(activity, dataForActivity);
+					}
+
+					var activitiesToFilterFor = new List<IActivity>();
+					foreach (var activity in activityInternalData.Keys)
+					{
+						activitiesToFilterFor.Add(activity);
 					}
 
 					bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
