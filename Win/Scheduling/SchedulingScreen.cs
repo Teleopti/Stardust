@@ -17,9 +17,6 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Persisters.Requests;
@@ -62,7 +59,6 @@ using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
-using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
@@ -267,87 +263,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		}
 
-		private void formatRibbonControls()
-		{
-			//Load Options
-			setAllToolStripItemsToLongestWidth(toolStripPanelItemLoadOptions);
-			//Show
-			setAllToolStripItemsToLongestWidth(toolStripPanelItem1);
-			//Locks
-			setAllToolStripItemsToLongestWidth(toolStripPanelItemLocks);
-			//Actions
-			setAllToolStripItemsToLongestWidth(toolStripPanelItemAssignments);
-			//Views
-			setAllToolStripItemsToLongestWidth(toolStripPanelItemViews2);
-			//Edit
-			setAllToolStripItemsToLongestWidth(_editControl.PanelItem);
-		}
-
 		private void setShowRibbonTexts()
 		{
-			//HOME
-			//Load Options
-			toggleRibbonTexts(toolStripPanelItemLoadOptions.Items);
-			//Show
-			toggleRibbonTexts(toolStripPanelItem1.Items);
-			//Locks
-			toggleRibbonTexts(toolStripPanelItemLocks.Items);
-			//Actions
-			toggleRibbonTexts(toolStripPanelItemAssignments.Items);
-			//Views
-			toggleRibbonTexts(toolStripPanelItemViews2.Items);
-			//Edit
-			toggleRibbonTexts(_editControl.PanelItem.Items);
-			toggleRibbonTexts(_editControlRestrictions.PanelItem.Items);
-			//Clipboard
-			toggleRibbonTexts(_clipboardControl.PanelItem.Items);
-			toggleRibbonTexts(_clipboardControlRestrictions.PanelItem.Items);
-			//REQUESTS
-			toggleRibbonTexts(toolStripExHandleRequests.Items);
-
-			if (_showRibbonTexts)
-				formatRibbonControls();
-
-		}
-
-		private static void setAllToolStripItemsToLongestWidth(ToolStripPanelItem panelItem)
-		{
-			int maxWidth = 0;
-
-			foreach (ToolStripItem item in panelItem.Items)
-			{
-				if (item.Width > maxWidth)
-					maxWidth = item.Width;
-			}
-
-			foreach (ToolStripItem item in panelItem.Items)
-			{
-				item.ImageAlign = ContentAlignment.MiddleLeft;
-				item.TextAlign = ContentAlignment.MiddleLeft;
-				item.AutoSize = false;
-				item.Width = maxWidth;
-			}
-		}
-
-		private void toggleRibbonTexts(ToolStripItemCollection items)
-		{
-			if (_showRibbonTexts)
-			{
-				foreach (ToolStripItem item in items)
-				{
-					item.Owner.ShowItemToolTips = false;
-					item.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-				}
-			}
-			else
-			{
-				foreach (ToolStripItem item in items)
-				{
-					item.Owner.ShowItemToolTips = true;
-					item.DisplayStyle = ToolStripItemDisplayStyle.Image;
-					item.AutoSize = true;
-				}
-			}
+			SchedulerRibbonHelper.SetShowRibbonTexts(_showRibbonTexts, toolStripPanelItemLoadOptions, toolStripPanelItem1, toolStripPanelItemLocks, toolStripPanelItemAssignments, toolStripPanelItemViews2, _editControl, _editControlRestrictions, _clipboardControl, _clipboardControlRestrictions, toolStripExHandleRequests);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
