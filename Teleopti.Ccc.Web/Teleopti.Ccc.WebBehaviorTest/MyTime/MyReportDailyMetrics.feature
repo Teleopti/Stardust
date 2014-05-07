@@ -37,7 +37,6 @@ Scenario: Navigate within my report view to next day
 	When I navigate to the next day
 	Then I should end up in my report for '2013-10-05'
 
-@ignore
 Scenario: Navigate within my report using date picker
 	Given I am an agent
 	And I view my report for '2013-10-04'

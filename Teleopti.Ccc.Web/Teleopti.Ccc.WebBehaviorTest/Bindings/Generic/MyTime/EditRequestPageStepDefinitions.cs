@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click to add a new text request")]
 		public void WhenIClickToAddANewTextRequest()
 		{
-			Browser.Interactions.Click(".text-request-add");
+			Browser.Interactions.Click("#addTextRequest");
 			Browser.Interactions.AssertExists("#Request-add-section");
 		}
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click to add a new absence request")]
 		public void WhenIClickToAddANewAbsenceRequest()
 		{
-			Browser.Interactions.Click(".absence-request-add");
+			Browser.Interactions.Click("#addAbsenceRequest");
 			Browser.Interactions.AssertExists("#Request-add-section");
 		}
 

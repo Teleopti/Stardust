@@ -1,3 +1,0 @@
-﻿..\..\..\InfrastructureTest\Teleopti.Ccc.InfrastructureTest.dll.Config,BuildArtifacts\CruiseControl.config
-..\..\..\ccnet\CruiseControl.config,BuildArtifacts\CruiseControl.config
-..\..\..\ccnet\InfraTest.ini,BuildArtifacts\InfraTest.ini

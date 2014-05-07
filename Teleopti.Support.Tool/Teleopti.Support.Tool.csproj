@@ -315,8 +315,7 @@
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>XCOPY "$(ProjectDir)..\BuildArtifacts" "$(ProjectDir)bin\$(Configuration)\BuildArtifacts" /S /Y /I
-XCOPY "$(ProjectDir)..\CCnet\*.config" "$(ProjectDir)bin\$(Configuration)\BuildArtifacts" /Y /I</PreBuildEvent>
+    <PreBuildEvent>XCOPY "$(ProjectDir)..\BuildArtifacts" "$(ProjectDir)bin\$(Configuration)\BuildArtifacts" /S /Y /I</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

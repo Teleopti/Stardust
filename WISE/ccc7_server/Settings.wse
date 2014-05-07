@@ -302,10 +302,6 @@ item: Set Variable
   Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web
 end
 item: Set Variable
-  Variable=URLAUTHENTICATIONBRIDGE_TMP
-  Value=%DNS_ALIAS_TMP%TeleoptiCCC/AuthenticationBridge/
-end
-item: Set Variable
   Variable=URLWINDOWSIDENTITYPROVIDER_TMP
   Value=%DNS_ALIAS_TMP%TeleoptiCCC/WindowsIdentityProvider/
 end
@@ -319,7 +315,7 @@ item: Set Variable
 end
 item: Set Variable
   Variable=WINDOWS_CLAIM_PROVIDER_TMP
-  Value=<add identifier="urn:Windows" displayName="Windows" url="%URLWINDOWSIDENTITYPROVIDER_TMP%" protocolHandler="OpenIdHandler" />
+  Value=<add identifier="urn:Windows" displayName="Windows" url="%DNS_ALIAS_TMP%TeleoptiCCC/WindowsIdentityProvider/" protocolHandler="OpenIdHandler" />
 end
 item: If/While Statement
   Variable=IDENTITY_PROVIDERS_TMP
@@ -375,12 +371,7 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(UrlWindowsIdentityProvider)|%UrlWindowsIdentityProvider_TMP%
-  Line Number=0
-end
-item: Insert Line into Text File
-  Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(UrlAuthenticationBridge)|%UrlAuthenticationBridge_TMP%
+  New Text=$(UrlAuthenticationBridge)|%DNS_ALIAS_TMP%TeleoptiCCC/AuthenticationBridge/
   Line Number=0
 end
 item: Insert Line into Text File

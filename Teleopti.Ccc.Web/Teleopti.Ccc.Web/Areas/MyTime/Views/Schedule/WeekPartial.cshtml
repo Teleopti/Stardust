@@ -105,10 +105,10 @@
 			<a class="overtime-availability-add" href="#" data-bind="click: function () { overtimeAvailabilityActivate() }"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
 		</li>
 		<li data-bind="visible: textPermission, css: {active: textRequestActive}">
-			<a class="text-request-add" href="#" data-bind="click: textRequestActivate"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+			<a id="addTextRequest" class="text-request-add" href="#" data-bind="click: textRequestActivate"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
 		</li>
 		<li data-bind="visible: absenceRequestPermission, css: { active: absenceRequestActive }">
-			<a class="absence-request-add" href="#" data-bind="click: absenceRequestActivate"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+			<a id="addAbsenceRequest" class="absence-request-add" href="#" data-bind="click: absenceRequestActivate"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
 		</li>
 	</ul>
 	<div data-bind="with: requestViewModel">

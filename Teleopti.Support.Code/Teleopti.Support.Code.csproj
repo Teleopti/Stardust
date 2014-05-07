@@ -91,7 +91,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)settings.txt" copy "$(ProjectDir)..\.debug-Setup\config\settings.txt" "$(ProjectDir)settings.txt"</PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)settings.txt" copy "$(ProjectDir)..\.debug-Setup\config\settings.txt" "$(ProjectDir)settings.txt"
+if not exist "$(ProjectDir)ConfigFiles\BuildServerConfigFiles.txt" copy "$(ProjectDir)ConfigFiles\BuildServerConfigFiles.txt.template" "$(ProjectDir)ConfigFiles\BuildServerConfigFiles.txt"</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

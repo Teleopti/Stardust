@@ -1,6 +1,5 @@
 ﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js"/>
@@ -30,12 +29,22 @@ Teleopti.MyTimeWeb.Request = (function ($) {
             self.addTextRequestActive(true);
             Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick();
             Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
+
+            var subnavbar = $('.subnavbar');
+			if(subnavbar != undefined && subnavbar.hasClass('in')) {
+		        $('.subnavbar').collapse('toggle');
+	        }
         };
         self.addAbsenceRequest = function () {
             self.resetToolbarActiveButtons();
             self.addAbsenceRequestActive(true);
             Teleopti.MyTimeWeb.Request.RequestDetail.AddAbsenceRequestClick();
             Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
+
+            var subnavbar = $('.subnavbar');
+            if (subnavbar != undefined && subnavbar.hasClass('in')) {
+            	$('.subnavbar').collapse('toggle');
+            }
         };
         self.addShiftTradeRequest = function (date) {
 
@@ -46,6 +55,11 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			self.addShiftTradeRequestActive(true);
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow(date);
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
+
+			var subnavbar = $('.subnavbar');
+			if (subnavbar != undefined && subnavbar.hasClass('in')) {
+				$('.subnavbar').collapse('toggle');
+			}
         };
 
         self.resetToolbarActiveButtons = function() {
@@ -56,8 +70,9 @@ Teleopti.MyTimeWeb.Request = (function ($) {
     }
 
     function _initNavigationViewModel() {
-    		requestNavigationViewModel = new RequestNavigationViewModel();
-    		ko.applyBindings(requestNavigationViewModel, $('div.navbar')[1]);
+		requestNavigationViewModel = new RequestNavigationViewModel();
+		ko.applyBindings(requestNavigationViewModel, $('div.navbar.subnavbar')[0]);
+		ko.applyBindings(requestNavigationViewModel, $('div.navbar.hidden-sm')[0]);
 	}
 
 	return {
@@ -94,4 +109,3 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 	};
 
 })(jQuery);
-

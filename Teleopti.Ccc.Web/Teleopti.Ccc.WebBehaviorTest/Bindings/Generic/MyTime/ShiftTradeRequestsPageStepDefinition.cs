@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
-			Browser.Interactions.Click(".shifttrade-request-add");
+			Browser.Interactions.Click("#addShiftTradeRequest");
 			Browser.Interactions.AssertExists(".ready-loading-flag.is-ready-loaded");
 		}
 
