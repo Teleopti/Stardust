@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private bool _availabilityDaysOnly;
         private bool _usePreferences;
         private bool _preferencesDaysOnly;
-        //private BlockFinderType _blockFinderType;
+
 		private ISpecification<IEditableShift> _mainShiftOptimizeActivitySpecification;
         public bool UseMinimumPersons { get; set; }
         public bool UseMaximumPersons { get; set; }
@@ -32,14 +32,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public Percent Fairness { get; set; }
         public bool UseStudentAvailability { get; set; }
 		public bool UseTeam { get; set; }
-		public IGroupPageLight GroupOnGroupPage { get; set; }
-
 
         public IGroupPageLight GroupOnGroupPageForTeamBlockPer { get; set; }
+		private BlockFinderType _blockFinderTypeForAdvanceScheduling;
         public bool BlockSameEndTime { get; set; }
         public bool BlockSameShiftCategory { get; set; }
         public bool BlockSameStartTime { get; set; }
-		  public bool BlockSameShift { get; set; }
+		public bool BlockSameShift { get; set; }
         public bool UseBlock { get; set; }
 
         public bool DoNotBreakMaxStaffing { get; set; }
@@ -61,13 +60,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool TeamSameActivity { get; set; }
 		public bool UseAverageShiftLengths { get; set; }
 
-        public bool UsePeriodAsBlock { get; set; }
 
-        public bool UseTwoDaysOffAsBlock{get;set;}
-
-        public bool UseCalendarWeekAsBlock{get;set;}
-
-        private BlockFinderType _blockFinderTypeForAdvanceScheduling;
         
         public BlockFinderType BlockFinderTypeForAdvanceScheduling
         {
