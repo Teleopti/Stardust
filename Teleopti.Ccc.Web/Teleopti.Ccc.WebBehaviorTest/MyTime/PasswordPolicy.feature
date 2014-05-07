@@ -17,7 +17,6 @@ Background:
 	| Field | Value |
 	| Name  | Agent |
 
-@ignore
 Scenario: Change password fails against the policy
 	Given I am a user signed in with
 	| Field    | Value     |
@@ -31,7 +30,6 @@ Scenario: Change password fails against the policy
 	| Old Password       | P@ssword1 |
 	Then I should see password change failed with message
 
-@ignore
 Scenario: Sign in fails after account is locked
 	Given I have user logon details with
 	| Field    | Value |
@@ -47,7 +45,6 @@ Scenario: Sign in fails after account is locked
 	Then I should not be signed in
 	And I should see a log on error 'LogOnFailedAccountIsLocked'
 
-@ignore
 Scenario: See change password when password will expire soon
 	Given I have user logon details with
 	| Field                           | Value |
@@ -62,7 +59,6 @@ Scenario: See change password when password will expire soon
 	| Password | P@ssword1 |
 	Then I should see change password page with warning 'Your password will expire soon'
 
-@ignore
 Scenario: Skip change password when password will expire soon
 	Given I have user logon details with
 	| Field                           | Value |
@@ -78,7 +74,6 @@ Scenario: Skip change password when password will expire soon
 	And I click skip button
 	Then I should be signed in
 
-@ignore
 Scenario: See change password when password already expired
 	Given I have user logon details with
 	| Field                           | Value |
@@ -94,7 +89,6 @@ Scenario: See change password when password already expired
 	Then I should see must change password page with warning 'YourPasswordHasAlreadyExpired'
 	And I should not see skip button
 
-@ignore
 Scenario: Manually navigate to other page when sign in with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
@@ -110,7 +104,6 @@ Scenario: Manually navigate to other page when sign in with password already exp
 	And I manually navigate to week schedule page
 	Then I should see the sign in page
 
-@ignore
 Scenario: Change password successfully
 	Given I have user logon details with
 	| Field                           | Value |
@@ -130,7 +123,6 @@ Scenario: Change password successfully
 	| Old Password       | P@ssword1    |
 	Then I should be signed in
 
-@ignore
 Scenario: Change password fails if new password is weak
 	Given I have user logon details with
 	| Field                           | Value |
@@ -150,7 +142,6 @@ Scenario: Change password fails if new password is weak
 	| Old Password       | P@ssword1 |
 	Then I should see an error 'PasswordPolicyWarning'
 
-@ignore
 Scenario: Change password fails if old password is wrong
 	Given I have user logon details with
 	| Field                           | Value |
