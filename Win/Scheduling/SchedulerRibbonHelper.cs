@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Interfaces.Domain;
@@ -90,6 +92,87 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				toolStrip.Items[0].Visible = false;
 				toolStrip.Items[1].Visible = true;
+			}
+		}
+
+		public static void SetShowRibbonTexts(bool showRibbonTexts, ToolStripPanelItem loadOptions, ToolStripPanelItem show, ToolStripPanelItem locks, ToolStripPanelItem actions, ToolStripPanelItem view, EditControl editControl, EditControl editControlRestrictions, ClipboardControl clipboardControl, ClipboardControl clipboardControlRestrictions, ToolStripEx requests)
+		{
+			//Load Options
+			toggleRibbonTexts(showRibbonTexts, loadOptions.Items);
+			//Show
+			toggleRibbonTexts(showRibbonTexts, show.Items);
+			//Locks
+			toggleRibbonTexts(showRibbonTexts, locks.Items);
+			//Actions
+			toggleRibbonTexts(showRibbonTexts, actions.Items);
+			//Views
+			toggleRibbonTexts(showRibbonTexts, view.Items);
+			//Edit
+			toggleRibbonTexts(showRibbonTexts, editControl.PanelItem.Items);
+			toggleRibbonTexts(showRibbonTexts, editControlRestrictions.PanelItem.Items);
+			//Clipboard
+			toggleRibbonTexts(showRibbonTexts, clipboardControl.PanelItem.Items);
+			toggleRibbonTexts(showRibbonTexts, clipboardControlRestrictions.PanelItem.Items);
+			//REQUESTS
+			toggleRibbonTexts(showRibbonTexts, requests.Items);
+
+			if (showRibbonTexts)
+				formatRibbonControls(loadOptions, show, locks, actions, view, editControl);
+		}
+
+		private static void toggleRibbonTexts(bool showRibbonTexts, ToolStripItemCollection items)
+		{
+			if (showRibbonTexts)
+			{
+				foreach (ToolStripItem item in items)
+				{
+					item.Owner.ShowItemToolTips = false;
+					item.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+				}
+			}
+			else
+			{
+				foreach (ToolStripItem item in items)
+				{
+					item.Owner.ShowItemToolTips = true;
+					item.DisplayStyle = ToolStripItemDisplayStyle.Image;
+					item.AutoSize = true;
+				}
+			}
+		}
+
+		private static void formatRibbonControls(ToolStripPanelItem loadOptions, ToolStripPanelItem show, ToolStripPanelItem locks, ToolStripPanelItem actions, ToolStripPanelItem view, EditControl editControl)
+		{
+			//Load Options
+			setAllToolStripItemsToLongestWidth(loadOptions);
+			//Show
+			setAllToolStripItemsToLongestWidth(show);
+			//Locks
+			setAllToolStripItemsToLongestWidth(locks);
+			//Actions
+			setAllToolStripItemsToLongestWidth(actions);
+			//Views
+			setAllToolStripItemsToLongestWidth(view);
+			//Edit
+			setAllToolStripItemsToLongestWidth(editControl.PanelItem);
+		}
+
+		private static void setAllToolStripItemsToLongestWidth(ToolStripPanelItem panelItem)
+		{
+			int maxWidth = 0;
+
+			foreach (ToolStripItem item in panelItem.Items)
+			{
+				if (item.Width > maxWidth)
+					maxWidth = item.Width;
+			}
+
+			foreach (ToolStripItem item in panelItem.Items)
+			{
+				item.ImageAlign = ContentAlignment.MiddleLeft;
+				item.TextAlign = ContentAlignment.MiddleLeft;
+				item.AutoSize = false;
+				item.Width = maxWidth;
 			}
 		}
 	}
