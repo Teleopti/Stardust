@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Table = TechTalk.SpecFlow.Table;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[AfterScenario("PasswordPolicy")]
 		public void AfterPasswordPolicyScenario()
 		{
-			var targetTestPasswordPolicyFile = Path.Combine(Paths.NhibPath(), "PasswordPolicy.xml");
+			var targetTestPasswordPolicyFile = Path.Combine(Path.Combine(IniFileInfo.SitePath, "bin"), "PasswordPolicy.xml");
 			if (File.Exists(targetTestPasswordPolicyFile))
 				File.Delete(targetTestPasswordPolicyFile);
 			_timeoutScope.Dispose();
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"There is a password policy with")]
 		public void GivenThereIsAPasswordPolicyWith(Table table)
 		{
-			var targetTestPasswordPolicyFile = Path.Combine(Paths.NhibPath(), "PasswordPolicy.xml");
+			var targetTestPasswordPolicyFile = Path.Combine(Path.Combine(IniFileInfo.SitePath, "bin"), "PasswordPolicy.xml");
 			if (File.Exists(targetTestPasswordPolicyFile))
 				return;
 			var contents = File.ReadAllText("Data\\PasswordPolicy.xml");
