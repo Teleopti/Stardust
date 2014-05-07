@@ -104,6 +104,8 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			if (item != null)
 				scheduleControl1.Appearance.DivisionsPerHour = item.PerHour;
 			selectWholeWeekInCalendar(scheduleControl1.Calendar.DateValue);
+			_previousButton.Visible = true;
+			_nextButton.Visible = true;
 		}
 
         
