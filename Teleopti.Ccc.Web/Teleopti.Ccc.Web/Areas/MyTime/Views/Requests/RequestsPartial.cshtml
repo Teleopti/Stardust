@@ -43,8 +43,35 @@
 
 <input id="Request-detail-datepicker-format" type="hidden" value="@Model.DatePickerFormat"/>
 
-<div class="container fixed-non-responsive">
-	<div class="navbar navbar-default">
+<div class="hidden-lg hidden-md topbarparent">
+	<div class="navbar navbar-default collapse navbar-collapse subnavbar">
+		<div class="container">
+			<ul class="nav navbar-nav">
+				@if (Model.RequestPermission.TextRequestPermission)
+				{
+					<li data-bind="css: { active: addTextRequestActive }">
+						<a href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+					</li>
+				}
+				@if (Model.RequestPermission.AbsenceRequestPermission)
+				{
+					<li data-bind="css: { active: addAbsenceRequestActive }">
+						<a href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+					</li>
+				}
+				@if (Model.RequestPermission.ShiftTradeRequestPermission)
+				{
+					<li data-bind="css: { active: addShiftTradeRequestActive }">
+						<a href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+					</li>
+				}
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="container fixed-non-responsive" style="padding-top: 10px;">
+	<div class="navbar navbar-default hidden-sm hidden-xs">
 		<div class="container">
 			<ul class="nav navbar-nav">
 				@if (Model.RequestPermission.TextRequestPermission)
