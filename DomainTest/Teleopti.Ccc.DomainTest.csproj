@@ -1313,6 +1313,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analyzer\" />
+    <Folder Include="Optimization\TeamBlock\MoveTimeOptimization\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Forecasting\DayInMonthIndex\DayInMonthSeasonalityData.txt">
