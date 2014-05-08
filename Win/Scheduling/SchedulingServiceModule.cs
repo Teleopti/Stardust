@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -211,6 +212,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             registerDayOffFairnessOptimizationService(builder);
 			registerEqualNumberOfCategoryFairnessService(builder);
 	        registerWeeklyRestSolverClasses(builder);
+	        registerMoveTimeOptimizationClasses(builder);
 
             builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
             builder.RegisterType<AnalyzePersonAccordingToAvailability>().As<IAnalyzePersonAccordingToAvailability>();
@@ -229,7 +231,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         }
 
-        private void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
+	    private void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
+	    {
+			 builder.RegisterType<DayValueUnlockedIndexSorter>().As<IDayValueUnlockedIndexSorter>();
+			 builder.RegisterType<TeamBlockMoveTimeDescisionMaker>().As<ITeamBlockMoveTimeDescisionMaker>();
+	    }
+
+	    private void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
         {
             builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacade>().As<ITeamBlockDayOffFairnessOptimizationServiceFacade >();
             builder.RegisterType<WeekDayPoints>().As<IWeekDayPoints>();

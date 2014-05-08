@@ -486,6 +486,8 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityFairnessOptimizationService.cs" />
     <Compile Include="Optimization\TeamBlock\FilterOutIntervalsAfterMidNight.cs" />
     <Compile Include="Optimization\TeamBlock\LocateMissingIntervalsIfMidNightBreak.cs" />
+    <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\DayValueUnlockedIndexSorter.cs" />
+    <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeDescisionMaker.cs" />
     <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
