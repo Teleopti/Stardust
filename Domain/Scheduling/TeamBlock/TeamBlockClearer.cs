@@ -29,7 +29,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			IList<IScheduleDay> toRemove = new List<IScheduleDay>();
 
-			foreach (var person in teamBlock.TeamInfo.GroupMembers)
+			var selectedTeamMembers = teamBlock.TeamInfo.UnLockedMembers();
+
+			foreach (var person in selectedTeamMembers)
 			{
 				addDaysToRemove(teamBlock, person, toRemove);
 			}
