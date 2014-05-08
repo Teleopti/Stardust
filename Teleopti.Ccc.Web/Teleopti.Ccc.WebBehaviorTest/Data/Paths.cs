@@ -13,12 +13,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			return new DirectoryInfo(path).FullName;
 		}
 
-		public static string NhibPath()
-		{
-			var path = IniFileInfo.AGENTPORTALWEB_nhibConfPath;
-			return new DirectoryInfo(path).FullName;
-		}
-
 		public static string WebNHibConfPath()
 		{
 			return WebBinPath();

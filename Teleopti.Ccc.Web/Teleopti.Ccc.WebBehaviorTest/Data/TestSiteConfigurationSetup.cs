@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class TestSiteConfigurationSetup
 	{
-		private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.NhibPath(), "TestData.nhib.xml");
+		private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData.nhib.xml");
 		private static readonly string TargetWebConfig = Path.Combine(Paths.WebPath(), "web.config");
 		private static readonly string BackupWebConfig = Path.Combine(Paths.WebPath(), "web.backup.config");
 		private static readonly string BehaviorTestWebConfig = Path.Combine(Paths.WebPath(), "web.fromtest.config");
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				AttemptToUseIISExpress();
 
 			updateWebConfigFromTemplate();
-			//GenerateAndWriteTestDataNHibFileFromTemplate();
+			GenerateAndWriteTestDataNHibFileFromTemplate();
 		}
 
 		private static void AttemptToUseIISExpress()
