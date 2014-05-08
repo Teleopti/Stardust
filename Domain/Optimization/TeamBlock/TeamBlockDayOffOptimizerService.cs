@@ -366,7 +366,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 																							allPersonMatrixList);
 				if (teamBlockInfo == null) continue;
 				if (!_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
-					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
+					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo, selectedPersons);
 
 				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
 																		selectedPersons, rollbackService);
