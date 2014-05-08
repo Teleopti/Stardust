@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.AspNet.SignalR.Client.Hubs;
 using Newtonsoft.Json.Linq;
 using Teleopti.Interfaces.MessageBroker;
 using log4net;
@@ -16,30 +15,35 @@ namespace Teleopti.Messaging.SignalR
 
 	public class SignalSubscriber : ISignalSubscriber
 	{
-		private readonly IHubProxy _hubProxy;
+		private readonly IDoHubProxyCalls _hubProxy;
 		private const string eventName = "OnEventMessage";
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(SignalSubscriber));
 
 		public event Action<Notification> OnNotification;
 
-
 		[CLSCompliant(false)]
-		public SignalSubscriber(IHubProxy hubProxy)
+		public SignalSubscriber(IDoHubProxyCalls hubProxy)
 		{
 			_hubProxy = hubProxy;
 		}
 
 		public void Start()
 		{
-			_hubProxy.Subscribe(eventName).Received += subscription_Data;
+			_hubProxy.WithProxy(p =>
+			{
+				p.Subscribe(eventName).Received += subscription_Data;
+			});
 		}
 
 		public void Stop()
 		{
 			try
 			{
-				_hubProxy.Subscribe(eventName).Received -= subscription_Data;
+				_hubProxy.WithProxy(p =>
+				{
+					p.Subscribe(eventName).Received -= subscription_Data;
+				});
 			}
 			catch (Exception ex)
 			{
@@ -49,17 +53,13 @@ namespace Teleopti.Messaging.SignalR
 
 		private void subscription_Data(IList<JToken> obj)
 		{
-			var handler = OnNotification;
-			if (handler != null)
+			if (OnNotification != null)
 			{
 				var d = obj[0].ToObject<Notification>();
-				handler.BeginInvoke(d, onNotificationCallback, handler);
+				OnNotification(d);
 			}
 		}
 
-		private void onNotificationCallback(IAsyncResult ar)
-		{
-			((Action<Notification>)ar.AsyncState).EndInvoke(ar);
-		}
 	}
+
 }

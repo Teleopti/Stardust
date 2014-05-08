@@ -8,10 +8,12 @@ using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
 using log4net;
+using Teleopti.Messaging.SignalR.Wrappers;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
 {
+
 	[CLSCompliant(false)]
 	public class SignalConnectionHandler : ISignalConnectionHandler
 	{
@@ -23,7 +25,7 @@ namespace Teleopti.Messaging.SignalR
 		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
 		public const string ConnectionReconnected = "Connection reconnected successfully";
 
-		private readonly IHubProxy _hubProxy;
+		private readonly IHubProxyWrapper _hubProxy;
 		private readonly IHubConnectionWrapper _hubConnection;
 		private readonly TimeSpan _reconnectDelay;
 		private readonly Task emptyTask;
@@ -33,11 +35,14 @@ namespace Teleopti.Messaging.SignalR
 		private int _reconnectAttempts;
 
 
-		public SignalConnectionHandler(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger,
-			TimeSpan reconnectDelay, int maxReconnectAttempts = 0)
+		public SignalConnectionHandler(
+			Func<IHubConnectionWrapper> hubConnectionFactory, 
+			ILog logger,
+			TimeSpan reconnectDelay, 
+			int maxReconnectAttempts = 0)
 		{
-			_hubProxy = hubProxy;
-			_hubConnection = hubConnection;
+			_hubConnection = hubConnectionFactory.Invoke();
+			_hubProxy = _hubConnection.CreateHubProxy("MessageBrokerHub");
 			_reconnectDelay = reconnectDelay;
 			_maxReconnectAttempts = maxReconnectAttempts;
 
@@ -131,6 +136,11 @@ namespace Teleopti.Messaging.SignalR
 			{
 				Logger.Error("An error happened when stopping connection.", ex);
 			}
+		}
+
+		public void WithProxy(Action<IHubProxyWrapper> action)
+		{
+			action.Invoke(_hubProxy);
 		}
 
 		public Task AddSubscription(Subscription subscription)

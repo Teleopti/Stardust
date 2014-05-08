@@ -9,6 +9,7 @@ using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Exceptions;
 using log4net;
+using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.SignalR
 {
@@ -59,9 +60,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_connectionHandler == null)
 				{
-					var connection = MakeHubConnection();
-					var proxy = connection.CreateHubProxy("MessageBrokerHub");
-					_connectionHandler = new SignalConnectionHandler(proxy, connection, Logger, reconnectDelay, reconnectAttempts);
+					_connectionHandler = new SignalConnectionHandler(MakeHubConnection, Logger, reconnectDelay, reconnectAttempts);
 				}
 
 				_connectionHandler.StartConnection();

@@ -1,10 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Messaging.SignalR.Wrappers;
+using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public interface ISignalConnectionHandler
+	public interface IDoHubProxyCalls
+	{
+		void WithProxy(Action<IHubProxyWrapper> action);
+	}
+
+	public interface ISignalConnectionHandler : IDoHubProxyCalls
 	{
 		void StartConnection();
 		void CloseConnection();

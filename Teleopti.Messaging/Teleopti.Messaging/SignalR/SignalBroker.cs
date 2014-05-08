@@ -13,13 +13,13 @@ using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Events;
 using Teleopti.Messaging.Exceptions;
 using log4net;
+using Teleopti.Messaging.SignalR.Wrappers;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
 {
 	public class SignalBroker : IMessageBroker
 	{
-		private const string hubClassName = "MessageBrokerHub";
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
 		private ISignalConnectionHandler _connectionHandler;
 		private ISignalSubscriber _subscriberWrapper;
@@ -334,24 +334,18 @@ namespace Teleopti.Messaging.SignalR
 			{
 				throw new BrokerNotInstantiatedException("The SignalBroker can only be used with a valid Uri!");
 			}
-			var connection = MakeHubConnection(serverUrl);
-			var hubProxy = connection.CreateHubProxy(hubClassName);
-
+			
 			lock (_wrapperLock)
 			{
-				_subscriberWrapper = MakeSignalSubscriber(hubProxy);
+
+				_connectionHandler = new SignalConnectionHandler(() => MakeHubConnection(serverUrl), null, reconnectDelay);
+
+				_subscriberWrapper = new SignalSubscriber(_connectionHandler);
 				_subscriberWrapper.OnNotification += onNotification;
 				_subscriberWrapper.Start();
 
-				_connectionHandler = new SignalConnectionHandler(hubProxy, connection, null, reconnectDelay);
 				_connectionHandler.StartConnection();
 			}
-		}
-
-		[CLSCompliant(false)]
-		protected virtual ISignalSubscriber MakeSignalSubscriber(IHubProxy hubProxy)
-		{
-			return new SignalSubscriber(hubProxy);
 		}
 
 		[CLSCompliant(false)]
