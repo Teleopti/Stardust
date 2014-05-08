@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Support.Code.Tool;
 
@@ -11,13 +12,13 @@ namespace Teleopti.Support.CodeTest.Tool
         [Test]
         public void ShouldSetPropertiesFromArguments()
         {
+	        var mockCommand = MockRepository.GenerateMock<ISupportCommand>();
             var args = new[] { "-MODeploy", "-?" };
-            ICommandLineArgument target = new CommandLineArgument(args);
+            ICommandLineArgument target = new CommandLineArgument(args,_ => mockCommand);
 
             target.Mode.Type.Should().Be("Deploy");
     
-            target.ShowHelp.Should().Be.True();
-            target.Help.Should().Not.Be.Empty();
+            target.Command.Should().Be.SameInstanceAs(mockCommand);
         }
   
     }

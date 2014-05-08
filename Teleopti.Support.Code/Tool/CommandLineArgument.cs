@@ -6,7 +6,7 @@ namespace Teleopti.Support.Code.Tool
     public interface ICommandLineArgument
     {
 		ModeFile Mode { get; }
-        string Help { get; }
+		ISupportCommand Command { get; }
     }
 
 	public class CommandLineArgument : ICommandLineArgument

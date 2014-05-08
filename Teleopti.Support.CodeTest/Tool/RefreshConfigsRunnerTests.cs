@@ -29,7 +29,7 @@ namespace Teleopti.Support.CodeTest.Tool
             Expect.Call(_fileMan.GetReplaceList()).Return(new List<SearchReplace>());
             Expect.Call(() => _refreshConfig.SplitAndReplace("", new List<SearchReplace>(), false)).IgnoreArguments();
             _mocks.ReplayAll();
-			_refresher.RefreshThem(new ModeFile("DEV"));
+			_refresher.Execute(new ModeFile("DEV"));
             _mocks.VerifyAll();
         }
 
@@ -39,7 +39,7 @@ namespace Teleopti.Support.CodeTest.Tool
             Expect.Call(_fileMan.GetReplaceList()).Return(new List<SearchReplace>());
 			Expect.Call(() => _refreshConfig.SplitAndReplace("", new List<SearchReplace>(), false)).IgnoreArguments();
             _mocks.ReplayAll();
-			_refresher.RefreshThem(new ModeFile("DEPLOY"));
+			_refresher.Execute(new ModeFile("DEPLOY"));
             _mocks.VerifyAll();
         }
 
@@ -49,7 +49,7 @@ namespace Teleopti.Support.CodeTest.Tool
             Expect.Call(_fileMan.GetReplaceList()).Return(new List<SearchReplace>());
 			Expect.Call(() => _refreshConfig.SplitAndReplace("", new List<SearchReplace>(), false)).IgnoreArguments();
             _mocks.ReplayAll();
-			_refresher.RefreshThem(new ModeFile("TEST"));
+			_refresher.Execute(new ModeFile("TEST"));
             _mocks.VerifyAll();
         }
 
@@ -59,7 +59,7 @@ namespace Teleopti.Support.CodeTest.Tool
             Expect.Call(_fileMan.GetReplaceList()).Return(new List<SearchReplace>());
 			Expect.Call(() => _refreshConfig.SplitAndReplace("", new List<SearchReplace>(), false)).IgnoreArguments().Throw(new FileNotFoundException("Borta?"));
             _mocks.ReplayAll();
-			_refresher.RefreshThem(new ModeFile("TEST"));
+			_refresher.Execute(new ModeFile("TEST"));
             _mocks.VerifyAll();
         }
     }
