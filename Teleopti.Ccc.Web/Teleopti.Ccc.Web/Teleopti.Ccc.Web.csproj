@@ -867,7 +867,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestDetail.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.List.js" />
     <Content Include="Areas\Start\Content\Css\Site.css" />
-    <Content Include="Areas\MyTime\Content\Images\alpha-gradient.png" />
     <Content Include="Areas\MyTime\Content\Images\arrow-down.png" />
     <Content Include="Areas\MyTime\Content\Images\main_content_bottom_bg.jpg" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.custom.css" />
@@ -931,7 +930,6 @@
     <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader.gif" />
-    <Content Include="Areas\MyTime\Content\Images\body_bg.jpg" />
     <Content Include="Areas\MyTime\Content\Images\button_sprite.png" />
     <Content Include="Areas\MyTime\Content\Images\calendarview_week_wide_bg.png" />
     <Content Include="Areas\MyTime\Content\Images\checkbox_sprite.png" />
@@ -942,8 +940,6 @@
     <Content Include="Areas\MyTime\Content\Images\edit_section_bg_top.png" />
     <Content Include="Areas\MyTime\Content\Images\error_icon.png" />
     <Content Include="Areas\MyTime\Content\Images\header_bg.png" />
-    <Content Include="Areas\Start\Content\Images\login_logo.png" />
-    <Content Include="Areas\Start\Content\Images\login_page_bg.png" />
     <Content Include="Areas\MyTime\Content\Images\main_content_bg.jpg" />
     <Content Include="Areas\MyTime\Content\Images\main_content_top_bg.jpg" />
     <Content Include="Areas\MyTime\Content\Images\calendarview_week_bg.png" />
@@ -1071,6 +1067,8 @@
     <Content Include="Areas\MyTime\Views\Availability\AddStudentAvailabilityPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\AddOvertimeAvailabilityPartial.cshtml" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.map" />
+    <Content Include="Areas\SSO\Views\Shared\Error.cshtml" />
+    <Content Include="Areas\SSO\Views\Shared\ErrorPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

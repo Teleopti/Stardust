@@ -178,7 +178,6 @@
 
 html.full-height, html.full-height body, html.full-height form.aspnetform{ height: 100%; }
 
-#page, #page-signin{ margin: 0 auto; text-align: left; }
 html.full-height #page, html.full-height #page-signin{ 
 	 min-height: 100%;
 	height: auto !important;
@@ -228,8 +227,6 @@ html.full-height #push{
  .field-validation-error, .validation-summary-errors, .error{font-size: 11px; color: #cc0000;}
  #tab-windows .error h1{color: #cc0000; width: auto;}
  .validation-summary-errors ul, .error ul{list-style: none;}
- 
- #error-panel{ background: transparent url("../Images/signin_bg_sprite.png") 0 -640px repeat-x; height: 170px; font-size: 10px;}
  
  /* Seperators */
  .seperator{border-right: 1px solid #d2d2d2; border-left: 1px solid #fff; float: left; height: 95%; margin:0 12px;}
