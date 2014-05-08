@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see a message saying I dont have access to MyReport")]
 		public void ThenIShouldSeeAMessageSayingIDontHaveAccess()
 		{
-			//todo...
-			Browser.Interactions.AssertExists(".error");
+			Browser.Interactions.AssertExists("#error-panel");
 		}
 
 		[Given(@"I do not have any report data for date '(.*)'")]
