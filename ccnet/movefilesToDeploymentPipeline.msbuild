@@ -20,6 +20,7 @@
 	</Target>
 	
 	<!-- try to minimize these later-->
+	<!-- change to "$(output)\*.*" instead. typ. -->
 	<Target Name="MoveFiles">
 		<ItemGroup>
 			<MainFiles Include="$(CCNetWorkingDirectory)\**\*.dll;
@@ -32,6 +33,7 @@
 			<CcnetFiles Include="$(CCNetWorkingDirectory)\ccnet\**\*.*"/>
 			<DatabaseFiles Include="$(CCNetWorkingDirectory)\database\**\*.*"/>
 			<FeatureFiles Include="$(CCNetWorkingDirectory)\Domain\FeatureFlags\*.txt"/>
+			<LicenseFiles Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\**\License.txt" />
 		</ItemGroup>
 		<Copy SourceFiles="@(MainFiles)"
     			DestinationFiles="@(MainFiles->'$(DestinationFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
@@ -43,6 +45,8 @@
     			DestinationFiles="@(DatabaseFiles->'$(DestinationFolder)\database\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(FeatureFiles)"
     			DestinationFiles="@(FeatureFiles->'$(DestinationFolder)\Domain\FeatureFlags\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(LicenseFiles)"
+    			DestinationFiles="@(LicenseFiles->'$(DestinationFolder)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\%(RecursiveDir)%(Filename)%(Extension)')" />
 	</Target>
 	
 	<Target Name="CreateHgChangesetFile">
