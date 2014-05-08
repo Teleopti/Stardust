@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace Teleopti.Support.Code.Tool
 {
@@ -6,22 +7,23 @@ namespace Teleopti.Support.Code.Tool
     {
 		ModeFile Mode { get; }
         string Help { get; }
-        bool ShowHelp { get; }
     }
 
 	public class CommandLineArgument : ICommandLineArgument
     {
        private readonly string[] _argumentCollection;
-        
-        public CommandLineArgument(string[] argumentCollection)
+		private readonly Func<string, ISupportCommand> _helpCommand;
+
+		public CommandLineArgument(string[] argumentCollection, Func<string,ISupportCommand> helpCommand)
         {
             _argumentCollection = argumentCollection;
-            ReadArguments();
+	        _helpCommand = helpCommand;
+	        ReadArguments();
         }
 
+		public ISupportCommand Command { get; private set; }
+
 		public ModeFile Mode { get; private set; }
-		public bool SaveSsoConfig { get; set; }
-		public bool ShowHelp { get; private set; }
         public string Help
         {
             get { return @"Command line arguments:
@@ -33,6 +35,9 @@ namespace Teleopti.Support.Code.Tool
 
         private void ReadArguments()
         {
+			Command = new RefreshConfigsRunner(new SettingsFileManager(new SettingsReader()),
+																new RefreshConfigFile(new ConfigFileTagReplacer(),
+																					  new MachineKeyChecker()));
             foreach (string s in _argumentCollection)
             {
                 switch (s)
@@ -41,7 +46,7 @@ namespace Teleopti.Support.Code.Tool
                     case "?":
                     case "-HELP":
                     case "HELP":
-                        ShowHelp = true;
+		                Command = _helpCommand.Invoke(Help);
                         continue;
                 }
 
@@ -52,10 +57,13 @@ namespace Teleopti.Support.Code.Tool
                 {
                     case "-MO":   // Mode.
                         Mode = new ModeFile(switchValue);
-                        break;
-					case "-SC":
-						SaveSsoConfig = true;
+						break;
+					case "-BC":
+						Command = new SsoConfigurationBackupHandler(new CustomSection(), new SsoFilePathReader());
 		                break;
+					case "-RC":
+						Command = new SsoConfigurationRestoreHandler(new CustomSection(), new SsoFilePathReader());
+						break;
                     
                 }
             }

@@ -47,7 +47,7 @@ namespace Teleopti.Support.Tool
 
 				var refreshRunner = new RefreshConfigsRunner(fileMan, new RefreshConfigFile(new ConfigFileTagReplacer(),
 																													new MachineKeyChecker()));
-				refreshRunner.RefreshThem(new ModeFile(mode));
+				refreshRunner.Execute(new ModeFile(mode));
 
 			  if (mode.Equals("DEPLOY"))
 			  {

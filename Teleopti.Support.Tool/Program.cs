@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using Teleopti.Support.Code.Tool;
-using log4net;
 using log4net.Config;
 
 namespace Teleopti.Support.Tool
@@ -29,26 +25,8 @@ namespace Teleopti.Support.Tool
 	        }
             else
             {
-                var commandLineArgument = new CommandLineArgument(args);
-                if (commandLineArgument.ShowHelp)
-                    new HelpWindow(commandLineArgument.Help).ShowDialog();
-                else
-                {
-					if (commandLineArgument.SaveSsoConfig)
-					{
-						//new SsoConfigurationBackupHandler().Excute(commandLineArgument.Mode);
-						new SsoConfigurationRestoreHandler().Excute(commandLineArgument.Mode);
-					}
-					else
-					{
-						var refreshRunner = new RefreshConfigsRunner(new SettingsFileManager(new SettingsReader()),
-																new RefreshConfigFile(new ConfigFileTagReplacer(),
-																					  new MachineKeyChecker()));
-						refreshRunner.RefreshThem(commandLineArgument.Mode);
-					}
-                }
-
-	            
+				var commandLineArgument = new CommandLineArgument(args, x => new HelpWindow(x));
+				commandLineArgument.Command.Execute(commandLineArgument.Mode);
             }
         }
 

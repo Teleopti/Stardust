@@ -55,6 +55,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tool\ConfigFileTagReplacer.cs" />
     <Compile Include="Tool\CryptoCreator.cs" />
+    <Compile Include="Tool\CustomSection.cs" />
+    <Compile Include="Tool\CustomSectionContainer.cs" />
+    <Compile Include="Tool\ISupportCommand.cs" />
     <Compile Include="Tool\MachineKeyChecker.cs" />
     <Compile Include="Tool\ModeFile.cs" />
     <Compile Include="Tool\RefreshConfigFile.cs" />
@@ -63,6 +66,8 @@
     <Compile Include="Tool\SettingsFileManager.cs" />
     <Compile Include="Tool\SettingsReader.cs" />
     <Compile Include="Tool\SsoConfigurationBackupHandler.cs" />
+    <Compile Include="Tool\SsoConfigurationRestoreHandler.cs" />
+    <Compile Include="Tool\SsoFilePathReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ConfigFiles\AzureConfigFiles.txt">

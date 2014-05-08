@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using Teleopti.Support.Code.Tool;
 
 namespace Teleopti.Support.Tool
 {
-    public partial class HelpWindow : Form
+    public partial class HelpWindow : Form, ISupportCommand
     {
         public HelpWindow()
         {
@@ -23,5 +17,9 @@ namespace Teleopti.Support.Tool
             textBox1.SelectionLength = 0;
         }
 
+	    public void Execute(ModeFile modeFile)
+	    {
+		    ShowDialog();
+	    }
     }
 }

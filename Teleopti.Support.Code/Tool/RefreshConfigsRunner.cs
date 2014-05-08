@@ -6,7 +6,7 @@ using log4net.Appender;
 
 namespace Teleopti.Support.Code.Tool
 {
-	public class RefreshConfigsRunner
+	public class RefreshConfigsRunner : ISupportCommand
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(RefreshConfigsRunner));
         private readonly ISettingsFileManager _manager;
@@ -18,7 +18,7 @@ namespace Teleopti.Support.Code.Tool
             _refreshConfigFile = refreshConfigFile;
         }
 
-        public void RefreshThem(ModeFile mode)
+        public void Execute(ModeFile mode)
         {
 	        var settings = _manager.GetReplaceList();
             
