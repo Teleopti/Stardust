@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Teleopti.Support.Code.Tool;
 
 namespace Teleopti.Support.Tool
@@ -17,6 +18,7 @@ namespace Teleopti.Support.Tool
             textBox1.SelectionLength = 0;
         }
 
+		[CLSCompliant(false)]
 	    public void Execute(ModeFile modeFile)
 	    {
 		    ShowDialog();

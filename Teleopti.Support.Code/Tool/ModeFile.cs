@@ -4,7 +4,6 @@ using System.IO;
 
 namespace Teleopti.Support.Code.Tool
 {
-	[CLSCompliant(true)]
 	public class ModeFile
 	{
 
