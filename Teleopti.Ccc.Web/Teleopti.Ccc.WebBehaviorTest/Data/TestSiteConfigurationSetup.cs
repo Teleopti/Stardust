@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class TestSiteConfigurationSetup
 	{
-		private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.NhibPath(), "TestData.nhib.xml");
+		private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData.nhib.xml");
 
 		public static int Port = 52858;
 		public static Uri Url;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_portsConfiguration = RandomPortsAndUrls();
 			WriteWebConfigs();
 			StartIISExpress();
-			//GenerateAndWriteTestDataNHibFileFromTemplate();
+			GenerateAndWriteTestDataNHibFileFromTemplate();
 		}
 
 		private static IDisposable RandomPortsAndUrls()
