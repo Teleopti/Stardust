@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
         }
 
         [When(@"I view my mobile week schedule for date '(.*)'")]
+		  [Given(@"I view my mobile week schedule for date '(.*)'")]
         public void WhenIViewMyMobileWeekScheduleForDate(DateTime date)
         {
             TestControllerMethods.Logon();

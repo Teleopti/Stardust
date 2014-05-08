@@ -18,6 +18,28 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
 	var self = this;
 
 	self.dayViewModels = ko.observableArray();
+	self.displayDate = ko.observable();
+	self.nextWeekDate = ko.observable(moment());
+	self.previousWeekDate = ko.observable(moment());
+	self.selectedDate = ko.observable(moment().startOf('day'));
+	self.selectedDateSubscription = null;
+
+	self.setCurrentDate = function (date) {
+		if (self.selectedDateSubscription)
+			self.selectedDateSubscription.dispose();
+		self.selectedDate(date);
+		self.selectedDateSubscription = self.selectedDate.subscribe(function (d) {
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
+		});
+	};
+
+	self.nextWeek = function () {
+		self.selectedDate(self.nextWeekDate());
+	};
+
+	self.previousWeek = function () {
+		self.selectedDate(self.previousWeekDate());
+	};
 
 	self.readData = function(data) {
 
@@ -27,9 +49,13 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
 
 			self.dayViewModels.push(vm);
 		});
-
+		self.displayDate(data.PeriodSelection.Display);
+		self.setCurrentDate(moment(data.PeriodSelection.Date));
+		self.nextWeekDate(moment(data.PeriodSelection.PeriodNavigation.NextPeriod));
+		self.previousWeekDate(moment(data.PeriodSelection.PeriodNavigation.PrevPeriod));
 	};
 };
+
 Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay) {
 	var self = this;
 	self.summaryName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Title : null);

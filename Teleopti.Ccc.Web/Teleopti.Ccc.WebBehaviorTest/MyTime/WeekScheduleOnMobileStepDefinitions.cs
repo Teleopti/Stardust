@@ -94,6 +94,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			  Browser.Interactions.AssertFirstContains(".weekday", weekDayName);
 		  }
 
+		  [When(@"I navigate to next week")]
+		  public void WhenINavigateToNextWeek()
+		  {
+			  Browser.Interactions.Click(".glyphicon-chevron-right");
+		  }
 
     }
 }

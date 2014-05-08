@@ -32,3 +32,11 @@
 .weekview-mobile {
 	padding-top: 10px;
 }
+
+.weekview-mobile .body {
+	padding-top: 10px;
+}
+
+.weekview-mobile .datepicker-style{
+	padding-top: 7px;
+}
