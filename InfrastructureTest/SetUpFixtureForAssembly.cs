@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 			mocks.ReplayAll();
 
 			deleteEverythingInDb();
-			configureLog4net();
 		}
 
 		[TearDown]
@@ -91,17 +90,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 					s.CreateQuery("delete from " + entityName).ExecuteUpdate();
 			}
 			s.CreateQuery("delete from Revision").ExecuteUpdate();
-		}
-
-		private static void configureLog4net()
-		{
-			if (IniFileInfo.SqlOutput)
-			{
-				var app = new TraceAppender();
-				app.Threshold = Level.Warn;
-				app.Layout = new SimpleLayout();
-				BasicConfigurator.Configure(app);
-			}
 		}
 
 		private static void checkThatDbIsEmtpy()

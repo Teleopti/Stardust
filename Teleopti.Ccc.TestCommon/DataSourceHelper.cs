@@ -17,25 +17,22 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest());
 
-			if (IniFileInfo.Create)
-			{
-				using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
-					SetupCcc7(dataSourceFactory, ccc7);
+			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+				SetupCcc7(ccc7);
 
-				using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
-					SetupAnalytics(dataSourceFactory, analytics);
-			}
+			using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
+				SetupAnalytics(analytics);
 
 			return CreateDataSource(dataSourceFactory, name);
 		}
 
-		private static void SetupCcc7(DataSourcesFactory dataSourceFactory, DatabaseHelper ccc7)
+		private static void SetupCcc7(DatabaseHelper ccc7)
 		{
 			if (TryRestoreDatabase(ccc7))
 				return;
 
-			CreateDatabase(ccc7, true);
-			CreateSchema(dataSourceFactory, ccc7, true);
+			CreateDatabase(ccc7);
+			CreateSchema(ccc7);
 			CreateUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
 			PersistAuditSetting();
 			BackupDatabase(ccc7);
@@ -59,44 +56,36 @@ namespace Teleopti.Ccc.TestCommon
 				);
 		}
 
-		private static void SetupAnalytics(DataSourcesFactory dataSourceFactory, DatabaseHelper analytics)
+		private static void SetupAnalytics(DatabaseHelper analytics)
 		{
 			if (TryRestoreDatabase(analytics))
 				return;
 
-			CreateDatabase(analytics, false);
-			CreateSchema(dataSourceFactory, analytics, false);
+			CreateDatabase(analytics);
+			CreateSchema(analytics);
 			BackupDatabase(analytics);
 		}
 
-		private static void CreateDatabase(DatabaseHelper database, bool allowCreateByNHib)
-		{
-			ExceptionToConsole(
-				() =>
-					{
-						if (database.Exists())
-						{
-							database.DropConnections();
-							database.Drop();
-						}
-						if (allowCreateByNHib && IniFileInfo.CreateByNHib)
-							database.Create();
-						else
-							database.CreateByDbManager();
-					},
-				"Failed to prepare database {0}!", database.ConnectionString
-				);
-		}
-
-		private static void CreateSchema(DataSourcesFactory dataSourceFactory, DatabaseHelper database, bool allowCreateByNHib)
+		private static void CreateDatabase(DatabaseHelper database)
 		{
 			ExceptionToConsole(
 				() =>
 				{
-					if (allowCreateByNHib && IniFileInfo.CreateByNHib)
-							throw new NotSupportedException("not supported anymore! (?)");
-					database.CreateSchemaByDbManager();
+					if (database.Exists())
+					{
+						database.DropConnections();
+						database.Drop();
+					}
+					database.CreateByDbManager();
 				},
+				"Failed to prepare database {0}!", database.ConnectionString
+				);
+		}
+
+		private static void CreateSchema(DatabaseHelper database)
+		{
+			ExceptionToConsole(
+				database.CreateSchemaByDbManager,
 				"Failed to create database schema {0}!", database.ConnectionString
 				);
 		}
@@ -161,17 +150,17 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			ExceptionToConsole(
 				() =>
+				{
+					using (var conn = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
 					{
-						using (var conn = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
-						{
-							SqlConnection.ClearPool(conn);
-							conn.Open();
-							using (var cmd = new SqlCommand("delete from auditing.Auditsetting", conn))
-								cmd.ExecuteNonQuery();
-							using (var cmd = new SqlCommand("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSetting.TheId + ",0)", conn))
-								cmd.ExecuteNonQuery();
-						}
-					},
+						SqlConnection.ClearPool(conn);
+						conn.Open();
+						using (var cmd = new SqlCommand("delete from auditing.Auditsetting", conn))
+							cmd.ExecuteNonQuery();
+						using (var cmd = new SqlCommand("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSetting.TheId + ",0)", conn))
+							cmd.ExecuteNonQuery();
+					}
+				},
 				"Failed to persistn audit setting in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
 				);
 		}
@@ -179,7 +168,7 @@ namespace Teleopti.Ccc.TestCommon
 		public static IDictionary<string, string> CreateDataSourceSettings(string connectionString, int? timeout, string sessionFactoryName)
 		{
 			var dictionary = new Dictionary<string, string>();
-			if(sessionFactoryName != null)
+			if (sessionFactoryName != null)
 				dictionary[NHibernate.Cfg.Environment.SessionFactoryName] = sessionFactoryName;
 			dictionary[NHibernate.Cfg.Environment.ConnectionProvider] =
 				"Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TeleoptiDriverConnectionProvider, Teleopti.Ccc.Infrastructure";
@@ -224,13 +213,6 @@ namespace Teleopti.Ccc.TestCommon
 			}
 		}
 
-
-
-
-
-
-
-
 		private static void ExceptionToConsole(Action action, string exceptionMessage, params object[] args)
 		{
 			try
@@ -258,7 +240,5 @@ namespace Teleopti.Ccc.TestCommon
 				throw;
 			}
 		}
-
-
 	}
 }
