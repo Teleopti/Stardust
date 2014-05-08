@@ -76,10 +76,7 @@ namespace Teleopti.Ccc.TestCommon
 						database.DropConnections();
 						database.Drop();
 					}
-					if (allowCreateByNHib && IniFileInfo.CreateByNHib)
-						database.Create();
-					else
-						database.CreateByDbManager();
+					database.CreateByDbManager();
 				},
 				"Failed to prepare database {0}!", database.ConnectionString
 				);
@@ -88,12 +85,7 @@ namespace Teleopti.Ccc.TestCommon
 		private static void CreateSchema(DataSourcesFactory dataSourceFactory, DatabaseHelper database, bool allowCreateByNHib)
 		{
 			ExceptionToConsole(
-				() =>
-				{
-					if (allowCreateByNHib && IniFileInfo.CreateByNHib)
-						throw new NotSupportedException("not supported anymore! (?)");
-					database.CreateSchemaByDbManager();
-				},
+				database.CreateSchemaByDbManager,
 				"Failed to create database schema {0}!", database.ConnectionString
 				);
 		}
