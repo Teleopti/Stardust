@@ -29,23 +29,6 @@ namespace Teleopti.MessagingTest.SignalR
 			_doneTask = taskCompletionSource.Task;
 		}
 
-		private proxyAndBrokerHolder makeProxyAndBroker()
-		{
-			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			hubConnection.Stub(x => x.Start()).Return(_doneTask);
-			hubConnection.Stub(x => x.State).Return(ConnectionState.Connected);
-			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
-			hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(new Subscription());
-			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
-			var target = new signalBrokerForTest(new messageFilterManagerFake(), hubConnection, new SignalSubscriber(hubProxy))
-			{
-				ConnectionString = @"http://localhost:8080"
-			};
-			target.StartMessageBroker();
-			return new proxyAndBrokerHolder(hubProxy, target);
-		}
-
 		private IHubProxy stubProxy()
 		{
 			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
@@ -278,18 +261,6 @@ namespace Teleopti.MessagingTest.SignalR
 
 			wasEventHandlerCalled.Should().Be(false);
 		}
-
-		[Test]
-		public void Really_ShouldStartBroker()
-		{
-			Assert.Ignore("Test describing existing functionality");
-		}
-
-		[Test]
-		public void Really_ShouldStopBroker()
-		{
-			Assert.Ignore("Test describing existing functionality");
-		}
 		
 		private interface IInterfaceForTest
 		{
@@ -335,18 +306,5 @@ namespace Teleopti.MessagingTest.SignalR
 				return _hubConnection;
 			}
 		}
-
-
-		private class proxyAndBrokerHolder
-		{
-			public IHubProxy HubProxy { get; private set; }
-			public signalBrokerForTest SignalBroker { get; private set; }
-
-			public proxyAndBrokerHolder(IHubProxy hubProxy, signalBrokerForTest signalBroker)
-			{
-				HubProxy = hubProxy;
-				SignalBroker = signalBroker;
-	}
-}
 	}
 }
