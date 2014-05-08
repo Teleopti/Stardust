@@ -18,21 +18,21 @@ namespace Teleopti.Ccc.TestCommon
 			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest());
 
 			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
-				SetupCcc7(dataSourceFactory, ccc7);
+				SetupCcc7(ccc7);
 
 			using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
-				SetupAnalytics(dataSourceFactory, analytics);
+				SetupAnalytics(analytics);
 
 			return CreateDataSource(dataSourceFactory, name);
 		}
 
-		private static void SetupCcc7(DataSourcesFactory dataSourceFactory, DatabaseHelper ccc7)
+		private static void SetupCcc7(DatabaseHelper ccc7)
 		{
 			if (TryRestoreDatabase(ccc7))
 				return;
 
-			CreateDatabase(ccc7, true);
-			CreateSchema(dataSourceFactory, ccc7, true);
+			CreateDatabase(ccc7);
+			CreateSchema(ccc7);
 			CreateUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
 			PersistAuditSetting();
 			BackupDatabase(ccc7);
@@ -56,17 +56,17 @@ namespace Teleopti.Ccc.TestCommon
 				);
 		}
 
-		private static void SetupAnalytics(DataSourcesFactory dataSourceFactory, DatabaseHelper analytics)
+		private static void SetupAnalytics(DatabaseHelper analytics)
 		{
 			if (TryRestoreDatabase(analytics))
 				return;
 
-			CreateDatabase(analytics, false);
-			CreateSchema(dataSourceFactory, analytics, false);
+			CreateDatabase(analytics);
+			CreateSchema(analytics);
 			BackupDatabase(analytics);
 		}
 
-		private static void CreateDatabase(DatabaseHelper database, bool allowCreateByNHib)
+		private static void CreateDatabase(DatabaseHelper database)
 		{
 			ExceptionToConsole(
 				() =>
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.TestCommon
 				);
 		}
 
-		private static void CreateSchema(DataSourcesFactory dataSourceFactory, DatabaseHelper database, bool allowCreateByNHib)
+		private static void CreateSchema(DatabaseHelper database)
 		{
 			ExceptionToConsole(
 				database.CreateSchemaByDbManager,
@@ -213,13 +213,6 @@ namespace Teleopti.Ccc.TestCommon
 			}
 		}
 
-
-
-
-
-
-
-
 		private static void ExceptionToConsole(Action action, string exceptionMessage, params object[] args)
 		{
 			try
@@ -247,7 +240,5 @@ namespace Teleopti.Ccc.TestCommon
 				throw;
 			}
 		}
-
-
 	}
 }
