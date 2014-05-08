@@ -229,8 +229,6 @@ html.full-height #push{
  #tab-windows .error h1{color: #cc0000; width: auto;}
  .validation-summary-errors ul, .error ul{list-style: none;}
  
- #error-panel{ background: transparent url("../Images/signin_bg_sprite.png") 0 -640px repeat-x; height: 170px; font-size: 10px;}
- 
  /* Seperators */
  .seperator{border-right: 1px solid #d2d2d2; border-left: 1px solid #fff; float: left; height: 95%; margin:0 12px;}
  
