@@ -62,6 +62,7 @@
     <Compile Include="Tool\SearchReplace.cs" />
     <Compile Include="Tool\SettingsFileManager.cs" />
     <Compile Include="Tool\SettingsReader.cs" />
+    <Compile Include="Tool\SsoConfigurationBackupHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ConfigFiles\AzureConfigFiles.txt">

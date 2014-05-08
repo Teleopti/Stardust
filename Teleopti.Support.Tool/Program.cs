@@ -36,7 +36,8 @@ namespace Teleopti.Support.Tool
                 {
 					if (commandLineArgument.SaveSsoConfig)
 					{
-						new SaveSsoRunner().Save(commandLineArgument.Mode);
+						//new SsoConfigurationBackupHandler().Excute(commandLineArgument.Mode);
+						new SsoConfigurationRestoreHandler().Excute(commandLineArgument.Mode);
 					}
 					else
 					{

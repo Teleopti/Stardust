@@ -14,7 +14,6 @@
 ..\..\..\Teleopti.Ccc.Web.Broker.Backplane\Web.config,BuildArtifacts\BrokerBackplaneWeb.config
 ..\..\..\Teleopti.Ccc.Web.Broker\web.config,BuildArtifacts\BrokerWeb.config
 ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.config,BuildArtifacts\Web.Root.Web.config
-..\..\..\TeleoptiCCC\Web\Web.config,BuildArtifacts\Web.Root.Web.config
 ..\..\..\Teleopti.Ccc.Web.AuthenticationBridge\Web.config,BuildArtifacts\Web.AuthenticationBridge.Web.config
 ..\..\..\Teleopti.Ccc.Web.WindowsIdentityProvider\Web.config,BuildArtifacts\Web.WindowsIdentityProvider.Web.config
 c:\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
