@@ -157,6 +157,13 @@ DELETE mart.fact_request
 WHERE business_unit_id = @business_unit_id
 AND request_start_date_id BETWEEN @start_date_id AND @end_date_id
 
+/* #27816 In case of requests with altered dates not in range */
+DELETE mart.fact_request
+FROM stage.stg_request stg
+INNER JOIN mart.fact_request mart
+	ON stg.request_code = mart.request_code
+WHERE business_unit_id = @business_unit_id	
+
 ----------------
 --insert new ones
 ----------------
