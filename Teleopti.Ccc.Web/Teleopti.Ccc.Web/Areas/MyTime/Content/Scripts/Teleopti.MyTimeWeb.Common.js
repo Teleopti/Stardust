@@ -1,10 +1,8 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.9.2.js" />
+﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/jquery.qtip.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js"/>
-
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -106,8 +104,9 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 		        {
 		            navbar.addClass('custom-collapsed'); // force collapse mode
 		        }
-		        
-		        if ($('.navbar-toggle').visible()) {
+
+			    var navbarToggle = $('.navbar-toggle');
+			    if (navbarToggle && navbarToggle.visible()) {
 		            $('body').css('padding-top: 0px;');
 		            navbar.removeClass('navbar-fixed-top');
 		        } else {

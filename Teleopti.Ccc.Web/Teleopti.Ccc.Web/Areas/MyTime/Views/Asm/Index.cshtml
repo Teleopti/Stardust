@@ -24,13 +24,15 @@
 				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
 			});
 		Teleopti.MyTimeWeb.AlertActivity.StartAlert({
-			notifyText: '@Resources.YourScheduleTheDATEHasChanged',
+			comingMessageTemplate: '@Resources.NextActivityComingMessage',
+			endingMessageTemplate: '@Resources.ShiftEndingMessage',
 			originalDocumentTitle: document.title,
 			baseUrl: '@Url.Content("~/")',
-				webNotification: function () {
-					return window.opener == null; //to avoid double messages to web notification if both portal and asm is open
-				},
-			header: '@Resources.Teleopti'
+			webNotification: function () {
+				return window.opener == null; //to avoid double messages to web notification if both portal and asm is open
+			},
+			header: '@Resources.Teleopti',
+				timeout: 30000
 		});
 	});
 </script>

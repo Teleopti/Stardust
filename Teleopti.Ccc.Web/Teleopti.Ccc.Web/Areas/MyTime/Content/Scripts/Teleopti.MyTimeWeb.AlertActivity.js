@@ -94,7 +94,9 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				// First activity not started
 				layer = self.layers[0];
 				activityName = layer.activityName;
-				alertMessage = notifyOptions.comingMessageTemplate.format(activityName, layer.startTimeText);
+				alertMessage = notifyOptions.comingMessageTemplate 
+					? notifyOptions.comingMessageTemplate.format(activityName, layer.startTimeText)
+					: "";
 
 				var shiftStartTime = layer.startMinutesSinceAsmZero * 60;
 				timeDiff = shiftStartTime - secondsSinceStart;
@@ -102,14 +104,18 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				// The shift is passing...
 				if (self.layers[layerIndex + 1].isIdleLayer()) {
 					var currentLayer = self.layers[layerIndex];
-					alertMessage = notifyOptions.endingMessageTemplate.format(currentLayer.endTimeText);
+					alertMessage = notifyOptions.endingMessageTemplate
+						? notifyOptions.endingMessageTemplate.format(currentLayer.endTimeText)
+						: "";
 
 					var shiftEndTime = currentLayer.endMinutesSinceAsmZero * 60;
 					timeDiff = shiftEndTime - secondsSinceStart;
 				} else {
 					var nextLayer = self.layers[layerIndex + 1];
 					activityName = nextLayer.activityName;
-					alertMessage = notifyOptions.comingMessageTemplate.format(activityName, nextLayer.startTimeText);
+					alertMessage = notifyOptions.comingMessageTemplate 
+						? notifyOptions.comingMessageTemplate.format(activityName, nextLayer.startTimeText)
+						: "";
 
 					var nextActivityStartTime = nextLayer.startMinutesSinceAsmZero * 60;
 					timeDiff = nextActivityStartTime - secondsSinceStart;
@@ -117,7 +123,9 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			} else if (layerIndex === (layerCount - 1)) {
 				// Now is in latest activity
 				currentLayer = self.layers[layerIndex];
-				alertMessage = notifyOptions.endingMessageTemplate.format(currentLayer.endTimeText);
+				alertMessage = notifyOptions.endingMessageTemplate 
+					? notifyOptions.endingMessageTemplate.format(currentLayer.endTimeText)
+					: "";
 
 				shiftEndTime = currentLayer.endMinutesSinceAsmZero * 60;
 				timeDiff = shiftEndTime - secondsSinceStart;
