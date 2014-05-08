@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.TestCommon
 		public static string SQL_PASSWORD { get; private set; }
 		public static string Url { get; private set; }
 		public static string AGENTPORTALWEB_nhibConfPath { get; private set; }
-		public static bool IISExpress { get; private set; }
 		public static bool ServiceBus { get; private set; }
 
 		private static void readIniFile()
@@ -46,7 +45,6 @@ namespace Teleopti.Ccc.TestCommon
 
 
 			AGENTPORTALWEB_nhibConfPath = ConfigurationManager.AppSettings["AGENTPORTALWEB_nhibConfPath"];
-			IISExpress = true;
 			ServiceBus = ConfigurationManager.AppSettings["servicebus"] == "true";
 
 			buildConnectionString();
