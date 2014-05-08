@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						if(_cancelMe)
 							break;
 
-						_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
+						_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo, selectedPersons);
 						schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
 						roleModelShift = _roleModelSelector.Select(teamBlockInfo, firstSelectedDayInBlock, selectedTeamMembers.First(), schedulingOptions);
 						success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays, roleModelShift);

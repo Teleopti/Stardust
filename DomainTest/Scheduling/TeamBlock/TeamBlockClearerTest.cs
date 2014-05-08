@@ -23,13 +23,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 		private ITeamBlockInfo _teamBlockInfo;
 		private IPerson _person1;
+		private IPerson _person2;
 		private IScheduleDay _scheduleDay;
 		private IList<IScheduleDay> _toRemoveList;
 		private IGroupPerson _groupPerson;
 		private IScheduleMatrixPro _matrix;
 		private IVirtualSchedulePeriod _schedulePeriod;
 		private IScheduleDayPro _scheduleDayPro;
-
+		private IList<IPerson> _selectedPersons;
+			
 		[SetUp]
 		public void Setup()
 		{
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_toRemoveList = new List<IScheduleDay> { _scheduleDay };
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
+			_selectedPersons = new List<IPerson>{_person1};
 		}
 
 		[Test]
@@ -73,7 +76,34 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				_target.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo);
+				_target.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo, _selectedPersons);
+			}
+		}
+
+		[Test]
+		public void ShouldOnlyClearBlockOnSelected()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
+				Expect.Call(_matrix.Person).Return(_person1);
+				Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
+				Expect.Call(_matrix.UnlockedDays)
+					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(_toRemoveList,
+																							 _rollbackService,
+																							 _schedulingOptions.ConsiderShortBreaks))
+					  .Return(_toRemoveList);
+			}
+
+			using (_mocks.Playback())
+			{
+				_person2 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
+				_selectedPersons.Add(_person2);
+				_target.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo, _selectedPersons);
 			}
 		}
 
@@ -96,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				_target.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo);
+				_target.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo, _selectedPersons);
 			}
 		}
 
@@ -116,9 +146,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				_target.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo);
+				_target.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo, _selectedPersons);
 			}
 		}
-
 	}
 }

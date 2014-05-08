@@ -1,6 +1,7 @@
 ﻿
 
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -10,7 +11,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		void ClearTeamBlock(ISchedulingOptions schedulingOptions,
 		                                    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                                    ITeamBlockInfo teamBlock);
+		                                    ITeamBlockInfo teamBlock, 
+											IList<IPerson> selectedPersons);
 	}
 
 	public class TeamBlockClearer : ITeamBlockClearer
@@ -23,13 +25,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public void ClearTeamBlock(ISchedulingOptions schedulingOptions,
-		                           ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                           ITeamBlockInfo teamBlock)
+		public void ClearTeamBlock(ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+		                           ITeamBlockInfo teamBlock, 
+								  IList<IPerson> selectedPersons )
 		{
 			IList<IScheduleDay> toRemove = new List<IScheduleDay>();
 
-			foreach (var person in teamBlock.TeamInfo.GroupPerson.GroupMembers)
+			var selectedTeamMembers = teamBlock.TeamInfo.GroupPerson.GroupMembers.Intersect(selectedPersons).ToList();
+
+			foreach (var person in selectedTeamMembers)
 			{
 				addDaysToRemove(teamBlock, person, toRemove);
 			}
