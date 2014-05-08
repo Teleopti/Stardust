@@ -17,14 +17,11 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest());
 
-			if (IniFileInfo.Create)
-			{
-				using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
-					SetupCcc7(dataSourceFactory, ccc7);
+			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
+				SetupCcc7(dataSourceFactory, ccc7);
 
-				using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
-					SetupAnalytics(dataSourceFactory, analytics);
-			}
+			using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
+				SetupAnalytics(dataSourceFactory, analytics);
 
 			return CreateDataSource(dataSourceFactory, name);
 		}
@@ -73,17 +70,17 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			ExceptionToConsole(
 				() =>
+				{
+					if (database.Exists())
 					{
-						if (database.Exists())
-						{
-							database.DropConnections();
-							database.Drop();
-						}
-						if (allowCreateByNHib && IniFileInfo.CreateByNHib)
-							database.Create();
-						else
-							database.CreateByDbManager();
-					},
+						database.DropConnections();
+						database.Drop();
+					}
+					if (allowCreateByNHib && IniFileInfo.CreateByNHib)
+						database.Create();
+					else
+						database.CreateByDbManager();
+				},
 				"Failed to prepare database {0}!", database.ConnectionString
 				);
 		}
@@ -94,7 +91,7 @@ namespace Teleopti.Ccc.TestCommon
 				() =>
 				{
 					if (allowCreateByNHib && IniFileInfo.CreateByNHib)
-							throw new NotSupportedException("not supported anymore! (?)");
+						throw new NotSupportedException("not supported anymore! (?)");
 					database.CreateSchemaByDbManager();
 				},
 				"Failed to create database schema {0}!", database.ConnectionString
@@ -161,17 +158,17 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			ExceptionToConsole(
 				() =>
+				{
+					using (var conn = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
 					{
-						using (var conn = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
-						{
-							SqlConnection.ClearPool(conn);
-							conn.Open();
-							using (var cmd = new SqlCommand("delete from auditing.Auditsetting", conn))
-								cmd.ExecuteNonQuery();
-							using (var cmd = new SqlCommand("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSetting.TheId + ",0)", conn))
-								cmd.ExecuteNonQuery();
-						}
-					},
+						SqlConnection.ClearPool(conn);
+						conn.Open();
+						using (var cmd = new SqlCommand("delete from auditing.Auditsetting", conn))
+							cmd.ExecuteNonQuery();
+						using (var cmd = new SqlCommand("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSetting.TheId + ",0)", conn))
+							cmd.ExecuteNonQuery();
+					}
+				},
 				"Failed to persistn audit setting in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
 				);
 		}
@@ -179,7 +176,7 @@ namespace Teleopti.Ccc.TestCommon
 		public static IDictionary<string, string> CreateDataSourceSettings(string connectionString, int? timeout, string sessionFactoryName)
 		{
 			var dictionary = new Dictionary<string, string>();
-			if(sessionFactoryName != null)
+			if (sessionFactoryName != null)
 				dictionary[NHibernate.Cfg.Environment.SessionFactoryName] = sessionFactoryName;
 			dictionary[NHibernate.Cfg.Environment.ConnectionProvider] =
 				"Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TeleoptiDriverConnectionProvider, Teleopti.Ccc.Infrastructure";

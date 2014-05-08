@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.TestCommon
 		public static string DB_CCC7 { get; private set; }
 		public static string SQL_LOGIN { get; private set; }
 		public static string SQL_PASSWORD { get; private set; }
-		public static bool Create { get; private set; }
 		public static bool CreateByNHib { get; private set; }
 		public static string Url { get; private set; }
 		public static string AGENTPORTALWEB_nhibConfPath { get; private set; }
@@ -44,7 +43,6 @@ namespace Teleopti.Ccc.TestCommon
 			WEB_BROKER_FOR_WEB = ConfigurationManager.AppSettings["WEB_BROKER"];
 
 			Url = ConfigurationManager.AppSettings["WEB_URL"];
-			Create = true;
 			CreateByNHib = false;
 			SqlOutput = ConfigurationManager.AppSettings["sqloutput"] == "true";
 
