@@ -177,3 +177,10 @@ Scenario: Navigate to next week
    And I view my mobile week schedule for date '2014-04-15'
    When I navigate to next week
    Then I should see my mobile week schedule for date '2014-04-21'
+
+Scenario: Navigate to previous week
+   Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+   And I view my mobile week schedule for date '2014-04-21'
+   When I navigate to previous week
+   Then I should see my mobile week schedule for date '2014-04-15'

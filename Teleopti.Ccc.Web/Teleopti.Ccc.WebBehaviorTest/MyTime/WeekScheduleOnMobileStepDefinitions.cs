@@ -100,5 +100,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			  Browser.Interactions.Click(".glyphicon-chevron-right");
 		  }
 
+		  [When(@"I navigate to previous week")]
+		  public void WhenINavigateToPreviousWeek()
+		  {
+			  Browser.Interactions.Click(".glyphicon-chevron-left");
+		  }
+
     }
 }
