@@ -77,6 +77,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
+		public void ShouldNotClearLockedBlock()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(), _rollbackService, _schedulingOptions.ConsiderShortBreaks)).Return(_toRemoveList);
+			}
+
+			using (_mocks.Playback())
+			{
+				_teamBlockInfo.TeamInfo.LockMember(_person1);
+				_target.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo);
+			}
+		}
+
+		[Test]
 		public void ShouldNotDeleteLockedDayInMatrix()
 		{
 			using (_mocks.Record())
