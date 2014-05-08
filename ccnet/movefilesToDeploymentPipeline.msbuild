@@ -29,6 +29,7 @@
 								$(CCNetWorkingDirectory)\*.dll"/>
 			<WebFiles Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\**\*.*"/>
 			<CcnetFiles Include="$(CCNetWorkingDirectory)\ccnet\**\*.*"/>
+			<DatabaseFiles Include="$(CCNetWorkingDirectory)\database\**\*.*"/>
 			<FeatureFiles Include="$(CCNetWorkingDirectory)\Domain\FeatureFlags\*.txt"/>
 		</ItemGroup>
 		<Copy SourceFiles="@(MainFiles)"
@@ -37,6 +38,8 @@
     			DestinationFiles="@(WebFiles->'$(DestinationFolder)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(CcnetFiles)"
     			DestinationFiles="@(CcnetFiles->'$(DestinationFolder)\ccnet\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(DatabaseFiles)"
+    			DestinationFiles="@(DatabaseFiles->'$(DestinationFolder)\ccnet\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(FeatureFiles)"
     			DestinationFiles="@(FeatureFiles->'$(DestinationFolder)\Domain\FeatureFlags\%(RecursiveDir)%(Filename)%(Extension)')" />
 	</Target>
