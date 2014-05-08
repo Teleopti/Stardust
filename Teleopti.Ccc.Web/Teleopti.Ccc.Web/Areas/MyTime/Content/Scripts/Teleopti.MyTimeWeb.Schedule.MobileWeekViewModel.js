@@ -33,6 +33,10 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
 		});
 	};
 
+	self.desktop = function() {
+		var date = self.selectedDate();
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
+	}
 	self.nextWeek = function () {
 		self.selectedDate(self.nextWeekDate());
 	};
@@ -50,7 +54,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
 			self.dayViewModels.push(vm);
 		});
 		self.displayDate(data.PeriodSelection.Display);
-		self.setCurrentDate(moment(data.PeriodSelection.Date));
 		self.nextWeekDate(moment(data.PeriodSelection.PeriodNavigation.NextPeriod));
 		self.previousWeekDate(moment(data.PeriodSelection.PeriodNavigation.PrevPeriod));
 	};

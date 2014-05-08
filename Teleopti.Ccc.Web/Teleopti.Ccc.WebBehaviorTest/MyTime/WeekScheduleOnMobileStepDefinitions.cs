@@ -106,5 +106,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			  Browser.Interactions.Click(".glyphicon-chevron-left");
 		  }
 
+
+		  [When(@"I click the desktop link")]
+		  public void WhenIClickTheDesktopLink()
+		  {
+			  Browser.Interactions.Click("#desktop");
+		  }
+
     }
 }
