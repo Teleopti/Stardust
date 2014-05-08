@@ -89,12 +89,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 					var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, day, schedulingResultStateHolder, false);
 					
-					}
-
 					var activitiesToFilterFor = new List<IActivity>();
 					foreach (var activity in activityInternalData.Keys)
 					{
 						activitiesToFilterFor.Add(activity);
+					}
 
 					bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 																								 schedulingOptions
