@@ -19,6 +19,7 @@
 		<exec command="hg revert -a" WorkingDirectory="$(CCNetWorkingDirectory)"/>
 	</Target>
 	
+	<!-- try to minimize these later-->
 	<Target Name="MoveFiles">
 		<ItemGroup>
 			<MainFiles Include="$(CCNetWorkingDirectory)\**\*.dll;
@@ -39,7 +40,7 @@
 		<Copy SourceFiles="@(CcnetFiles)"
     			DestinationFiles="@(CcnetFiles->'$(DestinationFolder)\ccnet\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(DatabaseFiles)"
-    			DestinationFiles="@(DatabaseFiles->'$(DestinationFolder)\ccnet\%(RecursiveDir)%(Filename)%(Extension)')" />
+    			DestinationFiles="@(DatabaseFiles->'$(DestinationFolder)\database\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(FeatureFiles)"
     			DestinationFiles="@(FeatureFiles->'$(DestinationFolder)\Domain\FeatureFlags\%(RecursiveDir)%(Filename)%(Extension)')" />
 	</Target>
