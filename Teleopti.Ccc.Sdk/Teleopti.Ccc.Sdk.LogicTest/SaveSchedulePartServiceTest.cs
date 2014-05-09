@@ -68,5 +68,30 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 				Assert.Throws<FaultException>(()=>target.Save(scheduleDay,null, new ScheduleTag()));
 			}
 		}
+
+		[Test]
+		public void ShouldNotThrowFaultExceptionOnBrokenBusinessRulesWhenOverriden()
+		{
+			var scheduleDay = mocks.DynamicMock<IScheduleDay>();
+			var businessRuleResponse = mocks.DynamicMock<IBusinessRuleResponse>();
+			var response = new List<IBusinessRuleResponse> { businessRuleResponse };
+			var dictionary = mocks.DynamicMock<IReadOnlyScheduleDictionary>();
+			var differenceCollectionItems = mocks.DynamicMock<IDifferenceCollection<IPersistableScheduleData>>();
+
+			using (mocks.Record())
+			{
+				Expect.Call(businessRuleResponse.Overridden).Return(true);
+				Expect.Call(scheduleDay.Owner).Return(dictionary);
+				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, null, null, null)).IgnoreArguments().Return(response);
+				Expect.Call(dictionary.MakeEditable);
+
+				Expect.Call(dictionary.DifferenceSinceSnapshot()).Return(differenceCollectionItems);
+				Expect.Call(() => scheduleDictionarySaver.SaveChanges(differenceCollectionItems, null)).IgnoreArguments();
+			}
+			using (mocks.Playback())
+			{
+				target.Save(scheduleDay, null, new ScheduleTag());
+			}
+		}
 	}
 }
