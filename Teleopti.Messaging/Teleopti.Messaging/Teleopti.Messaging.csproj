@@ -144,15 +144,22 @@
     <Compile Include="SignalR\SiteAdherenceMessage.cs" />
     <Compile Include="SignalR\TeamAdherenceMessage.cs" />
     <Compile Include="SignalR\DoNotSend.cs" />
-    <Compile Include="SignalR\HubConnectionWrapper.cs" />
-    <Compile Include="SignalR\IHubConnectionWrapper.cs" />
-    <Compile Include="SignalR\ISignalConnectionHandler.cs" />
+    <Compile Include="SignalR\ICallHubProxy.cs" />
+    <Compile Include="SignalR\ISignalBrokerCommands.cs" />
+    <Compile Include="Events\EventMessageFactory.cs" />
+    <Compile Include="SignalR\SignalBrokerCommands.cs" />
+    <Compile Include="SignalR\SignalConnection.cs" />
+    <Compile Include="SignalR\Wrappers\HubProxyWrapper.cs" />
+    <Compile Include="SignalR\Wrappers\IHubProxyWrapper.cs" />
+    <Compile Include="SignalR\Wrappers\HubConnectionWrapper.cs" />
+    <Compile Include="SignalR\Wrappers\IHubConnectionWrapper.cs" />
+    <Compile Include="SignalR\IHandleHubConnection.cs" />
     <Compile Include="SignalR\NotificationFactory.cs" />
     <Compile Include="SignalR\SignalBroker.cs" />
     <Compile Include="SignalR\SignalSender.cs" />
-    <Compile Include="SignalR\SignalSubscriber.cs" />
-    <Compile Include="SignalR\SignalConnectionHandler.cs" />
     <Compile Include="SignalR\TaskHelper.cs" />
+    <Compile Include="SignalR\Wrappers\ISubscriptionWrapper.cs" />
+    <Compile Include="SignalR\Wrappers\SubscriptionWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Teleopti.Interfaces\Teleopti.Interfaces.csproj">

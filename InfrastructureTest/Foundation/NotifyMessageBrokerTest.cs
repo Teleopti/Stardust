@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -15,7 +13,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
-using List=Rhino.Mocks.Constraints.List;
 
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
@@ -28,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         private MockRepository mocks;
         private IUnitOfWork uow;
 
-        protected override void SetupForRepositoryTest()
+	    protected override void SetupForRepositoryTest()
         {
             mocks = new MockRepository();
             messBroker = mocks.StrictMock<IMessageBroker>();
@@ -47,9 +44,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             UnitOfWork.PersistAll();
             IActivity obj = new Activity("for test");
 
-            IEventMessage mess1 = mocks.StrictMock<IEventMessage>();
-            IEventMessage mess2 = mocks.StrictMock<IEventMessage>();
-            IEventMessage mess3 = mocks.StrictMock<IEventMessage>();
             new Repository(uow).Add(obj);
 
             Assert.IsInstanceOf<IDeleteTag>(obj);
@@ -58,23 +52,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 using(mocks.Ordered())
                 {
                     Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(Guid.Empty, obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
-                                        .Return(mess1);
                     messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x => x[0].DomainUpdateType == DomainUpdateType.Insert));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(Guid.Empty, obj.Id.Value, obj.GetType(), DomainUpdateType.Update))
-                                        .Return(mess2);
 					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess2 }));
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x => x[0].DomainUpdateType == DomainUpdateType.Update));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(Guid.Empty, obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
-                                        .Return(mess3);
 					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess3 }));
-                }
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x => x[0].DomainUpdateType == DomainUpdateType.Delete));
+				}
             }
             using (mocks.Playback())
             {
@@ -99,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IRootChangeInfo rootChangeInfo = new RootChangeInfo(theObject, DomainUpdateType.Insert);
             Expect.Call(messBroker.IsInitialized).Return(false);
             mocks.ReplayAll();
-            NotifyMessageBroker notifier = new NotifyMessageBroker(messBroker);
+			NotifyMessageBroker notifier = new NotifyMessageBroker(messBroker);
             notifier.Notify(Guid.Empty, new List<IRootChangeInfo> { rootChangeInfo });
             mocks.VerifyAll();
         }
@@ -118,9 +106,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
 			IMeeting obj = new Meeting(per,new [] {new MeetingPerson(per,false)},"subj","location","desc",activity,scenario);
 			obj.StartDate = obj.EndDate = DateOnly.Today;
-			var period = obj.MeetingPeriod(obj.StartDate);
-			IEventMessage mess1 = mocks.StrictMock<IEventMessage>();
-			IEventMessage mess2 = mocks.StrictMock<IEventMessage>();
 			new Repository(uow).Add(obj);
 
 			using (mocks.Record())
@@ -128,24 +113,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 				using (mocks.Ordered())
 				{
 					Expect.Call(messBroker.IsInitialized).Return(true);
-					Expect.Call(messBroker.CreateEventMessage(Guid.Empty, obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
-					.Return(mess1);
-					
-					Expect.Call(messBroker.CreateEventMessage(period.StartDateTime,period.EndDateTime, Guid.Empty, per.Id.Value, typeof(Person), obj.Id.Value, typeof(MeetingChangedEntity), DomainUpdateType.Insert))
-					.Return(mess2);
 
 					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1, mess2 }));
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), 
+						Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
+							x[0].DomainUpdateType == DomainUpdateType.Insert && 
+							x[1].DomainObjectType.Contains("MeetingChangedEntity") &&  x[1].DomainUpdateType == DomainUpdateType.Insert
+						));
 
 					Expect.Call(messBroker.IsInitialized).Return(true);
-					Expect.Call(messBroker.CreateEventMessage(Guid.Empty, obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
-					.Return(mess1);
-
-					Expect.Call(messBroker.CreateEventMessage(period.StartDateTime, period.EndDateTime, Guid.Empty, per.Id.Value, typeof(Person), obj.Id.Value, typeof(MeetingChangedEntity), DomainUpdateType.Delete))
-					.Return(mess2);
 
 					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1, mess2 }));
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(),
+						Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
+							x[0].DomainUpdateType == DomainUpdateType.Delete &&
+							x[1].DomainObjectType.Contains("MeetingChangedEntity") && x[1].DomainUpdateType == DomainUpdateType.Delete
+						));
 				}
 			}
 			using (mocks.Playback())
@@ -169,10 +152,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             UnitOfWork.PersistAll();
             IPerson per1 = PersonFactory.CreatePerson("1");
             IPerson per2 = PersonFactory.CreatePerson("2");
-            IEventMessage mess1 = mocks.StrictMock<IEventMessage>();
-            IEventMessage mess2 = mocks.StrictMock<IEventMessage>();
-            IEventMessage mess3 = mocks.StrictMock<IEventMessage>();
-            IEventMessage mess4 = mocks.StrictMock<IEventMessage>();
             new Repository(uow).Add(per1);
             new Repository(uow).Add(per2);
 
@@ -181,21 +160,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 using (mocks.Ordered())
                 {
                     Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(Guid.Empty, per1.Id.Value, per1.GetType(), DomainUpdateType.Insert))
-                                        .Return(mess1);
-                    Expect.Call(messBroker.CreateEventMessage(Guid.Empty, per2.Id.Value, per2.GetType(), DomainUpdateType.Insert))
-                                        .Return(mess2);
 					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1, mess2 }));
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(),
+						Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
+							x[0].DomainUpdateType == DomainUpdateType.Insert && 
+							x[1].DomainUpdateType == DomainUpdateType.Insert
+							));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(Guid.Empty, per1.Id.Value, per1.GetType(), DomainUpdateType.Delete))
-                                        .Return(mess3);
-                    Expect.Call(messBroker.CreateEventMessage(Guid.Empty, per2.Id.Value, per2.GetType(), DomainUpdateType.Delete))
-                                        .Return(mess4);
 					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess3, mess4 }));
-                }
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(),
+						Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
+							x[0].DomainUpdateType == DomainUpdateType.Delete &&
+							x[1].DomainUpdateType == DomainUpdateType.Delete
+							));
+				}
             }
 
             using (mocks.Playback())
@@ -228,23 +207,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 {
                     Expect.Call(identifier.InitiatorId).Return(moduleId).Repeat.Any();
                     Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(moduleId, obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
-                                        .Return(mess1);
 					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
+	                LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(),
+		                Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
+			                x[0].DomainUpdateType == DomainUpdateType.Insert && x[0].ModuleId == moduleId
+			                ));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(moduleId, obj.Id.Value, obj.GetType(), DomainUpdateType.Update))
-                                        .Return(mess2);
 					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess2 }));
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(),
+						Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
+							x[0].DomainUpdateType == DomainUpdateType.Update && x[0].ModuleId == moduleId
+							));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(moduleId, obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
-                                        .Return(mess3);
 					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess3 }));
-                }
+					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(),
+						Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
+							x[0].DomainUpdateType == DomainUpdateType.Delete && x[0].ModuleId == moduleId
+							));
+				}
             }
             using (mocks.Playback())
             {
@@ -269,7 +251,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IRootChangeInfo rootChangeInfo = new RootChangeInfo(theObject,DomainUpdateType.Insert);
             Expect.Call(messBroker.IsInitialized).Return(true);
             mocks.ReplayAll();
-            NotifyMessageBroker notifier = new NotifyMessageBroker(messBroker);
+			NotifyMessageBroker notifier = new NotifyMessageBroker(messBroker);
             notifier.Notify(Guid.Empty,new List<IRootChangeInfo>{rootChangeInfo});
             mocks.VerifyAll();
         }
@@ -286,8 +268,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IRootChangeInfo changeInfo = new RootChangeInfo(root, DomainUpdateType.Update);
             using(mocks.Record())
             {
-                Expect.Call(messBroker.CreateEventMessage(period.StartDateTime, period.EndDateTime, module, root.Id.Value, root.GetType(), DomainUpdateType.Update))
-                    .Return(null);
             }
             using(mocks.Playback())
             {
@@ -298,7 +278,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         [Test]
         public void VerifyNoPeriodButMainReference()
         {
-            ExtendedNotifyMessageBroker target = new ExtendedNotifyMessageBroker(messBroker);
+			ExtendedNotifyMessageBroker target = new ExtendedNotifyMessageBroker(messBroker);
             Guid rootId = Guid.NewGuid();
             Guid refRootId = Guid.NewGuid();
             IAggregateRoot refRoot = new Activity("for test");
@@ -309,8 +289,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IRootChangeInfo changeInfo = new RootChangeInfo(root, DomainUpdateType.Update);
             using (mocks.Record())
             {
-                Expect.Call(messBroker.CreateEventMessage(module, refRootId, refRoot.GetType(), root.Id.Value, root.GetType(), DomainUpdateType.Update))
-                    .Return(null);
             }
             using (mocks.Playback())
             {
@@ -365,7 +343,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         private class ExtendedNotifyMessageBroker : NotifyMessageBroker
         {
             public ExtendedNotifyMessageBroker(IMessageBroker messageBroker)
-                : base(messageBroker)
+				: base(messageBroker)
             {
             }
 

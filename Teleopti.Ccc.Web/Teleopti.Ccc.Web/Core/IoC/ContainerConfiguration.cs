@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			var featureTogglePath = inRealWebEnvironment() ? 
 				HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["FeatureToggle"]) : 
-				string.Empty;
+				"Just something for test___ALL";
 			builder.RegisterModule(new ToggleNetModule(featureTogglePath));
 
 

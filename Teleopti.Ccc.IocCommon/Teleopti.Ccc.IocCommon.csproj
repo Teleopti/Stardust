@@ -127,8 +127,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Toggle.Net">
-      <HintPath>..\packages\Toggle.Net.0.3.1\lib\net40\Toggle.Net.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Toggle.Net.0.4.0\lib\net40\Toggle.Net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 
-namespace Teleopti.Messaging.SignalR
+namespace Teleopti.Messaging.SignalR.Wrappers
 {
 	[CLSCompliant(false)]
 	public class HubConnectionWrapper : IHubConnectionWrapper
@@ -47,9 +47,9 @@ namespace Teleopti.Messaging.SignalR
 			remove { _hubConnection.Error -= value; }
 		}
 
-		public IHubProxy CreateHubProxy(string hubName)
+		public IHubProxyWrapper CreateHubProxy(string hubName)
 		{
-			return _hubConnection.CreateHubProxy(hubName);
+			return new HubProxyWrapper(_hubConnection.CreateHubProxy(hubName));
 		}
 	}
 }

@@ -8,28 +8,35 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 {
 	public interface ITeamBlockMoveTimeDescisionMaker
 	{
-		IList<DateOnly> Execute(IScheduleMatrixLockableBitArrayConverter matrixConverter, IScheduleResultDataExtractor dataExtractor);
+		IList<DateOnly> Execute(IScheduleMatrixPro scheduleMatrix,IOptimizationPreferences optimizationPreferences);
 	}
 
 	public class TeamBlockMoveTimeDescisionMaker : ITeamBlockMoveTimeDescisionMaker
 	{
 		private readonly IDayValueUnlockedIndexSorter _dayValueUnlockedIndexSorter;
+		private readonly ILockableBitArrayFactory lockableBitArrayFactory;
+		private readonly IScheduleResultDataExtractorProvider  _scheduleResultDataExtractorProvider;
 
-		public TeamBlockMoveTimeDescisionMaker(IDayValueUnlockedIndexSorter dayValueUnlockedIndexSorter)
+		public TeamBlockMoveTimeDescisionMaker(IDayValueUnlockedIndexSorter dayValueUnlockedIndexSorter, ILockableBitArrayFactory lockableBitArrayFactory, IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
 		{
 			_dayValueUnlockedIndexSorter = dayValueUnlockedIndexSorter;
+			this.lockableBitArrayFactory = lockableBitArrayFactory;
+			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 		}
 
-		public IList<DateOnly> Execute(IScheduleMatrixLockableBitArrayConverter matrixConverter, IScheduleResultDataExtractor dataExtractor)
+		public IList<DateOnly> Execute(IScheduleMatrixPro scheduleMatrix, IOptimizationPreferences optimizationPreferences)
 		{
-			return makeDecision(matrixConverter.Convert(false, false), matrixConverter.SourceMatrix, dataExtractor);
+			
+			return makeDecision(lockableBitArrayFactory.ConvertFromMatrix(false,false,scheduleMatrix ),scheduleMatrix  ,optimizationPreferences );
 		}
 
-		private IList<DateOnly> makeDecision(ILockableBitArray lockableBitArray, IScheduleMatrixPro matrix,
-													 IScheduleResultDataExtractor dataExtractor)
+		private IList<DateOnly> makeDecision(ILockableBitArray lockableBitArray, IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences)
 		{
+			IScheduleResultDataExtractor scheduleResultDataExtractor =
+				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
+
 			IList<DateOnly> result = new List<DateOnly>(2);
-			var values = dataExtractor.Values();
+			var values = scheduleResultDataExtractor.Values();
 
 			var indexesToMoveFrom = _dayValueUnlockedIndexSorter.SortAscending(lockableBitArray, values);
 			var indexesToMoveTo = _dayValueUnlockedIndexSorter.SortDescending(lockableBitArray, values);

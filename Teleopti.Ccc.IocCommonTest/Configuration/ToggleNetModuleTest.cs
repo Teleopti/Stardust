@@ -1,10 +1,14 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Autofac;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -55,14 +59,15 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			var tempFile = Path.GetTempFileName();
 			try
 			{
-				File.WriteAllLines(tempFile, new []{"EnabledFeature=true"});
+				File.WriteAllLines(tempFile, new[] {"EnabledFeature=true"});
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
+				containerBuilder.Register(_ => MockRepository.GenerateStub<ILoggedOnUser>()).As<ILoggedOnUser>();
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
 					toggleChecker.IsEnabled(Toggles.EnabledFeature)
-							.Should().Be.True();
+						.Should().Be.True();
 				}
 			}
 			finally
@@ -77,9 +82,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			var tempFile = Path.GetTempFileName();
 			try
 			{
-				File.WriteAllLines(tempFile, new[] { "EnabledFeature=false" });
+				File.WriteAllLines(tempFile, new[] {"EnabledFeature=false"});
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
+				containerBuilder.Register(_ => MockRepository.GenerateStub<ILoggedOnUser>()).As<ILoggedOnUser>();
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -121,11 +127,76 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldResolveTogglesActive()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new ToggleNetModule(" "));
+			containerBuilder.RegisterModule(new ToggleNetModule("all"));
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<ITogglesActive>()
 					.Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldEnableForLoggedOnUser()
+		{
+			var tempFile = Path.GetTempFileName();
+			var loggedOnGuid = Guid.NewGuid();
+			var loggedOnUserSvc = MockRepository.GenerateStub<ILoggedOnUser>();
+			var loggedOnUser = new Person();
+			loggedOnUser.SetId(loggedOnGuid);
+			loggedOnUserSvc.Expect(x => x.CurrentUser()).Return(loggedOnUser);
+			try
+			{
+				File.WriteAllLines(tempFile, new[]
+				{
+					"EnabledFeature=user",
+					"EnabledFeature.user.ids=" + loggedOnGuid
+				});
+				var containerBuilder = new ContainerBuilder();
+				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
+				containerBuilder.Register(_ => loggedOnUserSvc).As<ILoggedOnUser>();
+				using (var container = containerBuilder.Build())
+				{
+					var toggleChecker = container.Resolve<IToggleManager>();
+					toggleChecker.IsEnabled(Toggles.EnabledFeature)
+						.Should().Be.True();
+				}
+			}
+			finally
+			{
+				File.Delete(tempFile);
+			}
+		}
+
+
+		[Test]
+		public void ShouldDisableForLoggedOnUser()
+		{
+			var tempFile = Path.GetTempFileName();
+			var loggedOnGuid = Guid.NewGuid();
+			var loggedOnUserSvc = MockRepository.GenerateStub<ILoggedOnUser>();
+			var loggedOnUser = new Person();
+			loggedOnUser.SetId(loggedOnGuid);
+			loggedOnUserSvc.Expect(x => x.CurrentUser()).Return(loggedOnUser);
+			try
+			{
+				File.WriteAllLines(tempFile, new[]
+				{
+					"EnabledFeature=user",
+					"EnabledFeature.user.ids=" + loggedOnGuid
+				});
+				var containerBuilder = new ContainerBuilder();
+				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
+				containerBuilder.Register(_ => loggedOnUserSvc).As<ILoggedOnUser>();
+				using (var container = containerBuilder.Build())
+				{
+					var toggleChecker = container.Resolve<IToggleManager>();
+					toggleChecker.IsEnabled(Toggles.EnabledFeature)
+						.Should().Be.True();
+				}
+			}
+			finally
+			{
+				File.Delete(tempFile);
 			}
 		}
 	}

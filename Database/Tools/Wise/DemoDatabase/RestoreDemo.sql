@@ -77,6 +77,7 @@ REPLACE,
 STATS = 10'
 
 EXEC (@SQLString)
+GO
 
 --Re-move TeleoptiDemoUser. Will be re-added by DBManager
 USE [TeleoptiAnalytics_Demo]

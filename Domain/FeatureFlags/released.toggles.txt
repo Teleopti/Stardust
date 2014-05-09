@@ -1,3 +1,37 @@
 ﻿# default flag settings for customers
 #
 # Note: If you change this file in production, app pool will recycle!
+#
+# How to...
+#
+##### Enable a feature ######
+# MyFeature = true
+#############################
+#
+#
+##### Disable a feature ###########
+##### Optional, default behavior ##
+# MyFeature = false
+###################################
+#
+#
+##### Enable for specific users ############
+##### Note! 
+##### Needs active unitofwork when
+##### asking if this feature is enabled!
+############################################
+# MyFeature = user
+# MyFeature.user.ids = 11610FE4-0130-4568-97DE-9B5E015B2565, 10957AD5-5489-48E0-959A-9B5E015B2B55
+#
+#
+##### Enable for random number of users #####
+##### 
+##### Note! 
+##### Needs active unitofwork when
+##### asking if this feature is enabled! ####
+#############################################
+# MyFeature = random
+# MyFeature.random.percent = 55
+#
+#
+
