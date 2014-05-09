@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 
 namespace Teleopti.Messaging.SignalR.Wrappers
 {
+	[CLSCompliant(false)]
 	public class HubProxyWrapper : IHubProxyWrapper
 	{
 		private readonly IHubProxy _hubProxy;

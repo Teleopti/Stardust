@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Teleopti.Messaging.SignalR.Wrappers
 {
+	[CLSCompliant(false)]
 	public class SubscriptionWrapper : ISubscriptionWrapper
 	{
 		private readonly Subscription _subscription;
