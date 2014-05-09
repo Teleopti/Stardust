@@ -33,7 +33,7 @@
 			<CcnetFiles Include="$(CCNetWorkingDirectory)\ccnet\**\*.*"/>
 			<DatabaseFiles Include="$(CCNetWorkingDirectory)\database\**\*.*"/>
 			<FeatureFiles Include="$(CCNetWorkingDirectory)\Domain\FeatureFlags\*.txt"/>
-			<LicenseFiles Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\**\License.txt" />
+			<LicenseFiles Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\**\License.xml" />
 		</ItemGroup>
 		<Copy SourceFiles="@(MainFiles)"
     			DestinationFiles="@(MainFiles->'$(DestinationFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
