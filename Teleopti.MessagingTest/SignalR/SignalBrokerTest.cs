@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -18,32 +17,18 @@ using Subscription = Microsoft.AspNet.SignalR.Client.Hubs.Subscription;
 
 namespace Teleopti.MessagingTest.SignalR
 {
-
 	[TestFixture]
 	public class SignalBrokerTest
 	{
-		private Task _doneTask;
-
-		[SetUp]
-		public void Setup()
-		{
-			var taskCompletionSource = new TaskCompletionSource<object>();
-			taskCompletionSource.SetResult(null);
-			_doneTask = taskCompletionSource.Task;
-		}
-
 		private IHubProxyWrapper stubProxy()
 		{
-			var hubProxy = MockRepository.GenerateMock<IHubProxyWrapper>();
-			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
-			hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(new SubscriptionWrapper(new Subscription()));
-			return hubProxy;
+			return stubProxy(new SubscriptionWrapper(new Subscription()));
 		}
 
 		private IHubProxyWrapper stubProxy(ISubscriptionWrapper subscription)
 		{
 			var hubProxy = MockRepository.GenerateMock<IHubProxyWrapper>();
-			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
+			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(TaskHelper.MakeDoneTask());
 			hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(subscription);
 			return hubProxy;
 		}
@@ -62,16 +47,9 @@ namespace Teleopti.MessagingTest.SignalR
 		{
 			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
 			hubConnection.Stub(x => x.State).Return(ConnectionState.Connected);
-			hubConnection.Stub(x => x.Start()).Return(makeDoneTask());
+			hubConnection.Stub(x => x.Start()).Return(TaskHelper.MakeDoneTask());
 			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
 			return hubConnection;
-		}
-
-		private static Task<object> makeDoneTask()
-		{
-			var taskCompletionSource = new TaskCompletionSource<object>();
-			taskCompletionSource.SetResult(null);
-			return taskCompletionSource.Task;
 		}
 
 		[Test]
@@ -88,9 +66,6 @@ namespace Teleopti.MessagingTest.SignalR
 				h.Invoke(Arg<string>.Is.Equal("NotifyClientsMultiple"),
 						 Arg<IEnumerable<Notification>>.Is.Anything));
 		}
-
-
-
 
 		[Test]
 		public void ShouldSendBatchEventMessages()

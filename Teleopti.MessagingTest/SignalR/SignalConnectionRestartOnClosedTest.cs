@@ -10,7 +10,6 @@ namespace Teleopti.MessagingTest.SignalR
 	[TestFixture]
 	public class SignalConnectionRestartOnClosedTest
 	{
-
 		private IHubConnectionWrapper stubHubConnection(IHubProxyWrapper hubProxy)
 		{
 			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
