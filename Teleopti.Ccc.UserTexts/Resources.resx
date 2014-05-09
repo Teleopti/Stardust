@@ -11861,7 +11861,7 @@ Reduce the complexity to use these shifts.</value>
   <data name="UnsupportedOptimizationSteps" xml:space="preserve">
     <value>Optimization steps "Time between days", "Shift for flexible work time", "Days off for flexible work time" and "Shift category limitations" are not supported when team or block is selected</value>
     <comment>Optimization steps "Time between days", "Shift for flexible work time", "Days off for flexible work time" and "Shift category limitations" are not supported when team or block is selected</comment>
-  </data>  
+  </data>
   <data name="TeamToCompareWith" xml:space="preserve">
     <value>Team to compare with</value>
     <comment>Team to compare with</comment>
@@ -12059,5 +12059,13 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
     <value>Schedule Period</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Desktop</value>
+    <comment>week schedule view for desktop</comment>
+  </data>
+  <data name="Mobile" xml:space="preserve">
+    <value>Mobile</value>
+    <comment>week schedule view for mobile</comment>
   </data>
 </root>
