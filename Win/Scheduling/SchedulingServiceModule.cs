@@ -235,6 +235,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    {
 			 builder.RegisterType<DayValueUnlockedIndexSorter>().As<IDayValueUnlockedIndexSorter>();
 			 builder.RegisterType<TeamBlockMoveTimeDescisionMaker>().As<ITeamBlockMoveTimeDescisionMaker>();
+			 builder.RegisterType<ValidateFoundMovedDaysSpecification>().As<IValidateFoundMovedDaysSpecification>();
 	    }
 
 	    private void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
