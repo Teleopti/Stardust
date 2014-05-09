@@ -144,6 +144,7 @@
     <Compile Include="SignalR\DoNotSend.cs" />
     <Compile Include="SignalR\ICallHubProxy.cs" />
     <Compile Include="SignalR\ISignalBrokerCommands.cs" />
+    <Compile Include="Events\EventMessageFactory.cs" />
     <Compile Include="SignalR\SignalBrokerCommands.cs" />
     <Compile Include="SignalR\SignalConnectionHandler.cs" />
     <Compile Include="SignalR\Wrappers\HubProxyWrapper.cs" />

@@ -157,28 +157,6 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 
 		[Test]
-		public void ShouldCreateEventMessages()
-		{
-			var target = new signalBrokerForTest(null, null);
-			var guid = Guid.NewGuid();
-			var result = target.CreateEventMessage(guid, Guid.Empty, typeof(IInterfaceForTest), DomainUpdateType.Update);
-			result.ModuleId.Should().Be(guid);
-
-			result = target.CreateEventMessage(guid, Guid.Empty, typeof(IInterfaceForTest), Guid.Empty, typeof(string),
-											   DomainUpdateType.Update);
-			result.ModuleId.Should().Be(guid);
-
-			result = target.CreateEventMessage(DateTime.UtcNow, DateTime.UtcNow, guid, Guid.Empty, typeof(IInterfaceForTest),
-											   DomainUpdateType.Update);
-			result.ModuleId.Should().Be(guid);
-
-			result = target.CreateEventMessage(DateTime.UtcNow, DateTime.UtcNow, guid, Guid.Empty, typeof(string), Guid.Empty,
-											   typeof(IInterfaceForTest), DomainUpdateType.Update);
-			result.ModuleId.Should().Be(guid);
-
-		}
-
-		[Test]
 		public void ShouldInvokeEventHandlers()
 		{
 			var wasEventHandlerCalled = false;
