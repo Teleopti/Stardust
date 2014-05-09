@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 			IEnumerable<IBusinessRuleResponse> invalidList = dic.Modify(ScheduleModifier.Scheduler,
 			                                     scheduleDay, newBusinessRuleCollection, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag));
 
-            if (invalidList != null && invalidList.Any())
+            if (invalidList != null && invalidList.Any(l => !l.Overridden))
 			{
 				throw new FaultException(
 					string.Format(System.Globalization.CultureInfo.InvariantCulture, "At least one business rule was broken. Messages are: {0}{1}", Environment.NewLine,
