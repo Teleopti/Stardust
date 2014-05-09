@@ -32,7 +32,9 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
             },
             success: function (data) {
             	vm.readData(data);
-	            vm.setCurrentDate(moment(data.PeriodSelection.Date));
+            	vm.setCurrentDate(moment(data.PeriodSelection.Date));
+            	vm.nextWeekDate(moment(data.PeriodSelection.PeriodNavigation.NextPeriod));
+            	vm.previousWeekDate(moment(data.PeriodSelection.PeriodNavigation.PrevPeriod));
 	            completelyLoaded();
             }
         });

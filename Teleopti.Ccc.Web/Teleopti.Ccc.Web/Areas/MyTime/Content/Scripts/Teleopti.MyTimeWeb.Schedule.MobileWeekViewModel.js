@@ -54,8 +54,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
 			self.dayViewModels.push(vm);
 		});
 		self.displayDate(data.PeriodSelection.Display);
-		self.nextWeekDate(moment(data.PeriodSelection.PeriodNavigation.NextPeriod));
-		self.previousWeekDate(moment(data.PeriodSelection.PeriodNavigation.PrevPeriod));
+
 	};
 };
 
