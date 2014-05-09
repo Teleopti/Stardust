@@ -18,7 +18,6 @@ namespace Teleopti.Support.Tool
             textBox1.SelectionLength = 0;
         }
 
-		[CLSCompliant(false)]
 	    public void Execute(ModeFile modeFile)
 	    {
 		    ShowDialog();
