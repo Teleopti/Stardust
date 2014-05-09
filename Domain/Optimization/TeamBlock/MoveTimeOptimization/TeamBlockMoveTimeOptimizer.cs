@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -24,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly ITeamBlockScheduler  _teamBlockScheduler ;
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
-		private bool _cancelMe;
 		private readonly ILockUnSelectedInTeamBlock _lockUnSelectedInTeamBlock;
 
 		public TeamBlockMoveTimeOptimizer(ISchedulingOptionsCreator schedulingOptionsCreator,ITeamBlockMoveTimeDescisionMaker decisionMaker, IDeleteAndResourceCalculateService deleteAndResourceCalculateService, IResourceOptimizationHelper resourceOptimizationHelper,  ITeamBlockScheduler teamBlockScheduler, ITeamBlockGenerator teamBlockGenerator, ILockUnSelectedInTeamBlock lockUnSelectedInTeamBlock)
@@ -82,27 +79,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			bool isPeriodBetter = newPeriodValue < oldPeriodValue;
 			if (!isPeriodBetter)
 			{
-				//rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
-				//lockDays(firstDayDate, secondDayDate);
 				return true;
 			}
-
-			//if (daysOverMax())
-			//{
-			//	rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
-			//	lockDays(firstDayDate, secondDayDate);
-			//	return false;
-			//}
-
-			//if (restrictionsOverMax().Count > 0)
-			//{
-			//	rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
-			//	lockDays(firstDayDate, secondDayDate);
-			//	return true;
-			//}
-			//}
-
-			
 
 			return true;
 		}
