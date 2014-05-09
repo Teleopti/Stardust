@@ -1085,7 +1085,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\.debug-Setup\config\Teleopti.Ccc.WebBehaviorTest.App.config" "$(ProjectDir)App.config"
+    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\Teleopti.Ccc.TestCommon.App.config" "$(ProjectDir)App.config"
 "$(SolutionDir)packages\SpecFlow.1.9.0\tools\specflow.exe" generateall "$(ProjectDir)Teleopti.Ccc.WebBehaviorTest.csproj"</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
