@@ -23,7 +23,6 @@ namespace Teleopti.Messaging.SignalR
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
 		private ISignalConnectionHandler _connectionHandler;
 		private ISignalBrokerCommands _signalBrokerCommands;
-		private ISignalSubscriber _signalSubscriber;
 		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 
@@ -343,9 +342,14 @@ namespace Teleopti.Messaging.SignalR
 
 				_signalBrokerCommands = new SignalBrokerCommands(Logger, _connectionHandler);
 
-				_signalSubscriber = new SignalSubscriber(_connectionHandler);
-				_signalSubscriber.OnNotification += onNotification;
-				_signalSubscriber.Start();
+				_connectionHandler.WithProxy(p =>
+				{
+					p.Subscribe("OnEventMessage").Received += obj =>
+					{
+						var d = obj[0].ToObject<Notification>();
+						onNotification(d);
+					};
+				});
 
 				_connectionHandler.StartConnection();
 			}
@@ -388,11 +392,6 @@ namespace Teleopti.Messaging.SignalR
 				if (_connectionHandler != null)
 				{
 					_connectionHandler.CloseConnection();
-				}
-				if (_signalSubscriber != null)
-				{
-					_signalSubscriber.Stop();
-					_signalSubscriber.OnNotification -= onNotification;
 				}
 			}
 		}

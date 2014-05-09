@@ -154,7 +154,6 @@
     <Compile Include="SignalR\NotificationFactory.cs" />
     <Compile Include="SignalR\SignalBroker.cs" />
     <Compile Include="SignalR\SignalSender.cs" />
-    <Compile Include="SignalR\SignalSubscriber.cs" />
     <Compile Include="SignalR\TaskHelper.cs" />
     <Compile Include="SignalR\Wrappers\ISubscriptionWrapper.cs" />
     <Compile Include="SignalR\Wrappers\SubscriptionWrapper.cs" />
