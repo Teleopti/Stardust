@@ -9,21 +9,25 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
         {
             IScheduleDayPro currentMoveFromDay = matrix.FullWeeksPeriodDays[currentMoveFromIndex];
             IScheduleDayPro currentMoveToDay = matrix.FullWeeksPeriodDays[currentMoveToIndex];
+            var currentMoveFromDaySchedule = currentMoveFromDay.DaySchedulePart();
+            var currentMoveToDaySchedule = currentMoveToDay.DaySchedulePart();
 
-            if (currentMoveFromDay.DaySchedulePart().SignificantPart() != SchedulePartView.MainShift
-                || currentMoveToDay.DaySchedulePart().SignificantPart() != SchedulePartView.MainShift)
+
+            if (currentMoveFromDaySchedule.SignificantPart() != SchedulePartView.MainShift
+                || currentMoveToDaySchedule.SignificantPart() != SchedulePartView.MainShift)
                 return false;
 
 
             TimeSpan? moveFromWorkShiftLength = null;
             TimeSpan? moveToWorkShiftLength = null;
 
-            if (currentMoveFromDay.DaySchedulePart() != null
-                && currentMoveFromDay.DaySchedulePart().ProjectionService() != null)
-                moveFromWorkShiftLength = currentMoveFromDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
-            if (currentMoveToDay.DaySchedulePart() != null
-                && currentMoveToDay.DaySchedulePart().ProjectionService() != null)
-                moveToWorkShiftLength = currentMoveToDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
+
+            if (currentMoveFromDaySchedule != null
+                && currentMoveFromDaySchedule.ProjectionService() != null)
+                moveFromWorkShiftLength = currentMoveFromDaySchedule.ProjectionService().CreateProjection().ContractTime();
+            if (currentMoveToDaySchedule != null
+                && currentMoveToDaySchedule.ProjectionService() != null)
+                moveToWorkShiftLength = currentMoveToDaySchedule.ProjectionService().CreateProjection().ContractTime();
             if (moveFromWorkShiftLength.HasValue
                 && moveToWorkShiftLength.HasValue
                 && moveFromWorkShiftLength.Value > moveToWorkShiftLength.Value)
