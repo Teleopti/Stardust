@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Messaging.Events;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
@@ -21,13 +22,15 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
     public class NotifyMessageBroker
     {
         private readonly IMessageBroker _messageBroker;
+	    private readonly EventMessageFactory _eventMessageFactory;
 
-        public NotifyMessageBroker(IMessageBroker messageBroker)
+	    public NotifyMessageBroker(IMessageBroker messageBroker)
         {
-            _messageBroker = messageBroker;
+	        _messageBroker = messageBroker;
+	        _eventMessageFactory = new EventMessageFactory();
         }
 
-        public void Notify(Guid moduleId, IEnumerable<IRootChangeInfo> rootModifications)
+	    public void Notify(Guid moduleId, IEnumerable<IRootChangeInfo> rootModifications)
         {
             if (_messageBroker==null || !_messageBroker.IsInitialized) return;
             
@@ -88,9 +91,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             if (periodRoot == null)
             {
                 if(changeWithRoot==null)
-                    eventMessage = _messageBroker.CreateEventMessage(moduleId, rootId, rootType, change.Status);
+					eventMessage = _eventMessageFactory.CreateEventMessage(moduleId, rootId, rootType, change.Status);
                 else
-                    eventMessage = _messageBroker.CreateEventMessage(moduleId, 
+					eventMessage = _eventMessageFactory.CreateEventMessage(moduleId, 
                                                                     changeWithRoot.MainRoot.Id.Value,
                                                                     realType(changeWithRoot.MainRoot),
                                                                     rootId, 
@@ -101,9 +104,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             {
                 DateTimePeriod period = periodRoot.Period;
                 if(changeWithRoot==null)
-                    eventMessage = _messageBroker.CreateEventMessage(period.StartDateTime, period.EndDateTime, moduleId, rootId, rootType, change.Status);
+					eventMessage = _eventMessageFactory.CreateEventMessage(period.StartDateTime, period.EndDateTime, moduleId, rootId, rootType, change.Status);
                 else
-                    eventMessage = _messageBroker.CreateEventMessage(period.StartDateTime, 
+					eventMessage = _eventMessageFactory.CreateEventMessage(period.StartDateTime, 
                                                                      period.EndDateTime,
                                                                      moduleId, 
                                                                      changeWithRoot.MainRoot.Id.Value,

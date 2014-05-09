@@ -764,6 +764,7 @@
     <Compile Include="MessageBroker\Events\EventMessageArgs.cs" />
     <Compile Include="MessageBroker\Events\IEventMessage.cs" />
     <Compile Include="MessageBroker\Events\IMessageBroker.cs" />
+    <Compile Include="MessageBroker\Events\IEventMessageFactory.cs" />
     <Compile Include="MessageBroker\Events\IMessageBrokerListener.cs" />
     <Compile Include="MessageBroker\Events\IMessageBrokerSender.cs" />
     <Compile Include="MessageBroker\Notification.cs" />

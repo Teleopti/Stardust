@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
-using Microsoft.AspNet.SignalR.Client.Hubs;
 using NUnit.Framework;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,7 +11,7 @@ using SharpTestsEx;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.SignalR;
 using log4net;
-using Subscription = Microsoft.AspNet.SignalR.Client.Hubs.Subscription;
+using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.MessagingTest.SignalR
 {
@@ -43,7 +42,7 @@ namespace Teleopti.MessagingTest.SignalR
 			return new signalSenderForTest(hubConnection, log);
 		}
 
-		private signalSenderForTest makeSignalSender(IHubProxy hubProxy, ILog logger = null)
+		private signalSenderForTest makeSignalSender(IHubProxyWrapper hubProxy, ILog logger = null)
 		{
 			var signalSender = new signalSenderForTest(stubHubConnection(hubProxy), logger);
 			signalSender.StartBrokerService();
@@ -62,7 +61,7 @@ namespace Teleopti.MessagingTest.SignalR
 			return new hubProxyFake();
 		}
 
-		private IHubConnectionWrapper stubHubConnection(IHubProxy hubProxy)
+		private IHubConnectionWrapper stubHubConnection(IHubProxyWrapper hubProxy)
 		{
 			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
 			hubConnection.Stub(x => x.State).Return(ConnectionState.Connected);
@@ -149,7 +148,7 @@ namespace Teleopti.MessagingTest.SignalR
 		public void ShouldLogWhenNotificationTasksFails()
 		{
 			var failedTask = makeFailedTask(new Exception());
-			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
+			var hubProxy = MockRepository.GenerateMock<IHubProxyWrapper>();
 
 			var log = MockRepository.GenerateMock<ILog>();
 			var target = makeSignalSender(hubProxy, log);
@@ -172,7 +171,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
 
-			log.AssertWasCalled(x => x.Error(SignalConnectionHandler.ConnectionRestartedErrorMessage));
+			log.AssertWasCalled(x => x.Error(SignalConnection.ConnectionRestartedErrorMessage));
 		}
 
 		[Test]
@@ -187,11 +186,11 @@ namespace Teleopti.MessagingTest.SignalR
 
 			hubConnection.GetEventRaiser(x => x.Reconnected += null).Raise();
 
-			log.AssertWasCalled(x => x.Info(SignalConnectionHandler.ConnectionReconnected));
+			log.AssertWasCalled(x => x.Info(SignalConnection.ConnectionReconnected));
 			
 		}
 
-		private class hubProxyFake : IHubProxy
+		private class hubProxyFake : IHubProxyWrapper
 		{
 			public readonly IList<Notification> NotifyClientsInvokedWith = new List<Notification>();
 
@@ -207,7 +206,7 @@ namespace Teleopti.MessagingTest.SignalR
 				throw new NotImplementedException();
 			}
 
-			public Subscription Subscribe(string eventName)
+			public ISubscriptionWrapper Subscribe(string eventName)
 			{
 				throw new NotImplementedException();
 			}
