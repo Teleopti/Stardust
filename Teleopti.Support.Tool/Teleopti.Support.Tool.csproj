@@ -237,6 +237,9 @@
       <DependentUpon>ChangeSettings.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
+    <None Include="BackupConfig.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -265,6 +268,9 @@
     <None Include="Resources\ajax-loader.gif" />
     <None Include="Resources\accept.png" />
     <None Include="Resources\accept1.png" />
+    <None Include="RestoreConfig.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Teleopti.Ccc.snk" />
   </ItemGroup>
   <ItemGroup>
