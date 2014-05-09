@@ -190,11 +190,9 @@ Scenario: Navigate to desktop view
 	And I view my mobile week schedule for date '2014-04-21'
 	When I click the desktop link
 	Then I should see my week schedule for date '2014-04-21'
-
-@ignore	
+	
 Scenario: Navigate from desktop
 	Given I have the role 'Full access to mytime'
-	And the current time is '2014-04-15 12:00'
-	And I am viewing week schedule
+	And I view my week schedule for date '2014-04-15'
 	When I click the mobile link
 	Then I should see my mobile week schedule for date '2014-04-15'

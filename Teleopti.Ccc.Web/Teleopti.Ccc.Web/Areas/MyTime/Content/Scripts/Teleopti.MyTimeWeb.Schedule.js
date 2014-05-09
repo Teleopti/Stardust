@@ -166,6 +166,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		    
 		};
 		
+		self.mobile = function () {
+			var date = self.selectedDate();
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
+		}
+
 		function _fillFormData(data) {
 			self.requestViewModel().DateFrom(moment(self.initialRequestDay, self.requestViewModel().DateFormat()));
 			self.requestViewModel().DateTo(moment(self.initialRequestDay, self.requestViewModel().DateFormat()));

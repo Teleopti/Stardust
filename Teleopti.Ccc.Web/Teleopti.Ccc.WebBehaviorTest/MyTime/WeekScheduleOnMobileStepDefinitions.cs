@@ -113,5 +113,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			  Browser.Interactions.Click("#desktop");
 		  }
 
+		  [When(@"I click the mobile link")]
+		  public void WhenIClickTheMobileLink()
+		  {
+			  Browser.Interactions.Click("#mobile");
+		  }
+
     }
 }
