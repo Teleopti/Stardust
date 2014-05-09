@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
-using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
 using log4net;
 using Teleopti.Messaging.SignalR.Wrappers;
-using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
 {
@@ -17,10 +14,6 @@ namespace Teleopti.Messaging.SignalR
 	[CLSCompliant(false)]
 	public class SignalConnectionHandler : ISignalConnectionHandler
 	{
-		private const string notifyclients = "NotifyClients";
-		private const string notifyclientsmultiple = "NotifyClientsMultiple";
-		private const string addsubscription = "AddSubscription";
-		private const string removesubscription = "RemoveSubscription";
 
 		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
 		public const string ConnectionReconnected = "Connection reconnected successfully";
@@ -143,39 +136,10 @@ namespace Teleopti.Messaging.SignalR
 			action.Invoke(_hubProxy);
 		}
 
-		public Task AddSubscription(Subscription subscription)
-		{
-			return notify(addsubscription, subscription);
-		}
-
-		public Task RemoveSubscription(string route)
-		{
-			return notify(removesubscription, route);
-		}
-
-		public Task NotifyClients(Notification notification)
-		{
-			return notify(notifyclients, notification);
-		}
-
-		public Task NotifyClients(IEnumerable<Notification> notifications)
-		{
-			return notify(notifyclientsmultiple, notifications);
-		}
-
-		private Task notify(string methodName, params object[] notifications)
+		public void IfProxyConnected(Action<IHubProxyWrapper> action)
 		{
 			if (_hubConnection.State == ConnectionState.Connected)
-			{
-				var task = _hubProxy.Invoke(methodName, notifications);
-
-				return task.ContinueWith(t =>
-					{
-						if (t.IsFaulted && t.Exception != null)
-							Logger.Debug("An error happened on notification task", t.Exception);
-					}, TaskContinuationOptions.OnlyOnFaulted);
-			}
-			return emptyTask;
+				action.Invoke(_hubProxy);
 		}
 
 		public bool IsInitialized()

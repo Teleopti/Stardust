@@ -22,7 +22,8 @@ namespace Teleopti.Messaging.SignalR
 	{
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
 		private ISignalConnectionHandler _connectionHandler;
-		private ISignalSubscriber _subscriberWrapper;
+		private ISignalBrokerCommands _signalBrokerCommands;
+		private ISignalSubscriber _signalSubscriber;
 		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 
@@ -114,7 +115,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_connectionHandler == null) return;
 
-				_connectionHandler.NotifyClients(state);
+				_signalBrokerCommands.NotifyClients(state);
 			}
 		}
 
@@ -176,7 +177,9 @@ namespace Teleopti.Messaging.SignalR
 			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, domainObjectId, domainObjectType, startDate, endDate);
 		}
 
-		private void registerEventSubscription(string datasource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid? referenceObjectId, Type referenceObjectType, Guid? domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
+		private void registerEventSubscription(string datasource, Guid businessUnitId,
+			EventHandler<EventMessageArgs> eventMessageHandler, Guid? referenceObjectId, Type referenceObjectType,
+			Guid? domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
 			//It is mad that this one is here! But it is "inherited" from the old broker. So it must be here to avoid bugs when running with the web broker only.
 			if (!domainObjectType.IsInterface)
@@ -199,16 +202,14 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_connectionHandler == null) return;
 
-				_connectionHandler.AddSubscription(subscription).ContinueWith(_ =>
-				{
-					var route = subscription.Route();
+				_signalBrokerCommands.AddSubscription(subscription);
 
-					var handlers = _subscriptionHandlers.GetOrAdd(route, key => new List<SubscriptionWithHandler>());
-					handlers.Add(new SubscriptionWithHandler { Handler = eventMessageHandler, Subscription = subscription });
-				});
+				var route = subscription.Route();
+				var handlers = _subscriptionHandlers.GetOrAdd(route, key => new List<SubscriptionWithHandler>());
+				handlers.Add(new SubscriptionWithHandler {Handler = eventMessageHandler, Subscription = subscription});
 			}
 		}
-		
+
 		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
 			//currently does nothing due
@@ -241,7 +242,7 @@ namespace Teleopti.Messaging.SignalR
 							if (subscriptionHandler.Count == 0 && subscriptionWithHandler.Subscription != null)
 							{
 								var route = subscriptionWithHandler.Subscription.Route();
-								_connectionHandler.RemoveSubscription(route);
+								_signalBrokerCommands.RemoveSubscription(route);
 								handlersToRemove.Add(route);
 							}
 						}
@@ -340,9 +341,11 @@ namespace Teleopti.Messaging.SignalR
 
 				_connectionHandler = new SignalConnectionHandler(() => MakeHubConnection(serverUrl), null, reconnectDelay);
 
-				_subscriberWrapper = new SignalSubscriber(_connectionHandler);
-				_subscriberWrapper.OnNotification += onNotification;
-				_subscriberWrapper.Start();
+				_signalBrokerCommands = new SignalBrokerCommands(Logger, _connectionHandler);
+
+				_signalSubscriber = new SignalSubscriber(_connectionHandler);
+				_signalSubscriber.OnNotification += onNotification;
+				_signalSubscriber.Start();
 
 				_connectionHandler.StartConnection();
 			}
@@ -386,10 +389,10 @@ namespace Teleopti.Messaging.SignalR
 				{
 					_connectionHandler.CloseConnection();
 				}
-				if (_subscriberWrapper != null)
+				if (_signalSubscriber != null)
 				{
-					_subscriberWrapper.Stop();
-					_subscriberWrapper.OnNotification -= onNotification;
+					_signalSubscriber.Stop();
+					_signalSubscriber.OnNotification -= onNotification;
 				}
 			}
 		}

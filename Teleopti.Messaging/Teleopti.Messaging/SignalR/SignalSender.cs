@@ -17,6 +17,7 @@ namespace Teleopti.Messaging.SignalR
 	{
 		private readonly string _serverUrl;
 		private ISignalConnectionHandler _connectionHandler;
+		private ISignalBrokerCommands _signalBrokerCommands;
 		protected ILog Logger;
 
 		public SignalSender(string serverUrl)
@@ -61,6 +62,7 @@ namespace Teleopti.Messaging.SignalR
 				if (_connectionHandler == null)
 				{
 					_connectionHandler = new SignalConnectionHandler(MakeHubConnection, Logger, reconnectDelay, reconnectAttempts);
+					_signalBrokerCommands = new SignalBrokerCommands(Logger, _connectionHandler);
 				}
 
 				_connectionHandler.StartConnection();
@@ -82,7 +84,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void SendNotification(Notification notification)
 		{
-			_connectionHandler.NotifyClients(notification);
+			_signalBrokerCommands.NotifyClients(notification);
 		}
 
 		public virtual void Dispose()

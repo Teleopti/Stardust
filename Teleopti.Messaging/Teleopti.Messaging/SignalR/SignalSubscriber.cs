@@ -15,7 +15,7 @@ namespace Teleopti.Messaging.SignalR
 
 	public class SignalSubscriber : ISignalSubscriber
 	{
-		private readonly IDoHubProxyCalls _hubProxy;
+		private readonly ICallHubProxy _hubProxy;
 		private const string eventName = "OnEventMessage";
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(SignalSubscriber));
@@ -23,7 +23,7 @@ namespace Teleopti.Messaging.SignalR
 		public event Action<Notification> OnNotification;
 
 		[CLSCompliant(false)]
-		public SignalSubscriber(IDoHubProxyCalls hubProxy)
+		public SignalSubscriber(ICallHubProxy hubProxy)
 		{
 			_hubProxy = hubProxy;
 		}
