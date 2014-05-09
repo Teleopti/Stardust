@@ -163,6 +163,7 @@ FROM stage.stg_request stg
 INNER JOIN mart.fact_request mart
 	ON stg.request_code = mart.request_code
 WHERE business_unit_id = @business_unit_id	
+AND stg.request_startdate BETWEEN @start_date AND @end_date
 
 ----------------
 --insert new ones
