@@ -2,7 +2,8 @@
 
 <Project DefaultTargets="Execute" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 	<PropertyGroup>
-		<DestinationFolder>D:\PipelineState\$(CCNetLabel)</DestinationFolder>
+		<DestinationFolder Condition="'$(DestinationFolder)' == ''">D:\PipelineState\$(CCNetLabel)</DestinationFolder>
+		<Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
 		<HgChangesetFile>$(DestinationFolder)\hgchangeset.txt</HgChangesetFile>
 		<MSBuildMercurialTasksPath>$(CCNetWorkingDirectory)\ccnet\MSBuild\MSBuild.Mercurial</MSBuildMercurialTasksPath>
 	</PropertyGroup>
@@ -33,8 +34,8 @@
 			<CcnetFiles Include="$(CCNetWorkingDirectory)\ccnet\**\*.*"/>
 			<DatabaseFiles Include="$(CCNetWorkingDirectory)\database\**\*.*"/>
 			<FeatureFiles Include="$(CCNetWorkingDirectory)\Domain\FeatureFlags\*.txt"/>
-			<WebBehaviourExtra Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\**\License.xml;
-									    $(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\$(Configuration)\Data\*.*" />
+			<WebBehaviourLicense Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\**\License.xml"/>
+			<WebBehaviourData Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\$(Configuration)\Data\*.*"/>
 		</ItemGroup>
 		<Copy SourceFiles="@(MainFiles)"
     			DestinationFiles="@(MainFiles->'$(DestinationFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
@@ -46,8 +47,10 @@
     			DestinationFiles="@(DatabaseFiles->'$(DestinationFolder)\database\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(FeatureFiles)"
     			DestinationFiles="@(FeatureFiles->'$(DestinationFolder)\Domain\FeatureFlags\%(RecursiveDir)%(Filename)%(Extension)')" />
-		<Copy SourceFiles="@(WebBehaviourExtra)"
-    			DestinationFiles="@(WebBehaviourExtra->'$(DestinationFolder)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(WebBehaviourLicense)"
+    			DestinationFiles="@(WebBehaviourLicense->'$(DestinationFolder)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(WebBehaviourData)"
+    			DestinationFiles="@(WebBehaviourData->'$(DestinationFolder)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\$(Configuration)\Data\%(RecursiveDir)%(Filename)%(Extension)')" />
 	</Target>
 	
 	<Target Name="CreateHgChangesetFile">
