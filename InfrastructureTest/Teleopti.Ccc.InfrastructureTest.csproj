@@ -557,7 +557,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)App.Config" copy "$(ProjectDir)..\.debug-Setup\config\CruiseControl.config" "$(ProjectDir)App.Config"</PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)App.Config" copy "$(ProjectDir)..\BuildArtifacts\Teleopti.Ccc.TestCommon.App.config" "$(ProjectDir)App.Config"</PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
