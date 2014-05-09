@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         private IMessageBroker messBroker;
         private MockRepository mocks;
         private IUnitOfWork uow;
-	    private IEventMessageFactory eventMessageFactory;
 
 	    protected override void SetupForRepositoryTest()
         {
@@ -260,7 +259,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         [Test]
         public void VerifyPeriodButNoMainReference()
         {
-            ExtendedNotifyMessageBroker target= new ExtendedNotifyMessageBroker(messBroker, eventMessageFactory);
+            ExtendedNotifyMessageBroker target= new ExtendedNotifyMessageBroker(messBroker);
             DateTimePeriod period = new DateTimePeriod(1900,1,1,2000,1,1);
             Guid rootId = Guid.NewGuid();
             IAggregateRoot root = new RootWithPeriodButNoMainReference(period);
@@ -279,7 +278,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         [Test]
         public void VerifyNoPeriodButMainReference()
         {
-			ExtendedNotifyMessageBroker target = new ExtendedNotifyMessageBroker(messBroker, eventMessageFactory);
+			ExtendedNotifyMessageBroker target = new ExtendedNotifyMessageBroker(messBroker);
             Guid rootId = Guid.NewGuid();
             Guid refRootId = Guid.NewGuid();
             IAggregateRoot refRoot = new Activity("for test");
@@ -343,7 +342,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
         private class ExtendedNotifyMessageBroker : NotifyMessageBroker
         {
-            public ExtendedNotifyMessageBroker(IMessageBroker messageBroker, IEventMessageFactory eventMessageFactory)
+            public ExtendedNotifyMessageBroker(IMessageBroker messageBroker)
 				: base(messageBroker)
             {
             }
