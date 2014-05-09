@@ -146,12 +146,12 @@
     <Compile Include="SignalR\ISignalBrokerCommands.cs" />
     <Compile Include="Events\EventMessageFactory.cs" />
     <Compile Include="SignalR\SignalBrokerCommands.cs" />
-    <Compile Include="SignalR\SignalConnectionHandler.cs" />
+    <Compile Include="SignalR\SignalConnection.cs" />
     <Compile Include="SignalR\Wrappers\HubProxyWrapper.cs" />
     <Compile Include="SignalR\Wrappers\IHubProxyWrapper.cs" />
     <Compile Include="SignalR\Wrappers\HubConnectionWrapper.cs" />
     <Compile Include="SignalR\Wrappers\IHubConnectionWrapper.cs" />
-    <Compile Include="SignalR\ISignalConnectionHandler.cs" />
+    <Compile Include="SignalR\IHandleHubConnection.cs" />
     <Compile Include="SignalR\NotificationFactory.cs" />
     <Compile Include="SignalR\SignalBroker.cs" />
     <Compile Include="SignalR\SignalSender.cs" />

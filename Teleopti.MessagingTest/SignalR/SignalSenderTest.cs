@@ -171,7 +171,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
 
-			log.AssertWasCalled(x => x.Error(SignalConnectionHandler.ConnectionRestartedErrorMessage));
+			log.AssertWasCalled(x => x.Error(SignalConnection.ConnectionRestartedErrorMessage));
 		}
 
 		[Test]
@@ -186,7 +186,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 			hubConnection.GetEventRaiser(x => x.Reconnected += null).Raise();
 
-			log.AssertWasCalled(x => x.Info(SignalConnectionHandler.ConnectionReconnected));
+			log.AssertWasCalled(x => x.Info(SignalConnection.ConnectionReconnected));
 			
 		}
 

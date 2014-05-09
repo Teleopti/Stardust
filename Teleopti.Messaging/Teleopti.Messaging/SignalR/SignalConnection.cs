@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
-using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Messaging.Exceptions;
 using log4net;
 using Teleopti.Messaging.SignalR.Wrappers;
@@ -12,7 +11,7 @@ namespace Teleopti.Messaging.SignalR
 {
 
 	[CLSCompliant(false)]
-	public class SignalConnectionHandler : ISignalConnectionHandler
+	public class SignalConnection : IHandleHubConnection, ICallHubProxy
 	{
 
 		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
@@ -21,14 +20,13 @@ namespace Teleopti.Messaging.SignalR
 		private readonly IHubProxyWrapper _hubProxy;
 		private readonly IHubConnectionWrapper _hubConnection;
 		private readonly TimeSpan _reconnectDelay;
-		private readonly Task emptyTask;
 
 		protected ILog Logger;
 		private readonly int _maxReconnectAttempts;
 		private int _reconnectAttempts;
 
 
-		public SignalConnectionHandler(
+		public SignalConnection(
 			Func<IHubConnectionWrapper> hubConnectionFactory, 
 			ILog logger,
 			TimeSpan reconnectDelay, 
@@ -39,9 +37,7 @@ namespace Teleopti.Messaging.SignalR
 			_reconnectDelay = reconnectDelay;
 			_maxReconnectAttempts = maxReconnectAttempts;
 
-			Logger = logger ?? LogManager.GetLogger(typeof(SignalConnectionHandler));
-
-			emptyTask = TaskHelper.MakeEmptyTask();
+			Logger = logger ?? LogManager.GetLogger(typeof(SignalConnection));
 		}
 
 		public void StartConnection()
@@ -142,7 +138,7 @@ namespace Teleopti.Messaging.SignalR
 				action.Invoke(_hubProxy);
 		}
 
-		public bool IsInitialized()
+		public bool IsConnected()
 		{
 			return _hubProxy != null && _hubConnection.State == ConnectionState.Connected;
 		}

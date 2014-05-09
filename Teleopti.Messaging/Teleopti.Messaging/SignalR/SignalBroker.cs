@@ -21,7 +21,7 @@ namespace Teleopti.Messaging.SignalR
 	public class SignalBroker : IMessageBroker
 	{
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
-		private ISignalConnectionHandler _connectionHandler;
+		private IHandleHubConnection _connection;
 		private ISignalBrokerCommands _signalBrokerCommands;
 		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
@@ -55,10 +55,10 @@ namespace Teleopti.Messaging.SignalR
 		{
 			lock (_wrapperLock)
 			{
-				if (_connectionHandler == null) return;
+				if (_connection == null) return;
 
-				_connectionHandler.CloseConnection();
-				_connectionHandler = null;
+				_connection.CloseConnection();
+				_connection = null;
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace Teleopti.Messaging.SignalR
 		{
 			lock (_wrapperLock)
 			{
-				if (_connectionHandler == null) return;
+				if (_connection == null) return;
 
 				_signalBrokerCommands.NotifyClients(state);
 			}
@@ -199,7 +199,7 @@ namespace Teleopti.Messaging.SignalR
 
 			lock (_wrapperLock)
 			{
-				if (_connectionHandler == null) return;
+				if (_connection == null) return;
 
 				_signalBrokerCommands.AddSubscription(subscription);
 
@@ -219,7 +219,7 @@ namespace Teleopti.Messaging.SignalR
 
 			lock (_wrapperLock)
 			{
-				if (_connectionHandler == null) return;
+				if (_connection == null) return;
 
 				var subscriptionWithHandlersToRemove = new List<SubscriptionWithHandler>();
 				var subscriptionValues = new List<IList<SubscriptionWithHandler>>(_subscriptionHandlers.Values);
@@ -281,12 +281,12 @@ namespace Teleopti.Messaging.SignalR
 			
 			lock (_wrapperLock)
 			{
+				var connection = new SignalConnection(() => MakeHubConnection(serverUrl), null, reconnectDelay);
+				_connection = connection;
 
-				_connectionHandler = new SignalConnectionHandler(() => MakeHubConnection(serverUrl), null, reconnectDelay);
+				_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
 
-				_signalBrokerCommands = new SignalBrokerCommands(Logger, _connectionHandler);
-
-				_connectionHandler.WithProxy(p =>
+				connection.WithProxy(p =>
 				{
 					p.Subscribe("OnEventMessage").Received += obj =>
 					{
@@ -295,7 +295,7 @@ namespace Teleopti.Messaging.SignalR
 					};
 				});
 
-				_connectionHandler.StartConnection();
+				_connection.StartConnection();
 			}
 		}
 
@@ -333,9 +333,9 @@ namespace Teleopti.Messaging.SignalR
 		{
 			lock (_wrapperLock)
 			{
-				if (_connectionHandler != null)
+				if (_connection != null)
 				{
-					_connectionHandler.CloseConnection();
+					_connection.CloseConnection();
 				}
 			}
 		}
@@ -348,7 +348,7 @@ namespace Teleopti.Messaging.SignalR
 		{
 			get
 			{
-				return _connectionHandler!=null && _connectionHandler.IsInitialized();
+				return _connection!=null && _connection.IsConnected();
 			}
 		}
 

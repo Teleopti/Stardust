@@ -16,7 +16,7 @@ namespace Teleopti.Messaging.SignalR
 	public class SignalSender : IMessageSender
 	{
 		private readonly string _serverUrl;
-		private ISignalConnectionHandler _connectionHandler;
+		private IHandleHubConnection _connection;
 		private ISignalBrokerCommands _signalBrokerCommands;
 		protected ILog Logger;
 
@@ -59,13 +59,14 @@ namespace Teleopti.Messaging.SignalR
 				return;
 			try
 			{
-				if (_connectionHandler == null)
+				if (_connection == null)
 				{
-					_connectionHandler = new SignalConnectionHandler(MakeHubConnection, Logger, reconnectDelay, reconnectAttempts);
-					_signalBrokerCommands = new SignalBrokerCommands(Logger, _connectionHandler);
+					var connection = new SignalConnection(MakeHubConnection, Logger, reconnectDelay, reconnectAttempts);
+					_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
+					_connection = connection;
 				}
 
-				_connectionHandler.StartConnection();
+				_connection.StartConnection();
 			}
 			catch (SocketException exception)
 			{
@@ -79,7 +80,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public bool IsAlive
 		{
-			get { return _connectionHandler != null && _connectionHandler.IsInitialized(); }
+			get { return _connection != null && _connection.IsConnected(); }
 		}
 
 		public void SendNotification(Notification notification)
@@ -89,8 +90,8 @@ namespace Teleopti.Messaging.SignalR
 
 		public virtual void Dispose()
 		{
-			_connectionHandler.CloseConnection();
-			_connectionHandler = null;
+			_connection.CloseConnection();
+			_connection = null;
 		}
 
 		protected virtual ILog MakeLogger()
