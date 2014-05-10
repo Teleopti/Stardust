@@ -6,8 +6,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
     public interface IRuleSetAccordingToAccessabilityFilter
     {
-        IEnumerable<IWorkShiftRuleSet> Filter(ITeamBlockInfo teamBlockInfo);
-        IEnumerable<IWorkShiftRuleSet> Filter(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly);
+        IEnumerable<IWorkShiftRuleSet> FilterForRoleModel(ITeamBlockInfo teamBlockInfo);
+        IEnumerable<IWorkShiftRuleSet> FilterForTeamMember(IPerson person, DateOnly dateOnly);
     }
 
     public class RuleSetAccordingToAccessabilityFilter : IRuleSetAccordingToAccessabilityFilter
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		    _skillAggregator = skillAggregator;
 	    }
 
-	    public IEnumerable<IWorkShiftRuleSet> Filter(ITeamBlockInfo teamBlockInfo)
+	    public IEnumerable<IWorkShiftRuleSet> FilterForRoleModel(ITeamBlockInfo teamBlockInfo)
         {
             IList<IRuleSetBag> extractedRuleSetBags = _teamBlockRuleSetBagExtractor.GetRuleSetBag(teamBlockInfo).ToList();
 	        var filteredList = _teamBlockIncludedWorkShiftRuleFilter.Filter(teamBlockInfo.BlockInfo.BlockPeriod,
@@ -36,12 +36,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
             return filteredList;
         }
 
-        public IEnumerable<IWorkShiftRuleSet> Filter(ITeamBlockInfo teamBlockInfo, DateOnly explicitDateToCheck)
+        public IEnumerable<IWorkShiftRuleSet> FilterForTeamMember(IPerson person, DateOnly explicitDateToCheck)
         {
-	        var extractedRuleSetBags = _teamBlockRuleSetBagExtractor.GetRuleSetBag(teamBlockInfo, explicitDateToCheck);
+	        var extractedRuleSetBags = _teamBlockRuleSetBagExtractor.GetRuleSetBagForTeamMember(person, explicitDateToCheck);
 			var filteredList = _teamBlockIncludedWorkShiftRuleFilter.Filter(new DateOnlyPeriod(explicitDateToCheck, explicitDateToCheck),
 	                                                                        extractedRuleSetBags.ToList());
-	        filteredList = filterForSkillActivity(filteredList, teamBlockInfo);
             return filteredList;
         }
 
