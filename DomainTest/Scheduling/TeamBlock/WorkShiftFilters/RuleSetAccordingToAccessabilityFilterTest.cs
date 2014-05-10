@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	    private ITeamInfo _teamInfo;
 	    private List<ISkill> _skillList;
 	    private ISkill _skill;
+		private List<IPerson> _groupMembers;
 	    private IPerson _person;
 
 	    [SetUp]
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		    _skill = SkillFactory.CreateSkill("skill");
 		    _skillList = new List<ISkill>{_skill};
 		    _person = PersonFactory.CreatePerson();
+			_groupMembers = new List<IPerson>();
         }
 
         [Test]
