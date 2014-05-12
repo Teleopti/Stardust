@@ -33,6 +33,7 @@
 			<CcNetFiles Include="$(SourceFiles)\ccnet\**\*.*" />
 			<SupportTool Include="$(SourceFiles)\Teleopti.Support.Tool\**\*.*" />
 			<BuildArtifacts Include="$(SourceFiles)\BuildArtifacts\**\*.*" />
+			<DatabaseFiles Include="$(SourceFiles)\database\**\*.*"/>
 		</ItemGroup>
 		<Copy SourceFiles="@(WebFiles)"
     			DestinationFiles="@(WebFiles->'$(DestinationFolder)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\%(RecursiveDir)%(Filename)%(Extension)')" />
@@ -46,6 +47,8 @@
     			DestinationFiles="@(SupportTool->'$(DestinationFolder)\Teleopti.Support.Tool\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(BuildArtifacts)"
     			DestinationFiles="@(BuildArtifacts->'$(DestinationFolder)\BuildArtifacts\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(DatabaseFiles)"
+    			DestinationFiles="@(DatabaseFiles->'$(DestinationFolder)\database\%(RecursiveDir)%(Filename)%(Extension)')" />				
 	</Target>
 	
 	<Target Name="ClearWorkingDirectory">
