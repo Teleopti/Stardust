@@ -24,7 +24,7 @@ SET ETL_TOOL_nhibConfPath=%nhibFolder%
 
 ::the settings file
 SET MySettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings.txt
-DEL "%MySettings%" /F
+IF EXIST "%MySettings%" DEL "%MySettings%" /F
 
 ::hardcoded parameters for config
 ECHO $(IIS_AUTH)^|Windows>>"%MySettings%"
