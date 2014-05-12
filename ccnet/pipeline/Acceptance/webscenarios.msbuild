@@ -2,11 +2,13 @@
 
 <Project DefaultTargets="AcceptanceTests" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 	<PropertyGroup>
-		<SourceFiles>\\hebe\d$\PipelineState\$(CCNetLabel)</SourceFiles>
-		<NUnitExeToolPath>$(CCNetWorkingDirectory)\packages\NUnit.Runners.2.6.2\tools</NUnitExeToolPath>
+		<DestinationFolder Condition="'$(DestinationFolder)' == ''">$(CCNetWorkingDirectory)</DestinationFolder>
+		<PipelineFolder>\\hebe\d$\PipelineState</PipelineFolder>
+		<SourceFiles Condition="'$(SourceFiles)' == ''">$(PipelineFolder)\$(CCNetLabel)</SourceFiles>
+		<NUnitExeToolPath>$(DestinationFolder)\packages\NUnit.Runners.2.6.2\tools</NUnitExeToolPath>
 	</PropertyGroup>
 	
-	<UsingTask AssemblyFile="$(CCNetWorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools\MSBuild.Community.Tasks.dll" TaskName="NUnit"/>
+	<UsingTask AssemblyFile="$(DestinationFolder)\packages\MSBuildTasks.1.4.0.65\tools\MSBuild.Community.Tasks.dll" TaskName="NUnit"/>
 	
 	<Target Name="AcceptanceTests">
 		<CallTarget Targets="CopySourceFilesToWorkingDirectory" />
@@ -18,13 +20,13 @@
 			<FilesToCopy Include="$(SourceFiles)\**\*.*"/>
 		</ItemGroup>
 		<Copy SourceFiles="@(FilesToCopy)"
-    			DestinationFiles="@(FilesToCopy->'$(CCNetWorkingDirectory)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    			DestinationFiles="@(FilesToCopy->'$(DestinationFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
 	</Target>
 	
 	<Target Name="ClearWorkingDirectory">
 		<ItemGroup>
-		  <FilesToClean Include="$(CCNetWorkingDirectory)\**\*"/>
-		  <Directories Include="$([System.IO.Directory]::GetDirectories('$(CCNetWorkingDirectory)', '*', System.IO.SearchOption.AllDirectories))"
+		  <FilesToClean Include="$(DestinationFolder)\**\*"/>
+		  <Directories Include="$([System.IO.Directory]::GetDirectories('$(DestinationFolder)', '*', System.IO.SearchOption.AllDirectories))"
 					   Exclude="$(TargetFolder)"/>
 		</ItemGroup>
 
@@ -33,10 +35,10 @@
 	</Target>
 
 	<Target Name="RunWebScenarios">
-		<NUnit Assemblies="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\Release\Teleopti.Ccc.WebBehaviorTest.dll"
+		<NUnit Assemblies="$(DestinationFolder)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\Release\Teleopti.Ccc.WebBehaviorTest.dll"
 			ToolPath="$(NUnitExeToolPath)"
 			Framework="4.0"
 			WorkingDirectory="C:\Program Files (x86)\CruiseControl.NET\server\CCC-Acc-Dev\WorkingDirectory\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\Release"
-			OutputXmlFile="$(CCNetWorkingDirectory)\nunit.xml" />
+			OutputXmlFile="$(DestinationFolder)\nunit.xml" />
 	</Target>
 </Project>
