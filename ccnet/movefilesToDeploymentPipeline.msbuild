@@ -2,7 +2,8 @@
 
 <Project DefaultTargets="Execute" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 	<PropertyGroup>
-		<DestinationFolder Condition="'$(DestinationFolder)' == ''">D:\PipelineState\$(CCNetLabel)</DestinationFolder>
+		<PipeLineFolder>D:\PipelineState</PipeLineFolder>
+		<DestinationFolder Condition="'$(DestinationFolder)' == ''">$(PipeLineFolder)\$(CCNetLabel)</DestinationFolder>
 		<Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
 		<HgChangesetFile>$(DestinationFolder)\hgchangeset.txt</HgChangesetFile>
 		<MSBuildMercurialTasksPath>$(CCNetWorkingDirectory)\ccnet\MSBuild\MSBuild.Mercurial</MSBuildMercurialTasksPath>
@@ -37,6 +38,7 @@
 			<WebBehaviourLicense Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\**\License.xml"/>
 			<WebBehaviourData Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\$(Configuration)\Data\*.*"/>
 		</ItemGroup>
+		<MakeDir Directories="$(DestinationFolder)"/>
 		<Copy SourceFiles="@(MainFiles)"
     			DestinationFiles="@(MainFiles->'$(DestinationFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(WebFiles)"
