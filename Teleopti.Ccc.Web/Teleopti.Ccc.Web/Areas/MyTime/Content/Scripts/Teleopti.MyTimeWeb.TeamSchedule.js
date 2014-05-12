@@ -165,6 +165,9 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	};
 
 	function _cleanBindings() {
+		//remove old layer's tooltip if it still exist
+		$("[class='tooltip fade top in']").remove();
+		
 		ko.cleanNode($('#page')[0]);
 	};
 
