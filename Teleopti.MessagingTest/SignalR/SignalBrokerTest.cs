@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -239,7 +240,7 @@ namespace Teleopti.MessagingTest.SignalR
 			private readonly IHubConnectionWrapper _hubConnection;
 
 			public signalBrokerForTest(IMessageFilterManager typeFilter, IHubConnectionWrapper hubConnection)
-				: base(typeFilter, new Now())
+				: base(typeFilter, new NoRecreate(), new Now())
 			{
 				_hubConnection = hubConnection;
 			}
@@ -250,4 +251,5 @@ namespace Teleopti.MessagingTest.SignalR
 			}
 		}
 	}
+
 }

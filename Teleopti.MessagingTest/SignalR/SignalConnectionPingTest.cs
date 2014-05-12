@@ -31,16 +31,16 @@ namespace Teleopti.MessagingTest.SignalR
 		public void ShouldRecreateConnectionWhenNoReplyFromPingInXMinutes()
 		{
 			var now = new MutableNow();
-			now.Mutate(DateTime.UtcNow);
+			now.Mutate(new DateTime(2001, 1, 1, 12, 0, 0, DateTimeKind.Utc));
 			var hubProxy1 = new HubThatRepliesToPing();
 			var hubProxy2 = new HubThatRepliesToPing();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = new MultiConnectionSignalSenderForTest(new[] {hubConnection1, hubConnection2}, new Ping(TimeSpan.FromMinutes(2)), now);
+			var target = new MultiConnectionSignalSenderForTest(new[] {hubConnection1, hubConnection2}, new Ping(TimeSpan.FromMinutes(3)), now);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			hubProxy1.BreakTheConnection();
-			now.Mutate(now.UtcDateTime().AddMinutes(3));
+			now.Mutate(now.UtcDateTime().AddMinutes(4));
 			var notification = new Notification();
 			target.SendNotification(notification);
 
@@ -74,13 +74,13 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy2 = new HubThatRepliesToPing();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new Ping(TimeSpan.FromMinutes(2)), now);
+			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new Ping(TimeSpan.FromMinutes(1)), now);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			var notification1 = new Notification();
 			target.SendNotification(notification1);
 			hubProxy1.BreakTheConnection();
-			now.Mutate(now.UtcDateTime().AddMinutes(3));
+			now.Mutate(now.UtcDateTime().AddMinutes(2));
 			var notification2 = new Notification();
 			target.SendNotification(notification2);
 

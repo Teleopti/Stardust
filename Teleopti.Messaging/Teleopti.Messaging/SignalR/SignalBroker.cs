@@ -20,6 +20,7 @@ namespace Teleopti.Messaging.SignalR
 {
 	public class SignalBroker : IMessageBroker
 	{
+		private readonly IRecreateStrategy _recreateStrategy;
 		private readonly INow _now;
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
 		private IHandleHubConnection _connection;
@@ -27,8 +28,9 @@ namespace Teleopti.Messaging.SignalR
 		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 
-		public SignalBroker(IMessageFilterManager typeFilter, INow now)
+		public SignalBroker(IMessageFilterManager typeFilter, IRecreateStrategy recreateStrategy, INow now)
 		{
+			_recreateStrategy = recreateStrategy;
 			_now = now;
 			FilterManager = typeFilter;
 			IsTypeFilterApplied = true;
@@ -283,7 +285,7 @@ namespace Teleopti.Messaging.SignalR
 			
 			lock (_wrapperLock)
 			{
-				var connection = new SignalConnection(() => MakeHubConnection(serverUrl), null, reconnectDelay, null, _now);
+				var connection = new SignalConnection(() => MakeHubConnection(serverUrl), null, reconnectDelay, _recreateStrategy, _now);
 				_connection = connection;
 
 				_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);

@@ -5,6 +5,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.SignalR;
 
@@ -19,17 +20,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterInstance(_dataSourceConfigurationSetter);
 			builder.RegisterType<InitializeApplication>().As<IInitializeApplication>().SingleInstance();
 			builder.RegisterType<DataSourcesFactory>().As<IDataSourcesFactory>().SingleInstance();
-			builder.RegisterInstance(new SignalBroker(MessageFilterManager.Instance))
+			builder.RegisterInstance(MessageFilterManager.Instance).As<IMessageFilterManager>().SingleInstance();
+			builder.RegisterType<SignalBroker>()
 				.As<IMessageBroker>()
 				.As<IMessageBrokerSender>()
 				.As<IMessageBrokerListener>()
-				;
+				.SingleInstance();
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<EnversConfiguration>().As<IEnversConfiguration>().SingleInstance();
 			builder.RegisterType<ConfigReader>().As<IConfigReader>().SingleInstance();

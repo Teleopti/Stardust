@@ -550,6 +550,7 @@
     <Compile Include="Domain\MeetingChangedDetail.cs" />
     <Compile Include="Domain\MeetingChangedEntity.cs" />
     <Compile Include="Domain\MinMaxStaffBroken.cs" />
+    <Compile Include="Domain\Now.cs" />
     <Compile Include="Domain\OpenForWork.cs" />
     <Compile Include="Domain\JobResultProgress.cs" />
     <Compile Include="Domain\QueueAdjustment.cs" />

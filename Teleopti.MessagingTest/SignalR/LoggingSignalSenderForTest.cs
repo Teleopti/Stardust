@@ -1,6 +1,7 @@
 using System;
 using log4net;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
 

@@ -15,32 +15,21 @@ using Teleopti.Messaging.SignalR.Wrappers;
 namespace Teleopti.Messaging.SignalR
 {
 
-	public interface IPing
-	{
-	}
-
-	public class Ping : IPing
-	{
-		public Ping(TimeSpan recreateTimeout)
-		{
-		}
-	}
-
 	public class SignalSender : IMessageSender
 	{
-		private readonly IPing _ping;
+		private readonly IRecreateStrategy _recreateStrategy;
 		private readonly INow _now;
 		private readonly string _serverUrl;
 		private IHandleHubConnection _connection;
 		private ISignalBrokerCommands _signalBrokerCommands;
 		private readonly ILog _logger;
 
-		public SignalSender(string serverUrl, IPing ping, INow now)
-			: this(serverUrl, LogManager.GetLogger(typeof(SignalSender)), ping, now)
+		public SignalSender(string serverUrl, IRecreateStrategy recreateStrategy, INow now)
+			: this(serverUrl, LogManager.GetLogger(typeof(SignalSender)), recreateStrategy, now)
 		{
 		}
 
-		public SignalSender(string serverUrl, ILog logger, IPing ping, INow now)
+		public SignalSender(string serverUrl, ILog logger, IRecreateStrategy recreateStrategy, INow now)
 		{
 			_serverUrl = serverUrl;
 
@@ -50,7 +39,7 @@ namespace Teleopti.Messaging.SignalR
 			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
 
 			_logger = logger;
-			_ping = ping;
+			_recreateStrategy = recreateStrategy;
 			_now = now;
 		}
 
@@ -84,7 +73,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_connection == null)
 				{
-					var connection = new SignalConnection(MakeHubConnection, _logger, restartDelay, _ping, _now, restartAttempts);
+					var connection = new SignalConnection(MakeHubConnection, _logger, restartDelay, _recreateStrategy, _now, restartAttempts);
 					
 					_signalBrokerCommands = new SignalBrokerCommands(_logger, connection);
 					_connection = connection;

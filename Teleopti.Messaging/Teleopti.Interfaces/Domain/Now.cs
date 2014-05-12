@@ -1,7 +1,6 @@
 using System;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Common.Time
+namespace Teleopti.Interfaces.Domain
 {
 	public sealed class Now : INow
 	{
