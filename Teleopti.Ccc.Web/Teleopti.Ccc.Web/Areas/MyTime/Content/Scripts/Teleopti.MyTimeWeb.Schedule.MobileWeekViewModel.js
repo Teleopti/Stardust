@@ -36,7 +36,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
 	self.desktop = function() {
 		var date = self.selectedDate();
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
-	}
+	};
 
 	self.nextWeek = function () {
 		self.selectedDate(self.nextWeekDate());
