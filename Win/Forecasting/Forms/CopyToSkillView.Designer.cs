@@ -119,7 +119,7 @@
             this.checkBoxAdvIncludeTemplates.TabIndex = 4;
             this.checkBoxAdvIncludeTemplates.Text = "xxIncludeTemplates";
             this.checkBoxAdvIncludeTemplates.ThemesEnabled = false;
-            this.checkBoxAdvIncludeTemplates.CheckedChanged += new Syncfusion.Windows.Forms.Tools.CheckedChangedEventHandler(this.checkBoxAdvIncludeTemplates_CheckedChanged);
+            this.checkBoxAdvIncludeTemplates.CheckedChanged += new System.EventHandler(this.checkBoxAdvIncludeTemplates_CheckedChanged);
             // 
             // checkBoxAdvIncludeQueues
             // 

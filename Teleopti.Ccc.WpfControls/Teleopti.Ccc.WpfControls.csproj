@@ -108,14 +108,17 @@
     <Reference Include="PresentationFramework.Aero">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Syncfusion.Core">
-      <HintPath>..\packages\Syncfusion.Core.10.2.81\lib\4.0\Syncfusion.Core.dll</HintPath>
+    <Reference Include="Syncfusion.Core, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Syncfusion.Core.12.1.0.43\lib\4.0\Syncfusion.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Shared.Base">
-      <HintPath>..\packages\Syncfusion.Shared.Base.10.2.81\lib\4.0\Syncfusion.Shared.Base.dll</HintPath>
+    <Reference Include="Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Syncfusion.Shared.Base.12.1.0.43\lib\4.0\Syncfusion.Shared.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Shared.Wpf">
-      <HintPath>..\packages\Syncfusion.Shared.Wpf.10.2.81\lib\4.0\Syncfusion.Shared.Wpf.dll</HintPath>
+    <Reference Include="Syncfusion.Shared.Wpf, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Syncfusion.Shared.Wpf.12.1.0.43\lib\4.0\Syncfusion.Shared.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -1186,6 +1189,7 @@
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

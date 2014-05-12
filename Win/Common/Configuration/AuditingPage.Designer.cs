@@ -220,7 +220,7 @@
 			this.checkBoxAdvIsRunning.TabIndex = 1;
 			this.checkBoxAdvIsRunning.Text = "xxEnableScheduleAuditTrail";
 			this.checkBoxAdvIsRunning.ThemesEnabled = true;
-			this.checkBoxAdvIsRunning.CheckedChanged += new Syncfusion.Windows.Forms.Tools.CheckedChangedEventHandler(this.checkBoxAdvIsRunningCheckedChanged);
+			this.checkBoxAdvIsRunning.CheckedChanged += new System.EventHandler(this.checkBoxAdvIsRunningCheckedChanged);
 			// 
 			// gradientPanelHeader
 			// 

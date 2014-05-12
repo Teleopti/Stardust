@@ -124,31 +124,31 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-        private void chbAvailability_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        private void chbAvailability_CheckedChanged(object sender, EventArgs e)
         {
             _useAvailability = chbAvailability.Checked;
             RecalculateRestrictions();
         }
 
-        private void chbRotations_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        private void chbRotations_CheckedChanged(object sender, EventArgs e)
         {
             _useRotation = chbRotations.Checked;
             RecalculateRestrictions();
         }
 
-        private void chbPreferences_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        private void chbPreferences_CheckedChanged(object sender, EventArgs e)
         {
             _usePreference = chbPreferences.Checked;
             RecalculateRestrictions();
         }
 
-        private void chbStudenAvailability_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        private void chbStudenAvailability_CheckedChanged(object sender, EventArgs e)
         {
             _useStudentAvailability = chbStudenAvailability.Checked;
             RecalculateRestrictions();
         }
 
-        private void chbSchedules_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        private void chbSchedules_CheckedChanged(object sender, EventArgs e)
         {
             _useSchedules = chbSchedules.Checked;
             RecalculateRestrictions();

@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void checkBoxAdvNextDayCheckedChanged(object sender, Syncfusion.Windows.Forms.Tools.CheckedChangedEventArgs e)
+		private void checkBoxAdvNextDayCheckedChanged(object sender, EventArgs e)
 		{
 			if (!string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerFrom)) ||
 				!string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerTo)))

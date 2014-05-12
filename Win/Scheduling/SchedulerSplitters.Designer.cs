@@ -364,7 +364,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.chbAvailability.TabIndex = 0;
 			this.chbAvailability.Text = "xxAvailability";
 			this.chbAvailability.ThemesEnabled = false;
-			this.chbAvailability.CheckedChanged += new Syncfusion.Windows.Forms.Tools.CheckedChangedEventHandler(this.chbAvailability_CheckedChanged);
+			this.chbAvailability.CheckedChanged += new System.EventHandler(this.chbAvailability_CheckedChanged);
 			// 
 			// chbRotations
 			// 
@@ -375,7 +375,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.chbRotations.TabIndex = 2;
 			this.chbRotations.Text = "xxRotation";
 			this.chbRotations.ThemesEnabled = false;
-			this.chbRotations.CheckedChanged += new Syncfusion.Windows.Forms.Tools.CheckedChangedEventHandler(this.chbRotations_CheckedChanged);
+			this.chbRotations.CheckedChanged += new System.EventHandler(this.chbRotations_CheckedChanged);
 			// 
 			// chbPreferences
 			// 
@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.chbPreferences.TabIndex = 2;
 			this.chbPreferences.Text = "xxPreference";
 			this.chbPreferences.ThemesEnabled = false;
-			this.chbPreferences.CheckedChanged += new Syncfusion.Windows.Forms.Tools.CheckedChangedEventHandler(this.chbPreferences_CheckedChanged);
+			this.chbPreferences.CheckedChanged += new System.EventHandler(this.chbPreferences_CheckedChanged);
 			// 
 			// chbStudenAvailability
 			// 
@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.chbStudenAvailability.TabIndex = 2;
 			this.chbStudenAvailability.Text = "xxStudentAvailability";
 			this.chbStudenAvailability.ThemesEnabled = false;
-			this.chbStudenAvailability.CheckedChanged += new Syncfusion.Windows.Forms.Tools.CheckedChangedEventHandler(this.chbStudenAvailability_CheckedChanged);
+			this.chbStudenAvailability.CheckedChanged += new System.EventHandler(this.chbStudenAvailability_CheckedChanged);
 			// 
 			// chbSchedules
 			// 
@@ -408,7 +408,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.chbSchedules.TabIndex = 3;
 			this.chbSchedules.Text = "xxSchedule";
 			this.chbSchedules.ThemesEnabled = false;
-			this.chbSchedules.CheckedChanged += new Syncfusion.Windows.Forms.Tools.CheckedChangedEventHandler(this.chbSchedules_CheckedChanged);
+			this.chbSchedules.CheckedChanged += new System.EventHandler(this.chbSchedules_CheckedChanged);
 			// 
 			// agentRestrictionGrid1
 			// 
