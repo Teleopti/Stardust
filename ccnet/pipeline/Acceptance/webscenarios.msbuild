@@ -7,6 +7,8 @@
 		<SourceFiles Condition="'$(SourceFiles)' == ''">$(PipelineFolder)\$(CCNetLabel)</SourceFiles>
 		<NUnitExeToolPath>$(DestinationFolder)\packages\NUnit.Runners.2.6.2\tools</NUnitExeToolPath>
 		<Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
+		<ApplicationDatabase Condition="'$(ApplicationDatabase)'==''">ApplicationDbTest</ApplicationDatabase>
+		<AnalyticsDatabase Condition="'$(AnalyticsDatabase)'==''">AnalyticsDbTest</AnalyticsDatabase>
 	</PropertyGroup>
 	
 	<UsingTask AssemblyFile="$(DestinationFolder)\packages\MSBuildTasks.1.4.0.65\tools\MSBuild.Community.Tasks.dll" TaskName="NUnit"/>
@@ -81,7 +83,7 @@
 			<SetSettings>"$(DestinationFolder)\ccnet\pipeline\Acceptance\setSettings.bat"</SetSettings>
 			<SupportTool>Teleopti.Support.Tool.exe</SupportTool>
 		</PropertyGroup>
-		<exec command="$(setSettings) a b"/>
+		<exec command="$(setSettings) $(ApplicationDatabase) $(AnalyticsDatabase)"/>
 		<exec command="$(SupportTool) -MOTest" WorkingDirectory="$(DestinationFolder)\Teleopti.Support.Tool\bin\$(Configuration)"/>
 	</Target>
 </Project>

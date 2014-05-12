@@ -1,6 +1,6 @@
 ::Test msbuild targets on webscenarios.msbuild
 :: usage
-:: webscenarios.bat [CCNetLabel] [destinationFolder] [targets]
+:: webscenarios.bat [CCNetLabel] [destinationFolder] [targets] [applicationDatabase] [AnalyticsDatabase]
 
 @ECHO off
 
@@ -12,6 +12,8 @@ SET MSBUILD=C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
 set CCNetLabel=%1
 set DestinationFolder=%2
 set targets=%3
+set ApplicationDatabase=%4
+set AnalyticsDatabase=%5
 
 echo %rootdir%
 
