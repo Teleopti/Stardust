@@ -12,6 +12,7 @@
 	
 	<Target Name="AcceptanceTests">
 		<CallTarget Targets="CopySourceFilesToWorkingDirectory" />
+		<CallTarget Targets="ConfigureSettings" />
 		<CallTarget Targets="RunWebScenarios"/>
 	</Target>
 	
@@ -47,5 +48,12 @@
 			ToolPath="$(NUnitExeToolPath)"
 			Framework="4.0"
 			OutputXmlFile="$(DestinationFolder)\nunit.xml" />
+	</Target>
+	
+	<Target Name="ConfigureSettings">
+		<PropertyGroup>
+			<SetSettings>$(SourceFiles)\ccnet\pipeline\Acceptance\setSettings.bat</SetSettings>
+		</PropertyGroup>
+		<exec command="$(setSettings) a b"/>
 	</Target>
 </Project>
