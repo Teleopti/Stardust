@@ -80,7 +80,7 @@
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 	</ItemGroup>
 
-	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;NCoverReporting;NDepend;CopyNDependStatisticsToDatabase">
+	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;NCoverReporting;CopyNDependStatisticsToDatabase">
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 	
@@ -349,7 +349,7 @@
 		<Message Importance="high" Text="NCoverReporting finished." />
 	</Target> 
 	
-	<Target Name="NDepend" Condition="'$(CCNetProject)' == 'CCC-Main'" DependsOnTargets="Compile" >
+	<Target Name="NDepend" DependsOnTargets="Compile" >
     <PropertyGroup>
       <NDPath>C:\NDepend\NDepend.console.exe</NDPath>
       <NDProject>$(CCNetWorkingDirectory)\ccc.ndproj</NDProject>
@@ -359,7 +359,7 @@
     <Exec
       Command='"$(NDPath)" "$(NDProject)" /OutDir "$(NDOut)"'/>
   </Target>
-	<Target Name="CopyNDependStatisticsToDatabase" Condition="'$(CCNetProject)' == 'CCC-Main'" DependsOnTargets="NDepend">
+	<Target Name="CopyNDependStatisticsToDatabase" Condition="'$(CCNetProject)' == 'CCC-Main' AND '$(Computername)' == 'HEBE'" DependsOnTargets="NDepend">
 		<PropertyGroup>
 			<RevisionOutput>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs\Ndepend\Revision.txt</RevisionOutput>
 			<NDependOutput>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs\Ndepend\\</NDependOutput>
