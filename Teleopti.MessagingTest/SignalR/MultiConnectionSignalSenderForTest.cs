@@ -9,15 +9,18 @@ namespace Teleopti.MessagingTest.SignalR
 	{
 		private readonly Queue<IHubConnectionWrapper> _hubConnections;
 
-		public MultiConnectionSignalSenderForTest(IEnumerable<IHubConnectionWrapper> hubConnections, IRecreateStrategy recreateStrategy, INow now)
-			: base("http://neeedsToBeSet", recreateStrategy, now)
+		public IHubConnectionWrapper CurrentConnection;
+
+		public MultiConnectionSignalSenderForTest(IEnumerable<IHubConnectionWrapper> hubConnections, IRecreateStrategy recreateStrategy, ITime time)
+			: base("http://neeedsToBeSet", recreateStrategy, time)
 		{
 			_hubConnections = new Queue<IHubConnectionWrapper>(hubConnections);
 		}
 
 		protected override IHubConnectionWrapper MakeHubConnection()
 		{
-			return _hubConnections.Dequeue();
+			CurrentConnection = _hubConnections.Dequeue();
+			return CurrentConnection;
 		}
 	}
 }

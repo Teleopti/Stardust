@@ -11,52 +11,6 @@ using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.SignalR
 {
-
-	public interface IRecreateStrategy
-	{
-		void NewProxyCreated(IHubProxyWrapper hubProxy, DateTime now);
-		void VerifyConnection(Action createNewConnection, DateTime now);
-	}
-
-	public class Ping : IRecreateStrategy
-	{
-		private TimeSpan RecreateTimeout { get; set; }
-		private DateTime lastPongReply;
-
-		public Ping() : this(TimeSpan.FromMinutes(2))
-		{
-		}
-
-		public Ping(TimeSpan recreateTimeout)
-		{
-			RecreateTimeout = recreateTimeout;
-		}
-
-		public void NewProxyCreated(IHubProxyWrapper hubProxy, DateTime now)
-		{
-			hubProxy.Subscribe("Pong").Received += list => lastPongReply = now;
-			hubProxy.Invoke("Ping");
-		}
-
-		public void VerifyConnection(Action createNewConnection, DateTime now)
-		{
-			if (now > lastPongReply.Add(RecreateTimeout))
-				createNewConnection();
-		}
-
-	}
-
-	public class NoRecreate : IRecreateStrategy
-	{
-		public void NewProxyCreated(IHubProxyWrapper hubProxy, DateTime now)
-		{
-		}
-
-		public void VerifyConnection(Action createNewConnection, DateTime now)
-		{
-		}
-	}
-
 	[CLSCompliant(false)]
 	public class SignalConnection : IHandleHubConnection, ICallHubProxy
 	{
@@ -72,7 +26,7 @@ namespace Teleopti.Messaging.SignalR
 		protected ILog Logger;
 		private readonly int _maxRestartAttempts;
 		private readonly IRecreateStrategy _recreateStrategy;
-		private readonly INow _now;
+		private readonly ITime _time;
 		private int _reconnectAttempts;
 
 		public SignalConnection(
@@ -80,7 +34,7 @@ namespace Teleopti.Messaging.SignalR
 			ILog logger,
 			TimeSpan restartDelay, 
 			IRecreateStrategy recreateStrategy,
-			INow now,
+			ITime time,
 			int maxRestartAttempts = 0)
 		{
 			_hubConnectionFactory = hubConnectionFactory;
@@ -88,7 +42,7 @@ namespace Teleopti.Messaging.SignalR
 			_restartDelay = restartDelay;
 			_maxRestartAttempts = maxRestartAttempts;
 			_recreateStrategy = recreateStrategy;
-			_now = now;
+			_time = time;
 
 			Logger = logger ?? LogManager.GetLogger(typeof(SignalConnection));
 
@@ -98,13 +52,13 @@ namespace Teleopti.Messaging.SignalR
 		{
 			_hubConnection = _hubConnectionFactory.Invoke();
 			_hubProxy = _hubConnection.CreateHubProxy("MessageBrokerHub");
-			_recreateStrategy.NewProxyCreated(_hubProxy, _now.UtcDateTime());
+			_recreateStrategy.NewProxyCreated(_hubProxy, _time.UtcDateTime());
 		}
 
 		public void StartConnection(Action<Notification> onNotification)
 		{
 			createConnectionAndProxy();
-
+			
 			if (onNotification != null)
 			{
 				_hubProxy.Subscribe("OnEventMessage").Received += obj =>
@@ -206,7 +160,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void IfProxyConnected(Action<IHubProxyWrapper> action)
 		{
-			_recreateStrategy.VerifyConnection(createConnectionAndProxy, _now.UtcDateTime());
+			_recreateStrategy.VerifyConnection(createConnectionAndProxy, _time.UtcDateTime());
 
 			if (_hubConnection.State == ConnectionState.Connected)
 				action.Invoke(_hubProxy);

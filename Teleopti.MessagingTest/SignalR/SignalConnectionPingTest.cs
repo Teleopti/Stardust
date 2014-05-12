@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
@@ -30,17 +31,16 @@ namespace Teleopti.MessagingTest.SignalR
 		[Test]
 		public void ShouldRecreateConnectionWhenNoReplyFromPingInXMinutes()
 		{
-			var now = new MutableNow();
-			now.Mutate(new DateTime(2001, 1, 1, 12, 0, 0, DateTimeKind.Utc));
+			var time = new FakeTime(new DateTime(2001, 1, 1, 12, 0, 0, DateTimeKind.Utc));
 			var hubProxy1 = new HubThatRepliesToPing();
 			var hubProxy2 = new HubThatRepliesToPing();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = new MultiConnectionSignalSenderForTest(new[] {hubConnection1, hubConnection2}, new Ping(TimeSpan.FromMinutes(3)), now);
+			var target = new MultiConnectionSignalSenderForTest(new[] {hubConnection1, hubConnection2}, new Ping(TimeSpan.FromMinutes(3)), time);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			hubProxy1.BreakTheConnection();
-			now.Mutate(now.UtcDateTime().AddMinutes(4));
+			time.Passes(TimeSpan.FromMinutes(4));
 			var notification = new Notification();
 			target.SendNotification(notification);
 
@@ -50,15 +50,14 @@ namespace Teleopti.MessagingTest.SignalR
 		[Test]
 		public void ShouldNotRecreateUntilTimeout()
 		{
-			var now = new MutableNow();
-			now.Mutate(DateTime.UtcNow);
+			var time = new FakeTime();
 			var hubProxy = new HubThatRepliesToPing();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection }, new Ping(TimeSpan.FromMinutes(2)), now);
+			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection }, new Ping(TimeSpan.FromMinutes(2)), time);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			hubProxy.BreakTheConnection();
-			now.Mutate(now.UtcDateTime().AddSeconds(119));
+			time.Passes(TimeSpan.FromSeconds(119));
 			var notification = new Notification();
 			target.SendNotification(notification);
 
@@ -68,19 +67,18 @@ namespace Teleopti.MessagingTest.SignalR
 		[Test]
 		public void ShouldSendNotificationsOnCurrentConnection()
 		{
-			var now = new MutableNow();
-			now.Mutate(DateTime.UtcNow);
+			var time = new FakeTime();
 			var hubProxy1 = new HubThatRepliesToPing();
 			var hubProxy2 = new HubThatRepliesToPing();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new Ping(TimeSpan.FromMinutes(1)), now);
+			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new Ping(TimeSpan.FromMinutes(1)), time);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			var notification1 = new Notification();
 			target.SendNotification(notification1);
 			hubProxy1.BreakTheConnection();
-			now.Mutate(now.UtcDateTime().AddMinutes(2));
+			time.Passes(TimeSpan.FromMinutes(2));
 			var notification2 = new Notification();
 			target.SendNotification(notification2);
 
@@ -88,8 +86,28 @@ namespace Teleopti.MessagingTest.SignalR
 			hubProxy2.NotifyClientsInvokedWith.Single().Should().Be(notification2);
 		}
 
+		[Test, Ignore]
+		public void ShouldCreateConnectionsInTheBackground()
+		{
+			var time = new FakeTime();
+			var hubProxy1 = new HubThatRepliesToPing();
+			var hubProxy2 = new HubThatRepliesToPing();
+			var hubConnection1 = stubHubConnection(hubProxy1);
+			var hubConnection2 = stubHubConnection(hubProxy2);
+			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new Ping(TimeSpan.FromMinutes(1)), time);
+			target.StartBrokerService(TimeSpan.FromSeconds(0));
+
+			hubProxy1.BreakTheConnection();
+			time.Passes(TimeSpan.FromMinutes(2));
+
+			target.CurrentConnection.Should().Be(hubConnection2);
+		}
+
 
 	}
+
+
+	
 
 	public class HubThatRepliesToPing : IHubProxyWrapper
 	{
@@ -108,7 +126,11 @@ namespace Teleopti.MessagingTest.SignalR
 		public Task Invoke(string method, params object[] args)
 		{
 			if (method == "Ping" && !_broken)
+			{
 				pingReply.ReplyToPing();
+			//	var task = TaskHelper.Delay(TimeSpan.FromMilliseconds(100));
+			//	task.ContinueWith(t => pingReply.ReplyToPing());
+			}
 			if (method == "NotifyClients")
 				NotifyClientsInvokedWith.Add(args.First() as Notification);
 			return TaskHelper.MakeDoneTask();
@@ -129,4 +151,6 @@ namespace Teleopti.MessagingTest.SignalR
 			Received(null);
 		}
 	}
+
+
 }

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, new SignalBroker(MessageFilterManager.Instance, new NoRecreate(), new Now()), null);
+			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, SignalBroker.MakeForTest(MessageFilterManager.Instance), null);
 			var sessionData = CreateSessionData(person, applicationData, businessUnit, principalContext);
 
 			var state = new FakeState { ApplicationScopeData = applicationData, SessionScopeData = sessionData, IsLoggedIn = true };

@@ -10,7 +10,7 @@ namespace Teleopti.MessagingTest.SignalR
 		private readonly IHubConnectionWrapper _hubConnection;
 
 		public SignalSenderForTest(IHubConnectionWrapper hubConnection)
-			: base("http://neeedsToBeSet", new NoRecreate(), new Now())
+			: base("http://neeedsToBeSet", new NoRecreate(), new Time(new Now()))
 		{
 			_hubConnection = hubConnection; 
 		}

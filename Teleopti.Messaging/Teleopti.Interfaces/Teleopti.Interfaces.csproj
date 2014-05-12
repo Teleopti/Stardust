@@ -119,6 +119,7 @@
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
+    <Compile Include="Domain\ITime.cs" />
     <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="Domain\IActualAgentState.cs" />
@@ -584,6 +585,7 @@
     <Compile Include="Domain\StaffingThresholds.cs" />
     <Compile Include="Domain\StartTimeLimitation.cs" />
     <Compile Include="Domain\TeleoptiAuthenticationHeaderNames.cs" />
+    <Compile Include="Domain\Time.cs" />
     <Compile Include="Domain\TimeFormatsType.cs" />
     <Compile Include="Domain\MultiplicatorType.cs" />
     <Compile Include="Domain\TimeOfDay.cs" />

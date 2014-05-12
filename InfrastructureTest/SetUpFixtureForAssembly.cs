@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			ApplicationData = new ApplicationData(appSettings,
 									new ReadOnlyCollection<IDataSource>(new List<IDataSource> { DataSource }),
-									new SignalBroker(MessageFilterManager.Instance, new NoRecreate(), new Now()), null);
+									SignalBroker.MakeForTest(MessageFilterManager.Instance), null);
 			sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, ApplicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
 
 			StateHolderProxyHelper.SetStateReaderExpectations(stateMock, ApplicationData, sessionData);

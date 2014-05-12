@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.WinCode.Main
 			new InitializeApplication(
 				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
 				                       DataSourceConfigurationSetter.ForDesktop()),
-				new SignalBroker(MessageFilterManager.Instance, new Ping(), new Now()))
-				{
+				SignalBroker.Make(MessageFilterManager.Instance)
+				) {
 					MessageBrokerDisabled = messageBrokerDisabled
 				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath),
 				        new ConfigurationManagerWrapper(), true);
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WinCode.Main
                                                           new PersonChangedMessageSender(eventPublisher),
                                                           new PersonPeriodChangedMessageSender(eventPublisher)
 												      }, DataSourceConfigurationSetter.ForDesktop()),
-        			new SignalBroker(MessageFilterManager.Instance, new Ping(), new Now()))
+					SignalBroker.Make(MessageFilterManager.Instance))
         			{
         				MessageBrokerDisabled = messageBrokerDisabled
         			};

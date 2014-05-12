@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			if (_messageBroker == null)
 			{
-				var broker = new SignalBroker(MessageFilterManager.Instance, new NoRecreate(), new Now());
+				var broker = new SignalBroker(MessageFilterManager.Instance, new NoRecreate(), new Time(new Now()));
 				broker.ConnectionString = TestSiteConfigurationSetup.Url.ToString();
 				broker.StartMessageBroker();
 				_messageBroker = broker;

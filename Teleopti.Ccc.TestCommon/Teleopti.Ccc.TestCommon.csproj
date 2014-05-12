@@ -104,6 +104,7 @@
     <Compile Include="FakeLoggedOnUser.cs" />
     <Compile Include="FakeRepositories\FakePersonAssignmentReadScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakeScenarioRepository.cs" />
+    <Compile Include="FakeTime.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="IniFileInfo.cs" />
     <Compile Include="CrossThreadTestRunner.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="StubFactory.cs" />
     <Compile Include="FakeCurrentDatasource.cs" />
     <Compile Include="FakeCurrentScenario.cs" />
+    <Compile Include="TestableNow.cs" />
     <Compile Include="TestData\Analytics\AQueue.cs" />
     <Compile Include="TestData\Analytics\AWorkload.cs" />
     <Compile Include="TestData\Analytics\BusinessUnit.cs" />

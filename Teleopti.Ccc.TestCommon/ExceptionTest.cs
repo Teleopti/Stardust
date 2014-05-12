@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.TestCommon
 {
-    /// <summary>
+	/// <summary>
     /// Base class for tests running against
     /// own implemented exceptions
     /// </summary>

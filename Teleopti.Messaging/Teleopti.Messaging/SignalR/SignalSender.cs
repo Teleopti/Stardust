@@ -18,18 +18,18 @@ namespace Teleopti.Messaging.SignalR
 	public class SignalSender : IMessageSender
 	{
 		private readonly IRecreateStrategy _recreateStrategy;
-		private readonly INow _now;
+		private readonly ITime _time;
 		private readonly string _serverUrl;
 		private IHandleHubConnection _connection;
 		private ISignalBrokerCommands _signalBrokerCommands;
 		private readonly ILog _logger;
 
-		public SignalSender(string serverUrl, IRecreateStrategy recreateStrategy, INow now)
-			: this(serverUrl, LogManager.GetLogger(typeof(SignalSender)), recreateStrategy, now)
+		public SignalSender(string serverUrl, IRecreateStrategy recreateStrategy, ITime time)
+			: this(serverUrl, LogManager.GetLogger(typeof(SignalSender)), recreateStrategy, time)
 		{
 		}
 
-		public SignalSender(string serverUrl, ILog logger, IRecreateStrategy recreateStrategy, INow now)
+		public SignalSender(string serverUrl, ILog logger, IRecreateStrategy recreateStrategy, ITime time)
 		{
 			_serverUrl = serverUrl;
 
@@ -40,7 +40,7 @@ namespace Teleopti.Messaging.SignalR
 
 			_logger = logger;
 			_recreateStrategy = recreateStrategy;
-			_now = now;
+			_time = time;
 		}
 
 		protected static bool IgnoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
@@ -73,7 +73,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_connection == null)
 				{
-					var connection = new SignalConnection(MakeHubConnection, _logger, restartDelay, _recreateStrategy, _now, restartAttempts);
+					var connection = new SignalConnection(MakeHubConnection, _logger, restartDelay, _recreateStrategy, _time, restartAttempts);
 					
 					_signalBrokerCommands = new SignalBrokerCommands(_logger, connection);
 					_connection = connection;

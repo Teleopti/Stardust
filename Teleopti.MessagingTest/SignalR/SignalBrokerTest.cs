@@ -240,7 +240,7 @@ namespace Teleopti.MessagingTest.SignalR
 			private readonly IHubConnectionWrapper _hubConnection;
 
 			public signalBrokerForTest(IMessageFilterManager typeFilter, IHubConnectionWrapper hubConnection)
-				: base(typeFilter, new NoRecreate(), new Now())
+				: base(typeFilter, new NoRecreate(), new Time(new Now()))
 			{
 				_hubConnection = hubConnection;
 			}
