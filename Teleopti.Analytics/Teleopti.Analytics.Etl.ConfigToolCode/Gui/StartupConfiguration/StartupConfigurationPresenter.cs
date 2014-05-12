@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Common.Logging;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.StartupConfiguration
@@ -85,13 +86,13 @@ namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.StartupConfiguration
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void SetDefaultCulture()
 		{
-			var defaultCultureInfo = CultureInfo.CurrentCulture;
+			var defaultCultureInfo = CultureInfo.CurrentCulture.FixPersianCulture();
 
 			if (_model.OriginalConfiguration.CultureId.HasValue)
 			{
 				try
 				{
-					defaultCultureInfo = CultureInfo.GetCultureInfo(_model.OriginalConfiguration.CultureId.Value);
+					defaultCultureInfo = CultureInfo.GetCultureInfo(_model.OriginalConfiguration.CultureId.Value).FixPersianCulture();
 				}
 				catch
 				{

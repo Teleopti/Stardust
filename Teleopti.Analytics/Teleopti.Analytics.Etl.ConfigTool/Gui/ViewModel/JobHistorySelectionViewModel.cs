@@ -20,7 +20,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 		public JobHistorySelectionViewModel(IBaseConfiguration baseConfiguration)
 		{
 			_culture = baseConfiguration.CultureId.HasValue
-									? CultureInfo.GetCultureInfo(baseConfiguration.CultureId.Value)
+									? CultureInfo.GetCultureInfo(baseConfiguration.CultureId.Value).FixPersianCulture()
 									: CultureInfo.GetCultureInfo("sv-SE");
 
 			SetWeekPeriod();

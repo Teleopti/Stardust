@@ -8,6 +8,7 @@ using Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration;
 using Teleopti.Analytics.Etl.Transformer;
 using log4net.Config;
 using System.Xaml;
+using Teleopti.Interfaces.Domain;
 using Application = System.Windows.Application;
 
 namespace Teleopti.Analytics.Etl.ConfigTool
@@ -35,7 +36,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 			}
 
 			if (configurationHandler.BaseConfiguration.CultureId != null)
-				Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(configurationHandler.BaseConfiguration.CultureId.Value);
+				Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(configurationHandler.BaseConfiguration.CultureId.Value).FixPersianCulture();
 
 			// WPF should use CurrentCulture
 			FrameworkElement.LanguageProperty.OverrideMetadata(

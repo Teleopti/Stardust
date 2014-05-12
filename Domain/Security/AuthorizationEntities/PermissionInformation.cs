@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
@@ -135,15 +136,15 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "argumentException")]
         public CultureInfo Culture()
         {
-            if (!culture.HasValue) return Thread.CurrentThread.CurrentCulture;
+            if (!culture.HasValue) return Thread.CurrentThread.CurrentCulture.FixPersianCulture();
 
             try
             {
-                return CultureInfo.GetCultureInfo(culture.Value);
+				return CultureInfo.GetCultureInfo(culture.Value).FixPersianCulture();
             }
             catch (ArgumentException)
             {
-                return Thread.CurrentThread.CurrentCulture;
+				return Thread.CurrentThread.CurrentCulture.FixPersianCulture();
             }
 
         }
@@ -162,15 +163,15 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "argumentException")]
         public CultureInfo UICulture()
         {
-            if (!uiCulture.HasValue) return Thread.CurrentThread.CurrentUICulture;
+			if (!uiCulture.HasValue) return Thread.CurrentThread.CurrentUICulture.FixPersianCulture();
 
             try
             {
-                return CultureInfo.GetCultureInfo(uiCulture.Value);
+				return CultureInfo.GetCultureInfo(uiCulture.Value).FixPersianCulture();
             }
             catch (ArgumentException)
             {
-                return Thread.CurrentThread.CurrentUICulture;
+				return Thread.CurrentThread.CurrentUICulture.FixPersianCulture();
             }
         }
 
