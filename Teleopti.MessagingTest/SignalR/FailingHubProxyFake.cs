@@ -1,21 +1,24 @@
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
-using Teleopti.Interfaces.MessageBroker;
+using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
-using Subscription = Microsoft.AspNet.SignalR.Client.Hubs.Subscription;
 
 namespace Teleopti.MessagingTest.SignalR
 {
-	public class HubProxyFake : IHubProxyWrapper
+	public class FailingHubProxyFake : IHubProxyWrapper
 	{
-		public readonly IList<Notification> NotifyClientsInvokedWith = new List<Notification>();
+		private readonly Exception _exception;
+
+		public FailingHubProxyFake(Exception exception)
+		{
+			_exception = exception;
+		}
 
 		public Task Invoke(string method, params object[] args)
 		{
 			if (method == "NotifyClients")
-				NotifyClientsInvokedWith.Add(args.First() as Notification);
+				return TaskHelper.MakeFailedTask(_exception);
 			return TaskHelper.MakeDoneTask();
 		}
 

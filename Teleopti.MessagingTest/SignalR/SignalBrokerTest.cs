@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -238,7 +239,7 @@ namespace Teleopti.MessagingTest.SignalR
 			private readonly IHubConnectionWrapper _hubConnection;
 
 			public signalBrokerForTest(IMessageFilterManager typeFilter, IHubConnectionWrapper hubConnection)
-				: base(typeFilter)
+				: base(typeFilter, new Now())
 			{
 				_hubConnection = hubConnection;
 			}

@@ -6,6 +6,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -19,14 +20,16 @@ namespace Teleopti.Messaging.SignalR
 {
 	public class SignalBroker : IMessageBroker
 	{
+		private readonly INow _now;
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
 		private IHandleHubConnection _connection;
 		private ISignalBrokerCommands _signalBrokerCommands;
 		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 
-		public SignalBroker(IMessageFilterManager typeFilter)
+		public SignalBroker(IMessageFilterManager typeFilter, INow now)
 		{
+			_now = now;
 			FilterManager = typeFilter;
 			IsTypeFilterApplied = true;
 
@@ -280,21 +283,13 @@ namespace Teleopti.Messaging.SignalR
 			
 			lock (_wrapperLock)
 			{
-				var connection = new SignalConnection(() => MakeHubConnection(serverUrl), null, reconnectDelay);
+				var connection = new SignalConnection(() => MakeHubConnection(serverUrl), null, reconnectDelay, null, _now);
 				_connection = connection;
 
 				_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
 
-				connection.WithProxy(p =>
-				{
-					p.Subscribe("OnEventMessage").Received += obj =>
-					{
-						var d = obj[0].ToObject<Notification>();
-						onNotification(d);
-					};
-				});
 
-				_connection.StartConnection();
+				_connection.StartConnection(onNotification);
 			}
 		}
 

@@ -24,17 +24,15 @@ namespace Teleopti.MessagingTest.SignalR
 		[Test]
 		public void ShouldLogWhenNotificationTasksFails()
 		{
-			var failedTask = TaskHelper.MakeFailedTask(new Exception());
-			var hubProxy = MockRepository.GenerateMock<IHubProxyWrapper>();
+			var exception = new Exception();
+			var hubProxy = new FailingHubProxyFake(exception);
 
 			var log = MockRepository.GenerateMock<ILog>();
 			var target = new LoggingSignalSenderForTest(stubHubConnection(hubProxy), log);
 			target.StartBrokerService();
 
-			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", null)).IgnoreArguments().Return(failedTask);
-
 			Assert.DoesNotThrow(() => target.SendNotification(new Notification()));
-			log.AssertWasCalled(t => t.Debug("", null), a => a.IgnoreArguments());
+			log.AssertWasCalled(t => t.Debug(Arg<string>.Is.Equal("An error happened on notification task"), Arg<Exception>.Is.NotNull));
 		}
 
 		[Test]

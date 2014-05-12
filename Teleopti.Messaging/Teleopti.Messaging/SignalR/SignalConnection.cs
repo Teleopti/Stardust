@@ -3,6 +3,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
 using log4net;
 using Teleopti.Messaging.SignalR.Wrappers;
@@ -17,31 +19,58 @@ namespace Teleopti.Messaging.SignalR
 		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to restart...";
 		public const string ConnectionReconnected = "Connection reconnected successfully";
 
-		private readonly IHubProxyWrapper _hubProxy;
-		private readonly IHubConnectionWrapper _hubConnection;
+		private IHubProxyWrapper _hubProxy;
+		private IHubConnectionWrapper _hubConnection;
+		private readonly Func<IHubConnectionWrapper> _hubConnectionFactory;
 		private readonly TimeSpan _restartDelay;
 
 		protected ILog Logger;
 		private readonly int _maxRestartAttempts;
+		private readonly IPing _ping;
+		private readonly INow _now;
 		private int _reconnectAttempts;
-
+		private DateTime lastPongReply;
 
 		public SignalConnection(
 			Func<IHubConnectionWrapper> hubConnectionFactory, 
 			ILog logger,
 			TimeSpan restartDelay, 
+			IPing ping,
+			INow now,
 			int maxRestartAttempts = 0)
 		{
-			_hubConnection = hubConnectionFactory.Invoke();
-			_hubProxy = _hubConnection.CreateHubProxy("MessageBrokerHub");
+			_hubConnectionFactory = hubConnectionFactory;
+			
 			_restartDelay = restartDelay;
 			_maxRestartAttempts = maxRestartAttempts;
+			_ping = ping;
+			_now = now;
 
 			Logger = logger ?? LogManager.GetLogger(typeof(SignalConnection));
+
 		}
 
-		public void StartConnection()
+		private void createConnectionAndProxy()
 		{
+			_hubConnection = _hubConnectionFactory.Invoke();
+			_hubProxy = _hubConnection.CreateHubProxy("MessageBrokerHub");
+			_hubProxy.Subscribe("Pong").Received += list => lastPongReply = DateTime.UtcNow;
+			_hubProxy.Invoke("Ping");
+		}
+
+		public void StartConnection(Action<Notification> onNotification)
+		{
+			createConnectionAndProxy();
+
+			if (onNotification != null)
+			{
+				_hubProxy.Subscribe("OnEventMessage").Received += obj =>
+				{
+					var d = obj[0].ToObject<Notification>();
+					onNotification(d);
+				};
+			}
+			
 			_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
 			_hubConnection.Closed += restart;
 			_hubConnection.Reconnected += hubConnectionOnReconnected;
@@ -134,6 +163,10 @@ namespace Teleopti.Messaging.SignalR
 
 		public void IfProxyConnected(Action<IHubProxyWrapper> action)
 		{
+			if (_now.UtcDateTime() > lastPongReply.AddMinutes(2))
+			{
+				createConnectionAndProxy();
+			}
 			if (_hubConnection.State == ConnectionState.Connected)
 				action.Invoke(_hubProxy);
 		}

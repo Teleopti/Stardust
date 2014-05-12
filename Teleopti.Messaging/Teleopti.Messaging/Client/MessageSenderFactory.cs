@@ -11,7 +11,7 @@ namespace Teleopti.Messaging.Client
 			Uri serverUrl;
 			if (Uri.TryCreate(connectionString,UriKind.Absolute,out serverUrl))
 			{
-				return new SignalSender(connectionString);
+				return new SignalSender(connectionString, null, null);
 			}
 			return null;
 		}

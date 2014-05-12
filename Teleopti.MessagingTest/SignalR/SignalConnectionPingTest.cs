@@ -39,17 +39,12 @@ namespace Teleopti.MessagingTest.SignalR
 			var target = new MultiConnectionSignalSenderForTest(new[] {hubConnection1, hubConnection2}, new Ping(TimeSpan.FromMinutes(2)), now);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
-			//var notification1 = new Notification();
-			//target.SendNotification(notification1);
-			//hubProxy1.NotifyClientsInvokedWith.Single().Should().Be(notification1);
-
-			//hubProxy1.BreakTheConnection();
-
+			hubProxy1.BreakTheConnection();
 			now.Mutate(now.UtcDateTime().AddMinutes(3));
+			var notification = new Notification();
+			target.SendNotification(notification);
 
-			var notification2 = new Notification();
-			target.SendNotification(notification2);
-			hubProxy2.NotifyClientsInvokedWith.Single().Should().Be(notification2);
+			hubProxy2.NotifyClientsInvokedWith.Single().Should().Be(notification);
 		}
 
 		[Test]
@@ -62,10 +57,11 @@ namespace Teleopti.MessagingTest.SignalR
 			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection }, new Ping(TimeSpan.FromMinutes(2)), now);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
+			hubProxy.BreakTheConnection();
 			now.Mutate(now.UtcDateTime().AddSeconds(119));
-
 			var notification = new Notification();
 			target.SendNotification(notification);
+
 			hubProxy.NotifyClientsInvokedWith.Single().Should().Be(notification);
 		}
 
@@ -83,14 +79,12 @@ namespace Teleopti.MessagingTest.SignalR
 
 			var notification1 = new Notification();
 			target.SendNotification(notification1);
-			hubProxy1.NotifyClientsInvokedWith.Single().Should().Be(notification1);
-
 			hubProxy1.BreakTheConnection();
-
 			now.Mutate(now.UtcDateTime().AddMinutes(3));
-
 			var notification2 = new Notification();
 			target.SendNotification(notification2);
+
+			hubProxy1.NotifyClientsInvokedWith.Single().Should().Be(notification1);
 			hubProxy2.NotifyClientsInvokedWith.Single().Should().Be(notification2);
 		}
 
@@ -106,7 +100,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 		public ISubscriptionWrapper Subscribe(string eventName)
 		{
-			if (eventName == "PingReply")
+			if (eventName == "Pong")
 				return pingReply;
 			return new SubscriptionWrapper(new Subscription());
 		}

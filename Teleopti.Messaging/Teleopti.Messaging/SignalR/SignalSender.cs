@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Exceptions;
@@ -27,16 +28,19 @@ namespace Teleopti.Messaging.SignalR
 
 	public class SignalSender : IMessageSender
 	{
+		private readonly IPing _ping;
+		private readonly INow _now;
 		private readonly string _serverUrl;
 		private IHandleHubConnection _connection;
 		private ISignalBrokerCommands _signalBrokerCommands;
 		private readonly ILog _logger;
 
-		public SignalSender(string serverUrl) : this(serverUrl, LogManager.GetLogger(typeof (SignalSender)))
+		public SignalSender(string serverUrl, IPing ping, INow now)
+			: this(serverUrl, LogManager.GetLogger(typeof(SignalSender)), ping, now)
 		{
 		}
 
-		public SignalSender(string serverUrl, ILog logger)
+		public SignalSender(string serverUrl, ILog logger, IPing ping, INow now)
 		{
 			_serverUrl = serverUrl;
 
@@ -44,7 +48,10 @@ namespace Teleopti.Messaging.SignalR
 			ServicePointManager.DefaultConnectionLimit = 50;
 
 			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+
 			_logger = logger;
+			_ping = ping;
+			_now = now;
 		}
 
 		protected static bool IgnoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
@@ -77,21 +84,13 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_connection == null)
 				{
-					var connection = new SignalConnection(MakeHubConnection, _logger, restartDelay, restartAttempts);
-					try
-					{
-						connection = new SignalConnection(MakeHubConnection, _logger, restartDelay, restartAttempts);
-					}
-					catch (Exception)
-					{
-					}
-
+					var connection = new SignalConnection(MakeHubConnection, _logger, restartDelay, _ping, _now, restartAttempts);
 					
 					_signalBrokerCommands = new SignalBrokerCommands(_logger, connection);
 					_connection = connection;
 				}
 
-				_connection.StartConnection();
+				_connection.StartConnection(null);
 			}
 			catch (SocketException exception)
 			{

@@ -10,7 +10,7 @@ namespace Teleopti.MessagingTest.SignalR
 		private readonly Queue<IHubConnectionWrapper> _hubConnections;
 
 		public MultiConnectionSignalSenderForTest(IEnumerable<IHubConnectionWrapper> hubConnections, IPing ping, INow now)
-			: base("http://neeedsToBeSet")
+			: base("http://neeedsToBeSet", ping, now)
 		{
 			_hubConnections = new Queue<IHubConnectionWrapper>(hubConnections);
 		}

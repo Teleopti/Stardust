@@ -1,8 +1,11 @@
-﻿namespace Teleopti.Messaging.SignalR
+﻿using System;
+using Teleopti.Interfaces.MessageBroker;
+
+namespace Teleopti.Messaging.SignalR
 {
 	public interface IHandleHubConnection
 	{
-		void StartConnection();
+		void StartConnection(Action<Notification> onNotification);
 		void CloseConnection();
 		bool IsConnected();
 	}
