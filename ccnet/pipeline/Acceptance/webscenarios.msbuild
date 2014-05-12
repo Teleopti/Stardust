@@ -52,8 +52,10 @@
 	
 	<Target Name="ConfigureSettings">
 		<PropertyGroup>
-			<SetSettings>$(DestinationFolder)\ccnet\pipeline\Acceptance\setSettings.bat</SetSettings>
+			<SetSettings>"$(DestinationFolder)\ccnet\pipeline\Acceptance\setSettings.bat"</SetSettings>
+			<SupportTool>Teleopti.Support.Tool.exe</SupportTool>
 		</PropertyGroup>
 		<exec command="$(setSettings) a b"/>
+		<exec command="$(SupportTool) -MOTest" WorkingDirectory="$(DestinationFolder)\Teleopti.Support.Tool\bin\$(Configuration)"/>
 	</Target>
 </Project>
