@@ -16,12 +16,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		private readonly IDayValueUnlockedIndexSorter _dayValueUnlockedIndexSorter;
 		private readonly ILockableBitArrayFactory lockableBitArrayFactory;
 		private readonly IScheduleResultDataExtractorProvider  _scheduleResultDataExtractorProvider;
+		private readonly IValidateFoundMovedDaysSpecification _validateFoundMovedDaysSpecification;
 
-		public TeamBlockMoveTimeDescisionMaker(IDayValueUnlockedIndexSorter dayValueUnlockedIndexSorter, ILockableBitArrayFactory lockableBitArrayFactory, IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
+		public TeamBlockMoveTimeDescisionMaker(IDayValueUnlockedIndexSorter dayValueUnlockedIndexSorter, ILockableBitArrayFactory lockableBitArrayFactory, IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider, IValidateFoundMovedDaysSpecification validateFoundMovedDaysSpecification)
 		{
 			_dayValueUnlockedIndexSorter = dayValueUnlockedIndexSorter;
 			this.lockableBitArrayFactory = lockableBitArrayFactory;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
+			_validateFoundMovedDaysSpecification = validateFoundMovedDaysSpecification;
+
 		}
 
 		public IList<DateOnly> Execute(IScheduleMatrixPro scheduleMatrix, IOptimizationPreferences optimizationPreferences)
@@ -48,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 					if (values[currentMoveToIndex - lockableBitArray.PeriodArea.Minimum] <
 						 values[currentMoveFromIndex - lockableBitArray.PeriodArea.Minimum])
 						break;
-					if (areFoundDaysValid(currentMoveFromIndex, currentMoveToIndex, matrix))
+					if (_validateFoundMovedDaysSpecification.AreFoundDaysValid(currentMoveFromIndex, currentMoveToIndex, matrix))
 					{
 						DateOnly mostUnderStaffedDay = matrix.FullWeeksPeriodDays[currentMoveFromIndex].Day;
 						DateOnly mostOverStaffedDay = matrix.FullWeeksPeriodDays[currentMoveToIndex].Day;
@@ -60,35 +63,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			}
 			return result;
 		}
-
-
-		private static bool areFoundDaysValid(int currentMoveFromIndex, int currentMoveToIndex, IScheduleMatrixPro matrix)
-		{
-			IScheduleDayPro currentMoveFromDay = matrix.FullWeeksPeriodDays[currentMoveFromIndex];
-			IScheduleDayPro currentMoveToDay = matrix.FullWeeksPeriodDays[currentMoveToIndex];
-
-			if (currentMoveFromDay.DaySchedulePart().SignificantPart() != SchedulePartView.MainShift
-				 || currentMoveToDay.DaySchedulePart().SignificantPart() != SchedulePartView.MainShift)
-				return false;
-
-
-			TimeSpan? moveFromWorkShiftLength = null;
-			TimeSpan? moveToWorkShiftLength = null;
-
-			if (currentMoveFromDay.DaySchedulePart() != null
-				&& currentMoveFromDay.DaySchedulePart().ProjectionService() != null)
-				moveFromWorkShiftLength = currentMoveFromDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
-			if (currentMoveToDay.DaySchedulePart() != null
-				&& currentMoveToDay.DaySchedulePart().ProjectionService() != null)
-				moveToWorkShiftLength = currentMoveToDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
-			if (moveFromWorkShiftLength.HasValue
-				 && moveToWorkShiftLength.HasValue
-				 && moveFromWorkShiftLength.Value > moveToWorkShiftLength.Value)
-				return false;
-
-			return true;
-		}
-
 	}
 
 	

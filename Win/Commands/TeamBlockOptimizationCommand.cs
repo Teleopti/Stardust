@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.Win.Commands
 	    private readonly ITeamBlockScheduler _teamBlockScheduler;
         private readonly IWeeklyRestSolverCommand  _weeklyRestSolverCommand;
 	    private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
+	    private readonly ITeamBlockMoveTimeBetweenDaysCommand _teamBlockMoveTimeBetweenDaysCommand;
 
 	    public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
 											ITeamBlockClearer teamBlockCleaner,
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.Win.Commands
 											ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
 											ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
 											ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
-											ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand, IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification)
+											ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand, IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification, ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand)
 	    {
 		    _schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -119,6 +120,7 @@ namespace Teleopti.Ccc.Win.Commands
 		    _teamBlockScheduler = teamBlockScheduler;
             _weeklyRestSolverCommand = weeklyRestSolverCommand;
 		    _allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
+		    _teamBlockMoveTimeBetweenDaysCommand = teamBlockMoveTimeBetweenDaysCommand;
 	    }
 
         public void Execute(BackgroundWorker backgroundWorker, 
@@ -148,6 +150,12 @@ namespace Teleopti.Ccc.Win.Commands
 	        if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
 		        optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,
 			        rollbackServiceWithResourceCalculation, resourceCalculateDelayer, teamBlockGenerator);
+
+			  if (optimizationPreferences.General.OptimizationStepTimeBetweenDays && !optimizationPreferences.Extra.UseBlockSameShift)
+			  {
+				  
+				  optimizeMoveTimeBetweenDays(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences, rollbackServiceWithResourceCalculation, schedulingOptions, resourceCalculateDelayer, allMatrixes);
+			  }
 
 			if (optimizationPreferences.General.OptimizationStepFairness)
 			{
@@ -183,6 +191,22 @@ namespace Teleopti.Ccc.Win.Commands
                         _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences) );
 
         }
+
+	    private void optimizeMoveTimeBetweenDays(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod,
+		    IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
+		    ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, ISchedulingOptions schedulingOptions,
+		    IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allMatrixes)
+	    {
+			 IScheduleResultDataExtractor allSkillsDataExtractor =
+	 OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod,
+													_schedulerStateHolder.SchedulingResultState);
+			 IPeriodValueCalculator periodValueCalculatorForAllSkills =
+				  OptimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced,
+																					 allSkillsDataExtractor);
+		    _teamBlockMoveTimeBetweenDaysCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons,
+				 rollbackServiceWithResourceCalculation, resourceCalculateDelayer, selectedPeriod, allMatrixes, backgroundWorker, periodValueCalculatorForAllSkills,
+			    _schedulerStateHolder.SchedulingResultState);
+	    }
 
 	    private void solveWeeklyRestViolations(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, 
                     IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService, IList<IScheduleMatrixPro> allMatrixes,

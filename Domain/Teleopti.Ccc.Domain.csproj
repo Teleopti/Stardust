@@ -329,6 +329,7 @@
     <Compile Include="DayOffPlanning\SmartDayOffBackToLegalStateService.cs" />
     <Compile Include="DayOffPlanning\TeDataDayOffDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
+    <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\ValidateFoundMovedDaysSpecification.cs" />
     <Compile Include="DayOffPlanning\WeeklyDayOffValidator.cs" />
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateBitArrayCreator.cs" />
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateDecisionMaker.cs" />

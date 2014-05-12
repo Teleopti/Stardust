@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 {
 	public interface ITeamBlockMoveTimeBetweenDaysService
 	{
-		void Execute();
+		void Execute(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder);
 		event EventHandler<ResourceOptimizerProgressEventArgs> PerformMoveTime;
 	}
 
