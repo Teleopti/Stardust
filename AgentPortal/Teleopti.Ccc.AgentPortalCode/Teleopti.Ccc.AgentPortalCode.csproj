@@ -275,6 +275,7 @@
     <Compile Include="ScheduleReporting\ScheduleToPdfManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Foundation\StateHandlers\StateImplementation.cd" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
