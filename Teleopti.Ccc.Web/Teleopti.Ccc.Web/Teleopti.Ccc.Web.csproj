@@ -570,7 +570,6 @@
     <Compile Include="Areas\Start\Models\Authentication\IAuthenticationType.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationType.cs" />
-    <Compile Include="Core\Startup\ChunkedCookieHandlerWithMachineKeyCheck.cs" />
     <Compile Include="Core\Startup\ExceptionHandlerPipelineModule.cs" />
     <Compile Include="Core\Startup\FindAreaRegistrations.cs" />
     <Compile Include="Core\Startup\IFindAreaRegistrations.cs" />
