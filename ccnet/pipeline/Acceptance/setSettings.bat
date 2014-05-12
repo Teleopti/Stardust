@@ -2,6 +2,8 @@
 ::setSettings.bat [db_ccc7] [db_analytics]
 @ECHO off
 
+SETLOCAL
+
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-27%
 
@@ -63,9 +65,8 @@ ECHO $(TOGGLE_FILE)^|%TOGGLE_FILE%>>"%MySettings%"
 ECHO $(TOGGLE_URL)^|%TOGGLE_URL%>>"%MySettings%"
 ECHO $(SQL_SERVER_NAME)^|%SQL_SERVER_NAME%>>"%MySettings%"
 
-
 ::Prepare the file(s) to be SerachedAndReplaced
-mkdir %ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles
-ECHO %ROOTDIR%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\Teleopti.Ccc.WebBehaviorTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config>%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles\BuildServerConfigFiles.txt
+if not exist "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles" mkdir "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles"
+ECHO %ROOTDIR%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\Teleopti.Ccc.WebBehaviorTest.dll.config,%ROOTDIR%\BuildArtifacts\Teleopti.Ccc.TestCommon.App.config>%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles\BuildServerConfigFiles.txt
 
-%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe -MOTest
+ENDLOCAL
