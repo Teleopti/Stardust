@@ -27,10 +27,19 @@
 	
 	<Target Name="CopySourceFilesToWorkingDirectory" DependsOnTargets="ClearWorkingDirectory">
 		<ItemGroup>
-			<FilesToCopy Include="$(SourceFiles)\**\*.*"/>
+			<WebFiles Include="$(SourceFiles)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\**\*.*"/>
+			<WebBehaviorTest Include="$(SourceFiles)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\**\*.*"/>
+			<NugetFiles Include="$(SourceFiles)\.nuget\**\*.*" />
+			<CcNetFiles Include="$(SourceFiles)\ccnet\**\*.*" />
 		</ItemGroup>
-		<Copy SourceFiles="@(FilesToCopy)"
-    			DestinationFiles="@(FilesToCopy->'$(DestinationFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(WebFiles)"
+    			DestinationFiles="@(WebFiles->'$(DestinationFolder)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(WebBehaviorTest)"
+    			DestinationFiles="@(WebBehaviorTest->'$(DestinationFolder)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(NugetFiles)"
+    			DestinationFiles="@(NugetFiles->'$(DestinationFolder)\.nuget\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(CcNetFiles)"
+    			DestinationFiles="@(CcNetFiles->'$(DestinationFolder)\CcNetFiles\%(RecursiveDir)%(Filename)%(Extension)')" />
 	</Target>
 	
 	<Target Name="ClearWorkingDirectory">
