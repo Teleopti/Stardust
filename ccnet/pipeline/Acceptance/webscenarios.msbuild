@@ -52,7 +52,7 @@
 	
 	<Target Name="ConfigureSettings">
 		<PropertyGroup>
-			<SetSettings>$(SourceFiles)\ccnet\pipeline\Acceptance\setSettings.bat</SetSettings>
+			<SetSettings>$(DestinationFolder)\ccnet\pipeline\Acceptance\setSettings.bat</SetSettings>
 		</PropertyGroup>
 		<exec command="$(setSettings) a b"/>
 	</Target>

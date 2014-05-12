@@ -63,8 +63,9 @@ ECHO $(TOGGLE_FILE)^|%TOGGLE_FILE%>>"%MySettings%"
 ECHO $(TOGGLE_URL)^|%TOGGLE_URL%>>"%MySettings%"
 ECHO $(SQL_SERVER_NAME)^|%SQL_SERVER_NAME%>>"%MySettings%"
 
+
 ::Prepare the file(s) to be SerachedAndReplaced
 mkdir %ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles
-ECHO %ROOTDIR%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\Teleopti.Ccc.WebBehaviorTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config>Teleopti.Support.Tool\bin\%configuration%\ConfigFiles\BuildServerConfigFiles.txt
+ECHO %ROOTDIR%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\Teleopti.Ccc.WebBehaviorTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config>%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles\BuildServerConfigFiles.txt
 
 %ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe -MOTest
