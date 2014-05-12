@@ -6,6 +6,7 @@
 		<PipelineFolder>\\hebe\d$\PipelineState</PipelineFolder>
 		<SourceFiles Condition="'$(SourceFiles)' == ''">$(PipelineFolder)\$(CCNetLabel)</SourceFiles>
 		<NUnitExeToolPath>$(DestinationFolder)\packages\NUnit.Runners.2.6.2\tools</NUnitExeToolPath>
+		<Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
 	</PropertyGroup>
 	
 	<UsingTask AssemblyFile="$(DestinationFolder)\packages\MSBuildTasks.1.4.0.65\tools\MSBuild.Community.Tasks.dll" TaskName="NUnit"/>
