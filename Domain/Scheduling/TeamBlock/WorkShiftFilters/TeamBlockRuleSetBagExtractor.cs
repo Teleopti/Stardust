@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
     public interface ITeamBlockRuleSetBagExtractor
     {
         IEnumerable<IRuleSetBag> GetRuleSetBag(ITeamBlockInfo teamBlockInfo);
-        IEnumerable<IRuleSetBag> GetRuleSetBag(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly);
+        IEnumerable<IRuleSetBag> GetRuleSetBagForTeamMember(IPerson person, DateOnly dateOnly);
     }
 
     public class TeamBlockRuleSetBagExtractor : ITeamBlockRuleSetBagExtractor
@@ -26,20 +26,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
                     possibleWorkShiftRuleSetBagList.Add(tempWorkShiftRuleSetBag);
                 }
             }
+
             return possibleWorkShiftRuleSetBagList;
         }
 
-        public IEnumerable<IRuleSetBag> GetRuleSetBag(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly)
-        {
-            var possibleWorkShiftRuleSetBagList = new List<IRuleSetBag>();
-            foreach (var person in teamBlockInfo.TeamInfo.GroupMembers)
-            {
-                var tempWorkShiftRuleSetBag = person.Period(dateOnly).RuleSetBag;
-                if (tempWorkShiftRuleSetBag == null) continue;
-                if (possibleWorkShiftRuleSetBagList.Contains(tempWorkShiftRuleSetBag)) continue;
-                possibleWorkShiftRuleSetBagList.Add(tempWorkShiftRuleSetBag);
-            }
-            return possibleWorkShiftRuleSetBagList;
-        }
+	    public IEnumerable<IRuleSetBag> GetRuleSetBagForTeamMember(IPerson person, DateOnly dateOnly)
+	    {
+		    var possibleWorkShiftRuleSetBagList = new List<IRuleSetBag>();
+
+		    var tempWorkShiftRuleSetBag = person.Period(dateOnly).RuleSetBag;
+		    if (tempWorkShiftRuleSetBag != null)
+			    possibleWorkShiftRuleSetBagList.Add(tempWorkShiftRuleSetBag);
+
+		    return possibleWorkShiftRuleSetBagList;
+	    }
     }
 }

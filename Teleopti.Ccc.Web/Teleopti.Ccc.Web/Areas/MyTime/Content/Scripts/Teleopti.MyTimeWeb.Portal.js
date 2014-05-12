@@ -72,7 +72,10 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		;
 
 		if (location.hash.length <= 1) {
-			location.replace('#' + _settings.defaultNavigation);
+			if (_isMobile()) {
+				location.replace('#Schedule/MobileWeek');
+			}
+			else location.replace('#' + _settings.defaultNavigation);
 		}
 
 		$('#asm-link').click(function (ev) {
@@ -219,11 +222,23 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		return str.indexOf(suffix, str.length - suffix.length) !== -1;
 	}
 
+	function _isMobile() {
+		var ua = navigator.userAgent;
+		if ( ua.match(/Android/i) ||ua.match(/webOS/i) ||ua.match(/iPhone/i) ||ua.match(/iPod/i) ) {
+			return true;
+		}
+		return false;
+	}
+
 	function _parseHash(hash) {
 		if (_endsWith(hash, 'Tab')) {
 			if (hash.indexOf('#Schedule') == 0) {
-				hash = hash.substring(0, hash.length - 'Tab'.length) + '/Week';
+				if (_isMobile()) {
+					hash = hash.substring(0, hash.length - 'Tab'.length) + '/MobileWeek';
+				}
+				else hash = hash.substring(0, hash.length - 'Tab'.length) + '/Week';
 			} else {
+
 				hash = hash.substring(0, hash.length - 'Tab'.length) + '/Index';
 			}
 		}
