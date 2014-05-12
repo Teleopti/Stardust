@@ -13,11 +13,21 @@ set destination=%~1
 set target=%2
 set configuration=%3
 
+::handle empty input
+if "%destination%"=="" call :help & goto:eof
+if "%target%"=="" call :help & goto:eof
+if "%configuration%"=="" call :help & goto:eof
+
 rmdir %destination%
 
 set DestinationFolder=%destination%
 %msbuild% %ROOTDIR%\ccnet\movefilesToDeploymentPipeline.msbuild /t:%target% /p:Configuration=%configuration%
 
-
 echo Done!
 pause
+goto:eof
+
+:help
+ECHO Example call:
+ECHO movefilesToDeploymentPipeline.bat [destfolder] [target] [configuration]
+exit /b
