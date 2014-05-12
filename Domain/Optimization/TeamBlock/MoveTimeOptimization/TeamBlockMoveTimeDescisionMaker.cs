@@ -16,12 +16,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		private readonly IDayValueUnlockedIndexSorter _dayValueUnlockedIndexSorter;
 		private readonly ILockableBitArrayFactory lockableBitArrayFactory;
 		private readonly IScheduleResultDataExtractorProvider  _scheduleResultDataExtractorProvider;
+		private readonly IValidateFoundMovedDaysSpecification _validateFoundMovedDaysSpecification;
 
-		public TeamBlockMoveTimeDescisionMaker(IDayValueUnlockedIndexSorter dayValueUnlockedIndexSorter, ILockableBitArrayFactory lockableBitArrayFactory, IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
+		public TeamBlockMoveTimeDescisionMaker(IDayValueUnlockedIndexSorter dayValueUnlockedIndexSorter, ILockableBitArrayFactory lockableBitArrayFactory, IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider, IValidateFoundMovedDaysSpecification validateFoundMovedDaysSpecification)
 		{
 			_dayValueUnlockedIndexSorter = dayValueUnlockedIndexSorter;
 			this.lockableBitArrayFactory = lockableBitArrayFactory;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
+			_validateFoundMovedDaysSpecification = validateFoundMovedDaysSpecification;
+
 		}
 
 		public IList<DateOnly> Execute(IScheduleMatrixPro scheduleMatrix, IOptimizationPreferences optimizationPreferences)

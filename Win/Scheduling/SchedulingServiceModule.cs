@@ -232,10 +232,14 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
 	    private void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
-	    {
+	    {			 
+			 builder.RegisterType<ValidateFoundMovedDaysSpecification>().As<IValidateFoundMovedDaysSpecification>();
 			 builder.RegisterType<DayValueUnlockedIndexSorter>().As<IDayValueUnlockedIndexSorter>();
 			 builder.RegisterType<TeamBlockMoveTimeDescisionMaker>().As<ITeamBlockMoveTimeDescisionMaker>();
-			 builder.RegisterType<ValidateFoundMovedDaysSpecification>().As<IValidateFoundMovedDaysSpecification>();
+			 builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
+			 builder.RegisterType<TeamBlockMoveTimeBetweenDaysService>().As<ITeamBlockMoveTimeBetweenDaysService>();
+			 builder.RegisterType<TeamBlockMoveTimeOptimizer>().As<ITeamBlockMoveTimeOptimizer>();
+			 builder.RegisterType<LockUnSelectedInTeamBlock>().As<ILockUnSelectedInTeamBlock>();
 	    }
 
 	    private void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
@@ -358,7 +362,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>();
 			builder.RegisterType<TeamBlockScheduler>().As<ITeamBlockScheduler>();
-			//ITeamBlockScheduler
+	        builder.RegisterType<TeamBlockGenerator>().As<ITeamBlockGenerator>();
+	        //ITeamBlockScheduler
 		}
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)

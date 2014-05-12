@@ -10,7 +10,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Commands
 {
-	public class TeamBlockMoveTimeBetweenDaysCommand
+	public interface ITeamBlockMoveTimeBetweenDaysCommand
+	{
+		void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, BackgroundWorker backgroundWorker, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder);
+	}
+
+	public class TeamBlockMoveTimeBetweenDaysCommand : ITeamBlockMoveTimeBetweenDaysCommand
 	{
 		private readonly IToggleManager _toggleManager;
 		private BackgroundWorker _backgroundWorker;
@@ -22,14 +27,13 @@ namespace Teleopti.Ccc.Win.Commands
 			_teamBlockMoveTimeBetweenDaysService = teamBlockMoveTimeBetweenDaysService;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService,
-										IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, BackgroundWorker backgroundWorker)
+		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, BackgroundWorker backgroundWorker, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_backgroundWorker = backgroundWorker;
 			if (!_toggleManager.IsEnabled(Toggles.TeamBlockMoveTimeBetweenDays))
 				return;
 			_teamBlockMoveTimeBetweenDaysService.PerformMoveTime += moveTimePerformed;
-			_teamBlockMoveTimeBetweenDaysService.Execute();
+			_teamBlockMoveTimeBetweenDaysService.Execute(optimizationPreferences, allVisibleMatrixes, rollbackService, periodValueCalculator, schedulingResultStateHolder);
 			_teamBlockMoveTimeBetweenDaysService.PerformMoveTime -= moveTimePerformed;
 		}
 
