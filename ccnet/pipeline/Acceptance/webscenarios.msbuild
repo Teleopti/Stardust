@@ -2,7 +2,7 @@
 
 <Project DefaultTargets="AcceptanceTests" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 	<PropertyGroup>
-		<DestinationFolder Condition="'$(DestinationFolder)' == ''">$(CCNetWorkingDirectory)</DestinationFolder>
+		<DestinationFolder Condition="'$(DestinationFolder)' == ''">$(CCNetArtifactDirectory)\pipeline</DestinationFolder>
 		<PipelineFolder>\\hebe\d$\PipelineState</PipelineFolder>
 		<SourceFiles Condition="'$(SourceFiles)' == ''">$(PipelineFolder)\$(CCNetLabel)</SourceFiles>
 		<NUnitExeToolPath>$(DestinationFolder)\packages\NUnit.Runners.2.6.2\tools</NUnitExeToolPath>
@@ -13,6 +13,14 @@
 	<Target Name="AcceptanceTests">
 		<CallTarget Targets="CopySourceFilesToWorkingDirectory" />
 		<CallTarget Targets="RunWebScenarios"/>
+	</Target>
+	
+	<Target Name="InstallSolutionDependencies">
+		<PropertyGroup>
+			<NugetFolder>$(SourceFiles)\.nuget</NugetFolder>
+			<NugetExe>"$(NugetFolder)\nuget.exe"</NugetExe>
+		</PropertyGroup>
+		<exec command="$(NugetExe) install $(NugetFolder)\packages.config -o $(DestinationFolder)\packages"/>
 	</Target>
 	
 	<Target Name="CopySourceFilesToWorkingDirectory" DependsOnTargets="ClearWorkingDirectory">
@@ -34,11 +42,10 @@
 		<RemoveDir Directories="@(Directories)" />
 	</Target>
 
-	<Target Name="RunWebScenarios">
+	<Target Name="RunWebScenarios" DependsOnTargets="InstallSolutionDependencies">
 		<NUnit Assemblies="$(DestinationFolder)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\Release\Teleopti.Ccc.WebBehaviorTest.dll"
 			ToolPath="$(NUnitExeToolPath)"
 			Framework="4.0"
-			WorkingDirectory="C:\Program Files (x86)\CruiseControl.NET\server\CCC-Acc-Dev\WorkingDirectory\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\Release"
 			OutputXmlFile="$(DestinationFolder)\nunit.xml" />
 	</Target>
 </Project>
