@@ -34,6 +34,8 @@
 			<SupportTool Include="$(SourceFiles)\Teleopti.Support.Tool\**\*.*" />
 			<BuildArtifacts Include="$(SourceFiles)\BuildArtifacts\**\*.*" />
 			<DatabaseFiles Include="$(SourceFiles)\database\**\*.*"/>
+			<AuthBridge Include="$(SourceFiles)\Teleopti.Ccc.Web.AuthenticationBridge\**\*.*" />
+			<WinAuthProvider Include="$(SourceFiles)\Teleopti.Ccc.Web.WindowsIdentityProvider\**\*.*" />
 		</ItemGroup>
 		<Copy SourceFiles="@(WebFiles)"
     			DestinationFiles="@(WebFiles->'$(DestinationFolder)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\%(RecursiveDir)%(Filename)%(Extension)')" />
@@ -48,7 +50,11 @@
 		<Copy SourceFiles="@(BuildArtifacts)"
     			DestinationFiles="@(BuildArtifacts->'$(DestinationFolder)\BuildArtifacts\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(DatabaseFiles)"
-    			DestinationFiles="@(DatabaseFiles->'$(DestinationFolder)\database\%(RecursiveDir)%(Filename)%(Extension)')" />				
+    			DestinationFiles="@(DatabaseFiles->'$(DestinationFolder)\database\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(AuthBridge)"
+    			DestinationFiles="@(AuthBridge->'$(DestinationFolder)\Teleopti.Ccc.Web.AuthenticationBridge\%(RecursiveDir)%(Filename)%(Extension)')" />	
+		<Copy SourceFiles="@(WinAuthProvider)"
+    			DestinationFiles="@(WinAuthProvider->'$(DestinationFolder)\Teleopti.Ccc.Web.WindowsIdentityProvider\%(RecursiveDir)%(Filename)%(Extension)')" />					
 	</Target>
 	
 	<Target Name="ClearWorkingDirectory">
