@@ -39,7 +39,7 @@
 		<Copy SourceFiles="@(NugetFiles)"
     			DestinationFiles="@(NugetFiles->'$(DestinationFolder)\.nuget\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(CcNetFiles)"
-    			DestinationFiles="@(CcNetFiles->'$(DestinationFolder)\CcNetFiles\%(RecursiveDir)%(Filename)%(Extension)')" />
+    			DestinationFiles="@(CcNetFiles->'$(DestinationFolder)\ccnet\%(RecursiveDir)%(Filename)%(Extension)')" />
 	</Target>
 	
 	<Target Name="ClearWorkingDirectory">
