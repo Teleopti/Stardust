@@ -43,6 +43,7 @@
 	</Target>
 	
 	<Target Name="ClearWorkingDirectory">
+		<MakeDir Condition="!Exists('$(DestinationFolder)')" Directories="$(DestinationFolder)" />
 		<ItemGroup>
 		  <FilesToClean Include="$(DestinationFolder)\**\*"/>
 		  <Directories Include="$([System.IO.Directory]::GetDirectories('$(DestinationFolder)', '*', System.IO.SearchOption.AllDirectories))"
