@@ -18,8 +18,8 @@ namespace Teleopti.Interfaces.MessageBroker.Client
 		/// <summary>
 		/// Starts the broker with max number of retries set
 		/// </summary>
-		/// <param name="reconnectAttempts">How many times connection should try to reconnect</param>
-		void StartBrokerService(int reconnectAttempts);
+		/// <param name="restartAttempts">How many times connection should try to reconnect</param>
+		void StartBrokerService(int restartAttempts);
 
 		/// <summary>
 		/// Syncronous sending of single notification 

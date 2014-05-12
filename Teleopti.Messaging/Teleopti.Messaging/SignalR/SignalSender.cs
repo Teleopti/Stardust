@@ -13,14 +13,30 @@ using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.SignalR
 {
+
+	public interface IPing
+	{
+	}
+
+	public class Ping : IPing
+	{
+		public Ping(TimeSpan recreateTimeout)
+		{
+		}
+	}
+
 	public class SignalSender : IMessageSender
 	{
 		private readonly string _serverUrl;
 		private IHandleHubConnection _connection;
 		private ISignalBrokerCommands _signalBrokerCommands;
-		protected ILog Logger;
+		private readonly ILog _logger;
 
-		public SignalSender(string serverUrl)
+		public SignalSender(string serverUrl) : this(serverUrl, LogManager.GetLogger(typeof (SignalSender)))
+		{
+		}
+
+		public SignalSender(string serverUrl, ILog logger)
 		{
 			_serverUrl = serverUrl;
 
@@ -28,7 +44,7 @@ namespace Teleopti.Messaging.SignalR
 			ServicePointManager.DefaultConnectionLimit = 50;
 
 			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
-			Logger = MakeLogger();
+			_logger = logger;
 		}
 
 		protected static bool IgnoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
@@ -39,7 +55,7 @@ namespace Teleopti.Messaging.SignalR
 		protected void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
 		{
 			if (e.Observed) return;
-			Logger.Debug("An unobserved task failed.", e.Exception);
+			_logger.Debug("An unobserved task failed.", e.Exception);
 			e.SetObserved();
 		}
 
@@ -48,12 +64,12 @@ namespace Teleopti.Messaging.SignalR
 			StartBrokerService(TimeSpan.FromSeconds(240));
 		}
 
-		public void StartBrokerService(int reconnectAttempts)
+		public void StartBrokerService(int restartAttempts)
 		{
 			StartBrokerService(TimeSpan.FromSeconds(20), 3);
 		}
 
-		public void StartBrokerService(TimeSpan reconnectDelay, int reconnectAttempts = 0)
+		public void StartBrokerService(TimeSpan restartDelay, int restartAttempts = 0)
 		{
 			if (string.IsNullOrEmpty(_serverUrl))
 				return;
@@ -61,8 +77,17 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_connection == null)
 				{
-					var connection = new SignalConnection(MakeHubConnection, Logger, reconnectDelay, reconnectAttempts);
-					_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
+					var connection = new SignalConnection(MakeHubConnection, _logger, restartDelay, restartAttempts);
+					try
+					{
+						connection = new SignalConnection(MakeHubConnection, _logger, restartDelay, restartAttempts);
+					}
+					catch (Exception)
+					{
+					}
+
+					
+					_signalBrokerCommands = new SignalBrokerCommands(_logger, connection);
 					_connection = connection;
 				}
 
@@ -70,11 +95,11 @@ namespace Teleopti.Messaging.SignalR
 			}
 			catch (SocketException exception)
 			{
-				Logger.Error("The message broker seems to be down.", exception);
+				_logger.Error("The message broker seems to be down.", exception);
 			}
 			catch (BrokerNotInstantiatedException exception)
 			{
-				Logger.Error("The message broker seems to be down.", exception);
+				_logger.Error("The message broker seems to be down.", exception);
 			}
 		}
 
@@ -92,11 +117,6 @@ namespace Teleopti.Messaging.SignalR
 		{
 			_connection.CloseConnection();
 			_connection = null;
-		}
-
-		protected virtual ILog MakeLogger()
-		{
-			return LogManager.GetLogger(typeof(SignalSender));
 		}
 
 		[CLSCompliant(false)]

@@ -28,7 +28,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = MockRepository.GenerateMock<IHubProxyWrapper>();
 
 			var log = MockRepository.GenerateMock<ILog>();
-			var target = new SignalSenderForTest(stubHubConnection(hubProxy), log);
+			var target = new LoggingSignalSenderForTest(stubHubConnection(hubProxy), log);
 			target.StartBrokerService();
 
 			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", null)).IgnoreArguments().Return(failedTask);
@@ -43,7 +43,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubConnection = stubHubConnection(new HubProxyFake());
 			var log = MockRepository.GenerateMock<ILog>();
 
-			var target = new SignalSenderForTest(hubConnection, log);
+			var target = new LoggingSignalSenderForTest(hubConnection, log);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
@@ -57,7 +57,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubConnection = stubHubConnection(new HubProxyFake());
 			var log = MockRepository.GenerateMock<ILog>();
 
-			var target = new SignalSenderForTest(hubConnection, log);
+			var target = new LoggingSignalSenderForTest(hubConnection, log);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			hubConnection.GetEventRaiser(x => x.Reconnected += null).Raise();

@@ -24,7 +24,7 @@ namespace Teleopti.MessagingTest.SignalR
 		{
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection, null);
+			var target = new SignalSenderForTest(hubConnection);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
@@ -37,7 +37,7 @@ namespace Teleopti.MessagingTest.SignalR
 		{
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection, null);
+			var target = new SignalSenderForTest(hubConnection);
 			target.StartBrokerService(TimeSpan.FromSeconds(0), 3);
 
 			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
@@ -53,7 +53,7 @@ namespace Teleopti.MessagingTest.SignalR
 		{
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection, null);
+			var target = new SignalSenderForTest(hubConnection);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
@@ -70,7 +70,7 @@ namespace Teleopti.MessagingTest.SignalR
 		{
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection, null);
+			var target = new SignalSenderForTest(hubConnection);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			hubConnection.Stub(x => x.Start()).Return(TaskHelper.MakeFailedTask(new Exception())).Repeat.Once();

@@ -1,15 +1,15 @@
-using System.Collections;
+using log4net;
 using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.MessagingTest.SignalR
 {
-	public class SignalSenderForTest : SignalSender
+	public class LoggingSignalSenderForTest : SignalSender
 	{
 		private readonly IHubConnectionWrapper _hubConnection;
 
-		public SignalSenderForTest(IHubConnectionWrapper hubConnection)
-			: base("http://neeedsToBeSet")
+		public LoggingSignalSenderForTest(IHubConnectionWrapper hubConnection, ILog logger)
+			: base("http://neeedsToBeSet", logger)
 		{
 			_hubConnection = hubConnection;
 		}

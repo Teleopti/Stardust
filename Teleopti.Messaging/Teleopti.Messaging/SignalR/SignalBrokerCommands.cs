@@ -22,25 +22,25 @@ namespace Teleopti.Messaging.SignalR
 
 		public void AddSubscription(Subscription subscription)
 		{
-			notify(addsubscription, subscription);
+			call(addsubscription, subscription);
 		}
 
 		public void RemoveSubscription(string route)
 		{
-			notify(removesubscription, route);
+			call(removesubscription, route);
 		}
 
 		public void NotifyClients(Notification notification)
 		{
-			notify(notifyclients, notification);
+			call(notifyclients, notification);
 		}
 
 		public void NotifyClients(IEnumerable<Notification> notifications)
 		{
-			notify(notifyclientsmultiple, notifications);
+			call(notifyclientsmultiple, notifications);
 		}
 
-		private void notify(string methodName, params object[] notifications)
+		private void call(string methodName, params object[] notifications)
 		{
 			_hubProxy.IfProxyConnected(p =>
 			{

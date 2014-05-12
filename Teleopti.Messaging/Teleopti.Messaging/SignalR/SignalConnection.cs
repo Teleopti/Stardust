@@ -14,28 +14,28 @@ namespace Teleopti.Messaging.SignalR
 	public class SignalConnection : IHandleHubConnection, ICallHubProxy
 	{
 
-		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
+		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to restart...";
 		public const string ConnectionReconnected = "Connection reconnected successfully";
 
 		private readonly IHubProxyWrapper _hubProxy;
 		private readonly IHubConnectionWrapper _hubConnection;
-		private readonly TimeSpan _reconnectDelay;
+		private readonly TimeSpan _restartDelay;
 
 		protected ILog Logger;
-		private readonly int _maxReconnectAttempts;
+		private readonly int _maxRestartAttempts;
 		private int _reconnectAttempts;
 
 
 		public SignalConnection(
 			Func<IHubConnectionWrapper> hubConnectionFactory, 
 			ILog logger,
-			TimeSpan reconnectDelay, 
-			int maxReconnectAttempts = 0)
+			TimeSpan restartDelay, 
+			int maxRestartAttempts = 0)
 		{
 			_hubConnection = hubConnectionFactory.Invoke();
 			_hubProxy = _hubConnection.CreateHubProxy("MessageBrokerHub");
-			_reconnectDelay = reconnectDelay;
-			_maxReconnectAttempts = maxReconnectAttempts;
+			_restartDelay = restartDelay;
+			_maxRestartAttempts = maxRestartAttempts;
 
 			Logger = logger ?? LogManager.GetLogger(typeof(SignalConnection));
 		}
@@ -43,7 +43,7 @@ namespace Teleopti.Messaging.SignalR
 		public void StartConnection()
 		{
 			_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
-			_hubConnection.Closed += reconnect;
+			_hubConnection.Closed += restart;
 			_hubConnection.Reconnected += hubConnectionOnReconnected;
 
 			try
@@ -90,14 +90,14 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		private void reconnect()
+		private void restart()
 		{
 			// ErikS: 2014-02-17
-			// To handle lots of MyTime and MyTimeWeb clients we dont want to flood with reconnect attempts
+			// To handle lots of MyTime and MyTimeWeb clients we dont want to flood with restart attempts
 			// Closed event triggers when the broker is actually down, IE the server died not from recycles
-			if(_maxReconnectAttempts == 0 || _reconnectAttempts < _maxReconnectAttempts)
+			if(_maxRestartAttempts == 0 || _reconnectAttempts < _maxRestartAttempts)
 			{
-				TaskHelper.Delay(_reconnectDelay).Wait();
+				TaskHelper.Delay(_restartDelay).Wait();
 				Logger.Error(ConnectionRestartedErrorMessage);
 				_hubConnection.Start();
 				_reconnectAttempts++;
@@ -114,7 +114,7 @@ namespace Teleopti.Messaging.SignalR
 			if (_hubConnection == null) return;
 
 			_hubConnection.Reconnected -= hubConnectionOnReconnected;
-			_hubConnection.Closed -= reconnect;
+			_hubConnection.Closed -= restart;
 
 			try
 			{
