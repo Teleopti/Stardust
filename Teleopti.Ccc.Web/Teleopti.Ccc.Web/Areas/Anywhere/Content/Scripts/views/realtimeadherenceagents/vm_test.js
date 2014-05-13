@@ -6,7 +6,6 @@
 				var vm = viewModel();
 				assert.equals(vm.agents(), []);
 			},
-
 		});		
 	};
 });

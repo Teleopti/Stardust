@@ -1,1 +1,31 @@
-﻿
+﻿define([
+	'knockout',
+	'text!templates/realtimeadherenceagents/view.html',
+	'views/realtimeadherenceagents/vm',
+	'errorview',
+	'ajax'
+], function (
+	ko,
+	view,
+	realTimeAdherenceViewModel,
+	errorview,
+	ajax
+) {
+	return {
+		initialize: function (options) {
+			errorview.remove();
+			options.renderHtml(view);
+		},
+
+		display: function (options) {
+			ajax.ajax({
+				url: "Agents/GetStates?teamId=" + options.id,
+				error: function (jqXHR, textStatus, errorThrown) {
+					if (jqXHR.status == 403) {
+						errorview.display('No permission to view this team.');
+					}
+				}
+			});
+		}
+	};
+});

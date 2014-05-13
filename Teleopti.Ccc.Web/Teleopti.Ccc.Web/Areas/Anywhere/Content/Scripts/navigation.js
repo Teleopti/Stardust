@@ -47,7 +47,7 @@ define([
 		},
 
 		GotoRealTimeAdherenceTeamDetails: function (teamId) {
-			window.setLocationHash('realtimeadherenceteamdetails/' + teamId);
+			window.setLocationHash('realtimeadherenceagents/' + teamId);
 		}
 	};
 });
