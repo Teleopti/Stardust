@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
@@ -23,8 +24,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		private readonly ITeamBlockScheduler  _teamBlockScheduler ;
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly ILockUnSelectedInTeamBlock _lockUnSelectedInTeamBlock;
+		private ITeamBlockRestrictionOverLimitValidator  _teamBlockRestrictionOverLimitValidator;
 
-		public TeamBlockMoveTimeOptimizer(ISchedulingOptionsCreator schedulingOptionsCreator,ITeamBlockMoveTimeDescisionMaker decisionMaker, IDeleteAndResourceCalculateService deleteAndResourceCalculateService, IResourceOptimizationHelper resourceOptimizationHelper,  ITeamBlockScheduler teamBlockScheduler, ITeamBlockGenerator teamBlockGenerator, ILockUnSelectedInTeamBlock lockUnSelectedInTeamBlock)
+		public TeamBlockMoveTimeOptimizer(ISchedulingOptionsCreator schedulingOptionsCreator,ITeamBlockMoveTimeDescisionMaker decisionMaker, IDeleteAndResourceCalculateService deleteAndResourceCalculateService, IResourceOptimizationHelper resourceOptimizationHelper,  ITeamBlockScheduler teamBlockScheduler, ITeamBlockGenerator teamBlockGenerator, ILockUnSelectedInTeamBlock lockUnSelectedInTeamBlock, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_decisionMaker = decisionMaker;
@@ -33,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			_teamBlockScheduler = teamBlockScheduler;
 			_teamBlockGenerator = teamBlockGenerator;
 			_lockUnSelectedInTeamBlock = lockUnSelectedInTeamBlock;
+			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
 		}
 
 		public bool OptimizeMatrix(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleMatrixPro matrix)
@@ -48,10 +51,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			rollbackService.ClearModificationCollection();
 			IScheduleDayPro firstDay = matrix.GetScheduleDayByKey(daysToBeMoved[0]);
 			DateOnly firstDayDate = daysToBeMoved[0];
+			IScheduleDay firstScheduleDay = firstDay.DaySchedulePart();
+			var originalFirstScheduleDay = (IScheduleDay)firstScheduleDay.Clone();
 			TimeSpan firstDayContractTime = firstDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
 
 			IScheduleDayPro secondDay = matrix .GetScheduleDayByKey(daysToBeMoved[1]);
 			DateOnly secondDayDate = daysToBeMoved[1];
+			IScheduleDay secondScheduleDay = secondDay.DaySchedulePart();
+			var originalSecondScheduleDay = (IScheduleDay)secondScheduleDay.Clone();
 			TimeSpan secondDayContractTime = secondDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
 
 			if (firstDayDate == secondDayDate)
@@ -68,10 +75,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, rollbackService, schedulingOptions.ConsiderShortBreaks);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																							schedulingOptions.ConsiderShortBreaks);
-
-			if (!scheduleTeamBlock(matrixList, firstDayDate, matrix, schedulingOptions, rollbackService, resourceCalculateDelayer,schedulingResultStateHolder))
+			var oldHintOptionValue = schedulingOptions.WorkShiftLengthHintOption;
+			schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
+			if (!scheduleTeamBlock(matrixList, firstDayDate, matrix, schedulingOptions, rollbackService, resourceCalculateDelayer,schedulingResultStateHolder, originalFirstScheduleDay, TODO))
 				return false;
-			if (!scheduleTeamBlock(matrixList, secondDayDate, matrix, schedulingOptions, rollbackService, resourceCalculateDelayer,schedulingResultStateHolder))
+			schedulingOptions.WorkShiftLengthHintOption = oldHintOptionValue;
+			if (!scheduleTeamBlock(matrixList, secondDayDate, matrix, schedulingOptions, rollbackService, resourceCalculateDelayer,schedulingResultStateHolder, originalSecondScheduleDay, TODO))
 				return false;
 
 		
@@ -79,22 +88,34 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			bool isPeriodBetter = newPeriodValue < oldPeriodValue;
 			if (!isPeriodBetter)
 			{
+				rollbackService.Rollback();
+				lockDay(matrix, firstDayDate );
+				lockDay(matrix, secondDayDate);
 				return true;
 			}
 
 			return true;
 		}
 
-		private bool scheduleTeamBlock(IList<IScheduleMatrixPro> matrixList, DateOnly DayDate, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder)
+		private void safeCalculateDate(DateOnly dayDate, IScheduleDay originalScheduleDay, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
-			var dayTeamBlock = _teamBlockGenerator.Generate(matrixList, new DateOnlyPeriod(DayDate, DayDate),
+			resourceCalculateDelayer.CalculateIfNeeded(dayDate, originalScheduleDay.ProjectionService().CreateProjection().Period());
+		}
+
+		private bool scheduleTeamBlock(IList<IScheduleMatrixPro> matrixList, DateOnly dayDate, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleDay originalScheduleDay, IOptimizationPreferences optimizationPreferences)
+		{
+			var dayTeamBlock = _teamBlockGenerator.Generate(matrixList, new DateOnlyPeriod(dayDate, dayDate),
 				new List<IPerson> { matrix.Person }, schedulingOptions).First();
-			_lockUnSelectedInTeamBlock.Lock(dayTeamBlock, new List<IPerson> { matrix.Person }, new DateOnlyPeriod(DayDate, DayDate));
-			if (_teamBlockScheduler.ScheduleTeamBlockDay(dayTeamBlock, DayDate, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective()))
+			_lockUnSelectedInTeamBlock.Lock(dayTeamBlock, new List<IPerson> { matrix.Person }, new DateOnlyPeriod(dayDate, dayDate));
+			if (_teamBlockScheduler.ScheduleTeamBlockDay(dayTeamBlock, dayDate, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective()))
 			{
-				//validate
-				return true;
+				if(_teamBlockRestrictionOverLimitValidator.Validate(dayTeamBlock , optimizationPreferences ))
+				{
+					return true;
+				}
 			}
+			rollbackService.Rollback();
+			safeCalculateDate(dayDate, originalScheduleDay, resourceCalculateDelayer);
 			return false;
 		}
 

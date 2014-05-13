@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Win.Commands
 						
 
 						_teamBlockOptimizationCommand.Execute(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences,
-						                                      rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer);
+																		  rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer, selectedSchedules);
 
 						break;
 					}

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
         public bool IsOptimizationStepsChecked()
         {
-            if (checkBoxTimeBetweenDays.Checked || checkBoxShiftsForFlexibleWorkTime.Checked ||
+            if ( checkBoxShiftsForFlexibleWorkTime.Checked ||
                 checkBoxDaysOffFromFlexibleWorkTime.Checked || checkBoxShiftCategoryLimitations.Checked)
                 return true;
             return false;
