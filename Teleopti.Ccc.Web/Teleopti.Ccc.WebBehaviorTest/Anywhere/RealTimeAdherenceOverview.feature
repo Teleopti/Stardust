@@ -282,7 +282,7 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
 
-@ignore
+@OnlyRunIfEnabled('RtaLastStatesOverview')
 Scenario: Should not be able to see agents if not permitted
 	Given I have a role with
 	 | Field                                  | Value       |
@@ -290,8 +290,8 @@ Scenario: Should not be able to see agents if not permitted
 	 | Access to real time adherence overview | True		|
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
-	When I view real time adherence for team 'Red'
-	Then I should see a message that I have no permission for team 'Red'
+	When I try to view real time adherence for team 'Red'
+	Then I should see a message that I have no permission for this function
 
 @ignore
 Scenario: Should be able to see current states of all agents

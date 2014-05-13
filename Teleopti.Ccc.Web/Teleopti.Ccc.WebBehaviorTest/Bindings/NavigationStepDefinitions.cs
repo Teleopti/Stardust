@@ -269,6 +269,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywhereRealTimeAdherenceOverview(false);
 		}
 
+		[When(@"I try to view real time adherence for team '(.*)'")]
+		public void WhenITryToViewRealTimeAdherenceForTeam(string team)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAnywhereRealTimeAdherenceTeamOverviewNoWait(IdForTeam(team));
+		}
 
 		[When(@"I view Real time adherence for site '(.*)'")]
 		public void WhenIViewRealTimeAdherenceForSite(string site)
@@ -418,6 +424,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view real time adherence for team '(.*)'")]
 		public void WhenIViewRealTimeAdherenceForTeam(string team)
 		{
+			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereRealTimeAdherenceTeamOverview(IdForTeam(team));
 		}
 
