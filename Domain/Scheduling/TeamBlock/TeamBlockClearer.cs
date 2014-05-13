@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		private static void addDaysToRemove(ITeamBlockInfo teamBlock, IPerson person, IList<IScheduleDay> toRemove)
 		{
-			foreach (var dateOnly in teamBlock.BlockInfo.BlockPeriod.DayCollection())
+			foreach (var dateOnly in teamBlock.BlockInfo.UnLockedDates())
 			{
 				IScheduleMatrixPro matrix = teamBlock.TeamInfo.MatrixForMemberAndDate(person, dateOnly);
 				if (matrix == null)
