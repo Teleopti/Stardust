@@ -44,6 +44,10 @@ define([
 
 		GotoRealTimeAdherenceTeams: function (siteId) {
 			window.setLocationHash('realtimeadherenceteams/' + siteId);
+		},
+
+		GotoRealTimeAdherenceTeamDetails: function (teamId) {
+			window.setLocationHash('realtimeadherenceteamdetails/' + teamId);
 		}
 	};
 });

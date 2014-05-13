@@ -414,5 +414,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GoToMyReport(date);
 		}
+
+		[When(@"I view real time adherence for team '(.*)'")]
+		public void WhenIViewRealTimeAdherenceForTeam(string team)
+		{
+			Navigation.GotoAnywhereRealTimeAdherenceTeamOverview(IdForTeam(team));
+		}
+
 	}
 }
