@@ -1,3 +1,4 @@
+using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
@@ -26,6 +27,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<InitializeApplication>().As<IInitializeApplication>().SingleInstance();
 			builder.RegisterType<DataSourcesFactory>().As<IDataSourcesFactory>().SingleInstance();
 			builder.RegisterInstance(MessageFilterManager.Instance).As<IMessageFilterManager>().SingleInstance();
+			builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>();
+			builder.RegisterType<RestartOnClosed>().As<IConnectionKeepAliveStrategy>();
 			builder.RegisterType<SignalBroker>()
 				.As<IMessageBroker>()
 				.As<IMessageBrokerSender>()

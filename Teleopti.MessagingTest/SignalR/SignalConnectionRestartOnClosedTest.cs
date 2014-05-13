@@ -24,8 +24,8 @@ namespace Teleopti.MessagingTest.SignalR
 		{
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection);
-			target.StartBrokerService(TimeSpan.FromSeconds(0));
+			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(0)));
+			target.StartBrokerService();
 
 			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
 
@@ -33,28 +33,12 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 
 		[Test]
-		public void ShouldNotRestartHubConnectionMoreThanXTimes()
+		public void ShouldContinueToRestartHubConnectionWhenConnectionClosed()
 		{
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection);
-			target.StartBrokerService(TimeSpan.FromSeconds(0), 3);
-
-			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
-			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
-			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
-			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
-
-			hubConnection.AssertWasCalled(c => c.Start(), a => a.Repeat.Times(4));
-		}
-
-		[Test]
-		public void ShouldContinueToRestartWhenReconnectAttemptsIsNotSet()
-		{
-			var hubProxy = new HubProxyFake();
-			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection);
-			target.StartBrokerService(TimeSpan.FromSeconds(0));
+			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(0)));
+			target.StartBrokerService();
 
 			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
 			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
@@ -65,13 +49,13 @@ namespace Teleopti.MessagingTest.SignalR
 			hubConnection.AssertWasCalled(c => c.Start(), a => a.Repeat.Times(6));
 		}
 
-		[Test]
+		[Test, Ignore("This does not test anything, and we dont know if we want this behavior")]
 		public void ShouldRestartHubConnectionWhenStartFails()
 		{
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection);
-			target.StartBrokerService(TimeSpan.FromSeconds(0));
+			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(0)));
+			target.StartBrokerService();
 
 			hubConnection.Stub(x => x.Start()).Return(TaskHelper.MakeFailedTask(new Exception())).Repeat.Once();
 

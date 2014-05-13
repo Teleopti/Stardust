@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Rta.WebService
 			var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
 			builder.RegisterType<TeleoptiRtaService>().SingleInstance();
 			builder.RegisterModule(mbCacheModule);
+			builder.RegisterModule(new DateAndTimeModule());
 			builder.RegisterModule(new RealTimeContainerInstaller(mbCacheModule));
 			return builder.Build();
 		}

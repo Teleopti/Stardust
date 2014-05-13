@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
@@ -9,10 +8,16 @@ namespace Teleopti.MessagingTest.SignalR
 	{
 		private readonly IHubConnectionWrapper _hubConnection;
 
-		public SignalSenderForTest(IHubConnectionWrapper hubConnection)
-			: base("http://neeedsToBeSet", new NoRecreateConnection(), new Time(new Now()))
+		public SignalSenderForTest(IHubConnectionWrapper hubConnection, IConnectionKeepAliveStrategy connectionKeepAliveStrategy)
+			: base("http://neeedsToBeSet", new[] { connectionKeepAliveStrategy }, new Time(new Now()))
 		{
-			_hubConnection = hubConnection; 
+			_hubConnection = hubConnection;
+		}
+
+		public SignalSenderForTest(IHubConnectionWrapper hubConnection)
+			: base("http://neeedsToBeSet", new IConnectionKeepAliveStrategy[] { }, new Time(new Now()))
+		{
+			_hubConnection = hubConnection;
 		}
 
 		protected override IHubConnectionWrapper MakeHubConnection()

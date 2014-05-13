@@ -20,7 +20,7 @@ namespace Teleopti.Messaging.SignalR
 {
 	public class SignalBroker : IMessageBroker
 	{
-		private readonly IRecreateConnectionStrategy _recreateConnectionStrategy;
+		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private readonly ITime _time;
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
 		private IHandleHubConnection _connection;
@@ -30,17 +30,18 @@ namespace Teleopti.Messaging.SignalR
 
 		public static SignalBroker MakeForTest(IMessageFilterManager typeFilter)
 		{
-			return new SignalBroker(typeFilter, new NoRecreateConnection(), new Time(new Now()));
+			return new SignalBroker(typeFilter, new IConnectionKeepAliveStrategy[] {}, new Time(new Now()));
 		}
 
 		public static SignalBroker Make(IMessageFilterManager typeFilter)
 		{
-			return new SignalBroker(typeFilter, new RecreateConnectionOnNoPingReply(), new Time(new Now()));
+			return new SignalBroker(typeFilter,
+				new IConnectionKeepAliveStrategy[] {new RestartOnClosed(), new RecreateOnNoPingReply()}, new Time(new Now()));
 		}
 
-		public SignalBroker(IMessageFilterManager typeFilter, IRecreateConnectionStrategy recreateConnectionStrategy, ITime time)
+		public SignalBroker(IMessageFilterManager typeFilter, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, ITime time)
 		{
-			_recreateConnectionStrategy = recreateConnectionStrategy;
+			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
 			_time = time;
 			FilterManager = typeFilter;
 			IsTypeFilterApplied = true;
@@ -282,11 +283,6 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartMessageBroker()
 		{
-			StartMessageBroker(TimeSpan.FromSeconds(240));
-		}
-		
-		public void StartMessageBroker(TimeSpan reconnectDelay)
-		{
 			Uri serverUrl;
 			if (!Uri.TryCreate(ConnectionString, UriKind.Absolute, out serverUrl))
 			{
@@ -295,11 +291,10 @@ namespace Teleopti.Messaging.SignalR
 			
 			lock (_wrapperLock)
 			{
-				var connection = new SignalConnection(() => MakeHubConnection(serverUrl), null, reconnectDelay, _recreateConnectionStrategy, _time);
+				var connection = new SignalConnection(() => MakeHubConnection(serverUrl), _connectionKeepAliveStrategy, _time);
 				_connection = connection;
 
 				_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
-
 
 				_connection.StartConnection(onNotification);
 			}

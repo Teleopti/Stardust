@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -14,22 +15,21 @@ using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.SignalR
 {
-
 	public class SignalSender : IMessageSender
 	{
-		private readonly IRecreateConnectionStrategy _recreateConnectionStrategy;
+		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private readonly ITime _time;
 		private readonly string _serverUrl;
 		private IHandleHubConnection _connection;
 		private ISignalBrokerCommands _signalBrokerCommands;
-		private readonly ILog _logger;
+		private readonly ILog _logger = LogManager.GetLogger(typeof(SignalSender));
 
-		public SignalSender(string serverUrl, IRecreateConnectionStrategy recreateConnectionStrategy, ITime time)
-			: this(serverUrl, LogManager.GetLogger(typeof(SignalSender)), recreateConnectionStrategy, time)
+		public static SignalSender MakeForEtl(string serverUrl)
 		{
+			return new SignalSender(serverUrl, new IConnectionKeepAliveStrategy[] { }, new Time(new Now()));
 		}
 
-		public SignalSender(string serverUrl, ILog logger, IRecreateConnectionStrategy recreateConnectionStrategy, ITime time)
+		public SignalSender(string serverUrl, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, ITime time)
 		{
 			_serverUrl = serverUrl;
 
@@ -38,8 +38,7 @@ namespace Teleopti.Messaging.SignalR
 
 			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
 
-			_logger = logger;
-			_recreateConnectionStrategy = recreateConnectionStrategy;
+			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
 			_time = time;
 		}
 
@@ -57,23 +56,13 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartBrokerService()
 		{
-			StartBrokerService(TimeSpan.FromSeconds(240));
-		}
-
-		public void StartBrokerService(int restartAttempts)
-		{
-			StartBrokerService(TimeSpan.FromSeconds(20), 3);
-		}
-
-		public void StartBrokerService(TimeSpan restartDelay, int restartAttempts = 0)
-		{
 			if (string.IsNullOrEmpty(_serverUrl))
 				return;
 			try
 			{
 				if (_connection == null)
 				{
-					var connection = new SignalConnection(MakeHubConnection, _logger, restartDelay, _recreateConnectionStrategy, _time, restartAttempts);
+					var connection = new SignalConnection(MakeHubConnection, _connectionKeepAliveStrategy, _time);
 					
 					_signalBrokerCommands = new SignalBrokerCommands(_logger, connection);
 					_connection = connection;

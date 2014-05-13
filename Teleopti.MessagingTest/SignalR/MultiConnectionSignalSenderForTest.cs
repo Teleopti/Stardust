@@ -11,8 +11,8 @@ namespace Teleopti.MessagingTest.SignalR
 
 		public IHubConnectionWrapper CurrentConnection;
 
-		public MultiConnectionSignalSenderForTest(IEnumerable<IHubConnectionWrapper> hubConnections, IRecreateConnectionStrategy recreateConnectionStrategy, ITime time)
-			: base("http://neeedsToBeSet", recreateConnectionStrategy, time)
+		public MultiConnectionSignalSenderForTest(IEnumerable<IHubConnectionWrapper> hubConnections, IConnectionKeepAliveStrategy connectionKeepAliveStrategy, ITime time)
+			: base("http://neeedsToBeSet", new[] { connectionKeepAliveStrategy }, time)
 		{
 			_hubConnections = new Queue<IHubConnectionWrapper>(hubConnections);
 		}

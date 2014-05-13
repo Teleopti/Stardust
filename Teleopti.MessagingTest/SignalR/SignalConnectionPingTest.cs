@@ -34,8 +34,8 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy2 = new HubThatRepliesToPing();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = new MultiConnectionSignalSenderForTest(new[] {hubConnection1, hubConnection2}, new RecreateConnectionOnNoPingReply(TimeSpan.FromMinutes(3)), time);
-			target.StartBrokerService(TimeSpan.FromSeconds(0));
+			var target = new MultiConnectionSignalSenderForTest(new[] {hubConnection1, hubConnection2}, new RecreateOnNoPingReply(TimeSpan.FromMinutes(3)), time);
+			target.StartBrokerService();
 
 			hubProxy1.BreakTheConnection();
 			time.Passes(TimeSpan.FromMinutes(4));
@@ -51,8 +51,8 @@ namespace Teleopti.MessagingTest.SignalR
 			var time = new FakeTime();
 			var hubProxy = new HubThatRepliesToPing();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection }, new RecreateConnectionOnNoPingReply(TimeSpan.FromMinutes(2)), time);
-			target.StartBrokerService(TimeSpan.FromSeconds(0));
+			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection }, new RecreateOnNoPingReply(TimeSpan.FromMinutes(2)), time);
+			target.StartBrokerService();
 
 			hubProxy.BreakTheConnection();
 			time.Passes(TimeSpan.FromSeconds(119));
@@ -70,8 +70,8 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy2 = new HubThatRepliesToPing();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new RecreateConnectionOnNoPingReply(TimeSpan.FromMinutes(1)), time);
-			target.StartBrokerService(TimeSpan.FromSeconds(0));
+			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
+			target.StartBrokerService();
 
 			var notification1 = new Notification();
 			target.SendNotification(notification1);
@@ -92,8 +92,8 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy2 = new HubThatRepliesToPing();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new RecreateConnectionOnNoPingReply(TimeSpan.FromMinutes(1)), time);
-			target.StartBrokerService(TimeSpan.FromSeconds(0));
+			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
+			target.StartBrokerService();
 
 			hubProxy1.BreakTheConnection();
 			time.Passes(TimeSpan.FromMinutes(2));
