@@ -11,11 +11,14 @@ namespace Teleopti.MessagingTest.SignalR
 	public class HubProxyFake : IHubProxyWrapper
 	{
 		public readonly IList<Notification> NotifyClientsInvokedWith = new List<Notification>();
+		public readonly IList<Notification> NotifyClientsMultipleInvokedWith = new List<Notification>();
 
 		public Task Invoke(string method, params object[] args)
 		{
 			if (method == "NotifyClients")
 				NotifyClientsInvokedWith.Add(args.First() as Notification);
+			if (method == "NotifyClientsMultiple")
+				NotifyClientsMultipleInvokedWith.Add(args.First() as Notification);
 			return TaskHelper.MakeDoneTask();
 		}
 

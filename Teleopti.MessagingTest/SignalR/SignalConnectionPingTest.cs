@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.SignalR.Client;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -99,6 +100,43 @@ namespace Teleopti.MessagingTest.SignalR
 			time.Passes(TimeSpan.FromMinutes(2));
 
 			target.CurrentConnection.Should().Be(hubConnection2);
+		}
+
+		[Test, Ignore("Do this now?")]
+		public void ShouldSubscribeToNotificationsOnNewConnection()
+		{
+			var time = new FakeTime();
+			var wasEventHandlerCalled = false;
+			var subscription = MockRepository.GenerateMock<ISubscriptionWrapper>();
+			var hubProxy1 = new HubThatRepliesToPing();
+			var hubProxy2 = new HubThatRepliesToPing();
+			var hubConnection1 = stubHubConnection(hubProxy1);
+			var hubConnection2 = stubHubConnection(hubProxy2);
+			var target = new MultiConnectionSignalBrokerForTest(new MessageFilterManagerFake(),
+				new[] {hubConnection1, hubConnection2}, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
+			target.StartMessageBroker();
+
+			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
+											 typeof(IInterfaceForTest));
+
+			var notification = new Notification
+			{
+				DomainQualifiedType = "IInterfaceForTest",
+				BusinessUnitId = Guid.Empty.ToString(),
+				DataSource = string.Empty,
+				DomainType = "IInterfaceForTest",
+				StartDate = Interfaces.MessageBroker.Subscription.DateToString(DateTime.UtcNow),
+				EndDate = Interfaces.MessageBroker.Subscription.DateToString(DateTime.UtcNow)
+			};
+			var token = JObject.Parse(JsonConvert.SerializeObject(notification));
+			subscription.GetEventRaiser(x => x.Received += null).Raise(new List<JToken>(new JToken[] { token }));
+
+			wasEventHandlerCalled.Should().Be(true);
+		}
+
+		private interface IInterfaceForTest
+		{
+
 		}
 	}
 }
