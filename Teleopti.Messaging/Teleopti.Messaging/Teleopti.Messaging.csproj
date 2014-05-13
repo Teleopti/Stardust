@@ -143,11 +143,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalR\DoNotSend.cs" />
     <Compile Include="SignalR\ICallHubProxy.cs" />
-    <Compile Include="SignalR\IRecreateStrategy.cs" />
+    <Compile Include="SignalR\IRecreateConnectionStrategy.cs" />
     <Compile Include="SignalR\ISignalBrokerCommands.cs" />
     <Compile Include="Events\EventMessageFactory.cs" />
-    <Compile Include="SignalR\NoRecreate.cs" />
-    <Compile Include="SignalR\Ping.cs" />
+    <Compile Include="SignalR\NoRecreateConnection.cs" />
+    <Compile Include="SignalR\RecreateConnectionOnNoPingReply.cs" />
     <Compile Include="SignalR\SignalBrokerCommands.cs" />
     <Compile Include="SignalR\SignalConnection.cs" />
     <Compile Include="SignalR\Wrappers\HubProxyWrapper.cs" />

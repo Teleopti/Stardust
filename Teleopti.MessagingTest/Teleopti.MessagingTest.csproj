@@ -68,6 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalR\FailingHubProxyFake.cs" />
     <Compile Include="SignalR\HubProxyFake.cs" />
+    <Compile Include="SignalR\HubThatRepliesToPing.cs" />
     <Compile Include="SignalR\LoggingSignalSenderForTest.cs" />
     <Compile Include="SignalR\MultiConnectionSignalSenderForTest.cs" />
     <Compile Include="SignalR\SignalBrokerTest.cs" />

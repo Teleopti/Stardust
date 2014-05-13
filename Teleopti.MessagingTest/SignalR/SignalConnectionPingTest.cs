@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
-using Subscription = Microsoft.AspNet.SignalR.Client.Hubs.Subscription;
 
 namespace Teleopti.MessagingTest.SignalR
 {
@@ -36,7 +34,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy2 = new HubThatRepliesToPing();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = new MultiConnectionSignalSenderForTest(new[] {hubConnection1, hubConnection2}, new Ping(TimeSpan.FromMinutes(3)), time);
+			var target = new MultiConnectionSignalSenderForTest(new[] {hubConnection1, hubConnection2}, new RecreateConnectionOnNoPingReply(TimeSpan.FromMinutes(3)), time);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			hubProxy1.BreakTheConnection();
@@ -53,7 +51,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var time = new FakeTime();
 			var hubProxy = new HubThatRepliesToPing();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection }, new Ping(TimeSpan.FromMinutes(2)), time);
+			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection }, new RecreateConnectionOnNoPingReply(TimeSpan.FromMinutes(2)), time);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			hubProxy.BreakTheConnection();
@@ -67,12 +65,12 @@ namespace Teleopti.MessagingTest.SignalR
 		[Test]
 		public void ShouldSendNotificationsOnCurrentConnection()
 		{
-			var time = new FakeTime();
+			var time = new FakeTime(new DateTime(2013, 1, 1, 12, 0, 0, DateTimeKind.Utc));
 			var hubProxy1 = new HubThatRepliesToPing();
 			var hubProxy2 = new HubThatRepliesToPing();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new Ping(TimeSpan.FromMinutes(1)), time);
+			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new RecreateConnectionOnNoPingReply(TimeSpan.FromMinutes(1)), time);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			var notification1 = new Notification();
@@ -86,7 +84,7 @@ namespace Teleopti.MessagingTest.SignalR
 			hubProxy2.NotifyClientsInvokedWith.Single().Should().Be(notification2);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldCreateConnectionsInTheBackground()
 		{
 			var time = new FakeTime();
@@ -94,7 +92,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy2 = new HubThatRepliesToPing();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new Ping(TimeSpan.FromMinutes(1)), time);
+			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new RecreateConnectionOnNoPingReply(TimeSpan.FromMinutes(1)), time);
 			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			hubProxy1.BreakTheConnection();
@@ -102,55 +100,5 @@ namespace Teleopti.MessagingTest.SignalR
 
 			target.CurrentConnection.Should().Be(hubConnection2);
 		}
-
-
 	}
-
-
-	
-
-	public class HubThatRepliesToPing : IHubProxyWrapper
-	{
-		private readonly PingReplySubscription pingReply = new PingReplySubscription();
-		private bool _broken = false;
-
-		public readonly IList<Notification> NotifyClientsInvokedWith = new List<Notification>();
-
-		public ISubscriptionWrapper Subscribe(string eventName)
-		{
-			if (eventName == "Pong")
-				return pingReply;
-			return new SubscriptionWrapper(new Subscription());
-		}
-
-		public Task Invoke(string method, params object[] args)
-		{
-			if (method == "Ping" && !_broken)
-			{
-				pingReply.ReplyToPing();
-			//	var task = TaskHelper.Delay(TimeSpan.FromMilliseconds(100));
-			//	task.ContinueWith(t => pingReply.ReplyToPing());
-			}
-			if (method == "NotifyClients")
-				NotifyClientsInvokedWith.Add(args.First() as Notification);
-			return TaskHelper.MakeDoneTask();
-		}
-
-		public void BreakTheConnection()
-		{
-			_broken = true;
-		}
-	}
-
-	public class PingReplySubscription : ISubscriptionWrapper
-	{
-		public event Action<IList<JToken>> Received;
-
-		public void ReplyToPing()
-		{
-			Received(null);
-		}
-	}
-
-
 }
