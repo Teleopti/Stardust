@@ -4,7 +4,7 @@
 	<PropertyGroup>
 		<DestinationFolder Condition="'$(DestinationFolder)' == ''">$(CCNetArtifactDirectory)\pipeline</DestinationFolder>
 		<PipelineFolder>\\hebe\d$\PipelineState</PipelineFolder>
-		<SourceFiles Condition="'$(SourceFiles)' == ''">$(PipelineFolder)\$(CCNetLabel)</SourceFiles>
+		<SourceFiles Condition="'$(SourceFiles)' == ''">$(PipelineFolder)\138</SourceFiles>
 		<SikuliPath Condition="'$(SikuliPath)' == ''">C:\Sikuli</SikuliPath>
 		<Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
 		<SikuliSrc>$(DestinationFolder)\SikuliSrc</SikuliSrc>
@@ -14,17 +14,16 @@
 	
 	<Target Name="AcceptanceTests">
 		<CallTarget Targets="CopySourceFilesToWorkingDirectory" />
-		<CallTarget Targets="ConfigureSettings" />
 		<CallTarget Targets="RunSikuliTests"/>
 	</Target>
 	
-	<Target Name="InstallSolutionDependencies" DependsOnTargets="CloneRepo">
+	<Target Name="InstallSolutionDependencies" DependsOnTargets="CloneRepo" Desciption="Getting nuget packages and Sikuli source files">
 		<PropertyGroup>
 			<SikuliTestRepo>http://atom:5000/QA/AutomatedSmokeTests</SikuliTestRepo>
 			<NugetFolder>$(SourceFiles)\.nuget</NugetFolder>
-			<NugetExe>"$(NugetFolder)\nuget.exe"</NugetExe>
+			<NugetExe>$(NugetFolder)\nuget.exe</NugetExe>
 		</PropertyGroup>
-		<exec command="$(NugetExe) install $(NugetFolder)\packages.config -o $(DestinationFolder)\packages"/>		
+		<exec command="%22$(NugetExe)%22 install %22$(NugetFolder)\packages.config%22 -o %22$(DestinationFolder)\packages%22"/>
 		<exec command="hg pull $(SikuliTestRepo) --update" WorkingDirectory="$(SikuliSrc)"/>
 	</Target>
 
@@ -32,7 +31,7 @@
 		<PropertyGroup>
 			<SikuliTestRepo>http://atom:5000/QA/AutomatedSmokeTests</SikuliTestRepo>
 		</PropertyGroup>
-		<exec command="hg clone $(SikuliTestRepo) $(SikuliSrc)"/>
+		<exec command="hg clone $(SikuliTestRepo) %22$(SikuliSrc)%22"/>
 		
 	</Target>	
 	
