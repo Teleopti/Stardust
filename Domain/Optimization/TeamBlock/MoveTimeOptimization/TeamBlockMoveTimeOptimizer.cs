@@ -77,10 +77,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 																							schedulingOptions.ConsiderShortBreaks);
 			var oldHintOptionValue = schedulingOptions.WorkShiftLengthHintOption;
 			schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
-			if (!scheduleTeamBlock(matrixList, firstDayDate, matrix, schedulingOptions, rollbackService, resourceCalculateDelayer,schedulingResultStateHolder, originalFirstScheduleDay, TODO))
+			if (!scheduleTeamBlock(matrixList, firstDayDate, matrix, schedulingOptions, rollbackService, resourceCalculateDelayer,schedulingResultStateHolder, originalFirstScheduleDay,optimizerPreferences ))
 				return false;
 			schedulingOptions.WorkShiftLengthHintOption = oldHintOptionValue;
-			if (!scheduleTeamBlock(matrixList, secondDayDate, matrix, schedulingOptions, rollbackService, resourceCalculateDelayer,schedulingResultStateHolder, originalSecondScheduleDay, TODO))
+			if (!scheduleTeamBlock(matrixList, secondDayDate, matrix, schedulingOptions, rollbackService, resourceCalculateDelayer,schedulingResultStateHolder, originalSecondScheduleDay, optimizerPreferences ))
 				return false;
 
 		
