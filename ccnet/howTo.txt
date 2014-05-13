@@ -130,18 +130,6 @@ atom.prefix = http://atom:5000
 atom.username = ccnet
 atom.password = m8kemew0rk
 
-
-------------------
-Python test and git integration
-------------------
-Install with default options:
-\\a380\Hangaren\#PROGRAM\Develop\Python\Git-1.9.0-preview20140217.exe
-\\a380\Hangaren\#PROGRAM\Develop\Python\python-3.4.0.msi
-
-Verify all three path exists in PATH variable and add them if needed:
-C:\Python34\;C:\Python34\Scripts;C:\Program Files (x86)\Git\cmd
-
-
 ------------------
 CruiseControl
 ------------------
@@ -191,6 +179,48 @@ Pick the Chefs recommendation of to day
 Use this setting: "Download updates but let me choose whether to install them"
 make sure IE10 and IE11 are remove!!
 We need to be careful with this => We don't to risk Microsoft to mess up our Build server!
+
+
+------------------------------------------------------
+------------------------------------------------------
+--                                                  --
+--                                                  --
+--                                                  --
+--            below: Pipeline tests                 --
+--                                                  --
+--                                                  --
+--                                                  --
+------------------------------------------------------
+------------------------------------------------------
+
+------------------
+Python test and git integration
+------------------
+Install with default options:
+\\a380\Hangaren\#PROGRAM\Develop\Python\Git-1.9.0-preview20140217.exe
+\\a380\Hangaren\#PROGRAM\Develop\Python\python-3.4.0.msi
+
+Verify all three path exists in PATH variable and add them if needed:
+C:\Python34\;C:\Python34\Scripts;C:\Program Files (x86)\Git\cmd
+
+
+------------------
+Sikuli automated test 
+------------------
+- Prereqs:
+The system running Sikuli scripts must have real screen connected. Headless systems are not supported(Java restriction).
+Python must be installed(see abobe)
+
+- install
+\\a380\Hangaren\#PROGRAM\Develop\Java SE Runtime\jre-7-windows-64.exe
+Set SikuliPath=c:\Sikuli
+if not exist %SikuliPath% MKDIR %SikuliPath%
+COPY \\a380\Hangaren\#PROGRAM\Develop\Sikuli\sikuli-setup.jar %SikuliPath%
+%SikuliPath%\sikuli-setup.jar
+C:\Sikuli\runSetup.cmd
+	Choose 1-Pack1:I want to use all options...
+	Yes, I want to download
+
 
 ------------------------------------------------------------------------------------------------------------------
 

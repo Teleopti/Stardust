@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project DefaultTargets="AcceptanceTests" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+	<PropertyGroup>
+		<DestinationFolder Condition="'$(DestinationFolder)' == ''">$(CCNetArtifactDirectory)\pipeline</DestinationFolder>
+		<PipelineFolder>\\hebe\d$\PipelineState</PipelineFolder>
+		<SourceFiles Condition="'$(SourceFiles)' == ''">$(PipelineFolder)\$(CCNetLabel)</SourceFiles>
+		<SikuliPath>C:\Sikuli</SikuliPath>
+		<Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
+		<SikuliSrc>$(DestinationFolder)\SikuliSrc</SikuliSrc>
+	</PropertyGroup>
+	
+	<UsingTask AssemblyFile="$(DestinationFolder)\packages\MSBuildTasks.1.4.0.65\tools\MSBuild.Community.Tasks.dll" TaskName="NUnit"/>
+	
+	<Target Name="AcceptanceTests">
+		<CallTarget Targets="CopySourceFilesToWorkingDirectory" />
+		<CallTarget Targets="ConfigureSettings" />
+		<CallTarget Targets="RunSikuliTests"/>
+	</Target>
+	
+	<Target Name="InstallSolutionDependencies" DependsOnTargets="CloneRepo">
+		<PropertyGroup>
+			<SikuliTestRepo>http://atom:5000/QA/AutomatedSmokeTests</SikuliTestRepo>
+			<NugetFolder>$(SourceFiles)\.nuget</NugetFolder>
+			<NugetExe>"$(NugetFolder)\nuget.exe"</NugetExe>
+		</PropertyGroup>
+		<exec command="$(NugetExe) install $(NugetFolder)\packages.config -o $(DestinationFolder)\packages"/>		
+		<exec command="hg pull $(SikuliTestRepo) --update" WorkingDirectory="$(SikuliSrc)"/>
+	</Target>
+
+	<Target Name="CloneRepo" Condition="!Exists('$(SikuliSrc)')">
+		<PropertyGroup>
+			<SikuliTestRepo>http://atom:5000/QA/AutomatedSmokeTests</SikuliTestRepo>
+		</PropertyGroup>
+		<exec command="hg clone $(SikuliTestRepo) $(SikuliSrc)"/>
+		
+	</Target>	
+	
+	<Target Name="CopySourceFilesToWorkingDirectory" DependsOnTargets="ClearWorkingDirectory">
+		<ItemGroup>
+			<DBManager Include="$(SourceFiles)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\**\*.*"/>
+			<AdminClientStandAlone Include="$(SourceFiles)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\**\*.*"/>
+			<CcNetFiles Include="$(SourceFiles)\ccnet\**\*.*" />
+			<SupportTool Include="$(SourceFiles)\Teleopti.Support.Tool\**\*.*" />
+			<BuildArtifacts Include="$(SourceFiles)\BuildArtifacts\**\*.*" />
+			<DatabaseFiles Include="$(SourceFiles)\database\**\*.*"/>
+		</ItemGroup>
+		
+		<Copy SourceFiles="@(DBManager)"
+    			DestinationFiles="@(DBManager->'$(DestinationFolder)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\%(RecursiveDir)%(Filename)%(Extension)')" />		
+		<Copy SourceFiles="@(AdminClientStandAlone)"
+    			DestinationFiles="@(AdminClientStandAlone->'$(DestinationFolder)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(CcNetFiles)"
+    			DestinationFiles="@(CcNetFiles->'$(DestinationFolder)\ccnet\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(SupportTool)"
+    			DestinationFiles="@(SupportTool->'$(DestinationFolder)\Teleopti.Support.Tool\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(BuildArtifacts)"
+    			DestinationFiles="@(BuildArtifacts->'$(DestinationFolder)\BuildArtifacts\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(DatabaseFiles)"
+    			DestinationFiles="@(DatabaseFiles->'$(DestinationFolder)\database\%(RecursiveDir)%(Filename)%(Extension)')" />
+	</Target>
+	
+	<Target Name="ClearWorkingDirectory">
+		<MakeDir Condition="!Exists('$(DestinationFolder)')" Directories="$(DestinationFolder)" />
+		<ItemGroup>
+		  <FilesToClean Include="$(DestinationFolder)\**\*"/>
+		  <Directories Include="$([System.IO.Directory]::GetDirectories('$(DestinationFolder)', '*', System.IO.SearchOption.AllDirectories))"
+					   Exclude="$(TargetFolder)"/>
+		</ItemGroup>
+
+		<Delete Files="@(FilesToClean)" ContinueOnError="true"/>
+		<RemoveDir Directories="@(Directories)" />
+	</Target>
+
+	<Target Name="RunSikuliTests" DependsOnTargets="InstallSolutionDependencies">
+		<Exec Command ="%22$(SikuliPath)\runIDE.cmd%22 -r %22$(SikuliSrc)\BuildTest\Utveckling.sikuli%22" ContinueOnError='true'>
+            <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+        </Exec>
+  
+       <Message Text="The exit code is $(ErrorCode)"/>
+        <Error Text="Error while executing: %22$(SikuliPath)\runIDE.cmd%22 -r %22$(SikuliSrc)\BuildTest\Utveckling.sikuli%22" Condition="'$(ErrorCode)' > '0'" />
+        <OnError ExecuteTargets="MessageErrorHandler"/>
+  </Target>
+     
+  <!--Error Handler-->
+  <Target Name="MessageErrorHandler">
+        <Message Text="An error has occurred while running the batch file"/>
+  </Target>
+	
+	<Target Name="ConfigureSettings">
+		<PropertyGroup>
+			<SetSettings>"$(DestinationFolder)\ccnet\pipeline\Acceptance\sikulitestSettings.bat"</SetSettings>
+			<SupportTool>Teleopti.Support.Tool.exe</SupportTool>
+		</PropertyGroup>
+		<exec command="$(setSettings) a b"/>
+		<exec command="$(SupportTool) -MOTest" WorkingDirectory="$(DestinationFolder)\Teleopti.Support.Tool\bin\$(Configuration)"/>
+	</Target>
+</Project>
