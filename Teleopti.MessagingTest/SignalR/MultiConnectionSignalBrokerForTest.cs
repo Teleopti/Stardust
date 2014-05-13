@@ -11,8 +11,10 @@ namespace Teleopti.MessagingTest.SignalR
 	{
 		private readonly Queue<IHubConnectionWrapper> _hubConnections;
 
-		public MultiConnectionSignalBrokerForTest(IMessageFilterManager typeFilter, IEnumerable<IHubConnectionWrapper> hubConnections, IConnectionKeepAliveStrategy connectionKeepAliveStrategy, ITime time)
-			: base(typeFilter, new IConnectionKeepAliveStrategy[] { }, time)
+		public MultiConnectionSignalBrokerForTest(IMessageFilterManager typeFilter,
+			IEnumerable<IHubConnectionWrapper> hubConnections, IConnectionKeepAliveStrategy connectionKeepAliveStrategy,
+			ITime time)
+			: base(typeFilter, new[] {connectionKeepAliveStrategy}, time)
 		{
 			_hubConnections = new Queue<IHubConnectionWrapper>(hubConnections);
 			ConnectionString = "http://neeedsToBeSet";

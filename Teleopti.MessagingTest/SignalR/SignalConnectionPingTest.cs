@@ -102,14 +102,13 @@ namespace Teleopti.MessagingTest.SignalR
 			target.CurrentConnection.Should().Be(hubConnection2);
 		}
 
-		[Test, Ignore("Do this now?")]
+		[Test, Ignore]
 		public void ShouldSubscribeToNotificationsOnNewConnection()
 		{
 			var time = new FakeTime();
 			var wasEventHandlerCalled = false;
-			var subscription = MockRepository.GenerateMock<ISubscriptionWrapper>();
-			var hubProxy1 = new HubThatRepliesToPing();
-			var hubProxy2 = new HubThatRepliesToPing();
+			var hubProxy1 = new HubThatSubscribesAndPongs();
+			var hubProxy2 = new HubThatSubscribesAndPongs();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
 			var target = new MultiConnectionSignalBrokerForTest(new MessageFilterManagerFake(),
@@ -118,18 +117,9 @@ namespace Teleopti.MessagingTest.SignalR
 
 			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
 											 typeof(IInterfaceForTest));
-
-			var notification = new Notification
-			{
-				DomainQualifiedType = "IInterfaceForTest",
-				BusinessUnitId = Guid.Empty.ToString(),
-				DataSource = string.Empty,
-				DomainType = "IInterfaceForTest",
-				StartDate = Interfaces.MessageBroker.Subscription.DateToString(DateTime.UtcNow),
-				EndDate = Interfaces.MessageBroker.Subscription.DateToString(DateTime.UtcNow)
-			};
-			var token = JObject.Parse(JsonConvert.SerializeObject(notification));
-			subscription.GetEventRaiser(x => x.Received += null).Raise(new List<JToken>(new JToken[] { token }));
+			hubProxy1.BreakTheConnection();
+			time.Passes(TimeSpan.FromMinutes(2));
+			hubProxy2.TriggerRecieved();
 
 			wasEventHandlerCalled.Should().Be(true);
 		}
