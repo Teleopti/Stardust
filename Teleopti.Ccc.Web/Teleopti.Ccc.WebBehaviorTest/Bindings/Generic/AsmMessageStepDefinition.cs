@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -203,6 +204,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			javaScript.AppendFormat(CultureInfo.InvariantCulture, "Teleopti.MyTimeWeb.AsmMessageList.DeleteMessage( '{0}' );", id.ToString());
 
+			Browser.Interactions.Javascript(javaScript.ToString());
+			//try more times to avoid random failure for delete message
+			Thread.Sleep(100);
+			Browser.Interactions.Javascript(javaScript.ToString());
+			Thread.Sleep(100);
 			Browser.Interactions.Javascript(javaScript.ToString());
 		}
 
