@@ -2017,12 +2017,8 @@
     <Folder Include="Analyzer\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FeatureFlags\released.toggles.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="FeatureFlags\RC.toggles.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="FeatureFlags\released.toggles.txt" />
+    <Content Include="FeatureFlags\RC.toggles.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
