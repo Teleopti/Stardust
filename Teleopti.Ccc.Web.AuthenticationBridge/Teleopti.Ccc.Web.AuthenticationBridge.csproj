@@ -42,17 +42,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AuthBridge, Version=1.0.0.12, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.8\lib\net40\AuthBridge.dll</HintPath>
+    <Reference Include="AuthBridge">
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.9\lib\net40\AuthBridge.dll</HintPath>
     </Reference>
-    <Reference Include="AuthBridge.Web, Version=1.0.3.8, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AuthBridge.Web, Version=1.0.3.9, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.8\lib\net40\AuthBridge.Web.dll</HintPath>
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.9\lib\net40\AuthBridge.Web.dll</HintPath>
     </Reference>
     <Reference Include="ClaimsPolicyEngine, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.8\lib\net40\ClaimsPolicyEngine.dll</HintPath>
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.9\lib\net40\ClaimsPolicyEngine.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.AspNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -252,15 +251,16 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <None Include="Scripts\jquery-1.9.0.intellisense.js" />
     <Content Include="Global.asax" />
     <Content Include="Policy.xml" />
+    <Content Include="Views\Shared\Error.aspx" />
+    <Content Include="xrds.aspx" />
+    <None Include="Scripts\jquery-1.9.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.9.0.js" />
     <Content Include="Scripts\jquery-1.9.0.min.js" />
     <Content Include="Views\Authentication\Authenticate.aspx" />
-    <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

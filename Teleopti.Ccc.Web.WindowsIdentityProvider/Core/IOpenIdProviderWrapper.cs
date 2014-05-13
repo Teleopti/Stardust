@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Core
 		IRequest GetRequest();
 		OutgoingWebResponse PrepareResponse(IRequest request);
 		void SendResponse(IRequest request);
+		IDirectWebRequestHandler WebRequestHandler();
 	}
 }

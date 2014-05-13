@@ -161,6 +161,13 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				// Is this is an identity authentication request? (as opposed to an anonymous request)...
 				if (pending != null)
 				{
+					if (pendingRequest.IsReturnUrlDiscoverable(_openIdProvider.Channel().WebRequestHandler) != RelyingPartyDiscoveryResult.Success)
+					{
+						pending.IsAuthenticated = false;
+						response = null;
+						return false;
+					}
+
 					// If this is directed identity, or if the claimed identifier being checked is controlled by the current user...
 					if (pending.IsDirectedIdentity
 						|| UserControlsIdentifier(pending))

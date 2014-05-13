@@ -26,5 +26,10 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Core
 		{
 			_openIdProvider.SendResponse(request);
 		}
+
+		public IDirectWebRequestHandler WebRequestHandler()
+		{
+			return _openIdProvider.Channel.WebRequestHandler;
+		}
 	}
 }

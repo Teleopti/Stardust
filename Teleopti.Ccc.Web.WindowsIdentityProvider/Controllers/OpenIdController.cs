@@ -62,7 +62,11 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 		{
 			var idrequest = _providerEndpointWrapper.PendingRequest as IAuthenticationRequest;
 			_providerEndpointWrapper.PendingRequest = null;
-
+			if (idrequest.IsReturnUrlDiscoverable(_openIdProvider.WebRequestHandler()) != RelyingPartyDiscoveryResult.Success)
+			{
+				idrequest.IsAuthenticated = false;
+				return new EmptyResult();
+			}
 			var windowsAccount = _windowsAccountProvider.RetrieveWindowsAccount();
 			if (windowsAccount != null)
 			{
