@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Rhino.Mocks;
 using NUnit.Framework;
@@ -46,21 +47,40 @@ namespace Teleopti.Support.CodeTest.Tool
         [Test]
         public void RefreshThemTestTest()
         {
-            Expect.Call(_fileMan.GetReplaceList()).Return(new List<SearchReplace>());
-			Expect.Call(() => _refreshConfig.SplitAndReplace("", new List<SearchReplace>(), false)).IgnoreArguments();
-            _mocks.ReplayAll();
-			_refresher.Execute(new ModeFile("TEST"));
-            _mocks.VerifyAll();
+	        var testfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"ConfigFiles\BuildServerConfigFiles.txt");
+	        try
+	        {
+						File.WriteAllLines(testfile, new []{"something"});
+						Expect.Call(_fileMan.GetReplaceList()).Return(new List<SearchReplace>());
+						Expect.Call(() => _refreshConfig.SplitAndReplace("", new List<SearchReplace>(), false)).IgnoreArguments();
+						_mocks.ReplayAll();
+						_refresher.Execute(new ModeFile("TEST"));
+						_mocks.VerifyAll();
+					}
+	        finally
+	        {
+						File.Delete(testfile);  
+	        }
         }
 
         [Test]
         public void RefreshThemErrorTest()
         {
-            Expect.Call(_fileMan.GetReplaceList()).Return(new List<SearchReplace>());
-			Expect.Call(() => _refreshConfig.SplitAndReplace("", new List<SearchReplace>(), false)).IgnoreArguments().Throw(new FileNotFoundException("Borta?"));
-            _mocks.ReplayAll();
-			_refresher.Execute(new ModeFile("TEST"));
-            _mocks.VerifyAll();
+					var testfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"ConfigFiles\BuildServerConfigFiles.txt");
+	       
+	        try
+	        {
+						File.WriteAllLines(testfile, new[] { "something" });
+						Expect.Call(_fileMan.GetReplaceList()).Return(new List<SearchReplace>());
+						Expect.Call(() => _refreshConfig.SplitAndReplace("", new List<SearchReplace>(), false)).IgnoreArguments().Throw(new FileNotFoundException("Borta?"));
+						_mocks.ReplayAll();
+						_refresher.Execute(new ModeFile("TEST"));
+						_mocks.VerifyAll();
+	        }
+					finally
+					{
+						File.Delete(testfile); 
+	        }
         }
     }
 }
