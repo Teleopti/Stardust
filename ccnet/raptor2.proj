@@ -281,8 +281,8 @@
 
 	<Target Name="FixConfigFiles">
 		<Message Importance="high" Text="Fixing config files..." />
-		<Message Importance="high" Text="%22$(CCNetWorkingDirectory)\.debug-Setup\InfratestConfig.bat%22 %22$(DBNamePrefix)_ccc7%22 %22$(DBNamePrefix)_analytics%22 ALL %22$(Configuration)%22"/>
-			<Exec Command="%22$(CCNetWorkingDirectory)\.debug-Setup\InfratestConfig.bat%22 %22$(DBNamePrefix)_ccc7%22 %22$(DBNamePrefix)_analytics%22 ALL %22$(Configuration)%22">
+		<Message Importance="high" Text="%22$(CCNetWorkingDirectory)\.debug-Setup\InfratestConfig.bat%22 %22$(DBNamePrefix)_ccc7%22 %22$(DBNamePrefix)_analytics%22 ALL $(Configuration)"/>
+			<Exec Command="%22$(CCNetWorkingDirectory)\.debug-Setup\InfratestConfig.bat%22 %22$(DBNamePrefix)_ccc7%22 %22$(DBNamePrefix)_analytics%22 ALL $(Configuration)">
 		</Exec>
 		<Message Importance="high" Text="Fixing config files. Done!" />	
 	</Target>
