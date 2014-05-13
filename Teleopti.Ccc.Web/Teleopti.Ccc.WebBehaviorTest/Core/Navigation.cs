@@ -202,8 +202,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	    public static void GotoMessagePage()
         {
 			GoToWaitForCompleted("MyTime#Message/Index", new ApplicationStartupTimeout());
-			if (Browser.Current != null)
-				Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
 
 		public static void GoToPerformanceTool()

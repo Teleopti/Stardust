@@ -27,10 +27,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			new ScenarioContextLazy<TeamSchedulePage>(() => Browser.Current.Page<TeamSchedulePage>());
 		public static TeamSchedulePage TeamSchedulePage { get { return _teamSchedulePage.Value; } }
 
-        private static readonly ScenarioContextLazy<MessagePage> _messagePage =
-            new ScenarioContextLazy<MessagePage>(() => Browser.Current.Page<MessagePage>());
-        public static MessagePage MessagePage { get { return _messagePage.Value; } }
-
 		public static WatiN.Core.Page Current { get { return ScenarioContext.Current.Value<WatiN.Core.Page>(); } }
 
 		public static void NavigatingTo(WatiN.Core.Page page)
