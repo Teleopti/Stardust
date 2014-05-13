@@ -1,17 +1,17 @@
 @ECHO off
 SETLOCAL
 SET ROOTDIR=%~dp0
-SET ROOTDIR=%ROOTDIR:~0,-1%
-SET masterSettings=%ROOTDIR%\config\settingsInfraTest.txt
+SET ROOTDIR=%ROOTDIR:~0,-14%
+SET masterSettings=%ROOTDIR%\.debug-setup\config\settingsInfraTest.txt
 SET CCC7DB=%~1
 SET AnalyticsDB=%~2
 SET FEATURETOGGLE=%~3
 SET HGGUID=%~4
+set configuration=%5
 set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
-SET MySettings=%ROOTDIR%\..\Teleopti.Support.Code\settings.txt
+SET MySettings=%ROOTDIR%\Teleopti.Support.Code\settings.txt
 SET nhibFolder=c:\nhib\%HGGUID%
  
-cd %ROOTDIR%
 
 if "%1" == "" (
 SET CCC7DB=Infratest_CCC7
@@ -35,6 +35,10 @@ SET TOGGLE_FILE=released.toggles.txt
 SET TOGGLE_URL=http://localhost:52858/
 )
 
+if "%configuration%"=="" (
+set configuration=Debug
+)
+
 ::get a fresh Settings.txt
 COPY "%masterSettings%" "%MySettings%"
 ECHO. >> "%MySettings%"
@@ -51,18 +55,18 @@ ECHO $(DATASOURCE_NAME)^|TestData>>"%MySettings%"
 
 if not exist "%nhibFolder%" mkdir "%nhibFolder%"
 
-::Ugly Betty Was here!
-::Copy dynamic parameters into file structure in order to run parallel builds 
-copy "%ROOTDIR%\..\Teleopti.Support.Code\ConfigFiles\BuildServerConfigFiles.txt.template" "%ROOTDIR%\..\Teleopti.Support.Code\ConfigFiles\BuildServerConfigFiles.txt"
-ECHO. >> "%ROOTDIR%\..\Teleopti.Support.Code\ConfigFiles\BuildServerConfigFiles.txt"
-ECHO %nhibFolder%\TestData.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml >> "%ROOTDIR%\..\Teleopti.Support.Code\ConfigFiles\BuildServerConfigFiles.txt"
 
-::Build Teleopti.Support.Tool.exe
-ECHO Building %ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj
-%MSBUILD% /t:rebuild "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log" 
+::Build Teleopti.Support.Tool.exe if source files are available (they aren't in pipeline)
+if exist "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD% /t:build "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" /p:Configuration=%configuration%
+
+::telling what config to modify
+echo ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config>%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles\BuildServerConfigFiles.txt
+echo ..\..\..\InfrastructureTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config>>%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles\BuildServerConfigFiles.txt
+echo ..\..\..\Teleopti.Ccc.ApplicationConfigTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config>>%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles\BuildServerConfigFiles.txt
+echo ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config>>%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles\BuildServerConfigFiles.txt
 
 ::Run supportTool to replace all config
-"%ROOTDIR%\..\Teleopti.Support.Tool\bin\Debug\Teleopti.Support.Tool.exe" -MOTEST
+"%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MOTEST
 
 ENDLOCAL
 goto:eof
