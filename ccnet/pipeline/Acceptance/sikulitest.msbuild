@@ -5,7 +5,7 @@
 		<DestinationFolder Condition="'$(DestinationFolder)' == ''">$(CCNetArtifactDirectory)\pipeline</DestinationFolder>
 		<PipelineFolder>\\hebe\d$\PipelineState</PipelineFolder>
 		<SourceFiles Condition="'$(SourceFiles)' == ''">$(PipelineFolder)\$(CCNetLabel)</SourceFiles>
-		<SikuliPath>C:\Sikuli</SikuliPath>
+		<SikuliPath Condition="'$(SikuliPath)' == ''">C:\Sikuli</SikuliPath>
 		<Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
 		<SikuliSrc>$(DestinationFolder)\SikuliSrc</SikuliSrc>
 	</PropertyGroup>

@@ -1,6 +1,7 @@
 ::Test msbuild targets on webscenarios.msbuild
 :: usage
-:: sikulitest.bat [CCNetLabel] [destinationFolder] [targets]
+:: sikulitest.bat [CCNetLabel] [destinationFolder] [targets] [SikuliPath]
+:: sikulitest.bat 138 c:\Temp\Pipeline RunSikuliTests C:\Sikuli
 
 @ECHO off
 
