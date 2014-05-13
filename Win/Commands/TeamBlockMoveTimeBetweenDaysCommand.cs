@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Win.Commands
 {
 	public interface ITeamBlockMoveTimeBetweenDaysCommand
 	{
-		void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, BackgroundWorker backgroundWorker, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder);
+		void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, BackgroundWorker backgroundWorker, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> matrixesOnSelectedperiod);
 	}
 
 	public class TeamBlockMoveTimeBetweenDaysCommand : ITeamBlockMoveTimeBetweenDaysCommand
@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.Win.Commands
 			_teamBlockMoveTimeBetweenDaysService = teamBlockMoveTimeBetweenDaysService;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, BackgroundWorker backgroundWorker, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, BackgroundWorker backgroundWorker, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> matrixesOnSelectedperiod)
 		{
 			_backgroundWorker = backgroundWorker;
 			if (!_toggleManager.IsEnabled(Toggles.TeamBlockMoveTimeBetweenDays))
 				return;
-			_teamBlockMoveTimeBetweenDaysService.PerformMoveTime += moveTimePerformed;
-			_teamBlockMoveTimeBetweenDaysService.Execute(optimizationPreferences, allVisibleMatrixes, rollbackService, periodValueCalculator, schedulingResultStateHolder);
-			_teamBlockMoveTimeBetweenDaysService.PerformMoveTime -= moveTimePerformed;
+			_teamBlockMoveTimeBetweenDaysService.ReportProgress  += moveTimePerformed;
+			_teamBlockMoveTimeBetweenDaysService.Execute(optimizationPreferences, allVisibleMatrixes, rollbackService, periodValueCalculator, schedulingResultStateHolder, selectedPersons, matrixesOnSelectedperiod);
+			_teamBlockMoveTimeBetweenDaysService.ReportProgress  -= moveTimePerformed;
 		}
 
 		private void moveTimePerformed(object sender, ResourceOptimizerProgressEventArgs e)
@@ -42,10 +42,7 @@ namespace Teleopti.Ccc.Win.Commands
 			if (_backgroundWorker.CancellationPending)
 			{
 				e.Cancel = true;
-			}
-			else
-			{
-				e.Cancel = false;
+				e.UserCancel = true;
 			}
 			_backgroundWorker.ReportProgress(1, e);
 		}

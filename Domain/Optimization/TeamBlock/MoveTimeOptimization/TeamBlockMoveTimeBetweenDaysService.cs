@@ -1,129 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 {
 	public interface ITeamBlockMoveTimeBetweenDaysService
 	{
-		void Execute(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder);
-		event EventHandler<ResourceOptimizerProgressEventArgs> PerformMoveTime;
+		void Execute(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> matrixesOnSelectedperiod);
+		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
 
 	public class TeamBlockMoveTimeBetweenDaysService : ITeamBlockMoveTimeBetweenDaysService
 	{
-		public event EventHandler<ResourceOptimizerProgressEventArgs> PerformMoveTime;
-		private ITeamBlockMoveTimeOptimizer _teamBlockMoveTimeOptimizer;
+		private readonly ITeamBlockMoveTimeOptimizer _teamBlockMoveTimeOptimizer;
 		private bool _cancelMe;
+		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
 		public TeamBlockMoveTimeBetweenDaysService(ITeamBlockMoveTimeOptimizer teamBlockMoveTimeOptimizer)
 		{
 			_teamBlockMoveTimeOptimizer = teamBlockMoveTimeOptimizer;
 		}
 
-		public void Execute(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public void Execute(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> matrixesOnSelectedperiod)
 		{
 
-			var activeMatrixes = new List<IScheduleMatrixPro>(matrixList);
+			var activeMatrixes = new List<IScheduleMatrixPro>(matrixesOnSelectedperiod);
 			while (activeMatrixes.Count > 0)
 			{
 				if (_cancelMe)
 					break;
-				IEnumerable<IScheduleMatrixPro> shuffledMatrixes = matrixList.GetRandom(matrixList.Count, true);
+				IEnumerable<IScheduleMatrixPro> shuffledMatrixes = matrixesOnSelectedperiod.GetRandom(matrixesOnSelectedperiod.Count, true);
 				int executes = 0;
-				double lastPeriodValue = periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
-				double newPeriodValue = lastPeriodValue;
 				foreach (var matrix in shuffledMatrixes)
 				{
 					if (_cancelMe)
 						break;
+					if (!selectedPersons.Contains(matrix.Person))
+					{
+						activeMatrixes.Remove(matrix);
+						continue;
+					}
 					executes++;
 					bool result = _teamBlockMoveTimeOptimizer.OptimizeMatrix( optimizerPreferences, matrixList, rollbackService, periodValueCalculator, schedulingResultStateHolder, matrix);
 					if (!result)
 					{
 						activeMatrixes.Remove(matrix);
 					}
+					
+					string who = "Move time on .. "  + matrix.Person.Name.ToString(NameOrderOption.FirstNameLastName);
+					string success;
+					if (!result)
+					{
+						success = " " + Resources.wasNotSuccessful;
+					}
 					else
 					{
-						newPeriodValue = periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
+						success = " " + Resources.wasSuccessful;
 					}
-
-					//string unlocked = " (" +
-					//						(int)
-					//						(optimizer.Matrix.UnlockedDays.Count/
-					//						(double) optimizer.Matrix.EffectivePeriodDays.Count*100) + "%) ";
-					//string who = Resources.OptimizingShiftLengths + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " " + unlocked + optimizer.ContainerOwner.Name.ToString(NameOrderOption.FirstNameLastName);
-					//string success;
-					//if (!result)
-					//{
-					//	success = " " + Resources.wasNotSuccessful;
-					//}
-					//else
-					//{
-					//	success = " " + Resources.wasSuccessful;
-					//}
-					//string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ")";
-					//OnReportProgress(who + success + values);
+					OnReportProgress(who + success );
 				}
 			}
-
 		}
 
-		protected virtual void OnDayScheduled(ResourceOptimizerProgressEventArgs resourceOptimizerProgressEventArgs)
+		public void OnReportProgress(string message)
 		{
-			EventHandler<ResourceOptimizerProgressEventArgs> temp = PerformMoveTime;
-			if (temp != null)
+			var handler = ReportProgress;
+			if (handler != null)
 			{
-				temp(this, resourceOptimizerProgressEventArgs);
-			}
-			_cancelMe = resourceOptimizerProgressEventArgs.Cancel;
-		}
-
-		public void Execute()
-		{
-			var someCondition = true;
-			while (someCondition)
-			{
-				var dateOnlyList = getCandidatesDatesToAnalyze();
-				if (dateOnlyList.Count == 0) break;
-
-				var candidatesTeamBlock = contractTeamBlockOnDates(dateOnlyList);
-
-				deleteDaysAmongTeamBlockBasedOnOptions(candidatesTeamBlock);
-
-				resceduleTeamBlock(candidatesTeamBlock);
-
-				validateIfMoveTimeIsOk(candidatesTeamBlock);
+				ResourceOptimizerProgressEventArgs args = new ResourceOptimizerProgressEventArgs(0, 0, message);
+				handler(this, args);
+				if (args.Cancel)
+					_cancelMe = true;
 			}
 		}
-
 		
-
-		private void validateIfMoveTimeIsOk(IList<TeamBlockInfo> candidatesTeamBlock)
-		{
-			throw new NotImplementedException();
-		}
-
-		private void resceduleTeamBlock(IList<TeamBlockInfo> candidatesTeamBlock)
-		{
-			throw new NotImplementedException();
-		}
-
-		private void deleteDaysAmongTeamBlockBasedOnOptions(IList<TeamBlockInfo> candidatesTeamBlock)
-		{
-			throw new NotImplementedException();
-		}
-
-		private IList<TeamBlockInfo> contractTeamBlockOnDates(IList<DateOnly> dateOnlyList)
-		{
-			throw new NotImplementedException();
-		}
-
-		private IList<DateOnly> getCandidatesDatesToAnalyze()
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

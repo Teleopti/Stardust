@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
@@ -26,13 +27,7 @@ namespace Teleopti.Ccc.Win.Commands
     public interface ITeamBlockOptimizationCommand
     {
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-		void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod,
-							IList<IPerson> selectedPersons,
-							IOptimizationPreferences optimizationPreferences,
-							ISchedulePartModifyAndRollbackService rollbackService,
-							IScheduleTagSetter tagSetter,
-							ISchedulingOptions schedulingOptions,
-							IResourceCalculateDelayer resourceCalculateDelayer);
+		void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, IScheduleTagSetter tagSetter, ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> selectedSchedules);
     }
 
     public class TeamBlockOptimizationCommand : ITeamBlockOptimizationCommand
@@ -123,14 +118,7 @@ namespace Teleopti.Ccc.Win.Commands
 		    _teamBlockMoveTimeBetweenDaysCommand = teamBlockMoveTimeBetweenDaysCommand;
 	    }
 
-        public void Execute(BackgroundWorker backgroundWorker, 
-							DateOnlyPeriod selectedPeriod,
-							IList<IPerson> selectedPersons,
-							IOptimizationPreferences optimizationPreferences,
-							ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation,
-							IScheduleTagSetter tagSetter,
-							ISchedulingOptions schedulingOptions,
-							IResourceCalculateDelayer resourceCalculateDelayer)
+        public void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, IScheduleTagSetter tagSetter, ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> selectedSchedules)
         {
 
 			_backgroundWorker = backgroundWorker;
@@ -153,8 +141,8 @@ namespace Teleopti.Ccc.Win.Commands
 
 			  if (optimizationPreferences.General.OptimizationStepTimeBetweenDays && !optimizationPreferences.Extra.UseBlockSameShift)
 			  {
-				  
-				  optimizeMoveTimeBetweenDays(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences, rollbackServiceWithResourceCalculation, schedulingOptions, resourceCalculateDelayer, allMatrixes);
+				  var matrixesOnSelectedperiod = _matrixListFactory.CreateMatrixList(selectedSchedules, selectedPeriod);
+				  optimizeMoveTimeBetweenDays(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences, rollbackServiceWithResourceCalculation, schedulingOptions, resourceCalculateDelayer, matrixesOnSelectedperiod,allMatrixes);
 			  }
 
 			if (optimizationPreferences.General.OptimizationStepFairness)
@@ -192,10 +180,7 @@ namespace Teleopti.Ccc.Win.Commands
 
         }
 
-	    private void optimizeMoveTimeBetweenDays(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod,
-		    IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
-		    ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, ISchedulingOptions schedulingOptions,
-		    IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allMatrixes)
+	    private void optimizeMoveTimeBetweenDays(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> matrixesOnSelectedperiod, IList<IScheduleMatrixPro> allMatrixes)
 	    {
 			 IScheduleResultDataExtractor allSkillsDataExtractor =
 	 OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod,
@@ -205,7 +190,7 @@ namespace Teleopti.Ccc.Win.Commands
 																					 allSkillsDataExtractor);
 		    _teamBlockMoveTimeBetweenDaysCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons,
 				 rollbackServiceWithResourceCalculation, resourceCalculateDelayer, selectedPeriod, allMatrixes, backgroundWorker, periodValueCalculatorForAllSkills,
-			    _schedulerStateHolder.SchedulingResultState);
+				 _schedulerStateHolder.SchedulingResultState, matrixesOnSelectedperiod);
 	    }
 
 	    private void solveWeeklyRestViolations(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, 
