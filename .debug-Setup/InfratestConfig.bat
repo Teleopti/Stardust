@@ -6,12 +6,9 @@ SET masterSettings=%ROOTDIR%\.debug-setup\config\settingsInfraTest.txt
 SET CCC7DB=%~1
 SET AnalyticsDB=%~2
 SET FEATURETOGGLE=%~3
-SET HGGUID=%~4
-set configuration=%5
+set configuration=%4
 set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 SET MySettings=%ROOTDIR%\Teleopti.Support.Code\settings.txt
-SET nhibFolder=c:\nhib\%HGGUID%
- 
 
 if "%1" == "" (
 SET CCC7DB=Infratest_CCC7
@@ -42,9 +39,6 @@ set configuration=Debug
 ::get a fresh Settings.txt
 COPY "%masterSettings%" "%MySettings%"
 ECHO. >> "%MySettings%"
-ECHO $(SDK_nhibConfPath)^|%nhibFolder%>>"%MySettings%"
-ECHO $(ETL_SERVICE_nhibConfPath)^|%nhibFolder%>>"%MySettings%"
-ECHO $(ETL_TOOL_nhibConfPath)^|%nhibFolder%>>"%MySettings%"
 ECHO $(AGENTPORTALWEB_nhibConfPath)^|bin>>"%MySettings%"
 ECHO $(DB_CCC7)^|%CCC7DB%>>"%MySettings%"
 ECHO $(DB_ANALYTICS)^|%AnalyticsDB%>>"%MySettings%"
@@ -52,9 +46,6 @@ ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%MySettings%"
 ECHO $(TOGGLE_FILE)^|%TOGGLE_FILE%>>"%MySettings%"
 ECHO $(TOGGLE_URL)^|%TOGGLE_URL%>>"%MySettings%"
 ECHO $(DATASOURCE_NAME)^|TestData>>"%MySettings%"
-
-if not exist "%nhibFolder%" mkdir "%nhibFolder%"
-
 
 ::Build Teleopti.Support.Tool.exe if source files are available (they aren't in pipeline)
 if exist "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD% /t:build "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" /p:Configuration=%configuration%
