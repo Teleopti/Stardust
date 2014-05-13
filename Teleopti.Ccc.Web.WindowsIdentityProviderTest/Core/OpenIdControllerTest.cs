@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			var request = MockRepository.GenerateMock<IAuthenticationRequest>();
 			request.Expect(x => x.IsAuthenticated).PropertyBehavior();
 			request.Expect(x => x.LocalIdentifier).PropertyBehavior();
+			request.Expect(x => x.IsReturnUrlDiscoverable(null)).IgnoreArguments().Return(RelyingPartyDiscoveryResult.Success);
 			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
 
 			var windowsAccountProvider = MockRepository.GenerateMock<IWindowsAccountProvider>();
