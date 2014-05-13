@@ -69,7 +69,10 @@
     <Compile Include="SignalR\FailingHubProxyFake.cs" />
     <Compile Include="SignalR\HubProxyFake.cs" />
     <Compile Include="SignalR\HubThatRepliesToPing.cs" />
+    <Compile Include="SignalR\MessageFilterManagerFake.cs" />
+    <Compile Include="SignalR\MultiConnectionSignalBrokerForTest.cs" />
     <Compile Include="SignalR\MultiConnectionSignalSenderForTest.cs" />
+    <Compile Include="SignalR\SignalBrokerForTest.cs" />
     <Compile Include="SignalR\SignalBrokerTest.cs" />
     <Compile Include="SignalR\SignalConnectionRestartOnClosedTest.cs" />
     <Compile Include="SignalR\SignalConnectionPingTest.cs" />
