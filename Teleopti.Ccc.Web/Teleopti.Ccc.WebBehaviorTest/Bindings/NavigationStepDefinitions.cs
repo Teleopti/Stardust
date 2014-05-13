@@ -27,6 +27,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Asm.MakeSureWeAreLoggedOn();");
 		}
+ 
+		[Given(@"I am viewing messages")]
+		[When(@"I am viewing messages")]
+		public void WhenIAmViewingMessages()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoMessagePage();
+		}
 
 		[When(@"Someone is viewing sharing link")]
 		public void WhenSomeoneIsViewingSharingLink()

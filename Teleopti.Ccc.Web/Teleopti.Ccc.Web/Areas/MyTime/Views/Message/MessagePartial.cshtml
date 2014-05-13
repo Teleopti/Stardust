@@ -12,8 +12,8 @@
     <div id="AsmMessages-list" data-bind="foreach: asmMessageColumnList">
         <div class="row" data-bind="foreach: Items">
             <div class="span6">
-                <div class="well well-small" data-bind="css: { 'asmMessage-selected': isSelected }">
-                    <div class="bdd-asm-message-body" data-bind="click: toggleSelected" style="cursor: pointer">
+                <div class="bdd-asm-message-body well well-small" data-bind="css: { 'asmMessage-selected': isSelected }">
+                    <div class="header" data-bind="click: toggleSelected" style="cursor: pointer">
                         <span class="displaynone" data-bind="text: messageId"></span>
                         <div>
                             <h5 class="asmMessage-title" data-bind="text: title">
