@@ -281,3 +281,156 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	 When I view Real time adherence for site 'Paris'
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
+
+@ignore
+Scenario: Should not be able to see agents if not permitted
+	Given I have a role with
+	 | Field                                  | Value       |
+	 | Name                                   | Team leader |
+	 | Access to real time adherence overview | True		|
+	And there is a site named 'Paris'
+	And there is a team named 'Red' on site 'Paris'
+	When I view real time adherence for team 'Red'
+	Then I should see a message that I have no permission for team 'Red'
+
+@ignore
+Scenario: Should be able to see current states of all agents
+	Given I have a role with
+	 | Field                                  | Value       |
+	 | Name                                   | Team leader |
+	 | Access to team						  | Team Red	|
+	 | Access to real time adherence overview | True		|
+	And there is an activity named 'Phone'
+	And there is an activity named 'Lunch'
+	And there is a site named 'Paris'
+	And there is a team named 'Red' on site 'Paris'
+	And Pierre Baldi has a person period with
+	 | Field      | Value      |
+	 | Team       | Red        |
+	 | Start Date | 2014-01-21 |
+	And Ashley Andeen has a person period with
+	 | Field      | Value      |
+	 | Team       | Red        |
+	 | Start Date | 2014-01-21 |
+	And Pierre Baldi has a shift with
+	| Field			| Value            |
+	| Start time	| 2014-01-21 12:00 |
+	| End time		| 2014-01-21 13:00 |
+	| Activity		| Phone            |
+	| Next activity	| Lunch            |
+	| Next activity start time | 2014-01-21 13:00 |
+	And Ashley Andeen has a shift with
+	| Field			| Value            |
+	| Start time	| 2014-01-21 12:00 |
+	| End time		| 2014-01-21 13:00 |
+	| Activity		| Phone            |
+	| Next activity	| Lunch            |
+	| Next activity start time | 2014-01-21 13:00 |
+	And there is an alarm with 
+	| Field           | Value    |
+	| Activity        | Phone    |
+	| Phone state     | Ready    |
+	| Name            | Adhering |
+	| Color           | Green	|
+	| Alarm Time	| 2014-01-21 12:10 |
+	| Staffing effect | 0        |
+	And there is an alarm with 
+	| Field           | Value        |
+	| Activity        | Phone        |
+	| Phone state     | Pause        |
+	| Color           | Red	|
+	| Name            | Not adhering |
+	| Alarm Time	| 2014-01-21 12:10 |
+	| Staffing effect | -1           |
+	And 'Pierre Baldi' sets his phone state to 'Pause'
+	And 'Ashley Andeen' sets his phone state to 'Ready'
+	When I view Real time adherence for team 'Red'
+	Then I should see 
+		| Field				| Value				|
+		| Name				| Pierre Baldi		|
+		| State				| Pause		|
+		| Activity			| Phone		|
+		| Next activity		| Lunch		|
+		| Next activity start time	| 2014-01-21 13:00	|
+		| Alarm	| Not adhering	|
+		| Alarm Time	| 2014-01-21 12:10 |
+	And I should see
+		| Field				| Value				|
+		| Name				| Ashley Andeen		|
+		| State				| Ready		|
+		| Activity			| Phone		|
+		| Next activity		| Lunch		|
+		| Next activity start time	| 2014-01-21 13:00	|
+		| Alarm	| Adhering	|
+		| Alarm Time	| 2014-01-21 12:10 |
+
+@ignore
+Scenario: Should be able to see state updates of all agents
+	Given I have a role with
+	 | Field                                  | Value       |
+	 | Name                                   | Team leader |
+	 | Access to team						  | Team Red	|
+	 | Access to real time adherence overview | True		|
+	And there is an activity named 'Phone'
+	And there is an activity named 'Lunch'
+	And there is a site named 'Paris'
+	And there is a team named 'Red' on site 'Paris'
+	And Pierre Baldi has a person period with
+	 | Field      | Value      |
+	 | Team       | Red        |
+	 | Start Date | 2014-01-21 |
+	And Ashley Andeen has a person period with
+	 | Field      | Value      |
+	 | Team       | Red        |
+	 | Start Date | 2014-01-21 |
+	And Pierre Baldi has a shift with
+	| Field			| Value            |
+	| Start time	| 2014-01-21 12:00 |
+	| End time		| 2014-01-21 13:00 |
+	| Activity		| Phone            |
+	| Next activity	| Lunch            |
+	| Next activity start time | 2014-01-21 13:00 |
+	And Ashley Andeen has a shift with
+	| Field			| Value            |
+	| Start time	| 2014-01-21 12:00 |
+	| End time		| 2014-01-21 13:00 |
+	| Activity		| Phone            |
+	| Next activity	| Lunch            |
+	| Next activity start time | 2014-01-21 13:00 |
+	And there is an alarm with 
+	| Field           | Value    |
+	| Activity        | Phone    |
+	| Phone state     | Ready    |
+	| Name            | Adhering |
+	| Color           | Green	|
+	| Alarm Time	| 2014-01-21 12:10 |
+	| Staffing effect | 0        |
+	And there is an alarm with 
+	| Field           | Value        |
+	| Activity        | Phone        |
+	| Phone state     | Pause        |
+	| Color           | Red	|
+	| Name            | Not adhering |
+	| Alarm Time	| 2014-01-21 12:10 |
+	| Staffing effect | -1           |
+	When I view Real time adherence for team 'Red'
+	And 'Pierre Baldi' sets his phone state to 'Pause'
+	And 'Ashley Andeen' sets his phone state to 'Ready'
+	Then I should see 
+		| Field				| Value				|
+		| Name				| Pierre Baldi		|
+		| State				| Pause		|
+		| Activity			| Phone		|
+		| Next activity		| Lunch		|
+		| Next activity start time	| 2014-01-21 13:00	|
+		| Alarm	| Not adhering	|
+		| Alarm Time	| 2014-01-21 12:10 |
+	And I should see
+		| Field				| Value				|
+		| Name				| Ashley Andeen		|
+		| State				| Ready		|
+		| Activity			| Phone		|
+		| Next activity		| Lunch		|
+		| Next activity start time	| 2014-01-21 13:00	|
+		| Alarm	| Adhering	|
+		| Alarm Time	| 2014-01-21 12:10 |
