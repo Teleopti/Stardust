@@ -332,7 +332,7 @@ Scenario: Should be able to see current states of all agents
 	| Phone state     | Ready    |
 	| Name            | Adhering |
 	| Color           | Green	|
-	| Alarm Time	| 2014-01-21 12:10 |
+	| Alarm Time	| 2014-01-21 12:15 |
 	| Staffing effect | 0        |
 	And there is an alarm with 
 	| Field           | Value        |
@@ -345,8 +345,8 @@ Scenario: Should be able to see current states of all agents
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets his phone state to 'Ready'
 	When I view real time adherence for team 'Red'
-	Then I should see real time agent details
-		| Field				| Value				|
+	Then I should see real time agent details for 'Pierre Baldi'
+		| Name				| 		|
 		| Name				| Pierre Baldi		|
 		| State				| Pause		|
 		| Activity			| Phone		|
@@ -355,7 +355,7 @@ Scenario: Should be able to see current states of all agents
 		| Alarm	| Not adhering	|
 		| Alarm Time	| 2014-01-21 12:10 |
 		| Time in state	| 0:20:00 |
-	And I should see real time agent details 
+	And I should see real time agent details for 'Ashley Andeen'
 		| Field				| Value				|
 		| Name				| Ashley Andeen		|
 		| State				| Ready		|
@@ -418,7 +418,7 @@ Scenario: Should be able to see state updates of all agents
 	When I view real time adherence for team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets his phone state to 'Ready'
-	Then I should see 
+	Then I should see real time agent details for 'Pierre Baldi'
 		| Field				| Value				|
 		| Name				| Pierre Baldi		|
 		| State				| Pause		|
@@ -427,7 +427,7 @@ Scenario: Should be able to see state updates of all agents
 		| Next activity start time	| 2014-01-21 13:00	|
 		| Alarm	| Not adhering	|
 		| Alarm Time	| 2014-01-21 12:10 |
-	And I should see
+	And I should see real time agent details for 'Ashley Andeen'
 		| Field				| Value				|
 		| Name				| Ashley Andeen		|
 		| State				| Ready		|

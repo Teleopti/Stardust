@@ -3,6 +3,7 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 {
@@ -41,23 +42,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".team [data-max='{0}']:contains('{1}')", total, team));
 		}
 
-		[Then(@"I should see real time agent details")]
-		public void ThenIShouldSeeRealTimeAgentDetails(Table table)
+		[Then(@"I should see real time agent details for '(.*)'")]
+		public void ThenIShouldSeeRealTimeAgentDetailsFor(string name, Table table)
 		{
 			var stateInfo = table.CreateInstance<RealTimeAdherenceAgentStateInfo>();
-			assertRealTimeAgentDetails(stateInfo);
+			assertRealTimeAgentDetails(name,stateInfo);
 		}
 
-		private static void assertRealTimeAgentDetails(RealTimeAdherenceAgentStateInfo stateInfo)
-		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format("TD.agent-name:contains('{0}')", stateInfo.Name));
+		private static void assertRealTimeAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)
+		{		
+			const string selector = ".agent-name:contains('{0}') ~ td:contains('{1}')";
+
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.State);
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.Activity);
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.NextActivity);
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.NextActivityStartTimeFormatted());
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.Alarm);
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.AlarmTimeFormatted());
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.TimeInState);
 		}
-		
 	}
 
 	public class RealTimeAdherenceAgentStateInfo
 	{
-	
 		public string Name	{ get; set; }
 		public string State	{ get; set; }
 		public string Activity	{ get; set; }
@@ -65,6 +72,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public string NextActivityStartTime	{ get; set; }
 		public string Alarm	{ get; set; }
 		public string AlarmTime	{ get; set; }
-		public TimeSpan TimeInState	 { get; set; }
+		public string TimeInState	 { get; set; }
+
+		public string NextActivityStartTimeFormatted()
+		{
+			var format = DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern;
+			return DateTime.Parse(NextActivityStartTime).ToString(format);
+		}
+
+		public string AlarmTimeFormatted()
+		{
+			var format = DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern;
+			return DateTime.Parse(AlarmTime).ToString(format);
+		}
 	}
 }
