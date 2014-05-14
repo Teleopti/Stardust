@@ -8,7 +8,6 @@ SET AnalyticsDB=%~2
 SET FEATURETOGGLE=%~3
 set configuration=%4
 set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
-SET MySettings=%ROOTDIR%\Teleopti.Support.Code\settings.txt
 
 if "%1" == "" (
 SET CCC7DB=Infratest_CCC7
@@ -36,6 +35,11 @@ if "%configuration%"=="" (
 set configuration=Debug
 )
 
+SET MySettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings.txt
+
+::Build Teleopti.Support.Tool.exe if source files are available (they aren't in pipeline)
+if exist "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD% /t:build "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" /p:Configuration=%configuration%
+
 ::get a fresh Settings.txt
 COPY "%masterSettings%" "%MySettings%"
 ECHO. >> "%MySettings%"
@@ -46,9 +50,6 @@ ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%MySettings%"
 ECHO $(TOGGLE_FILE)^|%TOGGLE_FILE%>>"%MySettings%"
 ECHO $(TOGGLE_URL)^|%TOGGLE_URL%>>"%MySettings%"
 ECHO $(DATASOURCE_NAME)^|TestData>>"%MySettings%"
-
-::Build Teleopti.Support.Tool.exe if source files are available (they aren't in pipeline)
-if exist "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD% /t:build "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" /p:Configuration=%configuration%
 
 ::telling what config to modify
 set buildServerConfigFiles="%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles\BuildServerConfigFiles.txt"
