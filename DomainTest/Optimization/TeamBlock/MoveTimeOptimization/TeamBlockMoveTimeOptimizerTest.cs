@@ -38,6 +38,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		private IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private IConstructAndScheduleSingleDayTeamBlock _constructAndScheduleSingleDayTeamBlock;
+		private IPeriodValueCalculator _periodValueCalculator;
+		private DateOnly _today;
+		private IScheduleDayPro _scheduleDayPro1;
 
 		[SetUp]
 		public void Setup()
@@ -58,22 +61,47 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			_optimizationPreferences = new OptimizationPreferences();
 			_person1 = PersonFactory.CreatePerson("test");
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
+			_periodValueCalculator = _mock.StrictMock<IPeriodValueCalculator>();
+			_today = new DateOnly(2014,05,14);
+			_scheduleDayPro1 = _mock.StrictMock<IScheduleDayPro>();
 		}
 
-		[Test]
+		[Ignore,Test]
+		public void ShouldReturnFalseIfNoDatesFound()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
+				Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences)).Return(new List<DateOnly>());
+			}
+			using (_mock.Playback())
+			{
+				Assert.IsFalse(_target.OptimizeMatrix(_optimizationPreferences, _matrixList, _rollbackService, _periodValueCalculator,
+					_schedulingResultStateHolder, _matrix1));
+			}
+		}
+
+		[Ignore,Test]
 		public void ShouldReturnFalseIfFoundDaysAreEqual()
 		{
 			using (_mock.Record())
 			{
-				
+				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
+				Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences)).Return(new List<DateOnly> {_today, _today});
+
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(_matrix1.GetScheduleDayByKey(_today)).Return(_scheduleDayPro1);
 			}
 			using (_mock.Playback())
 			{
-				
+				_target.OptimizeMatrix(_optimizationPreferences, _matrixList, _rollbackService, _periodValueCalculator,
+					_schedulingResultStateHolder, _matrix1);
 			}
 		}
 
-		[Test]
+		[Ignore,Test]
 		public void ShouldReturnTrueIfHigherContractTime()
 		{
 			using (_mock.Record())
@@ -86,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			}
 		}
 
-		[Test]
+		[Ignore,Test]
 		public void ShouldOptimizeSuccessfully()
 		{
 			using (_mock.Record())
