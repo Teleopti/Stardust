@@ -182,7 +182,7 @@
       <HintPath>..\..\packages\Syncfusion.Core.12.1.0.43\lib\4.0\Syncfusion.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Grid.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+    <Reference Include="Syncfusion.Grid.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Syncfusion.Grid.Win.12.1.0.43\lib\4.0\Syncfusion.Grid.Base.dll</HintPath>
     </Reference>
@@ -194,18 +194,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Syncfusion.Shared.Base.12.1.0.43\lib\4.0\Syncfusion.Shared.Base.dll</HintPath>
     </Reference>
-    <Reference Include="Syncfusion.Shared.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+    <Reference Include="Syncfusion.Shared.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Syncfusion.Shared.Win.12.1.0.43\lib\4.0\Syncfusion.Shared.Windows.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Tools.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Syncfusion.Tools.Win.12.1.0.43\lib\4.0\Syncfusion.Tools.Base.dll</HintPath>
+      <HintPath>..\..\packages\Syncfusion.Tools.Win.12.1.0.45\lib\4.0\Syncfusion.Tools.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
+    <Reference Include="Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Syncfusion.Tools.Win.12.1.0.43\lib\4.0\Syncfusion.Tools.Windows.dll</HintPath>
+      <HintPath>..\..\packages\Syncfusion.Tools.Win.12.1.0.45\lib\4.0\Syncfusion.Tools.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -266,7 +266,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="ShellApplication.cs" />
-    <Compile Include="SmartClientPortal.cs" />
+    <Compile Include="SmartClientPortal.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SmartClientPortal.designer.cs">
       <DependentUpon>SmartClientPortal.cs</DependentUpon>
     </Compile>
