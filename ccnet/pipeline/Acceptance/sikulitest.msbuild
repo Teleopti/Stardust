@@ -10,6 +10,7 @@
 		<SikuliSrc>$(DestinationFolder)\SikuliSrc</SikuliSrc>
 	</PropertyGroup>
 	
+    <UsingTask TaskName="RunSikuliTests" AssemblyFile="c:\Temp\ClassLibraryTask.dll" />	
 	<UsingTask AssemblyFile="$(DestinationFolder)\packages\MSBuildTasks.1.4.0.65\tools\MSBuild.Community.Tasks.dll" TaskName="NUnit"/>
 	
 	<Target Name="AcceptanceTests">
@@ -17,7 +18,7 @@
 		<CallTarget Targets="RunSikuliTests"/>
 	</Target>
 	
-	<Target Name="InstallSolutionDependencies" DependsOnTargets="CloneRepo" Desciption="Getting nuget packages and Sikuli source files">
+	<Target Name="InstallSolutionDependencies" DependsOnTargets="CloneRepo">
 		<PropertyGroup>
 			<SikuliTestRepo>http://atom:5000/QA/AutomatedSmokeTests</SikuliTestRepo>
 			<NugetFolder>$(SourceFiles)\.nuget</NugetFolder>
@@ -72,11 +73,24 @@
 	</Target>
 
 	<Target Name="RunSikuliTests" DependsOnTargets="InstallSolutionDependencies">
+		<Exec Command ="ECHO %22$(SikuliPath)\runIDE.cmd%22 -r %22$(SikuliSrc)\BuildTest\Utveckling.sikuli%22> %22c:\Temp\runTests.bat%22" ContinueOnError='true'>
+            <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+        </Exec>
+		<Message Text="The exit code is $(ErrorCode)"/>
+		
+		<!-- Custom Task by Teleopti -->
+		<Message Text="Running Sikuli custom MsBuild Task by Teleopti..."/>
+		<RunSikuliTests BatPath = "c:\\Temp\\runTests.bat"/>
+		<Message Text="Running Sikuli custom MsBuild Task by Teleopti. Done!"/>
+		
+		<!-- Run batch directly from MSBuild -->
+		<Message Text="Running Sikuli via Command line from MsBuild..."/>
 		<Exec Command ="%22$(SikuliPath)\runIDE.cmd%22 -r %22$(SikuliSrc)\BuildTest\Utveckling.sikuli%22" ContinueOnError='true'>
             <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
         </Exec>
-  
-       <Message Text="The exit code is $(ErrorCode)"/>
+		<Message Text="Running Sikuli via Command line from MsBuild. Done!"/>
+		
+		<Message Text="The exit code is $(ErrorCode)"/>
         <Error Text="Error while executing: %22$(SikuliPath)\runIDE.cmd%22 -r %22$(SikuliSrc)\BuildTest\Utveckling.sikuli%22" Condition="'$(ErrorCode)' > '0'" />
         <OnError ExecuteTargets="MessageErrorHandler"/>
   </Target>
