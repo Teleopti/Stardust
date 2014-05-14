@@ -52,7 +52,9 @@ ECHO $(TOGGLE_URL)^|%TOGGLE_URL%>>"%MySettings%"
 ECHO $(DATASOURCE_NAME)^|TestData>>"%MySettings%"
 
 ::telling what config to modify
-set buildServerConfigFiles="%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles\BuildServerConfigFiles.txt"
+set configFilesFolder=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles
+set buildServerConfigFiles="%configFilesFolder%\BuildServerConfigFiles.txt"
+if not exist "%configFilesFolder%" mkdir "%configFilesFolder%"
 echo ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config>%buildServerConfigFiles%
 echo ..\..\..\InfrastructureTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config>>%buildServerConfigFiles%
 echo ..\..\..\Teleopti.Ccc.ApplicationConfigTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config>>%buildServerConfigFiles%
