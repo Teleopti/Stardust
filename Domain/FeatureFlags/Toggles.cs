@@ -10,6 +10,7 @@
 		WeeklyRestRuleSolver,
 		TeamBlockMoveTimeBetweenDays,
 		//Show last updated states of realtime adherence overview
-		RtaLastStatesOverview
+		RtaLastStatesOverview,
+		PreferenceAlertWhenMinOrMaxHoursBroken
 	}
 }
