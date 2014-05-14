@@ -12038,7 +12038,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>The notify message show in MyTimeWeb when latest activity ending</comment>
   </data>
   <data name="NextActivityComingMessage" xml:space="preserve">
-    <value>Next activity {0} will coming at {1}</value>
+    <value>Next activity ({0}) will start at {1}</value>
     <comment>The notify message show in MyTimeWeb when next activity coming</comment>
   </data>
   <data name="ResolvingWeeklyRestFor" xml:space="preserve">
