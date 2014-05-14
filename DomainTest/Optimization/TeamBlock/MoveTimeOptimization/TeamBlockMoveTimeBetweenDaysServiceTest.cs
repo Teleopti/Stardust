@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			_person1 = PersonFactory.CreatePerson("test");
 		}
 
-		[Test, Ignore("This fails")]
+		[Test]
 		public void ShouldExecuteService()
 		{
 			_target = new TeamBlockMoveTimeBetweenDaysService(_teamBlockMoveTimeOptimizer);

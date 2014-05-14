@@ -401,6 +401,7 @@
     <Compile Include="Optimization\TeamBlock\LocateMissingIntervalsIfMidNightBreakTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockUnSelectedInTeamBlockTest.cs" />
+    <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\ConstructAndScheduleSingleDayTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\DayValueUnlockedIndexSorterTest.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeBetweenDaysServiceTest.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeDescisionMakerTest.cs" />

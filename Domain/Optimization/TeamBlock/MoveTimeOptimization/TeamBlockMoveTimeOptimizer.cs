@@ -21,28 +21,21 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		private readonly ITeamBlockMoveTimeDescisionMaker _decisionMaker;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly ITeamBlockScheduler  _teamBlockScheduler ;
-		private readonly ITeamBlockGenerator _teamBlockGenerator;
-		private readonly ILockUnSelectedInTeamBlock _lockUnSelectedInTeamBlock;
-		private ITeamBlockRestrictionOverLimitValidator  _teamBlockRestrictionOverLimitValidator;
+		private readonly IConstructAndScheduleSingleDayTeamBlock _constructAndScheduleSingleDayTeamBlock;
 
-		public TeamBlockMoveTimeOptimizer(ISchedulingOptionsCreator schedulingOptionsCreator,ITeamBlockMoveTimeDescisionMaker decisionMaker, IDeleteAndResourceCalculateService deleteAndResourceCalculateService, IResourceOptimizationHelper resourceOptimizationHelper,  ITeamBlockScheduler teamBlockScheduler, ITeamBlockGenerator teamBlockGenerator, ILockUnSelectedInTeamBlock lockUnSelectedInTeamBlock, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
+		public TeamBlockMoveTimeOptimizer(ISchedulingOptionsCreator schedulingOptionsCreator,ITeamBlockMoveTimeDescisionMaker decisionMaker, IDeleteAndResourceCalculateService deleteAndResourceCalculateService, IResourceOptimizationHelper resourceOptimizationHelper,  IConstructAndScheduleSingleDayTeamBlock constructAndScheduleSingleDayTeamBlock)
 		{
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_decisionMaker = decisionMaker;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_teamBlockScheduler = teamBlockScheduler;
-			_teamBlockGenerator = teamBlockGenerator;
-			_lockUnSelectedInTeamBlock = lockUnSelectedInTeamBlock;
-			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
+			_constructAndScheduleSingleDayTeamBlock = constructAndScheduleSingleDayTeamBlock;
 		}
 
 		public bool OptimizeMatrix(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleMatrixPro matrix)
 		{
 
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
-			//schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
 
 			double oldPeriodValue = periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
 			IList<DateOnly> daysToBeMoved = _decisionMaker.Execute(matrix ,optimizerPreferences );
@@ -104,19 +97,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 
 		private bool scheduleTeamBlock(IList<IScheduleMatrixPro> matrixList, DateOnly dayDate, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleDay originalScheduleDay, IOptimizationPreferences optimizationPreferences)
 		{
-			var dayTeamBlock = _teamBlockGenerator.Generate(matrixList, new DateOnlyPeriod(dayDate, dayDate),
-				new List<IPerson> { matrix.Person }, schedulingOptions).First();
-			_lockUnSelectedInTeamBlock.Lock(dayTeamBlock, new List<IPerson> { matrix.Person }, new DateOnlyPeriod(dayDate, dayDate));
-			if (_teamBlockScheduler.ScheduleTeamBlockDay(dayTeamBlock, dayDate, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective()))
+			if (!_constructAndScheduleSingleDayTeamBlock.Schedule(matrixList,dayDate,matrix,schedulingOptions,rollbackService,resourceCalculateDelayer,schedulingResultStateHolder ,optimizationPreferences ))
 			{
-				if(_teamBlockRestrictionOverLimitValidator.Validate(dayTeamBlock , optimizationPreferences ))
-				{
-					return true;
-				}
+				rollbackService.Rollback();
+				safeCalculateDate(dayDate, originalScheduleDay, resourceCalculateDelayer);
+				return false;
 			}
-			rollbackService.Rollback();
-			safeCalculateDate(dayDate, originalScheduleDay, resourceCalculateDelayer);
-			return false;
+			return true;
 		}
 
 		
