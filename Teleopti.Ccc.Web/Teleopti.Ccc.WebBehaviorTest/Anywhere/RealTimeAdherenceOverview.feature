@@ -294,15 +294,16 @@ Scenario: Should not be able to see agents if not permitted
 
 @ignore
 Scenario: Should be able to see current states of all agents
-	Given I have a role with
-	 | Field                                  | Value       |
-	 | Name                                   | Team leader |
-	 | Access to team						  | Team Red	|
-	 | Access to real time adherence overview | True		|
+	Given  the current time is '2014-01-21 12:30:00'
 	And there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
+	And I have a role with
+	 | Field                                  | Value       |
+	 | Name                                   | Team leader |
+	 | Access to team						  | Red	|
+	 | Access to real time adherence overview | True		|
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Red        |
@@ -343,8 +344,8 @@ Scenario: Should be able to see current states of all agents
 	| Staffing effect | -1           |
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets his phone state to 'Ready'
-	When I view Real time adherence for team 'Red'
-	Then I should see 
+	When I view real time adherence for team 'Red'
+	Then I should see real time agent details
 		| Field				| Value				|
 		| Name				| Pierre Baldi		|
 		| State				| Pause		|
@@ -353,7 +354,8 @@ Scenario: Should be able to see current states of all agents
 		| Next activity start time	| 2014-01-21 13:00	|
 		| Alarm	| Not adhering	|
 		| Alarm Time	| 2014-01-21 12:10 |
-	And I should see
+		| Time in state	| 0:20:00 |
+	And I should see real time agent details 
 		| Field				| Value				|
 		| Name				| Ashley Andeen		|
 		| State				| Ready		|
@@ -361,7 +363,8 @@ Scenario: Should be able to see current states of all agents
 		| Next activity		| Lunch		|
 		| Next activity start time	| 2014-01-21 13:00	|
 		| Alarm	| Adhering	|
-		| Alarm Time	| 2014-01-21 12:10 |
+		| Alarm Time	| 2014-01-21 12:15 |
+		| Time in state	| 0:15:00 |
 
 @ignore
 Scenario: Should be able to see state updates of all agents
@@ -412,7 +415,7 @@ Scenario: Should be able to see state updates of all agents
 	| Name            | Not adhering |
 	| Alarm Time	| 2014-01-21 12:10 |
 	| Staffing effect | -1           |
-	When I view Real time adherence for team 'Red'
+	When I view real time adherence for team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets his phone state to 'Ready'
 	Then I should see 
