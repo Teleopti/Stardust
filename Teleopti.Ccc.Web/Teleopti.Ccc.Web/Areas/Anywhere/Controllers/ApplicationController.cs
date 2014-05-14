@@ -74,6 +74,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.OutOfAdherence,
 					UserTexts.Resources.RealTimeAdherence,
 					UserTexts.Resources.WaitingThreeDots,
+					UserTexts.Resources.InsufficientPermission,
+					
+
 
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,

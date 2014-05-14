@@ -3,13 +3,15 @@
 	'text!templates/realtimeadherenceagents/view.html',
 	'views/realtimeadherenceagents/vm',
 	'errorview',
-	'ajax'
+	'ajax',
+	'resources'
 ], function (
 	ko,
 	view,
 	realTimeAdherenceViewModel,
 	errorview,
-	ajax
+	ajax,
+	resources
 ) {
 	return {
 		initialize: function (options) {
@@ -22,7 +24,7 @@
 				url: "Agents/GetStates?teamId=" + options.id,
 				error: function (jqXHR, textStatus, errorThrown) {
 					if (jqXHR.status == 403) {
-						errorview.display('No permission to view this team.');
+						errorview.display(resources.InsufficientPermission);
 					}
 				}
 			});

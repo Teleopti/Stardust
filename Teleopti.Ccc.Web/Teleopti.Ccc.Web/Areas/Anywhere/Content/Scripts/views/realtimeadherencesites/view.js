@@ -5,7 +5,8 @@
 		'views/realtimeadherencesites/vm',
 		'subscriptions.adherencesites',
 		'errorview',
-		'ajax'
+		'ajax',
+		'resources'
 ], function (
 		ko,
 		justGageBinding,
@@ -13,7 +14,8 @@
 		realTimeAdherenceViewModel,
 		subscriptions,
 		errorview,
-		ajax
+		ajax,
+		resources
 	) {
 
 	var viewModel;
@@ -24,7 +26,7 @@
 
 			var menu = ko.contextFor($('nav')[0]).$data;
 			if (!menu.RealTimeAdherenceVisible()) {
-				errorview.display('No permission for real time adherence overview!');
+				errorview.display(resources.InsufficientPermission);
 				return;
 			}
 
