@@ -59,15 +59,6 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=MYUSERNAME
-  Variable Name2=_PROP_VAR_
-  Variable Value2=MYUSER
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
   Variable Value1=SQL_SERVER_USER
   Variable Name2=_PROP_VAR_
   Variable Value2=SUSER
@@ -80,15 +71,6 @@ item: Custom Script Item
   Variable Value1=SQL_SERVER_AUTH
   Variable Name2=_PROP_VAR_
   Variable Value2=SAUTH
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=SQL_USER_AUTH
-  Variable Name2=_PROP_VAR_
-  Variable Value2=AUTH
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
@@ -120,31 +102,12 @@ item: Set Variable
 end
 item: End Block
 end
-remarked item: Display Message
-  Title=aa
-  Text=SQLCMD -S%SRV% -Dmaster %SA% -v BakDir = "%DIR%DemoDatabase" -i"%DIR%DemoDatabase\RestoreDemo.sql" -o c:\out.txt
-end
 item: Remark
-  Text=Restore 3xDatabases
+  Text=Fix logins from Restore
 end
 item: Execute Program
   Pathname=SQLCMD
-  Command Line=-S"%SRV%" -dmaster %SA% -vBakDir="%DIR%DemoDatabase" -vDataDir="%DIR%DemoDatabase" -i"%DIR%DemoDatabase\RestoreDemo.sql"
+  Command Line=-S"%SRV%" -d"TeleoptiAnalytics_Demo" %SA% -i"%DIR%DemoDatabase\RestoreUsers.sql"
   Default Directory=%DIR%
   Flags=00000110
-end
-item: If/While Statement
-  Variable=INSTALL_RESULT
-  Value=0
-  Flags=00000001
-end
-item: Display Message
-  Title=Database Restored Failed
-  Text=Database Restored Failed
-  Flags=00001000
-end
-item: Exit Installation
-  Flags=1
-end
-item: End Block
 end
