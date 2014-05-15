@@ -36,6 +36,7 @@ namespace Teleopti.Messaging.SignalR
 				if (time.UtcDateTime() >= _timeOutTime)
 				{
 					recreateConnection();
+					stateAccessor.WithConnection(c => c.Start());
 					initializePing(stateAccessor);
 					_nextPingTime = _time.UtcDateTime().Add(_pingInterval);
 				}

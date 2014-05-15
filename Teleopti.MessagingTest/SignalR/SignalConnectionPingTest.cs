@@ -141,6 +141,23 @@ namespace Teleopti.MessagingTest.SignalR
 			wasEventHandlerCalled.Should().Be(true);
 		}
 
+		[Test]
+		public void ShouldStartRecreatedConnection()
+		{
+			var time = new FakeTime();
+			var hubProxy1 = new HubProxyFake();
+			var hubProxy2 = new HubProxyFake();
+			var hubConnection1 = stubHubConnection(hubProxy1);
+			var hubConnection2 = stubHubConnection(hubProxy2);
+			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
+			target.StartBrokerService();
+
+			hubProxy1.BreakTheConnection();
+			time.Passes(TimeSpan.FromMinutes(2));
+
+			hubConnection2.AssertWasCalled(x => x.Start());
+		}
+
 		private interface IInterfaceForTest
 		{
 
