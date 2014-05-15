@@ -18,18 +18,22 @@ namespace Teleopti.Messaging.SignalR
 		private IHubProxyWrapper _hubProxy;
 		private IHubConnectionWrapper _hubConnection;
 		private readonly Func<IHubConnectionWrapper> _hubConnectionFactory;
+		private readonly Action _afterConnectionCreated;
 
 		private readonly ILog _logger = LogManager.GetLogger(typeof(SignalConnection));
 		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private readonly ITime _time;
+		private Action<Notification> _onNotification;
 
 		public SignalConnection(
 			Func<IHubConnectionWrapper> hubConnectionFactory, 
+			Action afterConnectionCreated,
 			IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy,
 			ITime time
 			)
 		{
 			_hubConnectionFactory = hubConnectionFactory;
+			_afterConnectionCreated = afterConnectionCreated;
 			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
 			_time = time;
 		}
@@ -44,24 +48,24 @@ namespace Teleopti.Messaging.SignalR
 			foreach (var strategy in _connectionKeepAliveStrategy)
 				strategy.OnNewConnection(this);
 
+			_hubProxy.Subscribe("OnEventMessage").Received += obj =>
+			{
+				var d = obj[0].ToObject<Notification>();
+				if (_onNotification != null)
+					_onNotification(d);
+			};
+
+			_afterConnectionCreated();
 		}
 
 		public void StartConnection(Action<Notification> onNotification)
 		{
+			_onNotification = onNotification;
+
 			createConnectionAndProxy();
 
 			foreach (var strategy in _connectionKeepAliveStrategy)
 				strategy.OnStart(this, _time, createConnectionAndProxy);
-
-			if (onNotification != null)
-			{
-				_hubProxy.Subscribe("OnEventMessage").Received += obj =>
-				{
-					var d = obj[0].ToObject<Notification>();
-					onNotification(d);
-				};
-			}
-			
 
 			try
 			{
@@ -84,6 +88,7 @@ namespace Teleopti.Messaging.SignalR
 				{
 					throw exception;
 				}
+
 			}
 			catch (AggregateException aggregateException)
 			{

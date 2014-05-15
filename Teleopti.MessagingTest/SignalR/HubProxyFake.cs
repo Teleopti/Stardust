@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,6 +16,7 @@ namespace Teleopti.MessagingTest.SignalR
 	{
 		private readonly SubscriptionFake pingReplySubscription = new SubscriptionFake();
 		private readonly SubscriptionFake notificationSubscription = new SubscriptionFake();
+		private string _subscriptedToRoute;
 		private bool _connectionBroken;
 
 		public readonly IList<Notification> NotifyClientsInvokedWith = new List<Notification>();
@@ -42,7 +40,7 @@ namespace Teleopti.MessagingTest.SignalR
 			{
 				var notification = (Notification) args.First();
 				NotifyClientsInvokedWith.Add(notification);
-				RaiseNotificationSubscription(notification);
+				raiseNotificationSubscription(notification);
 			}
 
 			if (method == "NotifyClientsMultiple")
@@ -51,16 +49,27 @@ namespace Teleopti.MessagingTest.SignalR
 				notifications.ForEach(notification =>
 				{
 					NotifyClientsMultipleInvokedWith.Add(notification);
-					RaiseNotificationSubscription(notification);
+					raiseNotificationSubscription(notification);
 				});
+			}
+
+			if (method == "AddSubscription")
+			{
+				var subscription = (Interfaces.MessageBroker.Subscription) args.First();
+				_subscriptedToRoute = subscription.Route();
 			}
 
 			return TaskHelper.MakeDoneTask();
 		}
 
-		private void RaiseNotificationSubscription(Notification notification)
+		private void raiseNotificationSubscription(Notification notification)
 		{
-			if (_connectionBroken) return;
+			if (_connectionBroken)
+				return;
+			if (_subscriptedToRoute == null)
+				return;
+			if (!notification.Routes().Contains(_subscriptedToRoute))
+				return;
 			var token = JObject.Parse(JsonConvert.SerializeObject(notification));
 			notificationSubscription.RaiseRecieved(new List<JToken>(new JToken[] {token}));
 		}

@@ -62,7 +62,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_connection == null)
 				{
-					var connection = new SignalConnection(MakeHubConnection, _connectionKeepAliveStrategy, _time);
+					var connection = new SignalConnection(MakeHubConnection, () => { }, _connectionKeepAliveStrategy, _time);
 					
 					_signalBrokerCommands = new SignalBrokerCommands(_logger, connection);
 					_connection = connection;

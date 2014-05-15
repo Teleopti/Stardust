@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.SignalR.Client;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -122,7 +118,7 @@ namespace Teleopti.MessagingTest.SignalR
 			wasEventHandlerCalled.Should().Be(true);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldSubscribeToNotificationsOnRecreatedConnection()
 		{
 			var time = new FakeTime();
