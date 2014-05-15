@@ -4,14 +4,16 @@ define([
 		'subscriptions.personschedule',
 		'subscriptions.staffingmetrics',
 		'subscriptions.adherenceteams',
-		'subscriptions.adherencesites'
+		'subscriptions.adherencesites',
+		'subscriptions.adherenceagents'
 	], function(
 		$,
 		groupschedule,
 		personschedule,
 		staffingmetrics,
 		adherenceteams,
-		adherencesites
+		adherencesites,
+		adherenceagents
 	) {
 
 		return {
@@ -21,7 +23,8 @@ define([
 					personschedule.start(),
 					staffingmetrics.start(),
 					adherenceteams.start(),
-					adherencesites.start()
+					adherencesites.start(),
+					adherenceagents.start()
 				);
 			}
 		};
