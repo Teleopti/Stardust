@@ -12,12 +12,12 @@ namespace Teleopti.MessagingTest.SignalR
 
 		public string LookupTypeToSend(Type domainObjectType)
 		{
-			return "string";
+			return domainObjectType.AssemblyQualifiedName;
 		}
 
 		public Type LookupType(Type domainObjectType)
 		{
-			return typeof(string);
+			return domainObjectType;
 		}
 	}
 }

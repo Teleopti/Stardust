@@ -119,18 +119,7 @@ namespace Teleopti.Messaging.SignalR
 			                                           eventEndDate, moduleId, referenceObjectId,
 			                                           referenceObjectType, domainObjectId, domainObjectType, updateType,
 			                                           domainObject);
-			var invoker = new HubProxyInvoker(callProxy);
-			invoker.BeginInvoke(notificationList, callProxyCallback, invoker);
-		}
-
-		private void callProxy(IEnumerable<Notification> state)
-		{
-			lock (_wrapperLock)
-			{
-				if (_connection == null) return;
-
-				_signalBrokerCommands.NotifyClients(state);
-			}
+			_signalBrokerCommands.NotifyClients(notificationList);
 		}
 
 		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
@@ -153,23 +142,13 @@ namespace Teleopti.Messaging.SignalR
 
 				if (notificationList.Count > 200)
 				{
-					callProxy(notificationList);
+					_signalBrokerCommands.NotifyClients(notificationList);
 					notificationList.Clear();
 				}
 			}
 			if (notificationList.Count > 0)
-			{
-				var invoker = new HubProxyInvoker(callProxy);
-				invoker.BeginInvoke(notificationList, callProxyCallback, invoker);
-			}
+				_signalBrokerCommands.NotifyClients(notificationList);
 		}
-
-		private void callProxyCallback(IAsyncResult ar)
-		{
-			((HubProxyInvoker)ar.AsyncState).EndInvoke(ar);
-		}
-
-		private delegate void HubProxyInvoker(IEnumerable<Notification> notifications);
 
 		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
 		{

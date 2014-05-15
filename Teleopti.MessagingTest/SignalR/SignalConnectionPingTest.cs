@@ -10,6 +10,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
 
@@ -31,8 +32,8 @@ namespace Teleopti.MessagingTest.SignalR
 		public void ShouldRecreateConnectionWhenNoReplyFromPingInXMinutes()
 		{
 			var time = new FakeTime(new DateTime(2001, 1, 1, 12, 0, 0, DateTimeKind.Utc));
-			var hubProxy1 = new HubThatRepliesToPing();
-			var hubProxy2 = new HubThatRepliesToPing();
+			var hubProxy1 = new HubProxyFake();
+			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
 			var target = new MultiConnectionSignalSenderForTest(new[] {hubConnection1, hubConnection2}, new RecreateOnNoPingReply(TimeSpan.FromMinutes(3)), time);
@@ -50,7 +51,7 @@ namespace Teleopti.MessagingTest.SignalR
 		public void ShouldNotRecreateUntilTimeout()
 		{
 			var time = new FakeTime();
-			var hubProxy = new HubThatRepliesToPing();
+			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection }, new RecreateOnNoPingReply(TimeSpan.FromMinutes(2)), time);
 			target.StartBrokerService();
@@ -67,8 +68,8 @@ namespace Teleopti.MessagingTest.SignalR
 		public void ShouldSendNotificationsOnCurrentConnection()
 		{
 			var time = new FakeTime(new DateTime(2013, 1, 1, 12, 0, 0, DateTimeKind.Utc));
-			var hubProxy1 = new HubThatRepliesToPing();
-			var hubProxy2 = new HubThatRepliesToPing();
+			var hubProxy1 = new HubProxyFake();
+			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
 			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
@@ -89,8 +90,8 @@ namespace Teleopti.MessagingTest.SignalR
 		public void ShouldCreateConnectionsInTheBackground()
 		{
 			var time = new FakeTime();
-			var hubProxy1 = new HubThatRepliesToPing();
-			var hubProxy2 = new HubThatRepliesToPing();
+			var hubProxy1 = new HubProxyFake();
+			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
 			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 }, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
@@ -102,13 +103,32 @@ namespace Teleopti.MessagingTest.SignalR
 			target.CurrentConnection.Should().Be(hubConnection2);
 		}
 
-		[Test, Ignore]
-		public void ShouldSubscribeToNotificationsOnNewConnection()
+		[Test]
+		public void ShouldSubscribeToNotificationsOnFirstConnection()
 		{
 			var time = new FakeTime();
 			var wasEventHandlerCalled = false;
-			var hubProxy1 = new HubThatSubscribesAndPongs();
-			var hubProxy2 = new HubThatSubscribesAndPongs();
+			var hubProxy1 = new HubProxyFake();
+			var hubConnection1 = stubHubConnection(hubProxy1);
+			var target = new MultiConnectionSignalBrokerForTest(new MessageFilterManagerFake(),
+				new[] {hubConnection1}, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
+			target.StartMessageBroker();
+
+			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
+				typeof (IInterfaceForTest));
+			target.SendEventMessage(string.Empty, Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
+				typeof (IInterfaceForTest), DomainUpdateType.Update, new byte[] {});
+
+			wasEventHandlerCalled.Should().Be(true);
+		}
+
+		[Test, Ignore]
+		public void ShouldSubscribeToNotificationsOnRecreatedConnection()
+		{
+			var time = new FakeTime();
+			var wasEventHandlerCalled = false;
+			var hubProxy1 = new HubProxyFake();
+			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
 			var target = new MultiConnectionSignalBrokerForTest(new MessageFilterManagerFake(),
@@ -116,10 +136,11 @@ namespace Teleopti.MessagingTest.SignalR
 			target.StartMessageBroker();
 
 			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
-											 typeof(IInterfaceForTest));
+				typeof (IInterfaceForTest));
 			hubProxy1.BreakTheConnection();
 			time.Passes(TimeSpan.FromMinutes(2));
-			hubProxy2.TriggerRecieved();
+			target.SendEventMessage(string.Empty, Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
+				typeof (IInterfaceForTest), DomainUpdateType.Update, new byte[] {});
 
 			wasEventHandlerCalled.Should().Be(true);
 		}

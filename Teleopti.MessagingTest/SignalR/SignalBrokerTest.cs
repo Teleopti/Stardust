@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.AspNet.SignalR.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -55,8 +56,8 @@ namespace Teleopti.MessagingTest.SignalR
 			target.SendEventMessages(string.Empty, Guid.Empty,
 									 new IEventMessage[]
 				                         {
-					                         new EventMessage {DomainObjectType = "string"},
-					                         new EventMessage {DomainObjectType = "string"}
+					                         new EventMessage {DomainObjectType = typeof(string).AssemblyQualifiedName},
+					                         new EventMessage {DomainObjectType = typeof(string).AssemblyQualifiedName}
 				                         });
 
 			hubProxy.NotifyClientsMultipleInvokedWith.Should().Have.Count.GreaterThan(0);
