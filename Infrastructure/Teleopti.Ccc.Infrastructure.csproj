@@ -167,6 +167,7 @@
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
     <Compile Include="Foundation\ToggleQuerier.cs" />
     <Compile Include="Foundation\TogglesActive.cs" />
+    <Compile Include="IAgentStateReader.cs" />
     <Compile Include="Licensing\XmlLicenseServiceFactory.cs" />
     <Compile Include="NHibernateConfiguration\CompressedString.cs" />
     <Compile Include="NHibernateConfiguration\FasterProxyFactoryFactory.cs" />
@@ -282,6 +283,8 @@
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ResourceCalculationPrerequisitesLoader.cs" />
     <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
+    <Compile Include="Rta\AgentAdherenceStateInfo.cs" />
+    <Compile Include="Rta\AgentStatesReader.cs" />
     <Compile Include="Rta\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\IPersonOrganizationReader.cs" />
     <Compile Include="Rta\ISiteAdherenceAggregator.cs" />
