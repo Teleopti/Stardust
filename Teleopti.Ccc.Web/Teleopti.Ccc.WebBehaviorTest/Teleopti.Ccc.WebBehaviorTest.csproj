@@ -134,6 +134,11 @@
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
+    <Compile Include="MyTime\MyReportAgentQueueMetrics.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MyReportAgentQueueMetrics.feature</DependentUpon>
+    </Compile>
     <Compile Include="MyTime\PreferenceAlertWhenBrokenMinOrMaxHours.feature.cs">
       <SubType>Code</SubType>
       <AutoGen>True</AutoGen>
@@ -785,6 +790,10 @@
     <None Include="Anywhere\ViewDaysOff.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewDaysOff.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\MyReportAgentQueueMetrics.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MyReportAgentQueueMetrics.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\PreferenceAlertWhenBrokenMinOrMaxHours.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
