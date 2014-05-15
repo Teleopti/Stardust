@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 	[TestFixture]
 	public class AgentsControllerTest
 	{
-		[Test]
+	[Test]
+	[Ignore("Bugg #27998")]
 		public void ShouldFailIfNoPermissionForOneTeam()
 		{
 			var teamId = Guid.NewGuid();
