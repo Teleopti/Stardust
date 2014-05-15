@@ -46,13 +46,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			DateOnly firstDayDate = daysToBeMoved[0];
 			IScheduleDay firstScheduleDay = firstDay.DaySchedulePart();
 			var originalFirstScheduleDay = (IScheduleDay)firstScheduleDay.Clone();
-			TimeSpan firstDayContractTime = firstDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
+			TimeSpan firstDayContractTime = firstScheduleDay.ProjectionService().CreateProjection().ContractTime();
 
 			IScheduleDayPro secondDay = matrix .GetScheduleDayByKey(daysToBeMoved[1]);
 			DateOnly secondDayDate = daysToBeMoved[1];
 			IScheduleDay secondScheduleDay = secondDay.DaySchedulePart();
 			var originalSecondScheduleDay = (IScheduleDay)secondScheduleDay.Clone();
-			TimeSpan secondDayContractTime = secondDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
+			TimeSpan secondDayContractTime = secondScheduleDay.ProjectionService().CreateProjection().ContractTime();
 
 			if (firstDayDate == secondDayDate)
 				return false;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			}
 				
 			//delete schedule on the two days
-			IList<IScheduleDay> listToDelete = new List<IScheduleDay> { firstDay.DaySchedulePart(), secondDay.DaySchedulePart() };
+			IList<IScheduleDay> listToDelete = new List<IScheduleDay> { firstScheduleDay, secondScheduleDay };
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, rollbackService, schedulingOptions.ConsiderShortBreaks);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 																							schedulingOptions.ConsiderShortBreaks);
