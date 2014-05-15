@@ -43,17 +43,17 @@ namespace Teleopti.Messaging.SignalR
 
 				if (time.UtcDateTime() >= _nextPingTime)
 				{
-					stateAccessor.WithProxy(p => p.Invoke("Ping"));
+					stateAccessor.IfProxyConnected(p => p.Invoke("Ping"));
 					_nextPingTime = _time.UtcDateTime().Add(_pingInterval);
 				}
 
 			}, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
 		}
 
-		private void initializePing(IStateAccessor hubProxy)
+		private void initializePing(IStateAccessor stateAccessor)
 		{
 			resetTimeout();
-			hubProxy.WithProxy(p => p.Subscribe("Pong").Received += x => resetTimeout());
+			stateAccessor.WithProxy(p => p.Subscribe("Pong").Received += x => resetTimeout());
 		}
 
 		private void resetTimeout()
