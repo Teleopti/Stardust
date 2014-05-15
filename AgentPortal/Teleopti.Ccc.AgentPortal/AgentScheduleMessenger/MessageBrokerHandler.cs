@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
         public void UnregisterMessageBrokerSubscriptions()
         {
             if (StateHolder.Instance.MessageBroker != null &&
-                StateHolder.Instance.MessageBroker.IsInitialized)
+                StateHolder.Instance.MessageBroker.IsConnected)
             {
                 try
                 {
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
         private void RegisterForMessageBrokerEvents(object state)
         {
             if (StateHolder.Instance.MessageBroker != null &&
-                StateHolder.Instance.MessageBroker.IsInitialized)
+                StateHolder.Instance.MessageBroker.IsConnected)
             {
                 try
                 {

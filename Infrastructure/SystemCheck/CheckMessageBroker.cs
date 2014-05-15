@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
         public bool IsRunningOk()
         {
             return string.IsNullOrEmpty(_messageBroker.ConnectionString) ||
-                   _messageBroker.IsInitialized;
+                   _messageBroker.IsConnected;
         }
 
         public string WarningText

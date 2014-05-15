@@ -23,9 +23,7 @@ namespace Teleopti.Messaging.SignalR
 	{
 		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private readonly ITime _time;
-		//private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
-		private readonly IList<SubscriptionWithHandler> _subscriptions = new List<SubscriptionWithHandler>();
-		private readonly object _subscriptionsLock = new object();
+		private readonly IList<SubscriptionCallback> _subscriptions = new List<SubscriptionCallback>();
 		private IHandleHubConnection _connection;
 		private ISignalBrokerCommands _signalBrokerCommands;
 		private readonly object _wrapperLock = new object();
@@ -226,10 +224,10 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_connection == null) return;
 
-				_subscriptions.Add(new SubscriptionWithHandler
+				_subscriptions.Add(new SubscriptionCallback
 				{
 					Subscription = subscription,
-					Handler = eventMessageHandler
+					Callback = eventMessageHandler
 				});
 				_signalBrokerCommands.AddSubscription(subscription);
 			}
@@ -247,7 +245,7 @@ namespace Teleopti.Messaging.SignalR
 				if (_connection == null) return;
 
 				var toRemove = (from s in _subscriptions
-					where s.Handler == eventMessageHandler
+					where s.Callback == eventMessageHandler
 					select s).ToList();
 
 				toRemove.ForEach(s => _subscriptions.Remove(s));
@@ -304,7 +302,7 @@ namespace Teleopti.Messaging.SignalR
 
 	    private bool IsTypeFilterApplied { get; set; }
 
-		public bool IsInitialized
+		public bool IsConnected
 		{
 			get
 			{
@@ -324,7 +322,7 @@ namespace Teleopti.Messaging.SignalR
 					route == r &&
 					s.Subscription.LowerBoundaryAsDateTime() <= eventMessage.EventEndDate &&
 					s.Subscription.UpperBoundaryAsDateTime() >= eventMessage.EventStartDate
-				select s.Handler;
+				select s.Callback;
 
 			foreach (var handler in matchingHandlers)
 				handler(this, new EventMessageArgs(eventMessage));
@@ -332,9 +330,9 @@ namespace Teleopti.Messaging.SignalR
 		}
 	}
 
-	public class SubscriptionWithHandler
+	public class SubscriptionCallback
 	{
 		public Subscription Subscription { get; set; }
-		public EventHandler<EventMessageArgs> Handler { get; set; }
+		public EventHandler<EventMessageArgs> Callback { get; set; }
 	}
 }

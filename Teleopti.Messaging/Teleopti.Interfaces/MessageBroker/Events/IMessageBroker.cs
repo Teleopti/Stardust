@@ -7,6 +7,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
 		void StartMessageBroker();
         void StopMessageBroker();
         string ConnectionString { get; set; }
-        bool IsInitialized { get; }
+        bool IsConnected { get; }
     }
 }

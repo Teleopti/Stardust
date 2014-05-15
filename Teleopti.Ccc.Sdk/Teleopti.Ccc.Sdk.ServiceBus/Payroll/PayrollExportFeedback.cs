@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
         private bool MessageBrokerIsRunning()
         {
-            return _messageBroker != null && _messageBroker.IsInitialized;
+            return _messageBroker != null && _messageBroker.IsConnected;
         }
 
         public void Error(string message)
