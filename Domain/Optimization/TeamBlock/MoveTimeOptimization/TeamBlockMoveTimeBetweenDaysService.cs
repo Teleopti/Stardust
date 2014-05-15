@@ -50,7 +50,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 					{
 						activeMatrixes.Remove(matrix);
 					}
-					
+					if (_cancelMe)
+						break;
 					string who = "Move time on .. "  + matrix.Person.Name.ToString(NameOrderOption.FirstNameLastName);
 					string success;
 					if (!result)
