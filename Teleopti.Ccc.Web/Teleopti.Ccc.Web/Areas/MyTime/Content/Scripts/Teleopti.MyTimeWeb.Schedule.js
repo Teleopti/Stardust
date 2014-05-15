@@ -434,7 +434,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 		self.height = ko.computed(function () {
 			var bottom = Math.round(scheduleHeight * self.endPositionPercentage()) - 1;
-			return bottom - self.top();
+			var top = self.top();
+			return bottom > top ? bottom - top : 0;
 		});
 		self.width = ko.observable(layer.IsOvertimeAvailability ? '20' : '131');
 		self.topPx = ko.computed(function () {
