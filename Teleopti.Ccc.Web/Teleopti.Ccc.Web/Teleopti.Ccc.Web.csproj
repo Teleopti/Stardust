@@ -808,6 +808,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.justgagebinding.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\raphaelloader.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherenceagents.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherenceteams.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.staffingmetrics.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.personschedule.js" />
