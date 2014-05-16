@@ -15,6 +15,7 @@
 	ajax,
 	resources
 ) {
+	var viewModel;
 	return {
 		initialize: function (options) {
 			errorview.remove();
@@ -22,6 +23,8 @@
 		},
 
 		display: function (options) {
+			viewModel = realTimeAdherenceViewModel();
+			ko.applyBindings(viewModel, options.bindingElement);
 			var teamId = options.id;
 			ajax.ajax({
 				url: "Agents/GetStates?teamId=" + teamId,
@@ -29,6 +32,9 @@
 					if (jqXHR.status == 403) {
 						errorview.display(resources.InsufficientPermission);
 					}
+				},
+				success: function (data) {
+					viewModel.fill(data);
 				}
 			});
 

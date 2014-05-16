@@ -17,9 +17,8 @@
 		that.fill = function (data) {
 			for (var i = 0; i < data.length; i++) {
 				var newTeam = team();
-				newTeam.Id = data[i].Id;
-				newTeam.Name = data[i].Name;
-				newTeam.NumberOfAgents = data[i].NumberOfAgents;
+				newTeam.fill(data[i]);
+				
 				that.teams.push(newTeam);
 			}
 		};

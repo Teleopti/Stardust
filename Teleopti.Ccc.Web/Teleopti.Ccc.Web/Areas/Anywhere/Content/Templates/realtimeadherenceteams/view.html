@@ -6,7 +6,7 @@
 	<div class="row" data-bind="foreach: teams">
 		<div data-bind="if: NumberOfAgents > 0">
 			<div class="col-md-4">
-				<div class="well well-sm team">
+				<div class="well well-sm team" data-bind="click: openTeam">
 					<!-- ko if: !hasBeenUpdated() -->
 					<div class="overlay">
 						<h1 data-bind="text: $root.resources.WaitingThreeDots"></h1>
