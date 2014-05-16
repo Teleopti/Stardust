@@ -7,13 +7,13 @@
 	<tr data-bind="foreach: agents,
 					 ifnot: alarm==outOfAdherence">
 
-		<td class="agent-name" data-bind="text: name"></td>
-		<td data-bind="text: state"></td>
-		<td data-bind="text: activity"></td>
-		<td data-bind="text: nextActivity"></td>
-		<td data-bind="text: nextActivityStartTime"></td>
-		<td data-bind="text: alarm"></td>
+		<td class="agent-name" data-bind="text: Name"></td>
+		<td data-bind="text: State"></td>
+		<td data-bind="text: Activity"></td>
+		<td data-bind="text: NextActivity"></td>
+		<td data-bind="text: NextActivityStartTime"></td>
+		<td data-bind="text: Alarm"></td>
 		<td data-bind="text: alarmTime"></td>
-		<td data-bind="text: timeInState"></td>
+		<!--<td data-bind="text: timeInState"></td>-->
 	</tr>
 </table>
