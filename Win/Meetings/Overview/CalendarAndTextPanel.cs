@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Schedule;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Meetings.Overview
 {
-    public partial class CalendarAndTextPanel : UserControl
+    public partial class CalendarAndTextPanel : UserControl, ILocalized
     {
         public event EventHandler DateChanged;
         public CalendarAndTextPanel()
         {
             InitializeComponent();
-			var cultureInfo = CultureInfo.CurrentUICulture;
+			var cultureInfo = CultureInfo.CurrentCulture;
 			monthCalendarAdv1.Culture = cultureInfo;
+
+			SetTexts();
 			//monthCalendarAdv1.FirstDayOfWeek = (Day)cultureInfo.DateTimeFormat.FirstDayOfWeek;
 			monthCalendarAdv1.Iso8601CalenderFormat =
 				DateHelper.Iso8601Cultures.Contains(cultureInfo.LCID);
@@ -67,6 +70,10 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             monthCalendarAdv1.SelectedDates = dateTimes.ToArray();
         }
 
+	    public void SetTexts()
+	    {
+			 new LanguageResourceHelper().SetTexts(this);
+	    }
     }
 
    
