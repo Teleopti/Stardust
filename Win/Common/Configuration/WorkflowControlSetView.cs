@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         public void LoadControl()
         {
             _presenter.Initialize();
-			  setUpTimeSpanBoxes()
+				setUpTimeSpanBoxes();
             dateTimePickerAdvViewpoint.Value = DateTime.Today;
             comboBoxAdvWorkflowControlSet.Focus();
             // Hide Absence Request tab if no permissions.

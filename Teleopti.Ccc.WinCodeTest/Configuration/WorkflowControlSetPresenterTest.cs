@@ -853,6 +853,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         public void VerifyShiftTradeTargetTimeFlexibilityIsSetWhenCreatingNew()
         {
 			var flexibility = new TimeSpan(0, 0, 0);
+			  var mimTimePerWeek = new TimeSpan(0, 0, 0);
 
             using (_mocks.Record())
             {
@@ -872,6 +873,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 Expect.Call(() => _view.LoadDateOnlyVisualizer()).Repeat.Any();
                 Expect.Call(() => _view.SetAutoGrant(false));
                 Expect.Call(() => _view.SetUseShiftCategoryFairness(false));
+	            Expect.Call(() => _view.SetMinTimePerWeek(mimTimePerWeek));
             }
             using (_mocks.Playback())
             {
