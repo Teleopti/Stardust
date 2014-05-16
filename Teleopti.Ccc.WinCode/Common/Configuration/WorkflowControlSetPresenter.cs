@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             _view.SetShiftTradeTargetTimeFlexibility(_selectedModel.ShiftTradeTargetTimeFlexibility);
             _view.SetAutoGrant(_selectedModel.AutoGrantShiftTradeRequest);
             _view.SetUseShiftCategoryFairness(_selectedModel.UseShiftCategoryFairness);
+			   _view.SetMinTimePerWeek(_selectedModel.MinTimePerWeek);
         }
 
         public IWorkflowControlSetModel SelectedModel
@@ -547,5 +548,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         {
             _selectedModel.StudentAvailabilityInputPeriod = studentAvailabilityInputPeriod;
         }
+
+	    public void SetMinTimePerWeek(TimeSpan minTimePerWeek)
+	    {
+		    _selectedModel.MinTimePerWeek = minTimePerWeek;
+	    }
     }
 }

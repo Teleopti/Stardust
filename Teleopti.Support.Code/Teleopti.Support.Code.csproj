@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Tool\CommandLineArgument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tool\CompositeCommand.cs" />
     <Compile Include="Tool\ConfigFileTagReplacer.cs" />
     <Compile Include="Tool\CryptoCreator.cs" />
     <Compile Include="Tool\CustomSection.cs" />

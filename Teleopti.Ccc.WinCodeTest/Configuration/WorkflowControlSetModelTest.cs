@@ -346,5 +346,14 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			_target.UseShiftCategoryFairness = false;
 			Assert.IsFalse(_target.UseShiftCategoryFairness);
 		}
+
+	    [Test]
+	    public void VerifyMinTimePerWeekCanBeSet()
+	    {
+			var minTimePerWeek = new TimeSpan(0,28,0,0);
+			 _target.MinTimePerWeek = minTimePerWeek;
+
+			 Assert.AreEqual(minTimePerWeek, _target.MinTimePerWeek);
+	    }
     }
 }

@@ -853,6 +853,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         public void VerifyShiftTradeTargetTimeFlexibilityIsSetWhenCreatingNew()
         {
 			var flexibility = new TimeSpan(0, 0, 0);
+			  var mimTimePerWeek = new TimeSpan(0, 0, 0);
 
             using (_mocks.Record())
             {
@@ -872,6 +873,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 Expect.Call(() => _view.LoadDateOnlyVisualizer()).Repeat.Any();
                 Expect.Call(() => _view.SetAutoGrant(false));
                 Expect.Call(() => _view.SetUseShiftCategoryFairness(false));
+	            Expect.Call(() => _view.SetMinTimePerWeek(mimTimePerWeek));
             }
             using (_mocks.Playback())
             {
@@ -991,6 +993,26 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _mocks.VerifyAll();
         }
 
+	    [Test]
+	    public void VerifySetMinTimePerWeek()
+	    {
+			 var minTimePerWeek = new TimeSpan(0, 28, 0, 0);
+			 IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
+			 using (_mocks.Record())
+			 {
+				 ExpectInitialize(repositoryCollection);
+				 ExpectSetSelectedWorkflowControlSetModel();
+			 }
+			 using (_mocks.Playback())
+			 {
+				 _target.Initialize();
+				 _target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
+				 _target.SetMinTimePerWeek(minTimePerWeek);
+				 Assert.AreEqual(minTimePerWeek, _target.SelectedModel.MinTimePerWeek);
+			 }
+			 _mocks.VerifyAll();
+	    }
+
         public void ExpectInitialize(IList<IWorkflowControlSet> repositoryCollection)
         {
             ExpectInitialize(_mocks, _view, _unitOfWorkFactory, _repositoryFactory, repositoryCollection, _categories, _dayOffTemplates, _absenceList,
@@ -1062,6 +1084,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(() => view.SetShiftTradeTargetTimeFlexibility(new TimeSpan()));
             Expect.Call(() => view.SetAutoGrant(false)).IgnoreArguments();
             Expect.Call(() => view.SetUseShiftCategoryFairness(false)).IgnoreArguments();
+            Expect.Call(() => view.SetMinTimePerWeek(new TimeSpan()));
             Expect.Call(view.EnableAllAuthorized);
         }
     }

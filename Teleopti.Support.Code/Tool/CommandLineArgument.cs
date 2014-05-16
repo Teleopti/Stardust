@@ -40,9 +40,10 @@ namespace Teleopti.Support.Code.Tool
 
 		private void ReadArguments()
 		{
-			Command = new RefreshConfigsRunner(new SettingsFileManager(new SettingsReader()),
+			var restoreCommand = new SsoConfigurationRestoreHandler(new CustomSection(), new SsoFilePathReader());
+			Command = new CompositeCommand(new RefreshConfigsRunner(new SettingsFileManager(new SettingsReader()),
 				new RefreshConfigFile(new ConfigFileTagReplacer(),
-					new MachineKeyChecker()));
+					new MachineKeyChecker())),restoreCommand);
 			foreach (string s in _argumentCollection)
 			{
 				switch (s)
@@ -67,7 +68,7 @@ namespace Teleopti.Support.Code.Tool
 						Command = new SsoConfigurationBackupHandler(new CustomSection(), new SsoFilePathReader());
 						break;
 					case "-RC":
-						Command = new SsoConfigurationRestoreHandler(new CustomSection(), new SsoFilePathReader());
+						Command = restoreCommand;
 						break;
 
 				}

@@ -441,14 +441,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             checkBoxTeamSameEndTime.Enabled = value;
             checkBoxTeamSameStartTime.Enabled = value;
             checkBoxTeamSameActivity.Enabled = value;
-	        if (!value)
-	        {
-				  checkBoxTeamSameShiftCategory.Checked  = false;
-				  checkBoxTeamSameEndTime.Checked = false;
-				  checkBoxTeamSameStartTime.Checked = false;
-				  checkBoxTeamSameActivity.Checked = false;
-	        }else if (
-		        !(checkBoxTeamSameShiftCategory.Checked || checkBoxTeamSameStartTime.Checked ||
+	        if (value && !(checkBoxTeamSameShiftCategory.Checked || checkBoxTeamSameStartTime.Checked ||
 		          checkBoxTeamSameEndTime.Checked ||
 		          checkBoxTeamSameActivity.Checked))
 		        checkBoxTeamSameShiftCategory.Checked = true;
@@ -575,12 +568,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		        !(checkBoxBlockSameStartTime.Checked || checkBoxBlockSameShift.Checked ||
 		          checkBoxBlockSameShiftCategory.Checked))
 			    checkBoxBlockSameShiftCategory.Checked = true;
-			 else if (!isEnabled)
-			 {
-				 checkBoxBlockSameStartTime.Checked = false;
-				 checkBoxBlockSameShift.Checked = false;
-				 checkBoxBlockSameShiftCategory.Checked = false;
-			 }
 	    }
     }
     
