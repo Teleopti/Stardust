@@ -15,7 +15,7 @@ namespace Teleopti.Messaging.SignalR
 		private object _timer;
 		private IHubConnectionWrapper _connectionToRestart;
 
-		public RestartOnClosed() : this(TimeSpan.FromMinutes(4)) { }
+		public RestartOnClosed() : this(TimeSpan.FromMinutes(1)) { }
 
 		public RestartOnClosed(TimeSpan restartDelay)
 		{
