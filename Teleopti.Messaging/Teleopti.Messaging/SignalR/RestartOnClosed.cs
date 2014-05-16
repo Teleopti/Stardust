@@ -1,6 +1,7 @@
 ﻿using System;
 using log4net;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.SignalR
 {
@@ -9,6 +10,10 @@ namespace Teleopti.Messaging.SignalR
 		private readonly TimeSpan _restartDelay;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(RestartOnClosed));
 		private Action _closedHandler;
+		private ITime _time;
+		private DateTime? _restartAt;
+		private object _timer;
+		private IHubConnectionWrapper _connectionToRestart;
 
 		public RestartOnClosed() : this(TimeSpan.FromMinutes(4)) { }
 
@@ -24,9 +29,8 @@ namespace Teleopti.Messaging.SignalR
 				_closedHandler = delegate
 				{
 					Logger.Error("Connection closed. Restarting soon.");
-					TaskHelper.Delay(_restartDelay).Wait();
-					Logger.Error("Restarting connection.");
-					c.Start();
+					_restartAt = _time.UtcDateTime().Add(_restartDelay);
+					_connectionToRestart = c;
 				};
 				c.Closed += _closedHandler;
 			});
@@ -34,10 +38,30 @@ namespace Teleopti.Messaging.SignalR
 
 		public void OnStart(IStateAccessor stateAccessor, ITime time, Action recreateConnection)
 		{
+			_time = time;
+			_timer = time.StartTimer(o =>
+			{
+				if (_restartAt == null)
+					return;
+
+				if (time.UtcDateTime() >= _restartAt)
+				{
+					Logger.Error("Restarting connection.");
+					stateAccessor.WithConnection(c =>
+					{
+						if (c == _connectionToRestart)
+							c.Start();
+					});
+					_restartAt = null;
+					_connectionToRestart = null;
+				}
+
+			}, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
 		}
 
 		public void OnClose(IStateAccessor stateAccessor)
 		{
+			_time.DisposeTimer(_timer);
 			stateAccessor.WithConnection(c =>
 			{
 				c.Closed -= _closedHandler;

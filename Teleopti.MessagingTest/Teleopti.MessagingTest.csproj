@@ -75,6 +75,7 @@
     <Compile Include="SignalR\SignalBrokerTest.cs" />
     <Compile Include="SignalR\SignalConnectionRestartOnClosedTest.cs" />
     <Compile Include="SignalR\SignalConnectionPingTest.cs" />
+    <Compile Include="SignalR\SignalConnectionStrategiesIntegrationTest.cs" />
     <Compile Include="SignalR\SignalSenderForTest.cs" />
     <Compile Include="SignalR\SignalSenderTest.cs" />
     <Compile Include="SignalR\HubProxySubscribableFake.cs" />

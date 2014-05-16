@@ -12,6 +12,7 @@ namespace Teleopti.Messaging.SignalR
 		private ITime _time;
 		private DateTime _nextPingTime;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(RecreateOnNoPingReply));
+		private object _timer;
 
 		public RecreateOnNoPingReply() : this(TimeSpan.FromMinutes(5))
 		{
@@ -31,11 +32,11 @@ namespace Teleopti.Messaging.SignalR
 		{
 			_time = time;
 			initializePing(stateAccessor);
-			time.StartTimer(o =>
+			_timer = time.StartTimer(o =>
 			{
 
 				if (time.UtcDateTime() >= _timeOutTime)
-				{
+				{	
 					Logger.Error("Ping not responding, recreating connection...");
 					recreateConnection();
 					stateAccessor.WithConnection(c => c.Start());
@@ -54,7 +55,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void OnClose(IStateAccessor stateAccessor)
 		{
-			_time.StopTimer();
+			_time.DisposeTimer(_timer);
 		}
 
 		private void initializePing(IStateAccessor stateAccessor)

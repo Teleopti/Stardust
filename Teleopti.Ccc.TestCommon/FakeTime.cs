@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Teleopti.Interfaces.Domain;
@@ -7,13 +8,8 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeTime : ITime
 	{
-		private TimerCallback _callback;
-		private TimeSpan _period;
-		private object _state;
-		private DateTime _nextDueTime;
-		private DateTime _nextPeriodTime;
 		private readonly TestableNow _now;
-		private bool _nextDueTimeHasPassed;
+		private readonly IList<FakeTimer> _timers = new List<FakeTimer>();
 
 		public FakeTime(DateTime time) : this(new TestableNow(time))
 		{
@@ -33,18 +29,36 @@ namespace Teleopti.Ccc.TestCommon
 			return _now.UtcDateTime();
 		}
 
-		public void StartTimer(TimerCallback callback, object state, TimeSpan dueTime, TimeSpan period)
+		private class FakeTimer
 		{
-			_callback = callback;
-			_state = state;
-			_period = period;
-			_nextDueTime = _now.UtcDateTime().Add(dueTime);
-			_nextPeriodTime = _now.UtcDateTime().Add(dueTime.Add(period));
+			public TimerCallback Callback;
+			public object State;
+			public TimeSpan DueTime;
+			public TimeSpan Period;
+			public DateTime NextDueTime;
+			public DateTime NextPeriodTime;
+			public bool NextDueTimeHasPassed;
 		}
 
-		public void StopTimer()
+		public object StartTimer(TimerCallback callback, object state, TimeSpan dueTime, TimeSpan period)
 		{
-			_callback = null;
+			var timer = new FakeTimer
+			{
+				Callback = callback,
+				State = state,
+				DueTime = dueTime,
+				Period = period,
+				NextDueTime = _now.UtcDateTime().Add(dueTime),
+				NextPeriodTime = _now.UtcDateTime().Add(dueTime.Add(period)),
+				NextDueTimeHasPassed = false,
+			};
+			_timers.Add(timer);
+			return timer;
+		}
+
+		public void DisposeTimer(object timer)
+		{
+			_timers.Remove((FakeTimer) timer);
 		}
 
 		public void Passes(TimeSpan time)
@@ -61,17 +75,20 @@ namespace Teleopti.Ccc.TestCommon
 
 		private void handleCallbackCall()
 		{
-			if (_callback != null)
+			foreach (var timer in _timers)
 			{
-				if (!_nextDueTimeHasPassed && _now.UtcDateTime() >= _nextDueTime)
+				if (timer.Callback != null)
 				{
-					_callback(_state);
-					_nextDueTimeHasPassed = true;
-				}
-				if (_now.UtcDateTime() >= _nextPeriodTime)
-				{
-					_callback(_state);
-					_nextPeriodTime = _now.UtcDateTime().Add(_period);
+					if (!timer.NextDueTimeHasPassed && _now.UtcDateTime() >= timer.NextDueTime)
+					{
+						timer.Callback(timer.State);
+						timer.NextDueTimeHasPassed = true;
+					}
+					if (_now.UtcDateTime() >= timer.NextPeriodTime)
+					{
+						timer.Callback(timer.State);
+						timer.NextPeriodTime = _now.UtcDateTime().Add(timer.Period);
+					}
 				}
 			}
 		}

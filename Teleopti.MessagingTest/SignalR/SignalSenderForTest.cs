@@ -8,8 +8,8 @@ namespace Teleopti.MessagingTest.SignalR
 	{
 		private readonly IHubConnectionWrapper _hubConnection;
 
-		public SignalSenderForTest(IHubConnectionWrapper hubConnection, IConnectionKeepAliveStrategy connectionKeepAliveStrategy)
-			: base("http://neeedsToBeSet", new[] { connectionKeepAliveStrategy }, new Time(new Now()))
+		public SignalSenderForTest(IHubConnectionWrapper hubConnection, IConnectionKeepAliveStrategy connectionKeepAliveStrategy, ITime time)
+			: base("http://neeedsToBeSet", new[] { connectionKeepAliveStrategy }, time)
 		{
 			_hubConnection = hubConnection;
 		}

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Teleopti.Interfaces.Domain
@@ -6,7 +7,7 @@ namespace Teleopti.Interfaces.Domain
 	public class Time : ITime
 	{
 		private readonly INow _now;
-		private Timer _timer;
+		private readonly IList<Timer> _timers = new List<Timer>();
 
 		public Time(INow now)
 		{
@@ -18,15 +19,17 @@ namespace Teleopti.Interfaces.Domain
 			return _now.UtcDateTime();
 		}
 
-		public void StartTimer(TimerCallback callback, object state, TimeSpan dueTime, TimeSpan period)
+		public object StartTimer(TimerCallback callback, object state, TimeSpan dueTime, TimeSpan period)
 		{
-			_timer = new Timer(callback, state, dueTime, period);
+			var timer = new Timer(callback, state, dueTime, period);
+			_timers.Add(timer);
+			return timer;
 		}
 
-		public void StopTimer()
+		public void DisposeTimer(object timer)
 		{
-			_timer.Dispose();
-			_timer = null;
+			var t = (Timer) timer;
+			t.Dispose();
 		}
 	}
 }
