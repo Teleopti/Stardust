@@ -42,16 +42,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AuthBridge">
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.9\lib\net40\AuthBridge.dll</HintPath>
-    </Reference>
-    <Reference Include="AuthBridge.Web, Version=1.0.3.9, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AuthBridge, Version=1.0.0.12, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.9\lib\net40\AuthBridge.Web.dll</HintPath>
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.10\lib\net40\AuthBridge.dll</HintPath>
+    </Reference>
+    <Reference Include="AuthBridge.Web, Version=1.0.3.10, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.10\lib\net40\AuthBridge.Web.dll</HintPath>
     </Reference>
     <Reference Include="ClaimsPolicyEngine, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.9\lib\net40\ClaimsPolicyEngine.dll</HintPath>
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.10\lib\net40\ClaimsPolicyEngine.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.AspNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -276,7 +277,9 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\Site.Master" />
