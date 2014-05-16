@@ -32,6 +32,25 @@ where exists (
 GO
 
 ----------------  
+--Name: MickeD
+--Date: 2014-05-16
+--Desc: Bug #27785 Need to delete person assignments that does not have a main-, personal- or overtime-shift
+---------------- 
+--this index is added by Security.exe. If the UQ-index doesn't exist, try fix the data before converting data to new PA-structure
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonAssignment]') AND name = N'UQ_PersonAssignment_Date_Scenario_Person')
+BEGIN
+            delete [dbo].[PersonAssignment]
+            from [dbo].[PersonAssignment]
+            left join [dbo].[MainShift] on [dbo].[PersonAssignment].[Id] = [dbo].[MainShift].[Id]
+            left join [dbo].[PersonalShift] on [dbo].[PersonAssignment].[Id] = [dbo].[PersonalShift].[Id]
+            left join [dbo].[OvertimeShift] on [dbo].[PersonAssignment].[Id] = [dbo].[OvertimeShift].[Id]
+            where [dbo].[MainShift].[Id] is null
+            and [dbo].[PersonalShift].[Id] is null
+            and [dbo].[OvertimeShift].[Id] is null
+END
+GO
+
+----------------  
 --Name: Roger Kratz
 --Date: 2013-04-15
 --Desc: Adding date for person assignment. Hard coded to 1800-1-1. Will be replaced by .net code
