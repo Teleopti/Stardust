@@ -322,6 +322,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         public void LoadControl()
         {
             _presenter.Initialize();
+			  setUpTimeSpanBoxes()
             dateTimePickerAdvViewpoint.Value = DateTime.Today;
             comboBoxAdvWorkflowControlSet.Focus();
             // Hide Absence Request tab if no permissions.
@@ -329,6 +330,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             tabControlAdvArea.TabPages[1].TabVisible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AbsenceRequests);
             tabControlAdvArea.TabPages[2].TabVisible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequests);
         }
+
+	    private void setUpTimeSpanBoxes()
+	    {
+			 textBoxExtMinTimePerWeek.SetSize(54, 23);
+			 textBoxExtMinTimePerWeek.AllowNegativeValues = false;
+	    }
 
         public void SaveChanges()
         {
@@ -951,7 +958,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             dateSelectionFromToStudentAvailability.WorkPeriodEnd = studentAvailabilityPeriod.EndDate;
         }
 
-        private void dateSelectionFromToStudentAvailability_Validating(object sender, CancelEventArgs e)
+	    public void SetMinTimePerWeek(TimeSpan minTimePerWeek)
+	    {
+		    textBoxExtMinTimePerWeek.SetInitialResolution(minTimePerWeek);
+	    }
+
+	    private void dateSelectionFromToStudentAvailability_Validating(object sender, CancelEventArgs e)
         {
             validateFromToPeriods(e, sender);
         }
@@ -996,7 +1008,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void textBoxExtMinTimePerWeek_Validated(object sender, EventArgs e)
 		{
 			//Check contract setting
-
 		}
 
 		private static bool validateMaxHours(TimeSpan timeSpan, int maxHours)

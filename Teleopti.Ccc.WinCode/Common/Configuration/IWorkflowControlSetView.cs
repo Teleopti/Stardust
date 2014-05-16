@@ -174,5 +174,11 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         /// <param name="insertPeriod">The insert period.</param>
         /// <param name="studentAvailabilityPeriod">The student availability period.</param>
         void SetStudentAvailabilityPeriods(DateOnlyPeriod insertPeriod, DateOnlyPeriod studentAvailabilityPeriod);
+
+		  /// <summary>
+		  /// Sets the min time per week.
+		  /// </summary>
+		  /// <param name="minTimePerWeek">The minTimePerWeek.</param>
+	    void SetMinTimePerWeek	(TimeSpan minTimePerWeek);
     }
 }

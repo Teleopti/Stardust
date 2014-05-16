@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         void RemoveSkillFromMatchList(ISkill skill);
         bool UseShiftCategoryFairness { get; set; }
         bool IsDirty { get; set; }
+	    TimeSpan MinTimePerWeek { get; set; }
     }
 
     public class WorkflowControlSetModel : IWorkflowControlSetModel
@@ -363,5 +364,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             get;
             set;
         }
+
+	    public TimeSpan MinTimePerWeek { get; set; }
     }
 }

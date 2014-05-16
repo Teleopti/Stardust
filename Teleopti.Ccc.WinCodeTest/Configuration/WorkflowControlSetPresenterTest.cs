@@ -991,6 +991,26 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _mocks.VerifyAll();
         }
 
+	    [Test]
+	    public void VerifySetMinTimePerWeek()
+	    {
+			 var minTimePerWeek = new TimeSpan(0, 28, 0, 0);
+			 IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
+			 using (_mocks.Record())
+			 {
+				 ExpectInitialize(repositoryCollection);
+				 ExpectSetSelectedWorkflowControlSetModel();
+			 }
+			 using (_mocks.Playback())
+			 {
+				 _target.Initialize();
+				 _target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
+				 _target.SetMinTimePerWeek(minTimePerWeek);
+				 Assert.AreEqual(minTimePerWeek, _target.SelectedModel.MinTimePerWeek);
+			 }
+			 _mocks.VerifyAll();
+	    }
+
         public void ExpectInitialize(IList<IWorkflowControlSet> repositoryCollection)
         {
             ExpectInitialize(_mocks, _view, _unitOfWorkFactory, _repositoryFactory, repositoryCollection, _categories, _dayOffTemplates, _absenceList,
@@ -1062,6 +1082,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(() => view.SetShiftTradeTargetTimeFlexibility(new TimeSpan()));
             Expect.Call(() => view.SetAutoGrant(false)).IgnoreArguments();
             Expect.Call(() => view.SetUseShiftCategoryFairness(false)).IgnoreArguments();
+            Expect.Call(() => view.SetMinTimePerWeek(new TimeSpan()));
             Expect.Call(view.EnableAllAuthorized);
         }
     }
