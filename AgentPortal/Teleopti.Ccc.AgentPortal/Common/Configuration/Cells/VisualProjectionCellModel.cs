@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells
             : base(grid, cellModel)
         {
             PersonDto person = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
-            _currentCultureInfo = person.CultureLanguageId.HasValue
+            _currentCultureInfo = (person.CultureLanguageId.HasValue
                                             ? CultureInfo.GetCultureInfo(person.CultureLanguageId.Value)
-                                            : CultureInfo.CurrentCulture;
+                                            : CultureInfo.CurrentCulture).FixPersianCulture();
         }
 
         protected override void OnMouseHover(int rowIndex, int colIndex, MouseEventArgs e)

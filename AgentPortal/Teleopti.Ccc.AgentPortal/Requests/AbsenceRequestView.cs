@@ -101,6 +101,9 @@ namespace Teleopti.Ccc.AgentPortal.Requests
             office2007OutlookTimePickerAPStartTime.TimeIntervalInDropDown = _requestStateHolder.Resolution;
             office2007OutlookTimePickerAPEndTime.TimeIntervalInDropDown = _requestStateHolder.Resolution;
 
+			dateTimePickerAdvStart.Culture = CultureInfo.CurrentCulture;
+			dateTimePickerAdvEnd.Culture = CultureInfo.CurrentCulture;
+
             autoLabelRequestDateValue.Text = DateTime.Now.ToShortDateString();
 
             dateTimePickerAdvStart.Focus();

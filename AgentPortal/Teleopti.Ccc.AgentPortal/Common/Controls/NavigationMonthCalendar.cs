@@ -159,8 +159,8 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
                     culture = CultureInfo.GetCultureInfo(person.CultureLanguageId.Value);
                 }
             }
-            CurrentUICulture = uiCulture;
-            CurrentCulture = culture;
+			CurrentUICulture = uiCulture.FixPersianCulture();
+			CurrentCulture = culture.FixPersianCulture();
             //AddWeekDays(DateHelper.GetDaysOfWeek(culture));
         }
         /// <summary>

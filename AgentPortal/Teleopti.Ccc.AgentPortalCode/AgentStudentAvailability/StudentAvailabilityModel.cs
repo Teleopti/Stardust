@@ -37,12 +37,12 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability
 
         private void SetCultures()
         {
-            _currentUiCultureInfo = LoggedOnPerson.UICultureLanguageId.HasValue
+            _currentUiCultureInfo = (LoggedOnPerson.UICultureLanguageId.HasValue
                                         ? CultureInfo.GetCultureInfo(LoggedOnPerson.UICultureLanguageId.Value)
-                                        : CultureInfo.CurrentUICulture;
-            _currentCultureInfo = LoggedOnPerson.CultureLanguageId.HasValue
+                                        : CultureInfo.CurrentUICulture).FixPersianCulture();
+            _currentCultureInfo = (LoggedOnPerson.CultureLanguageId.HasValue
                                       ? CultureInfo.GetCultureInfo(LoggedOnPerson.CultureLanguageId.Value)
-                                      : CultureInfo.CurrentCulture;
+                                      : CultureInfo.CurrentCulture).FixPersianCulture();
 
         }
 

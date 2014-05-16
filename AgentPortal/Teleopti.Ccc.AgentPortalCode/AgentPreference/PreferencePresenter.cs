@@ -423,9 +423,9 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             WeekHeaderCellData weekHeaderCell;
 
             PersonDto person = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
-            CultureInfo cultureUi = person.CultureLanguageId.HasValue
+            CultureInfo cultureUi = (person.CultureLanguageId.HasValue
                                         ? CultureInfo.GetCultureInfo(person.CultureLanguageId.Value)
-                                        : CultureInfo.CurrentCulture;
+                                        : CultureInfo.CurrentCulture).FixPersianCulture();
 
             int weekNumber = 0;
 

@@ -39,7 +39,9 @@ namespace Teleopti.Interfaces.Domain
 				info.ShortestDayNames = new string[] { "ی", "د", "س", "چ", "پ", "ج", "ش" };
 				info.DayNames = new string[] { "یکشنبه", "دوشنبه", "ﺳﻪشنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه" };
 				info.AbbreviatedMonthNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
+				info.AbbreviatedMonthGenitiveNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
 				info.MonthNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
+				info.MonthGenitiveNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
 				info.AMDesignator = "ق.ظ";
 				info.PMDesignator = "ب.ظ";
 				info.FirstDayOfWeek = DayOfWeek.Saturday;

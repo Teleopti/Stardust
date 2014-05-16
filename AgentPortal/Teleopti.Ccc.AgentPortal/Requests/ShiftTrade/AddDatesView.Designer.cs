@@ -143,7 +143,6 @@
             this.dateTimePickerFromDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTimePickerFromDate.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
             this.dateTimePickerFromDate.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
-            this.dateTimePickerFromDate.Culture = new System.Globalization.CultureInfo("sv-SE");
             this.dateTimePickerFromDate.DropDownImage = null;
             this.dateTimePickerFromDate.EnableNullDate = false;
             this.dateTimePickerFromDate.EnableNullKeys = false;
@@ -157,7 +156,7 @@
             this.dateTimePickerFromDate.Size = new System.Drawing.Size(95, 21);
             this.dateTimePickerFromDate.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.dateTimePickerFromDate.TabIndex = 7;
-            this.dateTimePickerFromDate.UseCurrentCulture = true;
+            this.dateTimePickerFromDate.UseCurrentCulture = false;
             this.dateTimePickerFromDate.Value = new System.DateTime(2009, 9, 7, 13, 47, 33, 849);
             this.dateTimePickerFromDate.PopupClosed += new Syncfusion.Windows.Forms.PopupClosedEventHandler(this.dateTimePicker_PopupClosed);
             this.dateTimePickerFromDate.ValueChanged += new System.EventHandler(this.dateTimePickerFromDate_ValueChanged);
@@ -219,7 +218,6 @@
             this.dateTimePickerToDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTimePickerToDate.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
             this.dateTimePickerToDate.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
-            this.dateTimePickerToDate.Culture = new System.Globalization.CultureInfo("sv-SE");
             this.dateTimePickerToDate.DropDownImage = null;
             this.dateTimePickerToDate.EnableNullDate = false;
             this.dateTimePickerToDate.EnableNullKeys = false;
@@ -233,7 +231,7 @@
             this.dateTimePickerToDate.Size = new System.Drawing.Size(95, 21);
             this.dateTimePickerToDate.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.dateTimePickerToDate.TabIndex = 8;
-            this.dateTimePickerToDate.UseCurrentCulture = true;
+            this.dateTimePickerToDate.UseCurrentCulture = false;
             this.dateTimePickerToDate.Value = new System.DateTime(2009, 9, 7, 13, 47, 33, 834);
             this.dateTimePickerToDate.PopupClosed += new Syncfusion.Windows.Forms.PopupClosedEventHandler(this.dateTimePicker_PopupClosed);
             this.dateTimePickerToDate.BeforePopup += new System.EventHandler(this.dateTimePicker_BeforePopup);

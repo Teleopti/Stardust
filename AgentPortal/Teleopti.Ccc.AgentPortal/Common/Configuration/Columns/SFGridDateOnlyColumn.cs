@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.Threading;
 using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
 
         public override void GetCellValue(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
         {
+	        e.Style.CultureInfo = Thread.CurrentThread.CurrentCulture;
             e.Style.CellType = "DateOnly";
             e.Style.CellValue = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
             if (!string.IsNullOrEmpty(_toBeBold))

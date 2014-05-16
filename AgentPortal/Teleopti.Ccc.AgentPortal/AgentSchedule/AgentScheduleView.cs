@@ -127,12 +127,12 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         {
             // Set Culture 
             PersonDto person = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
-            CultureInfo cultureUi = person.UICultureLanguageId.HasValue
+            CultureInfo cultureUi = (person.UICultureLanguageId.HasValue
                                         ? CultureInfo.GetCultureInfo(person.UICultureLanguageId.Value)
-                                        : CultureInfo.CurrentUICulture; 
-            CultureInfo cultureFormat = person.CultureLanguageId.HasValue
+										: CultureInfo.CurrentUICulture).FixPersianCulture(); 
+            CultureInfo cultureFormat = (person.CultureLanguageId.HasValue
                                             ? CultureInfo.GetCultureInfo(person.CultureLanguageId.Value)
-                                            : CultureInfo.CurrentCulture;
+											: CultureInfo.CurrentCulture).FixPersianCulture();
 
             CultureInfo newCulture = (CultureInfo)cultureUi.Clone();
             newCulture.DateTimeFormat = (DateTimeFormatInfo) cultureFormat.DateTimeFormat.Clone();

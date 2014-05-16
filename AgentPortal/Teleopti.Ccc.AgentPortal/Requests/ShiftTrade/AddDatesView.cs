@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 using Teleopti.Ccc.AgentPortal.Common;
 using Teleopti.Ccc.UserTexts;
@@ -45,6 +46,8 @@ namespace Teleopti.Ccc.AgentPortal.Requests.ShiftTrade
 		  protected override void SetCommonTexts()
 		  {
 				base.SetCommonTexts();
+			  dateTimePickerFromDate.Culture = CultureInfo.CurrentCulture;
+			  dateTimePickerToDate.Culture = CultureInfo.CurrentCulture;
 				dateTimePickerFromDate.Calendar.TodayButton.Text = UserTexts.Resources.Today;
 				dateTimePickerToDate.Calendar.TodayButton.Text = UserTexts.Resources.Today;
 		  }

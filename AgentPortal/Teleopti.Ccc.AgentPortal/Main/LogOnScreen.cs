@@ -13,6 +13,7 @@ using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortal.Main
 {
@@ -580,11 +581,11 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
                 Thread.CurrentThread.CurrentCulture =
                     CultureInfo.GetCultureInfo(
-                        loggedPerson.CultureLanguageId.GetValueOrDefault(CultureInfo.CurrentCulture.LCID));
+						loggedPerson.CultureLanguageId.GetValueOrDefault(CultureInfo.CurrentCulture.LCID)).FixPersianCulture();
 
                 Thread.CurrentThread.CurrentUICulture =
                     CultureInfo.GetCultureInfo(
-                        loggedPerson.UICultureLanguageId.GetValueOrDefault(CultureInfo.CurrentUICulture.LCID));
+						loggedPerson.UICultureLanguageId.GetValueOrDefault(CultureInfo.CurrentUICulture.LCID)).FixPersianCulture();
 
                 result = true;
             }

@@ -84,6 +84,9 @@ namespace Teleopti.Ccc.AgentPortal.Requests
 
         private void TextRequestView_Load(object sender, EventArgs e)
         {
+			dateTimePickerAdvStart.Culture = CultureInfo.CurrentCulture;
+			dateTimePickerAdvEnd.Culture = CultureInfo.CurrentCulture;
+
             _presenter.Initialize();
         }
 

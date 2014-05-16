@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells
 {
@@ -45,9 +46,9 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells
             else if (value.GetType() == typeof(DateOnlyDto))
             {
                 DateOnlyDto typedValue = (DateOnlyDto)value;
-                CultureInfo ci = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson.CultureLanguageId.HasValue
+                CultureInfo ci = (StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson.CultureLanguageId.HasValue
                        ? CultureInfo.GetCultureInfo(StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson.CultureLanguageId.Value)
-                       : CultureInfo.CurrentCulture;
+                       : CultureInfo.CurrentCulture).FixPersianCulture();
 
                 DateTimeFormatInfo info = ci.DateTimeFormat;
                 dateOnlyString = typedValue.DateTime.ToString("d", info);

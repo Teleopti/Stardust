@@ -658,13 +658,13 @@ namespace Teleopti.Ccc.AgentPortal.Main
             var control = panelSchedule.Controls[0] as ScheduleControl;
             if (control == null) return;
 
-            CultureInfo cultureUi = person.UICultureLanguageId.HasValue
+            CultureInfo cultureUi = (person.UICultureLanguageId.HasValue
                                         ? CultureInfo.GetCultureInfo(person.UICultureLanguageId.Value)
-                                        : CultureInfo.CurrentUICulture;
+										: CultureInfo.CurrentUICulture).FixPersianCulture();
 
-        	CultureInfo culture = person.CultureLanguageId.HasValue
+        	CultureInfo culture = (person.CultureLanguageId.HasValue
         	                      	? CultureInfo.GetCultureInfo(person.CultureLanguageId.Value)
-        	                      	: CultureInfo.CurrentCulture;
+									: CultureInfo.CurrentCulture).FixPersianCulture();
 
             bool rightToLeft = cultureUi.TextInfo.IsRightToLeft;
 

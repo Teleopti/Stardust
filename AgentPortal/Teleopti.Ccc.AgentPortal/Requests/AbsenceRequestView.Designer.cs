@@ -327,7 +327,7 @@
 			this.dateTimePickerAdvEnd.Name = "dateTimePickerAdvEnd";
 			this.dateTimePickerAdvEnd.ShowCheckBox = false;
 			this.dateTimePickerAdvEnd.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
-			this.dateTimePickerAdvEnd.UseCurrentCulture = true;
+			this.dateTimePickerAdvEnd.UseCurrentCulture = false;
 			this.dateTimePickerAdvEnd.Value = new System.DateTime(2010, 3, 24, 10, 47, 4, 838);
 			this.dateTimePickerAdvEnd.ValueChanged += new System.EventHandler(this.dateTimePickerAdvEnd_ValueChanged);
 			// 
@@ -388,7 +388,7 @@
 			this.dateTimePickerAdvStart.Name = "dateTimePickerAdvStart";
 			this.dateTimePickerAdvStart.ShowCheckBox = false;
 			this.dateTimePickerAdvStart.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
-			this.dateTimePickerAdvStart.UseCurrentCulture = true;
+			this.dateTimePickerAdvStart.UseCurrentCulture = false;
 			this.dateTimePickerAdvStart.Value = new System.DateTime(2010, 3, 24, 10, 47, 4, 838);
 			this.dateTimePickerAdvStart.ValueChanged += new System.EventHandler(this.dateTimePickerAdvStart_ValueChanged);
 			// 

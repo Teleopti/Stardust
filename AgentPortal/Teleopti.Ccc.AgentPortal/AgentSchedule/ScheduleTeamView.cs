@@ -225,9 +225,9 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                 displayDate = StartDateForTeamView.ToShortDateString();
             else
             {
-                CultureInfo c = loggedOnPerson.CultureLanguageId.HasValue
+                CultureInfo c = (loggedOnPerson.CultureLanguageId.HasValue
                                                ? CultureInfo.GetCultureInfo(loggedOnPerson.CultureLanguageId.Value)
-                                               : CultureInfo.CurrentCulture;
+                                               : CultureInfo.CurrentCulture).FixPersianCulture();
                 displayDate = string.Format(c, StartDateForTeamView.ToShortDateString());
             }
             
