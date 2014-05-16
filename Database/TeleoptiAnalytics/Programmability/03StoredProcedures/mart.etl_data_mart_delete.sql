@@ -114,6 +114,7 @@ BEGIN
 	DELETE FROM mart.fact_schedule_deviation		WHERE date_id >= @Date_Id
 	DELETE FROM mart.fact_schedule_day_count		WHERE date_id >= @Date_Id
 	DELETE FROM mart.fact_schedule_preference		WHERE date_id >= @Date_Id
+	DELETE FROM mart.fact_quality					WHERE date_id >= @Date_Id
 
 	--Bridge and dim date
 	DELETE mart.bridge_time_zone
