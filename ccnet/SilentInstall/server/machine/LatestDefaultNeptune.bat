@@ -10,7 +10,7 @@ SET DB_CCC7=TeleoptiCCC7_Demo
 SET DB_CCCAGG=TeleoptiCCC7Agg_Demo
 SET DB_WINGROUP=NEPTUNE\EverybodyAtTeleopti
 SET /A SSL=1
-SET ADDLOCAL=Database,AgentPortalWeb,Analytics,ClickOnce,AgentPortal,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker,RestoreDemo
+SET ADDLOCAL=Database,AgentPortalWeb,Analytics,ClickOnce,AgentPortal,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker
 SET /A SQLSSL=1
 
 SET DB_AdminAccess=WINAUTH
