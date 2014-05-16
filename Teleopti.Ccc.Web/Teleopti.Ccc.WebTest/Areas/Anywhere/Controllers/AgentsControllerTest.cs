@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 	public class AgentsControllerTest
 	{
 	[Test]
-	[Ignore("Bugg #27998")]
 		public void ShouldFailIfNoPermissionForOneTeam()
 		{
 			var teamId = Guid.NewGuid();
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 						team)).Return(false);
 			teamRepository.Stub(x => x.Get(teamId)).Return(team);
 
-			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(permissionProvider, teamRepository, date))
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(permissionProvider, teamRepository, date,null))
 			{
 				target.GetStates(teamId);
 				target.Response.StatusCode.Should().Be(403);
