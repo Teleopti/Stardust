@@ -49,6 +49,20 @@ namespace Teleopti.MessagingTest.SignalR
 			hubConnection.AssertWasCalled(c => c.Start(), a => a.Repeat.Times(6));
 		}
 
+		[Test]
+		public void ShouldStopRestartingWhenDisposed()
+		{
+			var hubProxy = new HubProxyFake();
+			var hubConnection = stubHubConnection(hubProxy);
+			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(0)));
+			target.StartBrokerService();
+			target.Dispose();
+
+			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
+
+			hubConnection.AssertWasCalled(x => x.Start(), a => a.Repeat.Once());
+		}
+
 		[Test, Ignore("This does not test anything, and we dont know if we want this behavior")]
 		public void ShouldRestartHubConnectionWhenStartFails()
 		{

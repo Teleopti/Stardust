@@ -7,5 +7,6 @@ namespace Teleopti.Messaging.SignalR
 	{
 		void OnNewConnection(IStateAccessor stateAccessor);
 		void OnStart(IStateAccessor stateAccessor, ITime time, Action recreateConnection);
+		void OnClose(IStateAccessor stateAccessor);
 	}
 }

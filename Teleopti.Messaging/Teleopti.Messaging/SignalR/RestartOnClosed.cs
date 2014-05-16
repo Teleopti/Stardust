@@ -8,6 +8,7 @@ namespace Teleopti.Messaging.SignalR
 	{
 		private readonly TimeSpan _restartDelay;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(RestartOnClosed));
+		private Action _closedHandler;
 
 		public RestartOnClosed() : this(TimeSpan.FromMinutes(4)) { }
 
@@ -25,14 +26,22 @@ namespace Teleopti.Messaging.SignalR
 		{
 			stateAccessor.WithConnection(c =>
 			{
-				c.Closed += () =>
+				_closedHandler = delegate
 				{
 					TaskHelper.Delay(_restartDelay).Wait();
 					Logger.Error("Connection closed. Trying to restart...");
 					c.Start();
 				};
+				c.Closed += _closedHandler;
 			});
 		}
 
+		public void OnClose(IStateAccessor stateAccessor)
+		{
+			stateAccessor.WithConnection(c =>
+			{
+				c.Closed -= _closedHandler;
+			});
+		}
 	}
 }

@@ -50,6 +50,10 @@ namespace Teleopti.Messaging.SignalR
 			}, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
 		}
 
+		public void OnClose(IStateAccessor stateAccessor)
+		{
+		}
+
 		private void initializePing(IStateAccessor stateAccessor)
 		{
 			resetTimeout();

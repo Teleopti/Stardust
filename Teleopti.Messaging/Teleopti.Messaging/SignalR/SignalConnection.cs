@@ -111,6 +111,9 @@ namespace Teleopti.Messaging.SignalR
 		{
 			try
 			{
+				foreach (var strategy in _connectionKeepAliveStrategy)
+					strategy.OnClose(this);
+
 				if (_hubConnection.State == ConnectionState.Connected)
 					_hubConnection.Stop();
 			}
