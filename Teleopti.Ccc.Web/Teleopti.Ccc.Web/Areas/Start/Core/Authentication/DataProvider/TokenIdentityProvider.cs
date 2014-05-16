@@ -42,14 +42,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 
 		private static TokenIdentity getTokenIdentity(string nameClaimValue)
 		{
-			return nameClaimValue.Contains("§")
+			return nameClaimValue.Contains("@@")
 				? getApplicationTokenIdentity(nameClaimValue)
 				: getWindowsTokenIdentity(nameClaimValue);
 		}
 
 		private static TokenIdentity getApplicationTokenIdentity(string nameClaimValue)
 		{
-			var nameAndDatasource = nameClaimValue.Split('/').Last().Split('§');
+			var nameAndDatasource = nameClaimValue.Split('/').Last().Split(new[] { "@@" }, StringSplitOptions.RemoveEmptyEntries);
 			return new TokenIdentity
 			{
 				DataSource = nameAndDatasource[1],
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 
 		private static TokenIdentity getWindowsTokenIdentity(string nameClaimValue)
 		{
-			if (nameClaimValue.Contains('§')) return null;
+			if (nameClaimValue.Contains("@@")) return null;
 			var nameAndDomain = nameClaimValue.Split('/').Last();
 			return new TokenIdentity
 			{
