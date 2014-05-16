@@ -199,12 +199,6 @@ namespace Teleopti.Ccc.Win.Optimization
 			  checkBoxBlockSameShift.Enabled = isEnabled;
 			if(isBlockEnabled() &&  !(checkBoxBlockSameShiftCategory.Checked  || checkBoxBlockSameStartTime.Checked || checkBoxBlockSameShift.Checked  ))
 				checkBoxBlockSameShiftCategory.Checked = true;
-			else if (!isBlockEnabled())
-			{
-				checkBoxBlockSameShiftCategory.Checked  = false ;
-				checkBoxBlockSameStartTime.Checked = false;
-				checkBoxBlockSameShift.Checked = false;
-			}
 		}
 
 		  private void comboBoxGroupPageOnTeams_SelectedValueChanged(object sender, EventArgs e)
@@ -217,14 +211,6 @@ namespace Teleopti.Ccc.Win.Optimization
 			  checkBoxTeamSameActivity.Enabled = isEnabled;
 			  if (isTeamEnabled() && !(checkBoxTeamSameShiftCategory.Checked || checkBoxTeamSameStartTime.Checked || checkBoxTeamSameEndTime.Checked || checkBoxTeamSameActivity.Checked ))
 				  checkBoxTeamSameShiftCategory.Checked = true;
-			  else if (!isTeamEnabled())
-			  {
-				  checkBoxTeamSameDaysOff.Checked  = false;
-				  checkBoxTeamSameShiftCategory.Checked = false;
-				  checkBoxTeamSameStartTime.Checked = false;
-				  checkBoxTeamSameEndTime.Checked = false;
-				  checkBoxTeamSameActivity.Checked = false;
-			  }
 		  }
 
 		private bool isTeamEnabled()
