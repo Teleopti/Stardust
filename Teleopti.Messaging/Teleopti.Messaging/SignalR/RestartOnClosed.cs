@@ -23,8 +23,9 @@ namespace Teleopti.Messaging.SignalR
 			{
 				_closedHandler = delegate
 				{
+					Logger.Error("Connection closed. Restarting soon.");
 					TaskHelper.Delay(_restartDelay).Wait();
-					Logger.Error("Connection closed. Trying to restart...");
+					Logger.Error("Restarting connection.");
 					c.Start();
 				};
 				c.Closed += _closedHandler;

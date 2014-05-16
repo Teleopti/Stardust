@@ -1,4 +1,5 @@
 using System;
+using log4net;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Messaging.SignalR
@@ -10,6 +11,7 @@ namespace Teleopti.Messaging.SignalR
 		private DateTime _timeOutTime;
 		private ITime _time;
 		private DateTime _nextPingTime;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(RecreateOnNoPingReply));
 
 		public RecreateOnNoPingReply() : this(TimeSpan.FromMinutes(5))
 		{
@@ -23,7 +25,6 @@ namespace Teleopti.Messaging.SignalR
 
 		public void OnNewConnection(IStateAccessor stateAccessor)
 		{
-
 		}
 
 		public void OnStart(IStateAccessor stateAccessor, ITime time, Action recreateConnection)
@@ -35,6 +36,7 @@ namespace Teleopti.Messaging.SignalR
 
 				if (time.UtcDateTime() >= _timeOutTime)
 				{
+					Logger.Error("Ping not responding, recreating connection...");
 					recreateConnection();
 					stateAccessor.WithConnection(c => c.Start());
 					initializePing(stateAccessor);
