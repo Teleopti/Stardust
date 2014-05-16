@@ -52,6 +52,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void OnClose(IStateAccessor stateAccessor)
 		{
+			_time.StopTimer();
 		}
 
 		private void initializePing(IStateAccessor stateAccessor)

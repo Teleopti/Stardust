@@ -42,6 +42,11 @@ namespace Teleopti.Ccc.TestCommon
 			_nextPeriodTime = _now.UtcDateTime().Add(dueTime.Add(period));
 		}
 
+		public void StopTimer()
+		{
+			_callback = null;
+		}
+
 		public void Passes(TimeSpan time)
 		{
 			var targetTime = _now.UtcDateTime().Add(time);

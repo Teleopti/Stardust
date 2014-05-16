@@ -7,5 +7,6 @@ namespace Teleopti.Interfaces.Domain
 	{
 		DateTime UtcDateTime();
 		void StartTimer(TimerCallback callback, object state, TimeSpan dueTime, TimeSpan period);
+		void StopTimer();
 	}
 }

@@ -22,5 +22,11 @@ namespace Teleopti.Interfaces.Domain
 		{
 			_timer = new Timer(callback, state, dueTime, period);
 		}
+
+		public void StopTimer()
+		{
+			_timer.Dispose();
+			_timer = null;
+		}
 	}
 }
