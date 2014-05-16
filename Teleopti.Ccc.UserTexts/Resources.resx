@@ -12068,4 +12068,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Mobile</value>
     <comment>week schedule view for mobile</comment>
   </data>
+  <data name="MoveTimeOn" xml:space="preserve">
+    <value>Move time on </value>
+    <comment>This is used when using move time with team block</comment>
+  </data>
 </root>
