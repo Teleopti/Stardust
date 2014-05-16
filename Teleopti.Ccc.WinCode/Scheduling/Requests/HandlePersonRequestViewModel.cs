@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			personRequestViewModel.ValidateIfWithinSchedulePeriod(_schedulePeriod, _permittedPersons);
 			RequestViewModels.Add(personRequestViewModel);
 			_showOnlymodels.Add(personRequestViewModel);
-            filterItems();
+         filterItems();
 		}
 
 		public void FilterOutOlderThan(TimeSpan timeSpan)
@@ -175,10 +175,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			filterItems();
 		}
 
+		public bool CanApplyFilterNow()
+		{
+			if (!PersonRequestViewModels.IsAddingNew && !PersonRequestViewModels.IsEditingItem)
+				return true;
+			return false;
+		}
+
 		private void filterItems()
 		{
-		    if (_skipFilter)
-		        return;
+			if (_skipFilter)
+				return;
+			if (!CanApplyFilterNow())
+				return;
 
             lock (FilterLock)
             {
