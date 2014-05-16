@@ -6094,7 +6094,7 @@ Start Date</value>
     <comment>enum weeknumber</comment>
   </data>
   <data name="ApointmentTime" xml:space="preserve">
-    <value>Apointment time</value>
+    <value>Appointment time</value>
     <comment>recurrence meeting text</comment>
   </data>
   <data name="AppointmentRecurrence" xml:space="preserve">
