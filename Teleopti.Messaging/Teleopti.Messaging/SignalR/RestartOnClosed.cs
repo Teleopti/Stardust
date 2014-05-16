@@ -19,11 +19,6 @@ namespace Teleopti.Messaging.SignalR
 
 		public void OnNewConnection(IStateAccessor stateAccessor)
 		{
-
-		}
-
-		public void OnStart(IStateAccessor stateAccessor, ITime time, Action recreateConnection)
-		{
 			stateAccessor.WithConnection(c =>
 			{
 				_closedHandler = delegate
@@ -34,6 +29,10 @@ namespace Teleopti.Messaging.SignalR
 				};
 				c.Closed += _closedHandler;
 			});
+		}
+
+		public void OnStart(IStateAccessor stateAccessor, ITime time, Action recreateConnection)
+		{
 		}
 
 		public void OnClose(IStateAccessor stateAccessor)

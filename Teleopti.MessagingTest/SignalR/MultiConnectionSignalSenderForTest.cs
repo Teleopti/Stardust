@@ -17,6 +17,12 @@ namespace Teleopti.MessagingTest.SignalR
 			_hubConnections = new Queue<IHubConnectionWrapper>(hubConnections);
 		}
 
+		public MultiConnectionSignalSenderForTest(IEnumerable<IHubConnectionWrapper> hubConnections, IEnumerable<IConnectionKeepAliveStrategy>connectionKeepAliveStrategy, ITime time)
+			: base("http://neeedsToBeSet", connectionKeepAliveStrategy, time)
+		{
+			_hubConnections = new Queue<IHubConnectionWrapper>(hubConnections);
+		}
+
 		protected override IHubConnectionWrapper MakeHubConnection()
 		{
 			CurrentConnection = _hubConnections.Dequeue();
