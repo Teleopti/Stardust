@@ -2,3 +2,4 @@
 #
 # for configuration options, look in released.toggles.txt
 WeeklyRestRuleSolver=true
+RtaLastStatesOverview=true
