@@ -1,6 +1,7 @@
 ﻿define([
+	'resources'
 ],
-    function (
+    function (resources
 		) {
     	return function () {
 
@@ -11,10 +12,11 @@
     			that.State = data.State;
     			that.Activity = data.Activity;
     			that.NextActivity = data.NextActivity;
-    			that.NextActivityStartTime = data.NextActivityStartTime;
+    			that.NextActivityStartTime = moment(data.NextActivityStartTime).format(resources.DateTimeFormatForMoment);
     			that.Alarm = data.Alarm;
-    			that.AlarmTime = data.AlarmTime;
-    		};
+    			that.AlarmTime = moment(data.AlarmTime).format(resources.DateTimeFormatForMoment);
+    			that.TimeInState = moment((Date.now()-new Date(data.AlarmTime))).minute();
+		    };
 
     		return that;
     	};

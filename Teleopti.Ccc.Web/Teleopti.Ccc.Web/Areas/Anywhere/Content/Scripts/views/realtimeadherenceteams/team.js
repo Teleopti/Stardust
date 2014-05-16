@@ -1,7 +1,8 @@
 ﻿define([
-		'knockout'
+		'knockout',
+		'navigation'
 ],
-	function (ko) {
+	function (ko, navigation) {
 		return function () {
 
 			var that = {};

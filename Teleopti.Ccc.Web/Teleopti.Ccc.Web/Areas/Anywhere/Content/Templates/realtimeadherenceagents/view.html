@@ -1,19 +1,30 @@
 ﻿<div class="realtimeadherenceagents">
 </div>
 
-<table>
-	<tr data-bind="foreach: agents,
-					 if: alarm==outOfAdherence" class="error">
-	<tr data-bind="foreach: agents,
-					 ifnot: alarm==outOfAdherence">
-
-		<td class="agent-name" data-bind="text: Name"></td>
-		<td data-bind="text: State"></td>
-		<td data-bind="text: Activity"></td>
-		<td data-bind="text: NextActivity"></td>
-		<td data-bind="text: NextActivityStartTime"></td>
-		<td data-bind="text: Alarm"></td>
-		<td data-bind="text: alarmTime"></td>
-		<!--<td data-bind="text: timeInState"></td>-->
-	</tr>
+<table class="table table-stripped table-bordered">
+	<thead>
+		<tr>
+			<!-- i18n ?-->
+			<th>Agent Name</th>
+			<th>State</th>
+			<th>Activity</th>
+			<th>Next Activity</th>
+			<th>Next Activity Start Time</th>
+			<th>Alarm</th>
+			<th>Alarm Time</th>
+			<th>Time In State</th>
+		</tr>
+	</thead>
+	<tbody data-bind="foreach: agents">
+		<tr>
+			<td class="agent-name" data-bind="text: Name"></td>
+			<td data-bind="text: State"></td>
+			<td data-bind="text: Activity"></td>
+			<td data-bind="text: NextActivity"></td>
+			<td data-bind="text: NextActivityStartTime"></td>
+			<td data-bind="text: Alarm"></td>
+			<td data-bind="text: AlarmTime"></td>
+			<td data-bind="text: TimeInState"></td>
+		</tr>
+	</tbody>
 </table>
