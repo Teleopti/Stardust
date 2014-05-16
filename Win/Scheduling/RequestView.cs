@@ -148,11 +148,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             get { return GetType().Name; }
         }
 
-        public void DisableFilter(bool yes)
-        {
-            _model.SkipFilter = yes;
-        }
-
         #endregion
 
         public void FilterDays(TimeSpan timeSpan)
