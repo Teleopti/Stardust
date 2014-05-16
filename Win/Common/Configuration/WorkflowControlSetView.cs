@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -33,12 +34,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private SFGridColumnGridHelper<AbsenceRequestPeriodModel> _gridHelper;
         private IDictionary<IAbsence, MonthlyProjectionVisualiser> _projectionCache =
             new Dictionary<IAbsence, MonthlyProjectionVisualiser>();
-        private Point _gridPoint;
+		private Point _gridPoint;
+		private const int MaxHoursPerDay = 24;
+		private const int MaxHoursPerWeek = 168;
 
         public WorkflowControlSetView()
         {
             InitializeComponent();
-        	if (DesignMode) return;
+
+				//hidden it temporarily
+				labelMinimumTimePerWeek.Hide();
+				textBoxExtMinTimePerWeek.Hide();
+	        
+	        if (DesignMode) return;
         	_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory());
         	GridStyleInfoStore.CellValueProperty.IsCloneable = false;
         	dateTimePickerAdvPublishedTo.NullString = Resources.NotPublished;
@@ -964,5 +972,57 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             var studentAvailabilityInputPeriod = new DateOnlyPeriod(dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart, dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd);
             _presenter.SetStudentAvailabilityInputPeriod(studentAvailabilityInputPeriod);
         }
+
+		private void textBoxExtMinTimePerWeek_Validating(object sender, CancelEventArgs e)
+		{
+				e.Cancel = validateMinHoursPerWeek();
+		}
+
+		private bool validateMinHoursPerWeek()
+		{
+			var cancel = false;
+
+			var hoursPerWeek = textBoxExtMinTimePerWeek.Value;
+			if (!validateMaxHours(hoursPerWeek, MaxHoursPerWeek))
+			{
+				ViewBase.ShowErrorMessage(Resources.MaximumHoursPerWeekCannotBeMoreThan168Hours,
+								   Resources.TimeError);
+				cancel = true;
+			}
+
+			return cancel;
+		}
+
+		private void textBoxExtMinTimePerWeek_Validated(object sender, EventArgs e)
+		{
+			//Check contract setting
+
+		}
+
+		private static bool validateMaxHours(TimeSpan timeSpan, int maxHours)
+		{
+			var isValid = true;
+
+			switch (maxHours)
+			{
+				case MaxHoursPerDay:
+					if (timeSpan.Days > 0 || timeSpan.Hours > maxHours)
+					{
+						isValid = false;
+					}
+					break;
+				case MaxHoursPerWeek:
+					if (timeSpan.Days * 24 + timeSpan.Hours > maxHours)
+					{
+						isValid = false;
+					}
+					break;
+				default:
+					isValid = false;
+					break;
+			}
+
+			return isValid;
+		}
     }
 }

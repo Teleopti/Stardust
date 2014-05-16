@@ -6094,7 +6094,7 @@ Start Date</value>
     <comment>enum weeknumber</comment>
   </data>
   <data name="ApointmentTime" xml:space="preserve">
-    <value>Apointment time</value>
+    <value>Appointment time</value>
     <comment>recurrence meeting text</comment>
   </data>
   <data name="AppointmentRecurrence" xml:space="preserve">
@@ -12067,5 +12067,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="Mobile" xml:space="preserve">
     <value>Mobile</value>
     <comment>week schedule view for mobile</comment>
+  </data>
+  <data name="MoveTimeOn" xml:space="preserve">
+    <value>Move time on </value>
+    <comment>This is used when using move time with team block</comment>
   </data>
 </root>

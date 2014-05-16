@@ -6,4 +6,5 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		int Aggregate(Guid teamId);
 	}
+
 }
