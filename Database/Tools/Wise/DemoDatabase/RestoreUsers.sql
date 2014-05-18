@@ -1,3 +1,5 @@
+SET NOCOUNT ON
+
 --Create SQL User and Pwd
 USE [master]
 IF NOT EXISTS (SELECT * FROM sys.syslogins WHERE name = 'TeleoptiDemoUser')
@@ -72,7 +74,6 @@ declare @AddDays int
 
 set @PeriodsToAdd = 0
 select @TemplateLength=datediff(DD,@TemplateStartDate,@TemplateEndDate)+1
-select @TemplateLength
 
 --get monday of last week
 SELECT @MondayLastWeek=DATEADD(wk, DATEDIFF(wk,7,GETDATE()), 0)
@@ -104,13 +105,15 @@ EXEC TeleoptiAnalytics_Demo.mart.etl_job_delete_schedule_All
 -- Create a schedule for the main job that runs one minute aftere this script is run
 DECLARE @main_job_schedule_id INT, @minutes_of_day INT, @job_start_time_string NVARCHAR(100)
 DECLARE @relative_period_start INT, @relative_period_end INT
+DECLARE @delayJobByMin int
+SET @delayJobByMin = 5
 
 SET @relative_period_start = -10
 SET @relative_period_end = 20
 SET @minutes_of_day = DATEDIFF(mi, CONVERT(INT, CONVERT(FLOAT, GETDATE())), CONVERT(FLOAT, GETDATE()))
-SET @minutes_of_day = @minutes_of_day + 5 --delay 5 min from MSI install
+SET @minutes_of_day = @minutes_of_day + @delayJobByMin
 
-SET @job_start_time_string = LEFT(CONVERT(NVARCHAR(8), DATEADD(mi, 1, GETDATE()), 108), 5)
+SET @job_start_time_string = LEFT(CONVERT(NVARCHAR(8), DATEADD(mi, @delayJobByMin, GETDATE()), 108), 5)
 SET @job_start_time_string = 'Occurs every day at ' + @job_start_time_string + '. Using the log data source ''<All>''.'
 
 CREATE TABLE #new_schedule(id INT)
