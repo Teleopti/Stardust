@@ -1,4 +1,5 @@
 @ECHO off
+@ECHO off
 
 ::=======================
 ::Init
@@ -21,8 +22,8 @@ CD "%ROOTDIR%"
 SET /P INSTANCE=Your SQL Server instance: 
 
 CHOICE /C yn /M "Do you want to use WinAuth?"
-IF ERRORLEVEL 1 SET /a WinAuth=1
-IF ERRORLEVEL 2 SET /a WinAuth=0
+IF %ERRORLEVEL% EQU 1 SET /a WinAuth=1
+IF %ERRORLEVEL% EQU 2 SET /a WinAuth=0
 
 ::Check input
 IF %WinAuth% equ 1 Call :WinAuth
@@ -95,17 +96,20 @@ GOTO :error
 )
 
 ::Add license
-IF %ISCCC7% EQU 1 (
-CHOICE /C yn /M "Add license?"
-IF ERRORLEVEL 1 (
-	SQLCMD -S%INSTANCE% -E -d"%DATABASE%" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
-	)
-)
+IF %ISCCC7% EQU 1 Call :AddLic
 
 ECHO.
 ECHO upgrade successfull!
 CD "%ROOTDIR%"
 GOTO Finish
+
+:AddLic
+CHOICE /M "Add license?"
+IF %ERRORLEVEL% EQU 1 (
+ECHO SQLCMD -S%INSTANCE% -E -d"%DATABASE%" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+SQLCMD -S%INSTANCE% -E -d"%DATABASE%" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+)
+exit /b
 
 ::Set Auth string
 :WinAuth

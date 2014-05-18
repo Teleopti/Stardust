@@ -25,8 +25,8 @@ SET ROOTDIR=%ROOTDIR:~0,-1%
 IF "%MyServerInstance%"=="" SET /P MyServerInstance=Your SQL Server instance:
 
 CHOICE /C yn /M "Do you want to use WinAuth?"
-IF ERRORLEVEL 1 SET /a WinAuth=1
-IF ERRORLEVEL 2 SET /a WinAuth=0
+IF %ERRORLEVEL% EQU 1 SET /a WinAuth=1
+IF %ERRORLEVEL% EQU 2 SET /a WinAuth=0
 
 ::Check input
 IF %WinAuth% equ 1 Call :WinAuth
@@ -42,13 +42,13 @@ SET CROSSDB=1
 
 ECHO.
 CHOICE /C yn /M "Would you like to re-add SQL permission for application account?"
-IF ERRORLEVEL 1 SET /a AddSecurity=1
-IF ERRORLEVEL 2 SET /a AddSecurity=0
+IF %ERRORLEVEL% EQU 1 SET /a AddSecurity=1
+IF %ERRORLEVEL% EQU 2 SET /a AddSecurity=0
 
 if %AddSecurity% equ 1 (
 CHOICE /C yn /M "Will end users use SQL Login?"
-IF ERRORLEVEL 1 Call :AddSQLSecurity
-IF ERRORLEVEL 2 Call :AddWinSecurity
+IF %ERRORLEVEL% EQU 1 Call :AddSQLSecurity
+IF %ERRORLEVEL% EQU 2 Call :AddWinSecurity
 )
 
 ECHO outside
