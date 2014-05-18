@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
@@ -39,7 +40,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				                                                                                                 NextActivity = state.ScheduledNext,
 				                                                                                                 NextActivityStartTime = state.NextStart,
 				                                                                                                 Alarm = state.AlarmName,
-				                                                                                                 AlarmTime = state.AlarmStart
+				                                                                                                 AlarmTime = state.AlarmStart,
+																												 AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(state.Color))
 			                                                                                                 });
 
 			return agentAdherenceStateInfo;

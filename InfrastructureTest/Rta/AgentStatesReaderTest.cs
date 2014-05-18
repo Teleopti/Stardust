@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -65,7 +66,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				                  ScheduledNext = "Lunch",
 				                  NextStart = DateTime.Now,
 				                  AlarmName = "Out of adherence",
-				                  AlarmStart = DateTime.Now
+				                  AlarmStart = DateTime.Now,
+								  Color = Color.Red.ToArgb()
 			                  };
 
 			var teamRepository = createTeamRepositoryForTeam(team);
@@ -83,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			agentStateResult.NextActivityStartTime.Should().Be(agentState1.NextStart);
 			agentStateResult.Alarm.Should().Be(agentState1.AlarmName);
 			agentStateResult.AlarmTime.Should().Be(agentState1.AlarmStart);
-
+			agentStateResult.AlarmColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(agentState1.Color)));
 		}
 
 		[Test]
