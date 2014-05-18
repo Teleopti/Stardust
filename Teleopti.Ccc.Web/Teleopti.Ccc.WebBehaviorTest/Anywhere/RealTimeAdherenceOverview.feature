@@ -292,7 +292,7 @@ Scenario: Should not be able to see agents if not permitted
 	When I try to view real time adherence for team 'Red'
 	Then I should see a message that I have no permission for this function
 
-@ignore
+
 Scenario: Should be able to see current states of all agents
 	Given  the current time is '2014-01-21 12:30:00'
 	And there is an activity named 'Phone'
@@ -319,6 +319,7 @@ Scenario: Should be able to see current states of all agents
 	| Activity		| Phone            |
 	| Next activity	| Lunch            |
 	| Next activity start time | 2014-01-21 13:00 |
+	| Next activity end time | 2014-01-21 13:30 |
 	And Ashley Andeen has a shift with
 	| Field			| Value            |
 	| Start time	| 2014-01-21 12:00 |
@@ -326,35 +327,36 @@ Scenario: Should be able to see current states of all agents
 	| Activity		| Phone            |
 	| Next activity	| Lunch            |
 	| Next activity start time | 2014-01-21 13:00 |
+	| Next activity end time | 2014-01-21 13:30 |
 	And there is an alarm with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
-	| Color           | Green	|
-	| Alarm Time	| 2014-01-21 12:15 |
+	| Alarm Color           | Green	|
 	| Staffing effect | 0        |
 	And there is an alarm with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
-	| Color           | Red	|
+	| Alarm Color           | Red	|
 	| Name            | Not adhering |
-	| Alarm Time	| 2014-01-21 12:10 |
 	| Staffing effect | -1           |
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets his phone state to 'Ready'
 	When I view real time adherence for team 'Red'
+	And the browser time is '2014-01-21 12:45:00'
 	Then I should see real time agent details for 'Pierre Baldi'
-		| Name				| 		|
-		| Name				| Pierre Baldi		|
-		| State				| Pause		|
-		| Activity			| Phone		|
-		| Next activity		| Lunch		|
-		| Next activity start time	| 2014-01-21 13:00	|
-		| Alarm	| Not adhering	|
-		| Alarm Time	| 2014-01-21 12:10 |
-		| Time in state	| 0:20:00 |
+		| Name                     |                  |
+		| Name                     | Pierre Baldi     |
+		| State                    | Pause            |
+		| Activity                 | Phone            |
+		| Next activity            | Lunch            |
+		| Next activity start time | 2014-01-21 13:00 |
+		| Alarm                    | Not adhering     |
+		| Alarm Time               | 2014-01-21 12:30 |
+		| Alarm Color              | Red              |
+		| Time in state	| 0:15:00 |
 	And I should see real time agent details for 'Ashley Andeen'
 		| Field				| Value				|
 		| Name				| Ashley Andeen		|
@@ -363,7 +365,8 @@ Scenario: Should be able to see current states of all agents
 		| Next activity		| Lunch		|
 		| Next activity start time	| 2014-01-21 13:00	|
 		| Alarm	| Adhering	|
-		| Alarm Time	| 2014-01-21 12:15 |
+		| Alarm Time	| 2014-01-21 12:30 |
+		| Alarm Color              | Green              |
 		| Time in state	| 0:15:00 |
 
 @ignore
@@ -392,6 +395,7 @@ Scenario: Should be able to see state updates of all agents
 	| Activity		| Phone            |
 	| Next activity	| Lunch            |
 	| Next activity start time | 2014-01-21 13:00 |
+	| Next activity end time | 2014-01-21 13:30 |
 	And Ashley Andeen has a shift with
 	| Field			| Value            |
 	| Start time	| 2014-01-21 12:00 |
@@ -399,21 +403,20 @@ Scenario: Should be able to see state updates of all agents
 	| Activity		| Phone            |
 	| Next activity	| Lunch            |
 	| Next activity start time | 2014-01-21 13:00 |
+	| Next activity end time | 2014-01-21 13:30 |
 	And there is an alarm with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
-	| Color           | Green	|
-	| Alarm Time	| 2014-01-21 12:10 |
+	| Alarm Color           | Green	|
 	| Staffing effect | 0        |
 	And there is an alarm with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
-	| Color           | Red	|
+	| Alarm Color           | Red	|
 	| Name            | Not adhering |
-	| Alarm Time	| 2014-01-21 12:10 |
 	| Staffing effect | -1           |
 	When I view real time adherence for team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
@@ -426,7 +429,8 @@ Scenario: Should be able to see state updates of all agents
 		| Next activity		| Lunch		|
 		| Next activity start time	| 2014-01-21 13:00	|
 		| Alarm	| Not adhering	|
-		| Alarm Time	| 2014-01-21 12:10 |
+		| Alarm Color           | Green	|
+		| Alarm Time	| 2014-01-21 12:30 |
 	And I should see real time agent details for 'Ashley Andeen'
 		| Field				| Value				|
 		| Name				| Ashley Andeen		|
@@ -435,4 +439,5 @@ Scenario: Should be able to see state updates of all agents
 		| Next activity		| Lunch		|
 		| Next activity start time	| 2014-01-21 13:00	|
 		| Alarm	| Adhering	|
-		| Alarm Time	| 2014-01-21 12:10 |
+		| Alarm Color           | Red	|
+		| Alarm Time	| 2014-01-21 12:30 |

@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -49,6 +50,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			assertRealTimeAgentDetails(name,stateInfo);
 		}
 
+		[When(@"the browser time is '(.*)'")]
+		public void WhenTheBrowserTimeIs(DateTime time)
+		{
+			const string setJsDateTemplate =
+				@"Date.prototype.getTime = function () {{ return new Date({0}, {1}, {2}, {3}, {4}, {5}); }};";
+			var setJsDate = string.Format(setJsDateTemplate, time.Year, time.Month - 1, time.Day, time.Hour, time.Minute, time.Second);
+			Browser.Interactions.Javascript(setJsDate);
+		}
+
 		private static void assertRealTimeAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)
 		{		
 			const string selector = ".agent-name:contains('{0}') ~ td:contains('{1}')";
@@ -59,7 +69,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.NextActivityStartTimeFormatted());
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.Alarm);
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.AlarmTimeFormatted());
-			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.TimeInState);
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.TimeInStateFormatted());
+
+			const string colorSelector = "tr[style*='background-color: {0}'] .agent-name:contains('{1}')";
+			Browser.Interactions.AssertExistsUsingJQuery(colorSelector, toRGB(stateInfo.AlarmColor), name);
+
+		}
+
+		private static String toRGB(string colorName)
+		{
+			var color = Color.FromName(colorName);
+			return string.Format("rgb({0}, {1}, {2})", color.R, color.G, color.B);
 		}
 	}
 
@@ -71,6 +91,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public string NextActivity	{ get; set; }
 		public string NextActivityStartTime	{ get; set; }
 		public string Alarm	{ get; set; }
+		public string AlarmColor { get; set; }
 		public string AlarmTime	{ get; set; }
 		public string TimeInState	 { get; set; }
 
@@ -84,6 +105,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var format = DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern;
 			return DateTime.Parse(AlarmTime).ToString(format);
+		}
+
+		public string TimeInStateFormatted()
+		{
+			return TimeSpan.Parse(TimeInState).ToString(@"h\:mm\:ss");
 		}
 	}
 }
