@@ -16,7 +16,7 @@
 		</tr>
 	</thead>
 	<tbody data-bind="foreach: agents">
-		<tr>
+		<tr data-bind="style:  { 'background-color': AlarmColor }">
 			<td class="agent-name" data-bind="text: Name"></td>
 			<td data-bind="text: State"></td>
 			<td data-bind="text: Activity"></td>

@@ -18,7 +18,10 @@
 			}
 		};
 
-		that.update = function (data) {
+		that.refreshTimeInState = function() {
+			that.agents().forEach(function (item) {
+				item.refreshTimeInState();
+			});
 		};
 
 		return that;

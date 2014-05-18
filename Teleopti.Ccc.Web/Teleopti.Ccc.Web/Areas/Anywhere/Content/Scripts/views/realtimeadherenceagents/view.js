@@ -38,6 +38,10 @@
 				}
 			});
 
+			setInterval(function () {
+				viewModel.refreshTimeInState();
+			}, 1000);
+
 			subscriptions.subscribeAdherence(function (notification) {
 			},
 			teamId,
