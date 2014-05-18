@@ -466,10 +466,14 @@ namespace Teleopti.Ccc.DBManager
 				int minorCheckVersionNumber = int.Parse(checkVersionDetails[1], CultureInfo.InvariantCulture);
 				int buildCheckVersionNumber = int.Parse(checkVersionDetails[2], CultureInfo.InvariantCulture);
 
-				if (majorCheckVersionNumber < majorVersionNumber && minorCheckVersionNumber < minorVersionNumber && buildCheckVersionNumber < buildVersionNumber)
-					return false;
-				else
+				if (majorCheckVersionNumber < majorVersionNumber)
 					return true;
+				if (minorCheckVersionNumber < minorVersionNumber)
+					return true;
+				if (buildCheckVersionNumber < buildVersionNumber)
+					return true;
+				else
+					return false;
 		}
 
         private static void CreateLogin(string user, string pwd, Boolean iswingroup)
@@ -526,23 +530,23 @@ namespace Teleopti.Ccc.DBManager
 			
 			//Create or Re-link e.g Alter the DB-user from SQL-Login
 			createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
-			relinkSQLUser = string.Format(CultureInfo.CurrentCulture, @"ALTER USER [{0}] WITH LOGIN = [{0}]", user);
+
+			if (SQLVersionGreaterThen(SQL2005SP2))
+				relinkSQLUser = string.Format(CultureInfo.CurrentCulture, @"ALTER USER [{0}] WITH LOGIN = [{0}]", user);
+			else
+				relinkSQLUser = string.Format(CultureInfo.CurrentCulture, @"sp_change_users_login 'Update_One', '{0}', '{0}'", user);
 
 			if (DBUserExist(user))
 			{
 				logWrite("DB user already exist, re-link ...");
 				using (var cmd = new SqlCommand(relinkSQLUser, _sqlConnection))
-
-					if (SQLVersionGreaterThen(SQL2005SP2))
-						cmd.ExecuteNonQuery();
-					else
-						logWrite("You need SQL Server 2005 SP2 to re-link user to");
+				cmd.ExecuteNonQuery();
 			}
 			else
 			{
 				logWrite("DB user is missing. Create DB user ...");
 				using (var cmd = new SqlCommand(createDBUser, _sqlConnection))
-					cmd.ExecuteNonQuery();
+				cmd.ExecuteNonQuery();
 			}
 
 			//Add permission
