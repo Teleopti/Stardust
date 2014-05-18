@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public DateTime NextActivityStartTime { get; set; }
 		public string Alarm { get; set; }
 		public DateTime AlarmTime { get; set; }
+		public string AlarmColor { get; set; }
 	}
 }

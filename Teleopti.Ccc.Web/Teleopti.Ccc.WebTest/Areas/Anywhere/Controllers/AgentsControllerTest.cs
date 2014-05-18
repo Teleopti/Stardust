@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -51,7 +52,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				               NextActivity = "Lunch",
 				               NextActivityStartTime = new DateTime(2001, 1, 1, 12, 3, 0),
 				               Alarm = "Alarma!",
-				               AlarmTime = new DateTime(2001, 1, 1, 12, 0, 0)
+				               AlarmTime = new DateTime(2001, 1, 1, 12, 0, 0),
+							   AlarmColor = ColorTranslator.ToHtml(Color.Red)
 			               };
 
 			var dataReader = new fakeStateReader(new List<AgentAdherenceStateInfo>()
