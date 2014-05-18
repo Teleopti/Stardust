@@ -34,6 +34,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime LunchStartTime { get { return ScheduledActivityStartTime; } set { ScheduledActivityStartTime = value; } }
 		public DateTime LunchEndTime { get { return ScheduledActivityEndTime; } set { ScheduledActivityEndTime = value; } }
 		
+		public string NextActivity { get { return ScheduledActivity; } set { ScheduledActivity = value; } }
+		public DateTime NextActivityStartTime { get { return ScheduledActivityStartTime; } set { ScheduledActivityStartTime = value; } }
+		public DateTime NextActivityEndTime { get { return ScheduledActivityEndTime; } set { ScheduledActivityEndTime = value; } }
+		
 		// this should not be here. this exists on the ShiftCategoryConfigurable
 		public string ShiftColor { get; set; }	
 
