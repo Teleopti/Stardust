@@ -15,11 +15,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string PhoneState { get; set; }
 		public string Name { get; set; }
 		public int StaffingEffect { get; set; }
+		public string AlarmColor { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
-			var alarmType = new AlarmType(new Description(Name), Color.Red, TimeSpan.Zero, AlarmTypeMode.UserDefined,
-			                              StaffingEffect);
+
+			var alarmType = new AlarmType(new Description(Name),
+				string.IsNullOrEmpty(AlarmColor) ? Color.Red : Color.FromName(AlarmColor), TimeSpan.Zero, AlarmTypeMode.UserDefined,
+				StaffingEffect);
 
 			var activityRepository = new ActivityRepository(uow);
 			var activity = activityRepository.LoadAll().First(a => a.Name == Activity);
