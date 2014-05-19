@@ -33,9 +33,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 		private readonly IPersonRequestCheckAuthorization _authorization;
 		private readonly TimeZoneInfo _timeZoneInfo;
 		private static readonly object FilterLock = new object();
-        private bool _skipFilter;
-
-	    public ListCollectionView PersonRequestViewModels { get; set; }
+	   public ListCollectionView PersonRequestViewModels { get; set; }
 
 		public IList<PersonRequestViewModel> SelectedModels
 		{
@@ -49,17 +47,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 		{
 			get { return PersonRequestViewModels.CurrentItem as PersonRequestViewModel; }
 		}
-
-	    public bool SkipFilter
-	    {
-	        get { return _skipFilter; }
-	        set
-	        {
-	            _skipFilter = value; 
-	            if(!_skipFilter)
-                    filterItems();
-	        }
-	    }
 
 	    public HandlePersonRequestViewModel(DateTimePeriod schedulePeriod, 
 												IList<IPerson> permittedPersons, 
@@ -175,27 +162,39 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			filterItems();
 		}
 
-		public bool CanApplyFilterNow()
+		private void commitStatusInAddingAndEditing()
+
+
 		{
-			if (!PersonRequestViewModels.IsAddingNew && !PersonRequestViewModels.IsEditingItem)
-				return true;
-			return false;
+			if (PersonRequestViewModels.IsAddingNew)
+			{
+				PersonRequestViewModels.CommitNew();
+			}
+			else if (PersonRequestViewModels.IsEditingItem)
+			{
+				PersonRequestViewModels.CommitEdit();
+			}
+		}
+
+		private bool canApplyFilter()
+		{
+			if(PersonRequestViewModels.IsAddingNew || PersonRequestViewModels.IsEditingItem)
+				return false;
+			return true;
 		}
 
 		private void filterItems()
 		{
-			if (_skipFilter)
-				return;
-			if (!CanApplyFilterNow())
-				return;
-
-            lock (FilterLock)
-            {
-                var updatedOnFilter = new PersonRequestViewModelFilter(_filterTimeSpan);
-                var showOnlyfilter = new ShowOnlyPersonRequestViewModelSpecification(_showOnlymodels);
-                RequestViewModels.FilterOutBySpecification(updatedOnFilter.Or(showOnlyfilter));
-                //PersonRequestViewModels = RequestViewModels.CreateFilteredView(updatedOnFilter.Or(showOnlyfilter));
-            }
+			commitStatusInAddingAndEditing();
+			if (canApplyFilter())
+			{
+				lock (FilterLock)
+				{
+					var updatedOnFilter = new PersonRequestViewModelFilter(_filterTimeSpan);
+					var showOnlyfilter = new ShowOnlyPersonRequestViewModelSpecification(_showOnlymodels);
+					RequestViewModels.FilterOutBySpecification(updatedOnFilter.Or(showOnlyfilter));
+				}
+			}
 		}
 
 		/// <summary>
