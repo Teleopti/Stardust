@@ -4,12 +4,15 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
+using Teleopti.Ccc.Web.Areas.Start.Models.Test;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
@@ -24,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var modifyNow = MockRepository.GenerateStrictMock<IMutateNow>();
 			modifyNow.Expect(mock => mock.Mutate(dateSet));
 
-			using (var target = new TestController(modifyNow, null, null, null, null, null, null))
+			using (var target = new TestController(modifyNow, null, null, null, null, null, null,null))
 			{
 				target.SetCurrentTime(dateSet.Ticks);
 			}
@@ -36,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var sessionSpecificDataProvider = MockRepository.GenerateMock<ISessionSpecificDataProvider>();
 			var httpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
 			httpContext.Stub(x => x.Current()).Return(new FakeHttpContext(""));
-			using (var target = new TestController(new MutableNow(), sessionSpecificDataProvider, null, null, null, httpContext, MockRepository.GenerateMock<IFormsAuthentication>()))
+			using (var target = new TestController(new MutableNow(), sessionSpecificDataProvider, null, null, null, httpContext, MockRepository.GenerateMock<IFormsAuthentication>(),null))
 			{
 				target.BeforeScenario(true);
 				target.CorruptMyCookie();
@@ -60,10 +63,60 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			businessUnitProvider.Stub(x => x.RetrieveBusinessUnitsForPerson(null, null)).IgnoreArguments().Return(new[] { businessUnit });
 			var httpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
 			httpContext.Stub(x => x.Current()).Return(new FakeHttpContext(""));
-			using (var target = new TestController(null, null, authenticator, logon, businessUnitProvider, httpContext, null))
+			using (var target = new TestController(null, null, authenticator, logon, businessUnitProvider, httpContext, null,null))
 			{
 				target.Logon(null, businessUnit.Name, null, null);
 			}
 		}
+
+		[Test]
+		public void CheckFeature_WhenToggleIsDisabled_ShouldReturnFalse()
+		{
+			const string toggle = "DisabledFeature";
+			var toggleStub = MockRepository.GenerateMock<IToggleManager>();
+
+
+			toggleStub.Expect(t => t.IsEnabled(Toggles.DisabledFeature)).Return(false);
+
+			using (var target = new TestController(null, null, null, null, null, null, null, toggleStub))
+			{
+				var model = target.CheckFeature(toggle).Model as TestMessageViewModel;
+				Assert.That(model.Title.Contains(toggle));
+				Assert.That(model.Message.Contains(false.ToString()));
+			}
+		}
+
+		[Test]
+		public void CheckFeature_WhenToggleIsEnabled_ShouldReturnTrue()
+		{
+			const string toggle = "DisabledFeature";
+			var toggleStub = MockRepository.GenerateMock<IToggleManager>();
+
+
+			toggleStub.Expect(t => t.IsEnabled(Toggles.DisabledFeature)).Return(true);
+
+			using (var target = new TestController(null, null, null, null, null, null, null, toggleStub))
+			{
+				var model = target.CheckFeature(toggle).Model as TestMessageViewModel;
+				Assert.That(model.Message.Contains(true.ToString()));
+
+			}
+		}
+
+		[Test]
+		public void CheckFeature_WhenToggleDoesNotExist_ShouldReturnFalse()
+		{
+			const string toggle = "NonExistingFeature";
+			var toggleStub = MockRepository.GenerateMock<IToggleManager>();
+
+			using (var target = new TestController(null, null, null, null, null, null, null, toggleStub))
+			{
+				var model = target.CheckFeature(toggle).Model as TestMessageViewModel;
+				Assert.That(model.Message.Contains(false.ToString()));
+
+			}
+		}
+
+		
 	}
 }

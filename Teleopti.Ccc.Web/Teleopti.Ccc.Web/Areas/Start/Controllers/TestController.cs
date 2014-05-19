@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Microsoft.IdentityModel.Claims;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
@@ -26,8 +27,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IBusinessUnitProvider _businessUnitProvider;
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly IFormsAuthentication _formsAuthentication;
+		private readonly IToggleManager _toggleManager;
 
-		public TestController(IMutateNow mutateNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication)
+		public TestController(IMutateNow mutateNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager)
 		{
 			_mutateNow = mutateNow;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
@@ -36,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_businessUnitProvider = businessUnitProvider;
 			_httpContext = httpContext;
 			_formsAuthentication = formsAuthentication;
+			_toggleManager = toggleManager;
 		}
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker)
@@ -129,6 +132,25 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				Message = "Time is set to " + dateSet + " in UTC"
 			};
 			ViewBag.SetTime = "hello";
+
+			return View("Message", viewModel);
+		}
+
+		public ViewResult CheckFeature(string featureName)
+		{
+			var result = false;
+			Toggles featureToggle;
+
+			if (Enum.TryParse(featureName, out featureToggle))
+			{
+				result = _toggleManager.IsEnabled(featureToggle);
+			}
+
+			var viewModel = new TestMessageViewModel
+			{
+				Title = string.Format("Feature {0}", featureName),
+				Message = result.ToString()
+			};
 
 			return View("Message", viewModel);
 		}
