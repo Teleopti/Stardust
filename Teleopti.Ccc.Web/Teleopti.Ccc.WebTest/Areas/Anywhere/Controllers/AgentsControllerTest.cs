@@ -6,13 +6,16 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure;
-using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
+using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
@@ -33,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 						team)).Return(false);
 			teamRepository.Stub(x => x.Get(teamId)).Return(team);
 
-			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(permissionProvider, teamRepository, date,null))
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(permissionProvider, teamRepository, null, date,null))
 			{
 				target.GetStates(teamId);
 				target.Response.StatusCode.Should().Be(403);
@@ -46,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var teamId = Guid.NewGuid();
 			var expected = new AgentAdherenceStateInfo()
 			               {
-				               Name = "Ashley Andeen",
+				               PersonId = Guid.NewGuid(),
 				               State = "out of adherence",
 				               Activity = "Phone",
 				               NextActivity = "Lunch",
@@ -62,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 													 expected
 			                                     });
 
-			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), MockRepository.GenerateStub<ITeamRepository>(), new Now(), dataReader))
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), MockRepository.GenerateStub<ITeamRepository>(),null, new Now(), dataReader))
 			{
 			
 				var result = target.GetStates(teamId).Data as IEnumerable<AgentAdherenceStateInfo>;
@@ -73,6 +76,35 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				Assert.That(result.Last(),Is.EqualTo(expected));
 			}
 		
+		}
+
+		[Test]
+		public void GetAgents_ShouldGetAllAgentsForOneTeam()
+		{
+			var teamId = Guid.NewGuid();
+			var team = new Team();
+			team.SetId(teamId);
+			var person = new Person();
+			var personId = Guid.NewGuid();
+			person.SetId(personId);
+			person.Name= new Name("bill","gates");
+			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
+			teamRepository.Stub(x => x.Get(teamId)).Return(team);
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			var today = new Now();
+			var period = new DateOnlyPeriod(today.LocalDateOnly(), today.LocalDateOnly());
+			personRepository.Stub(x => x.FindPeopleBelongTeam(team, period)).Return(new List<IPerson>{person});
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), teamRepository, personRepository, new Now(), null))
+			{
+				var expected = new AgentViewModel {Id = personId.ToString(), Name = person.Name.ToString()};
+				var result = target.ForTeam(teamId).Data as IEnumerable<AgentViewModel>;
+
+				result.Count().Should().Be(1);
+
+				Assert.That(result.Single().Id, Is.EqualTo(expected.Id));
+				Assert.That(result.Single().Name, Is.EqualTo(expected.Name));
+			}
+
 		}
 
 		private class fakeStateReader : IAgentStateReader
