@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 									  IList<IPerson> selectedPersons, DateOnly day,
 									  IShiftProjectionCache roleModelShift, DateOnlyPeriod selectedPeriod)
 		{
+			_cancelMe = false;
 			if (roleModelShift == null) return false;
 			var teamInfo = teamBlockInfo.TeamInfo;
 			var teamBlockSingleDayInfo = new TeamBlockSingleDayInfo(teamInfo, day);
