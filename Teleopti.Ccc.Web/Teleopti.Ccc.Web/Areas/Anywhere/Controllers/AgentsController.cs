@@ -42,26 +42,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				return null;
 			}
 
-			return Json(_agentStateReader.GetLatestStatesForTeam(teamId),JsonRequestBehavior.AllowGet);
-		}
-
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult ForTeam(Guid teamId)
-		{
-			var team = _teamRepository.Get(teamId);
-			var isPermitted =
-				_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
-					_date.LocalDateOnly(), team);
-			if (!isPermitted)
+			return Json(_agentStateReader.GetLatestStatesForTeam(teamId).Select(x => new AgentViewModel
 			{
-				Response.StatusCode = 403;
-				return null;
-			}
-			var today = _date.LocalDateOnly();
-			var agents =
-				_personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
-					.Select(x => new AgentViewModel {Id = x.Id.GetValueOrDefault().ToString(), Name = x.Name.ToString()});
-			return Json(agents, JsonRequestBehavior.AllowGet);
+				PersonId = x.PersonId,
+				Name = _personRepository.Get(x.PersonId).Name.ToString(),
+				State = x.State,
+				Activity = x.Activity,
+				NextActivity = x.NextActivity,
+				NextActivityStartTime = x.NextActivityStartTime,
+				Alarm = x.Alarm,
+				AlarmTime = x.AlarmTime,
+				AlarmColor = x.AlarmColor
+			}), JsonRequestBehavior.AllowGet);
 		}
 	}
 

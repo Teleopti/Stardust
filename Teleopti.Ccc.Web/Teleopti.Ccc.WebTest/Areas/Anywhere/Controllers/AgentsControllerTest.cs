@@ -47,66 +47,63 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void GetStates_ShouldGetAllTheStatesForTeamFromReader()
 		{
 			var teamId = Guid.NewGuid();
-			var expected = new AgentAdherenceStateInfo()
-			               {
-				               PersonId = Guid.NewGuid(),
-				               State = "out of adherence",
-				               Activity = "Phone",
-				               NextActivity = "Lunch",
-				               NextActivityStartTime = new DateTime(2001, 1, 1, 12, 3, 0),
-				               Alarm = "Alarma!",
-				               AlarmTime = new DateTime(2001, 1, 1, 12, 0, 0),
-							   AlarmColor = ColorTranslator.ToHtml(Color.Red)
-			               };
+			var team = new Team();
+			team.SetId(teamId);
+			var personId = Guid.NewGuid();
+			var person = new Person();
+			person.SetId(personId);
+			person.Name = new Name(" "," ");
+			
+			var stateInfo = new AgentAdherenceStateInfo()
+			{
+				PersonId = personId,
+				State = "out of adherence",
+				Activity = "Phone",
+				NextActivity = "Lunch",
+				NextActivityStartTime = new DateTime(2001, 1, 1, 12, 3, 0),
+				Alarm = "Alarma!",
+				AlarmTime = new DateTime(2001, 1, 1, 12, 0, 0),
+				AlarmColor = ColorTranslator.ToHtml(Color.Red)
+			};
+			var expected = new AgentViewModel
+			{
+				PersonId = stateInfo.PersonId,
+				Name = person.Name.ToString(),
+				State = stateInfo.State,
+				Activity =stateInfo.Activity,
+				NextActivity = stateInfo.NextActivity,
+				NextActivityStartTime = stateInfo.NextActivityStartTime,
+				Alarm = stateInfo.Alarm,
+				AlarmTime = stateInfo.AlarmTime,
+				AlarmColor = stateInfo.AlarmColor
+			};
 
 			var dataReader = new fakeStateReader(new List<AgentAdherenceStateInfo>()
 			                                     {
-				                                     expected,
-													 expected
+				                                     stateInfo
 			                                     });
 
-			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), MockRepository.GenerateStub<ITeamRepository>(),null, new Now(), dataReader))
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			personRepository.Stub(x => x.Get(personId)).Return(person);
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), MockRepository.GenerateStub<ITeamRepository>(), personRepository, new Now(), dataReader))
 			{
 			
-				var result = target.GetStates(teamId).Data as IEnumerable<AgentAdherenceStateInfo>;
-
-				result.Count().Should().Be(2);
-
-				Assert.That(result.First(),Is.EqualTo(expected));
-				Assert.That(result.Last(),Is.EqualTo(expected));
-			}
-		
-		}
-
-		[Test]
-		public void GetAgents_ShouldGetAllAgentsForOneTeam()
-		{
-			var teamId = Guid.NewGuid();
-			var team = new Team();
-			team.SetId(teamId);
-			var person = new Person();
-			var personId = Guid.NewGuid();
-			person.SetId(personId);
-			person.Name= new Name("bill","gates");
-			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
-			teamRepository.Stub(x => x.Get(teamId)).Return(team);
-			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			var today = new Now();
-			var period = new DateOnlyPeriod(today.LocalDateOnly(), today.LocalDateOnly());
-			personRepository.Stub(x => x.FindPeopleBelongTeam(team, period)).Return(new List<IPerson>{person});
-			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), teamRepository, personRepository, new Now(), null))
-			{
-				var expected = new AgentViewModel {Id = personId.ToString(), Name = person.Name.ToString()};
-				var result = target.ForTeam(teamId).Data as IEnumerable<AgentViewModel>;
+				var result = target.GetStates(teamId).Data as IEnumerable<AgentViewModel>;
 
 				result.Count().Should().Be(1);
 
-				Assert.That(result.Single().Id, Is.EqualTo(expected.Id));
-				Assert.That(result.Single().Name, Is.EqualTo(expected.Name));
+				Assert.That(result.First().PersonId,Is.EqualTo(expected.PersonId));
+				Assert.That(result.First().Name, Is.EqualTo(expected.Name));
+				Assert.That(result.First().State, Is.EqualTo(expected.State));
+				Assert.That(result.First().Activity, Is.EqualTo(expected.Activity));
+				Assert.That(result.First().NextActivity, Is.EqualTo(expected.NextActivity));
+				Assert.That(result.First().NextActivityStartTime, Is.EqualTo(expected.NextActivityStartTime));
+				Assert.That(result.First().Alarm, Is.EqualTo(expected.Alarm));
+				Assert.That(result.First().AlarmTime, Is.EqualTo(expected.AlarmTime));
+				Assert.That(result.First().AlarmColor, Is.EqualTo(expected.AlarmColor));
 			}
-
 		}
-
+		
 		private class fakeStateReader : IAgentStateReader
 		{
 			private readonly IEnumerable<AgentAdherenceStateInfo> _statesForAnyTeam;
