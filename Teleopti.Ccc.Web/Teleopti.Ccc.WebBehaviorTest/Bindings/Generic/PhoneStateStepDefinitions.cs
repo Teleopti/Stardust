@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				var now = new ThisIsNow(CurrentTime.Value());
 				var databaseReader = new DatabaseReader(databaseConnectionFactory, databaseConnectionStringHandler, now);
 				var mbCacheFactory = new MbCacheFactoryFake();
-				var messageSender = new SignalSender(TestSiteConfigurationSetup.Url.ToString());
+				var messageSender = new SignalSender(TestSiteConfigurationSetup.Url.ToString(), new IConnectionKeepAliveStrategy[]{}, new Time(now));
 				var personOrganizationProvider = new PersonOrganizationProvider(new PersonOrganizationReader(now, ConnectionStringHelper.ConnectionStringUsedInTests));
 				return new RtaDataHandler(messageSender,
 				                          new DataSourceResolverFake(),

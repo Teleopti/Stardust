@@ -1350,15 +1350,15 @@
     <Compile Include="Scheduling\SchedulingScreenInternals\SchedulingAndOptimizeArgument.cs" />
     <Compile Include="Scheduling\SchedulingScreenInternals\SchedulingScreenEnums.cs" />
     <Compile Include="Scheduling\SchedulingScreenInternals\SchedulingScreenPermissionHelper.cs" />
-    <Compile Include="Scheduling\SkillResult\SkillFullPeriodGridControl.cs">
+    <Compile Include="Scheduling\SkillResult\SkillFullPeriodGridControl.cs" />
     <Compile Include="Scheduling\SkillGridMenuItemUpdate.cs" />
-    <Compile Include="Scheduling\SkillResult\SkillMonthGridControl.cs">
+    <Compile Include="Scheduling\SkillResult\SkillMonthGridControl.cs" />
     <Compile Include="Scheduling\SkillWeekGridControl.cs" />
     <Compile Include="Scheduling\PersonsFilterView.cs" />
     <Compile Include="Scheduling\SkillResult\SkillResultGridControlBase.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Scheduling\SkillResult\SkillWeekGridControl.cs">
+    <Compile Include="Scheduling\SkillResult\SkillWeekGridControl.cs" />
     <Compile Include="Scheduling\PersonsFilterView.Designer.cs">
       <DependentUpon>PersonsFilterView.cs</DependentUpon>
     </Compile>
@@ -2662,9 +2662,9 @@
     <Compile Include="Forecasting\Forms\SkillPages\SkillGeneral.designer.cs">
       <DependentUpon>SkillGeneral.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\SkillResult\SkillDayGridControl.cs">
+    <Compile Include="Scheduling\SkillResult\SkillDayGridControl.cs" />
     <Compile Include="Scheduling\SkillIntradayGridControl.cs" />
-    <Compile Include="Scheduling\SkillResult\SkillIntradayGridControl.cs">
+    <Compile Include="Scheduling\SkillResult\SkillIntradayGridControl.cs" />
     <Compile Include="Scheduling\OverViewView.cs" />
     <Compile Include="Scheduling\PeriodView.cs" />
     <Compile Include="Scheduling\WeekView.cs" />
