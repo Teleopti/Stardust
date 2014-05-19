@@ -156,11 +156,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    get { return _isWindowLoaded; }
 		    set { _isWindowLoaded = value; }
 	    }
-        public void DisableFilter(bool yes)
-        {
-            _model.SkipFilter = yes;
-        }
-
 
 	    #endregion
 
