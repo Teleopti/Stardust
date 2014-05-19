@@ -140,17 +140,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			if (overtimeAvailability.Date.Day == 20)
 			{
 				Browser.Interactions.AssertJavascriptResultContains(layerTop,"111");
-				Browser.Interactions.AssertJavascriptResultContains(layerHeight,"443");
+				Browser.Interactions.AssertJavascriptResultContains(layerHeight,"445");
 			}
 			if (overtimeAvailability.Date.Day == 21)
 			{
 				Browser.Interactions.AssertJavascriptResultContains(layerTop, "459");
-				Browser.Interactions.AssertJavascriptResultContains(layerHeight, "206");
+				Browser.Interactions.AssertJavascriptResultContains(layerHeight, "208");
 			}
 			if (overtimeAvailability.Date.Day == 22)
 			{
 				Browser.Interactions.AssertJavascriptResultContains(layerTop, "0");
-				Browser.Interactions.AssertJavascriptResultContains(layerHeight, "87");
+				Browser.Interactions.AssertJavascriptResultContains(layerHeight, "89");
 			}
 			Browser.Interactions.AssertJavascriptResultContains(layerWidth, "20");
 		}
