@@ -64,5 +64,25 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 
 		}
 
+		[Test]
+		public void ShouldPongOnPing()
+		{
+			var target = new MessageBrokerHub(new ActionImmediate(), new SubscriptionPassThrough());
+			var hubBuilder = new TestHubBuilder();
+			var _ponged = false;
+			var client = hubBuilder.FakeClient(
+				"Pong",
+				new Action(() =>
+				{
+					_ponged = true;
+				}));
+			hubBuilder.SetupHub(target, client);
+
+			target.Ping();
+
+			_ponged.Should().Be.True();
+		}
+
+
 	}
 }

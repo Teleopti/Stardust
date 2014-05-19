@@ -25,7 +25,7 @@ namespace Teleopti.MessagingTest.SignalR
 		public void ShouldSendSingleNotification()
 		{
 			var hubProxy = new HubProxyFake();
-			var target = new SignalSenderForTest(stubHubConnection(hubProxy), null);
+			var target = new SignalSenderForTest(stubHubConnection(hubProxy));
 			target.StartBrokerService();
 
 			var notification1 = new Notification();

@@ -320,7 +320,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				session.Flush();
 				tx.Commit();
 				tx.Dispose();
-				Expect.Call(messageBroker.IsInitialized).Return(true);
+				Expect.Call(messageBroker.IsConnected).Return(true);
 			}
 
 			mocks.ReplayAll();
@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 				Expect.Call(() => messageSender.Execute(new List<IRootChangeInfo>(interceptor.ModifiedRoots))).IgnoreArguments();
 				
-				Expect.Call(messageBroker.IsInitialized).Return(true);
+				Expect.Call(messageBroker.IsConnected).Return(true);
 			}
 
 			mocks.ReplayAll();

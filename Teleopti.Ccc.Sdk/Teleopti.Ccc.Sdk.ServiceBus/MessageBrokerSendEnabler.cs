@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 _messaging = StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging;
 				if (_messaging != null)
 				{
-					if (_messaging.IsInitialized)
+					if (_messaging.IsConnected)
 					{
 						_wasStartedBefore = true;
 						return;
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         /// </summary>
         protected virtual void ReleaseManagedResources()
         {
-			if (_messaging != null && _messaging.IsInitialized && !_wasStartedBefore)
+			if (_messaging != null && _messaging.IsConnected && !_wasStartedBefore)
             {
                 lock (LockObject)
                 {

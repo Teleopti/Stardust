@@ -2,6 +2,7 @@ using System;
 using Microsoft.AspNet.SignalR.Client;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
 
@@ -10,7 +11,6 @@ namespace Teleopti.MessagingTest.SignalR
 	[TestFixture]
 	public class SignalConnectionRestartOnClosedTest
 	{
-
 		private IHubConnectionWrapper stubHubConnection(IHubProxyWrapper hubProxy)
 		{
 			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
@@ -23,56 +23,65 @@ namespace Teleopti.MessagingTest.SignalR
 		[Test]
 		public void ShouldRestartHubConnectionWhenConnectionClosed()
 		{
+			var time = new FakeTime();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection, null);
-			target.StartBrokerService(TimeSpan.FromSeconds(0));
+			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
+			target.StartBrokerService();
 
 			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
+			time.Passes(TimeSpan.FromMinutes(5));
 
 			hubConnection.AssertWasCalled(x => x.Start(), a => a.Repeat.Twice());
 		}
 
 		[Test]
-		public void ShouldNotRestartHubConnectionMoreThanXTimes()
+		public void ShouldContinueToRestartHubConnectionWhenConnectionClosed()
 		{
+			var time = new FakeTime();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection, null);
-			target.StartBrokerService(TimeSpan.FromSeconds(0), 3);
+			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
+			target.StartBrokerService();
 
 			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
+			time.Passes(TimeSpan.FromMinutes(5));
 			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
+			time.Passes(TimeSpan.FromMinutes(5));
 			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
+			time.Passes(TimeSpan.FromMinutes(5));
 			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
-
-			hubConnection.AssertWasCalled(c => c.Start(), a => a.Repeat.Times(4));
-		}
-
-		[Test]
-		public void ShouldContinueToRestartWhenReconnectAttemptsIsNotSet()
-		{
-			var hubProxy = new HubProxyFake();
-			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection, null);
-			target.StartBrokerService(TimeSpan.FromSeconds(0));
-
+			time.Passes(TimeSpan.FromMinutes(5));
 			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
-			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
-			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
-			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
-			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
+			time.Passes(TimeSpan.FromMinutes(5));
 
 			hubConnection.AssertWasCalled(c => c.Start(), a => a.Repeat.Times(6));
 		}
 
 		[Test]
-		public void ShouldRestartHubConnectionWhenStartFails()
+		public void ShouldStopRestartingWhenDisposed()
 		{
+			var time = new FakeTime();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection, null);
-			target.StartBrokerService(TimeSpan.FromSeconds(0));
+			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
+			target.StartBrokerService();
+			target.Dispose();
+
+			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
+			time.Passes(TimeSpan.FromMinutes(5));
+
+			hubConnection.AssertWasCalled(x => x.Start(), a => a.Repeat.Once());
+		}
+
+		[Test, Ignore("This does not test anything, and we dont know if we want this behavior")]
+		public void ShouldRestartHubConnectionWhenStartFails()
+		{
+			var time = new FakeTime();
+			var hubProxy = new HubProxyFake();
+			var hubConnection = stubHubConnection(hubProxy);
+			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(0)), time);
+			target.StartBrokerService();
 
 			hubConnection.Stub(x => x.Start()).Return(TaskHelper.MakeFailedTask(new Exception())).Repeat.Once();
 

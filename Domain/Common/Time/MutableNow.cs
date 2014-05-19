@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.Time
 {
-	public sealed class MutableNow : INow, IMutateNow
+	public class MutableNow : INow, IMutateNow
 	{
 		private DateTime? _mutatedUtc;
 

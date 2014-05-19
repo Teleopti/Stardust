@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 		private bool messageBrokerIsRunning()
 		{
-			return _messageBroker != null && _messageBroker.IsInitialized;
+			return _messageBroker != null && _messageBroker.IsConnected;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

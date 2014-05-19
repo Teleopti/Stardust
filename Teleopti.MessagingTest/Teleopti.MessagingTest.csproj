@@ -66,17 +66,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SignalR\FailingHubProxyFake.cs" />
     <Compile Include="SignalR\HubProxyFake.cs" />
+    <Compile Include="SignalR\MessageFilterManagerFake.cs" />
+    <Compile Include="SignalR\MultiConnectionSignalBrokerForTest.cs" />
+    <Compile Include="SignalR\MultiConnectionSignalSenderForTest.cs" />
+    <Compile Include="SignalR\SignalBrokerForTest.cs" />
     <Compile Include="SignalR\SignalBrokerTest.cs" />
     <Compile Include="SignalR\SignalConnectionRestartOnClosedTest.cs" />
+    <Compile Include="SignalR\SignalConnectionPingTest.cs" />
+    <Compile Include="SignalR\SignalConnectionStrategiesIntegrationTest.cs" />
     <Compile Include="SignalR\SignalSenderForTest.cs" />
-    <Compile Include="SignalR\SignalSenderLoggingTest.cs" />
     <Compile Include="SignalR\SignalSenderTest.cs" />
+    <Compile Include="SignalR\HubProxySubscribableFake.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
+      <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
+      <Name>Teleopti.Ccc.TestCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>

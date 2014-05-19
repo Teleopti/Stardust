@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             	var application =
             		new InitializeApplication(
             			new DataSourcesFactory(new EnversConfiguration(), creator.Create(), DataSourceConfigurationSetter.ForServiceBus()),
-            			new SignalBroker(MessageFilterManager.Instance));
+						SignalBroker.Make(MessageFilterManager.Instance));
                 application.Start(new BasicState(), encryptedAppSettings,
                                   encryptedNHibConfigs.DecryptList(EncryptionConstants.Image1,
                                                                    EncryptionConstants.Image2), null);
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					new InitializeApplication(
 						new DataSourcesFactory(new EnversConfiguration(), creator.Create(),
 						                       DataSourceConfigurationSetter.ForServiceBus()),
-						new SignalBroker(MessageFilterManager.Instance));
+						SignalBroker.Make(MessageFilterManager.Instance));
 				application.Start(new BasicState(), _xmlFilePath, null, new ConfigurationManagerWrapper(), true);
 
 				Logger.Info("Initialized application");
