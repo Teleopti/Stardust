@@ -87,5 +87,9 @@ namespace Teleopti.Ccc.Web.Broker
 			}
 		}
 
+		public void Ping()
+		{
+			Clients.Caller.Pong();
+		}
 	}
 }

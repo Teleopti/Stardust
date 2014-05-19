@@ -6,7 +6,7 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.Client;
+using Teleopti.Messaging.SignalR;
 using IRaptorRepository = Teleopti.Analytics.Etl.Interfaces.Transformer.IRaptorRepository;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job
@@ -26,7 +26,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
         public JobHelper()
         {
 			_logHelp = new LogOnHelper(SuperUser.UserName, SuperUser.Password, ConfigurationManager.AppSettings["nhibConfPath"]);
-            _messageSender = MessageSenderFactory.CreateMessageSender(ConfigurationManager.AppSettings["MessageBroker"]);
+            _messageSender = SignalSender.MakeForEtl(ConfigurationManager.AppSettings["MessageBroker"]);
         }
 
         public JobHelper(IRaptorRepository repository, IMessageSender messageSender, ILogOnHelper logOnHelper) : this(logOnHelper, messageSender)

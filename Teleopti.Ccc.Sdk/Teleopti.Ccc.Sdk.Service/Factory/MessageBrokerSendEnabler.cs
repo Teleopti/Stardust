@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         /// </summary>
         protected virtual void ReleaseManagedResources()
         {
-            if (_messaging != null && _messaging.IsInitialized && !MessageBrokerReceiveEnabled)
+            if (_messaging != null && _messaging.IsConnected && !MessageBrokerReceiveEnabled)
             {
                 lock (LockObject)
                 {

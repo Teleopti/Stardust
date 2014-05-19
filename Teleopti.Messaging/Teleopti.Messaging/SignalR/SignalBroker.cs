@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -7,6 +6,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -20,14 +20,29 @@ namespace Teleopti.Messaging.SignalR
 {
 	public class SignalBroker : IMessageBroker
 	{
-		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
+		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
+		private readonly ITime _time;
+		private readonly IList<SubscriptionCallback> _subscriptions = new List<SubscriptionCallback>();
 		private IHandleHubConnection _connection;
 		private ISignalBrokerCommands _signalBrokerCommands;
 		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 
-		public SignalBroker(IMessageFilterManager typeFilter)
+		public static SignalBroker MakeForTest(IMessageFilterManager typeFilter)
 		{
+			return new SignalBroker(typeFilter, new IConnectionKeepAliveStrategy[] {}, new Time(new Now()));
+		}
+
+		public static SignalBroker Make(IMessageFilterManager typeFilter)
+		{
+			return new SignalBroker(typeFilter,
+				new IConnectionKeepAliveStrategy[] {new RestartOnClosed(), new RecreateOnNoPingReply()}, new Time(new Now()));
+		}
+
+		public SignalBroker(IMessageFilterManager typeFilter, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, ITime time)
+		{
+			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
+			_time = time;
 			FilterManager = typeFilter;
 			IsTypeFilterApplied = true;
 
@@ -50,6 +65,34 @@ namespace Teleopti.Messaging.SignalR
 		}
 
 	    private IMessageFilterManager FilterManager { get; set; }
+
+		public void StartMessageBroker()
+		{
+			Uri serverUrl;
+			if (!Uri.TryCreate(ConnectionString, UriKind.Absolute, out serverUrl))
+			{
+				throw new BrokerNotInstantiatedException("The SignalBroker can only be used with a valid Uri!");
+			}
+
+			lock (_wrapperLock)
+			{
+				var connection = new SignalConnection(
+					() => MakeHubConnection(serverUrl),
+					() =>
+					{
+						foreach (var subscription in _subscriptions)
+							_signalBrokerCommands.AddSubscription(subscription.Subscription);
+					},
+					_connectionKeepAliveStrategy,
+					_time);
+
+				_connection = connection;
+
+				_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
+
+				_connection.StartConnection(onNotification);
+			}
+		}
 
 		public void Dispose()
 		{
@@ -104,18 +147,7 @@ namespace Teleopti.Messaging.SignalR
 			                                           eventEndDate, moduleId, referenceObjectId,
 			                                           referenceObjectType, domainObjectId, domainObjectType, updateType,
 			                                           domainObject);
-			var invoker = new HubProxyInvoker(callProxy);
-			invoker.BeginInvoke(notificationList, callProxyCallback, invoker);
-		}
-
-		private void callProxy(IEnumerable<Notification> state)
-		{
-			lock (_wrapperLock)
-			{
-				if (_connection == null) return;
-
-				_signalBrokerCommands.NotifyClients(state);
-			}
+			_signalBrokerCommands.NotifyClients(notificationList);
 		}
 
 		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
@@ -138,23 +170,13 @@ namespace Teleopti.Messaging.SignalR
 
 				if (notificationList.Count > 200)
 				{
-					callProxy(notificationList);
+					_signalBrokerCommands.NotifyClients(notificationList);
 					notificationList.Clear();
 				}
 			}
 			if (notificationList.Count > 0)
-			{
-				var invoker = new HubProxyInvoker(callProxy);
-				invoker.BeginInvoke(notificationList, callProxyCallback, invoker);
-			}
+				_signalBrokerCommands.NotifyClients(notificationList);
 		}
-
-		private void callProxyCallback(IAsyncResult ar)
-		{
-			((HubProxyInvoker)ar.AsyncState).EndInvoke(ar);
-		}
-
-		private delegate void HubProxyInvoker(IEnumerable<Notification> notifications);
 
 		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
 		{
@@ -201,102 +223,37 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_connection == null) return;
 
+				_subscriptions.Add(new SubscriptionCallback
+				{
+					Subscription = subscription,
+					Callback = eventMessageHandler
+				});
 				_signalBrokerCommands.AddSubscription(subscription);
-
-				var route = subscription.Route();
-				var handlers = _subscriptionHandlers.GetOrAdd(route, key => new List<SubscriptionWithHandler>());
-				handlers.Add(new SubscriptionWithHandler {Handler = eventMessageHandler, Subscription = subscription});
 			}
 		}
 
 		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			//currently does nothing due
-			//if(subscriptionHandler.Count == 0 ...) below. Only second last foreach does anything. What? Don't know...
-			//needs to be rewritten
-
-			var handlersToRemove = new List<string>();
+			// cleanup refactoring, but keeping the same buggy behavior: does not remove subscription from the server.
+			// should also do this somewhere, when there are no local routes left:
+			//_signalBrokerCommands.RemoveSubscription(route);
+			// if you want more information check hg history
 
 			lock (_wrapperLock)
 			{
 				if (_connection == null) return;
 
-				var subscriptionWithHandlersToRemove = new List<SubscriptionWithHandler>();
-				var subscriptionValues = new List<IList<SubscriptionWithHandler>>(_subscriptionHandlers.Values);
-				foreach (var subscriptionHandler in subscriptionValues)
-				{
-					if (subscriptionHandler == null)
-					{
-						continue;
-					}
+				var toRemove = (from s in _subscriptions
+					where s.Callback == eventMessageHandler
+					select s).ToList();
 
-					foreach (var subscriptionWithHandler in subscriptionHandler)
-					{
-						var target = subscriptionWithHandler.Handler;
-						if (target == eventMessageHandler)
-						{
-							subscriptionWithHandlersToRemove.Add(subscriptionWithHandler);
-							// BUG? If count == 0 we never get here!
-							//this is really, really wrong. Same as "if(false)" but we want that for now - otherwise bug 27055
-							if (subscriptionHandler.Count == 0 && subscriptionWithHandler.Subscription != null)
-							{
-								var route = subscriptionWithHandler.Subscription.Route();
-								_signalBrokerCommands.RemoveSubscription(route);
-								handlersToRemove.Add(route);
-							}
-						}
-					}
-
-					foreach (var subscriptionWithHandler in subscriptionWithHandlersToRemove)
-					{
-						subscriptionHandler.Remove(subscriptionWithHandler);
-					}
-				}
-			}
-
-			foreach (var route in handlersToRemove)
-			{
-				IList<SubscriptionWithHandler> removed;
-				_subscriptionHandlers.TryRemove(route,out removed);
+				toRemove.ForEach(s => _subscriptions.Remove(s));
 			}
 		}
 
 		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
 			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, null, domainObjectType, startDate, endDate);
-		}
-
-		public void StartMessageBroker()
-		{
-			StartMessageBroker(TimeSpan.FromSeconds(240));
-		}
-		
-		public void StartMessageBroker(TimeSpan reconnectDelay)
-		{
-			Uri serverUrl;
-			if (!Uri.TryCreate(ConnectionString, UriKind.Absolute, out serverUrl))
-			{
-				throw new BrokerNotInstantiatedException("The SignalBroker can only be used with a valid Uri!");
-			}
-			
-			lock (_wrapperLock)
-			{
-				var connection = new SignalConnection(() => MakeHubConnection(serverUrl), null, reconnectDelay);
-				_connection = connection;
-
-				_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
-
-				connection.WithProxy(p =>
-				{
-					p.Subscribe("OnEventMessage").Received += obj =>
-					{
-						var d = obj[0].ToObject<Notification>();
-						onNotification(d);
-					};
-				});
-
-				_connection.StartConnection();
-			}
 		}
 
 		[CLSCompliant(false)]
@@ -344,7 +301,7 @@ namespace Teleopti.Messaging.SignalR
 
 	    private bool IsTypeFilterApplied { get; set; }
 
-		public bool IsInitialized
+		public bool IsConnected
 		{
 			get
 			{
@@ -354,28 +311,27 @@ namespace Teleopti.Messaging.SignalR
 
 		private void InvokeEventHandlers(EventMessage eventMessage, IEnumerable<string> routes)
 		{
-			foreach (var route in routes)
-			{
-				IList<SubscriptionWithHandler> reference;
-				if (_subscriptionHandlers.TryGetValue(route, out reference))
-				{
-					var subscriptionList = new List<SubscriptionWithHandler>(reference);
-					foreach (var subscriptionWithHandler in subscriptionList)
-					{
-						if (subscriptionWithHandler.Subscription.LowerBoundaryAsDateTime() <= eventMessage.EventEndDate &&
-						  subscriptionWithHandler.Subscription.UpperBoundaryAsDateTime() >= eventMessage.EventStartDate)
-						{
-							subscriptionWithHandler.Handler.Invoke(this, new EventMessageArgs(eventMessage));
-						}
-					}
-				}
-			}
+			// locks everywhere in this class, but no lock here?!!!
+			// if locks are even required, should be here aswell no?
+
+			var matchingHandlers = from s in _subscriptions
+				from r in routes
+				let route = s.Subscription.Route()
+				where
+					route == r &&
+					s.Subscription.LowerBoundaryAsDateTime() <= eventMessage.EventEndDate &&
+					s.Subscription.UpperBoundaryAsDateTime() >= eventMessage.EventStartDate
+				select s.Callback;
+
+			foreach (var handler in matchingHandlers)
+				handler(this, new EventMessageArgs(eventMessage));
+
 		}
 	}
 
-	public class SubscriptionWithHandler
+	public class SubscriptionCallback
 	{
 		public Subscription Subscription { get; set; }
-		public EventHandler<EventMessageArgs> Handler { get; set; }
+		public EventHandler<EventMessageArgs> Callback { get; set; }
 	}
 }

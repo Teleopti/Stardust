@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck
             using(mocks.Record())
             {
                 Expect.Call(mb.ConnectionString).Return("Any");
-                Expect.Call(mb.IsInitialized)
+                Expect.Call(mb.IsConnected)
                     .Return(true);
             }
             using(mocks.Playback())
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck
             using (mocks.Record())
             {
                 Expect.Call(mb.ConnectionString).Return("Any");
-                Expect.Call(mb.IsInitialized)
+                Expect.Call(mb.IsConnected)
                     .Return(false);
             }
             using (mocks.Playback())

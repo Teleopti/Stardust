@@ -1,130 +1,131 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
 using log4net;
 using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.SignalR
 {
-
 	[CLSCompliant(false)]
-	public class SignalConnection : IHandleHubConnection, ICallHubProxy
+	public class SignalConnection : IHandleHubConnection, IStateAccessor
 	{
+		private IHubProxyWrapper _hubProxy;
+		private IHubConnectionWrapper _hubConnection;
+		private readonly Func<IHubConnectionWrapper> _hubConnectionFactory;
+		private readonly Action _afterConnectionCreated;
 
-		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
-		public const string ConnectionReconnected = "Connection reconnected successfully";
-
-		private readonly IHubProxyWrapper _hubProxy;
-		private readonly IHubConnectionWrapper _hubConnection;
-		private readonly TimeSpan _reconnectDelay;
-
-		protected ILog Logger;
-		private readonly int _maxReconnectAttempts;
-		private int _reconnectAttempts;
-
+		private readonly ILog _logger = LogManager.GetLogger(typeof(SignalConnection));
+		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
+		private readonly ITime _time;
+		private Action<Notification> _onNotification;
 
 		public SignalConnection(
 			Func<IHubConnectionWrapper> hubConnectionFactory, 
-			ILog logger,
-			TimeSpan reconnectDelay, 
-			int maxReconnectAttempts = 0)
+			Action afterConnectionCreated,
+			IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy,
+			ITime time
+			)
 		{
-			_hubConnection = hubConnectionFactory.Invoke();
-			_hubProxy = _hubConnection.CreateHubProxy("MessageBrokerHub");
-			_reconnectDelay = reconnectDelay;
-			_maxReconnectAttempts = maxReconnectAttempts;
-
-			Logger = logger ?? LogManager.GetLogger(typeof(SignalConnection));
+			_hubConnectionFactory = hubConnectionFactory;
+			_afterConnectionCreated = afterConnectionCreated;
+			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
+			_time = time;
 		}
 
-		public void StartConnection()
+		private void createConnectionAndProxy()
 		{
+			_hubConnection = _hubConnectionFactory.Invoke();
 			_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
-			_hubConnection.Closed += reconnect;
-			_hubConnection.Reconnected += hubConnectionOnReconnected;
+			_hubConnection.Reconnected += () => _logger.Info("Connection reconnected successfully");
+			_hubProxy = _hubConnection.CreateHubProxy("MessageBrokerHub");
+
+			foreach (var strategy in _connectionKeepAliveStrategy)
+				strategy.OnNewConnection(this);
+
+			_hubProxy.Subscribe("OnEventMessage").Received += obj =>
+			{
+				var d = obj[0].ToObject<Notification>();
+				if (_onNotification != null)
+					_onNotification(d);
+			};
+
+			_afterConnectionCreated();
+		}
+
+		public void StartConnection(Action<Notification> onNotification)
+		{
+			_onNotification = onNotification;
+
+			createConnectionAndProxy();
+
+			foreach (var strategy in _connectionKeepAliveStrategy)
+				strategy.OnStart(this, _time, createConnectionAndProxy);
 
 			try
 			{
-				tryStartConnection();
-			}
-			catch (AggregateException aggregateException)
-			{
-				Logger.Error("An error happened when starting hub connection.", aggregateException);
-				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", aggregateException);
-			}
-			catch (SocketException socketException)
-			{
-				Logger.Error("An error happened when starting hub connection.", socketException);
-				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", socketException);
-			}
-			catch (InvalidOperationException exception)
-			{
-				Logger.Error("An error happened when starting hub connection.", exception);
-				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", exception);
-			}
-		}
-
-		private void tryStartConnection()
-		{
-			Exception exception = null;
-			var startTask = _hubConnection.Start();
-			startTask.ContinueWith(t =>
+				Exception exception = null;
+				var startTask = _hubConnection.Start();
+				startTask.ContinueWith(t =>
 				{
 					if (t.IsFaulted && t.Exception != null)
 					{
 						exception = t.Exception.GetBaseException();
-						Logger.Error("An error happened when starting hub connection.", exception);
+						_logger.Error("An error happened when starting hub connection.", exception);
 					}
 				}, TaskContinuationOptions.OnlyOnFaulted);
 
-			if (!startTask.Wait(TimeSpan.FromSeconds(30)))
-			{
-				exception = new InvalidOperationException("Could not start message broker client within 30 seconds.");
-			}
-			if (exception != null)
-			{
-				throw exception;
-			}
-		}
+				if (!startTask.Wait(TimeSpan.FromSeconds(30)))
+				{
+					exception = new InvalidOperationException("Could not start message broker client within 30 seconds.");
+				}
+				if (exception != null)
+				{
+					throw exception;
+				}
 
-		private void reconnect()
-		{
-			// ErikS: 2014-02-17
-			// To handle lots of MyTime and MyTimeWeb clients we dont want to flood with reconnect attempts
-			// Closed event triggers when the broker is actually down, IE the server died not from recycles
-			if(_maxReconnectAttempts == 0 || _reconnectAttempts < _maxReconnectAttempts)
-			{
-				TaskHelper.Delay(_reconnectDelay).Wait();
-				Logger.Error(ConnectionRestartedErrorMessage);
-				_hubConnection.Start();
-				_reconnectAttempts++;
 			}
-		}
-
-		private void hubConnectionOnReconnected()
-		{
-			Logger.Info(ConnectionReconnected);
+			catch (AggregateException aggregateException)
+			{
+				_logger.Error("An error happened when starting hub connection.", aggregateException);
+				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", aggregateException);
+			}
+			catch (SocketException socketException)
+			{
+				_logger.Error("An error happened when starting hub connection.", socketException);
+				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", socketException);
+			}
+			catch (InvalidOperationException exception)
+			{
+				_logger.Error("An error happened when starting hub connection.", exception);
+				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", exception);
+			}
 		}
 
 		public void CloseConnection()
 		{
-			if (_hubConnection == null) return;
-
-			_hubConnection.Reconnected -= hubConnectionOnReconnected;
-			_hubConnection.Closed -= reconnect;
-
 			try
 			{
+				foreach (var strategy in _connectionKeepAliveStrategy)
+					strategy.OnClose(this);
+
 				if (_hubConnection.State == ConnectionState.Connected)
 					_hubConnection.Stop();
 			}
 			catch (Exception ex)
 			{
-				Logger.Error("An error happened when stopping connection.", ex);
+				_logger.Error("An error happened when stopping connection.", ex);
 			}
+		}
+
+		public void WithConnection(Action<IHubConnectionWrapper> action)
+		{
+			action.Invoke(_hubConnection);
 		}
 
 		public void WithProxy(Action<IHubProxyWrapper> action)

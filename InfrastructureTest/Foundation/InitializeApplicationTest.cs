@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		public void VerifyDefaultProperty()
 		{
 			target = new InitializeApplication(new DataSourcesFactory(null, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest()),
-				new SignalBroker(MessageFilterManager.Instance));
+				SignalBroker.MakeForTest(MessageFilterManager.Instance));
 		}
 
 
