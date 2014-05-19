@@ -32,6 +32,7 @@
 								$(CCNetWorkingDirectory)\**\obj\**\*.*;
 								$(CCNetWorkingDirectory)\*.dll"/>
 			<WebFiles Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\**\*.*"/>
+			<AuthBridgeFiles Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.AuthenticationBridge\**\*.*"/>
 			<CcnetFiles Include="$(CCNetWorkingDirectory)\ccnet\**\*.*"/>
 			<DatabaseFiles Include="$(CCNetWorkingDirectory)\database\**\*.*"/>
 			<WebBehaviourLicense Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\**\License.xml"/>
@@ -41,6 +42,8 @@
 		<MakeDir Directories="$(DestinationFolder)"/>
 		<Copy SourceFiles="@(MainFiles)"
     			DestinationFiles="@(MainFiles->'$(DestinationFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(AuthBridgeFiles)"
+    			DestinationFiles="@(AuthBridgeFiles->'$(DestinationFolder)\Teleopti.Ccc.Web.AuthenticationBridge\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(WebFiles)"
     			DestinationFiles="@(WebFiles->'$(DestinationFolder)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(CcnetFiles)"
