@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Messaging.SignalR
+namespace Teleopti.Interfaces.Messages.Rta
 {
 	public class AgentAdherenceStateInfo
 	{
@@ -23,7 +23,12 @@ namespace Teleopti.Messaging.SignalR
 			return PersonId.Equals(state.PersonId) && State.Equals(state.State) && Activity.Equals(state.Activity) &&
 			       NextActivity.Equals(state.NextActivity) && NextActivityStartTime.Equals(state.NextActivityStartTime)
 			       && Alarm.Equals(state.Alarm) && AlarmTime.Equals(state.AlarmTime) && AlarmColor.Equals(state.AlarmColor);
+		}
 
+		public override int GetHashCode()
+		{
+			return PersonId.GetHashCode() ^ State.GetHashCode() ^ Activity.GetHashCode() ^ NextActivity.GetHashCode() ^
+			       NextActivityStartTime.GetHashCode() ^ Alarm.GetHashCode() ^ AlarmColor.GetHashCode() ^ AlarmTime.GetHashCode();
 		}
 	}
 }

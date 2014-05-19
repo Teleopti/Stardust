@@ -5,7 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Messaging.SignalR;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {

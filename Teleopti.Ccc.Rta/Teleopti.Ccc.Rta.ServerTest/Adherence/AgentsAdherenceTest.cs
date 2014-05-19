@@ -11,6 +11,7 @@ using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Rta.Server.Adherence;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages.Rta;
 using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.ServerTest.Adherence
