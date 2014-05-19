@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Infrastructure
 {

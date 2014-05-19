@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public Notification LastNotification;
 		public Notification LastTeamNotification;
 		public Notification LastSiteNotification;
+		public Notification LastAgentsNotification;
 		public ICollection<Notification> AllNotifications;
 
 		public void SendNotification(Notification notification)
@@ -33,10 +34,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			
 			if (notification.DomainType.Contains("Team"))
 				LastTeamNotification = notification;
+			else if (notification.DomainType.Contains("Agents"))
+				LastAgentsNotification = notification;
 			else
-				LastSiteNotification = notification;
-
-			AllNotifications.Add(notification);
+				AllNotifications.Add(notification);
 		}
 	}
 }
