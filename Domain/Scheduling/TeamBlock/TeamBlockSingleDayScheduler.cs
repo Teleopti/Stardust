@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 										ISchedulingResultStateHolder schedulingResultStateHolder,
 										IEffectiveRestriction shiftNudgeRestriction)
 		{
+			_cancelMe = false;
 			if (roleModelShift == null) return false;
 			var teamInfo = teamBlockInfo.TeamInfo;
 			var teamBlockSingleDayInfo = new TeamBlockSingleDayInfo(teamInfo, day);
