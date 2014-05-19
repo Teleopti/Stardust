@@ -4,6 +4,7 @@ using System.Security.Principal;
 using System.Threading;
 using Autofac;
 using Autofac.Integration.Wcf;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Rta.Server;
 using Teleopti.Ccc.Rta.Server.Adherence;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.Rta.WebService
 		{
 			var builder = ContainerBuilder.CreateBuilder();
 			builder.RegisterType<TeleoptiRtaService>().SingleInstance();
+			builder.RegisterModule(new DateAndTimeModule());
 			return builder.Build();
 		}
 

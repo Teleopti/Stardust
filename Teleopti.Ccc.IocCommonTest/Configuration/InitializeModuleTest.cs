@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -6,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -20,6 +24,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			dataSourceConfigurationSetter = MockRepository.GenerateStub<IDataSourceConfigurationSetter>();
 			containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule(new DateAndTimeModule());
 			containerBuilder.RegisterModule(new InitializeModule(dataSourceConfigurationSetter));
 		}
 
@@ -60,6 +65,17 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			{
 				container.Resolve<IConfigReader>()
 					.Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldRegisterSignalBrokerConnectionKeepAliveStrategies()
+		{
+			using (var container = containerBuilder.Build())
+			{
+				container.Resolve<IEnumerable<IConnectionKeepAliveStrategy>>()
+					.Select(s => s.GetType())
+					.Should().Have.SameValuesAs(new[] {typeof (RecreateOnNoPingReply), typeof (RestartOnClosed)});
 			}
 		}
 	}

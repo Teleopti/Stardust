@@ -119,6 +119,7 @@
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
+    <Compile Include="Domain\ITime.cs" />
     <Compile Include="Domain\IAuthenticationInfo.cs" />
     <Compile Include="Domain\PersianCultureHelper.cs" />
     <Compile Include="Domain\SchedulingServiceSuccessfulEventArgs.cs" />
@@ -552,6 +553,7 @@
     <Compile Include="Domain\MeetingChangedDetail.cs" />
     <Compile Include="Domain\MeetingChangedEntity.cs" />
     <Compile Include="Domain\MinMaxStaffBroken.cs" />
+    <Compile Include="Domain\Now.cs" />
     <Compile Include="Domain\OpenForWork.cs" />
     <Compile Include="Domain\JobResultProgress.cs" />
     <Compile Include="Domain\QueueAdjustment.cs" />
@@ -583,6 +585,7 @@
     <Compile Include="Domain\StaffingThresholds.cs" />
     <Compile Include="Domain\StartTimeLimitation.cs" />
     <Compile Include="Domain\TeleoptiAuthenticationHeaderNames.cs" />
+    <Compile Include="Domain\Time.cs" />
     <Compile Include="Domain\TimeFormatsType.cs" />
     <Compile Include="Domain\MultiplicatorType.cs" />
     <Compile Include="Domain\TimeOfDay.cs" />

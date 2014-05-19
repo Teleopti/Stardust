@@ -1,6 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
@@ -135,7 +136,8 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
         	Uri serverUrl;
         	if (Uri.TryCreate(_connectionString,UriKind.Absolute,out serverUrl))
         	{
-				var broker = new SignalBroker(new DummyFilterManager()) {ConnectionString = _connectionString};
+        		var broker = SignalBroker.Make(new DummyFilterManager());
+        		broker.ConnectionString = _connectionString;
 				_messageBroker = broker;
 				_messageBroker.StartMessageBroker();
         	}

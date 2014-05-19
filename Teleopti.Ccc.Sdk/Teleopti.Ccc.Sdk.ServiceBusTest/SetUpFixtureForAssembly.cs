@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(messageBroker);
             IBusinessUnit businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 
-            Expect.Call(messageBroker.IsInitialized).Return(false).Repeat.Any();
+            Expect.Call(messageBroker.IsConnected).Return(false).Repeat.Any();
             mocks.Replay(messageBroker);
 
             IPerson per = new Person { Name = new Name("Peter", "Westlin Junior") };

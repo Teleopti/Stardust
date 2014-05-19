@@ -1448,8 +1448,8 @@
       if not exist "$(ProjectDir)Areas\MobileReports\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Mobile.Web.config" "$(ProjectDir)Areas\MobileReports\Views\web.config"
       if not exist "$(ProjectDir)Areas\SSO\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.SSO.Web.config" "$(ProjectDir)Areas\SSO\Views\web.config"
 	  if not exist "$(TargetDir)FeatureFlags" mkdir "$(TargetDir)FeatureFlags"
-	  if not exist "$(TargetDir)FeatureFlags\RC.toggles.txt" copy "$(ProjectDir)..\..\Domain\FeatureFlags\RC.toggles.txt" "$(TargetDir)FeatureFlags\RC.toggles.txt"
-	  if not exist "$(TargetDir)FeatureFlags\released.toggles.txt" copy "$(ProjectDir)..\..\Domain\FeatureFlags\released.toggles.txt" "$(TargetDir)FeatureFlags\released.toggles.txt"
+	  copy "$(ProjectDir)..\..\Domain\FeatureFlags\RC.toggles.txt" "$(TargetDir)FeatureFlags\RC.toggles.txt"
+	  copy "$(ProjectDir)..\..\Domain\FeatureFlags\released.toggles.txt" "$(TargetDir)FeatureFlags\released.toggles.txt"
 </PreBuildEvent>
   </PropertyGroup>
 </Project>

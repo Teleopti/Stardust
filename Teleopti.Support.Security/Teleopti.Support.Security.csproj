@@ -83,6 +83,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TeleoptiAnalyticsDataUpdate.cs" />
     <Compile Include="CrossDatabaseViewUpdate.cs" />
     <Compile Include="CommandLineArgument.cs" />
     <Compile Include="LicenseStatusChecker.cs" />

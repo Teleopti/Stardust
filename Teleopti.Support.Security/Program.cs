@@ -16,6 +16,7 @@ namespace Teleopti.Support.Security
         private static readonly ICommandLineCommand PersonFirstDayOfWeekSetter = new PersonFirstDayOfWeekSetter();
         private static readonly ICommandLineCommand LicenseStatusChecker = new LicenseStatusChecker();
 		private static readonly ICommandLineCommand CrossDatabaseViewUpdate = new CrossDatabaseViewUpdate();
+		private static readonly ICommandLineCommand TeleoptiAnalyticsDataUpdate = new TeleoptiAnalyticsDataUpdate();
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
 		static void Main(string[] args)
@@ -33,6 +34,7 @@ namespace Teleopti.Support.Security
 				if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
 				{
 					CrossDatabaseViewUpdate.Execute(commandLineArgument);
+					TeleoptiAnalyticsDataUpdate.Execute(commandLineArgument);
 				}
 				else
 				{

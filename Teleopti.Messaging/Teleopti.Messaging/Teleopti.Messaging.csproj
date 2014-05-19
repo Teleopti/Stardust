@@ -129,7 +129,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\MessageSenderFactory.cs" />
     <Compile Include="Coders\JobResultProgressDecoder.cs" />
     <Compile Include="Coders\JobResultProgressEncoder.cs" />
     <Compile Include="Core\FramerUtility.cs" />
@@ -144,9 +143,12 @@
     <Compile Include="SignalR\SiteAdherenceMessage.cs" />
     <Compile Include="SignalR\TeamAdherenceMessage.cs" />
     <Compile Include="SignalR\DoNotSend.cs" />
-    <Compile Include="SignalR\ICallHubProxy.cs" />
+    <Compile Include="SignalR\IStateAccessor.cs" />
+    <Compile Include="SignalR\IConnectionKeepAliveStrategy.cs" />
     <Compile Include="SignalR\ISignalBrokerCommands.cs" />
     <Compile Include="Events\EventMessageFactory.cs" />
+    <Compile Include="SignalR\RecreateOnNoPingReply.cs" />
+    <Compile Include="SignalR\RestartOnClosed.cs" />
     <Compile Include="SignalR\SignalBrokerCommands.cs" />
     <Compile Include="SignalR\SignalConnection.cs" />
     <Compile Include="SignalR\Wrappers\HubProxyWrapper.cs" />

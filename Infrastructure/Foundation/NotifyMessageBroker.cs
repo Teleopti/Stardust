@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 	    public void Notify(Guid moduleId, IEnumerable<IRootChangeInfo> rootModifications)
         {
-            if (_messageBroker==null || !_messageBroker.IsInitialized) return;
+            if (_messageBroker==null || !_messageBroker.IsConnected) return;
             
 			var eventMessages = new List<IEventMessage>();
             foreach (var change in rootModifications)

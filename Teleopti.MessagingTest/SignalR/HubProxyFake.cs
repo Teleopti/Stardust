@@ -4,45 +4,90 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
+using Subscription = Microsoft.AspNet.SignalR.Client.Hubs.Subscription;
 
 namespace Teleopti.MessagingTest.SignalR
 {
 	public class HubProxyFake : IHubProxyWrapper
 	{
-		public readonly IList<Notification> NotifyClientsInvokedWith = new List<Notification>();
+		private readonly SubscriptionFake pingReplySubscription = new SubscriptionFake();
+		private readonly SubscriptionFake notificationSubscription = new SubscriptionFake();
+		private string _subscriptedToRoute;
+		private bool _connectionBroken;
 
-		private static Task<object> makeDoneTask()
+		public readonly IList<Notification> NotifyClientsInvokedWith = new List<Notification>();
+		public readonly IList<Notification> NotifyClientsMultipleInvokedWith = new List<Notification>();
+
+		public ISubscriptionWrapper Subscribe(string eventName)
 		{
-			var taskCompletionSource = new TaskCompletionSource<object>();
-			taskCompletionSource.SetResult(null);
-			return taskCompletionSource.Task;
+			if (eventName == "Pong")
+				return pingReplySubscription;
+			if (eventName == "OnEventMessage")
+				return notificationSubscription;
+			return new SubscriptionWrapper(new Subscription());
 		}
 
 		public Task Invoke(string method, params object[] args)
 		{
+			if (method == "Ping" && !_connectionBroken)
+				pingReplySubscription.RaiseRecieved(null);
+
 			if (method == "NotifyClients")
-				NotifyClientsInvokedWith.Add(args.First() as Notification);
-			return makeDoneTask();
+			{
+				var notification = (Notification) args.First();
+				NotifyClientsInvokedWith.Add(notification);
+				raiseNotificationSubscription(notification);
+			}
+
+			if (method == "NotifyClientsMultiple")
+			{
+				var notifications = (IEnumerable<Notification>) args.First();
+				notifications.ForEach(notification =>
+				{
+					NotifyClientsMultipleInvokedWith.Add(notification);
+					raiseNotificationSubscription(notification);
+				});
+			}
+
+			if (method == "AddSubscription")
+			{
+				var subscription = (Interfaces.MessageBroker.Subscription) args.First();
+				_subscriptedToRoute = subscription.Route();
+			}
+
+			return TaskHelper.MakeDoneTask();
 		}
 
-		public Task<T> Invoke<T>(string method, params object[] args)
+		private void raiseNotificationSubscription(Notification notification)
 		{
-			throw new NotImplementedException();
+			if (_connectionBroken)
+				return;
+			if (_subscriptedToRoute == null)
+				return;
+			if (!notification.Routes().Contains(_subscriptedToRoute))
+				return;
+			var token = JObject.Parse(JsonConvert.SerializeObject(notification));
+			notificationSubscription.RaiseRecieved(new List<JToken>(new JToken[] {token}));
 		}
 
-		public ISubscriptionWrapper Subscribe(string eventName)
+		public void BreakTheConnection()
 		{
-			throw new NotImplementedException();
+			_connectionBroken = true;
 		}
+	}
 
-		public JToken this[string name]
+	public class SubscriptionFake : ISubscriptionWrapper
+	{
+		public event Action<IList<JToken>> Received;
+
+		public void RaiseRecieved(IList<JToken> obj)
 		{
-			get { throw new NotImplementedException(); }
-			set { throw new NotImplementedException(); }
+			if (Received != null)
+				Received(obj);
 		}
-
-		public JsonSerializer JsonSerializer { get; private set; }
 	}
 }

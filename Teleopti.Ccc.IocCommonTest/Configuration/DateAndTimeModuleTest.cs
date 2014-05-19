@@ -32,5 +32,18 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				obj1.Should().Be.SameInstanceAs(obj2);
 			}
 		}
+
+
+		[Test]
+		public void TimeShouldBeRegisteredAsSingleton()
+		{
+			using (var container = containerBuilder.Build())
+			{
+				var obj1 = container.Resolve<ITime>();
+				var obj2 = container.Resolve<ITime>();
+				obj1.Should().Not.Be.Null();
+				obj1.Should().Be.SameInstanceAs(obj2);
+			}
+		}
 	}
 }

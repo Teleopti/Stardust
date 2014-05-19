@@ -12,6 +12,7 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.SignalR;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
@@ -33,8 +34,8 @@ namespace Teleopti.Ccc.WinCode.Main
 			new InitializeApplication(
 				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
 				                       DataSourceConfigurationSetter.ForDesktop()),
-				new SignalBroker(MessageFilterManager.Instance))
-				{
+				SignalBroker.Make(MessageFilterManager.Instance)
+				) {
 					MessageBrokerDisabled = messageBrokerDisabled
 				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath),
 				        new ConfigurationManagerWrapper(), true);
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.WinCode.Main
                                                           new PersonChangedMessageSender(eventPublisher),
                                                           new PersonPeriodChangedMessageSender(eventPublisher)
 												      }, DataSourceConfigurationSetter.ForDesktop()),
-        			new SignalBroker(MessageFilterManager.Instance))
+					SignalBroker.Make(MessageFilterManager.Instance))
         			{
         				MessageBrokerDisabled = messageBrokerDisabled
         			};

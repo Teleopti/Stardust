@@ -57,7 +57,10 @@ define([
 				var time = self.StartMinutes();
 				var end = self.EndMinutes();
 				var hideEven = false;
-				if (self.PixelsPerMinute() < 0.5555 && resources.TimeFormatForMoment.indexOf("A") !== -1) {
+				if (self.PixelsPerMinute() < 0.90 && resources.TimeFormatForMoment.indexOf("A") !== -1) {
+					hideEven = true;
+				}
+				if (self.PixelsPerMinute() < 0.65 && resources.TimeFormatForMoment.indexOf("A") === -1) {
 					hideEven = true;
 				}
 				var isHidden = false;

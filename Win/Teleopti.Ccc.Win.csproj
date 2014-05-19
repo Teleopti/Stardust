@@ -1452,14 +1452,14 @@
     <Compile Include="Scheduling\SkillResult\SkillMonthGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Scheduling\PersonsFilterView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Scheduling\SkillResult\SkillResultGridControlBase.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Scheduling\SkillResult\SkillWeekGridControl.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Scheduling\PersonsFilterView.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Scheduling\PersonsFilterView.Designer.cs">
       <DependentUpon>PersonsFilterView.cs</DependentUpon>

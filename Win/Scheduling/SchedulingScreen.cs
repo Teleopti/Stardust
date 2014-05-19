@@ -5720,10 +5720,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var conflictsBuffer = new List<PersistConflict>();
 			var refreshedEntitiesBuffer = new List<IPersistableScheduleData>();
-		    _requestView.DisableFilter(true);
 			refreshEntitiesUsingMessageBroker(refreshedEntitiesBuffer, conflictsBuffer);
 			handleConflicts(refreshedEntitiesBuffer, conflictsBuffer);
-            _requestView.DisableFilter(false);
 		}
 
 		private void handleConflicts(IEnumerable<IPersistableScheduleData> refreshedEntities, IEnumerable<PersistConflict> conflicts)

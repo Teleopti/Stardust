@@ -11,6 +11,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 {
 	public class TestHubBuilder
 	{
+		public dynamic FakeClient(string methodName, Action action)
+		{
+			IDictionary<string, object> caller = new ExpandoObject();
+			caller[methodName] = action;
+			return caller;
+		}
+
 		public dynamic FakeClient<T>(string methodName, Action<T> action)
 		{
 			IDictionary<string, object> caller = new ExpandoObject();
