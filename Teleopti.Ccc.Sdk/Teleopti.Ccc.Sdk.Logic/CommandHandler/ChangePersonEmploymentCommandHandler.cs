@@ -52,6 +52,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var person = _personRepository.Get(command.Person.Id.GetValueOrDefault());
 				checkIfAuthorized(person);
 
+	            if (startDate > person.TerminalDate)
+					throw new FaultException("You cannot change person employment after his leaving date.");
+
                 var existPersonPeriod =
 					person.PersonPeriodCollection.FirstOrDefault(pp => pp.StartDate == startDate);
 

@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private ExternalLogOnDto _externalLogOnDto;
         private IList<ExternalLogOnDto> _externalLogOnList;
 
-	    private readonly DateOnlyPeriodDto _dateOnlyPeriodDto = new DateOnlyPeriodDto
-		    {StartDate = new DateOnlyDto{DateTime = DateOnly.Today}, EndDate = new DateOnlyDto {DateTime = DateOnly.Today}};
+	    private DateOnlyPeriodDto _dateOnlyPeriodDto;
         private PersonDto _personDto;
         private PersonContractDto _personContractDto;
         private IPerson _person;
@@ -54,6 +53,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         [SetUp]
         public void Setup()
         {
+	        _dateOnlyPeriodDto = new DateOnlyPeriodDto
+	        {
+		        StartDate = new DateOnlyDto {DateTime = DateOnly.Today},
+		        EndDate = new DateOnlyDto {DateTime = DateOnly.Today}
+	        };
             _personSkillPeriodAssembler =  MockRepository.GenerateMock<IAssembler<IPersonPeriod,PersonSkillPeriodDto>>();
             _unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
@@ -183,7 +187,22 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             Assert.Throws<FaultException>(() => _target.Handle(_changePersonEmploymentCommandDto));
         }
 
-        [Test]
+	    [Test]
+	    public void ShouldThrowExceptionWhenAddingPersonPeriodAfterLeavingDate()
+	    {
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			_currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
+				.Return(_person);
+
+			_person.TerminatePerson(new DateOnly(2013, 10, 1), new PersonAccountUpdaterDummy());
+			_dateOnlyPeriodDto.StartDate = new DateOnlyDto(2013, 10, 2);
+
+			Assert.Throws<FaultException>(() => _target.Handle(_changePersonEmploymentCommandDto));
+	    }
+
+	    [Test]
         public void ShouldUseDetailedPersonSkillIfAvailable()
         {
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today);
