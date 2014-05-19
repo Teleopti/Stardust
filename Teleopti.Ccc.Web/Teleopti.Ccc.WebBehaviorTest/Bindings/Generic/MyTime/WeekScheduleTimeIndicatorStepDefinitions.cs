@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeTheTimeIndicatorAtTime(DateTime date)
 		{
 			const int heightOfDay = 668;
-			const int timeLineOffset = 121;
+			const int timeLineOffset = 117;
 			const int timeIndicatorHeight = 2;
 		    TimeSpan minTimelineTime;
 		    TimeSpan maxTimelineTime;

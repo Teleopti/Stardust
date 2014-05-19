@@ -105,13 +105,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeActivitiesOnDateWith(DateTime date, Table table)
 		{
 			const string layerTop1 = "16px";
-			const string layerHeigth1 = "190px";
+			const string layerHeigth1 = "192px";
 				
 			const string layerTop2 = "207px";
-			const string layerHeigth2 = "62px";
+			const string layerHeigth2 = "64px";
 
 			const string layerTop3 = "270px";
-			const string layerHeigth3 = "381px";
+			const string layerHeigth3 = "383px";
 			var dateFixed = date.ToString("yyyy-MM-dd");
 
 			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='top: {1}']", dateFixed, layerTop1));
