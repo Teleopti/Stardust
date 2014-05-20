@@ -835,8 +835,8 @@ namespace Teleopti.Ccc.Win.Common
             gridControl.Model.Options.WrapCellBehavior = GridWrapCellBehavior.WrapRow;
             gridControl.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
             gridControl.ResizeRowsBehavior = GridResizeCellsBehavior.None;
-            gridControl.Properties.MarkRowHeader = true;
-            gridControl.Properties.MarkColHeader = true;
+            gridControl.Properties.MarkRowHeader = false;
+            gridControl.Properties.MarkColHeader = false;
 	        gridControl.Properties.BackgroundColor = SystemColors.Window;
         }
 
