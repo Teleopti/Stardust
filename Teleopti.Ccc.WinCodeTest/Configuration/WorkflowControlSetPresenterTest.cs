@@ -1084,7 +1084,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(() => view.SetMinTimePerWeek(new TimeSpan()));
             Expect.Call(() => view.SetAutoGrant(false)).IgnoreArguments();
             Expect.Call(() => view.SetUseShiftCategoryFairness(false)).IgnoreArguments();
-            Expect.Call(() => view.SetMinTimePerWeek(new TimeSpan()));
             Expect.Call(view.EnableAllAuthorized);
         }
     }
