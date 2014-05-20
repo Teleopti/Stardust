@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Core
 		public OpenIdProviderWrapper(OpenIdProvider openIdProvider)
 		{
 			_openIdProvider = openIdProvider;
+			_openIdProvider.ErrorReporting = new CustomErrorReporting();
 		}
 
 		public IRequest GetRequest()

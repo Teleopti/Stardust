@@ -348,6 +348,7 @@
     <Compile Include="Areas\SSO\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\SSO\Controllers\AuthenticationApiController.cs" />
     <Compile Include="Areas\SSO\Core\ApplicationAuthenticationType.cs" />
+    <Compile Include="Areas\SSO\Core\CustomErrorReporting.cs" />
     <Compile Include="Areas\SSO\Core\SsoAuthenticationModelBinder.cs" />
     <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactory.cs" />
     <Compile Include="Areas\SSO\Core\IProviderEndpointWrapper.cs" />

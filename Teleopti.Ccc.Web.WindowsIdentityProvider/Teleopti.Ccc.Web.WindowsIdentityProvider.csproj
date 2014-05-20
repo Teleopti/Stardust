@@ -124,6 +124,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\CustomErrorReporting.cs" />
     <Compile Include="Core\IProviderEndpointWrapper.cs" />
     <Compile Include="Controllers\OpenIdController.cs" />
     <Compile Include="Core\ProviderEndpointWrapper.cs" />

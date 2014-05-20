@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 		public OpenIdProviderWapper(OpenIdProvider openIdProvider)
 		{
 			_openIdProvider = openIdProvider;
+			_openIdProvider.ErrorReporting = new CustomErrorReporting();
 		}
 
 		public IRequest GetRequest()
