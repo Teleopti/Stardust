@@ -11536,4 +11536,16 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="Mobile" xml:space="preserve">
     <value>Mobil</value>
   </data>
+  <data name="BlockFinderTypeBetweenDayOff" xml:space="preserve">
+    <value>Mellan fridagar</value>
+  </data>
+  <data name="ValidateUnsupportedRestrictions" xml:space="preserve">
+    <value>Skiftkategoribegränsningar stöds inte när team eller block är valt</value>
+  </data>
+  <data name="UnsupportedOptimizationSteps" xml:space="preserve">
+    <value>Optimeringsstegen "Tid mellan dagar", "Skift för flexibel arbetstid", "Fridagar för flexibel arbetstid" och "Skiftkategoribegränsningar" stöds inte när team eller block är valda.</value>
+  </data>
+  <data name="MoveTimeOn" xml:space="preserve">
+    <value>Flyttar tid på </value>
+  </data>
 </root>
