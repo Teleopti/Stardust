@@ -25,9 +25,30 @@ GO
 CREATE PROCEDURE [mart].[etl_fact_schedule_preference_load] 
 @start_date smalldatetime,
 @end_date smalldatetime,
-@business_unit_code uniqueidentifier
-WITH EXECUTE AS OWNER	
+@business_unit_code uniqueidentifier,
+@debug bit = 0
 AS
+
+--enable if needed. see #27933
+declare @OnlyDefaultScenario bit
+set @OnlyDefaultScenario=0
+
+--debug
+declare @timeStat table (step int,thisstep_ms int,totalTime int)
+declare @startTime datetime
+declare @lastStep datetime
+set @lastStep=getdate()
+set @startTime=getdate()
+declare @step int
+set @step=0
+
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,thisstep_ms)
+	select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate()
+	set @step=@step+1
+end
 
 DECLARE @start_date_id	INT
 DECLARE @end_date_id	INT
@@ -44,9 +65,33 @@ SET @end_date_id	 =	(SELECT date_id FROM dim_date WHERE @end_date = date_date)
 DECLARE @business_unit_id int
 SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,thisstep_ms)
+	select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate()
+	set @step=@step+1
+end
+
 DELETE FROM mart.fact_schedule_preference
 WHERE date_id between @start_date_id AND @end_date_id
 AND business_unit_id = @business_unit_id
+
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,thisstep_ms)
+	select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate()
+	set @step=@step+1
+end
+
+--Enable this section if Customer are OK with just default scenario
+If @OnlyDefaultScenario=1
+DELETE stg
+FROM mart.dim_scenario s
+INNER JOIN Stage.stg_schedule_preference stg
+	ON s.scenario_code = stg.scenario_code
+WHERE s.default_scenario <> 1
 
 -----------------------------------------------------------------------------------
 -- Insert rows
@@ -148,4 +193,16 @@ GROUP BY dsd.date_id,p.person_id,ds.scenario_id, CASE
 								  END,
 								   sc.shift_category_id, ddo.day_off_id,
 	 f.preference_fulfilled, 	 f.preference_unfulfilled, p.business_unit_id, f.datasource_id, ab.absence_id
+
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,thisstep_ms)
+	select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate()
+	set @step=@step+1
+end
+
+if @debug=1
+	select * from @timeStat order by step
+
 GO
