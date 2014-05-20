@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Toggle
 {
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 			_toggleManager = toggleManager;
 		}
 
+		[UnitOfWorkAction] //remove when an interface returning personid exist
 		public bool IsEnabled(Toggles toggle)
 		{
 			return _toggleManager.IsEnabled(toggle);
