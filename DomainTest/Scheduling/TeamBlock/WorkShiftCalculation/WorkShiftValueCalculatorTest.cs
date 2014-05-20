@@ -27,14 +27,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		private Activity _phoneActivity;
         private ISkillIntervalData _data;
 		private IDictionary<DateTime, ISkillIntervalData> _dic;
+	    private IMaxSeatsCalculationForTeamBlock _maxSeatsCalculationForTeamBlock;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _workShiftPeriodValueCalculator = _mocks.StrictMock<IWorkShiftPeriodValueCalculator>();
             _workShiftLengthValueCalculator = _mocks.StrictMock<IWorkShiftLengthValueCalculator>();
-            _target = new WorkShiftValueCalculator(_workShiftPeriodValueCalculator, _workShiftLengthValueCalculator);
+		      _maxSeatsCalculationForTeamBlock = _mocks.StrictMock<IMaxSeatsCalculationForTeamBlock>();
+            _target = new WorkShiftValueCalculator(_workShiftPeriodValueCalculator, _workShiftLengthValueCalculator, _maxSeatsCalculationForTeamBlock);
             _start = new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc);
             _end = new DateTime(2009, 02, 02, 8, 30, 0, DateTimeKind.Utc);
             _phoneActivity = new Activity("phone");
@@ -91,6 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 20, false, false)).Return(50);
+					 Expect.Call(_maxSeatsCalculationForTeamBlock.PeriodValue(50, UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak, false)).Return(50);
                 Expect.Call(_workShiftLengthValueCalculator.CalculateShiftValueForPeriod(50, 20,
                                                                                          WorkShiftLengthHintOption.AverageWorkTime))
                     .Return(50);
@@ -114,6 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 30, false, false)).Return(50);
+					 Expect.Call(_maxSeatsCalculationForTeamBlock.PeriodValue(50, UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak, false)).Return(50);
                 Expect.Call(_workShiftLengthValueCalculator.CalculateShiftValueForPeriod(50, 30,
                                                                                          WorkShiftLengthHintOption.AverageWorkTime))
                     .Return(50);
@@ -155,6 +159,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 25, false, false)).Return(50);
+					 Expect.Call(_maxSeatsCalculationForTeamBlock.PeriodValue(50, UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak, false)).Return(50);
 			}
 
             using (_mocks.Playback())
@@ -181,7 +186,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 1, false, false)).Return(5);
+					 Expect.Call(_maxSeatsCalculationForTeamBlock.PeriodValue(5, UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak, false)).Return(5);
                 Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 2, false, false)).Return(7);
+					 Expect.Call(_maxSeatsCalculationForTeamBlock.PeriodValue(7, UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak, false)).Return(7);
                 Expect.Call(_workShiftLengthValueCalculator.CalculateShiftValueForPeriod(12, 3,
                                                                                          WorkShiftLengthHintOption.AverageWorkTime))
                     .Return(50);
@@ -209,7 +216,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 15, false, false)).Return(50);
+					 Expect.Call(_maxSeatsCalculationForTeamBlock.PeriodValue(50, UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak, false)).Return(50);
                 Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(data2, 20, false, false)).Return(50);
+					 Expect.Call(_maxSeatsCalculationForTeamBlock.PeriodValue(50, UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak, false)).Return(50);
                 Expect.Call(_workShiftLengthValueCalculator.CalculateShiftValueForPeriod(100, 35,
                                                                                          WorkShiftLengthHintOption.AverageWorkTime))
                     .Return(100);
@@ -242,6 +251,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(_data, 10, false, false)).Return(50);
+					 Expect.Call(_maxSeatsCalculationForTeamBlock.PeriodValue(50, UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak, false)).Return(50);
                 Expect.Call(_workShiftLengthValueCalculator.CalculateShiftValueForPeriod(50, 10,
                                                                                          WorkShiftLengthHintOption.AverageWorkTime))
                     .Return(100);
@@ -327,7 +337,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(data1, 60, false, false)).Return(5);
+					 Expect.Call(_maxSeatsCalculationForTeamBlock.PeriodValue(5, UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak, false)).Return(5);
                 Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(data2, 60, false, false)).Return(7);
+					 Expect.Call(_maxSeatsCalculationForTeamBlock.PeriodValue(7, UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak, false)).Return(7);
                 Expect.Call(_workShiftLengthValueCalculator.CalculateShiftValueForPeriod(12, 120,
                                                                                          WorkShiftLengthHintOption.AverageWorkTime))
                     .Return(50);
@@ -342,6 +354,44 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
             }
         }
 
-       
+	    [Test]
+	    public void ShouldReturnNullIMaxSeatsCaculatorReturnsNull()
+	    {
+			 _start = new DateTime(2009, 02, 02, 23, 0, 0, DateTimeKind.Utc);
+			 _end = new DateTime(2009, 02, 03, 0, 0, 0, DateTimeKind.Utc);
+			 DateTimePeriod period1 = new DateTimePeriod(_start, _end);
+			 DateTimePeriod period2 = new DateTimePeriod(_start.AddHours(1), _end.AddHours(1));
+
+			 var visualLayerCollection = new[]
+				{
+					new MainShiftLayer(_phoneActivity, period1), 
+					new MainShiftLayer(_phoneActivity, period2)
+				}.CreateProjection();
+
+			 var data1 = new SkillIntervalData(period1, 5, -5, 0, null, null);
+			 var data2 = new SkillIntervalData(period2, 5, -5, 0, null, null);
+			 _dic.Clear();
+			 _dic.Add(_start, data1);
+			 _dic.Add(_start.AddHours(1), data2);
+
+			 using (_mocks.Record())
+			 {
+				 Expect.Call(_workShiftPeriodValueCalculator.PeriodValue(data1, 60, false, false)).Return(5);
+				 Expect.Call(_maxSeatsCalculationForTeamBlock.PeriodValue(5, UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak, false)).Return(null);
+			 }
+
+			 using (_mocks.Playback())
+			 {
+				 double? result = _target.CalculateShiftValue(visualLayerCollection, _phoneActivity,
+												 _dic, WorkShiftLengthHintOption.AverageWorkTime,
+									false, false, TimeZoneInfo.Utc);
+				 Assert.IsNull(result);
+				
+			 }
+
+			 
+	    }
     }
+
+
 }
