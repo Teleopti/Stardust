@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
 			var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 			var timeZone = groupPerson.PermissionInformation.DefaultTimeZone();
-			var matrixesOfFirstPerson = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod).ToList();
+			var matrixesForPerson = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod).ToList();
 
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 			                                                                      new EndTimeLimitation(),
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(schedulingOptions) ||
 				_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(schedulingOptions))
 			{
-				effectiveRestriction = combineRestriction(new SameStartTimeRestriction(timeZone), dateOnlyList, matrixesOfFirstPerson, effectiveRestriction);
+				effectiveRestriction = combineRestriction(new SameStartTimeRestriction(timeZone), dateOnlyList, matrixesForPerson, effectiveRestriction);
 			}
 			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(schedulingOptions) ||
 				_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(schedulingOptions))
@@ -78,12 +78,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions) ||
 				_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(schedulingOptions))
 			{
-				effectiveRestriction = combineRestriction(new SameShiftRestriction(_scheduleDayEquator), dateOnlyList, matrixesOfFirstPerson, effectiveRestriction);
+				effectiveRestriction = combineRestriction(new SameShiftRestriction(_scheduleDayEquator), dateOnlyList, matrixesForPerson, effectiveRestriction);
 			}
 			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(schedulingOptions) ||
 				_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(schedulingOptions))
 			{
-				effectiveRestriction = combineRestriction(new SameShiftCategoryRestriction(), dateOnlyList, matrixesOfFirstPerson, effectiveRestriction);
+				effectiveRestriction = combineRestriction(new SameShiftCategoryRestriction(), dateOnlyList, matrixesForPerson, effectiveRestriction);
 			}
 			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(schedulingOptions) ||
 				_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(schedulingOptions))
@@ -106,7 +106,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			{
 				effectiveRestriction = combineRestriction(new ResctrictionFromRoleModelRestriction(roleModel, _teamBlockSchedulingOptions, schedulingOptions), dateOnlyList,
 						matrixList, effectiveRestriction);
+				effectiveRestriction.CommonMainShift = null;
+				if (schedulingOptions.UseBlock && schedulingOptions.BlockSameShift)
+				{
+					effectiveRestriction = combineRestriction(new SameShiftRestriction(_scheduleDayEquator), dateOnlyList, matrixesForPerson, effectiveRestriction);
+				}
 			}
+
 			effectiveRestriction = combineRestriction(new NightlyRestRestrcition(_nightlyRestRule), dateOnlyList, matrixList,
 			                                          effectiveRestriction);
 
