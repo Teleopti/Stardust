@@ -80,7 +80,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             _view.SetMinTimePerWeek(_selectedModel.MinTimePerWeek);
             _view.SetAutoGrant(_selectedModel.AutoGrantShiftTradeRequest);
             _view.SetUseShiftCategoryFairness(_selectedModel.UseShiftCategoryFairness);
-			   _view.SetMinTimePerWeek(_selectedModel.MinTimePerWeek);
         }
 
         public IWorkflowControlSetModel SelectedModel

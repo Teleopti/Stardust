@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         private DateTime? _schedulePublishedToDate;
         private int? _writeProtection;
         private TimeSpan _shiftTradeTargetTimeFlexibility;
-        private TimeSpan _minTimePerWeek;
         private MinMax<int> _shiftTradeOpenPeriodDaysForward;
         private IActivity _allowedPreferenceActivity;
         private bool _useShiftCategoryFairness;
@@ -219,12 +218,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			 get { return _minTimePerWeek; }
 			 set { _minTimePerWeek = value; }
 	    }
-
-		public virtual TimeSpan MinTimePerWeek
-		{
-			get { return _minTimePerWeek; }
-			set { _minTimePerWeek = value; }
-		}
 
 	    public virtual IEnumerable<ISkill> MustMatchSkills { get { return _mustMatchSkills; } }
 

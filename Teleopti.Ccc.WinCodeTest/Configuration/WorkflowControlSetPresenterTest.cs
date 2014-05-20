@@ -872,7 +872,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 Expect.Call(() => _view.LoadDateOnlyVisualizer()).Repeat.Any();
                 Expect.Call(() => _view.SetAutoGrant(false));
                 Expect.Call(() => _view.SetUseShiftCategoryFairness(false));
-	            Expect.Call(() => _view.SetMinTimePerWeek(new TimeSpan()));
+	            Expect.Call(() => _view.SetMinTimePerWeek(new TimeSpan())).IgnoreArguments();
             }
             using (_mocks.Playback())
             {

@@ -247,8 +247,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         IEnumerable<IAbsence> AllowedPreferenceAbsences { get; }
 
-	    TimeSpan MinTimePerWeek { get; set; }
-
 	    /// <summary>
         /// Adds an absence.
         /// </summary>
