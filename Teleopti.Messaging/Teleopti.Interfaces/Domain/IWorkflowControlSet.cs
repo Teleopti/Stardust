@@ -164,6 +164,11 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The shift trade target time flexibilty.</value>
         TimeSpan ShiftTradeTargetTimeFlexibility { get; set; }
 
+		  /// <summary>
+		  /// Gets or sets the minimum hours per week.
+		  /// </summary>
+		  /// <value>The minimum hours per week.</value>
+		  TimeSpan MinTimePerWeek { get; set; }
 
         /// <summary>
         /// Gets the skills that must match when swaping shift in shift trade.

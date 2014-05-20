@@ -1002,12 +1002,22 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				cancel = true;
 			}
 
+			//Check contract setting
+			//var currentContract = (Contract)_contract;
+			//var maxHoursPerWeek = currentContract.WorkTimeDirective.MaxTimePerWeek;
+			//if (hoursPerWeek > maxHoursPerWeek)
+			//{
+			//	ViewBase.ShowErrorMessage("Resources.MinimumHoursPerWeekCannotBiggerThanMaximumHoursPerWeekInContract",
+			//		Resources.TimeError);
+			//	cancel = true;
+			//}
+
 			return cancel;
 		}
 
 		private void textBoxExtMinTimePerWeek_Validated(object sender, EventArgs e)
 		{
-			//Check contract setting
+			_presenter.SetMinTimePerWeek(textBoxExtMinTimePerWeek.Value);
 		}
 
 		private static bool validateMaxHours(TimeSpan timeSpan, int maxHours)
