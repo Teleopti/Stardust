@@ -6,10 +6,14 @@ set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 
 COLOR A
 cls
+SET DefaultDB=%1
+SET IFFLOW=%2
+IF "%DefaultDB%"=="" SET DefaultDB=DemoSales
 
 ::Default values
+SET configuration=Debug
 SET /A ERRORLEV=0
-SET DefaultDB=DemoSales
+
 SET Customer=%DefaultDB%
 SET AppRar=%DefaultDB%App.rar
 SET StatRar=%DefaultDB%Stat.rar
@@ -56,8 +60,8 @@ ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopt
 %MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% EQU 0 (
 SET DATABASEPATH="%ROOTDIR%\..\Database"
-SET DBMANAGER="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Debug\DBManager.exe"
-SET DBMANAGERPATH="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Debug"
+SET DBMANAGER="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%configuration%\DBManager.exe"
+SET DBMANAGERPATH="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%configuration%"
 ) else (
 SET /A ERRORLEV=6
 GOTO :error
@@ -140,6 +144,8 @@ ECHO - Encryption of passwords will be ensured.
 ECHO - Add a valid license
 ECHO --- --- ---
 ECHO.
+
+IF NOT "%IFFLOW%"=="" GOTO Flow
 SET /P IFFLOW=Go with the flow? [Y/N]
 IF "%IFFLOW%"=="Y" GOTO Flow
 IF "%IFFLOW%"=="y" GOTO Flow
@@ -293,15 +299,21 @@ ECHO Building %ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.c
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 
 ECHO Running: scheduleConverter, ForecasterDateAdjustment, PersonFirstDayOfWeekSetter, PasswordEncryption, LicenseStatusChecker
-"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiCCC7" -EE
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiCCC7" -EE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
 
 ECHO Running: CrossDatabaseViewUpdate
-"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiAnalytics" -CD"%Branch%_%Customer%_TeleoptiCCCAgg" -EE
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiAnalytics" -CD"%Branch%_%Customer%_TeleoptiCCCAgg" -EE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
-:Add lic
-::Add license
+Set IFFLOW=%IFFLOW:Y=y%
+IF "%IFFLOW%"=="y" (
+SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+CALL "%ROOTDIR%\FixMyConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics"
+CALL "%ROOTDIR%\InfratestConfig.bat"
+GOTO Finish
+)
+
 CHOICE /C yn /M "Add license?"
 IF ERRORLEVEL 1 (
 SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
