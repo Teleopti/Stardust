@@ -369,17 +369,18 @@ Scenario: Should be able to see current states of all agents
 		| Alarm Color              | Green              |
 		| Time in state	| 0:15:00 |
 
-@ignore
+
 Scenario: Should be able to see state updates of all agents
-	Given I have a role with
-	 | Field                                  | Value       |
-	 | Name                                   | Team leader |
-	 | Access to team						  | Team Red	|
-	 | Access to real time adherence overview | True		|
+	Given the current time is '2014-01-21 12:30:00'
 	And there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
+	And I have a role with
+	 | Field                                  | Value       |
+	 | Name                                   | Team leader |
+	 | Access to team						  | Red	|
+	 | Access to real time adherence overview | True		|
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Red        |
@@ -421,6 +422,7 @@ Scenario: Should be able to see state updates of all agents
 	When I view real time adherence for team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets his phone state to 'Ready'
+	And the browser time is '2014-01-21 12:45:00'
 	Then I should see real time agent details for 'Pierre Baldi'
 		| Field				| Value				|
 		| Name				| Pierre Baldi		|
@@ -429,8 +431,9 @@ Scenario: Should be able to see state updates of all agents
 		| Next activity		| Lunch		|
 		| Next activity start time	| 2014-01-21 13:00	|
 		| Alarm	| Not adhering	|
-		| Alarm Color           | Green	|
+		| Alarm Color           | Red	|
 		| Alarm Time	| 2014-01-21 12:30 |
+		| Time in state	| 0:15:00 |
 	And I should see real time agent details for 'Ashley Andeen'
 		| Field				| Value				|
 		| Name				| Ashley Andeen		|
@@ -439,5 +442,6 @@ Scenario: Should be able to see state updates of all agents
 		| Next activity		| Lunch		|
 		| Next activity start time	| 2014-01-21 13:00	|
 		| Alarm	| Adhering	|
-		| Alarm Color           | Red	|
+		| Alarm Color           | Green	|
 		| Alarm Time	| 2014-01-21 12:30 |
+		| Time in state	| 0:15:00 |

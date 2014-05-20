@@ -24,6 +24,13 @@
 			});
 		};
 
+		that.updateFromNotification = function (notification) {
+			console.log('notif', notification);
+			var data = JSON.parse(notification.BinaryData);
+			data.Id = notification.DomainId;
+			that.fill(data);
+		}
+
 		return that;
 	};
 }

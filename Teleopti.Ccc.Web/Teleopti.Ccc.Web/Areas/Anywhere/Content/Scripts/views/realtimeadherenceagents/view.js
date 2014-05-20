@@ -43,6 +43,7 @@
 			}, 1000);
 
 			subscriptions.subscribeAdherence(function (notification) {
+				viewModel.updateFromNotification(notification);
 			},
 			teamId,
 			function () {

@@ -29,7 +29,7 @@ define([
 			unsubscribeAdherence();
 			startPromise.done(function () {
 				agentAdherenceSubscription = messagebroker.subscribe({
-					domainType: 'AgentAdherenceMessage',
+					domainType: 'AgentsAdherenceMessage',
 					domainReferenceId: teamId,
 					callback: callback
 				});
