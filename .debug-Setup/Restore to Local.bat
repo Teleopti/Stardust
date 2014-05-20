@@ -7,7 +7,7 @@ set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 COLOR A
 cls
 SET DefaultDB=%1
-SET IFFLOW=%2
+IF NOT "%DefaultDB%"=="" SET IFFLOW=y
 IF "%DefaultDB%"=="" SET DefaultDB=DemoSales
 
 ::Default values
