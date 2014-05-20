@@ -834,10 +834,10 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
         private void StartMessageBrokerListener()
         {
-            ThreadPool.QueueUserWorkItem(RegisterForMessageBrokerEvents);
+            RegisterForMessageBrokerEvents();
         }
 
-        private void RegisterForMessageBrokerEvents(object state)
+        private void RegisterForMessageBrokerEvents()
         {
             if (StateHolder.Instance.MessageBroker != null &&
                 StateHolder.Instance.MessageBroker.IsConnected)

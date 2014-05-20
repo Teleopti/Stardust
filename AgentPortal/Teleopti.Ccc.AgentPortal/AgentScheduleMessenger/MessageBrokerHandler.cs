@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.Remoting;
-using System.Threading;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Interfaces.Domain;
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
 
         public void StartMessageBrokerListener()
         {
-            ThreadPool.QueueUserWorkItem(RegisterForMessageBrokerEvents);
+            RegisterForMessageBrokerEvents();
         }
 
         public void UnregisterMessageBrokerSubscriptions()
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
             }
         }
 
-        private void RegisterForMessageBrokerEvents(object state)
+        private void RegisterForMessageBrokerEvents()
         {
             if (StateHolder.Instance.MessageBroker != null &&
                 StateHolder.Instance.MessageBroker.IsConnected)

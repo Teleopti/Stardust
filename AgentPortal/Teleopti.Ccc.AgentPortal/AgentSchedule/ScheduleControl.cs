@@ -700,7 +700,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         /// </remarks>
         private void StartMessageBrokerListener()
         {
-            ThreadPool.QueueUserWorkItem(RegisterForMessageBrokerEvents);
+            RegisterForMessageBrokerEvents();
         }
 
         /// <summary>
@@ -710,7 +710,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         /// Created by: Sumedah
         /// Created date: 2008-12-11
         /// </remarks>
-        private void RegisterForMessageBrokerEvents(object state)
+        private void RegisterForMessageBrokerEvents()
         {
             if (StateHolder.Instance.MessageBroker != null &&
                 StateHolder.Instance.MessageBroker.IsConnected)
