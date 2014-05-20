@@ -49,7 +49,7 @@ namespace Teleopti.Messaging.SignalR
 				task.ContinueWith(t =>
 				{
 					if (t.IsFaulted && t.Exception != null)
-						_logger.Debug("An error happened on notification task", t.Exception);
+						_logger.Info("An error happened on notification task", t.Exception);
 				}, TaskContinuationOptions.OnlyOnFaulted);
 			});
 		}

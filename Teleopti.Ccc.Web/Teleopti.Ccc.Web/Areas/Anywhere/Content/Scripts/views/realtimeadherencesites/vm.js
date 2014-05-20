@@ -36,6 +36,7 @@
 			};
 
 			that.updateFromNotification = function (notification) {
+				
 				var data = JSON.parse(notification.BinaryData);
 				data.Id = notification.DomainId;
 				that.update(data);

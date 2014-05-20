@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 
 			target.Invoke(actualAgentState);
 
-			broker.LastNotification.GetOriginal<AgentsAdherenceMessage>().AgentStates.Single().Should().Be(expected.AgentStates.Single());
+			broker.LastAgentsNotification.GetOriginal<AgentsAdherenceMessage>().AgentStates.Single().Should().Be(expected.AgentStates.Single());
 		}
 	}
 }
