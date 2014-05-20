@@ -25,14 +25,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 
         public override bool IsSatisfiedBy(ITeamBlockInfo teamBlockInfo)
         {
-            IScheduleDay sampleScheduleDay = _validSampleDayPickerFromTeamBlock.GetSampleScheduleDay(teamBlockInfo);
-            if (sampleScheduleDay == null)
-                return true;
             IList<DateOnly> dayList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
             List<IScheduleMatrixPro> matrixes = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dayList[0]).ToList();
-            var sampleShift = sampleScheduleDay.GetEditorShift();
+            
             foreach (var matrix in matrixes)
             {
+				IScheduleDay sampleScheduleDay = _validSampleDayPickerFromTeamBlock.GetSampleScheduleDay(teamBlockInfo, matrix.Person);
+				if(sampleScheduleDay == null)
+					continue;
+
+				var sampleShift = sampleScheduleDay.GetEditorShift();
                 var range = matrix.ActiveScheduleRange;
                 foreach (var dateOnly in dayList)
                 {
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
                     if (scheduleDay.SignificantPart() == SchedulePartView.MainShift)
                     {
                         var destShift = scheduleDay.GetEditorShift();
-                        if ((!_scheduleDayEquator.MainShiftEquals(sampleShift, destShift)))
+                        if ((!_scheduleDayEquator.MainShiftBasicEquals(sampleShift, destShift)))
                             return false;
                     }
                 }

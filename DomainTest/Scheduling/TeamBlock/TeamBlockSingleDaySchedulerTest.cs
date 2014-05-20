@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
 			_teamScheduling = _mocks.StrictMock<ITeamScheduling>();
-			_teamBlockSchedulingOptions = _mocks.StrictMock<ITeamBlockSchedulingOptions>();
+			_teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
 			_createSkillIntervalDataPerDateAndActivity = _mocks.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
 			_target = new TeamBlockSingleDayScheduler(
 				_teamBlockSchedulingCompletionChecker, 
@@ -109,8 +109,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldScheduleForSameShift()
+		public void ShouldScheduleForSameShiftIfSingleAgentTeamAndBlockWithSameShift()
 		{
+			_schedulingOptions = new SchedulingOptions();
+			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
+			_schedulingOptions.UseBlock = true;
+			_schedulingOptions.BlockSameShift = true;
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
@@ -125,7 +129,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																											  _dateOnly,
 																											  new List<IPerson> { _person2 }))
 					  .Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(true).Repeat.Twice();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _blockPeriod));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
@@ -171,8 +174,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																											  _dateOnly,
 																											  new List<IPerson>{_person2}))
 					  .Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false).Repeat.Twice();
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false).Repeat.Twice();
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 				      .Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person1, _teamBlockInfo, restriction,
@@ -232,8 +233,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																											  _dateOnly,
 																											  new List<IPerson> { _person2 }))
 					  .Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false).Repeat.Twice();
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false).Repeat.Twice();
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 					  .Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person1, _teamBlockInfo, restriction,

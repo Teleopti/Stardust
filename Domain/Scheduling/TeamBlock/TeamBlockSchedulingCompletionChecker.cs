@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly))
 			{
 				if (!selectedPersons.Contains(matrix.Person)) continue;
-                if (!checkScheduleStatus(dateOnly, matrix)) return false;
+                if (!checkScheduleStatus(dateOnly, matrix)) 
+					return false;
 			}
 
 			return true;

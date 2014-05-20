@@ -153,11 +153,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public void OnDayScheduledFailed()
 		{
+			var e = new SchedulingServiceFailedEventArgs();
+
 			var temp = DayScheduled;
 			if (temp != null)
 			{
-				temp(this, new SchedulingServiceFailedEventArgs());
+				temp(this, e);
 			}
+			_cancelMe = e.Cancel;
 		}
     }
 }
