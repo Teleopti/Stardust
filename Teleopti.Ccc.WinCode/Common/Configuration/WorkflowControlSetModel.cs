@@ -365,15 +365,15 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             set;
         }
 
-	    public TimeSpan MinTimePerWeek
-	    {
-		      get { return DomainEntity.MinTimePerWeek; }
-            set
-            {
-                if (DomainEntity.MinTimePerWeek == value) return;
-                DomainEntity.MinTimePerWeek = value;
-                IsDirty = true;
-            }
-	    }
+		public TimeSpan MinTimePerWeek
+		{
+			get { return DomainEntity.MinTimePerWeek; }
+			set
+			{
+				if (DomainEntity.MinTimePerWeek == value) return;
+				DomainEntity.MinTimePerWeek = value;
+				IsDirty = true;
+			}
+		}
     }
 }

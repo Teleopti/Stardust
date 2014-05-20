@@ -98,6 +98,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelPublishSchedules = new System.Windows.Forms.Label();
 			this.dateTimePickerAdvPublishedTo = new Syncfusion.Windows.Forms.Tools.DateTimePickerAdv();
 			this.tableLayoutPanelOpenPreference = new System.Windows.Forms.TableLayoutPanel();
+			this.textBoxExtMinTimePerWeek = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+			this.labelMinimumTimePerWeek = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.labelPreferencePeriod = new System.Windows.Forms.Label();
 			this.labelIsOpen = new System.Windows.Forms.Label();
 			this.dateSelectionFromToPreferencePeriod = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
@@ -151,8 +153,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-			this.labelMinimumTimePerWeek = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.textBoxExtMinTimePerWeek = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
 			this.tableLayoutPanelHeader.SuspendLayout();
@@ -931,10 +931,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvPublishedTo.Calendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvPublishedTo.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvPublishedTo.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
-			this.dateTimePickerAdvPublishedTo.Calendar.HeaderEndColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255)))));
-			this.dateTimePickerAdvPublishedTo.Calendar.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.dateTimePickerAdvPublishedTo.Calendar.HeaderHeight = 20;
-			this.dateTimePickerAdvPublishedTo.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvPublishedTo.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvPublishedTo.Calendar.HeadGradient = true;
 			this.dateTimePickerAdvPublishedTo.Calendar.Iso8601CalenderFormat = false;
@@ -942,7 +938,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvPublishedTo.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvPublishedTo.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvPublishedTo.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvPublishedTo.Calendar.Size = new System.Drawing.Size(194, 174);
+			this.dateTimePickerAdvPublishedTo.Calendar.Size = new System.Drawing.Size(187, 174);
 			this.dateTimePickerAdvPublishedTo.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvPublishedTo.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.dateTimePickerAdvPublishedTo.Calendar.TabIndex = 0;
@@ -956,7 +952,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.BackColor = System.Drawing.SystemColors.Window;
 			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.IsBackStageButton = false;
-			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Location = new System.Drawing.Point(122, 0);
+			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Location = new System.Drawing.Point(115, 0);
 			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
 			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Text = "None";
 			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.UseVisualStyle = true;
@@ -968,11 +964,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.IsBackStageButton = false;
 			this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Size = new System.Drawing.Size(122, 20);
+			this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Size = new System.Drawing.Size(115, 20);
 			this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvPublishedTo.CalendarSize = new System.Drawing.Size(189, 176);
-			this.dateTimePickerAdvPublishedTo.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvPublishedTo.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvPublishedTo.DropDownImage = null;
 			this.dateTimePickerAdvPublishedTo.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(181)))), ((int)(((byte)(203)))), ((int)(((byte)(232)))));
@@ -1009,6 +1004,34 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelOpenPreference.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 81.50685F));
 			this.tableLayoutPanelOpenPreference.Size = new System.Drawing.Size(803, 146);
 			this.tableLayoutPanelOpenPreference.TabIndex = 6;
+			// 
+			// textBoxExtMinTimePerWeek
+			// 
+			this.textBoxExtMinTimePerWeek.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
+			this.textBoxExtMinTimePerWeek.AllowNegativeValues = true;
+			this.textBoxExtMinTimePerWeek.DefaultInterpretAsMinutes = false;
+			this.textBoxExtMinTimePerWeek.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.textBoxExtMinTimePerWeek.Location = new System.Drawing.Point(580, 30);
+			this.textBoxExtMinTimePerWeek.Margin = new System.Windows.Forms.Padding(6, 3, 0, 0);
+			this.textBoxExtMinTimePerWeek.MaximumValue = System.TimeSpan.Parse("3.12:00:00");
+			this.textBoxExtMinTimePerWeek.Name = "textBoxExtMinTimePerWeek";
+			this.textBoxExtMinTimePerWeek.Size = new System.Drawing.Size(74, 22);
+			this.textBoxExtMinTimePerWeek.TabIndex = 11;
+			this.textBoxExtMinTimePerWeek.TimeSpanBoxHeight = 20;
+			this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 33;
+			this.textBoxExtMinTimePerWeek.Leave += new System.EventHandler(this.textBoxExtMinTimePerWeek_Validated);
+			// 
+			// labelMinimumTimePerWeek
+			// 
+			this.labelMinimumTimePerWeek.AutoSize = false;
+			this.labelMinimumTimePerWeek.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.labelMinimumTimePerWeek.Font = new System.Drawing.Font("Tahoma", 8F);
+			this.labelMinimumTimePerWeek.Location = new System.Drawing.Point(577, 0);
+			this.labelMinimumTimePerWeek.Name = "labelMinimumTimePerWeek";
+			this.labelMinimumTimePerWeek.Size = new System.Drawing.Size(223, 27);
+			this.labelMinimumTimePerWeek.TabIndex = 10;
+			this.labelMinimumTimePerWeek.Text = "xxMinimumTimePerWeekColon";
+			this.labelMinimumTimePerWeek.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// labelPreferencePeriod
 			// 
@@ -1398,10 +1421,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvViewpoint.Calendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvViewpoint.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvViewpoint.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
-			this.dateTimePickerAdvViewpoint.Calendar.HeaderEndColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255)))));
-			this.dateTimePickerAdvViewpoint.Calendar.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.dateTimePickerAdvViewpoint.Calendar.HeaderHeight = 20;
-			this.dateTimePickerAdvViewpoint.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvViewpoint.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvViewpoint.Calendar.HeadGradient = true;
 			this.dateTimePickerAdvViewpoint.Calendar.Iso8601CalenderFormat = false;
@@ -1409,7 +1428,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvViewpoint.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvViewpoint.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvViewpoint.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvViewpoint.Calendar.Size = new System.Drawing.Size(194, 174);
+			this.dateTimePickerAdvViewpoint.Calendar.Size = new System.Drawing.Size(187, 174);
 			this.dateTimePickerAdvViewpoint.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvViewpoint.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.dateTimePickerAdvViewpoint.Calendar.TabIndex = 0;
@@ -1422,7 +1441,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvViewpoint.Calendar.NoneButton.BackColor = System.Drawing.SystemColors.Window;
 			this.dateTimePickerAdvViewpoint.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvViewpoint.Calendar.NoneButton.IsBackStageButton = false;
-			this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Location = new System.Drawing.Point(122, 0);
+			this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Location = new System.Drawing.Point(118, 0);
 			this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
 			this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Text = "None";
 			this.dateTimePickerAdvViewpoint.Calendar.NoneButton.UseVisualStyle = true;
@@ -1435,11 +1454,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvViewpoint.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvViewpoint.Calendar.TodayButton.IsBackStageButton = false;
 			this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Size = new System.Drawing.Size(194, 20);
+			this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Size = new System.Drawing.Size(187, 20);
 			this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdvViewpoint.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvViewpoint.CalendarSize = new System.Drawing.Size(189, 176);
-			this.dateTimePickerAdvViewpoint.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvViewpoint.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvViewpoint.DropDownImage = null;
 			this.dateTimePickerAdvViewpoint.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(181)))), ((int)(((byte)(203)))), ((int)(((byte)(232)))));
@@ -1810,35 +1828,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.errorProvider1.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
 			this.errorProvider1.ContainerControl = this;
-			// 
-			// labelMinimumTimePerWeek
-			// 
-			this.labelMinimumTimePerWeek.AutoSize = false;
-			this.labelMinimumTimePerWeek.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.labelMinimumTimePerWeek.Font = new System.Drawing.Font("Tahoma", 8F);
-			this.labelMinimumTimePerWeek.Location = new System.Drawing.Point(577, 0);
-			this.labelMinimumTimePerWeek.Name = "labelMinimumTimePerWeek";
-			this.labelMinimumTimePerWeek.Size = new System.Drawing.Size(223, 27);
-			this.labelMinimumTimePerWeek.TabIndex = 10;
-			this.labelMinimumTimePerWeek.Text = "xxMinimumTimePerWeekColon";
-			this.labelMinimumTimePerWeek.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textBoxExtMinTimePerWeek
-			// 
-			this.textBoxExtMinTimePerWeek.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
-			this.textBoxExtMinTimePerWeek.AllowNegativeValues = true;
-			this.textBoxExtMinTimePerWeek.DefaultInterpretAsMinutes = false;
-			this.textBoxExtMinTimePerWeek.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.textBoxExtMinTimePerWeek.Location = new System.Drawing.Point(580, 30);
-			this.textBoxExtMinTimePerWeek.Margin = new System.Windows.Forms.Padding(6, 3, 0, 0);
-			this.textBoxExtMinTimePerWeek.MaximumValue = System.TimeSpan.Parse("3.12:00:00");
-			this.textBoxExtMinTimePerWeek.Name = "textBoxExtMinTimePerWeek";
-			this.textBoxExtMinTimePerWeek.Size = new System.Drawing.Size(74, 22);
-			this.textBoxExtMinTimePerWeek.TabIndex = 11;
-			this.textBoxExtMinTimePerWeek.TimeSpanBoxHeight = 20;
-			this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 33;
-			this.textBoxExtMinTimePerWeek.Validating += textBoxExtMinTimePerWeek_Validating;
-			this.textBoxExtMinTimePerWeek.Validated += textBoxExtMinTimePerWeek_Validated;
 			// 
 			// WorkflowControlSetView
 			// 

@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             InitializeComponent();
 
 				//hidden it temporarily
-				labelMinimumTimePerWeek.Hide();
-				textBoxExtMinTimePerWeek.Hide();
+				//labelMinimumTimePerWeek.Hide();
+				//textBoxExtMinTimePerWeek.Hide();
 	        
 	        if (DesignMode) return;
         	_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory());
@@ -1017,6 +1017,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void textBoxExtMinTimePerWeek_Validated(object sender, EventArgs e)
 		{
+			_presenter.SetMinTimePerWeek(textBoxExtMinTimePerWeek.Value);
+
+			if (_presenter == null || _presenter.SelectedModel == null) return;
 			_presenter.SetMinTimePerWeek(textBoxExtMinTimePerWeek.Value);
 		}
 

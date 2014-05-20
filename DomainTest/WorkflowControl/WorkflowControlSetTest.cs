@@ -316,12 +316,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.IsNotNull(_target.ShiftTradeTargetTimeFlexibility);
         }
 
-		  [Test]
-		  public void SetMinTimePerWeek()
-		  {
-			  _target.MinTimePerWeek = new TimeSpan(1, 1, 1, 1);
-			  Assert.IsNotNull(_target.MinTimePerWeek);
-		  }
+        [Test]
+        public void SetMinTimePerWeekSetting()
+        {
+            _target.MinTimePerWeek = new TimeSpan(0,28,0,0);
+            Assert.IsNotNull(_target.MinTimePerWeek);
+        }
 
 		[Test]
 		public void ShouldMakeClaesSConfused()

@@ -77,6 +77,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             _view.SetAllowedShiftCategories(_selectedModel);
             _view.SetAllowedAbsences(_selectedModel);
             _view.SetShiftTradeTargetTimeFlexibility(_selectedModel.ShiftTradeTargetTimeFlexibility);
+            _view.SetMinTimePerWeek(_selectedModel.MinTimePerWeek);
             _view.SetAutoGrant(_selectedModel.AutoGrantShiftTradeRequest);
             _view.SetUseShiftCategoryFairness(_selectedModel.UseShiftCategoryFairness);
 			   _view.SetMinTimePerWeek(_selectedModel.MinTimePerWeek);
