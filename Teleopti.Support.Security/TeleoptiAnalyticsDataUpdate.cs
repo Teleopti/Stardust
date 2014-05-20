@@ -38,7 +38,7 @@ namespace Teleopti.Support.Security
 					log.Debug("Total number of rows to update: " + rowsLeft);
 					var rows = 1;
 
-					command.CommandText = "Exec mart.sp_dummy";
+					command.CommandText = "Exec mart.sys_move_fact_schedule_data";
 					{
 						while (rows > 0)
 						{
@@ -63,20 +63,21 @@ namespace Teleopti.Support.Security
 		private void updateDatabaseVersion(SqlConnection connection, string systemVersion, int buildNumber)
 		{
 			log.Debug("Updating database version...");
-			var command = connection.CreateCommand();
-			command.CommandText = string.Format(System.Globalization.CultureInfo.InvariantCulture,
-				"INSERT INTO dbo.DatabaseVersion (BuildNumber,SystemVersion,AddedDate,AddedBy) VALUES ({0},'{1}',GetDate(),'{2}')",
-				buildNumber,
-				systemVersion,
-				Environment.UserName);
-			command.ExecuteNonQuery();
+			using (var command = connection.CreateCommand())
+			{
+				command.CommandText = string.Format(System.Globalization.CultureInfo.InvariantCulture,
+					"INSERT INTO dbo.DatabaseVersion (BuildNumber,SystemVersion,AddedDate,AddedBy) VALUES ({0},'{1}',GetDate(),'{2}')",
+					buildNumber,
+					systemVersion,
+					Environment.UserName);
+				command.ExecuteNonQuery();
+			}
 			log.Debug("Done updating database version.");
 		}
 
 		private bool patchApplied(SqlConnection connection, string systemVersion, int buildNumber)
 		{
-			SqlCommand command;
-			using (command = connection.CreateCommand())
+			using (var command = connection.CreateCommand())
 			{
 				command.CommandText = string.Format(System.Globalization.CultureInfo.InvariantCulture,
 					"SELECT COUNT(*) FROM dbo.DatabaseVersion WHERE BuildNumber={0} AND SystemVersion='{1}'",
