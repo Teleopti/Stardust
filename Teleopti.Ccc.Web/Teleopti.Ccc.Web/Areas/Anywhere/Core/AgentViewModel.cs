@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 
-namespace Teleopti.Ccc.Infrastructure.Rta
+namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
-	public class AgentAdherenceStateInfo
+	public class AgentViewModel
 	{
+		public Guid PersonId { get; set; }
 		public string Name { get; set; }
 		public string State { get; set; }
 		public string Activity { get; set; }

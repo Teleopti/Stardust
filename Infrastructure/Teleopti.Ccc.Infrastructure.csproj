@@ -283,7 +283,6 @@
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ResourceCalculationPrerequisitesLoader.cs" />
     <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
-    <Compile Include="Rta\AgentAdherenceStateInfo.cs" />
     <Compile Include="Rta\AgentStatesReader.cs" />
     <Compile Include="Rta\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\IPersonOrganizationReader.cs" />

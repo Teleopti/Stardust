@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			var agentStateResult = target.GetLatestStatesForTeam(team.Id.GetValueOrDefault()).Single();
 
-			agentStateResult.Name.Should().Be(person.Name.ToString());
+			agentStateResult.PersonId.Should().Be(person.Id);
 			agentStateResult.State.Should().Be(agentState1.State);
 			agentStateResult.Activity.Should().Be(agentState1.Scheduled);
 			agentStateResult.NextActivity.Should().Be(agentState1.ScheduledNext);

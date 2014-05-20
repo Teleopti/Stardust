@@ -8,12 +8,14 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		private readonly IMessageSender _messageSender;
 		private readonly TeamAdherenceAggregator _teamAdherenceAggregator;
 		private readonly SiteAdherenceAggregator _siteAdherenceAggregator;
+		private readonly AgentAdherenceAggregator _agentAdherenceAggregator;
 
 		public AdherenceAggregator(IMessageSender messageSender, IOrganizationForPerson organizationForPerson)
 		{
 			_messageSender = messageSender;
 			_teamAdherenceAggregator = new TeamAdherenceAggregator(organizationForPerson);
 			_siteAdherenceAggregator = new SiteAdherenceAggregator(organizationForPerson);
+			_agentAdherenceAggregator = new AgentAdherenceAggregator(organizationForPerson);
 		}
 
 		public void Invoke(IActualAgentState actualAgentState)
@@ -25,6 +27,10 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			var teamAdherence = _teamAdherenceAggregator.CreateNotification(actualAgentState);
 			if (teamAdherence != null)
 				_messageSender.SendNotification(teamAdherence);
+
+			var agentsAdherence = _agentAdherenceAggregator.CreateNotification(actualAgentState);
+			if (agentsAdherence != null)
+				_messageSender.SendNotification(agentsAdherence);
 		}
 	}
 }

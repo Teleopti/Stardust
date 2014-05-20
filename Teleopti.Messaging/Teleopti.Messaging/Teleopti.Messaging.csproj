@@ -141,6 +141,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalR\SiteAdherenceMessage.cs" />
+    <Compile Include="SignalR\AgentsAdherenceMessage.cs" />
     <Compile Include="SignalR\TeamAdherenceMessage.cs" />
     <Compile Include="SignalR\DoNotSend.cs" />
     <Compile Include="SignalR\IStateAccessor.cs" />

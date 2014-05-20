@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 			var agentAdherenceStateInfo = _statisticRepository.LoadLastAgentState(personIds).Select(state => new AgentAdherenceStateInfo()
 			                                                                                                 {
-				                                                                                                 Name = peopleInTeam.First(p => p.Id == state.PersonId).Name.ToString(),
+				                                                                                                 PersonId = state.PersonId,
 				                                                                                                 State = state.State,
 				                                                                                                 Activity = state.Scheduled,
 				                                                                                                 NextActivity = state.ScheduledNext,
