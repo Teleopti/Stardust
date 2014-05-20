@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Interfaces.Domain;
 
@@ -279,18 +281,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 		private static bool areMainShiftsEqual(IEditableShift original, IEditableShift current)
 		{
-			if (original.ShiftCategory.Id != current.ShiftCategory.Id)
-				return false;
-			if (original.LayerCollection.Count != current.LayerCollection.Count)
-				return false;
-			for (int layerIndex = 0; layerIndex < original.LayerCollection.Count; layerIndex++)
-			{
-				ILayer<IActivity> originalLayer = original.LayerCollection[layerIndex];
-				ILayer<IActivity> currentLayer = current.LayerCollection[layerIndex];
-				if (!originalLayer.Period.Equals(currentLayer.Period))
-					return false;
-			}
-			return true;
+			IScheduleDayEquator scheduleDayEquator = new ScheduleDayEquator(new EditableShiftMapper());
+			return scheduleDayEquator.MainShiftBasicEquals(original, current);
 		}
 
         private static TimeSpan? resolveTime(TimeSpan? thisTime, TimeSpan? otherTime, bool min)

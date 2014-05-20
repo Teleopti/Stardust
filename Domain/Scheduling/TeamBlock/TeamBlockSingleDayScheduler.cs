@@ -76,9 +76,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				if (_cancelMe)
 					return false;
+
 				if (isTeamBlockScheduledForSelectedTeamMembers(new List<IPerson> { person }, day, teamBlockSingleDayInfo))
 					continue;
-				if (!_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions) && !_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(schedulingOptions))
+
+				var isSingleAgentTeamAndBlockWithSameShift = !schedulingOptions.UseTeam && schedulingOptions.UseBlock &&
+				                                             schedulingOptions.BlockSameShift;
+				if (!isSingleAgentTeamAndBlockWithSameShift)
 				{
 					var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person, roleModelShift);
 					if (restriction == null) return false;
