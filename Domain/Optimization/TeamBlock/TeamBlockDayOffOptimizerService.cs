@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 															   IList<IPerson> selectedPersons,
 															   IList<IScheduleMatrixPro> allPersonMatrixList)
 		{
-			var teamInfosToRemove = new List<ITeamInfo>();
+			var teamInfosToRemove = new HashSet<ITeamInfo>();
 			double previousPeriodValue =
 					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 			var totalLiveTeamInfos = remainingInfoList.Count;
@@ -150,17 +150,28 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				if (teamInfo.GroupPerson.GroupMembers.Any())
 				{
+					var allFailed = true;
 					foreach (var matrix in teamInfo.MatrixesForGroup())
 					{
 						rollbackService.ClearModificationCollection();
 
 						var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix, schedulingOptions, teamInfo,
 												   selectedPeriod, selectedPersons, allPersonMatrixList);
+						double currentPeriodValue =
+							_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+						success = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
+													   teamInfo, totalLiveTeamInfos, currentTeamInfoCounter, currentPeriodValue);
 
-						previousPeriodValue = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
-													   teamInfosToRemove, teamInfo, totalLiveTeamInfos, currentTeamInfoCounter);
+						if (success)
+						{
+							previousPeriodValue = currentPeriodValue;
+							allFailed = false;
+						}
 					}
 					
+					if(allFailed)
+						teamInfosToRemove.Add(teamInfo);
+
 					if (_cancelMe)
 						break;
 				}
@@ -178,7 +189,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                                       IList<IPerson> selectedPersons,
 															   IList<IScheduleMatrixPro> allPersonMatrixList)
 		{
-			var teamInfosToRemove = new List<ITeamInfo>();
+			var teamInfosToRemove = new HashSet<ITeamInfo>();
 			double previousPeriodValue =
 					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 			var totalLiveTeamInfos = remainingInfoList.Count;
@@ -189,18 +200,29 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				if (teamInfo.GroupPerson.GroupMembers.Any())
 				{
+					var allFailed = true;
 					foreach (IScheduleMatrixPro matrix in teamInfo.MatrixesForGroupMember(0))
 					{
 						rollbackService.ClearModificationCollection();
 						var success = runOneTeam(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
 						                           selectedPeriod, selectedPersons, allPersonMatrixList);
+						double currentPeriodValue =
+							_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+						success = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
+						                                   teamInfo, totalLiveTeamInfos, currentTeamInfoCounter, currentPeriodValue);
 
-						previousPeriodValue = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
-						                                   teamInfosToRemove, teamInfo, totalLiveTeamInfos, currentTeamInfoCounter);
+						if (success)
+						{
+							allFailed = false;
+							previousPeriodValue = currentPeriodValue;
+						}
 
 						if (_cancelMe)
 							break;
 					}
+
+					if (allFailed)
+						teamInfosToRemove.Add(teamInfo);
 				}
 
 				if (_cancelMe)
@@ -210,29 +232,27 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return teamInfosToRemove;
 		}
 
-		private double handleResult(ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
-		                            double previousPeriodValue, bool success, List<ITeamInfo> teamInfosToRemove, ITeamInfo teamInfo,
-		                            int totalLiveTeamInfos, int currentTeamInfoCounter)
+		private bool handleResult(ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
+		                            double previousPeriodValue, bool success, ITeamInfo teamInfo,
+									int totalLiveTeamInfos, int currentTeamInfoCounter, double currentPeriodValue)
 		{
-			double currentPeriodValue =
-				_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 
-			if (currentPeriodValue >= previousPeriodValue || !success)
+
+			var failed = (currentPeriodValue >= previousPeriodValue || !success);
+			if (failed)
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-				teamInfosToRemove.Add(teamInfo);
+				
 				currentPeriodValue =
 					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 			}
-
-			previousPeriodValue = currentPeriodValue;
 
 			OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
 			                 currentTeamInfoCounter.ToString("####") + ") " +
 			                 StringHelper.DisplayString(teamInfo.GroupPerson.Name.ToString(), 20) + " (" + currentPeriodValue +
 			                 ")");
 
-			return previousPeriodValue;
+			return !failed;
 		}
 
 		private bool runOneMatrixOnly(IOptimizationPreferences optimizationPreferences,
