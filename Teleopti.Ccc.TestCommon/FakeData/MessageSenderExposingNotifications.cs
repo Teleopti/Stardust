@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			else if (notification.DomainType.Contains("Agents"))
 				LastAgentsNotification = notification;
 			else
-				AllNotifications.Add(notification);
+				LastSiteNotification = notification;
+			AllNotifications.Add(notification);
 		}
 	}
 }

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			target.Invoke(inAdherence);
 			target.Invoke(outOfAdherence);
 
-			broker.LastNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			broker.LastTeamNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			target.Invoke(inAdherence);
 			target.Invoke(outOfAdherence);
 
-			broker.LastNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			broker.LastTeamNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			target.Invoke(outOfAdherence1);
 			target.Invoke(outOfAdherence2);
 
-			broker.LastNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
+			broker.LastTeamNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
 		}
 
 		[Test]
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			target.Invoke(outOfAdherence1);
 			target.Invoke(outOfAdherence2);
 
-			broker.LastNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			broker.LastTeamNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]

@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			}
 			var newState = mapFrom(actualAgentState);
 			_agentStates[personId] = newState;
-			return newState.Equals(agentStateInfo);
+			return !newState.Equals(agentStateInfo);
 		}
 
 		public IEnumerable<AgentAdherenceStateInfo> AgentStates

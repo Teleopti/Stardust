@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			target.Invoke(newState);
 
 			broker.AllNotifications.Select(x => x.DomainType)
-				.Should().Have.SameValuesAs("TeamAdherenceMessage", "SiteAdherenceMessage");
+				.Should().Have.SameValuesAs("TeamAdherenceMessage", "SiteAdherenceMessage", "AgentsAdherenceMessage");
 		}
 
 		[Test]
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 
 			target.Invoke(agentState);
 
-			broker.LastNotification.DomainType.Should().Be.EqualTo(typeof(TeamAdherenceMessage).Name);
+			broker.LastNotification.DomainType.Should().Be.EqualTo(typeof(AgentsAdherenceMessage).Name);
 		}
 
 		[Test]
