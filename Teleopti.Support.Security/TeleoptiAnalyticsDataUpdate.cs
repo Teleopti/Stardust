@@ -33,12 +33,14 @@ namespace Teleopti.Support.Security
 				log.Debug("re-order columns in table mart.fact_schedule ...");
 				using (command = connection.CreateCommand())
 				{
+					command.CommandTimeout = 600;
 					command.CommandText = "select count(*) from mart.fact_schedule_old";
 					var rowsLeft = (Int32)command.ExecuteScalar();
 					log.Debug("Total number of rows to update: " + rowsLeft);
 					var rows = 1;
 
 					command.CommandText = "Exec mart.sys_move_fact_schedule_data";
+					
 					{
 						while (rows > 0)
 						{
