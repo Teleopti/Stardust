@@ -404,7 +404,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>();
 		    builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>();
 			 builder.RegisterType<VisualLayerToBaseDateMapper>().As<IVisualLayerToBaseDateMapper>();
-			 builder.RegisterType<MaxSeatsCalculationForTeamBlock>().As<MaxSeatsCalculationForTeamBlock>();
+			 builder.RegisterType<MaxSeatsCalculationForTeamBlock>().As<IMaxSeatsCalculationForTeamBlock>();
 
 			//IVisualLayerToBaseDateMapper
 	    }
