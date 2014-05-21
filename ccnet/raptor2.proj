@@ -101,9 +101,9 @@
 		</MSBuild>
 
 		<Message Importance="high" Text="Compile finished." />
-		<CallTarget Targets="MoveFilesToPipeLine"/>
+		<CallTarget Targets="MoveFilesToPipeLine" Condition="'$(CCNetProject)'=='CCC-Main'"/>
 	</Target>
-	
+		
     <Target Name="BuildSSASXmla" Condition="Exists('$(vs2010ide)') And Exists('$(AsDBDeploy)')">
 
 		<Message Text="Building dwproj-file ..." Importance="high" />
