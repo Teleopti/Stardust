@@ -1017,8 +1017,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void textBoxExtMinTimePerWeek_Validated(object sender, EventArgs e)
 		{
-			_presenter.SetMinTimePerWeek(textBoxExtMinTimePerWeek.Value);
-
 			if (_presenter == null || _presenter.SelectedModel == null) return;
 			_presenter.SetMinTimePerWeek(textBoxExtMinTimePerWeek.Value);
 		}
