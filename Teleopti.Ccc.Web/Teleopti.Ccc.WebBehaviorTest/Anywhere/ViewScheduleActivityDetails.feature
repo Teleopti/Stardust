@@ -88,6 +88,7 @@ Scenario: View shift details
 	| Phone       | Green  |	
 	| Short break | Blue   |
 
+	@ignore
 Scenario: Show black text in shift details when activity color is light
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
