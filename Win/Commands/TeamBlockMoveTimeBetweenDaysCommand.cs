@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Win.Commands
 		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, BackgroundWorker backgroundWorker, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> matrixesOnSelectedperiod)
 		{
 			_backgroundWorker = backgroundWorker;
-			if (!_toggleManager.IsEnabled(Toggles.TeamBlockMoveTimeBetweenDays))
+			if (!_toggleManager.IsEnabled(Toggles.ModuleName_TeamBlockMoveTimeBetweenDays_66666))
 				return;
 			_teamBlockMoveTimeBetweenDaysService.ReportProgress  += moveTimePerformed;
 			_teamBlockMoveTimeBetweenDaysService.Execute(optimizationPreferences, allVisibleMatrixes, rollbackService, periodValueCalculator, schedulingResultStateHolder, selectedPersons, matrixesOnSelectedperiod);
