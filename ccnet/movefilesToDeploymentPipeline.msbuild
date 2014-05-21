@@ -40,6 +40,7 @@
 			<WebBehaviourData Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\$(Configuration)\Data\*.*"/>
 			<DebugSetupFiles Include="$(CCNetWorkingDirectory)\.debug-Setup\**\*.*"/>
 		</ItemGroup>
+		<RemoveDir Directories="$(DestinationFolder)"/>
 		<MakeDir Directories="$(DestinationFolder)"/>
 		<Copy SourceFiles="@(MainFiles)"
     			DestinationFiles="@(MainFiles->'$(DestinationFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
