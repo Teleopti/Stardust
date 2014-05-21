@@ -15,7 +15,8 @@ namespace Teleopti.Interfaces.MessageBroker
 		{
 			typeof (IActualAgentState).Name,
 			"SiteAdherenceMessage",
-			"TeamAdherenceMessage"
+			"TeamAdherenceMessage",
+			"AgentsAdherenceMessage"
 		};
 		private static readonly StringCollection TypesWithBusinessUnitException = new StringCollection {typeof(IStatisticTask).Name};
 

@@ -167,5 +167,17 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			target.Route().Should().Not.Contain(target.DataSource);
 		}
 
+		[Test]
+		public void ShouldExcludeDatasourceForAgentsAdherenceMessage()
+		{
+			target = new Subscription
+			{
+				DataSource = Guid.NewGuid().ToString(),
+				DomainType = typeof(AgentsAdherenceMessage).Name
+			};
+
+			target.Route().Should().Not.Contain(target.DataSource);
+		}
+
 	}
 }
