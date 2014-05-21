@@ -55,6 +55,25 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				AlarmColor = x.AlarmColor
 			}), JsonRequestBehavior.AllowGet);
 		}
+
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult ForTeam(Guid teamId)
+		{
+			var team = _teamRepository.Get(teamId);
+			var isPermitted =
+				_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
+					_date.LocalDateOnly(), team);
+			if (!isPermitted)
+			{
+				Response.StatusCode = 403;
+				return null;
+			}
+			var today = _date.LocalDateOnly();
+			var agents =
+				_personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
+					.Select(x => new AgentViewModel {PersonId = x.Id.GetValueOrDefault(), Name = x.Name.ToString()});
+			return Json(agents, JsonRequestBehavior.AllowGet);
+		}
 	}
 
 }

@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var dataReader = new fakeStateReader(new List<AgentAdherenceStateInfo>()
 			                                     {
 				                                     stateInfo
-			                                     });
+			                                     }); 
 
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(personId)).Return(person);
@@ -103,6 +103,37 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				Assert.That(result.First().AlarmColor, Is.EqualTo(expected.AlarmColor));
 			}
 		}
+
+
+		[Test]
+		public void GetAgents_ShouldGetAllAgentsForOneTeam()
+		{
+			var teamId = Guid.NewGuid();
+			var team = new Team();
+			team.SetId(teamId);
+			var person = new Person();
+			var personId = Guid.NewGuid();
+			person.SetId(personId);
+			person.Name = new Name("bill", "gates");
+			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
+			teamRepository.Stub(x => x.Get(teamId)).Return(team);
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			var today = new Now();
+			var period = new DateOnlyPeriod(today.LocalDateOnly(), today.LocalDateOnly());
+			personRepository.Stub(x => x.FindPeopleBelongTeam(team, period)).Return(new List<IPerson> { person });
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), teamRepository, personRepository, new Now(), null))
+			{
+				var expected = new AgentViewModel { PersonId = personId, Name = person.Name.ToString() };
+				var result = target.ForTeam(teamId).Data as IEnumerable<AgentViewModel>;
+
+				result.Count().Should().Be(1);
+
+				Assert.That(result.Single().PersonId, Is.EqualTo(expected.PersonId));
+				Assert.That(result.Single().Name, Is.EqualTo(expected.Name));
+			}
+
+		}
+
 		
 		private class fakeStateReader : IAgentStateReader
 		{
@@ -118,5 +149,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				return _statesForAnyTeam;
 			}
 		}
+
 	}
 }
