@@ -832,7 +832,6 @@ namespace Teleopti.Ccc.Win.Common
             gridControl.CutPaste.ClipboardFlags &= ~GridDragDropFlags.Styles;
             gridControl.HorizontalThumbTrack = true;
             gridControl.VerticalThumbTrack = true;
-            gridControl.Model.Options.WrapCellBehavior = GridWrapCellBehavior.WrapRow;
             gridControl.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
             gridControl.ResizeRowsBehavior = GridResizeCellsBehavior.None;
             gridControl.Properties.MarkRowHeader = false;
