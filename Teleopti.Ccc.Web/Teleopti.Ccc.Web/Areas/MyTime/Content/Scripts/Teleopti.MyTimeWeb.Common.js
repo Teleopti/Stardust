@@ -105,12 +105,12 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 		            navbar.addClass('custom-collapsed'); // force collapse mode
 		        }
 
-			    var navbarToggle = $('.navbar-toggle');
-			    if (navbarToggle && navbarToggle.visible()) {
-		            $('body').css('padding-top: 0px;');
+				var navbarToggle = $('#mainNavbarToggler');
+				if (navbarToggle && navbarToggle.is(':visible')) {
+					$('body').css('padding-top', '0');
 		            navbar.removeClass('navbar-fixed-top');
 		        } else {
-		            $('body').css('padding-top: 60px;');
+					$('body').css('padding-top', '60px');
 		            navbar.addClass('navbar-fixed-top');
 		        }
 		    }
