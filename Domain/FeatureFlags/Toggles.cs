@@ -7,9 +7,9 @@
 		DisabledFeature,
 		//////
 
-		ModuleName_WeeklyRestRuleSolver_66666,
+		Scheduler_WeeklyRestRuleSolver_27108,
 
-		ModuleName_TeamBlockMoveTimeBetweenDays_66666,
+		Scheduler_TeamBlockMoveTimeBetweenDays_22407,
 
 		RTA_RtaLastStatesOverview_27789,
 
