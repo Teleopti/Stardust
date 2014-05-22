@@ -367,6 +367,14 @@ namespace Teleopti.Ccc.Win.Meetings
 		  {
 				Invalidate(true);
 				RefreshUpdate();
+
+				gridControlSuggestions.Refresh();
+				monthCalendarAdvDateSelection.Refresh();
+				autoLabel2.Refresh();
+				autoLabelStartSpan.Refresh();
+				autoLabelEndSpan.Refresh();
+				office2007OutlookTimePickerStartSpan.Refresh();
+				office2007OutlookTimePickerEndSpan.Refresh();
 		  }
 
 		  public void SetRecurringDates(IList<DateOnly> recurringDates)
