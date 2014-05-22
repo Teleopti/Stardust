@@ -535,6 +535,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		  private void Office2007OutlookTimePickerSpanTextChanged(object sender, EventArgs e)
 		  {
+				if (_presenter == null || !_presenter.IsInitialized) return;
 				gridControlSuggestions.Refresh();
 				FindAvailableDays();
 				monthCalendarAdvDateSelection.RefreshCalendar(true);
