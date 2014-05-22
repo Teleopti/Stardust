@@ -34,7 +34,7 @@ namespace Teleopti.Support.Security
 				if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
 				{
 					CrossDatabaseViewUpdate.Execute(commandLineArgument);
-					TeleoptiAnalyticsDataUpdate.Execute(commandLineArgument);
+					//TeleoptiAnalyticsDataUpdate.Execute(commandLineArgument);
 				}
 				else
 				{
