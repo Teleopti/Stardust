@@ -22,12 +22,14 @@ SET TOGGLE_URL=ALL
 SET TOGGLE_FILE=ALL
 
 if "%FEATURETOGGLE%" == "RC" (
-SET TOGGLE_FILE=RC.toggles.txt
+SET TOGGLE_FILE=bin/FeatureFlags/RC.toggles.txt
+::FIX LATER!
 SET TOGGLE_URL=http://localhost:52858/
 )
 
 if "%FEATURETOGGLE%" == "R" (
-SET TOGGLE_FILE=released.toggles.txt
+SET TOGGLE_FILE=bin/FeatureFlags/released.toggles.txt
+::FIX LATER!
 SET TOGGLE_URL=http://localhost:52858/
 )
 

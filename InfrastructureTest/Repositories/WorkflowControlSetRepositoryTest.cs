@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             workflowControlSet.StudentAvailabilityPeriod = new DateOnlyPeriod(2008, 5, 27, 2009, 5, 28);
             workflowControlSet.StudentAvailabilityInputPeriod = new DateOnlyPeriod(2008, 5, 29, 2009, 5, 30);
             workflowControlSet.ShiftTradeTargetTimeFlexibility = TimeSpan.FromHours(8);
-            workflowControlSet.MinTimePerWeek = TimeSpan.FromHours(28);
             workflowControlSet.AddSkillToMatchList(_skill);
             workflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(6,29);
             workflowControlSet.AddAllowedPreferenceDayOff(_dayOff);

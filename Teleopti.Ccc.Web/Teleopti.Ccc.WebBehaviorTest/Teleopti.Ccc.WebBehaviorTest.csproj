@@ -134,6 +134,7 @@
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
+    <Compile Include="MyTime\PreferenceAlertWhenBrokenMinOrMaxHoursStepDefinition.cs" />
     <Compile Include="MyTime\MyReportAgentQueueMetrics.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

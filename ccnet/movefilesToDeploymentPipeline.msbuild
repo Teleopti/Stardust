@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<Project DefaultTargets="Execute" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 	<PropertyGroup>
 		<PipeLineFolder>D:\PipelineState</PipeLineFolder>
 		<DestinationFolder Condition="'$(DestinationFolder)' == ''">$(PipeLineFolder)\$(CCNetLabel)</DestinationFolder>
@@ -11,7 +11,7 @@
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\MSBuild\MSBuild.Mercurial\MSBuild.Mercurial.Tasks"/>
 	
-	<Target Name="Execute">
+	<Target Name="MoveFilesToPipeLine">
 		<CallTarget Targets="RevertRepo"/>
 		<CallTarget Targets="MoveFiles"/>
 		<CallTarget Targets="CreateHgChangesetFile"/>
@@ -40,6 +40,7 @@
 			<WebBehaviourData Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\$(Configuration)\Data\*.*"/>
 			<DebugSetupFiles Include="$(CCNetWorkingDirectory)\.debug-Setup\**\*.*"/>
 		</ItemGroup>
+		<RemoveDir Directories="$(DestinationFolder)"/>
 		<MakeDir Directories="$(DestinationFolder)"/>
 		<Copy SourceFiles="@(MainFiles)"
     			DestinationFiles="@(MainFiles->'$(DestinationFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />

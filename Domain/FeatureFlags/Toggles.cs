@@ -6,11 +6,13 @@
 		EnabledFeature,
 		DisabledFeature,
 		//////
-		
-		WeeklyRestRuleSolver,
-		TeamBlockMoveTimeBetweenDays,
-		//Show last updated states of realtime adherence overview
-		RtaLastStatesOverview,
-		PreferenceAlertWhenMinOrMaxHoursBroken
+
+		Scheduler_WeeklyRestRuleSolver_27108,
+
+		Scheduler_TeamBlockMoveTimeBetweenDays_22407,
+
+		RTA_RtaLastStatesOverview_27789,
+
+		ModuleName_PreferenceAlertWhenMinOrMaxHoursBroken_66666
 	}
 }

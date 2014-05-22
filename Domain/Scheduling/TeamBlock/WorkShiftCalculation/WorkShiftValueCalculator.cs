@@ -18,11 +18,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
     {
         private readonly IWorkShiftPeriodValueCalculator _workShiftPeriodValueCalculator;
         private readonly IWorkShiftLengthValueCalculator _workShiftLengthValueCalculator;
+	    private readonly IMaxSeatsCalculationForTeamBlock _maxSeatsCalculationForTeamBlock;
 
-        public WorkShiftValueCalculator(IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator, IWorkShiftLengthValueCalculator workShiftLengthValueCalculator)
+	    public WorkShiftValueCalculator(IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator, IWorkShiftLengthValueCalculator workShiftLengthValueCalculator, IMaxSeatsCalculationForTeamBlock maxSeatsCalculationForTeamBlock)
         {
             _workShiftPeriodValueCalculator = workShiftPeriodValueCalculator;
             _workShiftLengthValueCalculator = workShiftLengthValueCalculator;
+	        _maxSeatsCalculationForTeamBlock = maxSeatsCalculationForTeamBlock;
         }
 
         public double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity,
@@ -71,8 +73,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
                 while (currentResourceInMinutes > 0)
                 {
-                    periodValue += _workShiftPeriodValueCalculator.PeriodValue(currentStaffPeriod, currentResourceInMinutes,
+                   var valueForThisPeriod = _workShiftPeriodValueCalculator.PeriodValue(currentStaffPeriod, currentResourceInMinutes,
                                                                                useMinimumPersons, useMaximumPersons);
+	                var maxSeatsCorrection = _maxSeatsCalculationForTeamBlock.PeriodValue(valueForThisPeriod,
+		                UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak, false);
+
+	                if (maxSeatsCorrection == null)
+		                return null;
+	                periodValue += maxSeatsCorrection.Value;
                     resourceInMinutes += currentResourceInMinutes;
 
 	                currentSkillStaffPeriodKey = currentSkillStaffPeriodKey.AddMinutes(resolution);

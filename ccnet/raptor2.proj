@@ -35,7 +35,7 @@
 		
 		<NDependTransferDataPath>C:\NDepend\NDependXmlToDb\NDependXmlToDb.exe</NDependTransferDataPath>
 	</PropertyGroup>
-
+	<Import Project="$(CCNetWorkingDirectory)\ccnet\movefilesToDeploymentPipeline.msbuild"/>
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 	<UsingTask TaskName="NCover.MSBuildTasks.NCover"  AssemblyFile="$(CCNetWorkingDirectory)\packages\Teleopti.NCover64.1.0.0\content\Build Task Plugins\NCover.MSBuildTasks.dll"/>
 	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\packages\Teleopti.NCover64.1.0.0\content\Build Task Plugins\NCover.MSBuildTasks.dll" />
@@ -101,8 +101,9 @@
 		</MSBuild>
 
 		<Message Importance="high" Text="Compile finished." />
+		<CallTarget Targets="MoveFilesToPipeLine" Condition="'$(CCNetProject)'=='CCC-Main'"/>
 	</Target>
-	
+		
     <Target Name="BuildSSASXmla" Condition="Exists('$(vs2010ide)') And Exists('$(AsDBDeploy)')">
 
 		<Message Text="Building dwproj-file ..." Importance="high" />

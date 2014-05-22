@@ -6439,6 +6439,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				try
 				{
                     var definitionSets = MultiplicatorDefinitionSet.Where(set => set.MultiplicatorType == MultiplicatorType.Overtime).ToList();
+					overtimePreferences.OvertimeType = definitionSets[0];
+					overtimePreferences.SkillActivity = _schedulerState.CommonStateHolder.ActiveActivities.First();
 
 					var resolution = 15;
 	                IScheduleDay scheduleDay;

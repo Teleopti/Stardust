@@ -41,12 +41,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 				endTimeLimitation = new EndTimeLimitation(endTime, endTime);
 			}
 
-			if (_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions) ||
-			    _teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions))
-			{
-				mainShift = _shift.TheMainShift;
-			}
-
 			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions) || 
 				_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)||
 				_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)||
@@ -54,8 +48,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			{
 				shiftCategory = _shift.TheWorkShift.ShiftCategory;
 			}
-
-
 
 			var restriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation,
 													   workTimeLimitation, null, null, null,

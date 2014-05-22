@@ -33,12 +33,17 @@ namespace Teleopti.Support.Security
 				log.Debug("re-order columns in table mart.fact_schedule ...");
 				using (command = connection.CreateCommand())
 				{
-					command.CommandText = "select count(*) from mart.fact_schedule_old";
+					command.CommandTimeout = 600;
+					command.CommandText = "SELECT PS.row_count FROM sys.dm_db_partition_stats AS PS " + 
+											"INNER JOIN sys.objects AS OBJ ON PS.object_id = OBJ.object_id " + 
+											"INNER JOIN sys.indexes AS IDX ON PS.object_id = IDX.object_id AND PS.index_id = IDX.index_id "+
+											"WHERE IDX.is_primary_key = 1 AND OBJ.name = 'fact_schedule_old'";
 					var rowsLeft = (Int32)command.ExecuteScalar();
 					log.Debug("Total number of rows to update: " + rowsLeft);
 					var rows = 1;
 
 					command.CommandText = "Exec mart.sys_move_fact_schedule_data";
+					
 					{
 						while (rows > 0)
 						{

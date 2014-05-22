@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		{
 			_mocks = new MockRepository();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_teamBlockSchedulingOptions = _mocks.StrictMock<ITeamBlockSchedulingOptions>();
+			_teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
 			_target = new TeamRestrictionAggregator(_effectiveRestrictionCreator, _schedulingResultStateHolder,
 			                                        _teamBlockSchedulingOptions);
@@ -75,10 +75,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestriction);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameActivity(_schedulingOptions)).Return(false);
 			}
 
 			using (_mocks.Playback())
@@ -106,6 +102,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			var visualLayerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
 			var period1 = new DateTimePeriod(new DateTime(2013, 11, 12, 9, 0, 0, DateTimeKind.Utc),
 										   new DateTime(2013, 11, 12, 17, 30, 0, DateTimeKind.Utc));
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.TeamSameStartTime = true;
 
 			using (_mocks.Record())
 			{
@@ -113,10 +111,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestriction);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(true);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameActivity(_schedulingOptions)).Return(false);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1);
 				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null);
 				Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1);
@@ -152,16 +146,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			var period1 = new DateTimePeriod(new DateTime(2013, 11, 12, 9, 0, 0, DateTimeKind.Utc),
 										   new DateTime(2013, 11, 12, 17, 0, 0, DateTimeKind.Utc));
 
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.TeamSameEndTime = true;
+
 			using (_mocks.Record())
 			{
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestriction);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(true);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameActivity(_schedulingOptions)).Return(false);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1);
 				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null);
 				Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1);
@@ -194,16 +187,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			var scheduleDay1 = _mocks.DynamicMock<IScheduleDay>();
 			var scheduleDayPro1 = _mocks.DynamicMock<IScheduleDayPro>();
 			var personAssignment1 = _mocks.StrictMock<IPersonAssignment>();
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.TeamSameShiftCategory = true;
+
 			using (_mocks.Record())
 			{
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestriction);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(true);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameActivity(_schedulingOptions)).Return(false);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1);
 				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null);
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
@@ -233,6 +225,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			expectedResult.ShiftCategory = shiftCat;
 			var workShift = _mocks.StrictMock<IWorkShift>();
 			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+			_schedulingOptions.UseTeam = true;
+			_schedulingOptions.TeamSameStartTime = true;
+			_schedulingOptions.TeamSameEndTime = true;
+			_schedulingOptions.TeamSameShiftCategory = true;
 			
 			using (_mocks.Record())
 			{
@@ -240,12 +236,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestriction);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(true).Repeat.AtLeastOnce();
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(true).Repeat.AtLeastOnce();
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(true).Repeat.AtLeastOnce();
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameActivity(_schedulingOptions)).Return(false);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(null).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null).Repeat.AtLeastOnce();
 				

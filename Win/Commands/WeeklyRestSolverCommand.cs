@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Commands
 
 	    public  void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, BackgroundWorker backgroundWorker)
         {
-			if (!_toggleManager.IsEnabled(Toggles.WeeklyRestRuleSolver))
+			if (!_toggleManager.IsEnabled(Toggles.Scheduler_WeeklyRestRuleSolver_27108))
 		        return;
 
             _backgroundWorker = backgroundWorker;

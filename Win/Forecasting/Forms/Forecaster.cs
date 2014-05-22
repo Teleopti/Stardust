@@ -1679,10 +1679,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private void toolStripButtonPrint_Click(object sender, EventArgs e)
         {
-            if (_chartControl != null)
+            if (_chartControl == null) return;
+
+            using (var pPrintDialog = new PrintDialog {Document = _chartControl.PrintDocument})
             {
-	            var pPrintDialog = new PrintDialog {Document = _chartControl.PrintDocument};
-	            _chartControl.PrintDocument.DefaultPageSettings.Landscape = true;
+                _chartControl.PrintDocument.DefaultPageSettings.Landscape = true;
                 //this will check if the platform is 64bit or not
                 var sArchType = Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
                 if (sArchType != null && sArchType.Contains("64"))
@@ -1690,10 +1691,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
                 if (pPrintDialog.ShowDialog() == DialogResult.OK)
                 {
-	                _chartControl.PrintColorMode = pPrintDialog.PrinterSettings.SupportsColor
-		                                               ? ChartPrintColorMode.Color
-		                                               : ChartPrintColorMode.GrayScale;
-	                _chartControl.PrintDocument.Print();
+                    _chartControl.PrintColorMode = pPrintDialog.PrinterSettings.SupportsColor
+                        ? ChartPrintColorMode.Color
+                        : ChartPrintColorMode.GrayScale;
+                    _chartControl.PrintDocument.Print();
                 }
             }
         }
@@ -1701,18 +1702,21 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private void toolStripButtonPrintPreview_Click(object sender, EventArgs e)
         {
-            var pPrintPreviewDialog = new PrintPreviewDialog();
-            _chartControl.PrintDocument.DefaultPageSettings.Landscape = true;
-            pPrintPreviewDialog.Document = _chartControl.PrintDocument;
-            try
-            {
-                pPrintPreviewDialog.ShowDialog();
-            }
-            catch (System.Drawing.Printing.InvalidPrinterException exceptionInvalidPrinterException)
-            {
-                ShowInformationMessage(exceptionInvalidPrinterException.Message, UserTexts.Resources.Forecasts);
-            }
+            if (_chartControl == null) return;
 
+            using (var pPrintPreviewDialog = new PrintPreviewDialog())
+            {
+                _chartControl.PrintDocument.DefaultPageSettings.Landscape = true;
+                pPrintPreviewDialog.Document = _chartControl.PrintDocument;
+                try
+                {
+                    pPrintPreviewDialog.ShowDialog();
+                }
+                catch (System.Drawing.Printing.InvalidPrinterException exceptionInvalidPrinterException)
+                {
+                    ShowInformationMessage(exceptionInvalidPrinterException.Message, UserTexts.Resources.Forecasts);
+                }
+            }
         }
 
         private void tabControlWorkloads_SelectedIndexChanged(object sender, EventArgs e)

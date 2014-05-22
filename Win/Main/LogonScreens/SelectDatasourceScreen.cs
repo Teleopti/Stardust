@@ -32,20 +32,23 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
             listBoxApplicationDataSources.DataSource = availableApplicationDataSources;
             listBoxWindowsDataSources.DataSource = logonableWindowsDataSources;
+
+		    Control itemToFocus;
 			if (logonableWindowsDataSources.Count < 1)
 			{
 			    var idx = tabControlChooseDataSource.TabPages.IndexOf(tabPageWindowsDataSources);
                 if(idx > -1)
                     tabControlChooseDataSource.TabPages.RemoveAt(idx);
 				tabControlChooseDataSource.SelectedIndex = 0;
-				listBoxApplicationDataSources.Focus();
+				itemToFocus  = listBoxApplicationDataSources;
 			}
 			else
 			{
-				listBoxWindowsDataSources.Focus();
+				itemToFocus = listBoxWindowsDataSources;
 			}
+
             tabControlChooseDataSource.Visible = true;
-			
+		    itemToFocus.Focus();
 		}
 
 		public void GetData()

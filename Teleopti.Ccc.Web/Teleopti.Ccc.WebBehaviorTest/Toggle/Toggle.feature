@@ -3,22 +3,24 @@
 	As a manager
 	I want to be able to choose what features should reach customers
 
-Scenario: Enabled feature in process
-	When I query inprocess toggle service for 'EnabledFeature'
-	Then I should get 'true' back
-
-Scenario: Enabled feature out of process
-	When I query outofprocess toggle service for 'EnabledFeature'
-	Then I should get 'true' back
-
 @OnlyRunIfEnabled('EnabledFeature')
-Scenario: Only run featuretest if a certain feature is enabled
+Scenario: Only run featuretest if a certain feature is enabled using in process
 	When I query inprocess toggle service for 'EnabledFeature'
 	Then I should get 'true' back
 
 @OnlyRunIfDisabled('DisabledFeature')
-Scenario: Only run featuretest if a certain feature is disabled
+Scenario: Only run featuretest if a certain feature is disabled using in process
 	When I query inprocess toggle service for 'DisabledFeature'
+	Then I should get 'false' back
+
+	@OnlyRunIfEnabled('EnabledFeature')
+Scenario: Only run featuretest if a certain feature is enabled using out of process
+	When I query outofprocess toggle service for 'EnabledFeature'
+	Then I should get 'true' back
+
+@OnlyRunIfDisabled('DisabledFeature')
+Scenario: Only run featuretest if a certain feature is disabled using out of process
+	When I query outofprocess toggle service for 'DisabledFeature'
 	Then I should get 'false' back
 
 

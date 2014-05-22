@@ -154,7 +154,6 @@
     <Compile Include="ApplicationLayer\ServiceBusEventPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
-    <Compile Include="FeatureFlags\ToggleUserProvider.cs" />
     <Compile Include="Foundation\AvailableApplicationIdentityDataSources.cs" />
     <Compile Include="Foundation\ConfigReader.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapper.cs" />
