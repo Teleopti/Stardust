@@ -1,5 +1,5 @@
 ﻿# default flag settings for QA
 #
 # for configuration options, look in released.toggles.txt
-ModuleName_WeeklyRestRuleSolver_27108=true
+Scheduler_WeeklyRestRuleSolver_27108=true
 RTA_RtaLastStatesOverview_27789=true
