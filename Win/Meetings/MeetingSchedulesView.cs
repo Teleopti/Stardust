@@ -367,6 +367,14 @@ namespace Teleopti.Ccc.Win.Meetings
 		  {
 				Invalidate(true);
 				RefreshUpdate();
+
+				gridControlSuggestions.Refresh();
+				monthCalendarAdvDateSelection.Refresh();
+				autoLabel2.Refresh();
+				autoLabelStartSpan.Refresh();
+				autoLabelEndSpan.Refresh();
+				office2007OutlookTimePickerStartSpan.Refresh();
+				office2007OutlookTimePickerEndSpan.Refresh();
 		  }
 
 		  public void SetRecurringDates(IList<DateOnly> recurringDates)
@@ -535,6 +543,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		  private void Office2007OutlookTimePickerSpanTextChanged(object sender, EventArgs e)
 		  {
+				if (_presenter == null || !_presenter.IsInitialized) return;
 				gridControlSuggestions.Refresh();
 				FindAvailableDays();
 				monthCalendarAdvDateSelection.RefreshCalendar(true);
