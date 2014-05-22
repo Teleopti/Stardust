@@ -1,0 +1,7 @@
+1. 	Pull latest changes from the teleopticcc repo
+
+2. 	Execute CreateReleaseBranch.bat from folder teleopticcc\Database\Tools
+	This will empty the trunk files and put them in new release scriptsa and push that to the repo.
+	
+3. 	In folder \\hebe\Installation\Dependencies\wsi copy the latest folder and create a new with named to the new version number. 
+	This is used for the msi-builds.
