@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 		private static void assertRealTimeAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)
-		{		
+		{
 			const string selector = ".agent-name:contains('{0}') ~ td:contains('{1}')";
 
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.State);

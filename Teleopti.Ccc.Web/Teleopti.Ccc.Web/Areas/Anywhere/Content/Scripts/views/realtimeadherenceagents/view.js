@@ -26,15 +26,29 @@
 			viewModel = realTimeAdherenceViewModel();
 			ko.applyBindings(viewModel, options.bindingElement);
 			var teamId = options.id;
+			
+
 			ajax.ajax({
-				url: "Agents/GetStates?teamId=" + teamId,
+				url: "Agents/ForTeam?teamId=" + teamId,
 				error: function (jqXHR, textStatus, errorThrown) {
 					if (jqXHR.status == 403) {
 						errorview.display(resources.InsufficientPermission);
 					}
 				},
 				success: function (data) {
-					viewModel.fill(data);
+					viewModel.fillAgents(data);
+					ajax.ajax({
+						url: "Agents/GetStates?teamId=" + teamId,
+						error: function (jqXHR, textStatus, errorThrown) {
+							if (jqXHR.status == 403) {
+								errorview.display(resources.InsufficientPermission);
+							}
+						},
+						success: function (data) {
+							viewModel.fillAgentsStates(data);
+
+						}
+					});
 				}
 			});
 

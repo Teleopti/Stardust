@@ -420,28 +420,28 @@ Scenario: Should be able to see state updates of all agents
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	When I view real time adherence for team 'Red'
-	And 'Pierre Baldi' sets his phone state to 'Pause'
-	And 'Ashley Andeen' sets his phone state to 'Ready'
 	And the browser time is '2014-01-21 12:45:00'
+	And 'Pierre Baldi' sets his phone state to 'Ready'
+	And 'Ashley Andeen' sets his phone state to 'Pause'
 	Then I should see real time agent details for 'Pierre Baldi'
 		| Field				| Value				|
 		| Name				| Pierre Baldi		|
-		| State				| Pause		|
-		| Activity			| Phone		|
-		| Next activity		| Lunch		|
-		| Next activity start time	| 2014-01-21 13:00	|
-		| Alarm	| Not adhering	|
-		| Alarm Color           | Red	|
-		| Alarm Time	| 2014-01-21 12:30 |
-		| Time in state	| 0:15:00 |
-	And I should see real time agent details for 'Ashley Andeen'
-		| Field				| Value				|
-		| Name				| Ashley Andeen		|
 		| State				| Ready		|
 		| Activity			| Phone		|
 		| Next activity		| Lunch		|
 		| Next activity start time	| 2014-01-21 13:00	|
 		| Alarm	| Adhering	|
 		| Alarm Color           | Green	|
+		| Alarm Time	| 2014-01-21 12:30 |
+		| Time in state	| 0:15:00 |
+	And I should see real time agent details for 'Ashley Andeen'
+		| Field				| Value				|
+		| Name				| Ashley Andeen		|
+		| State				| Pause		|
+		| Activity			| Phone		|
+		| Next activity		| Lunch		|
+		| Next activity start time	| 2014-01-21 13:00	|
+		| Alarm	| Not adhering	|
+		| Alarm Color           | Red	|
 		| Alarm Time	| 2014-01-21 12:30 |
 		| Time in state	| 0:15:00 |

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 
 			return new Notification
 			{
-				BinaryData = JsonConvert.SerializeObject("agents testmsg"),
+				BinaryData = JsonConvert.SerializeObject(agentsAdherenceMessage),
 				BusinessUnitId = businessUnitId.ToString(),
 				DomainType = "AgentsAdherenceMessage",
 				DomainId = teamId.ToString(),
