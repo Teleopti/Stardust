@@ -31,6 +31,7 @@
 				success: function (data) {
 					viewModel.fill(data);
 					checkFeature();
+					checkDetailFeature();
 				}
 			});
 
@@ -49,6 +50,22 @@
 					success: function (data) {
 						if (data === "True") {
 							loadLastStates();
+						}
+					}
+				});
+			};
+
+			var checkDetailFeature = function () {
+				ajax.ajax({
+					dataType: "text",
+					url: "ToggleHandler/IsEnabled?toggle=RTA_DrilldownToAllAgentsInOneTeam_25234",
+					success: function (data) {
+						if (data === "True") {
+							for (var i = 0; i < viewModel.teams().length; i++) {
+								(function (team) {
+									team.canOpenTeam(true);
+								})(viewModel.teams()[i]);
+							}
 						}
 					}
 				});
