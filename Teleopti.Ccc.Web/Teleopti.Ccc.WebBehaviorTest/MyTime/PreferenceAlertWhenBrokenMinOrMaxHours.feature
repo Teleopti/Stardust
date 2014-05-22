@@ -7,10 +7,11 @@ Feature: Preference Alert When Broken Min Or Max Hours
 @ignore 
 Scenario: Show min and max hours per week that the entered preference could result in during scheduling
 Given I am an agent
+And I have a shift bag with start times 8 to 9 and end times 12 to 20
+And I have a preference with work time limitation between 5 and 9
 When I view preferences
-And I insert preferences for a week with work time '5' to '9' hours per day
-Then I should see min hours per week as '35'
-And I should see max hours per week as '63'
+Then I should see min hours per week as '23'
+And I should see max hours per week as '81'
  
 @ignore
 Scenario: Show alert when current min hours per week is larger than max hours per week on contract
