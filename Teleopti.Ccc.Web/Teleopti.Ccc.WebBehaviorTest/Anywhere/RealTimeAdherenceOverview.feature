@@ -294,7 +294,7 @@ Scenario: Should not be able to see agents if not permitted
 
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
 Scenario: Should be able to see current states of all agents
-	Given  the current time is '2014-01-21 11:30:00'
+	Given  the current time is '2014-01-21 12:30:00'
 	And there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
@@ -304,6 +304,7 @@ Scenario: Should be able to see current states of all agents
 	 | Name                                   | Team leader |
 	 | Access to team						  | Red	|
 	 | Access to real time adherence overview | True		|
+	And I am located in 'London'
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Red        |
@@ -312,8 +313,6 @@ Scenario: Should be able to see current states of all agents
 	 | Field      | Value      |
 	 | Team       | Red        |
 	 | Start Date | 2014-01-21 |
-	And 'Ashley Andeen' is located in Stockholm
-	And 'Pierre Baldi' is located in Stockholm
 	And Pierre Baldi has a shift with
 	| Field			| Value            |
 	| Start time	| 2014-01-21 12:00 |
@@ -384,6 +383,7 @@ Scenario: Should be able to see state updates of all agents
 	 | Name                                   | Team leader |
 	 | Access to team						  | Red	|
 	 | Access to real time adherence overview | True		|
+	And I am located in 'London'
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Red        |
@@ -392,8 +392,6 @@ Scenario: Should be able to see state updates of all agents
 	 | Field      | Value      |
 	 | Team       | Red        |
 	 | Start Date | 2014-01-21 |
-	And 'Ashley Andeen' is located in Stockholm
-	And 'Pierre Baldi' is located in Stockholm
 	And Pierre Baldi has a shift with
 	| Field			| Value            |
 	| Start time	| 2014-01-21 12:00 |
