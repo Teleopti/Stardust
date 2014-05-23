@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private bool _extendExistingShifts = true;
         private Guid? _skillActivtyId;
         private Guid? _overtimeType;
-        private TimePeriod _selectTimePeriod;
+        private TimePeriod _selectTimePeriod = new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(1));
         private bool _doNotBreakMaxSeatPerWeek = false;
         private bool _doNotBreakNightlyRest = false;
         private bool _doNotBreakWeeklyRest =  false;
@@ -28,17 +28,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             }
             if (overtimePreferences.ScheduleTag == null)
                 overtimePreferences.ScheduleTag = NullScheduleTag.Instance;
+
             foreach (var activity in activityList)
             {
+				if (_skillActivtyId == null)
+				{
+					overtimePreferences.SkillActivity = activity;
+					break;
+				}
+
                 if (_skillActivtyId == activity.Id )
                     overtimePreferences.SkillActivity = activity ;
             }
 
             foreach (var overtimeType in multiplicatorDefinitionSets)
             {
-                if (_overtimeType == overtimeType.Id)
+	            if (_overtimeType == null)
+	            {
+		            overtimePreferences.OvertimeType = overtimeType;
+		            break;
+	            }
+
+	            if (_overtimeType == overtimeType.Id)
                     overtimePreferences.OvertimeType = overtimeType;
             }
+
+			
 
             overtimePreferences.ExtendExistingShift = _extendExistingShifts;
             overtimePreferences.SelectedTimePeriod = _selectTimePeriod;

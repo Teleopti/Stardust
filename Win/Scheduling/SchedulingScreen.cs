@@ -6429,52 +6429,37 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripMenuItemScheduleOvertime_Click(object sender, EventArgs e)
 		{
 			if (_backgroundWorkerOvertimeScheduling.IsBusy) return;
+			if (_scheduleView == null) return;
+			if (_scheduleView.AllSelectedDates().Count == 0)return;
 
-			if (_scheduleView != null)
+			try
 			{
-				if (_scheduleView.AllSelectedDates().Count == 0)
-					return;
-				IOvertimePreferences overtimePreferences = new OvertimePreferences();
-				overtimePreferences.SelectedTimePeriod = new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(1));
-				try
+				var definitionSets = MultiplicatorDefinitionSet.Where(set => set.MultiplicatorType == MultiplicatorType.Overtime).ToList();
+				var resolution = 15;
+				IScheduleDay scheduleDay;
+				if (tryGetFirstSelectedSchedule(out scheduleDay))
 				{
-                    var definitionSets = MultiplicatorDefinitionSet.Where(set => set.MultiplicatorType == MultiplicatorType.Overtime).ToList();
-					overtimePreferences.OvertimeType = definitionSets[0];
-					overtimePreferences.SkillActivity = _schedulerState.CommonStateHolder.ActiveActivities.First();
-
-					var resolution = 15;
-	                IScheduleDay scheduleDay;
-                    if (tryGetFirstSelectedSchedule(out scheduleDay))
+					var person = scheduleDay.Person;
+					var skills = aggregateSkills(person, scheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
+					if (skills.Count > 0)
 					{
-						var person = scheduleDay.Person;
-						var skills = aggregateSkills(person, scheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
-                       if (skills.Count > 0)
-						{
-							var skillResolutionProvider = _container.Resolve<ISkillResolutionProvider>();
-							resolution = skillResolutionProvider.MinimumResolution(skills);
-						}
-					}
-
-                    using (var options = new OvertimePreferencesDialog(overtimePreferences, _schedulerState.CommonStateHolder.ActiveScheduleTags, "OvertimePreferences", _schedulerState.CommonStateHolder.ActiveActivities, resolution, definitionSets))
-					{
-						if (options.ShowDialog(this) == DialogResult.OK)
-						{
-							options.Refresh();
-
-							startBackgroundScheduleWork(_backgroundWorkerOvertimeScheduling,
-																					new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
-																						{
-																							OvertimePreferences = overtimePreferences
-																						}, true);
-						}
+						var skillResolutionProvider = _container.Resolve<ISkillResolutionProvider>();
+						resolution = skillResolutionProvider.MinimumResolution(skills);
 					}
 				}
-				catch (DataSourceException dataSourceException)
+
+				using (var options = new OvertimePreferencesDialog(_schedulerState.CommonStateHolder.ActiveScheduleTags, "OvertimePreferences", _schedulerState.CommonStateHolder.ActiveActivities, resolution, definitionSets))
 				{
-					using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC, Resources.ServerUnavailable))
-					{
-						view.ShowDialog();
-					}
+					if (options.ShowDialog(this) != DialogResult.OK) return;
+					options.Refresh();
+					startBackgroundScheduleWork(_backgroundWorkerOvertimeScheduling,new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()){OvertimePreferences = options.Preferences}, true);
+				}
+			}
+			catch (DataSourceException dataSourceException)
+			{
+				using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC, Resources.ServerUnavailable))
+				{
+					view.ShowDialog();
 				}
 			}
 		}
