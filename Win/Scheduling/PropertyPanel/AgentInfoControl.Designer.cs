@@ -64,6 +64,8 @@
 			this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tabPageFairness = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+			this.tableLayoutPanelNoWorkflowControlSet = new System.Windows.Forms.TableLayoutPanel();
+			this.labelMissingWorkflowControlSet = new System.Windows.Forms.Label();
 			this.tableLayoutPanelFairness = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.comboBoxAgentGrouping = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
@@ -91,6 +93,7 @@
 			this.tabPageAdvPersonPeriod.SuspendLayout();
 			this.tabPageAdvPerson.SuspendLayout();
 			this.tabPageFairness.SuspendLayout();
+			this.tableLayoutPanelNoWorkflowControlSet.SuspendLayout();
 			this.tableLayoutPanelFairness.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAgentGrouping)).BeginInit();
@@ -106,6 +109,7 @@
 			// tabControlAgentInfo
 			// 
 			this.tabControlAgentInfo.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.tabControlAgentInfo.BeforeTouchSize = new System.Drawing.Size(453, 462);
 			this.tabControlAgentInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlAgentInfo.Controls.Add(this.tabPageAdvSchedulePeriod);
 			this.tabControlAgentInfo.Controls.Add(this.tabPageAdvRestrictions);
@@ -322,6 +326,7 @@
 			// tabPageFairness
 			// 
 			this.tabPageFairness.BackColor = System.Drawing.Color.White;
+			this.tabPageFairness.Controls.Add(this.tableLayoutPanelNoWorkflowControlSet);
 			this.tabPageFairness.Controls.Add(this.tableLayoutPanelFairness);
 			this.tabPageFairness.Controls.Add(this.tableLayoutPanelRanking);
 			this.tabPageFairness.Image = null;
@@ -333,6 +338,31 @@
 			this.tabPageFairness.TabIndex = 6;
 			this.tabPageFairness.Text = "xxFairness";
 			this.tabPageFairness.ThemesEnabled = false;
+			// 
+			// tableLayoutPanelNoWorkflowControlSet
+			// 
+			this.tableLayoutPanelNoWorkflowControlSet.ColumnCount = 2;
+			this.tableLayoutPanelNoWorkflowControlSet.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.91611F));
+			this.tableLayoutPanelNoWorkflowControlSet.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 54.08389F));
+			this.tableLayoutPanelNoWorkflowControlSet.Controls.Add(this.labelMissingWorkflowControlSet, 0, 0);
+			this.tableLayoutPanelNoWorkflowControlSet.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tableLayoutPanelNoWorkflowControlSet.Location = new System.Drawing.Point(0, 102);
+			this.tableLayoutPanelNoWorkflowControlSet.Name = "tableLayoutPanelNoWorkflowControlSet";
+			this.tableLayoutPanelNoWorkflowControlSet.RowCount = 1;
+			this.tableLayoutPanelNoWorkflowControlSet.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanelNoWorkflowControlSet.Size = new System.Drawing.Size(453, 47);
+			this.tableLayoutPanelNoWorkflowControlSet.TabIndex = 2;
+			// 
+			// labelMissingWorkflowControlSet
+			// 
+			this.labelMissingWorkflowControlSet.AutoSize = true;
+			this.labelMissingWorkflowControlSet.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.labelMissingWorkflowControlSet.Location = new System.Drawing.Point(3, 0);
+			this.labelMissingWorkflowControlSet.Name = "labelMissingWorkflowControlSet";
+			this.labelMissingWorkflowControlSet.Size = new System.Drawing.Size(202, 47);
+			this.labelMissingWorkflowControlSet.TabIndex = 1;
+			this.labelMissingWorkflowControlSet.Text = "xxMissingWorkflowControlSet";
+			this.labelMissingWorkflowControlSet.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// tableLayoutPanelFairness
 			// 
@@ -371,6 +401,7 @@
 			// comboBoxAgentGrouping
 			// 
 			this.comboBoxAgentGrouping.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxAgentGrouping.BeforeTouchSize = new System.Drawing.Size(241, 19);
 			this.comboBoxAgentGrouping.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxAgentGrouping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAgentGrouping.Location = new System.Drawing.Point(203, 3);
@@ -568,6 +599,8 @@
 			this.tabPageAdvPersonPeriod.ResumeLayout(false);
 			this.tabPageAdvPerson.ResumeLayout(false);
 			this.tabPageFairness.ResumeLayout(false);
+			this.tableLayoutPanelNoWorkflowControlSet.ResumeLayout(false);
+			this.tableLayoutPanelNoWorkflowControlSet.PerformLayout();
 			this.tableLayoutPanelFairness.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
@@ -620,6 +653,8 @@
         private System.Windows.Forms.Label labelSeniorityPointsValue;
         private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label labelRanking;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelNoWorkflowControlSet;
+		private System.Windows.Forms.Label labelMissingWorkflowControlSet;
         
 	}
 }
