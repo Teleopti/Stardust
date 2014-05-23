@@ -583,10 +583,7 @@ SELECT interval_id= interval_id,
 	interval_end = interval_end
 FROM mart.dim_interval
 ORDER BY interval_id
---remove one minute from last interval to be able to join shifts ending at UTC midnight
-update #intervals 
-set interval_end=dateadd(minute,-1,interval_end) 
-where interval_end=dateadd(day,1,@date_min)
+
 
 --INSERT DATA FROM OLD FACT_SCHEDULE
 INSERT [mart].[fact_schedule] WITH(TABLOCK)
@@ -601,7 +598,7 @@ INNER JOIN mart.dim_person dp
 	AND btz.time_zone_id=dp.time_zone_id
 INNER JOIN #intervals di
 	ON	dateadd(hour,DATEPART(hour,f.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,f.shift_endtime),@date_min) >= di.interval_start
-	AND	dateadd(hour,DATEPART(hour,f.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,f.shift_endtime),@date_min) <= di.interval_end
+	AND	dateadd(hour,DATEPART(hour,f.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,f.shift_endtime),@date_min) < di.interval_end
 GO
 PRINT 'new data into: [mart].[fact_schedule]. Done!'
 GO
