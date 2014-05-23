@@ -56,6 +56,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 				Expect.Call(_matrix1.Person).Return(_person1).Repeat.Twice() ;
 				Expect.Call(_teamBlockMoveTimeOptimizer.OptimizeMatrix(_optimizationPreferences, matrixList, _rollbackService,
 					_periodValueCalculator, _schedulingResultStateHolder, _matrix1)).Return(false);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
+					.Return(0.815689)
+					.Repeat.Times(2);
 
 			}
 			using (_mock.Playback())
@@ -79,6 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 				Expect.Call(_matrix1.Person).Return(_person1).Repeat.Twice();
 				Expect.Call(_teamBlockMoveTimeOptimizer.OptimizeMatrix(_optimizationPreferences, matrixList, _rollbackService,
 					_periodValueCalculator, _schedulingResultStateHolder, _matrix1)).Return(true);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(0.815689);
 
 			}
 			using (_mock.Playback())
