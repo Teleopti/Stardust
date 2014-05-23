@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		private IDictionary<DateTime, ISkillIntervalData> _skillIntervalDatas;
 		private IActivity _activity;
 		private IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> _skillIntervalDataForActivity;
-		private WorkShiftLengthHintOption _lengthHint;
 		private IVisualLayerCollection _visualLayerCollection;
 	   private IEqualWorkShiftValueDecider _equalWorkShiftValueDecider;
 		private PeriodValueCalculationParameters _periodValueCalculationParameters;
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			_activity = new Activity("hej");
 			_skillIntervalDataForActivity = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
 			_skillIntervalDataForActivity.Add(_activity, _skillIntervalDatas);
-			_lengthHint = WorkShiftLengthHintOption.AverageWorkTime;
 			_visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
 			_periodValueCalculationParameters = new PeriodValueCalculationParameters(WorkShiftLengthHintOption.AverageWorkTime,
 													 false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, false);
