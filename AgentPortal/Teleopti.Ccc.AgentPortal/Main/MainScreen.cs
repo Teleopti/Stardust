@@ -181,11 +181,6 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
             if (WindowState != FormWindowState.Minimized)
                 checkPermissions();
-
-			// <-- Bugfix #27980: Strange view in Week view when logging in to MyTime
-			if (WindowState != FormWindowState.Minimized)
-				RefreshTab();
-			// -->
         }
 
         private void switchToAsm()
