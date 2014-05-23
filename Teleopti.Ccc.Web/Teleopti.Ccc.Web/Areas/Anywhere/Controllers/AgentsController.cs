@@ -73,7 +73,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			var today = _date.LocalDateOnly();
 			var agents =
 				_personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
-					.Select(x => new AgentViewModel {PersonId = x.Id.GetValueOrDefault(), Name = x.Name.ToString()});
+					.Select(
+						x =>
+							new AgentViewModel
+							{
+								PersonId = x.Id.GetValueOrDefault(),
+								Name = x.Name.ToString(),
+								SiteId = team.Site.Id.ToString(),
+								SiteName = team.Site.Description.Name,
+								TeamId = team.Id.ToString(),
+								TeamName = team.Description.Name,
+								TimeZoneOffsetMinutes = _userTimeZone.TimeZone().BaseUtcOffset.TotalMinutes
+							});
 			return Json(agents, JsonRequestBehavior.AllowGet);
 		}
 	}

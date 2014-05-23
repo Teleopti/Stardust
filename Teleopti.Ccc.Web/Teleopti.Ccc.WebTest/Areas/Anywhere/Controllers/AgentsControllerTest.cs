@@ -114,8 +114,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void GetAgents_ShouldGetAllAgentsForOneTeam()
 		{
 			var teamId = Guid.NewGuid();
-			var team = new Team();
+			var team = new Team {Description = new Description("team1")};
 			team.SetId(teamId);
+			var siteId = Guid.NewGuid();
+			var site = new Site("site1");
+			site.SetId(siteId);
+			site.AddTeam(team);
 			var person = new Person();
 			var personId = Guid.NewGuid();
 			person.SetId(personId);
@@ -126,15 +130,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var today = new Now();
 			var period = new DateOnlyPeriod(today.LocalDateOnly(), today.LocalDateOnly());
 			personRepository.Stub(x => x.FindPeopleBelongTeam(team, period)).Return(new List<IPerson> { person });
-			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), teamRepository, personRepository, new Now(), null, null))
+			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			var hawaiiTimeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			userTimeZone.Stub(x => x.TimeZone()).Return(hawaiiTimeZoneInfo);
+
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), teamRepository, personRepository, new Now(), null, userTimeZone))
 			{
-				var expected = new AgentViewModel { PersonId = personId, Name = person.Name.ToString() };
+				var expected = new AgentViewModel
+				{
+					PersonId = personId,
+					Name = person.Name.ToString(),
+					SiteId = siteId.ToString(),
+					SiteName = site.Description.Name,
+					TeamId = teamId.ToString(),
+					TeamName = team.Description.Name,
+					TimeZoneOffsetMinutes = userTimeZone.TimeZone().BaseUtcOffset.TotalMinutes
+				};
 				var result = target.ForTeam(teamId).Data as IEnumerable<AgentViewModel>;
 
 				result.Count().Should().Be(1);
 
 				Assert.That(result.Single().PersonId, Is.EqualTo(expected.PersonId));
 				Assert.That(result.Single().Name, Is.EqualTo(expected.Name));
+				Assert.That(result.Single().SiteId, Is.EqualTo(expected.SiteId));
+				Assert.That(result.Single().SiteName, Is.EqualTo(expected.SiteName));
+				Assert.That(result.Single().TeamId, Is.EqualTo(expected.TeamId));
+				Assert.That(result.Single().TeamName, Is.EqualTo(expected.TeamName));
+				Assert.That(result.Single().TimeZoneOffsetMinutes, Is.EqualTo(expected.TimeZoneOffsetMinutes));
 			}
 
 		}
