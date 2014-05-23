@@ -8,16 +8,16 @@
 
     		var that = {};
     		that.TimeInState = ko.observable();
-    		that.fill = function (data, name) {
+    		that.fill = function (data, name, offset) {
     			that.PersonId = data.PersonId;
 				that.Name = name,
     			that.State = data.State;
     			that.Activity = data.Activity;
     			that.NextActivity = data.NextActivity;
-    			that.NextActivityStartTime = moment(data.NextActivityStartTime).format(resources.DateTimeFormatForMoment);
+    			that.NextActivityStartTime = moment(data.NextActivityStartTime).add(offset,'minutes').format(resources.DateTimeFormatForMoment);
     			that.Alarm = data.Alarm;
 			    that.AlarmColor = data.AlarmColor;
-    			that.AlarmTime = moment(data.AlarmTime).format(resources.DateTimeFormatForMoment);
+			    that.AlarmTime = moment(data.AlarmTime).add(offset, 'minutes').format(resources.DateTimeFormatForMoment);
 			    that.refreshTimeInState();
 		    };
 
