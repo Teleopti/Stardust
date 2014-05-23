@@ -6,6 +6,15 @@
 				var vm = viewModel();
 				assert.equals(vm.agentStates(), []);
 			},
+			
+			"should fill agents info": function () {
+				var agent = { PersonId: "guid", Name: "Bill" };
+				var vm = viewModel();
+				vm.fillAgents([agent]);
+
+				assert.equals(vm.agents[0].PersonId, agent.PersonId);
+				assert.equals(vm.agents[0].Name, agent.Name);
+			},
 
 			"should fill agent state data": function() {
 				var state1 = {
@@ -27,6 +36,7 @@
 					AlarmTime: moment('2014-01-21 12:15').format(resources.DateTimeFormatForMoment)
 				};
 				var vm = viewModel();
+				vm.fillAgents([{ PersonId: "guid1", Name: "Bill" }, { PersonId: "guid2", Name: "John" }]);
 				vm.fillAgentsStates([state1, state2]);
 
 				assert.equals(vm.agentStates()[0].PersonId, state1.PersonId);
@@ -43,15 +53,6 @@
 				assert.equals(vm.agentStates()[1].NextActivityStartTime, state2.NextActivityStartTime);
 				assert.equals(vm.agentStates()[1].Alarm, state2.Alarm);
 				assert.equals(vm.agentStates()[1].AlarmTime, state2.AlarmTime);
-			},
-
-			"should fill agents info" : function() {
-				var agent = { PersonId: "guid", Name: "Bill" };
-				var vm = viewModel();
-				vm.fillAgents([agent]);
-
-				assert.equals(vm.agents[0].Id, agent.PersonId);
-				assert.equals(vm.agents[0].Name, agent.Name);
 			}
 		});		
 	};

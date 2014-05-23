@@ -31,10 +31,10 @@
 
 		that.getAgentName =function(id) {
 
-			var agent = that.agents.filter(function(item) {
+			var a = that.agents.filter(function(item) {
 				return item.PersonId === id;
 				});
-			return agent[0].Name;
+			return a[0].Name;
 		}
 
 		that.refreshTimeInState = function() {
