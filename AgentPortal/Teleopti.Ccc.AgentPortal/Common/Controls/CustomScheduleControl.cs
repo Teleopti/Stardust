@@ -255,7 +255,26 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
             _previousButton.ContextMenu = new ContextMenu();
             _previousButton.Click += PreviousButtonClick;
             _nextButton.Click += NextButtonClick;
+
+			// <-- Bugfix #27980: Strange view in Week view when logging in to MyTime
+			Calendar.Resize += calendar_Resize;
+			// -->
         }
+
+		void calendar_Resize(object sender, EventArgs e)
+		{
+			Timer latency = new Timer {Interval = 500};
+			latency.Tick += latency_Tick;
+			latency.Start();
+		}
+
+		void latency_Tick(object sender, EventArgs e)
+		{
+			var timer = (Timer)sender;
+			timer.Stop();
+			timer.Dispose();
+			OnResize(e);
+		}
 
         private void NavigateInWeekView(Control captionButton)
         {

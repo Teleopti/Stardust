@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Remoting;
@@ -436,11 +437,18 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             ScheduleView.SetScheduleControlEventHandlers();
             ScheduleView.ScheduleControlHost.AllowAdjustAppointmentsWithMouse = false;
             SetScheduleCurrentView(ScheduleViewType.Week);
+			ScheduleView.ScheduleControlHost.Resize += ScheduleControlHost_Resize;
 
             // Start Message Broker Listener
             StartMessageBrokerListener();
             scheduleControlMain.GetScheduleHost().SelectCellsMouseButtonsMask = MouseButtons.Left | MouseButtons.Right;
         }
+
+		void ScheduleControlHost_Resize(object sender, EventArgs e)
+		{
+			RefreshSchedule();
+
+		}
 
         void contextmenuStripExScheduleControl_Opening(object sender, CancelEventArgs e)
         {
