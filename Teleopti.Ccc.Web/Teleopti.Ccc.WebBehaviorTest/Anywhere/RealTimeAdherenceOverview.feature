@@ -294,7 +294,7 @@ Scenario: Should not be able to see agents if not permitted
 
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
 Scenario: Should be able to see current states of all agents
-	Given  the current time is '2014-01-21 12:30:00'
+	Given  the current time is '2014-01-21 11:30:00'
 	And there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
@@ -312,6 +312,8 @@ Scenario: Should be able to see current states of all agents
 	 | Field      | Value      |
 	 | Team       | Red        |
 	 | Start Date | 2014-01-21 |
+	And 'Ashley Andeen' is located in Stockholm
+	And 'Pierre Baldi' is located in Stockholm
 	And Pierre Baldi has a shift with
 	| Field			| Value            |
 	| Start time	| 2014-01-21 12:00 |
@@ -372,15 +374,16 @@ Scenario: Should be able to see current states of all agents
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
 @ignore
 Scenario: Should be able to see state updates of all agents
-	Given I have a role with
-	 | Field                                  | Value       |
-	 | Name                                   | Team leader |
-	 | Access to team						  | Team Red	|
-	 | Access to real time adherence overview | True		|
+	Given  the current time is '2014-01-21 11:30:00'
 	And there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
+	And I have a role with
+	 | Field                                  | Value       |
+	 | Name                                   | Team leader |
+	 | Access to team						  | Red	|
+	 | Access to real time adherence overview | True		|
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Red        |
@@ -389,6 +392,8 @@ Scenario: Should be able to see state updates of all agents
 	 | Field      | Value      |
 	 | Team       | Red        |
 	 | Start Date | 2014-01-21 |
+	And 'Ashley Andeen' is located in Stockholm
+	And 'Pierre Baldi' is located in Stockholm
 	And Pierre Baldi has a shift with
 	| Field			| Value            |
 	| Start time	| 2014-01-21 12:00 |
@@ -420,18 +425,20 @@ Scenario: Should be able to see state updates of all agents
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	When I view real time adherence for team 'Red'
+	And the browser time is '2014-01-21 12:45:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets his phone state to 'Ready'
 	Then I should see real time agent details for 'Pierre Baldi'
-		| Field				| Value				|
-		| Name				| Pierre Baldi		|
-		| State				| Pause		|
-		| Activity			| Phone		|
-		| Next activity		| Lunch		|
-		| Next activity start time	| 2014-01-21 13:00	|
-		| Alarm	| Not adhering	|
-		| Alarm Color           | Green	|
-		| Alarm Time	| 2014-01-21 12:30 |
+		| Name                     |                  |
+		| Name                     | Pierre Baldi     |
+		| State                    | Pause            |
+		| Activity                 | Phone            |
+		| Next activity            | Lunch            |
+		| Next activity start time | 2014-01-21 13:00 |
+		| Alarm                    | Not adhering     |
+		| Alarm Time               | 2014-01-21 12:30 |
+		| Alarm Color              | Red              |
+		| Time in state	| 0:15:00 |
 	And I should see real time agent details for 'Ashley Andeen'
 		| Field				| Value				|
 		| Name				| Ashley Andeen		|
@@ -440,5 +447,6 @@ Scenario: Should be able to see state updates of all agents
 		| Next activity		| Lunch		|
 		| Next activity start time	| 2014-01-21 13:00	|
 		| Alarm	| Adhering	|
-		| Alarm Color           | Red	|
 		| Alarm Time	| 2014-01-21 12:30 |
+		| Alarm Color              | Green              |
+		| Time in state	| 0:15:00 |
