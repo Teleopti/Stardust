@@ -150,6 +150,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_matrixPro.Person).Return(new Person());
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
                 Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).IgnoreArguments() .Return(true);
+					 Expect.Call(_teamBlockInfoMock.BlockInfo).Return(_blockInfoMock);
+					 Expect.Call(_blockInfoMock.BlockPeriod).Return(new DateOnlyPeriod(_date, _date));
             }
 
             using (_mock.Playback())
@@ -184,6 +186,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
                 
                 Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).IgnoreArguments().Return(true);
+					 Expect.Call(_teamBlockInfoMock.BlockInfo).Return(_blockInfoMock);
+					 Expect.Call(_blockInfoMock.BlockPeriod).Return(new DateOnlyPeriod(_date, _date));
             }
 
             using (_mock.Playback())
@@ -216,8 +220,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
                 Expect.Call(_workShiftMinMaxCalculator.IsPeriodInLegalState(_matrixPro, _schedulingOptions)).IgnoreArguments().Return(false );
                 Expect.Call(()=>_safeRollback.Execute(_rollbackService, _schedulingOptions));
-                Expect.Call(_teamBlockInfoMock.BlockInfo).Return(_blockInfoMock);
-                Expect.Call(_blockInfoMock.BlockPeriod ).Return(_dateOnlyPeriod );
+                Expect.Call(_teamBlockInfoMock.BlockInfo).Return(_blockInfoMock).Repeat.Twice() ;
+                Expect.Call(_blockInfoMock.BlockPeriod ).Return(_dateOnlyPeriod ).Repeat.Twice() ;
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
 
                 Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).IgnoreArguments().Return(true);
@@ -254,12 +258,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_workShiftMinMaxCalculator.IsPeriodInLegalState(_matrixPro, _schedulingOptions)).IgnoreArguments().Return(true);
                 Expect.Call(() => _safeRollback.Execute(_rollbackService, _schedulingOptions));
 
-                Expect.Call(_teamBlockInfoMock.BlockInfo).Return(_blockInfoMock);
-                Expect.Call(_blockInfoMock.BlockPeriod).Return(_dateOnlyPeriod);
+                Expect.Call(_teamBlockInfoMock.BlockInfo).Return(_blockInfoMock).Repeat.Twice() ;
+                Expect.Call(_blockInfoMock.BlockPeriod).Return(_dateOnlyPeriod).Repeat.Twice() ;
 
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
 
                 Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).IgnoreArguments().Return(false);
+
             }
 
             using (_mock.Playback())
@@ -312,8 +317,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var personList = new List<IPerson> {_person, person2};
 			using (_mock.Record())
 			{
-				//Expect.Call(teamInfo2.GroupMembers).Return(new List<IPerson> { person2 }).Repeat.Any();
-				//Expect.Call(teamInfo.GroupMembers).Return(new List<IPerson> { _person }).Repeat.Any();
 				Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(person2, _dateOnlyPeriod, _matrixList)).Return(teamInfo2);
@@ -337,11 +340,54 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_matrixPro.Person).Return(new Person());
 				Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).IgnoreArguments().Return(true);
+				Expect.Call(teamBlockInfoMock2.BlockInfo ).Return(_blockInfoMock );
+				Expect.Call(_blockInfoMock.BlockPeriod).Return(new DateOnlyPeriod(_date,_date));
 			}
 
 			using (_mock.Playback())
 			{
 				Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder));
+			}
+		}
+
+		[Test]
+		public void ShouldRollbackWhenMaxSeatBrokenOnAnyDayOfBlock()
+		{
+			var datePeriod = new DateOnlyPeriod(new DateOnly(2014, 05, 21), new DateOnly(2014, 05, 25));
+			var teamInfo = new TeamInfo(_group, new List<IList<IScheduleMatrixPro>> { _matrixList });
+			using (_mock.Record())
+			{
+				Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, datePeriod, _matrixList)).IgnoreArguments().Return(teamInfo);
+				Expect.Call(_validatedTeamBlockExtractor.GetTeamBlockInfo(_teamInfoMock, _date, _matrixList,
+																	 _schedulingOptions, datePeriod))
+						.IgnoreArguments()
+						.Return(_teamBlockInfoMock);
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
+					_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, null))
+					.IgnoreArguments()
+					.Return(true);
+				Expect.Call(_teamBlockInfoMock.TeamInfo).Return(_teamInfoMock);
+				Expect.Call(_teamInfoMock.MatrixesForGroupAndDate(_date)).Return(_matrixList);
+				Expect.Call(_matrixPro.Person).Return(_person);
+				Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
+				Expect.Call(_workShiftMinMaxCalculator.IsPeriodInLegalState(_matrixPro, _schedulingOptions)).IgnoreArguments().Return(true);
+				Expect.Call(() => _safeRollback.Execute(_rollbackService, _schedulingOptions));
+
+				Expect.Call(_teamBlockInfoMock.BlockInfo).Return(_blockInfoMock).Repeat.Twice();
+				Expect.Call(_blockInfoMock.BlockPeriod).Return(datePeriod).Repeat.Twice();
+
+				Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
+
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(new DateOnly(2014, 05, 21), _schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(new DateOnly(2014, 05, 22), _schedulingOptions)).Return(false);
+
+			}
+
+			using (_mock.Playback())
+			{
+				Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder));
 			}
 		}
 
