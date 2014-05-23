@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		private IDictionary<DateTime, ISkillIntervalData> _skillIntervalDatas;
 		private IActivity _activity;
 		private IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> _skillIntervalDataForActivity;
-		private WorkShiftLengthHintOption _lengthHint;
 		private IVisualLayerCollection _visualLayerCollection;
-	    private IEqualWorkShiftValueDecider _equalWorkShiftValueDecider;
+	   private IEqualWorkShiftValueDecider _equalWorkShiftValueDecider;
+		private PeriodValueCalculationParameters _periodValueCalculationParameters;
 
 		[SetUp]
 		public void Setup()
@@ -40,8 +40,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			_activity = new Activity("hej");
 			_skillIntervalDataForActivity = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
 			_skillIntervalDataForActivity.Add(_activity, _skillIntervalDatas);
-			_lengthHint = WorkShiftLengthHintOption.AverageWorkTime;
 			_visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+			_periodValueCalculationParameters = new PeriodValueCalculationParameters(WorkShiftLengthHintOption.AverageWorkTime,
+													 false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, false);
 		}
 
 
@@ -52,15 +53,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			using (_mocks.Record())
 			{
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
+				
 				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-																		  _skillIntervalDataForActivity[_activity], _lengthHint, true, true, TimeZoneInfo.Utc)).Return(7);
+																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(7);
 			}
 
 			IShiftProjectionCache result;
 
 			using (_mocks.Playback())
 			{
-				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true, TimeZoneInfo.Utc);
+				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _periodValueCalculationParameters, TimeZoneInfo.Utc);
 			}
 
 			Assert.IsNotNull(result);
@@ -75,11 +77,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			{
 				Expect.Call(_shiftProjectionCache2.MainShiftProjection).Return(_visualLayerCollection);
 				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-																		  _skillIntervalDataForActivity[_activity], _lengthHint, true, true, TimeZoneInfo.Utc)).Return(7);
+																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(7);
 
 				Expect.Call(_shiftProjectionCache2.MainShiftProjection).Return(_visualLayerCollection);
 				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-																		  _skillIntervalDataForActivity[_activity], _lengthHint, true, true, TimeZoneInfo.Utc)).Return(7);
+																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(7);
 
 				Expect.Call(_equalWorkShiftValueDecider.Decide(_shiftProjectionCache2, _shiftProjectionCache2))
 				      .Return(_shiftProjectionCache2);
@@ -89,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 
 			using (_mocks.Playback())
 			{
-				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true, TimeZoneInfo.Utc);
+				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _periodValueCalculationParameters, TimeZoneInfo.Utc);
 			}
 
 			Assert.AreSame(_shiftProjectionCache2, result);
@@ -104,22 +106,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			{
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
 				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-																		  _skillIntervalDataForActivity[_activity], _lengthHint, true, true, TimeZoneInfo.Utc)).Return(7);
+																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(7);
 
 				Expect.Call(_shiftProjectionCache2.MainShiftProjection).Return(_visualLayerCollection);
 				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-																		  _skillIntervalDataForActivity[_activity], _lengthHint, true, true, TimeZoneInfo.Utc)).Return(8);
+																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(8);
 
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
 				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-																		  _skillIntervalDataForActivity[_activity], _lengthHint, true, true, TimeZoneInfo.Utc)).Return(7);
+																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(7);
 			}
 
 			IShiftProjectionCache result;
 
 			using (_mocks.Playback())
 			{
-				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true, TimeZoneInfo.Utc);
+				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _periodValueCalculationParameters, TimeZoneInfo.Utc);
 			}
 
 			Assert.AreSame(_shiftProjectionCache2, result);
@@ -135,18 +137,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			{
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
 				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-																		  _skillIntervalDataForActivity[_activity], _lengthHint, true, true, TimeZoneInfo.Utc)).Return(2);
+																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(2);
 
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
 				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, otherActivity,
-																		  _skillIntervalDataForActivity[_activity], _lengthHint, true, true, TimeZoneInfo.Utc)).Return(3);
+																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(3);
 			}
 
 			IShiftProjectionCache result;
 
 			using (_mocks.Playback())
 			{
-				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true, TimeZoneInfo.Utc);
+				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _periodValueCalculationParameters, TimeZoneInfo.Utc);
 			}
 
 			Assert.IsNotNull(result);
@@ -162,18 +164,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			{
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
 				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-																		  _skillIntervalDataForActivity[_activity], _lengthHint, true, true, TimeZoneInfo.Utc)).Return(7);
+																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(7);
 
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
 				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, otherActivity,
-																		  _skillIntervalDataForActivity[_activity], _lengthHint, true, true, TimeZoneInfo.Utc)).Return(null);
+																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(null);
 			}
 
 			IShiftProjectionCache result;
 
 			using (_mocks.Playback())
 			{
-				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true, TimeZoneInfo.Utc);
+				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity,_periodValueCalculationParameters, TimeZoneInfo.Utc);
 			}
 
 			Assert.IsNull(result);

@@ -6,6 +6,20 @@
 				var vm = viewModel();
 				assert.equals(vm.agentStates(), []);
 			},
+			
+			"should fill agents info": function () {
+				var agent = { PersonId: "guid", Name: "Bill", SiteId: "gui1", SiteName: "site", TeamId: "guid2", TeamName: "team", TimeZoneOffset: -600 };
+				var vm = viewModel();
+				vm.fillAgents([agent]);
+
+				assert.equals(vm.agents[0].PersonId, agent.PersonId);
+				assert.equals(vm.agents[0].Name, agent.Name);
+				assert.equals(vm.agents[0].SiteId, agent.SiteId);
+				assert.equals(vm.agents[0].SiteName, agent.SiteName);
+				assert.equals(vm.agents[0].TeamId, agent.TeamId);
+				assert.equals(vm.agents[0].TeamName, agent.TeamName);
+				assert.equals(vm.agents[0].TimeZoneOffset, agent.TimeZoneOffset);
+			},
 
 			"should fill agent state data": function() {
 				var state1 = {
@@ -30,32 +44,24 @@
 				var agent1 = { PersonId: "guid1", Name: "Bill" };
 				var agent2 = { PersonId: "guid2", Name: "Boule" };
 				var vm = viewModel();
-				vm.fillAgents([agent1, agent2]);
+				vm.fillAgents([{ PersonId: "guid1", Name: "Bill", SiteId: "gui1", SiteName: "site", TeamId: "guid2", TeamName: "team", TimeZoneOffset: -600 },
+					{ PersonId: "guid2", Name: "John", SiteId: "gui1", SiteName: "site", TeamId: "guid2", TeamName: "team", TimeZoneOffset: -600 }]);
 				vm.fillAgentsStates([state1, state2]);
 
 				assert.equals(vm.agentStates()[0].PersonId, state1.PersonId);
 				assert.equals(vm.agentStates()[0].State, state1.State);
 				assert.equals(vm.agentStates()[0].Activity, state1.Activity);
 				assert.equals(vm.agentStates()[0].NextActivity, state1.NextActivity);
-				assert.equals(vm.agentStates()[0].NextActivityStartTime, state1.NextActivityStartTime);
+				assert.equals(vm.agentStates()[0].NextActivityStartTime, moment(state1.NextActivityStartTime, resources.DateTimeFormatForMoment).add(-600, 'minutes').format(resources.DateTimeFormatForMoment));
 				assert.equals(vm.agentStates()[0].Alarm, state1.Alarm);
-				assert.equals(vm.agentStates()[0].AlarmTime, state1.AlarmTime);
+				assert.equals(vm.agentStates()[0].AlarmTime, moment(state1.AlarmTime, resources.DateTimeFormatForMoment).add(-600, 'minutes').format(resources.DateTimeFormatForMoment));
 				assert.equals(vm.agentStates()[1].PersonId, state2.PersonId);
 				assert.equals(vm.agentStates()[1].State, state2.State);
 				assert.equals(vm.agentStates()[1].Activity, state2.Activity);
 				assert.equals(vm.agentStates()[1].NextActivity, state2.NextActivity);
-				assert.equals(vm.agentStates()[1].NextActivityStartTime, state2.NextActivityStartTime);
+				assert.equals(vm.agentStates()[1].NextActivityStartTime, moment(state2.NextActivityStartTime, resources.DateTimeFormatForMoment).add(-600, 'minutes').format(resources.DateTimeFormatForMoment));
 				assert.equals(vm.agentStates()[1].Alarm, state2.Alarm);
-				assert.equals(vm.agentStates()[1].AlarmTime, state2.AlarmTime);
-			},
-
-			"should fill agents info" : function() {
-				var agent = { PersonId: "guid", Name: "Bill" };
-				var vm = viewModel();
-				vm.fillAgents([agent]);
-
-				assert.equals(vm.agents[0].PersonId, agent.PersonId);
-				assert.equals(vm.agents[0].Name, agent.Name);
+				assert.equals(vm.agentStates()[1].AlarmTime, moment(state2.AlarmTime, resources.DateTimeFormatForMoment).add(-600, 'minutes').format(resources.DateTimeFormatForMoment));
 			}
 		});		
 	};

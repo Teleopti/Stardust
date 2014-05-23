@@ -123,28 +123,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			
 		}
 
-		[Test, Ignore("Micke, talk to Asad")]
-		public void VerifyDecisionMakerNeverGiveMeTwoSameDates()
-		{
-			var bitArray = createBitArray();
-			var values = new List<double?> { -20, -20, -20, -20 };
-			using (_mocks.Record())
-			{
-				Expect.Call(_lokableBitArrayFactory.ConvertFromMatrix(false, false, _scheduleMatrix)).Return(bitArray);
-				Expect.Call(_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(_scheduleMatrix,
-					_optimizationPreferences.Advanced)).Return(_dataExtractor);
-				Expect.Call(_dataExtractor.Values()).Return(values ).Repeat.Any();
-				Expect.Call(_validateFoundMovedDaysSpecification.AreFoundDaysValid(3, 4, _scheduleMatrix)).Return(true);
-				simpleMatrixExpectations();
-				
-			}
-
-			// day counterparts are > febr 9, 10, 11, 12
-			var result = _target.Execute(_scheduleMatrix ,_optimizationPreferences );
-			Assert.AreEqual(2, result.Count);
-			Assert.AreNotEqual(result[0], result[1]);
-		}
-
 		[Test]
 		public void SimpleLockedTest()
 		{

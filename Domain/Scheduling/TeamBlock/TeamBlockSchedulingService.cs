@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
 	            if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions,
-	                                                         schedulePartModifyAndRollbackService,
+	                                                          schedulePartModifyAndRollbackService,
 	                                                         resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective()))
 		            verfiyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,
 		                                     dateOnlySkipList, teamBlockInfo);
@@ -117,12 +117,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     break;
                 }
             }
-
-            if (!_teamBlockMaxSeat.CheckMaxSeat(datePointer, _schedulingOptions))
-            {
-                executeRollback(schedulePartModifyAndRollbackService);
-                dateOnlySkipList.AddRange(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection());
-            }
+	        foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
+			  {
+				  if (!_teamBlockMaxSeat.CheckMaxSeat(dateOnly, _schedulingOptions))
+				  {
+					  executeRollback(schedulePartModifyAndRollbackService);
+					  dateOnlySkipList.AddRange(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection());
+					  break;
+				  }
+		        
+	        }
 
         }
         

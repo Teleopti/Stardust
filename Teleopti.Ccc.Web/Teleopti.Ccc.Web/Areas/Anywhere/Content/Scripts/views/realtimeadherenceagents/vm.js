@@ -29,17 +29,17 @@
 		that.fillAgentsStates = function(data) {
 			for (var i = 0; i < data.length; i++) {
 				var agentState = agentstate();
-				agentState.fill(data[i], that.getAgentName(data[i].PersonId));
+				var a = that.getAgent(data[i].PersonId);
+				agentState.fill(data[i], a.Name, a.TimeZoneOffset);
 				that.agentStates.push(agentState);
 			}
 		}
 
-		that.getAgentName =function(id) {
-
-			var agent = that.agents.filter(function(item) {
+		that.getAgent =function(id) {
+			var a = that.agents.filter(function(item) {
 				return item.PersonId === id;
 				});
-			return agent[0].Name;
+			return a[0];
 		}
 
 		that.refreshTimeInState = function() {

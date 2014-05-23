@@ -81,7 +81,8 @@
       <HintPath>..\..\packages\Autofac.Mvc4.3.0.0\lib\net40\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Autofac.Integration.SignalR">
-      <HintPath>..\..\packages\Autofac.SignalR.3.0.1\lib\net40\Autofac.Integration.SignalR.dll</HintPath>
+      <HintPath>..\..\packages\Autofac.SignalR.TeleoptiKey.3.0.1\lib\net40\Autofac.Integration.SignalR.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="AutoMapper, Version=2.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -99,7 +100,7 @@
     </Reference>
     <Reference Include="Contrib.SignalR.SignalRMessageBus, Version=1.2.0.0, Culture=neutral, PublicKeyToken=cd2e232b0d2204e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Contrib.SignalR.SignalRMessageBus.1.2.0\lib\net40-Client\Contrib.SignalR.SignalRMessageBus.dll</HintPath>
+      <HintPath>..\..\packages\Contrib.SignalR.SignalRMessageBus.TeleoptiKey.1.2.1\lib\net40-Client\Contrib.SignalR.SignalRMessageBus.dll</HintPath>
     </Reference>
     <Reference Include="DDay.iCal">
       <HintPath>..\..\packages\DDay.iCal.1.0.2.575\lib\DDay.iCal.dll</HintPath>
@@ -155,15 +156,16 @@
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.1.2.0\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.TeleoptiKey.1.2.0\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Owin, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Owin.1.2.0\lib\net40\Microsoft.AspNet.SignalR.Owin.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Owin.TeleoptiKey.1.2.0\lib\net40\Microsoft.AspNet.SignalR.Owin.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.SystemWeb.1.2.0\lib\net40\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.SystemWeb.TeleoptiKey.1.2.0\lib\net40\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel">
       <HintPath>..\..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
@@ -185,6 +187,7 @@
       <HintPath>..\..\packages\NHibernate.Caches.SysCache.4.0.0.4000\lib\net40\NHibernate.Caches.SysCache.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.ServiceBus">
@@ -807,7 +810,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Anywhere\Content\feature.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\feature_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\feature.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.justgagebinding.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\raphaelloader.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherenceagents.js" />
@@ -825,6 +831,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\team_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\window.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />

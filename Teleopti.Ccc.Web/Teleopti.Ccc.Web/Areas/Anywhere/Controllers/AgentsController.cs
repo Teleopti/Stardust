@@ -19,14 +19,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly IPersonRepository _personRepository;
 		private readonly INow _date;
 		private readonly IAgentStateReader _agentStateReader;
+		private readonly IUserTimeZone _userTimeZone;
 
-		public AgentsController(IPermissionProvider permissionProvider, ITeamRepository teamRepository, IPersonRepository personRepository, INow date, IAgentStateReader agentStateReader)
+		public AgentsController(IPermissionProvider permissionProvider, ITeamRepository teamRepository, IPersonRepository personRepository, INow date, IAgentStateReader agentStateReader, IUserTimeZone userTimeZone)
 		{
 			_permissionProvider = permissionProvider;
 			_teamRepository = teamRepository;
 			_personRepository = personRepository;
 			_date = date;
 			_agentStateReader = agentStateReader;
+			_userTimeZone = userTimeZone;
 		}
 
 		[UnitOfWorkAction, HttpGet]
@@ -49,9 +51,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				State = x.State,
 				Activity = x.Activity,
 				NextActivity = x.NextActivity,
-				NextActivityStartTime = x.NextActivityStartTime,
+				NextActivityStartTime = TimeZoneInfo.ConvertTimeFromUtc(x.NextActivityStartTime, _userTimeZone.TimeZone()),
 				Alarm = x.Alarm,
-				AlarmTime = x.AlarmTime,
+				AlarmTime = TimeZoneInfo.ConvertTimeFromUtc(x.AlarmTime, _userTimeZone.TimeZone()),
 				AlarmColor = x.AlarmColor
 			}), JsonRequestBehavior.AllowGet);
 		}
@@ -71,7 +73,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			var today = _date.LocalDateOnly();
 			var agents =
 				_personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
-					.Select(x => new AgentViewModel {PersonId = x.Id.GetValueOrDefault(), Name = x.Name.ToString()});
+					.Select(
+						x =>
+							new AgentViewModel
+							{
+								PersonId = x.Id.GetValueOrDefault(),
+								Name = x.Name.ToString(),
+								SiteId = team.Site.Id.ToString(),
+								SiteName = team.Site.Description.Name,
+								TeamId = team.Id.ToString(),
+								TeamName = team.Description.Name,
+								TimeZoneOffsetMinutes = _userTimeZone.TimeZone().BaseUtcOffset.TotalMinutes
+							});
 			return Json(agents, JsonRequestBehavior.AllowGet);
 		}
 	}

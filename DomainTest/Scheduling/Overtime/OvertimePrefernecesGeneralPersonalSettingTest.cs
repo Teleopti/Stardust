@@ -105,6 +105,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
         }
 
+		[Test]
+		public void ShouldMapToDefaultIfNotInPersonalSetting()
+		{
+			IOvertimePreferences preferences = new OvertimePreferences();
+			_scheduleTags = new List<IScheduleTag> { _scheduleTagMock };
+			_target.MapTo(preferences, _scheduleTags, new List<IActivity> { _activity }, new List<IMultiplicatorDefinitionSet> { _definitionSet });
+			
+			Assert.AreEqual(_activity, preferences.SkillActivity );
+			Assert.AreEqual(_definitionSet, preferences.OvertimeType);
+			Assert.AreEqual(new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(1)), preferences.SelectedTimePeriod);
+		}
+
         private void mapFromBoolExpectCalls()
         {
             Expect.Call(_overtimePreferncesMock.AllowBreakMaxWorkPerWeek).Return(true);
@@ -126,6 +138,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             Expect.Call(() => _overtimePreferncesMock.SelectedTimePeriod = new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(2)));
         }
 
-    
+		
     }
 }

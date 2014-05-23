@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IActivityIntervalDataCreator _activityIntervalDataCreator;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
+		private PeriodValueCalculationParameters _periodValueCalculationParameters;
 
 		[SetUp]
 		public void Setup()
@@ -80,6 +81,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_selectedPersons = new List<IPerson> {_person1, _person2};
 			_shift = _mocks.StrictMock<IShiftProjectionCache>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
+			_periodValueCalculationParameters = new PeriodValueCalculationParameters(_schedulingOptions.WorkShiftLengthHintOption,
+																		  _schedulingOptions.UseMinimumPersons,
+																		  _schedulingOptions.UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, false);
 		}
 
 		[Test]
@@ -185,9 +189,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder, false))
 					.Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
-																		  _schedulingOptions.WorkShiftLengthHintOption,
-																		  _schedulingOptions.UseMinimumPersons,
-																		  _schedulingOptions.UseMaximumPersons, TimeZoneGuard.Instance.TimeZone)).Return(shifts[0]).Repeat.AtLeastOnce();
+																		  _periodValueCalculationParameters, TimeZoneGuard.Instance.TimeZone)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
@@ -244,9 +246,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder,false))
 					.Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
-																		  _schedulingOptions.WorkShiftLengthHintOption,
-																		  _schedulingOptions.UseMinimumPersons,
-																		  _schedulingOptions.UseMaximumPersons, TimeZoneGuard.Instance.TimeZone)).Return(shifts[0]).Repeat.AtLeastOnce();
+																		  _periodValueCalculationParameters, TimeZoneGuard.Instance.TimeZone)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);

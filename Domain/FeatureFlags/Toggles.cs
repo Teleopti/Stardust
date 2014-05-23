@@ -8,10 +8,11 @@
 		//////
 
 		Scheduler_WeeklyRestRuleSolver_27108,
-
 		Scheduler_TeamBlockMoveTimeBetweenDays_22407,
+		Scheduler_TeamBlockAdhereWithMaxSeatRule_23419,
 
 		RTA_RtaLastStatesOverview_27789,
+		RTA_DrilldownToAllAgentsInOneTeam_25234,
 
 		ModuleName_PreferenceAlertWhenMinOrMaxHoursBroken_66666
 	}

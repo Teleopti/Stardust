@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 
 		public void Execute(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> matrixesOnSelectedperiod)
 		{
-
+			_cancelMe = false; 
 			var activeMatrixes = new List<IScheduleMatrixPro>(matrixesOnSelectedperiod);
 			while (activeMatrixes.Count > 0)
 			{
@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 					{
 						activeMatrixes.Remove(matrix);
 					}
+					double newPeriodValue = periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
 					if (_cancelMe)
 						break;
 					string who = Resources.MoveTimeOn  + matrix.Person.Name.ToString(NameOrderOption.FirstNameLastName);
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 					{
 						success = " " + Resources.wasSuccessful;
 					}
-					OnReportProgress(who + success );
+					OnReportProgress(who + success + " " +newPeriodValue);
 				}
 			}
 		}

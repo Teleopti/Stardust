@@ -292,7 +292,7 @@ Scenario: Should not be able to see agents if not permitted
 	When I try to view real time adherence for team 'Red'
 	Then I should see a message that I have no permission for this function
 
-
+@OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
 Scenario: Should be able to see current states of all agents
 	Given  the current time is '2014-01-21 12:30:00'
 	And there is an activity named 'Phone'
@@ -304,6 +304,7 @@ Scenario: Should be able to see current states of all agents
 	 | Name                                   | Team leader |
 	 | Access to team						  | Red	|
 	 | Access to real time adherence overview | True		|
+	And I am located in 'London'
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Red        |
@@ -369,9 +370,10 @@ Scenario: Should be able to see current states of all agents
 		| Alarm Color              | Green              |
 		| Time in state	| 0:15:00 |
 
-
+@OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
+@ignore
 Scenario: Should be able to see state updates of all agents
-	Given the current time is '2014-01-21 12:30:00'
+	Given  the current time is '2014-01-21 11:30:00'
 	And there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
@@ -381,6 +383,7 @@ Scenario: Should be able to see state updates of all agents
 	 | Name                                   | Team leader |
 	 | Access to team						  | Red	|
 	 | Access to real time adherence overview | True		|
+	And I am located in 'London'
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Red        |
@@ -421,27 +424,27 @@ Scenario: Should be able to see state updates of all agents
 	| Staffing effect | -1           |
 	When I view real time adherence for team 'Red'
 	And the browser time is '2014-01-21 12:45:00'
-	And 'Pierre Baldi' sets his phone state to 'Ready'
-	And 'Ashley Andeen' sets his phone state to 'Pause'
+	And 'Pierre Baldi' sets his phone state to 'Pause'
+	And 'Ashley Andeen' sets his phone state to 'Ready'
 	Then I should see real time agent details for 'Pierre Baldi'
+		| Name                     |                  |
+		| Name                     | Pierre Baldi     |
+		| State                    | Pause            |
+		| Activity                 | Phone            |
+		| Next activity            | Lunch            |
+		| Next activity start time | 2014-01-21 13:00 |
+		| Alarm                    | Not adhering     |
+		| Alarm Time               | 2014-01-21 12:30 |
+		| Alarm Color              | Red              |
+		| Time in state	| 0:15:00 |
+	And I should see real time agent details for 'Ashley Andeen'
 		| Field				| Value				|
-		| Name				| Pierre Baldi		|
+		| Name				| Ashley Andeen		|
 		| State				| Ready		|
 		| Activity			| Phone		|
 		| Next activity		| Lunch		|
 		| Next activity start time	| 2014-01-21 13:00	|
 		| Alarm	| Adhering	|
-		| Alarm Color           | Green	|
 		| Alarm Time	| 2014-01-21 12:30 |
-		| Time in state	| 0:15:00 |
-	And I should see real time agent details for 'Ashley Andeen'
-		| Field				| Value				|
-		| Name				| Ashley Andeen		|
-		| State				| Pause		|
-		| Activity			| Phone		|
-		| Next activity		| Lunch		|
-		| Next activity start time	| 2014-01-21 13:00	|
-		| Alarm	| Not adhering	|
-		| Alarm Color           | Red	|
-		| Alarm Time	| 2014-01-21 12:30 |
+		| Alarm Color              | Green              |
 		| Time in state	| 0:15:00 |

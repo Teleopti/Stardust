@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    private readonly IList<IMultiplicatorDefinitionSet> _definitionSets;
 	    private readonly IEnumerable<IScheduleTag> _scheduleTags;
 
-        public OvertimePreferencesDialog(IOvertimePreferences overtimePreferences, IEnumerable<IScheduleTag> scheduleTags, string settingValue, IEnumerable<IActivity> availableActivity, int resolution, IList<IMultiplicatorDefinitionSet> definitionSets)
+        public OvertimePreferencesDialog(IEnumerable<IScheduleTag> scheduleTags, string settingValue, IEnumerable<IActivity> availableActivity, int resolution, IList<IMultiplicatorDefinitionSet> definitionSets)
             : this()
         {
             _scheduleTags = scheduleTags;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _availableActivity = availableActivity;
             _resolution = resolution;
             _definitionSets = definitionSets;
-            _overtimePreferences = overtimePreferences;
+            _overtimePreferences = new OvertimePreferences();
             
             loadPersonalSettings();
             initTags();
@@ -37,6 +37,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             setDefaultTimePeriod();
             setInitialValues();
         }
+
+		public IOvertimePreferences Preferences
+		{
+			get { return _overtimePreferences; }
+		}
 
 	    private void initOvertimeTypes()
 	    {
