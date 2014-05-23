@@ -1,17 +1,22 @@
 ﻿define([
 		'knockout',
 		'views/realtimeadherenceagents/agentstate',
-		'views/realtimeadherenceagents/agent'
+		'views/realtimeadherenceagents/agent',
+		'resources'
 ],
 	function (ko,
 		agentstate,
-		agent) {
+		agent,
+		resources) {
 	return function () {
 
 		var that = {};
 
 		that.agents = []; 
-		that.agentStates = ko.observableArray(); 
+		that.agentStates = ko.observableArray();
+		that.resources = resources;
+		that.teamName = ko.observable();
+		that.siteName = ko.observable();
 		
 		that.fillAgents = function (data) {
 			for (var i = 0; i < data.length; i++) {
@@ -48,6 +53,14 @@
 			data.Id = notification.DomainId;
 			that.agentStates.removeAll();
 			that.fillAgentsStates(data.AgentStates);
+		}
+
+		that.setSiteName = function (name) {
+			that.siteName(name);
+		}
+
+		that.setTeamName = function(name) {
+			that.teamName = name;
 		}
 
 		return that;

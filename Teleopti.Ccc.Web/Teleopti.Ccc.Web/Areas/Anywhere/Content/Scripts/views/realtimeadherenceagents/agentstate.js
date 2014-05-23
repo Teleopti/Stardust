@@ -16,7 +16,7 @@
     			that.NextActivity = data.NextActivity;
     			that.NextActivityStartTime = moment(data.NextActivityStartTime).format(resources.DateTimeFormatForMoment);
     			that.Alarm = data.Alarm;
-			    that.AlarmColor = data.AlarmColor;
+    			that.AlarmColor = 'rgba('+that.hexToRgb(data.AlarmColor) + ', 0.6)';
     			that.AlarmTime = moment(data.AlarmTime).format(resources.DateTimeFormatForMoment);
 			    that.refreshTimeInState();
 		    };
@@ -24,7 +24,18 @@
     		that.refreshTimeInState = function () {
     			var duration = moment.duration(((new Date).getTime() - new Date(that.AlarmTime)));
     			that.TimeInState(Math.floor(duration.asHours()) + moment.utc(duration.asMilliseconds()).format(":mm:ss"));
-		    }
+    		}
+
+    		that.hexToRgb = function (hex) {
+				
+			    hex = hex ? hex.substring(1) : '000000';
+    			var bigint = parseInt(hex, 16);
+    			var r = (bigint >> 16) & 255;
+    			var g = (bigint >> 8) & 255;
+    			var b = bigint & 255;
+
+    			return r + "," + g + "," + b;
+    		}
 
     		return that;
     	};

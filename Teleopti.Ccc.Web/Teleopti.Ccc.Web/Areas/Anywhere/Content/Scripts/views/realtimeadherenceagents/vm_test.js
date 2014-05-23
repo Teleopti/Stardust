@@ -26,7 +26,11 @@
 					Alarm: 'Not Adhering',
 					AlarmTime: moment('2014-01-21 12:15').format(resources.DateTimeFormatForMoment)
 				};
+
+				var agent1 = { PersonId: "guid1", Name: "Bill" };
+				var agent2 = { PersonId: "guid2", Name: "Boule" };
 				var vm = viewModel();
+				vm.fillAgents([agent1, agent2]);
 				vm.fillAgentsStates([state1, state2]);
 
 				assert.equals(vm.agentStates()[0].PersonId, state1.PersonId);
@@ -50,7 +54,7 @@
 				var vm = viewModel();
 				vm.fillAgents([agent]);
 
-				assert.equals(vm.agents[0].Id, agent.PersonId);
+				assert.equals(vm.agents[0].PersonId, agent.PersonId);
 				assert.equals(vm.agents[0].Name, agent.Name);
 			}
 		});		

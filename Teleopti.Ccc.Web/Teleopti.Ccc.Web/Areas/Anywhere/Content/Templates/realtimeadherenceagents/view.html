@@ -1,30 +1,36 @@
-﻿<div class="realtimeadherenceagents">
+﻿<div class="realtimeadherenceagents container">
+	<ul class="breadcrumb">
+		<li><a href="#realtimeadherencesites" data-bind="text: resources.RealTimeAdherence"></a></li>
+		<li><a href="#" data-bind="text: siteName">Paris</a></li>
+		<li class="active" data-bind="text: teamName">Red</li>
+	</ul>
+	<div class="panel panel-default">
+		<table class="table table-stripped table-condensed">
+			<thead>
+				<tr>
+					<!-- i18n ?-->
+					<th>Agent Name</th>
+					<th>State</th>
+					<th>Activity</th>
+					<th>Next Activity</th>
+					<th>Next Activity Start Time</th>
+					<th>Alarm</th>
+					<th>Alarm Time</th>
+					<th>Time In State</th>
+				</tr>
+			</thead>
+			<tbody data-bind="foreach: agentStates">
+				<tr data-bind="style:  { 'background-color': AlarmColor }">
+					<td class="agent-name" data-bind="text: Name"></td>
+					<td data-bind="text: State"></td>
+					<td data-bind="text: Activity"></td>
+					<td data-bind="text: NextActivity"></td>
+					<td data-bind="text: NextActivityStartTime"></td>
+					<td data-bind="text: Alarm"></td>
+					<td data-bind="text: AlarmTime"></td>
+					<td data-bind="text: TimeInState"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
-
-<table class="table table-stripped table-bordered">
-	<thead>
-		<tr>
-			<!-- i18n ?-->
-			<th>Agent Name</th>
-			<th>State</th>
-			<th>Activity</th>
-			<th>Next Activity</th>
-			<th>Next Activity Start Time</th>
-			<th>Alarm</th>
-			<th>Alarm Time</th>
-			<th>Time In State</th>
-		</tr>
-	</thead>
-	<tbody data-bind="foreach: agentStates">
-		<tr data-bind="style:  { 'background-color': AlarmColor }">
-			<td class="agent-name" data-bind="text: Name"></td>
-			<td data-bind="text: State"></td>
-			<td data-bind="text: Activity"></td>
-			<td data-bind="text: NextActivity"></td>
-			<td data-bind="text: NextActivityStartTime"></td>
-			<td data-bind="text: Alarm"></td>
-			<td data-bind="text: AlarmTime"></td>
-			<td data-bind="text: TimeInState"></td>
-		</tr>
-	</tbody>
-</table>
