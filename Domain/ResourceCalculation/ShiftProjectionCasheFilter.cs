@@ -482,7 +482,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (shiftList != null)
             {
                 var cnt = shiftList.Count;
-                if (schedulingOptions.TeamSameActivity)
+                if (schedulingOptions.TeamSameActivity && schedulingOptions.UseTeam)
                 {
                     foreach (var shift in shiftList)
                     {

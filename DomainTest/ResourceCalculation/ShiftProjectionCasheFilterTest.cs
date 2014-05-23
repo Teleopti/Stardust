@@ -1004,5 +1004,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Assert.That(shiftsList.Count, Is.EqualTo(0));
             }
         }
+
+		[Test]
+		public void ShouldNotFilterOnTeamSameActivityWhenNotUseTeam()
+		{
+			var shiftList = getCashes();
+			var schedulingOptions = new SchedulingOptions { TeamSameActivity = true, UseTeam = false };
+			var possibleStartEndCategory = new PossibleStartEndCategory { EndTime = TimeSpan.FromHours(15), StartTime = TimeSpan.FromHours(8) };
+			var result = _target.FilterOnGroupSchedulingCommonActivity(shiftList, schedulingOptions, possibleStartEndCategory, _finderResult);
+			Assert.AreEqual(shiftList.Count, result.Count);
+		}
     }
 }
