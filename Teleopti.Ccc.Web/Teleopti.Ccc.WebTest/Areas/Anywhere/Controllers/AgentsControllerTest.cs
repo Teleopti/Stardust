@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 						team)).Return(false);
 			teamRepository.Stub(x => x.Get(teamId)).Return(team);
 
-			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(permissionProvider, teamRepository, null, date,null))
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(permissionProvider, teamRepository, null, date,null,null))
 			{
 				target.GetStates(teamId);
 				target.Response.StatusCode.Should().Be(403);
@@ -53,6 +54,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var person = new Person();
 			person.SetId(personId);
 			person.Name = new Name(" "," ");
+
+			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			var hawaiiTimeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			userTimeZone.Stub(x => x.TimeZone()).Return(hawaiiTimeZoneInfo);
 			
 			var stateInfo = new AgentAdherenceStateInfo()
 			{
@@ -60,9 +65,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				State = "out of adherence",
 				Activity = "Phone",
 				NextActivity = "Lunch",
-				NextActivityStartTime = new DateTime(2001, 1, 1, 12, 3, 0),
+				NextActivityStartTime = new DateTime(2001, 1, 1, 12, 3, 0, DateTimeKind.Utc),
 				Alarm = "Alarma!",
-				AlarmTime = new DateTime(2001, 1, 1, 12, 0, 0),
+				AlarmTime = new DateTime(2001, 1, 1, 12, 0, 0, DateTimeKind.Utc),
 				AlarmColor = ColorTranslator.ToHtml(Color.Red)
 			};
 			var expected = new AgentViewModel
@@ -72,9 +77,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				State = stateInfo.State,
 				Activity =stateInfo.Activity,
 				NextActivity = stateInfo.NextActivity,
-				NextActivityStartTime = stateInfo.NextActivityStartTime,
+				NextActivityStartTime = TimeZoneInfo.ConvertTimeFromUtc(stateInfo.NextActivityStartTime, userTimeZone.TimeZone()),
 				Alarm = stateInfo.Alarm,
-				AlarmTime = stateInfo.AlarmTime,
+				AlarmTime = TimeZoneInfo.ConvertTimeFromUtc(stateInfo.AlarmTime, userTimeZone.TimeZone()),
 				AlarmColor = stateInfo.AlarmColor
 			};
 
@@ -85,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(personId)).Return(person);
-			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), MockRepository.GenerateStub<ITeamRepository>(), personRepository, new Now(), dataReader))
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), MockRepository.GenerateStub<ITeamRepository>(), personRepository, new Now(), dataReader, userTimeZone))
 			{
 			
 				var result = target.GetStates(teamId).Data as IEnumerable<AgentViewModel>;
@@ -121,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var today = new Now();
 			var period = new DateOnlyPeriod(today.LocalDateOnly(), today.LocalDateOnly());
 			personRepository.Stub(x => x.FindPeopleBelongTeam(team, period)).Return(new List<IPerson> { person });
-			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), teamRepository, personRepository, new Now(), null))
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), teamRepository, personRepository, new Now(), null, null))
 			{
 				var expected = new AgentViewModel { PersonId = personId, Name = person.Name.ToString() };
 				var result = target.ForTeam(teamId).Data as IEnumerable<AgentViewModel>;
