@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private List<IPerson> _groupMembers;
 		private ITeamInfo _teaminfo;
 		private IActivityIntervalDataCreator _activityIntervalDataCreator;
+		private PeriodValueCalculationParameters _periodValueCalculationParameters;
 
 		[SetUp]
 		public void Setup()
@@ -54,6 +55,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 													 _workShiftSelector,
 													 _schedulingResultStateHolder,
 													 _activityIntervalDataCreator);
+			_periodValueCalculationParameters = new PeriodValueCalculationParameters(_schedulingOptions.WorkShiftLengthHintOption,
+																		  _schedulingOptions.UseMinimumPersons,
+																		  _schedulingOptions.UseMaximumPersons,MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, false);
 		}
 
 		[Test]
@@ -117,10 +121,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(shifts);
 				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo,_dateOnly, _schedulingResultStateHolder, true))
 					  .Return(activityData);
-				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
-																		  _schedulingOptions.WorkShiftLengthHintOption,
-																		  _schedulingOptions.UseMinimumPersons,
-																		  _schedulingOptions.UseMaximumPersons, TimeZoneGuard.Instance.TimeZone))
+				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData, _periodValueCalculationParameters
+																		  , TimeZoneGuard.Instance.TimeZone)).IgnoreArguments()
 					  .Return(shiftProjectionCache);
 			}
 			using (_mocks.Playback())

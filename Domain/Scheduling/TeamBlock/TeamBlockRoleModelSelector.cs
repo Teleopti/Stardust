@@ -54,14 +54,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer,
 				_schedulingResultStateHolder, true);
-
+	        var parameters = new PeriodValueCalculationParameters(schedulingOptions
+		        .WorkShiftLengthHintOption, schedulingOptions
+			        .UseMinimumPersons,
+		        schedulingOptions
+			        .UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, false);
 			var roleModel = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
-				schedulingOptions
-					.WorkShiftLengthHintOption,
-				schedulingOptions
-					.UseMinimumPersons,
-				schedulingOptions
-                    .UseMaximumPersons, TimeZoneGuard.Instance.TimeZone);
+				parameters, TimeZoneGuard.Instance.TimeZone);
 			return roleModel;
 		}
 	}

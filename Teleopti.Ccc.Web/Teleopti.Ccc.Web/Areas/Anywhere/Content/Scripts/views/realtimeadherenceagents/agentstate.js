@@ -22,7 +22,7 @@
 		    };
 
     		that.refreshTimeInState = function () {
-    			var duration = moment.duration(((new Date).getTime() - new Date(that.AlarmTime)));
+    			var duration = moment.duration(((new Date).getTime() - moment(that.AlarmTime, resources.DateTimeFormatForMoment).toDate()));
     			that.TimeInState(Math.floor(duration.asHours()) + moment.utc(duration.asMilliseconds()).format(":mm:ss"));
 		    }
 

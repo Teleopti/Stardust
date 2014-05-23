@@ -8,14 +8,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
-    public interface IWorkShiftValueCalculator
-    {
-		double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity, IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic,
-													WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, TimeZoneInfo timeZoneInfo);
-    }
+	public interface IWorkShiftValueCalculator
+	{
+		double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity,
+			IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic,
+			PeriodValueCalculationParameters periodValueCalculationParameters, TimeZoneInfo timeZoneInfo);
+	}
 
-    public class WorkShiftValueCalculator : IWorkShiftValueCalculator
-    {
+	public class WorkShiftValueCalculator : IWorkShiftValueCalculator
+	{
         private readonly IWorkShiftPeriodValueCalculator _workShiftPeriodValueCalculator;
         private readonly IWorkShiftLengthValueCalculator _workShiftLengthValueCalculator;
 	    private readonly IMaxSeatsCalculationForTeamBlock _maxSeatsCalculationForTeamBlock;
@@ -29,8 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
         public double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity,
 										   IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic,
-                                           WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons,
-                                           bool useMaximumPersons, TimeZoneInfo timeZoneInfo)
+                                           PeriodValueCalculationParameters periodValueCalculationParameters, TimeZoneInfo timeZoneInfo)
         {
             if (mainShiftLayers == null) throw new ArgumentNullException("mainShiftLayers");
 			if (skillIntervalDataDic == null)
@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
                 while (currentResourceInMinutes > 0)
                 {
                    var valueForThisPeriod = _workShiftPeriodValueCalculator.PeriodValue(currentStaffPeriod, currentResourceInMinutes,
-                                                                               useMinimumPersons, useMaximumPersons);
+                                                                               periodValueCalculationParameters.UseMinimumPersons, periodValueCalculationParameters.UseMaximumPersons);
 	                var maxSeatsCorrection = _maxSeatsCalculationForTeamBlock.PeriodValue(valueForThisPeriod,
-		                UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak, false);
+		                MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, false);
 
 	                if (maxSeatsCorrection == null)
 		                return null;
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
                 }
             }
 
-            return _workShiftLengthValueCalculator.CalculateShiftValueForPeriod(periodValue, resourceInMinutes, lengthFactor);
+				return _workShiftLengthValueCalculator.CalculateShiftValueForPeriod(periodValue, resourceInMinutes, periodValueCalculationParameters.LengthFactor);
         }  
     }
 }

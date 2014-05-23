@@ -84,22 +84,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				                                             schedulingOptions.BlockSameShift;
 				if (!isSingleAgentTeamAndBlockWithSameShift)
 				{
-					var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person, roleModelShift);
+					var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person,
+						roleModelShift);
 					if (restriction == null) return false;
 					restriction = restriction.Combine(shiftNudgeRestriction);
-					var shifts = _workShiftFilterService.FilterForTeamMember(day, person, teamBlockSingleDayInfo, restriction, schedulingOptions,
-					                                            new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day));
+					var shifts = _workShiftFilterService.FilterForTeamMember(day, person, teamBlockSingleDayInfo, restriction,
+						schedulingOptions,
+						new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day));
 					if (shifts.IsNullOrEmpty()) continue;
 
-					var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day, schedulingResultStateHolder, false);
-					
+					var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day,
+						schedulingResultStateHolder, false);
+					var parameters = new PeriodValueCalculationParameters(schedulingOptions
+						.WorkShiftLengthHintOption, schedulingOptions
+							.UseMinimumPersons,
+						schedulingOptions
+							.UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, false);
 					bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
-																								 schedulingOptions
-																									 .WorkShiftLengthHintOption,
-																								 schedulingOptions
-																									 .UseMinimumPersons,
-																								 schedulingOptions
-																									 .UseMaximumPersons, TimeZoneGuard.Instance.TimeZone);
+						parameters, TimeZoneGuard.Instance.TimeZone);
 					if (bestShiftProjectionCache == null) continue;
 				}
 
