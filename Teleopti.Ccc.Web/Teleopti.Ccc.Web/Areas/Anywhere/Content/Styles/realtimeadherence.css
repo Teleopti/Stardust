@@ -6,6 +6,10 @@
 	cursor: pointer;
 }
 
+.drilldown{
+	cursor: pointer;
+}
+
 .realtimeadherenceteams .gage {
 	height: 250px;
 }
