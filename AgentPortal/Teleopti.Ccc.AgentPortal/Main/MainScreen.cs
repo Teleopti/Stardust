@@ -166,9 +166,6 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 toolStripExMessages.Size = toolStripExMessages.PreferredSize;
                 ribbonControlAdv1.BeforeContextMenuOpen += ribbonControlBeforeContextMenuOpen;
             }
-            // <-- Bugfix #27980: Strange view in Week view when logging in to MyTime
-            RefreshTab();
-            // -->
         }
 
         private void MainScreen_Resize(object sender, EventArgs e)
@@ -184,6 +181,11 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
             if (WindowState != FormWindowState.Minimized)
                 checkPermissions();
+
+			// <-- Bugfix #27980: Strange view in Week view when logging in to MyTime
+			if (WindowState != FormWindowState.Minimized)
+				RefreshTab();
+			// -->
         }
 
         private void switchToAsm()
