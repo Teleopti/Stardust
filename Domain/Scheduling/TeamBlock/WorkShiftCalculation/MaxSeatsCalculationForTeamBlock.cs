@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public interface IMaxSeatsCalculationForTeamBlock
 	{
-		double? PeriodValue(double periodValue, UseMaxSeatsOptions option, bool isMaxSeatsReached);
+		double? PeriodValue(double periodValue, MaxSeatsFeatureOptions maxSeatsFeatureOption, bool isMaxSeatsReached);
 	}
 
 	public class MaxSeatsCalculationForTeamBlock : IMaxSeatsCalculationForTeamBlock
@@ -15,17 +15,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		private const int theBigNumber = -10000;
 
 
-		public double? PeriodValue(double periodValue, UseMaxSeatsOptions option, bool isMaxSeatsReached)
+		public double? PeriodValue(double periodValue, MaxSeatsFeatureOptions maxSeatsFeatureOption, bool isMaxSeatsReached)
 		{
-			switch (option)
+			switch (maxSeatsFeatureOption)
 			{
-				case UseMaxSeatsOptions.DoNotConsiderMaxSeats:
+				case MaxSeatsFeatureOptions.DoNotConsiderMaxSeats:
 					return periodValue;
-				case UseMaxSeatsOptions.ConsiderMaxSeats:
+				case MaxSeatsFeatureOptions.ConsiderMaxSeats:
 					if(isMaxSeatsReached)
 						return periodValue*theBigNumber;
 					break;
-				case UseMaxSeatsOptions.ConsiderMaxSeatsAndDoNotBreak:
+				case MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak:
 					if (isMaxSeatsReached)
 						return null;
 					break;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		}
 	}
 
-	public enum UseMaxSeatsOptions
+	public enum MaxSeatsFeatureOptions
 	{
 		DoNotConsiderMaxSeats = 0,
 		ConsiderMaxSeats = 1,
