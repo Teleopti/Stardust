@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						.WorkShiftLengthHintOption, schedulingOptions
 							.UseMinimumPersons,
 						schedulingOptions
-							.UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, false);
+							.UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats);
 					bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 						parameters, TimeZoneGuard.Instance.TimeZone);
 					if (bestShiftProjectionCache == null) continue;
