@@ -40,6 +40,7 @@
 				agentState.fill(data[i], a.Name, a.TimeZoneOffset);
 				that.agentStates.push(agentState);
 			}
+			that.agentStates.sort(function(left, right) { return left.Name == right.Name ? 0 : (left.Name < right.Name ? -1 : 1); });
 		}
 
 		that.getAgent =function(id) {
