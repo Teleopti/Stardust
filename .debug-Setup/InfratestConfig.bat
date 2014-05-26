@@ -18,19 +18,14 @@ SET AnalyticsDB=Infratest_Analytics
 )
 
 ::init toggle values to "ALL"
-SET TOGGLE_URL=ALL
 SET TOGGLE_FILE=ALL
 
 if "%FEATURETOGGLE%" == "RC" (
 SET TOGGLE_FILE=bin/FeatureFlags/RC.toggles.txt
-::FIX LATER!
-SET TOGGLE_URL=http://localhost:52858/
 )
 
 if "%FEATURETOGGLE%" == "R" (
 SET TOGGLE_FILE=bin/FeatureFlags/released.toggles.txt
-::FIX LATER!
-SET TOGGLE_URL=http://localhost:52858/
 )
 
 if "%configuration%"=="" (
@@ -50,7 +45,6 @@ ECHO $(DB_CCC7)^|%CCC7DB%>>"%MySettings%"
 ECHO $(DB_ANALYTICS)^|%AnalyticsDB%>>"%MySettings%"
 ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%MySettings%"
 ECHO $(TOGGLE_FILE)^|%TOGGLE_FILE%>>"%MySettings%"
-ECHO $(TOGGLE_URL)^|%TOGGLE_URL%>>"%MySettings%"
 ECHO $(DATASOURCE_NAME)^|TestData>>"%MySettings%"
 
 ::telling what config to modify
