@@ -227,10 +227,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if(possibleStartEndCategory != null)
 					_shiftList = _shiftProjectionCacheFilter.FilterOnShiftCategory(possibleStartEndCategory.ShiftCategory, _shiftList, FinderResult);
 
-				_shiftList = _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonStartEnd(_shiftList, possibleStartEndCategory, schedulingOptions, FinderResult);
-
-                _shiftList = _shiftProjectionCacheFilter.FilterOnGroupSchedulingCommonActivity(_shiftList, schedulingOptions, possibleStartEndCategory, FinderResult);
-
 			    _shiftList = _shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(_shiftList, schedulingOptions.MainShiftOptimizeActivitySpecification);
 
 				_shiftList = _shiftProjectionCacheFilter.FilterOnRestrictionAndNotAllowedShiftCategories(dateOnly,

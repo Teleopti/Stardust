@@ -159,21 +159,6 @@ namespace Teleopti.Interfaces.Domain
 														   DateOnly dateOnly, IList<IShiftProjectionCache> shiftList, 
     	                                                   IWorkShiftFinderResult finderResult);
 
-    	
-		/// <summary>
-		/// Filters the on group scheduling common start end.
-		/// </summary>
-		/// <param name="shiftList">The shift list.</param>
-		/// <param name="possibleStartEndCategory">The possible start end category.</param>
-		/// <param name="schedulingOptions">The scheduling options.</param>
-		/// <param name="finderResult">The finder result.</param>
-		/// <returns></returns>
-        IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonStartEnd(IList<IShiftProjectionCache> shiftList,
-                                                                           IPossibleStartEndCategory
-                                                                           possibleStartEndCategory,
-                                                                           ISchedulingOptions schedulingOptions,
-																		   IWorkShiftFinderResult finderResult);
-
         /// <summary>
         /// Filter on activities which cannot be overwritten by meetings and personal shifts
         /// </summary>
@@ -185,16 +170,6 @@ namespace Teleopti.Interfaces.Domain
                                                                     IScheduleDay part,
                                                                     IWorkShiftFinderResult finderResult);
 
-        /// <summary>
-        /// Filters the on group scheduling common activity.
-        /// </summary>
-        /// <param name="shiftList"></param>
-        /// <param name="schedulingOptions"></param>
-        /// <param name="possibleStartEndCategory"></param>
-        /// <param name="finderResult"></param>
-        /// <returns></returns>
-        IList<IShiftProjectionCache> FilterOnGroupSchedulingCommonActivity(IList<IShiftProjectionCache> shiftList, ISchedulingOptions schedulingOptions,
-                                                                          IPossibleStartEndCategory possibleStartEndCategory, IWorkShiftFinderResult finderResult);
         /// <summary>
         /// Filters the on personal shifts.
         /// </summary>

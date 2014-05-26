@@ -748,77 +748,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
         [Test]
-        public void CanFilterOnGroupSchedulingCommonStart()
-        {
-            var shiftList = getCashes();
-			Expect.Call(_cashe1.WorkShiftStartTime).Return(_start1);
-			Expect.Call(_cashe2.WorkShiftStartTime).Return(_start2);
-			Expect.Call(_cashe3.WorkShiftStartTime).Return(_start3);
-			Expect.Call(_cashe4.WorkShiftStartTime).Return(_start4);
-            _mocks.ReplayAll();
-            var possibleStartEndCategory = new PossibleStartEndCategory { StartTime = new TimeSpan(8,0,0) };
-            var schedulingOptions = new SchedulingOptions { TeamSameStartTime = true };
-
-            var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
-                                                                          possibleStartEndCategory,
-                                                                          schedulingOptions,
-																		  _finderResult);
-
-            retShifts.Count.Should().Be.EqualTo(2);
-            _mocks.VerifyAll();
-        }
-
-        [Test]
-        public void CanFilterOnGroupSchedulingCommonEnd()
-        {
-
-
-            var shiftList = getCashes();
-            Expect.Call(_cashe1.WorkShiftEndTime ).Return(_end1 );
-			Expect.Call(_cashe2.WorkShiftEndTime).Return(_end2);
-			Expect.Call(_cashe3.WorkShiftEndTime).Return(_end3);
-			Expect.Call(_cashe4.WorkShiftEndTime).Return(_end4);
-            _mocks.ReplayAll();
-            var possibleStartEndCategory = new PossibleStartEndCategory { EndTime  = TimeSpan.FromHours(15) };
-            var schedulingOptions = new SchedulingOptions { TeamSameEndTime = true };
-
-            var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
-                                                                          possibleStartEndCategory,
-                                                                          schedulingOptions,
-																		  _finderResult);
-
-            retShifts.Count.Should().Be.EqualTo(1);
-            _mocks.VerifyAll();
-        }
-
-        [Test]
-        public void CanFilterOnGroupSchedulingCommonStartEnd()
-        {
-
-
-            var shiftList = getCashes();
-			Expect.Call(_cashe1.WorkShiftStartTime).Return(_start1);
-			Expect.Call(_cashe2.WorkShiftStartTime).Return(_start2);
-			Expect.Call(_cashe3.WorkShiftStartTime).Return(_start3);
-			Expect.Call(_cashe4.WorkShiftStartTime).Return(_start4);
-			Expect.Call(_cashe1.WorkShiftEndTime).Return(_end1);
-			Expect.Call(_cashe2.WorkShiftEndTime).Return(_end2).Repeat.Any();
-			Expect.Call(_cashe3.WorkShiftEndTime).Return(_end3).Repeat.Any();
-			Expect.Call(_cashe4.WorkShiftEndTime).Return(_end4).Repeat.Any();
-            _mocks.ReplayAll();
-			var possibleStartEndCategory = new PossibleStartEndCategory { EndTime = TimeSpan.FromHours(15), StartTime = TimeSpan.FromHours(8) };
-            var schedulingOptions = new SchedulingOptions { TeamSameEndTime = true, TeamSameStartTime = true };
-
-            var retShifts = _target.FilterOnGroupSchedulingCommonStartEnd(shiftList,
-                                                                          possibleStartEndCategory,
-                                                                          schedulingOptions,
-																		  _finderResult);
-
-            retShifts.Count.Should().Be.EqualTo(1);
-            _mocks.VerifyAll();
-        }
-
-        [Test]
         public void CanFilterOutShiftsWhichCannotBeOverwritten()
         {
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();
@@ -1004,15 +933,5 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Assert.That(shiftsList.Count, Is.EqualTo(0));
             }
         }
-
-		[Test]
-		public void ShouldNotFilterOnTeamSameActivityWhenNotUseTeam()
-		{
-			var shiftList = getCashes();
-			var schedulingOptions = new SchedulingOptions { TeamSameActivity = true, UseTeam = false };
-			var possibleStartEndCategory = new PossibleStartEndCategory { EndTime = TimeSpan.FromHours(15), StartTime = TimeSpan.FromHours(8) };
-			var result = _target.FilterOnGroupSchedulingCommonActivity(shiftList, schedulingOptions, possibleStartEndCategory, _finderResult);
-			Assert.AreEqual(shiftList.Count, result.Count);
-		}
     }
 }
