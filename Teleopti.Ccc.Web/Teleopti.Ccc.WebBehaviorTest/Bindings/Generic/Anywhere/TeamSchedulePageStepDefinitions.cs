@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				if (!string.IsNullOrEmpty(scheduleShiftInfo.TextColor))
 				{
 					Browser.Interactions.AssertExistsUsingJQuery(
-						string.Format(selector + " .label[style*='background-color: {0}; color: {1}']:contains('{2}')",
+                        string.Format(selector + " .label[style*='background-color: {0}'][style*='color: {1}']:contains('{2}')",
 						              colorNameToCss(scheduleShiftInfo.Color),
 						              colorNameToCss(scheduleShiftInfo.TextColor),
 						              scheduleShiftInfo.Name)
