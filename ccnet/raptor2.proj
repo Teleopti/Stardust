@@ -299,7 +299,7 @@
 				Include="$(CCNetWorkingDirectory)\**\*Test.csproj"
 				Exclude="
 					$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj"/>
-		<ProjectsToNCover Condition="'$(RunWebBehaviorTests)' == 'true'"
+		<ProjectsToNCover Condition="'$(RunWebBehaviorTests)' == 'true' And '$(CCNetProject)'!='CCC-Main'"
 			  Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj"
 		 />
 	</ItemGroup>
