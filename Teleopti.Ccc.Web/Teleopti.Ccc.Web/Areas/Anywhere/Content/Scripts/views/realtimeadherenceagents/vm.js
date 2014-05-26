@@ -17,14 +17,18 @@
 		that.resources = resources;
 		that.teamName = ko.observable();
 		that.siteName = ko.observable();
+		that.siteId = ko.observable();
 		
 		that.fillAgents = function (data) {
 			for (var i = 0; i < data.length; i++) {
 				var a = agent();
 				a.fill(data[i]);
 				that.agents.push(a);
-				}
-			};
+				that.teamName(data[i].teamName);
+				that.siteName(data[i].siteName);
+				that.SiteId(data[i].siteId);
+			}
+		};
 
 		that.fillAgentsStates = function(data) {
 			for (var i = 0; i < data.length; i++) {
@@ -53,14 +57,6 @@
 			data.Id = notification.DomainId;
 			that.agentStates.removeAll();
 			that.fillAgentsStates(data.AgentStates);
-		}
-
-		that.setSiteName = function (name) {
-			that.siteName(name);
-		}
-
-		that.setTeamName = function(name) {
-			that.teamName = name;
 		}
 
 		return that;
