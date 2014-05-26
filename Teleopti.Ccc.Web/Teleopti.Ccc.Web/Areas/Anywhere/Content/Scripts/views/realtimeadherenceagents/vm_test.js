@@ -42,6 +42,9 @@
 					AlarmColor: '#fff',
 					AlarmTime: moment('2014-01-21 12:15').format(resources.DateTimeFormatForMoment)
 				};
+
+				var agent1 = { PersonId: "guid1", Name: "Bill" };
+				var agent2 = { PersonId: "guid2", Name: "Boule" };
 				var vm = viewModel();
 				vm.fillAgents([{ PersonId: "guid1", Name: "Bill", SiteId: "gui1", SiteName: "site", TeamId: "guid2", TeamName: "team", TimeZoneOffsetMinutes: -600 },
 					{ PersonId: "guid2", Name: "John", SiteId: "gui1", SiteName: "site", TeamId: "guid2", TeamName: "team", TimeZoneOffsetMinutes: -600 }]);
