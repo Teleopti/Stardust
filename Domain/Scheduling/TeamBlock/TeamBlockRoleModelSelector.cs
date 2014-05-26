@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		        .WorkShiftLengthHintOption, schedulingOptions
 			        .UseMinimumPersons,
 		        schedulingOptions
-			        .UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, false);
+			        .UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats);
 			var roleModel = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 				parameters, TimeZoneGuard.Instance.TimeZone);
 			return roleModel;

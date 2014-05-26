@@ -12,16 +12,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	  private readonly bool _useMinimumPersons;
 	  private readonly bool _useMaximumPersons;
 	  private readonly MaxSeatsFeatureOptions _maxSeatsFeatureOption;
-	  private readonly bool _isMaxSeatsReached;
 
 	  public PeriodValueCalculationParameters(WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons,
-                                           bool useMaximumPersons, MaxSeatsFeatureOptions maxSeatsFeatureOption, bool isMaxSeatsReached)
+                                           bool useMaximumPersons, MaxSeatsFeatureOptions maxSeatsFeatureOption)
 	  {
 		  _lengthFactor = lengthFactor;
 		  _useMinimumPersons = useMinimumPersons;
 		  _useMaximumPersons = useMaximumPersons;
 		  _maxSeatsFeatureOption = maxSeatsFeatureOption;
-		  _isMaxSeatsReached = isMaxSeatsReached;
 	  }
 
 	  public WorkShiftLengthHintOption LengthFactor
@@ -44,9 +42,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		  get { return _maxSeatsFeatureOption; }
 	  }
 
-	  public bool IsMaxSeatsReached
-	  {
-		  get { return _isMaxSeatsReached; }
-	  }
 	}
 }

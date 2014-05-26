@@ -22,42 +22,49 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		public void ShouldReturnOriginalPeriodValueIfNotConsiderMaxSeats()
 		{
 			Assert.AreEqual(12.45,
-				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, false));
+				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, false,true));
 		}
 
 		[Test]
 		public void ShouldReturnOriginalPeriodValueIfNotConsiderMaxSeatsWhenMaxSeatsReached()
 		{
 			Assert.AreEqual(12.45,
-				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, true));
+				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, true, true));
 		}
 
 		[Test]
 		public void ShouldReturnOriginalPeriodValueIfConsiderMaxSeats()
 		{
 			Assert.AreEqual(12.45,
-				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeats, false));
+				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeats, false, true));
 		}
 
 		[Test]
 		public void ShouldReturnAPunishedPeriodValueIfConsiderMaxSeatsWhenMaxSeatsReached()
 		{
 			Assert.AreEqual(12.45 * -10000,
-				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeats, true));
+				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeats, true, true));
 		}
 
 		[Test]
 		public void ShouldReturnNullIfConsiderMaxSeatsAndDontBreak()
 		{
 			Assert.IsNull(
-				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, true));
+				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, true, true));
 		}
 
 		[Test]
 		public void ShouldReturnOriginalPeriodValueIfConsiderMaxSeatsAndDontBreak()
 		{
 			Assert.AreEqual(12.45,
-				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, false));
+				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, false, true));
+		}
+
+		[Test]
+		public void ReturnSameValueIfRequireSeatIsFalse()
+		{
+			Assert.AreEqual(12.45,
+				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, false, false));
 		}
 	}
 }
