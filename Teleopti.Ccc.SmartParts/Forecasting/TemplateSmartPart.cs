@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using Microsoft.Practices.CompositeUI.SmartParts;
+using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
@@ -64,43 +65,12 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
 
         private void DrawLastUpdatedInfoForTemplateSmartPart(IDrawProperties drawProperties, int index)
         {
-            if (index == 0)
-            {
-                drawProperties.Graphics.DrawString(UserTexts.Resources.LastUpdated, _drawSmartPart.DefaultFont, Brushes.Black,
-                                DefaultNamesCol, drawProperties.Bounds.Y);
-
-                drawProperties.Graphics.DrawString(UserTexts.Resources.ChangedBy, _drawSmartPart.DefaultFont, Brushes.Black,
-                                    (NamesColumnWidth + DefaultNamesCol), drawProperties.Bounds.Y);
-            }
-
-            if (index > 0 && (index - 1) < _workloadDetails.Count)
-            {
-                EntityUpdateInformation workloadDetail = _workloadDetails[index - 1];
-
-                string updatedOn = string.Empty;
-                if (workloadDetail.LastUpdate.HasValue && StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
-                    updatedOn = workloadDetail.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipal.Current.Regional.Culture);
-
-                drawProperties.Graphics.DrawString(updatedOn, _drawSmartPart.DefaultFont, Brushes.Black,
-                                    DefaultNamesCol, drawProperties.Bounds.Y);
-
-                string updatedBy = string.Empty;
-                if (workloadDetail.Name.HasValue) updatedBy = workloadDetail.Name.Value.ToString();
-
-                drawProperties.Graphics.DrawString(updatedBy, _drawSmartPart.DefaultFont, Brushes.Black,
-                                    (NamesColumnWidth + DefaultNamesCol), drawProperties.Bounds.Y);
-            }
+				
         }
 
         public void DrawNames(IDrawProperties drawProperties)
         {
-            if (drawProperties == null) throw new ArgumentNullException("drawProperties");
-
-            int index = drawProperties.RowIndex - 1;
-            if ((_workloadNames != null) && (index > 0 && (index - 1) < _workloadDetails.Count))
-            {
-                _drawSmartPart.DrawWorkloadNames(drawProperties, _workloadNames, (index - 1));
-            }
+				
         }
 
         public ToolTipInfo SetTooltip(IDrawPositionAndWidth drawPositionAndWidth, int cursorX)
@@ -144,7 +114,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
             if (_forecasterControl == null)
             {
                 _forecasterControl = new ForecastGraphsControl(this, _drawSmartPart);
-                _forecasterControl.Dock = DockStyle.Fill;
+                _forecasterControl.Dock = DockStyle.Top;
                 panel1.Controls.Add(_forecasterControl);
 
                 _forecasterControl.Timeline = false;
@@ -153,10 +123,41 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                 _forecasterControl.ProgressColumn.ColWidths[1] = NamesColumnWidth;
                 _forecasterControl.ProgressColumn.ColWidths[2] = DefaultNamesCol;
                 _forecasterControl.ProgressColumn.ColWidths[3] = _forecasterControl.ProgressColumn.Width - (DefaultNamesCol + 75);
+	            _forecasterControl.ProgressColumn.ReadOnly = false;
             }
 
             _forecasterControl.ProgressColumn.RowCount = _workloadDetails.Count + 1;
-            _forecasterControl.ProgressColumn.Invalidate();
+	        DrawInfo();
         }
+
+	    private void DrawInfo()
+	    {
+			 _forecasterControl.ProgressColumn.Model[1, 2].CellValue = UserTexts.Resources.LastUpdated;
+			 _forecasterControl.ProgressColumn.Model[1, 3].CellValue = UserTexts.Resources.ChangedBy; 
+		    for (int i = 2; i <= _workloadDetails.Count + 1; i++)
+		    {
+				 EntityUpdateInformation workloadDetail = _workloadDetails[i - 2];
+
+				 string updatedOn = string.Empty;
+				 if (workloadDetail.LastUpdate.HasValue && StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
+					 updatedOn = workloadDetail.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipal.Current.Regional.Culture);
+				 
+				 string updatedBy = string.Empty;
+				 if (workloadDetail.Name.HasValue) updatedBy = workloadDetail.Name.Value.ToString();
+
+				 
+				 _forecasterControl.ProgressColumn.Model[i, 1].CellValue = _workloadNames[i-2].Name;
+				 _forecasterControl.ProgressColumn.Model[i, 2].CellValue = updatedOn;
+				 _forecasterControl.ProgressColumn.Model[i, 3].CellValue = updatedBy;
+				
+		    }
+			 _forecasterControl.ProgressColumn.ColWidths.ResizeToFit(GridRangeInfo.Table());
+		 }
+
+		 private void TemplateSmartPart_Enter(object sender, EventArgs e)
+		 {
+			 DrawInfo();
+		 }
+
     }
 }
