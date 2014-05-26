@@ -371,9 +371,8 @@ Scenario: Should be able to see current states of all agents
 		| Time in state	| 0:15:00 |
 
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
-@ignore
 Scenario: Should be able to see state updates of all agents
-	Given  the current time is '2014-01-21 11:30:00'
+	Given  the current time is '2014-01-21 12:30:00'
 	And there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
