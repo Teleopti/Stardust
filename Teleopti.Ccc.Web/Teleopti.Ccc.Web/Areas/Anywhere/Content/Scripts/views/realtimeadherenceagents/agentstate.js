@@ -18,8 +18,6 @@
     			that.Alarm = data.Alarm;
     			that.AlarmColor = 'rgba('+that.hexToRgb(data.AlarmColor) + ', 0.6)';
     			that.AlarmTime = moment.utc(data.AlarmTime).add(offset, 'minutes').format(resources.DateTimeFormatForMoment);
-			    console.log(that.AlarmTime);
-			    console.log(moment.utc(data.AlarmTime).add(offset, 'minutes'));
 			    that.refreshTimeInState();
 		    };
 
