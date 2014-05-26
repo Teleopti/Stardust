@@ -30,129 +30,133 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SmartPartBase));
-            this.toolStripExHeader = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
-            this.CloseButton = new System.Windows.Forms.ToolStripButton();
-            this.FormTitle = new System.Windows.Forms.ToolStripLabel();
-            this.addSmartPartsToolStripMenuItem = new System.Windows.Forms.ToolStripDropDownButton();
-            this.replaceSmartPartsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStripExSmartPart = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
-            this.toolStripStatusLabelIcon = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBarSmartPart = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripExHeader.SuspendLayout();
-            this.statusStripExSmartPart.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // toolStripExHeader
-            // 
-            this.toolStripExHeader.BackColor = System.Drawing.Color.Transparent;
-            this.toolStripExHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripExHeader.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.toolStripExHeader.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStripExHeader.Image = null;
-            this.toolStripExHeader.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.toolStripExHeader.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SmartPartBase));
+			this.toolStripExHeader = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
+			this.CloseButton = new System.Windows.Forms.ToolStripButton();
+			this.FormTitle = new System.Windows.Forms.ToolStripLabel();
+			this.addSmartPartsToolStripMenuItem = new System.Windows.Forms.ToolStripDropDownButton();
+			this.replaceSmartPartsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.statusStripExSmartPart = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
+			this.toolStripStatusLabelIcon = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripProgressBarSmartPart = new System.Windows.Forms.ToolStripProgressBar();
+			this.toolStripExHeader.SuspendLayout();
+			this.statusStripExSmartPart.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// toolStripExHeader
+			// 
+			this.toolStripExHeader.BackColor = System.Drawing.Color.Transparent;
+			this.toolStripExHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.toolStripExHeader.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripExHeader.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.toolStripExHeader.Image = null;
+			this.toolStripExHeader.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.toolStripExHeader.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CloseButton,
             this.FormTitle,
             this.addSmartPartsToolStripMenuItem});
-            this.toolStripExHeader.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStripExHeader.Location = new System.Drawing.Point(0, 0);
-            this.toolStripExHeader.Name = "toolStripExHeader";
-            this.toolStripExHeader.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Blue;
-            this.toolStripExHeader.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStripExHeader.ShowCaption = false;
-            this.toolStripExHeader.ShowLauncher = false;
-            this.toolStripExHeader.Size = new System.Drawing.Size(401, 25);
-            this.toolStripExHeader.TabIndex = 1;
-            // 
-            // CloseButton
-            // 
-            this.CloseButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.CloseButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.CloseButton.Image = global::Teleopti.Common.UI.SmartPartControls.Properties.Resources.cancel;
-            this.CloseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.CloseButton.Name = "CloseButton";
-            this.CloseButton.Size = new System.Drawing.Size(23, 22);
-            this.CloseButton.Text = "Close";
-            this.CloseButton.Visible = false;
-            this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
-            // 
-            // FormTitle
-            // 
-            this.FormTitle.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.FormTitle.ForeColor = System.Drawing.Color.SteelBlue;
-            this.FormTitle.Image = global::Teleopti.Common.UI.SmartPartControls.Properties.Resources.browser;
-            this.FormTitle.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.FormTitle.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
-            this.FormTitle.Name = "FormTitle";
-            this.FormTitle.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.FormTitle.Size = new System.Drawing.Size(116, 22);
-            this.FormTitle.Text = "Smart Part  Title";
-            this.FormTitle.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // addSmartPartsToolStripMenuItem
-            // 
-            this.addSmartPartsToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.addSmartPartsToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.addSmartPartsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.toolStripExHeader.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+			this.toolStripExHeader.Location = new System.Drawing.Point(0, 0);
+			this.toolStripExHeader.Name = "toolStripExHeader";
+			this.toolStripExHeader.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Blue;
+			this.toolStripExHeader.RightToLeft = System.Windows.Forms.RightToLeft.No;
+			this.toolStripExHeader.ShowCaption = false;
+			this.toolStripExHeader.ShowLauncher = false;
+			this.toolStripExHeader.Size = new System.Drawing.Size(401, 25);
+			this.toolStripExHeader.TabIndex = 1;
+			// 
+			// CloseButton
+			// 
+			this.CloseButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this.CloseButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.CloseButton.Image = global::Teleopti.Common.UI.SmartPartControls.Properties.Resources.cancel;
+			this.CloseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.CloseButton.Name = "CloseButton";
+			this.CloseButton.Size = new System.Drawing.Size(23, 22);
+			this.CloseButton.Text = "Close";
+			this.CloseButton.Visible = false;
+			this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
+			// 
+			// FormTitle
+			// 
+			this.FormTitle.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
+			this.FormTitle.ForeColor = System.Drawing.Color.SteelBlue;
+			this.FormTitle.Image = global::Teleopti.Common.UI.SmartPartControls.Properties.Resources.browser;
+			this.FormTitle.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.FormTitle.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
+			this.FormTitle.Name = "FormTitle";
+			this.FormTitle.RightToLeft = System.Windows.Forms.RightToLeft.No;
+			this.FormTitle.Size = new System.Drawing.Size(116, 22);
+			this.FormTitle.Text = "Smart Part  Title";
+			this.FormTitle.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// addSmartPartsToolStripMenuItem
+			// 
+			this.addSmartPartsToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this.addSmartPartsToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.addSmartPartsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.replaceSmartPartsToolStripMenuItem});
-            this.addSmartPartsToolStripMenuItem.Image = global::Teleopti.Common.UI.SmartPartControls.Properties.Resources.dropdown;
-            this.addSmartPartsToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.addSmartPartsToolStripMenuItem.Name = "addSmartPartsToolStripMenuItem";
-            this.addSmartPartsToolStripMenuItem.Size = new System.Drawing.Size(29, 22);
-            this.addSmartPartsToolStripMenuItem.Visible = false;
-            // 
-            // replaceSmartPartsToolStripMenuItem
-            // 
-            this.replaceSmartPartsToolStripMenuItem.Image = global::Teleopti.Common.UI.SmartPartControls.Properties.Resources.undo;
-            this.replaceSmartPartsToolStripMenuItem.Name = "replaceSmartPartsToolStripMenuItem";
-            this.replaceSmartPartsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.replaceSmartPartsToolStripMenuItem.Text = "Replace Smart Parts";
-            // 
-            // statusStripExSmartPart
-            // 
-            this.statusStripExSmartPart.AllowItemReorder = true;
-            this.statusStripExSmartPart.Dock = Syncfusion.Windows.Forms.Tools.DockStyleEx.Bottom;
-            this.statusStripExSmartPart.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.addSmartPartsToolStripMenuItem.Image = global::Teleopti.Common.UI.SmartPartControls.Properties.Resources.dropdown;
+			this.addSmartPartsToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.addSmartPartsToolStripMenuItem.Name = "addSmartPartsToolStripMenuItem";
+			this.addSmartPartsToolStripMenuItem.Size = new System.Drawing.Size(29, 22);
+			this.addSmartPartsToolStripMenuItem.Visible = false;
+			// 
+			// replaceSmartPartsToolStripMenuItem
+			// 
+			this.replaceSmartPartsToolStripMenuItem.Image = global::Teleopti.Common.UI.SmartPartControls.Properties.Resources.undo;
+			this.replaceSmartPartsToolStripMenuItem.Name = "replaceSmartPartsToolStripMenuItem";
+			this.replaceSmartPartsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+			this.replaceSmartPartsToolStripMenuItem.Text = "Replace Smart Parts";
+			// 
+			// statusStripExSmartPart
+			// 
+			this.statusStripExSmartPart.AllowItemReorder = true;
+			this.statusStripExSmartPart.BackColor = System.Drawing.SystemColors.Control;
+			this.statusStripExSmartPart.BeforeTouchSize = new System.Drawing.Size(401, 22);
+			this.statusStripExSmartPart.Dock = Syncfusion.Windows.Forms.Tools.DockStyleEx.Bottom;
+			this.statusStripExSmartPart.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelIcon});
-            this.statusStripExSmartPart.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.statusStripExSmartPart.Location = new System.Drawing.Point(0, 248);
-            this.statusStripExSmartPart.Name = "statusStripExSmartPart";
-            this.statusStripExSmartPart.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Blue;
-            this.statusStripExSmartPart.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.statusStripExSmartPart.ShowItemToolTips = true;
-            this.statusStripExSmartPart.Size = new System.Drawing.Size(401, 22);
-            this.statusStripExSmartPart.TabIndex = 16;
-            this.statusStripExSmartPart.Text = "statusStripEx4";
-            // 
-            // toolStripStatusLabelIcon
-            // 
-            this.toolStripStatusLabelIcon.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripStatusLabelIcon.Image = ((System.Drawing.Image)(resources.GetObject("toolStripStatusLabelIcon.Image")));
-            this.toolStripStatusLabelIcon.Name = "toolStripStatusLabelIcon";
-            this.toolStripStatusLabelIcon.Size = new System.Drawing.Size(16, 16);
-            // 
-            // toolStripProgressBarSmartPart
-            // 
-            this.toolStripProgressBarSmartPart.Name = "toolStripProgressBarSmartPart";
-            this.toolStripProgressBarSmartPart.Size = new System.Drawing.Size(100, 15);
-            this.toolStripProgressBarSmartPart.Value = 50;
-            // 
-            // SmartPartBase
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(this.statusStripExSmartPart);
-            this.Controls.Add(this.toolStripExHeader);
-            this.Name = "SmartPartBase";
-            this.Size = new System.Drawing.Size(401, 270);
-            this.Load += new System.EventHandler(this.SmartPartBase_Load);
-            this.toolStripExHeader.ResumeLayout(false);
-            this.toolStripExHeader.PerformLayout();
-            this.statusStripExSmartPart.ResumeLayout(false);
-            this.ResumeLayout(false);
-            this.PerformLayout();
+			this.statusStripExSmartPart.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
+			this.statusStripExSmartPart.Location = new System.Drawing.Point(0, 248);
+			this.statusStripExSmartPart.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
+			this.statusStripExSmartPart.Name = "statusStripExSmartPart";
+			this.statusStripExSmartPart.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Blue;
+			this.statusStripExSmartPart.RightToLeft = System.Windows.Forms.RightToLeft.No;
+			this.statusStripExSmartPart.ShowItemToolTips = true;
+			this.statusStripExSmartPart.Size = new System.Drawing.Size(401, 22);
+			this.statusStripExSmartPart.SizingGrip = false;
+			this.statusStripExSmartPart.TabIndex = 16;
+			this.statusStripExSmartPart.Text = "statusStripEx4";
+			// 
+			// toolStripStatusLabelIcon
+			// 
+			this.toolStripStatusLabelIcon.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripStatusLabelIcon.Image = ((System.Drawing.Image)(resources.GetObject("toolStripStatusLabelIcon.Image")));
+			this.toolStripStatusLabelIcon.Name = "toolStripStatusLabelIcon";
+			this.toolStripStatusLabelIcon.Size = new System.Drawing.Size(16, 16);
+			// 
+			// toolStripProgressBarSmartPart
+			// 
+			this.toolStripProgressBarSmartPart.Name = "toolStripProgressBarSmartPart";
+			this.toolStripProgressBarSmartPart.Size = new System.Drawing.Size(100, 15);
+			this.toolStripProgressBarSmartPart.Value = 50;
+			// 
+			// SmartPartBase
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.White;
+			this.Controls.Add(this.statusStripExSmartPart);
+			this.Controls.Add(this.toolStripExHeader);
+			this.Name = "SmartPartBase";
+			this.Size = new System.Drawing.Size(401, 270);
+			this.Load += new System.EventHandler(this.SmartPartBase_Load);
+			this.toolStripExHeader.ResumeLayout(false);
+			this.toolStripExHeader.PerformLayout();
+			this.statusStripExSmartPart.ResumeLayout(false);
+			this.ResumeLayout(false);
+			this.PerformLayout();
 
         }
 
