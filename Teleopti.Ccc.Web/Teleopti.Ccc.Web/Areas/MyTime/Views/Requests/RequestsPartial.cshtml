@@ -108,7 +108,7 @@
                                 <span class="request-caption">@Resources.Date: </span><span class="request-data-date" data-bind="text: Dates"></span>
                                 <span class="request-caption">@Resources.UpdatedOn: </span><span data-bind="text: UpdatedOn" ></span>
                             </div>
-                            <div class="request-data-message request-text" data-bind="text: (IsSelected() && !IsEditable()) ? Text : ListText">
+                            <div class="request-data-message request-text" data-bind="text: (IsSelected() && (!IsEditable() || Type() == '@Resources.RequestTypeShiftTrade')) ? Text : ListText">
                             </div>
                         </div>
                         <div class="request-edit" data-bind="visible: IsSelected, with: DetailItem">
