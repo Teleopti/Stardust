@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				State = x.State,
 				Activity = x.Activity,
 				NextActivity = x.NextActivity,
-				NextActivityStartTime = TimeZoneInfo.ConvertTimeFromUtc(x.NextActivityStartTime, _userTimeZone.TimeZone()),
+				NextActivityStartTime = x.NextActivityStartTime,
 				Alarm = x.Alarm,
-				AlarmTime = TimeZoneInfo.ConvertTimeFromUtc(x.AlarmTime, _userTimeZone.TimeZone()),
+				AlarmTime = x.AlarmTime,
 				AlarmColor = x.AlarmColor
 			}), JsonRequestBehavior.AllowGet);
 		}
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 								SiteName = team.Site.Description.Name,
 								TeamId = team.Id.ToString(),
 								TeamName = team.Description.Name,
-								TimeZoneOffsetMinutes = _userTimeZone.TimeZone().BaseUtcOffset.TotalMinutes
+								TimeZoneOffsetMinutes = _userTimeZone.TimeZone().GetUtcOffset(DateTime.Now).TotalMinutes
 							});
 			return Json(agents, JsonRequestBehavior.AllowGet);
 		}

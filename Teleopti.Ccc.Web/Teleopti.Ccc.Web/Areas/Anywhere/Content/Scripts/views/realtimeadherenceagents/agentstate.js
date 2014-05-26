@@ -14,16 +14,18 @@
     			that.State = data.State;
     			that.Activity = data.Activity;
     			that.NextActivity = data.NextActivity;
-    			that.NextActivityStartTime = moment(data.NextActivityStartTime).add(offset,'minutes').format(resources.DateTimeFormatForMoment);
+    			that.NextActivityStartTime = moment.utc(data.NextActivityStartTime).add(offset,'minutes').format(resources.DateTimeFormatForMoment);
     			that.Alarm = data.Alarm;
     			that.AlarmColor = 'rgba('+that.hexToRgb(data.AlarmColor) + ', 0.6)';
-			    that.AlarmTime = moment(data.AlarmTime).add(offset, 'minutes').format(resources.DateTimeFormatForMoment);
+    			that.AlarmTime = moment.utc(data.AlarmTime).add(offset, 'minutes').format(resources.DateTimeFormatForMoment);
+			    console.log(that.AlarmTime);
+			    console.log(moment.utc(data.AlarmTime).add(offset, 'minutes'));
 			    that.refreshTimeInState();
 		    };
 
     		that.refreshTimeInState = function () {
     			var duration = moment.duration(((new Date).getTime() - moment(that.AlarmTime, resources.DateTimeFormatForMoment).toDate()));
-    			that.TimeInState(Math.floor(duration.asHours()) + moment.utc(duration.asMilliseconds()).format(":mm:ss"));
+    			that.TimeInState(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
     		}
 
     		that.hexToRgb = function (hex) {
