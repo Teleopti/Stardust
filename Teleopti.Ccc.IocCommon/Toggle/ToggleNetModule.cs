@@ -1,17 +1,22 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Toggle.Net;
 using Toggle.Net.Configuration;
 using Toggle.Net.Providers.TextFile;
+using Toggle.Net.Specifications;
 
 namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	public class ToggleNetModule : Module
 	{
+		public const string DeveloperLicenseName = "Teleopti_RD";
+		public const string RcLicenseName = "Teleopti_RC";
+		
 		private readonly string _pathToToggle;
-
+		
 		public ToggleNetModule(string pathToToggle)
 		{
 			_pathToToggle = pathToToggle.Trim();
@@ -21,18 +26,19 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		{
 			builder.Register<IToggleManager>(c =>
 			{
+				var customerName = c.Resolve<ILicenseActivator>().CustomerName;
 				if (_pathToToggle.StartsWith("http://") || _pathToToggle.StartsWith("https://"))
 				{
 					return new ToggleQuerier(_pathToToggle);
 				}
-				if (_pathToToggle.EndsWith("ALL", StringComparison.OrdinalIgnoreCase))
+				var specMappings = new DefaultSpecificationMappings();
+				specMappings.AddMapping("license", new LicenseSpecification(customerName));
+				var toggleConfiguration = new ToggleConfiguration(new FileProviderFactory(new FileReader(_pathToToggle), specMappings));
+				if (DeveloperLicenseName.Equals(customerName))
 				{
-					return new toggleManagerFullAccess();
+					toggleConfiguration.SetDefaultSpecification(new TrueSpecification());
 				}
-				var toggleConfiguration =
-					new ToggleConfiguration(new FileProviderFactory(new FileReader(_pathToToggle), new DefaultSpecificationMappings()));
-				var toggleChecker = toggleConfiguration.Create();
-				return new toggleCheckerWrapper(toggleChecker);
+				return new toggleCheckerWrapper(toggleConfiguration.Create());
 			})
 				.SingleInstance()
 				.As<IToggleManager>();
@@ -41,14 +47,14 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				.SingleInstance().As<ITogglesActive>();
 			builder.RegisterType<AllToggles>()
 				.SingleInstance().As<IAllToggles>();
-		}
-
-		private class toggleManagerFullAccess : IToggleManager
-		{
-			public bool IsEnabled(Toggles toggle)
+			builder.Register(c =>
 			{
-				return toggle != Toggles.DisabledFeature;
-			}
+				if (DefinedLicenseDataFactory.LicenseActivator == null)
+					throw new DataSourceException("Missing datasource (no *.hbm.xml file available)!");
+				return DefinedLicenseDataFactory.LicenseActivator;
+			})
+			.SingleInstance()
+			.As<ILicenseActivator>();
 		}
 
 		private class toggleCheckerWrapper : IToggleManager
