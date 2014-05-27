@@ -867,6 +867,92 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(0, ret.StudentAvailabilitiesOverLimit);
 	    }
 
+
+			}
+
+			bool ret;
+
+			using (_mocks.Playback())
+			{
+				_target = new OptimizationOverLimitByRestrictionDecider(
+					_matrix,
+					_restrictionChecker,
+					_optimizationPreferences,
+					_originalStateContainer);
+
+				var last = new OverLimitResults(0, 1, 2, 3, 0);
+				ret = _target.HasOverLimitIncreased(last);
+				Assert.IsTrue(ret);
+			}
+		}
+
+	    [Test]
+	    public void ShouldReportCorrectBrokenCount()
+	    {
+			_optimizationPreferences.General.UsePreferences = true;
+		    _optimizationPreferences.General.PreferencesValue = 1;
+			_optimizationPreferences.General.UseMustHaves = true;
+		    _optimizationPreferences.General.MustHavesValue = 1;
+			_optimizationPreferences.General.UseRotations = true;
+		    _optimizationPreferences.General.RotationsValue = 1;
+			_optimizationPreferences.General.UseAvailabilities = true;
+			_optimizationPreferences.General.AvailabilitiesValue = 1;
+			_optimizationPreferences.General.UseStudentAvailabilities = true;
+			_optimizationPreferences.General.StudentAvailabilitiesValue = 1;
+			using (_mocks.Record())
+			{
+				commonMocks2();
+				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Broken);
+				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Satisfied);
+				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Satisfied);
+				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Satisfied);
+
+				commonMocks3();
+				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Broken);
+				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Broken);
+				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
+				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
+
+				commonMocks3();
+				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Broken);
+				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Broken);
+				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Broken);
+				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Satisfied);
+
+				commonMocks3();
+				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
+				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
+				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
+				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
+
+				commonMocks3();
+				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
+				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
+				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
+				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
+
+			}
+
+			OverLimitResults ret;
+
+			using (_mocks.Playback())
+			{
+				_target = new OptimizationOverLimitByRestrictionDecider(
+					_matrix,
+					_restrictionChecker,
+					_optimizationPreferences,
+					_originalStateContainer);
+
+				ret = _target.OverLimitsCounts();
+			}
+
+			Assert.AreEqual(1, ret.PreferencesOverLimit);
+			Assert.AreEqual(2, ret.MustHavesOverLimit);
+			Assert.AreEqual(3, ret.RotationsOverLimit);
+			Assert.AreEqual(4, ret.AvailabilitiesOverLimit);
+			Assert.AreEqual(0, ret.StudentAvailabilitiesOverLimit);
+	    }
+
         private void resetPreferences()
         {
             _optimizationPreferences.General.UsePreferences = false;
