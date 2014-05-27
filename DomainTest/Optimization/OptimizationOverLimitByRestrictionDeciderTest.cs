@@ -83,8 +83,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+                Assert.IsTrue(result.PreferencesOverLimit == 0);
             }
         }
 
@@ -105,8 +105,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+                Assert.IsTrue(result.PreferencesOverLimit == 0);
 
             }
         }
@@ -128,8 +128,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsFalse(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsFalse(result.PreferencesOverLimit == 0);
             }
         }
 
@@ -144,8 +144,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _restrictionChecker,
                 _optimizationPreferences,
                 _originalStateContainer);
-            IList<DateOnly> result = _target.OverLimit();
-            Assert.IsTrue(result.Count == 0);
+            var result = _target.OverLimitsCounts();
+			Assert.IsTrue(result.PreferencesOverLimit == 0);
         }
 
         [Test]
@@ -171,8 +171,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsTrue(result.PreferencesOverLimit == 0);
             }
         }
 
@@ -203,8 +203,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+                Assert.IsTrue(result.MustHavesOverLimit == 0);
             }
         }
 
@@ -225,8 +225,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsTrue(result.MustHavesOverLimit == 0);
             }
         }
 
@@ -247,8 +247,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsFalse(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsFalse(result.MustHavesOverLimit == 0);
             }
         }
 
@@ -263,8 +263,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _restrictionChecker,
                 _optimizationPreferences,
                 _originalStateContainer);
-            IList<DateOnly> result = _target.OverLimit();
-            Assert.IsTrue(result.Count == 0);
+            var result = _target.OverLimitsCounts();
+			Assert.IsTrue(result.MustHavesOverLimit == 0);
         }
 
         [Test]
@@ -290,8 +290,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsTrue(result.MustHavesOverLimit == 0);
             }
         }
 
@@ -322,8 +322,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+                Assert.IsTrue(result.RotationsOverLimit == 0);
             }
         }
 
@@ -344,8 +344,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsTrue(result.RotationsOverLimit == 0);
             }
         }
 
@@ -366,8 +366,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsFalse(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsFalse(result.RotationsOverLimit == 0);
             }
         }
 
@@ -387,8 +387,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsTrue(result.RotationsOverLimit == 0);
             }
         }
 
@@ -415,8 +415,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsTrue(result.RotationsOverLimit == 0);
             }
         }
 
@@ -446,8 +446,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+                Assert.IsTrue(result.AvailabilitiesOverLimit == 0);
             }
         }
 
@@ -468,8 +468,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsTrue(result.AvailabilitiesOverLimit == 0);
             }
         }
 
@@ -490,8 +490,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsFalse(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsFalse(result.AvailabilitiesOverLimit == 0);
             }
         }
 
@@ -511,8 +511,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsTrue(result.AvailabilitiesOverLimit == 0);
             }
         }
 
@@ -539,8 +539,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsTrue(result.AvailabilitiesOverLimit == 0);
             }
         }
 
@@ -570,8 +570,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+                Assert.IsTrue(result.StudentAvailabilitiesOverLimit == 0);
             }
         }
 
@@ -592,8 +592,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsTrue(result.StudentAvailabilitiesOverLimit == 0);
             }
         }
 
@@ -614,8 +614,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsFalse(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsFalse(result.StudentAvailabilitiesOverLimit == 0);
             }
         }
 
@@ -635,8 +635,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsTrue(result.StudentAvailabilitiesOverLimit == 0);
             }
         }
 
@@ -662,8 +662,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                IList<DateOnly> result = _target.OverLimit();
-                Assert.IsTrue(result.Count == 0);
+                var result = _target.OverLimitsCounts();
+				Assert.IsTrue(result.StudentAvailabilitiesOverLimit == 0);
             }
         }
 
@@ -774,36 +774,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mocks.Record())
 			{
-				commonMocks2();
-				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Satisfied);
-
-				commonMocks3();
-				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-
-				commonMocks3();
-				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Satisfied);
-
-				commonMocks3();
-				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
-
-				commonMocks3();
-				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-
+				permissionStateMocks();
 			}
 
 			bool ret;
@@ -822,7 +793,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			}
 	    }
 
-		[Test]
+	    
+	    [Test]
 		public void ShouldReportTrueIfBrokenHasIncreased()
 		{
 			_optimizationPreferences.General.UsePreferences = true;
@@ -838,36 +810,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mocks.Record())
 			{
-				commonMocks2();
-				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Satisfied);
-
-				commonMocks3();
-				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-
-				commonMocks3();
-				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Satisfied);
-
-				commonMocks3();
-				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
-
-				commonMocks3();
-				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-
+				permissionStateMocks();
 			}
 
 			bool ret;
@@ -901,36 +844,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_optimizationPreferences.General.StudentAvailabilitiesValue = 1;
 			using (_mocks.Record())
 			{
-				commonMocks2();
-				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Satisfied);
-
-				commonMocks3();
-				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-
-				commonMocks3();
-				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Satisfied);
-
-				commonMocks3();
-				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_restrictionChecker.CheckAvailability()).Return(PermissionState.Broken);
-
-				commonMocks3();
-				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-
+				permissionStateMocks();
 			}
 
 			OverLimitResults ret;
@@ -997,11 +911,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		private void commonMocks2()
 		{
-			Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
-			Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
-			Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
-			Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
-
 			Expect.Call(_matrix.EffectivePeriodDays).Return(
 				new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>
                                                             {
@@ -1024,11 +933,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		private void commonMocks3()
 		{
-			Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
-			Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
-			Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
-			Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
-
 			Expect.Call(_matrix.EffectivePeriodDays).Return(
 				new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>
                                                             {
@@ -1044,5 +948,39 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_scheduleDayPro4.DaySchedulePart()).Return(_scheduleDay4);
 
 		}
+
+		private void permissionStateMocks()
+		{
+			commonMocks2();
+			Expect.Call(_restrictionChecker.CheckPreference(_scheduleDay1)).Return(PermissionState.Broken);
+			Expect.Call(_restrictionChecker.CheckPreference(_scheduleDay2)).Return(PermissionState.Satisfied);
+			Expect.Call(_restrictionChecker.CheckPreference(_scheduleDay3)).Return(PermissionState.Satisfied);
+			Expect.Call(_restrictionChecker.CheckPreference(_scheduleDay4)).Return(PermissionState.Satisfied);
+
+			commonMocks3();
+			Expect.Call(_restrictionChecker.CheckPreferenceMustHave(_scheduleDay1)).Return(PermissionState.Broken);
+			Expect.Call(_restrictionChecker.CheckPreferenceMustHave(_scheduleDay2)).Return(PermissionState.Broken);
+			Expect.Call(_restrictionChecker.CheckPreferenceMustHave(_scheduleDay3)).Return(PermissionState.Satisfied);
+			Expect.Call(_restrictionChecker.CheckPreferenceMustHave(_scheduleDay4)).Return(PermissionState.Satisfied);
+
+			commonMocks3();
+			Expect.Call(_restrictionChecker.CheckRotations(_scheduleDay1)).Return(PermissionState.Broken);
+			Expect.Call(_restrictionChecker.CheckRotations(_scheduleDay2)).Return(PermissionState.Broken);
+			Expect.Call(_restrictionChecker.CheckRotations(_scheduleDay3)).Return(PermissionState.Broken);
+			Expect.Call(_restrictionChecker.CheckRotations(_scheduleDay4)).Return(PermissionState.Satisfied);
+
+			commonMocks3();
+			Expect.Call(_restrictionChecker.CheckAvailability(_scheduleDay1)).Return(PermissionState.Broken);
+			Expect.Call(_restrictionChecker.CheckAvailability(_scheduleDay2)).Return(PermissionState.Broken);
+			Expect.Call(_restrictionChecker.CheckAvailability(_scheduleDay3)).Return(PermissionState.Broken);
+			Expect.Call(_restrictionChecker.CheckAvailability(_scheduleDay4)).Return(PermissionState.Broken);
+
+			commonMocks3();
+			Expect.Call(_restrictionChecker.CheckStudentAvailability(_scheduleDay1)).Return(PermissionState.Satisfied);
+			Expect.Call(_restrictionChecker.CheckStudentAvailability(_scheduleDay2)).Return(PermissionState.Satisfied);
+			Expect.Call(_restrictionChecker.CheckStudentAvailability(_scheduleDay3)).Return(PermissionState.Satisfied);
+			Expect.Call(_restrictionChecker.CheckStudentAvailability(_scheduleDay4)).Return(PermissionState.Satisfied);
+		}
+
     }
 }

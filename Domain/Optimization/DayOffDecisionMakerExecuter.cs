@@ -187,15 +187,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             }
 
-            IList<DateOnly> daysToLock = restrictionsOverMax();
-            if (daysToLock.Count > 0)
+            if (_optimizationOverLimitDecider.HasOverLimitIncreased(lastOverLimitCount))
             {
                 rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
-                foreach (var day in daysToLock)
-                {
-                    //should only lock the days breaking restrictions, so we must return those days from restrictionsOverMax
-                    currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(day, day));
-                }
                 return true;
             }
 
