@@ -1,12 +1,10 @@
 ﻿using System.IO;
 using Autofac;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
@@ -60,7 +58,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				File.WriteAllLines(tempFile, new[] {"EnabledFeature=true"});
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => MockRepository.GenerateStub<ILoggedOnUser>()).As<ILoggedOnUser>();
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -83,7 +80,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				File.WriteAllLines(tempFile, new[] {"EnabledFeature=false"});
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => MockRepository.GenerateStub<ILoggedOnUser>()).As<ILoggedOnUser>();
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
