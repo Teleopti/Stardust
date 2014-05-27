@@ -167,7 +167,7 @@
 		</div>
 	</div>
 </div>
-<div class="container fixed-non-responsive">
+<div class="container fixed-non-responsive" style="width: 1030px">
 	<div id="Preference-add-extended-form" class="well well-small clearfix form-preference" data-bind="visible: AddPreferenceFormVisible">
 		@Html.Partial("AddPreferencesPartial")
 	</div>
@@ -220,17 +220,32 @@
 
 		<div id="Preference-body-inner" class="well clearfix pd0 body-inner">
 			<ul class="weekdays">
+				<li style="max-width: 50px"></li>
 				@foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
 				{
 					<li>@weekDayName.Title</li>
 				}
 			</ul>
+
 			@foreach (WeekViewModel week in Model.Weeks)
 			{
 				<ul class="calendarview-week" onselectstart="return false;">
 					<li>
 						<div>
-
+							
+						</div>
+					</li>
+					<li style="max-width: 50px" data-mytime-week="week">
+						<div class="day-header"></div>
+						<div class="day-content" style="text-align: left">
+							<div>
+								<span class="glyphicon glyphicon-chevron-right"></span>
+								<span data-bind="text:PossibleResultWeeklyContractTimeLower"></span>
+							</div>
+							<div>
+								<span class="glyphicon glyphicon-chevron-left"></span>
+								<span data-bind="text:PossibleResultWeeklyContractTimeUpper"></span>
+							</div>
 						</div>
 					</li>
 					@foreach (DayViewModel day in week.Days)

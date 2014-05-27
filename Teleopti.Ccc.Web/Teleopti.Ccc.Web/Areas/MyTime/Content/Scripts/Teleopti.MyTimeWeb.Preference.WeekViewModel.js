@@ -16,14 +16,14 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-Teleopti.MyTimeWeb.Preference.WeekViewModel = function (dayViewModels) {
+Teleopti.MyTimeWeb.Preference.WeekViewModel = function () {
 	var self = this;
 
-    this.DayViewModels = dayViewModels;
+    this.DayViewModels = ko.observableArray();
 
 	self.PossibleResultWeeklyContractTimeMinutesLower = ko.computed(function() {
 		var sum = 0;
-		$.each(self.DayViewModels, function(index, day) {
+		$.each(self.DayViewModels(), function(index, day) {
 			var value = day.PossibleContractTimeMinutesLower();
 			if (value)
 				sum += parseInt(value);
@@ -37,7 +37,7 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (dayViewModels) {
 
 	self.PossibleResultWeeklyContractTimeMinutesUpper = ko.computed(function() {
 		var sum = 0;
-		$.each(self.DayViewModels, function(index, day) {
+		$.each(self.DayViewModels(), function(index, day) {
 			var value = day.PossibleContractTimeMinutesUpper();
 			if (value)
 				sum += parseInt(value);
