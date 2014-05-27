@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
@@ -34,7 +35,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
 		private bool _cancelMe;
+		private IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
+		private readonly IToggleManager _toggleManager;
 
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 										   IProposedRestrictionAggregator proposedRestrictionAggregator,
@@ -42,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 										   IWorkShiftSelector workShiftSelector,
 										   ITeamScheduling teamScheduling,
 										   ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
-											IActivityIntervalDataCreator activityIntervalDataCreator)
+											IActivityIntervalDataCreator activityIntervalDataCreator, IMaxSeatInformationGeneratorBasedOnIntervals maxSeatInformationGeneratorBasedOnIntervals, IToggleManager toggleManager)
 		{
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 			_proposedRestrictionAggregator = proposedRestrictionAggregator;
@@ -51,6 +54,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_teamScheduling = teamScheduling;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_activityIntervalDataCreator = activityIntervalDataCreator;
+			_maxSeatInformationGeneratorBasedOnIntervals = maxSeatInformationGeneratorBasedOnIntervals;
+			_toggleManager = toggleManager;
 		}
 
 		public bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, 
@@ -100,6 +105,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 							.UseMinimumPersons,
 						schedulingOptions
 							.UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats);
+					IDictionary<DateTime,bool  > maxSeatInfo = new Dictionary<DateTime, bool>();
+					if (_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419))
+					{
+						maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day,
+							schedulingResultStateHolder);
+					}
+					parameters.MaxSeatInfoPerInterval = maxSeatInfo;
 					bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 						parameters, TimeZoneGuard.Instance.TimeZone);
 					if (bestShiftProjectionCache == null) continue;

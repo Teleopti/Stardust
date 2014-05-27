@@ -882,6 +882,7 @@
     <Compile Include="Scheduling\TeamBlock\ValidSampleDayPickerFromTeamBlockTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatsCalculationForTeamBlockTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\IsMaxSeatsReachedOnSkillStaffPeriodSpecificationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatSkillAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatsSpecificationDictionary.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatsSpecificationDictionaryTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\VisualLayerToBaseDateMapperTest.cs" />

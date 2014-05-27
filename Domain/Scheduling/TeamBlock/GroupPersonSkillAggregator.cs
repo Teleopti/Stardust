@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				{
 					foreach (var personSkill in personPeriod.PersonSkillCollection)
 					{
-						ret.Add(personSkill.Skill);
+						ret.Add(personSkill.Skill );
 					}
 				}
 			}
