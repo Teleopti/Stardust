@@ -89,7 +89,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (workingBitArray == null)
                 throw new ArgumentNullException("workingBitArray");
 
-            if (restrictionsOverMax().Count > 0 || daysOverMax())
+			var lastOverLimitCount = _optimizationOverLimitDecider.OverLimitsCounts();
+            if (daysOverMax())
                 return false;
 
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
@@ -213,11 +214,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
 
             return true;
-        }
-
-        private IList<DateOnly> restrictionsOverMax()
-        {
-            return _optimizationOverLimitDecider.OverLimit(); //maybe send in matrix to get the days locked
         }
 
         private bool daysOverMax()
