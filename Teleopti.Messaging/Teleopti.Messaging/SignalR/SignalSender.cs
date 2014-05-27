@@ -54,7 +54,7 @@ namespace Teleopti.Messaging.SignalR
 			e.SetObserved();
 		}
 
-		public void StartBrokerService()
+		public void StartBrokerService(bool useLongPolling = false)
 		{
 			if (string.IsNullOrEmpty(_serverUrl))
 				return;
@@ -68,7 +68,7 @@ namespace Teleopti.Messaging.SignalR
 					_connection = connection;
 				}
 
-				_connection.StartConnection(null);
+				_connection.StartConnection(null,useLongPolling);
 			}
 			catch (SocketException exception)
 			{

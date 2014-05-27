@@ -66,7 +66,7 @@ namespace Teleopti.Messaging.SignalR
 
 	    private IMessageFilterManager FilterManager { get; set; }
 
-		public void StartMessageBroker()
+		public void StartMessageBroker(bool useLongPolling = false)
 		{
 			Uri serverUrl;
 			if (!Uri.TryCreate(ConnectionString, UriKind.Absolute, out serverUrl))
@@ -90,7 +90,7 @@ namespace Teleopti.Messaging.SignalR
 
 				_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
 
-				_connection.StartConnection(onNotification);
+				_connection.StartConnection(onNotification, useLongPolling);
 			}
 		}
 

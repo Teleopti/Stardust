@@ -21,5 +21,6 @@ namespace Teleopti.MessagingTest.SignalR
 		{
 			return _hubConnection;
 		}
+
 	}
 }

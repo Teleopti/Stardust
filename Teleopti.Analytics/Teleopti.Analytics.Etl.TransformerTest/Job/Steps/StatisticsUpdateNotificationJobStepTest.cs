@@ -36,7 +36,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 		public void ShouldSendMessageBrokerEvent()
 		{
 			_messageSender.Expect(x => x.IsAlive).Return(false).Repeat.Once();
-			_messageSender.Expect (x => x.StartBrokerService());
+			_messageSender.Expect (x => x.StartBrokerService(useLongPolling:true));
 			_messageSender.Expect(x => x.IsAlive).Return(true).Repeat.Once();
 
 			var target = new StatisticsUpdateNotificationJobStep(_jobParameters);
