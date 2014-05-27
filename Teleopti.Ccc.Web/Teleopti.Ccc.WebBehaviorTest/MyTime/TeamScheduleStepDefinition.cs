@@ -359,6 +359,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertNotExists(".navbar-nav", "#Team-Picker");
 		}
 
+		[Then(@"I should see the date-picker")]
+		public void ThenIShouldSeeTheDatePicker()
+		{
+			Browser.Interactions.AssertExists("#ScheduleDatePicker");
+		}
+
 		[Then(@"I should see the team-picker")]
 		public void ThenIShouldSeeTheTeam_PickerWithTwoTeams()
 		{
