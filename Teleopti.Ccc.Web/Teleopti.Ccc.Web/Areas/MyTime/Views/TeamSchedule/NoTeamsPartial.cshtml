@@ -1,6 +1,66 @@
 ﻿@{
 	Layout = null;
 }
-<div class="alert alert-info bdd-show-message">
-	@Teleopti.Ccc.UserTexts.Resources.NoTeamsAvailable
+
+<script type="text/javascript">
+	function EmptyTeamScheduleViewModel() {
+		this.selectedDate = ko.observable(moment());
+
+		this.dateFormat = ko.observable("YYYY-MM-DD");
+
+		this.weekStart = ko.observable();
+
+		this.nextDay = function () {
+			this.selectedDate(this.selectedDate().clone().add('days', 1));
+		};
+
+		this.previousDay = function () {
+			this.selectedDate(this.selectedDate().clone().add('days', -1));
+		};
+	}
+
+	$(function () {
+		var vm = new EmptyTeamScheduleViewModel();
+
+		vm.selectedDate(moment('@Model'));
+		
+		vm.selectedDate.subscribe(function () {
+			Teleopti.MyTimeWeb.Portal.NavigateTo("TeamSchedule/Index", vm.selectedDate().format('YYYY-MM-DD'), null);
+		});
+
+		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
+			vm.weekStart(data.WeekStart);
+			vm.dateFormat(data.DateFormatForMoment);
+			ko.applyBindings(vm);
+		});
+	});
+</script>
+
+<div class="container fixed-non-responsive" style="padding-top: 10px;">
+	<div class="navbar navbar-default hidden-sm hidden-xs">
+		<div class="container">
+			<div class="navbar-left">
+				<div class="navbar-form">
+					<div id="ScheduleDatePicker" class="input-group collapse-sub-navbar" style="max-width: 255px;">
+						<span class="input-group-btn">
+							<button class="btn btn-default" data-bind="click: previousDay, css: 'done'">
+								<i class="glyphicon glyphicon-chevron-left"></i>
+							</button>
+						</span>
+						<input data-bind="value: selectedDate().format(dateFormat())" style="width: 100%" type="text" class="text-center form-control" readonly="readonly" />
+						<div class="input-group-btn">
+							<button class="btn btn-default" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+							<button class="btn btn-default" data-bind="click: nextDay, css: 'done'"><i class="glyphicon glyphicon-chevron-right"></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="alert alert-info bdd-show-message">
+		@Teleopti.Ccc.UserTexts.Resources.NoTeamsAvailable
+	</div>
 </div>

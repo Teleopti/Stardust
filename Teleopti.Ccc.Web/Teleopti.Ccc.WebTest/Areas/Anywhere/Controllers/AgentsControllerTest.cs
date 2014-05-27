@@ -77,9 +77,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				State = stateInfo.State,
 				Activity =stateInfo.Activity,
 				NextActivity = stateInfo.NextActivity,
-				NextActivityStartTime = TimeZoneInfo.ConvertTimeFromUtc(stateInfo.NextActivityStartTime, userTimeZone.TimeZone()),
+				NextActivityStartTime = stateInfo.NextActivityStartTime,
 				Alarm = stateInfo.Alarm,
-				AlarmTime = TimeZoneInfo.ConvertTimeFromUtc(stateInfo.AlarmTime, userTimeZone.TimeZone()),
+				AlarmTime = stateInfo.AlarmTime,
 				AlarmColor = stateInfo.AlarmColor
 			};
 
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 					SiteName = site.Description.Name,
 					TeamId = teamId.ToString(),
 					TeamName = team.Description.Name,
-					TimeZoneOffsetMinutes = userTimeZone.TimeZone().BaseUtcOffset.TotalMinutes
+					TimeZoneOffsetMinutes = userTimeZone.TimeZone().GetUtcOffset(DateTime.Now).TotalMinutes
 				};
 				var result = target.ForTeam(teamId).Data as IEnumerable<AgentViewModel>;
 

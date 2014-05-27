@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	public  class UserInfoController : Controller
+	public class UserInfoController : Controller
 	{
 		private readonly IUserCulture _userCulture;
 
@@ -15,8 +15,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult Culture()
 		{
-			return Json(new { WeekStart = (int)_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek }, JsonRequestBehavior.AllowGet);
+			return Json(new
+			{
+				WeekStart = (int)_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek,
+				DateFormatForMoment = _userCulture.GetCulture().DateTimeFormat.ShortDatePattern.ToUpper()
+			}, JsonRequestBehavior.AllowGet);
 		}
-
 	}
 }

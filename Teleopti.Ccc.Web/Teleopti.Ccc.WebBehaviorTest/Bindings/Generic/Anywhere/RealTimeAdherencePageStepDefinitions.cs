@@ -72,14 +72,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.TimeInStateFormatted());
 
 			const string colorSelector = "tr[style*='background-color: {0}'] .agent-name:contains('{1}')";
-			Browser.Interactions.AssertExistsUsingJQuery(colorSelector, toRGB(stateInfo.AlarmColor), name);
+			Browser.Interactions.AssertExistsUsingJQuery(colorSelector, toRGBA(stateInfo.AlarmColor, "0.6"), name);
 
 		}
 
-		private static String toRGB(string colorName)
+		private static String toRGBA(string colorName, string transparency)
 		{
 			var color = Color.FromName(colorName);
-			return string.Format("rgb({0}, {1}, {2})", color.R, color.G, color.B);
+			return string.Format("rgba({0}, {1}, {2}, {3})", color.R, color.G, color.B, transparency);
 		}
 	}
 

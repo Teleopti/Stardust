@@ -208,6 +208,11 @@ Scenario: Don't show team-picker with no team access
 	When I view team schedule
 	Then I should not see the team-picker
 
+Scenario: Should show date-picker with no team access
+	Given I am an agent in a team with access only to my own data
+	When I view team schedule
+	Then I should see the date-picker
+
 Scenario: Don't show team-picker with only one team
 	Given I am an agent in a team with access to my team
 	When I view team schedule
