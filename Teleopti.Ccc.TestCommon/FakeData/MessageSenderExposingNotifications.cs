@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public bool IsAlive { get; private set; }
-		public void StartBrokerService()
+		public void StartBrokerService(bool useLongPolling = false)
 		{
 			throw new System.NotImplementedException();
 		}
