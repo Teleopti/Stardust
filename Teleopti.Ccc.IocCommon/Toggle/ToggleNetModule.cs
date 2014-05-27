@@ -6,7 +6,7 @@ using Toggle.Net;
 using Toggle.Net.Configuration;
 using Toggle.Net.Providers.TextFile;
 
-namespace Teleopti.Ccc.IocCommon.Configuration
+namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	public class ToggleNetModule : Module
 	{

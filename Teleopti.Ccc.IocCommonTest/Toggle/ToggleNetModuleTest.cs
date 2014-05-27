@@ -5,10 +5,10 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.IocCommonTest.Configuration
+namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
 	public class ToggleNetModuleTest
 	{
