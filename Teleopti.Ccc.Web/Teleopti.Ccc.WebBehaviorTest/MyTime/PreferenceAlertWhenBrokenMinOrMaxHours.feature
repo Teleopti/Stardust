@@ -4,7 +4,6 @@ Feature: Preference Alert When Broken Min Or Max Hours
          As an agent
          I want to be informed if I have broken the min or max hours per week
 
-@ignore 
 Scenario: Show min and max hours per week that the entered preference could result in during scheduling
 Given I am an agent
 And I have a shift bag with start times 8 to 9 and end times 12 to 20
