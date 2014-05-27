@@ -139,7 +139,9 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
         		var broker = SignalBroker.Make(new DummyFilterManager());
         		broker.ConnectionString = _connectionString;
 				_messageBroker = broker;
-				_messageBroker.StartMessageBroker();
+
+        		var useLongPolling = State.SessionScopeData.AppSettings.GetSettingValue("MessageBrokerLongPolling", bool.Parse);
+				_messageBroker.StartMessageBroker(useLongPolling);
         	}
         }
 

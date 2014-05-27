@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNet.SignalR.Client.Transports;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
@@ -58,7 +59,7 @@ namespace Teleopti.Messaging.SignalR
 			_afterConnectionCreated();
 		}
 
-		public void StartConnection(Action<Notification> onNotification)
+		public void StartConnection(Action<Notification> onNotification, bool useLongPolling)
 		{
 			_onNotification = onNotification;
 
@@ -70,7 +71,7 @@ namespace Teleopti.Messaging.SignalR
 			try
 			{
 				Exception exception = null;
-				var startTask = _hubConnection.Start();
+				var startTask = useLongPolling ? _hubConnection.Start(new LongPollingTransport()) : _hubConnection.Start();
 				startTask.ContinueWith(t =>
 				{
 					if (t.IsFaulted && t.Exception != null)

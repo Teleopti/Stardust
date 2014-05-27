@@ -564,10 +564,13 @@ namespace Teleopti.Ccc.AgentPortal.Main
             if (loggedPerson != null)
             {
                 // Intialize State Holder
+	            var stateManager = new StateManager();
+				stateManager.SetSessionData(new SessionData(loggedPerson, _choosenBusinessUnit, _choosenDataSource, _logOnDetails.Password));
+				stateManager.SessionScopeData.AssignAppSettings(_appSettings);
 #if (DEBUG)
                 try
                 {
-                    StateHolder.Initialize(new StateManager());
+                    StateHolder.Initialize(stateManager);
                 }
                 catch (FaultException e)
                 {
@@ -575,9 +578,8 @@ namespace Teleopti.Ccc.AgentPortal.Main
                     return false;
                 }
 #else
-                StateHolder.Initialize(new StateManager());
+                StateHolder.Initialize(stateManager);
 #endif
-                StateHolder.Instance.State.SetSessionData(new SessionData(loggedPerson, _choosenBusinessUnit, _choosenDataSource, _logOnDetails.Password));
 
                 Thread.CurrentThread.CurrentCulture =
                     CultureInfo.GetCultureInfo(

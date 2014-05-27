@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNet.SignalR.Client.Transports;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -33,6 +34,22 @@ namespace Teleopti.MessagingTest.SignalR
 			hubConnection.Stub(x => x.Start()).Return(TaskHelper.MakeDoneTask());
 			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
 			return hubConnection;
+		}
+
+		[Test]
+		public void ShouldStartLongPollingWhenSet()
+		{
+			var hubProxy = new HubProxyFake();
+
+			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
+			hubConnection.Stub(x => x.State).Return(ConnectionState.Connected);
+			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
+			hubConnection.Stub(x => x.Start(new LongPollingTransport())).IgnoreArguments().Return(TaskHelper.MakeDoneTask());
+
+			var signalBroker = new SignalBrokerForTest(new MessageFilterManagerFake(), hubConnection);
+			signalBroker.StartMessageBroker(useLongPolling: true);
+
+			hubConnection.AssertWasCalled(x => x.Start(new LongPollingTransport()), o => o.Constraints(Rhino.Mocks.Constraints.Is.TypeOf<LongPollingTransport>()));
 		}
 
 		[Test]
