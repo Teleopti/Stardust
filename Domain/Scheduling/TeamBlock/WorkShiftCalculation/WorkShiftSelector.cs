@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			foreach (var activity in skillIntervalDataLocalDictionary.Keys)
 			{
 				double? skillValue = valueForActivity(activity, skillIntervalDataLocalDictionary[activity], shiftProjectionCache, parameters, timeZoneInfo);
-				if (!skillValue.HasValue) return null;
+				if (!skillValue.HasValue) return null;  
 				
 				if (totalForAllActivitesValue.HasValue)
 				{
