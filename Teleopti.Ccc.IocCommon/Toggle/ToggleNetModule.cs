@@ -10,44 +10,32 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	public class ToggleNetModule : Module
 	{
-		private readonly string _pathToToggleFile;
+		private readonly string _pathToToggle;
 
-		public ToggleNetModule(string pathToToggleFile)
+		public ToggleNetModule(string pathToToggle)
 		{
-			_pathToToggleFile = pathToToggleFile.Trim();
+			_pathToToggle = pathToToggle.Trim();
 		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			if (_pathToToggleFile.EndsWith("ALL", StringComparison.OrdinalIgnoreCase))
+			builder.Register<IToggleManager>(c =>
 			{
-				builder.Register(_ => new toggleManagerFullAccess())
-					.SingleInstance()
-					.As<IToggleManager>();
-			}
-			else
-			{
-				if (_pathToToggleFile.StartsWith("http://") || _pathToToggleFile.StartsWith("https://"))
+				if (_pathToToggle.StartsWith("http://") || _pathToToggle.StartsWith("https://"))
 				{
-					builder.Register(_ => new ToggleQuerier(_pathToToggleFile))
-						.SingleInstance()
-						.As<IToggleManager>();
+					return new ToggleQuerier(_pathToToggle);
 				}
-				else
+				if (_pathToToggle.EndsWith("ALL", StringComparison.OrdinalIgnoreCase))
 				{
-					builder.Register(c =>
-					{
-						var toggleConfiguration =
-							new ToggleConfiguration(new FileProviderFactory(new FileReader(_pathToToggleFile),
-								new DefaultSpecificationMappings()));
-						var toggleChecker = toggleConfiguration.Create();
-						return new toggleCheckerWrapper(toggleChecker);
-					}
-						)
-						.SingleInstance()
-						.As<IToggleManager>();
+					return new toggleManagerFullAccess();
 				}
-			}
+				var toggleConfiguration =
+					new ToggleConfiguration(new FileProviderFactory(new FileReader(_pathToToggle), new DefaultSpecificationMappings()));
+				var toggleChecker = toggleConfiguration.Create();
+				return new toggleCheckerWrapper(toggleChecker);
+			})
+				.SingleInstance()
+				.As<IToggleManager>();
 
 			builder.RegisterType<TogglesActive>()
 				.SingleInstance().As<ITogglesActive>();
