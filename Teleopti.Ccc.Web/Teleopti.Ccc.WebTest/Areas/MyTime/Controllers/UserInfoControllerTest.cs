@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = target.Culture();
 			dynamic content = result.Data;
 
-			Assert.That((object)content.DateFormatForServer, Is.EqualTo("yyyy-MM-dd"));
 			Assert.That((object)content.DateFormatForMoment, Is.EqualTo("YYYY-MM-DD"));
 			Assert.That(result, Is.Not.Null);
 		}
