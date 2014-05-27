@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
             xdoc.AppendChild(rootNode);
             rootNode.AppendChild(xdoc.CreateElement("CheckDate")).AppendChild(xdoc.CreateTextNode(CheckDate.ToString("s", invariant)));
             rootNode.AppendChild(xdoc.CreateElement("StatusOk")).AppendChild(xdoc.CreateTextNode(StatusOk.ToString(invariant)));
-            rootNode.AppendChild(xdoc.CreateElement("LastValidDate")).AppendChild(xdoc.CreateTextNode(LastValidDate.AddDays(1).ToString("s", invariant)));
+            rootNode.AppendChild(xdoc.CreateElement("LastValidDate")).AppendChild(xdoc.CreateTextNode(LastValidDate.ToString("s", invariant)));
             rootNode.AppendChild(xdoc.CreateElement("AlmostTooMany")).AppendChild(xdoc.CreateTextNode(AlmostTooMany.ToString(invariant)));
             rootNode.AppendChild(xdoc.CreateElement("NumberOfActiveAgents")).AppendChild(xdoc.CreateTextNode(NumberOfActiveAgents.ToString(invariant)));
             rootNode.AppendChild(xdoc.CreateElement("DaysLeft")).AppendChild(xdoc.CreateTextNode(DaysLeft.ToString(invariant)));
