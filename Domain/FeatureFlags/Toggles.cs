@@ -14,6 +14,6 @@
 		RTA_RtaLastStatesOverview_27789,
 		RTA_DrilldownToAllAgentsInOneTeam_25234,
 
-		ModuleName_PreferenceAlertWhenMinOrMaxHoursBroken_66666
+		Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635
 	}
 }
