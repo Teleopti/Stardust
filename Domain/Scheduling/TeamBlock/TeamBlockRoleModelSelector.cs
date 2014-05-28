@@ -82,13 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			if (_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419))
 			{
-				if (schedulingOptions.UseMaxSeats)
-				{
-					maxSeatFeatureOption = MaxSeatsFeatureOptions.ConsiderMaxSeats;
-					if (schedulingOptions.DoNotBreakMaxSeats)
-						maxSeatFeatureOption = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
-				}
-
+				maxSeatFeatureOption = schedulingOptions.UserOptionMaxSeatsFeature;
 				maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, datePointer,
 					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone);
 			}

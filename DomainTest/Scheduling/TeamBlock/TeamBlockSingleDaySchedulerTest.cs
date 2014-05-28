@@ -279,8 +279,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var activityData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
 			var skillIntervalDataDic = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
 			skillIntervalDataDic.Add(_dateOnly, new Dictionary<IActivity, IList<ISkillIntervalData>>());
-			_schedulingOptions.UseMaxSeats = true;
-			_schedulingOptions.DoNotBreakMaxSeats = true;
+			_schedulingOptions.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
