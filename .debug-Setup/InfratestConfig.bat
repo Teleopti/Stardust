@@ -18,8 +18,10 @@ SET AnalyticsDB=Infratest_Analytics
 )
 
 
-::init toggle values to "ALL"
+set licensefile=
+if "%FEATURETOGGLE%" == "ALL" (
 SET licensefile=Teleopti_RD.xml
+)
 
 if "%FEATURETOGGLE%" == "RC" (
 SET licensefile=Teleopti_RC.xml
@@ -27,6 +29,13 @@ SET licensefile=Teleopti_RC.xml
 
 if "%FEATURETOGGLE%" == "R" (
 SET licensefile=Teleopti_Prod.xml
+)
+
+if "%licensefile%" == "" (
+CHOICE /C drc /M "Do you want to run (d)ev, (r)c or (c)ustomer toggle settings"
+IF ERRORLEVEL 1 SET licensefile=Teleopti_RD.xml
+IF ERRORLEVEL 2 SET licensefile=Teleopti_RC.xml
+IF ERRORLEVEL 3 SET licensefile=Teleopti_Prod.xml
 )
 
 ::copy licensefile to webbehaviortest
