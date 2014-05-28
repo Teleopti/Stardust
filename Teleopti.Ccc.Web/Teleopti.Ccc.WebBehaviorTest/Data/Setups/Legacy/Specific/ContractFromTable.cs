@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		public int PositiveTargetToleranceHours { get; set; }
 		public int NegativeTargetToleranceHours { get; set; }
 		public int AverageWorkTimePerDay { get; set; }
+		public int MaxHoursPerWeek { get; set; }
 
 		public IContract Contract { get; set; }
 
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 		public void Apply(IUnitOfWork uow)
 		{
+			var workTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(MaxHoursPerWeek), new TimeSpan(), new TimeSpan());
 			Contract = new Contract("Contract from table")
 				{
 					EmploymentType = EmploymentType,
@@ -34,7 +36,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 					PositiveDayOffTolerance = PositiveDayOffTolerance,
 					NegativeDayOffTolerance = NegativeDayOffTolerance,
 					PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(PositiveTargetToleranceHours),
-					NegativePeriodWorkTimeTolerance = TimeSpan.FromHours(NegativeTargetToleranceHours)
+					NegativePeriodWorkTimeTolerance = TimeSpan.FromHours(NegativeTargetToleranceHours),
+					WorkTimeDirective = workTimeDirective
 				};
 			new ContractRepository(uow).Add(Contract);
 		}

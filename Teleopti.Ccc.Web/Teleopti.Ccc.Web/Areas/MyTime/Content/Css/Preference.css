@@ -259,3 +259,8 @@ div.qtip-content {
 .musthave-textcolor>li>a:hover {
 color: #333333;
 }
+
+.day-content .weekly-work-time-alert {
+	color: red;
+	font-weight: bold;
+}
