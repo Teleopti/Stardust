@@ -11,17 +11,18 @@
     		that.fill = function (data, name, offset) {
     			that.PersonId = data.PersonId;
 				that.Name = name,
-    			that.State = data.State;
+    			that.State = data.State ;
     			that.Activity = data.Activity;
     			that.NextActivity = data.NextActivity;
-    			that.NextActivityStartTime = moment.utc(data.NextActivityStartTime).add(offset,'minutes').format(resources.DateTimeFormatForMoment);
+    			that.NextActivityStartTime = data.NextActivityStartTime ? (moment.utc(data.NextActivityStartTime).add(offset, 'minutes').format(resources.DateTimeFormatForMoment)) : '';
     			that.Alarm = data.Alarm;
     			that.AlarmColor = 'rgba('+that.hexToRgb(data.AlarmColor) + ', 0.6)';
-    			that.AlarmTime = moment.utc(data.AlarmTime).add(offset, 'minutes').format(resources.DateTimeFormatForMoment);
+    			that.AlarmTime = data.AlarmTime ? moment.utc(data.AlarmTime).add(offset, 'minutes').format(resources.DateTimeFormatForMoment) : '';
 			    that.refreshTimeInState();
 		    };
 
     		that.refreshTimeInState = function () {
+			    if (!that.AlarmTime) return;
     			var duration = moment.duration(((new Date).getTime() - moment(that.AlarmTime, resources.DateTimeFormatForMoment).toDate()));
     			that.TimeInState(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
     		}

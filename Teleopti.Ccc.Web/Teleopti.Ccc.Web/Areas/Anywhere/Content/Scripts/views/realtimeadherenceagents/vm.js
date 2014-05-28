@@ -33,17 +33,37 @@
 			that.siteURI('#realtimeadherenceteams/' + that.siteId());
 		};
 
-		that.fillAgentsStates = function(data) {
-			for (var i = 0; i < data.length; i++) {
-				var agentState = agentstate();
-				var a = that.getAgent(data[i].PersonId);
-				agentState.fill(data[i], a.Name, a.TimeZoneOffset);
-				that.agentStates.push(agentState);
+		that.fillAgentsStates = function (data) {
+			if (!data) {
+				that.agents.forEach(function(agent) { // TODO refacto 
+					var newagentState = agentstate();
+					newagentState.fill({PersonId: agent.PersonId}, agent.Name, agent.TimeZoneOffset);
+					var newexistingState = that.agentStates().filter(function(obj) {
+						return obj.PersonId === agent.PersonId;
+					});
+					if (newexistingState.length !== 0) {
+						that.agentStates.remove(newexistingState[0]);
+					}
+					that.agentStates.push(newagentState);
+				});
+			} else {
+				for (var i = 0; i < data.length; i++) {
+					var agentState = agentstate();
+					var a = that.getAgent(data[i].PersonId);
+					agentState.fill(data[i], a.Name, a.TimeZoneOffset);
+					var existingState = that.agentStates().filter(function (obj) {
+						return obj.PersonId === data[i].PersonId;
+					});
+					if (existingState.length !== 0) {
+						that.agentStates.remove(existingState[0]);
+					}
+					that.agentStates.push(agentState);
+				}
 			}
 			that.agentStates.sort(function(left, right) { return left.Name == right.Name ? 0 : (left.Name < right.Name ? -1 : 1); });
 		}
 
-		that.getAgent =function(id) {
+		that.getAgent = function(id) {
 			var a = that.agents.filter(function(item) {
 				return item.PersonId === id;
 				});
@@ -59,7 +79,6 @@
 		that.updateFromNotification = function (notification) {
 			var data = JSON.parse(notification.BinaryData);
 			data.Id = notification.DomainId;
-			that.agentStates.removeAll();
 			that.fillAgentsStates(data.AgentStates);
 		}
 
