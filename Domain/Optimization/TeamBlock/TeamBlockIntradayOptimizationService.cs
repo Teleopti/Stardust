@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
 	    private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
+		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private bool _cancelMe;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
@@ -39,7 +40,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                            ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
 		                                            ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
 		                                            ITeamBlockClearer teamBlockClearer,
-													ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker, IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock)
+													ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker, 
+													IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
+													ITeamBlockSteadyStateValidator teamTeamBlockSteadyStateValidator)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
@@ -48,7 +51,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockClearer = teamBlockClearer;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 		    _dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
-		    _teamBlockGenerator = teamBlockGenerator;
+			_teamTeamBlockSteadyStateValidator = teamTeamBlockSteadyStateValidator;
+			_teamBlockGenerator = teamBlockGenerator;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 		}
 
@@ -107,6 +111,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			int runningTeamBlockCounter = 0;
 			foreach (var teamBlockInfo in sortedTeamBlockInfos)
 			{
+				if (!_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
+				{
+					teamBlockToRemove.Add(teamBlockInfo);
+					continue;
+				}
+
 				runningTeamBlockCounter++;
 				if (_cancelMe)
 					break;
