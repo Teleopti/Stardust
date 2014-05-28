@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
@@ -21,13 +24,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
+		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
+		private readonly IToggleManager  _toggleManager;
 
 		public TeamBlockRoleModelSelector(ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator,
 										  IWorkShiftFilterService workShiftFilterService,
 										  ISameOpenHoursInTeamBlockSpecification sameOpenHoursInTeamBlockSpecification,
 										  IWorkShiftSelector workShiftSelector,
 											ISchedulingResultStateHolder schedulingResultStateHolder,
-											IActivityIntervalDataCreator activityIntervalDataCreator)
+											IActivityIntervalDataCreator activityIntervalDataCreator, IMaxSeatInformationGeneratorBasedOnIntervals maxSeatInformationGeneratorBasedOnIntervals, IToggleManager toggleManager)
 		{
 			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
@@ -35,6 +40,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_workShiftSelector = workShiftSelector;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_activityIntervalDataCreator = activityIntervalDataCreator;
+			_maxSeatInformationGeneratorBasedOnIntervals = maxSeatInformationGeneratorBasedOnIntervals;
+			_toggleManager = toggleManager;
 		}
 
         public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IPerson person,
@@ -54,14 +61,38 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer,
 				_schedulingResultStateHolder, true);
-	        var parameters = new PeriodValueCalculationParameters(schedulingOptions
+			var maxSeatFeatureOption = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
+			IDictionary<DateTime, bool> maxSeatInfo = new Dictionary<DateTime, bool>();
+			maxSeatFeatureOption = maxSeatsFeature(teamBlockInfo, datePointer, schedulingOptions, maxSeatFeatureOption, ref maxSeatInfo);
+
+			  var parameters = new PeriodValueCalculationParameters(schedulingOptions
 		        .WorkShiftLengthHintOption, schedulingOptions
 			        .UseMinimumPersons,
 		        schedulingOptions
-			        .UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats);
+					  .UseMaximumPersons, maxSeatFeatureOption);
+
+	        parameters.MaxSeatInfoPerInterval = maxSeatInfo;
 			var roleModel = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 				parameters, TimeZoneGuard.Instance.TimeZone);
 			return roleModel;
+		}
+
+		private MaxSeatsFeatureOptions maxSeatsFeature(ITeamBlockInfo teamBlockInfo, DateOnly datePointer,
+			ISchedulingOptions schedulingOptions, MaxSeatsFeatureOptions maxSeatFeatureOption, ref IDictionary<DateTime, bool> maxSeatInfo)
+		{
+			if (_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419))
+			{
+				if (schedulingOptions.UseMaxSeats)
+				{
+					maxSeatFeatureOption = MaxSeatsFeatureOptions.ConsiderMaxSeats;
+					if (schedulingOptions.DoNotBreakMaxSeats)
+						maxSeatFeatureOption = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
+				}
+
+				maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, datePointer,
+					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone);
+			}
+			return maxSeatFeatureOption;
 		}
 	}
 }

@@ -11,9 +11,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	[TestFixture]
-	public class MaxSeatsSpecificationDictionaryTest
+	public class MaxSeatsSpecificationDictionaryExtractorTest
 	{
-		private MaxSeatsSpecificationDictionary _target;
+		private MaxSeatsSpecificationDictionaryExtractor _target;
 		private List<ISkillStaffPeriod> _skillStaffPeriodList;
 		private MockRepository _mocks;
 		private ISkillStaffPeriod _skillStaffPeriod1;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		{
 			_mocks = new MockRepository();
 			_isMaxSeatsReachedOnSkillStaffPeriodSpecification = new IsMaxSeatsReachedOnSkillStaffPeriodSpecification();
-			_target = new MaxSeatsSpecificationDictionary(_isMaxSeatsReachedOnSkillStaffPeriodSpecification);
+			_target = new MaxSeatsSpecificationDictionaryExtractor(_isMaxSeatsReachedOnSkillStaffPeriodSpecification);
 			_skillStaffPeriod1 = _mocks.StrictMock<ISkillStaffPeriod>();
 			_skillStaffPeriod2 = _mocks.StrictMock<ISkillStaffPeriod>();
 			_skillStaff1 = _mocks.StrictMock<ISkillStaff>();
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		[Test]
 		public void ShouldReturnNullIfGivenStaffPeripdIsNull()
 		{
-			Assert.IsNull(_target.SetMaxSeatsFlag(null, TimeZoneInfo.Utc));
+			Assert.IsNull(_target.ExtractMaxSeatsFlag(null, TimeZoneInfo.Utc));
 		}
 
 		[Test]
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			}
 			using (_mocks.Playback())
 			{
-				Assert.AreEqual(2, _target.SetMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc).Count());
+				Assert.AreEqual(2, _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc).Count());
 			}
 		}
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.SetMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc);
+				var result = _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc);
 				Assert.IsTrue(result[startDateTime]);
 				Assert.IsFalse(result[startDateTime.AddMinutes(30)]);
 			}
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.SetMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc);
+				var result = _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc);
 				Assert.IsFalse(result[startDateTime]);
 				Assert.IsFalse(result[startDateTime.AddMinutes(30)]);
 			}
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			using (_mocks.Playback())
 			{
 				TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-				var result = _target.SetMaxSeatsFlag(_skillStaffPeriodList, tzi);
+				var result = _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, tzi);
 				Assert.AreEqual(startDateTime.AddHours(1), result.Keys.First()); 
 
 			}

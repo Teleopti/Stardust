@@ -6,6 +6,7 @@ $(document).ready(function () {
 	test("should load preferences", function () {
 
 		$("#qunit-fixture")
+			.append("<li data-mytime-week='week' class='inperiod preference' />")
 			.append("<li data-mytime-date='2012-06-11' class='inperiod preference' />")
 			.append("<li data-mytime-date='2012-06-12' class='inperiod preference' />");
 
@@ -29,6 +30,7 @@ $(document).ready(function () {
 
 		$("#qunit-fixture")
 			.html("<div id='Preference-period-feedback-view' data-bind='text: PossibleResultContractTimeLower'>No data!</div>")
+			.append("<li data-mytime-week='week' />")
 			.append("<li data-mytime-date='2012-06-11' class='inperiod feedback' data-bind='text: PossibleContractTimeLower' />")
 			.append("<li data-mytime-date='2012-06-12' class='inperiod feedback' data-bind='text: PossibleContractTimeLower' />");
 
@@ -68,7 +70,8 @@ $(document).ready(function () {
 
 	test("should only load feedback for days with class feedback", function () {
 		$("#qunit-fixture")
-			.html("<li data-mytime-date='2012-06-11' data-bind='text: PossibleContractTimeLower' />")
+			.html("<li data-mytime-week='week' />")
+			.append("<li data-mytime-date='2012-06-11' data-bind='text: PossibleContractTimeLower' />")
 			.append("<li data-mytime-date='2012-06-12' class='inperiod feedback' data-bind='text: PossibleContractTimeLower' />");
 
 		var ajax = {
@@ -100,6 +103,7 @@ $(document).ready(function () {
 
 		$("#qunit-fixture")
 			.append("<div id='Preference-period-feedback-view'><span data-bind='text: PossibleResultContractTimeLower' /><span data-bind='text: PossibleResultContractTimeUpper' /></div>")
+			.append("<li data-mytime-week='week'></li>")
 			.append("<li data-mytime-date='2012-06-13' class='inperiod'></li>")
 			.append("<li data-mytime-date='2012-06-14' class='inperiod'></li>");
 
@@ -165,6 +169,7 @@ $(document).ready(function () {
 
 		$("#qunit-fixture")
 			.html("<div id='Preference-period-feedback-view' data-bind='text: PossibleResultContractTimeLower'>No data!</div>")
+			.append("<li data-mytime-week='week' />")
 			.append("<li data-mytime-date='2012-06-19' class='inperiod feedback' />");
 
 		var ajax = {
