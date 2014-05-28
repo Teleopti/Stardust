@@ -17,7 +17,7 @@ namespace Teleopti.Runtime.Environment
             if (e.Width.HasValue)
                 form.Width = e.Width.Value;
             form.webControl1.WebView = e.WebView;
-            form.webControl1.WebView.NewWindow += WebView_NewWindow;
+            form.webControl1.WebView.NewWindow += form.WebView_NewWindow;
             e.Accepted = true;
             form.Show();
         }
