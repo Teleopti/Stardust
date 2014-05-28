@@ -9,6 +9,11 @@ namespace Teleopti.Runtime.Environment
             InitializeComponent();
         }
 
+        public MainForm(string url):this()
+        {
+            webView1.Url = url;
+        }
+
         private void webView1_NewWindow(object sender, EO.WebBrowser.NewWindowEventArgs e)
         {
             var form=new MainForm();
