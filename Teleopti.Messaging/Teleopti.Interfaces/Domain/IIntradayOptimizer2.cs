@@ -14,12 +14,6 @@ namespace Teleopti.Interfaces.Domain
         bool Execute();
 
         /// <summary>
-        /// Determines whether the moved days are over the limit.
-        /// </summary>
-        /// <returns></returns>
-        IList<DateOnly> RestrictionsOverMax();
-
-        /// <summary>
         /// Gets the container owner.
         /// </summary>
         /// <value>The container owner.</value>

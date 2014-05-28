@@ -50,8 +50,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
         private IProjectionService _projectionService;
         private IVisualLayerCollection _visualLayerCollection;
+	    private OverLimitResults _overLimitCount;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -104,6 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             DateTimePeriod mainShiftPeriod = new DateTimePeriod(mainShiftStart, mainShiftStart.AddHours(8));
             _personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonFactory.CreatePerson(),
                                                                                       mainShiftPeriod);
+	        _overLimitCount = new OverLimitResults(0, 0, 0, 0, 0);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -121,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 commonMocks();
                 int x;
 				IList<IScheduleDay> y;
-                Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
+	            Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCount);
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y))
@@ -162,6 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix, _schedulingOptions, _rollbackService)).Return(true);
                 Expect.Call(_workTimeBackToLegalStateService.RemovedDays).Return(new List<DateOnly> { DateOnly.MinValue });
 				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod())).IgnoreArguments().Repeat.AtLeastOnce();
+				Expect.Call(_optimizationOverLimitDecider.HasOverLimitIncreased(_overLimitCount)).Return(false);
             }
 
             bool ret;
@@ -189,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 commonMocks();
                 int x;
 				IList<IScheduleDay> y;
-                Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
+				Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCount);
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
@@ -223,6 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay> { _scheduleDay }));
                 Expect.Call(() => _rollbackService.Rollback());
             	Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod())).IgnoreArguments();
+	            Expect.Call(_optimizationOverLimitDecider.HasOverLimitIncreased(_overLimitCount)).Return(false);
             }
 
             bool ret;
@@ -250,7 +254,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 commonMocks();
                 int x;
 				IList<IScheduleDay> y;
-                Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>());
+				Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCount);
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
@@ -337,8 +341,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mocks.Record())
             {
-                Expect.Call(_optimizationOverLimitDecider.OverLimit())
-                      .Return(new List<DateOnly> {new DateOnly(), new DateOnly()});
+				Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCount);
+	            Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit()).Return(true);
             }
             Assert.IsFalse(_target.Execute());
         }
