@@ -37,6 +37,7 @@
 				},
 				success: function (data) {
 					viewModel.fillAgents(data);
+					viewModel.fillAgentsStates();
 					ajax.ajax({
 						url: "Agents/GetStates?teamId=" + teamId,
 						error: function (jqXHR, textStatus, errorThrown) {

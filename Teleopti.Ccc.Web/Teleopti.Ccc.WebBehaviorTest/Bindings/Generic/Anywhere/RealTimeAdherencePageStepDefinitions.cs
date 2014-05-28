@@ -50,6 +50,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			assertRealTimeAgentDetails(name,stateInfo);
 		}
 
+		[Then(@"I should see real time agent name for '(.*)'")]
+		public void ThenIShouldSeeRealTimeAgentNameFor(string name)
+		{
+			assertRealTimeAgentName(name);
+		}
+
 		[When(@"the browser time is '(.*)'")]
 		public void WhenTheBrowserTimeIs(DateTime time)
 		{
@@ -74,6 +80,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			const string colorSelector = "tr[style*='background-color: {0}'] .agent-name:contains('{1}')";
 			Browser.Interactions.AssertExistsUsingJQuery(colorSelector, toRGBA(stateInfo.AlarmColor, "0.6"), name);
 
+		}
+
+		private static void assertRealTimeAgentName(string name)
+		{
+			const string selector = ".agent-name:contains('{0}')";
+
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name);
 		}
 
 		private static String toRGBA(string colorName, string transparency)
