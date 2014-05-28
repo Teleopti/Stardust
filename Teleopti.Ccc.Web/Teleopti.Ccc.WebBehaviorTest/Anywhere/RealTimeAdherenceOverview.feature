@@ -355,7 +355,7 @@ Scenario: Should be able to see current states of all agents
 		| Next activity            | Lunch            |
 		| Next activity start time | 13:00 |
 		| Alarm                    | Not adhering     |
-		| Alarm Time               | 2014-01-21 12:30 |
+		| Alarm Time               | 0:15:00 |
 		| Alarm Color              | Red              |
 		| Time in state	| 0:15:00 |
 	And I should see real time agent details for 'Ashley Andeen'
@@ -366,7 +366,7 @@ Scenario: Should be able to see current states of all agents
 		| Next activity		| Lunch		|
 		| Next activity start time	| 13:00	|
 		| Alarm	| Adhering	|
-		| Alarm Time	| 2014-01-21 12:30 |
+		| Alarm Time	| 0:15:00 |
 		| Alarm Color              | Green              |
 		| Time in state	| 0:15:00 |
 
@@ -433,7 +433,7 @@ Scenario: Should be able to see state updates of all agents
 		| Next activity            | Lunch            |
 		| Next activity start time | 13:00 |
 		| Alarm                    | Not adhering     |
-		| Alarm Time               | 2014-01-21 12:30 |
+		| Alarm Time               | 0:15:00 |
 		| Alarm Color              | Red              |
 		| Time in state	| 0:15:00 |
 	And I should see real time agent details for 'Ashley Andeen'
@@ -444,7 +444,7 @@ Scenario: Should be able to see state updates of all agents
 		| Next activity		| Lunch		|
 		| Next activity start time	| 13:00	|
 		| Alarm	| Adhering	|
-		| Alarm Time	| 2014-01-21 12:30 |
+		| Alarm Time	| 0:15:00 |
 		| Alarm Color              | Green              |
 		| Time in state	| 0:15:00 |
 
