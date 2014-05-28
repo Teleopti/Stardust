@@ -97,8 +97,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		public string NextActivityStartTimeFormatted()
 		{
-			var format = DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern;
-			return DateTime.Parse(NextActivityStartTime).ToString(format);
+			return DateTime.Parse(NextActivityStartTime).ToString(@"HH\:mm");
 		}
 
 		public string AlarmTimeFormatted()

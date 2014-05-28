@@ -353,7 +353,7 @@ Scenario: Should be able to see current states of all agents
 		| State                    | Pause            |
 		| Activity                 | Phone            |
 		| Next activity            | Lunch            |
-		| Next activity start time | 2014-01-21 13:00 |
+		| Next activity start time | 13:00 |
 		| Alarm                    | Not adhering     |
 		| Alarm Time               | 2014-01-21 12:30 |
 		| Alarm Color              | Red              |
@@ -364,7 +364,7 @@ Scenario: Should be able to see current states of all agents
 		| State				| Ready		|
 		| Activity			| Phone		|
 		| Next activity		| Lunch		|
-		| Next activity start time	| 2014-01-21 13:00	|
+		| Next activity start time	| 13:00	|
 		| Alarm	| Adhering	|
 		| Alarm Time	| 2014-01-21 12:30 |
 		| Alarm Color              | Green              |
@@ -431,7 +431,7 @@ Scenario: Should be able to see state updates of all agents
 		| State                    | Pause            |
 		| Activity                 | Phone            |
 		| Next activity            | Lunch            |
-		| Next activity start time | 2014-01-21 13:00 |
+		| Next activity start time | 13:00 |
 		| Alarm                    | Not adhering     |
 		| Alarm Time               | 2014-01-21 12:30 |
 		| Alarm Color              | Red              |
@@ -442,7 +442,7 @@ Scenario: Should be able to see state updates of all agents
 		| State				| Ready		|
 		| Activity			| Phone		|
 		| Next activity		| Lunch		|
-		| Next activity start time	| 2014-01-21 13:00	|
+		| Next activity start time	| 13:00	|
 		| Alarm	| Adhering	|
 		| Alarm Time	| 2014-01-21 12:30 |
 		| Alarm Color              | Green              |

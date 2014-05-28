@@ -62,7 +62,7 @@
 				assert.equals(vm.agentStates()[0].State, state1.State);
 				assert.equals(vm.agentStates()[0].Activity, state1.Activity);
 				assert.equals(vm.agentStates()[0].NextActivity, state1.NextActivity);
-				assert.equals(vm.agentStates()[0].NextActivityStartTime, moment.utc(state1.NextActivityStartTime, resources.DateTimeFormatForMoment).add(-600, 'minutes').format(resources.DateTimeFormatForMoment));
+				assert.equals(vm.agentStates()[0].NextActivityStartTime, moment.utc(state1.NextActivityStartTime, resources.TimeFormatForMoment).add(-600, 'minutes').format(resources.TimeFormatForMoment));
 				assert.equals(vm.agentStates()[0].Alarm, state1.Alarm);
 				assert.equals(vm.agentStates()[0].AlarmColor, 'rgba(' + hexToRgb(state1.AlarmColor) + ', 0.6)');
 				assert.equals(vm.agentStates()[0].AlarmTime, moment.utc(state1.AlarmTime, resources.DateTimeFormatForMoment).add(-600, 'minutes').format(resources.DateTimeFormatForMoment));
@@ -70,7 +70,7 @@
 				assert.equals(vm.agentStates()[1].State, state2.State);
 				assert.equals(vm.agentStates()[1].Activity, state2.Activity);
 				assert.equals(vm.agentStates()[1].NextActivity, state2.NextActivity);
-				assert.equals(vm.agentStates()[1].NextActivityStartTime, moment.utc(state2.NextActivityStartTime, resources.DateTimeFormatForMoment).add(-600, 'minutes').format(resources.DateTimeFormatForMoment));
+				assert.equals(vm.agentStates()[1].NextActivityStartTime, moment.utc(state2.NextActivityStartTime, resources.TimeFormatForMoment).add(-600, 'minutes').format(resources.TimeFormatForMoment));
 				assert.equals(vm.agentStates()[1].Alarm, state2.Alarm);
 				assert.equals(vm.agentStates()[1].AlarmColor, 'rgba(' + hexToRgb(state2.AlarmColor) + ', 0.6)');
 				assert.equals(vm.agentStates()[1].AlarmTime, moment.utc(state2.AlarmTime, resources.DateTimeFormatForMoment).add(-600, 'minutes').format(resources.DateTimeFormatForMoment));
