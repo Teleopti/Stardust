@@ -515,6 +515,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					if (backToLegalStateSolverContainer.Result)
 					{
+						
 						OptimizerHelperHelper.SyncSmartDayOffContainerWithMatrix(
 							backToLegalStateSolverContainer,
 							dayOffTemplate,
@@ -529,8 +530,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 						                                                                                              restrictionChecker,
 						                                                                                              optimizerPreferences,
 						                                                                                              originalStateContainer);
+						var overLimitCount = optimizationOverLimitByRestrictionDecider.OverLimitsCounts();
 						if (optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit() ||
-						    optimizationOverLimitByRestrictionDecider.OverLimit().Count > 0)
+						    overLimitCount.PreferencesOverLimit > 0 || overLimitCount.MustHavesOverLimit > 0 ||
+							overLimitCount.RotationsOverLimit > 0 || overLimitCount.AvailabilitiesOverLimit > 0 || overLimitCount.StudentAvailabilitiesOverLimit > 0)
 						{
 							var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback,
 							                                                               new ScheduleTagSetter(
