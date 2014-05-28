@@ -407,6 +407,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			 builder.RegisterType<MaxSeatsCalculationForTeamBlock>().As<IMaxSeatsCalculationForTeamBlock>();
 			 builder.RegisterType<MaxSeatInformationGeneratorBasedOnIntervals>().As<IMaxSeatInformationGeneratorBasedOnIntervals>();
 			 builder.RegisterType<MaxSeatSkillAggregator>().As<IMaxSeatSkillAggregator>();
+			 builder.RegisterType<MaxSeatInformationGeneratorBasedOnIntervals>().As<IMaxSeatInformationGeneratorBasedOnIntervals>();
+			 builder.RegisterType<MaxSeatsSpecificationDictionaryExtractor>().As<IMaxSeatsSpecificationDictionaryExtractor>();
+			 builder.RegisterType<IsMaxSeatsReachedOnSkillStaffPeriodSpecification>().As<IIsMaxSeatsReachedOnSkillStaffPeriodSpecification>();
 
 			//IVisualLayerToBaseDateMapper
 	    }

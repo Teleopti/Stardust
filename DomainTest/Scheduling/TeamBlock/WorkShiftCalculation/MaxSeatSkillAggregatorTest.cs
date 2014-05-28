@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 				Expect.Call(_person2.PersonPeriods(_dateOnlyPeriod)).Return(person2PersonPeriodList);
 				Expect.Call(_personPeriod2.PersonMaxSeatSkillCollection).Return(_skillList);
 			}
-			HashSet<ISkill> aggregatedSkills = _target.GetAggregatedSkills(_teamMembers, new DateOnly(2014, 05, 26));
+			HashSet<ISkill> aggregatedSkills = _target.GetAggregatedSkills(_teamMembers, _dateOnlyPeriod);
 			using (_mock.Playback())
 			{
 				Assert.AreEqual(1,aggregatedSkills.Count( ));
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 				Expect.Call(_person1.PersonPeriods(_dateOnlyPeriod)).Return(new List<IPersonPeriod>( ));
 				Expect.Call(_person2.PersonPeriods(_dateOnlyPeriod)).Return(new List<IPersonPeriod>());
 			}
-			HashSet<ISkill> aggregatedSkills = _target.GetAggregatedSkills(_teamMembers, new DateOnly( 2014, 05, 26));
+			HashSet<ISkill> aggregatedSkills = _target.GetAggregatedSkills(_teamMembers, _dateOnlyPeriod);
 			using (_mock.Playback())
 			{
 				Assert.AreEqual(0, aggregatedSkills.Count());

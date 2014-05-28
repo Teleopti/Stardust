@@ -8,21 +8,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public interface IMaxSeatInformationGeneratorBasedOnIntervals
 	{
-		IDictionary<DateTime, bool> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder  schedulingResultStateHolder);
+		IDictionary<DateTime, bool> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone);
 	}
 
 	public class MaxSeatInformationGeneratorBasedOnIntervals : IMaxSeatInformationGeneratorBasedOnIntervals
 	{
 		private readonly IMaxSeatSkillAggregator _maxSeatSkillAggregator;
+		private readonly IMaxSeatsSpecificationDictionaryExtractor _maxSeatsSpecificationDictionaryExtractor;
 
-		public MaxSeatInformationGeneratorBasedOnIntervals(IMaxSeatSkillAggregator maxSeatSkillAggregator)
+		public MaxSeatInformationGeneratorBasedOnIntervals(IMaxSeatSkillAggregator maxSeatSkillAggregator, IMaxSeatsSpecificationDictionaryExtractor maxSeatsSpecificationDictionaryExtractor)
 		{
 			_maxSeatSkillAggregator = maxSeatSkillAggregator;
+			_maxSeatsSpecificationDictionaryExtractor = maxSeatsSpecificationDictionaryExtractor;
 		}
 
-		public IDictionary<DateTime, bool> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder  schedulingResultStateHolder)
+		public IDictionary<DateTime, bool> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone)
 		{
-			var skills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(), datePointer ).ToList();
+			var skills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(), new DateOnlyPeriod(datePointer,datePointer ) ).ToList();
 			var skillDaysOnDatePointer = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { datePointer });
 			var skillDaysHavingMaxSeatInfo = new List<ISkillDay>();
 			foreach (var skillDay in skillDaysOnDatePointer)
@@ -30,14 +32,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				if (skills.Contains(skillDay.Skill))
 					skillDaysHavingMaxSeatInfo.Add(skillDay);
 			}
-			//is this check really valid?
-			var maxSeatInfoOnEachIntervalDic = new Dictionary<DateTime, bool>();
+			IDictionary<DateTime, bool> maxSeatInfoOnEachIntervalDic = new Dictionary<DateTime, bool>();
 			if (skillDaysHavingMaxSeatInfo.Any( ))
 			{
-				//skillStaffPeriodCollection = skillDaysHavingMaxSeatInfo[0].SkillStaffPeriodCollection;
-				//call Jovi code here and return the result
+				var skillStaffPeriodCollection = skillDaysHavingMaxSeatInfo[0].SkillStaffPeriodCollection;
+				maxSeatInfoOnEachIntervalDic =  _maxSeatsSpecificationDictionaryExtractor.ExtractMaxSeatsFlag(skillStaffPeriodCollection.ToList() , timeZone  );
 			}
-			//is this really valid
 			return maxSeatInfoOnEachIntervalDic;
 		}
 	}

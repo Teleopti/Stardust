@@ -61,21 +61,38 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer,
 				_schedulingResultStateHolder, true);
-	        var parameters = new PeriodValueCalculationParameters(schedulingOptions
+			var maxSeatFeatureOption = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
+			IDictionary<DateTime, bool> maxSeatInfo = new Dictionary<DateTime, bool>();
+			maxSeatFeatureOption = maxSeatsFeature(teamBlockInfo, datePointer, schedulingOptions, maxSeatFeatureOption, ref maxSeatInfo);
+
+			  var parameters = new PeriodValueCalculationParameters(schedulingOptions
 		        .WorkShiftLengthHintOption, schedulingOptions
 			        .UseMinimumPersons,
 		        schedulingOptions
-			        .UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats);
-			  IDictionary<DateTime, bool> maxSeatInfo = new Dictionary<DateTime, bool>();
-			  if (_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419))
-			  {
-				  maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, datePointer ,
-					  _schedulingResultStateHolder);
-			  }
+					  .UseMaximumPersons, maxSeatFeatureOption);
+
 	        parameters.MaxSeatInfoPerInterval = maxSeatInfo;
 			var roleModel = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 				parameters, TimeZoneGuard.Instance.TimeZone);
 			return roleModel;
+		}
+
+		private MaxSeatsFeatureOptions maxSeatsFeature(ITeamBlockInfo teamBlockInfo, DateOnly datePointer,
+			ISchedulingOptions schedulingOptions, MaxSeatsFeatureOptions maxSeatFeatureOption, ref IDictionary<DateTime, bool> maxSeatInfo)
+		{
+			if (_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419))
+			{
+				if (schedulingOptions.UseMaxSeats)
+				{
+					maxSeatFeatureOption = MaxSeatsFeatureOptions.ConsiderMaxSeats;
+					if (schedulingOptions.DoNotBreakMaxSeats)
+						maxSeatFeatureOption = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
+				}
+
+				maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, datePointer,
+					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone);
+			}
+			return maxSeatFeatureOption;
 		}
 	}
 }

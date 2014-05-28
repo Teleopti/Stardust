@@ -1,33 +1,31 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
+namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
-	public class MaxSeatsSpecificationDictionary
+	public interface IMaxSeatsSpecificationDictionaryExtractor
+	{
+		IDictionary<DateTime, bool> ExtractMaxSeatsFlag(List<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZoneInfo);
+	}
+
+	public class MaxSeatsSpecificationDictionaryExtractor : IMaxSeatsSpecificationDictionaryExtractor
 	{
 		private readonly IIsMaxSeatsReachedOnSkillStaffPeriodSpecification _isMaxSeatsReachedOnSkillStaffPeriodSpecification;
 		private Dictionary<DateTime, bool> _maxSeatsDictionary;
 
-		public MaxSeatsSpecificationDictionary(IIsMaxSeatsReachedOnSkillStaffPeriodSpecification isMaxSeatsReachedOnSkillStaffPeriodSpecification)
+		public MaxSeatsSpecificationDictionaryExtractor(IIsMaxSeatsReachedOnSkillStaffPeriodSpecification isMaxSeatsReachedOnSkillStaffPeriodSpecification)
 		{
 			_isMaxSeatsReachedOnSkillStaffPeriodSpecification = isMaxSeatsReachedOnSkillStaffPeriodSpecification;
 		}
 
-		public Dictionary<DateTime, bool> MaxSeatsDictionary
-		{
-			get { return _maxSeatsDictionary; }
-		}
-
-		public IDictionary<DateTime, Boolean> SetMaxSeatsFlag(List<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZoneInfo)
+		public IDictionary<DateTime, bool> ExtractMaxSeatsFlag(List<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZoneInfo)
 		{
 			if (skillStaffPeriodList.IsNullOrEmpty())
 				return null;
 
-			_maxSeatsDictionary = new Dictionary<DateTime, Boolean>();
+			_maxSeatsDictionary = new Dictionary<DateTime, bool>();
 			foreach (var skillStaffPeriod in skillStaffPeriodList)
 			{
 				var utcPeriod = skillStaffPeriod.Period;

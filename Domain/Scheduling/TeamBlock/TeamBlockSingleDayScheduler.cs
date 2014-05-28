@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private bool _cancelMe;
 		private IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
+		private readonly ISkillIntervalDataDivider _intervalDataDivider;
 		private readonly IToggleManager _toggleManager;
 
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
@@ -100,17 +101,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 					var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day,
 						schedulingResultStateHolder, false);
+					var maxSeatFeatureOption = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
+					IDictionary<DateTime, bool> maxSeatInfo = new Dictionary<DateTime, bool>();
+					maxSeatFeatureOption = handleMaxSeatFeature(teamBlockInfo, schedulingOptions, day, schedulingResultStateHolder, maxSeatFeatureOption, ref maxSeatInfo);
+						
 					var parameters = new PeriodValueCalculationParameters(schedulingOptions
 						.WorkShiftLengthHintOption, schedulingOptions
 							.UseMinimumPersons,
 						schedulingOptions
-							.UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats);
-					IDictionary<DateTime,bool  > maxSeatInfo = new Dictionary<DateTime, bool>();
-					if (_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419))
-					{
-						maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day,
-							schedulingResultStateHolder);
-					}
+							.UseMaximumPersons, maxSeatFeatureOption);
 					parameters.MaxSeatInfoPerInterval = maxSeatInfo;
 					bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 						parameters, TimeZoneGuard.Instance.TimeZone);
@@ -126,7 +125,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo);
 		}
 
-		
+		private MaxSeatsFeatureOptions handleMaxSeatFeature(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
+			DateOnly day, ISchedulingResultStateHolder schedulingResultStateHolder, MaxSeatsFeatureOptions maxSeatFeatureOption,
+			ref IDictionary<DateTime, bool> maxSeatInfo)
+		{
+			if (_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419))
+			{
+				if (schedulingOptions.UseMaxSeats)
+				{
+					maxSeatFeatureOption = MaxSeatsFeatureOptions.ConsiderMaxSeats;
+					if (schedulingOptions.DoNotBreakMaxSeats)
+						maxSeatFeatureOption = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
+				}
+
+				maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day,
+					schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone);
+			}
+			return maxSeatFeatureOption;
+		}
+
 
 		public void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{
