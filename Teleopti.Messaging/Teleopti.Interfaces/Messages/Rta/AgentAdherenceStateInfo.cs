@@ -11,6 +11,7 @@ namespace Teleopti.Interfaces.Messages.Rta
 		public DateTime NextActivityStartTime { get; set; }
 		public string Alarm { get; set; }
 		public DateTime AlarmStart { get; set; }
+		public DateTime StateStart { get; set; }
 		public string AlarmColor { get; set; }
 
 		public override bool Equals(object obj)
@@ -22,13 +23,13 @@ namespace Teleopti.Interfaces.Messages.Rta
 			var state = (AgentAdherenceStateInfo) obj;
 			return PersonId.Equals(state.PersonId) && State.Equals(state.State) && Activity.Equals(state.Activity) &&
 			       NextActivity.Equals(state.NextActivity) && NextActivityStartTime.Equals(state.NextActivityStartTime)
-			       && Alarm.Equals(state.Alarm) && AlarmStart.Equals(state.AlarmStart) && AlarmColor.Equals(state.AlarmColor);
+				   && Alarm.Equals(state.Alarm) && AlarmStart.Equals(state.AlarmStart) && AlarmColor.Equals(state.AlarmColor) && StateStart.Equals(state.StateStart);
 		}
 
 		public override int GetHashCode()
 		{
 			return PersonId.GetHashCode() ^ State.GetHashCode() ^ Activity.GetHashCode() ^ NextActivity.GetHashCode() ^
-			       NextActivityStartTime.GetHashCode() ^ Alarm.GetHashCode() ^ AlarmColor.GetHashCode() ^ AlarmStart.GetHashCode();
+			       NextActivityStartTime.GetHashCode() ^ Alarm.GetHashCode() ^ AlarmColor.GetHashCode() ^ AlarmStart.GetHashCode() ^ StateStart.GetHashCode();
 		}
 	}
 }

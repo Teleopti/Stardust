@@ -88,7 +88,8 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 				AlarmStart = actualAgentState.AlarmStart,
 				NextActivity = actualAgentState.ScheduledNext,
 				NextActivityStartTime = actualAgentState.NextStart,
-				State = actualAgentState.State
+				State = actualAgentState.State,
+				StateStart = actualAgentState.StateStart
 			};
 		}
 	}
