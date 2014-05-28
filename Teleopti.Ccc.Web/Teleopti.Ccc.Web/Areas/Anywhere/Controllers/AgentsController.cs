@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				PersonId = x.PersonId,
 				Name = _personRepository.Get(x.PersonId).Name.ToString(),
 				State = x.State,
+				StateStart = x.StateStart,
 				Activity = x.Activity,
 				NextActivity = x.NextActivity,
 				NextActivityStartTime = DateTime.SpecifyKind(x.NextActivityStartTime, DateTimeKind.Utc),

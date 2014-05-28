@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			{
 				PersonId = personId,
 				State = "out of adherence",
+				StateStart = new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc),
 				Activity = "Phone",
 				NextActivity = "Lunch",
 				NextActivityStartTime = new DateTime(2001, 1, 1, 12, 3, 0, DateTimeKind.Utc),
@@ -75,6 +76,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				PersonId = stateInfo.PersonId,
 				Name = person.Name.ToString(),
 				State = stateInfo.State,
+				StateStart = stateInfo.StateStart,
 				Activity =stateInfo.Activity,
 				NextActivity = stateInfo.NextActivity,
 				NextActivityStartTime = stateInfo.NextActivityStartTime,
@@ -100,6 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				Assert.That(result.First().PersonId,Is.EqualTo(expected.PersonId));
 				Assert.That(result.First().Name, Is.EqualTo(expected.Name));
 				Assert.That(result.First().State, Is.EqualTo(expected.State));
+				Assert.That(result.First().StateStart, Is.EqualTo(expected.StateStart));
 				Assert.That(result.First().Activity, Is.EqualTo(expected.Activity));
 				Assert.That(result.First().NextActivity, Is.EqualTo(expected.NextActivity));
 				Assert.That(result.First().NextActivityStartTime, Is.EqualTo(expected.NextActivityStartTime));
