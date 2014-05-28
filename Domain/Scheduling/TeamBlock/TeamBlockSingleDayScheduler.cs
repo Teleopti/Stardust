@@ -32,12 +32,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkShiftFilterService _workShiftFilterService;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly ITeamScheduling _teamScheduling;
-		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
 		private bool _cancelMe;
-		private IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
+		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		private readonly ISkillIntervalDataDivider _intervalDataDivider;
 		private readonly IToggleManager _toggleManager;
 
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
@@ -45,7 +43,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 										   IWorkShiftFilterService workShiftFilterService,
 										   IWorkShiftSelector workShiftSelector,
 										   ITeamScheduling teamScheduling,
-										   ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
 											IActivityIntervalDataCreator activityIntervalDataCreator, IMaxSeatInformationGeneratorBasedOnIntervals maxSeatInformationGeneratorBasedOnIntervals, IToggleManager toggleManager)
 		{
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
@@ -53,7 +50,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_workShiftFilterService = workShiftFilterService;
 			_workShiftSelector = workShiftSelector;
 			_teamScheduling = teamScheduling;
-			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_activityIntervalDataCreator = activityIntervalDataCreator;
 			_maxSeatInformationGeneratorBasedOnIntervals = maxSeatInformationGeneratorBasedOnIntervals;
 			_toggleManager = toggleManager;
