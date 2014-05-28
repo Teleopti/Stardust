@@ -20,6 +20,7 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function () {
 	var self = this;
 
 	this.DayViewModels = ko.observableArray();
+	this.ContractMaxTimePerWeek = 0;
 
 	self.PossibleResultWeeklyContractTimeMinutesLower = ko.computed(function() {
 		var sum = 0;
@@ -68,5 +69,27 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function () {
 		return false;
 	});
 
+	self.IsMinHoursBroken = ko.computed(function() {
+		return self.PossibleResultWeeklyContractTimeMinutesLower() > self.ContractMaxTimePerWeek;
+	});
+
+	self.readContractMaxTimePerWeek = function(data) {
+		 self.ContractMaxTimePerWeek = data;
+	};
+
+	this.LoadContractMaxTimeSetting = function (ajax) {
+		 var deferred = $.Deferred();
+		 ajax.Ajax({
+		 	 url: "Preference/ContractMaxTimePerWeek",
+		 	 dataType: "json",
+		 	 data: {
+		 	 	 Date: self.DayViewModels()[0].Date
+		 	 },
+		 	 type: 'GET',
+		 	 success: function (data, textStatus, jqXHR) {
+		 	 	 self.readContractMaxTimePerWeek(data);
+		 	 }
+		 });
+	};
 };
 

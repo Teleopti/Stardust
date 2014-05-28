@@ -37,4 +37,14 @@ $(document).ready(function () {
 		equal(weekViewModel.PossibleResultWeeklyContractTimeUpper(), "160:05");
 	});
 
+	test("should read max time per week setting in contract", function () {
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+		var weekViewModel = new Teleopti.MyTimeWeb.Preference.WeekViewModel();
+		viewModelDay.Date = "2014-05-28";
+		weekViewModel.DayViewModels.push(viewModelDay);
+		weekViewModel.readContractMaxTimePerWeek("60:00");
+		 
+		equal(weekViewModel.ContractMaxTimePerWeek, "60:00");
+	});
+
 });
