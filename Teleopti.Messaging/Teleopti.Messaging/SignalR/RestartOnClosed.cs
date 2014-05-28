@@ -28,7 +28,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				_closedHandler = delegate
 				{
-					Logger.Error("Connection closed. Restarting soon.");
+					Logger.Warn("Connection closed. Flagging for restart.");
 					_restartAt = _time.UtcDateTime().Add(_restartDelay);
 					_connectionToRestart = c;
 				};
@@ -46,11 +46,13 @@ namespace Teleopti.Messaging.SignalR
 
 				if (time.UtcDateTime() >= _restartAt)
 				{
-					Logger.Error("Restarting connection.");
 					stateAccessor.WithConnection(c =>
 					{
 						if (c == _connectionToRestart)
+						{
+							Logger.Warn("Restarting connection.");
 							c.Start();
+						}
 					});
 					_restartAt = null;
 					_connectionToRestart = null;
