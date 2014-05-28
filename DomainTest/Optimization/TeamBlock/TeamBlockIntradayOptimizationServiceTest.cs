@@ -118,8 +118,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var persons = new List<IPerson> { person };
 			var schedulingOptions = new SchedulingOptions();
 			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
-			var groupPerson = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var group = new Group(new List<IPerson> { person }, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			var optimizationPreferences = new OptimizationPreferences();
@@ -134,7 +134,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,_schedulePartModifyAndRollbackService);
+
+				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
+								 _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
 			}	
 		}
 
