@@ -357,6 +357,7 @@
     <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactory.cs" />
     <Compile Include="Areas\SSO\Core\IProviderEndpointWrapper.cs" />
     <Compile Include="Areas\SSO\Core\ProviderEndpointWrapper.cs" />
+    <Compile Include="Areas\Start\Controllers\UrlController.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityProviderAuthenticationType.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerController.cs" />

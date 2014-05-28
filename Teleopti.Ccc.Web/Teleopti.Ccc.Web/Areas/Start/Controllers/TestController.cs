@@ -18,7 +18,7 @@ using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
-	public class TestController : Controller
+    public class TestController : Controller
 	{
 		private readonly IMutateNow _mutateNow;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
