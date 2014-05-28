@@ -17,16 +17,20 @@ if "%2" == "" (
 SET AnalyticsDB=Infratest_Analytics
 )
 
+
 ::init toggle values to "ALL"
-::SET TOGGLE_FILE=ALL
+SET licensefile=Teleopti_RD.xml
 
-::if "%FEATURETOGGLE%" == "RC" (
-::SET TOGGLE_FILE=bin/FeatureFlags/RC.toggles.txt
-::)
+if "%FEATURETOGGLE%" == "RC" (
+SET licensefile=Teleopti_RC.xml
+)
 
-::if "%FEATURETOGGLE%" == "R" (
-::SET TOGGLE_FILE=bin/FeatureFlags/released.toggles.txt
-::)
+if "%FEATURETOGGLE%" == "R" (
+SET licensefile=Teleopti_Prod.xml
+)
+
+::copy licensefile to webbehaviortest
+copy /y %rootdir%\LicenseFiles\%licensefile% %rootdir%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\license.xml
 
 if "%configuration%"=="" (
 set configuration=Debug
