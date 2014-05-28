@@ -289,7 +289,8 @@ namespace Teleopti.Ccc.Win.Commands
 			        _teamBlockRestrictionOverLimitValidator,
 			        _teamBlockCleaner, 
 					_teamBlockMaxSeatChecker, 
-					_dailyTargetValueCalculatorForTeamBlock
+					_dailyTargetValueCalculatorForTeamBlock,
+					_teamBlockSteadyStateValidator
 			        );
 
             teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
