@@ -12072,4 +12072,15 @@ Reduce the complexity to use these shifts.</value>
     <value>Move time on </value>
     <comment>This is used when using move time with team block</comment>
   </data>
+  <data name="NextActivity" xml:space="preserve">
+    <value>Next Activity</value>
+    <comment>next activity in schedule</comment>
+  </data>
+  <data name="NextActivityStartTime" xml:space="preserve">
+    <value>Next Activity Start Time</value>
+  </data>
+  <data name="TimeInState" xml:space="preserve">
+    <value>Time in State</value>
+    <comment>time in the alarm state</comment>
+  </data>
 </root>
