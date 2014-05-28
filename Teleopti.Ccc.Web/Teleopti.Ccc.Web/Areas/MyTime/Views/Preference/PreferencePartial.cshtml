@@ -238,6 +238,7 @@
 					<li data-mytime-week="week" style="width: 50px" data-bind="visible:false">
 						<div class="day-header"></div>
 						<div class="day-content">
+							<!-- ko if: IsWeeklyWorkTimeVisible -->
 							<div class="min-hours-per-week">
 								<span class="glyphicon glyphicon-chevron-right"></span>
 								<span data-bind="text:PossibleResultWeeklyContractTimeLower"></span>
@@ -246,6 +247,7 @@
 								<span class="glyphicon glyphicon-chevron-left"></span>
 								<span data-bind="text:PossibleResultWeeklyContractTimeUpper"></span>
 							</div>
+						   <!-- /ko -->
 						</div>
 					</li>
 					@foreach (DayViewModel day in week.Days)
