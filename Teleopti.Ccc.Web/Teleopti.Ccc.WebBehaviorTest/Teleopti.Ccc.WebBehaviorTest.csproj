@@ -826,7 +826,7 @@
     </Content>
     <Content Include="License.xml">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\TestData.nhib.xml">
       <SubType>Designer</SubType>
