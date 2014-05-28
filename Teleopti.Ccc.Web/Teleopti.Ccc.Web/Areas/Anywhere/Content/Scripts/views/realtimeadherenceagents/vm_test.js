@@ -25,6 +25,7 @@
 				var state1 = {
 					PersonId: 'guid1',
 					State: 'Ready',
+					StateStart: moment('2014-01-21 12:00').format(resources.DateTimeFormatForMoment),
 					Activity: 'Phone',
 					NextActivity: 'Lunch',
 					NextActivityStartTime: moment('2014-01-21 13:00').format(resources.DateTimeFormatForMoment),
@@ -35,6 +36,7 @@
 				var state2 = {
 					PersonId: 'guid2',
 					State: 'Pause',
+					StateStart: moment('2014-01-21 12:00').format(resources.DateTimeFormatForMoment),
 					Activity: 'Phone',
 					NextActivity: 'Lunch',
 					NextActivityStartTime: moment('2014-01-21 13:00').format(resources.DateTimeFormatForMoment),
@@ -60,6 +62,7 @@
 				}
 				assert.equals(vm.agentStates()[0].PersonId, state1.PersonId);
 				assert.equals(vm.agentStates()[0].State, state1.State);
+				assert.equals(vm.agentStates()[0].StateStart, moment.utc(state1.StateStart, resources.DateTimeFormatForMoment).add(-600, 'minutes').format(resources.DateTimeFormatForMoment));
 				assert.equals(vm.agentStates()[0].Activity, state1.Activity);
 				assert.equals(vm.agentStates()[0].NextActivity, state1.NextActivity);
 				assert.equals(vm.agentStates()[0].NextActivityStartTime, moment.utc(state1.NextActivityStartTime, resources.TimeFormatForMoment).add(-600, 'minutes').format(resources.TimeFormatForMoment));
@@ -68,6 +71,7 @@
 				assert.equals(vm.agentStates()[0].AlarmStart, moment.utc(state1.AlarmStart, resources.DateTimeFormatForMoment).add(-600, 'minutes').format(resources.DateTimeFormatForMoment));
 				assert.equals(vm.agentStates()[1].PersonId, state2.PersonId);
 				assert.equals(vm.agentStates()[1].State, state2.State);
+				assert.equals(vm.agentStates()[1].StateStart, moment.utc(state1.StateStart, resources.DateTimeFormatForMoment).add(-600, 'minutes').format(resources.DateTimeFormatForMoment));
 				assert.equals(vm.agentStates()[1].Activity, state2.Activity);
 				assert.equals(vm.agentStates()[1].NextActivity, state2.NextActivity);
 				assert.equals(vm.agentStates()[1].NextActivityStartTime, moment.utc(state2.NextActivityStartTime, resources.TimeFormatForMoment).add(-600, 'minutes').format(resources.TimeFormatForMoment));
@@ -80,6 +84,7 @@
 				var state1 = {
 					PersonId: 'guid1',
 					State: 'Ready',
+					StateStart: moment('2014-01-21 12:00').format(resources.DateTimeFormatForMoment),
 					Activity: 'Phone',
 					NextActivity: 'Lunch',
 					NextActivityStartTime: moment('2014-01-21 13:00').format(resources.DateTimeFormatForMoment),
@@ -90,6 +95,7 @@
 				var state2 = {
 					PersonId: 'guid2',
 					State: 'Pause',
+					StateStart: moment('2014-01-21 12:00').format(resources.DateTimeFormatForMoment),
 					Activity: 'Phone',
 					NextActivity: 'Lunch',
 					NextActivityStartTime: moment('2014-01-21 13:00').format(resources.DateTimeFormatForMoment),

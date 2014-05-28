@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			                                                                                                 {
 				                                                                                                 PersonId = state.PersonId,
 				                                                                                                 State = state.State,
+																												 StateStart = state.StateStart,
 				                                                                                                 Activity = state.Scheduled,
 				                                                                                                 NextActivity = state.ScheduledNext,
 				                                                                                                 NextActivityStartTime = state.NextStart,
