@@ -38,9 +38,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
     	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
     	private IDictionary<DateOnly, IScheduleDay> _dic;
-	    private OverLimitResults _overLimtitesResult;
 
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
@@ -86,7 +85,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_dic.Add(new DateOnly(2011, 1, 1), _scheduleDay1);
 			_dic.Add(new DateOnly(2011, 1, 2), _scheduleDay2);
 			_effectiveRestriction = _mocks.Stub<IEffectiveRestriction>();
-		    _overLimtitesResult = new OverLimitResults(0, 0, 0, 0, 0);
 		}
 
         [Test]
@@ -100,6 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks(decisionMakerResult);
 
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments()
@@ -112,7 +111,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(30);
                 Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 1)))
                     .Return(true).Repeat.Any();
-	            Expect.Call(_optimizationOverLimitDecider.HasOverLimitIncreased(_overLimtitesResult)).Return(false);
             }
 
             bool result;
@@ -136,6 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks(decisionMakerResult);
 
+                Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments()
@@ -148,7 +147,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(30);
                 Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 2)))
                     .Return(false).Repeat.Any();
-				Expect.Call(_optimizationOverLimitDecider.HasOverLimitIncreased(_overLimtitesResult)).Return(false);
             }
 
             bool result;
@@ -172,6 +170,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks(decisionMakerResult);
 
+                Expect.Call(_optimizationOverLimitDecider.OverLimit())
+                    .Return(new List<DateOnly>());
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments()
@@ -202,7 +202,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 commonMocks(decisionMakerResult);
-
+                Expect.Call(_optimizationOverLimitDecider.OverLimit())
+                    .Return(new List<DateOnly>()).Repeat.Twice();
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_rollbackService.ModificationCollection).Return(new List<IScheduleDay>()).Repeat.AtLeastOnce();
@@ -216,7 +217,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(100);
                 Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 2)))
                     .Return(false).Repeat.Any();
-				Expect.Call(_optimizationOverLimitDecider.HasOverLimitIncreased(_overLimtitesResult)).Return(false);
             }
 
             bool result;
@@ -236,7 +236,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-				Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimtitesResult);
+                Expect.Call(_optimizationOverLimitDecider.OverLimit())
+                    .Return(new List<DateOnly>());
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_decisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor))
@@ -273,8 +274,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void commonMocks(ExtendReduceTimeDecisionMakerResult decisionMakerResult)
-		{
-			Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimtitesResult);
+        {
             Expect.Call(_decisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor))
                 .Return(decisionMakerResult);
             Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))

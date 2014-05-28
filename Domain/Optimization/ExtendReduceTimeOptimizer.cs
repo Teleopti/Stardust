@@ -68,8 +68,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool Execute()
         {
-	        var lastOverLimitCount = _optimizationOverLimitDecider.OverLimitsCounts();
-            if (daysOverMax())
+            if (restrictionsOverMax().Count > 0 || daysOverMax())
                 return false;
 
             bool sucess = false;
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 DateOnly dateOnly = daysToBeRescheduled.DayToLengthen.Value;
 
-                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Long, _schedulingOptions, dateOnly, _matrixConverter.SourceMatrix, lastOverLimitCount))
+                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Long, _schedulingOptions, dateOnly, _matrixConverter.SourceMatrix))
                     sucess = true;
             }
 
@@ -91,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 DateOnly dateOnly = daysToBeRescheduled.DayToShorten.Value;
 
-                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Short, _schedulingOptions, dateOnly, _matrixConverter.SourceMatrix, lastOverLimitCount))
+                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Short, _schedulingOptions, dateOnly, _matrixConverter.SourceMatrix))
                     sucess = true;
             }
 
@@ -107,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             WorkShiftLengthHintOption lenghtHint, 
             ISchedulingOptions schedulingOptions,
             DateOnly dateOnly,
-            IScheduleMatrixPro matrix, OverLimitResults lastOverLimitResults)
+            IScheduleMatrixPro matrix)
         {
             double oldPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
             _rollbackService.ClearModificationCollection();
@@ -137,9 +136,15 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             }
 
-            if (_optimizationOverLimitDecider.HasOverLimitIncreased(lastOverLimitResults))
+            IList<DateOnly> daysToLock = restrictionsOverMax();
+            if (daysToLock.Count > 0)
             {
                 rollbackAndResourceCalculate(dateOnly);
+
+                foreach (var date in daysToLock)
+                {
+                    matrix.LockPeriod(new DateOnlyPeriod(date, date));
+                }
                 return true;
             }
 
@@ -199,6 +204,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
 
             return true;
+        }
+
+        private IList<DateOnly> restrictionsOverMax()
+        {
+            return _optimizationOverLimitDecider.OverLimit();
         }
 
         private bool daysOverMax()

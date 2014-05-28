@@ -72,8 +72,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
 
-			var lastOverLimitCount = _optimizationOverLimitDecider.OverLimitsCounts();
-            if (daysOverMax())
+            if (restrictionsOverMax().Count > 0 || daysOverMax())
                 return false;
 
             double oldPeriodValue = calculatePeriodValue();
@@ -152,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             }
 
-			if (_optimizationOverLimitDecider.HasOverLimitIncreased(lastOverLimitCount))
+            if (restrictionsOverMax().Count > 0)
             {
                 rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
 				lockDays(firstDayDate, secondDayDate);
@@ -179,6 +178,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			lockDay(firstDayDate);
 			lockDay(secondDayDate);
 		}
+
+        private IList<DateOnly> restrictionsOverMax()
+        {
+            return _optimizationOverLimitDecider.OverLimit();
+        }
 
         private bool daysOverMax()
         {

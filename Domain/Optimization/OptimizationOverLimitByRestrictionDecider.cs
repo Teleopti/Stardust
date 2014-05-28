@@ -5,9 +5,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IOptimizationOverLimitByRestrictionDecider
     {
+        IList<DateOnly> OverLimit();
         bool MoveMaxDaysOverLimit();
-	    OverLimitResults OverLimitsCounts();
-	    bool HasOverLimitIncreased(OverLimitResults lastOverLimitCounts);
     }
 
     public class OptimizationOverLimitByRestrictionDecider : IOptimizationOverLimitByRestrictionDecider
@@ -30,34 +29,17 @@ namespace Teleopti.Ccc.Domain.Optimization
             _restrictionOverLimitDecider = new RestrictionOverLimitDecider(restrictionChecker);
         }
 
-	    public bool HasOverLimitIncreased(OverLimitResults lastOverLimitCounts)
-	    {
-		    var current = OverLimitsCounts();
-			if (current.PreferencesOverLimit > lastOverLimitCounts.PreferencesOverLimit)
-			    return true;
+        public IList<DateOnly> OverLimit()
+        {
+            List<DateOnly> overallResult = new List<DateOnly>();
+            overallResult.AddRange(preferencesOverLimit());
+            overallResult.AddRange(mustHavesOverLimit());
+            overallResult.AddRange(rotationOverLimit());
+            overallResult.AddRange(availabilitiesOverLimit());
+            overallResult.AddRange(studentAvailabilitiesOverLimit());
 
-			if (current.MustHavesOverLimit > lastOverLimitCounts.MustHavesOverLimit)
-				return true;
-
-			if (current.RotationsOverLimit > lastOverLimitCounts.RotationsOverLimit)
-				return true;
-
-			if (current.AvailabilitiesOverLimit > lastOverLimitCounts.AvailabilitiesOverLimit)
-				return true;
-
-			if (current.StudentAvailabilitiesOverLimit > lastOverLimitCounts.StudentAvailabilitiesOverLimit)
-				return true;
-
-			return false;
-	    }
-
-		public OverLimitResults OverLimitsCounts()
-		{
-			var overallResults = new OverLimitResults(preferencesOverLimit().Count, mustHavesOverLimit().Count,
-				rotationOverLimit().Count, availabilitiesOverLimit().Count, studentAvailabilitiesOverLimit().Count);
-
-		    return overallResults;
-	    }
+            return overallResult;
+        }
 
         public bool MoveMaxDaysOverLimit()
         {
@@ -105,48 +87,4 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return _restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(new Percent(_optimizationPreferences.General.StudentAvailabilitiesValue), _matrix).BrokenDays;
         }
     }
-
-	public class OverLimitResults
-	{
-		private readonly int _preferencesOverLimit;
-		private readonly int _rotationsOverLimit;
-		private readonly int _availabilitiesOverLimit;
-		private readonly int _studentAvailabilitiesOverLimit;
-		private readonly int _mustHavesOverLimit;
-
-		public OverLimitResults(int preferencesOverLimit, int mustHavesOverLimit, int rotationsOverLimit, int availabilitiesOverLimit,
-			int studentAvailabilitiesOverLimit)
-		{
-			_preferencesOverLimit = preferencesOverLimit;
-			_rotationsOverLimit = rotationsOverLimit;
-			_availabilitiesOverLimit = availabilitiesOverLimit;
-			_studentAvailabilitiesOverLimit = studentAvailabilitiesOverLimit;
-			_mustHavesOverLimit = mustHavesOverLimit;
-		}
-
-		public int PreferencesOverLimit
-		{
-			get { return _preferencesOverLimit; }
-		}
-
-		public int RotationsOverLimit
-		{
-			get { return _rotationsOverLimit; }
-		}
-
-		public int AvailabilitiesOverLimit
-		{
-			get { return _availabilitiesOverLimit; }
-		}
-
-		public int StudentAvailabilitiesOverLimit
-		{
-			get { return _studentAvailabilitiesOverLimit; }
-		}
-
-		public int MustHavesOverLimit
-		{
-			get { return _mustHavesOverLimit; }
-		}
-	}
 }

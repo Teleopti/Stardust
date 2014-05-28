@@ -71,8 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool Execute()
         {
-	        var lastOverLimitCounts = _optimizationOverLimitDecider.OverLimitsCounts();
-            if (daysOverMax())
+            if (RestrictionsOverMax().Count > 0 || daysOverMax())
                 return false;
 
             // Step: get day to move
@@ -102,8 +101,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             
             //delete schedule
 			IList<IScheduleDay> listToDelete = new List<IScheduleDay> { scheduleDay };    
-
+            var changed = new changedDay
+                              {
+                                  PrevoiousSchedule = (IScheduleDay) scheduleDay.Clone()
+                              };
+            
             _deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks);
+
+            changed.CurrentSchedule = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateToBeRemoved).DaySchedulePart();
             
             if (!tryScheduleDay(dateToBeRemoved, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime)) 
                 return true;
@@ -115,18 +120,25 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (newPeriodValue.HasValue)
                 newValidatedPeriodValue = newPeriodValue.Value;
 
+            changed = new changedDay();
+            changed.PrevoiousSchedule = (IScheduleDay)_matrixConverter.SourceMatrix.GetScheduleDayByKey(dateToBeRemoved).DaySchedulePart().Clone();
+
             bool isPeriodWorse = newValidatedPeriodValue > oldPeriodValue;
             if (isPeriodWorse)
             {
                 _rollbackService.Rollback();
+                changed.CurrentSchedule =
+                    _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateToBeRemoved).DaySchedulePart();
                 _resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null);
                 lockDay(dateToBeRemoved);
                 return true;
             }
 
-			if (_optimizationOverLimitDecider.HasOverLimitIncreased(lastOverLimitCounts) || daysOverMax())
+            if (RestrictionsOverMax().Count > 0 || daysOverMax())
             {
                 _rollbackService.Rollback();
+                changed.CurrentSchedule =
+                    _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateToBeRemoved).DaySchedulePart();
                 _resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null);
                 lockDay(dateToBeRemoved);
                 return false;
@@ -136,6 +148,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			lockDay(dateToBeRemoved);
 
             return true;
+        }
+
+        public IList<DateOnly> RestrictionsOverMax()
+        {
+            return _optimizationOverLimitDecider.OverLimit();
         }
 
         private bool daysOverMax()
@@ -185,6 +202,14 @@ namespace Teleopti.Ccc.Domain.Optimization
         private void lockDay(DateOnly day)
         {
             _matrixConverter.SourceMatrix.LockPeriod(new DateOnlyPeriod(day, day));
+        }
+
+        private class changedDay
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            public IScheduleDay PrevoiousSchedule { get; set; }
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            public IScheduleDay CurrentSchedule { get; set; }
         }
     }
 }

@@ -85,8 +85,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public bool Execute()
 		{
-			var lastOverLimitCount = _optimizationOverLimitDecider.OverLimitsCounts();
-			if (daysOverMax())
+			if (restrictionsOverMax().Count > 0 || daysOverMax())
 				return false;
 
 			_rollbackService.ClearModificationCollection();
@@ -147,8 +146,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 					return false;
 				}
 
-				if (_optimizationOverLimitDecider.HasOverLimitIncreased(lastOverLimitCount))
+				IList<DateOnly> daysToLock = restrictionsOverMax();
+				if (daysToLock.Count > 0)
 				{
+					foreach (var dateOnly in daysToLock)
+					{
+						sourceMatrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+					}
 					rollbackAndResourceCalculate();
 					return true;
 				}
@@ -299,6 +303,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 
 			return removedIllegalDates;
+		}
+
+
+		private IList<DateOnly> restrictionsOverMax()
+		{
+			return _optimizationOverLimitDecider.OverLimit(); //maybe send in matrix to get the days locked
 		}
 
 		private bool daysOverMax()
