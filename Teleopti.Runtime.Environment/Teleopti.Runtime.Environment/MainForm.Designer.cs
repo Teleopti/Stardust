@@ -46,7 +46,7 @@
             // 
             // webView1
             // 
-            this.webView1.Url = "http://cccrc/TeleoptiCCC/";
+            this.webView1.Url = "http://localhost:56760";
             this.webView1.NewWindow += new EO.WebBrowser.NewWindowHandler(this.webView1_NewWindow);
             // 
             // MainForm
