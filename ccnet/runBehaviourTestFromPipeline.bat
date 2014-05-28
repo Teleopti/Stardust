@@ -25,7 +25,6 @@ cd "%target%"
 echo %target%
 
 SET TOGGLEURL=ALL
-SET TOGGLE_FILE=ALL
 SET DB_CCC7=a
 SET DB_ANALYTICS=b
 SET AS_DATABASE=%AnalyticsDB%
@@ -77,7 +76,6 @@ ECHO $(AGENTPORTALWEB_nhibConfPath)^|%AGENTPORTALWEB_nhibConfPath%>>"%MySettings
 ECHO $(DB_CCC7)^|%DB_CCC7%>>"%MySettings%"
 ECHO $(DB_ANALYTICS)^|%DB_ANALYTICS%>>"%MySettings%"
 ECHO $(AS_DATABASE)^|%AS_DATABASE%>>"%MySettings%"
-ECHO $(TOGGLE_FILE)^|%TOGGLE_FILE%>>"%MySettings%"
 ECHO $(TOGGLE_URL)^|%TOGGLE_URL%>>"%MySettings%"
 ECHO $(SQL_SERVER_NAME)^|%SQL_SERVER_NAME%>>"%MySettings%"
 

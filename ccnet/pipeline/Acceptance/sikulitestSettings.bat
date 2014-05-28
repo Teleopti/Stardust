@@ -9,7 +9,6 @@ SET ROOTDIR=%ROOTDIR:~0,-27%
 
 set configuration=Release
 SET TOGGLEURL=ALL
-SET TOGGLE_FILE=ALL
 SET DB_CCC7=%1
 SET DB_ANALYTICS=%2
 SET AS_DATABASE=%AnalyticsDB%
@@ -61,7 +60,6 @@ ECHO $(AGENTPORTALWEB_nhibConfPath)^|%AGENTPORTALWEB_nhibConfPath%>>"%MySettings
 ECHO $(DB_CCC7)^|%DB_CCC7%>>"%MySettings%"
 ECHO $(DB_ANALYTICS)^|%DB_ANALYTICS%>>"%MySettings%"
 ECHO $(AS_DATABASE)^|%AS_DATABASE%>>"%MySettings%"
-ECHO $(TOGGLE_FILE)^|%TOGGLE_FILE%>>"%MySettings%"
 ECHO $(TOGGLE_URL)^|%TOGGLE_URL%>>"%MySettings%"
 ECHO $(SQL_SERVER_NAME)^|%SQL_SERVER_NAME%>>"%MySettings%"
 
