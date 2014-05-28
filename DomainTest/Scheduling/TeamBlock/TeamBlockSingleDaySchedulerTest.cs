@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IWorkShiftFilterService _workShiftFilterService;
 		private IWorkShiftSelector _workShiftSelector;
 		private ITeamScheduling _teamScheduling;
-		private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private MockRepository _mocks;
 		private DateOnly _dateOnly;
 		private IPerson _person1;
@@ -50,14 +49,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_teamBlockSchedulingOptions = _mocks.StrictMock<ITeamBlockSchedulingOptions>();
 			_teamBlockSchedulingCompletionChecker = _mocks.StrictMock<ITeamBlockSchedulingCompletionChecker>();
 			_proposedRestrictionAggregator = _mocks.StrictMock<IProposedRestrictionAggregator>();
 			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
 			_teamScheduling = _mocks.StrictMock<ITeamScheduling>();
-			_teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
 			_activityIntervalDataCreator = _mocks.StrictMock<IActivityIntervalDataCreator>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_maxSeatInformationGeneratorBasedOnIntervals = _mocks.StrictMock<IMaxSeatInformationGeneratorBasedOnIntervals>();
@@ -68,7 +65,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_workShiftFilterService, 
 				_workShiftSelector, 
 				_teamScheduling, 
-				_teamBlockSchedulingOptions,
 				_activityIntervalDataCreator,_maxSeatInformationGeneratorBasedOnIntervals ,_toggleManager );
 
 			_dateOnly = new DateOnly(2013, 11, 12);
