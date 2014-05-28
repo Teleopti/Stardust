@@ -22,34 +22,38 @@ namespace Teleopti.Messaging.SignalR
 
 		public void AddSubscription(Subscription subscription)
 		{
+			_logger.Debug("AddSubscription");
 			call(addsubscription, subscription);
 		}
 
 		public void RemoveSubscription(string route)
 		{
+			_logger.Debug("RemoveSubscription");
 			call(removesubscription, route);
 		}
 
 		public void NotifyClients(Notification notification)
 		{
+			_logger.Debug("NotifyClients");
 			call(notifyclients, notification);
 		}
 
 		public void NotifyClients(IEnumerable<Notification> notifications)
 		{
+			_logger.Debug("NotifyClients");
 			call(notifyclientsmultiple, notifications);
 		}
 
-		private void call(string methodName, params object[] notifications)
+		private void call(string methodName, params object[] args)
 		{
 			_hubProxy.IfProxyConnected(p =>
 			{
-				var task = p.Invoke(methodName, notifications);
+				var task = p.Invoke(methodName, args);
 
 				task.ContinueWith(t =>
 				{
 					if (t.IsFaulted && t.Exception != null)
-						_logger.Debug("An error happened on notification task", t.Exception);
+						_logger.Info("An error occurred on task calling " + methodName, t.Exception);
 				}, TaskContinuationOptions.OnlyOnFaulted);
 			});
 		}
