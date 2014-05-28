@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.TestCommon
 		public static string SQL_PASSWORD { get; private set; }
 		public static string AGENTPORTALWEB_nhibConfPath { get; private set; }
 		public static bool ServiceBus { get; private set; }
-		public static string FeatureToggle { get; private set; }
 
 		private static void readIniFile()
 		{
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.TestCommon
 			WEB_BROKER_BACKPLANE = ConfigurationManager.AppSettings["WEB_BROKER_BACKPLANE"];
 			AGENTPORTALWEB_nhibConfPath = ConfigurationManager.AppSettings["AGENTPORTALWEB_nhibConfPath"];
 			ServiceBus = ConfigurationManager.AppSettings["servicebus"] == "true";
-			FeatureToggle = ConfigurationManager.AppSettings["FeatureToggle"];
 			buildConnectionString();
 		}
 
