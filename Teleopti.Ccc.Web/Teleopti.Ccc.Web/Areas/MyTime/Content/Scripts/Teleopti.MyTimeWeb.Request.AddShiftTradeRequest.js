@@ -116,6 +116,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.sendRequest = function () {
 		    self.isSendEnabled(false);
 		    sendRequestCallback(self);
+		    self.chooseAgent(null);
 		};
 
 		self.cancelRequest = function () {
