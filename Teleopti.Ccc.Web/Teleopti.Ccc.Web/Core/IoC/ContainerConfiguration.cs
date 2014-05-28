@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 {
 	public class ContainerConfiguration : IContainerConfiguration
 	{
-		public IContainer Configure()
+		public IContainer Configure(string featureTogglePath)
 		{
 			var builder = new ContainerBuilder();
 
@@ -114,20 +114,9 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
-
-			var featureTogglePath = inRealWebEnvironment() ? 
-				HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["FeatureToggle"]) : 
-				"Just something for test___ALL";
 			builder.RegisterModule(new ToggleNetModule(featureTogglePath));
 
-
-
 			return builder.Build();
-		}
-
-		private static bool inRealWebEnvironment()
-		{
-			return HttpContext.Current != null;
 		}
 
 		private static void registerAopComponents(ContainerBuilder builder)

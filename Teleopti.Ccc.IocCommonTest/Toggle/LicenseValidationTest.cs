@@ -3,10 +3,8 @@ using Autofac;
 using Autofac.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.IocCommonTest.Toggle
