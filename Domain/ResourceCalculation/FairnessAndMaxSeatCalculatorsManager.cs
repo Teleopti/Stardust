@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -84,15 +85,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		            shiftValue = fairnessValue;
 	            }
 
-
-
-				if (shiftValue > highestShiftValue && schedulingOptions.UseMaxSeats)
+				if (shiftValue > highestShiftValue && schedulingOptions.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
                 {
                     var seatVal =
                         _seatLimitationWorkShiftCalculator.CalculateShiftValue(person,
                                                                                shiftProjection.MainShiftProjection,
                                                                                maxSeatSkillPeriods,
-																			   schedulingOptions.DoNotBreakMaxSeats);
+																			   schedulingOptions.UserOptionMaxSeatsFeature);
                     if (!seatVal.HasValue)
                         continue;
 

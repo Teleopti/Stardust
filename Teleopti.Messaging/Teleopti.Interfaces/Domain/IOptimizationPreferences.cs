@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -475,21 +476,13 @@ namespace Teleopti.Interfaces.Domain
         /// </value>
         bool UseMaximumStaffing { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [use maximum seats].
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if use; otherwise, <c>false</c>.
-        /// </value>
-        bool UseMaximumSeats { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [do not break maximum seats].
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if use; otherwise, <c>false</c>.
-        /// </value>
-        bool DoNotBreakMaximumSeats { get; set; }
+		  /// <summary>
+		  /// Gets or sets a value indicating whether [use maximum seats].
+		  /// </summary>
+		  /// <value>
+		  /// 	<c>true</c> if use; otherwise, <c>false</c>.
+		  /// </value>
+		  MaxSeatsFeatureOptions UserOptionMaxSeatsFeature { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [use average shift lengths].

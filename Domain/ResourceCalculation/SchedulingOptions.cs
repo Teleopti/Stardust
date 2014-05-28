@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
@@ -44,8 +45,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool DoNotBreakMaxStaffing { get; set; }
         public IGroupPageLight GroupPageForShiftCategoryFairness { get; set; }
         public int RefreshRate { get; set; }
-		public bool UseMaxSeats { get; set; }
-		public bool DoNotBreakMaxSeats { get; set; }
+		  public MaxSeatsFeatureOptions UserOptionMaxSeatsFeature { get; set; }
         public bool UseSameDayOffs { get; set; }
         public IScheduleTag TagToUseOnScheduling { get; set; }
     	public int ResourceCalculateFrequency { get; set; }

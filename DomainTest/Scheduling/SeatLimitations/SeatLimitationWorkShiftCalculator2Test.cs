@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -53,14 +54,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 				Expect.Call(_seatImpactOnPeriodForProjection.SkillStaffPeriodDate(skillStaffPeriod1, _person)).Return(new DateOnly());
 				Expect.Call(_seatImpactOnPeriodForProjection.CheckPersonSkill(_skill, _person, new DateOnly())).Return(true);
 				Expect.Call(_seatImpactOnPeriodForProjection.CalculatePeriod(skillStaffPeriod1, visualLayerCollection)).
-					Return(1).Repeat.AtLeastOnce();
+				Return(1).Repeat.AtLeastOnce();
 			}
 
 			double? result;
 
 			using(_mocks.Playback())
 			{
-				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, false);
+				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, MaxSeatsFeatureOptions.ConsiderMaxSeats);
 			}
 			Assert.AreEqual(-10000, result.Value);
 		}
@@ -87,14 +88,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 				Expect.Call(_seatImpactOnPeriodForProjection.SkillStaffPeriodDate(skillStaffPeriod1, _person)).Return(new DateOnly());
 				Expect.Call(_seatImpactOnPeriodForProjection.CheckPersonSkill(_skill, _person, new DateOnly())).Return(true);
 				Expect.Call(_seatImpactOnPeriodForProjection.CalculatePeriod(skillStaffPeriod1, visualLayerCollection)).
-					Return(1).Repeat.AtLeastOnce();
+				Return(1).Repeat.AtLeastOnce();
 			}
 
 			double? result;
 
 			using (_mocks.Playback())
 			{
-				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, true);
+				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak);
 			}
 			Assert.IsNull(result);
 		}
@@ -127,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 
 			using (_mocks.Playback())
 			{
-				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, false);
+				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, MaxSeatsFeatureOptions.ConsiderMaxSeats);
 			}
 			Assert.AreEqual(0, result.Value);
 		}
@@ -157,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 
 			using (_mocks.Playback())
 			{
-				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, false);
+				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, MaxSeatsFeatureOptions.ConsiderMaxSeats);
 			}
 			Assert.AreEqual(0, result.Value);
 		}
@@ -187,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 
 			using (_mocks.Playback())
 			{
-				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, false);
+				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, MaxSeatsFeatureOptions.ConsiderMaxSeats);
 			}
 			Assert.AreEqual(0, result.Value);
 		}

@@ -1,11 +1,13 @@
 ﻿using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface ITeamBlockMaxSeatChecker
     {
-		bool CheckMaxSeat(DateOnly dateOnly, ISchedulingOptions schdulingOption);
+		bool CheckMaxSeat(DateOnly dateOnly, ISchedulingOptions schedulingOption);
     }
 
     public class TeamBlockMaxSeatChecker : ITeamBlockMaxSeatChecker
@@ -17,11 +19,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             _schedulingResultStateHolder = schedulingResultStateHolder;
         }
 
-		public bool CheckMaxSeat(DateOnly dateOnly, ISchedulingOptions schdulingOption)
+		public bool CheckMaxSeat(DateOnly dateOnly, ISchedulingOptions schedulingOption)
         {
             var skillDays = _schedulingResultStateHolder.SkillDays;
 
-			if (schdulingOption.UseMaxSeats && schdulingOption.DoNotBreakMaxSeats)
+			if (schedulingOption.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
             {
                 foreach (var skillPair in skillDays)
                 {

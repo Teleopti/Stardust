@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
 
@@ -12,8 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private bool _useTweakedValues;
 		private bool _useMinimumStaffing;
 		private bool _useMaximumStaffing;
-		private bool _useMaximumSeats;
-		private bool _doNotBreakMaximumSeats;
+		private MaxSeatsFeatureOptions _userOptionMaxSeatsFeature;
 		private bool _useAverageShiftLengths;
 		private int _refreshScreenInterval;
 
@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			target.UseMinimumStaffing = _useMinimumStaffing;
 			target.UseMaximumStaffing = _useMaximumStaffing;
-			target.UseMaximumSeats = _useMaximumSeats;
-			target.DoNotBreakMaximumSeats = _doNotBreakMaximumSeats;
+			target.UserOptionMaxSeatsFeature = _userOptionMaxSeatsFeature;
 			target.UseAverageShiftLengths = _useAverageShiftLengths;
 
 			target.RefreshScreenInterval = _refreshScreenInterval;
@@ -47,8 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			_useMinimumStaffing = source.UseMinimumStaffing;
 			_useMaximumStaffing = source.UseMaximumStaffing;
-			_useMaximumSeats = source.UseMaximumSeats;
-			_doNotBreakMaximumSeats = source.DoNotBreakMaximumSeats;
+			_userOptionMaxSeatsFeature = source.UserOptionMaxSeatsFeature;
 			_useAverageShiftLengths = source.UseAverageShiftLengths;
 
 			_refreshScreenInterval = source.RefreshScreenInterval;
@@ -59,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_targetValueCalculation = TargetValueOptions.StandardDeviation;
 			_useMinimumStaffing = true;
 			_useMaximumStaffing = true;
-			_useMaximumSeats = true;
+			_userOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
 			_useAverageShiftLengths = true;
 			_refreshScreenInterval = 10;
 		}

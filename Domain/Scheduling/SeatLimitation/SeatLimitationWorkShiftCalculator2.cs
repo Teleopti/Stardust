@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
 	public interface ISeatLimitationWorkShiftCalculator2
 	{
-		double? CalculateShiftValue(IPerson person, IVisualLayerCollection layers, IDictionary<ISkill, ISkillStaffPeriodDictionary> skillStaffPeriods, bool doNotBreak);
+		double? CalculateShiftValue(IPerson person, IVisualLayerCollection layers, IDictionary<ISkill, ISkillStaffPeriodDictionary> skillStaffPeriods, MaxSeatsFeatureOptions option);
 	}
 
 	public class SeatLimitationWorkShiftCalculator2 : ISeatLimitationWorkShiftCalculator2
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			_seatImpactOnPeriodForProjection = seatImpactOnPeriodForProjection;
 		}
 
-		public double? CalculateShiftValue(IPerson person, IVisualLayerCollection layers, IDictionary<ISkill, ISkillStaffPeriodDictionary> skillStaffPeriods, bool doNotBreak)
+		public double? CalculateShiftValue(IPerson person, IVisualLayerCollection layers, IDictionary<ISkill, ISkillStaffPeriodDictionary> skillStaffPeriods, MaxSeatsFeatureOptions option)
 		{
 			DateTimePeriod? vcPeriod = layers.Period();
 			if (!vcPeriod.HasValue)
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					double thisResult = _seatImpactOnPeriodForProjection.CalculatePeriod(skillStaffPeriod, layers);
 					//double thisResult = 0;
 
-					if (skillStaffPeriod.Payload.CalculatedUsedSeats + thisResult > skillStaffPeriod.Payload.MaxSeats && doNotBreak)
+					if (skillStaffPeriod.Payload.CalculatedUsedSeats + thisResult > skillStaffPeriod.Payload.MaxSeats && option == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
 						return null;
 
 					if (skillStaffPeriod.Payload.CalculatedUsedSeats + thisResult > skillStaffPeriod.Payload.MaxSeats)

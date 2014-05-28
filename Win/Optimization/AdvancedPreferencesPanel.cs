@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Win.Common;
+﻿using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
+using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Optimization
@@ -56,9 +57,13 @@ namespace Teleopti.Ccc.Win.Optimization
 
             Preferences.UseMinimumStaffing = checkBoxMinimumStaffing.Checked;
             Preferences.UseMaximumStaffing = checkBoxMaximumStaffing.Checked;
-            Preferences.UseMaximumSeats = checkBoxMaximumSeats.Checked;
-            Preferences.DoNotBreakMaximumSeats = checkBoxDoNotBreakMaximumSeats.Checked;
-        	Preferences.UseAverageShiftLengths = checkBoxUseAverageShiftLengths.Checked;
+				if (checkBoxMaximumSeats.Checked && checkBoxDoNotBreakMaximumSeats.Checked)
+					Preferences.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
+				else if (checkBoxMaximumSeats.Checked)
+					Preferences.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
+				else if (!checkBoxMaximumSeats.Checked)
+					Preferences.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
+        	   Preferences.UseAverageShiftLengths = checkBoxUseAverageShiftLengths.Checked;
             Preferences.RefreshScreenInterval = (int)numericUpDownRefreshRate.Value;
         }
 
@@ -82,11 +87,26 @@ namespace Teleopti.Ccc.Win.Optimization
 
             checkBoxMinimumStaffing.Checked = Preferences.UseMinimumStaffing;
             checkBoxMaximumStaffing.Checked = Preferences.UseMaximumStaffing;
-            checkBoxMaximumSeats.Checked = Preferences.UseMaximumSeats;
-            checkBoxDoNotBreakMaximumSeats.Checked = Preferences.DoNotBreakMaximumSeats;
-        	checkBoxUseAverageShiftLengths.Checked = Preferences.UseAverageShiftLengths;
+				if (Preferences.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
+				{
+					checkBoxMaximumSeats.Checked = true;
+					checkBoxDoNotBreakMaximumSeats.Enabled = true;
+					checkBoxDoNotBreakMaximumSeats.Checked = true;
+				}
+				else if (Preferences.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeats)
+				{
+					checkBoxMaximumSeats.Checked = true;
+					checkBoxDoNotBreakMaximumSeats.Enabled = true;
+				}
+				else if (Preferences.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
+				{
+					checkBoxMaximumSeats.Checked = false;
+					checkBoxDoNotBreakMaximumSeats.Enabled = false;
+					checkBoxDoNotBreakMaximumSeats.Checked = false;
+				}
+	        checkBoxUseAverageShiftLengths.Checked = Preferences.UseAverageShiftLengths;
 
-            numericUpDownRefreshRate.Value = Preferences.RefreshScreenInterval;
+	        numericUpDownRefreshRate.Value = Preferences.RefreshScreenInterval;
         }
 
         private void checkBoxMaximumSeats_CheckedChanged(object sender, System.EventArgs e)

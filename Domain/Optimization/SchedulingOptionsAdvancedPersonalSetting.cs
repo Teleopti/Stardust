@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
 
@@ -10,9 +11,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private bool _useMinStaff = true;
 		private bool _useMaxStaff = true;
-		private bool _useMaxSeats = true;
 		private bool _useAverageShiftLengths;
-		private bool _doNotBreakMaxSeats;
+		private MaxSeatsFeatureOptions _maxSeatsFeatureOptions;
 		private Guid? _shiftCategoryId;
        
 		public SchedulingOptionsAdvancedPersonalSetting()
@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			schedulingOptions.UseMinimumPersons = _useMinStaff;
 			schedulingOptions.UseMaximumPersons = _useMaxStaff;
-			schedulingOptions.UseMaxSeats = _useMaxSeats;
-			schedulingOptions.DoNotBreakMaxSeats = _doNotBreakMaxSeats;
+			schedulingOptions.UserOptionMaxSeatsFeature = _maxSeatsFeatureOptions;
 			schedulingOptions.UseAverageShiftLengths = _useAverageShiftLengths;
 
 			if(_shiftCategoryId.HasValue)
@@ -48,8 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			_useMinStaff = schedulingOptions.UseMinimumPersons;
 			_useMaxStaff = schedulingOptions.UseMaximumPersons;
-			_useMaxSeats = schedulingOptions.UseMaxSeats;
-			_doNotBreakMaxSeats = schedulingOptions.DoNotBreakMaxSeats;
+			_maxSeatsFeatureOptions = schedulingOptions.UserOptionMaxSeatsFeature;
 			_useAverageShiftLengths = schedulingOptions.UseAverageShiftLengths;
 			if (schedulingOptions.ShiftCategory != null)
 				_shiftCategoryId = schedulingOptions.ShiftCategory.Id;

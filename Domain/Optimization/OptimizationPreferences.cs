@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -136,8 +137,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public bool UseMinimumStaffing { get; set; }
 		public bool UseMaximumStaffing { get; set; }
-		public bool UseMaximumSeats { get; set; }
-		public bool DoNotBreakMaximumSeats { get; set; }
+		public MaxSeatsFeatureOptions UserOptionMaxSeatsFeature { get; set; }
 		public bool UseAverageShiftLengths { get; set; }
 
 		public int RefreshScreenInterval { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -18,24 +19,18 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             ISchedulingOptions schedulingOptions = new SchedulingOptions();
 
-            schedulingOptions.TagToUseOnScheduling = optimizationPreferences.General.ScheduleTag;
-	       
-            //schedulingOptions.UseBlockScheduling =
-            //    optimizationPreferences.Extra.UseBlockScheduling 
-            //    ? optimizationPreferences.Extra.BlockFinderTypeValue 
-            //    : BlockFinderType.None;
+	        schedulingOptions.TagToUseOnScheduling = optimizationPreferences.General.ScheduleTag;
+	        schedulingOptions.UseTeam = optimizationPreferences.Extra.UseTeams;
+	        schedulingOptions.TeamSameShiftCategory =
+		        optimizationPreferences.Extra.UseTeamSameShiftCategory;
+	        schedulingOptions.TeamSameStartTime = optimizationPreferences.Extra.UseTeamSameStartTime;
+	        schedulingOptions.TeamSameEndTime = optimizationPreferences.Extra.UseTeamSameEndTime;
+	        schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.UseTeamSameDaysOff;
+	        schedulingOptions.TeamSameActivity = optimizationPreferences.Extra.UseTeamSameActivity;
+	        if (schedulingOptions.TeamSameActivity)
+		        schedulingOptions.CommonActivity = optimizationPreferences.Extra.TeamActivityValue;
 
-            schedulingOptions.UseTeam = optimizationPreferences.Extra.UseTeams;
-        	schedulingOptions.TeamSameShiftCategory =
-        		optimizationPreferences.Extra.UseTeamSameShiftCategory;
-        	schedulingOptions.TeamSameStartTime = optimizationPreferences.Extra.UseTeamSameStartTime;
-        	schedulingOptions.TeamSameEndTime = optimizationPreferences.Extra.UseTeamSameEndTime;
-        	schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.UseTeamSameDaysOff;
-            schedulingOptions.TeamSameActivity = optimizationPreferences.Extra.UseTeamSameActivity;
-            if(schedulingOptions.TeamSameActivity )
-                schedulingOptions.CommonActivity = optimizationPreferences.Extra.TeamActivityValue;
-            
-            schedulingOptions.GroupOnGroupPageForTeamBlockPer = optimizationPreferences.Extra.TeamGroupPage;
+	        schedulingOptions.GroupOnGroupPageForTeamBlockPer = optimizationPreferences.Extra.TeamGroupPage;
             
 
             setPreferencesInSchedulingOptions(optimizationPreferences, schedulingOptions);
@@ -65,18 +60,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 				schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.UseTeamSameDaysOff;
 			}
 
-			//if (optimizationPreferences.Shifts.KeepShiftCategories)
-			//    schedulingOptions.RescheduleOptions = OptimizationRestriction.KeepShiftCategory;
-			//else if (optimizationPreferences.Shifts.KeepStartTimes || optimizationPreferences.Shifts.KeepEndTimes )
-			//    schedulingOptions.RescheduleOptions = OptimizationRestriction.KeepStartAndEndTime ;
-			//else
-			//    schedulingOptions.RescheduleOptions = OptimizationRestriction.None;
-
             schedulingOptions.UseMinimumPersons = optimizationPreferences.Advanced.UseMinimumStaffing;
             schedulingOptions.UseMaximumPersons = optimizationPreferences.Advanced.UseMaximumStaffing;
-            schedulingOptions.UseMaxSeats = optimizationPreferences.Advanced.UseMaximumSeats;
-            schedulingOptions.DoNotBreakMaxSeats = optimizationPreferences.Advanced.DoNotBreakMaximumSeats;
-        	schedulingOptions.UseAverageShiftLengths = optimizationPreferences.Advanced.UseAverageShiftLengths;
+	         schedulingOptions.UserOptionMaxSeatsFeature = optimizationPreferences.Advanced.UserOptionMaxSeatsFeature;
+        	   schedulingOptions.UseAverageShiftLengths = optimizationPreferences.Advanced.UseAverageShiftLengths;
 
             // extra properties
             schedulingOptions.ConsiderShortBreaks = optimizationPreferences.Rescheduling.ConsiderShortBreaks;

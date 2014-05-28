@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 
 namespace Teleopti.Interfaces.Domain
@@ -237,7 +238,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Gets or sets a value indicating whether [use max seats].
 		/// </summary>
 		/// <value><c>true</c> if [use max seats]; otherwise, <c>false</c>.</value>
-		bool UseMaxSeats { get; set; }
+		//bool UseMaxSeats { get; set; } //Todo remove all commented code
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [do not break max seats].
@@ -245,7 +246,16 @@ namespace Teleopti.Interfaces.Domain
 		/// <value>
 		/// 	<c>true</c> if [do not break max seats]; otherwise, <c>false</c>.
 		/// </value>
-		bool DoNotBreakMaxSeats { get; set; }
+		  //bool DoNotBreakMaxSeats { get; set; }//Todo remove all commented code
+
+		  /// <summary>
+		  /// This enum representing max seats options.
+		  /// </summary>
+		  /// <value>
+		  /// 	<c>true</c> if [do not break max seats]; otherwise, <c>false</c>.
+		  /// </value>
+		  MaxSeatsFeatureOptions UserOptionMaxSeatsFeature { get; set; }
+		  
 
         /// <summary>
         /// Gets or sets a value indicating whether to consider short breaks.

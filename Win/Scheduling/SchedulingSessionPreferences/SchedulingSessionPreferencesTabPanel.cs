@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private IEnumerable<IScheduleTag> _scheduleTags;
     	private ISchedulerGroupPagesProvider _groupPagesProvider;
         private GroupPageLight _singleAgentEntry;
+	    private MaxSeatsFeatureOptions _maxSeatsFeatureOptions;
 
 	    public SchedulingSessionPreferencesTabPanel()
         {
@@ -262,13 +264,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		    _schedulingOptions.GroupOnGroupPageForTeamBlockPer = _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer;
 		    _schedulingOptions.DoNotBreakMaxStaffing = _localSchedulingOptions.DoNotBreakMaxStaffing;
 		    _schedulingOptions.GroupPageForShiftCategoryFairness = _localSchedulingOptions.GroupPageForShiftCategoryFairness;
-		    _schedulingOptions.UseMaxSeats = _localSchedulingOptions.UseMaxSeats;
-		    _schedulingOptions.DoNotBreakMaxSeats = _localSchedulingOptions.DoNotBreakMaxSeats;
+		    _schedulingOptions.UserOptionMaxSeatsFeature = _localSchedulingOptions.UserOptionMaxSeatsFeature;
 		    _schedulingOptions.UseSameDayOffs = _localSchedulingOptions.UseSameDayOffs;
 		    _schedulingOptions.TagToUseOnScheduling = _localSchedulingOptions.TagToUseOnScheduling;
 		    _schedulingOptions.ResourceCalculateFrequency = _localSchedulingOptions.ResourceCalculateFrequency;
 		    _schedulingOptions.ShowTroubleshot = _localSchedulingOptions.ShowTroubleshot;
-		    _schedulingOptions.TeamSameShiftCategory =
+		    _schedulingOptions.TeamSameShiftCategory = 
 			    _localSchedulingOptions.TeamSameShiftCategory;
 		    _schedulingOptions.TeamSameEndTime = _localSchedulingOptions.TeamSameEndTime;
 		    _schedulingOptions.TeamSameStartTime = _localSchedulingOptions.TeamSameStartTime;
@@ -306,8 +307,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		    _localSchedulingOptions.GroupPageForShiftCategoryFairness =
 			    (IGroupPageLight) comboBoxGroupingFairness.SelectedItem;
 		    _localSchedulingOptions.DoNotBreakMaxStaffing = checkBoxDoNotBreakMaxSeats.Checked;
-		    _localSchedulingOptions.UseMaxSeats = checkBoxUseMaxSeats.Checked;
-		    _localSchedulingOptions.DoNotBreakMaxSeats = checkBoxDoNotBreakMaxSeats.Checked;
+			 if(checkBoxUseMaxSeats.Checked && checkBoxDoNotBreakMaxSeats.Checked) 
+		    _localSchedulingOptions.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
+			 else if (checkBoxUseMaxSeats.Checked)
+				 _localSchedulingOptions.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
+			 else if (!checkBoxUseMaxSeats.Checked)
+				 _localSchedulingOptions.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
 		    _localSchedulingOptions.TagToUseOnScheduling = (IScheduleTag) comboBoxAdvTag.SelectedItem;
 		    _localSchedulingOptions.ResourceCalculateFrequency = (int) numericUpDownResourceCalculateEvery.Value;
 		    _localSchedulingOptions.ShowTroubleshot = checkBoxShowTroubleShot.Checked;
@@ -361,9 +366,21 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         	
 			checkBoxDoNotBreakMaxSeats.Checked = _localSchedulingOptions.DoNotBreakMaxStaffing;
-        	checkBoxUseMaxSeats.Checked = _localSchedulingOptions.UseMaxSeats;
-        	checkBoxDoNotBreakMaxSeats.Enabled = checkBoxUseMaxSeats.Checked;
-        	checkBoxDoNotBreakMaxSeats.Checked = _localSchedulingOptions.DoNotBreakMaxSeats;
+		    if (_localSchedulingOptions.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
+		    {
+			    checkBoxUseMaxSeats.Checked = true;
+			    checkBoxDoNotBreakMaxSeats.Enabled = true;
+			    checkBoxDoNotBreakMaxSeats.Checked = true;
+		    }else if (_localSchedulingOptions.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeats)
+		    {
+			    checkBoxUseMaxSeats.Checked = true;
+				 checkBoxDoNotBreakMaxSeats.Enabled = true;
+		    }else if (_localSchedulingOptions.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
+		    {
+			    checkBoxUseMaxSeats.Checked = false;
+				 checkBoxDoNotBreakMaxSeats.Enabled = false;
+				 checkBoxDoNotBreakMaxSeats.Checked = false;
+		    }
         	numericUpDownResourceCalculateEvery.Value = _localSchedulingOptions.ResourceCalculateFrequency;
 			checkBoxShowTroubleShot.Checked = _localSchedulingOptions.ShowTroubleshot;
             

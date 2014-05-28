@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
 
@@ -54,22 +55,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         
         private void MapFromExpectations()
         {
-            Expect.Call(_schedulingOptions.UseMinimumPersons).Return(true);
-            Expect.Call(_schedulingOptions.UseMaximumPersons).Return(true);
-            Expect.Call(_schedulingOptions.UseMaxSeats).Return(true);
-            Expect.Call(_schedulingOptions.DoNotBreakMaxSeats).Return(true);
-        	Expect.Call(_schedulingOptions.UseAverageShiftLengths).Return(true);
+	        Expect.Call(_schedulingOptions.UseMinimumPersons).Return(true);
+	        Expect.Call(_schedulingOptions.UseMaximumPersons).Return(true);
+	        Expect.Call(_schedulingOptions.UserOptionMaxSeatsFeature)
+		        .Return(MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak);
+	        Expect.Call(_schedulingOptions.UseAverageShiftLengths).Return(true);
 
         }
 
 
         private void MapToExpectations()
         {
-            Expect.Call(_schedulingOptions.UseMinimumPersons = true);
-            Expect.Call(_schedulingOptions.UseMaximumPersons = true);
-            Expect.Call(_schedulingOptions.UseMaxSeats = true );
-            Expect.Call(_schedulingOptions.DoNotBreakMaxSeats = true );
-        	Expect.Call(_schedulingOptions.UseAverageShiftLengths = true);
+	        Expect.Call(_schedulingOptions.UseMinimumPersons = true);
+	        Expect.Call(_schedulingOptions.UseMaximumPersons = true);
+	        Expect.Call(_schedulingOptions.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak);
+	        Expect.Call(_schedulingOptions.UseAverageShiftLengths = true);
         }
     }
 }

@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
@@ -36,8 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _mock = new MockRepository();
             _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
             _schedulingOption = new SchedulingOptions();
-            _schedulingOption.DoNotBreakMaxSeats = true;
-            _schedulingOption.UseMaxSeats = true;
+	         _schedulingOption.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
             _target=new TeamBlockMaxSeatChecker(_schedulingResultStateHolder);
             _dateOnly = DateOnly.Today;
             _skill1 = _mock.StrictMock<ISkill>();

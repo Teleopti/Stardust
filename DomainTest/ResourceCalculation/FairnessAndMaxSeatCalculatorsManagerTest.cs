@@ -7,7 +7,9 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
+using Teleopti.Ccc.Win.Common.Configuration;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
@@ -39,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _shiftCategoryFairnessShiftValueCalculator = _mocks.StrictMock<IShiftCategoryFairnessShiftValueCalculator>();
             _shiftCatFairnessManager = _mocks.StrictMock<IShiftCategoryFairnessManager>();
             _options = new SchedulingOptions{ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-                WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime, UseMaxSeats = true, DoNotBreakMaxSeats = true};
+                WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime, UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak};
             _target = new FairnessAndMaxSeatCalculatorsManager(_stateHolder, _shiftCatFairnessManager,
                 _shiftCategoryFairnessShiftValueCalculator, _fairnessValueCalculator,_seatLimitationWorkShiftCalculator);
 
@@ -71,15 +73,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_shiftCategoryFairnessFactors.FairnessFactor(category)).Return(5);
             Expect.Call(_shiftCategoryFairnessShiftValueCalculator.ModifiedShiftValue(1, 5, 3, _options)).IgnoreArguments().Return(11);
 
-        	Expect.Call(shiftCache.MainShiftProjection).Return(projection).Repeat.AtLeastOnce();
-			//Expect.Call(projection.ContractTime()).Return(TimeSpan.FromHours(7));
-            //Expect.Call(_averageShiftLengthValueCalculator.CalculateShiftValue(11, TimeSpan.FromHours(7),
-            //                                                                   TimeSpan.FromHours(8))).Return(33);
+				Expect.Call(shiftCache.MainShiftProjection).Return(projection).Repeat.AtLeastOnce();
 
             Expect.Call(_seatLimitationWorkShiftCalculator.CalculateShiftValue(_person, projection, maxSeatSkillPeriods,
-                                                                               true)).Return(55);
-
-            //Expect.Call(_averageShiftLengthValueCalculator.CalculateShiftValue(66, TimeSpan.FromHours(7), TimeSpan.FromHours(8))).Return(88);
+                                                                               _options.UserOptionMaxSeatsFeature)).Return(55);
             _mocks.ReplayAll();
             var result = _target.RecalculateFoundValues(allValues, 3, true, _person, dateOnly,  maxSeatSkillPeriods,
 										   TimeSpan.FromHours(8), _options);
@@ -103,27 +100,22 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                   new WorkShiftCalculationResult { Value = 1, ShiftProjection = shiftCache }
                               };
 
-        	_options.Fairness = new Percent(0.25d);
+				_options.Fairness = new Percent(0.25d);
             Expect.Call(_shiftCatFairnessManager.GetFactorsForPersonOnDate(_person, dateOnly)).Return(
                 _shiftCategoryFairnessFactors);
 
             Expect.Call(shiftCache.TheMainShift).Return(mainShift).Repeat.Twice();
             Expect.Call(mainShift.ShiftCategory).Return(category).Repeat.Twice();
             Expect.Call(_shiftCategoryFairnessFactors.FairnessFactor(category)).Return(5).Repeat.Twice();
-			Expect.Call(_shiftCategoryFairnessShiftValueCalculator.ModifiedShiftValue(1, 5, 3, _options)).IgnoreArguments().Return(11).Repeat.Twice();
+				Expect.Call(_shiftCategoryFairnessShiftValueCalculator.ModifiedShiftValue(1, 5, 3, _options))
+				.IgnoreArguments()
+				.Return(11)
+				.Repeat.Twice();
 
             Expect.Call(shiftCache.MainShiftProjection).Return(projection).Repeat.AtLeastOnce();
-            //Expect.Call(projection.ContractTime()).Return(TimeSpan.FromHours(7)).Repeat.Twice();
            
             Expect.Call(_seatLimitationWorkShiftCalculator.CalculateShiftValue(_person, projection, maxSeatSkillPeriods,
-                                                                               true)).Return(0);
-            //Expect.Call(_seatLimitationWorkShiftCalculator.CalculateShiftValue(_person, projection, maxSeatSkillPeriods,
-            //                                                                   true)).Return(-7);
-
-			//Expect.Call(_averageShiftLengthValueCalculator.CalculateShiftValue(11, TimeSpan.FromHours(7),
-			//                                                                  TimeSpan.FromHours(8))).Return(33);
-			//Expect.Call(_averageShiftLengthValueCalculator.CalculateShiftValue(11, TimeSpan.FromHours(7),
-			//                                                                   TimeSpan.FromHours(8))).Return(33);
+                                                                               _options.UserOptionMaxSeatsFeature)).Return(0);
 
             _mocks.ReplayAll();
             var result = _target.RecalculateFoundValues(allValues, 3, true, _person, dateOnly,  maxSeatSkillPeriods,
@@ -147,22 +139,19 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                               {
                                   new WorkShiftCalculationResult { Value = 1, ShiftProjection = shiftCache } 
                               };
-			_options.Fairness = new Percent(0.25d);
+				_options.Fairness = new Percent(0.25d);
             Expect.Call(_shiftCatFairnessManager.GetFactorsForPersonOnDate(_person, dateOnly)).Return(
                 _shiftCategoryFairnessFactors);
 
             Expect.Call(shiftCache.TheMainShift).Return(mainShift);
             Expect.Call(mainShift.ShiftCategory).Return(category);
             Expect.Call(_shiftCategoryFairnessFactors.FairnessFactor(category)).Return(5);
-			Expect.Call(_shiftCategoryFairnessShiftValueCalculator.ModifiedShiftValue(1, 5, 3, new SchedulingOptions { Fairness = new Percent(0.25d) })).IgnoreArguments().Return(11);
+				Expect.Call(_shiftCategoryFairnessShiftValueCalculator.ModifiedShiftValue(1, 5, 3, new SchedulingOptions { Fairness = new Percent(0.25d) })).IgnoreArguments().Return(11);
 
             Expect.Call(shiftCache.MainShiftProjection).Return(projection);
-            //Expect.Call(projection.ContractTime()).Return(TimeSpan.FromHours(7));
-            //Expect.Call(_averageShiftLengthValueCalculator.CalculateShiftValue(11, TimeSpan.FromHours(7),
-            //                                                                   TimeSpan.FromHours(8))).Return(33);
 
             Expect.Call(_seatLimitationWorkShiftCalculator.CalculateShiftValue(_person, projection, maxSeatSkillPeriods,
-                                                                               true)).Return(null);
+                                                                               _options.UserOptionMaxSeatsFeature)).Return(null);
             _mocks.ReplayAll();
             var result = _target.RecalculateFoundValues(allValues, 3, true, _person, dateOnly, maxSeatSkillPeriods,
 										   TimeSpan.FromHours(8), _options);
@@ -195,11 +184,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(dic[_person]).Return(range);
             Expect.Call(range.FairnessPoints()).Return(fairnessValueResult);
             Expect.Call(shiftCache.ShiftCategoryDayOfWeekJusticeValue).Return(5);
-			Expect.Call(_fairnessValueCalculator.CalculateFairnessValue(1, 5, 15, 5, fairnessValueResult, 3, _options)).IgnoreArguments().Return(11);
+				Expect.Call(_fairnessValueCalculator.CalculateFairnessValue(1, 5, 15, 5, fairnessValueResult, 3, _options)).IgnoreArguments().Return(11);
 
-			Expect.Call(shiftCache.MainShiftProjection).Return(projection).Repeat.AtLeastOnce();
+				Expect.Call(shiftCache.MainShiftProjection).Return(projection).Repeat.AtLeastOnce();
             Expect.Call(_seatLimitationWorkShiftCalculator.CalculateShiftValue(_person, projection, maxSeatSkillPeriods,
-                                                                               true)).Return(55);
+                                                                               _options.UserOptionMaxSeatsFeature)).Return(55);
               
             _mocks.ReplayAll();
             var result = _target.RecalculateFoundValues(allValues, 3, false, _person, dateOnly,  maxSeatSkillPeriods,
@@ -223,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_options.Fairness = new Percent(0);
 			Expect.Call(shiftCache.MainShiftProjection).Return(projection).Repeat.AtLeastOnce();
 			Expect.Call(_seatLimitationWorkShiftCalculator.CalculateShiftValue(_person, projection, maxSeatSkillPeriods,
-																			   true)).Return(55);
+																			   _options.UserOptionMaxSeatsFeature)).Return(55);
 
 			_mocks.ReplayAll();
 			var result = _target.RecalculateFoundValues(allValues, 3, false, _person, dateOnly, maxSeatSkillPeriods,

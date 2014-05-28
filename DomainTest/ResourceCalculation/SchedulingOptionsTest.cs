@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -57,30 +58,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _target.UsePreferencesMustHaveOnly = false;
             _target.UsePreferences = true;
             Assert.IsFalse(_target.UsePreferencesMustHaveOnly);
-			Assert.IsTrue(_target.UseMaxSeats);
-			Assert.IsFalse(_target.DoNotBreakMaxSeats);
-        	_target.DoNotBreakMaxSeats = true;
-			Assert.IsTrue(_target.DoNotBreakMaxSeats);
-        	_target.UseMaxSeats = false;
-			Assert.IsFalse(_target.UseMaxSeats);
-        	_target.UseTeam = true;
+	        _target.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
+	        Assert.AreEqual(MaxSeatsFeatureOptions.ConsiderMaxSeats, _target.UserOptionMaxSeatsFeature);
+	        _target.UseTeam = true;
             Assert.IsTrue(_target.UseTeam);
             Assert.IsFalse(_target.UseSameDayOffs);
             _target.UseSameDayOffs = true;
             Assert.IsTrue(_target.UseSameDayOffs);
             
         }
-
-        //[Test]
-        //public void VerifyBlockOptions()
-        //{
-        //    _target.UsePeriodAsBlock = true;
-        //    Assert.IsTrue(_target.UsePeriodAsBlock);
-        //    _target.UseTwoDaysOffAsBlock = true;
-        //    Assert.IsTrue(_target.UseTwoDaysOffAsBlock);
-        //    _target.UseCalendarWeekAsBlock = true;
-        //    Assert.IsTrue(_target.UseCalendarWeekAsBlock);
-        //}
 
         [Test]
         public void VerifyRotationDaysOnlyCannotBeTrueIfUseRotationsIsFalse()
