@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                     {
                         try
                         {
+							var useLongPolling = StateHolderReader.Instance.StateReader.ApplicationScopeData.AppSettings.GetSettingValue("MessageBrokerLongPolling", bool.Parse);
                             _messaging.StartMessageBroker();
                         }
                         catch (BrokerNotInstantiatedException ex)

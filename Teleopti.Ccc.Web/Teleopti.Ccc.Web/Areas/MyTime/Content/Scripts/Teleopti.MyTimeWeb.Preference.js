@@ -5,6 +5,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.WeekViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.SelectionViewModel.js" />
 /// <reference path="../../../../Content/moment/moment.js" />
@@ -24,6 +25,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	var addExtendedPreferenceFormViewModel = null;
 	var preferencesAndScheduleViewModel = null;
 	var selectionViewModel = null;
+	var weekViewModels = {};
 	var readyForInteraction = function () { };
 	var completelyLoaded = function () { };
 
@@ -272,15 +274,27 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	    var dayViewModelsInPeriod = {};
 
-		$('li[data-mytime-date]').each(function (index, element) {
-			var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate);
+				
+	    $('li[data-mytime-week]').each(function (index, element) {
+	    	weekViewModels[index] = new Teleopti.MyTimeWeb.Preference.WeekViewModel();
+	    	ko.applyBindings(weekViewModels[index], element);
+	    });
+
+	    $('li[data-mytime-date]').each(function (index, element) {
+	    	var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate);
+
 			dayViewModel.ReadElement(element);
 			dayViewModels[dayViewModel.Date] = dayViewModel;
 			if ($(element).hasClass("inperiod")) {
 				dayViewModelsInPeriod[dayViewModel.Date] = dayViewModel;
 			}
 			ko.applyBindings(dayViewModel, element);
-		});
+
+		    weekViewModels[Math.floor(index / 7)].DayViewModels.push(dayViewModel);
+
+	    });
+		
+
 		var from = $('li[data-mytime-date]').first().data('mytime-date');
 		var to = $('li[data-mytime-date]').last().data('mytime-date');
 
@@ -367,6 +381,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
     
 	function _cleanBindings() {
 	    $('li[data-mytime-date]').each(function (index, element) {
+	        ko.cleanNode(element);
+	    });
+	    $('li[data-mytime-week]').each(function (index, element) {
 	        ko.cleanNode(element);
 	    });
 	    

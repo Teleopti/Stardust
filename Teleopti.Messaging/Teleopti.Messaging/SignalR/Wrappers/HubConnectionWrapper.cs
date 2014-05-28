@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
+using Microsoft.AspNet.SignalR.Client.Transports;
 
 namespace Teleopti.Messaging.SignalR.Wrappers
 {
@@ -22,6 +23,11 @@ namespace Teleopti.Messaging.SignalR.Wrappers
 		public Task Start()
 		{
 			return _hubConnection.Start();
+		}
+
+		public Task Start(IClientTransport transport)
+		{
+			return _hubConnection.Start(transport);
 		}
 
 		public void Stop()

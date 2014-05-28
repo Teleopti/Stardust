@@ -75,7 +75,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.RealTimeAdherence,
 					UserTexts.Resources.WaitingThreeDots,
 					UserTexts.Resources.InsufficientPermission,
-					
+					UserTexts.Resources.AgentName,
+					UserTexts.Resources.State,
+					UserTexts.Resources.TimeInState,
+					UserTexts.Resources.NextActivity,
+					UserTexts.Resources.NextActivityStartTime,
+					UserTexts.Resources.Alarm,
+					UserTexts.Resources.AlarmTime,
 
 
 					DateAndTimeFormatExtensions.FixedDateFormat,

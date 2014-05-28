@@ -1112,7 +1112,11 @@
     <Compile Include="Scheduling\TeamBlock\ValidatedTeamBlockInfoExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidSampleDayPickerFromTeamBlock.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\EqualWorkShiftValueDecider.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\IsMaxSeatsReachedOnSkillStaffPeriodSpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatInformationGeneratorBasedOnIntervals.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatsCalculationForTeamBlock.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatSkillAggregator.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatsSpecificationDictionaryExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\PeriodValueCalculationParameters.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\VisualLayerToBaseDateMapper.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftLengthValueCalculator.cs" />

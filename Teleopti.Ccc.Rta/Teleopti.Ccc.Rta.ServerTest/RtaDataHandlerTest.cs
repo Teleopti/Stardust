@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			_asyncMessageSender = MockRepository.GenerateMock<IMessageSender>();
 
-			_asyncMessageSender.StartBrokerService();
+			_asyncMessageSender.StartBrokerService(useLongPolling:true);
 			var agentState = new ActualAgentState {SendOverMessageBroker = false};
 			int datasourceId;
 			IEnumerable<PersonWithBusinessUnit> outEnumerable;
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void VerifyProtectedConstructorWorks()
 		{
-			_asyncMessageSender.Expect(e => e.StartBrokerService());
+			_asyncMessageSender.Expect(e => e.StartBrokerService(useLongPolling: true));
 			_mocks.ReplayAll();
 
 			_target = new RtaDataHandler(_asyncMessageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void VerifyProtectedConstructorCatchBrokerException()
 		{
-			_asyncMessageSender.Expect(e => e.StartBrokerService()).Throw(new BrokerNotInstantiatedException());
+			_asyncMessageSender.Expect(e => e.StartBrokerService(useLongPolling: true)).Throw(new BrokerNotInstantiatedException());
 			_mocks.ReplayAll();
 
 			_target = new RtaDataHandler(_asyncMessageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void VerifyErrorWhenMessageBrokerNotInstantiated()
 		{
-			_asyncMessageSender.StartBrokerService();
+			_asyncMessageSender.StartBrokerService(useLongPolling: true);
 			LastCall.Throw(new BrokerNotInstantiatedException());
 			_mocks.ReplayAll();
 
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void VerifyIsAlive()
 		{
-			_asyncMessageSender.StartBrokerService();
+			_asyncMessageSender.StartBrokerService(useLongPolling: true);
 			Expect.Call(_asyncMessageSender.IsAlive).Return(true);
 			_mocks.ReplayAll();
 
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldNotSendWhenWrongDataSource()
 		{
-			_asyncMessageSender.StartBrokerService();
+			_asyncMessageSender.StartBrokerService(useLongPolling: true);
 			int dataSource;
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(false).OutRef(1);
 			
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			int dataSource;
 			IEnumerable<PersonWithBusinessUnit> outPersonBusinessUnits;
 
-			_asyncMessageSender.StartBrokerService();
+			_asyncMessageSender.StartBrokerService(useLongPolling: true);
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(false).OutRef(new object[1]);
 			
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			                             	};
 			var agentState = new ActualAgentState();
 
-			_asyncMessageSender.StartBrokerService();
+			_asyncMessageSender.StartBrokerService(useLongPolling: true);
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			                             			}
 			                             	};
 
-			_asyncMessageSender.StartBrokerService();
+			_asyncMessageSender.StartBrokerService(useLongPolling: true);
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			                             	};
 			var agentState = new ActualAgentState{SendOverMessageBroker = true};
 
-			_asyncMessageSender.StartBrokerService();
+			_asyncMessageSender.StartBrokerService(useLongPolling: true);
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					BusinessUnit = _businessUnitId
 				};
 
-			_asyncMessageSender.StartBrokerService();
+			_asyncMessageSender.StartBrokerService(useLongPolling: true);
 			_agentAssembler.Expect(a => a.InvalidateReadModelCache(_personId));
 			_agentAssembler.Expect(a => a.GetAgentStateForScheduleUpdate(_personId, _businessUnitId, _timestamp)).IgnoreArguments().Return(
 				agentState);
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void ShouldNotSendWhenStateHaveNotChangedForScheduleUpdate()
 		{
 
-			_asyncMessageSender.StartBrokerService();
+			_asyncMessageSender.StartBrokerService(useLongPolling: true);
 			_agentAssembler.Expect(a => a.GetAgentStateForScheduleUpdate(_personId, _businessUnitId, _timestamp)).IgnoreArguments().Return(null);
 			_agentAssembler.Expect(t => t.InvalidateReadModelCache(_personId));
 			_mocks.ReplayAll();
@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ProcessRtaData_HandleLastOfBatch()
 		{
-			_asyncMessageSender.StartBrokerService();
+			_asyncMessageSender.StartBrokerService(useLongPolling: true);
 			_isSnapshot = true;
 			_logOn = "";
 			var agentState = new ActualAgentState();

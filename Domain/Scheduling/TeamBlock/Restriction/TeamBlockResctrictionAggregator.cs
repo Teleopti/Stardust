@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			{
 				effectiveRestriction = combineRestriction(new ResctrictionFromRoleModelRestriction(roleModel, _teamBlockSchedulingOptions, schedulingOptions), dateOnlyList,
 						matrixList, effectiveRestriction);
-				effectiveRestriction.CommonMainShift = null;
+				if(effectiveRestriction != null) effectiveRestriction.CommonMainShift = null;
 				if (schedulingOptions.UseBlock && schedulingOptions.BlockSameShift)
 				{
 					effectiveRestriction = combineRestriction(new SameShiftRestriction(_scheduleDayEquator), dateOnlyList, matrixesForPerson, effectiveRestriction);

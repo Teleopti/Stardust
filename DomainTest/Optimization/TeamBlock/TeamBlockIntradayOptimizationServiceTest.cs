@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 	    private IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
+		private ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private int _reportedProgress;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
@@ -48,11 +49,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_teamBlockMaxSeatChecker = _mocks.StrictMock<ITeamBlockMaxSeatChecker>();
 	        _dailyTargetValueCalculatorForTeamBlock = _mocks.StrictMock<IDailyTargetValueCalculatorForTeamBlock>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
+		    _teamBlockSteadyStateValidator = _mocks.StrictMock<ITeamBlockSteadyStateValidator>();
 			_target = new TeamBlockIntradayOptimizationService(_teamBlockGenerator, _teamBlockScheduler,
 			                                                   _schedulingOptionsCreator, 
 			                                                   _safeRollbackAndResourceCalculation,
 			                                                   _teamBlockIntradayDecisionMaker, _restrictionOverLimitValidator,
-			                                                   _teamBlockClearer, _teamBlockMaxSeatChecker,_dailyTargetValueCalculatorForTeamBlock);
+			                                                   _teamBlockClearer, _teamBlockMaxSeatChecker,_dailyTargetValueCalculatorForTeamBlock, _teamBlockSteadyStateValidator);
 		    _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 		    _reportedProgress = 0;
 		}
@@ -95,12 +97,47 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			    Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
 			          .Return(0.5).Repeat.Twice() ;
                 Expect.Call(()=>_safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
+				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions)).Return(true);
 			}
 			using (_mocks.Playback())
 			{
 				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
 								 _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
 			}
+		}
+
+		[Test]
+		public void ShouldNotTryToOptimizeWhenNotInSteadyState()
+		{
+			var dateOnly = new DateOnly();
+			var matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixes = new List<IScheduleMatrixPro> { matrix1, matrix2 };
+			var selectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
+			var person = PersonFactory.CreatePerson("Bill");
+			var persons = new List<IPerson> { person };
+			var schedulingOptions = new SchedulingOptions();
+			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
+			var group = new Group(new List<IPerson> { person }, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
+			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
+			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
+			var optimizationPreferences = new OptimizationPreferences();
+			var teamBlocks = new List<ITeamBlockInfo> { teamBlockInfo };
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences)).Return(schedulingOptions);
+				Expect.Call(_teamBlockGenerator.Generate(matrixes, selectedPeriod, persons, schedulingOptions)).Return(teamBlocks);
+				Expect.Call(_teamBlockIntradayDecisionMaker.Decide(teamBlocks, optimizationPreferences,schedulingOptions)).Return(teamBlocks);
+				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions)).Return(false);
+				
+			}
+			using (_mocks.Playback())
+			{
+
+				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
+								 _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
+			}	
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -138,6 +175,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                 Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
                       .Return(5.0);
                 Expect.Call(()=>_safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
+				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions)).Return(true);
 			}
 			using (_mocks.Playback())
 			{
@@ -184,6 +222,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                       .Return(5.0);
                 Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
+				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions)).Return(true);
 			}
 			using (_mocks.Playback())
 			{
@@ -258,6 +297,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced)).Return(5.0);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
+				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions)).Return(true);
 			}
 			using (_mocks.Playback())
 			{

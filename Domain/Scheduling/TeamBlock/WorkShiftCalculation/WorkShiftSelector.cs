@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		private double? valueForActivity(IActivity activity, IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic, IShiftProjectionCache shiftProjectionCache, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
 		{
 			double? value = _workShiftValueCalculator.CalculateShiftValue(shiftProjectionCache.MainShiftProjection,
-																		  activity, skillIntervalDataDic, parameters , timeZoneInfo, new Dictionary<DateTime, bool>());
+																		  activity, skillIntervalDataDic, parameters , timeZoneInfo);
 			return value;
 		}
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			foreach (var activity in skillIntervalDataLocalDictionary.Keys)
 			{
 				double? skillValue = valueForActivity(activity, skillIntervalDataLocalDictionary[activity], shiftProjectionCache, parameters, timeZoneInfo);
-				if (!skillValue.HasValue) return null;
+				if (!skillValue.HasValue) return null;  
 				
 				if (totalForAllActivitesValue.HasValue)
 				{

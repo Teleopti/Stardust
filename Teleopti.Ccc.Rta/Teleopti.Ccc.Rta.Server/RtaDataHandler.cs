@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			try
 			{
-				_asyncMessageSender.StartBrokerService();
+				_asyncMessageSender.StartBrokerService(useLongPolling:true);
 			}
 			catch (BrokerNotInstantiatedException ex)
 			{

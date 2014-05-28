@@ -13,7 +13,7 @@ namespace Teleopti.Interfaces.MessageBroker.Client
 		/// <summary>
 		/// Starts the broker
 		/// </summary>
-		void StartBrokerService();
+		void StartBrokerService(bool useLongPolling = false);
 
 		/// <summary>
 		/// Syncronous sending of single notification 

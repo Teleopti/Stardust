@@ -106,7 +106,7 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 		        }
 
 				var navbarToggle = $('#mainNavbarToggler');
-				if (navbarToggle && navbarToggle.is(':visible')) {
+				if (navbarToggle.length == 0 || (navbarToggle.length > 0 && navbarToggle.is(':visible'))) {
 					$('body').css('padding-top', '0');
 		            navbar.removeClass('navbar-fixed-top');
 		        } else {

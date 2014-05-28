@@ -48,13 +48,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             var schedulePeriods = virtualSchedulePeriods as IVirtualSchedulePeriod[] ?? virtualSchedulePeriods.ToArray();
 			
             IPerson anyPerson = null;
-			IScheduleRange currentSchedules = null;
-			IList<IBusinessRuleResponse> oldResponses = null;
+            IList<IBusinessRuleResponse> oldResponses = null;
 	        int oldResponseCount = 0;
 			if (schedulePeriods.Any())
 	        {
 		        anyPerson = schedulePeriods.First().Person;
-		        currentSchedules = rangeClones[anyPerson];
+		        IScheduleRange currentSchedules = rangeClones[anyPerson];
 		        oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
 				oldResponseCount = oldResponses.Count();
 	        }
@@ -97,7 +96,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                                 // vi måste kanske gör ngt annat om en vecka ligger i 2 olika schemaperioder (kan ju ha helt olika regler)
                                 if (personWeek.Week.Intersection(scheduleDateOnlyPeriod) != null && personWeek.Person.Equals(person))
                                 {
-	                                foreach (var schedule in rangeClones.Values)
+                                    var personSched = (from sched in rangeClones
+                                                       where sched.Key.Equals(person)
+                                                       select sched.Value).ToList();
+
+                                    foreach (var schedule in personSched)
 									{
 										IList<DateOnly> datesWithCategory;
 										if (_limitationChecker.IsShiftCategoryOverWeekLimit(shiftCategoryLimitation, schedule, personWeek.Week, out datesWithCategory))

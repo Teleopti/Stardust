@@ -37,15 +37,17 @@ namespace Teleopti.Messaging.SignalR
 
 				if (time.UtcDateTime() >= _timeOutTime)
 				{	
-					Logger.Error("Ping not responding, recreating connection...");
+					Logger.Warn("Ping not responding, recreating connection...");
 					recreateConnection();
 					stateAccessor.WithConnection(c => c.Start());
 					initializePing(stateAccessor);
 					_nextPingTime = _time.UtcDateTime().Add(_pingInterval);
+					Logger.Warn("Connection recreated");
 				}
 
 				if (time.UtcDateTime() >= _nextPingTime)
 				{
+					Logger.Debug("Ping!");
 					stateAccessor.IfProxyConnected(p => p.Invoke("Ping"));
 					_nextPingTime = _time.UtcDateTime().Add(_pingInterval);
 				}
@@ -61,7 +63,11 @@ namespace Teleopti.Messaging.SignalR
 		private void initializePing(IStateAccessor stateAccessor)
 		{
 			resetTimeout();
-			stateAccessor.WithProxy(p => p.Subscribe("Pong").Received += x => resetTimeout());
+			stateAccessor.WithProxy(p => p.Subscribe("Pong").Received += x =>
+			{
+				Logger.Debug("Pong!");
+				resetTimeout();
+			});
 		}
 
 		private void resetTimeout()

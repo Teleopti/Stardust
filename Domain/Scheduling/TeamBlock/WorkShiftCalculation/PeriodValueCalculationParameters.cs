@@ -42,5 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		  get { return _maxSeatsFeatureOption; }
 	  }
 
+	  public IDictionary<DateTime, bool> MaxSeatInfoPerInterval { get; set; }
+
 	}
 }

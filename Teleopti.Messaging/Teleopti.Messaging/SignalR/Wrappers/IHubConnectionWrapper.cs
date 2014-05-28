@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNet.SignalR.Client.Transports;
 
 namespace Teleopti.Messaging.SignalR.Wrappers
 {
@@ -11,6 +12,7 @@ namespace Teleopti.Messaging.SignalR.Wrappers
 		ConnectionState State { get; }
 		ICredentials Credentials { get; set; }
 		Task Start();
+		Task Start(IClientTransport transport);
 		void Stop();
 		event Action Closed;
 		event Action Reconnected;

@@ -6,8 +6,6 @@ using Autofac;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
@@ -547,12 +545,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 						                                                                                              restrictionChecker,
 						                                                                                              optimizerPreferences,
 						                                                                                              originalStateContainer);
-						if (optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit() ||
-						    optimizationOverLimitByRestrictionDecider.OverLimit().Count > 0)
+						var overLimitCounts = optimizationOverLimitByRestrictionDecider.OverLimitsCounts();
+						if (overLimitCounts.AvailabilitiesOverLimit > 0 || overLimitCounts.MustHavesOverLimit > 0 ||
+						    overLimitCounts.PreferencesOverLimit > 0 || overLimitCounts.RotationsOverLimit > 0 ||
+						    overLimitCounts.StudentAvailabilitiesOverLimit > 0 ||
+						    optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit())
 						{
 							var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback,
-							                                                               new ScheduleTagSetter(
-								                                                               KeepOriginalScheduleTag.Instance));
+								new ScheduleTagSetter(
+									KeepOriginalScheduleTag.Instance));
 							rollbackMatrixChanges(originalStateContainer, rollbackService);
 						}
 					}
