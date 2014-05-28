@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public string NextActivity { get; set; }
 		public DateTime NextActivityStartTime { get; set; }
 		public string Alarm { get; set; }
-		public DateTime AlarmTime { get; set; }
+		public DateTime AlarmStart { get; set; }
 		public string AlarmColor { get; set; }
 		public string TeamId { get; set; }
 		public string TeamName { get; set; }

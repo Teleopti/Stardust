@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				NextActivity = "Lunch",
 				NextActivityStartTime = new DateTime(2001, 1, 1, 12, 3, 0, DateTimeKind.Utc),
 				Alarm = "Alarma!",
-				AlarmTime = new DateTime(2001, 1, 1, 12, 0, 0, DateTimeKind.Utc),
+				AlarmStart = new DateTime(2001, 1, 1, 12, 0, 0, DateTimeKind.Utc),
 				AlarmColor = ColorTranslator.ToHtml(Color.Red)
 			};
 			var expected = new AgentViewModel
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				NextActivity = stateInfo.NextActivity,
 				NextActivityStartTime = stateInfo.NextActivityStartTime,
 				Alarm = stateInfo.Alarm,
-				AlarmTime = stateInfo.AlarmTime,
+				AlarmStart = stateInfo.AlarmStart,
 				AlarmColor = stateInfo.AlarmColor
 			};
 
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				Assert.That(result.First().NextActivity, Is.EqualTo(expected.NextActivity));
 				Assert.That(result.First().NextActivityStartTime, Is.EqualTo(expected.NextActivityStartTime));
 				Assert.That(result.First().Alarm, Is.EqualTo(expected.Alarm));
-				Assert.That(result.First().AlarmTime, Is.EqualTo(expected.AlarmTime));
+				Assert.That(result.First().AlarmStart, Is.EqualTo(expected.AlarmStart));
 				Assert.That(result.First().AlarmColor, Is.EqualTo(expected.AlarmColor));
 			}
 		}

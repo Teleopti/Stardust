@@ -17,7 +17,7 @@
     			that.NextActivityStartTime = data.NextActivityStartTime ? (moment.utc(data.NextActivityStartTime).add(offset, 'minutes').format(resources.TimeFormatForMoment)) : '';
     			that.Alarm = data.Alarm;
     			that.AlarmColor = 'rgba('+that.hexToRgb(data.AlarmColor) + ', 0.6)';
-    			that.AlarmTime = data.AlarmTime ? moment.utc(data.AlarmTime).add(offset, 'minutes').format(resources.DateTimeFormatForMoment) : '';
+    			that.AlarmStart = data.AlarmStart ? moment.utc(data.AlarmStart).add(offset, 'minutes').format(resources.DateTimeFormatForMoment) : '';
 			    that.refreshTimeInState();
 		    };
 

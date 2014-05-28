@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				                                                                                                 NextActivity = state.ScheduledNext,
 				                                                                                                 NextActivityStartTime = state.NextStart,
 				                                                                                                 Alarm = state.AlarmName,
-				                                                                                                 AlarmTime = state.AlarmStart,
+				                                                                                                 AlarmStart = state.AlarmStart,
 																												 AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(state.Color))
 			                                                                                                 });
 

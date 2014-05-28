@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				NextActivity = x.NextActivity,
 				NextActivityStartTime = DateTime.SpecifyKind(x.NextActivityStartTime, DateTimeKind.Utc),
 				Alarm = x.Alarm,
-				AlarmTime = DateTime.SpecifyKind(x.AlarmTime, DateTimeKind.Utc),
+				AlarmStart = DateTime.SpecifyKind(x.AlarmStart, DateTimeKind.Utc),
 				AlarmColor = x.AlarmColor
 			}), JsonRequestBehavior.AllowGet);
 		}

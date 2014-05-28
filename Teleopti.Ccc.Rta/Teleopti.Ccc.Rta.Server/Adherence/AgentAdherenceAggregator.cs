@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 				Activity = actualAgentState.Scheduled,
 				Alarm = actualAgentState.AlarmName,
 				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(actualAgentState.Color)),
-				AlarmTime = actualAgentState.AlarmStart,
+				AlarmStart = actualAgentState.AlarmStart,
 				NextActivity = actualAgentState.ScheduledNext,
 				NextActivityStartTime = actualAgentState.NextStart,
 				State = actualAgentState.State
