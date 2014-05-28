@@ -11,8 +11,10 @@ $(document).ready(function () {
 
 		viewModelDay1.PossibleContractTimeMinutesLower(6 * 60);
 		viewModelDay1.PossibleContractTimeMinutesUpper(10 * 60);
+		viewModelDay1.EditableIsInOpenPeriod(true);
 		viewModelDay2.PossibleContractTimeMinutesLower(6 * 60);
 		viewModelDay2.PossibleContractTimeMinutesUpper(10 * 60);
+		viewModelDay2.EditableIsInOpenPeriod(true);
 
 		weekViewModel.DayViewModels.push(viewModelDay1);
 		weekViewModel.DayViewModels.push(viewModelDay2);
@@ -27,6 +29,7 @@ $(document).ready(function () {
 		var weekViewModel = new Teleopti.MyTimeWeb.Preference.WeekViewModel();
 		viewModelDay.PossibleContractTimeMinutesLower(100 * 60 + 30);
 		viewModelDay.PossibleContractTimeMinutesUpper(160 * 60 + 5);
+		viewModelDay.EditableIsInOpenPeriod(true);
 		weekViewModel.DayViewModels.push(viewModelDay);
 
 		expect(2);

@@ -24,7 +24,7 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function () {
 	self.PossibleResultWeeklyContractTimeMinutesLower = ko.computed(function() {
 		var sum = 0;
 		$.each(self.DayViewModels(), function (index, day) {
-			 if (!(day.EditableHasNoSchedule()) || (day.EditableHasNoSchedule() && day.EditableIsInOpenPeriod() && day.DisplayFeedback())) {
+			 if (!(day.EditableHasNoSchedule()) || (day.EditableHasNoSchedule() && day.EditableIsInOpenPeriod())) {
 			 	 var value = day.PossibleContractTimeMinutesLower();
 			 	 if (value)
 			 	 	 sum += parseInt(value);
@@ -41,7 +41,7 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function () {
 	self.PossibleResultWeeklyContractTimeMinutesUpper = ko.computed(function() {
 		var sum = 0;
 		$.each(self.DayViewModels(), function (index, day) {
-			 if (!(day.EditableHasNoSchedule()) || (day.EditableHasNoSchedule() && day.EditableIsInOpenPeriod() && day.DisplayFeedback())) {
+			 if (!(day.EditableHasNoSchedule()) || (day.EditableHasNoSchedule() && day.EditableIsInOpenPeriod())) {
 				 var value = day.PossibleContractTimeMinutesUpper();
 				 if (value)
 					 sum += parseInt(value);
