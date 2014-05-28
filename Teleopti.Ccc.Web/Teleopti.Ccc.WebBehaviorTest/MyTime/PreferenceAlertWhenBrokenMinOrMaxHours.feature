@@ -15,9 +15,12 @@ And I should see max hours per week as '81'
 @ignore
 Scenario: Show alert when current min hours per week is larger than max hours per week on contract
 Given I am an agent
-And I have a contract with max hours '60'
+And I have a contract with:
+         | Field              | Value |
+         | max hours per week | 60    |
+And I have a shift bag with start times 8 to 9 and end times 18 to 20
+And I have a preference with work time limitation between 7 and 9
 When I view preferences
-And I insert preferences for a week with work time '9' to '12' hours per day
 Then I should be alerted for the max hours
  
 @ignore
