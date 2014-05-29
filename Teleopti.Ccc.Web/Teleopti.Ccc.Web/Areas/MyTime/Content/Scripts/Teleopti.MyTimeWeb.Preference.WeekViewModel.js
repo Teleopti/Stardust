@@ -20,7 +20,8 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function () {
 	var self = this;
 
 	this.DayViewModels = ko.observableArray();
-	this.ContractMaxTimePerWeek = 0;
+	this.MaxTimePerWeekMinutesSetting = 0;
+	this.MinTimePerWeekMinutesSetting = 0;
 
 	self.PossibleResultWeeklyContractTimeMinutesLower = ko.computed(function() {
 		var sum = 0;
@@ -73,23 +74,23 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function () {
 		return self.PossibleResultWeeklyContractTimeMinutesLower() > self.ContractMaxTimePerWeek;
 	});
 
-	self.readContractMaxTimePerWeek = function(data) {
-		 self.ContractMaxTimePerWeek = data;
+	self.readWeeklyWorkTimeSettings = function(data) {
+		 self.MaxTimePerWeekMinutesSetting = data.MaxWorkTimePerWeekMinutes;
+		 self.MinTimePerWeekMinutesSetting = data.MinWorkTimePerWeekMinutes;
 	};
 
-	this.LoadContractMaxTimeSetting = function (ajax) {
-	//	 ajax.Ajax({
-	//	 	 url: "Preference/ContractMaxTimePerWeek",
-	//	 	 dataType: "json",
-	//	 	 data: {
-	//	 	 	 Date: self.DayViewModels()[0].Date
-	//	 	 },
-	//	 	 type: 'GET',
-	//	 	 success: function (data, textStatus, jqXHR) {
-	//	 	 	 self.readContractMaxTimePerWeek(data);
-	//	 	 }
-		 //	 });
-		 self.readContractMaxTimePerWeek(60);
+	this.LoadWeeklyWorkTimeSettings = function (ajax) {
+		 ajax.Ajax({
+		 	 url: "Preference/WeeklyWorkTimeSetting",
+		 	 dataType: "json",
+		 	 data: {
+		 	 	 Date: self.DayViewModels()[0].Date
+		 	 },
+		 	 type: 'GET',
+		 	 success: function (data) {
+		 	 	 self.readWeeklyWorkTimeSettings(data);
+		 	 }
+		 	 });
 	};
 };
 
