@@ -54,6 +54,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_viewModelFactory.CreatePreferencesAndSchedulesViewModel(from, to), JsonRequestBehavior.AllowGet);
 		}
 
+		[HttpGet]
+		[UnitOfWork]
+		public virtual JsonResult WeeklyWorkTimeSetting(DateOnly date)
+		{
+			return Json(_viewModelFactory.CreatePreferenceWeeklyWorkTimeViewModel(date), JsonRequestBehavior.AllowGet);
+		}
+
 		[UnitOfWork]
 		[HttpGet]
 		[ActionName("Preference")]

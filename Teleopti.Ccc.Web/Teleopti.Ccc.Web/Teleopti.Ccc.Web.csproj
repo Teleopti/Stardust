@@ -312,6 +312,8 @@
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\ITeamViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\MyReportViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceWeeklyWorkTimeSettingProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceWeeklyWorkTimeSettingProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
     <Compile Include="Areas\MyTime\Core\Reports\DataProvider\IReportsNavigationProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Reports\DataProvider\IReportsProvider.cs" />
@@ -339,6 +341,7 @@
     <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MyReport\DailyMetricsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MyReport\DetailedAdherenceViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceWeeklyWorkTimeViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\AbsenceAccountViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditPersonScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditScheduleLayerViewModel.cs" />

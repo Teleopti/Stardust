@@ -14,13 +14,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 		private readonly IPreferenceProvider _preferenceProvider;
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IPreferenceTemplateProvider _preferenceTemplateProvider;
+		private readonly IPreferenceWeeklyWorkTimeSettingProvider _preferenceWeeklyWorkTimeSettingProvider;
 
-		public PreferenceViewModelFactory(IMappingEngine mapper, IPreferenceProvider preferenceProvider, IScheduleProvider scheduleProvider, IPreferenceTemplateProvider preferenceTemplateProvider)
+		public PreferenceViewModelFactory(IMappingEngine mapper, IPreferenceProvider preferenceProvider, IScheduleProvider scheduleProvider, IPreferenceTemplateProvider preferenceTemplateProvider, IPreferenceWeeklyWorkTimeSettingProvider preferenceWeeklyWorkTimeSettingProvider)
 		{
 			_mapper = mapper;
 			_preferenceProvider = preferenceProvider;
 			_scheduleProvider = scheduleProvider;
 			_preferenceTemplateProvider = preferenceTemplateProvider;
+			_preferenceWeeklyWorkTimeSettingProvider = preferenceWeeklyWorkTimeSettingProvider;
 		}
 
 		public PreferenceViewModel CreateViewModel(DateOnly date)
@@ -53,6 +55,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 		{
 			var templates = _preferenceTemplateProvider.RetrievePreferenceTemplates();
 			return _mapper.Map<IEnumerable<IExtendedPreferenceTemplate>, IEnumerable<PreferenceTemplateViewModel>>(templates);
+		}
+
+		public PreferenceWeeklyWorkTimeViewModel CreatePreferenceWeeklyWorkTimeViewModel(DateOnly date)
+		{
+			 var setting = _preferenceWeeklyWorkTimeSettingProvider.RetrieveSetting(date);
+			 return new PreferenceWeeklyWorkTimeViewModel
+			 {
+				  MaxWorkTimePerWeekMinutes = setting.MaxWorkTimePerWeekMinutes,
+				  MinWorkTimePerWeekMinutes = setting.MinWorkTimePerWeekMinutes,
+			 };
 		}
 	}
 }
