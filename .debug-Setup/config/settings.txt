@@ -5,8 +5,8 @@ $(DB_ANALYTICS)|TeleoptiAnalytics_Demo
 $(AS_DATABASE)|TeleoptiAnalytics_Demo
 $(IIS_AUTH)|Windows
 $(LOCAL_WIKI)|c:\temp
-$(PM_ASMX)|http://localhost/analyzer/services/Analyzer2005.asmx
-$(PM_AUTH_MODE)|Windows
+$(PM_ASMX)|http://CCCRC/TeleoptiPM/services/Analyzer2005.asmx
+$(PM_AUTH_MODE)|Anonymous
 $(PM_ANONYMOUS_DOMAINUSER)|YourDomain\theUser
 $(PM_ANONYMOUS_PWD)|pw
 $(PM_INSTALL)|False

@@ -155,10 +155,10 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://ccctestts/analyzer/services/Analyzer2005.asmx">
+    <WebReferenceUrl Include="http://localhost/TeleoptiPM/services/Analyzer2005.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\AnalyzerRef\</RelPath>
-      <UpdateFromURL>http://ccctestts/analyzer/services/Analyzer2005.asmx</UpdateFromURL>
+      <UpdateFromURL>http://localhost/TeleoptiPM/services/Analyzer2005.asmx</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
