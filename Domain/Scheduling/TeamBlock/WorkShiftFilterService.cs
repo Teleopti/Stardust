@@ -72,7 +72,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_ruleSetPersonalSkillsActivityFilter = ruleSetPersonalSkillsActivityFilter;
 		}
 
-		public IList<IShiftProjectionCache> FilterForRoleModel(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, bool sameContractTime)
+		public IList<IShiftProjectionCache> FilterForRoleModel(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+			IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult,
+			bool sameContractTime)
 		{
 			if (effectiveRestriction == null)
 				return null;
@@ -92,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (schedulingOptions.ShiftCategory != null)
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
-            var filteredRuleSetList = _ruleSetAccordingToAccessabilityFilter.FilterForRoleModel(teamBlockInfo).ToList();
+			var filteredRuleSetList = _ruleSetAccordingToAccessabilityFilter.FilterForRoleModel(teamBlockInfo).ToList();
 			var ruleSetBag = new RuleSetBag();
 			foreach (var workShiftRuleSet in filteredRuleSetList)
 			{
@@ -103,29 +105,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				groupPerson.GroupMembers.First().PermissionInformation.DefaultTimeZone(), ruleSetBag, false, false);
 			shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
 				groupPerson, matrixList, sameContractTime);
-			if (shiftList == null || shiftList.Count == 0)
+
+			if (allowanceToUseBlackList(shiftList, schedulingOptions, effectiveRestriction))
 			{
-				if (schedulingOptions.UsePreferences || schedulingOptions.UseAvailability || schedulingOptions.UseRotations ||
-					schedulingOptions.UseStudentAvailability)
-				{
-					shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
-						groupPerson.GroupMembers.First().PermissionInformation.DefaultTimeZone(), ruleSetBag, true, false);
-					shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
-						groupPerson, matrixList, sameContractTime);
-				}
+				shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
+					groupPerson.GroupMembers.First().PermissionInformation.DefaultTimeZone(), ruleSetBag, true, false);
+				shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
+					groupPerson, matrixList, sameContractTime);
 			}
+
 			if (shiftList == null)
 				return null;
 			return shiftList.Count == 0 ? null : shiftList;
 		}
 
-		public IList<IShiftProjectionCache> FilterForTeamMember(DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
+		public IList<IShiftProjectionCache> FilterForTeamMember(DateOnly dateOnly, IPerson person,
+			ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions,
+			IWorkShiftFinderResult finderResult)
 		{
 			if (effectiveRestriction == null)
 				return null;
 			if (teamBlockInfo == null)
 				return null;
-			var matrixList = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, new DateOnlyPeriod(dateOnly, dateOnly)).ToList();
+			var matrixList =
+				teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, new DateOnlyPeriod(dateOnly, dateOnly)).ToList();
 			if (matrixList.Count == 0) return null;
 			var currentSchedulePeriod = person.VirtualSchedulePeriod(dateOnly);
 			if (!currentSchedulePeriod.IsValid)
@@ -151,20 +154,34 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person, matrixList,
 				true);
-			if (shiftList == null || shiftList.Count == 0)
+
+			if (allowanceToUseBlackList(shiftList, schedulingOptions, effectiveRestriction))
 			{
-				if (schedulingOptions.UsePreferences || schedulingOptions.UseAvailability || schedulingOptions.UseRotations ||
-				    schedulingOptions.UseStudentAvailability)
-				{
-					shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
-						person.PermissionInformation.DefaultTimeZone(), ruleSetBag, true, false);
-					shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person,
-						matrixList, true);
-				}
+				shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
+					person.PermissionInformation.DefaultTimeZone(), ruleSetBag, true, false);
+				shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person,
+					matrixList, true);
 			}
+
 			if (shiftList == null)
 				return null;
 			return shiftList.Count == 0 ? null : shiftList;
+		}
+
+		private bool allowanceToUseBlackList(IList<IShiftProjectionCache> shiftList, ISchedulingOptions schedulingOptions,
+			IEffectiveRestriction effectiveRestriction)
+		{
+			if (shiftList == null || shiftList.Count == 0)
+			{
+				bool useRestrictions = schedulingOptions.UsePreferences || schedulingOptions.UseAvailability ||
+				                       schedulingOptions.UseRotations ||
+				                       schedulingOptions.UseStudentAvailability;
+
+				if (useRestrictions && effectiveRestriction.IsRestriction)
+					return true;
+			}
+
+			return false;
 		}
 
 		private IList<IShiftProjectionCache> runFiltersForRoleModel(DateOnly dateOnly, IEffectiveRestriction effectiveRestriction,
