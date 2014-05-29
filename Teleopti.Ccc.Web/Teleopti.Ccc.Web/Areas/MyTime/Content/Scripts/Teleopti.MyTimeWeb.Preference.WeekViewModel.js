@@ -78,18 +78,18 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function () {
 	};
 
 	this.LoadContractMaxTimeSetting = function (ajax) {
-		 var deferred = $.Deferred();
-		 ajax.Ajax({
-		 	 url: "Preference/ContractMaxTimePerWeek",
-		 	 dataType: "json",
-		 	 data: {
-		 	 	 Date: self.DayViewModels()[0].Date
-		 	 },
-		 	 type: 'GET',
-		 	 success: function (data, textStatus, jqXHR) {
-		 	 	 self.readContractMaxTimePerWeek(data);
-		 	 }
-		 });
+	//	 ajax.Ajax({
+	//	 	 url: "Preference/ContractMaxTimePerWeek",
+	//	 	 dataType: "json",
+	//	 	 data: {
+	//	 	 	 Date: self.DayViewModels()[0].Date
+	//	 	 },
+	//	 	 type: 'GET',
+	//	 	 success: function (data, textStatus, jqXHR) {
+	//	 	 	 self.readContractMaxTimePerWeek(data);
+	//	 	 }
+		 //	 });
+		 self.readContractMaxTimePerWeek(60);
 	};
 };
 
