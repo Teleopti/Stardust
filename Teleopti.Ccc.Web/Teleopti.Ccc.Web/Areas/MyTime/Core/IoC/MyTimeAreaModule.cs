@@ -151,6 +151,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ExtendedPreferencePredicate>().As<IExtendedPreferencePredicate>().SingleInstance();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
 			builder.RegisterType<PreferenceTemplateProvider>().As<IPreferenceTemplateProvider>();
+			builder.RegisterType<PreferenceWeeklyWorkTimeSettingProvider>().As<IPreferenceWeeklyWorkTimeSettingProvider>();
 			builder.RegisterType<PreferenceTemplatePersister>().As<IPreferenceTemplatePersister>();
 		}
 		 
