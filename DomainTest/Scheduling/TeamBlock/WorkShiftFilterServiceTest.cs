@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void ShouldFilterWorkShifts()
+		public void ShouldFilterWorkShiftsForRoleModel()
 		{
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditableShift>();
@@ -173,23 +173,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
 				      .Return(true);
-                Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
-				Expect.Call(_commonMainShiftFilter.Filter(caches, effectiveRestriction)).Return(caches);
-				Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(caches, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(caches);
-				Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, caches, _finderResult)).Return(caches);
-				Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, caches, _finderResult)).Return(caches);
-				Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _person, caches, effectiveRestriction, _finderResult)).Return(caches);
-				Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _person, caches, effectiveRestriction, _finderResult))
-				      .Return(caches);
-				Expect.Call(_workTimeLimitationShiftFilter.Filter(caches, effectiveRestriction, _finderResult)).Return(caches);
-				Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> {_matrix}, caches,
-				                                            _schedulingOptions, _finderResult)).Return(caches);
-				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _person, caches, _finderResult)).Return(caches);
-				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, caches, _finderResult)).Return(caches);
-				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
-				      .Return(caches);
-                Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
+				Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
 
+                Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
+				filterForRoleModel(caches, effectiveRestriction);
 			}
 			using (_mocks.Playback())
 			{
@@ -197,7 +184,61 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.IsNotNull(retShift);
 			}
 		}
-		
+
+		public void ShouldFilterWorkShiftsForRoleModelUsingBlackListIfAllowed()
+		{
+			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			effectiveRestriction.IsPreferenceDay = true;
+			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditableShift>();
+			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
+			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+			var caches = getCashes();
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrix.SchedulePeriod).Return(schedulePeriod);
+				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
+				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
+					  .Return(true);
+				Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
+
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(new List<IShiftProjectionCache>());
+				filterForRoleModel(caches, effectiveRestriction);
+
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, true, false)).IgnoreArguments().Return(caches);
+				filterForRoleModel(caches, effectiveRestriction);
+			}
+			using (_mocks.Playback())
+			{
+				var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
+				Assert.IsNotNull(retShift);
+			}
+		}
+
+		private void filterForRoleModel(IList<IShiftProjectionCache> caches, IEffectiveRestriction effectiveRestriction)
+		{
+			Expect.Call(_commonMainShiftFilter.Filter(caches, effectiveRestriction)).Return(caches);
+			Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(caches,
+				_schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(caches);
+			Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, caches, _finderResult))
+				.Return(caches);
+			Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, caches,
+				_finderResult)).Return(caches);
+			Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _groupPerson, caches, effectiveRestriction,
+				_finderResult)).Return(caches);
+			Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _groupPerson, caches, effectiveRestriction,
+				_finderResult))
+				.Return(caches);
+			Expect.Call(_workTimeLimitationShiftFilter.Filter(caches, effectiveRestriction, _finderResult)).Return(caches);
+			Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> {_matrix}, caches,
+				_schedulingOptions, _finderResult)).Return(caches);
+			Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _groupPerson, caches, _finderResult))
+				.Return(caches);
+			Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _groupPerson, caches, _finderResult)).Return(caches);
+			Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
+				.Return(caches);
+		}
+
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldReturnNullIfShiftListIsNull()
 		{
