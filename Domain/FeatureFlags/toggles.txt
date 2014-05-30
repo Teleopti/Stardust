@@ -1,0 +1,24 @@
+﻿# Note: If you change this file in production, app pool will recycle!
+#
+# How to...
+#
+##### Enable a feature ######
+# MyFeature = true
+#############################
+#
+#
+##### Disable a feature ###########
+##### Optional, default behavior ##
+# MyFeature = false
+###################################
+#
+#
+### Enable for specific license #######
+### eg enable for RC license ##########
+# MyFeature.license.name = Teleopti_RC
+#######################################
+#
+
+Scheduler_WeeklyRestRuleSolver_27108.license.name = Teleopti_RC
+RTA_RtaLastStatesOverview_27789.license.name = Teleopti_RC
+RTA_DrilldownToAllAgentsInOneTeam_25234.license.name = Teleopti_RC
