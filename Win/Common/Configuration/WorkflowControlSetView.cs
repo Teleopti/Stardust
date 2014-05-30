@@ -41,10 +41,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         public WorkflowControlSetView()
         {
             InitializeComponent();
-
-				//hidden it temporarily
-				labelMinimumTimePerWeek.Hide();
-				textBoxExtMinTimePerWeek.Hide();
 	        
 	        if (DesignMode) return;
         	_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory());

@@ -12,8 +12,6 @@
 		Scheduler_TeamBlockAdhereWithMaxSeatRule_23419,
 
 		RTA_RtaLastStatesOverview_27789,
-		RTA_DrilldownToAllAgentsInOneTeam_25234,
-
-		Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635
+		RTA_DrilldownToAllAgentsInOneTeam_25234
 	}
 }
