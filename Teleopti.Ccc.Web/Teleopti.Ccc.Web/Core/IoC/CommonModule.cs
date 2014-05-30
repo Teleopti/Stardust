@@ -56,13 +56,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		private static void registerPortalTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<CultureSpecificViewModelFactory>().As<ICultureSpecificViewModelFactory>();
-			builder.Register(c =>
-			                 	{
-			                 		if (DefinedLicenseDataFactory.LicenseActivator == null)
-			                 			throw new DataSourceException("Missing datasource (no *.hbm.xml file available)!");
-			                 		return DefinedLicenseDataFactory.LicenseActivator;
-			                 	})
-				.As<ILicenseActivator>();
 		}
 
 		private static void registerCommonTypes(ContainerBuilder builder)

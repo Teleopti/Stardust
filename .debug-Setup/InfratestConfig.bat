@@ -9,6 +9,10 @@ SET FEATURETOGGLE=%~3
 set configuration=%4
 set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 
+if "%configuration%"=="" (
+set configuration=Debug
+)
+
 if "%1" == "" (
 SET CCC7DB=Infratest_CCC7
 )
@@ -17,20 +21,31 @@ if "%2" == "" (
 SET AnalyticsDB=Infratest_Analytics
 )
 
-::init toggle values to "ALL"
-SET TOGGLE_FILE=ALL
+
+set licensefile=
+if "%FEATURETOGGLE%" == "ALL" (
+SET licensefile=Teleopti_RD.xml
+)
 
 if "%FEATURETOGGLE%" == "RC" (
-SET TOGGLE_FILE=bin/FeatureFlags/RC.toggles.txt
+SET licensefile=Teleopti_RC.xml
 )
 
 if "%FEATURETOGGLE%" == "R" (
-SET TOGGLE_FILE=bin/FeatureFlags/released.toggles.txt
+SET licensefile=Teleopti_Prod.xml
 )
 
-if "%configuration%"=="" (
-set configuration=Debug
+if "%licensefile%" == "" (
+CHOICE /C drc /M "Do you want to run (d)ev, (r)c or (c)ustomer toggle settings"
+IF ERRORLEVEL 1 SET licensefile=Teleopti_RD.xml
+IF ERRORLEVEL 2 SET licensefile=Teleopti_RC.xml
+IF ERRORLEVEL 3 SET licensefile=Teleopti_Prod.xml
 )
+
+::copy licensefile to webbehaviortest
+copy /y "%rootdir%\LicenseFiles\%licensefile%" "%rootdir%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\license.xml"
+::ugly - if compiled, copy to bin folder (fix this!)
+if exist "%rootdir%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\license.xml" copy /y "%rootdir%\LicenseFiles\%licensefile%" "%rootdir%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\license.xml"
 
 SET MySettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings.txt
 
@@ -44,7 +59,6 @@ ECHO $(AGENTPORTALWEB_nhibConfPath)^|bin>>"%MySettings%"
 ECHO $(DB_CCC7)^|%CCC7DB%>>"%MySettings%"
 ECHO $(DB_ANALYTICS)^|%AnalyticsDB%>>"%MySettings%"
 ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%MySettings%"
-ECHO $(TOGGLE_FILE)^|%TOGGLE_FILE%>>"%MySettings%"
 ECHO $(DATASOURCE_NAME)^|TestData>>"%MySettings%"
 
 ::telling what config to modify

@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 {
 	public interface IContainerConfiguration
 	{
-		IContainer Configure();
+		IContainer Configure(string featureTogglePath);
 	}
 }

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Markup;
 using Autofac;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Constants;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Library;
 using Teleopti.Ccc.Win.Forecasting;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			mocks = new MockRepository();
 			var applicationData = mocks.DynamicMock<IApplicationData>();
 
-			var container = new ContainerConfiguration().Configure();
+			var container = new ContainerConfiguration().Configure(string.Empty);
 
 			var containerAdder = new ContainerBuilder();
 			containerAdder.RegisterModule(new AuthenticationModule(applicationData));
@@ -95,8 +96,22 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldRegisterToggleHandlerController()
 		{
-			requestContainer.Resolve<ToggleHandlerController>()
-				.Should().Not.Be.Null();
+			var tempFile = Path.GetTempFileName();
+			try
+			{
+				File.WriteAllText(tempFile, string.Empty);
+				var container = new ContainerConfiguration().Configure(tempFile);
+				var containerAdder = new ContainerBuilder();
+				containerAdder.Register(_ => MockRepository.GenerateMock<ILicenseActivator>());
+				containerAdder.Update(container);
+
+				container.Resolve<ToggleHandlerController>()
+					.Should().Not.Be.Null();
+			}
+			finally
+			{
+				File.Delete(tempFile);
+			}
 		}
 
 		[Test]

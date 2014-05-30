@@ -18,6 +18,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 {
 	public class ContainerConfiguration : IContainerConfiguration
 	{
-		public IContainer Configure()
+		public IContainer Configure(string featureTogglePath)
 		{
 			var builder = new ContainerBuilder();
 
@@ -113,20 +114,9 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
-
-			var featureTogglePath = inRealWebEnvironment() ? 
-				HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["FeatureToggle"]) : 
-				"Just something for test___ALL";
 			builder.RegisterModule(new ToggleNetModule(featureTogglePath));
 
-
-
 			return builder.Build();
-		}
-
-		private static bool inRealWebEnvironment()
-		{
-			return HttpContext.Current != null;
 		}
 
 		private static void registerAopComponents(ContainerBuilder builder)

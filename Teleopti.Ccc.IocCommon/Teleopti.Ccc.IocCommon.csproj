@@ -126,8 +126,9 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Toggle.Net">
-      <HintPath>..\packages\Toggle.Net.0.4.0\lib\net40\Toggle.Net.dll</HintPath>
+    <Reference Include="Toggle.Net, Version=0.5.0.0, Culture=neutral, PublicKeyToken=edf35f5974b06d9f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Toggle.Net.0.5.0\lib\net40\Toggle.Net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -149,7 +150,8 @@
     <Compile Include="Configuration\ScheduleScreenRefresherModule.cs" />
     <Compile Include="Configuration\ShiftTradeModule.cs" />
     <Compile Include="Configuration\TeleoptiCacheKey.cs" />
-    <Compile Include="Configuration\ToggleNetModule.cs" />
+    <Compile Include="Toggle\LicenseSpecification.cs" />
+    <Compile Include="Toggle\ToggleNetModule.cs" />
     <Compile Include="Configuration\UnitOfWorkModule.cs" />
     <Compile Include="Configuration\MbCacheModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

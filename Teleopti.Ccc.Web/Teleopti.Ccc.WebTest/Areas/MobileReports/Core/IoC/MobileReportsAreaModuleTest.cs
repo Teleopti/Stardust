@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.IoC
 		[SetUp]
 		public void Setup()
 		{
-			_container = new ContainerConfiguration().Configure();
+			_container = new ContainerConfiguration().Configure(string.Empty);
 			var containerAdder = new ContainerBuilder();
 			containerAdder.RegisterModule(new MobileReportsAreaModule());
 			containerAdder.Update(_container);

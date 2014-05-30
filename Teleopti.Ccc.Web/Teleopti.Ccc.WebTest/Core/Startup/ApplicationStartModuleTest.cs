@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 				Tasks = tasks;
 			}
 
-			public IContainer Configure()
+			public IContainer Configure(string featureTogglePath)
 			{
 				Tasks = new List<IBootstrapperTask>();
 				var builder = new ContainerBuilder();

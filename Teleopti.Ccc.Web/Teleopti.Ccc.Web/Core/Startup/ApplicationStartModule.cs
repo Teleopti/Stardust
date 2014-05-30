@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -101,7 +103,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			ErrorAtStartup = null;
 			try
 			{
-				var container = _containerConfiguration.Configure();
+				var pathToToggle = Path.Combine(HttpContext.Current.Server.MapPath("~/"), ConfigurationManager.AppSettings["FeatureToggle"]);
+				var container = _containerConfiguration.Configure(pathToToggle);
 				if (!_testMode)
 				{
 					DependencyResolver.SetResolver(new AutofacDependencyResolver(container));

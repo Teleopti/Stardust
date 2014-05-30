@@ -116,7 +116,12 @@
     <Compile Include="Configuration\ScheduleScreenRefresherModuleTest.cs" />
     <Compile Include="Configuration\ShiftTradeModuleTest.cs" />
     <Compile Include="Configuration\TeleoptiCacheKeyTest.cs" />
-    <Compile Include="Configuration\ToggleNetModuleTest.cs" />
+    <Compile Include="Toggle\CustomerTest.cs" />
+    <Compile Include="Toggle\DeveloperTest.cs" />
+    <Compile Include="Toggle\GeneralTest.cs" />
+    <Compile Include="Toggle\LicenseValidationTest.cs" />
+    <Compile Include="Toggle\RcTest.cs" />
+    <Compile Include="Toggle\ToggleBaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
   </ItemGroup>
