@@ -22,7 +22,7 @@ define([
 					return false;
 				}),
 			new AddFullDayAbsenceScenario(
-				"ScheduledResourcesReadModel",
+				"ScheduledResourcesReadModel (BROKEN)",
 				function () { return true; })
 		];
 
