@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 
 namespace Teleopti.Interfaces.Domain
 {

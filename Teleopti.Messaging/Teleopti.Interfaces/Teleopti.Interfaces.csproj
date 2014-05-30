@@ -99,9 +99,6 @@
     <Reference Include="System.Security" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Teleopti.Ccc.Domain">
-      <HintPath>..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\Bin\Teleopti.Ccc.Domain.dll</HintPath>
-    </Reference>
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Teleopti.Secrets.7.5.800.37\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
@@ -124,6 +121,7 @@
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
     <Compile Include="Domain\ITime.cs" />
     <Compile Include="Domain\IAuthenticationInfo.cs" />
+    <Compile Include="Domain\MaxSeatsFeatureOptions.cs" />
     <Compile Include="Domain\PersianCultureHelper.cs" />
     <Compile Include="Domain\SchedulingServiceSuccessfulEventArgs.cs" />
     <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
