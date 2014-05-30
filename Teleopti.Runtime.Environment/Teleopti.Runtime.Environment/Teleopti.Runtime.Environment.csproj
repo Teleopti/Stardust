@@ -40,12 +40,11 @@
     <AssemblyOriginatorKeyFile>..\..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EO.WebBrowser, Version=3.0.60.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\EO.WebBrowser.3.0.60\lib\EO.WebBrowser.dll</HintPath>
+    <Reference Include="EO.WebBrowser">
+      <HintPath>..\..\packages\EO.WebBrowser.3.0.60\lib\EO.WebBrowser.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net20\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.3\lib\net20\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

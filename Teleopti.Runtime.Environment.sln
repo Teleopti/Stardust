@@ -1,17 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Runtime.Environment", "Teleopti.Runtime.Environment\Teleopti.Runtime.Environment.csproj", "{83D40812-9E6A-4EF1-B84F-11BC203283EF}"
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Runtime.Environment", "Teleopti.Runtime.Environment\Teleopti.Runtime.Environment\Teleopti.Runtime.Environment.csproj", "{83D40812-9E6A-4EF1-B84F-11BC203283EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Runtime.TestServer", "Teleopti.Runtime.TestServer\Teleopti.Runtime.TestServer.csproj", "{65BEE818-D800-4699-8FC5-8F31E4E2A31A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Runtime.TestServer", "Teleopti.Runtime.Environment\Teleopti.Runtime.TestServer\Teleopti.Runtime.TestServer.csproj", "{65BEE818-D800-4699-8FC5-8F31E4E2A31A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{32D4930D-39E7-4D39-9463-7EEF001D243A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{89901570-771C-46E3-9AE6-3AD0234B853A}"
 	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
 Global
