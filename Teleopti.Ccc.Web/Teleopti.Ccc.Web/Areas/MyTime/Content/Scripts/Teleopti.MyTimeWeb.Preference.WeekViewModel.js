@@ -60,6 +60,7 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 	self.PossibleResultWeeklyContractTimeLower = ko.computed(function() {
 		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultWeeklyContractTimeMinutesLower());
 	});
+
 	self.PossibleResultWeeklyContractTimeUpper = ko.computed(function() {
 		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultWeeklyContractTimeMinutesUpper());
 	});
