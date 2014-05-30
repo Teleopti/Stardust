@@ -326,8 +326,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						});
 						$.each(weekViewModels, function (index, week) {
 							 week.LoadWeeklyWorkTimeSettings();
-							console.log(week.MinTimePerWeekMinutesSetting());
-							console.log(week.MaxTimePerWeekMinutesSetting());
 						});
 
 						selectionViewModel.enableDateSelection();
