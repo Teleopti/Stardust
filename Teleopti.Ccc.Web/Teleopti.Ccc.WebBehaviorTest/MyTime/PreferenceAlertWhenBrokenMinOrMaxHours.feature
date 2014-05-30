@@ -11,6 +11,15 @@ And I have a preference with work time limitation between 5 and 9
 When I view preferences
 Then I should see min hours per week as '23'
 And I should see max hours per week as '81'
+
+@ignore
+Scenario: Do not calculate and show min and max hours per week for week that is not in current period and without published schedule
+Given I am an agent
+And I have a shift bag with start times 8 to 9 and end times 12 to 20
+And I have a scheduling period of 1 week
+And the current time is '2014-05-29'
+When I view preferences
+Then I should not see min and max hours per week for 1 week before
  
 @ignore
 Scenario: Show alert when current min hours per week is larger than max hours per week on contract
@@ -26,9 +35,14 @@ Then I should be alerted for the max hours
 @ignore
 Scenario: Show alert when current max hours per week is less than min hours per week on WCS
 Given I am an agent
-And I have a workflow control set with min hours '28'
+And I have a workflow control set with
+	| Field                      | Value              |
+	| Name                       | Published schedule |
+	| Schedule published to date | 2040-06-24         |
+	| Min time per week          | 60                 |
+And  I have a shift bag with start times 9 to 10 and end times 15 to 16
+And I have a preference with work time limitation between 7 and 9
 When I view preferences
-And I insert preferences for a week with work time '1' to '3' hours per day
 Then I should be alerted for the min hours
 
 @ignore
