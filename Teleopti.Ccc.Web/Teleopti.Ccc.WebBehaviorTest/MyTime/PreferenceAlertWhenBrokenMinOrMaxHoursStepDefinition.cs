@@ -30,8 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see min and max hours per week for one week before")]
 		public void ThenIShouldNotSeeMinAndMaxHoursPerWeekForOneWeekBefore()
 		{
-			var cell = string.Format("li[data-mytime-week]:nth(0)");
-			Browser.Interactions.AssertNotExistsUsingJQuery(cell, ".min-hours-per-week");
+			Browser.Interactions.AssertFirstNotContains("li[data-mytime-week]", ".min-hours-per-week");
 		}
 
 		[Then(@"I should not be alerted")]

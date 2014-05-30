@@ -1,6 +1,6 @@
 ﻿
 .alert-preference {
-	max-width: 954px;
+	max-width: 1024px;
 	margin: 20px auto;
 }
 
@@ -262,4 +262,17 @@ color: #333333;
 .day-content .weekly-work-time-alert {
 	color: red;
 	font-weight: bold;
+}
+
+.preference-body-width {
+	width: 1024px !important;
+}
+
+.min-hours-per-week {
+	padding-top: 12px;
+	font-size: 11px;
+}
+
+.max-hours-per-week {
+	font-size: 11px;
 }
