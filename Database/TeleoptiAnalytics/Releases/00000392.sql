@@ -486,6 +486,7 @@ GO
 EXEC sp_rename 'mart.PK_fact_schedule', 'PK_fact_schedule_old'
 GO
 
+--re-create
 CREATE TABLE [mart].[fact_schedule](
 	[shift_startdate_local_id] [int] NOT NULL,
 	[schedule_date_id] [int] NOT NULL,
@@ -538,6 +539,16 @@ ALTER TABLE [mart].[fact_schedule] ADD CONSTRAINT [PK_fact_schedule] PRIMARY KEY
 	[activity_starttime] ASC
 )
 GO
+
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') AND name = N'IX_dim_person_person_id_time_zone_id')
+CREATE NONCLUSTERED INDEX IX_dim_person_person_id_time_zone_id
+ON [mart].[dim_person]
+(
+	[person_id] ASC,
+	[time_zone_id] ASC
+)
+GO
+
 --counting rows in fact_schedule_old and give estimate of time
 declare @row_count bigint
 declare @rows_per_minute int
@@ -567,28 +578,87 @@ PRINT 'Please be patient and do not close any window.'
 PRINT '----'
 PRINT 'new data into: [mart].[fact_schedule]. Working ...'
 GO
-DECLARE @date_min smalldatetime
-SET @date_min='1900-01-01'
 
-CREATE TABLE #intervals
-(
-	interval_id smallint not null,
-	interval_start smalldatetime null,
-	interval_end smalldatetime null
-)
+--update stats before insert + select
+/*
+UPDATE STATISTICS mart.bridge_time_zone --0:06 min
+UPDATE STATISTICS mart.dim_person --0:05 min
+UPDATE STATISTICS mart.fact_schedule_old  --1:21 min
+UPDATE STATISTICS mart.fact_schedule
+*/
+--check tempdb before
+DECLARE @time_Start datetime
+DECLARE @num_of_bytes_written bigint
+DECLARE @num_of_bytes_read bigint
+DECLARE @io_stall_read_ms bigint
+DECLARE @io_stall_write_ms bigint
+DECLARE @num_of_writes bigint
+DECLARE @num_of_reads bigint
 
-INSERT #intervals(interval_id,interval_start,interval_end)
-SELECT interval_id= interval_id,
-	interval_start= interval_start,
-	interval_end = interval_end
-FROM mart.dim_interval
-ORDER BY interval_id
-
+SELECT
+	@time_Start=getdate(),
+	@num_of_bytes_written=num_of_bytes_written,
+	@num_of_bytes_read=num_of_bytes_read,
+	@io_stall_write_ms=io_stall_write_ms,
+	@io_stall_read_ms=io_stall_read_ms,
+	@num_of_reads=num_of_reads,
+	@num_of_writes=num_of_writes
+FROM sys.dm_io_virtual_file_stats(DB_ID('tempdb'), 1)
 
 --INSERT DATA FROM OLD FACT_SCHEDULE
+DECLARE @IntervalLengthMinutes smallint
+DECLARE @IntervalPerDay smallint 
+SELECT
+	@IntervalLengthMinutes=value,
+	@IntervalPerDay=1440/value
+FROM mart.sys_configuration
+WHERE [key]='IntervalLengthMinutes'
+
 INSERT [mart].[fact_schedule] WITH(TABLOCK)
-(shift_startdate_local_id, schedule_date_id, person_id, interval_id, activity_starttime, scenario_id, activity_id, absence_id, activity_startdate_id, activity_enddate_id, activity_endtime, shift_startdate_id, shift_starttime, shift_enddate_id, shift_endtime, shift_startinterval_id, shift_endinterval_id, shift_category_id, shift_length_id, scheduled_time_m, scheduled_time_absence_m, scheduled_time_activity_m, scheduled_contract_time_m, scheduled_contract_time_activity_m, scheduled_contract_time_absence_m, scheduled_work_time_m, scheduled_work_time_activity_m, scheduled_work_time_absence_m, scheduled_over_time_m, scheduled_ready_time_m, scheduled_paid_time_m, scheduled_paid_time_activity_m, scheduled_paid_time_absence_m, business_unit_id, datasource_id, insert_date, update_date, datasource_update_date, overtime_id)
-SELECT btz.local_date_id, f.schedule_date_id, f.person_id, f.interval_id, f.activity_starttime, f.scenario_id, f.activity_id, f.absence_id, f.activity_startdate_id, f.activity_enddate_id, f.activity_endtime, f.shift_startdate_id, f.shift_starttime, f.shift_enddate_id, f.shift_endtime, f.shift_startinterval_id, di.interval_id, f.shift_category_id, f.shift_length_id, f.scheduled_time_m, f.scheduled_time_absence_m, f.scheduled_time_activity_m, f.scheduled_contract_time_m, f.scheduled_contract_time_activity_m, f.scheduled_contract_time_absence_m, f.scheduled_work_time_m, f.scheduled_work_time_activity_m, f.scheduled_work_time_absence_m, f.scheduled_over_time_m, f.scheduled_ready_time_m, f.scheduled_paid_time_m, f.scheduled_paid_time_activity_m, f.scheduled_paid_time_absence_m, f.business_unit_id, f.datasource_id, f.insert_date, f.update_date, f.datasource_update_date, f.overtime_id
+SELECT
+shift_startdate_local_id		= btz.local_date_id,
+schedule_date_id				= f.schedule_date_id,
+person_id						= f.person_id,
+interval_id						= f.interval_id,
+activity_starttime				= f.activity_starttime,
+scenario_id						= f.scenario_id,
+activity_id						= f.activity_id,
+absence_id						= f.absence_id,
+activity_startdate_id			= f.activity_startdate_id,
+activity_enddate_id				= f.activity_enddate_id,
+activity_endtime				= f.activity_endtime,
+shift_startdate_id				= f.shift_startdate_id,
+shift_starttime					= f.shift_starttime,
+shift_enddate_id				= f.shift_enddate_id,
+shift_endtime					= f.shift_endtime,
+shift_startinterval_id			= f.shift_startinterval_id,
+shift_endinterval_id			= case (datepart(day,shift_starttime)-datepart(day,shift_endtime))
+									when 0
+										then shift_startinterval_id+datediff(mi,shift_starttime,shift_endtime)/@IntervalLengthMinutes
+										else shift_startinterval_id+datediff(mi,shift_starttime,shift_endtime)/@IntervalLengthMinutes-@IntervalPerDay
+									end,
+shift_category_id				= f.shift_category_id,
+shift_length_id					= f.shift_length_id,
+scheduled_time_m				= f.scheduled_time_m,
+scheduled_time_absence_m		= f.scheduled_time_absence_m,
+scheduled_time_activity_m		= f.scheduled_time_activity_m,
+scheduled_contract_time_m		= f.scheduled_contract_time_m,
+scheduled_contract_time_activity_m	= f.scheduled_contract_time_activity_m,
+scheduled_contract_time_absence_m	= f.scheduled_contract_time_absence_m,
+scheduled_work_time_m			= f.scheduled_work_time_m,
+scheduled_work_time_activity_m		= f.scheduled_work_time_activity_m,
+scheduled_work_time_absence_m		= f.scheduled_work_time_absence_m,
+scheduled_over_time_m			= f.scheduled_over_time_m,
+scheduled_ready_time_m			= f.scheduled_ready_time_m,
+scheduled_paid_time_m			= f.scheduled_paid_time_m,
+scheduled_paid_time_activity_m	= f.scheduled_paid_time_activity_m,
+scheduled_paid_time_absence_m	= f.scheduled_paid_time_absence_m,
+business_unit_id				= f.business_unit_id,
+datasource_id					= f.datasource_id,
+insert_date						= f.insert_date,
+update_date						= f.update_date,
+datasource_update_date			= f.datasource_update_date,
+overtime_id						= f.overtime_id
 FROM [mart].[fact_schedule_old] f
 INNER JOIN mart.bridge_time_zone btz 
 	ON f.shift_startdate_id=btz.date_id 
@@ -596,9 +666,27 @@ INNER JOIN mart.bridge_time_zone btz
 INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
-INNER JOIN #intervals di
-	ON	dateadd(hour,DATEPART(hour,f.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,f.shift_endtime),@date_min) >= di.interval_start
-	AND	dateadd(hour,DATEPART(hour,f.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,f.shift_endtime),@date_min) < di.interval_end
+OPTION (MAXDOP 1);
+
+--check tempdb after
+DECLARE @io_statistics_string nvarchar(2000)
+Declare @nl Char(2)
+Set @nl  = char(13) + char(10)
+
+PRINT 'tempdb I/O stats:'
+SELECT @io_statistics_string =
+	'seconds for fact_schedule insert: ' + cast(datediff(SS,@time_Start,getdate()) as varchar(10)) + @nl +
+	'num_of_reads: ' + cast(num_of_reads-@num_of_reads as varchar(20))+@nl +
+	'num_of_bytes_read: ' + cast(num_of_bytes_read-@num_of_bytes_read as varchar(20))+@nl +
+	'io_stall_read_ms: ' + cast(io_stall_read_ms-@io_stall_read_ms as varchar(20))+@nl +
+	'avg_io_stall_read_ms: ' + cast(cast((io_stall_read_ms-@io_stall_read_ms)/(1.0+num_of_reads-@num_of_reads) as numeric(10,1)) as varchar(20)) +@nl +
+	'num_of_writes: ' + cast(num_of_writes-@num_of_writes as varchar(20)) +@nl +
+	'num_of_bytes_written: ' + cast(num_of_bytes_written-@num_of_bytes_written as varchar(20)) + @nl +
+	'io_stall_write_ms: ' + cast(io_stall_write_ms-@io_stall_write_ms as varchar(20)) + @nl +
+	'avg_io_stall_write_ms: ' + cast(cast((io_stall_write_ms-@io_stall_write_ms)/(1.0+num_of_writes-@num_of_writes) as numeric(10,1)) as varchar(20)) + @nl
+FROM sys.dm_io_virtual_file_stats(DB_ID('tempdb'), 1)
+PRINT @io_statistics_string
+
 GO
 PRINT 'new data into: [mart].[fact_schedule]. Done!'
 GO
@@ -783,6 +871,8 @@ INNER JOIN mart.bridge_time_zone btz
 INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
+OPTION (MAXDOP 1)
+
 GO
 PRINT '[mart].[fact_schedule_deviation]. Done!'
 GO
@@ -942,6 +1032,7 @@ GROUP BY
 	btz.local_date_id,
 	f.person_id,
 	f.scenario_id
+OPTION (MAXDOP 1)
 GO
 PRINT '[mart].[fact_schedule_day_count]. Done!'
 GO
