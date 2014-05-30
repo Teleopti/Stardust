@@ -83,17 +83,19 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 		 self.MinTimePerWeekMinutesSetting = data.MinWorkTimePerWeekMinutes;
 	};
 
-	this.LoadWeeklyWorkTimeSettings = function (complete) {
-		 if (self.DayViewModels == undefined || self.DayViewModels == null || self.DayViewModels()[0].Date == undefined) {
-		 	 complete();
-		    return null;
-		 }
-		 return ajaxForDate(self, {
-		 	 url: "Preference/WeeklyWorkTimeSetting",
-		 	 type: 'GET',
-		 	 data: { Date: self.DayViewModels()[0].Date },
-		 	 date: self.DayViewModels()[0].Date,
-		 	 success: self.readWeeklyWorkTimeSettings(data),
+	this.LoadWeeklyWorkTimeSettings = function(complete) {
+		if (self.DayViewModels == undefined || self.DayViewModels == null || self.DayViewModels()[0].Date == undefined) {
+			complete();
+			return null;
+		}
+		return ajaxForDate.Ajax({
+			url: "Preference/WeeklyWorkTimeSetting",
+			dataType: "json",
+			type: 'GET',
+			data: {Date: self.DayViewModels()[0].Date },
+			success:function(data) {
+				self.readWeeklyWorkTimeSettings(data);
+			} ,
 		 	 complete: complete,
 		 	 statusCode404: function () { }
 		 });

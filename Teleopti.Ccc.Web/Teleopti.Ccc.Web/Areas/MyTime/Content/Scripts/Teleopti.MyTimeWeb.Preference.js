@@ -276,7 +276,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 				
 	    $('li[data-mytime-week]').each(function (index, element) {
-	    	weekViewModels[index] = new Teleopti.MyTimeWeb.Preference.WeekViewModel(_ajaxForDate);
+	    	weekViewModels[index] = new Teleopti.MyTimeWeb.Preference.WeekViewModel(ajax);
 	    	ko.applyBindings(weekViewModels[index], element);
 	    });
 
@@ -325,7 +325,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 							day.LoadFeedback();
 						});
 						$.each(weekViewModels, function (index, week) {
-							week.LoadWeeklyWorkTimeSettings(ajax);
+							 week.LoadWeeklyWorkTimeSettings();
+							console.log(week.MinTimePerWeekMinutesSetting);
+							console.log(week.MaxTimePerWeekMinutesSetting);
 						});
 
 						selectionViewModel.enableDateSelection();
