@@ -587,23 +587,26 @@ UPDATE STATISTICS mart.fact_schedule_old  --1:21 min
 UPDATE STATISTICS mart.fact_schedule
 */
 --check tempdb before
-DECLARE @time_Start datetime
-DECLARE @num_of_bytes_written bigint
-DECLARE @num_of_bytes_read bigint
-DECLARE @io_stall_read_ms bigint
-DECLARE @io_stall_write_ms bigint
-DECLARE @num_of_writes bigint
-DECLARE @num_of_reads bigint
+IF  (SELECT CONVERT(NVARCHAR(200), SERVERPROPERTY('edition'))) <> 'SQL Azure'
+BEGIN
+	DECLARE @time_Start datetime
+	DECLARE @num_of_bytes_written bigint
+	DECLARE @num_of_bytes_read bigint
+	DECLARE @io_stall_read_ms bigint
+	DECLARE @io_stall_write_ms bigint
+	DECLARE @num_of_writes bigint
+	DECLARE @num_of_reads bigint
 
-SELECT
-	@time_Start=getdate(),
-	@num_of_bytes_written=num_of_bytes_written,
-	@num_of_bytes_read=num_of_bytes_read,
-	@io_stall_write_ms=io_stall_write_ms,
-	@io_stall_read_ms=io_stall_read_ms,
-	@num_of_reads=num_of_reads,
-	@num_of_writes=num_of_writes
-FROM sys.dm_io_virtual_file_stats(DB_ID('tempdb'), 1)
+	SELECT
+		@time_Start=getdate(),
+		@num_of_bytes_written=num_of_bytes_written,
+		@num_of_bytes_read=num_of_bytes_read,
+		@io_stall_write_ms=io_stall_write_ms,
+		@io_stall_read_ms=io_stall_read_ms,
+		@num_of_reads=num_of_reads,
+		@num_of_writes=num_of_writes
+	FROM sys.dm_io_virtual_file_stats(DB_ID('tempdb'), 1)
+END
 
 --INSERT DATA FROM OLD FACT_SCHEDULE
 DECLARE @IntervalLengthMinutes smallint
@@ -673,19 +676,22 @@ DECLARE @io_statistics_string nvarchar(2000)
 Declare @nl Char(2)
 Set @nl  = char(13) + char(10)
 
-PRINT 'tempdb I/O stats:'
-SELECT @io_statistics_string =
-	'seconds for fact_schedule insert: ' + cast(datediff(SS,@time_Start,getdate()) as varchar(10)) + @nl +
-	'num_of_reads: ' + cast(num_of_reads-@num_of_reads as varchar(20))+@nl +
-	'num_of_bytes_read: ' + cast(num_of_bytes_read-@num_of_bytes_read as varchar(20))+@nl +
-	'io_stall_read_ms: ' + cast(io_stall_read_ms-@io_stall_read_ms as varchar(20))+@nl +
-	'avg_io_stall_read_ms: ' + cast(cast((io_stall_read_ms-@io_stall_read_ms)/(1.0+num_of_reads-@num_of_reads) as numeric(10,1)) as varchar(20)) +@nl +
-	'num_of_writes: ' + cast(num_of_writes-@num_of_writes as varchar(20)) +@nl +
-	'num_of_bytes_written: ' + cast(num_of_bytes_written-@num_of_bytes_written as varchar(20)) + @nl +
-	'io_stall_write_ms: ' + cast(io_stall_write_ms-@io_stall_write_ms as varchar(20)) + @nl +
-	'avg_io_stall_write_ms: ' + cast(cast((io_stall_write_ms-@io_stall_write_ms)/(1.0+num_of_writes-@num_of_writes) as numeric(10,1)) as varchar(20)) + @nl
-FROM sys.dm_io_virtual_file_stats(DB_ID('tempdb'), 1)
-PRINT @io_statistics_string
+IF  (SELECT CONVERT(NVARCHAR(200), SERVERPROPERTY('edition'))) <> 'SQL Azure'
+BEGIN
+	PRINT 'tempdb I/O stats:'
+	SELECT @io_statistics_string =
+		'seconds for fact_schedule insert: ' + cast(datediff(SS,@time_Start,getdate()) as varchar(10)) + @nl +
+		'num_of_reads: ' + cast(num_of_reads-@num_of_reads as varchar(20))+@nl +
+		'num_of_bytes_read: ' + cast(num_of_bytes_read-@num_of_bytes_read as varchar(20))+@nl +
+		'io_stall_read_ms: ' + cast(io_stall_read_ms-@io_stall_read_ms as varchar(20))+@nl +
+		'avg_io_stall_read_ms: ' + cast(cast((io_stall_read_ms-@io_stall_read_ms)/(1.0+num_of_reads-@num_of_reads) as numeric(10,1)) as varchar(20)) +@nl +
+		'num_of_writes: ' + cast(num_of_writes-@num_of_writes as varchar(20)) +@nl +
+		'num_of_bytes_written: ' + cast(num_of_bytes_written-@num_of_bytes_written as varchar(20)) + @nl +
+		'io_stall_write_ms: ' + cast(io_stall_write_ms-@io_stall_write_ms as varchar(20)) + @nl +
+		'avg_io_stall_write_ms: ' + cast(cast((io_stall_write_ms-@io_stall_write_ms)/(1.0+num_of_writes-@num_of_writes) as numeric(10,1)) as varchar(20)) + @nl
+	FROM sys.dm_io_virtual_file_stats(DB_ID('tempdb'), 1)
+	PRINT @io_statistics_string
+END
 
 GO
 PRINT 'new data into: [mart].[fact_schedule]. Done!'
