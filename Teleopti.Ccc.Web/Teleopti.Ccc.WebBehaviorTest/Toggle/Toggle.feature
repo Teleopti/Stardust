@@ -8,19 +8,17 @@ Scenario: Only run featuretest if a certain feature is enabled using in process
 	When I query inprocess toggle service for 'EnabledFeature'
 	Then I should get 'true' back
 
-@OnlyRunIfDisabled('DisabledFeature')
+@OnlyRunIfDisabled('EnabledFeature')
 Scenario: Only run featuretest if a certain feature is disabled using in process
-	When I query inprocess toggle service for 'DisabledFeature'
+	When I query inprocess toggle service for 'EnabledFeature'
 	Then I should get 'false' back
 
-	@OnlyRunIfEnabled('EnabledFeature')
+@OnlyRunIfEnabled('EnabledFeature')
 Scenario: Only run featuretest if a certain feature is enabled using out of process
 	When I query outofprocess toggle service for 'EnabledFeature'
 	Then I should get 'true' back
 
-@OnlyRunIfDisabled('DisabledFeature')
+@OnlyRunIfDisabled('EnabledFeature')
 Scenario: Only run featuretest if a certain feature is disabled using out of process
-	When I query outofprocess toggle service for 'DisabledFeature'
+	When I query outofprocess toggle service for 'EnabledFeature'
 	Then I should get 'false' back
-
-

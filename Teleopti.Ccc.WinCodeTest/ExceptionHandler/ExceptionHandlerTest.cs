@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using NUnit.Framework;
@@ -148,8 +147,7 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 		{
 			var features = new Dictionary<Toggles, bool>
 			               {
-				               {Toggles.EnabledFeature, true},
-				               {Toggles.DisabledFeature, false},
+				               {Toggles.EnabledFeature, true}
 			               };
 			var allToggleFeatures = new ActiveTogglesStub(features);
 
@@ -164,15 +162,14 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 		{
 			var features = new Dictionary<Toggles, bool>
 			               {
-				               {Toggles.EnabledFeature, false},
-							   {Toggles.DisabledFeature, false}
+				               {Toggles.EnabledFeature, false}
 			               };
 			var allToggleFeatures = new ActiveTogglesStub(features);
 
 			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException("Any Exception will do", 123), "", _mapi, _fileWriter, allToggleFeatures);
 			var expectedString = model.CompleteStackAndAssemblyText();
 
-			expectedString.Should().Contain(string.Format("{0} = {1}", Toggles.DisabledFeature, features[Toggles.DisabledFeature]));
+			expectedString.Should().Contain(string.Format("{0} = {1}", Toggles.EnabledFeature, features[Toggles.EnabledFeature]));
 		}
 
 	    [Test]

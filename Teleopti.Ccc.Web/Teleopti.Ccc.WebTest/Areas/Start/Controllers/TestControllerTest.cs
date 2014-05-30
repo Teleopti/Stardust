@@ -2,7 +2,6 @@
 using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -72,11 +71,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void CheckFeature_WhenToggleIsDisabled_ShouldReturnFalse()
 		{
-			const string toggle = "DisabledFeature";
+			const string toggle = "EnabledFeature";
 			var toggleStub = MockRepository.GenerateMock<IToggleManager>();
 
 
-			toggleStub.Expect(t => t.IsEnabled(Toggles.DisabledFeature)).Return(false);
+			toggleStub.Expect(t => t.IsEnabled(Toggles.EnabledFeature)).Return(false);
 
 			using (var target = new TestController(null, null, null, null, null, null, null, toggleStub))
 			{
@@ -89,11 +88,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void CheckFeature_WhenToggleIsEnabled_ShouldReturnTrue()
 		{
-			const string toggle = "DisabledFeature";
+			const string toggle = "EnabledFeature";
 			var toggleStub = MockRepository.GenerateMock<IToggleManager>();
 
 
-			toggleStub.Expect(t => t.IsEnabled(Toggles.DisabledFeature)).Return(true);
+			toggleStub.Expect(t => t.IsEnabled(Toggles.EnabledFeature)).Return(true);
 
 			using (var target = new TestController(null, null, null, null, null, null, null, toggleStub))
 			{

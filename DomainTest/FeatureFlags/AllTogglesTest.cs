@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.FeatureFlags
 
 		private static IEnumerable<Toggles> allTogglesThatShouldFollowingNamingConventions()
 		{
-			return new AllToggles().Toggles().Except(new[] {Toggles.DisabledFeature, Toggles.EnabledFeature});
+			return new AllToggles().Toggles().Except(new[] {Toggles.EnabledFeature});
 		}
 
 		private static bool namedModuleNamePbiSeparatedByUnderscore(Toggles toggle) 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.FeatureFlags
 				{
 					return false;
 				}
-				return parts.Last().Length==5;					
+				return parts.Last().Length==5;
 		}
 
 	}
