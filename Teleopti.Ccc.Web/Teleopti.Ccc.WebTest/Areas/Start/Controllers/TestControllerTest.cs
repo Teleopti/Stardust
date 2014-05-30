@@ -71,11 +71,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void CheckFeature_WhenToggleIsDisabled_ShouldReturnFalse()
 		{
-			const string toggle = "EnabledFeature";
+			const string toggle = "TestToggle";
 			var toggleStub = MockRepository.GenerateMock<IToggleManager>();
 
 
-			toggleStub.Expect(t => t.IsEnabled(Toggles.EnabledFeature)).Return(false);
+			toggleStub.Expect(t => t.IsEnabled(Toggles.TestToggle)).Return(false);
 
 			using (var target = new TestController(null, null, null, null, null, null, null, toggleStub))
 			{
@@ -88,11 +88,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void CheckFeature_WhenToggleIsEnabled_ShouldReturnTrue()
 		{
-			const string toggle = "EnabledFeature";
+			const string toggle = "TestToggle";
 			var toggleStub = MockRepository.GenerateMock<IToggleManager>();
 
 
-			toggleStub.Expect(t => t.IsEnabled(Toggles.EnabledFeature)).Return(true);
+			toggleStub.Expect(t => t.IsEnabled(Toggles.TestToggle)).Return(true);
 
 			using (var target = new TestController(null, null, null, null, null, null, null, toggleStub))
 			{

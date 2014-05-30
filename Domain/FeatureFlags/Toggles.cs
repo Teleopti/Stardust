@@ -3,7 +3,7 @@
 	public enum Toggles
 	{
 		//Don't remove this one - used in tests
-		EnabledFeature,
+		TestToggle,
 		//////
 
 		Scheduler_WeeklyRestRuleSolver_27108,

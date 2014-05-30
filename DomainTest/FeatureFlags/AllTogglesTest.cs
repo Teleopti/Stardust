@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.FeatureFlags
 		{
 			var target = new AllToggles();
 			target.Toggles()
-				.Should().Contain(Toggles.EnabledFeature);
+				.Should().Contain(Toggles.TestToggle);
 		}
 
 		[Test]
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.FeatureFlags
 
 		private static IEnumerable<Toggles> allTogglesThatShouldFollowingNamingConventions()
 		{
-			return new AllToggles().Toggles().Except(new[] {Toggles.EnabledFeature});
+			return new AllToggles().Toggles().Except(new[] {Toggles.TestToggle});
 		}
 
 		private static bool namedModuleNamePbiSeparatedByUnderscore(Toggles toggle) 

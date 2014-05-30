@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Toggle
 		{
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
 			var target = new ToggleHandlerController(toggleManager);
-			toggleManager.Expect(x => x.IsEnabled(Toggles.EnabledFeature)).Return(true);
+			toggleManager.Expect(x => x.IsEnabled(Toggles.TestToggle)).Return(true);
 
-			target.IsEnabled(Toggles.EnabledFeature)
+			target.IsEnabled(Toggles.TestToggle)
 				.Should().Be.True();
 		}
 
@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Toggle
 		{
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
 			var target = new ToggleHandlerController(toggleManager);
-			toggleManager.Expect(x => x.IsEnabled(Toggles.EnabledFeature)).Return(false);
+			toggleManager.Expect(x => x.IsEnabled(Toggles.TestToggle)).Return(false);
 
-			target.IsEnabled(Toggles.EnabledFeature)
+			target.IsEnabled(Toggles.TestToggle)
 				.Should().Be.False();
 		}
 	}

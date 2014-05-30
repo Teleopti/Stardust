@@ -17,14 +17,14 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var tempFile = Path.GetTempFileName();
 			try
 			{
-				File.WriteAllLines(tempFile, new[] { "EnabledFeature=false" });
+				File.WriteAllLines(tempFile, new[] { "TestToggle=false" });
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
 				containerBuilder.Register(_ => createLicenseActivitor());
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.EnabledFeature)
+					toggleChecker.IsEnabled(Toggles.TestToggle)
 						.Should().Be.EqualTo(DisabledFeatureShouldBe);
 				}
 			}
@@ -40,14 +40,14 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var tempFile = Path.GetTempFileName();
 			try
 			{
-				File.WriteAllLines(tempFile, new[] { "EnabledFeature=true" });
+				File.WriteAllLines(tempFile, new[] { "TestToggle=true" });
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
 				containerBuilder.Register(_ => createLicenseActivitor());
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.EnabledFeature)
+					toggleChecker.IsEnabled(Toggles.TestToggle)
 						.Should().Be.EqualTo(EnabledFeatureShouldBe);
 				}
 			}
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.EnabledFeature)
+					toggleChecker.IsEnabled(Toggles.TestToggle)
 						.Should().Be.EqualTo(UndefinedFeatureShouldBe);
 				}
 			}
@@ -86,14 +86,14 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var tempFile = Path.GetTempFileName();
 			try
 			{
-				File.WriteAllLines(tempFile, new[] { "EnabledFeature.license.name=" + ToggleNetModule.RcLicenseName });
+				File.WriteAllLines(tempFile, new[] { "TestToggle.license.name=" + ToggleNetModule.RcLicenseName });
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
 				containerBuilder.Register(_ => createLicenseActivitor());
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.EnabledFeature)
+					toggleChecker.IsEnabled(Toggles.TestToggle)
 						.Should().Be.EqualTo(RcFeatureShouldBe);
 				}
 			}
@@ -109,14 +109,14 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var tempFile = Path.GetTempFileName();
 			try
 			{
-				File.WriteAllLines(tempFile, new[] { "EnabledFeature.license.name=" + ToggleNetModule.RcLicenseName.ToUpper()});
+				File.WriteAllLines(tempFile, new[] { "TestToggle.license.name=" + ToggleNetModule.RcLicenseName.ToUpper()});
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
 				containerBuilder.Register(_ => createLicenseActivitor());
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.EnabledFeature)
+					toggleChecker.IsEnabled(Toggles.TestToggle)
 						.Should().Be.EqualTo(RcFeatureShouldBe);
 				}
 			}
@@ -132,14 +132,14 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var tempFile = Path.GetTempFileName();
 			try
 			{
-				File.WriteAllLines(tempFile, new[] { "EnabledFeature.license.name  =	 " + ToggleNetModule.RcLicenseName.ToUpper() + "		"});
+				File.WriteAllLines(tempFile, new[] { "TestToggle.license.name  =	 " + ToggleNetModule.RcLicenseName.ToUpper() + "		"});
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
 				containerBuilder.Register(_ => createLicenseActivitor());
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.EnabledFeature)
+					toggleChecker.IsEnabled(Toggles.TestToggle)
 						.Should().Be.EqualTo(RcFeatureShouldBe);
 				}
 			}

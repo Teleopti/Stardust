@@ -147,14 +147,14 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 		{
 			var features = new Dictionary<Toggles, bool>
 			               {
-				               {Toggles.EnabledFeature, true}
+				               {Toggles.TestToggle, true}
 			               };
 			var allToggleFeatures = new ActiveTogglesStub(features);
 
 			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException("Any Exception will do", 123), "", _mapi, _fileWriter, allToggleFeatures);
 			var expectedString = model.CompleteStackAndAssemblyText();
 
-			expectedString.Should().Contain(string.Format("{0} = {1}", Toggles.EnabledFeature, features[Toggles.EnabledFeature]));
+			expectedString.Should().Contain(string.Format("{0} = {1}", Toggles.TestToggle, features[Toggles.TestToggle]));
 		}
 
 		[Test]
@@ -162,14 +162,14 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 		{
 			var features = new Dictionary<Toggles, bool>
 			               {
-				               {Toggles.EnabledFeature, false}
+				               {Toggles.TestToggle, false}
 			               };
 			var allToggleFeatures = new ActiveTogglesStub(features);
 
 			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException("Any Exception will do", 123), "", _mapi, _fileWriter, allToggleFeatures);
 			var expectedString = model.CompleteStackAndAssemblyText();
 
-			expectedString.Should().Contain(string.Format("{0} = {1}", Toggles.EnabledFeature, features[Toggles.EnabledFeature]));
+			expectedString.Should().Contain(string.Format("{0} = {1}", Toggles.TestToggle, features[Toggles.TestToggle]));
 		}
 
 	    [Test]

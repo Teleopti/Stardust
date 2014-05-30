@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var tempFile = Path.GetTempFileName();
 			try
 			{
-				File.WriteAllLines(tempFile, new[] { "EnabledFeature=license"});
+				File.WriteAllLines(tempFile, new[] { "TestToggle=license"});
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
 				containerBuilder.Register(_ => MockRepository.GenerateMock<ILicenseActivator>());
