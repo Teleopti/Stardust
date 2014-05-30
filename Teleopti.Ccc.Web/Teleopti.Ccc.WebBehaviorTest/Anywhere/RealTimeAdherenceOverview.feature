@@ -523,7 +523,7 @@ Scenario: Should be able to see all agents of the team with or without state upd
 		| Next activity            | Lunch            |
 		| Next activity start time | 2014-01-21 13:00 |
 		| Alarm                    | Not adhering     |
-		| Alarm Time               | 2014-01-21 12:30 |
+		| Alarm Time               | 0:15:00 |
 		| Alarm Color              | Red              |
 		| Time in state	| 0:15:00 |
 	And I should see real time agent details for 'Ashley Andeen'
@@ -534,7 +534,7 @@ Scenario: Should be able to see all agents of the team with or without state upd
 		| Next activity		| Lunch		|
 		| Next activity start time	| 2014-01-21 13:00	|
 		| Alarm	| Adhering	|
-		| Alarm Time	| 2014-01-21 12:30 |
+		| Alarm Time	| 0:15:00 |
 		| Alarm Color              | Green              |
 		| Time in state	| 0:15:00 |
 	And I should see real time agent name for 'John Smith'
