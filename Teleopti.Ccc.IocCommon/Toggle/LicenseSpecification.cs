@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		{
 			if (!parameters.ContainsKey(NameKey))
 			{
-				throw new InvalidSpecificationParameterException(string.Format("Parameter '{0}' must be set for toggle '{1}'!", NameKey, toggleName));				
+				throw new InvalidSpecificationParameterException(string.Format("Parameter '{0}' must be set for toggle '{1}'!", NameKey, toggleName));
 			}
 		}
 	}

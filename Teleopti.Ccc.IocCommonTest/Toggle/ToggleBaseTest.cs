@@ -126,6 +126,29 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			}
 		}
 
+		[Test]
+		public void RcFeatureInFileUntrimmed()
+		{
+			var tempFile = Path.GetTempFileName();
+			try
+			{
+				File.WriteAllLines(tempFile, new[] { "EnabledFeature.license.name  =	 " + ToggleNetModule.RcLicenseName.ToUpper() + "		"});
+				var containerBuilder = new ContainerBuilder();
+				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
+				containerBuilder.Register(_ => createLicenseActivitor());
+				using (var container = containerBuilder.Build())
+				{
+					var toggleChecker = container.Resolve<IToggleManager>();
+					toggleChecker.IsEnabled(Toggles.EnabledFeature)
+						.Should().Be.EqualTo(RcFeatureShouldBe);
+				}
+			}
+			finally
+			{
+				File.Delete(tempFile);
+			}
+		}
+
 		protected abstract bool UndefinedFeatureShouldBe { get; }
 		protected abstract bool EnabledFeatureShouldBe { get; }
 		protected abstract bool DisabledFeatureShouldBe { get; }
