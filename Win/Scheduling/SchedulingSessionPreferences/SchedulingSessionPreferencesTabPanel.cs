@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.GroupPageCreator;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private IEnumerable<IScheduleTag> _scheduleTags;
     	private ISchedulerGroupPagesProvider _groupPagesProvider;
         private GroupPageLight _singleAgentEntry;
-	    private MaxSeatsFeatureOptions _maxSeatsFeatureOptions;
 
 	    public SchedulingSessionPreferencesTabPanel()
         {
