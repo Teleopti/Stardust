@@ -16,6 +16,7 @@
 ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.config,BuildArtifacts\Web.Root.Web.config
 ..\..\..\Teleopti.Ccc.Web.AuthenticationBridge\Web.config,BuildArtifacts\Web.AuthenticationBridge.Web.config
 ..\..\..\Teleopti.Ccc.Web.WindowsIdentityProvider\Web.config,BuildArtifacts\Web.WindowsIdentityProvider.Web.config
+..\..\..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal.AnalyzerProxy\app.config,BuildArtifacts\Teleopti.Analytics.Portal.AnalyzerProxy.App.config
 c:\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 
 
