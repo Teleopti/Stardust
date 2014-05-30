@@ -14,7 +14,8 @@
 				that.Name = name,
     			that.State = data.State;
 				that.StateStart = data.StateStart ? moment.utc(data.StateStart).add(offset, 'minutes').format(resources.DateTimeFormatForMoment): '';
-    			that.NextActivity = data.NextActivity;
+				that.Activity = data.Activity;
+				that.NextActivity = data.NextActivity;
     			that.NextActivityStartTime = data.NextActivityStartTime ? (moment.utc(data.NextActivityStartTime).add(offset, 'minutes').format(resources.TimeFormatForMoment)) : '';
     			that.Alarm = data.Alarm;
     			that.AlarmColor = 'rgba('+that.hexToRgb(data.AlarmColor) + ', 0.6)';
