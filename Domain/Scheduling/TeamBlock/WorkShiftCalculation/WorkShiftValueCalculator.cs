@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				{
 					var valueForThisPeriod = _workShiftPeriodValueCalculator.PeriodValue(currentStaffPeriod, currentResourceInMinutes,
 						periodValueCalculationParameters.UseMinimumPersons, periodValueCalculationParameters.UseMaximumPersons);
-					if (_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419))
+					if (_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419) && periodValueCalculationParameters.HasMaxSeatSkill )
 					{
 						bool maxSeatReached = false;
 						var maxSeatsPerIntervalDictionary = periodValueCalculationParameters.MaxSeatInfoPerInterval;

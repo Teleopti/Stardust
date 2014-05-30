@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private PeriodValueCalculationParameters _periodValueCalculationParameters;
 		private IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		private IToggleManager _toggleManager;
+		private IMaxSeatSkillAggregator _maxSeatSkillAggregator;
 
 		[SetUp]
 		public void Setup()
@@ -55,14 +57,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_activityIntervalDataCreator = _mocks.StrictMock<IActivityIntervalDataCreator>();
 			_maxSeatInformationGeneratorBasedOnIntervals = _mocks.StrictMock<IMaxSeatInformationGeneratorBasedOnIntervals>();
 			_toggleManager = _mocks.StrictMock<IToggleManager>();
-
+			_maxSeatSkillAggregator = _mocks.StrictMock<IMaxSeatSkillAggregator>();
 			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _workShiftFilterService, _sameOpenHoursInTeamBlockSpecification,
 													 _workShiftSelector,
 													 _schedulingResultStateHolder,
-													 _activityIntervalDataCreator,_maxSeatInformationGeneratorBasedOnIntervals ,_toggleManager );
+													 _activityIntervalDataCreator,_maxSeatInformationGeneratorBasedOnIntervals ,_toggleManager,_maxSeatSkillAggregator );
 			_periodValueCalculationParameters = new PeriodValueCalculationParameters(_schedulingOptions.WorkShiftLengthHintOption,
 																		  _schedulingOptions.UseMinimumPersons,
-																		  _schedulingOptions.UseMaximumPersons,MaxSeatsFeatureOptions.DoNotConsiderMaxSeats);
+																		  _schedulingOptions.UseMaximumPersons,MaxSeatsFeatureOptions.DoNotConsiderMaxSeats,false);
 		}
 
 		[Test]
@@ -117,8 +119,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo);
-				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers);
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice() ;
+				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Twice();
 				Expect.Call(_restrictionAggregator.Aggregate(_dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
 				Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
@@ -130,6 +132,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																		  , TimeZoneGuard.Instance.TimeZone)).IgnoreArguments()
 					  .Return(shiftProjectionCache);
 				Expect.Call(_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419)).Return(false);
+				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_groupMembers,
+					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill>());
 			}
 			using (_mocks.Playback())
 			{
@@ -152,8 +156,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo);
-				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers);
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice() ;
+				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Twice();
 				Expect.Call(_restrictionAggregator.Aggregate(_dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
 				Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
@@ -167,6 +171,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419)).Return(true);
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, _dateOnly,
 					_schedulingResultStateHolder,TimeZoneGuard.Instance.TimeZone )).Return(new Dictionary<DateTime, bool>());
+				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_groupMembers,
+					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill>{SkillFactory.CreateSkill("")});
 			}
 			using (_mocks.Playback())
 			{
