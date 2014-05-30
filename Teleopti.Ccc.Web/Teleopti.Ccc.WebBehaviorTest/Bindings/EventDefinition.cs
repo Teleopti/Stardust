@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				TestDataSetup.SetupFakeState();
 				TestDataSetup.CreateMinimumTestData();
 
-				TestSiteConfigurationSetup.RecycleApplication();
 				CreateData();
 
 				TestDataSetup.BackupCcc7Data();
