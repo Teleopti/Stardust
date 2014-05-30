@@ -9,6 +9,10 @@ SET FEATURETOGGLE=%~3
 set configuration=%4
 set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 
+if "%configuration%"=="" (
+set configuration=Debug
+)
+
 if "%1" == "" (
 SET CCC7DB=Infratest_CCC7
 )
@@ -39,11 +43,9 @@ IF ERRORLEVEL 3 SET licensefile=Teleopti_Prod.xml
 )
 
 ::copy licensefile to webbehaviortest
-copy /y %rootdir%\LicenseFiles\%licensefile% %rootdir%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\license.xml
-
-if "%configuration%"=="" (
-set configuration=Debug
-)
+copy /y "%rootdir%\LicenseFiles\%licensefile%" "%rootdir%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\license.xml"
+::ugly - if compiled, copy to bin folder (fix this!)
+if exist "%rootdir%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\license.xml" copy /y "%rootdir%\LicenseFiles\%licensefile%" "%rootdir%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\license.xml"
 
 SET MySettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings.txt
 
