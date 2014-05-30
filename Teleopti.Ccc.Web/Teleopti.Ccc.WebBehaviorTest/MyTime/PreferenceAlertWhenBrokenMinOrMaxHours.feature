@@ -48,8 +48,15 @@ Then I should be alerted for the min hours
 @ignore
 Scenario: Should not alert when neither min nor max hours are broken
 Given I am an agent
-And I have a workflow control set with min hours '28'
-And I have a contract with max hours '60'
+And I have a contract with:
+         | Field              | Value |
+         | max hours per week | 80    |
+And I have a workflow control set with
+	| Field                      | Value              |
+	| Name                       | Published schedule |
+	| Schedule published to date | 2040-06-24         |
+	| Min time per week          | 60                 |
+And  I have a shift bag with start times 8 to 10 and end times 15 to 20
+And I have a preference with work time limitation between 7 and 10
 When I view preferences
-And I insert preferences for a week with work time '6' to '10' hours per day
 Then I should not be alerted

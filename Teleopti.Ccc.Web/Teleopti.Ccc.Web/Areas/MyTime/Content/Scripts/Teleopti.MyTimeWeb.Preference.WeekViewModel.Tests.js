@@ -48,8 +48,8 @@ $(document).ready(function () {
 		});
 
 		expect(2);
-		equal(weekViewModel.MaxTimePerWeekMinutesSetting, 360);
-		equal(weekViewModel.MinTimePerWeekMinutesSetting, 120);
+		equal(weekViewModel.MaxTimePerWeekMinutesSetting(), 360);
+		equal(weekViewModel.MinTimePerWeekMinutesSetting(), 120);
 	});
 
 });

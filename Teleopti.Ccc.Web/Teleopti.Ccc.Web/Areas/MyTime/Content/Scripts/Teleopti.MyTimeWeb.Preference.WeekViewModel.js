@@ -20,8 +20,8 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 	var self = this;
 
 	this.DayViewModels = ko.observableArray();
-	this.MaxTimePerWeekMinutesSetting = 0;
-	this.MinTimePerWeekMinutesSetting = 0;
+	this.MaxTimePerWeekMinutesSetting = ko.observable(0);
+	this.MinTimePerWeekMinutesSetting = ko.observable(0);
 
 	self.PossibleResultWeeklyContractTimeMinutesLower = ko.computed(function() {
 		var sum = 0;
@@ -71,16 +71,16 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 	});
 
 	self.IsMinHoursBroken = ko.computed(function() {
-		 return self.PossibleResultWeeklyContractTimeMinutesLower() > self.MaxTimePerWeekMinutesSetting;
+		 return self.PossibleResultWeeklyContractTimeMinutesLower() > self.MaxTimePerWeekMinutesSetting();
 	});
 
 	self.IsMaxHoursBroken = ko.computed(function () {
-		 return self.PossibleResultWeeklyContractTimeMinutesUpper() < self.MinTimePerWeekMinutesSetting;
+		 return self.PossibleResultWeeklyContractTimeMinutesUpper() < self.MinTimePerWeekMinutesSetting();
 	});
 
 	self.readWeeklyWorkTimeSettings = function(data) {
-		 self.MaxTimePerWeekMinutesSetting = data.MaxWorkTimePerWeekMinutes;
-		 self.MinTimePerWeekMinutesSetting = data.MinWorkTimePerWeekMinutes;
+		 self.MaxTimePerWeekMinutesSetting(data.MaxWorkTimePerWeekMinutes);
+		 self.MinTimePerWeekMinutesSetting(data.MinWorkTimePerWeekMinutes);
 	};
 
 	this.LoadWeeklyWorkTimeSettings = function(complete) {

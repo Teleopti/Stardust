@@ -26,5 +26,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			 Browser.Interactions.AssertExists(".weekly-work-time-alert");
 		}
 
+		[Then(@"I should not be alerted")]
+		public void ThenIShouldNotBeAlerted()
+		{
+			 Browser.Interactions.AssertNotExists(".max-hours-per-week", ".weekly-work-time-alert");
+		}
+
 	}
 }
