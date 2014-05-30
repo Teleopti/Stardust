@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Globalization;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 
@@ -29,7 +30,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		{
 			var result = target.CreateDatePickerGlobalizationViewModel();
 
-			result.FirstDay.Should().Be.EqualTo(6);
+			// some systems 0, some systems 6 !!
+			result.FirstDay.Should().Be.EqualTo(CultureInfo.GetCultureInfo("ar-SA").DateTimeFormat.FirstDayOfWeek);
 			result.IsRtl.Should().Be.True();
 		}
 		[Test, SetCulture("sv-SE"), SetUICulture("sv-SE")]

@@ -115,8 +115,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		public string AlarmTimeFormatted()
 		{
-			var format = DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern;
-			return DateTime.Parse(AlarmTime).ToString(format);
+			return TimeSpan.Parse(AlarmTime).ToString(@"h\:mm\:ss");
 		}
 
 		public string TimeInStateFormatted()

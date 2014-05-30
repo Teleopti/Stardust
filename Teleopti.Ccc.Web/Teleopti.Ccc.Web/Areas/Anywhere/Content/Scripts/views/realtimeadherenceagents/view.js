@@ -55,6 +55,7 @@
 
 			setInterval(function () {
 				viewModel.refreshTimeInState();
+				viewModel.refreshAlarmTime();
 			}, 1000);
 
 			subscriptions.subscribeAdherence(function (notification) {

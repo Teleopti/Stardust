@@ -37,11 +37,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			                                                                                                 {
 				                                                                                                 PersonId = state.PersonId,
 				                                                                                                 State = state.State,
+																												 StateStart = state.StateStart,
 				                                                                                                 Activity = state.Scheduled,
 				                                                                                                 NextActivity = state.ScheduledNext,
 				                                                                                                 NextActivityStartTime = state.NextStart,
 				                                                                                                 Alarm = state.AlarmName,
-				                                                                                                 AlarmTime = state.AlarmStart,
+				                                                                                                 AlarmStart = state.AlarmStart,
 																												 AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(state.Color))
 			                                                                                                 });
 

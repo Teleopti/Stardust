@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			ErrorAtStartup = null;
 			try
 			{
-				var pathToToggle = Path.Combine(HttpContext.Current.Server.MapPath("~/"), ConfigurationManager.AppSettings["FeatureToggle"]);
+				var pathToToggle = ApplicationStartModule.pathToToggle();
 				var container = _containerConfiguration.Configure(pathToToggle);
 				if (!_testMode)
 				{
@@ -131,6 +131,16 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				log.Error(ex);
 				ErrorAtStartup = ex;
 			}
+		}
+
+		private static string pathToToggle()
+		{
+			return inTestEnvironement() ? "inTest" : Path.Combine(HttpContext.Current.Server.MapPath("~/"), ConfigurationManager.AppSettings["FeatureToggle"]);
+		}
+
+		private static bool inTestEnvironement()
+		{
+			return HttpContext.Current == null;
 		}
 
 		void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
