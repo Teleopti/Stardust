@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			_skillIntervalDataForActivity.Add(_activity, _skillIntervalDatas);
 			_visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
 			_periodValueCalculationParameters = new PeriodValueCalculationParameters(WorkShiftLengthHintOption.AverageWorkTime,
-													 false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,false);
+													 false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,false,new Dictionary<DateTime, bool>());
 		}
 
 

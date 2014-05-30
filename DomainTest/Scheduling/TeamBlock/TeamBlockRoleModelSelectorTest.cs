@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 													 _activityIntervalDataCreator,_maxSeatInformationGeneratorBasedOnIntervals ,_toggleManager,_maxSeatSkillAggregator );
 			_periodValueCalculationParameters = new PeriodValueCalculationParameters(_schedulingOptions.WorkShiftLengthHintOption,
 																		  _schedulingOptions.UseMinimumPersons,
-																		  _schedulingOptions.UseMaximumPersons,MaxSeatsFeatureOptions.DoNotConsiderMaxSeats,false);
+																		  _schedulingOptions.UseMaximumPersons,MaxSeatsFeatureOptions.DoNotConsiderMaxSeats,false, new Dictionary<DateTime, bool>());
 		}
 
 		[Test]
