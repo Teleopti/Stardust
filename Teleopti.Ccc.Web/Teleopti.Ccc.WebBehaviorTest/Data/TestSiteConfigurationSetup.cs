@@ -45,12 +45,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			return new GenericDisposable(() =>
 			{
 				Port = originalPort;
-				Url = new Uri(string.Format("http://localhost:{0}/", Port));
+				Url = new Uri(string.Format("http://localhost:{0}/", originalPort));
 				PortAuthenticationBridge = originalAuthenticationBridgePort;
 				UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
 				PortWindowsIdentityProvider = originalWindowsIdentityProviderPort;
 				WindowsClaimProvider = string.Format("<add identifier=\"urn:Windows\" displayName=\"Windows\" url=\"http://localhost:{0}/\" protocolHandler=\"OpenIdHandler\" />", PortWindowsIdentityProvider);
-				TeleoptiClaimProvider = string.Format("<add identifier=\"urn:Teleopti\" displayName=\"Teleopti application\" url=\"http://localhost:{0}/sso/\" protocolHandler=\"OpenIdHandler\" />", Port);
+				TeleoptiClaimProvider = string.Format("<add identifier=\"urn:Teleopti\" displayName=\"Teleopti application\" url=\"http://localhost:{0}/sso/\" protocolHandler=\"OpenIdHandler\" />", originalPort);
 			});
 		}
 
