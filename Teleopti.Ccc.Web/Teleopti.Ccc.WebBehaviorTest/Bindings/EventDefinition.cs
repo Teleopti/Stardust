@@ -32,12 +32,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 				TestControllerMethods.BeforeTestRun();
 
-				TestSiteConfigurationSetup.RecycleApplication();
-
 				TestDataSetup.CreateDataSource();
 
 				TestDataSetup.SetupFakeState();
 				TestDataSetup.CreateMinimumTestData();
+
+				TestSiteConfigurationSetup.RecycleApplication();
 				CreateData();
 
 				TestDataSetup.BackupCcc7Data();
