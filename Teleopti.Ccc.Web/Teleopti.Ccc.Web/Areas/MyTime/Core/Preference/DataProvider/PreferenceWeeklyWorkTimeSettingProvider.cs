@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		 {
 			  var virtualSchedulePeriod = _virtualSchedulePeriodProvider.VirtualSchedulePeriodForDate(date);
 			 var contract = virtualSchedulePeriod.Contract;
-			 var minTimePerWeekMinutes = _loggedOnUser.CurrentUser().WorkflowControlSet.MinTimePerWeek.TotalMinutes;
+			 var minTimePerWeekMinutes = _loggedOnUser.CurrentUser().WorkflowControlSet != null ? _loggedOnUser.CurrentUser().WorkflowControlSet.MinTimePerWeek.TotalMinutes:0;
 			  
 			 var maxTimePerWeekMinutes = contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
 
