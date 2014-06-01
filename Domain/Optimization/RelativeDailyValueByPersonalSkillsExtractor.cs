@@ -117,13 +117,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private static IList<double> skillStaffPeriodsRelativeDifference(IEnumerable<ISkillIntervalData> skillIntervalDataList, bool considerMinStaffing, bool considerMaxStaffing)
         {
-			if (considerMinStaffing && considerMaxStaffing)
-				return skillIntervalDataList.Select(s => s.RelativeDifferenceBoosted()).ToList();
-			if (considerMinStaffing)
-				return skillIntervalDataList.Select(s => s.RelativeDifferenceMinStaffBoosted()).ToList();
-			if (considerMaxStaffing)
-				return skillIntervalDataList.Select(s => s.RelativeDifferenceMaxStaffBoosted()).ToList();
-			return skillIntervalDataList.Select(s => s.RelativeDifference()).ToList();
+			return skillIntervalDataList.Select(s => s.RelativeDifferenceBoosted()).ToList();
         }
 
         private IEnumerable<ISkill> extractPersonalSkillList(DateOnly scheduleDate)

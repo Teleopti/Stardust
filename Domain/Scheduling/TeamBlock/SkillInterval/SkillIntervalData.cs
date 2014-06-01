@@ -12,9 +12,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 		double? MinimumHeads { get; }
 		double AbsoluteDifference { get; }
 		double RelativeDifference();
-		double RelativeDifferenceMinStaffBoosted();
-		double RelativeDifferenceMaxStaffBoosted();
 		double RelativeDifferenceBoosted();
+		double MinMaxBoostFactorForStandardDeviation { get; set; }
 	}
 
 	public class SkillIntervalData : ISkillIntervalData
@@ -30,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			MinimumHeads = minimumHeads.HasValue && minimumHeads.Value < 0.001 ? null : minimumHeads;
 			MaximumHeads = maximumHeads.HasValue && maximumHeads.Value < 0.001 ? null : maximumHeads;
 			MinMaxBoostFactor = calculateMinMaxBoostFactor();
+			MinMaxBoostFactorForStandardDeviation = calculateMinMaxBoostFactorForStandardDeviationFactor();
 		}
 
 		private double calculateMinMaxBoostFactor()
@@ -45,6 +45,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			{
 				if (CurrentHeads >= MaximumHeads.Value)
 					maxHeadValue = MaximumHeads.Value - (CurrentHeads + 1);
+			}
+			return minHeadValue + maxHeadValue;
+		}
+
+		private double calculateMinMaxBoostFactorForStandardDeviationFactor()
+		{
+			double minHeadValue = 0;
+			double maxHeadValue = 0;
+			if (MinimumHeads.HasValue)
+			{
+				if (CurrentHeads < MinimumHeads.Value)
+					minHeadValue = (MinimumHeads.Value - CurrentHeads);
+			}
+			if (MaximumHeads.HasValue)
+			{
+				if (CurrentHeads >= MaximumHeads.Value)
+					maxHeadValue = MaximumHeads.Value - CurrentHeads;
 			}
 			return minHeadValue + maxHeadValue;
 		}
@@ -71,6 +88,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 
 		public double MinMaxBoostFactor { get; set; }
 
+		public double MinMaxBoostFactorForStandardDeviation { get; set; }
+
 		public TimeSpan Resolution()
 		{
 			return Period.EndDateTime.Subtract(Period.StartDateTime);
@@ -83,37 +102,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			return CurrentDemand / ForecastedDemand * -1;
 		}
 
-		public double RelativeDifferenceMinStaffBoosted()
-		{
-			if (!MinimumHeads.HasValue)
-				return RelativeDifference();
-
-			if (MinimumHeads.Value > 0 && CurrentHeads < MinimumHeads.Value)
-				return ((CurrentHeads - MinimumHeads.Value) * 10000) + RelativeDifference();
-
-			return RelativeDifference();
-
-		}
-
-		public double RelativeDifferenceMaxStaffBoosted()
-		{
-			if (!MaximumHeads.HasValue)
-				return RelativeDifference();
-
-			if (MaximumHeads.Value > 0 && CurrentHeads > MaximumHeads.Value)
-				return ((CurrentHeads - MaximumHeads.Value) * 10000) + RelativeDifference();
-
-			return RelativeDifference();
-		}
-
 		public double RelativeDifferenceBoosted()
 		{
-			double ret = 0;
-			if (MinimumHeads.HasValue && MinimumHeads.Value > 0 && CurrentHeads < MinimumHeads.Value)
-				ret = (CurrentHeads - MinimumHeads.Value) * 10000;
-			if (MaximumHeads.HasValue && MaximumHeads.Value > 0 && CurrentHeads > MaximumHeads.Value)
-				ret += (CurrentHeads - MaximumHeads.Value) * 10000;
-
+			double ret = MinMaxBoostFactorForStandardDeviation * 10000;			
 			return ret + RelativeDifference();
 		}
 	}

@@ -463,6 +463,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.AreEqual(-1, result[3].MinMaxBoostFactor);
 				Assert.AreEqual(0, result[4].MinMaxBoostFactor);
 				Assert.AreEqual(3, result[5].MinMaxBoostFactor);
+
+				Assert.AreEqual(-2, result[0].MinMaxBoostFactorForStandardDeviation);
+				Assert.AreEqual(1, result[1].MinMaxBoostFactorForStandardDeviation);
+				Assert.AreEqual(-1, result[2].MinMaxBoostFactorForStandardDeviation);
+				Assert.AreEqual(1, result[3].MinMaxBoostFactorForStandardDeviation);
+				Assert.AreEqual(1, result[4].MinMaxBoostFactorForStandardDeviation);
+				Assert.AreEqual(3, result[5].MinMaxBoostFactorForStandardDeviation);
             }
         }
 
