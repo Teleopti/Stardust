@@ -26,23 +26,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             ISkillIntervalData skillInterval1 =
                 new SkillIntervalData(
                     new DateTimePeriod(new DateTime(2013, 10, 14, 07, 0, 0, DateTimeKind.Utc),
-                                       new DateTime(2013, 10, 14, 08, 0, 0, DateTimeKind.Utc)), 7, 8, 6, 5, 7);
+                                       new DateTime(2013, 10, 14, 08, 0, 0, DateTimeKind.Utc)), 7, 8, 6, 5, 7); //minmaxboost 0
             ISkillIntervalData skillInterval2 =
                 new SkillIntervalData(
                     new DateTimePeriod(new DateTime(2013, 10, 15, 07, 0, 0, DateTimeKind.Utc),
-                                       new DateTime(2013, 10, 15, 08, 0, 0, DateTimeKind.Utc)), 5, 0, 7, 9, 17);
+                                       new DateTime(2013, 10, 15, 08, 0, 0, DateTimeKind.Utc)), 5, 0, 18, 9, 17); //minmaxboost -2
             ISkillIntervalData skillInterval3 =
                 new SkillIntervalData(
                     new DateTimePeriod(new DateTime(2013, 10, 16, 07, 0, 0, DateTimeKind.Utc),
-                                       new DateTime(2013, 10, 16, 08, 0, 0, DateTimeKind.Utc)), 4, 2, 1, 6, 12);
+                                       new DateTime(2013, 10, 16, 08, 0, 0, DateTimeKind.Utc)), 4, 2, 1, 6, 12); //minmaxboost 5
             IList<ISkillIntervalData> skillIntervalData = new List<ISkillIntervalData>{skillInterval1,skillInterval2,skillInterval3 };
 			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime.TimeOfDay, skillIntervalData, 60,
 		        new DateOnly(2013, 10, 14));
 	        Assert.AreEqual(result.ForecastedDemand, 5);
             Assert.AreEqual(result.CurrentDemand   ,2);
-            Assert.AreEqual(result.CurrentHeads    ,6);
-            Assert.AreEqual(result.MinimumHeads     ,6);
-            Assert.AreEqual(result.MaximumHeads     ,12);
+			Assert.AreEqual(0, result.CurrentHeads);
+			Assert.IsNull(result.MinimumHeads);
+			Assert.IsNull(result.MaximumHeads);
+			Assert.AreEqual(3, result.MinMaxBoostFactor);
         }
 
         [Test]
@@ -64,9 +65,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime.TimeOfDay, skillIntervalData, 60, new DateOnly(2013, 10, 14));
             Assert.AreEqual(result.ForecastedDemand, 5);
             Assert.AreEqual(result.CurrentDemand, 2);
-            Assert.AreEqual(result.CurrentHeads, 6);
-            Assert.AreEqual(result.MinimumHeads, 5.5);
-            Assert.AreEqual(result.MaximumHeads, 12);
+			Assert.AreEqual(0, result.CurrentHeads);
+			Assert.IsNull(result.MinimumHeads);
+			Assert.IsNull(result.MaximumHeads);
         }
 
         [Test]
@@ -88,9 +89,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime.TimeOfDay, skillIntervalData, 60, new DateOnly(2013, 10, 14));
             Assert.AreEqual(result.ForecastedDemand, 5);
             Assert.AreEqual(result.CurrentDemand, 2);
-            Assert.AreEqual(result.CurrentHeads, 6);
-            Assert.AreEqual(result.MinimumHeads, null);
-            Assert.AreEqual(result.MaximumHeads, 12);
+            Assert.AreEqual(0, result.CurrentHeads);
+            Assert.IsNull(result.MinimumHeads);
+			Assert.IsNull(result.MaximumHeads);
         }
 
         [Test]
@@ -112,9 +113,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime.TimeOfDay, skillIntervalData, 60, new DateOnly(2013, 10, 14));
             Assert.AreEqual(result.ForecastedDemand, 5);
             Assert.AreEqual(result.CurrentDemand, 2);
-            Assert.AreEqual(result.CurrentHeads, 6);
-            Assert.AreEqual(result.MinimumHeads, 5.5);
-            Assert.AreEqual(result.MaximumHeads, 14.5);
+			Assert.AreEqual(0, result.CurrentHeads);
+			Assert.IsNull(result.MinimumHeads);
+			Assert.IsNull(result.MaximumHeads);
         }
 
         [Test]
@@ -136,9 +137,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime.TimeOfDay, skillIntervalData, 60, new DateOnly(2013, 10, 14));
             Assert.AreEqual(result.ForecastedDemand, 5);
             Assert.AreEqual(result.CurrentDemand, 2);
-            Assert.AreEqual(result.CurrentHeads, 6);
-            Assert.AreEqual(result.MinimumHeads, null);
-            Assert.AreEqual(result.MaximumHeads, null);
+            Assert.AreEqual(0, result.CurrentHeads);
+            Assert.IsNull(result.MinimumHeads);
+            Assert.IsNull(result.MaximumHeads);
         }
     }
 

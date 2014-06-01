@@ -24,37 +24,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
             var forecastedDemands = new List<double>();
             var currentDemands = new List<double>();
-            var currentHeads = new List<double>();
-            var minimumStaffs = new List<double>();
-            var maximumStaffs = new List<double>();
+			var minMaxBoostFactor = 0d;
 
             forecastedDemands.AddRange(from item in skillIntervalDataList
                                        select item.ForecastedDemand);
             currentDemands.AddRange(from item in skillIntervalDataList
                                     select item.CurrentDemand);
-            currentHeads.AddRange(from item in skillIntervalDataList 
-                                  select item.CurrentHeads );
-            foreach (var val in skillIntervalDataList)
+ 
+            foreach (var intervalData in skillIntervalDataList)
             {
-                if(val.MinimumHeads.HasValue )
-                    minimumStaffs.Add(val.MinimumHeads.Value  );
+				forecastedDemands.Add(intervalData.ForecastedDemand);
+				currentDemands.Add(intervalData.CurrentDemand);
+				minMaxBoostFactor += intervalData.MinMaxBoostFactor;
             }
-            foreach (var val in skillIntervalDataList)
-            {
-                if (val.MaximumHeads.HasValue)
-                    maximumStaffs.Add(val.MaximumHeads .Value);
-            }
+
             if (forecastedDemands.Count == 0) return null ;
             var calculatedFDemand = _intervalDataCalculator.Calculate(forecastedDemands);
             var calculatedCDemand = _intervalDataCalculator.Calculate(currentDemands);
-            var currentHead = _intervalDataCalculator.Calculate(currentHeads);
-            var minimumStaff  = _intervalDataCalculator.Calculate(minimumStaffs);
-            var maximumStaff  = _intervalDataCalculator.Calculate(maximumStaffs);
 
             var startTime = DateTime.SpecifyKind(baseDate.Date.Add(key),DateTimeKind.Utc);
 			var endTime = DateTime.SpecifyKind(startTime.AddMinutes(resolution), DateTimeKind.Utc);
             ISkillIntervalData skillIntervalData = new SkillIntervalData(
-                new DateTimePeriod(startTime, endTime), calculatedFDemand, calculatedCDemand, currentHead , minimumStaff ,maximumStaff);
+                new DateTimePeriod(startTime, endTime), calculatedFDemand, calculatedCDemand, 0 , null ,null);
+			skillIntervalData.MinMaxBoostFactor = minMaxBoostFactor;
             return skillIntervalData;
         }
     }
