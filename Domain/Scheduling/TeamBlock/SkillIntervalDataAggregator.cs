@@ -43,10 +43,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             {
 
 
-                return new SkillIntervalData(new DateTimePeriod(skillIntervalData1.Period.StartDateTime, skillIntervalData1.Period.EndDateTime),
-                                             skillIntervalData1.ForecastedDemand,
-                                             skillIntervalData1.CurrentDemand,
-                                             skillIntervalData1.CurrentHeads, skillIntervalData1.MinimumHeads , skillIntervalData1.MaximumHeads );
+	            return
+		            new SkillIntervalData(
+			            new DateTimePeriod(skillIntervalData1.Period.StartDateTime, skillIntervalData1.Period.EndDateTime),
+			            skillIntervalData1.ForecastedDemand,
+			            skillIntervalData1.CurrentDemand,
+			            skillIntervalData1.CurrentHeads, skillIntervalData1.MinimumHeads, skillIntervalData1.MaximumHeads)
+		            {
+			            MinMaxBoostFactor = skillIntervalData1.MinMaxBoostFactor,
+			            MinMaxBoostFactorForStandardDeviation = skillIntervalData1.MinMaxBoostFactorForStandardDeviation
+		            };
+
             }
 
             var ret = new SkillIntervalData(new DateTimePeriod(skillIntervalData1.Period.StartDateTime, skillIntervalData2.Period.EndDateTime),
@@ -54,6 +61,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                          skillIntervalData1.CurrentDemand + skillIntervalData2.CurrentDemand,
                                          skillIntervalData1.CurrentHeads + skillIntervalData2.CurrentHeads, null, null);
 	        ret.MinMaxBoostFactor = skillIntervalData1.MinMaxBoostFactor + skillIntervalData2.MinMaxBoostFactor;
+	        ret.MinMaxBoostFactorForStandardDeviation = skillIntervalData1.MinMaxBoostFactorForStandardDeviation +
+	                                                    skillIntervalData2.MinMaxBoostFactorForStandardDeviation;
 
 	        return ret;
         }

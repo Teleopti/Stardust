@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             ISkillIntervalData skillInterval2 =
                 new SkillIntervalData(
                     new DateTimePeriod(new DateTime(2013, 10, 15, 07, 0, 0, DateTimeKind.Utc),
-                                       new DateTime(2013, 10, 15, 08, 0, 0, DateTimeKind.Utc)), 5, 0, 18, 9, 17); //minmaxboost -2
+                                       new DateTime(2013, 10, 15, 08, 0, 0, DateTimeKind.Utc)), 5, 0, 18, 9, 17); //minmaxboost -2, minnaxboostforSTDEV -1
             ISkillIntervalData skillInterval3 =
                 new SkillIntervalData(
                     new DateTimePeriod(new DateTime(2013, 10, 16, 07, 0, 0, DateTimeKind.Utc),
@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Assert.IsNull(result.MinimumHeads);
 			Assert.IsNull(result.MaximumHeads);
 			Assert.AreEqual(3, result.MinMaxBoostFactor);
+			Assert.AreEqual(4, result.MinMaxBoostFactorForStandardDeviation);
         }
 
         [Test]

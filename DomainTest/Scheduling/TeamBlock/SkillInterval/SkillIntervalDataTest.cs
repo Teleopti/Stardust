@@ -52,14 +52,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
         [Test]
         public void CalculateBoostedValueTestA()
         {
-            var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 1, 2,4 );
-            Assert.AreEqual(1,skillIntervalData.MinMaxBoostFactor);
+            var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 1, 2, 4);
+            Assert.AreEqual(1, skillIntervalData.MinMaxBoostFactor);
         }
 
         [Test]
         public void CalculateBoostedValueTestB()
         {
-            var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 4, 2, 4);
+            var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 4, 4, 4);
             Assert.AreEqual(-1, skillIntervalData.MinMaxBoostFactor);
         }
 
@@ -73,9 +73,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
         [Test]
         public void CalculateBoostedValueTestD()
         {
-            var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 1, 2, 2);
-            Assert.AreEqual(1, skillIntervalData.MinMaxBoostFactor);
+            var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 1, 1, 2);
+            Assert.AreEqual(0, skillIntervalData.MinMaxBoostFactor);
         }
+
+		[Test]
+		public void CalculateBoostedForStandardDevValueTestA()
+		{
+			var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 1, 2, 4);
+			Assert.AreEqual(1, skillIntervalData.MinMaxBoostFactorForStandardDeviation);
+		}
+
+		[Test]
+		public void CalculateBoostedForStandardDevValueTestB()
+		{
+			var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 4, 4, 4);
+			Assert.AreEqual(0, skillIntervalData.MinMaxBoostFactorForStandardDeviation);
+		}
+
+		[Test]
+		public void CalculateBoostedForStandardDevValueTestC()
+		{
+			var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 4, 6, 1);
+			Assert.AreEqual(-1, skillIntervalData.MinMaxBoostFactorForStandardDeviation);
+		}
+
+		[Test]
+		public void CalculateBoostedForStandardDevValueTestD()
+		{
+			var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 1, 1, 2);
+			Assert.AreEqual(0, skillIntervalData.MinMaxBoostFactor);
+		}
 
         [Test]
         public void CalculateBoostedValueWithNullMinimum()
@@ -130,32 +158,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			Assert.AreEqual(0.5, _target.RelativeDifference());
 		}
 
-		[Test]
-		public void ShouldCalculateBoostedRelativeDifferenceWhenMinHeadsNotFilfilled()
-		{
-			_target = new SkillIntervalData(_dtp, 10, 10, 1, 1, null);
-			Assert.AreEqual(-1, _target.RelativeDifferenceMinStaffBoosted());
-
-			_target = new SkillIntervalData(_dtp, 10, 10, 0, 1, null);
-			Assert.AreEqual(-10001, _target.RelativeDifferenceMinStaffBoosted());
-
-			_target = new SkillIntervalData(_dtp, 10, 10, 0, 2, null);
-			Assert.AreEqual(-20001, _target.RelativeDifferenceMinStaffBoosted());
-		}
-
-		[Test]
-		public void ShouldCalculateBoostedRelativeDifferenceWhenMaxHeadsIsBroken()
-		{
-			_target = new SkillIntervalData(_dtp, 10, -5, 5, null, 5);
-			Assert.AreEqual(0.5, _target.RelativeDifferenceMaxStaffBoosted());
-
-			_target = new SkillIntervalData(_dtp, 10, -5, 5, null, 4);
-			Assert.AreEqual(10000.5, _target.RelativeDifferenceMaxStaffBoosted());
-
-			_target = new SkillIntervalData(_dtp, 10, -5, 5, null, 3);
-			Assert.AreEqual(20000.5, _target.RelativeDifferenceMaxStaffBoosted());
-		}
-
+	
 		[Test]
 		public void ShouldCalculateBoostedRelativeDifferenceWithMinAndMaxHeads()
 		{
@@ -166,10 +169,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			Assert.AreEqual(0, _target.RelativeDifferenceBoosted());
 
 			_target = new SkillIntervalData(_dtp, 10, 0, 5, 4, 4);
-			Assert.AreEqual(10000, _target.RelativeDifferenceBoosted());
+			Assert.AreEqual(-10000, _target.RelativeDifferenceBoosted());
 
 			_target = new SkillIntervalData(_dtp, 10, 0, 5, 6, 6);
-			Assert.AreEqual(-10000, _target.RelativeDifferenceBoosted());
+			Assert.AreEqual(10000, _target.RelativeDifferenceBoosted());
 
 			_target = new SkillIntervalData(_dtp, 10, 0, 5, 6, 4);
 			Assert.AreEqual(0, _target.RelativeDifferenceBoosted());
