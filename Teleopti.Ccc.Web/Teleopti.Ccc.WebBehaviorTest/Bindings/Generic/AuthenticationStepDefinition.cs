@@ -9,8 +9,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class AuthenticationStepDefinition
 	{
-		private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData2.nhib.xml");
-
 		[Given(@"I have access to two data sources")]
 		public void GivenIHaveAccessToTwoDataSources()
 		{
@@ -21,23 +19,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			Browser.Interactions.ClickUsingJQuery("#DataSources a:first");
 		}
-
-		[BeforeScenario("ExtraDataSource")]
-		public void BeforePasswordPolicyScenario()
-		{
-			FileConfigurator.ConfigureByTags(
-				"Data\\TestData2.nhib.xml",
-				TargetTestDataNHibFile,
-				new AllTags()
-				);
-		}
-
-		[AfterScenario("ExtraDataSource")]
-		public void AfterPasswordPolicyScenario()
-		{
-			if (File.Exists(TargetTestDataNHibFile))
-				File.Delete(TargetTestDataNHibFile);
-		}
-
 	}
 }

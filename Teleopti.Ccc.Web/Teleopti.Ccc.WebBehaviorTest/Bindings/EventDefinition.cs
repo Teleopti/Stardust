@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
+            addExtraDataSource();
 			Browser.SelectBrowserByTag();
 			Browser.NotifyBeforeScenario();
 			
@@ -79,6 +81,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				Assert.Ignore("Ignored because of featureflags");
 			}
 		}
+
+        private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData2.nhib.xml");
+
+        private static void addExtraDataSource()
+        {
+            if (!ScenarioContext.Current.ScenarioInfo.Tags.Contains("ExtraDataSource")) return;
+            FileConfigurator.ConfigureByTags(
+                "Data\\TestData2.nhib.xml",
+                TargetTestDataNHibFile,
+                new AllTags()
+                );
+        }
+
+        private static void removeExtraDataSource()
+        {
+            if (!ScenarioContext.Current.ScenarioInfo.Tags.Contains("ExtraDataSource")) return;
+            if (File.Exists(TargetTestDataNHibFile))
+                File.Delete(TargetTestDataNHibFile);
+        }
 
 		private static bool shouldIgnoreTest(string featureName, bool shouldBeEnabled)
 		{
@@ -103,6 +124,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			ScenarioUnitOfWorkState.DisposeUnitOfWork();
 			HandleScenarioException();
+            removeExtraDataSource();
 
 			Log.Debug("Finished scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 		}
