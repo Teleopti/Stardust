@@ -23,9 +23,13 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			query["toggle"] = toggle.ToString();
 			uriBuilder.Query = query.ToString();
 			var request = WebRequest.Create(uriBuilder.ToString());
-			using (var reader = new StreamReader(request.GetResponse().GetResponseStream()))
+			
+			using (var response = request.GetResponse())
 			{
-				return Convert.ToBoolean(reader.ReadToEnd());
+				using (var stream = new StreamReader(response.GetResponseStream()))
+				{
+					return Convert.ToBoolean(stream.ReadToEnd());
+				}
 			}
 		}
 	}
