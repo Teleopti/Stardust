@@ -466,6 +466,12 @@
 			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.WindowsIdentityProvider\Web.Debug.config;
 			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.WindowsIdentityProvider\Web.Release.config"
 			/>
+			
+			<!-- Teleopti Runtime Environment -->
+			<RuntimeEnvironment
+			Include=
+			"$(CCNetWorkingDirectory)\Teleopti.Runtime.Environment\Teleopti.Runtime.Environment\bin\$(Configuration)\**\*.*"
+			/>
 		</ItemGroup>
 	</Target>
 
@@ -708,7 +714,9 @@
 		<Copy SourceFiles="@(AuthenticationBridge)"
 		  DestinationFiles="@(AuthenticationBridge->'$(DeployPath)\AuthenticationBridge\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy SourceFiles="@(WindowsIdentityProvider)"
-		  DestinationFiles="@(WindowsIdentityProvider->'$(DeployPath)\WindowsIdentityProvider\%(RecursiveDir)%(Filename)%(Extension)')"/>			  
+		  DestinationFiles="@(WindowsIdentityProvider->'$(DeployPath)\WindowsIdentityProvider\%(RecursiveDir)%(Filename)%(Extension)')"/>	
+		<Copy SourceFiles="@(RuntimeEnvironment)"
+		  DestinationFiles="@(RuntimeEnvironment->'$(DeployPath)\Teleopti.Runtime.Environment\%(RecursiveDir)%(Filename)%(Extension)')"/>		  
 		<Copy SourceFiles="$(SDKDocOutput)"
 			DestinationFiles="$(DeployPath)\SDK\SdkDoc.chm"
 			/>
