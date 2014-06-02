@@ -1,13 +1,18 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using EO.WebBrowser;
 
 namespace Teleopti.Runtime.Environment
 {
     public partial class MainForm : Form
     {
+        private const string LoadingText = " ...";
+        private readonly string InitialTitle;
+
         public MainForm()
         {
             InitializeComponent();
+            InitialTitle = Text;
         }
 
         public MainForm(string url):this()
@@ -15,7 +20,7 @@ namespace Teleopti.Runtime.Environment
             webView1.Url = url;
         }
 
-        private void webView1_NewWindow(object sender, EO.WebBrowser.NewWindowEventArgs e)
+        private void webView1_NewWindow(object sender, NewWindowEventArgs e)
         {
             var form=new MainForm();
             if (e.Height.HasValue)
@@ -25,15 +30,16 @@ namespace Teleopti.Runtime.Environment
             form.webControl1.WebView = e.WebView;
             form.webControl1.WebView.NewWindow += form.WebView_NewWindow;
             form.webControl1.WebView.BeforeContextMenu += webView1_BeforeContextMenu;
+            form.webControl1.WebView.IsLoadingChanged += webView1_IsLoadingChanged;
             e.Accepted = true;
             form.Show();
         }
 
-        private void WebView_NewWindow(object sender, EO.WebBrowser.NewWindowEventArgs e)
+        private void WebView_NewWindow(object sender, NewWindowEventArgs e)
         {
         }
 
-        private void webView1_BeforeContextMenu(object sender, EO.WebBrowser.BeforeContextMenuEventArgs e)
+        private void webView1_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
         {
             foreach (var item in e.Menu.Items)
             {
@@ -42,6 +48,19 @@ namespace Teleopti.Runtime.Environment
                     e.Menu.Items.Remove(item);
                     break;
                 }
+            }
+        }
+
+        private void webView1_IsLoadingChanged(object sender, EventArgs e)
+        {
+            if (webView1.IsLoading)
+            {
+                if (!Text.EndsWith(LoadingText))
+                    Text += LoadingText;
+            }
+            else
+            {
+                Text = InitialTitle;
             }
         }
     }
