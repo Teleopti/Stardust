@@ -5,7 +5,7 @@
 		<li class="active" data-bind="text: teamName">Red</li>
 	</ul>
 	<div class="panel panel-default">
-		<table class="table table-stripped table-condensed">
+		<table class="table table-stripped table-condensed rta-agents-details">
 			<thead>
 				<tr>
 					<th data-bind="text: resources.AgentName"></th>
@@ -19,7 +19,7 @@
 				</tr>
 			</thead>
 			<tbody data-bind="foreach: agentStates">
-				<tr data-bind="style:  { 'background-color': AlarmColor }">
+				<tr data-bind="style:  { 'background-color': AlarmColor, 'transition': 'background-color 2000ms linear', 'font-weight': FontWeight}">
 					<td class="agent-name" data-bind="text: Name"></td>
 					<td data-bind="text: State"></td>
 					<td data-bind="text: TimeInState"></td>

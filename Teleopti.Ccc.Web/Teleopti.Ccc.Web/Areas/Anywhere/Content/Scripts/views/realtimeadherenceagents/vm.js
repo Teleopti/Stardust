@@ -34,40 +34,47 @@
 		};
 
 		that.fillAgentsStates = function (data) {
+			var newagentState, existingState;
+
 			if (!data) {
-				that.agents.forEach(function(agent) { // TODO refacto 
-					var newagentState = agentstate();
-					newagentState.fill({PersonId: agent.PersonId}, agent.Name, agent.TimeZoneOffset);
-					var newexistingState = that.agentStates().filter(function(obj) {
-						return obj.PersonId === agent.PersonId;
-					});
-					if (newexistingState.length !== 0) {
-						that.agentStates.remove(newexistingState[0]);
+				that.agents.forEach(function(agent) {
+					existingState = that.getExistingAgentState(agent.PersonId);
+					if (existingState.length !== 0) {
+						existingState[0].fill({PersonId: agent.PersonId}, agent.Name, agent.TimeZoneOffset);
+					} else {
+						newagentState = agentstate();
+						newagentState.fill({ PersonId: agent.PersonId}, agent.Name, agent.TimeZoneOffset);
+						that.agentStates.push(newagentState);
 					}
-					that.agentStates.push(newagentState);
 				});
 			} else {
 				for (var i = 0; i < data.length; i++) {
-					var agentState = agentstate();
-					var a = that.getAgent(data[i].PersonId);
-					agentState.fill(data[i], a.Name, a.TimeZoneOffset);
-					var existingState = that.agentStates().filter(function (obj) {
-						return obj.PersonId === data[i].PersonId;
-					});
+					var a = that.getAgent(data[i].PersonId);	
+					existingState = that.getExistingAgentState(data[i].PersonId);
 					if (existingState.length !== 0) {
-						that.agentStates.remove(existingState[0]);
+						existingState[0].fill(data[i], a.Name, a.TimeZoneOffset);
+				} else {
+						newagentState = agentstate();
+						newagentState.fill(data[i], a.Name, a.TimeZoneOffset);
+						that.agentStates.push(newagentState);
 					}
-					that.agentStates.push(agentState);
 				}
 			}
 			that.agentStates.sort(function(left, right) { return left.Name == right.Name ? 0 : (left.Name < right.Name ? -1 : 1); });
 		}
 
+		that.getExistingAgentState = function(id) {
+			var existingState = that.agentStates().filter(function(obj) {
+						return obj.PersonId === id;
+				});
+			return existingState;
+		}
+
 		that.getAgent = function(id) {
-			var a = that.agents.filter(function(item) {
+			var agent = that.agents.filter(function(item) {
 				return item.PersonId === id;
 				});
-			return a[0];
+			return agent[0];
 		}
 
 		that.refreshTimeInState = function() {
