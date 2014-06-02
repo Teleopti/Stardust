@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private PeriodValueCalculationParameters _periodValueCalculationParameters;
 		private IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
-		private IToggleManager _toggleManager;
 		private IMaxSeatSkillAggregator _maxSeatSkillAggregator;
 
 		[SetUp]
@@ -60,7 +59,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_activityIntervalDataCreator = _mocks.StrictMock<IActivityIntervalDataCreator>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_maxSeatInformationGeneratorBasedOnIntervals = _mocks.StrictMock<IMaxSeatInformationGeneratorBasedOnIntervals>();
-			_toggleManager = _mocks.StrictMock < IToggleManager>();
 			_maxSeatSkillAggregator = _mocks.StrictMock<IMaxSeatSkillAggregator>();
 			_target = new TeamBlockSingleDayScheduler(
 				_teamBlockSchedulingCompletionChecker, 
@@ -68,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_workShiftFilterService, 
 				_workShiftSelector, 
 				_teamScheduling, 
-				_activityIntervalDataCreator,_maxSeatInformationGeneratorBasedOnIntervals ,_toggleManager,_maxSeatSkillAggregator );
+				_activityIntervalDataCreator,_maxSeatInformationGeneratorBasedOnIntervals ,_maxSeatSkillAggregator );
 
 			_dateOnly = new DateOnly(2013, 11, 12);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);
@@ -87,14 +85,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 			_periodValueCalculationParameters = new PeriodValueCalculationParameters(_schedulingOptions.WorkShiftLengthHintOption,
 																		  _schedulingOptions.UseMinimumPersons,
-																		  _schedulingOptions.UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats,false , new Dictionary<DateTime, bool>());
+																		  _schedulingOptions.UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats,false , new Dictionary<DateTime, bool>(),true);
 		}
 
 		[Test]
 		public void ShouldBeFalseIfNoRoleModel()
 		{
 			var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, null,
-									  _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction());
+									  _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction(),true);
 			Assert.That(result, Is.False);
 		}
 
@@ -111,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
-										  _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction());
+										  _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction(),true);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -151,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
-													   _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction());
+													   _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction(),true );
 				Assert.That(result, Is.True);
 			}
 		}
@@ -204,14 +202,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																											  _dateOnly,
 																											  _selectedPersons))
 					  .Return(true);
-				Expect.Call(_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419)).Return(false).Repeat.Twice();
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamBlockInfo.TeamInfo.GroupMembers.ToList(),
 					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill>( )).Repeat.Twice() ;
 			}
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
-													   _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction());
+													   _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction(),false);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -261,14 +258,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																											  _dateOnly,
 																											  _selectedPersons))
 					  .Return(true);
-				Expect.Call(_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419)).Return(false);
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamBlockInfo.TeamInfo.GroupMembers.ToList(),
 					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill>{SkillFactory.CreateSkill("")});
 			}
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
-													   _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction());
+													   _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction(),false);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -323,7 +319,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																											  _dateOnly,
 																											  _selectedPersons))
 					  .Return(true);
-				Expect.Call(_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419)).Return(true).Repeat.Twice() ;
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, _dateOnly,
 					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone)).Return(new Dictionary<DateTime, bool>()).Repeat.Twice() ;
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamBlockInfo.TeamInfo.GroupMembers.ToList(),
@@ -332,7 +327,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift,
-														_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction());
+														_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction(),true);
 				Assert.That(result, Is.True);
 			}
 		}

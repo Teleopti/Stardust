@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private ShiftNudgeDirective _shiftNudgeDirective;
+		private IToggleManager _toggleManager;
 
 		[SetUp]
 		public void Setup()
@@ -42,7 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		    _roleModelSelector = _mocks.StrictMock<ITeamBlockRoleModelSelector>();
 			_teamBlockClearer = _mocks.StrictMock<ITeamBlockClearer>();
 			_teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
-		    _target = new TeamBlockScheduler(_singleDayScheduler, _roleModelSelector, _teamBlockClearer, _teamBlockSchedulingOptions);
+			_toggleManager = _mocks.StrictMock<IToggleManager>();
+		    _target = new TeamBlockScheduler(_singleDayScheduler, _roleModelSelector, _teamBlockClearer, _teamBlockSchedulingOptions,_toggleManager);
 			_dateOnly = new DateOnly(2013, 11, 12);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);
 			_scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -66,12 +69,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(_shift);
+				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction(),true) ).Return(_shift);
 				Expect.Call(() => _singleDayScheduler.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly,
 					_shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _shiftNudgeDirective.EffectiveRestriction)).Return(true);
+					_schedulingResultStateHolder, _shiftNudgeDirective.EffectiveRestriction,true )).Return(true);
 				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
+				Expect.Call(_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419)).Return(true );
 			}
 			using (_mocks.Playback())
 			{
@@ -87,7 +91,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_target.DayScheduled += targetDayScheduled;
 			using (_mocks.Record())
 			{
-				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(null);
+				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction(),true)).Return(null);
+				Expect.Call(_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419)).Return(true);
 			}
 			using (_mocks.Playback())
 			{

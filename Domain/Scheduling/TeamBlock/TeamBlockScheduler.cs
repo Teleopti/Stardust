@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
@@ -30,16 +31,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private bool _cancelMe;
+		private readonly IToggleManager  _toggleManager;
 
 		public TeamBlockScheduler(ITeamBlockSingleDayScheduler singleDayScheduler,
 		                          ITeamBlockRoleModelSelector roleModelSelector,
 									ITeamBlockClearer teamBlockClearer, 
-									ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
+									ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IToggleManager toggleManager)
 		{
 			_singleDayScheduler = singleDayScheduler;
 			_roleModelSelector = roleModelSelector;
 			_teamBlockClearer = teamBlockClearer;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
+			_toggleManager = toggleManager;
 		}
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -58,9 +61,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers()).ToList();
 			if (selectedTeamMembers.IsEmpty())
 				return true;
-
+			var isMaxSeatToggleEnabled = _toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419);
 			IShiftProjectionCache roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
-				schedulingOptions, shiftNudgeDirective.EffectiveRestriction);
+				schedulingOptions, shiftNudgeDirective.EffectiveRestriction, isMaxSeatToggleEnabled);
 
 			if (roleModelShift == null)
 			{
@@ -70,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var selectedBlockDays = teamBlockInfo.BlockInfo.UnLockedDates();
 			bool success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays,
-				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
+				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, isMaxSeatToggleEnabled);
 
 			if (!success && _teamBlockSchedulingOptions.IsBlockWithSameShiftCategoryInvolved(schedulingOptions))
 			{
@@ -83,9 +86,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
 					roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
-						schedulingOptions, shiftNudgeDirective.EffectiveRestriction);
+						schedulingOptions, shiftNudgeDirective.EffectiveRestriction,isMaxSeatToggleEnabled );
 					success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays,
-						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
+						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective,isMaxSeatToggleEnabled );
 				}
 				schedulingOptions.NotAllowedShiftCategories.Clear();	
 			}
@@ -95,11 +98,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		}
 
-		private bool tryScheduleBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
-			IList<DateOnly> selectedBlockDays,
-			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
-			ShiftNudgeDirective shiftNudgeDirective)
+		private bool tryScheduleBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IList<DateOnly> selectedBlockDays, IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, ShiftNudgeDirective shiftNudgeDirective, bool isMaxSeatToggleEnabled)
 		{
 			var lastIndex = selectedBlockDays.Count - 1;
 			IEffectiveRestriction shiftNudgeRestriction = new EffectiveRestriction();
@@ -118,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				_singleDayScheduler.DayScheduled += OnDayScheduled;
 				bool successful = _singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, day,
 					roleModelShift, rollbackService,
-					resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeRestriction);
+					resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeRestriction,isMaxSeatToggleEnabled );
 				_singleDayScheduler.DayScheduled -= OnDayScheduled;
 
 				if(shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Right && dayIndex == 0)
