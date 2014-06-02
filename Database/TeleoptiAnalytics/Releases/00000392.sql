@@ -550,6 +550,7 @@ ON [mart].[dim_person]
 GO
 
 --counting rows in fact_schedule_old and give estimate of time
+/*
 declare @row_count bigint
 declare @rows_per_minute int
 declare @estimated_minutes int
@@ -572,7 +573,19 @@ PRINT 'The number of rows to migrate: ' + cast(@row_count as nvarchar(10))
 PRINT 'The estimated time in minutes to migrate fact_schedule: ' + cast(@estimated_minutes as nvarchar(10))
 PRINT 'Time is now '  +  convert(varchar(20),GETDATE(),108) + '. Estimated to finish: ' + convert(varchar(20),dateadd(mi,@estimated_minutes, getdate()),108)
 PRINT 'Please be patient and do not close any window.'
+*/
+---
+DECLARE @minDate smalldatetime
+DECLARE @maxDate smalldatetime
 
+SELECT
+	@minDate=DATEADD(MONTH, -6, DATEDIFF(dd, 0, GETDATE())),
+	@maxDate=DATEADD(MONTH, 1, DATEDIFF(dd, 0, GETDATE()))
+
+PRINT 'We will limit the number of schedule rows to migrate by date. -6 months to +1 month'
+PRINT 'From: ' + Cast(@minDate as nvarchar(20)) + ' To: ' + Cast(@maxDate as nvarchar(20))
+PRINT 'Please be patient and do not close any window.'
+PRINT 'To reload all Schedule data, run ETL Schedule step manually.'
 
 --Prepare intervals for new column
 PRINT '----'
@@ -586,6 +599,13 @@ UPDATE STATISTICS mart.dim_person --0:05 min
 UPDATE STATISTICS mart.fact_schedule_old  --1:21 min
 UPDATE STATISTICS mart.fact_schedule
 */
+DECLARE @minDate smalldatetime
+DECLARE @maxDate smalldatetime
+
+SELECT
+	@minDate=DATEADD(MONTH, -6, DATEDIFF(dd, 0, GETDATE())),
+	@maxDate=DATEADD(MONTH, 1, DATEDIFF(dd, 0, GETDATE()))
+
 --check tempdb before
 IF  (SELECT CONVERT(NVARCHAR(200), SERVERPROPERTY('edition'))) <> 'SQL Azure'
 BEGIN
@@ -669,6 +689,7 @@ INNER JOIN mart.bridge_time_zone btz
 INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
+WHERE f.schedule_date_id between @minDate and @maxDate
 OPTION (MAXDOP 1);
 
 --check tempdb after
@@ -867,6 +888,13 @@ GO
 
 --move data
 --INSERT DATA FROM OLD FACT_SCHEDULE_DEVIATION
+DECLARE @minDate smalldatetime
+DECLARE @maxDate smalldatetime
+
+SELECT
+	@minDate=DATEADD(MONTH, -6, DATEDIFF(dd, 0, GETDATE())),
+	@maxDate=DATEADD(MONTH, 1, DATEDIFF(dd, 0, GETDATE()))
+
 INSERT [mart].[fact_schedule_deviation] WITH (TABLOCK)
 (shift_startdate_local_id,date_id, interval_id, person_id, scheduled_ready_time_s, ready_time_s, contract_time_s, deviation_schedule_s, deviation_schedule_ready_s, deviation_contract_s, business_unit_id, datasource_id, insert_date, update_date, is_logged_in, shift_startdate_id, shift_startinterval_id )
 SELECT btz.local_date_id,f.date_id, f.interval_id,f.person_id, scheduled_ready_time_s, ready_time_s, contract_time_s, deviation_schedule_s, deviation_schedule_ready_s, deviation_contract_s, f.business_unit_id, f.datasource_id, f.insert_date, f.update_date, is_logged_in, shift_startdate_id, shift_startinterval_id
@@ -877,6 +905,7 @@ INNER JOIN mart.bridge_time_zone btz
 INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
+WHERE f.date_id between @minDate and @maxDate
 OPTION (MAXDOP 1)
 
 GO
