@@ -601,10 +601,15 @@ UPDATE STATISTICS mart.fact_schedule
 */
 DECLARE @minDate smalldatetime
 DECLARE @maxDate smalldatetime
+DECLARE @minDateId int
+DECLARE @maxDateId int
 
 SELECT
 	@minDate=DATEADD(MONTH, -6, DATEDIFF(dd, 0, GETDATE())),
 	@maxDate=DATEADD(MONTH, 1, DATEDIFF(dd, 0, GETDATE()))
+
+SET @minDateId =(SELECT date_id FROM mart.dim_date WHERE @minDate = date_date)
+SET @maxDateId =(SELECT date_id FROM mart.dim_date WHERE @maxDate = date_date)
 
 --check tempdb before
 IF  (SELECT CONVERT(NVARCHAR(200), SERVERPROPERTY('edition'))) <> 'SQL Azure'
@@ -689,7 +694,7 @@ INNER JOIN mart.bridge_time_zone btz
 INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
-WHERE f.schedule_date_id between @minDate and @maxDate
+WHERE f.schedule_date_id between @minDateId and @maxDateId
 OPTION (MAXDOP 1);
 
 --check tempdb after
@@ -890,10 +895,15 @@ GO
 --INSERT DATA FROM OLD FACT_SCHEDULE_DEVIATION
 DECLARE @minDate smalldatetime
 DECLARE @maxDate smalldatetime
+DECLARE @minDateId int
+DECLARE @maxDateId int
 
 SELECT
 	@minDate=DATEADD(MONTH, -6, DATEDIFF(dd, 0, GETDATE())),
 	@maxDate=DATEADD(MONTH, 1, DATEDIFF(dd, 0, GETDATE()))
+
+SET @minDateId =(SELECT date_id FROM mart.dim_date WHERE @minDate = date_date)
+SET @maxDateId =(SELECT date_id FROM mart.dim_date WHERE @maxDate = date_date)
 
 INSERT [mart].[fact_schedule_deviation] WITH (TABLOCK)
 (shift_startdate_local_id,date_id, interval_id, person_id, scheduled_ready_time_s, ready_time_s, contract_time_s, deviation_schedule_s, deviation_schedule_ready_s, deviation_contract_s, business_unit_id, datasource_id, insert_date, update_date, is_logged_in, shift_startdate_id, shift_startinterval_id )
@@ -905,7 +915,7 @@ INNER JOIN mart.bridge_time_zone btz
 INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
-WHERE f.date_id between @minDate and @maxDate
+WHERE f.date_id between @minDateId and @maxDateId
 OPTION (MAXDOP 1)
 
 GO
