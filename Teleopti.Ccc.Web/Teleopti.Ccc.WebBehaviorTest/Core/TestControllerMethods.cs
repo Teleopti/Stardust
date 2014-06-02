@@ -36,12 +36,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void BeforeScenario()
 		{
+		    var defaultProvider = "Teleopti";
 			var useBroker = "false";
 			if (ScenarioContext.Current.ScenarioInfo.Tags.Contains("broker"))
 				useBroker = "true";
+		    if (ScenarioContext.Current.ScenarioInfo.Tags.Contains("WindowsAsDefaultIdentityProviderLogon"))
+		        defaultProvider = "Windows";
 
 			// use a scenario tag here for enableMyTimeMessageBroker if required
-			Navigation.GoToWaitForCompleted(string.Format(CultureInfo.InvariantCulture, "Test/BeforeScenario?enableMyTimeMessageBroker={0}", useBroker));
+		    Navigation.GoToWaitForCompleted(string.Format(CultureInfo.InvariantCulture,
+		        "Test/BeforeScenario?enableMyTimeMessageBroker={0}&defaultProvider={1}", useBroker, defaultProvider));
 		}
 
 		/// <summary>

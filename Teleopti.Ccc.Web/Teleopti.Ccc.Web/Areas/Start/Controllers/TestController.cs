@@ -28,8 +28,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly IFormsAuthentication _formsAuthentication;
 		private readonly IToggleManager _toggleManager;
+        private readonly IIdentityProviderProvider _identityProviderProvider;
 
-		public TestController(IMutateNow mutateNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager)
+        public TestController(IMutateNow mutateNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider)
 		{
 			_mutateNow = mutateNow;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
@@ -39,15 +40,17 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_httpContext = httpContext;
 			_formsAuthentication = formsAuthentication;
 			_toggleManager = toggleManager;
+		    _identityProviderProvider = identityProviderProvider;
 		}
 
-		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker)
+        public ViewResult BeforeScenario(bool enableMyTimeMessageBroker, string defaultProvider = null)
 		{
 			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 
 			updateIocNow(null);
-			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
+            ((IdentityProviderProvider)_identityProviderProvider).SetDefaultProvider(defaultProvider);
+            UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
 			var viewModel = new TestMessageViewModel
 			{
 				Title = "Setting up for scenario",
@@ -81,7 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var claimsIdentity = new ClaimsIdentity(claims, "IssuerForTest");
 			_httpContext.Current().User = new ClaimsPrincipal(new IClaimsIdentity[] { claimsIdentity });
 			_logon.LogOn(dataSourceName, businessUnit.Id.Value, result.Person.Id.Value);
-
+            
 			var viewModel = new TestMessageViewModel
 			                	{
 			                		Title = "Quick logon",
