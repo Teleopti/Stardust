@@ -15,8 +15,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	  private readonly MaxSeatsFeatureOptions _maxSeatsFeatureOption;
 	  private readonly bool _hasMaxSeatSkill;
 	  private readonly IDictionary<DateTime, bool> _maxSeatInfo;
+	  private readonly bool _isMaxSeatToggleEnabled;
 
-	  public PeriodValueCalculationParameters(WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, MaxSeatsFeatureOptions maxSeatsFeatureOption, bool hasMaxSeatSkill, IDictionary<DateTime, bool> maxSeatInfo)
+	  public PeriodValueCalculationParameters(WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, MaxSeatsFeatureOptions maxSeatsFeatureOption, bool hasMaxSeatSkill, IDictionary<DateTime, bool> maxSeatInfo, bool isMaxSeatToggleEnabled)
 	  {
 		  _lengthFactor = lengthFactor;
 		  _useMinimumPersons = useMinimumPersons;
@@ -24,6 +25,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		  _maxSeatsFeatureOption = maxSeatsFeatureOption;
 		  _hasMaxSeatSkill = hasMaxSeatSkill;
 		  _maxSeatInfo = maxSeatInfo;
+		  _isMaxSeatToggleEnabled = isMaxSeatToggleEnabled;
+	  }
+
+	  public bool IsMaxSeatToggleEnabled
+	  {
+		  get { return _isMaxSeatToggleEnabled; }
 	  }
 
 	  public WorkShiftLengthHintOption LengthFactor
