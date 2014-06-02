@@ -17,7 +17,7 @@
     		that.Alarm = ko.observable();
     		that.AlarmColor = ko.observable();
     		that.AlarmStart = ko.observable();
-    		that.FontWeight = ko.observable();
+    		that.TextWeight = ko.observable();
     		that.StateStart = ko.observable();
 
     		that.fill = function (data, name, offset) {
@@ -51,9 +51,9 @@
 			that.refreshColor = function (newColor) {
 				if (that.color !== newColor) {
 					that.AlarmColor('rgba(' + that.hexToRgb(newColor) + ', 0.6)');
-					that.FontWeight(700);
-					setTimeout(function() {
-						that.FontWeight(600);
+					that.TextWeight(700);
+					setTimeout(function () {
+						that.TextWeight(500);
 					}, 4000);
 					that.color = newColor;
 				}
