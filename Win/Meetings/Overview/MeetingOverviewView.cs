@@ -545,8 +545,8 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
                     if (selCol[0].Left > 3)
                         col = selCol[0].Left / 31;
 
-                    if(scheduleControl1.Calendar.SelectedDates.Count -1 >= col)
-                        _clickedDate = scheduleControl1.Calendar.SelectedDates[col];
+					if(scheduleControl1.Calendar.SelectedDates.Count -1 > col) //<- var lika med här
+						_clickedDate = scheduleControl1.Calendar.SelectedDates[col];
 
                     startDateTime = _clickedDate.Date.AddHours(startHour).AddMinutes(startMinute);
                     endDateTime = startDateTime.AddMinutes(totalMinutes);
