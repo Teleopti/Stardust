@@ -74,4 +74,4 @@ nunit*.xml
 Teleopti.Support.Code/settings.txt
 ccnet/InfraTest.ini
 Teleopti.Support.Code/ConfigFiles/BuildServerConfigFiles.txt
-license.xml
+[lL]icense.xml
