@@ -58,31 +58,33 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 foreach (var absenceLayer in absenceLayers)
                 {
                     var sharedPeriod = calculatedPeriod.Intersection(absenceLayer.Period);
-                    if (sharedPeriod.HasValue && absenceRequest.Period.Contains(sharedPeriod.Value))
-                    {
-                        foreach (var skill in requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Skills)
-                        {
-                            if (skill == null) continue;
+	                if (!sharedPeriod.HasValue ) continue;
 
-                            var skillStaffPeriodList = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, sharedPeriod.Value);
-                            if (skillStaffPeriodList == null || skillStaffPeriodList.Count == 0)
-                            {
-                                continue;
-                            }
+	                var sharedRequestPeriod = absenceRequest.Period.Intersection(sharedPeriod.Value);
+	                if (!sharedRequestPeriod.HasValue) continue;
 
-                            var validatedUnderStaffingResult = ValidateUnderstaffing(skill, skillStaffPeriodList, timeZone, result);
-                            if (!validatedUnderStaffingResult.IsValid)
-                            {
-                                result.AddUnderstaffingDay(date);
-                            }
+	                foreach (var skill in requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Skills)
+	                {
+		                if (skill == null) continue;
 
-                            var validatedSeriousUnderStaffingResult = ValidateSeriousUnderstaffing(skill,skillStaffPeriodList, timeZone, result);
-                            if (!validatedSeriousUnderStaffingResult.IsValid)
-                            {
-                                result.AddSeriousUnderstaffingDay(date);
-                            }
-                        }
-                    }
+		                var skillStaffPeriodList = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, sharedRequestPeriod.Value);
+		                if (skillStaffPeriodList == null || skillStaffPeriodList.Count == 0)
+		                {
+			                continue;
+		                }
+
+		                var validatedUnderStaffingResult = ValidateUnderstaffing(skill, skillStaffPeriodList, timeZone, result);
+		                if (!validatedUnderStaffingResult.IsValid)
+		                {
+			                result.AddUnderstaffingDay(date);
+		                }
+
+		                var validatedSeriousUnderStaffingResult = ValidateSeriousUnderstaffing(skill,skillStaffPeriodList, timeZone, result);
+		                if (!validatedSeriousUnderStaffingResult.IsValid)
+		                {
+			                result.AddSeriousUnderstaffingDay(date);
+		                }
+	                }
                 }
             }
             
