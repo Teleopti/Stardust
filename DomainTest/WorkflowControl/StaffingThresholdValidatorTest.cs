@@ -207,17 +207,15 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var date = new DateOnly(2010, 02, 01);
 
 			createSkill();
-			createSkillDay(requestedDateTimePeriod);
+			createSkillDay(requestedDateTimePeriod.ChangeEndTime(TimeSpan.FromMinutes(15)));
 			var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
 			stateHolder.Schedules = _dictionary;
 
-			_dictionary.AddTestItem(absenceRequest.Person, GetExpectationsForOneDay(date, absence, requestedDateTimePeriod));
+			_dictionary.AddTestItem(absenceRequest.Person, GetExpectationsForOneDay(date, absence, requestedDateTimePeriod.ChangeEndTime(TimeSpan.FromMinutes(15))));
 
 			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
 			_resourceOptimizationHelper.AssertWasCalled(x => x.ResourceCalculateDate(date, true, true));
 			Assert.IsFalse(result.IsValid);
-
-
 	    }
 
         [Test]
