@@ -47,6 +47,7 @@
             // webView1
             // 
             this.webView1.Url = "http://localhost:56760";
+            this.webView1.BeforeContextMenu += new EO.WebBrowser.BeforeContextMenuHandler(this.webView1_BeforeContextMenu);
             this.webView1.NewWindow += new EO.WebBrowser.NewWindowHandler(this.webView1_NewWindow);
             // 
             // MainForm
