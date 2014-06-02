@@ -19,6 +19,6 @@
 #######################################
 #
 
-Scheduler_WeeklyRestRuleSolver_27108.license.name = Teleopti_RC
-RTA_RtaLastStatesOverview_27789.license.name = Teleopti_RC
-RTA_DrilldownToAllAgentsInOneTeam_25234.license.name = Teleopti_RC
+Scheduler_WeeklyRestRuleSolver_27108 = true
+RTA_RtaLastStatesOverview_27789.license.name = true
+RTA_DrilldownToAllAgentsInOneTeam_25234.license.name = true
