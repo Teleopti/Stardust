@@ -18,12 +18,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public bool IsEnabled(Toggles toggle)
 		{
-			var uriBuilder = new UriBuilder(_url);
-			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-			query["toggle"] = toggle.ToString();
-			uriBuilder.Query = query.ToString();
-			var request = WebRequest.Create(uriBuilder.ToString());
-			
+			var request = createWebRequest(toggle);
+
 			using (var response = request.GetResponse())
 			{
 				using (var stream = new StreamReader(response.GetResponseStream()))
@@ -31,6 +27,16 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 					return Convert.ToBoolean(stream.ReadToEnd());
 				}
 			}
+		}
+
+		private WebRequest createWebRequest(Toggles toggle)
+		{
+			var uriBuilder = new UriBuilder(_url);
+			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+			query["toggle"] = toggle.ToString();
+			uriBuilder.Query = query.ToString();
+			var request = WebRequest.Create(uriBuilder.ToString());
+			return request;
 		}
 	}
 }
