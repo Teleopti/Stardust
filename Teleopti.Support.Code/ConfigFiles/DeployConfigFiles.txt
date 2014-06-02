@@ -25,4 +25,4 @@
 ..\TeleoptiCCC\Web\Web.config,BuildArtifacts\Web.Root.Web.config
 ..\TeleoptiCCC\AuthenticationBridge\Web.config,BuildArtifacts\Web.AuthenticationBridge.Web.config
 ..\TeleoptiCCC\WindowsIdentityProvider\Web.config,BuildArtifacts\Web.WindowsIdentityProvider.Web.config
-..\TeleoptiCCC\Teleopti.Runtime.Environment\Teleopti.exe.config,BuildArtifacts\Runtime.Environment.config
+..\TeleoptiCCC\RuntimeEnvironment\Teleopti.exe.config,BuildArtifacts\Runtime.Environment.config

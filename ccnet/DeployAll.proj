@@ -716,7 +716,7 @@
 		<Copy SourceFiles="@(WindowsIdentityProvider)"
 		  DestinationFiles="@(WindowsIdentityProvider->'$(DeployPath)\WindowsIdentityProvider\%(RecursiveDir)%(Filename)%(Extension)')"/>	
 		<Copy SourceFiles="@(RuntimeEnvironment)"
-		  DestinationFiles="@(RuntimeEnvironment->'$(DeployPath)\Teleopti.Runtime.Environment\%(RecursiveDir)%(Filename)%(Extension)')"/>		  
+		  DestinationFiles="@(RuntimeEnvironment->'$(DeployPath)\RuntimeEnvironment\%(RecursiveDir)%(Filename)%(Extension)')"/>		  
 		<Copy SourceFiles="$(SDKDocOutput)"
 			DestinationFiles="$(DeployPath)\SDK\SdkDoc.chm"
 			/>
