@@ -643,7 +643,7 @@
 -->
 
 	<!-- Note: Each Copy command have a corresponding set of files in the above "ItemGroup" -->
-	<Target Name="CopyFiles" DependsOnTargets="AllFilesIncluded">
+	<Target Name="CopyFiles" DependsOnTargets="AllFilesIncluded;CreateHgChangesetFile">
 		<Message Text="Copying files to $(DeployPath)..."/>
 		<Copy 	SourceFiles="@(StartPage)"
 				DestinationFiles="@(StartPage->'$(DeployPath)\StartPage\%(RecursiveDir)%(Filename)%(Extension)')"/>
@@ -730,8 +730,15 @@
 			  DestinationFiles="@(PreReq->'$(MSIPath)\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy SourceFiles="$(SDKDocOutput)"
 			  DestinationFiles="$(MSIPath)\SdkDoc.chm"/>
-
 		<Message Text="Copying files to $(DeployPath). Done"/>
+	</Target>
+	
+	<Target Name="CreateHgChangesetFile">
+		<HgVersion LocalPath="$(CCNetWorkingDirectory)">
+			<Output TaskParameter="Changeset" PropertyName="HgChangeset" />
+		</HgVersion>
+		<WriteLinesToFile File="$(MSIPath)\lastchangeset.txt"
+						Lines="$(HgChangeset)" />
 	</Target>
 
 	<Target Name="TagAndPush" DependsOnTargets="GetVersion" Condition="'$(doTagging)'=='true'">
