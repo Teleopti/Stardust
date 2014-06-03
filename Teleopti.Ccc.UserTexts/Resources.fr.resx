@@ -5332,7 +5332,7 @@
     <value>Fin au plus tard</value>
   </data>
   <data name="LateStartTime" xml:space="preserve">
-    <value>Début au plus tôt</value>
+    <value>Début au plus tard</value>
   </data>
   <data name="MaxWorkTime" xml:space="preserve">
     <value>Temps contrat max</value>
@@ -8474,7 +8474,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Depuis contrat</value>
   </data>
   <data name="FromSchedulePeriod" xml:space="preserve">
-    <value>Depuis Période de Planification</value>
+    <value>Depuis Période Planning</value>
   </data>
   <data name="FullDayAbsence" xml:space="preserve">
     <value>Absence Journée Complète</value>
@@ -8791,7 +8791,7 @@ Réduisez la complexité pour utiliser ces horaires.</value>
     <value>Même Shift</value>
   </data>
   <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
-    <value>Merci de sélectionner au moins une des options "Même catégorie horaire", "Même horaire de début" ou "Même Horaire" dans l'Optimization par Block.</value>
+    <value>Merci de sélectionner au moins une des options "Même catégorie horaire", "Même horaire de début" ou "Même Horaire" dans l'Optimization par Bloc.</value>
   </data>
   <data name="ConfirmRemoval" xml:space="preserve">
     <value>Confirmer suppression</value>
@@ -9085,7 +9085,7 @@ Réduisez la complexité pour utiliser ces horaires.</value>
     <value>Disponibilité Horaire</value>
   </data>
   <data name="InfoPanel" xml:space="preserve">
-    <value>Panneau d'Infos</value>
+    <value>Info</value>
   </data>
   <data name="SubjectTooLong" xml:space="preserve">
     <value>Sujet trop long</value>

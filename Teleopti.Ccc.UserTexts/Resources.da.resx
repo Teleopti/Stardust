@@ -5353,7 +5353,7 @@ Tilgængelighed</value>
     <comment>Use Max Staffing</comment>
   </data>
   <data name="UseMinStaffing" xml:space="preserve">
-    <value>Anvend Maks Bemanding</value>
+    <value>Anvend Min Bemanding</value>
     <comment>Use Min Staffing</comment>
   </data>
   <data name="UsePreferences" xml:space="preserve">

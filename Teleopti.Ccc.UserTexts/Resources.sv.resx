@@ -11548,4 +11548,13 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="MoveTimeOn" xml:space="preserve">
     <value>Flyttar tid på </value>
   </data>
+  <data name="NextActivity" xml:space="preserve">
+    <value>Nästa aktivitet</value>
+  </data>
+  <data name="NextActivityStartTime" xml:space="preserve">
+    <value>Starttid för nästa aktivitet</value>
+  </data>
+  <data name="TimeInState" xml:space="preserve">
+    <value>Tid i status</value>
+  </data>
 </root>
