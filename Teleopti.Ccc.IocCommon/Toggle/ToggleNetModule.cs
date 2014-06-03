@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		{
 			builder.Register<IToggleManager>(c =>
 			{
-				var ctx = c.Resolve<IComponentContext>();
-				var licenseActivator = new Func<ILicenseActivator>(ctx.Resolve<ILicenseActivator>);
 				if (_pathToToggle.StartsWith("http://") || _pathToToggle.StartsWith("https://"))
 				{
 					return new ToggleQuerier(_pathToToggle);
 				}
+				var ctx = c.Resolve<IComponentContext>();
+				var licenseActivator = new Func<ILicenseActivator>(ctx.Resolve<ILicenseActivator>);
 				var specMappings = new DefaultSpecificationMappings();
 				specMappings.AddMapping("license", new LicenseSpecification(licenseActivator));
 				var toggleConfiguration = new ToggleConfiguration(new FileProviderFactory(new FileReader(_pathToToggle), specMappings));
