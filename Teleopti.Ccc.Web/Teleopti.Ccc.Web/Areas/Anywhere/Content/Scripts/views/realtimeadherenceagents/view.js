@@ -54,7 +54,6 @@
 			});
 
 			setInterval(function () {
-				viewModel.refreshTimeInState();
 				viewModel.refreshAlarmTime();
 			}, 1000);
 

@@ -10,7 +10,6 @@
     		that.TimeInState = ko.observable();
     		that.AlarmTime = ko.observable();
     		that.State = ko.observable();
-    		that.StateStart = ko.observable();
     		that.Activity = ko.observable();
     		that.NextActivity = ko.observable();
     		that.NextActivityStartTime = ko.observable();
@@ -18,13 +17,11 @@
     		that.AlarmColor = ko.observable();
     		that.AlarmStart = ko.observable();
     		that.TextWeight = ko.observable();
-    		that.StateStart = ko.observable();
 
     		that.fill = function (data, name, offset) {
     			that.PersonId = data.PersonId;
 				that.Name = name,
     			that.State(data.State);
-				that.StateStart(data.StateStart ? moment.utc(data.StateStart).add(offset, 'minutes').format(resources.DateTimeFormatForMoment): '');
 				that.Activity(data.Activity);
 				that.NextActivity(data.NextActivity);
     			that.NextActivityStartTime( data.NextActivityStartTime ? (moment.utc(data.NextActivityStartTime).add(offset, 'minutes').format(resources.TimeFormatForMoment)) : '');
@@ -33,14 +30,7 @@
     			that.refreshColor(data.AlarmColor);
     			that.AlarmStart(data.AlarmStart ? moment.utc(data.AlarmStart).add(offset, 'minutes').format(resources.DateTimeFormatForMoment) : '');
 				that.refreshAlarmTime();
-				that.refreshTimeInState();
 		    };
-
-    		that.refreshTimeInState = function () {
-			    if (!that.StateStart()) return;
-    			var duration = moment.duration(((new Date).getTime() - moment(that.StateStart(), resources.DateTimeFormatForMoment).toDate()));
-    			that.TimeInState(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
-    		}
 			
 			that.refreshAlarmTime = function () {
 				if (!that.AlarmStart()) return;

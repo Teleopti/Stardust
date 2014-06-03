@@ -76,13 +76,7 @@
 				});
 			return agent[0];
 		}
-
-		that.refreshTimeInState = function() {
-			that.agentStates().forEach(function (item) {
-				item.refreshTimeInState();
-			});
-		};
-
+		
 		that.refreshAlarmTime = function () {
 			that.agentStates().forEach(function (item) {
 				item.refreshAlarmTime();
