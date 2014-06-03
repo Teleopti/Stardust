@@ -401,6 +401,7 @@
     <Compile Include="Common\Controls\Columns\SelectedItemChangeBaseEventArgs.cs" />
     <Compile Include="Common\Controls\Columns\SelectedItemChangeEventArgs.cs" />
     <Compile Include="Common\Controls\Columns\TypeChangeEventArgs.cs" />
+    <Compile Include="Common\GridStyleInfoExtensions.cs" />
     <Compile Include="Common\Controls\OutlookControls\Workspaces\NewOutlookBarWorkspace.cs">
       <SubType>UserControl</SubType>
     </Compile>

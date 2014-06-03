@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Win
         public SearchPersonView()
         {
             InitializeComponent();
+            GridStyleInfoExtensions.ResetDefault();
             if(!DesignMode)
                 SetTexts();
 

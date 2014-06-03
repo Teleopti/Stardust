@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Reflection;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.AgentPortal.Common;
@@ -8,6 +9,15 @@ using Teleopti.Ccc.AgentPortalCode.AgentSchedule;
 
 namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 {
+    public static class GridStyleInfoExtensions
+    {
+        public static void ResetDefault()
+        {
+            var defaultField = typeof(GridStyleInfo).GetField("defaultStyle", BindingFlags.Static | BindingFlags.NonPublic);
+            defaultField.SetValue(null, null);
+        }
+    }
+
     public partial class LegendsView : BaseUserControl, ILegendsView
     {
         private LegendsPresenter _presenter;
@@ -15,6 +25,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         public LegendsView(ILegendLoader legendLoader)
         {
             InitializeComponent();
+            GridStyleInfoExtensions.ResetDefault();
             setupPresenter(legendLoader);
             setupDatasources();
             setupGrid();

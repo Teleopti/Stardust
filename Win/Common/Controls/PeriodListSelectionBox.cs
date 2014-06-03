@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         public PeriodListSelectionBox()
         {
             InitializeComponent();
+            GridStyleInfoExtensions.ResetDefault();
             if (!DesignMode) SetTexts();
 
             gridListControlPeriods.DataSource = _dateTimePairs;
