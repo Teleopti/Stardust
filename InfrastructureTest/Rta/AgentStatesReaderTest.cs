@@ -67,7 +67,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				                  ScheduledNext = "Lunch",
 				                  NextStart = DateTime.Now,
 				                  AlarmName = "Out of adherence",
-				                  AlarmStart = DateTime.Now,
 								  Color = Color.Red.ToArgb()
 			                  };
 
@@ -86,7 +85,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			agentStateResult.NextActivity.Should().Be(agentState1.ScheduledNext);
 			agentStateResult.NextActivityStartTime.Should().Be(agentState1.NextStart);
 			agentStateResult.Alarm.Should().Be(agentState1.AlarmName);
-			agentStateResult.AlarmStart.Should().Be(agentState1.AlarmStart);
 			agentStateResult.AlarmColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(agentState1.Color)));
 		}
 
