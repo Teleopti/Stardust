@@ -7,11 +7,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		public const string FixedDateFormat = "yyyy-MM-dd";
 		public const string FixedDateTimeFormat = "yyyy-MM-dd HH:mm";
+		public const string FixedDateTimeWithSecondsFormat = "yyyy-MM-dd HH:mm:ss";
 		public const string FixedTimeFormat = "HH:mm";
 
 		// see http://momentjs.com/docs/
 		public static string FixedDateFormatForMoment = ToMomentFormat(FixedDateFormat);
 		public static string FixedDateTimeFormatForMoment = ToMomentFormat(FixedDateTimeFormat);
+		public static string FixedDateTimeWithSecondsFormatForMoment = ToMomentFormat(FixedDateTimeWithSecondsFormat);
 		public static string FixedTimeFormatForMoment = ToMomentFormat(FixedTimeFormat);
 
 		public static string DateFormat()

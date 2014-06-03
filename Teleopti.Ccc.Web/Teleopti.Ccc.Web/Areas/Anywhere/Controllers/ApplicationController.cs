@@ -89,6 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					DateAndTimeFormatExtensions.FixedTimeFormat,
 					DateAndTimeFormatExtensions.FixedDateFormatForMoment,
 					DateAndTimeFormatExtensions.FixedDateTimeFormatForMoment,
+					DateAndTimeFormatExtensions.FixedDateTimeWithSecondsFormatForMoment,
 					DateAndTimeFormatExtensions.FixedTimeFormatForMoment,
 
 					DateFormat = DateAndTimeFormatExtensions.DateFormat(),

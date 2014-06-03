@@ -28,13 +28,13 @@
     			that.Alarm(data.Alarm);
     			
     			that.refreshColor(data.AlarmColor);
-    			that.AlarmStart(data.AlarmStart ? moment.utc(data.AlarmStart).add(offset, 'minutes').format(resources.DateTimeFormatForMoment) : '');
+    			that.AlarmStart(data.AlarmStart ? moment.utc(data.AlarmStart).add(offset, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
 				that.refreshAlarmTime();
 		    };
 			
 			that.refreshAlarmTime = function () {
 				if (!that.AlarmStart()) return;
-    			var duration = moment.duration(((new Date).getTime() - moment(that.AlarmStart(), resources.DateTimeFormatForMoment).toDate()));
+				var duration = moment.duration(((new Date).getTime() - moment(that.AlarmStart(), resources.FixedDateTimeWithSecondsFormatForMoment).toDate()));
     			that.AlarmTime(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
 			}
 
