@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -6,7 +7,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Toggle.Net;
 using Toggle.Net.Configuration;
 using Toggle.Net.Providers.TextFile;
-using Toggle.Net.Specifications;
 
 namespace Teleopti.Ccc.IocCommon.Toggle
 {
@@ -26,18 +26,16 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		{
 			builder.Register<IToggleManager>(c =>
 			{
-				var customerName = c.Resolve<ILicenseActivator>().CustomerName;
+				var ctx = c.Resolve<IComponentContext>();
+				var licenseActivator = new Func<ILicenseActivator>(ctx.Resolve<ILicenseActivator>);
 				if (_pathToToggle.StartsWith("http://") || _pathToToggle.StartsWith("https://"))
 				{
 					return new ToggleQuerier(_pathToToggle);
 				}
 				var specMappings = new DefaultSpecificationMappings();
-				specMappings.AddMapping("license", new LicenseSpecification(customerName));
+				specMappings.AddMapping("license", new LicenseSpecification(licenseActivator));
 				var toggleConfiguration = new ToggleConfiguration(new FileProviderFactory(new FileReader(_pathToToggle), specMappings));
-				if (DeveloperLicenseName.Equals(customerName))
-				{
-					toggleConfiguration.SetDefaultSpecification(new TrueSpecification());
-				}
+				toggleConfiguration.SetDefaultSpecification(new DefaultSpecification(licenseActivator));
 				return new toggleCheckerWrapper(toggleConfiguration.Create());
 			})
 				.SingleInstance()
