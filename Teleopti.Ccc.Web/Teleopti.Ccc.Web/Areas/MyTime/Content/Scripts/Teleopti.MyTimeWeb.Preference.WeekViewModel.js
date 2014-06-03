@@ -65,7 +65,16 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultWeeklyContractTimeMinutesUpper());
 	});
 
-	self.IsWeeklyWorkTimeVisible = ko.computed(function() {
+	self.IsWeeklyWorkTimeVisible = ko.computed(function () {
+		var isInCurrentPeriod = false;
+		$.each(self.DayViewModels(), function(index, day) {
+			if (day.EditableIsInOpenPeriod()) {
+				isInCurrentPeriod = true;
+				return false;
+			}
+		});
+		if (isInCurrentPeriod)
+			return true;
 		if (self.PossibleResultWeeklyContractTimeMinutesLower() > 0)
 			return true;
 		return false;
