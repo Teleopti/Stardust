@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -139,6 +140,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 	public class OptionsSettingPagesProvider : ISettingPagesProvider
 	{
+		private readonly IToggleManager _toggleManager;
+
+		public OptionsSettingPagesProvider(IToggleManager toggleManager)
+		{
+			_toggleManager = toggleManager;
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public IList<ISettingPage> CreateSettingPages()
 		{
@@ -170,7 +178,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 											new ManageAlarmSituations(),
 											new FairnessValuesControl(),
 											new DefinitionSetSettings(),
-											new WorkflowControlSetView(),
+											new WorkflowControlSetView(_toggleManager),
 											new AuditingPage(),
 											new ScheduleTagControl()
 										};

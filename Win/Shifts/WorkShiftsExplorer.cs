@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
@@ -31,13 +32,15 @@ namespace Teleopti.Ccc.Win.Shifts
         private VisualizeGridView _visualizeView;
         private IDictionary<ShiftCreatorViewType, ToolStripButton> _viewButtonDictionary;
         private readonly IEventAggregator _eventAggregator;
+	    private readonly IToggleManager _toggleManager;
         private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
 		
 		private bool ruleSetBagCopyClicked, ruleSetCopyClicked;
 
-        public WorkShiftsExplorer(IEventAggregator eventAggregator)
+        public WorkShiftsExplorer(IEventAggregator eventAggregator, IToggleManager toggleManager)
         {
             _eventAggregator = eventAggregator;
+	        _toggleManager = toggleManager;
             InitializeComponent();
             if (!DesignMode)
             {
@@ -399,7 +402,7 @@ namespace Teleopti.Ccc.Win.Shifts
         {
             try
             {
-                var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider()));
+					var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
                 settings.Show();
             }
             catch (DataSourceException ex)

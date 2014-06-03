@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using log4net;
 using Syncfusion.Windows.Forms;
@@ -132,9 +133,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
         private void toolStripButtonSystemOptions_Click(object sender, EventArgs e)
         {
+	        var toggleManager = _container.Resolve<IToggleManager>();
             try
             {
-                var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider()));
+					var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager)));
                 settings.Show();
                 settings.BringToFront();
             }

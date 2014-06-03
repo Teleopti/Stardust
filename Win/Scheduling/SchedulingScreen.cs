@@ -13,6 +13,7 @@ using System.Windows.Forms.Integration;
 using Autofac;
 using Autofac.Core;
 using MbCache.Core;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
@@ -5509,9 +5510,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonOptions_Click(object sender, EventArgs e)
 		{
+			var toggleManager = _container.Resolve<IToggleManager>();
+
 			try
 			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider()));
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager)));
 				settings.Show();
 				settings.BringToFront();
 			}

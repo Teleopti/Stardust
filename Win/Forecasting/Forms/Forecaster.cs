@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
 using Syncfusion.Drawing;
@@ -69,6 +70,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private readonly GridViewInChartButtons _zoomButtonsChart;
         private readonly DateNavigateControl _timeNavigationControl;//it was moved and renamed..
         private readonly GridRowInChartSettingButtons _gridrowInChartSetting;
+		  private readonly IToggleManager _toggleManager;
         private ForecasterSettings _currentForecasterSettings;
         private ForecasterChartSetting _skillChartSetting;
         private ForecasterChartSetting _workloadChartSetting;
@@ -988,13 +990,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         /// <param name="dateTimePeriod">The date time period.</param>
         /// <param name="scenario">The scenario.</param>
         /// <param name="longterm">if set to <c>true</c> [longterm].</param>
+	    /// <param name="toggleManager"></param>
         /// <remarks>
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        public Forecaster(ISkill skill, DateOnlyPeriod dateTimePeriod, IScenario scenario, bool longterm)
+	    public Forecaster(ISkill skill, DateOnlyPeriod dateTimePeriod, IScenario scenario, bool longterm, IToggleManager toggleManager)
             : this()
         {
+		    _toggleManager = toggleManager;
             _dateTimePeriod = dateTimePeriod;
 
             _zoomButtons = new ZoomButtons();
@@ -2281,7 +2285,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             try
             {
-                var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider()));
+					var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
                 settings.Show();
             }
             catch (DataSourceException ex)

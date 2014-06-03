@@ -7,6 +7,7 @@ using System.Security;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Interfaces.Infrastructure;
@@ -40,17 +41,19 @@ namespace Teleopti.Ccc.Win.Budgeting
 	    private readonly IBudgetPermissionService _budgetPermissionService;
 	    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 	    private readonly IRepositoryFactory _repositoryFactory;
+		private readonly IToggleManager _toggleManager;
 	    private readonly IEventAggregator _globalEventAggregator;
 	    private bool _dayHasSelectedCell;
 	    private bool _weekHasSelectedCell;
         private bool _monthHasSelectedCell;
 
-	    public BudgetGroupMainView(IBudgetGroupTabView budgetGroupTabView, IEventAggregatorLocator eventAggregatorLocator, IGracefulDataSourceExceptionHandler dataSourceExceptionHandler, IBudgetPermissionService budgetPermissionService, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
+	    public BudgetGroupMainView(IBudgetGroupTabView budgetGroupTabView, IEventAggregatorLocator eventAggregatorLocator, IGracefulDataSourceExceptionHandler dataSourceExceptionHandler, IBudgetPermissionService budgetPermissionService, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IToggleManager toggleManager)
 		{
 		    _dataSourceExceptionHandler = dataSourceExceptionHandler;
 		    _budgetPermissionService = budgetPermissionService;
 	        _unitOfWorkFactory = unitOfWorkFactory;
 	        _repositoryFactory = repositoryFactory;
+		    _toggleManager = toggleManager;
             _localEventAggregator = eventAggregatorLocator.LocalAggregator();
             _globalEventAggregator = eventAggregatorLocator.GlobalAggregator();
 			InitializeComponent();
@@ -519,7 +522,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 		{
             try
             {
-                var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider()));
+                var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
                 settings.Show();
             }
             catch (DataSourceException ex)

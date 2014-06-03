@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public partial class WorkflowControlSetView : BaseUserControl, ISettingPage, IWorkflowControlSetView
     {
+	    private readonly IToggleManager _toggleManager;
         private readonly WorkflowControlSetPresenter _presenter;
         private SFGridColumnGridHelper<AbsenceRequestPeriodModel> _gridHelper;
         private IDictionary<IAbsence, MonthlyProjectionVisualiser> _projectionCache =
@@ -41,7 +42,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         public WorkflowControlSetView()
         {
             InitializeComponent();
-	        
+		 }
+        public WorkflowControlSetView(IToggleManager toggleManager):this()
+        {
+	        _toggleManager = toggleManager;
+
+			  if (!_toggleManager.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635))
+			  {
+				  labelMinimumTimePerWeek.Hide();
+				  textBoxExtMinTimePerWeek.Hide();
+			  }
 	        if (DesignMode) return;
         	_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory());
         	GridStyleInfoStore.CellValueProperty.IsCloneable = false;

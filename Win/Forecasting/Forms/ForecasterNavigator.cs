@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 	    private readonly IJobHistoryViewFactory _jobHistoryViewFactory;
 	    private readonly IImportForecastViewFactory _importForecastViewFactory;
 	    private readonly ISendCommandToSdk _sendCommandToSdk;
+		private readonly IToggleManager _toggleManager;
 	    private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private const string assembly = "Teleopti.Ccc.SmartParts";
@@ -92,13 +94,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             IUnitOfWorkFactory unitOfWorkFactory, 
             IJobHistoryViewFactory jobHistoryViewFactory,
             IImportForecastViewFactory importForecastViewFactory,
-            ISendCommandToSdk sendCommandToSdk)
+            ISendCommandToSdk sendCommandToSdk,
+			 IToggleManager toggleManager)
             : this()
         {
             _portalSettings = portalSettings;
             _jobHistoryViewFactory = jobHistoryViewFactory;
             _importForecastViewFactory = importForecastViewFactory;
             _sendCommandToSdk = sendCommandToSdk;
+		    _toggleManager = toggleManager;
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
             splitContainer1.SplitterDistance = splitContainer1.Height - _portalSettings.ForecasterActionPaneHeight;
@@ -1012,7 +1016,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private void startForecaster(DateOnlyPeriod selectedPeriod, IScenario scenario, ISkill skill)
 		{
 			Cursor = Cursors.WaitCursor;
-			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true);
+			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true, _toggleManager);
 			forecaster.Show();
 			Cursor = Cursors.Default;
 		}

@@ -7,6 +7,7 @@ using Autofac;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -2041,12 +2042,14 @@ namespace Teleopti.Ccc.Win.Permissions
             handleRenameRole();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability",
+		    "CA2000:Dispose objects before losing scope")]
         private void toolStripButtonSystemOptionsClick(object sender, EventArgs e)
         {
+		    var toggleManager = _container.Resolve<IToggleManager>();
             try
             {
-                var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider()));
+					var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager)));
                 settings.Show();
             }
             catch (DataSourceException ex)

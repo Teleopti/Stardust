@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Configuration;
@@ -26,8 +27,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		where TAdapterChild : IRotationModel<TBaseType, TScheduleType>
 	{
 		public RotationBaseGridView(GridControl grid, FilteredPeopleHolder filteredPeopleHolder,
-									IList<TAdapterParent> parentAdapterCollection,
-									ViewType viewType)
+		                            IList<TAdapterParent> parentAdapterCollection, ViewType viewType,
+		                            IToggleManager toggleManager)
 			: base(grid, filteredPeopleHolder)
 		{
 			Init();
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			cellModel.HideTodayButton();
 			grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
 			_viewType = viewType;
+			_toggleManager = toggleManager;
 			_parentAdapterCollection = parentAdapterCollection;
 		}
 
@@ -92,6 +94,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		// View Type 
 		private ViewType _viewType;
+		private readonly IToggleManager _toggleManager;
 
 		internal override ViewType Type
 		{
@@ -354,7 +357,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 			if (selectedEntity != null)
 			{
-				var screen = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider()), selectedEntity);
+				var screen = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)), selectedEntity);
 				screen.Show();
 			}
 		}
