@@ -357,7 +357,6 @@ Scenario: Should be able to see current states of all agents
 		| Alarm                    | Not adhering     |
 		| Alarm Time               | 0:15:00 |
 		| Alarm Color              | Red              |
-		| Time in state	| 0:15:00 |
 	And I should see real time agent details for 'Ashley Andeen'
 		| Field				| Value				|
 		| Name				| Ashley Andeen		|
@@ -368,7 +367,6 @@ Scenario: Should be able to see current states of all agents
 		| Alarm	| Adhering	|
 		| Alarm Time	| 0:15:00 |
 		| Alarm Color              | Green              |
-		| Time in state	| 0:15:00 |
 
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
 Scenario: Should be able to see state updates of all agents
@@ -435,7 +433,6 @@ Scenario: Should be able to see state updates of all agents
 		| Alarm                    | Not adhering     |
 		| Alarm Time               | 0:15:00 |
 		| Alarm Color              | Red              |
-		| Time in state	| 0:15:00 |
 	And I should see real time agent details for 'Ashley Andeen'
 		| Field				| Value				|
 		| Name				| Ashley Andeen		|
@@ -446,7 +443,6 @@ Scenario: Should be able to see state updates of all agents
 		| Alarm	| Adhering	|
 		| Alarm Time	| 0:15:00 |
 		| Alarm Color              | Green              |
-		| Time in state	| 0:15:00 |
 
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
 Scenario: Should be able to see all agents of the team with or without state updates
@@ -525,7 +521,6 @@ Scenario: Should be able to see all agents of the team with or without state upd
 		| Alarm                    | Not adhering     |
 		| Alarm Time               | 0:15:00 |
 		| Alarm Color              | Red              |
-		| Time in state	| 0:15:00 |
 	And I should see real time agent details for 'Ashley Andeen'
 		| Field				| Value				|
 		| Name				| Ashley Andeen		|
@@ -536,5 +531,4 @@ Scenario: Should be able to see all agents of the team with or without state upd
 		| Alarm	| Adhering	|
 		| Alarm Time	| 0:15:00 |
 		| Alarm Color              | Green              |
-		| Time in state	| 0:15:00 |
 	And I should see real time agent name for 'John Smith'

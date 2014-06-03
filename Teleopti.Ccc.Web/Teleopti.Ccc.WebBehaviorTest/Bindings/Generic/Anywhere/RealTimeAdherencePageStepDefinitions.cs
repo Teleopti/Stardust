@@ -75,7 +75,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.NextActivityStartTimeFormatted());
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.Alarm);
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.AlarmTimeFormatted());
-			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.TimeInStateFormatted());
 
 			const string colorSelector = "tr[style*='background-color: {0}'] .agent-name:contains('{1}')";
 			Browser.Interactions.AssertExistsUsingJQuery(colorSelector, toRGBA(stateInfo.AlarmColor, "0.6"), name);
