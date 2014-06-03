@@ -150,6 +150,7 @@
     <Compile Include="Configuration\ScheduleScreenRefresherModule.cs" />
     <Compile Include="Configuration\ShiftTradeModule.cs" />
     <Compile Include="Configuration\TeleoptiCacheKey.cs" />
+    <Compile Include="Toggle\DefaultSpecification.cs" />
     <Compile Include="Toggle\LicenseSpecification.cs" />
     <Compile Include="Toggle\ToggleNetModule.cs" />
     <Compile Include="Configuration\UnitOfWorkModule.cs" />
