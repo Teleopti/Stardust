@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: My Profile
+﻿Feature: My Profile
 	In order to view and change my profile
 	As an agent
 	I want to 

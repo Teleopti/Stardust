@@ -5,10 +5,8 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
-using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
@@ -19,44 +17,43 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I view my regional settings")]
 		public void WhenIViewMyRegionalSettings()
 		{
+			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
+				DataMaker.Data().Apply(new Agent());
 			TestControllerMethods.Logon();
-			Navigation.GotoRegionalSettings();
-		}
-
-		[When(@"I view my password")]
-		public void WhenIViewMyPassword()
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoPasswordPage();
+			Navigation.GotoAnApplicationPage();
+			Browser.Interactions.Click(".user-name-link");
+			Browser.Interactions.Click("#regional-settings");
 		}
 
 		[When(@"I view password setting page")]
-		public void WhenIViewPasswordSettingPage()
+		[When(@"I view my password")]
+		public void WhenIViewMyPassword()
 		{
-			Navigation.GotoPasswordPage();
+			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
+				DataMaker.Data().Apply(new Agent());
+			TestControllerMethods.Logon();
+			Navigation.GotoAnApplicationPage();
+			Browser.Interactions.Click(".user-name-link");
+			Browser.Interactions.Click("#change-your-password");
 		}
 
 		[When(@"I change my password to '(.*)'")]
 		public void WhenIChangeMyPassword(string newPassword)
 		{
-			var page = Browser.Current.Page<PasswordPage>();
-			page.Password.Value = newPassword;
-			page.PasswordValidation.Value = newPassword;
-			page.OldPassword.Value = TestData.CommonPassword;
-			Browser.Current.Eval("$('input#password').keyup();");
-			page.ConfirmButton.EventualClick();
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#password", newPassword);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#passwordValidation", newPassword);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#oldPassword", TestData.CommonPassword);
+			Browser.Interactions.ClickUsingJQuery("#passwordButton");
 		}
 
 		[When(@"I change my password in my profile with")]
 		public void WhenIChangeMyPasswordInMyProfileWith(Table table)
 		{
 			var password = table.CreateInstance<PasswordInfo>();
-			var page = Browser.Current.Page<PasswordPage>();
-			page.Password.Value = password.Password;
-			page.PasswordValidation.Value = password.ConfirmedPassword;
-			page.OldPassword.Value = password.OldPassword;
-			Browser.Current.Eval("$('input#password').keyup();");
-			page.ConfirmButton.EventualClick();
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#password", password.Password);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#passwordValidation", password.ConfirmedPassword);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#oldPassword", password.OldPassword);
+			Browser.Interactions.ClickUsingJQuery("#passwordButton");
 		}
 
 		public class PasswordInfo
@@ -69,22 +66,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I change my password using incorrect current password")]
 		public void WhenIChangeMyPasswordUsingIncorrectCurrentPassword()
 		{
-			var page = Browser.Current.Page<PasswordPage>();
-			page.Password.Value = "newP@ssw0rd";
-			page.PasswordValidation.Value = "newP@ssw0rd";
-			page.OldPassword.Value = TestData.CommonPassword + "fel";
-			Browser.Current.Eval("$('input#password').keyup();");
-			page.ConfirmButton.EventualClick();
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#password", "newP@ssw0rd");
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#passwordValidation", "newP@ssw0rd");
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#oldPassword", TestData.CommonPassword + "fel");
+			Browser.Interactions.ClickUsingJQuery("#passwordButton");
 		}
 
 		[When(@"I am changing password using incorrect confirm password")]
 		public void WhenIAmChangingPasswordUsingIncorrectConfirmPassword()
 		{
-			var page = Browser.Current.Page<PasswordPage>();
-			page.Password.Value = "newP@ssw0rd";
-			page.PasswordValidation.Value = "newP@ssw0rd" +"fel";
-			page.OldPassword.Value = TestData.CommonPassword;
-			Browser.Current.Eval("$('input#password').keyup();");
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#password", "newP@ssw0rd");
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#passwordValidation", "newP@ssw0rd" + "fel");
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#oldPassword", TestData.CommonPassword);
 		}
 
 		[Then(@"I should see my culture")]
@@ -104,89 +97,50 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I change culture to US")]
 		public void WhenIChangeCultureToUS()
 		{
-			ChangeCulture(CultureInfo.GetCultureInfo(1033).DisplayName);
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#Culture-Picker", CultureInfo.GetCultureInfo(1033).DisplayName);
 		}
 
 		[When(@"I change language to english")]
 		public void WhenIChangeLanguageToEnglish()
 		{
-			ChangeUiCulture(CultureInfo.GetCultureInfo(1033).DisplayName);
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#CultureUi-Picker", CultureInfo.GetCultureInfo(1033).DisplayName);
 		}
 
 		[Then(@"I should see US date format"), SetCulture("en-US")]
 		public void ThenIShouldSeeUSDateFormat()
 		{
 			Navigation.GotoTeamSchedule();
-			Browser.Interactions.AssertExists(string.Format(@"div:[data-mytime-periodselection*=""""Display"": ""{0}""""]",
-			                                                DateOnlyForBehaviorTests.TestToday.Date.ToShortDateString()));
+			Browser.Interactions.AssertInputValueUsingJQuery(".navbar-form input.span2.text-center", DateOnlyForBehaviorTests.TestToday.Date.ToShortDateString());
 		}
-
 
 		[Then(@"I should see english text")]
 		public void ThenIShouldSeeEnglishText()
 		{
-			Browser.Interactions.AssertFirstContains("a[href='#RequestsTab']","Requests");
+			Browser.Interactions.AssertFirstContains("a[href='#RequestsTab']", "Requests");
 		}
 
 		[Then(@"I should see a message saying the password is not confirmed correctly")]
 		public void ThenIShouldSeeAMessageSayingThePasswordIsNotConfirmedCorrectly()
 		{
-			var page = Browser.Current.Page<PasswordPage>();
-			EventualAssert.That(() => page.NonMatchingNewPassword.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertExists("#nonMatchingPassword");
 		}
 
 		[Then(@"Confirm button should be disabled")]
 		public void ThenConfirmButtonShouldBeDisabled()
 		{
-			var page = Browser.Current.Page<PasswordPage>();
-			EventualAssert.That(() => page.ConfirmButton.Enabled, Is.False);
+			Browser.Interactions.AssertExists(".btn-primary:disabled");
 		}
 
 		[Then(@"I should see a message saying the password is incorrect")]
 		public void ThenIShouldSeeAMessageSayingThePasswordIsIncorrect()
 		{
-			var page = Browser.Current.Page<PasswordPage>();
-			EventualAssert.That(() => page.IncorrectPassword.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertExists("#incorrectOldPassword");
 		}
 
 		[Then(@"I should see password change failed with message")]
 		public void ThenIShouldSeePasswordChangeFailedWithMessage()
 		{
-			var page = Browser.Current.Page<PasswordPage>();
-			EventualAssert.That(() => page.InvalidNewPassword.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertExists("#invalidNewPassword");
 		}
-
-		private static void ChangeCulture(string culture)
-		{
-			TestControllerMethods.TestMessage("Page have not refreshed");
-			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
-
-			IOpenTheCulturePicker();
-			Select2Box.SelectItemByText("Culture-Picker", culture);
-
-			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
-		}
-
-		private static void ChangeUiCulture(string culture)
-		{
-			TestControllerMethods.TestMessage("Page have not refreshed");
-			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
-
-			IOpenTheCultureUiPicker();
-			Select2Box.SelectItemByText("CultureUi-Picker", culture);
-
-			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
-		}
-
-		private static void IOpenTheCultureUiPicker()
-		{
-			Select2Box.OpenWhenOptionsAreLoaded("CultureUi-Picker");
-		}
-
-		private static void IOpenTheCulturePicker()
-		{
-			Select2Box.OpenWhenOptionsAreLoaded("Culture-Picker");
-		}
-
 	}
 }
