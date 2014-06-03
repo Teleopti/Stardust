@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public IList<IShiftProjectionCache> FilterForRoleModel(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
 			IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult,
-			bool sameContractTime)
+			bool isSameOpenHoursInBlock)
 		{
 			if (effectiveRestriction == null)
 				return null;
@@ -104,14 +104,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
 				groupPerson.GroupMembers.First().PermissionInformation.DefaultTimeZone(), ruleSetBag, false, false);
 			shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
-				groupPerson, matrixList, sameContractTime);
+				groupPerson, matrixList, isSameOpenHoursInBlock);
 
 			if (allowanceToUseBlackList(shiftList, schedulingOptions, effectiveRestriction))
 			{
 				shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
 					groupPerson.GroupMembers.First().PermissionInformation.DefaultTimeZone(), ruleSetBag, true, false);
 				shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
-					groupPerson, matrixList, sameContractTime);
+					groupPerson, matrixList, isSameOpenHoursInBlock);
 			}
 
 			if (shiftList == null)
