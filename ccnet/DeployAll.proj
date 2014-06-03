@@ -643,7 +643,7 @@
 -->
 
 	<!-- Note: Each Copy command have a corresponding set of files in the above "ItemGroup" -->
-	<Target Name="CopyFiles" DependsOnTargets="AllFilesIncluded;CreateHgChangesetFile">
+	<Target Name="CopyFiles" DependsOnTargets="AllFilesIncluded">
 		<Message Text="Copying files to $(DeployPath)..."/>
 		<Copy 	SourceFiles="@(StartPage)"
 				DestinationFiles="@(StartPage->'$(DeployPath)\StartPage\%(RecursiveDir)%(Filename)%(Extension)')"/>
@@ -725,6 +725,7 @@
 		<Message Importance="high" Text="make folder ..."/>
 		<Exec Command="if not exist &quot;$(MSIPath)&quot; mkdir &quot;$(MSIPath)&quot;"/>
 		<Message Importance="high" Text="make folderWiki. Done!"/>
+		<CallTarget Targets="CreateHgChangesetFile" />
 	
 		<Copy SourceFiles="@(PreReq)"
 			  DestinationFiles="@(PreReq->'$(MSIPath)\%(RecursiveDir)%(Filename)%(Extension)')"/>
