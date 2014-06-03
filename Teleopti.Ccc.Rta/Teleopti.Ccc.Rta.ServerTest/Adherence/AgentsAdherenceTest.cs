@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 				StateStart = DateTime.Now,
 				AlarmId = alarmId,
 				AlarmName = "Adherencing",
+				AlarmStart = DateTime.Now,
 				Color = Color.Red.ToArgb(),
 				NextStart = DateTime.Now,
 				PersonId = personId,
@@ -48,10 +49,11 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 					Activity = actualAgentState.Scheduled,
 					Alarm = actualAgentState.AlarmName,
 					AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(actualAgentState.Color)),
-					AlarmStart = actualAgentState.StateStart,
+					AlarmStart = actualAgentState.AlarmStart,
 					NextActivity = actualAgentState.ScheduledNext,
 					NextActivityStartTime = actualAgentState.NextStart,
-					State = actualAgentState.State
+					State = actualAgentState.State,
+					StateStart = actualAgentState.StateStart
 				} } 
 			};
 
