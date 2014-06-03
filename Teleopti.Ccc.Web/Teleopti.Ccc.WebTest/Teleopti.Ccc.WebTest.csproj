@@ -166,6 +166,7 @@
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Controllers\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
+    <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Core\Startup\BundleScriptsTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
     <Compile Include="FakeSchedulePersonProvider.cs" />
