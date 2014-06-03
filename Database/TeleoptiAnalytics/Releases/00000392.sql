@@ -766,7 +766,7 @@ ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_insert_date
 GO
 ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_update_date]  DEFAULT (getdate()) FOR [update_date]
 GO
-ALTER TABLE [mart].[fact_schedule] ADD  DEFAULT ((-1)) FOR [overtime_id]
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_overtime_id] DEFAULT ((-1)) FOR [overtime_id]
 GO
 ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_absence] FOREIGN KEY([absence_id])
 REFERENCES [mart].[dim_absence] ([absence_id])
