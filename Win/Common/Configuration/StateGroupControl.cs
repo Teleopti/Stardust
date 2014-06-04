@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		// Helps keep track of the node that is being dragged (and which node has contextmenu visible).
 		private TreeNodeAdv _currentSourceNode;
 		private RtaStateGroupRepository _repository;
+		private bool _cancelValidate;
 
 		public StateGroupControl()
 		{
@@ -289,7 +290,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private static TreeNodeAdv CreateNode(IRtaStateGroup stateGroup)
+		private TreeNodeAdv CreateNode(IRtaStateGroup stateGroup)
 		{
             var node = new TreeNodeAdv(stateGroup.Name) {TagObject = stateGroup};
 			SetNodeToolTip(node);
@@ -431,8 +432,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private static void SetAvailableDescriptionToNode(TreeNodeAdv node)
+		private void SetAvailableDescriptionToNode(TreeNodeAdv node)
 		{
+			_cancelValidate = true;
             var stateGroup = node.TagObject as IRtaStateGroup;
 			if (stateGroup != null)
 			{
@@ -440,10 +442,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 					            ? string.Concat(stateGroup.Name, " - ", Resources.StateGroupAvailableDescription)
 					            : stateGroup.Name;
 			}
+			_cancelValidate = false;
 		}
 
-		private static void SetUseForLogOutDescriptionToNode(TreeNodeAdv node)
+		private void SetUseForLogOutDescriptionToNode(TreeNodeAdv node)
 		{
+			_cancelValidate = true;
             var stateGroup = node.TagObject as IRtaStateGroup;
 			if (stateGroup != null)
 			{
@@ -451,6 +455,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 					            ? string.Concat(node.Text, " - ", Resources.UseForLogOut)
 					            : node.Text;
 			}
+			_cancelValidate = false;
 		}
 
 		private void treeViewAdv1_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
@@ -466,7 +471,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			// Validating textchanges in edit textbox by user
 			// Validate number of characters.
-			if (e.Label.Length <= 50)
+			if (e.Label.Length <= 50 && !_cancelValidate)
 			{
 				e.ContinueEditing = true;
 			}
@@ -480,10 +485,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			// Validating entered text by user
 			// Check for empty name
-			if (String.IsNullOrEmpty(e.Label) || e.Label.Trim().Length == 0)
+			if (_cancelValidate || String.IsNullOrEmpty(e.Label) || e.Label.Trim().Length == 0)
 			{
 				// Invalid
 				e.Cancel = true;
+				e.ContinueEditing = false;
 			}
 			else
 			{
@@ -493,6 +499,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void treeViewAdv1_NodeEditorValidated(object sender, TreeNodeAdvEditEventArgs e)
 		{
+			if (_cancelValidate) return;
 			// New text change is made - Save Name change in object
 			var stateGroup = e.Node.TagObject as IRtaStateGroup;
 			if (stateGroup != null)
@@ -520,6 +527,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			stateGroup.Available = e.Node.Checked;
 			SetAvailableDescriptionToNode(e.Node);
 			SetUseForLogOutDescriptionToNode(e.Node);
+			_cancelValidate = false;
 		}
 
 		private void TreeViewAdv1MouseDown(object sender, MouseEventArgs e)
@@ -614,6 +622,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public ViewType ViewType
 		{
 			get { return ViewType.StateGroup; }
+		}
+
+		private void treeViewAdv1BeforeCheck(object sender, TreeNodeAdvBeforeCheckEventArgs e)
+		{
+			treeViewAdv1.SelectedNode = e.Node;
+			_cancelValidate = true;
 		}
 	}
 }
