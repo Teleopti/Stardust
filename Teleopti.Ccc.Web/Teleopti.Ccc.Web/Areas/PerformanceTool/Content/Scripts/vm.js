@@ -18,7 +18,7 @@ define([
 			new AddFullDayAbsenceScenario(
 				"PersonScheduleDayReadModel",
 				function (notification) {
-					if (this.PersonId == notification.DomainReferenceId) { return true; }
+					if (this.PersonId.toUpperCase() == notification.DomainReferenceId.toUpperCase()) { return true; }
 					return false;
 				}),
 			new AddFullDayAbsenceScenario(

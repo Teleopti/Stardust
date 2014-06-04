@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 				{
 					PersonIds = new[]
 						{
-							DataMaker.Data().MePerson.Id.Value.ToString()
+							DataMaker.Data().MePerson.Id.Value.ToString().ToUpper()
 						},
 					AbsenceId = DataMaker.Data().UserData<AbsenceConfigurable>().Absence.Id.Value.ToString(),
 					DateRange = new
