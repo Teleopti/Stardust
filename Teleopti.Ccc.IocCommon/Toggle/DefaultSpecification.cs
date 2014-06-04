@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Toggle.Net.Specifications;
 
@@ -7,16 +6,16 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	public class DefaultSpecification : IToggleSpecification
 	{
-		private readonly Func<ILicenseActivator> _licenseActivator;
+		private readonly ILicenseActivatorProvider _licenseActivatorProvider;
 
-		public DefaultSpecification(Func<ILicenseActivator> licenseActivator)
+		public DefaultSpecification(ILicenseActivatorProvider licenseActivatorProvider)
 		{
-			_licenseActivator = licenseActivator;
+			_licenseActivatorProvider = licenseActivatorProvider;
 		}
 
 		public bool IsEnabled(string currentUser, IDictionary<string, string> parameters)
 		{
-			var customerName = _licenseActivator().CustomerName;
+			var customerName = _licenseActivatorProvider.Current().CustomerName;
 			return ToggleNetModule.DeveloperLicenseName.Equals(customerName);
 		}
 

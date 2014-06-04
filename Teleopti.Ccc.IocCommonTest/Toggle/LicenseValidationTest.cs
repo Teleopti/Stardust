@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				File.WriteAllLines(tempFile, new[] { "TestToggle=license"});
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
+				ToggleNetModule.RegisterDependingModules(containerBuilder);
 				using (var container = containerBuilder.Build())
 				{
 					Assert.Throws<DependencyResolutionException>(() => container.Resolve<IToggleManager>());

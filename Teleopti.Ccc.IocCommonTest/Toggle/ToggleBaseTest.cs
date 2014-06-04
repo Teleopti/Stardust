@@ -154,11 +154,13 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		protected abstract bool DisabledFeatureShouldBe { get; }
 		protected abstract bool RcFeatureShouldBe { get; }
 
-		private ILicenseActivator createLicenseActivitor()
+		private ILicenseActivatorProvider createLicenseActivitor()
 		{
-			var act = MockRepository.GenerateMock<ILicenseActivator>();
-			act.Expect(x => x.CustomerName).Return(LicenseCustomerName);
-			return act;
+			var provider = MockRepository.GenerateMock<ILicenseActivatorProvider>();
+			var activator = MockRepository.GenerateMock<ILicenseActivator>();
+			provider.Stub(x => x.Current()).Return(activator);
+			activator.Stub(x => x.CustomerName).Return(LicenseCustomerName);
+			return provider;
 		}
 
 		protected abstract string LicenseCustomerName { get; }

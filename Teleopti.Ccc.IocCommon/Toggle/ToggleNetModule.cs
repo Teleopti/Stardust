@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Infrastructure;
 using Toggle.Net;
 using Toggle.Net.Configuration;
@@ -35,12 +38,11 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				{
 					return new ToggleQuerier(_pathToToggle);
 				}
-				var ctx = c.Resolve<IComponentContext>();
-				var licenseActivator = new Func<ILicenseActivator>(ctx.Resolve<ILicenseActivator>);
+				var licenseActivatorProvider = c.Resolve<ILicenseActivatorProvider>();
 				var specMappings = new DefaultSpecificationMappings();
-				specMappings.AddMapping("license", new LicenseSpecification(licenseActivator));
+				specMappings.AddMapping("license", new LicenseSpecification(licenseActivatorProvider));
 				var toggleConfiguration = new ToggleConfiguration(new FileProviderFactory(new FileReader(_pathToToggle), specMappings));
-				toggleConfiguration.SetDefaultSpecification(new DefaultSpecification(licenseActivator));
+				toggleConfiguration.SetDefaultSpecification(new DefaultSpecification(licenseActivatorProvider));
 				return new toggleCheckerWrapper(toggleConfiguration.Create());
 			})
 				.SingleInstance()
@@ -50,6 +52,13 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				.SingleInstance().As<ITogglesActive>();
 			builder.RegisterType<AllToggles>()
 				.SingleInstance().As<IAllToggles>();
+		}
+
+		public static void RegisterDependingModules(ContainerBuilder builder)
+		{
+			//if using in scenarios where not all modules are registered
+			builder.RegisterModule<UnitOfWorkModule>();
+			builder.RegisterModule<AuthenticationModule>();
 		}
 
 		private bool togglePathIsAnUrl()

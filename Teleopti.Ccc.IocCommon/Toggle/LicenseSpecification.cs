@@ -7,17 +7,17 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	public class LicenseSpecification : IToggleSpecification
 	{
-		private readonly Func<ILicenseActivator> _licenseActivator;
+		private readonly ILicenseActivatorProvider _licenseActivatorProvide;
 		public const string NameKey = "name";
 
-		public LicenseSpecification(Func<ILicenseActivator> licenseActivator)
+		public LicenseSpecification(ILicenseActivatorProvider licenseActivatorProvide)
 		{
-			_licenseActivator = licenseActivator;
+			_licenseActivatorProvide = licenseActivatorProvide;
 		}
 
 		public bool IsEnabled(string currentUser, IDictionary<string, string> parameters)
 		{
-			var licenseCustomerName = _licenseActivator().CustomerName;
+			var licenseCustomerName = _licenseActivatorProvide.Current().CustomerName;
 			return licenseCustomerName.Equals(parameters[NameKey], StringComparison.OrdinalIgnoreCase) ||
 					ToggleNetModule.DeveloperLicenseName.Equals(licenseCustomerName);
 		}
