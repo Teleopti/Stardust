@@ -321,11 +321,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					readyForInteraction();
 					loader(function () {
 						periodFeedbackViewModel.LoadFeedback();
+						$.each(weekViewModels, function (index, week) {
+							week.LoadWeeklyWorkTimeSettings();
+						});
 						$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
 							day.LoadFeedback();
-						});
-						$.each(weekViewModels, function (index, week) {
-							 week.LoadWeeklyWorkTimeSettings();
 						});
 
 						selectionViewModel.enableDateSelection();
