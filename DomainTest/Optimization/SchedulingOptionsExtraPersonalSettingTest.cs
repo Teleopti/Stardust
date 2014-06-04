@@ -69,7 +69,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         [Test]
         public void ShouldMap()
-        {	_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
+        {
+	        _schedulingOptions.UseBlock = true;
+			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
 	        _schedulingOptions.BlockSameShiftCategory = true;
 	        _schedulingOptions.BlockSameStartTime = true;
 	        _schedulingOptions.BlockSameEndTime = true;
