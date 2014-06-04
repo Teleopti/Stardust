@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			containerConfiguration = new ContainerConfiguration();
 		}
 
-		[Test, Ignore("it failed due to adding toggleManager to a mapper")]
+		[Test]
 		public void RegisteredGlobalFiltersShouldBeenRegistered()
 		{
 			using (var container = containerConfiguration.Configure(string.Empty))
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			}
 		}
 
-		[Test, Ignore("it failed due to adding toggleManager to a mapper")]
+		[Test]
 		public void TasksShouldBeRegisteredAsSingletons()
 		{
 			using (var container = containerConfiguration.Configure(string.Empty))
