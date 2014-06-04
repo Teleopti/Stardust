@@ -46,7 +46,7 @@ namespace Teleopti.Analytics.Etl.Transformer
                 return dataRow;
 
 			var personDayOff = extractDayOff(schedulePart);
-
+			var ass = schedulePart.PersonAssignment();
 			dataRow["schedule_date_local"] = schedulePart.DateOnlyAsPeriod.DateOnly.Date;
             dataRow["person_code"] = schedulePart.Person.Id;
             dataRow["scenario_code"] = schedulePart.Scenario.Id;
@@ -56,7 +56,7 @@ namespace Teleopti.Analytics.Etl.Transformer
             dataRow["day_off_shortname"] = personDayOff.Description.ShortName; //Get from domain
             dataRow["day_count"] = 1;
             dataRow["business_unit_code"] = schedulePart.Scenario.BusinessUnit.Id;
-			dataRow["datasource_update_date"] = schedulePart.PersonAssignment().UpdatedOn;
+			dataRow["datasource_update_date"] = ass == null ? DateTime.UtcNow : ass.UpdatedOn;
 
             return dataRow;
         }
