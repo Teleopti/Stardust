@@ -8258,4 +8258,8 @@ Weekday</value>
     <value>Add Hourly Availability...</value>
     <comment>To be used in menus/ribbon when adding student availability</comment>
   </data>
+  <data name="MinimumTimePerWeekColon" xml:space="preserve">
+    <value>Minimum Time Per Week:</value>
+    <comment>Minimum Time Per Week:</comment>
+  </data>
 </root>
