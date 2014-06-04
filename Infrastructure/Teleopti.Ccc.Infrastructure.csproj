@@ -163,6 +163,7 @@
     <Compile Include="Foundation\ToggleQuerier.cs" />
     <Compile Include="Foundation\TogglesActive.cs" />
     <Compile Include="IAgentStateReader.cs" />
+    <Compile Include="Licensing\LicenseActivatorProvider.cs" />
     <Compile Include="Licensing\XmlLicenseServiceFactory.cs" />
     <Compile Include="NHibernateConfiguration\CompressedString.cs" />
     <Compile Include="NHibernateConfiguration\FasterProxyFactoryFactory.cs" />

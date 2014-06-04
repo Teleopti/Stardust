@@ -24,6 +24,11 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
             return activator;
         }
 
+	    public static void ClearLicenseActivators()
+	    {
+		    _licenseActivators.Clear();
+	    }
+
         public static void SetLicenseActivator(string dataSource, ILicenseActivator licenseActivator)
         {
             _licenseActivators.AddOrUpdate(dataSource, s => licenseActivator, (s, a) => licenseActivator);
