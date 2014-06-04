@@ -220,7 +220,7 @@
 
 		<div id="Preference-body-inner" class="well clearfix pd0 body-inner">
 			<ul class="weekdays">
-				<li style="max-width: 45px;"></li>
+				<li style="max-width: 50px;">&nbsp;</li>
 				@foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
 				{
 					<li>@weekDayName.Title</li>
@@ -235,7 +235,7 @@
 							
 						</div>
 					</li>
-					<li data-mytime-week="week" style="width: 45px">
+					<li data-mytime-week="week" style="width: 50px">
 						<div class="day-header"></div>
 						<div class="day-content">
 							<!-- ko if: IsWeeklyWorkTimeVisible -->
