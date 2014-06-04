@@ -87,13 +87,15 @@
 			this.labelHeader.Location = new System.Drawing.Point(3, 8);
 			this.labelHeader.Name = "labelHeader";
 			this.labelHeader.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
-			this.labelHeader.Size = new System.Drawing.Size(225, 18);
+			this.labelHeader.Size = new System.Drawing.Size(227, 18);
 			this.labelHeader.TabIndex = 0;
 			this.labelHeader.Text = "xxManageStateGroupsAndStates";
 			// 
 			// treeViewAdv1
 			// 
+			this.treeViewAdv1.BeforeTouchSize = new System.Drawing.Size(544, 353);
 			this.treeViewAdv1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.treeViewAdv1.CanSelectDisabledNode = false;
 			this.treeViewAdv1.Dock = System.Windows.Forms.DockStyle.Fill;
 			// 
 			// 
@@ -105,10 +107,12 @@
 			this.treeViewAdv1.HelpTextControl.TabIndex = 0;
 			this.treeViewAdv1.HelpTextControl.Text = "help text";
 			this.treeViewAdv1.Location = new System.Drawing.Point(3, 36);
+			this.treeViewAdv1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.treeViewAdv1.Name = "treeViewAdv1";
 			this.treeViewAdv1.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
 			this.treeViewAdv1.ShowFocusRect = true;
 			this.treeViewAdv1.Size = new System.Drawing.Size(544, 353);
+			this.treeViewAdv1.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Default;
 			this.treeViewAdv1.TabIndex = 65;
 			this.treeViewAdv1.Text = "treeViewAdv1";
 			// 
@@ -127,6 +131,7 @@
 			this.treeViewAdv1.NodeEditorValidated += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvEditEventHandler(this.treeViewAdv1_NodeEditorValidated);
 			this.treeViewAdv1.EditCancelled += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvEditEventHandler(this.treeViewAdv1_EditCancelled);
 			this.treeViewAdv1.BeforeEdit += new Syncfusion.Windows.Forms.Tools.TreeViewAdvBeforeEditEventHandler(this.treeViewAdv1_BeforeEdit);
+			this.treeViewAdv1.BeforeCheck += new Syncfusion.Windows.Forms.Tools.TreeViewAdvBeforeCheckEventHandler(this.treeViewAdv1BeforeCheck);
 			this.treeViewAdv1.AfterCheck += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvEventHandler(this.treeViewAdv1_AfterCheck);
 			this.treeViewAdv1.DragDrop += new System.Windows.Forms.DragEventHandler(this.TreeViewAdv1DragDrop);
 			this.treeViewAdv1.DragOver += new System.Windows.Forms.DragEventHandler(this.TreeViewAdv1DragOver);
@@ -154,8 +159,10 @@
 			// buttonDelete
 			// 
 			this.buttonDelete.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.buttonDelete.BeforeTouchSize = new System.Drawing.Size(24, 24);
 			this.buttonDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
 			this.buttonDelete.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.buttonDelete.IsBackStageButton = false;
 			this.buttonDelete.Location = new System.Drawing.Point(520, 1);
 			this.buttonDelete.Margin = new System.Windows.Forms.Padding(3, 1, 0, 3);
 			this.buttonDelete.Name = "buttonDelete";
