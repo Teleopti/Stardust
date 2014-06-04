@@ -52,11 +52,11 @@ namespace Teleopti.Ccc.WinCode.Main
             {
                 _view.Warning(getAlmostTooManyAgentsWarning(licenseStatus.NumberOfActiveAgents, licenseService));
             }
-            if (!licenseStatus.StatusOk && licenseStatus.DaysLeft > 0)
+            if (!licenseStatus.StatusOk && licenseStatus.DaysLeft >= 0)
             {
                 _view.Warning(getLicenseIsOverUsedWarning(licenseService, licenseStatus));
             }
-            if (!licenseStatus.StatusOk && licenseStatus.DaysLeft < 1)
+            if (!licenseStatus.StatusOk && licenseStatus.DaysLeft < 0)
             {
                 _view.Error(getTooManyAgentsExplanation(licenseService, dataSourceName,
                                                   licenseStatus.NumberOfActiveAgents));

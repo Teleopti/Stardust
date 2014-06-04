@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             Expect.Call(_licenseStatus.NumberOfActiveAgents = 500);
             Expect.Call(_licenseStatus.CheckDate = DateTime.Today.Date);
             Expect.Call(_licenseStatus.LastValidDate).Return(DateTime.Today.AddDays(21).Date);
-            Expect.Call(_licenseStatus.DaysLeft = 20);
+            Expect.Call(_licenseStatus.DaysLeft = 21);
             Expect.Call(_licenseStatus.GetNewStatusDocument()).Return(new XmlDocument());
             Expect.Call(() => _licenseStatusReps.SaveLicenseStatus(""));
             _mocks.ReplayAll();
