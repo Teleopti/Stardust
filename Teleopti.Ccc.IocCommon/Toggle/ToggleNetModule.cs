@@ -26,6 +26,10 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		{
 			builder.Register<IToggleManager>(c =>
 			{
+				if (string.IsNullOrEmpty(_pathToToggle))
+				{
+					return new falseToggleManager();
+				}
 				if (_pathToToggle.StartsWith("http://") || _pathToToggle.StartsWith("https://"))
 				{
 					return new ToggleQuerier(_pathToToggle);
@@ -67,6 +71,14 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			public bool IsEnabled(Toggles toggle)
 			{
 				return _toggleChecker.IsEnabled(toggle.ToString());
+			}
+		}
+
+		private class falseToggleManager : IToggleManager
+		{
+			public bool IsEnabled(Toggles toggle)
+			{
+				return false;
 			}
 		}
 	}
