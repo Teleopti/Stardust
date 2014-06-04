@@ -290,7 +290,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 			ko.applyBindings(dayViewModel, element);
 
-		    weekViewModels[Math.floor(index / 7)].DayViewModels.push(dayViewModel);
+			if (!weekViewModels.isEmpty()) {
+				weekViewModels[Math.floor(index / 7)].DayViewModels.push(dayViewModel);
+			}
 
 	    });
 		
