@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 
 		public void NotifySmsLink(ScheduleDayReadModel readModel, DateOnly date, IPerson person)
 		{
-			if (!DefinedLicenseDataFactory.HasLicense)
+            var dataSource = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name;
+			if (!DefinedLicenseDataFactory.HasLicense(dataSource))
 			{
 				if (Logger.IsInfoEnabled)
 					Logger.Info("Can't access LicenseActivator to check SMSLink license.");
@@ -41,8 +42,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			}
 
 			//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
-			if (
-				DefinedLicenseDataFactory.GetLicenseActivator(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name).EnabledLicenseOptionPaths.Contains(
+		    if (
+				DefinedLicenseDataFactory.GetLicenseActivator(dataSource).EnabledLicenseOptionPaths.Contains(
 					DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
 			{
 				Logger.Info("Found SMSLink license.");

@@ -88,9 +88,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
         private void LogOnRaptorDomain(DataSourceContainer dataSourceContainer, Guid businessUnitId)
         {
-            if (!DefinedLicenseDataFactory.HasLicense)
+            var dataSource = dataSourceContainer.DataSource;
+            if (!DefinedLicenseDataFactory.HasLicense(dataSource.DataSourceName))
             {
-                var unitOfWorkFactory = dataSourceContainer.DataSource.Application;
+                var unitOfWorkFactory = dataSource.Application;
             	var licenseVerifier = new LicenseVerifier(new LicenseFeedback(), unitOfWorkFactory,
             	                                          new LicenseRepository(unitOfWorkFactory));
                 var licenseService = licenseVerifier.LoadAndVerifyLicense();
@@ -103,13 +104,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 LicenseProvider.ProvideLicenseActivator(unitOfWorkFactory.Name, licenseService);
             }
 
-            using (IUnitOfWork unitOfWork = dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
+            using (IUnitOfWork unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())
             {
                 IBusinessUnit businessUnit = _repositoryFactory.CreateBusinessUnitRepository(unitOfWork).Get(businessUnitId);
                 unitOfWork.Remove(businessUnit); //To make sure that business unit doesn't belong to this uow any more
 
                 AuthenticationMessageHeader.BusinessUnit = businessUnitId;
-                AuthenticationMessageHeader.DataSource = dataSourceContainer.DataSource.Application.Name;
+                AuthenticationMessageHeader.DataSource = dataSource.Application.Name;
                 if (dataSourceContainer.User.ApplicationAuthenticationInfo != null)
                 {
                     AuthenticationMessageHeader.UserName = dataSourceContainer.User.ApplicationAuthenticationInfo.ApplicationLogOnName;
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 }
                 
                 AuthenticationMessageHeader.UseWindowsIdentity = false;
-                _logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);
+                _logOnOff.LogOn(dataSource, dataSourceContainer.User, businessUnit);
 
 				setCorrectPermissionsOnUser(unitOfWork);
             }

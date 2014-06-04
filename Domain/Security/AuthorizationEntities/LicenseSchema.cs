@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,31 +14,21 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     {
 	    private readonly ReadOnlyCollection<LicenseOption> _licenseOptions = DefinedLicenseDataFactory.CreateDefinedLicenseOptions();
 
-        private static readonly IDictionary<string, LicenseSchema> _activeLicenseSchemas = new Dictionary<string, LicenseSchema>();
-
-        //private static LicenseSchema _activeLicenseSchema;
-
+        private static readonly ConcurrentDictionary<string, LicenseSchema> _activeLicenseSchemas = new ConcurrentDictionary<string, LicenseSchema>();
+        
         /// <summary>
         /// Gets the singleton instance of the active license schema.
         /// </summary>
         /// <value>The instance.</value>
         public static LicenseSchema GetActiveLicenseSchema(string dataSource)
         {
-            LicenseSchema activeLicenseSchema;
-            if (_activeLicenseSchemas.TryGetValue(dataSource, out activeLicenseSchema))
-            {
-                return activeLicenseSchema;
-            }
-
-            activeLicenseSchema = DefinedLicenseDataFactory.CreateActiveLicenseSchema(dataSource);
-            _activeLicenseSchemas.Add(dataSource, activeLicenseSchema);
-
-            return activeLicenseSchema;
+            return _activeLicenseSchemas.GetOrAdd(dataSource,
+                DefinedLicenseDataFactory.CreateActiveLicenseSchema(dataSource));
         }
 
         public static void SetActiveLicenseSchema(string dataSource, LicenseSchema licenseSchema)
         {
-            _activeLicenseSchemas[dataSource] = licenseSchema;
+            _activeLicenseSchemas.AddOrUpdate(dataSource, licenseSchema, (d, l) => licenseSchema);
         }
 
 	    /// <summary>

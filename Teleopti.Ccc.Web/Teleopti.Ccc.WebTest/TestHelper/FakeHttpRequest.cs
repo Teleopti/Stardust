@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace MvcContrib.TestHelper.Fakes
 {
@@ -61,6 +62,14 @@ namespace MvcContrib.TestHelper.Fakes
         public override HttpCookieCollection Cookies
         {
             get { return _cookies; }
+        }
+
+        public override RequestContext RequestContext
+        {
+            get
+            {
+                return new RequestContext();
+            }
         }
 
         public override string AppRelativeCurrentExecutionFilePath

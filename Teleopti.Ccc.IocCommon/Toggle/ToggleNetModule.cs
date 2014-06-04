@@ -52,9 +52,13 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				.SingleInstance().As<IAllToggles>();
 			builder.Register(c =>
 			{
-				if (!DefinedLicenseDataFactory.HasLicense)
+				if (!DefinedLicenseDataFactory.HasAnyLicense)
 					throw new DataSourceException("Missing datasource (no *.hbm.xml file available)!");
-				return DefinedLicenseDataFactory.GetLicenseActivator(c.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory().Name);
+
+                var dataSource = c.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory().Name;
+                if (!DefinedLicenseDataFactory.HasLicense(dataSource))
+                    throw new DataSourceException("No license for datasource!");
+			    return DefinedLicenseDataFactory.GetLicenseActivator(dataSource);
 			})
 			.SingleInstance()
 			.As<ILicenseActivator>();

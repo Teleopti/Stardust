@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Security.Principal;
 using System.Web;
+using System.Web.Caching;
 using System.Web.SessionState;
+using Rhino.Mocks;
 
 namespace MvcContrib.TestHelper.Fakes
 {
@@ -79,6 +81,16 @@ namespace MvcContrib.TestHelper.Fakes
             }
         }
 
+        public override HttpServerUtilityBase Server
+        {
+            get { return new FakeHttpServerUtility(); }
+        }
+
+        public override HttpApplicationStateBase Application
+        {
+            get { return new FakeHttpApplicationState(); }
+        }
+
         public void SetResponse(HttpResponseBase response)
         {
             _response = response;
@@ -110,5 +122,13 @@ namespace MvcContrib.TestHelper.Fakes
         {
             return null;
         }
+    }
+
+    public class FakeHttpApplicationState : HttpApplicationStateBase
+    {
+    }
+
+    public class FakeHttpServerUtility : HttpServerUtilityBase
+    {
     }
 }

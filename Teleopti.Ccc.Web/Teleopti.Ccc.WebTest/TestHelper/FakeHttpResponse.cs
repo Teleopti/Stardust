@@ -12,6 +12,11 @@ namespace MvcContrib.TestHelper.Fakes
             get { return _outputString.ToString(); }
         }
 
+        public override HttpCachePolicyBase Cache
+        {
+            get { return new FakeHttpCachePolicy(); }
+        }
+
         public override int StatusCode { get; set; }
 
         public override string RedirectLocation { get; set; }
@@ -25,5 +30,9 @@ namespace MvcContrib.TestHelper.Fakes
         {
             return virtualPath;
         }
+    }
+
+    public class FakeHttpCachePolicy : HttpCachePolicyBase
+    {
     }
 }

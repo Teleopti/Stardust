@@ -8,6 +8,7 @@ using AutoMapper;
 using Autofac;
 using Autofac.Core;
 using MbCache.Core;
+using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -66,16 +67,16 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[SetUp]
 		public void Setup()
 		{
-			mocks = new MockRepository();
-			var applicationData = mocks.DynamicMock<IApplicationData>();
+			var applicationData = MockRepository.GenerateMock<IApplicationData>();
 
 			var container = new ContainerConfiguration().Configure(string.Empty);
 
 			var containerAdder = new ContainerBuilder();
 			containerAdder.RegisterModule(new AuthenticationModule(applicationData));
-			containerAdder.Register(c => mocks.DynamicMock<HttpContextBase>());
-            var currentUnitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
-		    var unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            HttpContextBase httpContextBase = new FakeHttpContext("");
+            containerAdder.Register(c => httpContextBase);
+            var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+            var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 		    currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory())
 		        .Return(unitOfWorkFactory);
 		    unitOfWorkFactory.Stub(x => x.Name).Return("asdf");
@@ -87,8 +88,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		private ILifetimeScope requestContainer;
-		private MockRepository mocks;
-
+		
 		[Test]
 		public void ControllersShouldBeRegisteredPerInstance()
 		{
@@ -296,13 +296,11 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolvePortalViewModelFactory()
 		{
-            mocks.ReplayAll();
 		    DefinedLicenseDataFactory.SetLicenseActivator("asdf",
 		        new LicenseActivator(null, DateTime.MinValue, 0, 0, LicenseType.Agent,
 		            new Percent(), null, null));
 			requestContainer.Resolve<IPortalViewModelFactory>()
 				.Should().Not.Be.Null();
-            mocks.VerifyAll();
 		}
 		
 		[Test]
@@ -617,12 +615,10 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveLicenseActivator()
 		{
-		    mocks.ReplayAll();
 		        var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
 		        DefinedLicenseDataFactory.SetLicenseActivator("asdf", licenseActivator);
 		        requestContainer.Resolve<ILicenseActivator>().Should().Be(licenseActivator);
 		        DefinedLicenseDataFactory.SetLicenseActivator("asdf", null);
-		    mocks.VerifyAll();
 		}
 
 		[Test]

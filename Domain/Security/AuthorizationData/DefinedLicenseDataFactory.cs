@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,27 +14,28 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
     /// </summary>
     public static class DefinedLicenseDataFactory
     {
-        private static readonly IDictionary<string, ILicenseActivator> _licenseActivators=new Dictionary<string, ILicenseActivator>();
+        private static readonly ConcurrentDictionary<string, ILicenseActivator> _licenseActivators = new ConcurrentDictionary<string, ILicenseActivator>();
 
-        /// <summary>
-        /// Gets or sets the license activator.
-        /// </summary>
-        /// <value>The license activator.</value>
-        /// <remarks>
-        /// Created by: henryg
-        /// Created date: 2008-10-07
-        /// </remarks>
         public static ILicenseActivator GetLicenseActivator(string dataSource)
         {
-            return _licenseActivators[dataSource];
+            ILicenseActivator activator;
+            _licenseActivators.TryGetValue(dataSource, out activator);
+            
+            return activator;
         }
 
         public static void SetLicenseActivator(string dataSource, ILicenseActivator licenseActivator)
         {
-            _licenseActivators[dataSource] = licenseActivator;
+            _licenseActivators.AddOrUpdate(dataSource, s => licenseActivator, (s, a) => licenseActivator);
         }
 
-        public static bool HasLicense
+        public static bool HasLicense(string dataSource)
+        {
+            ILicenseActivator activator;
+            return _licenseActivators.TryGetValue(dataSource, out activator) && activator != null;
+        }
+
+        public static bool HasAnyLicense
         {
             get { return _licenseActivators.Values.Any(a => a != null); }
         }
