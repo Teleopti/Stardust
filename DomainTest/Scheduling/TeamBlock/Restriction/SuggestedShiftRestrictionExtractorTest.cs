@@ -23,6 +23,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		{
 			_mocks = new MockRepository();
 			_schedulingOptions = new SchedulingOptions();
+			_schedulingOptions.BlockSameShiftCategory = false;
+			_schedulingOptions.TeamSameShiftCategory = false;
 			_target = new SuggestedShiftRestrictionExtractor();
 		}
 		

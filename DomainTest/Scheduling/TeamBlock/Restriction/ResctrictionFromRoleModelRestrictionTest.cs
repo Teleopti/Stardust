@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			_schedulingOptions.UseTeam = true;
 			_schedulingOptions.TeamSameStartTime = true;
+			_schedulingOptions.TeamSameShiftCategory = false;
 			using (_mocks.Record())
 			{
 				Expect.Call(_shift.WorkShiftStartTime).Return(TimeSpan.FromHours(8));
@@ -67,6 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			_schedulingOptions.UseTeam = true;
 			_schedulingOptions.TeamSameEndTime = true;
+			_schedulingOptions.TeamSameShiftCategory = false;
 			using (_mocks.Record())
 			{
 				Expect.Call(_shift.WorkShiftEndTime).Return(TimeSpan.FromHours(18));

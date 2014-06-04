@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _mocks = new MockRepository();
             _schedulingOptions = new SchedulingOptions();
 				_schedulingOptions.UseBlock = true;
+	        _schedulingOptions.BlockSameShiftCategory = false;
             _mainShiftEquator = _mocks.StrictMock<IScheduleDayEquator>();
             _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
             _nightlyRestRestrictionForTeamBlock = _mocks.StrictMock<INightlyRestRestrictionForTeamBlock>();
@@ -141,6 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			  _schedulingOptions.BlockSameShift = true;
 			  _schedulingOptions.UseBlock = true;
             _schedulingOptions.UseTeam = true;
+	        _schedulingOptions.TeamSameShiftCategory = false;
             var dateOnly = new DateOnly(2012, 12, 7);
             var dateList = new List<DateOnly> { dateOnly };
             var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -601,6 +603,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _schedulingOptions.UseTeam = true;
             _schedulingOptions.TeamSameStartTime = true;
             _schedulingOptions.TeamSameEndTime = true;
+	        _schedulingOptions.TeamSameShiftCategory = false;
             var dateOnly = new DateOnly(2012, 12, 7);
             var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
             var period1 = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
