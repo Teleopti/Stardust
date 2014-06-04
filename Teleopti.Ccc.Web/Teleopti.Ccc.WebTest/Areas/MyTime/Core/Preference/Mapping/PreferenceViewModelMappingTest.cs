@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.UserTexts;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	{
 		private PreferenceDomainData data;
 		private IPreferenceOptionsProvider preferenceOptionProvider;
+		private IToggleManager toggleManager;
 
 		[SetUp]
 		public void Setup()
@@ -42,11 +44,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 						MaxMustHave = 8
 					};
 			preferenceOptionProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
+			toggleManager = MockRepository.GenerateMock<IToggleManager>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
 			                  	{
-			                  		c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(), () => preferenceOptionProvider));
+			                  		c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(), () => preferenceOptionProvider, toggleManager));
 									c.AddProfile(new CommonViewModelMappingProfile());
 			                  	});
 		}
@@ -352,6 +355,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			assertOption(shiftCategoriesGroup, Resources.ShiftCategory, shiftCategory.Description.Name, shiftCategory.Id.Value);
 			assertOption(dayOffsGroup, Resources.DayOff, dayOff.Description.Name, dayOff.Id.Value);
 			assertOption(absencesGroup, Resources.Absence, absence.Description.Name, absence.Id.Value);
+		}
+
+		[Test]
+		public void ShouldMapIsWeeklyWorkTimeEnabled()
+		{
+			toggleManager.Stub(x => x.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635)).Return(true);
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			Assert.That(result.IsWeeklyWorkTimeEnabled, Is.True);
 		}
 
 		private void assertOption(PreferenceOptionGroup optionGroup, string groupText, string firstItemName, Guid firstItemNameId)

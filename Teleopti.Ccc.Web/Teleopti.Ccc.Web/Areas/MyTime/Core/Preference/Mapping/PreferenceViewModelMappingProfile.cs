@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -18,11 +19,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	{
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly Func<IPreferenceOptionsProvider> _preferenceOptionsProvider;
+		private readonly IToggleManager _toggleManager;
 
-		public PreferenceViewModelMappingProfile(IPermissionProvider permissionProvider, Func<IPreferenceOptionsProvider> preferenceOptionsProvider)
+		public PreferenceViewModelMappingProfile(IPermissionProvider permissionProvider,
+			Func<IPreferenceOptionsProvider> preferenceOptionsProvider,
+		IToggleManager toggleManager)
 		{
 			_permissionProvider = permissionProvider;
 			_preferenceOptionsProvider = preferenceOptionsProvider;
+			_toggleManager = toggleManager;
 		}
 
 		private class PreferenceWeekMappingData
@@ -68,6 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				                                        	}))
 				.ForMember(d => d.PreferencePeriod, c => c.MapFrom(s => s.WorkflowControlSet))
 				.ForMember(d => d.ExtendedPreferencesPermission, c => c.ResolveUsing(s => _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)))
+				//.ForMember(d => d.IsWeeklyWorkTimeEnabled, c => c.ResolveUsing(s => _toggleManager.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635)))
 				.ForMember(d => d.Options, c => c.ResolveUsing(s => new PreferenceOptionsViewModel(PreferenceOptions(), ActivityOptions())))
 				;
 

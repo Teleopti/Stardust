@@ -220,7 +220,10 @@
 
 		<div id="Preference-body-inner" class="well clearfix pd0 body-inner">
 			<ul class="weekdays">
-				<li style="max-width: 50px;">&nbsp;</li>
+				@if (Model.IsWeeklyWorkTimeEnabled)
+				{
+					<li style="max-width: 50px;">&nbsp;</li>
+				}
 				@foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
 				{
 					<li>@weekDayName.Title</li>
@@ -235,6 +238,8 @@
 							
 						</div>
 					</li>
+				@if (Model.IsWeeklyWorkTimeEnabled)
+				{
 					<li data-mytime-week="week" style="width: 50px">
 						<div class="day-header"></div>
 						<div class="day-content">
@@ -250,6 +255,8 @@
 							<!-- /ko -->
 						</div>
 					</li>
+				}
+					
 					@foreach (DayViewModel day in week.Days)
 					{
 						var date = Html.Schedule().FormatDate(day.Date);

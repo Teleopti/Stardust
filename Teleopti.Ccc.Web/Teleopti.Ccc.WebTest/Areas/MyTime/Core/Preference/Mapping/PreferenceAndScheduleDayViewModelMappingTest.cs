@@ -10,6 +10,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IUserTimeZone _userTimeZone;
 		private TimeZoneInfo _timeZone;
 		private IPreferenceOptionsProvider _preferenceOptionsProvider;
+		private IToggleManager _toggleManager;
 
 		[SetUp]
 		public void Setup()
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			_preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
+			_toggleManager = MockRepository.GenerateMock<IToggleManager>();
 			_timeZone = TimeZoneInfo.Local;
 			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
 			Mapper.Reset();
@@ -47,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				{
 					c.AddProfile(new PreferenceAndScheduleDayViewModelMappingProfile(_projectionProvider, _userTimeZone));
 					c.AddProfile(new PreferenceDayViewModelMappingProfile(MockRepository.GenerateMock<IExtendedPreferencePredicate>()));
-					c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(), ()=>_preferenceOptionsProvider));
+					c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(), ()=>_preferenceOptionsProvider, _toggleManager));
 					c.AddProfile(new CommonViewModelMappingProfile());
 				});
 		}
