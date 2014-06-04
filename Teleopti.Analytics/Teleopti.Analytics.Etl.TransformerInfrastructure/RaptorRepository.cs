@@ -1481,7 +1481,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 																							  new FunctionsForRoleProvider(
 																								  new LicensedFunctionsProvider(
 																									  new DefinedRaptorApplicationFunctionFactory
-																										  ()),
+																										  (),new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())),
 																								  new ExternalFunctionsProvider(
 																									  new RepositoryFactory())), new SiteRepository(uow));
 

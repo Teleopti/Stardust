@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Main
                 var verifier = _licenseVerifierFactory.Create(_view, unitOfWorkFactory);
                 var licenseService = verifier.LoadAndVerifyLicense();
                 if (licenseService == null) return false;
-                LicenseProvider.ProvideLicenseActivator(licenseService);
+                LicenseProvider.ProvideLicenseActivator(unitOfWorkFactory.Name, licenseService);
                 return checkStatusOfLicense(licenseService, uow ,unitOfWorkFactory.Name);
             }
         }

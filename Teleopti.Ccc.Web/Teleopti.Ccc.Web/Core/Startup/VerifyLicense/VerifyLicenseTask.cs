@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.VerifyLicense
 				var licenseVerifier = _licenseVerifierFactory.Create(this,
 																	 unitOfWorkFactory);
 				var licenseService = licenseVerifier.LoadAndVerifyLicense();
-				LicenseProvider.ProvideLicenseActivator(licenseService);
+				LicenseProvider.ProvideLicenseActivator(dataSource.DataSourceName, licenseService);
 			}
 			return null;
 		}

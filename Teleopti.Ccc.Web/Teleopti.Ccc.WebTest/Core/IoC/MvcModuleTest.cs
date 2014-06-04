@@ -11,7 +11,6 @@ using MbCache.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -75,6 +74,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			var containerAdder = new ContainerBuilder();
 			containerAdder.RegisterModule(new AuthenticationModule(applicationData));
 			containerAdder.Register(c => mocks.DynamicMock<HttpContextBase>());
+            var currentUnitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
+		    var unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+		    currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory())
+		        .Return(unitOfWorkFactory);
+		    unitOfWorkFactory.Stub(x => x.Name).Return("asdf");
+
+		    containerAdder.Register(c => currentUnitOfWorkFactory);
 			containerAdder.Update(container);
 
 			requestContainer = container.BeginLifetimeScope("httpRequest");
@@ -290,10 +296,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolvePortalViewModelFactory()
 		{
-			DefinedLicenseDataFactory.LicenseActivator = new LicenseActivator(null, DateTime.MinValue, 0, 0, LicenseType.Agent,
-			                                                                  new Percent(), null, null);
+            mocks.ReplayAll();
+		    DefinedLicenseDataFactory.SetLicenseActivator("asdf",
+		        new LicenseActivator(null, DateTime.MinValue, 0, 0, LicenseType.Agent,
+		            new Percent(), null, null));
 			requestContainer.Resolve<IPortalViewModelFactory>()
 				.Should().Not.Be.Null();
+            mocks.VerifyAll();
 		}
 		
 		[Test]
@@ -426,7 +435,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldThrowDatasourceExceptionIfNoDatasourceFileIsAvailable()
 		{
-			DefinedLicenseDataFactory.LicenseActivator = null;
+			DefinedLicenseDataFactory.SetLicenseActivator("asdf", null);
 			var ok = false;
 			try
 			{
@@ -608,10 +617,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveLicenseActivator()
 		{
-			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
-			DefinedLicenseDataFactory.LicenseActivator = licenseActivator;
-			requestContainer.Resolve<ILicenseActivator>().Should().Be(licenseActivator);
-			DefinedLicenseDataFactory.LicenseActivator = null;
+		    mocks.ReplayAll();
+		        var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
+		        DefinedLicenseDataFactory.SetLicenseActivator("asdf", licenseActivator);
+		        requestContainer.Resolve<ILicenseActivator>().Should().Be(licenseActivator);
+		        DefinedLicenseDataFactory.SetLicenseActivator("asdf", null);
+		    mocks.VerifyAll();
 		}
 
 		[Test]

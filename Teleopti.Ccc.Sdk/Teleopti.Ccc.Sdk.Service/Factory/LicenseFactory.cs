@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 if (licenseService != null)
                 {
                     _licenseVerificationResultDto.SetValidLicenseFoundTrue();
-                    LicenseProvider.ProvideLicenseActivator(licenseService);
+                    LicenseProvider.ProvideLicenseActivator(unitOfWorkFactory.Name, licenseService);
                     _licenseVerificationResultDto.LicenseHolderName =
-                        DefinedLicenseDataFactory.LicenseActivator.CustomerName;
+                        DefinedLicenseDataFactory.GetLicenseActivator(unitOfWorkFactory.Name).CustomerName;
                 }
 
                 _licenseCache.Add(_licenseVerificationResultDto);

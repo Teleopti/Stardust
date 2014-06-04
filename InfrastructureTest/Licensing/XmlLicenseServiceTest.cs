@@ -322,11 +322,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             var uow = _mocks.DynamicMock<IUnitOfWork>();
             var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
             var personRepository = _mocks.StrictMock<IPersonRepository>();
-            
+            var unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
+
             const int numberOfActiveAgents = 100;
 
             using(_mocks.Record())
             {
+                Expect.Call(unitOfWorkFactory.Name).Return("asdf");
+                Expect.Call(unitOfWorkFactory.CurrentUnitOfWork()).Return(uow);
                 Expect.Call(personRepository.NumberOfActiveAgents()).Return(numberOfActiveAgents);
                 Expect.Call(uow.PersistAll()).Return(null);
 
@@ -335,7 +338,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             }
             using(_mocks.Playback())
             {
-                new XmlLicensePersister().SaveNewLicense(licenseFileName, uow, licenseRepository, XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
+                new XmlLicensePersister().SaveNewLicense(licenseFileName, unitOfWorkFactory, licenseRepository, XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
 				File.Delete(licenseFileName);
             }
         }
@@ -360,11 +363,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             var uow = _mocks.DynamicMock<IUnitOfWork>(); 
             var licenseRepository = _mocks.StrictMock<ILicenseRepository>();
             var personRepository = _mocks.StrictMock<IPersonRepository>();
+            var unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             
             const int numberOfActiveAgents = 100;
 
             using (_mocks.Record())
             {
+                Expect.Call(unitOfWorkFactory.Name).Return("asdf");
+                Expect.Call(unitOfWorkFactory.CurrentUnitOfWork()).Return(uow);
                 Expect.Call(personRepository.NumberOfActiveAgents()).Return(numberOfActiveAgents);
                 Expect.Call(uow.PersistAll()).Throw(new HibernateException());
 
@@ -373,7 +379,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             }
             using(_mocks.Playback())
             {
-                new XmlLicensePersister().SaveNewLicense(licenseFileName, uow, licenseRepository,
+                new XmlLicensePersister().SaveNewLicense(licenseFileName, unitOfWorkFactory, licenseRepository,
                                                  XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
             }
         }

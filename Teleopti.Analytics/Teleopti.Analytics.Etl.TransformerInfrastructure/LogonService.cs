@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
@@ -53,13 +54,13 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             if (licenseService == null) 
 				return false;
 
-            LicenseProvider.ProvideLicenseActivator(licenseService);
+            LicenseProvider.ProvideLicenseActivator(unitOfWorkFactory.Name, licenseService);
 
         	var roleToPrincipalCommand =
         		new RoleToPrincipalCommand(
         			new RoleToClaimSetTransformer(
         				new FunctionsForRoleProvider(
-        					new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
+        					new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory(),new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())),
         					new ExternalFunctionsProvider(new RepositoryFactory())
         					)
         				)

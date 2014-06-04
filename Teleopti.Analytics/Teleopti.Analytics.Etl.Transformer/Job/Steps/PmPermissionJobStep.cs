@@ -6,6 +6,7 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Analytics.PM.PMServiceHost;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
@@ -20,7 +21,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			_checkIfNeeded = checkIfNeeded;
 			Name = "Performance Manager permissions";
 			Transformer = new PmPermissionTransformer(new PmProxyFactory());
-			PermissionExtractor = new PmPermissionExtractor(new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()));
+			PermissionExtractor = new PmPermissionExtractor(new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory(),new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())));
 			PmUserInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
 		}
 		

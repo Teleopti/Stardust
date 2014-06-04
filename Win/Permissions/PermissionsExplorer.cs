@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
             if (_licensedFunctions == null)
             {
-                _licensedFunctions = (from o in LicenseSchema.ActiveLicenseSchema.LicenseOptions
+                _licensedFunctions = (from o in LicenseSchema.GetActiveLicenseSchema(UnitOfWorkFactory.Current.Name).LicenseOptions
                                       from f in o.EnabledApplicationFunctions
                                       where (o.Enabled)
                                       select f).ToList();
@@ -339,7 +339,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
 	        if (applicationFunction.ForeignSource != "Matrix") return;
 	        if (applicationFunction.FunctionCode.StartsWith(@"V8/") &&
-	            !DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(
+                !DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name).EnabledLicenseOptionPaths.Contains(
 		            DefinedLicenseOptionPaths.TeleoptiCccVersion8))
 	        {
 		        rootNode.Enabled = false;

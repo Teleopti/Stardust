@@ -6,8 +6,10 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Security.Principal
 {
@@ -17,20 +19,26 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         private IDefinedRaptorApplicationFunctionFactory functionFactory;
         private ILicensedFunctionsProvider target;
 		private LicenseSchema schema;
+        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
         [SetUp]
         public void Setup()
         {
             functionFactory = new DefinedRaptorApplicationFunctionFactory();
-            target = new LicensedFunctionsProvider(functionFactory);
+            _currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+            var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory())
+                .Return(unitOfWorkFactory);
+            unitOfWorkFactory.Stub(x => x.Name).Return("asdf");
+            target = new LicensedFunctionsProvider(functionFactory,_currentUnitOfWorkFactory);
 			schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
-			LicenseSchema.ActiveLicenseSchema = schema;
-		}
+            LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, schema);
+        }
 
 		[TearDown]
 		public void TearDown()
 		{
-			LicenseSchema.ActiveLicenseSchema = null;
+		    LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, null);
 		}
 
         [Test]
@@ -51,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 		{
 			var mocks = new MockRepository();
 			var defRaptorAppFactory = mocks.DynamicMock<IDefinedRaptorApplicationFunctionFactory>();
-			target = new LicensedFunctionsProvider(defRaptorAppFactory);
+			target = new LicensedFunctionsProvider(defRaptorAppFactory,_currentUnitOfWorkFactory);
 
 			using(mocks.Record())
 			{

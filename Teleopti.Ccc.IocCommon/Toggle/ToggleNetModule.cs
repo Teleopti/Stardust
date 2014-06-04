@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Interfaces.Infrastructure;
 using Toggle.Net;
 using Toggle.Net.Configuration;
 using Toggle.Net.Providers.TextFile;
@@ -51,9 +52,9 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				.SingleInstance().As<IAllToggles>();
 			builder.Register(c =>
 			{
-				if (DefinedLicenseDataFactory.LicenseActivator == null)
+				if (!DefinedLicenseDataFactory.HasLicense)
 					throw new DataSourceException("Missing datasource (no *.hbm.xml file available)!");
-				return DefinedLicenseDataFactory.LicenseActivator;
+				return DefinedLicenseDataFactory.GetLicenseActivator(c.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory().Name);
 			})
 			.SingleInstance()
 			.As<ILicenseActivator>();

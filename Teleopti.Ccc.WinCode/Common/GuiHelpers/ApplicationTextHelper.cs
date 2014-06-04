@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
         {
             get
             {
-                return String.Concat(UserTexts.Resources.LicensedToColon, " ", DefinedLicenseDataFactory.LicenseActivator.CustomerName);
+                return String.Concat(UserTexts.Resources.LicensedToColon, " ", DefinedLicenseDataFactory.GetLicenseActivator(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.DataSourceName).CustomerName);
             }
         }
 

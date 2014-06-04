@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationData
         [Test]
         public void VerifyLicenseActivator()
         {
-            DefinedLicenseDataFactory.LicenseActivator = _licenseActivator;
-            Assert.AreEqual(_licenseActivator, DefinedLicenseDataFactory.LicenseActivator);
+            DefinedLicenseDataFactory.SetLicenseActivator("asdf", _licenseActivator);
+            Assert.AreEqual(_licenseActivator, DefinedLicenseDataFactory.GetLicenseActivator("asdf"));
         }
 
         [Test]
@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationData
             }
             using (_mocks.Playback())
             {
-                DefinedLicenseDataFactory.LicenseActivator = _licenseActivator;
-                LicenseSchema licenseSchema = DefinedLicenseDataFactory.CreateActiveLicenseSchema();
+                DefinedLicenseDataFactory.SetLicenseActivator("asdf", _licenseActivator);
+                LicenseSchema licenseSchema = DefinedLicenseDataFactory.CreateActiveLicenseSchema("asdf");
                 
                 Assert.IsNotNull(licenseSchema);
 

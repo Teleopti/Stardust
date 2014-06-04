@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
         private void LogOnRaptorDomain(DataSourceContainer dataSourceContainer, Guid businessUnitId)
         {
-            if (DefinedLicenseDataFactory.LicenseActivator == null)
+            if (!DefinedLicenseDataFactory.HasLicense)
             {
                 var unitOfWorkFactory = dataSourceContainer.DataSource.Application;
             	var licenseVerifier = new LicenseVerifier(new LicenseFeedback(), unitOfWorkFactory,
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     return;
                 }
 
-                LicenseProvider.ProvideLicenseActivator(licenseService);
+                LicenseProvider.ProvideLicenseActivator(unitOfWorkFactory.Name, licenseService);
             }
 
             using (IUnitOfWork unitOfWork = dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())

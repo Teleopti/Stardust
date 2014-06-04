@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
                                                                                  new FunctionsForRoleProvider(
                                                                                      new LicensedFunctionsProvider(
                                                                                          new DefinedRaptorApplicationFunctionFactory
-                                                                                             ()),
+                                                                                             (),new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())),
                                                                                      new ExternalFunctionsProvider(
                                                                                          new RepositoryFactory())),null);
                 Assert.IsNotNull(target);

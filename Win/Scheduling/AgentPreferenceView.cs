@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
@@ -187,7 +188,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private static bool hasExtended()
 		{
-			var licensedFunctions = (from o in LicenseSchema.ActiveLicenseSchema.LicenseOptions
+            var licensedFunctions = (from o in LicenseSchema.GetActiveLicenseSchema(UnitOfWorkFactory.Current.Name).LicenseOptions
 									from f in o.EnabledApplicationFunctions
 									where (o.Enabled && f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences)
 									select f).ToList();

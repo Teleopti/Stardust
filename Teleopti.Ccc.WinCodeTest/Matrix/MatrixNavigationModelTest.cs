@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
             _mocks = new MockRepository();
             _target = new MatrixNavigationModel(() => "http://MatrixWebSiteUrl/");
 				_licenseActivator = _mocks.DynamicMock<ILicenseActivator>();
-				DefinedLicenseDataFactory.LicenseActivator = _licenseActivator;
+				DefinedLicenseDataFactory.SetLicenseActivator("for test", _licenseActivator);
         }
 
         [Test]

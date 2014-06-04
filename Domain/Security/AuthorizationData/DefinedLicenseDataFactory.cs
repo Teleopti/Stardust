@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.LicenseOptions;
 
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
     /// </summary>
     public static class DefinedLicenseDataFactory
     {
-        private static ILicenseActivator _licenseActivator;
+        private static readonly IDictionary<string, ILicenseActivator> _licenseActivators=new Dictionary<string, ILicenseActivator>();
 
         /// <summary>
         /// Gets or sets the license activator.
@@ -21,11 +22,20 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
         /// <remarks>
         /// Created by: henryg
         /// Created date: 2008-10-07
-		/// </remarks>
-        public static ILicenseActivator LicenseActivator
+        /// </remarks>
+        public static ILicenseActivator GetLicenseActivator(string dataSource)
         {
-            get { return _licenseActivator; }
-            set { _licenseActivator = value; }
+            return _licenseActivators[dataSource];
+        }
+
+        public static void SetLicenseActivator(string dataSource, ILicenseActivator licenseActivator)
+        {
+            _licenseActivators[dataSource] = licenseActivator;
+        }
+
+        public static bool HasLicense
+        {
+            get { return _licenseActivators.Values.Any(a => a != null); }
         }
 
         #region Interface
@@ -33,11 +43,12 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
         /// <summary>
         /// Creates the active license schema.
         /// </summary>
+        /// <param name="dataSource"></param>
         /// <returns></returns>
-        public static LicenseSchema CreateActiveLicenseSchema()
+        public static LicenseSchema CreateActiveLicenseSchema(string dataSource)
         {
-            LicenseSchema activeLicenseSchema = new LicenseSchema();
-            activeLicenseSchema.ActivateLicense(LicenseActivator);
+            var activeLicenseSchema = new LicenseSchema();
+            activeLicenseSchema.ActivateLicense(GetLicenseActivator(dataSource));
             return activeLicenseSchema;
         }
 

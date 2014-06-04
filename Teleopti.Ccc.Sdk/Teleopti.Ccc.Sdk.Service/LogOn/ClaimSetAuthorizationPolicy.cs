@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 {
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                             var applicationRole = roleRepository.Get(applicationRoleId);
 
 	                        var licensedFunctionsProvider =
-		                        new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory());
+		                        new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory(),new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
 							if (!hasValidLicense(licensedFunctionsProvider)) return true;
 
 	                        var roleToClaimSetTransformer =

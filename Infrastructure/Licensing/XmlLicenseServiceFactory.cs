@@ -82,14 +82,14 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 			}
 		}
 
-		public void SaveNewLicense(string licenseFilePath, IUnitOfWork uow, ILicenseRepository licenseRepository, string xmlPublicKey, IPersonRepository personRepository)
+		public void SaveNewLicense(string licenseFilePath, IUnitOfWorkFactory uowFactory, ILicenseRepository licenseRepository, string xmlPublicKey, IPersonRepository personRepository)
 		{
 			try
 			{
 				ILicenseService licenseService = SaveNewLicense(licenseFilePath, licenseRepository, xmlPublicKey, personRepository);
-				uow.PersistAll();
+				uowFactory.CurrentUnitOfWork().PersistAll();
 				// this is not really needed, but a good thing if we ever want to try to continue without restarting after installing a license
-				LicenseProvider.ProvideLicenseActivator(licenseService);
+				LicenseProvider.ProvideLicenseActivator(uowFactory.Name, licenseService);
 			}
 			catch (HibernateException e)
 			{

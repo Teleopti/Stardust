@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Main
 
         private string getLicenseText()
         {
-            ILicenseActivator license = DefinedLicenseDataFactory.LicenseActivator;
+            ILicenseActivator license = DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name);
 
             var options = new StringBuilder();
             foreach(string option in license.EnabledLicenseOptionPaths)

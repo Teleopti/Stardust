@@ -109,16 +109,11 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
             return licenseActivator;
         }
 
-
-        /// <summary>
-        /// Creates the default license activator.
-        /// </summary>
-		/// <param name="licenseService">The license service used</param>
-        public static void ProvideLicenseActivator(ILicenseService licenseService)
+        public static void ProvideLicenseActivator(string dataSource, ILicenseService licenseService)
         {
             if (licenseService == null) throw new ArgumentNullException("licenseService");
 
-            DefinedLicenseDataFactory.LicenseActivator = GetLicenseActivator(licenseService);
+            DefinedLicenseDataFactory.SetLicenseActivator(dataSource, GetLicenseActivator(licenseService));
         }
     }
 }

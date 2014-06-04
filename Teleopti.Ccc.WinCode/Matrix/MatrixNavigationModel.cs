@@ -83,10 +83,10 @@ namespace Teleopti.Ccc.WinCode.Matrix
 			return    new []{
 				"BB8C21BA-0756-4DDC-8B26-C9D5715A3443"};
 		}
-        private static IEnumerable<string> detailedAdherenceReports()
+        private IEnumerable<string> detailedAdherenceReports()
         {
 			  var ret =new List<string>();
-			 if(DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(
+			 if(DefinedLicenseDataFactory.GetLicenseActivator(DataSourceName).EnabledLicenseOptionPaths.Contains(
 		            DefinedLicenseOptionPaths.TeleoptiCccVersion8))
 				 ret.Add("BB8C21BA-0756-4DDC-8B26-C9D5715A3443");
                 return ret;
@@ -268,6 +268,11 @@ namespace Teleopti.Ccc.WinCode.Matrix
         public Guid? BusinessUnitId
         {
             get { return ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id; }
+        }
+
+        public string DataSourceName
+        {
+            get { return ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.DataSourceName; }
         }
     }
 

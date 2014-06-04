@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(dataSourceContainer.DataSource).Return(dataSource);
             Expect.Call(dataSource.Application).Return(uowFactory);
             Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
+            Expect.Call(uowFactory.Name).Return("asdf");
             Expect.Call(_licenseVerifierFactory.Create(_view, uowFactory)).Return(_licenseVerifier);
             Expect.Call(_licenseVerifier.LoadAndVerifyLicense()).Return(licenseService);
             Expect.Call(_licenseStatusLoader.GetStatus(uow)).Return(status);
@@ -87,6 +88,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(dataSourceContainer.DataSource).Return(dataSource);
             Expect.Call(dataSource.Application).Return(uowFactory);
             Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
+            Expect.Call(uowFactory.Name).Return("asdf");
             Expect.Call(_licenseVerifierFactory.Create(_view, uowFactory)).Return(_licenseVerifier);
             Expect.Call(_licenseVerifier.LoadAndVerifyLicense()).Return(licenseService);
             Expect.Call(_licenseStatusLoader.GetStatus(uow)).Return(status);
@@ -112,6 +114,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(dataSourceContainer.DataSource).Return(dataSource);
             Expect.Call(dataSource.Application).Return(uowFactory);
             Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
+            Expect.Call(uowFactory.Name).Return("asdf");
             Expect.Call(_licenseVerifierFactory.Create(_view, uowFactory)).Return(_licenseVerifier);
             Expect.Call(_licenseVerifier.LoadAndVerifyLicense()).Return(licenseService);
             Expect.Call(_licenseStatusLoader.GetStatus(uow)).Return(status);
@@ -137,6 +140,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(dataSourceContainer.DataSource).Return(dataSource);
             Expect.Call(dataSource.Application).Return(uowFactory);
             Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
+            Expect.Call(uowFactory.Name).Return("asdf");
             Expect.Call(_licenseVerifierFactory.Create(_view, uowFactory)).Return(_licenseVerifier);
             Expect.Call(_licenseVerifier.LoadAndVerifyLicense()).Return(licenseService);
             Expect.Call(_licenseStatusLoader.GetStatus(uow)).Return(status);

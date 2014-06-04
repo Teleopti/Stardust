@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.Win.Main
 							return;
                 	}
 					
-                    using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+                    using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
                     {
-						new XmlLicensePersister().SaveNewLicense(licenseFilePath, unitOfWork, licenseRepository, new XmlLicensePublicKeyReader().GetXmlPublicKey(), personRepository);
+                        new XmlLicensePersister().SaveNewLicense(licenseFilePath, _unitOfWorkFactory, licenseRepository, new XmlLicensePublicKeyReader().GetXmlPublicKey(), personRepository);
                     }
                     
                     var licenseStatusUpdater =

@@ -7,7 +7,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
@@ -32,8 +34,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 		private IPerson _person;
+	    private CurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
@@ -45,11 +48,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			_scheduleDayReadModelsCreator = _mocks.StrictMock<IScheduleDayReadModelsCreator>();
 			_scheduleDayReadModelRepository = _mocks.StrictMock<IScheduleDayReadModelRepository>();
 
-			_target = new ScheduleDayReadModelHandler(_personRepository, new DoNotifySmsLink(_significantChangeChecker,
-				_smsLinkChecker, _notificationSenderFactory), _scheduleDayReadModelsCreator, _scheduleDayReadModelRepository);
+		    _currentUnitOfWorkFactory = new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal());
+		    _target = new ScheduleDayReadModelHandler(_personRepository, new DoNotifySmsLink(_significantChangeChecker,
+				_smsLinkChecker, _notificationSenderFactory,_currentUnitOfWorkFactory), _scheduleDayReadModelsCreator, _scheduleDayReadModelRepository);
 
-			DefinedLicenseDataFactory.LicenseActivator = new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
-			                                                                  LicenseType.Agent, new Percent(.10), null, null);
+			DefinedLicenseDataFactory.SetLicenseActivator(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
+			                                                                  LicenseType.Agent, new Percent(.10), null, null));
 
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
@@ -58,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[Test]
 		public void ShouldSkipOutIfNotDefaultScenario()
 		{
-			DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
+			DefinedLicenseDataFactory.GetLicenseActivator(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name).EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
 			
 			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(2));
 			var denormalizedScheduleDay = new ProjectionChangedEventScheduleDay
@@ -116,7 +120,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ändrats"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Sdk.ServiceBus.SMS.INotificationSender.SendNotification(System.String,System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldCheckSignificantChangeAndSendIfTrue()
 		{
-			DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
+			DefinedLicenseDataFactory.GetLicenseActivator(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name).EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
 			
 			var mess = new NotificationMessage {Subject = "ändrats!"};
 			var period = new DateTimePeriod(new DateTime(2012, 12, 1, 10, 0, 0, DateTimeKind.Utc),

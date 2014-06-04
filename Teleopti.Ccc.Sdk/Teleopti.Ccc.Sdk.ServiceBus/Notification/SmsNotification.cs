@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 using log4net;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
@@ -14,22 +15,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 		private readonly ISignificantChangeChecker _significantChangeChecker;
 		private readonly ISmsLinkChecker _smsLinkChecker;
 		private readonly INotificationSenderFactory _notificationSenderFactory;
+	    private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
+	    private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
 		public DoNotifySmsLink(ISignificantChangeChecker significantChangeChecker,
 		                       ISmsLinkChecker smsLinkChecker,
-		                       INotificationSenderFactory notificationSenderFactory)
+		                       INotificationSenderFactory notificationSenderFactory,
+            ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_significantChangeChecker = significantChangeChecker;
 			_smsLinkChecker = smsLinkChecker;
 			_notificationSenderFactory = notificationSenderFactory;
+		    _currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
 		public void NotifySmsLink(ScheduleDayReadModel readModel, DateOnly date, IPerson person)
 		{
-			if (DefinedLicenseDataFactory.LicenseActivator == null)
+			if (!DefinedLicenseDataFactory.HasLicense)
 			{
 				if (Logger.IsInfoEnabled)
 					Logger.Info("Can't access LicenseActivator to check SMSLink license.");
@@ -38,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 
 			//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
 			if (
-				DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(
+				DefinedLicenseDataFactory.GetLicenseActivator(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name).EnabledLicenseOptionPaths.Contains(
 					DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
 			{
 				Logger.Info("Found SMSLink license.");

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			logger = mocks.DynamicMock<ILog>();
 			applicationData = mocks.DynamicMock<IApplicationData>();
 			target = new VerifyLicenseTask(licenseVerifierFactory, new Lazy<IApplicationData>(() => applicationData), logger);
-			DefinedLicenseDataFactory.LicenseActivator = null;
+			DefinedLicenseDataFactory.SetLicenseActivator("asdf", null);
 		}
 
 		[Test]
@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 
 			using(mocks.Record())
 			{
+			    Expect.Call(dataSource.DataSourceName).Return("asdf");
 				Expect.Call(applicationData.RegisteredDataSourceCollection).Return(dataSources);
 				Expect.Call(licenseVerifierFactory.Create(target, null)).Return(licenseVerifier);
 				Expect.Call(licenseVerifier.LoadAndVerifyLicense()).Return(mocks.DynamicMock<ILicenseService>());
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			using(mocks.Playback())
 			{
 				target.Execute();
-				DefinedLicenseDataFactory.LicenseActivator
+				DefinedLicenseDataFactory.GetLicenseActivator("asdf")
 					.Should().Not.Be.Null();
 			}
 		}
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			using (mocks.Playback())
 			{
 				Assert.Throws<PermissionException>(() => target.Execute());
-				DefinedLicenseDataFactory.LicenseActivator
+				DefinedLicenseDataFactory.GetLicenseActivator("asdf")
 					.Should().Be.Null();
 			}
 		}

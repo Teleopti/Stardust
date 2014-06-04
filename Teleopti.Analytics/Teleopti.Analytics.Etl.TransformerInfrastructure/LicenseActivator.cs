@@ -14,7 +14,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 				var xmlLicenseService = new XmlLicenseServiceFactory().Make(new LicenseRepository(uow), 0);
 
-				LicenseProvider.ProvideLicenseActivator(xmlLicenseService);	
+                LicenseProvider.ProvideLicenseActivator(UnitOfWorkFactory.Current.Name,xmlLicenseService);	
 			}
 		}
 

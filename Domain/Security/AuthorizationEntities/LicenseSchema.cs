@@ -13,19 +13,31 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     {
 	    private readonly ReadOnlyCollection<LicenseOption> _licenseOptions = DefinedLicenseDataFactory.CreateDefinedLicenseOptions();
 
-        private static LicenseSchema _activeLicenseSchema;
+        private static readonly IDictionary<string, LicenseSchema> _activeLicenseSchemas = new Dictionary<string, LicenseSchema>();
+
+        //private static LicenseSchema _activeLicenseSchema;
 
         /// <summary>
         /// Gets the singleton instance of the active license schema.
         /// </summary>
         /// <value>The instance.</value>
-        public static LicenseSchema ActiveLicenseSchema
+        public static LicenseSchema GetActiveLicenseSchema(string dataSource)
         {
-            get {
-	            return _activeLicenseSchema ??
-	                   (_activeLicenseSchema = DefinedLicenseDataFactory.CreateActiveLicenseSchema());
+            LicenseSchema activeLicenseSchema;
+            if (_activeLicenseSchemas.TryGetValue(dataSource, out activeLicenseSchema))
+            {
+                return activeLicenseSchema;
             }
-	        set { _activeLicenseSchema = value; }
+
+            activeLicenseSchema = DefinedLicenseDataFactory.CreateActiveLicenseSchema(dataSource);
+            _activeLicenseSchemas.Add(dataSource, activeLicenseSchema);
+
+            return activeLicenseSchema;
+        }
+
+        public static void SetActiveLicenseSchema(string dataSource, LicenseSchema licenseSchema)
+        {
+            _activeLicenseSchemas[dataSource] = licenseSchema;
         }
 
 	    /// <summary>

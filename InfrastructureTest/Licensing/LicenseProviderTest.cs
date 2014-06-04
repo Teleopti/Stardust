@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
         public void VerifyMissingArgumentsProvideLicenseActivator()
         {
-            LicenseProvider.ProvideLicenseActivator(null);
+            LicenseProvider.ProvideLicenseActivator("",null);
         }
 
         [Test]
