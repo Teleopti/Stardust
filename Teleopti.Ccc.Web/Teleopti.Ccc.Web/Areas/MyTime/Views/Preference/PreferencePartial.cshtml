@@ -5,6 +5,7 @@
 @{
     Layout = null;
 }
+<input id="showweeklyworktime" type="hidden"  value="@Model.IsWeeklyWorkTimeEnabled.ToString()" />
 <div class="hidden-lg hidden-md topbarparent">
 	<div class="navbar navbar-default collapse navbar-collapse subnavbar">
 		<div class="container">
@@ -167,7 +168,7 @@
 		</div>
 	</div>
 </div>
-<div class="container fixed-non-responsive preference-body-width">
+<div id="preferencebody" class="container fixed-non-responsive">
 	<div id="Preference-add-extended-form" class="well well-small clearfix form-preference" data-bind="visible: AddPreferenceFormVisible">
 		@Html.Partial("AddPreferencesPartial")
 	</div>
