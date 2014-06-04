@@ -30,7 +30,7 @@
     			that.State(data.State);
 				that.Activity(data.Activity);
 				that.NextActivity(data.NextActivity);
-				that.NextActivityStartTime(data.NextActivityStartTime ? (moment.utc(data.NextActivityStartTime).add(offset, 'minutes').format(resources.TimeFormatForMoment)) : '');
+				that.NextActivityStartTime(data.NextActivity && data.NextActivityStartTime ? that.getDateTimeFormat(moment.utc(data.NextActivityStartTime).add(offset, 'minutes')) : '');
 
 				that.EnteredCurrentAlarm(data.StateStart ? moment.utc(data.StateStart).add(offset, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
 				that.refreshAlarmTime();
@@ -83,6 +83,13 @@
 
     			return r + "," + g + "," + b;
     		}
+
+			that.getDateTimeFormat = function(time) {
+				if (time.date() > moment().date()) {
+					return time.format(resources.FixedDateTimeWithSecondsFormatForMoment);
+				}
+				return time.format(resources.TimeFormatForMoment);
+			}
 
     		return that;
     	};
