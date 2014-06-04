@@ -431,23 +431,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
-		public void ShouldThrowDatasourceExceptionIfNoDatasourceFileIsAvailable()
-		{
-			DefinedLicenseDataFactory.SetLicenseActivator("asdf", null);
-			var ok = false;
-			try
-			{
-				requestContainer.Resolve<ILicenseActivator>();
-			}
-			catch (DependencyResolutionException dependencyResolutionException)
-			{
-				if (dependencyResolutionException.InnerException is DataSourceException)
-					ok = true;
-			}
-			ok.Should().Be.True();
-		}
-
-		[Test]
 		public void ShouldResolveEffectiveRestrictionForDisplayCreator()
 		{
 			var result = requestContainer.Resolve<IEffectiveRestrictionForDisplayCreator>();
@@ -610,15 +593,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 							.Should().Not.Be.Null();
 			requestContainer.Resolve<IEnumerable<IHandleEvent<ScheduleProjectionReadOnlyChanged>>>()
 							.Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldResolveLicenseActivator()
-		{
-		        var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
-		        DefinedLicenseDataFactory.SetLicenseActivator("asdf", licenseActivator);
-		        requestContainer.Resolve<ILicenseActivator>().Should().Be(licenseActivator);
-		        DefinedLicenseDataFactory.SetLicenseActivator("asdf", null);
 		}
 
 		[Test]

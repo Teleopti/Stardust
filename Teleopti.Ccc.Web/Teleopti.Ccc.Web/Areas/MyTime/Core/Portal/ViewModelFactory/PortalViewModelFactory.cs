@@ -15,18 +15,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 	public class PortalViewModelFactory : IPortalViewModelFactory
 	{
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly ILicenseActivator _licenseActivator;
+		private readonly ILicenseActivatorProvider _licenseActivatorProvider;
 		private readonly IPushMessageProvider _pushMessageProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IReportsNavigationProvider _reportsNavigationProvider;
 
-		public PortalViewModelFactory(IPermissionProvider permissionProvider,
-												  ILicenseActivator licenseActivator,
-												  IPushMessageProvider pushMessageProvider,
-												  ILoggedOnUser loggedOnUser, IReportsNavigationProvider reportsNavigationProvider)
+		public PortalViewModelFactory(IPermissionProvider permissionProvider, ILicenseActivatorProvider licenseActivatorProviderProvider, IPushMessageProvider pushMessageProvider, ILoggedOnUser loggedOnUser, IReportsNavigationProvider reportsNavigationProvider)
 		{
 			_permissionProvider = permissionProvider;
-			_licenseActivator = licenseActivator;
+			_licenseActivatorProvider = licenseActivatorProviderProvider;
 			_pushMessageProvider = pushMessageProvider;
 			_loggedOnUser = loggedOnUser;
 			_reportsNavigationProvider = reportsNavigationProvider;
@@ -66,11 +63,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			}
 			else if (reportsItems != null) reportsList.AddRange(reportsItems);
 
+			var licenseActivator = _licenseActivatorProvider.Current();
+			var customerName = licenseActivator == null ? string.Empty : licenseActivator.CustomerName;
+			
 			return new PortalViewModel
 						{
 							ReportNavigationItems = reportsList,
 							NavigationItems = navigationItems,
-							CustomerName = _licenseActivator.CustomerName,
+							CustomerName = customerName,
 							ShowChangePassword = showChangePassword(),
 							HasAsmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
 							HasSignInAsAnotherUser = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.SignInAsAnotherUser),
