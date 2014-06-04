@@ -35,11 +35,14 @@ EXEC [mart].[stage_schedule_remove_overlapping_shifts]
 
 --if no @scenario, no data then break
 DECLARE @scenario_code uniqueidentifier
+DECLARE @scenario_id smallint
 SELECT TOP 1 @scenario_code=scenario_code FROM Stage.stg_schedule_changed
 IF @scenario_code IS NULL
 BEGIN
 	RETURN 0
 END
+
+SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE scenario_code=@scenario_code
 
 --debug
 declare @timeStat table (step int,laststep_ms int,totalTime int)
@@ -120,6 +123,7 @@ inner join stage.stg_schedule_changed ch
 			AND
 				(ch.schedule_date <= p.valid_to_date_local)
 		)
+WHERE f.scenario_id=@scenario_id
 
 if @debug=1
 begin
