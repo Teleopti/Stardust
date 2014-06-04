@@ -10,27 +10,28 @@ namespace Teleopti.Ccc.Domain.Optimization
     [Serializable]
     public class SchedulingOptionsExtraPersonalSetting : SettingValue
     {
-        //private BlockFinderType _blockFinderType = BlockFinderType.None;
-        private bool _useGroupScheduling;
-        //private string _groupSchedulingGroupPageKey;
+
+        private bool _useGroupScheduling; //take away
 
         private string _groupSchedlingForTeamBlockPerKey;
         private bool _useTeamBlockSameEndTime;
-        private bool _useTeamBlockSameShiftCategory;
+	    private bool _useTeamBlockSameShiftCategory = true;
         private bool _useTeamBlockSameStartTime;
         private bool _useTeamBlockSameShift;
         private bool _useTeamBlockPerOption;
-        
-        private Guid? _scheduleTagId;
+
+		private BlockFinderType _blockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
         private bool _useGroupSchedulingCommonStart;
         private bool _useGroupSchedulingCommonEnd;
-        private bool _useGroupSchedulingCommonCategory;
+	    private bool _useGroupSchedulingCommonCategory = true;
         private bool _useCommmonActivity;
         private Guid?  _commonActivtyId;
-        private BlockFinderType _blockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
-
+        
         private double _fairnessValue;
         private string _fairnessGroupPageKey;
+
+		//Move elsewhere
+		private Guid? _scheduleTagId;
         private int _resourceCalculateFrequency = 1;
         private int _screenRefreshRate = 10;
         
@@ -47,17 +48,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (schedulingOptions.TagToUseOnScheduling == null)
                 schedulingOptions.TagToUseOnScheduling = NullScheduleTag.Instance;
 
-            //schedulingOptions.UseBlockScheduling = _blockFinderType;
             schedulingOptions.BlockFinderTypeForAdvanceScheduling = _blockFinderTypeForAdvanceScheduling;
             schedulingOptions.UseTeam = _useGroupScheduling;
 
-				//foreach (var groupPage in groupPages)
-				//{
-				//	 if (_groupSchedulingGroupPageKey == groupPage.Key)
-				//		  schedulingOptions.GroupOnGroupPage = groupPage;
-				//}
-
-            //for leve per
             foreach (var groupPage in groupPagesForTeamBlockPer)
             {
                 if (_groupSchedlingForTeamBlockPerKey  == groupPage.Key)
@@ -98,11 +91,10 @@ namespace Teleopti.Ccc.Domain.Optimization
         public void MapFrom(ISchedulingOptions schedulingOptions)
         {
             _scheduleTagId = schedulingOptions.TagToUseOnScheduling.Id;
-             //_blockFinderType = schedulingOptions.UseBlockScheduling;
+
             _blockFinderTypeForAdvanceScheduling = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
             _useGroupScheduling = schedulingOptions.UseTeam;
-			//if (schedulingOptions.GroupOnGroupPage != null)
-			//	_groupSchedulingGroupPageKey = schedulingOptions.GroupOnGroupPage.Key;
+
            _useGroupSchedulingCommonStart = schedulingOptions.TeamSameStartTime;
             _useGroupSchedulingCommonEnd = schedulingOptions.TeamSameEndTime;
             _useGroupSchedulingCommonCategory = schedulingOptions.TeamSameShiftCategory;
