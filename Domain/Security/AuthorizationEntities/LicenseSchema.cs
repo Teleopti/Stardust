@@ -22,8 +22,13 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// <value>The instance.</value>
         public static LicenseSchema GetActiveLicenseSchema(string dataSource)
         {
-            return _activeLicenseSchemas.GetOrAdd(dataSource,
-                DefinedLicenseDataFactory.CreateActiveLicenseSchema(dataSource));
+            LicenseSchema activeLicenseSchema;
+            _activeLicenseSchemas.TryGetValue(dataSource, out activeLicenseSchema);
+            if (activeLicenseSchema != null)
+                return activeLicenseSchema;
+            var licenseSchema = DefinedLicenseDataFactory.CreateActiveLicenseSchema(dataSource);
+            _activeLicenseSchemas.TryAdd(dataSource, licenseSchema);
+            return licenseSchema;
         }
 
         public static void SetActiveLicenseSchema(string dataSource, LicenseSchema licenseSchema)
