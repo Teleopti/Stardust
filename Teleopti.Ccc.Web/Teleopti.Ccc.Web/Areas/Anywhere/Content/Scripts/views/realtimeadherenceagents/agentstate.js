@@ -16,6 +16,7 @@
     		that.Alarm = ko.observable();
     		that.AlarmColor = ko.observable();
     		that.AlarmStart = ko.observable();
+    		that.EnteredCurrentAlarm = ko.observable();
     		that.TextWeight = ko.observable();
 
     		that.fill = function (data, name, offset) {
@@ -24,17 +25,19 @@
     			that.State(data.State);
 				that.Activity(data.Activity);
 				that.NextActivity(data.NextActivity);
-    			that.NextActivityStartTime( data.NextActivityStartTime ? (moment.utc(data.NextActivityStartTime).add(offset, 'minutes').format(resources.TimeFormatForMoment)) : '');
+				that.NextActivityStartTime(data.NextActivityStartTime ? (moment.utc(data.NextActivityStartTime).add(offset, 'minutes').format(resources.TimeFormatForMoment)) : '');
+
+				that.EnteredCurrentAlarm(data.StateStart ? moment.utc(data.StateStart).add(offset, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
     			that.Alarm(data.Alarm);
-    			
-    			that.refreshColor(data.AlarmColor);
     			that.AlarmStart(data.AlarmStart ? moment.utc(data.AlarmStart).add(offset, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
+				that.refreshColor(data.AlarmColor);
+
 				that.refreshAlarmTime();
 		    };
 			
 			that.refreshAlarmTime = function () {
 				if (!that.AlarmStart()) return;
-				var duration = moment.duration(((new Date).getTime() - moment(that.AlarmStart(), resources.FixedDateTimeWithSecondsFormatForMoment).toDate()));
+				var duration = moment.duration(((new Date).getTime() - moment(that.EnteredCurrentAlarm(), resources.FixedDateTimeWithSecondsFormatForMoment).toDate()));
     			that.AlarmTime(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
 			}
 
