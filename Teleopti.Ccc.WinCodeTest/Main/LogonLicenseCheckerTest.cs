@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(_licenseVerifier.LoadAndVerifyLicense()).Return(licenseService);
             Expect.Call(_licenseStatusLoader.GetStatus(uow)).Return(status);
             Expect.Call(status.StatusOk).Return(false).Repeat.Times(3);
-            Expect.Call(status.DaysLeft).Return(0);
+            Expect.Call(status.DaysLeft).Return(-1);
             Expect.Call(() => _view.Error("")).IgnoreArguments();
             Expect.Call(uow.Dispose);
             _mocks.ReplayAll();

@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                     {
                         status.NumberOfActiveAgents = numberOfActiveAgents;
                         status.CheckDate = DateTime.Today.Date;
-                        status.DaysLeft = (int)Math.Round((status.LastValidDate.Date - DateTime.Today.Date).TotalDays) - 1;
+                        status.DaysLeft = (int)Math.Round((status.LastValidDate.Date - DateTime.Today.Date).TotalDays);
                         _licenseStatusRepositories.SaveLicenseStatus(status.GetNewStatusDocument().OuterXml);
                         return 1;
                     }
