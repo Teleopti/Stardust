@@ -50,18 +50,6 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				.SingleInstance().As<ITogglesActive>();
 			builder.RegisterType<AllToggles>()
 				.SingleInstance().As<IAllToggles>();
-			builder.Register(c =>
-			{
-				if (!DefinedLicenseDataFactory.HasAnyLicense)
-					throw new DataSourceException("Missing datasource (no *.hbm.xml file available)!");
-
-                var dataSource = c.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory().Name;
-                if (!DefinedLicenseDataFactory.HasLicense(dataSource))
-                    throw new DataSourceException("No license for datasource!");
-			    return DefinedLicenseDataFactory.GetLicenseActivator(dataSource);
-			})
-			.SingleInstance()
-			.As<ILicenseActivator>();
 		}
 
 		private bool togglePathIsAnUrl()
