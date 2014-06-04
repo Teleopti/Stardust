@@ -26,7 +26,11 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 	self.PossibleResultWeeklyContractTimeMinutesLower = ko.computed(function() {
 		var sum = 0;
 		$.each(self.DayViewModels(), function (index, day) {
-			 if (!(day.EditableHasNoSchedule()) || (day.EditableHasNoSchedule() && day.EditableIsInOpenPeriod())) {
+			if (!day.EditableIsInOpenPeriod() && day.EditableHasNoSchedule()) {
+				sum = 0;
+				return false; //break here only count whole weeks now
+			}
+			 
 			 	 var value = day.PossibleContractTimeMinutesLower();
 			 	 if (value)
 			 	 	 sum += parseInt(value);
@@ -34,8 +38,8 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 			 	 if (absenceValue)
 			 	 	 sum += parseInt(absenceValue);
 			 	 sum += day.ContractTimeMinutes();
-			 }
-
+			 
+			return true; //here continue the each loop
 		});
 		return sum;
 	});
@@ -43,7 +47,11 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 	self.PossibleResultWeeklyContractTimeMinutesUpper = ko.computed(function() {
 		var sum = 0;
 		$.each(self.DayViewModels(), function (index, day) {
-			 if (!(day.EditableHasNoSchedule()) || (day.EditableHasNoSchedule() && day.EditableIsInOpenPeriod())) {
+			if (!day.EditableIsInOpenPeriod() && day.EditableHasNoSchedule()) {
+				sum = 0;
+				return false; //break here only count whole weeks now
+			}
+			 
 				 var value = day.PossibleContractTimeMinutesUpper();
 				 if (value)
 					 sum += parseInt(value);
@@ -51,8 +59,8 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 				 if (absenceValue)
 					 sum += parseInt(absenceValue);
 				 sum += day.ContractTimeMinutes();
-			 }
-			
+			 
+			 return true; //here continue the each loop
 		});
 		return sum;
 	});
@@ -66,10 +74,10 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 	});
 
 	self.IsWeeklyWorkTimeVisible = ko.computed(function () {
-		var isInCurrentPeriod = false;
+		var isInCurrentPeriod = true;
 		$.each(self.DayViewModels(), function(index, day) {
-			if (day.EditableIsInOpenPeriod()) {
-				isInCurrentPeriod = true;
+			if (!day.EditableIsInOpenPeriod()) {
+				isInCurrentPeriod = false;
 				return false;
 			}
 		});
