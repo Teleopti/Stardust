@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
@@ -38,16 +39,14 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		{
 			var exportDtos = new List<PayrollBaseExportDto>();
 			var schedulePartDto = _schedulepartAssembler.DomainEntityToDto(scheduleDay);
-			var timeExportDots = createTimeExportDtos(person, dateOnly, schedulePartDto).ToList();
+            var timeExportDots = createTimeExportDtos(person, dateOnly, schedulePartDto).ToList();
 			if (timeExportDots.Any())
 				exportDtos.AddRange(timeExportDots);
 			return exportDtos;
 		}
 
-		private static IEnumerable<PayrollBaseExportDto> createTimeExportDtos(IPerson person, DateOnly dateOnly,
-																	   SchedulePartDto schedulePartDto)
+		private static IEnumerable<PayrollBaseExportDto> createTimeExportDtos(IPerson person, DateOnly dateOnly, SchedulePartDto schedulePartDto)
 		{
-			
 			if (isDayEmpty(schedulePartDto))
 				yield break;
 
@@ -68,9 +67,16 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				if (personAssignmentDto != null && personAssignmentDto.MainShift != null)
 					payrollTimeExportDataDto.ShiftCategoryName =
 						personAssignmentDto.MainShift.ShiftCategoryName;
-
-				payrollTimeExportDataDto.StartDate = schedulePartDto.LocalPeriod.LocalStartDateTime;
-				payrollTimeExportDataDto.EndDate = schedulePartDto.LocalPeriod.LocalEndDateTime;
+                if (schedulePartDto.ProjectedLayerCollection != null && schedulePartDto.ProjectedLayerCollection.Count > 0)
+                {
+			        payrollTimeExportDataDto.StartDate = schedulePartDto.ProjectedLayerCollection.FirstOrDefault().Period.LocalStartDateTime;
+                    payrollTimeExportDataDto.EndDate = schedulePartDto.ProjectedLayerCollection.LastOrDefault().Period.LocalEndDateTime;
+			    }
+			    else
+			    {
+                    payrollTimeExportDataDto.StartDate = schedulePartDto.LocalPeriod.LocalStartDateTime;
+                    payrollTimeExportDataDto.EndDate = schedulePartDto.LocalPeriod.LocalEndDateTime;
+			    }
 				payrollTimeExportDataDto.ContractTime = schedulePartDto.ContractTime.TimeOfDay;
 				payrollTimeExportDataDto.WorkTime = schedulePartDto.WorkTime.TimeOfDay;
 				payrollTimeExportDataDto.PaidTime = schedulePartDto.PaidTime.TimeOfDay;
