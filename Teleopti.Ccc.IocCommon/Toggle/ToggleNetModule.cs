@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		{
 			builder.Register<IToggleManager>(c =>
 			{
-				if (string.IsNullOrEmpty(_pathToToggle))
+				if (togglePathIsNotDefined())
 				{
 					return new falseToggleManager();
 				}
-				if (_pathToToggle.StartsWith("http://") || _pathToToggle.StartsWith("https://"))
+				if (togglePathIsAnUrl())
 				{
 					return new ToggleQuerier(_pathToToggle);
 				}
@@ -57,6 +57,16 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			})
 			.SingleInstance()
 			.As<ILicenseActivator>();
+		}
+
+		private bool togglePathIsAnUrl()
+		{
+			return _pathToToggle.StartsWith("http://") || _pathToToggle.StartsWith("https://");
+		}
+
+		private bool togglePathIsNotDefined()
+		{
+			return string.IsNullOrEmpty(_pathToToggle);
 		}
 
 		private class toggleCheckerWrapper : IToggleManager
