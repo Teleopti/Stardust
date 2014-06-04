@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			_blockPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
 			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(_blockPeriod));
 			_schedulingOptions = new SchedulingOptions();
+			_schedulingOptions.TeamSameShiftCategory = false;
+			_schedulingOptions.BlockSameShiftCategory = false;
 			_shift = _mocks.StrictMock<IShiftProjectionCache>();
 		}
 
