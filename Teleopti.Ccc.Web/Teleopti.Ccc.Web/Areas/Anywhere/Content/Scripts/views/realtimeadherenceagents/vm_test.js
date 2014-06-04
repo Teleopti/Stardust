@@ -111,7 +111,20 @@
 				assert.equals(vm.agentStates()[0].Name, agent2.Name);
 				assert.equals(vm.agentStates()[1].Name, agent1.Name);
 			},
-
+			"should display alarmtime based on when agent entered current alarm": function () {
+				resources.FixedDateTimeWithSecondsFormatForMoment = "YYYY-MM-DD HH:mm:ss";
+				var state = {
+					PersonId: 'guid1',
+					StateStart: moment().add(-10, 'seconds'),
+					AlarmStart: moment()
+				};
+				var agent = { PersonId: "guid1", TimeZoneOffsetMinutes: 0 };
+				var vm = viewModel();
+				vm.fillAgents([agent]);
+				vm.fillAgentsStates([state]);
+				assert.equals(vm.agentStates()[0].AlarmTime(), "0:00:10");
+				delete resources.FixedDateTimeWithSecondsFormatForMoment;
+			}
 		});		
 	};
 });
