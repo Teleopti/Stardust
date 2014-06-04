@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
@@ -10,6 +11,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 	{
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IPersonScheduleDayReadModelPersister _scheduleDayReadModelRepository;
+
+		private readonly static ILog Logger = LogManager.GetLogger(typeof(PersonScheduleDayReadModelUpdater));
 
 		public PersonScheduleDayReadModelUpdater(
 			IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
@@ -31,8 +34,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 
 		private void createReadModel(ProjectionChangedEventBase message)
 		{
-			if (!message.IsDefaultScenario) return;
-			if (message.ScheduleDays == null || message.ScheduleDays.Count == 0) return;
+			if (Logger.IsDebugEnabled)
+				Logger.Debug("Updating model PersonScheduleDayReadModel");
+
+			if (!message.IsDefaultScenario)
+			{
+				if (Logger.IsDebugEnabled)
+					Logger.Debug("Skipping update of model PersonScheduleDayReadModel because its not in default scenario");
+				return;
+			}
+			if (message.ScheduleDays == null || message.ScheduleDays.Count == 0)
+			{
+				if (Logger.IsDebugEnabled)
+					Logger.Debug("Skipping update of model PersonScheduleDayReadModel because the event did not contain any days");
+				return;
+			}
 
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(message.ScheduleDays.Min(s => s.Date.Date)),
 			                                        new DateOnly(message.ScheduleDays.Max(s => s.Date.Date)));

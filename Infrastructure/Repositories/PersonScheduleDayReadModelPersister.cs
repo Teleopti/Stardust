@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using log4net;
 using NHibernate;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
@@ -17,6 +18,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly IMessageBrokerSender _messageBroker;
 		private readonly ICurrentDataSource _currentDataSource;
 
+		private readonly static ILog Logger = LogManager.GetLogger(typeof(PersonScheduleDayReadModelPersister));
+
 		public PersonScheduleDayReadModelPersister(ICurrentUnitOfWork currentUnitOfWork, IMessageBrokerSender messageBroker, ICurrentDataSource currentDataSource)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
@@ -26,6 +29,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void UpdateReadModels(DateOnlyPeriod period, Guid personId, Guid businessUnitId, IEnumerable<PersonScheduleDayReadModel> readModels, bool initialLoad)
 		{
+			if (Logger.IsDebugEnabled)
+				Logger.Debug("Persisting model PersonScheduleDayReadModel");
+
 			if (!initialLoad)
 				clearPeriodForPerson(period, personId);
 
@@ -33,7 +39,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				readModels.ForEach(saveReadModel);
 
 			if (!initialLoad)
-				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _messageBroker.SendEventMessage(_currentDataSource.CurrentName(), businessUnitId, period.StartDate, period.EndDate, Guid.Empty, personId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+				_currentUnitOfWork.Current().AfterSuccessfulTx(() =>
+				{
+					if (Logger.IsDebugEnabled)
+						Logger.Debug("Sending notification for persisted model IPersonScheduleDayReadModel");
+					_messageBroker.SendEventMessage(_currentDataSource.CurrentName(), businessUnitId, period.StartDate, period.EndDate,
+						Guid.Empty, personId, typeof (Person), Guid.Empty, typeof (IPersonScheduleDayReadModel),
+						DomainUpdateType.NotApplicable, null);
+				});
 		}
 
 		private void clearPeriodForPerson(DateOnlyPeriod period, Guid personId)

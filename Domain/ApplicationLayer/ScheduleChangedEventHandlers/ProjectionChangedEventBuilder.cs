@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using log4net;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
@@ -7,23 +8,41 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	public class ProjectionChangedEventBuilder : IProjectionChangedEventBuilder
 	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(ProjectionChangedEventBuilder));
+
 		public IEnumerable<T> Build<T>(ScheduleChangedEventBase message, IScheduleRange range, DateOnlyPeriod realPeriod) 
 			where T : ProjectionChangedEventBase, new()
 		{
+			if (Logger.IsDebugEnabled)
+				Logger.Debug("Building ProjectionChangedEvent(s)");
+
 			foreach (var scheduleDayBatch in range.ScheduledDayCollection(realPeriod).Batch(50))
 			{
 				var scheduleDays = new List<ProjectionChangedEventScheduleDay>();
 				foreach (var scheduleDay in scheduleDayBatch)
 				{
+					if (Logger.IsDebugEnabled)
+						Logger.Debug("Adding a day to ProjectionChangedEvent");
+
 					var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
 					var personPeriod = scheduleDay.Person.Period(date);
-					if (personPeriod == null) continue;
+					if (personPeriod == null)
+					{
+						if (Logger.IsDebugEnabled)
+							Logger.Debug("Person did not have this day in any person period, skipping that day");
+						continue;
+					}
 
 					var projection = scheduleDay.ProjectionService().CreateProjection();
 					
 					var significantPart = scheduleDay.SignificantPart();
-					if (emptyScheduleOnInitialLoad(message, significantPart)) continue;
-					
+					if (emptyScheduleOnInitialLoad(message, significantPart))
+					{
+						if (Logger.IsDebugEnabled)
+							Logger.Debug("Skipping this day for reason: ?emptyScheduleOnInitialLoad?");
+						continue;
+					}
+
 					var eventScheduleDay = new ProjectionChangedEventScheduleDay
 						{
 							TeamId = personPeriod.Team.Id.GetValueOrDefault(),
@@ -115,6 +134,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					eventScheduleDay.Shift = shift;
 					scheduleDays.Add(eventScheduleDay);
 				}
+
 				yield return new T
 					{
 						IsInitialLoad = message.SkipDelete,

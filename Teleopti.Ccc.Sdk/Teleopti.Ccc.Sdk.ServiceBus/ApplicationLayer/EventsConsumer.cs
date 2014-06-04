@@ -1,4 +1,6 @@
-﻿using Rhino.ServiceBus;
+﻿using System;
+using log4net;
+using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -15,6 +17,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 		private readonly IServiceBus _bus;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
+		private readonly static ILog Logger = LogManager.GetLogger(typeof(EventsConsumer));
+
 		public EventsConsumer(IEventPublisher publisher, IServiceBus bus, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_publisher = publisher;
@@ -24,6 +28,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 
 		public void Consume(IEvent message)
 		{
+			if (Logger.IsDebugEnabled)
+				Logger.Debug("Consuming message of type " + message.GetType().Name);
+
 			var raptorDomainMessage = message as IRaptorDomainMessageInfo;
 			if (raptorDomainMessage == null)
 			{
