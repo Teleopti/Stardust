@@ -116,6 +116,7 @@
     <Compile Include="Configuration\ScheduleScreenRefresherModuleTest.cs" />
     <Compile Include="Configuration\ShiftTradeModuleTest.cs" />
     <Compile Include="Configuration\TeleoptiCacheKeyTest.cs" />
+    <Compile Include="Configuration\UnitOfWorkModuleTest.cs" />
     <Compile Include="Toggle\CustomerTest.cs" />
     <Compile Include="Toggle\DeveloperTest.cs" />
     <Compile Include="Toggle\GeneralTest.cs" />

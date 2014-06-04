@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -23,19 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			// placed here because at the moment uow is the "owner" of the *current* initiator identifier
 			builder.RegisterType<CurrentInitiatorIdentifier>().As<ICurrentInitiatorIdentifier>();
-
-			builder.Register(c =>
-			{
-				if (!DefinedLicenseDataFactory.HasAnyLicense)
-					throw new DataSourceException("Missing datasource (no *.hbm.xml file available)!");
-
-				var dataSource = c.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory().Name;
-				if (!DefinedLicenseDataFactory.HasLicense(dataSource))
-					throw new DataSourceException("No license for datasource!");
-				return DefinedLicenseDataFactory.GetLicenseActivator(dataSource);
-			})
-			.SingleInstance()
-			.As<ILicenseActivator>();
+			builder.RegisterType<LicenseActivatorProvider>().As<ILicenseActivatorProvider>().SingleInstance();
 		}
 	}
 }
