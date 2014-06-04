@@ -499,6 +499,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 	    public bool ValidateTeamSchedulingOption()
 	    {
+			if (_schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff)
+				return true;
+
 		    if (isTeamSelected())
 		    {
 			    if (
@@ -510,7 +513,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 	    }
 
 	    public bool ValidateBlockOption()
-        {
+	    {
+		    if (_schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff)
+			    return true;
+
 			if ((BlockFinderType)comboBoxBlockType.SelectedValue != BlockFinderType.SingleDay)
             {
                 if (!(checkBoxBlockSameShiftCategory .Checked || checkBoxBlockSameStartTime .Checked || checkBoxBlockSameShift .Checked ))

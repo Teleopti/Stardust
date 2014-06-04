@@ -23,7 +23,6 @@ define(
 				    var success;
 
 				    ajax.ajax = function (data) {
-					    console.log(data);
 					    success = data.success;
 				    };
 
@@ -37,7 +36,6 @@ define(
     				var success;
 				
     				ajax.ajax = function (data) {
-    					console.log(data);
     					success = data.success;
     				};
 
@@ -50,7 +48,6 @@ define(
     				var urlForAjax;
 
     				ajax.ajax = function (data) {
-    					console.log(data);
     					urlForAjax = data.url;
     				};
 

@@ -199,6 +199,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		{
 			_schedulingOptions.UseBlock = true;
 			_schedulingOptions.BlockSameShift = true;
+			_schedulingOptions.BlockSameShiftCategory = false;
 			var effectiveRestrictionForDayOne = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), null),
 										 new EndTimeLimitation(),
 										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
