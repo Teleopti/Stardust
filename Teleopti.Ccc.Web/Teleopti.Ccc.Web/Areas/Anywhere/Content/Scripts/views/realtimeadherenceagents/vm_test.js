@@ -124,7 +124,20 @@
 				vm.fillAgentsStates([state]);
 				assert.equals(vm.agentStates()[0].AlarmTime(), "0:00:10");
 				delete resources.FixedDateTimeWithSecondsFormatForMoment;
+			},
+			"should not display alarm or alarm color untill alarm start has passed": function () {
+				var state = {
+					PersonId: 'guid1',
+					Alarm: 'Adhering',
+					StateStart: moment(),
+					AlarmStart: moment().add(10, 'seconds')
+				};
+				var agent = { PersonId: "guid1", TimeZoneOffsetMinutes: 0 };
+				var vm = viewModel();
+				vm.fillAgents([agent]);
+				vm.fillAgentsStates([state]);
+				assert.equals(vm.agentStates()[0].Alarm(), undefined);
 			}
-		});		
+		});
 	};
 });

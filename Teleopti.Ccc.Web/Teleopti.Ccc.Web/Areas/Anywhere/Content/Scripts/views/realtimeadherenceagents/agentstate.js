@@ -13,9 +13,14 @@
     		that.Activity = ko.observable();
     		that.NextActivity = ko.observable();
     		that.NextActivityStartTime = ko.observable();
-    		that.Alarm = ko.observable();
+
+    		that.NextAlarm = '';
+		    that.NextAlarmColor = '';
+
+		    that.Alarm = ko.observable();
     		that.AlarmColor = ko.observable();
     		that.AlarmStart = ko.observable();
+
     		that.EnteredCurrentAlarm = ko.observable();
     		that.TextWeight = ko.observable();
 
@@ -28,20 +33,35 @@
 				that.NextActivityStartTime(data.NextActivityStartTime ? (moment.utc(data.NextActivityStartTime).add(offset, 'minutes').format(resources.TimeFormatForMoment)) : '');
 
 				that.EnteredCurrentAlarm(data.StateStart ? moment.utc(data.StateStart).add(offset, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
-    			that.Alarm(data.Alarm);
-    			that.AlarmStart(data.AlarmStart ? moment.utc(data.AlarmStart).add(offset, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
-				that.refreshColor(data.AlarmColor);
-
 				that.refreshAlarmTime();
-		    };
-			
-			that.refreshAlarmTime = function () {
-				if (!that.AlarmStart()) return;
-				var duration = moment.duration(((new Date).getTime() - moment(that.EnteredCurrentAlarm(), resources.FixedDateTimeWithSecondsFormatForMoment).toDate()));
-    			that.AlarmTime(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
-			}
 
-			that.refreshColor = function (newColor) {
+				that.AlarmStart(data.AlarmStart ? moment.utc(data.AlarmStart).add(offset, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
+
+				if (that.shouldWaitWithUpdatingAlarm()) {
+			    	that.NextAlarm = data.Alarm;
+				    that.NextAlarmColor = data.AlarmColor;
+				    return;
+			    }
+    			that.Alarm(data.Alarm);
+				that.refreshColor(data.AlarmColor);
+    		};
+			
+    		that.refreshAlarmTime = function() {
+			    if (!that.EnteredCurrentAlarm()) return;
+			    var duration = moment.duration(((new Date).getTime() - moment(that.EnteredCurrentAlarm(), resources.FixedDateTimeWithSecondsFormatForMoment).toDate()));
+			    that.AlarmTime(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
+
+			    if (that.NextAlarm === ''
+					|| that.shouldWaitWithUpdatingAlarm()) return;
+			    that.Alarm(that.NextAlarm);
+			    that.refreshColor(that.NextAlarmColor);
+    		}
+
+    		that.shouldWaitWithUpdatingAlarm = function () {
+    			return that.AlarmStart() && moment.utc().isBefore(that.AlarmStart());
+    		}
+
+		    that.refreshColor = function (newColor) {
 				if (that.color !== newColor) {
 					that.AlarmColor('rgba(' + that.hexToRgb(newColor) + ', 0.6)');
 					that.TextWeight(700);
