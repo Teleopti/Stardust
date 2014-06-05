@@ -50,8 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the text request in the list")]
 		public void ThenIShouldSeeTheTextRequestInTheList()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Is.StringContaining("Text"));
+			Browser.Interactions.AssertFirstContains(".request-body", "Text");
 		}
 
 		[Given(@"I am an agent without access to absence requests")]

@@ -496,7 +496,6 @@
     <Compile Include="MyTime\MyProfileStepDefinitions.cs" />
     <Compile Include="Pages\Common\SelectBox.cs" />
     <Compile Include="Pages\MobileGlobalMenuPage.cs" />
-    <Compile Include="Pages\PasswordPage.cs" />
     <Compile Include="Pages\RegionalSettingsPage.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutTeamScheduleAccess.cs" />
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />
@@ -601,7 +600,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Requests.feature</DependentUpon>
     </Compile>
-    <Compile Include="Pages\RequestsPage.cs" />
     <Compile Include="MyTime\RequestsStepDefinition.cs" />
     <Compile Include="MyTime\StudentAvailability.feature.cs">
       <DependentUpon>StudentAvailability.feature</DependentUpon>

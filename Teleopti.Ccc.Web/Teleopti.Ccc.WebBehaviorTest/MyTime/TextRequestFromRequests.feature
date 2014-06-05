@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: Text request from requests
+﻿Feature: Text request from requests
 	In order to make requests to my superior
 	As an agent
 	I want to be able to submit requests as text
