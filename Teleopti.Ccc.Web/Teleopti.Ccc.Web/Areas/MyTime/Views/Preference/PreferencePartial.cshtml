@@ -203,6 +203,12 @@
 			<span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange" />
 			<!-- /ko -->
 		</div>
+		<!-- ko if: IsWeeklyWorkTimeBroken() -->
+		<div id="weekly-work-time-broken">
+			<span>@Resources.WeeklyWorkTimeBroken</span>
+			<span class="glyphicon glyphicon-exclamation-sign" ></span>
+		</div>
+		<!-- /ko -->
 		<p></p>
 		<div>
 			@if (Model.PreferencePeriod == null)

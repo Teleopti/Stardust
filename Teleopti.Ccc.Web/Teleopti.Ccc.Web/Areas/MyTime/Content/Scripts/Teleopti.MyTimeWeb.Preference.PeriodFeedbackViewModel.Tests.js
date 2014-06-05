@@ -6,7 +6,7 @@ $(document).ready(function () {
 	test("should summarize possible contract time", function () {
 		var viewModelDay1 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var viewModelDay2 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
-		var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(null, [viewModelDay1, viewModelDay2]);
+		var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(null, [viewModelDay1, viewModelDay2], null, []);
 		viewModelDay1.PossibleContractTimeMinutesLower(6 * 60);
 		viewModelDay1.PossibleContractTimeMinutesUpper(10 * 60);
 		viewModelDay2.PossibleContractTimeMinutesLower(6 * 60);
@@ -19,7 +19,7 @@ $(document).ready(function () {
 
 	test("should format possible contract time", function () {
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
-		var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(null, [viewModelDay]);
+		var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(null, [viewModelDay], null, []);
 		viewModelDay.PossibleContractTimeMinutesLower(100 * 60 + 30);
 		viewModelDay.PossibleContractTimeMinutesUpper(160 * 60 + 5);
 
@@ -47,7 +47,7 @@ $(document).ready(function () {
 			}
 		};
 
-		var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, [], "2012-06-11");
+		var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, [], "2012-06-11", []);
 
 		viewModel.LoadFeedback();
 

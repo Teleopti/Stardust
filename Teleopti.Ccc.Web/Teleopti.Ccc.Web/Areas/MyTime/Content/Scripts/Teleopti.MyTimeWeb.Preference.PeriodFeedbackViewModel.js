@@ -16,10 +16,11 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewModels, date) {
+Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewModels, date, weekViewModels) {
 	var self = this;
 
-    this.DayViewModels = dayViewModels;
+	this.DayViewModels = dayViewModels;
+	this.WeekViewModels = weekViewModels;
 
 	this.LoadFeedback = function () {
 		ajax.Ajax({
@@ -43,6 +44,17 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 
 	this.TargetContractTimeLower = ko.observable();
 	this.TargetContractTimeUpper = ko.observable();
+
+	this.IsWeeklyWorkTimeBroken = ko.computed(function () {
+		var broken = false;
+		$.each(self.WeekViewModels, function(index, week) {
+			if ((week.IsMinHoursBroken() || week.IsMaxHoursBroken()) && week.IsInCurrentPeriod()) {
+				broken = true;
+				return false;
+			}
+		});
+		return broken;
+	});
 
 	this.PossibleResultContractTimeMinutesLower = ko.computed(function () {
 		var sum = 0;

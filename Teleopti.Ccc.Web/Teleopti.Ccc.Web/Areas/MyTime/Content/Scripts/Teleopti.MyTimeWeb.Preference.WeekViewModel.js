@@ -73,15 +73,20 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultWeeklyContractTimeMinutesUpper());
 	});
 
-	self.IsWeeklyWorkTimeVisible = ko.computed(function () {
+	self.IsInCurrentPeriod = ko.computed(function() {
 		var isInCurrentPeriod = true;
-		$.each(self.DayViewModels(), function(index, day) {
+		$.each(self.DayViewModels(), function (index, day) {
 			if (!day.EditableIsInOpenPeriod()) {
 				isInCurrentPeriod = false;
 				return false;
 			}
 		});
-		if (isInCurrentPeriod)
+
+		return isInCurrentPeriod;
+	});
+
+	self.IsWeeklyWorkTimeVisible = ko.computed(function () {
+		if (self.IsInCurrentPeriod())
 			return true;
 		if (self.PossibleResultWeeklyContractTimeMinutesLower() > 0)
 			return true;

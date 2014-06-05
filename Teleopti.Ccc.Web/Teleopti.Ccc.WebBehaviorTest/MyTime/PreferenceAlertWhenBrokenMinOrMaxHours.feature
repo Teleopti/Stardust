@@ -28,6 +28,7 @@ And I have a shift bag with start times 8 to 9 and end times 18 to 20
 And I have a preference with work time limitation between 7 and 9
 When I view preferences
 Then I should be alerted for the max hours
+And I should see warning text in top view
 
 Scenario: Show alert when current max hours per week is less than min hours per week on WCS
 Given I am an agent
@@ -35,11 +36,12 @@ And I have a workflow control set with
 	| Field                      | Value              |
 	| Name                       | Published schedule |
 	| Schedule published to date | 2040-06-24         |
-	| Min time per week          | 60                 |
-And  I have a shift bag with start times 9 to 10 and end times 15 to 16
-And I have a preference with work time limitation between 7 and 9
+	| Min time per week          | 45                 |
+And  I have a shift bag with start times 9 to 9 and end times 15 to 15
+And I have a preference with work time limitation between 6 and 9
 When I view preferences
 Then I should be alerted for the min hours
+And I should see warning text in top view
 
 Scenario: Should not alert when neither min nor max hours are broken
 Given I am an agent
@@ -55,3 +57,4 @@ And  I have a shift bag with start times 8 to 10 and end times 15 to 20
 And I have a preference with work time limitation between 7 and 10
 When I view preferences
 Then I should not be alerted
+And I should not see warning text in top view
