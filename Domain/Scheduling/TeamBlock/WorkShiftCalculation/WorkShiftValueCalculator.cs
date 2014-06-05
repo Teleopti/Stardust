@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 					if (periodValueCalculationParameters.IsMaxSeatToggleEnabled && periodValueCalculationParameters.HasMaxSeatSkill
 					    && periodValueCalculationParameters.MaxSeatsFeatureOption != MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
 					{
-						bool maxSeatReached = false;
+						var maxSeatReached = new IntervalLevelMaxSeatInfo();
 						var maxSeatsPerIntervalDictionary = periodValueCalculationParameters.MaxSeatInfoPerInterval;
 						if (!maxSeatsPerIntervalDictionary.TryGetValue(currentSkillStaffPeriodKey, out maxSeatReached))
 						{
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 							return 0;
 						}
 						var maxSeatsCorrection = _maxSeatsCalculationForTeamBlock.PeriodValue(valueForThisPeriod,
-							periodValueCalculationParameters.MaxSeatsFeatureOption, maxSeatReached, activity.RequiresSeat);
+							periodValueCalculationParameters.MaxSeatsFeatureOption, maxSeatReached.IsMaxSeatReached, activity.RequiresSeat, maxSeatReached.MaxSeatBoostingFactor);
 
 						if (maxSeatsCorrection == null)
 							return null;
