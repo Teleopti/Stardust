@@ -42,7 +42,15 @@ BEGIN
 	RETURN 0
 END
 
-SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE scenario_code=@scenario_code
+SELECT @scenario_id = scenario_id
+FROM mart.dim_scenario
+WHERE scenario_code=@scenario_code
+AND default_scenario = 1
+
+IF @scenario_id IS NULL
+BEGIN
+	RETURN 0
+END
 
 --debug
 declare @timeStat table (step int,laststep_ms int,totalTime int)
@@ -153,6 +161,7 @@ INNER JOIN mart.dim_date AS dsd
 ON stg.schedule_date = dsd.date_date
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
+WHERE ds.scenario_id=@scenario_id
 
 if @debug=1
 begin
@@ -183,8 +192,8 @@ begin
 end
 
 DELETE fs
-FROM #stg_schedule tmp
-INNER JOIN mart.fact_schedule fs 
+FROM mart.fact_schedule fs
+INNER JOIN #stg_schedule tmp
 	ON tmp.person_id	= fs.person_id
 	AND tmp.date_id		= fs.schedule_date_id
 	AND tmp.interval_id = fs.interval_id

@@ -22,11 +22,24 @@ if (select count(*)
 	from mart.dim_scenario
 	where business_unit_code = @business_unit_code
 	and scenario_code = @scenario_code
+	and default_scenario = 1
 	) <> 1
 BEGIN
 	DECLARE @ErrorMsg nvarchar(4000)
 	SELECT @ErrorMsg  = 'This is not a default scenario, or muliple default scenarios exists!'
 	RAISERROR (@ErrorMsg,16,1)
+	RETURN 0
+END
+
+--if no @scenario, no data then break
+DECLARE @scenario_id smallint
+SELECT @scenario_id = scenario_id
+FROM mart.dim_scenario
+WHERE scenario_code=@scenario_code
+AND default_scenario = 1
+
+IF @scenario_id IS NULL
+BEGIN
 	RETURN 0
 END
 
@@ -53,9 +66,6 @@ CREATE TABLE #stg_schedule_changed(
 	[shift_startdate_id] [int] NOT NULL,
 	[scenario_id] [smallint] NOT NULL
 )
---Get scenario_id
-DECLARE @scenario_id int 
-SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE scenario_code= @scenario_code
 
 --prepare a temp table for better performance on delete
 INSERT INTO #stg_schedule_changed
@@ -82,6 +92,7 @@ inner join stage.stg_schedule_changed ch
 			AND
 				(ch.schedule_date <= p.valid_to_date_local)
 		)
+WHERE f.scenario_id = @scenario_id
 
 -- special delete if something is left, a shift over midninght for example
 INSERT INTO #stg_schedule_day_off_count
@@ -105,6 +116,7 @@ INNER JOIN mart.dim_date AS dsd
 	ON stg.date = dsd.date_date
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
+WHERE ds.scenario_id = @scenario_id
 
 --return numbers of rows to ETL from here
 SET NOCOUNT OFF
