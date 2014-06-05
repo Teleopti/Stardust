@@ -33,10 +33,16 @@ END
 
 --if no @scenario, no data then break
 DECLARE @scenario_id smallint
+DECLARE @business_unit_id int
+
 SELECT @scenario_id = scenario_id
 FROM mart.dim_scenario
 WHERE scenario_code=@scenario_code
 AND default_scenario = 1
+
+SELECT @business_unit_id=business_unit_id
+FROM mart.dim_business_unit
+WHERE business_unit_code = @business_unit_code
 
 IF @scenario_id IS NULL
 BEGIN
@@ -57,11 +63,6 @@ CREATE TABLE #stg_schedule_changed(
 	[shift_startdate_id] [int] NOT NULL,
 	[scenario_id] [smallint] NOT NULL
 )
---Get scenario_id
-DECLARE @scenario_id int 
-SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE scenario_code= @scenario_code
-DECLARE @business_unit_id int
-SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 
 --return numbers of rows to ETL from here
 SET NOCOUNT OFF
