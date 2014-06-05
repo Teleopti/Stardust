@@ -339,10 +339,11 @@
 			// comboBoxAdvTag
 			// 
 			this.comboBoxAdvTag.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxAdvTag.BeforeTouchSize = new System.Drawing.Size(200, 19);
 			this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvTag.Location = new System.Drawing.Point(136, 3);
 			this.comboBoxAdvTag.Name = "comboBoxAdvTag";
-			this.comboBoxAdvTag.Size = new System.Drawing.Size(200, 21);
+			this.comboBoxAdvTag.Size = new System.Drawing.Size(200, 19);
 			this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvTag.TabIndex = 11;
 			// 
@@ -474,6 +475,7 @@
 			// comboBoxGroupingFairness
 			// 
 			this.comboBoxGroupingFairness.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxGroupingFairness.BeforeTouchSize = new System.Drawing.Size(178, 19);
 			this.comboBoxGroupingFairness.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxGroupingFairness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxGroupingFairness.Location = new System.Drawing.Point(225, 93);
@@ -544,6 +546,7 @@
 			// comboBoxTeamActivity
 			// 
 			this.comboBoxTeamActivity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxTeamActivity.BeforeTouchSize = new System.Drawing.Size(178, 19);
 			this.comboBoxTeamActivity.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamActivity.Enabled = false;
@@ -565,6 +568,7 @@
 			this.checkBoxTeamSameEndTime.TabIndex = 38;
 			this.checkBoxTeamSameEndTime.Text = "xxSameEndTime";
 			this.checkBoxTeamSameEndTime.UseVisualStyleBackColor = true;
+			this.checkBoxTeamSameEndTime.CheckedChanged += new System.EventHandler(this.checkBoxTeamSameEndTime_CheckedChanged);
 			// 
 			// checkBoxTeamSameStartTime
 			// 
@@ -578,6 +582,7 @@
 			this.checkBoxTeamSameStartTime.TabIndex = 37;
 			this.checkBoxTeamSameStartTime.Text = "xxSameStartTime";
 			this.checkBoxTeamSameStartTime.UseVisualStyleBackColor = true;
+			this.checkBoxTeamSameStartTime.CheckedChanged += new System.EventHandler(this.checkBoxTeamSameStartTime_CheckedChanged);
 			// 
 			// checkBoxTeamSameShiftCategory
 			// 
@@ -591,10 +596,12 @@
 			this.checkBoxTeamSameShiftCategory.TabIndex = 36;
 			this.checkBoxTeamSameShiftCategory.Text = "xxSameShiftCategory";
 			this.checkBoxTeamSameShiftCategory.UseVisualStyleBackColor = true;
+			this.checkBoxTeamSameShiftCategory.CheckedChanged += new System.EventHandler(this.checkBoxTeamSameShiftCategory_CheckedChanged);
 			// 
 			// comboBoxTeamGroupPage
 			// 
 			this.comboBoxTeamGroupPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxTeamGroupPage.BeforeTouchSize = new System.Drawing.Size(178, 19);
 			this.comboBoxTeamGroupPage.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamGroupPage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamGroupPage.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
@@ -608,6 +615,7 @@
 			// comboBoxBlockType
 			// 
 			this.comboBoxBlockType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxBlockType.BeforeTouchSize = new System.Drawing.Size(178, 19);
 			this.comboBoxBlockType.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxBlockType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxBlockType.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
@@ -630,6 +638,7 @@
 			this.checkBoxBlockSameShiftCategory.TabIndex = 48;
 			this.checkBoxBlockSameShiftCategory.Text = "xxSameShiftCategory";
 			this.checkBoxBlockSameShiftCategory.UseVisualStyleBackColor = true;
+			this.checkBoxBlockSameShiftCategory.CheckedChanged += new System.EventHandler(this.checkBoxBlockSameShiftCategory_CheckedChanged);
 			// 
 			// checkBoxBlockSameStartTime
 			// 
@@ -643,6 +652,7 @@
 			this.checkBoxBlockSameStartTime.TabIndex = 49;
 			this.checkBoxBlockSameStartTime.Text = "xxSameStartTime";
 			this.checkBoxBlockSameStartTime.UseVisualStyleBackColor = true;
+			this.checkBoxBlockSameStartTime.CheckedChanged += new System.EventHandler(this.checkBoxBlockSameStartTime_CheckedChanged);
 			// 
 			// checkBoxBlockSameShift
 			// 
@@ -656,6 +666,7 @@
 			this.checkBoxBlockSameShift.TabIndex = 50;
 			this.checkBoxBlockSameShift.Text = "xxSameShift";
 			this.checkBoxBlockSameShift.UseVisualStyleBackColor = true;
+			this.checkBoxBlockSameShift.CheckedChanged += new System.EventHandler(this.checkBoxBlockSameShift_CheckedChanged);
 			// 
 			// label2
 			// 
@@ -761,6 +772,7 @@
 			// comboBoxAdvShiftCategory
 			// 
 			this.comboBoxAdvShiftCategory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxAdvShiftCategory.BeforeTouchSize = new System.Drawing.Size(173, 19);
 			this.comboBoxAdvShiftCategory.Dock = System.Windows.Forms.DockStyle.Left;
 			this.comboBoxAdvShiftCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(28, 29);
