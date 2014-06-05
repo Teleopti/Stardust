@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day,
 						schedulingResultStateHolder, false);
 					var maxSeatFeatureOption = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
-					IDictionary<DateTime, bool> maxSeatInfo = new Dictionary<DateTime, bool>();
+					IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo = new Dictionary<DateTime, IntervalLevelMaxSeatInfo>();
 					maxSeatFeatureOption = handleMaxSeatFeature(teamBlockInfo, schedulingOptions, day, schedulingResultStateHolder,
 						maxSeatFeatureOption, ref maxSeatInfo, isMaxSeatToggleEnabled);
 
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		private MaxSeatsFeatureOptions handleMaxSeatFeature(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
 			DateOnly day, ISchedulingResultStateHolder schedulingResultStateHolder, MaxSeatsFeatureOptions maxSeatFeatureOption,
-			ref IDictionary<DateTime, bool> maxSeatInfo, bool isMaxSeatToggleEnabled)
+			ref IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo, bool isMaxSeatToggleEnabled)
 		{
 			if (isMaxSeatToggleEnabled)
 			{

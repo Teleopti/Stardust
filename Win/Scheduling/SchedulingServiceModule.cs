@@ -410,8 +410,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			 builder.RegisterType<MaxSeatInformationGeneratorBasedOnIntervals>().As<IMaxSeatInformationGeneratorBasedOnIntervals>();
 			 builder.RegisterType<MaxSeatsSpecificationDictionaryExtractor>().As<IMaxSeatsSpecificationDictionaryExtractor>();
 			 builder.RegisterType<IsMaxSeatsReachedOnSkillStaffPeriodSpecification>().As<IIsMaxSeatsReachedOnSkillStaffPeriodSpecification>();
-
-			//IVisualLayerToBaseDateMapper
+			 builder.RegisterType<IntervalLevelMaxSeatInfo >();
+			 builder.RegisterType<MaxSeatBoostingFactorCalculator>();
 	    }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

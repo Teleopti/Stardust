@@ -7,34 +7,37 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public interface IMaxSeatsSpecificationDictionaryExtractor
 	{
-		IDictionary<DateTime, bool> ExtractMaxSeatsFlag(List<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZoneInfo);
+		IDictionary<DateTime, IntervalLevelMaxSeatInfo> ExtractMaxSeatsFlag(List<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZoneInfo);
 	}
 
 	public class MaxSeatsSpecificationDictionaryExtractor : IMaxSeatsSpecificationDictionaryExtractor
 	{
 		private readonly IIsMaxSeatsReachedOnSkillStaffPeriodSpecification _isMaxSeatsReachedOnSkillStaffPeriodSpecification;
-		private Dictionary<DateTime, bool> _maxSeatsDictionary;
+		private readonly MaxSeatBoostingFactorCalculator _maxSeatBoostingFactorCalculator;
 
-		public MaxSeatsSpecificationDictionaryExtractor(IIsMaxSeatsReachedOnSkillStaffPeriodSpecification isMaxSeatsReachedOnSkillStaffPeriodSpecification)
+		public MaxSeatsSpecificationDictionaryExtractor(IIsMaxSeatsReachedOnSkillStaffPeriodSpecification isMaxSeatsReachedOnSkillStaffPeriodSpecification, MaxSeatBoostingFactorCalculator maxSeatBoostingFactorCalculator)
 		{
 			_isMaxSeatsReachedOnSkillStaffPeriodSpecification = isMaxSeatsReachedOnSkillStaffPeriodSpecification;
+			_maxSeatBoostingFactorCalculator = maxSeatBoostingFactorCalculator;
 		}
 
-		public IDictionary<DateTime, bool> ExtractMaxSeatsFlag(List<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZoneInfo)
+		public IDictionary<DateTime, IntervalLevelMaxSeatInfo> ExtractMaxSeatsFlag(List<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZoneInfo)
 		{
 			if (skillStaffPeriodList.IsNullOrEmpty())
 				return null;
 
-			_maxSeatsDictionary = new Dictionary<DateTime, bool>();
+			var maxSeatsDictionary = new Dictionary<DateTime, IntervalLevelMaxSeatInfo >();
 			foreach (var skillStaffPeriod in skillStaffPeriodList)
 			{
 				var utcPeriod = skillStaffPeriod.Period;
 				var localStartTime = DateTime.SpecifyKind(utcPeriod.StartDateTimeLocal(timeZoneInfo), DateTimeKind.Utc);
 				var isMaxSeatsReachedOnGivenInterval = _isMaxSeatsReachedOnSkillStaffPeriodSpecification.IsSatisfiedBy(skillStaffPeriod.Payload.CalculatedUsedSeats,
 					skillStaffPeriod.Payload.MaxSeats);
-				_maxSeatsDictionary.Add(localStartTime, isMaxSeatsReachedOnGivenInterval);
+				var boostingFactor = _maxSeatBoostingFactorCalculator.GetBoostingFactor(
+					skillStaffPeriod.Payload.CalculatedUsedSeats, skillStaffPeriod.Payload.MaxSeats);
+				maxSeatsDictionary.Add(localStartTime, new IntervalLevelMaxSeatInfo(isMaxSeatsReachedOnGivenInterval,0.0001 ));
 			}
-			return _maxSeatsDictionary;
+			return maxSeatsDictionary;
 		}
 	}
 }
