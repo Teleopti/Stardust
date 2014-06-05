@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
@@ -37,9 +35,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private IScheduleDictionary _scheduleDictionary;
         private ISchedulePartModifyAndRollbackService _rollbackService;
         private IOptimizationPreferences _optimizationPreferences;
-        private ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
+        //private ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
         private IList<IPerson> _selectedPersons;
-        private IList<ITeamBlockInfo> _teamBlocksFirstLoop;
+        private List<ITeamBlockInfo> _teamBlocksFirstLoop;
         private IList<ITeamBlockInfo> _teamBlocksScondLoop;
         private ITeamBlockPoints _teamBlockPoint1;
         private ITeamBlockPoints _teamBlockPoint2;
@@ -51,6 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private ITeamInfo _juniorTeamInfo;
         private ISeniorTeamBlockLocator _seniorTeamBlockLocator;
         private ISeniorityCalculatorForTeamBlock _seniorityCalculatorForTeamBlock;
+	    private IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
 
 
         [SetUp]
@@ -68,10 +67,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _seniorityCalculatorForTeamBlock = _mocks.StrictMock<ISeniorityCalculatorForTeamBlock>();
 	        _schedulingOptionsCreator = _mocks.StrictMock<ISchedulingOptionsCreator>();
 	        _teamBlockSeniorityValidator = _mocks.StrictMock<ITeamBlockSeniorityValidator>();
+	        _filterForNoneLockedTeamBlocks = _mocks.StrictMock<IFilterForNoneLockedTeamBlocks>();
 	        _target = new DayOffStep1(_constructTeamBlock, _filterForTeamBlockInSelection, _filterForFullyScheduledBlocks,
 	                                  _seniorityExtractor, _seniorTeamBlockLocator, _filterOnSwapableTeamBlocks,
 	                                  _seniorityCalculatorForTeamBlock, _teamBlockLocatorWithHighestPoints,
-	                                  _seniorityTeamBlockSwapper, _schedulingOptionsCreator, _teamBlockSeniorityValidator);
+	                                  _seniorityTeamBlockSwapper, _schedulingOptionsCreator, _teamBlockSeniorityValidator,
+									  _filterForNoneLockedTeamBlocks);
             _juniorTeamBlock = _mocks.StrictMock<ITeamBlockInfo>();
             _seniorTeamBlock = _mocks.StrictMock<ITeamBlockInfo>();
             _matrixList = new List<IScheduleMatrixPro>();
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _optimizationPreferences = new OptimizationPreferences();
-            _restrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
+            //_restrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
             _selectedPersons = new List<IPerson>();
             _teamBlocksFirstLoop = new List<ITeamBlockInfo> { _juniorTeamBlock, _seniorTeamBlock };
             _teamBlocksScondLoop = new List<ITeamBlockInfo> { _juniorTeamBlock };
@@ -203,6 +204,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             Expect.Call(_filterForFullyScheduledBlocks.Filter(_teamBlocksFirstLoop, _scheduleDictionary));
             Expect.Call(_seniorityExtractor.ExtractSeniority(_teamBlocksFirstLoop)).IgnoreArguments().Return(_teamBlockPointsList);
             Expect.Call(_seniorTeamBlockLocator.FindMostSeniorTeamBlock(_teamBlockPointsList.ToList())).Return(_seniorTeamBlock);
+	        Expect.Call(_filterForNoneLockedTeamBlocks.Filter(_teamBlocksFirstLoop)).IgnoreArguments().Return(_teamBlocksFirstLoop).Repeat.AtLeastOnce();
         }
     }
 }
