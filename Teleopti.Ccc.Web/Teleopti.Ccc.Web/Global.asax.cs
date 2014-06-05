@@ -8,7 +8,7 @@ using log4net.Config;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Rta.Server.Adherence;
-using Teleopti.Ccc.Web.Rta;
+using Teleopti.Ccc.Web.Areas.Rta;
 using ContainerBuilder = Teleopti.Ccc.Rta.Server.ContainerBuilder;
 
 namespace Teleopti.Ccc.Web

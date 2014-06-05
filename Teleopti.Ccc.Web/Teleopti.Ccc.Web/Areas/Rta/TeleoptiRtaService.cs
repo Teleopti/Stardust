@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.ServiceModel;
+using System.ServiceModel.Activation;
 using log4net;
 using Teleopti.Ccc.Rta.Interfaces;
 
-namespace Teleopti.Ccc.Web.Rta
+namespace Teleopti.Ccc.Web.Areas.Rta
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single),
+	AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class TeleoptiRtaService : ITeleoptiRtaService, IDisposable
     {
         private IRtaDataHandler _rtaDataHandler;

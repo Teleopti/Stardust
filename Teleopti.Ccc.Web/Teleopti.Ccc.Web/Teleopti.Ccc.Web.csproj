@@ -365,6 +365,7 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
+    <Compile Include="Areas\Rta\RtaAreaRegistration.cs" />
     <Compile Include="Areas\SSO\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\SSO\Controllers\AuthenticationApiController.cs" />
     <Compile Include="Areas\SSO\Core\ApplicationAuthenticationType.cs" />
@@ -793,8 +794,8 @@
     <Compile Include="Areas\MyTime\Models\WeekSchedule\WeekScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rta\ITeleoptiRtaService.cs" />
-    <Compile Include="Rta\TeleoptiRtaService.cs" />
+    <Compile Include="Areas\Rta\ITeleoptiRtaService.cs" />
+    <Compile Include="Areas\Rta\TeleoptiRtaService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\feature.js" />
@@ -1262,7 +1263,7 @@
     <Content Include="Content\signalr\jquery.signalR-1.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-1.2.0.min.js" />
     <Content Include="Global.asax" />
-    <Content Include="Rta\TeleoptiRtaService.svc" />
+    <Content Include="Areas\Rta\TeleoptiRtaService.svc" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
