@@ -29,7 +29,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private readonly ISeniorityTeamBlockSwapper _seniorityTeamBlockSwapper;
 	    private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 	    private readonly ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
-		private bool _cancelMe;
+	    private readonly IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
+	    private bool _cancelMe;
 
         public DayOffStep1(IConstructTeamBlock constructTeamBlock,
 	                       IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
@@ -41,7 +42,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	                       ITeamBlockLocatorWithHighestPoints teamBlockLocatorWithHighestPoints,
 	                       ISeniorityTeamBlockSwapper seniorityTeamBlockSwapper,
 							ISchedulingOptionsCreator schedulingOptionsCreator,
-							ITeamBlockSeniorityValidator teamBlockSeniorityValidator)
+							ITeamBlockSeniorityValidator teamBlockSeniorityValidator,
+							IFilterForNoneLockedTeamBlocks filterForNoneLockedTeamBlocks)
 	    {
 		    _constructTeamBlock = constructTeamBlock;
 		    _filterForTeamBlockInSelection = filterForTeamBlockInSelection;
@@ -54,6 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		    _seniorityTeamBlockSwapper = seniorityTeamBlockSwapper;
 		    _schedulingOptionsCreator = schedulingOptionsCreator;
 		    _teamBlockSeniorityValidator = teamBlockSeniorityValidator;
+	        _filterForNoneLockedTeamBlocks = filterForNoneLockedTeamBlocks;
 	    }
 
 	    public event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
@@ -135,7 +138,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			IList<ITeamBlockInfo> filteredList = listOfAllTeamBlock.Where(_teamBlockSeniorityValidator.ValidateSeniority).ToList();
 			filteredList = _filterForTeamBlockInSelection.Filter(filteredList, selectedPersons, selectedPeriod);
             filteredList = _filterForFullyScheduledBlocks.Filter(filteredList, scheduleDictionary );
-			
+			filteredList = _filterForNoneLockedTeamBlocks.Filter(filteredList);		
             return filteredList;
         }
 
