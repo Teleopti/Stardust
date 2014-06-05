@@ -21,6 +21,7 @@ namespace Teleopti.Runtime.Environment
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             var client = new WebClient();
+	        client.Credentials = CredentialCache.DefaultNetworkCredentials;
             var starturl = ConfigurationManager.AppSettings["url"];
             try
             {
