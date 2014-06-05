@@ -3,12 +3,14 @@ define([
 		'moment',
 		'addfulldayabsence/personscheduledayreadmodel',
 		'addfulldayabsence/scheduledresourcesreadmodel',
+		'template/scenario',
 		'jqueryajax'
 ], function (
 	ko,
 	moment,
 	AddFullDayAbsencePersonScheduleDayReadModelScenario,
 	AddFullDayAbsenceScheduledResourcesReadModelScenario,
+	TemplateScenario,
 	JqueryAjax
 	) {
 
@@ -18,7 +20,8 @@ define([
 
 		this.Scenarios = [
 			new AddFullDayAbsencePersonScheduleDayReadModelScenario(),
-			new AddFullDayAbsenceScheduledResourcesReadModelScenario()
+			new AddFullDayAbsenceScheduledResourcesReadModelScenario(),
+			new TemplateScenario()
 		];
 
 		var ajax = new JqueryAjax();
