@@ -17,8 +17,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			builder.RegisterModule<AuthenticationModule>();
 			using (var container = builder.Build())
 			{
-
-				container.Resolve<ILicenseActivatorProvider>().Should().Be.OfType<LicenseActivatorProvider>();
+				container.ResolveNamed<ILicenseActivatorProvider>("loggedon").Should().Be.OfType<LicenseActivatorProvider>();
 			}
 		}
 	}

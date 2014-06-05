@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Autofac;
+using Autofac.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				File.WriteAllLines(tempFile, new[] { "TestToggle=false" });
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => createLicenseActivitor());
+				containerBuilder.Register(_ => createLicenseActivitor()).Named<ILicenseActivatorProvider>("querystring");
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				File.WriteAllLines(tempFile, new[] { "TestToggle=true" });
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => createLicenseActivitor());
+				containerBuilder.Register(_ => createLicenseActivitor()).Named<ILicenseActivatorProvider>("querystring");
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				File.WriteAllLines(tempFile, new string[0]);
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => createLicenseActivitor());
+				containerBuilder.Register(_ => createLicenseActivitor()).Named<ILicenseActivatorProvider>("querystring");
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				File.WriteAllLines(tempFile, new[] { "TestToggle.license.name=" + ToggleNetModule.RcLicenseName });
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => createLicenseActivitor());
+				containerBuilder.Register(_ => createLicenseActivitor()).Named<ILicenseActivatorProvider>("querystring");
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -112,7 +113,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				File.WriteAllLines(tempFile, new[] { "TestToggle.license.name=" + ToggleNetModule.RcLicenseName.ToUpper()});
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => createLicenseActivitor());
+				containerBuilder.Register(_ => createLicenseActivitor()).Named<ILicenseActivatorProvider>("querystring");
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -135,7 +136,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				File.WriteAllLines(tempFile, new[] { "TestToggle.license.name  =	 " + ToggleNetModule.RcLicenseName.ToUpper() + "		"});
 				var containerBuilder = new ContainerBuilder();
 				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => createLicenseActivitor());
+				containerBuilder.Register(_ => createLicenseActivitor()).Named<ILicenseActivatorProvider>("querystring");
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();

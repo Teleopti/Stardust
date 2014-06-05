@@ -3,7 +3,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -20,10 +19,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			DefinedLicenseDataFactory.SetLicenseActivator("fortest", licenseActivator);
 			var uowCurrFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var checkLicense = MockRepository.GenerateMock<ICheckLicenseExists>();
 			uowFactory.Expect(x => x.Name).Return("fortest");
 			uowCurrFactory.Expect(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 
-			var target = new LicenseActivatorProvider(uowCurrFactory);
+			var target = new LicenseActivatorProvider(uowCurrFactory, checkLicense);
 
 
 			target.Current().Should().Be.SameInstanceAs(licenseActivator);
@@ -31,27 +31,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 		}
 
 		[Test]
-		public void ShouldThrowIfNoLicenseExists()
+		public void ShouldCheckLicense()
 		{
-			DefinedLicenseDataFactory.ClearLicenseActivators();
-			Assert.Throws<DataSourceException>(() => new LicenseActivatorProvider(null).Current()).ToString()
-				.Should().Contain(LicenseActivatorProvider.ErrorMessageIfNoLicenseAtAll);
-		}
+			const string datasourceName = "fortest";
 
-		[Test]
-		public void ShouldThrowIfDataSourceHasNoLicense()
-		{
 			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
-
-			//setup
-			DefinedLicenseDataFactory.SetLicenseActivator("fortest", licenseActivator);
 			var uowCurrFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			uowFactory.Expect(x => x.Name).Return("THISONE");
+			var checkLicense = MockRepository.GenerateMock<ICheckLicenseExists>();
+			uowFactory.Expect(x => x.Name).Return("fortest");
 			uowCurrFactory.Expect(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 
-			Assert.Throws<DataSourceException>(() => new LicenseActivatorProvider(uowCurrFactory).Current()).ToString()
-				.Should().Contain(string.Format(LicenseActivatorProvider.ErrorMessageIfNoLicenseForDataSource, "THISONE"));
+			DefinedLicenseDataFactory.SetLicenseActivator(datasourceName, licenseActivator);
+
+			var target = new LicenseActivatorProvider(uowCurrFactory, checkLicense);
+			target.Current();
+
+			checkLicense.AssertWasCalled(x => x.Check(datasourceName));
 
 			DefinedLicenseDataFactory.ClearLicenseActivators();
 		}

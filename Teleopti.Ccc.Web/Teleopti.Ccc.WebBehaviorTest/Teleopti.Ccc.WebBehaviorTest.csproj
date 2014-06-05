@@ -949,7 +949,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AbsenceRequestFromSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="MyTime\PreferencesFollowUp.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFollowUp.feature.cs</LastGenOutput>
