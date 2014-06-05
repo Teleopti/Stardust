@@ -188,20 +188,7 @@ namespace Teleopti.Ccc.Win.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			var isValidDefaultValuesForTeam = extraPreferencesPanel1.ValidateDefaultValuesForTeam();
-			var isValidDefaultValuesForBlock = extraPreferencesPanel1.ValidateDefaultValuesForBlock();
-			if (!isValidDefaultValuesForBlock || !isValidDefaultValuesForTeam)
-			{
-				if (!isValidDefaultValuesForTeam)
-					MessageBox.Show(this, UserTexts.Resources.SelectAtleastOneOptimizationOption,
-									UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK);
-				if (!isValidDefaultValuesForBlock)
-					MessageBox.Show(this, UserTexts.Resources.SelectAtleastOneOptimizationOptionForBlock,
-						UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK);
-				DialogResult = DialogResult.None;
-				return;
-			}
-
+			
 			if (!extraPreferencesPanel1.ValidateTeamBlockCombination())
 			{
 				MessageBox.Show(this, UserTexts.Resources.IllegalTeamBlockCombination, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK);

@@ -164,11 +164,6 @@ namespace Teleopti.Ccc.Win.Optimization
 			return true;
 		}
 
-        private void checkBoxCommonActivity_CheckedChanged(object sender, System.EventArgs e)
-        {
-            comboBoxTeamActivity.Enabled = checkBoxTeamSameActivity.Checked;
-        }
-
         private void setTeamBlockPerData()
         {
         	  checkBoxBlockSameShiftCategory.Checked = Preferences.UseBlockSameShiftCategory;
@@ -227,6 +222,59 @@ namespace Teleopti.Ccc.Win.Optimization
 				return false;
 
 			return (BlockFinderType)comboBoxBlockType.SelectedValue != BlockFinderType.SingleDay;
+		}
+
+		private void checkBoxTeamSameShiftCategory_CheckedChanged(object sender, EventArgs e)
+		{
+			teamOptimizingSessionOptionsHandler();
+		}
+
+		private void checkBoxTeamSameStartTime_CheckedChanged(object sender, EventArgs e)
+		{
+			teamOptimizingSessionOptionsHandler();
+		}
+
+		private void checkBoxTeamSameEndTime_CheckedChanged(object sender, EventArgs e)
+		{
+			teamOptimizingSessionOptionsHandler();
+		}
+
+		private void checkBoxCommonActivity_CheckedChanged(object sender, System.EventArgs e)
+		{
+			comboBoxTeamActivity.Enabled = checkBoxTeamSameActivity.Checked;
+			teamOptimizingSessionOptionsHandler();
+		}
+
+		private void teamOptimizingSessionOptionsHandler()
+		{
+			if (!checkBoxTeamSameEndTime.Checked &&
+				!checkBoxTeamSameShiftCategory.Checked &&
+				!checkBoxTeamSameStartTime.Checked &&
+				!checkBoxTeamSameActivity.Checked)
+				comboBoxTeamGroupPage.SelectedIndex = 0;
+		}
+
+		private void checkBoxBlockSameShiftCategory_CheckedChanged(object sender, EventArgs e)
+		{
+			blockOptimizingSessionOptionsHandler();
+		}
+
+		private void checkBoxBlockSameStartTime_CheckedChanged(object sender, EventArgs e)
+		{
+			blockOptimizingSessionOptionsHandler();
+		}
+
+		private void checkBoxBlockSameShift_CheckedChanged(object sender, EventArgs e)
+		{
+			blockOptimizingSessionOptionsHandler();
+		}
+
+		private void blockOptimizingSessionOptionsHandler()
+		{
+			if (!checkBoxBlockSameShift.Checked &&
+				!checkBoxBlockSameShiftCategory.Checked &&
+				!checkBoxBlockSameStartTime.Checked)
+				comboBoxBlockType.SelectedIndex = 0;
 		}
 
     }

@@ -342,7 +342,7 @@
 			this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvTag.Location = new System.Drawing.Point(136, 3);
 			this.comboBoxAdvTag.Name = "comboBoxAdvTag";
-			this.comboBoxAdvTag.Size = new System.Drawing.Size(200, 21);
+			this.comboBoxAdvTag.Size = new System.Drawing.Size(200, 19);
 			this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvTag.TabIndex = 11;
 			// 
@@ -565,6 +565,7 @@
 			this.checkBoxTeamSameEndTime.TabIndex = 38;
 			this.checkBoxTeamSameEndTime.Text = "xxSameEndTime";
 			this.checkBoxTeamSameEndTime.UseVisualStyleBackColor = true;
+			this.checkBoxTeamSameEndTime.CheckedChanged += new System.EventHandler(this.checkBoxTeamSameEndTime_CheckedChanged);
 			// 
 			// checkBoxTeamSameStartTime
 			// 
@@ -578,6 +579,7 @@
 			this.checkBoxTeamSameStartTime.TabIndex = 37;
 			this.checkBoxTeamSameStartTime.Text = "xxSameStartTime";
 			this.checkBoxTeamSameStartTime.UseVisualStyleBackColor = true;
+			this.checkBoxTeamSameStartTime.CheckedChanged += new System.EventHandler(this.checkBoxTeamSameStartTime_CheckedChanged);
 			// 
 			// checkBoxTeamSameShiftCategory
 			// 
@@ -591,6 +593,7 @@
 			this.checkBoxTeamSameShiftCategory.TabIndex = 36;
 			this.checkBoxTeamSameShiftCategory.Text = "xxSameShiftCategory";
 			this.checkBoxTeamSameShiftCategory.UseVisualStyleBackColor = true;
+			this.checkBoxTeamSameShiftCategory.CheckedChanged += new System.EventHandler(this.checkBoxTeamSameShiftCategory_CheckedChanged);
 			// 
 			// comboBoxTeamGroupPage
 			// 
@@ -630,6 +633,7 @@
 			this.checkBoxBlockSameShiftCategory.TabIndex = 48;
 			this.checkBoxBlockSameShiftCategory.Text = "xxSameShiftCategory";
 			this.checkBoxBlockSameShiftCategory.UseVisualStyleBackColor = true;
+			this.checkBoxBlockSameShiftCategory.CheckedChanged += new System.EventHandler(this.checkBoxBlockSameShiftCategory_CheckedChanged);
 			// 
 			// checkBoxBlockSameStartTime
 			// 
@@ -643,6 +647,7 @@
 			this.checkBoxBlockSameStartTime.TabIndex = 49;
 			this.checkBoxBlockSameStartTime.Text = "xxSameStartTime";
 			this.checkBoxBlockSameStartTime.UseVisualStyleBackColor = true;
+			this.checkBoxBlockSameStartTime.CheckedChanged += new System.EventHandler(this.checkBoxBlockSameStartTime_CheckedChanged);
 			// 
 			// checkBoxBlockSameShift
 			// 
@@ -656,6 +661,7 @@
 			this.checkBoxBlockSameShift.TabIndex = 50;
 			this.checkBoxBlockSameShift.Text = "xxSameShift";
 			this.checkBoxBlockSameShift.UseVisualStyleBackColor = true;
+			this.checkBoxBlockSameShift.CheckedChanged += new System.EventHandler(this.checkBoxBlockSameShift_CheckedChanged);
 			// 
 			// label2
 			// 
