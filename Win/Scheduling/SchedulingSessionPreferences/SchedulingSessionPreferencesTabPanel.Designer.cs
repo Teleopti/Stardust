@@ -339,6 +339,7 @@
 			// comboBoxAdvTag
 			// 
 			this.comboBoxAdvTag.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxAdvTag.BeforeTouchSize = new System.Drawing.Size(200, 19);
 			this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvTag.Location = new System.Drawing.Point(136, 3);
 			this.comboBoxAdvTag.Name = "comboBoxAdvTag";
@@ -474,6 +475,7 @@
 			// comboBoxGroupingFairness
 			// 
 			this.comboBoxGroupingFairness.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxGroupingFairness.BeforeTouchSize = new System.Drawing.Size(178, 19);
 			this.comboBoxGroupingFairness.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxGroupingFairness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxGroupingFairness.Location = new System.Drawing.Point(225, 93);
@@ -544,6 +546,7 @@
 			// comboBoxTeamActivity
 			// 
 			this.comboBoxTeamActivity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxTeamActivity.BeforeTouchSize = new System.Drawing.Size(178, 19);
 			this.comboBoxTeamActivity.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamActivity.Enabled = false;
@@ -598,6 +601,7 @@
 			// comboBoxTeamGroupPage
 			// 
 			this.comboBoxTeamGroupPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxTeamGroupPage.BeforeTouchSize = new System.Drawing.Size(178, 19);
 			this.comboBoxTeamGroupPage.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamGroupPage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamGroupPage.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
@@ -611,6 +615,7 @@
 			// comboBoxBlockType
 			// 
 			this.comboBoxBlockType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxBlockType.BeforeTouchSize = new System.Drawing.Size(178, 19);
 			this.comboBoxBlockType.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxBlockType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxBlockType.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
@@ -767,6 +772,7 @@
 			// comboBoxAdvShiftCategory
 			// 
 			this.comboBoxAdvShiftCategory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxAdvShiftCategory.BeforeTouchSize = new System.Drawing.Size(173, 19);
 			this.comboBoxAdvShiftCategory.Dock = System.Windows.Forms.DockStyle.Left;
 			this.comboBoxAdvShiftCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(28, 29);
