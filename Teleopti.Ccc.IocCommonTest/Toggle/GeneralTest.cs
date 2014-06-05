@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule("http://tralala"));
+			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule("https://hejsan"));
+			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -38,6 +40,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule("http://something"));
+			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<ITogglesActive>()
