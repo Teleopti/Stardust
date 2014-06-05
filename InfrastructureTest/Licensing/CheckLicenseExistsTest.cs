@@ -37,11 +37,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 
 			DefinedLicenseDataFactory.ClearLicenseActivators();
 		}
-
-		[Test]
-		public void ShouldThrowDescribingErrorIfDatasourceIsNull()
-		{
-			Assert.Throws<ArgumentNullException>(() => new CheckLicenseExists().Check(null));
-		}
 	}
 }

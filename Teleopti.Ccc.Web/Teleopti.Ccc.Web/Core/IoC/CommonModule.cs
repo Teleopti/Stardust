@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<AuthenticationModule>().As<IAuthenticationModule>().SingleInstance();
 			builder.RegisterType<IdentityProviderProvider>().As<IIdentityProviderProvider>().SingleInstance();
 			builder.RegisterType<QueryStringReader>().As<IQueryStringReader>().SingleInstance();
-			builder.RegisterType<LicenseActivatorReadFromQueryString>().Named<ILicenseActivatorProvider>("querystring").SingleInstance();
+			builder.RegisterType<LicenseActivatorDecoratorReadFromQueryString>().Named<ILicenseActivatorProvider>("querystring").SingleInstance();
 		}
 	}
 }

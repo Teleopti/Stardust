@@ -180,7 +180,7 @@
     <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
-    <Compile Include="Core\Licensing\LicenseActivatorReadFromQueryStringTest.cs" />
+    <Compile Include="Core\Licensing\LicenseActivatorDecoratorReadFromQueryStringTest.cs" />
     <Compile Include="Core\Licensing\QueryStringReaderTest.cs" />
     <Compile Include="Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingTest.cs" />
     <Compile Include="Core\Portal\DataProvider\ReportsProviderTest.cs" />

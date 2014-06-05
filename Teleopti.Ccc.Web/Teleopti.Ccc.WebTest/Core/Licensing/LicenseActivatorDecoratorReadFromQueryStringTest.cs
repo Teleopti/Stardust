@@ -8,7 +8,7 @@ using Teleopti.Ccc.Web.Core.Licensing;
 
 namespace Teleopti.Ccc.WebTest.Core.Licensing
 {
-	public class LicenseActivatorReadFromQueryStringTest
+	public class LicenseActivatorDecoratorReadFromQueryStringTest
 	{
 		[Test]
 		public void ShouldReturnLicenseActivator()
@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.WebTest.Core.Licensing
 			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
 			var querystringReader = MockRepository.GenerateMock<IQueryStringReader>();
 			var checkLicense = MockRepository.GenerateMock<ICheckLicenseExists>();
-			querystringReader.Stub(x => x.GetValue(LicenseActivatorReadFromQueryString.QuerystringKey)).Return(datasourceName);
+			querystringReader.Stub(x => x.GetValue(LicenseActivatorDecoratorReadFromQueryString.QuerystringKey)).Return(datasourceName);
 
 
 			DefinedLicenseDataFactory.SetLicenseActivator(datasourceName, licenseActivator);
 
-			var target = new LicenseActivatorReadFromQueryString(querystringReader, checkLicense);
+			var target = new LicenseActivatorDecoratorReadFromQueryString(null, querystringReader, checkLicense);
 
 			target.Current()
 				.Should().Be.SameInstanceAs(licenseActivator);
@@ -39,17 +39,32 @@ namespace Teleopti.Ccc.WebTest.Core.Licensing
 			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
 			var querystringReader = MockRepository.GenerateMock<IQueryStringReader>();
 			var checkLicense = MockRepository.GenerateMock<ICheckLicenseExists>();
-			querystringReader.Stub(x => x.GetValue(LicenseActivatorReadFromQueryString.QuerystringKey)).Return(datasourceName);
+			querystringReader.Stub(x => x.GetValue(LicenseActivatorDecoratorReadFromQueryString.QuerystringKey)).Return(datasourceName);
 
 
 			DefinedLicenseDataFactory.SetLicenseActivator(datasourceName, licenseActivator);
 
-			var target = new LicenseActivatorReadFromQueryString(querystringReader, checkLicense);
+			var target = new LicenseActivatorDecoratorReadFromQueryString(null, querystringReader, checkLicense);
 			target.Current();
 
 			checkLicense.AssertWasCalled(x => x.Check(datasourceName));
 
 			DefinedLicenseDataFactory.ClearLicenseActivators();
+		}
+
+		[Test]
+		public void ShouldFallbackToLoggedOnLicenseIfNoQuerystring()
+		{
+			var querystringReader = MockRepository.GenerateMock<IQueryStringReader>();
+			querystringReader.Stub(x => x.GetValue(LicenseActivatorDecoratorReadFromQueryString.QuerystringKey)).Return(null);
+			var checkLicense = MockRepository.GenerateMock<ICheckLicenseExists>();
+			var defaultLicenseActivatorProvider = MockRepository.GenerateStub<ILicenseActivatorProvider>();
+			var licenseActivator = MockRepository.GenerateStub<ILicenseActivator>();
+			defaultLicenseActivatorProvider.Stub(x => x.Current()).Return(licenseActivator);
+			var target = new LicenseActivatorDecoratorReadFromQueryString(defaultLicenseActivatorProvider, querystringReader, checkLicense);
+
+			target.Current()
+				.Should().Be.SameInstanceAs(licenseActivator);
 		}
 	}
 }
