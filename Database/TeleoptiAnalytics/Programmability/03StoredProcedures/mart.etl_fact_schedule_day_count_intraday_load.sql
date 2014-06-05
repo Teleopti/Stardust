@@ -22,11 +22,24 @@ if (select count(*)
 	from mart.dim_scenario
 	where business_unit_code = @business_unit_code
 	and scenario_code = @scenario_code
+	and default_scenario = 1
 	) <> 1
 BEGIN
 	DECLARE @ErrorMsg nvarchar(4000)
 	SELECT @ErrorMsg  = 'This is not a default scenario, or muliple default scenarios exists!'
 	RAISERROR (@ErrorMsg,16,1)
+	RETURN 0
+END
+
+--if no @scenario, no data then break
+DECLARE @scenario_id smallint
+SELECT @scenario_id = scenario_id
+FROM mart.dim_scenario
+WHERE scenario_code=@scenario_code
+AND default_scenario = 1
+
+IF @scenario_id IS NULL
+BEGIN
 	RETURN 0
 END
 
@@ -71,6 +84,7 @@ INNER JOIN mart.dim_date dd
 	ON dd.date_date = ch.schedule_date_local
 INNER JOIN mart.dim_scenario s
 	ON ch.scenario_code=s.scenario_code
+WHERE s.scenario_id=@scenario_id
 
 DELETE fs
 FROM mart.fact_schedule_day_count fs
