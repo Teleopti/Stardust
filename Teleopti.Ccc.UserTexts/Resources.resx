@@ -12088,7 +12088,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Minimum Time Per Week:</comment>
   </data>
   <data name="WeeklyWorkTimeBroken" xml:space="preserve">
-    <value>You have a broken week work time limit.</value>
+    <value>You have a broken weekly work time limit.</value>
     <comment>used as a warning in MyTimeWeb preference when weekly work time broken</comment>
   </data>
 </root>

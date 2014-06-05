@@ -26501,7 +26501,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have a broken week work time limit..
+        ///   Looks up a localized string similar to You have a broken weekly work time limit..
         /// </summary>
         public static string WeeklyWorkTimeBroken {
             get {
