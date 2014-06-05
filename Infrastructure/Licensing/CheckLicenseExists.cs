@@ -1,5 +1,6 @@
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
 {
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
 		public void Check(string dataSource)
 		{
+			InParameter.NotNull("dataSource", dataSource);
 			if (!DefinedLicenseDataFactory.HasAnyLicense)
 				throw new DataSourceException(ErrorMessageIfNoLicenseAtAll);
 

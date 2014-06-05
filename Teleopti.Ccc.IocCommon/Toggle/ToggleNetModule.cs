@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Autofac;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				}
 				if (togglePathIsAnUrl())
 				{
-					return new ToggleQuerier(_pathToToggle);
+					return new ToggleQuerier(c.Resolve<ICurrentDataSource>(), _pathToToggle);
 				}
 				var licenseActivatorProvider = c.ResolveNamed<ILicenseActivatorProvider>("querystring");
 				var specMappings = new DefaultSpecificationMappings();

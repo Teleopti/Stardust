@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -35,6 +36,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 				.Should().Contain(string.Format(CheckLicenseExists.ErrorMessageIfNoLicenseForDataSource, "THISONE"));
 
 			DefinedLicenseDataFactory.ClearLicenseActivators();
+		}
+
+		[Test]
+		public void ShouldThrowDescribingErrorIfDatasourceIsNull()
+		{
+			Assert.Throws<ArgumentNullException>(() => new CheckLicenseExists().Check(null));
 		}
 	}
 }

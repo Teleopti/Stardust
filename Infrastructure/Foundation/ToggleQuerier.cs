@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Web;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
@@ -9,10 +10,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	//integration tests from Toggle.feature scenario
 	public class ToggleQuerier : IToggleManager
 	{
+		private readonly ICurrentDataSource _currentDataSource;
 		private readonly string _url;
 
-		public ToggleQuerier(string url)
+		public ToggleQuerier(ICurrentDataSource currentDataSource, string url)
 		{
+			_currentDataSource = currentDataSource;
 			_url = url;
 		}
 
@@ -34,6 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			var uriBuilder = new UriBuilder(_url);
 			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 			query["toggle"] = toggle.ToString();
+			query["datasource"] = _currentDataSource.CurrentName();
 			uriBuilder.Query = query.ToString();
 			var request = WebRequest.Create(uriBuilder.ToString());
 			return request;

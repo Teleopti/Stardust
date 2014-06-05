@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			var regex = new Regex(@"\(.*\)");
 			foreach (var tags in scenario)
 			{
-				var toggleQuerier1 = new ToggleQuerier(new Uri(TestSiteConfigurationSetup.Url, "ToggleHandler/IsEnabled").ToString());
+				var toggleQuerier1 = new ToggleQuerier(new CurrentDataSource(new CurrentIdentity()), new Uri(TestSiteConfigurationSetup.Url, "ToggleHandler/IsEnabled").ToString());
 				var foo = regex.Match(tags).ToString();
 				foo = foo.Substring(2, foo.Length - 4);
 				var isEnabled = toggleQuerier1.IsEnabled((Toggles)Enum.Parse(typeof(Toggles), foo));
