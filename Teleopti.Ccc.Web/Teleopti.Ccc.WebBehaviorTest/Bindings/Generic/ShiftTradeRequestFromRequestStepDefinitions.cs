@@ -1,7 +1,5 @@
-﻿using NUnit.Framework;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -11,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"Details should be closed")]
 		public void ThenDetailsShouldBeClosed()
 		{
-			Browser.Interactions.AssertNotVisibleUsingJQuery("#Request-detail-section");
+			Browser.Interactions.AssertNotExists(".request-list", "#Request-detail-section");
 		}
 	}
 }
