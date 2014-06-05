@@ -1,12 +1,14 @@
 define([
 		'knockout',
 		'moment',
-		'addfulldayabsence/scenario',
+		'addfulldayabsence/personscheduledayreadmodel',
+		'addfulldayabsence/scheduledresourcesreadmodel',
 		'jqueryajax'
 ], function (
 	ko,
 	moment,
-	AddFullDayAbsenceScenario,
+	AddFullDayAbsencePersonScheduleDayReadModelScenario,
+	AddFullDayAbsenceScheduledResourcesReadModelScenario,
 	JqueryAjax
 	) {
 
@@ -15,15 +17,8 @@ define([
 		var self = this;
 
 		this.Scenarios = [
-			new AddFullDayAbsenceScenario(
-				"PersonScheduleDayReadModel",
-				function (notification) {
-					if (this.PersonId.toUpperCase() == notification.DomainReferenceId.toUpperCase()) { return true; }
-					return false;
-				}),
-			new AddFullDayAbsenceScenario(
-				"ScheduledResourcesReadModel (BROKEN)",
-				function () { return true; })
+			new AddFullDayAbsencePersonScheduleDayReadModelScenario(),
+			new AddFullDayAbsenceScheduledResourcesReadModelScenario()
 		];
 
 		var ajax = new JqueryAjax();
@@ -62,6 +57,9 @@ define([
 					}
 				}
 			}
+		});
+		this.Text = ko.computed(function () {
+			return self.Scenario().Text;
 		});
 
 		this.Configuration = ko.computed({

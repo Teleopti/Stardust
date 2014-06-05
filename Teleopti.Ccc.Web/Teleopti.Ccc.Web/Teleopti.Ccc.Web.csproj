@@ -924,10 +924,12 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\addfulldayabsence\iteration.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\addfulldayabsence\personscheduledayreadmodel.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\addfulldayabsence\scenariobase.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\jqueryajax.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\messagebroker.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\result.js" />
-    <Content Include="Areas\PerformanceTool\Content\Scripts\addfulldayabsence\scenario.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\addfulldayabsence\scheduledresourcesreadmodel.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\progressitem-count.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\signalrhubs.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\vm.js" />

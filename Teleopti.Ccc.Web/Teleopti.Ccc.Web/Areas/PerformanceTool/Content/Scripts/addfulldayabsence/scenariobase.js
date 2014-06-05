@@ -12,7 +12,7 @@ define([
 		ResultViewModel,
 		messagebroker
 	) {
-		return function (readModelName, isApplicableReadModelNotification) {
+		return function (readModelName, isNotificationApplicable, text) {
 
 			var self = this;
 			var startPromise = messagebroker.start();
@@ -20,6 +20,7 @@ define([
 			var result;
 			
 			this.Name = "Add full day absence -> " + readModelName;
+			this.Text = text;
 
 			this.Configuration = ko.observable();
 
@@ -63,7 +64,7 @@ define([
 								progressItemReadModel.Failure();
 								calculateRunDone();
 							},
-							IsApplicableNotification: isApplicableReadModelNotification
+							IsApplicableNotification: isNotificationApplicable
 						}));
 
 						if (iterations.length > 2000)
