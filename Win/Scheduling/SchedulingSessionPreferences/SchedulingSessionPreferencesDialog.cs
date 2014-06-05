@@ -188,34 +188,21 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            if (!schedulingSessionPreferencesTabPanel1.ValidateTeamSchedulingOption())
-            {
-                MessageBox.Show(Resources.SelectAtleastOneSchedulingOption, Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
-                DialogResult = DialogResult.None;
-            }
-            else if (!schedulingSessionPreferencesTabPanel1.ValidateBlockOption())
-            {
-                MessageBox.Show(Resources.SelectAtleastOneBlockOption, Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
-                DialogResult = DialogResult.None;
-            }
             else if(!schedulingSessionPreferencesTabPanel1.ValidateUnsupportedRestrictions())
             {
                 MessageBox.Show(Resources.ValidateUnsupportedRestrictions, Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
                 DialogResult = DialogResult.None;
             }
-            else 
+			schedulingSessionPreferencesTabPanel1.ExchangeData(ExchangeDataOption.ControlsToDataSource);
+
+            if (dayOffPreferencesPanel1.ValidateData(ExchangeDataOption.ClientToServer))
             {
-                schedulingSessionPreferencesTabPanel1.ExchangeData(ExchangeDataOption.ControlsToDataSource);
-
-                if (dayOffPreferencesPanel1.ValidateData(ExchangeDataOption.ClientToServer))
-                {
-                    dayOffPreferencesPanel1.ExchangeData(ExchangeDataOption.ClientToServer);
-                    DialogResult = DialogResult.OK;
-                    savePersonalSettings();
-                }
-
-                Close();
+                dayOffPreferencesPanel1.ExchangeData(ExchangeDataOption.ClientToServer);
+                DialogResult = DialogResult.OK;
+                savePersonalSettings();
             }
+
+            Close();
             
         }
 

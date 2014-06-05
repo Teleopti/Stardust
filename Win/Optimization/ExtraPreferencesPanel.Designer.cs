@@ -159,6 +159,7 @@
 			this.checkBoxTeamSameEndTime.TabIndex = 6;
 			this.checkBoxTeamSameEndTime.Text = "xxSameEndTime";
 			this.checkBoxTeamSameEndTime.UseVisualStyleBackColor = true;
+			this.checkBoxTeamSameEndTime.CheckedChanged += new System.EventHandler(this.checkBoxTeamSameEndTime_CheckedChanged);
 			// 
 			// checkBoxTeamSameStartTime
 			// 
@@ -169,6 +170,7 @@
 			this.checkBoxTeamSameStartTime.TabIndex = 6;
 			this.checkBoxTeamSameStartTime.Text = "xxSameStartTime";
 			this.checkBoxTeamSameStartTime.UseVisualStyleBackColor = true;
+			this.checkBoxTeamSameStartTime.CheckedChanged += new System.EventHandler(this.checkBoxTeamSameStartTime_CheckedChanged);
 			// 
 			// checkBoxTeamSameShiftCategory
 			// 
@@ -179,6 +181,7 @@
 			this.checkBoxTeamSameShiftCategory.TabIndex = 6;
 			this.checkBoxTeamSameShiftCategory.Text = "xxSameShiftCategory";
 			this.checkBoxTeamSameShiftCategory.UseVisualStyleBackColor = true;
+			this.checkBoxTeamSameShiftCategory.CheckedChanged += new System.EventHandler(this.checkBoxTeamSameShiftCategory_CheckedChanged);
 			// 
 			// comboBoxTeamGroupPage
 			// 
@@ -202,6 +205,7 @@
 			this.checkBoxBlockSameShiftCategory.TabIndex = 48;
 			this.checkBoxBlockSameShiftCategory.Text = "xxSameShiftCategory";
 			this.checkBoxBlockSameShiftCategory.UseVisualStyleBackColor = true;
+			this.checkBoxBlockSameShiftCategory.CheckedChanged += new System.EventHandler(this.checkBoxBlockSameShiftCategory_CheckedChanged);
 			// 
 			// checkBoxBlockSameStartTime
 			// 
@@ -213,6 +217,7 @@
 			this.checkBoxBlockSameStartTime.TabIndex = 49;
 			this.checkBoxBlockSameStartTime.Text = "xxSameStartTime";
 			this.checkBoxBlockSameStartTime.UseVisualStyleBackColor = true;
+			this.checkBoxBlockSameStartTime.CheckedChanged += new System.EventHandler(this.checkBoxBlockSameStartTime_CheckedChanged);
 			// 
 			// comboBoxBlockType
 			// 
@@ -237,6 +242,7 @@
 			this.checkBoxBlockSameShift.TabIndex = 51;
 			this.checkBoxBlockSameShift.Text = "xxSameShift";
 			this.checkBoxBlockSameShift.UseVisualStyleBackColor = true;
+			this.checkBoxBlockSameShift.CheckedChanged += new System.EventHandler(this.checkBoxBlockSameShift_CheckedChanged);
 			// 
 			// label1
 			// 
