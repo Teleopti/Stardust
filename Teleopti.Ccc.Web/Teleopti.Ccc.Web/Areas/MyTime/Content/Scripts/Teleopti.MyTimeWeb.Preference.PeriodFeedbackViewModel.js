@@ -101,7 +101,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	});
 
 	this.PreferenceFeedbackClass = ko.computed(function () {
-	    return self.PreferenceDaysOffIsOutOfRange() || self.PreferenceTimeIsOutOfRange() ? 'alert-danger' : 'alert-info';
+	    return self.PreferenceDaysOffIsOutOfRange() || self.PreferenceTimeIsOutOfRange() || self.IsWeeklyWorkTimeBroken() ? 'alert-danger' : 'alert-info';
 	});
 
 };
