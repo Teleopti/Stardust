@@ -6,7 +6,6 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Analytics.PM.PMServiceHost;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
@@ -21,7 +20,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			_checkIfNeeded = checkIfNeeded;
 			Name = "Performance Manager permissions";
 			Transformer = new PmPermissionTransformer(new PmProxyFactory());
-			PermissionExtractor = new PmPermissionExtractor(new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory(),new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())));
+			PermissionExtractor = new PmPermissionExtractor(new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()));
 			PmUserInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
 		}
 		
@@ -47,8 +46,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			using (var uow = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(personList);
-				Result.SetPmUsersForCurrentBusinessUnit(Transformer.GetUsersWithPermissionsToPerformanceManager(personList, true, PermissionExtractor));
-				pmUserCheckList = (List<UserDto>)Transformer.GetUsersWithPermissionsToPerformanceManager(personList, false, PermissionExtractor);
+				Result.SetPmUsersForCurrentBusinessUnit(Transformer.GetUsersWithPermissionsToPerformanceManager(personList, true, PermissionExtractor, UnitOfWorkFactory));
+				pmUserCheckList = (List<UserDto>)Transformer.GetUsersWithPermissionsToPerformanceManager(personList, false, PermissionExtractor, UnitOfWorkFactory);
 			}
 
 			if (!isLastBusinessUnit)

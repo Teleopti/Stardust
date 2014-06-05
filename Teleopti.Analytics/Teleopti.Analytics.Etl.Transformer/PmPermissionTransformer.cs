@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using log4net;
@@ -31,7 +30,7 @@ namespace Teleopti.Analytics.Etl.Transformer
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public IList<UserDto> GetUsersWithPermissionsToPerformanceManager(IList<IPerson> personCollection, bool filterWindowsLogOn, IPmPermissionExtractor permissionExtractor)
+        public IList<UserDto> GetUsersWithPermissionsToPerformanceManager(IList<IPerson> personCollection, bool filterWindowsLogOn, IPmPermissionExtractor permissionExtractor, IUnitOfWorkFactory unitOfWorkFactory)
         {
             InParameter.NotNull("personCollection", personCollection);
 
@@ -54,7 +53,7 @@ namespace Teleopti.Analytics.Etl.Transformer
                     var deleteTag = applicationRole as IDeleteTag;
                     if (deleteTag != null && !deleteTag.IsDeleted)
                     {
-                        personUsers.Add(getPermission(logOnName, applicationRole, filterWindowsLogOn, permissionExtractor));
+                        personUsers.Add(getPermission(logOnName, applicationRole, filterWindowsLogOn, permissionExtractor, unitOfWorkFactory));
                     }
                 }
 
@@ -87,13 +86,13 @@ namespace Teleopti.Analytics.Etl.Transformer
             return returnUser;
         }
 
-        private static UserDto getPermission(string logOnName, IApplicationRole applicationRole, bool isWindowsLogOn, IPmPermissionExtractor permissionExtractor)
+        private static UserDto getPermission(string logOnName, IApplicationRole applicationRole, bool isWindowsLogOn, IPmPermissionExtractor permissionExtractor, IUnitOfWorkFactory unitOfWorkFactory)
         {
             UserDto userDto = null;
             if (string.IsNullOrEmpty(logOnName))
                 return null;
 
-            PmPermissionType permissionLevel = permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection);
+            PmPermissionType permissionLevel = permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection,unitOfWorkFactory);
 
             if (permissionLevel != PmPermissionType.None)
             {

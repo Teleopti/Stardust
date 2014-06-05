@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
 {
     public interface IPersonRoleResolver
     {
-        HashSet<MatrixPermissionHolder> Resolve(DateOnly queryDate, IUnitOfWork unitOfWork);
+        HashSet<MatrixPermissionHolder> Resolve(DateOnly queryDate, IUnitOfWorkFactory unitOfWorkFactory);
     }
 
     public class PersonRoleResolver : IPersonRoleResolver
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
             _applicationFunctionResolver = applicationFunctionResolver;
         }
 
-        public HashSet<MatrixPermissionHolder> Resolve(DateOnly queryDate, IUnitOfWork unitOfWork)
+        public HashSet<MatrixPermissionHolder> Resolve(DateOnly queryDate, IUnitOfWorkFactory unitOfWorkFactory)
         {
             HashSet<MatrixPermissionHolder> result = new HashSet<MatrixPermissionHolder>();
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
                 HashSet<MatrixPermissionHolder> roleResult =
                     _teamResolverRole.ResolveTeams(role, queryDate);
                 HashSet<MatrixPermissionHolder> appFunctionResult =
-                    _applicationFunctionResolver.ResolveApplicationFunction(roleResult, role, unitOfWork);
+                    _applicationFunctionResolver.ResolveApplicationFunction(roleResult, role, unitOfWorkFactory);
                 foreach (MatrixPermissionHolder teamHolder in appFunctionResult)
                 {
                     result.Add(teamHolder);

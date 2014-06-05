@@ -40,19 +40,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var currentPrincipal = TeleoptiPrincipal.Current as TeleoptiPrincipal;
             
             var newRole = mocks.StrictMock<IApplicationRole>();
-            var unitOfWork = mocks.DynamicMock<IUnitOfWork>();
+            var unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
             var claimSet = new DefaultClaimSet();
             var person = PersonFactory.CreatePerson();
             person.PermissionInformation.AddApplicationRole(newRole);
                 
             using(mocks.Record())
             {
-                Expect.Call(roleToClaimSetTransformer.Transform(newRole,unitOfWork)).Return(claimSet);
+                Expect.Call(roleToClaimSetTransformer.Transform(newRole,unitOfWorkFactory)).Return(claimSet);
                 Expect.Call(personRepository.Get(Guid.Empty)).Return(person);
             }
             using (mocks.Playback())
             {
-                target.Execute(currentPrincipal, unitOfWork, personRepository);
+                target.Execute(currentPrincipal, unitOfWorkFactory, personRepository);
                 
                 TeleoptiPrincipal.Current.ClaimSets.Contains(claimSet).Should().Be.True();
             }

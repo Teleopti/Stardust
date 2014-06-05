@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 					);
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, uow, repositoryFactory.CreatePersonRepository(uow));
+				roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, unitOfWorkFactory, repositoryFactory.CreatePersonRepository(uow));
 			}
 
 			Thread.CurrentThread.CurrentCulture = argument.CultureInfo;
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 
 	internal class DummyLicensedFunctionsProvider : ILicensedFunctionsProvider
 	{
-		public IEnumerable<IApplicationFunction> LicensedFunctions()
+		public IEnumerable<IApplicationFunction> LicensedFunctions(string dataSourceName)
 		{
 			return new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList;
 		}

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         private MockRepository mocks;
         private IFunctionsForRoleProvider functionsForRoleProvider;
         private RoleToClaimSetTransformer target;
-        private IUnitOfWork unitOfWork;
+        private IUnitOfWorkFactory unitOfWorkFactory;
         private const string Function = "test";
 
         [SetUp]
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         {
             mocks = new MockRepository();
             functionsForRoleProvider = mocks.StrictMock<IFunctionsForRoleProvider>();
-            unitOfWork = mocks.StrictMock<IUnitOfWork>();
+            unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
             target = new RoleToClaimSetTransformer(functionsForRoleProvider);
         }
 
@@ -35,11 +35,11 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             using (mocks.Record())
             {
                 Expect.Call(applicationRole.AvailableData).Return(availableData).Repeat.AtLeastOnce();
-                Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole,unitOfWork)).Return(new[] {applicationFunction}).Repeat.AtLeastOnce();
+                Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole,unitOfWorkFactory)).Return(new[] {applicationFunction}).Repeat.AtLeastOnce();
             }
             using(mocks.Playback())
             {
-                var claimSet = target.Transform(applicationRole,unitOfWork);
+                var claimSet = target.Transform(applicationRole,unitOfWorkFactory);
                 claimSet.Count.Should().Be.EqualTo(2);
             }
         }
@@ -53,11 +53,11 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             using (mocks.Record())
             {
                 Expect.Call(applicationRole.AvailableData).Return(availableData).Repeat.AtLeastOnce();
-                Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWork)).Return(new[] { applicationFunction }).Repeat.AtLeastOnce();
+                Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWorkFactory)).Return(new[] { applicationFunction }).Repeat.AtLeastOnce();
             }
             using (mocks.Playback())
             {
-                var claimSet = target.Transform(applicationRole,unitOfWork);
+                var claimSet = target.Transform(applicationRole,unitOfWorkFactory);
                 claimSet.Count.Should().Be.EqualTo(3);
             }
         }
@@ -71,11 +71,11 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             using (mocks.Record())
             {
                 Expect.Call(applicationRole.AvailableData).Return(availableData).Repeat.AtLeastOnce();
-                Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWork)).Return(new[] { applicationFunction }).Repeat.AtLeastOnce();
+                Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWorkFactory)).Return(new[] { applicationFunction }).Repeat.AtLeastOnce();
             }
             using (mocks.Playback())
             {
-                var claimSet = target.Transform(applicationRole,unitOfWork);
+                var claimSet = target.Transform(applicationRole,unitOfWorkFactory);
                 claimSet.Count.Should().Be.EqualTo(3);
             }
         }
@@ -89,11 +89,11 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             using (mocks.Record())
             {
                 Expect.Call(applicationRole.AvailableData).Return(availableData).Repeat.AtLeastOnce();
-                Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWork)).Return(new[] { applicationFunction }).Repeat.AtLeastOnce();
+                Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWorkFactory)).Return(new[] { applicationFunction }).Repeat.AtLeastOnce();
             }
             using (mocks.Playback())
             {
-                var claimSet = target.Transform(applicationRole,unitOfWork);
+                var claimSet = target.Transform(applicationRole,unitOfWorkFactory);
                 claimSet.Count.Should().Be.EqualTo(3);
             }
         }
@@ -107,11 +107,11 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             using (mocks.Record())
             {
                 Expect.Call(applicationRole.AvailableData).Return(availableData).Repeat.AtLeastOnce();
-                Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWork)).Return(new[] { applicationFunction }).Repeat.AtLeastOnce();
+                Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWorkFactory)).Return(new[] { applicationFunction }).Repeat.AtLeastOnce();
             }
             using (mocks.Playback())
             {
-                var claimSet = target.Transform(applicationRole,unitOfWork);
+                var claimSet = target.Transform(applicationRole,unitOfWorkFactory);
                 claimSet.Count.Should().Be.EqualTo(3);
             }
         }
@@ -125,11 +125,11 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             using (mocks.Record())
             {
                 Expect.Call(applicationRole.AvailableData).Return(availableData).Repeat.AtLeastOnce();
-                Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWork)).Return(new[] { applicationFunction }).Repeat.AtLeastOnce();
+                Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWorkFactory)).Return(new[] { applicationFunction }).Repeat.AtLeastOnce();
             }
             using (mocks.Playback())
             {
-                var claimSet = target.Transform(applicationRole,unitOfWork);
+                var claimSet = target.Transform(applicationRole,unitOfWorkFactory);
                 claimSet.Count.Should().Be.EqualTo(3);
             }
         }
@@ -142,11 +142,11 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			using (mocks.Record())
 			{
 				Expect.Call(applicationRole.AvailableData).Return(null).Repeat.AtLeastOnce();
-				Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWork)).Return(new[] { applicationFunction }).Repeat.AtLeastOnce();
+				Expect.Call(functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWorkFactory)).Return(new[] { applicationFunction }).Repeat.AtLeastOnce();
 			}
 			using (mocks.Playback())
 			{
-				var claimSet = target.Transform(applicationRole, unitOfWork);
+				var claimSet = target.Transform(applicationRole, unitOfWorkFactory);
 				claimSet.Count.Should().Be.EqualTo(1);
 			}
 		}

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
             }
         }
 
-        public IList<MatrixPermissionHolder> ResolvePermission(DateOnly queryDate, IUnitOfWork unitOfWork)
+        public IList<MatrixPermissionHolder> ResolvePermission(DateOnly queryDate, IUnitOfWorkFactory unitOfWorkFactory)
         {
             using (PerformanceOutput.ForOperation("MatrixPermissionWithoutLoading"))
             {
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
                 foreach (IPersonRoleResolver resolver in _personRoleResolvers)
                 {
 
-                    HashSet<MatrixPermissionHolder> resolverResult = resolver.Resolve(queryDate,unitOfWork);
+                    HashSet<MatrixPermissionHolder> resolverResult = resolver.Resolve(queryDate,unitOfWorkFactory);
                     foreach (MatrixPermissionHolder holder in resolverResult)
                     {
                         result.Add(holder);

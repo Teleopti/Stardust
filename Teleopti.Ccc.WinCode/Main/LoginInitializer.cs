@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				_roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, uow, repositoryFactory.CreatePersonRepository(uow));
+				_roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, unitOfWorkFactory, repositoryFactory.CreatePersonRepository(uow));
 			}
 
 			if (result.Result)

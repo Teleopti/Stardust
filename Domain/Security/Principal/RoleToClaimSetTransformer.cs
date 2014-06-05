@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 {
     public interface IRoleToClaimSetTransformer
     {
-        ClaimSet Transform(IApplicationRole role, IUnitOfWork unitOfWork);
+        ClaimSet Transform(IApplicationRole role, IUnitOfWorkFactory unitOfWorkFactory);
     }
 
 	public class RoleToClaimSetTransformer : IRoleToClaimSetTransformer
@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         	_functionsForRoleProvider = functionsForRoleProvider;
         }
 
-		public ClaimSet Transform(IApplicationRole role, IUnitOfWork unitOfWork)
+		public ClaimSet Transform(IApplicationRole role, IUnitOfWorkFactory unitOfWorkFactory)
         {
             var claims = new List<Claim>();
 
-            var availableFunctions = _functionsForRoleProvider.AvailableFunctions(role, unitOfWork);
+            var availableFunctions = _functionsForRoleProvider.AvailableFunctions(role, unitOfWorkFactory);
 
 			claims.AddRange(
 				availableFunctions
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
     public interface IFunctionsForRoleProvider
     {
-        IEnumerable<IApplicationFunction> AvailableFunctions(IApplicationRole applicationRole, IUnitOfWork unitOfWork);
+        IEnumerable<IApplicationFunction> AvailableFunctions(IApplicationRole applicationRole, IUnitOfWorkFactory unitOfWorkFactory);
     }
 
     public class FunctionsForRoleProvider : IFunctionsForRoleProvider
@@ -104,15 +104,15 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             _externalFunctionsProvider = externalFunctionsProvider;
         }
 
-        public IEnumerable<IApplicationFunction> AvailableFunctions(IApplicationRole applicationRole, IUnitOfWork unitOfWork)
+        public IEnumerable<IApplicationFunction> AvailableFunctions(IApplicationRole applicationRole, IUnitOfWorkFactory unitOfWorkFactory)
         {
-            var licensedFunctions = _licensedFunctionsProvider.LicensedFunctions();
+            var licensedFunctions = _licensedFunctionsProvider.LicensedFunctions(unitOfWorkFactory.Name);
             var availableFunctions = new List<IApplicationFunction>();
 
             if (_roleIsPermittedToAllFunctionsSpecification.IsSatisfiedBy(applicationRole))
             {
                 availableFunctions.AddRange(licensedFunctions);
-                availableFunctions.AddRange(_externalFunctionsProvider.ExternalFunctions(unitOfWork));
+                availableFunctions.AddRange(_externalFunctionsProvider.ExternalFunctions(unitOfWorkFactory.CurrentUnitOfWork()));
             }
             else
             {

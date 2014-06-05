@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -29,8 +28,8 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory())
                 .Return(unitOfWorkFactory);
-            unitOfWorkFactory.Stub(x => x.Name).Return("asdf");
-            target = new LicensedFunctionsProvider(functionFactory,_currentUnitOfWorkFactory);
+            unitOfWorkFactory.Stub(x => x.Name).Return("for test");
+            target = new LicensedFunctionsProvider(functionFactory);
 			schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
             LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, schema);
         }
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             schema.LicenseOptions[1].Enabled = false;
             schema.EnabledLicenseSchema = DefinedLicenseSchemaCodes.TeleoptiCccSchema;
             
-            var result = target.LicensedFunctions();
+            var result = target.LicensedFunctions("for test");
             result.IsEmpty().Should().Be.False();
 
         }
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 		{
 			var mocks = new MockRepository();
 			var defRaptorAppFactory = mocks.DynamicMock<IDefinedRaptorApplicationFunctionFactory>();
-			target = new LicensedFunctionsProvider(defRaptorAppFactory,_currentUnitOfWorkFactory);
+			target = new LicensedFunctionsProvider(defRaptorAppFactory);
 
 			using(mocks.Record())
 			{
@@ -67,8 +66,8 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			}
 			using(mocks.Playback())
 			{
-				var res1 = target.LicensedFunctions();
-				var res2 = target.LicensedFunctions();
+				var res1 = target.LicensedFunctions("for test");
+				var res2 = target.LicensedFunctions("for test");
 				res1.Should().Be.SameInstanceAs(res2);
 			}
 		}

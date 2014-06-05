@@ -7,6 +7,7 @@ using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.TransformerTest
 {
@@ -17,12 +18,14 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         private IEnumerable<IApplicationFunction> _applicationFunctionList;
         private MockRepository _mocks;
         private ILicensedFunctionsProvider _licensedFunctionsProvider;
+	    private IUnitOfWorkFactory _unitOfWorkFactory;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _licensedFunctionsProvider = _mocks.StrictMock<ILicensedFunctionsProvider>();
+            _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             _applicationFunctionList = new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList;
             _target = new PmPermissionExtractor(_licensedFunctionsProvider);
         }
@@ -32,8 +35,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         {
             mockLicensedApplicationFunctions(true, true);
 
-            bool isPmLicenseValid1 = _target.IsPerformanceManagerLicenseValid;
-            bool isPmLicenseValid2 = _target.IsPerformanceManagerLicenseValid;
+            bool isPmLicenseValid1 = _target.IsPerformanceManagerLicenseValid(_unitOfWorkFactory);
+            bool isPmLicenseValid2 = _target.IsPerformanceManagerLicenseValid(_unitOfWorkFactory);
             _mocks.VerifyAll();
 
             Assert.IsTrue(isPmLicenseValid1);
@@ -44,7 +47,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void ShouldExtractNoPermissionsCauseNoLicense()
         {
             mockLicensedApplicationFunctions(false, false);
-            PmPermissionType pmPermission = _target.ExtractPermission(new List<IApplicationFunction> { getApplicationFunction("View") });
+            PmPermissionType pmPermission = _target.ExtractPermission(new List<IApplicationFunction> { getApplicationFunction("View") },_unitOfWorkFactory);
             _mocks.VerifyAll();
             Assert.AreEqual(PmPermissionType.None, pmPermission);
         }
@@ -53,7 +56,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void ShouldExtractNoPermissions()
         {
             mockLicensedApplicationFunctions(true, false);
-            PmPermissionType pmPermission = _target.ExtractPermission(new List<IApplicationFunction>());
+            PmPermissionType pmPermission = _target.ExtractPermission(new List<IApplicationFunction>(),_unitOfWorkFactory);
             _mocks.VerifyAll();
             Assert.AreEqual(PmPermissionType.None, pmPermission);
         }
@@ -62,7 +65,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void ShouldExtractViewPermissions()
         {
             mockLicensedApplicationFunctions(true, false);
-            PmPermissionType pmPermission = _target.ExtractPermission(new List<IApplicationFunction> { getApplicationFunction("View") });
+            PmPermissionType pmPermission = _target.ExtractPermission(new List<IApplicationFunction> { getApplicationFunction("View") },_unitOfWorkFactory);
             _mocks.VerifyAll();
             Assert.AreEqual(PmPermissionType.GeneralUser, pmPermission);
         }
@@ -71,7 +74,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void ShouldExtractCreatePermissions()
         {
             mockLicensedApplicationFunctions(true, false);
-            PmPermissionType pmPermission = _target.ExtractPermission(new List<IApplicationFunction> { getApplicationFunction("Create") });
+            PmPermissionType pmPermission = _target.ExtractPermission(new List<IApplicationFunction> { getApplicationFunction("Create") },_unitOfWorkFactory);
             _mocks.VerifyAll();
             Assert.AreEqual(PmPermissionType.ReportDesigner, pmPermission);
         }
@@ -80,7 +83,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void ShouldExtractCreatePermissionWhenApplicationFunctionAllIsProvided()
         {
             mockLicensedApplicationFunctions(true, false);
-            PmPermissionType pmPermission = _target.ExtractPermission(new List<IApplicationFunction> { getApplicationFunction("All") });
+            PmPermissionType pmPermission = _target.ExtractPermission(new List<IApplicationFunction> { getApplicationFunction("All") },_unitOfWorkFactory);
             _mocks.VerifyAll();
             Assert.AreEqual(PmPermissionType.ReportDesigner, pmPermission);
         }
@@ -94,10 +97,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest
                 licensedApplicationFunctions.Add(getApplicationFunction("Create"));
             }
 
+	        Expect.Call(_unitOfWorkFactory.Name).Return("for test");
             if (doCheckLicenseRepeatOnce)
-                Expect.Call(_licensedFunctionsProvider.LicensedFunctions()).Return(licensedApplicationFunctions).Repeat.Once();
+                Expect.Call(_licensedFunctionsProvider.LicensedFunctions("for test")).Return(licensedApplicationFunctions).Repeat.Once();
             else
-                Expect.Call(_licensedFunctionsProvider.LicensedFunctions()).Return(licensedApplicationFunctions).Repeat.AtLeastOnce();
+                Expect.Call(_licensedFunctionsProvider.LicensedFunctions("for test")).Return(licensedApplicationFunctions).Repeat.AtLeastOnce();
 
             _mocks.ReplayAll();
         }

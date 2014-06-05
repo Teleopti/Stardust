@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 {
@@ -68,15 +67,15 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                             var applicationRole = roleRepository.Get(applicationRoleId);
 
 	                        var licensedFunctionsProvider =
-		                        new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory(),new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
-							if (!hasValidLicense(licensedFunctionsProvider)) return true;
+		                        new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory());
+							if (!hasValidLicense(licensedFunctionsProvider,unitOfWorkFactory.Name)) return true;
 
 	                        var roleToClaimSetTransformer =
 		                        new RoleToClaimSetTransformer(new FunctionsForRoleProvider(licensedFunctionsProvider,
 		                                                                                   new ExternalFunctionsProvider(
 			                                                                                   new RepositoryFactory())));
 
-                            claimSet = roleToClaimSetTransformer.Transform(applicationRole, unitOfWork);
+                            claimSet = roleToClaimSetTransformer.Transform(applicationRole, unitOfWorkFactory);
                             _claimCache.Add(claimSet, applicationRoleId);
                         }
 
@@ -103,11 +102,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 			return personInRoleDetails;
 		}
 
-	    private static bool hasValidLicense(ILicensedFunctionsProvider licensedFunctionsProvider)
+	    private static bool hasValidLicense(ILicensedFunctionsProvider licensedFunctionsProvider, string dataSourceName)
 	    {
 		    try
 		    {
-			    licensedFunctionsProvider.LicensedFunctions();
+			    licensedFunctionsProvider.LicensedFunctions(dataSourceName);
 			    return true;
 		    }
 		    catch (NullReferenceException)

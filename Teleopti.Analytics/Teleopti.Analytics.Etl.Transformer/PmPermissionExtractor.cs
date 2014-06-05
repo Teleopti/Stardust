@@ -21,23 +21,20 @@ namespace Teleopti.Analytics.Etl.Transformer
             _licensedFunctionsProvider = licensedFunctionsProvider;
         }
 
-        public bool IsPerformanceManagerLicenseValid
-        {
-            get
-            {
-                if (!_isPmLicenseChecked)
-                {
-                    checkPmLicense();   // Check the PM license once per instance
-                    _isPmLicenseChecked = true;
-                }
+	    public bool IsPerformanceManagerLicenseValid(IUnitOfWorkFactory unitOfWorkFactory)
+	    {
+		    if (!_isPmLicenseChecked)
+		    {
+			    checkPmLicense(unitOfWorkFactory.Name); // Check the PM license once per instance
+			    _isPmLicenseChecked = true;
+		    }
 
-                return _isPmLicenseValid;
-            }
-        }
+		    return _isPmLicenseValid;
+	    }
 
-        public PmPermissionType ExtractPermission(ICollection<IApplicationFunction> applicationFunctionCollection)
+	    public PmPermissionType ExtractPermission(ICollection<IApplicationFunction> applicationFunctionCollection, IUnitOfWorkFactory unitOfWorkFactory)
         {
-            if (!IsPerformanceManagerLicenseValid)
+            if (!IsPerformanceManagerLicenseValid(unitOfWorkFactory))
                 return PmPermissionType.None;
 
             bool createPermission = ApplicationFunction.FindByPath(applicationFunctionCollection, DefinedRaptorApplicationFunctionPaths.All) != null;
@@ -55,10 +52,10 @@ namespace Teleopti.Analytics.Etl.Transformer
             return PmPermissionType.None;
         }
 
-        private void checkPmLicense()
+        private void checkPmLicense(string dataSourceName)
         {
             IEnumerable<IApplicationFunction> licensedApplicationFunctions =
-                _licensedFunctionsProvider.LicensedFunctions();
+                _licensedFunctionsProvider.LicensedFunctions(dataSourceName);
 
             if (licensedApplicationFunctions.Any(
                 f => f.ForeignId == DefinedRaptorApplicationFunctionForeignIds.ViewPerformanceManagerReport

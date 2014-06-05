@@ -120,19 +120,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 AuthenticationMessageHeader.UseWindowsIdentity = false;
                 _logOnOff.LogOn(dataSource, dataSourceContainer.User, businessUnit);
 
-				setCorrectPermissionsOnUser(unitOfWork);
+				setCorrectPermissionsOnUser(dataSource.Application);
             }
         }
 
-    	private void setCorrectPermissionsOnUser(IUnitOfWork unitOfWork)
+    	private void setCorrectPermissionsOnUser(IUnitOfWorkFactory unitOfWorkFactory)
     	{
-    		var person = TeleoptiPrincipal.Current.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWork));
+    		var person = TeleoptiPrincipal.Current.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWorkFactory.CurrentUnitOfWork()));
     		foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
     		{
     			var cachedClaim = _claimCache.Get(AuthenticationMessageHeader.DataSource, applicationRole.Id.GetValueOrDefault());
     			if (cachedClaim == null)
     			{
-    				cachedClaim = _roleToClaimSetTransformer.Transform(applicationRole, unitOfWork);
+    				cachedClaim = _roleToClaimSetTransformer.Transform(applicationRole, unitOfWorkFactory);
     				_claimCache.Add(cachedClaim, AuthenticationMessageHeader.DataSource, applicationRole.Id.GetValueOrDefault());
     			}
     			TeleoptiPrincipal.Current.AddClaimSet(cachedClaim);

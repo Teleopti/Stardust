@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         private ILicensedFunctionsProvider licensedFunctionsProvider;
         private FunctionsForRoleProvider target;
         private IExternalFunctionsProvider externalFunctionsProvider;
-        private IUnitOfWork unitOfWork;
+        private IUnitOfWorkFactory unitOfWorkFactory;
         private const string Function = "test";
 
         [SetUp]
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             mocks = new MockRepository();
             licensedFunctionsProvider = mocks.StrictMock<ILicensedFunctionsProvider>();
             externalFunctionsProvider = mocks.StrictMock<IExternalFunctionsProvider>();
-            unitOfWork = mocks.StrictMock<IUnitOfWork>();
+            unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
             target = new FunctionsForRoleProvider(licensedFunctionsProvider, externalFunctionsProvider);
         }
 
@@ -35,19 +35,21 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         public void ShouldTransformRoleWithAllFunctionIntoClaimSet()
         {
             var applicationRole = mocks.StrictMock<IApplicationRole>();
+            var unitOfWork = mocks.StrictMock<IUnitOfWork>();
             var applicationFunction = new ApplicationFunction { FunctionCode = Function };
             var allApplicationFunction = new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.All };
             using (mocks.Record())
             {
                 Expect.Call(applicationRole.ApplicationFunctionCollection).Return(new[] { allApplicationFunction }).Repeat.AtLeastOnce();
-
-                Expect.Call(licensedFunctionsProvider.LicensedFunctions()).Return(new[] { applicationFunction });
+	            Expect.Call(unitOfWorkFactory.Name).Return("datasource");
+	            Expect.Call(unitOfWorkFactory.CurrentUnitOfWork()).Return(unitOfWork);
+                Expect.Call(licensedFunctionsProvider.LicensedFunctions("datasource")).Return(new[] { applicationFunction });
                 Expect.Call(externalFunctionsProvider.ExternalFunctions(unitOfWork)).Return(
                     new List<IApplicationFunction>());
             }
             using (mocks.Playback())
             {
-                var availableFunctions = target.AvailableFunctions(applicationRole, unitOfWork);
+                var availableFunctions = target.AvailableFunctions(applicationRole, unitOfWorkFactory);
                 availableFunctions.Count().Should().Be.EqualTo(1);
                 availableFunctions.Any(c => c.FunctionCode == Function).Should().Be.True();
             }
@@ -60,12 +62,13 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             var applicationFunction = new ApplicationFunction { FunctionCode = Function };
             using (mocks.Record())
             {
-                Expect.Call(licensedFunctionsProvider.LicensedFunctions()).Return(new IApplicationFunction[] {});
+	            Expect.Call(unitOfWorkFactory.Name).Return("datasource");
+                Expect.Call(licensedFunctionsProvider.LicensedFunctions("datasource")).Return(new IApplicationFunction[] {});
                 Expect.Call(applicationRole.ApplicationFunctionCollection).Return(new[] { applicationFunction }).Repeat.AtLeastOnce();
             }
             using (mocks.Playback())
             {
-                var availableFunctions = target.AvailableFunctions(applicationRole, unitOfWork);
+                var availableFunctions = target.AvailableFunctions(applicationRole, unitOfWorkFactory);
                 availableFunctions.Count().Should().Be.EqualTo(1);
                 availableFunctions.Any(c => c.FunctionCode == Function).Should().Be.True();
             }
@@ -92,8 +95,8 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
                 Expect.Call(applicationFunction.FunctionDescription).Return("desc1");
                 Expect.Call(applicationFunction.FunctionDescription = "desc1");
-
-                Expect.Call(licensedFunctionsProvider.LicensedFunctions()).Return(new[] { applicationFunction});
+	            Expect.Call(unitOfWorkFactory.Name).Return("datasource");
+                Expect.Call(licensedFunctionsProvider.LicensedFunctions("datasource")).Return(new[] { applicationFunction});
                 Expect.Call(((IDeleteTag)applicationFunction).IsDeleted).Return(true);
                 Expect.Call(((IDeleteTag)applicationFunction).IsDeleted).Return(false);
 
@@ -101,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             }
             using (mocks.Playback())
             {
-                var availableFunctions = target.AvailableFunctions(applicationRole, unitOfWork);
+                var availableFunctions = target.AvailableFunctions(applicationRole, unitOfWorkFactory);
                 availableFunctions.Count().Should().Be.EqualTo(1);
                 availableFunctions.Any(c => c.FunctionCode == "code1").Should().Be.True();
             }

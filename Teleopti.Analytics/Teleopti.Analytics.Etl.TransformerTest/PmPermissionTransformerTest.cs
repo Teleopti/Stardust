@@ -11,12 +11,12 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.PerformanceManagerProxy;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Analytics.PM.PMServiceHost;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 using JobResult = Teleopti.Analytics.Etl.Transformer.Job.JobResult;
 using PersonFactory = Teleopti.Analytics.Etl.TransformerTest.FakeData.PersonFactory;
@@ -37,8 +37,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         private UserDto _userEf2;
         private MockRepository _mocks;
         private IPmPermissionExtractor _permissionExtractor;
+	    private IUnitOfWorkFactory _unitOfWorkFactory;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _target = new PmPermissionTransformer(null);
@@ -46,6 +47,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
             _mocks = new MockRepository();
             _permissionExtractor = _mocks.StrictMock<IPmPermissionExtractor>();
+            _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
         }
 
         [Test]
@@ -56,10 +58,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.That(person.ApplicationAuthenticationInfo, Is.Null);
 
             var applicationRole = person.PermissionInformation.ApplicationRoleCollection[0];
-            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection)).Return(PmPermissionType.ReportDesigner);
+            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection,_unitOfWorkFactory)).Return(PmPermissionType.ReportDesigner);
             _mocks.ReplayAll();
 
-            IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor);
+            IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor, _unitOfWorkFactory);
             _mocks.VerifyAll();
 
             Assert.AreEqual(1, users.Count);
@@ -79,12 +81,12 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             var applicationRole2 = person.PermissionInformation.ApplicationRoleCollection[1];
             var applicationRole3 = person.PermissionInformation.ApplicationRoleCollection[2];
 
-            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole1.ApplicationFunctionCollection)).Return(PmPermissionType.ReportDesigner);
-            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole2.ApplicationFunctionCollection)).Return(PmPermissionType.GeneralUser);
-            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole3.ApplicationFunctionCollection)).Return(PmPermissionType.None);
+            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole1.ApplicationFunctionCollection,_unitOfWorkFactory)).Return(PmPermissionType.ReportDesigner);
+            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole2.ApplicationFunctionCollection,_unitOfWorkFactory)).Return(PmPermissionType.GeneralUser);
+            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole3.ApplicationFunctionCollection,_unitOfWorkFactory)).Return(PmPermissionType.None);
             _mocks.ReplayAll();
 
-            IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, false, _permissionExtractor);
+            IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, false, _permissionExtractor, _unitOfWorkFactory);
             _mocks.VerifyAll();
 
             Assert.AreEqual(1, users.Count);
@@ -101,11 +103,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
             var applicationRole = person.PermissionInformation.ApplicationRoleCollection[0];
 
-            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection)).Return(PmPermissionType.GeneralUser).Repeat.Twice();
+            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection,_unitOfWorkFactory)).Return(PmPermissionType.GeneralUser).Repeat.Twice();
             _mocks.ReplayAll();
 
-            IList<UserDto> windowUsers = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor);
-            IList<UserDto> applicationUsers = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, false, _permissionExtractor);
+            IList<UserDto> windowUsers = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor, _unitOfWorkFactory);
+            IList<UserDto> applicationUsers = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, false, _permissionExtractor, _unitOfWorkFactory);
             _mocks.VerifyAll();
 
             Assert.AreEqual(1, windowUsers.Count);
@@ -119,11 +121,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         {
             ensureBothWindowsAndApplicationUsersExistInList();
 
-            Expect.Call(_permissionExtractor.ExtractPermission(new List<IApplicationFunction>())).Return(
+            Expect.Call(_permissionExtractor.ExtractPermission(new List<IApplicationFunction>(),_unitOfWorkFactory)).Return(
                 PmPermissionType.GeneralUser).Repeat.AtLeastOnce().IgnoreArguments();
             _mocks.ReplayAll();
 
-            IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(_personCollection, true, _permissionExtractor);
+            IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(_personCollection, true, _permissionExtractor, _unitOfWorkFactory);
             _mocks.VerifyAll();
 
             Assert.Greater(users.Count(u => u.IsWindowsLogOn), 0);
@@ -135,11 +137,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         {
             ensureBothWindowsAndApplicationUsersExistInList();
 
-            Expect.Call(_permissionExtractor.ExtractPermission(new List<IApplicationFunction>())).Return(
+            Expect.Call(_permissionExtractor.ExtractPermission(new List<IApplicationFunction>(),_unitOfWorkFactory)).Return(
                 PmPermissionType.GeneralUser).Repeat.AtLeastOnce().IgnoreArguments();
             _mocks.ReplayAll();
 
-            IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(_personCollection, false, _permissionExtractor);
+            IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(_personCollection, false, _permissionExtractor, _unitOfWorkFactory);
             _mocks.VerifyAll();
 
             Assert.Greater(users.Count(u => !u.IsWindowsLogOn), 0);
@@ -153,7 +155,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.IsNotNullOrEmpty(person.AuthenticationInfo.Identity);
             Assert.AreEqual(0, person.PermissionInformation.ApplicationRoleCollection.Count);
 
-            IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor);
+            IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor, _unitOfWorkFactory);
             Assert.AreEqual(0, users.Count);
         }
 
@@ -163,10 +165,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             IPerson person = _personCollection[3];
             var applicationRole = person.PermissionInformation.ApplicationRoleCollection[0];
 
-            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection)).Return(PmPermissionType.GeneralUser);
+            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection,_unitOfWorkFactory)).Return(PmPermissionType.GeneralUser);
             _mocks.ReplayAll();
 
-            IList<UserDto> userDtoCollection = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor);
+            IList<UserDto> userDtoCollection = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor, _unitOfWorkFactory);
             _mocks.VerifyAll();
             Assert.AreEqual(1, userDtoCollection[0].AccessLevel);
         }
@@ -177,10 +179,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             IPerson person = _personCollection[4];
             var applicationRole = person.PermissionInformation.ApplicationRoleCollection[0];
 
-            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection)).Return(PmPermissionType.ReportDesigner);
+            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection,_unitOfWorkFactory)).Return(PmPermissionType.ReportDesigner);
             _mocks.ReplayAll();
 
-            IList<UserDto> userDtoCollection = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor);
+            IList<UserDto> userDtoCollection = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor, _unitOfWorkFactory);
             _mocks.VerifyAll();
 
             Assert.AreEqual(2, userDtoCollection[0].AccessLevel);
@@ -401,12 +403,12 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             var applicationRole2 = person.PermissionInformation.ApplicationRoleCollection[1];
             var applicationRole3 = person.PermissionInformation.ApplicationRoleCollection[2];
 
-            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole1.ApplicationFunctionCollection)).Return(PmPermissionType.ReportDesigner);
-            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole2.ApplicationFunctionCollection)).Return(PmPermissionType.GeneralUser);
-            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole3.ApplicationFunctionCollection)).Return(PmPermissionType.None);
+            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole1.ApplicationFunctionCollection,_unitOfWorkFactory)).Return(PmPermissionType.ReportDesigner);
+            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole2.ApplicationFunctionCollection,_unitOfWorkFactory)).Return(PmPermissionType.GeneralUser);
+            Expect.Call(_permissionExtractor.ExtractPermission(applicationRole3.ApplicationFunctionCollection,_unitOfWorkFactory)).Return(PmPermissionType.None);
             _mocks.ReplayAll();
 
-            IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, false, _permissionExtractor);
+            IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, false, _permissionExtractor, _unitOfWorkFactory);
             _mocks.VerifyAll();
 
             Assert.AreEqual(1, users.Count);

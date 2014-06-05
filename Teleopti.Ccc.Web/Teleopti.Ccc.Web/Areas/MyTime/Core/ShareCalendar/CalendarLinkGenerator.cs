@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
 				var person = personRepository.Get(calendarLinkId.PersonId);
 
-				checkPermission(person, dataSource, uow, personRepository);
+				checkPermission(person, dataSource, dataSource.Application, personRepository);
 				checkStatus(uow, person);
 
 				var scheduleDays = getScheduleDays(calendarLinkId, uow, person.WorkflowControlSet.SchedulePublishedToDate);
@@ -86,10 +86,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 				throw new InvalidOperationException("Calendar sharing inactive");
 		}
 
-		private void checkPermission(IPerson person, IDataSource dataSource, IUnitOfWork uow, IPersonRepository personRepository)
+		private void checkPermission(IPerson person, IDataSource dataSource, IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository)
 		{
 			_currentPrincipalContext.SetCurrentPrincipal(person, dataSource, null);
-			_roleToPrincipalCommand.Execute(Thread.CurrentPrincipal as ITeleoptiPrincipal, uow, personRepository);
+			_roleToPrincipalCommand.Execute(Thread.CurrentPrincipal as ITeleoptiPrincipal, unitOfWorkFactory, personRepository);
 			if (!_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
 				throw new PermissionException("No permission for calendar sharing");
 		}

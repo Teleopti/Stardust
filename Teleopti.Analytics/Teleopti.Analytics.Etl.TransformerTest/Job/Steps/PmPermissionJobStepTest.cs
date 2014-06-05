@@ -53,8 +53,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 				Expect.Call(_stateHolder.UserCollection).Return(new List<IPerson>());
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 				_unitOfWork.Reassociate(personList);
-				Expect.Call(_pmPermissionTransformer.GetUsersWithPermissionsToPerformanceManager(personList, true, _permissionExtractor)).Return(new List<UserDto>());
-				Expect.Call(_pmPermissionTransformer.GetUsersWithPermissionsToPerformanceManager(personList, false, _permissionExtractor)).Return(new List<UserDto>());
+				Expect.Call(_pmPermissionTransformer.GetUsersWithPermissionsToPerformanceManager(personList, true, _permissionExtractor, _unitOfWorkFactory)).Return(new List<UserDto>());
+				Expect.Call(_pmPermissionTransformer.GetUsersWithPermissionsToPerformanceManager(personList, false, _permissionExtractor, _unitOfWorkFactory)).Return(new List<UserDto>());
 				_unitOfWork.Dispose();
 			}
 
@@ -106,8 +106,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 				Expect.Call(_stateHolder.UserCollection).Return(new List<IPerson>()).Repeat.AtLeastOnce();
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 				_unitOfWork.Reassociate(personList);
-				Expect.Call(_pmPermissionTransformer.GetUsersWithPermissionsToPerformanceManager(personList, true, _permissionExtractor)).Return(new List<UserDto>());
-				Expect.Call(_pmPermissionTransformer.GetUsersWithPermissionsToPerformanceManager(personList, false, _permissionExtractor)).Return(new List<UserDto>());
+				Expect.Call(_pmPermissionTransformer.GetUsersWithPermissionsToPerformanceManager(personList, true, _permissionExtractor, _unitOfWorkFactory)).Return(new List<UserDto>());
+				Expect.Call(_pmPermissionTransformer.GetUsersWithPermissionsToPerformanceManager(personList, false, _permissionExtractor, _unitOfWorkFactory)).Return(new List<UserDto>());
 				_unitOfWork.Dispose();
 
 				Expect.Call(_pmPermissionTransformer.GetPmUsersForAllBusinessUnits(_target.Name, new List<IJobResult>(), new List<UserDto>())).Return(new List<UserDto>());

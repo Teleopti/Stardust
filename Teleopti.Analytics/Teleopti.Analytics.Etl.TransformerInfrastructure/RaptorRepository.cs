@@ -1481,11 +1481,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 																							  new FunctionsForRoleProvider(
 																								  new LicensedFunctionsProvider(
 																									  new DefinedRaptorApplicationFunctionFactory
-																										  (),new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())),
+																										  ()),
 																								  new ExternalFunctionsProvider(
 																									  new RepositoryFactory())), new SiteRepository(uow));
 
-				IList<MatrixPermissionHolder> permissionHolders = permissionsResolver.ResolvePermission(DateOnly.Today, uow);
+				IList<MatrixPermissionHolder> permissionHolders = permissionsResolver.ResolvePermission(DateOnly.Today, UnitOfWorkFactory.Current);
 
 				foreach (MatrixPermissionHolder permissionHolder in permissionHolders)
 				{

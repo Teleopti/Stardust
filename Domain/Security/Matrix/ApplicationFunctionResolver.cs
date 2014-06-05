@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
 {
     public interface IApplicationFunctionResolver
     {
-        HashSet<MatrixPermissionHolder> ResolveApplicationFunction(HashSet<MatrixPermissionHolder> list, IApplicationRole applicationRole, IUnitOfWork unitOfWork);
+        HashSet<MatrixPermissionHolder> ResolveApplicationFunction(HashSet<MatrixPermissionHolder> list, IApplicationRole applicationRole, IUnitOfWorkFactory unitOfWorkFactory);
     }
 
     public class ApplicationFunctionResolver : IApplicationFunctionResolver
@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
             _functionsForRoleProvider = functionsForRoleProvider;
         }
 
-        public HashSet<MatrixPermissionHolder> ResolveApplicationFunction(HashSet<MatrixPermissionHolder> list, IApplicationRole applicationRole, IUnitOfWork unitOfWork)
+        public HashSet<MatrixPermissionHolder> ResolveApplicationFunction(HashSet<MatrixPermissionHolder> list, IApplicationRole applicationRole, IUnitOfWorkFactory unitOfWorkFactory)
         {
             var result = new HashSet<MatrixPermissionHolder>();
-            var availableFunctions = _functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWork);
+            var availableFunctions = _functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWorkFactory);
             var matrixFunctions = availableFunctions.FilterBySpecification(_matrixFunctionSpecification);
 
             foreach (MatrixPermissionHolder holder in list)

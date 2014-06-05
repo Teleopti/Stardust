@@ -50,19 +50,19 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 				var businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
 				var businessUnit = businessUnitRepository.Load(sessionData.BusinessUnitId);
 
-				principal = makePrincipalAndHandleThatPersonMightNotExist(uow, personRepository, dataSource, businessUnit, person);
+				principal = makePrincipalAndHandleThatPersonMightNotExist(dataSource.Application, personRepository, dataSource, businessUnit, person);
 			}
 
 			return principal;
 		}
 
-		private ITeleoptiPrincipal makePrincipalAndHandleThatPersonMightNotExist(IUnitOfWork uow, IPersonRepository personRepository, IDataSource dataSource, IBusinessUnit businessUnit, IPerson person)
+		private ITeleoptiPrincipal makePrincipalAndHandleThatPersonMightNotExist(IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, IDataSource dataSource, IBusinessUnit businessUnit, IPerson person)
 		{
 			try
 			{
 				var token = _tokenIdentityProvider.RetrieveToken();
 				var principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, token == null ? null : token.OriginalToken);
-				_roleToPrincipalCommand.Execute(principal, uow, personRepository);
+				_roleToPrincipalCommand.Execute(principal, unitOfWorkFactory, personRepository);
 				return principal;
 			}
 			catch (PersonNotFoundException)
