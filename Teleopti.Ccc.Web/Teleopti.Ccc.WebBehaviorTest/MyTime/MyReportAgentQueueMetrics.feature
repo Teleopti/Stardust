@@ -106,26 +106,24 @@ Scenario: Show details for answered calls for two queues
 	When I click on answered calls
 	Then I should see answered calls for each queue in agent queue view for '2014-05-15'
 
-@ignore
-Scenario: Navigate within agent queue view to previous day
+
+Scenario: Navigate within agent queue  to previous day
 	Given I am an agent
-	And I view agent queue metrics for '2014-05-15'
+	And I view my queue metrics report for '2014-05-15'
 	When I navigate to the previous day
-	Then I should end up in agent queue view for '2014-05-14'
+	Then I should see the queue metrics report for '2014-05-14'
 	
-@ignore
 Scenario: Navigate within agent queue view to next day
 	Given I am an agent
-	And I view agent queue metrics for '2014-05-15'
+	And I view my queue metrics report for '2014-05-15'
 	When I navigate to the next day
-	Then I should end up in agent queue view for '2014-05-16'
+	Then I should see the queue metrics report for '2014-05-16'
 
-@ignore
 Scenario: Navigate within agent queue view using date picker
 	Given I am an agent
-	And I view agent queue metrics for '2014-05-15'
-	When I select the date '2014-05-03'
-	Then I should end up in agent queue view for '2014-05-03'
+	And I view my queue metrics report for '2014-05-15'
+	When I select the date '2014-05-20'
+	Then I should see the queue metrics report for '2014-05-20'
 
 @ignore
 Scenario: Show friendly message when no report data

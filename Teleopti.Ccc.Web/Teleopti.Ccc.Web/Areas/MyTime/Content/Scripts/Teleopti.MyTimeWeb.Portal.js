@@ -147,6 +147,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		        	}
 			        if (actionUpperCase === "ADHERENCE") {
 			        	Teleopti.MyTimeWeb.MyAdherence.ForDay(moment(parsedDate));
+			        }
+			        if (actionUpperCase === "QUEUEMETRICS") {
+			        	Teleopti.MyTimeWeb.MyQueueMetrics.ForDay(moment(parsedDate));
 					}
 			        return;
 		        }
