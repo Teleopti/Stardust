@@ -11855,8 +11855,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>Intraday absence</comment>
   </data>
   <data name="IllegalTeamBlockCombination" xml:space="preserve">
-    <value>Optimizing with block between days off and not keeping team days off together is not supported</value>
-    <comment>Optimizing with block between days off and not keeping team days off together is not supported</comment>
+    <value>Optimizing with block between days off and not keeping team days off together is not supported. Optimization will not be optimal</value>
+    <comment>Not supported combination</comment>
   </data>
   <data name="UnsupportedOptimizationSteps" xml:space="preserve">
     <value>Optimization steps "Time between days", "Shift for flexible work time", "Days off for flexible work time" and "Shift category limitations" are not supported when team or block is selected</value>

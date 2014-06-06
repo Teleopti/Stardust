@@ -10067,7 +10067,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Optimizing with block between days off and not keeping team days off together is not supported.
+        ///   Looks up a localized string similar to Optimizing with block between days off and not keeping team days off together is not supported. Optimization will not be optimal.
         /// </summary>
         public static string IllegalTeamBlockCombination {
             get {

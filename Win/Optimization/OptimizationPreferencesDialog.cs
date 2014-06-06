@@ -194,14 +194,12 @@ namespace Teleopti.Ccc.Win.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			
-			if (!extraPreferencesPanel1.ValidateTeamBlockCombination())
+			if (ValidateData(ExchangeDataOption.ControlsToDataSource))
 			{
-				MessageBox.Show(this, UserTexts.Resources.IllegalTeamBlockCombination, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK);
-				DialogResult = DialogResult.None;
-				return;
-			}
-
+				if (!extraPreferencesPanel1.ValidateTeamBlockCombination())
+				{
+					MessageBox.Show(this, UserTexts.Resources.IllegalTeamBlockCombination, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				}
 		    if (!validateOptimizationSteps())
 		    {
                 MessageBox.Show(this, UserTexts.Resources.UnsupportedOptimizationSteps, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK);
@@ -209,8 +207,6 @@ namespace Teleopti.Ccc.Win.Optimization
                 return;
 		    }
 
-			if (ValidateData(ExchangeDataOption.ControlsToDataSource))
-			{
 				ExchangeData(ExchangeDataOption.ControlsToDataSource);
 				SavePersonalSettings();
 				if (Preferences.Shifts.KeepShifts || Preferences.DaysOff.UseKeepExistingDaysOff)
