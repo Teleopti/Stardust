@@ -232,7 +232,7 @@
 			<ul class="weekdays">
 				@if (Model.IsWeeklyWorkTimeEnabled)
 				{
-					<li style="max-width: 50px;">&nbsp;</li>
+					<li style="max-width: 55px;">&nbsp;</li>
 				}
 				@foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
 				{
@@ -250,7 +250,7 @@
 					</li>
 				@if (Model.IsWeeklyWorkTimeEnabled)
 				{
-					<li data-mytime-week="week" style="width: 50px">
+					<li data-mytime-week="week" style="width: 55px">
 						<div class="day-header"></div>
 						<div class="day-content">
 							<!-- ko if: IsWeeklyWorkTimeVisible -->
