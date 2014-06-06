@@ -276,3 +276,7 @@ color: #333333;
 .max-hours-per-week {
 	font-size: 11px;
 }
+
+.week-view-non-editable {
+	color:#c9c4c4
+}

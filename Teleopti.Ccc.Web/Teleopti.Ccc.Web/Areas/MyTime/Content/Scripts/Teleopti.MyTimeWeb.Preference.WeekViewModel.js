@@ -26,7 +26,7 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 	self.PossibleResultWeeklyContractTimeMinutesLower = ko.computed(function() {
 		var sum = 0;
 		$.each(self.DayViewModels(), function (index, day) {
-			if (!day.EditableIsInOpenPeriod() && day.EditableHasNoSchedule()) {
+			if (!day.EditableIsInOpenPeriod()) {
 				sum = 0;
 				return false; //break here only count whole weeks now
 			}
@@ -47,7 +47,7 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 	self.PossibleResultWeeklyContractTimeMinutesUpper = ko.computed(function() {
 		var sum = 0;
 		$.each(self.DayViewModels(), function (index, day) {
-			if (!day.EditableIsInOpenPeriod() && day.EditableHasNoSchedule()) {
+			if (!day.EditableIsInOpenPeriod()) {
 				sum = 0;
 				return false; //break here only count whole weeks now
 			}
@@ -85,20 +85,30 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 		return isInCurrentPeriod;
 	});
 
+	self.IsEditable = ko.computed(function () {
+		var isEditable = true;
+		$.each(self.DayViewModels(), function (index, day) {
+			if (!day.Editable()) {
+				isEditable = false;
+				return false;
+			}
+		});
+
+		return isEditable;
+	});
+
 	self.IsWeeklyWorkTimeVisible = ko.computed(function () {
 		if (self.IsInCurrentPeriod())
-			return true;
-		if (self.PossibleResultWeeklyContractTimeMinutesLower() > 0)
 			return true;
 		return false;
 	});
 
 	self.IsMinHoursBroken = ko.computed(function() {
-		 return self.PossibleResultWeeklyContractTimeMinutesLower() > self.MaxTimePerWeekMinutesSetting();
+		 return (self.PossibleResultWeeklyContractTimeMinutesLower() > self.MaxTimePerWeekMinutesSetting())&(self.IsEditable());
 	});
 
 	self.IsMaxHoursBroken = ko.computed(function () {
-		 return self.PossibleResultWeeklyContractTimeMinutesUpper() < self.MinTimePerWeekMinutesSetting();
+		return (self.PossibleResultWeeklyContractTimeMinutesUpper() < self.MinTimePerWeekMinutesSetting())&(self.IsEditable());
 	});
 
 	self.readWeeklyWorkTimeSettings = function(data) {

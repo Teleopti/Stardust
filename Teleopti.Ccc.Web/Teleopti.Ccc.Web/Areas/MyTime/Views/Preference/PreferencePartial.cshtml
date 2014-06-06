@@ -250,9 +250,9 @@
 					</li>
 				@if (Model.IsWeeklyWorkTimeEnabled)
 				{
-					<li data-mytime-week="week" style="width: 55px">
+					<li data-mytime-week="week" style="width: 55px;"  data-bind="css: { 'week-view-non-editable': !IsEditable() }">
 						<div class="day-header"></div>
-						<div class="day-content">
+						<div class="day-content" >
 							<!-- ko if: IsWeeklyWorkTimeVisible -->
 							<div class="min-hours-per-week" data-bind="css: {'weekly-work-time-alert': IsMinHoursBroken}">
 								<span>></span>
