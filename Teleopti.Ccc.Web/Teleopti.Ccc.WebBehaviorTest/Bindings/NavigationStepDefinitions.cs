@@ -362,7 +362,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnApplicationPageOutsidePortal();
 		}
 
-
+        [Given(@"I view my queue metrics report for '(.*)'")]
+        [When(@"I view my queue metrics report for '(.*)'")]
+        public void WhenIViewMyQueueMetricsReportFor(DateTime dateTime)
+        {
+            TestControllerMethods.Logon();
+            Navigation.GoToMyQueueMetrics(dateTime);
+        }
 
 
 		// navigation to signin and root
@@ -427,6 +433,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereRealTimeAdherenceTeamOverview(IdForTeam(team));
 		}
+
+       
 
 	}
 }

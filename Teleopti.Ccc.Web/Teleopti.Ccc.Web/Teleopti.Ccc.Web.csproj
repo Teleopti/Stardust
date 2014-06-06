@@ -308,6 +308,7 @@
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\DetailedAdherenceMapper.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\IDailyMetricsMapper.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\IDetailedAdherenceMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\MyReport\Mapping\QueueMetricsMapper.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\IMyReportViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\ITeamViewModelFactory.cs" />
@@ -342,6 +343,7 @@
     <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MyReport\DailyMetricsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MyReport\DetailedAdherenceViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\MyReport\QueueMetricsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceWeeklyWorkTimeViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\AbsenceAccountViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditPersonScheduleViewModel.cs" />
@@ -905,6 +907,7 @@
     <Content Include="Areas\MyTime\Content\Css\MonthView.css" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyQueueMetrics.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyAdherence.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AlertActivity.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.WeekViewModel.Tests.js" />

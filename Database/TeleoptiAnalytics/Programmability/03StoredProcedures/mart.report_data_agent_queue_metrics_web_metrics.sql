@@ -11,7 +11,6 @@ GO
 -- =============================================
 CREATE PROCEDURE [mart].[report_data_agent_queue_metrics_web_metrics] 
 @date_from datetime,
-@date_to datetime,
 @person_code uniqueidentifier,
 @business_unit_code uniqueidentifier
 as
@@ -43,7 +42,7 @@ after_call_work_s int
 Insert into #tempResult
 exec mart.report_data_agent_queue_metrics
 @date_from=@date_from,
-@date_to=@date_to,
+@date_to=@date_from,
 @interval_from=@interval_from,
 @interval_to=@interval_to,
 @group_page_code=NULL,

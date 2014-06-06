@@ -442,7 +442,10 @@
     <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWorkFactory.cs" />
     <Compile Include="WebReports\DailyMetricsForDayQuery.cs" />
+    <Compile Include="WebReports\QueueMetricsForDayResult.cs" />
     <Compile Include="WebReports\DailyMetricsForDayResult.cs" />
+    <Compile Include="WebReports\IQueueMetricsForDayQuery.cs" />
+    <Compile Include="WebReports\QueueMetricsForDayQuery.cs" />
     <Compile Include="WebReports\DetailedAdherenceForDayQuery.cs" />
     <Compile Include="WebReports\DetailedAdherenceForDayResult.cs" />
     <Compile Include="WebReports\IDailyMetricsForDayQuery.cs" />

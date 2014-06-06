@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
         {
             if(!_toggleManager.IsEnabled(Toggles.MyReport_AgentQueueMetrics_22254))
                 throw new HttpException(404, "Not found");
- 
+            
             var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
             ViewBag.DatePickerFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper();
             return View("DailyQueueMetricsPartial");
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
         [UnitOfWorkAction]
         public JsonResult QueueMetricsDetails(DateOnly date)
         {
-            return Json(_myReportViewModelFactory.CreateDetailedAherenceViewModel(date), JsonRequestBehavior.AllowGet);
+            return Json(_myReportViewModelFactory.CreateQueueMetricsViewModel(date), JsonRequestBehavior.AllowGet);
         }
 	}
 }

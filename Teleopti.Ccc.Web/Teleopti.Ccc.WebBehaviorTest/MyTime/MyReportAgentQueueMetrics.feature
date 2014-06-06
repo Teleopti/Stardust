@@ -75,13 +75,12 @@ Scenario: Navigate to details from answered calls
 	When I click on answered calls
 	Then I should see agent queue view for '2014-05-15'
 
-@ignore
-Scenario: Show details for average handling time for two queues
+
+Scenario: Show details for queue metrics
 	Given I am an agent
-	And I view my report for '2014-05-15'
-	And I have report data for 2 queues
-	When I click on average handling time
-	Then I should see average handling time for each queue in agent queue view for '2014-05-15'
+	And I have my report data for '2013-10-02'
+	When I view my queue metrics report for '2013-10-02'
+	Then I should see the queue metrics report for '2013-10-02'
 
 @ignore
 Scenario: Show details for average talk time for two queues

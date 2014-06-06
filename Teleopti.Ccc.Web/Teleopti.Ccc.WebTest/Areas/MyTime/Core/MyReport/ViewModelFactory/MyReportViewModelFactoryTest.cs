@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.ViewModelFactory
 		{
 			var mapper = MockRepository.GenerateMock<IDailyMetricsMapper>();
 			var dailyMetricsForDayQuery = MockRepository.GenerateMock<IDailyMetricsForDayQuery>();
-			var target = new MyReportViewModelFactory(dailyMetricsForDayQuery, null, mapper, null);
+			var target = new MyReportViewModelFactory(dailyMetricsForDayQuery, null, mapper, null, null, null);
 			var dataModel = new DailyMetricsForDayResult();
 			var viewModel = new DailyMetricsViewModel();
 			var date = DateOnly.Today;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.ViewModelFactory
 		{
 			var mapper = MockRepository.GenerateMock<IDetailedAdherenceMapper>();
 			var detailedAdherenceForDayQuery = MockRepository.GenerateMock<IDetailedAdherenceForDayQuery>();
-			var target = new MyReportViewModelFactory(null,detailedAdherenceForDayQuery,null, mapper);
+			var target = new MyReportViewModelFactory(null,detailedAdherenceForDayQuery,null, mapper, null, null);
 			var dataModel = new List<DetailedAdherenceForDayResult>();
 			var viewModel = new DetailedAdherenceViewModel();
 			var date = DateOnly.Today;

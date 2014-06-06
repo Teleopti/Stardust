@@ -67,9 +67,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 			//some report data
 			const int intervalId = 32;
+            var dataSource = DataMaker.Data().UserData<IDatasourceData>();
+            var queues = new AQueue(dataSource);
+		    queues.QueueId = 5;
+            DataMaker.Analytics().Setup(queues);
 			DataMaker.Data().Analytics().Setup(new FactSchedule(personId, theDay.DateId, theDay.DateId, 0, 22, intervalId, scenarioId));
 			DataMaker.Data().Analytics().Setup(new FactAgent(theDay.DateId, intervalId, acdLoginId, theDay.DateId, intervalId - 8, 600, 900, 300, 55,0, 0, 7, 210, 60));
-			DataMaker.Data().Analytics().Setup(new FactAgentQueue(theDay.DateId, intervalId, 5, acdLoginId, 210, 60, 7, 0));
+            DataMaker.Data().Analytics().Setup(new FactAgentQueue(theDay.DateId, intervalId, queues.QueueId, acdLoginId, 210, 60, 7, 0));
 			DataMaker.Data().Analytics().Setup(new FactScheduleDeviation(theDay.DateId, theDay.DateId, intervalId, personId, 900, 60, 60, 60, true));
 		}
 
@@ -188,5 +192,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.AssertUrlContains(string.Format("Adherence/{0}/{1}/{2}", date.Year, date.Month.ToString("D2"), date.Day.ToString("D2")));
 		}
+
+        [Then(@"I should see the queue metrics report for '(.*)'")]
+        public void ThenIShouldSeeTheQueueMetricsReportFor(DateTime date)
+        {
+            Browser.Interactions.AssertUrlContains(string.Format("QueueMetrics/{0}/{1}/{2}", date.Year, date.Month.ToString("D2"), date.Day.ToString("D2")));
+        }
+
 	}
 }

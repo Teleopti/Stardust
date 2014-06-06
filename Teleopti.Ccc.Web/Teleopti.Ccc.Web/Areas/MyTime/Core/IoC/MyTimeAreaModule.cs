@@ -197,6 +197,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<DailyMetricsMapper>().As<IDailyMetricsMapper>();
 			builder.RegisterType<DetailedAdherenceMapper>().As<IDetailedAdherenceMapper>();
 			builder.RegisterType<MyReportViewModelFactory>().As<IMyReportViewModelFactory>();
+            builder.RegisterType<QueueMetricsForDayQuery>().As<IQueueMetricsForDayQuery>();
+            builder.RegisterType<QueueMetricsMapper>().As<IQueueMetricsMapper>();
 		}
 
 		private static void registerCommonTypes(ContainerBuilder builder)

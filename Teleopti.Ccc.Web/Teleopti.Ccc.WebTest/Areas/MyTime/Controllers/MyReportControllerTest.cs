@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport;
@@ -17,7 +18,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void Index_WhenUserHasPermissionForMyReport_ShouldReturnPartialView()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IMyReportViewModelFactory>();
-			var target = new MyReportController(viewModelFactory, null);
+			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
+			var target = new MyReportController(viewModelFactory, null, toggleManager);
 			var model = new DailyMetricsViewModel();
 			var date = DateOnly.Today;
 
@@ -32,7 +34,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnDetailedAdherence()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IMyReportViewModelFactory>();
-			var target = new MyReportController(viewModelFactory, null);
+            var toggleManager = MockRepository.GenerateMock<IToggleManager>();
+            var target = new MyReportController(viewModelFactory, null, toggleManager);
 			var date = DateOnly.Today;
 			var model = new DetailedAdherenceViewModel();
 			viewModelFactory.Stub(x => x.CreateDetailedAherenceViewModel(date)).Return(model);
@@ -45,14 +48,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void AdherenceShouldReturnPartialView()
 		{
-			var controller = new MyReportController(null, null);
+			var controller = new MyReportController(null, null, null);
 			controller.Adherence().Should().Be.OfType<ViewResult>();
 		}
 
 		[Test]
 		public void IndexShouldReturnPartialView()
 		{
-			var controller = new MyReportController(null, null);
+			var controller = new MyReportController(null, null, null);
 			controller.Index().Should().Be.OfType<ViewResult>();
 		}
 	}

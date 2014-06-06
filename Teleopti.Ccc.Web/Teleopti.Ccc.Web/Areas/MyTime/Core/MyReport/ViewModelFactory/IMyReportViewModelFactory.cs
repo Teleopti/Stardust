@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory
@@ -7,5 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory
 	{
 		DailyMetricsViewModel CreateDailyMetricsViewModel(DateOnly dateOnly);
 		DetailedAdherenceViewModel CreateDetailedAherenceViewModel(DateOnly dateOnly);
+        ICollection<QueueMetricsViewModel> CreateQueueMetricsViewModel(DateOnly dateOnly);
 	}
 }
