@@ -30,7 +30,8 @@ CREATE PROCEDURE [mart].[report_data_agent_queue_metrics]
 @person_code uniqueidentifier ,
 @report_id uniqueidentifier,
 @language_id int,
-@business_unit_code uniqueidentifier
+@business_unit_code uniqueidentifier,
+@from_matrix bit = 1
 AS
 SET NOCOUNT ON
 
@@ -52,6 +53,8 @@ DECLARE @selected_end_interval nvarchar(50)
 SET @selected_start_interval=(SELECT left(i.interval_name,5) FROM mart.dim_interval i where interval_id= @interval_from)
 SET @selected_end_interval=(SELECT right(i.interval_name,5) FROM mart.dim_interval i where interval_id= @interval_to)
 
+if(@from_matrix=1)
+begin
 IF mart.GroupPageCodeIsBusinessHierarchy(@group_page_code) = 0
 	BEGIN
 		-- Some Group Page was picked
@@ -76,6 +79,17 @@ EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code,
 INSERT INTO #rights_teams 
 SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_id, @team_set)
 
+end
+else
+begin
+	declare @me_as_id int
+	select @me_as_id=person_id from mart.dimPersonFilterPersonPeriod(@date_from, @date_to,@person_code)
+	INSERT INTO #rights_agents  --Insert the current agent
+	SELECT @me_as_id
+	INSERT INTO #selected_agents --Insert the current agent
+	SELECT @me_as_id
+	insert into #rights_teams select team_id from mart.dim_person where person_id = @me_as_id
+end
 
 /* Check if time zone will be hidden (if only one exist then hide) */
 DECLARE @hide_time_zone bit
