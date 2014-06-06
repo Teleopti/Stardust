@@ -11355,7 +11355,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Skiftbyte nekat då skiften är på olika datum.</value>
   </data>
   <data name="IllegalTeamBlockCombination" xml:space="preserve">
-    <value>Optimering med block mellan fridagar och att inte hålla ihop teamens fridagar stöds inte</value>
+    <value>Optimering med block mellan fridagar och att inte hålla ihop teamets fridagar stöds inte. Optimeringen riskerar att inte bli bra</value>
     <comment>Optimizing with block between days off and not keeping team days off together is not supported</comment>
   </data>
   <data name="ActiveAgents" xml:space="preserve">

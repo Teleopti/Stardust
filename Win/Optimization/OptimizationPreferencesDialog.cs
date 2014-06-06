@@ -188,16 +188,12 @@ namespace Teleopti.Ccc.Win.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			
-			if (!extraPreferencesPanel1.ValidateTeamBlockCombination())
-			{
-				MessageBox.Show(this, UserTexts.Resources.IllegalTeamBlockCombination, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK);
-				DialogResult = DialogResult.None;
-				return;
-			}
-
 			if (ValidateData(ExchangeDataOption.ControlsToDataSource))
 			{
+				if (!extraPreferencesPanel1.ValidateTeamBlockCombination())
+				{
+					MessageBox.Show(this, UserTexts.Resources.IllegalTeamBlockCombination, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				}
 				ExchangeData(ExchangeDataOption.ControlsToDataSource);
 				SavePersonalSettings();
 				DialogResult = DialogResult.OK;
