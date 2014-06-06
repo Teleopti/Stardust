@@ -255,11 +255,11 @@
 						<div class="day-content">
 							<!-- ko if: IsWeeklyWorkTimeVisible -->
 							<div class="min-hours-per-week" data-bind="css: {'weekly-work-time-alert': IsMinHoursBroken}">
-								<span class="glyphicon glyphicon-chevron-right"></span>
+								<span>></span>
 								<span data-bind="text:PossibleResultWeeklyContractTimeLower"></span>
 							</div>
 							<div class="max-hours-per-week" data-bind="css: {'weekly-work-time-alert': IsMaxHoursBroken}">
-								<span class="glyphicon glyphicon-chevron-left"></span>
+								<span><</span>
 								<span data-bind="text:PossibleResultWeeklyContractTimeUpper"></span>
 							</div>
 							<!-- /ko -->
