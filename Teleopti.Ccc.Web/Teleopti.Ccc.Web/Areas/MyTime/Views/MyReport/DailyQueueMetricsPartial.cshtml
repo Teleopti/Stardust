@@ -1,46 +1,48 @@
 @using Teleopti.Ccc.UserTexts
 @{
-	Layout = null;
+    Layout = null;
 }
-
-
 <input id="my-report-datepicker-format" type="hidden" value="@ViewBag.DatePickerFormat" />
-
-    <div style="text-align: center" id="queueMetric">
-        <div class="navbar navbar-default">
-            <div class="container">
-                <div class="navbar-left">
-                    <div class="navbar-btn">
-                        <div class="input-group" style="max-width: 294px;">
-                            <span class="input-group-btn">
-                                <button id="report-view-date-nav-prev" class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button">
-                                    <i class="glyphicon glyphicon-chevron-left"></i>
-                                </button>
-                            </span>
-                            <input class="form-control text-center" style="width: 100%" id="report-view-date-nav-current" data-bind="value: selectedDate().format(datePickerFormat())" type="text" readonly="readonly" />
-                            <span class="input-group-btn">
-                                <button id="report-view-date-picker" class="btn btn-default moment-datepicker" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, format: datePickerFormat() }" type="button">
-                                    <i class="glyphicon glyphicon-calendar"></i>
-                                </button>
-                                <button id="report-view-date-nav-next" class="btn btn-default" data-bind="click: nextDay, css: 'done'" type="button">
-                                    <i class="glyphicon glyphicon-chevron-right"></i>
-                                </button>
-                            </span>
-                        </div>
+<div style="text-align: center" id="queueMetric">
+    <div class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-left">
+                <div class="navbar-btn">
+                    <div class="input-group" style="max-width: 294px;">
+                        <span class="input-group-btn">
+                            <button id="report-view-date-nav-prev" class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button">
+                                <i class="glyphicon glyphicon-chevron-left"></i>
+                            </button>
+                        </span>
+                        <input class="form-control text-center" style="width: 100%" id="report-view-date-nav-current" data-bind="value: selectedDate().format(datePickerFormat())" type="text" readonly="readonly" />
+                        <span class="input-group-btn">
+                            <button id="report-view-date-picker" class="btn btn-default moment-datepicker" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, format: datePickerFormat() }" type="button">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                            <button id="report-view-date-nav-next" class="btn btn-default" data-bind="click: nextDay, css: 'done'" type="button">
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </button>
+                        </span>
                     </div>
                 </div>
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#" id="report-overview" data-bind="click: goToOverview">@Resources.OverView</a>
-                    </li>
-                </ul>
             </div>
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#" id="report-overview" data-bind="click: goToOverview">@Resources.OverView</a>
+                </li>
+            </ul>
         </div>
-
-        <div class="page-header" style="margin-top: 5px">
-            <h3 style="margin-top: 5px">Daily Queue Metrics</h3>
+    </div>
+    <div class="page-header" style="margin-top: 5px;padding: 0">
+        <h3 style="margin-top: 5px">Daily Queue Metrics</h3>
+    </div>
+    <div data-bind="ifnot: dataAvailable">
+        <div id="friendly-message" class="alert alert-info alert-myreport">
+            @Resources.NoDataAvailable
         </div>
-        <div data-bind="foreach: myQueues">
+    </div>
+    <div data-bind="if: dataAvailable">
+        <div data-bind="foreach: myQueues" class="hidden-sm hidden-md hidden-lg">
             <div class="panel panel-default" style="margin-bottom: 10px;">
                 <h4 style="margin-bottom: 0" data-bind="text: Queue"></h4>
                 <div class="panel-body">
@@ -48,21 +50,21 @@
                         <div class="col-xs-12 col-sm-6 col-lg-3">
                             <div class="panel panel-primary dashboard-yellow" style="height: 40px; margin-bottom: 0">
                                 <div class="text-center col-xs-12">
-                                    <h5 data-bind="text: '@Resources.AverageHandlingTime '+ AverageHandlingTime + '@Resources.SecondShort	'"></h5>
+                                    <h5 data-bind="text: '@Resources.AverageHandlingTime '+ AverageHandlingTime"></h5>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-lg-3">
                             <div class="panel panel-primary dashboard-purple" style="height: 40px; margin-bottom: 0">
                                 <div class="text-center col-xs-12">
-                                    <h5 data-bind="text:'@Resources.AverageTalkTime '+ AverageTalkTime + '@Resources.SecondShort	'"></h5>
+                                    <h5 data-bind="text:'@Resources.AverageTalkTime '+ AverageTalkTime"></h5>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-lg-3">
                             <div class="panel panel-primary dashboard-red" style="height: 40px; margin-bottom: 0">
                                 <div class="text-center col-xs-12">
-                                    <h5 data-bind="text: '@Resources.AverageAfterCallWork '+AverageAfterCallWork + '@Resources.SecondShort	'"></h5>
+                                    <h5 data-bind="text: '@Resources.AverageAfterCallWork '+AverageAfterCallWork"></h5>
                                 </div>
                             </div>
                         </div>
@@ -77,4 +79,51 @@
                 </div>
             </div>
         </div>
+        <div class="hidden-xs">
+            <div class="col-xs-12 col-sm-12 col-lg-12 queue-header-row">
+                <div class="col-xs-3 col-sm-3 col-lg-3 queue-name" style="min-height: 80px;">
+                    <h4>@Resources.Queue</h4>
+                </div>
+                <div class="col-xs-8 col-sm-8 col-lg-8">
+                    <div class="col-xs-12 col-sm-12 col-lg-12  no-padding">
+                        <div class="text-center col-xs-12 queue-handling-time">
+                            @Resources.AverageHandlingTime
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-lg-6  no-padding">
+                        <div class="text-center col-xs-12 no-padding queue-talk-time">
+                            @Resources.AverageTalkTime
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-lg-6 no-padding">
+                        <div class="text-center col-xs-12 no-padding queue-afterwork-time text-center">
+                            @Resources.AverageAfterCallWork
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-1 col-sm-1 col-lg-1 no-padding" style="display: table">
+                    <div class="col-xs-12 queue-answered queue-answered-header text-center ">
+                        @Resources.AnsweredCalls
+                    </div>
+                </div>
+            </div>
+            <div data-bind="foreach: myQueues">
+                <div class="col-xs-12 col-sm-12 col-lg-12 queue-row">
+                    <div class="col-xs-3 col-sm-3 col-lg-3 queue-name" data-bind="text: Queue"></div>
+                    <div class="col-xs-8 col-sm-8 col-lg-8">
+                        <div class="col-xs-12 col-sm-12 col-lg-12 no-padding">
+                            <div class="queue-handling-time" data-bind="style: {width: HandlingPercent}, text: AverageHandlingTime"></div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-lg-12 no-padding">
+                            <div class="queue-talk-time" data-bind="style: {width: TalkTimePercent}, text: AverageTalkTime"></div>
+                            <div class="queue-afterwork-time" data-bind="style: {width: AfterCallWorkPercent}, text: AverageAfterCallWork"></div>
+                        </div>
+                    </div>
+                    <div class="col-xs-1 col-sm-1 col-lg-1 no-padding">
+                        <div class="col-xs-12 queue-answered text-center" data-bind="text: AnsweredCalls"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>

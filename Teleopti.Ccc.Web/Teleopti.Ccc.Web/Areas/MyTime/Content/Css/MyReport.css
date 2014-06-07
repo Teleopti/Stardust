@@ -184,3 +184,61 @@ table td.right-align-cell
 		margin-left:4px;
 		height: 11px;
 	}
+/*queue metrics*/
+    .queue-header-row {
+        display: table;
+        background-color: #e6f5fa;
+        color: white;
+        min-height: 80px;
+        padding: 0px;
+    }
+
+    .queue-row {
+        color: white;
+        min-height: 80px;
+        padding: 0;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-top: 1px solid darkblue;
+    }
+    .queue-name {
+        color: black;
+        font-weight: bold;
+        min-height: 80px;
+        padding: 0;
+    }
+    .queue-handling-time {
+        background-color: #5D9AD3;
+        min-height: 40px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        font-size: 14px;
+    }
+    .queue-talk-time {
+        background-color :#EC7E2F;
+        min-height: 40px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        font-size: 14px;
+        float: left;
+    }
+    .queue-afterwork-time {
+        background-color: gray;
+        min-height: 40px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        font-size: 14px;
+        float: left;
+    }
+    .queue-answered {
+        background-color: black;
+        min-height: 80px;
+        display: table-cell;
+        vertical-align: middle;
+        padding: 0;
+        padding-top: 30px;
+        font-size: 20px;
+    }
+   .queue-answered-header {
+       font-size: 14px;
+   }
