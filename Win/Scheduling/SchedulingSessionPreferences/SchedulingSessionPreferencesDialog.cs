@@ -190,8 +190,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
             if(!schedulingSessionPreferencesTabPanel1.ValidateUnsupportedRestrictions())
             {
-                MessageBox.Show(Resources.ValidateUnsupportedRestrictions, Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK);
-                DialogResult = DialogResult.None;
+                MessageBox.Show(Resources.ValidateUnsupportedRestrictions, Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 			schedulingSessionPreferencesTabPanel1.ExchangeData(ExchangeDataOption.ControlsToDataSource);
 

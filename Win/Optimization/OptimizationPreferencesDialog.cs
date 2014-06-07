@@ -200,11 +200,10 @@ namespace Teleopti.Ccc.Win.Optimization
 				{
 					MessageBox.Show(this, UserTexts.Resources.IllegalTeamBlockCombination, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
+
 		    if (!validateOptimizationSteps())
 		    {
-                MessageBox.Show(this, UserTexts.Resources.UnsupportedOptimizationSteps, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK);
-                DialogResult = DialogResult.None; 
-                return;
+                MessageBox.Show(this, UserTexts.Resources.UnsupportedOptimizationSteps, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 		    }
 
 				ExchangeData(ExchangeDataOption.ControlsToDataSource);

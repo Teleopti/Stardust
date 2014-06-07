@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_target.SendNotification(smsMessage, "46709218108");
 		}
 
-		[Test]
+		[Test, Ignore("Fails randomly, bug #28329")]
 		public void ShouldNotThrowIfSkipCheck()
 		{
 			const string xmlWithNoCheck = @"<?xml version='1.0' encoding='utf-8' ?>
