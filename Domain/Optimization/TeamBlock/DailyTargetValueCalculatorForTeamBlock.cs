@@ -47,8 +47,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		public double TargetValue(ITeamBlockInfo teamBlockInfo, IAdvancedPreferences advancedPreferences)
 		{
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;
-			var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
-			var dateOnlyPeriod = new DateOnlyPeriod(dateOnlyList.Min(), dateOnlyList.Max());
+			
+	        var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
+	        var dateOnlyList = blockPeriod.DayCollection();
+
+			var dateOnlyList = blockPeriod.DayCollection();
 			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupMembers, dateOnlyPeriod).ToList();
 			var minimumResolution = _resolutionProvider.MinimumResolution(skills);
 
@@ -96,8 +99,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var currentDate = skillDay.CurrentDate;
 				var skill = skillDay.Skill;
 				if (skill != null && !skills.Contains(skill)) continue;
-				if (skillDay.SkillStaffPeriodCollection.Count == 0) continue;
 				IList<ISkillStaffPeriod> skillStaffPeriodCollection = skillDay.SkillStaffPeriodCollection;
+				if (skillStaffPeriodCollection.Count == 0) continue;
+                
 				if (skill.MidnightBreakOffset != TimeSpan.Zero)
 				{
 					var missingIntervals = _locateMissingIntervalsIfMidNightBreak.GetMissingSkillStaffPeriods(currentDate, skill,
