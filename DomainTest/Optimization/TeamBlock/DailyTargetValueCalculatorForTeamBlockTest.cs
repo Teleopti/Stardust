@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
@@ -257,13 +258,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			_teamInfo = _mock.StrictMock<ITeamInfo>();
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
+		    var groupMembers = new List<IPerson> {PersonFactory.CreatePerson()};
 
 			using (_mock.Record())
 			{
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_baseLineData.GroupPerson);
+				Expect.Call(_teamInfo.GroupMembers).Return(groupMembers);
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
-				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.GroupPerson, _dateOnlyPeriod))
+				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(groupMembers, _dateOnlyPeriod))
 					.Return(_skillList);
 				Expect.Call(_resolutionProvider.MinimumResolution(_skillList.ToList())).Return(15);
 				

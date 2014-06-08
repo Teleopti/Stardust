@@ -50,9 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			
 	        var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
 	        var dateOnlyList = blockPeriod.DayCollection();
-
-			var dateOnlyList = blockPeriod.DayCollection();
-			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupMembers, dateOnlyPeriod).ToList();
+			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupMembers, blockPeriod).ToList();
 			var minimumResolution = _resolutionProvider.MinimumResolution(skills);
 
 			dateOnlyList.Add(dateOnlyList.Max().AddDays(1));
