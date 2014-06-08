@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
         public double TargetValue(ITeamBlockInfo teamBlockInfo , IAdvancedPreferences advancedPreferences)
         {
             var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
-            var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
-            var dateOnlyPeriod = new DateOnlyPeriod(dateOnlyList.Min(), dateOnlyList.Max());
-            var skills = _groupPersonSkillAggregator.AggregatedSkills(groupPerson, dateOnlyPeriod).ToList();
+	        var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
+			var dateOnlyList = blockPeriod.DayCollection();
+			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupPerson, blockPeriod).ToList();
             var minimumResolution = _resolutionProvider.MinimumResolution(skills);
 
 			dateOnlyList.Add(dateOnlyList.Max().AddDays(1));
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
             }
             else
             {
-                var aggregatedValues = finalSkillIntervalData.Select(interval => interval.RelativeDifference()).ToList();
+                var aggregatedValues = finalSkillIntervalData.Select(interval => interval.RelativeDifferenceBoosted()).ToList();
                 if (targetValueCalculation == TargetValueOptions.StandardDeviation)
                     return Calculation.Variances.StandardDeviation(aggregatedValues);
                 return Calculation.Variances.Teleopti(aggregatedValues);
@@ -90,9 +90,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
             {
                 var currentDate = skillDay.CurrentDate;
                 var skill = skillDay.Skill;
-                if (skill != null && !skills.Contains(skill)) continue ;
-                if (skillDay.SkillStaffPeriodCollection.Count == 0) continue ;
-                IList<ISkillStaffPeriod> skillStaffPeriodCollection = skillDay.SkillStaffPeriodCollection;
+                if (skill != null && !skills.Contains(skill)) continue;
+				IList<ISkillStaffPeriod> skillStaffPeriodCollection = skillDay.SkillStaffPeriodCollection;
+				if (skillStaffPeriodCollection.Count == 0) continue;
+                
                 if (skill.MidnightBreakOffset != TimeSpan.Zero)
                 {
                     var missingIntervals = _locateMissingIntervalsIfMidNightBreak.GetMissingSkillStaffPeriods(currentDate, skill, TimeZoneGuard.Instance.TimeZone );

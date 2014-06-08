@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
         private IGroupPersonSkillAggregator _groupPersonSkillAggregator;
         private IAdvancedPreferences _advancePrefrences;
         private BaseLineData _baseLineData;
-        private TeamInfo _teamInfo;
-        private BlockInfo _blockInfo;
-        private TeamBlockInfo _teamBlockInfo;
+        private ITeamInfo _teamInfo;
+        private IBlockInfo _blockInfo;
+        private ITeamBlockInfo _teamBlockInfo;
         private DateOnlyPeriod _dateOnlyPeriod;
         private IEnumerable<ISkill> _skillList;
         private ISkillDay _skillDay1;
@@ -223,6 +223,54 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.3);
         }
 
+	    [Test]
+	    public void ShouldHandleMinMaxStaffBoosts()
+	    {
+			var skillIntervalData1 = new SkillIntervalData(_period, 5, 3, 3, 0, 0);
+			var skillIntervalData2 = new SkillIntervalData(_period.MovePeriod(TimeSpan.FromMinutes(30)), 6, 0, 6, 7, null);
+
+			var skillIntervalList = new List<ISkillIntervalData> { skillIntervalData1, skillIntervalData2 };
+
+			IDictionary<DateOnly, IList<ISkillIntervalData>> dateToSkillIntervalDic = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
+			IDictionary<DateTime, ISkillIntervalData> timeToSkillIntervalDic = new Dictionary<DateTime, ISkillIntervalData>();
+
+			timeToSkillIntervalDic.Add(skillIntervalData1.Period.StartDateTime, skillIntervalData1);
+			timeToSkillIntervalDic.Add(skillIntervalData2.Period.StartDateTime, skillIntervalData2);
+			dateToSkillIntervalDic.Add(DateOnly.Today, skillIntervalList);
+		    var periodWithExtraDay = _dateOnlyPeriod.DayCollection();
+			periodWithExtraDay.Add(_dateOnlyPeriod.DayCollection().Max().AddDays(1));
+			var skillStaffPeriodCollecion = new ReadOnlyCollection<ISkillStaffPeriod>(_skillStaffPeriodList);
+
+			_teamInfo = _mock.StrictMock<ITeamInfo>();
+			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
+
+			using (_mock.Record())
+			{
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+				Expect.Call(_teamInfo.GroupPerson).Return(_baseLineData.GroupPerson);
+				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
+				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.GroupPerson, _dateOnlyPeriod))
+					.Return(_skillList);
+				Expect.Call(_resolutionProvider.MinimumResolution(_skillList.ToList())).Return(15);
+				
+				Expect.Call(
+					_schedulingResultStateHolder.SkillDaysOnDateOnly(periodWithExtraDay))
+					.Return(new List<ISkillDay> { _skillDay1 });
+				Expect.Call(_skillDay1.CurrentDate).Return(DateOnly.Today);
+				Expect.Call(_skillDay1.Skill).Return(_baseLineData.SampleSkill);
+				Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(skillStaffPeriodCollecion);
+				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriodList, DateOnly.Today,
+					TimeZoneGuard.Instance.TimeZone)).Return(skillIntervalList);
+				Expect.Call(_intervalDataDivider.SplitSkillIntervalData(skillIntervalList, 15)).Return(skillIntervalList);
+
+				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic, DateOnly.Today)).IgnoreArguments().Return(timeToSkillIntervalDic);
+
+			}
+			using (_mock.Playback())
+			{
+				Assert.AreEqual(5000.3, _target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.001);
+			}
+	    }
 
         private void skillDayExpectCalls(ISkillDay skillDay, List<ISkillIntervalData> skillIntervalList)
         {
