@@ -169,6 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				commonMocks();
 				bestLockMock();
 				lockMock();
+				Expect.Call(_matrixSenior.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 }));
 			}
 
 			using (_mocks.Playback())
@@ -188,6 +189,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				commonMocks();
 				bestLockMock();
 				lockMock();
+				Expect.Call(_matrixSenior.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 }));
 			}
 
 			using (_mocks.Playback())
@@ -210,9 +212,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
 				Expect.Call(_matrixSenior.OuterWeeksPeriodDays)
-					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 })).Repeat.AtLeastOnce();
+					.Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 })).Repeat.AtLeastOnce();
+				Expect.Call(_matrixSenior.EffectivePeriodDays)
+					.Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 })).Repeat.AtLeastOnce();
 				Expect.Call(_matrixJunior.OuterWeeksPeriodDays)
-					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 })).Repeat.AtLeastOnce();
+					.Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 })).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDayPro1.Day).Return(_dateBefore).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDayPro2.Day).Return(_dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(true, true, _matrixSenior)).Return(_seniorBitArray);
@@ -247,6 +251,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
 				Expect.Call(_matrixSenior.OuterWeeksPeriodDays)
 					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 })).Repeat.AtLeastOnce();
+				Expect.Call(_matrixSenior.EffectivePeriodDays)
+					.Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 }));
 				Expect.Call(_matrixJunior.OuterWeeksPeriodDays)
 					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 })).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDayPro1.Day).Return(_dateBefore).Repeat.AtLeastOnce();

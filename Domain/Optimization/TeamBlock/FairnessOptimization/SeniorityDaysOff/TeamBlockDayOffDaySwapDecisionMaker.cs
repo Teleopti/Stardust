@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -23,7 +24,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_dayOffRulesValidator = dayOffRulesValidator;
 		}
 
-		public IPossibleSwappableDays Decide(DateOnly dateOnly, ITeamBlockInfo teamBlockSenior, ITeamBlockInfo teamBlockJunior,
+		public IPossibleSwappableDays Decide(DateOnly dateOnly, 
+											 ITeamBlockInfo teamBlockSenior, 
+											 ITeamBlockInfo teamBlockJunior,
 		                                     IScheduleDictionary scheduleDictionary,
 		                                     IOptimizationPreferences optimizationPreferences,
 		                                     IList<DateOnly> dayOffsToGiveAway)
@@ -57,7 +60,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 						workingSeniorBitArray.Set(mostValuableDayIndexOfSenior, true);
 						workingJuniorBitArray.Set(mostValuableDayIndexOfJunior, false);
 
-						foreach (var dayOffDay in dayOffsToGiveAway)
+						IEnumerable<DateOnly> daysOffToGiveAwayFilteredToMatrix = filterOutDaysOffOutsidePeriod(seniorMatrix.EffectivePeriodDays, dayOffsToGiveAway);
+						foreach (var dayOffDay in daysOffToGiveAwayFilteredToMatrix)
 						{
 							if (_cancel) return null;
 							var candidateDaySenior = seniorScheduleRange.ScheduledDay(dayOffDay);
@@ -92,6 +96,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				}
 			}
 			return null;
+		}
+
+		private static IEnumerable<DateOnly> filterOutDaysOffOutsidePeriod(ReadOnlyCollection<IScheduleDayPro> period, IEnumerable<DateOnly> dayOffsToFilter)
+		{
+			//reads the first and last day out of the period, perhaps there is a better way //tamasb 
+			var masterPeriod = new DateOnlyPeriod(period[0].Day, period[period.Count-1].Day);
+			
+			return dayOffsToFilter.Where(masterPeriod.Contains).ToList();
 		}
 
 		private static bool isOnlyJuniorHasDayOff(IScheduleDay daySenior, IScheduleDay dayJunior)
