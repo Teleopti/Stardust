@@ -68,7 +68,8 @@ CREATE TABLE #fact_schedule_deviation(
 	ready_time_s int default 0,
 	is_logged_in int default 0, 
 	contract_time_s int default 0,
-	business_unit_id int
+	business_unit_id int,
+	person_code uniqueidentifier
 )
 
 CREATE TABLE #fact_schedule (
@@ -170,7 +171,8 @@ BEGIN
 		person_id, 
 		ready_time_s,
 		is_logged_in,
-		business_unit_id
+		business_unit_id,
+		person_code
 		)
 	SELECT
 		date_id					= fa.date_id, 
@@ -179,7 +181,8 @@ BEGIN
 		person_id				= b.person_id, 
 		ready_time_s			= fa.ready_time_s,
 		is_logged_in			= 1, --marks that we do have logged in time
-		business_unit_id		= b.business_unit_id
+		business_unit_id		= b.business_unit_id,
+		person_code				= p.person_code
 	FROM 
 		mart.bridge_acd_login_person b
 	JOIN
@@ -187,14 +190,14 @@ BEGIN
 	ON
 		b.acd_login_id = fa.acd_login_id
 	INNER JOIN 
-		mart.DimPersonAdapted() p
+		mart.dim_person p
 	ON 
 		p.person_id = b.person_id
 		AND
 			(
-				(fa.date_id > p.valid_from_date_id AND fa.date_id < p.valid_to_date_id)
+				(fa.date_id > p.valid_from_date_id AND fa.date_id < p.valid_to_date_id_maxDate)
 					OR (fa.date_id = p.valid_from_date_id AND fa.interval_id >= p.valid_from_interval_id)
-					OR (fa.date_id = p.valid_to_date_id AND fa.interval_id <= p.valid_to_interval_id)
+					OR (fa.date_id = p.valid_to_date_id_maxDate AND fa.interval_id <= p.valid_to_interval_id_maxDate)
 			)
 	WHERE
 		fa.date_id BETWEEN @start_date_id AND @end_date_id
@@ -276,7 +279,8 @@ BEGIN
 		acd_login_id,--new 20131128
 		ready_time_s,
 		is_logged_in,
-		business_unit_id
+		business_unit_id,
+		person_code
 		)
 	SELECT
 		date_id					= fa.date_id, 
@@ -285,17 +289,18 @@ BEGIN
 		person_id				= b.person_id, 
 		ready_time_s			= fa.ready_time_s,
 		is_logged_in			= 1, --marks that we do have logged in time
-		business_unit_id		= b.business_unit_id
+		business_unit_id		= b.business_unit_id,
+		person_code				= p.person_code
 	FROM mart.bridge_acd_login_person b
 	INNER JOIN mart.fact_agent fa
 		ON b.acd_login_id = fa.acd_login_id
-	INNER JOIN mart.DimPersonAdapted() p
+	INNER JOIN mart.dim_person p
 		ON p.person_id = b.person_id
 		AND
 			(
-				(fa.date_id > p.valid_from_date_id AND fa.date_id < p.valid_to_date_id)
+				(fa.date_id > p.valid_from_date_id AND fa.date_id < p.valid_to_date_id_maxDate)
 					OR (fa.date_id = p.valid_from_date_id AND fa.interval_id >= p.valid_from_interval_id)
-					OR (fa.date_id = p.valid_to_date_id AND fa.interval_id <= p.valid_to_interval_id)
+					OR (fa.date_id = p.valid_to_date_id_maxDate AND fa.interval_id <= p.valid_to_interval_id_maxDate)
 			)
 	INNER JOIN #stg_schedule_changed ch
 		ON  ch.shift_startdate_id	= fa.date_id
@@ -330,7 +335,8 @@ INSERT INTO #fact_schedule_deviation
 	is_logged_in, 
 	scheduled_ready_time_s,
 	contract_time_s,
-	business_unit_id
+	business_unit_id,
+	person_code
 	)
 SELECT
 	date_id					= fs.schedule_date_id, 
@@ -342,18 +348,19 @@ SELECT
 	is_logged_in			= 0, --Mark schedule rows as Not loggged in 
 	scheduled_ready_time_s	= fs.scheduled_ready_time_m*60,
 	contract_time_s			= fs.scheduled_contract_time_m*60,
-	business_unit_id		= fs.business_unit_id
+	business_unit_id		= fs.business_unit_id,
+	person_code				= p.person_code
 FROM 
 	#fact_schedule fs
 INNER JOIN 
-	mart.DimPersonAdapted() p
+	mart.dim_person p
 ON
 	p.person_id = fs.person_id
 	AND
 		(
-				(fs.shift_startdate_id > p.valid_from_date_id AND fs.shift_startdate_id < p.valid_to_date_id)
+				(fs.shift_startdate_id > p.valid_from_date_id AND fs.shift_startdate_id < p.valid_to_date_id_maxDate)
 				OR (fs.shift_startdate_id = p.valid_from_date_id AND fs.shift_startinterval_id >= p.valid_from_interval_id)
-				OR (fs.shift_startdate_id = p.valid_to_date_id AND fs.shift_startinterval_id <= p.valid_to_interval_id)
+				OR (fs.shift_startdate_id = p.valid_to_date_id_maxDate AND fs.shift_startinterval_id <= p.valid_to_interval_id_maxDate)
 		)
 INNER JOIN 
 	#intervals di
@@ -377,12 +384,13 @@ AND b.acd_login_id in (select acd_login_id from #fact_schedule_deviation stat wh
 
 
 /*#25900:20131128 Handle night shifts and person_period change, must update person_id in stat from correct shift*/
+/*#28059 Handle shared logins as well(only update when same person_code*/
 UPDATE stat
 SET person_id=shifts.person_id--update agent stat data
 FROM #fact_schedule_deviation shifts
 INNER JOIN #fact_schedule_deviation stat
 ON stat.date_id=shifts.date_id AND stat.interval_id=shifts.interval_id AND shifts.acd_login_id=stat.acd_login_id
-WHERE stat.person_id<>shifts.person_id AND shifts.acd_login_id IS NOT NULL --where diff on person but same acd_login
+WHERE stat.person_id<>shifts.person_id AND shifts.acd_login_id IS NOT NULL AND stat.person_code=shifts.person_code --where diff on person_id but same acd_login and same person_code
 AND shifts.shift_startdate_id IS NOT NULL  --get from schedule data
 AND stat.shift_startdate_id IS NULL
 
