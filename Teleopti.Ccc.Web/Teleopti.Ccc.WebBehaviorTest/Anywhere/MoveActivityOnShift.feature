@@ -9,7 +9,7 @@ Background:
 	| Name  | Phone |
 	| Color | Green |
 
-@ignore
+
 Scenario: The team leader should be able to move an activity
 	Given 'John King' has a shift with
 	| Field          | Value            |
@@ -17,7 +17,7 @@ Scenario: The team leader should be able to move an activity
 	| Activity       | Phone            |
 	| Start time     | 2013-11-18 11:00 |
 	| End time       | 2013-11-18 17:00 |
-	When I view person schedules
+	When I view schedules for 'Team green' on '2013-11-18'
 	And I move the activity
 	| Field          | Value            |
 	| Agent          | John King        |
@@ -25,11 +25,10 @@ Scenario: The team leader should be able to move an activity
 	| Activity       | Phone            |
 	| Start time     | 2013-11-18 12:00 |
 	And I save
-	Then I should see 
-	| Field | Value     |
-	| Agent | John King |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	| Start time     | 2013-11-18 12:00 |
-	| End time       | 2013-11-18 18:00 |
+	Then I should see schedule activity details for 'John King' with
+	| Field      | Value |
+	| Name       | Phone |
+	| Start time | 08:00 |
+	| End time   | 11:00 |
+
 

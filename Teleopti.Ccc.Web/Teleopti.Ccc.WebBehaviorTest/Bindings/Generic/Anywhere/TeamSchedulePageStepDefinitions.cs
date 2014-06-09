@@ -9,6 +9,7 @@ using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
+// Should we refacto this file by extracting tools method eg ?
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 {
 	[Binding]
@@ -63,6 +64,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			Browser.Interactions.ClickUsingJQuery(string.Format(".person:contains('{0}') .shift .layer:first-child", name));
 		}
+
+
 
 
 		[Then(@"I should see schedule activity details for '(.*)' with")]

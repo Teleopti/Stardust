@@ -207,6 +207,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.ClickUsingJQuery(".absence-list .absence:contains('" + absenceName + "') ." + cssClass.Name);
 		}
 
+		[When(@"I move the activity")]
+		public void WhenIMoveTheActivity(Table table)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[When(@"I save")]
+		public void WhenISave()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
 		public class TimeLineInfo
 		{
 			public string StartTime { get; set; }
