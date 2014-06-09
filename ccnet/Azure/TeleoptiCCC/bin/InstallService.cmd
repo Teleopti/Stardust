@@ -83,32 +83,6 @@ CALL "RegisterEventLogSource.exe" "TeleoptiWebApps" >> Install.log
 CALL "RegisterEventLogSource.exe" "TeleoptiWebBroker" >> Install.log
 ECHO Register all service and application names in Event Log. Done >> Install.log
 
-::================
-::Start Services
-::================
-ECHO --------------------- >> Install.log
-ping 127.0.0.1 -n 5 > nul
-
-ECHO. >> Install.log
-ECHO Starting services... >> Install.log
-
-NET START %ETLService%
-SC QUERY %ETLService% | find /i "RUNNING"
-if not ERRORLEVEL 1 (
-    echo %ETLService% is running. >> Install.log
-) else (
-    echo %ETLService% is not running >> Install.log
-)
-
-NET START %ServiceBus%
-SC QUERY %ServiceBus% | find /i "RUNNING"
-if not ERRORLEVEL 1 (
-    echo %ServiceBus% is running. >> Install.log
-) else (
-    echo %ServiceBus% is not running >> Install.log
-)
-
-
 ECHO.
 ECHO Done! >> Install.log
 ECHO --------------------- >> Install.log
