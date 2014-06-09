@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Specific;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
-using WatiN.Core;
-using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
@@ -33,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var id = team.Id.ToString();
 			var text = site + "/" + team.Description.Name;
 			Select2Box.SelectItemByIdAndText("Team-Picker", id, text);
-			Browser.Interactions.AssertExists(".navbar-form button:nth-of-type(3)");
+			Browser.Interactions.AssertExists(".input-group-btn button:nth-of-type(2)");
 		}
 
 		[When(@"I select '(.*)' in the team picker")]
@@ -52,62 +47,59 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Select2Box.SelectFirstOption("Team-Picker");
 		}
 
-
-
 		[Then(@"I should see the team schedule tab")]
 		public void ThenIShouldSeeTheTeamScheduleTab()
 		{
-			var page = Browser.Current.Page<PortalPage>();
-			EventualAssert.That(() => page.TeamScheduleLink.Exists, Is.True);
+			Browser.Interactions.AssertExists("a[href*='#TeamScheduleTab']");
 		}
 
 		[Then(@"I should not see the team schedule tab")]
 		public void ThenIShouldNotSeeTheTeamScheduleTab()
 		{
-			var page = Browser.Current.Page<PortalPage>();
-			EventualAssert.That(() => page.TeamScheduleLink.Exists, Is.False);
+			Browser.Interactions.AssertNotExists(".navbar-nav", "a[href*='#TeamScheduleTab']");
 		}
 
 		[Then(@"I should see my schedule")]
 		public void ThenIShouldSeeMySchedule()
 		{
-			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(DataMaker.Data().MePerson.Name.ToString());
-			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+				DataMaker.Data().MePerson.Name));
 		}
 
 		[Then(@"I should see my schedule in team schedule with")]
 		public void WhenIShouldSeeMyScheduleInTeamScheduleWith(Table table)
 		{
-			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(DataMaker.Data().MePerson.Name.ToString());
-			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
-			var layer = layers.FirstOrDefault();
-			layer.GetAttributeValue("tooltip-text").Should().Contain(table.Rows[0][1]);
-			layer.GetAttributeValue("tooltip-text").Should().Contain(table.Rows[1][1]);
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']",
+				DataMaker.Data().MePerson.Name, table.Rows[0][1]));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']",
+				DataMaker.Data().MePerson.Name, table.Rows[1][1]));
 		}
 
 		[Then(@"I should see my colleague's schedule")]
 		public void ThenIShouldSeeMyColleagueSSchedule()
 		{
-			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
-			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+				DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name));
 		}
 
 		[Then(@"I should see '(.*)' schedule in team schedule with")]
 		public void ThenIShouldSeeScheduleInTeamScheduleWith(string name, Table table)
 		{
-			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(name);
-			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
-			var layer = layers.FirstOrDefault();
-			layer.GetAttributeValue("tooltip-text").Should().Contain(table.Rows[0][1]);
-			layer.GetAttributeValue("tooltip-text").Should().Contain(table.Rows[1][1]);
+			Browser.Interactions.AssertExistsUsingJQuery(
+				string.Format(
+					".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']", name,
+					table.Rows[0][1]));
+			Browser.Interactions.AssertExistsUsingJQuery(
+				string.Format(
+					".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']", name,
+					table.Rows[1][1]));
 		}
-
 
 		[Then(@"I should see my colleague's absence")]
 		public void ThenIShouldMyColleagueSAbsence()
 		{
-			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
-			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+				DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name));
 		}
 
 		[Then(@"I should see the next day")]
@@ -131,29 +123,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see the absence's color")]
 		public void ThenIShouldNotSeeTheAbsenceSColor()
 		{
-			var collLayers = Pages.Pages.TeamSchedulePage.LayersByAgentName(DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
-			var color = TestData.ConfidentialAbsence.DisplayColor;
+			var color = TestData.ConfidentialAbsence.ConfidentialDisplayColor(DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person,DateOnly.Today);
 			var colorAsString = string.Format("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
 
-			foreach (var collLayer in collLayers)
-			{
-				var styleText = collLayer.Style.CssText;
-				styleText.Should().Not.Contain(colorAsString);
-			}
+			Browser.Interactions.AssertNotExistsUsingJQuery(
+				string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+					DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name),
+				string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[style*='{1}']",
+					DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name, colorAsString));
 		}
 
 		[Then(@"I should see my colleague's day off")]
 		public void ThenIShouldSeeMyColleagueSDayOff()
 		{
-			var dayOff = Pages.Pages.TeamSchedulePage.DayOffByAgentName(DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
-			EventualAssert.That(() => dayOff.Exists, Is.True);
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .dayoff",
+				DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name));
 		}
 
 		[Then(@"The time line should span from (.*) to (.*)")]
 		public void ThenTheTimeLineShouldSpanFromAToB(string from, string to)
 		{
-			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.FirstTimeLineItem().InnerHtml, Contains.Substring(from));
-			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.LastTimeLineItem().InnerHtml, Contains.Substring(to));
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".teamschedule-timeline-label:first", from);
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".teamschedule-timeline-label:last", to);
 		}
 
 		[Then(@"I should not see my colleagues schedule")]
@@ -177,48 +168,35 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see my colleague before myself")]
 		public void ThenIShouldSeeMyColleagueBeforeMyself()
 		{
-			var colleague = Pages.Pages.TeamSchedulePage.AgentByName(DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
-			var mySelf = Pages.Pages.TeamSchedulePage.AgentByName(DataMaker.Data().MePerson.Name.ToString());
-			
-			EventualAssert.That(() => colleague.Exists, Is.True);
-			EventualAssert.That(() => mySelf.Exists, Is.True);
-
-			var all = new List<Div>(Pages.Pages.TeamSchedulePage.Agents());
-			all.IndexOf(colleague)
-				.Should().Be.LessThan(all.IndexOf(mySelf));
+			ThenIShouldSeeBeforeMyself(DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
 		}
 
 		[Then(@"I should see '(.*)' before myself")]
 		public void ThenIShouldSeeBeforeMyself(string name)
 		{
-			var colleague = Pages.Pages.TeamSchedulePage.AgentByName(name);
-			var mySelf = Pages.Pages.TeamSchedulePage.AgentByName(DataMaker.Data().MePerson.Name.ToString());
-
-			EventualAssert.That(() => colleague.Exists, Is.True);
-			EventualAssert.That(() => mySelf.Exists, Is.True);
-
-			var all = new List<Div>(Pages.Pages.TeamSchedulePage.Agents());
-			all.IndexOf(colleague)
-				.Should().Be.LessThan(all.IndexOf(mySelf));
+			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".teamschedule-agent-name:nth(0)"), name);
+			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".teamschedule-agent-name:nth(1)"), DataMaker.Data().MePerson.Name.ToString());
 		}
 
 
 		[Then(@"I should see myself without schedule")]
 		public void ThenIShouldSeeMyselfWithoutSchedule()
 		{
-			var name = DataMaker.Data().MePerson.Name.ToString();
-			AssertAgentIsDisplayed(name);
-			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(name);
-			EventualAssert.That(() => layers.Count, Is.EqualTo(0));
+			var name = DataMaker.Data().MePerson.Name;
+			Browser.Interactions.AssertNotExistsUsingJQuery(
+				string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule",
+					name), string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+						name));
 		}
 
 		[Then(@"I should see my colleague without schedule")]
 		public void ThenIShouldSeeMyColleagueWithoutSchedule()
 		{
-			var name = DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString();
-			AssertAgentIsDisplayed(name);
-			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(name);
-			EventualAssert.That(() => layers.Count, Is.EqualTo(0));
+			var name = DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name;
+			Browser.Interactions.AssertNotExistsUsingJQuery(
+				string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule",
+					name), string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+						name));
 		}
 
 		[When(@"I open the team-picker")]
@@ -239,7 +217,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 		[Then(@"I should see available (team|group) options")]
-		public void ThenIShouldSeeAvailableGroupOptions(string teamGroup,Table table)
+		public void ThenIShouldSeeAvailableGroupOptions(string teamGroup, Table table)
 		{
 			var options = table.CreateSet<SingleValue>();
 
@@ -259,7 +237,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var firstTeam = Select2Box.FirstOptionText;
 			var lastTeam = Select2Box.LastOptionText;
-			var teams = new List<string> {lastTeam, firstTeam}.OrderBy(t => t).ToArray();
+			var teams = new List<string> { lastTeam, firstTeam }.OrderBy(t => t).ToArray();
 
 			teams.First().Should().Be.EqualTo(firstTeam);
 			teams.Last().Should().Be.EqualTo(lastTeam);
@@ -291,25 +269,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"The layer's start time attibute value should be (.*)")]
 		public void ThenTheLayerSStartTimeAttibuteValueShouldBe(string startTime)
 		{
-			var layer = Pages.Pages.TeamSchedulePage.LayersByAgentName(DataMaker.Data().MePerson.Name.ToString()).FirstOrDefault();
-
-			layer.GetAttributeValue("tooltip-text").Should().Contain(startTime);
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']",
+				DataMaker.Data().MePerson.Name, startTime));
 		}
 
 		[Then(@"The layer's end time attibute value should be (.*)")]
 		public void ThenTheLayerSEndTimeAttibuteValueShouldBe(string endTime)
 		{
-			var layer = Pages.Pages.TeamSchedulePage.LayersByAgentName(DataMaker.Data().MePerson.Name.ToString()).FirstOrDefault();
-
-			layer.GetAttributeValue("tooltip-text").Should().Contain(endTime);
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']",
+				DataMaker.Data().MePerson.Name, endTime));
 		}
 
 		[Then(@"The layer's activity name attibute value should be (.*)")]
 		public void ThenTheLayerSActivityNameAttibuteValueShouldBe(String activityName)
 		{
-			var layer = Pages.Pages.TeamSchedulePage.LayersByAgentName(DataMaker.Data().MePerson.Name.ToString()).FirstOrDefault();
-
-			layer.GetAttributeValue("tooltip-title").Should().Contain(activityName);
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-title*='{1}']",
+				DataMaker.Data().MePerson.Name, activityName));
 		}
 
 		[Then(@"I should see the team-picker with the other site's team")]
@@ -333,7 +308,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheOtherSiteSTeam()
 		{
 			var theOtherSitesTeam = DataMaker.Data().UserData<AnotherSitesTeam>().TheTeam.Description.Name;
-			Browser.Interactions.AssertFirstContains(".select2-container .select2-choice span", theOtherSitesTeam);
+			Browser.Interactions.AssertAnyContains(".select2-chosen", theOtherSitesTeam);
 		}
 
 		[Then(@"the team-picker should have my team selected")]
@@ -348,7 +323,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var team1 = DataMaker.Data().UserData<AnotherSitesTeam>().TheTeam;
 			var team2 = DataMaker.Data().UserData<AnotherSitesSecondTeam>().TheTeam;
-			var expected = new[] {team1, team2}.OrderBy(t => t.Description.Name).First();
+			var expected = new[] { team1, team2 }.OrderBy(t => t.Description.Name).First();
 
 			Select2Box.AssertSelectedOptionValue("Team-Picker", expected.Id.Value.ToString());
 		}
@@ -356,7 +331,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see the team-picker")]
 		public void ThenIShouldNotSeeTheTeam_Picker()
 		{
-			Browser.Interactions.AssertNotExists(".navbar-inner", "#Team-Picker");
+			Browser.Interactions.AssertNotExists(".navbar-nav", "#Team-Picker");
+		}
+
+		[Then(@"I should see the date-picker")]
+		public void ThenIShouldSeeTheDatePicker()
+		{
+			Browser.Interactions.AssertExists("#ScheduleDatePicker");
 		}
 
 		[Then(@"I should see the team-picker")]
@@ -365,46 +346,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists("#Team-Picker");
 		}
 
-		[Then(@"I should not see shiftrade button")]
-		public void ThenIShouldNotSeeShiftradeButton()
+		[When(@"I initialize a shift trade")]
+		public void WhenIInitializeAShiftTrade()
 		{
-			Browser.Interactions.AssertNotExists("#TeamSchedule-body",".icon-random");
+			Browser.Interactions.Click(".hidden-sm .initialize-shift-trade");
 		}
 
-		[When(@"I click any shifttrade button")]
-		public void WhenIClickAnyShifttradeButton()
+		[Then(@"I should not be able to initialize a shift trade")]
+		public void ThenIShouldNotBeAbleToInitializeAShiftTrade()
 		{
-			Browser.Interactions.Click(".icon-random");
+			Browser.Interactions.AssertNotExists(".navbar", ".initialize-shift-trade");
 		}
-
-		[Then(@"I should see the add shifttrade section")]
-		public void ThenIShouldSeeTheAddShifttradeSection()
-		{
-			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
-		}
-
-		[Then(@"I should see the add shifttrade section for '(.*)'")]
-		public void ThenIShouldSeeTheAddShifttradeSectionFor(DateTime date)
-		{
-			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
-			var script = string.Format("return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
-			Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString);
-			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
-			Browser.Interactions.AssertFirstContains("#Request-add-loaded-date", dateAsSwedishString);
-		}
-        
-        [When(@"I initialize a shift trade")]
-        public void WhenIInitializeAShiftTrade()
-        {
-            Browser.Interactions.Click(".initialize-shift-trade");
-        }
-        
-        [Then(@"I should not be able to initialize a shift trade")]
-        public void ThenIShouldNotBeAbleToInitializeAShiftTrade()
-        {
-			//Browser.Interactions.AssertExists(".btn[disabled]>.initialize-shift-trade");
-			Browser.Interactions.AssertNotExists(".navbar-text", ".initialize-shift-trade");
-        }
 
 		private static void AssertAgentIsDisplayed(string name)
 		{
@@ -413,10 +365,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		private static void AssertAgentIsNotDisplayed(string name)
 		{
-			var agent = Pages.Pages.TeamSchedulePage.AgentByName(name, false);
-			EventualAssert.That(() => agent.Exists, Is.False);
+			Browser.Interactions.AssertNotExistsUsingJQuery(".teamschedule-agent-name", string.Format(".teamschedule-agent-name:contains('{0}')",name));
 		}
-
 	}
-
 }

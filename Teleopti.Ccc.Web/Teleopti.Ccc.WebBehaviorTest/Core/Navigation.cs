@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
@@ -154,8 +153,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoRegionalSettings()
 		{
 			GoToWaitForCompleted("MyTime#Settings/Index", new ApplicationStartupTimeout(), new WaitUntilReadyForInteraction());
-			if (Browser.Current != null)
-				Pages.Pages.NavigatingTo(Browser.Current.Page<RegionalSettingsPage>());
 		}
 
 		public static void GotoPasswordPage()
@@ -171,8 +168,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoTeamSchedule()
 		{
 			GoToWaitForCompleted("MyTime#TeamSchedule/Index", new ApplicationStartupTimeout(), new WaitUntilReadyForInteraction());
-			if (Browser.Current != null)
-				Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
 		}
 
 		public static void GotoTeamSchedule(DateTime date)
@@ -180,8 +175,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForCompleted(string.Format("MyTime#TeamSchedule/Index/{0}/{1}/{2}", 
 				date.Year.ToString("0000"), date.Month.ToString("00"),date.Day.ToString("00"))
 				, new ApplicationStartupTimeout(), new WaitUntilReadyForInteraction());
-			if (Browser.Current != null)
-				Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
 		}
 
 		public static void GotoTheInternet()
