@@ -122,6 +122,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\INotificationClient.cs" />
     <Compile Include="Contracts\INotificationConfigReader.cs" />
     <Compile Include="Contracts\INotificationMessage.cs" />
     <Compile Include="Contracts\INotificationSender.cs" />

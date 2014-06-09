@@ -74,13 +74,12 @@ namespace Teleopti.Ccc.Sdk.Notification
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
 		private void sendSmsNotifications(string smsMessage, string mobileNumber, bool containUnicode)
 		{
-			using (var client = new WebClient())
+			using (var client = _notificationConfigReader.CreateClient())
 			{
 				// Add a user agent header in case the 
 				// requested URI contains a query.
 				var smsString = _notificationConfigReader.Data;
 
-				client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
 				if (containUnicode)
 					smsMessage = smsMessage.Aggregate(@"",
 					                                  (current, c) =>
@@ -96,7 +95,7 @@ namespace Teleopti.Ccc.Sdk.Notification
 				Logger.Info("Sending SMS on: " + _notificationConfigReader.Url + msgData);
 				try
 				{
-					var data = client.OpenRead(_notificationConfigReader.Url + msgData);
+					var data = client.MakeRequest(msgData);
 					if (data != null)
 					{
 						var reader = new StreamReader(data);

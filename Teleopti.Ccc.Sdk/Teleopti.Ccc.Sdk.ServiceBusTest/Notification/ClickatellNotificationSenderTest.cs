@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -14,12 +15,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		// the send will not work in thia test because of the password is wrong
 		// we don't want to send a lot of messages all the time :-) 
 		// if you want to try change to <password>cadadi01</password> (works as long as we have credits) <from>{3}</from>
-		private MockRepository _mocks;
 		private INotificationConfigReader _notificationConfigReader;
 		private ClickatellNotificationSender _target;
-		private INotificationMessage smsMessage = new NotificationMessage() { Subject = "Schedule has changed" };
+		private readonly INotificationMessage smsMessage = new NotificationMessage { Subject = "Schedule has changed" };
+	    private INotificationClient _notificationClient;
 
-		private const string xml = @"<?xml version='1.0' encoding='utf-8' ?>
+	    private const string xml = @"<?xml version='1.0' encoding='utf-8' ?>
 <Config>
 	<class>Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender</class>
 	<url>http://api.clickatell.com/xml/xml?data=</url>
@@ -46,8 +47,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
-			_notificationConfigReader = _mocks.StrictMock<INotificationConfigReader>();
+			_notificationConfigReader = MockRepository.GenerateMock<INotificationConfigReader>();
+			_notificationClient = MockRepository.GenerateMock<INotificationClient>();
 			_target = new ClickatellNotificationSender();
 			_target.SetConfigReader(_notificationConfigReader);
 		}
@@ -56,22 +57,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		public void ShouldNotSendIfNoConfig()
 		{
 			smsMessage.Messages.Add("On a day");
-			Expect.Call(_notificationConfigReader.HasLoadedConfig).Return(false);
-			_mocks.ReplayAll();
+			_notificationConfigReader.Stub(x => x.HasLoadedConfig).Return(false);
+
 			_target.SendNotification(smsMessage, "");
-			_mocks.VerifyAll();
+
+            _notificationConfigReader.AssertWasCalled(x => x.HasLoadedConfig);
 		}
 
-		[Test, ExpectedException(typeof(SendNotificationException))]
+		[Test]
 		public void ShouldTryToSendIfConfig()
 		{
 			smsMessage.Messages.Add("test1");
 			var doc = new XmlDocument();
 			doc.LoadXml(xml);
 
-			_notificationConfigReader = new NotificationConfigReader(doc);
+			_notificationConfigReader = new TestNotificationConfigReader(doc,_notificationClient);
 			_target.SetConfigReader(_notificationConfigReader);
 			_target.SendNotification(smsMessage, "46709218108");
+
+		    _notificationClient.AssertWasCalled(x => x.MakeRequest(_notificationConfigReader.Data), o => o.IgnoreArguments());
 		}
 
 	   [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), Test]
@@ -130,12 +134,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			var doc = new XmlDocument();
 			doc.LoadXml(incorrectXml);
 
-			_notificationConfigReader = new NotificationConfigReader(doc);
+            _notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
 			_target.SetConfigReader(_notificationConfigReader);
 			_target.SendNotification(smsMessage, "46709218108");
 		}
 
-		[Test, Ignore("Fails randomly, bug #28329")]
+		[Test]
 		public void ShouldNotThrowIfSkipCheck()
 		{
 			const string xmlWithNoCheck = @"<?xml version='1.0' encoding='utf-8' ?>
@@ -164,12 +168,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			var doc = new XmlDocument();
 			doc.LoadXml(xmlWithNoCheck);
 
-			_notificationConfigReader = new NotificationConfigReader(doc);
+            _notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
 			_target.SetConfigReader(_notificationConfigReader);
 			_target.SendNotification(smsMessage, "46709218108");
 		}
 	
-
 		[Test, ExpectedException(typeof(SendNotificationException))]
 		public void ShouldSearchForSuccess()
 		{
@@ -200,10 +203,82 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			var doc = new XmlDocument();
 			doc.LoadXml(xmlWithSuccessCheck);
 
-			_notificationConfigReader = new NotificationConfigReader(doc);
-			_target.SetConfigReader(_notificationConfigReader);
-			_target.SendNotification(smsMessage, "46709218108");
+            _notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
+
+		    using (var writer = new StreamWriter(new MemoryStream()))
+		    {
+                writer.Write("detgickintebra");
+                writer.Flush();
+                writer.BaseStream.Position = 0;
+		        _notificationClient.Stub(x => x.MakeRequest(_notificationConfigReader.Data))
+                    .IgnoreArguments()
+		            .Return(writer.BaseStream);
+
+		        _target.SetConfigReader(_notificationConfigReader);
+		        _target.SendNotification(smsMessage, "46709218108");
+		    }
 		}
+
+        [Test, ExpectedException(typeof(SendNotificationException))]
+        public void ShouldSearchForFailure()
+        {
+            const string xmlWithSuccessCheck = @"<?xml version='1.0' encoding='utf-8' ?>
+<Config>
+	<class>Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender</class>
+	<url>http://api.clickatell.com/xml/xml?data=</url>
+	<user>ola.hakansson@teleopti.com</user>
+	<password>cadadi02</password>
+	<api_id>3388822</api_id>
+	<from>TeleoptiCCC</from>
+	<FindSuccessOrError>Error</FindSuccessOrError>
+	<ErrorCode>fault</ErrorCode>
+	<SuccessCode>detgickbra</SuccessCode>
+	<SkipSearch>false</SkipSearch>
+	<data>
+		<![CDATA[ <clickAPI><sendMsg>
+		<api_id>3388822</api_id>
+		<user>{0}</user>
+		<password>{1}</password>
+		<to>{2}</to>
+		<from>{3}</from>
+		<text>{4}</text>
+		</sendMsg></clickAPI>]]>
+	</data>
+</Config>";
+            smsMessage.Messages.Add("test1");
+            var doc = new XmlDocument();
+            doc.LoadXml(xmlWithSuccessCheck);
+
+            _notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
+
+            using (var writer = new StreamWriter(new MemoryStream()))
+            {
+                writer.Write("fault");
+                writer.Flush();
+                writer.BaseStream.Position = 0;
+                _notificationClient.Stub(x => x.MakeRequest(_notificationConfigReader.Data))
+                    .IgnoreArguments()
+                    .Return(writer.BaseStream);
+
+                _target.SetConfigReader(_notificationConfigReader);
+                _target.SendNotification(smsMessage, "46709218108");
+            }
+        }
+
+	    private class TestNotificationConfigReader : NotificationConfigReader
+	    {
+	        private readonly INotificationClient _client;
+
+	        public TestNotificationConfigReader(XmlDocument document, INotificationClient client) : base(document)
+	        {
+	            _client = client;
+	        }
+
+	        public override INotificationClient CreateClient()
+	        {
+	            return _client;
+	        }
+	    }
 	}
 }
 

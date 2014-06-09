@@ -19,5 +19,6 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		string ErrorCode { get; }
 		string SuccessCode { get; }
 		bool SkipSearch { get; }
+	    INotificationClient CreateClient();
 	}
 }

@@ -6,7 +6,6 @@ using Teleopti.Ccc.Sdk.Common.Contracts;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
-	
 	public class NotificationConfigReader : INotificationConfigReader
 	{
 		private readonly string _configFile;
@@ -205,5 +204,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				return false;
 			}
 		}
+
+	    public virtual INotificationClient CreateClient()
+	    {
+	        return new NotificationWebClient(Url);
+	    }
 	}
 }
