@@ -31,11 +31,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			{
 				var utcPeriod = skillStaffPeriod.Period;
 				var localStartTime = DateTime.SpecifyKind(utcPeriod.StartDateTimeLocal(timeZoneInfo), DateTimeKind.Utc);
-				var isMaxSeatsReachedOnGivenInterval = _isMaxSeatsReachedOnSkillStaffPeriodSpecification.IsSatisfiedBy(skillStaffPeriod.Payload.CalculatedUsedSeats,
-					skillStaffPeriod.Payload.MaxSeats);
-				var boostingFactor = _maxSeatBoostingFactorCalculator.GetBoostingFactor(
-					skillStaffPeriod.Payload.CalculatedUsedSeats, skillStaffPeriod.Payload.MaxSeats);
-				maxSeatsDictionary.Add(localStartTime, new IntervalLevelMaxSeatInfo(isMaxSeatsReachedOnGivenInterval,0.0001 ));
+				var maxSeat = skillStaffPeriod.Payload.MaxSeats;
+				var calculatedUsedSeats = skillStaffPeriod.Payload.CalculatedUsedSeats;
+				var isMaxSeatsReachedOnGivenInterval = _isMaxSeatsReachedOnSkillStaffPeriodSpecification.IsSatisfiedBy(calculatedUsedSeats,
+					maxSeat);
+				var boostingFactor = _maxSeatBoostingFactorCalculator.GetBoostingFactor(calculatedUsedSeats, maxSeat);
+				maxSeatsDictionary.Add(localStartTime, new IntervalLevelMaxSeatInfo(isMaxSeatsReachedOnGivenInterval, boostingFactor));
 			}
 			return maxSeatsDictionary;
 		}
