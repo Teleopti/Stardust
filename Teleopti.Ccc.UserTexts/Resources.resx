@@ -12091,4 +12091,8 @@ Reduce the complexity to use these shifts.</value>
     <value>You have a broken weekly work time limit.</value>
     <comment>used as a warning in MyTimeWeb preference when weekly work time broken</comment>
   </data>
+  <data name="QueueMetrics" xml:space="preserve">
+    <value>Queue Metrics</value>
+    <comment>name of permission and report under my report</comment>
+  </data>
 </root>

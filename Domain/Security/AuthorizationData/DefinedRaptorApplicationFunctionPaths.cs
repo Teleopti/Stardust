@@ -116,6 +116,7 @@
 		public const string OvertimeAvailabilityWeb = "Raptor/MyTimeWeb/OvertimeAvailabilityWeb";
 		public const string MyReportWeb = "Raptor/MyTimeWeb/MyReportWeb";
 		public const string ViewPersonalAccount = "Raptor/MyTimeWeb/ViewPersonalAccount";
+		public const string MyReportQueueMetrics = "Raptor/MyTimeWeb/MyReportWeb/QueueMetrics";
 
 		// Anywhere
 		public const string SchedulesAnywhere = "Raptor/Anywhere/Schedules";

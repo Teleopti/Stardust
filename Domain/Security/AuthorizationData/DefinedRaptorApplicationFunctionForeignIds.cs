@@ -119,6 +119,7 @@
 		public const string OvertimeAvailabilityWeb = "0089";
 		public const string MyReportWeb = "0090";
 		public const string ViewPersonalAccount = "0093";
+		public const string MyReportQueueMetrics = "0095";
 
 		// Mobile Reports
 		public const string MobileReports = "0074";

@@ -48,11 +48,12 @@ namespace Teleopti.Ccc.Win.Permissions
         private const string space = @" ";
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
         private IPermissionViewerRolesPresenter _permissionsViewerPresenter;
+	    private IToggleManager _toggleManager;
 
-        public PermissionsExplorer(IComponentContext container)
+	    public PermissionsExplorer(IComponentContext container)
         {
             _container = container;
-
+	        _toggleManager = _container.Resolve<IToggleManager>();
             
             InitializeComponent();
             instantiateClipboardControl();
@@ -259,7 +260,7 @@ namespace Teleopti.Ccc.Win.Permissions
             }
         }
 
-        private static void recursivelyAddChildNodes(TreeNodeAdv treeNode, IEnumerable<IApplicationFunction> functions)
+        private void recursivelyAddChildNodes(TreeNodeAdv treeNode, IEnumerable<IApplicationFunction> functions)
         {
             if (functions == null) return;
             var parentApplicationFunction = treeNode.TagObject as IApplicationFunction;
@@ -269,7 +270,8 @@ namespace Teleopti.Ccc.Win.Permissions
                 IApplicationFunction applicationFunction in
                     functions.Where(f => parentApplicationFunction.Equals(f.Parent)))
             {
-
+				if (shouldHideFunction(applicationFunction))
+					continue;
                 if (applicationFunction.IsPreliminary)
                     continue;
 
@@ -282,6 +284,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
                 disableFunctionsNotLicensed(applicationFunction, rootNode);
 
+				
                 treeNode.Nodes.Add(rootNode);
                 recursivelyAddChildNodes(rootNode, functions);
             }
@@ -345,6 +348,16 @@ namespace Teleopti.Ccc.Win.Permissions
 		        rootNode.Enabled = false;
 	        }
         }
+
+		private  bool shouldHideFunction(IApplicationFunction applicationFunction)
+		{
+			if (applicationFunction.FunctionPath == "All") return false;
+			if (applicationFunction.ForeignId == "0095" && !_toggleManager.IsEnabled(Toggles.MyReport_AgentQueueMetrics_22254))
+			{
+				return true;
+			}
+			return false;
+		}
 
         private void changeCheckStateOfFunctionTree()
         {

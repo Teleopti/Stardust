@@ -18107,6 +18107,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Queue Metrics.
+        /// </summary>
+        public static string QueueMetrics {
+            get {
+                return ResourceManager.GetString("QueueMetrics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Queues.
         /// </summary>
         public static string Queues {
