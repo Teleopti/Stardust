@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -25,13 +27,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				Person = _personForId.Load(command.AgentId),
 				Scenario = _currentScenario.Current()
 			});
-			var orgLayer = personAssignment.ShiftLayers.Single();
-			personAssignment.Clear();
-			var orgStart = orgLayer.Period.StartDateTime;
-			var orgEnd = orgLayer.Period.EndDateTime;
-			var newStart = orgStart.Date.Add(command.NewStartTime);
-			var newEnd = newStart.Add(orgEnd - orgStart);
-			personAssignment.AddActivity(orgLayer.Payload, new DateTimePeriod(newStart, newEnd));
+			var layerWithSpecificActivity = personAssignment.ShiftLayers.Single(x => x.Payload.Id.Value == command.ActivityId);
+
+			var layerToMoveStartOriginal = layerWithSpecificActivity.Period.StartDateTime;
+			var layerToMoveEndOriginal = layerWithSpecificActivity.Period.EndDateTime;
+			var newStart = layerToMoveStartOriginal.Date.Add(command.NewStartTime);
+			var newEnd = newStart.Add(layerToMoveEndOriginal - layerToMoveStartOriginal);
+
+			personAssignment.RemoveActivity(layerWithSpecificActivity);
+			personAssignment.AddActivity(layerWithSpecificActivity.Payload, new DateTimePeriod(newStart, newEnd));
 		}
 	}
 }
