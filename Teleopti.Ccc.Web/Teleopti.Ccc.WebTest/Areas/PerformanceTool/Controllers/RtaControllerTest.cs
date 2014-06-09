@@ -16,7 +16,17 @@ namespace Teleopti.Ccc.WebTest.Areas.PerformanceTool.Controllers
 			target.CreatePersons(1);
 
 			rtaTestPersonCreator.AssertWasCalled(x => x.CreatePersons(1));
+		}
 
+		[Test]
+		public void ShouldCleanupData()
+		{
+			var rtaTestPersonCreator = MockRepository.GenerateMock<ITestPersonCreator>();
+			var target = new RtaController(rtaTestPersonCreator);
+
+			target.RemoveCreatedData();
+
+			rtaTestPersonCreator.AssertWasCalled(x => x.RemoveCreatedPersons());
 		}
 	}
 }
