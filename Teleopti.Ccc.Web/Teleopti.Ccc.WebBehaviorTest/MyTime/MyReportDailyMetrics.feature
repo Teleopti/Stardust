@@ -51,9 +51,21 @@ Scenario: Navigate to detailed adherence
 	Then I should end up in my adherence report for '2013-10-04'
 
 @OnlyRunIfEnabled('MyReport_AgentQueueMetrics_22254')
-@ignore
 Scenario: Navigate to detailed my queue metrics
 	Given I am an agent
+	And I have my report data for '2014-05-15'
 	And I view my report for '2014-05-15'
-	When I click on answered calls
-	Then I should see agent queue view for '2014-05-15'
+	When I choose to view my queue metrics
+	Then I should see the queue metrics report for '2014-05-15'
+
+@OnlyRunIfEnabled('MyReport_AgentQueueMetrics_22254')
+Scenario: No permission to my report queue metrics
+	Given there is a role with
+	| Field                             | Value                                |
+	| Name                              | No access to my report queue metrics |
+	| Access to my report queue metrics | False                                |
+	And I have the role 'No access to my report queue metrics'
+	And I have my report data for '2014-05-15'
+	And I view my report for '2014-05-15'
+	When I choose to view my queue metrics
+	Then I should end up in my report for '2014-05-15'

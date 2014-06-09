@@ -49,4 +49,3 @@ Scenario: Navigate from agent queue view to overview
 	And I view my queue metrics report for '2013-10-02'
 	When I choose to go to overview
 	Then I should end up in my report for '2013-10-02'
-

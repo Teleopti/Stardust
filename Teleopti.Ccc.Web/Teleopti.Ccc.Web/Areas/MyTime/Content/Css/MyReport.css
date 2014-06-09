@@ -206,6 +206,7 @@ table td.right-align-cell
         font-weight: bold;
         min-height: 80px;
         padding: 0;
+	    text-align: center;
     }
     .queue-handling-time {
         background-color: #5D9AD3;
@@ -233,11 +234,10 @@ table td.right-align-cell
     .queue-answered {
         background-color: black;
         min-height: 80px;
-        display: table-cell;
-        vertical-align: middle;
         padding: 0;
         padding-top: 30px;
         font-size: 20px;
+	    overflow: hidden;
     }
    .queue-answered-header {
        font-size: 14px;

@@ -60,11 +60,11 @@
 				</div>
 			</div>
 			<div class="col-md-4">
-				<div class="dashboard dashboard-yellow">
+				<div class="dashboard dashboard-yellow" data-bind="css:{'dashboard-clickable': queueMetricsEnabled()}, click: goToQueueMetrics">
 					<div class="row">
 						<div class="text-center col-xs-12">
 							<h1 data-bind="text: averageHandlingTime() + '@Resources.SecondShort	'"></h1>
-							<p class="handlingTimeValue">@Resources.AverageHandlingTime</p>
+							<p class="queue-metrics-value handlingTimeValue">@Resources.AverageHandlingTime</p>
 						</div>
 					</div>
 				</div>
@@ -73,31 +73,31 @@
 
 		<div class="row">
 			<div class="col-md-4">
-				<div class="dashboard dashboard-purple">
+				<div class="dashboard dashboard-purple" data-bind="css:{'dashboard-clickable': queueMetricsEnabled()}, click: goToQueueMetrics">
 					<div class="row">
 						<div class="text-center col-xs-12">
 							<h1 data-bind="text: averageTalkTime() + '@Resources.SecondShort'"></h1>
-							<p class="talkTimeValue">@Resources.AverageTalkTime</p>
+							<p class="queue-metrics-value talkTimeValue">@Resources.AverageTalkTime</p>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-4">
-				<div class="dashboard dashboard-red">
+				<div class="dashboard dashboard-red" data-bind="css:{'dashboard-clickable': queueMetricsEnabled()}, click: goToQueueMetrics">
 					<div class="row">
 						<div class="text-center col-xs-12">
 							<h1 data-bind="text: averageAfterCallWork() + '@Resources.SecondShort'"></h1>
-							<p class="afterWorkValue">@Resources.AverageAfterCallWork</p>
+							<p class="queue-metrics-value afterWorkValue">@Resources.AverageAfterCallWork</p>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-4">
-				<div class="dashboard dashboard-black">
+				<div class="dashboard dashboard-black" data-bind="css:{'dashboard-clickable': queueMetricsEnabled()}, click: goToQueueMetrics">
 					<div class="row">
 						<div class="text-center col-xs-12">
 							<h1 data-bind="text: answeredCalls()"></h1>
-							<p class="answeredCallsValue">@Resources.AnsweredCalls</p>
+							<p class="queue-metrics-value answeredCallsValue">@Resources.AnsweredCalls</p>
 						</div>
 					</div>
 				</div>

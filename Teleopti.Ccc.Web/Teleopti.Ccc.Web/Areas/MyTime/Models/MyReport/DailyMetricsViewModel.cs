@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport
 		public string AverageAfterCallWork { get; set; }
 		public int AnsweredCalls { get; set; }
 		public bool DataAvailable { get; set; }
+		public bool QueueMetricsEnabled { get; set; }
 	}
 }

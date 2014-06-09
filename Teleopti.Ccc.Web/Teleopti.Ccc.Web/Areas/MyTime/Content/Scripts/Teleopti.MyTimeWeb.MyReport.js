@@ -10,6 +10,7 @@
 		self.averageHandlingTime = ko.observable();
 		self.averageTalkTime = ko.observable();
 		self.readyTimePerScheduledReadyTime = ko.observable();
+		self.queueMetricsEnabled = ko.observable();
 
 		self.selectedDateInternal = ko.observable(date);
 		self.datePickerFormat = ko.observable('YYYYMMDD');
@@ -21,6 +22,10 @@
 		};
 		self.goToAdherence = function () {
 			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Adherence" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD')));
+		};
+		self.goToQueueMetrics = function () {
+			if(self.queueMetricsEnabled())
+				Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/QueueMetrics" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD')));
 		};
 		self.selectedDate = ko.computed({
 			read: function () {
@@ -57,6 +62,7 @@
 				vm.averageTalkTime(data.AverageTalkTime);
 				vm.readyTimePerScheduledReadyTime(data.ReadyTimePerScheduledReadyTime);
 				vm.dataAvailable(data.DataAvailable);
+				vm.queueMetricsEnabled(data.QueueMetricsEnabled);
 			}
 
 		});

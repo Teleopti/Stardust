@@ -208,5 +208,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertJavascriptResultContains("return $('.queue-answered').text().length > 0;", "True");
 		}
 
+		[When(@"I choose to view my queue metrics")]
+		public void WhenIChooseToViewMyQueueMetrics()
+		{
+			Browser.Interactions.Click(".queue-metrics-value");
+		}
+
 	}
 }

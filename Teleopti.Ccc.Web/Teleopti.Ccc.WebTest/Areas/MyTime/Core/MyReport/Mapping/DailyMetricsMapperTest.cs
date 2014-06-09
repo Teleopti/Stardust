@@ -3,8 +3,11 @@ using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
@@ -13,6 +16,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 	public class DailyMetricsMapperTest
 	{
 		private DailyMetricsMapper _target;
+		private IPermissionProvider _permissionProvider;
+		private IToggleManager _toggleManager;
 
 		[SetUp]
 		public void Setup()
@@ -20,8 +25,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 			var culture = CultureInfo.GetCultureInfo("sv-SE");
 			var userCulture = MockRepository.GenerateMock<IUserCulture>();
 			userCulture.Expect(x => x.GetCulture()).Return(culture);
+			_permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			_toggleManager = MockRepository.GenerateMock<IToggleManager>();
 
-			_target = new DailyMetricsMapper(userCulture);
+			_target = new DailyMetricsMapper(userCulture, _permissionProvider, _toggleManager);
 		}
 
 		[Test]
@@ -92,6 +99,39 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 			var viewModel = _target.Map(new DailyMetricsForDayResult());
 
 			viewModel.DataAvailable.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldSetQueueMetricsEnabledTrue()
+		{
+			_permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics)).Return(true);
+			_toggleManager.Stub(x => x.IsEnabled(Toggles.MyReport_AgentQueueMetrics_22254)).Return(true);
+			var viewModel = _target.Map(new DailyMetricsForDayResult());
+
+			viewModel.QueueMetricsEnabled.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldSetQueueMetricsEnabledFalseWithoutPermission()
+		{
+			_permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics)).Return(false);
+			_toggleManager.Stub(x => x.IsEnabled(Toggles.MyReport_AgentQueueMetrics_22254)).Return(true);
+			var viewModel = _target.Map(new DailyMetricsForDayResult());
+
+			viewModel.QueueMetricsEnabled.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldSetQueueMetricsEnabledFalseWhenToggleOff()
+		{
+			_permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics)).Return(true);
+			_toggleManager.Stub(x => x.IsEnabled(Toggles.MyReport_AgentQueueMetrics_22254)).Return(false);
+			var viewModel = _target.Map(new DailyMetricsForDayResult());
+
+			viewModel.QueueMetricsEnabled.Should().Be.False();
 		}
 
 	}

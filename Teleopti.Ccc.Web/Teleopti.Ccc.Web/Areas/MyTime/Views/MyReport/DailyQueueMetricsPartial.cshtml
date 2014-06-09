@@ -3,7 +3,7 @@
     Layout = null;
 }
 <input id="my-report-datepicker-format" type="hidden" value="@ViewBag.DatePickerFormat" />
-<div style="text-align: center" id="queueMetric">
+<div id="queueMetric">
     <div class="navbar navbar-default">
         <div class="container">
             <div class="navbar-left">
@@ -33,8 +33,8 @@
             </ul>
         </div>
     </div>
-    <div class="page-header" style="margin-top: 5px;padding: 0">
-        <h3 style="margin-top: 5px">Daily Queue Metrics</h3>
+    <div class="page-header" style="margin-top: 5px;padding: 0; text-align: center">
+        <h3 style="margin-top: 5px">@Resources.QueueMetrics</h3>
     </div>
     <div data-bind="ifnot: dataAvailable">
         <div id="friendly-message" class="alert alert-info alert-myreport">
@@ -101,25 +101,25 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-1 col-sm-1 col-lg-1 no-padding" style="display: table">
-                    <div class="col-xs-12 queue-answered queue-answered-header text-center ">
-                        @Resources.AnsweredCalls
-                    </div>
-                </div>
+				<div class="col-xs-1 col-sm-1 col-lg-1 no-padding" style="overflow: hidden">
+					<div class="col-xs-12 queue-answered queue-answered-header text-center ">
+						@Resources.AnsweredCalls
+					</div>
+				</div>
             </div>
             <div data-bind="foreach: myQueues">
                 <div class="col-xs-12 col-sm-12 col-lg-12 queue-row">
                     <div class="col-xs-3 col-sm-3 col-lg-3 queue-name" data-bind="text: Queue"></div>
                     <div class="col-xs-8 col-sm-8 col-lg-8">
                         <div class="col-xs-12 col-sm-12 col-lg-12 no-padding">
-                            <div class="queue-handling-time" data-bind="style: {width: HandlingPercent}, text: AverageHandlingTime"></div>
+							<div class="queue-handling-time text-center" data-bind="style: {width: HandlingPercent}, text: AverageHandlingTime"></div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-lg-12 no-padding">
-                            <div class="queue-talk-time" data-bind="style: {width: TalkTimePercent}, text: AverageTalkTime"></div>
-                            <div class="queue-afterwork-time" data-bind="style: {width: AfterCallWorkPercent}, text: AverageAfterCallWork"></div>
+							<div class="queue-talk-time text-center" data-bind="style: {width: TalkTimePercent}, text: AverageTalkTime"></div>
+							<div class="queue-afterwork-time text-center" data-bind="style: {width: AfterCallWorkPercent}, text: AverageAfterCallWork"></div>
                         </div>
                     </div>
-                    <div class="col-xs-1 col-sm-1 col-lg-1 no-padding">
+                    <div class="col-sm-1 col-md-1 col-lg-1 no-padding" >
                         <div class="col-xs-12 queue-answered text-center" data-bind="text: AnsweredCalls"></div>
                     </div>
                 </div>
