@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists("a[href$='#MyReportTab']");
 		}
 
-		[Then(@"I should see a message saying I dont have access to MyReport")]
+		[Then(@"I should see a message saying I dont have access")]
 		public void ThenIShouldSeeAMessageSayingIDontHaveAccess()
 		{
 			Browser.Interactions.AssertExists("#error-panel");

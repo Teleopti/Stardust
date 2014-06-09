@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
         [EnsureInPortal]
+		[MyReportQueueMetricsPermission]
         public ViewResult QueueMetrics()
         {
             if(!_toggleManager.IsEnabled(Toggles.MyReport_AgentQueueMetrics_22254))

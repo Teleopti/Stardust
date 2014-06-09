@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToViewAllGroupPages { get; set; }
 		public bool AccessToMatrixReports { get; set; }
 		public bool AccessToPersonalAbsenceAccount { get; set; }
+		public bool AccessToMyReportQueueMetrics { get; set; }
 		public bool CanLogonAsAnotherUser { get; set; }
 
 		public RoleConfigurable()
@@ -79,6 +80,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToMatrixReports = true;
 			AccessToPersonalAbsenceAccount = true;
 			CanLogonAsAnotherUser = true;
+			AccessToMyReportQueueMetrics = true;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -222,6 +224,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!CanLogonAsAnotherUser)
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.SignInAsAnotherUser
+									   select f;
+			if (!AccessToMyReportQueueMetrics)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics
 									   select f;
 			return applicationFunctions;
 		}

@@ -10,7 +10,7 @@ Scenario: No permission to my report module when navigating with URL
 	| Access to MyReport		| False					    |
 	And I have the role 'No access to MyReport'
 	When I navigate to my report
-	Then I should see a message saying I dont have access to MyReport
+	Then I should see a message saying I dont have access
 
 Scenario: Open my report shows yesterdays figures
 	Given I am an agent

@@ -4,37 +4,15 @@ Feature: My Report Agent Queue Metrics
 	As an agent
 	I need to see metrics for a specific day
 
-@ignore
-Scenario: No permission to agent queue metrics from average handling time
+
+Scenario: No permission to my report queue metrics
 	Given there is a role with
-	| Field                         | Value                            |
-	| Name                          | No access to agent queue metrics |
-	| Access to agent queue metrics | False                            |
-	And I have the role 'No access to agent queue metrics'
-	When I navigate to my report
-	And I click on average handling time
-	Then I should see a message saying I could not access to detailed agent queue metrics
-
-@ignore
-Scenario: Navigate to details from average handling time
-	Given I am an agent
-	And I view my report for '2014-05-15'
-	When I click on average handling time
-	Then I should see agent queue view for '2014-05-15'
-
-@ignore
-Scenario: Navigate to details from average talk time
-	Given I am an agent
-	And I view my report for '2014-05-15'
-	When I click on average talk time
-	Then I should see agent queue view for '2014-05-15'
-
-@ignore
-Scenario: Navigate to details from average after call work
-	Given I am an agent
-	And I view my report for '2014-05-15'
-	When I click on average after call work
-	Then I should see agent queue view for '2014-05-15'
+	| Field                             | Value                                |
+	| Name                              | No access to my report queue metrics |
+	| Access to my report queue metrics | False                                |
+	And I have the role 'No access to my report queue metrics'
+	When I view my queue metrics report for '2013-10-02'
+	Then I should see a message saying I dont have access
 
 Scenario: Show details for queue metrics
 	Given I am an agent

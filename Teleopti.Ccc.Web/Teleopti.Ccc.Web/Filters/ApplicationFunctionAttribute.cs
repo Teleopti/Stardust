@@ -22,6 +22,15 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
+	public sealed class MyReportQueueMetricsPermissionAttribute : ApplicationFunctionAttribute
+	{
+		public MyReportQueueMetricsPermissionAttribute()
+			:base(DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics)
+		{
+			
+		}
+	}
+
 	public sealed class PreferencePermissionAttribute : ApplicationFunctionAttribute
 	{
 		public PreferencePermissionAttribute() : base(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb,DefinedRaptorApplicationFunctionPaths.StandardPreferences)

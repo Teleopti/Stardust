@@ -364,7 +364,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	    {
             GoToWaitForCompleted(string.Format("MyTime#MyReport/QueueMetrics/{0}/{1}/{2}",
                     date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-                    new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
+                    new ApplicationStartupTimeout());
 	    }
 	}
 
