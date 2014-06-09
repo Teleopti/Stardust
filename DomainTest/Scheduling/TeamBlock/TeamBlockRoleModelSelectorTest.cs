@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
 			_dateOnly = new DateOnly(2013, 4, 8);
 			_person = PersonFactory.CreatePerson("bill");
-			_groupMembers = new List<IPerson> {_person};
+			_groupMembers = new List<IPerson> { _person };
 			_teaminfo = _mocks.StrictMock<ITeamInfo>();
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_schedulingOptions = new SchedulingOptions();
@@ -58,10 +58,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _workShiftFilterService, _sameOpenHoursInTeamBlockSpecification,
 													 _workShiftSelector,
 													 _schedulingResultStateHolder,
-													 _activityIntervalDataCreator,_maxSeatInformationGeneratorBasedOnIntervals ,_maxSeatSkillAggregator );
+													 _activityIntervalDataCreator, _maxSeatInformationGeneratorBasedOnIntervals, _maxSeatSkillAggregator);
 			_periodValueCalculationParameters = new PeriodValueCalculationParameters(_schedulingOptions.WorkShiftLengthHintOption,
 																		  _schedulingOptions.UseMinimumPersons,
-																		  _schedulingOptions.UseMaximumPersons,MaxSeatsFeatureOptions.DoNotConsiderMaxSeats,false, new Dictionary<DateTime, bool>(),false);
+																		  _schedulingOptions.UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, false, new Dictionary<DateTime, IntervalLevelMaxSeatInfo >(), false);
 		}
 
 		[Test]
@@ -69,11 +69,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_restrictionAggregator.Aggregate(_dateOnly, _person,_teamBlockInfo, _schedulingOptions)).Return(null);
+				Expect.Call(_restrictionAggregator.Aggregate(_dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(null);
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction(),false);
+				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction(), false);
 
 				Assert.That(result, Is.Null);
 			}
@@ -92,12 +92,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_restrictionAggregator.Aggregate(_dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
 				Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
-																	   new WorkShiftFinderResult(_person, _dateOnly), true))
+																		new WorkShiftFinderResult(_person, _dateOnly), true))
 					  .Return(new List<IShiftProjectionCache>());
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction(),false);
+				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction(), false);
 
 				Assert.That(result, Is.Null);
 			}
@@ -107,23 +107,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldSelectBestShiftAsRoleModel()
 		{
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
-													   new EndTimeLimitation(),
-													   new WorkTimeLimitation(), null, null, null,
-													   new List<IActivityRestriction>());
+														new EndTimeLimitation(),
+														new WorkTimeLimitation(), null, null, null,
+														new List<IActivityRestriction>());
 			var shiftProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
 			var shifts = new List<IShiftProjectionCache> { shiftProjectionCache };
 			var activityData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice() ;
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice();
 				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Twice();
 				Expect.Call(_restrictionAggregator.Aggregate(_dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
 				Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
-																	   new WorkShiftFinderResult(_person, _dateOnly), true))
+																		new WorkShiftFinderResult(_person, _dateOnly), true))
 					  .Return(shifts);
-				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo,_dateOnly, _schedulingResultStateHolder, true))
+				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder, true))
 					  .Return(activityData);
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData, _periodValueCalculationParameters
 																		  , TimeZoneGuard.Instance.TimeZone)).IgnoreArguments()
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction(),false );
+				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction(), false);
 
 				Assert.That(result, Is.EqualTo(shiftProjectionCache));
 			}
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice() ;
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice();
 				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Twice();
 				Expect.Call(_restrictionAggregator.Aggregate(_dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
 				Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
@@ -165,13 +165,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																		  , TimeZoneGuard.Instance.TimeZone)).IgnoreArguments()
 					  .Return(shiftProjectionCache);
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, _dateOnly,
-					_schedulingResultStateHolder,TimeZoneGuard.Instance.TimeZone )).Return(new Dictionary<DateTime, bool>());
+					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone)).Return(new Dictionary<DateTime, IntervalLevelMaxSeatInfo>());
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_groupMembers,
-					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill>{SkillFactory.CreateSkill("")});
+					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill> { SkillFactory.CreateSkill("") });
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction(),true );
+				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction(), true);
 
 				Assert.That(result, Is.EqualTo(shiftProjectionCache));
 			}

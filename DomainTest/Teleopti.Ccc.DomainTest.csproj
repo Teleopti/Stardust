@@ -881,6 +881,7 @@
     <Compile Include="Scheduling\TeamBlock\TwoDaysIntervalGeneratorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidatedTeamBlockInfoExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidSampleDayPickerFromTeamBlockTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatBoostingFactorCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatInformationGeneratorBasedOnIntervalsTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatsCalculationForTeamBlockTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\IsMaxSeatsReachedOnSkillStaffPeriodSpecificationTest.cs" />

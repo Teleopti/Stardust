@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public interface IMaxSeatInformationGeneratorBasedOnIntervals
 	{
-		IDictionary<DateTime, bool> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone);
+		IDictionary<DateTime, IntervalLevelMaxSeatInfo> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone);
 	}
 
 	public class MaxSeatInformationGeneratorBasedOnIntervals : IMaxSeatInformationGeneratorBasedOnIntervals
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			_maxSeatsSpecificationDictionaryExtractor = maxSeatsSpecificationDictionaryExtractor;
 		}
 
-		public IDictionary<DateTime, bool> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone)
+		public IDictionary<DateTime, IntervalLevelMaxSeatInfo> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone)
 		{
 			var skills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(), new DateOnlyPeriod(datePointer,datePointer ) ).ToList();
 			var skillDaysOnDatePointer = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { datePointer });
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				if (skills.Contains(skillDay.Skill))
 					skillDaysHavingMaxSeatInfo.Add(skillDay);
 			}
-			IDictionary<DateTime, bool> maxSeatInfoOnEachIntervalDic = new Dictionary<DateTime, bool>();
+			IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfoOnEachIntervalDic = new Dictionary<DateTime, IntervalLevelMaxSeatInfo>();
 			if (skillDaysHavingMaxSeatInfo.Any( ))
 			{
 				var skillStaffPeriodCollection = skillDaysHavingMaxSeatInfo[0].SkillStaffPeriodCollection;
