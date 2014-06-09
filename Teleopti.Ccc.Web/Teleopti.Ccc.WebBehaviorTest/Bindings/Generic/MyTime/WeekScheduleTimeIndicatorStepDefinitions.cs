@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			const int timeIndicatorHeight = 2;
 		    TimeSpan minTimelineTime;
 		    TimeSpan maxTimelineTime;
-			
+
 			Browser.Interactions.AssertExists(".weekview-timeline-label");
 
 			var result = (string)Browser.Interactions.Javascript("return $('.weekview-timeline-label').first().html();");

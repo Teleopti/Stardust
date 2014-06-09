@@ -293,7 +293,6 @@
     <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuPhantomJsActivator.cs" />
     <Compile Include="Data\Setups\Configurable\CalendarLinkConfigurable.cs" />
     <Compile Include="Data\ScenarioDataFactory.cs" />
-    <Compile Include="Pages\TeamSchedulePage.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
       <DependentUpon>PerformanceView.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -461,7 +460,6 @@
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
     <Compile Include="Pages\Common\ComboBox.cs" />
     <Compile Include="Pages\Common\IMessageReplyPage.cs" />
-    <Compile Include="Pages\GlobalMenuPage.cs" />
     <Compile Include="MyTime\PreferencesFeedbackBlacklisting.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -580,9 +578,7 @@
     </Compile>
     <Compile Include="MyTime\MyProfileStepDefinitions.cs" />
     <Compile Include="Pages\Common\SelectBox.cs" />
-    <Compile Include="Pages\MobileGlobalMenuPage.cs" />
     <Compile Include="Pages\PasswordPage.cs" />
-    <Compile Include="Pages\RegionalSettingsPage.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutTeamScheduleAccess.cs" />
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Administrator.cs" />
@@ -658,7 +654,6 @@
     <Compile Include="Data\Setups\Legacy\Specific\PersonPeriod.cs" />
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
-    <Compile Include="Pages\Pages.cs" />
     <Compile Include="Pages\Common\CalendarCells.cs" />
     <Compile Include="Pages\Common\DatePicker.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ScheduleIsPublished.cs" />
@@ -668,7 +663,6 @@
     <Compile Include="Pages\jQuery\IJQueryExpression.cs" />
     <Compile Include="Pages\jQuery\jQuery.cs" />
     <Compile Include="Pages\jQuery\JQueryExpression.cs" />
-    <Compile Include="Pages\PortalPage.cs" />
     <Compile Include="Pages\Common\SplitButton.cs" />
     <Compile Include="Core\ScenarioContextLazy.cs" />
     <Compile Include="MyTime\Preferences.feature.cs">

@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: Team schedule for groups
+﻿Feature: Team schedule for groups
 In order to know when my colleagues work
 As an agent
 I want to see team schedule for other groups on any group page

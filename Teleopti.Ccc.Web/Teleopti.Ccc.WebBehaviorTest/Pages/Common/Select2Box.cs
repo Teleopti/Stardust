@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		public static void Open(string select2Id)
 		{
 			AssertIsClosed(select2Id);
-			Browser.Interactions.Click(string.Format("#s2id_{0}", select2Id)); // for chrome
+			Browser.Interactions.ClickUsingJQuery(string.Format("#s2id_{0}", select2Id)); // for chrome
 			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open');", select2Id)); // for IE
 			AssertIsOpen(select2Id);
 		}
