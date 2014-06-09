@@ -2,7 +2,7 @@
 {
 	public interface ITestPersonCreator
 	{
-		void CreatePersons(int numberOfPersons);
+		void CreatePersons(int numberOfPersons, int datasourceId = 6);
 		void RemoveCreatedPersons();
 	}
 }

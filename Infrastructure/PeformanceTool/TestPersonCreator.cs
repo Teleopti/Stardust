@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.PeformanceTool
 			_externalLogOnRepository = externalLogOnRepository;
 		}
 
-		public void CreatePersons(int numberOfPersons)
+		public void CreatePersons(int numberOfPersons, int datasourceId = 6)
 		{
 			createThingsNeededForTestPersons();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.PeformanceTool
 				addNeededStuffToRepositories();
 				for (var i = 0; i < numberOfPersons; i++)
 				{
-					var person = createPersonWithExternalLogOn(i);
+					var person = createPersonWithExternalLogOn(i, datasourceId);
 					_personRepository.Add(person);
 				}
 				uow.PersistAll();
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.PeformanceTool
 			_contractScheduleRepository.Add(_stateHolder.ContractSchedule);
 		}
 
-		private IPerson createPersonWithExternalLogOn(int currentIteration)
+		private IPerson createPersonWithExternalLogOn(int currentIteration, int datasourceId)
 		{
 			var person = new Person();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
@@ -92,7 +92,10 @@ namespace Teleopti.Ccc.Infrastructure.PeformanceTool
 					_stateHolder.ContractSchedule),
 				_stateHolder.Team);
 			var externalLogOnString = currentIteration.ToString(CultureInfo.InvariantCulture);
-			var externalLogOn = new ExternalLogOn(52130, 52130, externalLogOnString, externalLogOnString, true);
+			var externalLogOn = new ExternalLogOn(52130, 52130, externalLogOnString, externalLogOnString, true)
+			{
+				DataSourceId = datasourceId
+			};
 
 			_stateHolder.Persons.Add(person);
 			_stateHolder.ExternalLogOns.Add(externalLogOn);
