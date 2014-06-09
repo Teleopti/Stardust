@@ -36,6 +36,19 @@ namespace Teleopti.Ccc.Web
 			return builder.Build();
 		}
 
+		private static void setDefaultGenericPrincipal()
+		{
+			try
+			{
+				Logger.Debug("Trying to set default generic principal.");
+				AppDomain.CurrentDomain.SetThreadPrincipal(new GenericPrincipal(new GenericIdentity("Anonymous"), new string[] { }));
+			}
+			catch (PolicyException policyException)
+			{
+				Logger.Debug("Failed to set thread principal for app domain, because it was already set.", policyException);
+			}
+		}
+
 		protected void Session_Start(object sender, EventArgs e)
 		{
 
@@ -48,19 +61,6 @@ namespace Teleopti.Ccc.Web
 
 		protected void Application_AuthenticateRequest(object sender, EventArgs e)
 		{
-		}
-
-		private static void setDefaultGenericPrincipal()
-		{
-			try
-			{
-				Logger.Debug("Trying to set default generic principal.");
-				AppDomain.CurrentDomain.SetThreadPrincipal(new GenericPrincipal(new GenericIdentity("Anonymous"), new string[] { }));
-			}
-			catch (PolicyException policyException)
-			{
-				Logger.Debug("Failed to set thread principal for app domain, because it was already set.", policyException);
-			}
 		}
 
 		protected void Application_Error(object sender, EventArgs e)
