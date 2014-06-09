@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var id = team.Id.ToString();
 			var text = site + "/" + team.Description.Name;
 			Select2Box.SelectItemByIdAndText("Team-Picker", id, text);
-			Browser.Interactions.AssertExists(".input-group-btn button:nth-of-type(2)");
+            Browser.Interactions.AssertExists(".navbar-form button:nth-of-type(3)");
 		}
 
 		[When(@"I select '(.*)' in the team picker")]
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see the team schedule tab")]
 		public void ThenIShouldNotSeeTheTeamScheduleTab()
 		{
-			Browser.Interactions.AssertNotExists(".navbar-nav", "a[href*='#TeamScheduleTab']");
+			Browser.Interactions.AssertNotExists(".navbar", "a[href*='#TeamScheduleTab']");
 		}
 
 		[Then(@"I should see my schedule")]
@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see the team-picker")]
 		public void ThenIShouldNotSeeTheTeam_Picker()
 		{
-			Browser.Interactions.AssertNotExists(".navbar-nav", "#Team-Picker");
+			Browser.Interactions.AssertNotExists(".navbar", "#Team-Picker");
 		}
 
 		[Then(@"I should see the date-picker")]
@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I initialize a shift trade")]
 		public void WhenIInitializeAShiftTrade()
 		{
-			Browser.Interactions.Click(".hidden-sm .initialize-shift-trade");
+            Browser.Interactions.Click(".initialize-shift-trade");
 		}
 
 		[Then(@"I should not be able to initialize a shift trade")]

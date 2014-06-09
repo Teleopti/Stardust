@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.Xml;
-using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
@@ -56,8 +53,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				string.Format(
 					"return $('.weekview-day[data-mytime-date=\"{0}\"] .weekview-day-schedule-layer:last .weekview-day-schedule-layer-time:contains(\"{1}\")').length > 0",
 					date.ToString("yyyy-MM-dd"), time);
-			Browser.Interactions.AssertJavascriptResultContains(activityNameScript, "true");
-			Browser.Interactions.AssertJavascriptResultContains(endTimeScript, "true");
+			Browser.Interactions.AssertJavascriptResultContains(activityNameScript, "True");
+			Browser.Interactions.AssertJavascriptResultContains(endTimeScript, "True");
 		}
 
 		[Then(@"I should see a shift on date '(.*)'")]
@@ -154,15 +151,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see activities on date '(.*)'")]
 		public void ThenIShouldSeeActivitiesOnDate(DateTime date)
 		{
-			Browser.Interactions.AssertJavascriptResultContains(
-				string.Format("return $(\".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer\").length > 0;",
-				              date.ToString("yyyy-MM-dd")), "true");
+			Browser.Interactions.AssertExistsUsingJQuery(
+				string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer",date.ToString("yyyy-MM-dd")));
 		}
 
 		[Then(@"I should see request page")]
 		public void ThenIShouldSeeRequestPage()
 		{
-			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("Request"));
+            Browser.Interactions.AssertUrlContains("Request");
 		}
 
 		[When(@"I click the current week button")]
