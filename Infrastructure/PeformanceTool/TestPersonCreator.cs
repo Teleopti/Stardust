@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
@@ -10,42 +9,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.PeformanceTool
 {
-	public interface ITestPersonCreator
-	{
-		void CreatePersons(int numberOfPersons);
-		void RemoveCreatedPersons();
-	}
-
-	public class ThingsCreatedForTestPersons
-	{
-		public IList<IPerson> Persons { get; private set; }
-		public IList<IExternalLogOn> ExternalLogOns { get; private set; }
-		public IList<IPersonPeriod> PersonPeriods { get; private set; }
-		public ISite Site { get; private set; }
-		public ITeam Team { get; private set; }
-		public IPartTimePercentage PartTimePercentage{ get; private set; }
-		public IContract Contract { get; private set; }
-		public IContractSchedule ContractSchedule { get; private set; }
-
-		public ThingsCreatedForTestPersons(ISite site,
-			ITeam team,
-			IPartTimePercentage partTimePercentage,
-			IContract contract,
-			IContractSchedule contractSchedule)
-		{
-			Persons = new List<IPerson>();
-			ExternalLogOns = new List<IExternalLogOn>();
-			PersonPeriods = new List<IPersonPeriod>();
-
-			Site = site;
-			Team = team;
-			PartTimePercentage = partTimePercentage;
-			Contract = contract;
-			ContractSchedule = contractSchedule;
-		}
-
-	}
-
 	public class TestPersonCreator : ITestPersonCreator
 	{
 		private readonly IPersonRepository _personRepository;
@@ -56,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.PeformanceTool
 		private readonly IContractScheduleRepository _contractScheduleRepository;
 		private readonly IExternalLogOnRepository _externalLogOnRepository;
 		
-		private ThingsCreatedForTestPersons createdStateHolder;
+		private ThingsForTestPersonsStateHolder _stateHolder;
 
 		public TestPersonCreator(IPersonRepository personRepository,
 			ITeamRepository teamRepository,
@@ -99,16 +62,23 @@ namespace Teleopti.Ccc.Infrastructure.PeformanceTool
 			var partTimePercentage = new PartTimePercentage(" ");
 			var contract = new Contract(" ");
 			var contractSchedule = new ContractSchedule(" ");
-			createdStateHolder = new ThingsCreatedForTestPersons(site, team, partTimePercentage, contract, contractSchedule);
+			_stateHolder = new ThingsForTestPersonsStateHolder
+			{
+				Site = site,
+				Team = team,
+				PartTimePercentage = partTimePercentage,
+				Contract = contract,
+				ContractSchedule = contractSchedule
+			};
 		}
 
 		private void addNeededStuffToRepositories()
 		{
-			_siteRepository.Add(createdStateHolder.Site);
-			_teamRepository.Add(createdStateHolder.Team);
-			_partTimePercentageRepository.Add(createdStateHolder.PartTimePercentage);
-			_contractRepository.Add(createdStateHolder.Contract);
-			_contractScheduleRepository.Add(createdStateHolder.ContractSchedule);
+			_siteRepository.Add(_stateHolder.Site);
+			_teamRepository.Add(_stateHolder.Team);
+			_partTimePercentageRepository.Add(_stateHolder.PartTimePercentage);
+			_contractRepository.Add(_stateHolder.Contract);
+			_contractScheduleRepository.Add(_stateHolder.ContractSchedule);
 		}
 
 		private IPerson createPersonWithExternalLogOn(int currentIteration)
@@ -116,15 +86,18 @@ namespace Teleopti.Ccc.Infrastructure.PeformanceTool
 			var person = new Person();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 
-			var personPeriod = new PersonPeriod(new DateOnly(DateTime.UtcNow),
-				new PersonContract(createdStateHolder.Contract, createdStateHolder.PartTimePercentage, createdStateHolder.ContractSchedule),
-				createdStateHolder.Team);
+			var personPeriod = new PersonPeriod(
+				new DateOnly(DateTime.UtcNow),
+				new PersonContract(_stateHolder.Contract,
+					_stateHolder.PartTimePercentage,
+					_stateHolder.ContractSchedule),
+				_stateHolder.Team);
 			var externalLogOnString = currentIteration.ToString(CultureInfo.InvariantCulture);
 			var externalLogOn = new ExternalLogOn(0, 0, externalLogOnString, externalLogOnString, true);
 
-			createdStateHolder.Persons.Add(person);
-			createdStateHolder.ExternalLogOns.Add(externalLogOn);
-			createdStateHolder.PersonPeriods.Add(personPeriod);
+			_stateHolder.Persons.Add(person);
+			_stateHolder.ExternalLogOns.Add(externalLogOn);
+			_stateHolder.PersonPeriods.Add(personPeriod);
 
 			_externalLogOnRepository.Add(externalLogOn);
 			personPeriod.AddExternalLogOn(externalLogOn);
@@ -136,14 +109,14 @@ namespace Teleopti.Ccc.Infrastructure.PeformanceTool
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_contractRepository.Remove(createdStateHolder.Contract);
-				_contractScheduleRepository.Remove(createdStateHolder.ContractSchedule);
-				_partTimePercentageRepository.Remove(createdStateHolder.PartTimePercentage);
-				_siteRepository.Remove(createdStateHolder.Site);
-				_teamRepository.Remove(createdStateHolder.Team);
+				_contractRepository.Remove(_stateHolder.Contract);
+				_contractScheduleRepository.Remove(_stateHolder.ContractSchedule);
+				_partTimePercentageRepository.Remove(_stateHolder.PartTimePercentage);
+				_siteRepository.Remove(_stateHolder.Site);
+				_teamRepository.Remove(_stateHolder.Team);
 				
-				createdStateHolder.ExternalLogOns.ForEach(e => _externalLogOnRepository.Remove(e));
-				createdStateHolder.Persons.ForEach(p => _personRepository.Remove(p));
+				_stateHolder.ExternalLogOns.ForEach(e => _externalLogOnRepository.Remove(e));
+				_stateHolder.Persons.ForEach(p => _personRepository.Remove(p));
 				uow.PersistAll();
 			}
 		}
