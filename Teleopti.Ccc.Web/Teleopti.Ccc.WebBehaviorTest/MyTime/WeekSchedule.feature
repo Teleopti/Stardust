@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: View week schedule
+﻿Feature: View week schedule
 	In order to know how to work this week
 	As an agent
 	I want to see my schedule details
