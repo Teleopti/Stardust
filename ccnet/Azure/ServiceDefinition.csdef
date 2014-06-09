@@ -1,7 +1,7 @@
 <ServiceDefinition name="TeleoptiCCC"
 xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 
-  <WebRole name="TeleoptiCCC" vmsize="ExtraSmall">
+  <WebRole name="TeleoptiCCC" vmsize="Medium">
     <Sites>
       <Site name="TeleoptiCCC" physicalDirectory="../Azure/Temp/AzureContent/TeleoptiCCC">
         <VirtualApplication name="SDK" physicalDirectory="../Azure/Temp/AzureContent/SDK" />
