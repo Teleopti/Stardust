@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 					if (isMaxSeatsReached)
 					{
 						if (requiresSeat)
-							return periodValue * theBigUglyNumber * maxSeatBoostingFactor;
+							return periodValue + ( theBigUglyNumber * maxSeatBoostingFactor);
 					}
 					break;
 				
