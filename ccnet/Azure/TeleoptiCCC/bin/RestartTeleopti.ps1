@@ -94,7 +94,9 @@ function IIS-Restart {
 
 function TeleoptiWebSites-HttpGet([string]$DataSourceName)
 {
-    $backplane = "Broker.backplane/backplane/signalr/negotiate"
+    $AuthenticationBridge = "AuthenticationBridge"
+	$WindowsIdentityProvider = "WindowsIdentityProvider"
+	$backplane = "Broker.backplane/backplane/signalr/negotiate"
     $broker    = "broker/signalr/negotiate"
     $sdk       = "SDK/TeleoptiCCCSdkService.svc"
     $rta       = "RTA/TeleoptiRtaService.svc"
@@ -106,13 +108,15 @@ function TeleoptiWebSites-HttpGet([string]$DataSourceName)
     $BaseUrl = "https://" + $DataSourceName +".teleopticloud.com/"
     }
 
-    $backplane = $BaseUrl + $backplane
+    $AuthenticationBridge = $BaseUrl + $AuthenticationBridge
+	$WindowsIdentityProvider = $BaseUrl + $WindowsIdentityProvider
+	$backplane = $BaseUrl + $backplane
     $broker    = $BaseUrl + $broker
     $sdk       = $BaseUrl + $sdk
     $rta       = $BaseUrl + $rta
     $web       = $BaseUrl + $web
 
-    $UrlArray = @($backplane,$broker,$web,$sdk,$rta)
+    $UrlArray = @($AuthenticationBridge,$WindowsIdentityProvider,$backplane,$broker,$web,$sdk,$rta)
 
 
     for ($i=0; $i -lt $UrlArray.length; $i++) {
