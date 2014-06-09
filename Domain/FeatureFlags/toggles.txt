@@ -24,4 +24,4 @@ RTA_RtaLastStatesOverview_27789.license.name = true
 RTA_DrilldownToAllAgentsInOneTeam_25234.license.name = true
 Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635.license.name = Teleopti_RC
 #MyReport_AgentQueueMetrics_22254.license.name = Teleopti_RD
-MyReport_AgentQueueMetrics_22254 = true
+MyReport_AgentQueueMetrics_22254 = false
