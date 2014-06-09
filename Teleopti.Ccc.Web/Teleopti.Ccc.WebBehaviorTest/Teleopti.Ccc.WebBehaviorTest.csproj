@@ -578,7 +578,6 @@
     </Compile>
     <Compile Include="MyTime\MyProfileStepDefinitions.cs" />
     <Compile Include="Pages\Common\SelectBox.cs" />
-    <Compile Include="Pages\PasswordPage.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutTeamScheduleAccess.cs" />
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Administrator.cs" />
