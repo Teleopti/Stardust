@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.Infrastructure.PeformanceTool
 			_externalLogOnRepository = externalLogOnRepository;
 		}
 
-
 		public void CreatePersons(int numberOfPersons)
 		{
 			createThingsNeededForTestPersons();
@@ -93,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.PeformanceTool
 					_stateHolder.ContractSchedule),
 				_stateHolder.Team);
 			var externalLogOnString = currentIteration.ToString(CultureInfo.InvariantCulture);
-			var externalLogOn = new ExternalLogOn(0, 0, externalLogOnString, externalLogOnString, true);
+			var externalLogOn = new ExternalLogOn(52130, 52130, externalLogOnString, externalLogOnString, true);
 
 			_stateHolder.Persons.Add(person);
 			_stateHolder.ExternalLogOns.Add(externalLogOn);
