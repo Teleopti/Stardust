@@ -178,6 +178,7 @@
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\DetailedAdherenceMapperTest.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\MyReportViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceWeeklyWorkTimeSettingProviderTest.cs" />
+    <Compile Include="Areas\PerformanceTool\Controllers\RtaControllerTest.cs" />
     <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
