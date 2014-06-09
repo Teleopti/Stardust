@@ -14,21 +14,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		}
 
 		[Test]
-		public void ShouldReturnZeroIfMaxSeatReached()
+		public void ShouldReturnOneIfMaxSeatEuqalsCalculatedSeat()
 		{
-			Assert.AreEqual(0,_target.GetBoostingFactor(4,4));
+			Assert.AreEqual(1,_target.GetBoostingFactor(4,4));
 		}
 
 		[Test]
-		public void ShouldReturnTwoIfMaxSeatTwoSeatsAway()
+		public void ShouldReturnOneIfMaxSeatIsNotReached()
 		{
-			Assert.AreEqual(2, _target.GetBoostingFactor(2, 4));
+			Assert.AreEqual(1, _target.GetBoostingFactor(2, 4));
 		}
 
 		[Test]
-		public void ShouldReturnMaxFactorIfNoSeatIsConsumed()
+		public void ShouldReturnTwoIfCalculatedSeatIsOverMax()
 		{
-			Assert.AreEqual(4, _target.GetBoostingFactor(0, 4));
+			Assert.AreEqual(2, _target.GetBoostingFactor(6, 4));
 		}
 	}
 }

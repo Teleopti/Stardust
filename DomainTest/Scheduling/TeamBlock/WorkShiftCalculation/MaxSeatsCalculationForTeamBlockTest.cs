@@ -36,14 +36,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		[Test]
 		public void ShouldReturnOriginalPeriodValueIfConsiderMaxSeats()
 		{
-			Assert.AreEqual(373500,
-				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeats, false, true,30));
+			Assert.AreEqual(12.45,
+				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeats, false, true,1));
 		}
 
 		[Test]
 		public void ShouldReturnAPunishedPeriodValueIfConsiderMaxSeatsWhenMaxSeatsReached()
 		{
-			Assert.AreEqual(12.45 * -10000,
+			Assert.AreEqual(12.45 * -10000*10,
 				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeats, true, true,10));
 		}
 
@@ -57,15 +57,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		[Test]
 		public void ShouldReturnOriginalPeriodValueIfConsiderMaxSeatsAndDontBreak()
 		{
-			Assert.AreEqual(12450,
+			Assert.AreEqual(12.45,
 				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, false, true,1));
 		}
 
 		[Test]
 		public void ReturnSameValueIfRequireSeatIsFalse()
 		{
-			Assert.AreEqual(24900,
-				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, false, false,2));
+			Assert.AreEqual(12.45,
+				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, false, false,1));
 		}
 	}
 }
