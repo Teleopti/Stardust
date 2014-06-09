@@ -4,7 +4,11 @@
 	{
 		public double GetBoostingFactor(double currentSeats, double maxSeats)
 		{
-			return maxSeats - currentSeats;
+			if (currentSeats > maxSeats)
+			{
+				return currentSeats - maxSeats;
+			}
+			return 1;
 		}
 	}
 }

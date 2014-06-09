@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 				Expect.Call(_skillStaffPeriod2.Period).Return(datetime2);
 
 				Expect.Call(_skillStaffPeriod2.Payload).Return(_skillStaff2).Repeat.Times(2);
-				Expect.Call(_skillStaff2.CalculatedUsedSeats).Return(25);
+				Expect.Call(_skillStaff2.CalculatedUsedSeats).Return(26);
 				Expect.Call(_skillStaff2.MaxSeats).Return(25);
 
 			}
@@ -197,9 +197,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			{
 				var result = _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc);
 				Assert.IsFalse(result[startDateTime].IsMaxSeatReached);
-				Assert.AreEqual(15,result[startDateTime].MaxSeatBoostingFactor );
+				Assert.AreEqual(1,result[startDateTime].MaxSeatBoostingFactor );
 				Assert.IsTrue( result[startDateTime.AddMinutes(30)].IsMaxSeatReached);
-				Assert.AreEqual(0, result[startDateTime.AddMinutes(30)].MaxSeatBoostingFactor);
+				Assert.AreEqual(1, result[startDateTime.AddMinutes(30)].MaxSeatBoostingFactor);
 			}
 		}
 

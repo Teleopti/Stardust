@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 	public class MaxSeatsCalculationForTeamBlock : IMaxSeatsCalculationForTeamBlock
 	{
-		private const double theBigNiceNumber = 1000;
 		private const int theBigUglyNumber = -10000;
 
 
@@ -25,10 +24,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 					if (isMaxSeatsReached)
 					{
 						if (requiresSeat)
-							return periodValue * theBigUglyNumber;
+							return periodValue * theBigUglyNumber * maxSeatBoostingFactor;
 					}
-					else
-						return periodValue * maxSeatBoostingFactor * theBigNiceNumber;
 					break;
 				
 				case MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak:
@@ -37,8 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 						if (requiresSeat)
 							return null;
 					}
-					else
-						return periodValue * maxSeatBoostingFactor * theBigNiceNumber;
+
 					break;
 			}
 			return periodValue;
