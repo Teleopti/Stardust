@@ -623,7 +623,6 @@
     <Compile Include="Core\SystemLevelLock.cs" />
     <Compile Include="Data\TestSiteConfigurationSetup.cs" />
     <Compile Include="Core\Browser.cs" />
-    <Compile Include="Pages\WeekSchedulePage.cs" />
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
     <Compile Include="Core\Navigation.cs" />
     <Compile Include="Core\BrowserDriver\TimeoutScope.cs" />

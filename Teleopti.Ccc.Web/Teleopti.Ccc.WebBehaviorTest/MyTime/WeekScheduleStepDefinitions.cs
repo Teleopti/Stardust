@@ -18,9 +18,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class WeekScheduleStepDefinitions
 	{
-
-		private WeekSchedulePage _page { get { return Pages.Pages.WeekSchedulePage; } }
-
 		[When(@"I click the request symbol for date '(.*)'")]
 		public void WhenIClickTheRequestSymbolForDate(DateTime date)
 		{
@@ -177,7 +174,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see a shift on date '(.*)'")]
 		public void ThenIShouldNotSeeAShiftOnDate(DateTime date)
 		{
-			_page.DayLayers(date).Count.Should().Be.EqualTo(0);
+			Browser.Interactions.AssertNotExists(string.Format(".weekview-day[data-mytime-date='{0}']", date.ToString("yyyy-MM-dd")),
+													string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer",
+																  date.ToString("yyyy-MM-dd")));
 		}
 		
 		[When(@"My schedule between '(.*)' to '(.*)' reloads")]

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using log4net;
 
@@ -91,8 +90,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoAnApplicationPageOutsidePortal()
 		{
 			GoToWaitForCompleted("MyTime/Schedule/Week", new ApplicationStartupTimeout());
-			if (Browser.Current != null)
-				Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
 		public static void GotoAnApplicationPage()
@@ -104,16 +101,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoToWaitForCompleted("MyTime#Schedule/Week",
 				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded(), new OverrideNotifyBehavior());
-			if (Browser.Current != null)
-				Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
 		public static void GotoWeekSchedulePageNoWait()
 		{
 			GoToWaitForCompleted("MyTime#Schedule/Week",
                 new ApplicationStartupTimeout());
-			if (Browser.Current != null)
-				Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
 		public static void GotoWeekSchedulePage(DateTime date)
@@ -121,8 +114,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForCompleted(string.Format("MyTime#Schedule/Week/{0}/{1}/{2}", 
 				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
 				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
-			if (Browser.Current != null)
-				Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
 		public static void GotoAvailability()
