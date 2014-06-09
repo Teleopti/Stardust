@@ -7,7 +7,6 @@ using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
@@ -59,15 +58,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				_activator.Started = true;
 			}
 			return _activator.Activator;
-		}
-
-		public static IE Current
-		{
-			get
-			{
-				var activator = GetStartedActivator() as WatiNSingleBrowserIEActivator;
-				return activator != null ? activator.Internal : null;
-			}
 		}
 
 		public static IBrowserInteractions Interactions { get { return GetStartedActivator().GetInteractions(); } }
