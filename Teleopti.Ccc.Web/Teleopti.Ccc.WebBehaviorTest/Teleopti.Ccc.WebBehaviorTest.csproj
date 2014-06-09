@@ -103,6 +103,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Anywhere\MoveActivityOnShift.feature.cs">
+      <DependentUpon>MoveActivityOnShift.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Anywhere\AddActivityOnShift.feature.cs">
       <DependentUpon>AddActivityOnShift.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -745,6 +750,10 @@
     <Content Include="BeforeTestRun.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Anywhere\MoveActivityOnShift.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MoveActivityOnShift.feature.cs</LastGenOutput>
+    </None>
     <None Include="Anywhere\AddActivityOnShift.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AddActivityOnShift.feature.cs</LastGenOutput>
