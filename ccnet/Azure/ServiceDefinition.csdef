@@ -33,6 +33,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
       <Task commandLine="IIS7ConfigMoveToNET4.cmd" executionContext="elevated" taskType="background" />
       <Task commandLine="InstallService.cmd" executionContext="elevated" taskType="background" />
 	  <Task commandLine="InitializeCopyPayroll.cmd" executionContext="elevated" taskType="background" />
+	  <Task commandLine="RestartTeleopti.cmd" executionContext="elevated" taskType="background" />
     </Startup>
 	<ConfigurationSettings>
 		<Setting name="TeleoptiDriveMap.BlobPath" />
