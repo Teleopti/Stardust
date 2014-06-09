@@ -66,6 +66,10 @@
 	font-size: xx-small;
 }
 
+.request-body-inner .request-warning {
+	font-size: smaller;
+}
+
 .request-edit-subject {
 	max-width: 440px;
 }
