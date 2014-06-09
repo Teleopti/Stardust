@@ -49,3 +49,11 @@ Scenario: Navigate to detailed adherence
 	And I view my report for '2013-10-04'
 	When I choose to view my detailed adherence
 	Then I should end up in my adherence report for '2013-10-04'
+
+@OnlyRunIfEnabled('MyReport_AgentQueueMetrics_22254')
+@ignore
+Scenario: Navigate to detailed my queue metrics
+	Given I am an agent
+	And I view my report for '2014-05-15'
+	When I click on answered calls
+	Then I should see agent queue view for '2014-05-15'

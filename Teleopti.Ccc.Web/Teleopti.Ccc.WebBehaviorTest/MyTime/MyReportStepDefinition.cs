@@ -199,5 +199,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.AssertUrlContains(string.Format("QueueMetrics/{0}/{1}/{2}", date.Year, date.Month.ToString("D2"), date.Day.ToString("D2")));
         }
 
+		[Then(@"I should see the queue metrics report with data for '(.*)'")]
+		public void ThenIShouldSeeTheQueueMetricsReportWithDataFor(string p0)
+		{
+			Browser.Interactions.AssertJavascriptResultContains("return $('.queue-handling-time').text().length > 0;", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.queue-talk-time').text().length > 0;", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.queue-afterwork-time').text().length > 0;", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.queue-answered').text().length > 0;", "True");
+		}
+
 	}
 }
