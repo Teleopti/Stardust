@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private List<IBusinessRuleResponse> _businessRuleResponseCollection;
         private readonly IScheduleDictionary _owner;
         private readonly IScheduleParameters _parameters;
-        private HashSet<IScheduleData> _scheduleDataCollection;
+        private List<IScheduleData> _scheduleDataCollection;
 
 		
         private readonly object lockObject = new object();
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             _owner = owner;
             _parameters = parameters;
             _businessRuleResponseCollection = new List<IBusinessRuleResponse>();
-            _scheduleDataCollection = new HashSet<IScheduleData>();
+            _scheduleDataCollection = new List<IScheduleData>();
 
 	        schedulePublishedSpecification = new SchedulePublishedSpecification(Person.WorkflowControlSet,
 	                                                                            ScheduleVisibleReasons.Published);
@@ -96,6 +96,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 lock(lockObject)
                 {
+						 if(!_scheduleDataCollection.Contains(scheduleData))
 									_scheduleDataCollection.Add(scheduleData);
 
                 	var preferenceDay = scheduleData as IPreferenceDay;
@@ -130,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 foreach (var assignment in personAssignmentCollection)
                 {
-                    if (checkData(assignment))
+						 if (checkData(assignment) && !_scheduleDataCollection.Contains(assignment))
                         _scheduleDataCollection.Add(assignment);
                 }                
             }
@@ -198,7 +199,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 										new PublishedScheduleData(dateAndDateTime, data, agentTimeZone)))
                                 select (IScheduleData) data.Clone()).ToList();
             }
-            filteredData.ForEach(x => retObj._scheduleDataCollection.Add(x));
+			foreach (var data in filteredData)
+			{
+				if (!_scheduleDataCollection.Contains(data))
+					_scheduleDataCollection.Add(data);
+			}
             BusinessRuleResponseInternalCollection.Where(rule => rule.Period.Contains(period.StartDateTime)).ForEach(retObj.BusinessRuleResponseInternalCollection.Add);
             return retObj;
         }
@@ -234,8 +239,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             Schedule clone = (Schedule)MemberwiseClone();
             clone._businessRuleResponseCollection = new List<IBusinessRuleResponse>();
-            clone._scheduleDataCollection = new HashSet<IScheduleData>();
-            ScheduleDataInternalCollection().ForEach(x => clone._scheduleDataCollection.Add(x));
+            clone._scheduleDataCollection = new List<IScheduleData>();
+			  foreach (var data in ScheduleDataInternalCollection())
+			  {
+				  if (!clone._scheduleDataCollection.Contains(data))
+					  clone._scheduleDataCollection.Add(data);
+			  }
             _businessRuleResponseCollection.ForEach(clone.BusinessRuleResponseInternalCollection.Add);
             CloneDerived(clone);
 
