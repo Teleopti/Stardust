@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			target.Move(_shiftLayers, layer);
 		}
 
-		public void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, TimeSpan newStartTime, TimeSpan length)
+		public virtual void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, TimeSpan newStartTime, TimeSpan length)
 		{
 			var newStartTimeLocal = Date.Date.Add(newStartTime);
 			var startTimeUtc = new DateTime(newStartTimeLocal.Ticks, DateTimeKind.Utc);
