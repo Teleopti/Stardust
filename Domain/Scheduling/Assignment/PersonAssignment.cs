@@ -344,25 +344,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 
 			var layerWithSpecificActivity = ShiftLayers
-				.SingleOrDefault(x => x.Payload.Equals(activity) && x.Period.Contains(currentStartTime));
-
-			if (layerWithSpecificActivity == null)
+				.Where(x => x.Payload.Equals(activity) && x.Period.Contains(currentStartTime)).ToArray();
+			if (!layerWithSpecificActivity.Any())
 			{
-					throw new ArgumentException(String.Format("The layer doesn't exist"));
+				throw new ArgumentException(String.Format("The layer doesn't exist"));
 			}
-			var originalOrderIndex = ShiftLayers.ToList().IndexOf(layerWithSpecificActivity);
-			RemoveActivity(layerWithSpecificActivity);
-
-			var currentLayerPeriod = new DateTimePeriod(currentStartTime, currentStartTime.Add(length));
-
-			var layerContainsCurrentLayerPeriod = layerWithSpecificActivity.Period;
-			if (layerContainsCurrentLayerPeriod.Intersect(currentLayerPeriod))
+			foreach (var layer in layerWithSpecificActivity)
 			{
-				var splittedLayerPeriods = layerContainsCurrentLayerPeriod.ExcludeDateTimePeriod(currentLayerPeriod);
-				splittedLayerPeriods.ForEach(period => InsertActivity(layerWithSpecificActivity.Payload, period, originalOrderIndex));
+				
+				var originalOrderIndex = ShiftLayers.ToList().IndexOf(layer);
+				RemoveActivity(layer);
+
+				var currentLayerPeriod = new DateTimePeriod(currentStartTime, currentStartTime.Add(length));
+
+				var layerContainsCurrentLayerPeriod = layer.Period;
+				if (layerContainsCurrentLayerPeriod.Intersect(currentLayerPeriod))
+				{
+					var splittedLayerPeriods = layerContainsCurrentLayerPeriod.ExcludeDateTimePeriod(currentLayerPeriod);
+					splittedLayerPeriods.ForEach(period => InsertActivity(layer.Payload, period, originalOrderIndex));
+				}
 			}
 
-			AddActivity(layerWithSpecificActivity.Payload, newPeriod);
+			AddActivity(activity, newPeriod);
 		}
 
 		public virtual IDayOff DayOff()

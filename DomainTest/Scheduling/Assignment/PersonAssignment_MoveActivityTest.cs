@@ -36,6 +36,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void ShouldMoveLayerIfDuplicate()
+		{
+			var agent = new Person().WithId();
+			var activity = new Activity("theone").WithId();
+			var layerStart = createDateTime(3);
+			var layerEnd = createDateTime(8);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(layerStart, layerEnd));
+			assignment.AddActivity(activity, new DateTimePeriod(layerStart, layerEnd));
+
+			assignment.MoveActivityAndSetHighestPriority(activity, layerStart, TimeSpan.FromHours(4), layerEnd-layerStart);
+
+			var projection = assignment.ProjectionService().CreateProjection();
+			projection.Single().Period.StartDateTime.Should().Be.EqualTo(createDateTime(4));
+			projection.Single().Period.EndDateTime.Should().Be.EqualTo(createDateTime(9));
+		}
+
+		[Test]
 		public void ShouldNotMoveTheOtherProjectedLayerWhenMovingRightPart()
 		{
 			var agent = new Person().WithId();
