@@ -31,4 +31,3 @@ Scenario: The team leader should be able to move an activity
 	| Start time | 08:00 |
 	| End time   | 11:00 |
 
-
