@@ -332,12 +332,17 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	function _init() {
 		var elementToBind = $('#Request-add-shift-trade')[0];
 		if (elementToBind !== undefined) {
-		    if ((vm || '') == '' || !ko.dataFor(elementToBind)) {
+		    if ((vm || '') == '') {
 		    	vm = new shiftTradeViewModel(_saveNewShiftTrade);
-		    	ko.applyBindings(vm, elementToBind);
-
-			    _setWeekStart(vm);
 		    }
+
+		    if (ko.dataFor(elementToBind))
+		    {
+		    	ko.cleanNode(elementToBind);
+		    }
+
+		    ko.applyBindings(vm, elementToBind);
+		    _setWeekStart(vm);
 		}
 	}
 
