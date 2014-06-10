@@ -13,6 +13,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	public class MoveActivityCommandHandlerTest
 	{
 		[Test]
+		public void ShouldDoThrowIfPersonAssignmentNotExists()
+		{
+			var agent = new Person();
+			agent.SetId(Guid.NewGuid());
+
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository();
+			var scenario = new ThisCurrentScenario(new Scenario(" "));
+			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, scenario);
+
+			var cmd = new MoveActivityCommand
+			{
+				AgentId = agent.Id.Value,
+				Date = new DateOnly(DateTime.UtcNow),
+				ActivityId = Guid.NewGuid(),
+				NewStartTime = TimeSpan.FromHours(4),
+				OldStartTime = new DateTime(2000,1,1),
+				OldProjectionLayerLength = TimeSpan.FromHours(2)
+			};
+
+			var ex = Assert.Throws<InvalidOperationException>(()=>target.Handle(cmd)).ToString();
+			ex.Should().Contain(cmd.AgentId.ToString());
+			ex.Should().Contain(cmd.Date.ToString());
+			ex.Should().Contain(scenario.Current().Description.ToString());
+		}
+
+		[Test]
 		public void ShouldMoveAndResizeALayerIfLayerAndProjectionHaveDifferentDuration()
 		{
 			var agent = new Person();
