@@ -22,19 +22,44 @@ function Test-Administrator
 	return ($myWindowsPrincipal.IsInRole($adminRole))
 }
 
-function DataSourceName-get {
-    if ($debug) {
-	$DataSourceName = "teleopticcc-dev"
+function BaseUrl-get {
+    param([bool]$IsAzure)
+    if ($IsAzure) {
+        $DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
+        $BaseUrl = "https://" + $DataSourceName +".teleopticloud.com/"
     }
-    else {
-	$DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
+    else
+    {
+         $BaseUrl = fnDnsAlias-Get
+         $BaseUrl = $BaseUrl + "TeleoptiCCC/"
     }
-	return $DataSourceName
+	return $BaseUrl
 }
 
-function TeleoptiWindowsServices-Stop()
-{
-    if ($debug) {
+function fnDnsAlias-Get {
+     if ("${Env:ProgramFiles(x86)}") {
+         $DNS_ALIAS = (Get-Item HKLM:\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings).GetValue("DNS_ALIAS")
+         }
+     else {
+        $DNS_ALIAS = (Get-Item HKLM:\SOFTWARE\Teleopti\TeleoptiCCC\InstallationSettings).GetValue("DNS_ALIAS")
+        }
+    Return $DNS_ALIAS
+}
+function fnIsAzure {
+    try
+    {
+    	$DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
+        Return $true
+    }
+    catch
+    {
+        Return $false
+    }
+}
+
+function TeleoptiWindowsServices-Stop {
+param([bool]$IsAzure)
+    if (!$isAzure) {
         $EtlService = "TeleoptiEtlService"
         $ServiceBus = "TeleoptiServiceBus"
     } else {
@@ -45,9 +70,9 @@ function TeleoptiWindowsServices-Stop()
 	fnServiceStop -ServiceName $EtlService
 }
 
-function TeleoptiWindowsServices-Start()
-{
-    if ($debug) {
+function TeleoptiWindowsServices-Start {
+param([bool]$IsAzure)
+    if (!$isAzure) {
         $EtlService = "TeleoptiEtlService"
         $ServiceBus = "TeleoptiServiceBus"
     } else {
@@ -92,7 +117,7 @@ function IIS-Restart {
     fnServiceStart -ServiceName "W3SVC"
 }
 
-function TeleoptiWebSites-HttpGet([string]$DataSourceName)
+function TeleoptiWebSites-HttpGet([string]$BaseUrl)
 {
     $AuthenticationBridge = "AuthenticationBridge"
 	$WindowsIdentityProvider = "WindowsIdentityProvider"
@@ -101,12 +126,6 @@ function TeleoptiWebSites-HttpGet([string]$DataSourceName)
     $sdk       = "SDK/TeleoptiCCCSdkService.svc"
     $rta       = "RTA/TeleoptiRtaService.svc"
     $web       = "Web/MyTime/Authentication"
-
-    if ($debug) {
-    $BaseUrl = "http://localhost/TeleoptiCCC/"
-    } else {
-    $BaseUrl = "https://" + $DataSourceName +".teleopticloud.com/"
-    }
 
     $AuthenticationBridge = $BaseUrl + $AuthenticationBridge
 	$WindowsIdentityProvider = $BaseUrl + $WindowsIdentityProvider
@@ -134,9 +153,9 @@ function TeleoptiWebSites-HttpGet([string]$DataSourceName)
 
 function fnBrowseUrl ([string]$url)
 {
+	#Get-Webclient $url #skip this for now, doesn't make any difference
     $req = [system.Net.WebRequest]::Create($url)
     try {
-        Get-Webclient $url #try wake her up!
         $res = $req.GetResponse()
     }
     catch [System.Net.WebException] {
@@ -174,30 +193,23 @@ $JOB = "Teleopti.Ccc.RestartSystem"
 
     Try
     {
-    	import-module WebAdministration
-
-        #create event log source
-        EventlogSource-Create "$JOB"
-
-        $computer = gc env:computername
-        if ($computer.ToUpper().StartsWith("TELEOPTI")) {
-        $debug = $true
-        }
-
-        [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
-
 	    ##test if admin
 	    If (!(Test-Administrator($myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()))) {
 		    throw "User is not Admin!"
 	    }
 
-        $DataSourceName = DataSourceName-get
-	    TeleoptiWindowsServices-Stop
+    	import-module WebAdministration
+
+        EventlogSource-Create "$JOB"
+
+        $isAzure = fnIsAzure
+        $BaseUrl = BaseUrl-get $isAzure
+	    TeleoptiWindowsServices-Stop $isAzure
         IIS-Restart
         write-host "sleep 5 seconds for IIS to restart ..."
         Start-Sleep -Seconds 5       
-        TeleoptiWebSites-HttpGet $DataSourceName
-        TeleoptiWindowsServices-Start
+        TeleoptiWebSites-HttpGet $BaseUrl
+        TeleoptiWindowsServices-Start $isAzure
     }
 
     Catch [Exception]
