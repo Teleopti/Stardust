@@ -1,7 +1,7 @@
 <ServiceDefinition name="TeleoptiCCC"
 xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 
-  <WebRole name="TeleoptiCCC" vmsize="ExtraSmall">
+  <WebRole name="TeleoptiCCC" vmsize="Medium">
     <Sites>
       <Site name="TeleoptiCCC" physicalDirectory="../Azure/Temp/AzureContent/TeleoptiCCC">
         <VirtualApplication name="SDK" physicalDirectory="../Azure/Temp/AzureContent/SDK" />
@@ -33,6 +33,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
       <Task commandLine="IIS7ConfigMoveToNET4.cmd" executionContext="elevated" taskType="background" />
       <Task commandLine="InstallService.cmd" executionContext="elevated" taskType="background" />
 	  <Task commandLine="InitializeCopyPayroll.cmd" executionContext="elevated" taskType="background" />
+	  <Task commandLine="RestartTeleopti.cmd" executionContext="elevated" taskType="background" />
     </Startup>
 	<ConfigurationSettings>
 		<Setting name="TeleoptiDriveMap.BlobPath" />
