@@ -201,8 +201,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
 			foreach (var data in filteredData)
 			{
-				if (!_scheduleDataCollection.Contains(data))
-					_scheduleDataCollection.Add(data);
+				if (!retObj._scheduleDataCollection.Contains(data))
+					retObj._scheduleDataCollection.Add(data);
 			}
             BusinessRuleResponseInternalCollection.Where(rule => rule.Period.Contains(period.StartDateTime)).ForEach(retObj.BusinessRuleResponseInternalCollection.Add);
             return retObj;
