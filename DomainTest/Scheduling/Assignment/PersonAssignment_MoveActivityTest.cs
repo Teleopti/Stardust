@@ -13,6 +13,52 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	public class PersonAssignment_MoveActivityTest
 	{
 		[Test]
+		public void ShouldNotMoveTheOtherProjectedLayerWhenMovingLeftPart()
+		{
+			var agent = new Person().WithId();
+			var activity = new Activity("theone").WithId();
+			var activityNotBeMoved = new Activity("justanotherone").WithId();
+			var layerFirstStart = createDateTime(3);
+			var layerFirstEnd = createDateTime(8);
+			var layerSecondStart = createDateTime(4);
+			var layerSecondEnd = createDateTime(7);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(layerFirstStart, layerFirstEnd));
+			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(layerSecondStart, layerSecondEnd));
+
+			assignment.MoveActivityAndSetHighestPriority(activity, layerFirstStart, TimeSpan.FromHours(4), TimeSpan.FromHours(1));
+
+			var projection = assignment.ProjectionService().CreateProjection();
+			projection.Count().Should().Be.EqualTo(3);
+
+			var lastLayerPeriod = projection.Last().Period;
+			lastLayerPeriod.StartDateTime.Should().Be.EqualTo(layerSecondEnd);
+			lastLayerPeriod.EndDateTime.TimeOfDay.Should().Be.EqualTo(TimeSpan.FromHours(8));
+		}
+
+		[Test]
+		public void ShouldNotMoveTheOtherProjectedLayerWhenMovingRightPart()
+		{
+			var agent = new Person().WithId();
+			var activity = new Activity("theone").WithId();
+			var activityNotBeMoved = new Activity("justanotherone").WithId();
+			var layerFirstStart = createDateTime(3);
+			var layerFirstEnd = createDateTime(8);
+			var layerSecondStart = createDateTime(4);
+			var layerSecondEnd = createDateTime(7);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(layerFirstStart, layerFirstEnd));
+			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(layerSecondStart, layerSecondEnd));
+
+			assignment.MoveActivityAndSetHighestPriority(activity, layerSecondEnd, TimeSpan.FromHours(6), TimeSpan.FromHours(1));
+
+			var projection = assignment.ProjectionService().CreateProjection();
+			projection.Count().Should().Be.EqualTo(3);
+
+			var firstLayerPeriod = projection.First().Period;
+			firstLayerPeriod.StartDateTime.Should().Be.EqualTo(layerFirstStart);
+			firstLayerPeriod.EndDateTime.TimeOfDay.Should().Be.EqualTo(TimeSpan.FromHours(4));
+		}
+
+		[Test]
 		public void ShouldThrowExceptionIfLayerIsNotFound()
 		{
 			var personassignment = PersonAssignmentFactory.CreateAssignmentWithOvertimePersonalAndMainshiftLayers();

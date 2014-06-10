@@ -344,12 +344,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 
 			var layerWithSpecificActivity = ShiftLayers
-				.SingleOrDefault(x => x.Payload.Equals(activity) && x.Period.StartDateTime == currentStartTime);
+				.SingleOrDefault(x => x.Payload.Equals(activity) && x.Period.Contains(currentStartTime));
 
-			if (!RemoveActivity(layerWithSpecificActivity))
+			if (layerWithSpecificActivity == null)
 			{
-				throw new ArgumentException(String.Format("The layer doesn't exist"));
-			};
+					throw new ArgumentException(String.Format("The layer doesn't exist"));
+			}
+			var originalOrderIndex = ShiftLayers.ToList().IndexOf(layerWithSpecificActivity);
+			RemoveActivity(layerWithSpecificActivity);
+
+			var currentLayerPeriod = new DateTimePeriod(currentStartTime, currentStartTime.Add(length));
+
+			var layerContainsCurrentLayerPeriod = layerWithSpecificActivity.Period;
+			if (layerContainsCurrentLayerPeriod.Intersect(currentLayerPeriod))
+			{
+				var splittedLayerPeriods = layerContainsCurrentLayerPeriod.ExcludeDateTimePeriod(currentLayerPeriod);
+				splittedLayerPeriods.ForEach(period => InsertActivity(layerWithSpecificActivity.Payload, period, originalOrderIndex));
+			}
+
 			AddActivity(layerWithSpecificActivity.Payload, newPeriod);
 		}
 
