@@ -40,20 +40,20 @@ table td.right-align-cell
 .dashboard-blue {
 	background-color: #428bca;
 }
-.dashboard-green {
+.dashboard-purple {
 	background-color: #7250aa;
 }
-.dashboard-yellow {
+.dashboard-orange {
 	background-color: #EC7E2F;;
 }
-.dashboard-purple {
+.dashboard-green {
 	background-color: #6b9d70;
 }
-.dashboard-red {
+.dashboard-gray {
 	background-color: gray;;
 }
 .dashboard-black {
-	background-color: #222222;
+	background-color: #5a4b4b;
 }
 .dashboard .glyphicon {
 	font-size: 40px;
@@ -214,6 +214,7 @@ table td.right-align-cell
         padding-bottom: 10px;
         padding-top: 10px;
         font-size: 14px;
+        border: 1px white solid;
     }
     .queue-talk-time {
         background-color : #6b9d70;
@@ -222,6 +223,7 @@ table td.right-align-cell
         padding-top: 10px;
         font-size: 14px;
         float: left;
+        border: 1px white solid;
     }
     .queue-afterwork-time {
         background-color: gray;
@@ -230,14 +232,16 @@ table td.right-align-cell
         padding-top: 10px;
         font-size: 14px;
         float: left;
+        border: 1px white solid;
     }
     .queue-answered {
-        background-color: black;
+        background-color: #5a4b4b;
         min-height: 80px;
         padding: 0;
         padding-top: 30px;
         font-size: 20px;
 	    overflow: hidden;
+        border: 1px white solid;
     }
    .queue-answered-header {
        font-size: 14px;
