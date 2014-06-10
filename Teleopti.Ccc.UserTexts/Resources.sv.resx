@@ -11557,4 +11557,13 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="TimeInState" xml:space="preserve">
     <value>Tid i status</value>
   </data>
+  <data name="MinimumTimePerWeekColon" xml:space="preserve">
+    <value>Minsta tid per vecka:</value>
+  </data>
+  <data name="WeeklyWorkTimeBroken" xml:space="preserve">
+    <value>Du har brutit mot maxarbetstiden per vecka.</value>
+  </data>
+  <data name="QueueMetrics" xml:space="preserve">
+    <value>Köstatistik</value>
+  </data>
 </root>
