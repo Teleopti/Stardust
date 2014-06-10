@@ -41,16 +41,16 @@ table td.right-align-cell
 	background-color: #428bca;
 }
 .dashboard-green {
-	background-color: #00a300;
+	background-color: #7250aa;
 }
 .dashboard-yellow {
-	background-color: #ffc40d;
+	background-color: #EC7E2F;;
 }
 .dashboard-purple {
-	background-color: #603cba;
+	background-color: #6b9d70;
 }
 .dashboard-red {
-	background-color: #eb3c00;
+	background-color: gray;;
 }
 .dashboard-black {
 	background-color: #222222;
@@ -208,14 +208,14 @@ table td.right-align-cell
         padding: 0;
     }
     .queue-handling-time {
-        background-color: #5D9AD3;
+        background-color: #EC7E2F;
         min-height: 40px;
         padding-bottom: 10px;
         padding-top: 10px;
         font-size: 14px;
     }
     .queue-talk-time {
-        background-color :#EC7E2F;
+        background-color : #6b9d70;
         min-height: 40px;
         padding-bottom: 10px;
         padding-top: 10px;
