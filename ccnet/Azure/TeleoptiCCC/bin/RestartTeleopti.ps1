@@ -130,14 +130,6 @@ function TeleoptiWebSites-HttpGet([string]$DataSourceName)
 
 function fnBrowseUrl ([string]$url)
 {
-    $w = New-Object net.WebClient
-    try {
-        $d = $w.downloadString($url)
-    }
-    catch [Net.WebException] {
-        Write-Host $_.Exception.ToString()
-    }
-    
     $req = [system.Net.WebRequest]::Create($url)
     try {
         Get-Webclient $url #try wake her up!
@@ -152,7 +144,11 @@ function fnBrowseUrl ([string]$url)
 }
 
 Function Get-Webclient ([string]$url) {
+
     $WebClient = New-Object System.Net.WebCLient
+    if ($url.Contains("Web/MyTime")) {
+        $webClient.Headers.Add("user-agent", 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5')
+    }
     $Results = $WebClient.DownloadString($url)
 }
 
