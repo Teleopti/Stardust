@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -333,6 +334,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual void MoveLayerVertical(IMoveLayerVertical target, IShiftLayer layer)
 		{
 			target.Move(_shiftLayers, layer);
+		}
+
+		public void MoveActivity(IShiftLayer layer, TimeSpan newStartTime)
+		{
+			var layerToMoveStartOriginal = layer.Period.StartDateTime;
+			var layerToMoveEndOriginal = layer.Period.EndDateTime;
+			var newStart = layerToMoveStartOriginal.Date.Add(newStartTime);
+			var newEnd = newStart.Add(layerToMoveEndOriginal - layerToMoveStartOriginal);
+
+			RemoveActivity(layer);
+			AddActivity(layer.Payload, new DateTimePeriod(newStart, newEnd));
 		}
 
 		public virtual IDayOff DayOff()

@@ -27,15 +27,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				Person = _personForId.Load(command.AgentId),
 				Scenario = _currentScenario.Current()
 			});
-			var layerWithSpecificActivity = personAssignment.ShiftLayers.Single(x => x.Payload.Id.Value == command.ActivityId);
-
-			var layerToMoveStartOriginal = layerWithSpecificActivity.Period.StartDateTime;
-			var layerToMoveEndOriginal = layerWithSpecificActivity.Period.EndDateTime;
-			var newStart = layerToMoveStartOriginal.Date.Add(command.NewStartTime);
-			var newEnd = newStart.Add(layerToMoveEndOriginal - layerToMoveStartOriginal);
-
-			personAssignment.RemoveActivity(layerWithSpecificActivity);
-			personAssignment.AddActivity(layerWithSpecificActivity.Payload, new DateTimePeriod(newStart, newEnd));
+			var layerWithSpecificActivity = personAssignment.ShiftLayers.Single(x => x.Payload.Id.Value == command.ActivityId && x.Period.StartDateTime == command.OldStartTime);
+			personAssignment.MoveActivity(layerWithSpecificActivity, command.NewStartTime);
 		}
 	}
 }

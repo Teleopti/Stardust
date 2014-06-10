@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public DateOnly Date { get; set; }
 		public Guid ActivityId { get; set; }
 		public TimeSpan NewStartTime { get; set; }
+		public DateTime OldStartTime { get; set; }
 	}
 }
