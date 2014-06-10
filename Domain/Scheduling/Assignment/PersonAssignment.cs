@@ -336,13 +336,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			target.Move(_shiftLayers, layer);
 		}
 
-		public void MoveActivity(IShiftLayer layer, DateTimePeriod newPeriod)
+		public void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, TimeSpan newStartTime, TimeSpan length)
 		{
-			if (!RemoveActivity(layer))
+			var newStartTimeLocal = Date.Date.Add(newStartTime);
+			var startTimeUtc = new DateTime(newStartTimeLocal.Ticks, DateTimeKind.Utc);
+			var newPeriod = new DateTimePeriod(startTimeUtc, startTimeUtc.Add(length));
+
+
+			var layerWithSpecificActivity = ShiftLayers
+				.SingleOrDefault(x => x.Payload.Equals(activity) && x.Period.StartDateTime == currentStartTime);
+
+			if (!RemoveActivity(layerWithSpecificActivity))
 			{
 				throw new ArgumentException(String.Format("The layer doesn't exist"));
 			};
-			AddActivity(layer.Payload, newPeriod);
+			AddActivity(layerWithSpecificActivity.Payload, newPeriod);
 		}
 
 		public virtual IDayOff DayOff()

@@ -90,6 +90,7 @@
     <Compile Include="DatabaseHelper.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DummyContextPopulator.cs" />
+    <Compile Include="EntityExtensions.cs" />
     <Compile Include="FakeCurrentInitiatorIdentifier.cs" />
     <Compile Include="FakeData\AbsenceAccountFactory.cs" />
     <Compile Include="FakeData\CultureInfoFactory.cs" />

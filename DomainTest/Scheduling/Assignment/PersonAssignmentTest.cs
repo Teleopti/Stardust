@@ -714,13 +714,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.That(expectedLayer.Period,Is.EqualTo(period));
 			Assert.That(expectedLayer is OvertimeShiftLayer);
 		}
-
-		[Test]
-		public void ShouldThrowExceptionIfLayerIsNotFoundWhenMovingActivity()
-		{
-			var personassignment = PersonAssignmentFactory.CreateAssignmentWithOvertimePersonalAndMainshiftLayers();
-			var layer = new MainShiftLayer(new Activity(" "), new DateTimePeriod(2014, 1, 1, 2014, 1, 2));
-			Assert.Throws<ArgumentException>(()=>personassignment.MoveActivity(layer, new DateTimePeriod(2014,1,1, 2014, 1,3)));
-		}
 	}
 }

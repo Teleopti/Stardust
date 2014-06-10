@@ -5,6 +5,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -12,23 +14,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	public class MoveActivityCommandHandlerTest
 	{
-
 		[Test]
 		public void ShouldDoThrowIfPersonAssignmentNotExists()
 		{
-			var agent = new Person();
-			agent.SetId(Guid.NewGuid());
-
+			var agent = new Person().WithId();
+			var activity = new Activity("act").WithId();
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository();
 			var scenario = new ThisCurrentScenario(new Scenario(" "));
 			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
-			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, scenario);
+			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, new FakeWriteSideRepository<IActivity>{activity}, scenario);
 
 			var cmd = new MoveActivityCommand
 			{
 				AgentId = agent.Id.Value,
 				Date = new DateOnly(DateTime.UtcNow),
-				ActivityId = Guid.NewGuid(),
+				ActivityId = activity.Id.Value,
 				NewStartTime = TimeSpan.FromHours(4),
 				OldStartTime = new DateTime(2000,1,1),
 				OldProjectionLayerLength = TimeSpan.FromHours(2)
@@ -41,139 +41,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShouldMoveAndResizeALayerIfLayerAndProjectionHaveDifferentDuration()
+		public void ShouldChangeState()
 		{
-			var agent = new Person();
-			agent.SetId(Guid.NewGuid());
-			var activity = new Activity("theone");
-			activity.SetId(Guid.NewGuid());
-			var activityNotBeMoved = new Activity("justanotherone");
-			activityNotBeMoved.SetId(Guid.NewGuid());
-			var orgStartActivity = createDateTime(2);
-			var orgEndActivity = createDateTime(5);
-			var orgStartActivityNotBeMoved = createDateTime(4);
-			var orgEndActivityNotBeMoved = createDateTime(7);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent,
-				new DateTimePeriod(orgStartActivity, orgEndActivity));
-			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(orgStartActivityNotBeMoved, orgEndActivityNotBeMoved));
-
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { assignment };
-			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
-			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, scenario);
-
-			var cmd = new MoveActivityCommand
-			{
-				AgentId = agent.Id.Value,
-				Date = assignment.Date,
-				ActivityId = activity.Id.Value,
-				NewStartTime = TimeSpan.FromHours(4),
-				OldStartTime = orgStartActivity,
-				OldProjectionLayerLength = TimeSpan.FromHours(2) //length of layer in projection
-			};
-
-			target.Handle(cmd);
-
-			var projection = assignment.ProjectionService().CreateProjection();
-			projection.Count().Should().Be.EqualTo(2);
-			projection.First().Period.StartDateTime.Should().Be.EqualTo(cmd.Date.Date.Add(cmd.NewStartTime));
-			projection.First().Period.ElapsedTime().Should().Be.EqualTo(orgStartActivityNotBeMoved.Subtract(orgStartActivity));
-		}
-
-
-		[Test]
-		public void ShouldMoveASpecificLayerIfTwoLayersWithSameActivityExist()
-		{
-			var agent = new Person();
-			agent.SetId(Guid.NewGuid());
-			var activity = new Activity("theone");
-			activity.SetId(Guid.NewGuid());
-			var orgStartActivity = createDateTime(2);
-			var orgEndActivity = createDateTime(5);
-			var orgStartActivityNotBeMoved = createDateTime(11);
-			var orgEndActivityNotBeMoved = createDateTime(15);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent,
-				new DateTimePeriod(orgStartActivity, orgEndActivity));
-			assignment.AddActivity(activity, new DateTimePeriod(orgStartActivityNotBeMoved, orgEndActivityNotBeMoved));
-
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { assignment };
-			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
-			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, scenario);
-
-			var cmd = new MoveActivityCommand
-			{
-				AgentId = agent.Id.Value,
-				Date = assignment.Date,
-				ActivityId = activity.Id.Value,
-				NewStartTime = TimeSpan.FromHours(1),
-				OldStartTime = orgStartActivity,
-				OldProjectionLayerLength = orgEndActivity - orgStartActivity
-			};
-
-			target.Handle(cmd);
-
-			var projection = assignment.ProjectionService().CreateProjection();
-			projection.Count().Should().Be.EqualTo(2);
-			projection.First().Period.StartDateTime.Should().Be.EqualTo(cmd.Date.Date.Add(cmd.NewStartTime));
-		}
-
-		[Test]
-		public void ShouldMoveLayerWhenItsTwoDifferentActivities()
-		{
-			var agent = new Person();
-			agent.SetId(Guid.NewGuid());
-			var activity = new Activity("theone");
-			var activityNotBeMoved = new Activity("justanotherone");
-			activity.SetId(Guid.NewGuid());
-			activityNotBeMoved.SetId(Guid.NewGuid());
-			var orgStartActivity = createDateTime(3);
-			var orgEndActivity = createDateTime(8);
-			var orgStartActivityNotBeMoved = createDateTime(5);
-			var orgEndActivityNotBeMoved = createDateTime(10);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent,
-				new DateTimePeriod(orgStartActivity, orgEndActivity));
-			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(orgStartActivityNotBeMoved, orgEndActivityNotBeMoved));
-
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { assignment };
-			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
-			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
-			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, scenario);
-
-			var cmd = new MoveActivityCommand
-			{
-				AgentId = agent.Id.Value,
-				Date = assignment.Date,
-				ActivityId = activity.Id.Value,
-				NewStartTime = TimeSpan.FromHours(1),
-				OldStartTime = orgStartActivity,
-				OldProjectionLayerLength = orgEndActivity - orgStartActivity
-			};
-
-			target.Handle(cmd);
-
-			var expectedStart = orgStartActivity.Date.Add(orgEndActivity - (orgStartActivity - cmd.NewStartTime));
-			var projection = assignment.ProjectionService().CreateProjection();
-			projection.Count().Should().Be.EqualTo(2);
-			projection.First().Period.EndDateTime.Should().Be.EqualTo(expectedStart);
-			projection.Last().Period.EndDateTime.Should().Be.EqualTo(orgEndActivityNotBeMoved);
-		}
-
-		[Test]
-		public void ShouldMoveSingleLayer()
-		{
-			var agent = new Person();
-			agent.SetId(Guid.NewGuid());
-			var activity = new Activity("_");
-			activity.SetId(Guid.NewGuid());
+			var agent = new Person().WithId();
+			var activity = new Activity("_").WithId();
 			var orgStart = createDateTime(6);
 			var orgEnd = createDateTime(11);
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(orgStart, orgEnd));
 
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { assignment };
+			var activityRepository = new FakeWriteSideRepository<IActivity> { activity };
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
 			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
-			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, scenario);
+			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, activityRepository, scenario);
 
 			var cmd = new MoveActivityCommand
 			{

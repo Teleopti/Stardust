@@ -10,20 +10,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	{
 		private readonly IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> _personAssignmentRepositoryTypedId;
 		private readonly IProxyForId<IPerson> _personForId;
+		private readonly IProxyForId<IActivity> _activityForId;
 		private readonly ICurrentScenario _currentScenario;
 
 		public MoveActivityCommandHandler(IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepositoryTypedId, 
 																		IProxyForId<IPerson> personForId, 
+																		IProxyForId<IActivity> activityForId,
 																		ICurrentScenario currentScenario)
 		{
 			_personAssignmentRepositoryTypedId = personAssignmentRepositoryTypedId;
 			_personForId = personForId;
+			_activityForId = activityForId;
 			_currentScenario = currentScenario;
 		}
 
 		public void Handle(MoveActivityCommand command)
 		{
 			var assignedAgent = _personForId.Load(command.AgentId);
+			var activity = _activityForId.Load(command.ActivityId);
 			var currentScenario = _currentScenario.Current();
 			var currentDate = command.Date;
 			var personAssignment = _personAssignmentRepositoryTypedId.LoadAggregate(new PersonAssignmentKey
@@ -35,12 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if (personAssignment == null)
 				throw new InvalidOperationException(string.Format("Person assigment is not found. Date: {0} PersonId: {1} Scenario: {2} ", currentDate, assignedAgent.Id, currentScenario.Description));
-			
-			var newStartTimeLocal = personAssignment.Date.Date.Add(command.NewStartTime);
-			var startTimeUtc = new DateTime(newStartTimeLocal.Ticks, DateTimeKind.Utc);
 
-			var layerWithSpecificActivity = personAssignment.ShiftLayers.Single(x => x.Payload.Id.Value == command.ActivityId && x.Period.StartDateTime == command.OldStartTime);
-			personAssignment.MoveActivity(layerWithSpecificActivity, new DateTimePeriod(startTimeUtc, startTimeUtc.Add(command.OldProjectionLayerLength)));
+			personAssignment.MoveActivityAndSetHighestPriority(activity, command.OldStartTime, command.NewStartTime, command.OldProjectionLayerLength);
 		}
 	}
 }
