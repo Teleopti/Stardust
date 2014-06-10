@@ -11455,8 +11455,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Please select at least one of the options "Shift Category", "Start Time" or "Same Shift" in  Block scheduling.</value>
   </data>
   <data name="ValidateUnsupportedRestrictions" xml:space="preserve">
-    <value>Shift category limitations is not supported when team or block is selected</value>
-    <comment>Shift category limitations is not supported when team or block is selected</comment>
+    <value>Shift category limitations are not checked when team or block are selected.</value>
+    <comment>Shift category limitations are not checked when team or block are selected</comment>
   </data>
   <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
     <value>Your absence request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: {0}.</value>
@@ -11859,8 +11859,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>Not supported combination</comment>
   </data>
   <data name="UnsupportedOptimizationSteps" xml:space="preserve">
-    <value>Optimization steps "Time between days", "Shift for flexible work time", "Days off for flexible work time" and "Shift category limitations" are not supported when team or block is selected</value>
-    <comment>Optimization steps "Time between days", "Shift for flexible work time", "Days off for flexible work time" and "Shift category limitations" are not supported when team or block is selected</comment>
+    <value>Optimization steps "Time between days", "Shift for flexible work time", "Days off for flexible work time" and "Shift category limitations" are not executed when team or block are selected.</value>
+    <comment>Optimization steps "Time between days", "Shift for flexible work time", "Days off for flexible work time" and "Shift category limitations" are not executed when team or block are selected</comment>
   </data>
   <data name="TeamToCompareWith" xml:space="preserve">
     <value>Team to compare with</value>
