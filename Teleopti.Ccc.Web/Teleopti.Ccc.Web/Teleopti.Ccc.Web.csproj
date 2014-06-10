@@ -918,6 +918,8 @@
     <Content Include="Areas\PerformanceTool\Content\Scripts\result.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\addfulldayabsence\scheduledresourcesreadmodel.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\progressitem-count.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\rta\iteration.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\rta\scenario.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\signalrhubs.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\template\iteration.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\template\scenario.js" />
