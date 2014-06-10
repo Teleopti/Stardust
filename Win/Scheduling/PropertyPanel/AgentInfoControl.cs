@@ -791,7 +791,16 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             listViewPerson.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
-        private void AgentInfo_FromLoad(object sender, EventArgs e)
+	    private void updateLocalTime(IPerson person)
+	    {
+		    var item = listViewPerson.Items[6];
+		    var subItem = item.SubItems[1];
+			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+		    subItem.Text = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneInfo).ToShortTimeString();
+
+	    }
+
+	    private void AgentInfo_FromLoad(object sender, EventArgs e)
         {
             initializeFairnessTab();
 	        timerRefresh.Interval = 2000;
@@ -802,7 +811,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		{
 			if (tabControlAgentInfo.SelectedTab == tabPageAdvPerson && _dateIsSelected)
 			{
-				updatePersonInfo(_selectedPerson);
+				updateLocalTime(_selectedPerson);
 			}
 		}
 
