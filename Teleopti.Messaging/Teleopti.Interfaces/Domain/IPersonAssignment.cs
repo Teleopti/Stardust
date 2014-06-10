@@ -66,6 +66,6 @@ namespace Teleopti.Interfaces.Domain
 	    void InsertOvertimeLayer(IActivity activity, DateTimePeriod period, int index, IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
 	    void InsertPersonalLayer(IActivity activity, DateTimePeriod period, int index);
 	    void MoveLayerVertical(IMoveLayerVertical target, IShiftLayer layer);
-	    void MoveActivity(IShiftLayer layer, TimeSpan newStartTime);
+	    void MoveActivity(IShiftLayer layer, DateTimePeriod newPeriod);
     }
 }

@@ -13,6 +13,47 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	public class MoveActivityCommandHandlerTest
 	{
 		[Test]
+		public void ShouldMoveAndResizeALayerIfLayerAndProjectionHaveDifferentDuration()
+		{
+			var agent = new Person();
+			agent.SetId(Guid.NewGuid());
+			var activity = new Activity("theone");
+			activity.SetId(Guid.NewGuid());
+			var activityNotBeMoved = new Activity("justanotherone");
+			activityNotBeMoved.SetId(Guid.NewGuid());
+			var orgStartActivity = createDateTime(2);
+			var orgEndActivity = createDateTime(5);
+			var orgStartActivityNotBeMoved = createDateTime(4);
+			var orgEndActivityNotBeMoved = createDateTime(7);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent,
+				new DateTimePeriod(orgStartActivity, orgEndActivity));
+			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(orgStartActivityNotBeMoved, orgEndActivityNotBeMoved));
+
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { assignment };
+			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
+			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, scenario);
+
+			var cmd = new MoveActivityCommand
+			{
+				AgentId = agent.Id.Value,
+				Date = assignment.Date,
+				ActivityId = activity.Id.Value,
+				NewStartTime = TimeSpan.FromHours(4),
+				OldStartTime = orgStartActivity,
+				OldProjectionLayerLength = TimeSpan.FromHours(2) //length of layer in projection
+			};
+
+			target.Handle(cmd);
+
+			var projection = assignment.ProjectionService().CreateProjection();
+			projection.Count().Should().Be.EqualTo(2);
+			projection.First().Period.StartDateTime.Should().Be.EqualTo(cmd.Date.Date.Add(cmd.NewStartTime));
+			projection.First().Period.ElapsedTime().Should().Be.EqualTo(orgStartActivityNotBeMoved.Subtract(orgStartActivity));
+		}
+
+
+		[Test]
 		public void ShouldMoveASpecificLayerIfTwoLayersWithSameActivityExist()
 		{
 			var agent = new Person();
@@ -38,7 +79,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				Date = assignment.Date,
 				ActivityId = activity.Id.Value,
 				NewStartTime = TimeSpan.FromHours(1),
-				OldStartTime = orgStartActivity
+				OldStartTime = orgStartActivity,
+				OldProjectionLayerLength = orgEndActivity - orgStartActivity
 			};
 
 			target.Handle(cmd);
@@ -76,7 +118,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				Date = assignment.Date,
 				ActivityId = activity.Id.Value,
 				NewStartTime = TimeSpan.FromHours(1),
-				OldStartTime = orgStartActivity
+				OldStartTime = orgStartActivity,
+				OldProjectionLayerLength = orgEndActivity - orgStartActivity
 			};
 
 			target.Handle(cmd);
@@ -97,8 +140,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			activity.SetId(Guid.NewGuid());
 			var orgStart = createDateTime(6);
 			var orgEnd = createDateTime(11);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(				activity, agent,
-				new DateTimePeriod(orgStart, orgEnd));
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(orgStart, orgEnd));
 
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { assignment };
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
@@ -111,7 +153,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				Date = assignment.Date,
 				ActivityId = activity.Id.Value,
 				NewStartTime = TimeSpan.FromHours(2),
-				OldStartTime = orgStart
+				OldStartTime = orgStart,
+				OldProjectionLayerLength = orgEnd - orgStart
 			};
 
 			target.Handle(cmd);

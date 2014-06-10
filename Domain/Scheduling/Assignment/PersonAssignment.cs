@@ -336,15 +336,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			target.Move(_shiftLayers, layer);
 		}
 
-		public void MoveActivity(IShiftLayer layer, TimeSpan newStartTime)
+		public void MoveActivity(IShiftLayer layer, DateTimePeriod newPeriod)
 		{
-			var layerToMoveStartOriginal = layer.Period.StartDateTime;
-			var layerToMoveEndOriginal = layer.Period.EndDateTime;
-			var newStart = layerToMoveStartOriginal.Date.Add(newStartTime);
-			var newEnd = newStart.Add(layerToMoveEndOriginal - layerToMoveStartOriginal);
-
 			RemoveActivity(layer);
-			AddActivity(layer.Payload, new DateTimePeriod(newStart, newEnd));
+			AddActivity(layer.Payload, newPeriod);
 		}
 
 		public virtual IDayOff DayOff()

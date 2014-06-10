@@ -12,7 +12,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IProxyForId<IPerson> _personForId;
 		private readonly ICurrentScenario _currentScenario;
 
-		public MoveActivityCommandHandler(IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepositoryTypedId, IProxyForId<IPerson> personForId, ICurrentScenario currentScenario)
+		public MoveActivityCommandHandler(IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepositoryTypedId, 
+																		IProxyForId<IPerson> personForId, 
+																		ICurrentScenario currentScenario)
 		{
 			_personAssignmentRepositoryTypedId = personAssignmentRepositoryTypedId;
 			_personForId = personForId;
@@ -21,14 +23,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public void Handle(MoveActivityCommand command)
 		{
+			var assignedAgent = _personForId.Load(command.AgentId);
 			var personAssignment = _personAssignmentRepositoryTypedId.LoadAggregate(new PersonAssignmentKey
 			{
 				Date = command.Date,
-				Person = _personForId.Load(command.AgentId),
+				Person = assignedAgent,
 				Scenario = _currentScenario.Current()
 			});
+			
+			var newStartTimeLocal = personAssignment.Date.Date.Add(command.NewStartTime);
+			var startTimeUtc = new DateTime(newStartTimeLocal.Ticks, DateTimeKind.Utc);
+
+
 			var layerWithSpecificActivity = personAssignment.ShiftLayers.Single(x => x.Payload.Id.Value == command.ActivityId && x.Period.StartDateTime == command.OldStartTime);
-			personAssignment.MoveActivity(layerWithSpecificActivity, command.NewStartTime);
+			personAssignment.MoveActivity(layerWithSpecificActivity, new DateTimePeriod(startTimeUtc, startTimeUtc.Add(command.OldProjectionLayerLength)));
 		}
 	}
 }
