@@ -338,7 +338,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void MoveActivity(IShiftLayer layer, DateTimePeriod newPeriod)
 		{
-			RemoveActivity(layer);
+			if (!RemoveActivity(layer))
+			{
+				throw new ArgumentException(String.Format("The layer doesn't exist"));
+			};
 			AddActivity(layer.Payload, newPeriod);
 		}
 

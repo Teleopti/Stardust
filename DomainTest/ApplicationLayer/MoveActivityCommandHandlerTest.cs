@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	public class MoveActivityCommandHandlerTest
 	{
+
 		[Test]
 		public void ShouldDoThrowIfPersonAssignmentNotExists()
 		{
