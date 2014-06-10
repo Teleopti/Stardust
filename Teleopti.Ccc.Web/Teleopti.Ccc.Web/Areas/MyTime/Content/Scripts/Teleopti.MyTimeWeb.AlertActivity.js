@@ -263,6 +263,9 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		StartAlert: function (options) {
 			notifyOptions = options;
 			initNotificationViewModel(options);
+		},
+		AbortAjax: function() {
+			ajax.AbortAll();
 		}
 	};
 })(jQuery);

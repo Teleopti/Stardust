@@ -63,14 +63,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
-            addExtraDataSource();
 			Browser.SelectBrowserByTag();
 			Browser.NotifyBeforeScenario();
-			
+
+			addExtraDataSource();
 			TestControllerMethods.BeforeScenario();
 			
 			TestDataSetup.RestoreCcc7Data();
 			TestDataSetup.ClearAnalyticsData();
+
 
 			GlobalPrincipalState.EnsureThreadPrincipal();
 			ScenarioUnitOfWorkState.OpenUnitOfWork();
@@ -123,6 +124,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Log.Debug("Cleaning up after scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
+			Browser.Interactions.Javascript("try { Teleopti.MyTimeWeb.MessageBroker.Close(); } catch(e) {}");
+			Browser.Interactions.Javascript("try { Teleopti.MyTimeWeb.AlertActivity.AbortAjax(); } catch(e) {}");
 			ScenarioUnitOfWorkState.DisposeUnitOfWork();
 			HandleScenarioException();
             removeExtraDataSource();
