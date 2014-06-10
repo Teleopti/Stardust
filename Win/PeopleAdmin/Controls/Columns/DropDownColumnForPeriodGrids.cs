@@ -148,6 +148,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
                         TItems item;
                         if (tryGetItemByDisplayMember(e.Style.CellValue.ToString(), out item))
                         {
+	                        if (null == item)
+		                        return;
                             _propertyReflector.SetValue(dataItem, BindingProperty, item);
                             e.Handled = true;
                         }
