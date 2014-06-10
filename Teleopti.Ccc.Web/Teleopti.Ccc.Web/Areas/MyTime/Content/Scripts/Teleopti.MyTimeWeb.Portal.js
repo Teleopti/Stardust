@@ -29,8 +29,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _registerPartialCallback(viewId, callBack, disposeCallback) {
-		_partialViewInitCallback[viewId] = callBack;
-		_partialViewDisposeCallback[viewId] = disposeCallback;
+	    _partialViewInitCallback[viewId.toUpperCase()] = callBack;
+	    _partialViewDisposeCallback[viewId.toUpperCase()] = disposeCallback;
 	}
 
 	//disable navigation controls on ajax-begin
@@ -292,12 +292,16 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _invokeDisposeCallback(viewId) {
-		var partialDispose = _partialViewDisposeCallback[viewId];
+	    if (viewId != null)
+	        viewId = viewId.toUpperCase();
+	    var partialDispose = _partialViewDisposeCallback[viewId];
 		if ($.isFunction(partialDispose))
 			partialDispose();
 	}
 
-	function _invokeInitCallback(viewId,secondAction) {
+	function _invokeInitCallback(viewId, secondAction) {
+	    if (viewId != null)
+	        viewId = viewId.toUpperCase();
 		var partialInit = _partialViewInitCallback[viewId];
 		if ($.isFunction(partialInit))
 			partialInit(_readyForInteraction, _completelyLoaded);
