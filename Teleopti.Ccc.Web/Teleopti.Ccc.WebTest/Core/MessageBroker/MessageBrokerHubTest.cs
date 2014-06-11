@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 				}));
 			hubBuilder.SetupHub(target, client);
 
-			target.PingWithId(13);
+			target.PingWithId(12);
 
 			pongedWith.Should().Be(12);
 		}
