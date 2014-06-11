@@ -72,8 +72,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		// Probably a WaitHandle object isnt a best choice, but same applies to QueueUserWorkItem method.
 		// An alternative using Tasks should be looked at instead.
-		public void ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp,
-			Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
+		public int ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp, Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
 		{
 			int dataSourceId;
 			var batch = isSnapshot
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.Rta.Server
 			{
 				LoggingSvc.WarnFormat(
 					"No data source available for source id = {0}. Event will not be handled before data source is set up.", sourceId);
-				return;
+				return 0;
 			}
 
 			if (isSnapshot && string.IsNullOrEmpty(logOn))
@@ -92,7 +91,7 @@ namespace Teleopti.Ccc.Rta.Server
 				LoggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", batchId,
 					sourceId);
 				handleLastOfBatch(batchId, sourceId);
-				return;
+				return 0;
 			}
 
 			IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.Rta.Server
 				LoggingSvc.InfoFormat(
 					"No person available for datasource id = {0} and log on {1}. Event will not be handled before person is set up.",
 					dataSourceId, logOn);
-				return;
+				return 0;
 			}
 
 			foreach (var personWithBusinessUnit in personWithBusinessUnits)
@@ -130,6 +129,7 @@ namespace Teleopti.Ccc.Rta.Server
 				if (agentState.SendOverMessageBroker)
 					sendRtaState(agentState);
 			}
+			return 1;
 		}
 
 		private void handleLastOfBatch(DateTime batchId, string sourceId)

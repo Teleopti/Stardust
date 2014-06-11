@@ -8,12 +8,13 @@ namespace Teleopti.Ccc.Rta.LogClientProxy
 {
     public class TeleoptiRtaServiceProxy : TeleoptiRtaService.TeleoptiRtaService, IRtaDataHandlerClient
     {
-        public void ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp, Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
+        public int ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp, Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
         {
             int result;
             bool resultSpecified;
             SaveExternalUserState("!#¤atAbgT%", logOn, stateCode, stateCode, true, true, (int)timeInState.TotalSeconds, true, timestamp,
                                      true, platformTypeId.ToString(), sourceId, batchId, true, isSnapshot, true, out result, out resultSpecified);
+	        return result;
         }
 
 		public void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)

@@ -95,13 +95,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		    Log.InfoFormat(
 			    "Message verified and validated from sender for UserCode: {0}, StateCode: {1}. (MessageId = {2})", userCode,
 			    stateCode, messageId);
-		    _rtaDataHandler.ProcessRtaData(userCode.Trim(), stateCode, TimeSpan.FromSeconds(secondsInState), timestamp,
+		    var result = _rtaDataHandler.ProcessRtaData(userCode.Trim(), stateCode, TimeSpan.FromSeconds(secondsInState), timestamp,
 		                                   parsedPlatformTypeId, sourceId, batchId, isSnapshot);
 
 		    Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId = {2})", userCode,
 		                   stateCode, messageId);
 
-		    return 1;
+		    return result;
 	    }
 
 	    private void verifyAuthenticationKey(string authenticationKey, Guid messageId)
