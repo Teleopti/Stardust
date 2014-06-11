@@ -13,6 +13,8 @@
 		MyReport_AgentQueueMetrics_22254,
 
 		RTA_RtaLastStatesOverview_27789,
-		RTA_DrilldownToAllAgentsInOneTeam_25234
+		RTA_DrilldownToAllAgentsInOneTeam_25234,
+
+		MyTeam_MoveActivity_25206
 	}
 }
