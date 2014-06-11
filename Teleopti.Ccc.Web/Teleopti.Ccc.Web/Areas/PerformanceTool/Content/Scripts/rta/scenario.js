@@ -2,7 +2,7 @@
 define([
 		'knockout',
 		'progressitem-count',
-		'template/iteration',
+		'rta/iteration',
 		'result'
 ], function (
 		ko,
@@ -16,14 +16,7 @@ define([
 		var result;
 
 		this.Name = "Rta Load Test";
-		this.Text = "\
-		Load test RTA configuration options:<br/> \
-		Remove SetUpDatabase if you dont want to create testAgents <br/><br/>\
-		\
-		Instead of ExternalLogOns:[ 1,2 ] you can choose either <br/>\
-		Sites : [ \"guid1\",\"guid2\" ] <br/>\
-		Teams : [ \"guid1\",\"guid2\" ] <br/>\
-		PersonIds : [ \"guid1\",\"guid2\" ] ";
+		this.Text = "";
 
 		this.Configuration = ko.observable();
 
@@ -36,10 +29,13 @@ define([
 		});
 
 		var updateResult = function () {
-			result.IterationsDone(progressItemReadModel.Count());
-			if (result.IterationsDone() >= self.IterationsExpected()) {
-				result.RunDone(true);
-				result = null;
+			var calculatedInterationsDone = progressItemReadModel.Count();
+			if (calculatedInterationsDone > result.IterationsDone()) {
+				result.IterationsDone(calculatedInterationsDone);
+				if (result.IterationsDone() >= self.IterationsExpected()) {
+					result.RunDone(true);
+					result = null;
+				}
 			}
 		};
 
@@ -50,23 +46,35 @@ define([
 				return;
 
 			var iterations = [];
-			for (var i = 0; i < configuration.NumberOfIterations; i++) {
-				iterations.push(new Iteration({
-					Number: i,
-					Sent: function () {
-						updateResult();
-					},
-					Success: function () {
-						progressItemReadModel.Success();
-						updateResult();
-					},
-					Failure: function () {
-						progressItemReadModel.Failure();
-						updateResult();
+			
+			for (var i = 0; i < configuration.StatesToSend;) {
+				for (var k = 0; k < configuration.States.length; k++) {
+					for (var j = 0; j < configuration.ExternalLogOns.length; j++) {
+						iterations.push(new Iteration({
+							Url: configuration.Url,
+							PlatformTypeId: configuration.PlatformTypeId,
+							SourceId: configuration.SourceId,
+
+							ExternalLogOn: configuration.ExternalLogOns[j],
+							StateCode: configuration.States[k],
+
+							Sent: function() {
+								updateResult();
+							},
+							Success: function() {
+								progressItemReadModel.Success();
+								updateResult();
+							},
+							Failure: function() {
+								progressItemReadModel.Failure();
+								updateResult();
+							}
+						}));
+						i++;
+						if (i == configuration.StatesToSend)
+							return iterations;
 					}
-				}));
-				if (iterations.length > 2000)
-					return undefined;
+				}
 			}
 			return iterations;
 
@@ -81,8 +89,10 @@ define([
 		});
 
 		var progressItemReadModel = new ProgressItemCountViewModel(
-			"Count",
-			self.IterationsExpected
+			"Rta",
+			ko.computed(function() {
+				return self.IterationsExpected();
+			}) 
 		);
 
 		this.ProgressItems = [
@@ -99,41 +109,25 @@ define([
 			return undefined;
 		});
 
-		var configuration =
-		{
-			Url: "http://foo.bar/TeleoptiRtaService.svc",
-			SendInterval: 1000,
+		self.Configuration(JSON.stringify({
+			Url: "http://localhost:52858/Rta/TeleoptiRtaService.svc",
 			PlatformTypeId: "00000000-0000-0000-0000-000000000000",
-			ExternalLogOns: [],
-			States: [],
-			DataSourceId: 1,
-			SetUpDatabase: {
-				NumberOfAgentsToCreate: 1000,
-				DataSourceId: 6,
-			}
-
-		};
-
-		self.Configuration(JSON.stringify(configuration, null, 4));
+			ExternalLogOns: [2001],
+			States: ["Ready", "OFF"],
+			SourceId: 1,
+			StatesToSend: 100
+		}, null, 4));
 
 		this.Run = function () {
-
 			var iterations = self.Iterations();
-
 			progressItemReadModel.Reset();
+			result = new ResultViewModel();
 
 			$.each(iterations, function (i, e) {
 				e.Start();
 			});
 
-			var commandsSentPromises = $.map(iterations, function (e) {
-				return e.AllCommandsCompletedPromise;
-			});
-			$.when.apply($, commandsSentPromises).then(function () {
-				result.CommandsDone(true);
-			});
-
-			result = new ResultViewModel();
+			result.CommandsDone(true);
 
 			return result;
 		};

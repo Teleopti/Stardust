@@ -1,30 +1,42 @@
 
 define([
-], function (
-	) {
+], function(
+) {
 
-	return function (data) {
+	return function(data) {
 
 		var self = this;
 
 		this.Number = data.Number;
 
-		this.Start = function () {
-
-			// do your async server calls here
-			// now we fake it
-
+		this.Start = function() {
 			self.AllCommandsCompletedPromise = $.Deferred();
-
-			setTimeout(function () {
-				self.AllCommandsCompletedPromise.resolve();
-			}, 50 * data.Number);
-
-			setTimeout(function () {
-				data.Success();
-			}, 100 * data.Number);
+			self.SendRtaExternalState();
 		};
 
+		this.SendRtaExternalState = function() {
+			$.ajax({
+				url: data.Url,
+				dataType: 'json',
+				contentType: 'application/json',
+				data: JSON.stringify({
+					authenticationKey: "!#¤atAbgT%",
+					userCode: data.ExternalLogOn,
+					stateCode: data.StateCode,
+					isLoggedOn: "true",
+					timestamp: moment.utc(),
+					platformTypeId: data.PlatformTypeId,
+					sourceId: data.SourceId,
+					isSnapshot: "false"
+				}),
+				error: function() {
+					data.Failure();
+				},
+				complete: function (jqXHR, text) {
+					if (text === "success")
+						data.Success();
+				}
+			});
+		};
 	};
-
 });
