@@ -58,5 +58,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_commandDispatcher.Execute(command);
 			return Json(new object(), JsonRequestBehavior.DenyGet);
 		}
+
+		[HttpPost]
+		[UnitOfWorkAction]
+		public JsonResult MoveActivity(MoveActivityCommand command)
+		{
+			_commandDispatcher.Execute(command);
+			return Json(new object(), JsonRequestBehavior.DenyGet);
+		}
 	}
 }

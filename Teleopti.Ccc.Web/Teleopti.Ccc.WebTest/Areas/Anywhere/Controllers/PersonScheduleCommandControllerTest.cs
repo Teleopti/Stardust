@@ -86,6 +86,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			commandDispatcher.AssertWasCalled(x => x.Execute(command));
 		}
 
+		[Test]
+		public void ShouldDispatchMoveActivity()
+		{
+			var dispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
+			var target = new PersonScheduleCommandController(dispatcher);
+			var command = new MoveActivityCommand();
+			target.MoveActivity(command);
+			dispatcher.AssertWasCalled(x=>x.Execute(command));
+		}
 	}
 
 }
