@@ -77,7 +77,7 @@ namespace Teleopti.Runtime.Environment
 
 				systemMenu.InsertMenu(0, ItemFlags.mfUnchecked | ItemFlags.mfString, m_AlwaysOnTopID, Resources.AlwaysOnTop);
 			}
-			catch (NoSystemMenuException err)
+			catch (NoSystemMenuException)
 			{
 			}
 		}
