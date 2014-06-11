@@ -26,6 +26,9 @@
     <![endif]-->
   
    <button class="btn btn-danger" data-bind="click: sendTestMessage, text: testMessage"></button>
-
+   <button class="btn btn-danger" data-bind="click: startSignalR">Start SignalR</button>
+	<button class="btn btn-danger" data-bind="click: checkMessageBrokerConnection">Check connection</button>
+	<button class="btn btn-danger" data-bind="click: sendMessageBrokerPing">Send Ping</button>
+	<button class="btn btn-danger" data-bind="click: subscribeToPing">Subscribe Ping</button>
 </body>
 </html>

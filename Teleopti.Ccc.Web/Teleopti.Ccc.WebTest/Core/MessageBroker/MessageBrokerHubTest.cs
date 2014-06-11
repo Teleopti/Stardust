@@ -83,6 +83,25 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			_ponged.Should().Be.True();
 		}
 
+		[Test]
+		public void Ping_WithAnIdentification_ShouldPongWithsameIdentification()
+		{
+			var target = new MessageBrokerHub(new ActionImmediate(), new SubscriptionPassThrough());
+			var hubBuilder = new TestHubBuilder();
+			var pongedWith = 0d;
+			var client = hubBuilder.FakeClient<double>(
+				"Pong",
+				new Action<double>((d) =>
+				{
+					pongedWith = d;
+				}));
+			hubBuilder.SetupHub(target, client);
+
+			target.PingWithId(13);
+
+			pongedWith.Should().Be(12);
+		}
+
 
 	}
 }

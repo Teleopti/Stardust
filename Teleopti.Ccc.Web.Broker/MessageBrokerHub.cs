@@ -91,5 +91,10 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			Clients.Caller.Pong();
 		}
+
+		public void PingWithId(double id)
+		{
+			Clients.Caller.Pong(id);
+		}
 	}
 }
