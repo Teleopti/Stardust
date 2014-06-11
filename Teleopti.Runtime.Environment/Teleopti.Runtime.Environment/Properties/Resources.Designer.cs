@@ -59,5 +59,14 @@ namespace Teleopti.Runtime.Environment.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Always on top.
+        /// </summary>
+        internal static string AlwaysOnTop {
+            get {
+                return ResourceManager.GetString("AlwaysOnTop", resourceCulture);
+            }
+        }
     }
 }
