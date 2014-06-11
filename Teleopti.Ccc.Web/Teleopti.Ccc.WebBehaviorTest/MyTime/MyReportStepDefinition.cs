@@ -171,7 +171,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.ClickUsingJQuery(".glyphicon.glyphicon-calendar");
 			string selector = string.Format(".datepicker-days .day:contains('{0}')", date.Day);
-			Browser.Interactions.AssertVisibleUsingJQuery(selector);
 			Browser.Interactions.ClickUsingJQuery(selector);
 		}
 
