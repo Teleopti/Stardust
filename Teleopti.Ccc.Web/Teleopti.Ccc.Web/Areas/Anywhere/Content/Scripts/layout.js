@@ -187,7 +187,8 @@ define([
                 success: function(responseData, textStatus, jqXHR) {
                     menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
                     menu.MobileReportsVisible(responseData.IsMobileReportsAvailable === true);
-	                menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
+                    menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
+                    menu.moveActivityVisible(responseData.moveActivityVisible === true);
                     menu.UserName(responseData.UserName);
                 }
             });
