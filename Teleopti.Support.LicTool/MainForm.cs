@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Licensing.Agreements;
 using Teleopti.Ccc.Secrets.Licensing;
 
@@ -21,17 +20,11 @@ namespace Teleopti.Support.LicTool
 		{
 			InitializeComponent();
 			InstallLocalKeypair();
-			comboBoxAgreement.SelectedIndexChanged += comboBoxAgreementSelectedIndexChanged;
 			loadAgreements();
 			comboBoxAgentsOrSeats.SelectedIndex = 0;
 			labelRatio.Enabled = false;
 			numericUpDownCountRatio.Value = 1.5M;
 			numericUpDownCountRatio.Enabled = false;
-		}
-
-		void comboBoxAgreementSelectedIndexChanged(object sender, EventArgs e)
-		{
-			var item = comboBoxAgreement.SelectedItem as LicenseAgreement;
 		}
 
 		private void loadAgreements()
@@ -74,16 +67,16 @@ namespace Teleopti.Support.LicTool
 		{
 			try
 			{
-					string path = Directory.GetCurrentDirectory();
+				var path = Directory.GetCurrentDirectory();
 
-					using (System.Diagnostics.Process proc = new System.Diagnostics.Process())
-					{
-						proc.StartInfo.FileName = path + "\\InstallLocalKeypair.bat";
-						proc.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
-						proc.StartInfo.CreateNoWindow = false;
-						proc.Start();
-						proc.WaitForExit();
-					}
+				using (System.Diagnostics.Process proc = new System.Diagnostics.Process())
+				{
+					proc.StartInfo.FileName = path + "\\InstallLocalKeypair.bat";
+					proc.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+					proc.StartInfo.CreateNoWindow = false;
+					proc.Start();
+					proc.WaitForExit();
+				}
 
 			}
 			catch (InvalidOperationException ex)
@@ -96,17 +89,13 @@ namespace Teleopti.Support.LicTool
 		static string replaceInvalidFileChars(string testName)        
 		   {                
 			   var windowsPathBadChars = new Regex("[" + Regex.Escape("<>:\"/\\|?*") + "]");
-			   if (windowsPathBadChars.IsMatch(testName)) 
-			   { return Regex.Replace(testName,"[" + Regex.Escape("<>:\"/\\|?*") + "]","_");
-			   //{ //return false; 
-			   };                // other checks for UNC, drive-path format, etc                
-			   return testName;
+			   return windowsPathBadChars.IsMatch(testName) 
+				   ? Regex.Replace(testName,"[" + Regex.Escape("<>:\"/\\|?*") + "]","_") 
+				   : testName;
 		   }
 
 		private void Initialize_form()
 		{
-			//     InstallLocalKeypair();
-
 			txtbxCustomerName.Text = null;
 			dtpkrExpirationDate.Value = DateTime.Now;
 			numExpirationGracePeriodDays.Value = 0;
@@ -116,44 +105,37 @@ namespace Teleopti.Support.LicTool
 			numericUpDownCountRatio.Value = 1.5M;
 			numMaxActiveAgentsGrace.Value = 0;
 
-			chkAgentScheduleMessenger.Checked = false;
-			//chkAgentScheduleMessenger.Enabled = true;
-			chkAgentSelfService.Checked = false;
 			chkBase.Checked = false;
-			chkHolidayPlanner.Checked = false;
-			//chkHolidayPlanner.Enabled = true;
-			chkPayrollIntegration.Checked = false;
-			chkPerformanceManager.Checked = false;
+			chkLifestyle.Checked = false;
+			chkShiftTrader.Checked = false;
+			chkVacationPlanner.Checked = false;
+			chkOvertimeAvailability.Checked = false;
+			chkNotify.Checked = false;
 			chkRealtimeAdherence.Checked = false;
-			chkShiftTrades.Checked = false;
-			//chkShiftTrades.Enabled = true;
-			chkMyTimeWeb.Checked = false;
-			chkMobileReports.Checked = false;
-
-			chkDeveloper.Checked = false;
-			checkBoxVersion8.Checked = false;
+			chkAgentScheduleMessenger.Checked = false;
+			chkSMSLink.Checked = false;
+			chkCalendarLink.Checked = false;
+			chkPerformanceManager.Checked = false;
+			chkPayrollIntegration.Checked = false;
 		}
 
 		private void EnterDemoSettings()
 		{
 			txtbxCustomerName.Text = "Demo license! For internal use only!";
-			//dtpkrExpirationDate.Value = LicenseExpirationDate.GetLicenseExpirationDate(DateTime.Today, 94);
-			//ExpirationDate.Value = DateTime.Today.Add(new TimeSpan(90,12,0,0,0));
 			numExpirationGracePeriodDays.Value = 30;
 			numMaxActiveAgents.Value = 100;
 			numMaxActiveAgentsGrace.Value = 10;
 
-			chkAgentScheduleMessenger.Checked = true;
-			chkAgentSelfService.Checked = true;
 			chkBase.Checked = true;
-			chkHolidayPlanner.Checked = true;
-			chkPayrollIntegration.Checked = true;
-			chkPerformanceManager.Checked = true;
+			chkLifestyle.Checked = true;
+			chkShiftTrader.Checked = true;
+			chkVacationPlanner.Checked = true;
+			chkOvertimeAvailability.Checked = true;
+			chkNotify.Checked = true;
 			chkRealtimeAdherence.Checked = true;
-			chkShiftTrades.Checked = true;
-			chkMyTimeWeb.Checked = true;
-			chkMobileReports.Checked = true;
-
+			chkAgentScheduleMessenger.Checked = true;
+			chkPerformanceManager.Checked = true;
+			chkPayrollIntegration.Checked = true;
 		}
 
 		private void EnterFreemiumSettings()
@@ -163,28 +145,15 @@ namespace Teleopti.Support.LicTool
 			numMaxActiveAgents.Value = 1;
 			numMaxActiveAgentsGrace.Value = 10;
 			comboBoxAgreement.Text = "TeleoptiLic_En_Sw_Forecasts.txt";
-
-			//chkAgentScheduleMessenger.Checked = false;
-			//chkAgentSelfService.Checked = false;
-			//chkBase.Checked = false;
-			//chkHolidayPlanner.Checked = false;
-			//chkPayrollIntegration.Checked = false;
-			//chkPerformanceManager.Checked = false;
-			//chkRealtimeAdherence.Checked = false;
-			//chkShiftTrades.Checked = false;
-			//chkMyTimeWeb.Checked = false;
-
 		}
 
 		private void DemoSettings_Click(object sender, EventArgs e)
 		{
 			EnterDemoSettings();   
-	  
 		}
 
 		private void ClearSettings_Click(object sender, EventArgs e)
 		{
-
 			Initialize_form();
 		}
 
@@ -198,8 +167,7 @@ namespace Teleopti.Support.LicTool
 				openFileDialog.FilterIndex = 2;
 				openFileDialog.RestoreDirectory = true;
 
-
-				string pubkey = GetPublicKey();
+				var pubkey = GetPublicKey();
 				if (openFileDialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(pubkey))
 				{
 					try
@@ -238,20 +206,18 @@ namespace Teleopti.Support.LicTool
 
 						//Standard
 						if (options.Contains("Base")) chkBase.Checked = true;
-						if (options.Contains("AgentScheduleMessenger")) chkAgentScheduleMessenger.Checked = true;
-						if (options.Contains("AgentSelfService")) chkAgentSelfService.Checked = true;
-						if (options.Contains("HolidayPlanner")) chkHolidayPlanner.Checked = true;
-						if (options.Contains("PayrollIntegration")) chkPayrollIntegration.Checked = true;
-						if (options.Contains("PerformanceManager")) chkPerformanceManager.Checked = true;
+						if (options.Contains("Lifestyle")) chkLifestyle.Checked = true;
+						if (options.Contains("ShiftTrader")) chkShiftTrader.Checked = true;
+						if (options.Contains("VacationPlanner")) chkVacationPlanner.Checked = true;
+						if (options.Contains("OvertimeAvailability")) chkOvertimeAvailability.Checked = true;
+						if (options.Contains("Notify")) chkNotify.Checked = true;
 						if (options.Contains("RealtimeAdherence")) chkRealtimeAdherence.Checked = true;
-						if (options.Contains("ShiftTrades")) chkShiftTrades.Checked = true;
-						if (options.Contains("Developer")) chkDeveloper.Checked = true;
-						if (options.Contains("MyTimeWeb")) chkMyTimeWeb.Checked = true;
-						if (options.Contains("MobileReports")) chkMobileReports.Checked = true;
-						if (options.Contains("SMSLink")) checkBoxSMS.Checked = true;
-						if (options.Contains("CalendarLink")) checkBoxCalendar.Checked = true;
-						if (options.Contains("Version8")) checkBoxVersion8.Checked = true;
-
+						if (options.Contains("AgentScheduleMessenger")) chkAgentScheduleMessenger.Checked = true;
+						if (options.Contains("SMSLink")) chkSMSLink.Checked = true;
+						if (options.Contains("CalendarLink")) chkCalendarLink.Checked = true;
+						if (options.Contains("PerformanceManager")) chkPerformanceManager.Checked = true;
+						if (options.Contains("PayrollIntegration")) chkPayrollIntegration.Checked = true;
+						
 						//Freemium
 						if (options.Contains("Forecasts")) chkFreemium.Checked = true;
 
@@ -273,7 +239,6 @@ namespace Teleopti.Support.LicTool
 			}
 		}
 
-
 		private void LoadLicenseFile_Click(object sender, EventArgs e)
 		{
 			LicenseFileLoad();
@@ -281,10 +246,6 @@ namespace Teleopti.Support.LicTool
 
 		private void LicenseFileSaveAndClose()
 		{
-			if (chkDeveloper.Checked == true)
-			{
-				MessageBox.Show("The Developer option is selected. Please make sure that this license is for internal use only.", "Developer option is for internal use only", MessageBoxButtons.OK);
-			}
 			IFormatProvider invariant = CultureInfo.InvariantCulture;
 			var xdoc = new XmlDocument();
 			XmlDeclaration xmlDeclaration = xdoc.CreateXmlDeclaration("1.0", "utf-8", null);
@@ -296,8 +257,7 @@ namespace Teleopti.Support.LicTool
 			rootNode.AppendChild(xdoc.CreateElement("ExpirationGracePeriod")).AppendChild(xdoc.CreateTextNode("P" + numExpirationGracePeriodDays.Value.ToString(invariant) + "D"));
 			rootNode.AppendChild(xdoc.CreateElement("MaxActiveAgents")).AppendChild(xdoc.CreateTextNode(numMaxActiveAgents.Value.ToString(invariant)));
 			rootNode.AppendChild(xdoc.CreateElement("MaxActiveAgentsGrace")).AppendChild(xdoc.CreateTextNode(numMaxActiveAgentsGrace.Value.ToString(invariant)));
-
-
+			
 			//Standard License
 			if (!chkFreemium.Checked)
 			{
@@ -306,21 +266,31 @@ namespace Teleopti.Support.LicTool
 				rootNode.AppendChild(xdoc.CreateElement("SeatRatio")).AppendChild(xdoc.CreateTextNode(numericUpDownCountRatio.Value.ToString(invariant)));
 
 				XmlElement elmOptions = xdoc.CreateElement("TeleoptiCCC");
-				if (chkBase.Checked) elmOptions.AppendChild(xdoc.CreateElement("Base")).AppendChild(xdoc.CreateTextNode("true"));
-				if (chkAgentScheduleMessenger.Checked) elmOptions.AppendChild(xdoc.CreateElement("AgentScheduleMessenger")).AppendChild(xdoc.CreateTextNode("true"));
-				if (chkAgentSelfService.Checked) elmOptions.AppendChild(xdoc.CreateElement("AgentSelfService")).AppendChild(xdoc.CreateTextNode("true"));
-				if (chkDeveloper.Checked) elmOptions.AppendChild(xdoc.CreateElement("Developer")).AppendChild(xdoc.CreateTextNode("true"));
-				if (chkHolidayPlanner.Checked) elmOptions.AppendChild(xdoc.CreateElement("HolidayPlanner")).AppendChild(xdoc.CreateTextNode("true"));
-				if (chkPayrollIntegration.Checked) elmOptions.AppendChild(xdoc.CreateElement("PayrollIntegration")).AppendChild(xdoc.CreateTextNode("true"));
-				if (chkPerformanceManager.Checked) elmOptions.AppendChild(xdoc.CreateElement("PerformanceManager")).AppendChild(xdoc.CreateTextNode("true"));
-				if (chkRealtimeAdherence.Checked) elmOptions.AppendChild(xdoc.CreateElement("RealtimeAdherence")).AppendChild(xdoc.CreateTextNode("true"));
-				if (chkShiftTrades.Checked) elmOptions.AppendChild(xdoc.CreateElement("ShiftTrades")).AppendChild(xdoc.CreateTextNode("true"));
-				if (chkMyTimeWeb.Checked) elmOptions.AppendChild(xdoc.CreateElement("MyTimeWeb")).AppendChild(xdoc.CreateTextNode("true"));
-				if (chkMobileReports.Checked) elmOptions.AppendChild(xdoc.CreateElement("MobileReports")).AppendChild(xdoc.CreateTextNode("true"));
-				if (checkBoxSMS.Checked) elmOptions.AppendChild(xdoc.CreateElement("SMSLink")).AppendChild(xdoc.CreateTextNode("true"));
-				if (checkBoxCalendar.Checked) elmOptions.AppendChild(xdoc.CreateElement("CalendarLink")).AppendChild(xdoc.CreateTextNode("true"));
-				if (checkBoxVersion8.Checked) elmOptions.AppendChild(xdoc.CreateElement("Version8")).AppendChild(xdoc.CreateTextNode("true"));
-
+				if (chkBase.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("Base")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkLifestyle.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("Lifestyle")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkShiftTrader.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("ShiftTrader")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkVacationPlanner.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("VacationPlanner")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkOvertimeAvailability.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("OvertimeAvailability")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkNotify.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("Notify")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkRealtimeAdherence.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("RealtimeAdherence")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkAgentScheduleMessenger.Checked) 
+					elmOptions.AppendChild(xdoc.CreateElement("AgentScheduleMessenger")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkSMSLink.Checked) 
+					elmOptions.AppendChild(xdoc.CreateElement("SMSLink")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkCalendarLink.Checked) 
+					elmOptions.AppendChild(xdoc.CreateElement("CalendarLink")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkPerformanceManager.Checked) 
+					elmOptions.AppendChild(xdoc.CreateElement("PerformanceManager")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkPayrollIntegration.Checked) 
+					elmOptions.AppendChild(xdoc.CreateElement("PayrollIntegration")).AppendChild(xdoc.CreateTextNode("true"));
+				
 				rootNode.AppendChild(elmOptions);
 			}
 			else
@@ -365,13 +335,11 @@ namespace Teleopti.Support.LicTool
 				}
 			}
 		}
-
-
+		
 		private void CreateAndSave_Click(object sender, EventArgs e)
 		{
 			LicenseFileSaveAndClose();
 		}
-			
 			
 		private void btnAdd3Mon_Click(object sender, EventArgs e)
 		{
@@ -383,30 +351,30 @@ namespace Teleopti.Support.LicTool
 			dtpkrExpirationDate.Value = LicenseExpirationDate.GetLicenseExpirationDate(dtpkrExpirationDate.Value,  2 * 365);
 		}
 
-		private void chkAgentSelfService_CheckedChanged(object sender, EventArgs e)
+		private void chkLifestyle_CheckedChanged(object sender, EventArgs e)
 		{
-			if (chkAgentSelfService.Checked == true)
+			if (chkLifestyle.Checked)
 			{
-				chkShiftTrades.Checked = true;
-				chkShiftTrades.Enabled = false;
+				chkShiftTrader.Checked = true;
+				chkShiftTrader.Enabled = false;
 
-				chkAgentScheduleMessenger.Checked = true;
-				chkAgentScheduleMessenger.Enabled = false;
+				chkVacationPlanner.Checked = true;
+				chkVacationPlanner.Enabled = false;
 
-				chkHolidayPlanner.Checked = true;
-				chkHolidayPlanner.Enabled = false;
+				chkOvertimeAvailability.Checked = true;
+				chkOvertimeAvailability.Enabled = false;
 
 			}
-			if (chkAgentSelfService.Checked == false)
+			else
 			{
-				chkShiftTrades.Checked = false ;
-				chkShiftTrades.Enabled = true;
+				chkShiftTrader.Checked = false;
+				chkShiftTrader.Enabled = true;
 
-				chkAgentScheduleMessenger.Checked = false;
-				chkAgentScheduleMessenger.Enabled = true;
+				chkVacationPlanner.Checked = false;
+				chkVacationPlanner.Enabled = true;
 
-				chkHolidayPlanner.Checked = false;
-				chkHolidayPlanner.Enabled = true;
+				chkOvertimeAvailability.Checked = false;
+				chkOvertimeAvailability.Enabled = true;
 			}
 		}
 
@@ -424,7 +392,6 @@ namespace Teleopti.Support.LicTool
 		private void quitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Application.Exit();
-
 		}
 
 		private void clearAllFieldsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -435,32 +402,20 @@ namespace Teleopti.Support.LicTool
 		private void demoSettingsToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			EnterDemoSettings();
-
 		}
 
-		
-	
-
-		
 		private void comboBoxAgentsOrSeats_SelectedIndexChanged(object sender, EventArgs e)
 		{
-							var seat = comboBoxAgentsOrSeats.SelectedIndex == 1;
-				numericUpDownCountRatio.Enabled = seat;
-				labelRatio.Enabled = seat;
-			
+			var seat = comboBoxAgentsOrSeats.SelectedIndex == 1;
+			numericUpDownCountRatio.Enabled = seat;
+			labelRatio.Enabled = seat;
 		}
 
 		private void chkFreemium_CheckedChanged(object sender, EventArgs e)
 		{
-				if (chkFreemium.Checked)
-					grpBoxModules.Visible = false;
-				else
-					grpBoxModules.Visible = true;
+			grpBoxModules.Visible = !chkFreemium.Checked;
 
-				EnterFreemiumSettings();
-
+			EnterFreemiumSettings();
 		}
-
-	 
 	}
 }
