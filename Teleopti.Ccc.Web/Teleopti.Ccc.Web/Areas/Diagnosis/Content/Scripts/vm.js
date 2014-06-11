@@ -12,6 +12,8 @@ define([
 
 		var self = this;
 
+		self.started = ko.observable(false);
+
 		self.showInfo = function(info) {
 			console.log('*******');
 			console.log(info);
@@ -24,6 +26,7 @@ define([
 
 		self.startSignalR = function() {
 			sigR.start();
+			self.started(true);
 		};
 
 		self.subscribeToPing = function() {
