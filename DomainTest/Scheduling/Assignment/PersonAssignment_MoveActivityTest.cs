@@ -150,6 +150,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			projection.Last().Period.EndDateTime.Should().Be.EqualTo(orgEndActivityNotBeMoved);
 		}
 
+		[Test]
+		public void ShouldRemovePartsOfLayersOfSameActivityStartingAfterMainLayersStartTime()
+		{
+			var agent = new Person().WithId();
+			var activity = new Activity("theone").WithId();
+			var activityNotBeMoved = new Activity("justanotherone").WithId();
+			var layer1start = createDateTime(4);
+			var layer1end = createDateTime(8);
+			var layer2start = createDateTime(6);
+			var layer2end = createDateTime(7);
+			var layer3start = createDateTime(3);
+			var layer3end = createDateTime(7);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(layer1start, layer1end));
+			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(layer2start, layer2end));
+			assignment.AddActivity(activity, new DateTimePeriod(layer3start, layer3end));
+
+			assignment.MoveActivityAndSetHighestPriority(activity, layer3start, TimeSpan.FromHours(6), layer3end - layer3start);
+			var projection = assignment.ProjectionService().CreateProjection();
+			projection.Count().Should().Be.EqualTo(1);
+			projection.First().Period.StartDateTime.Should().Be.EqualTo(createDateTime(6));
+			projection.First().Period.EndDateTime.Should().Be.EqualTo(createDateTime(10));
+		}
+
 		private static DateTime createDateTime(int hourOnDay)
 		{
 			return new DateTime(2013, 11, 14, hourOnDay, 0, 0, 0, DateTimeKind.Utc);

@@ -338,33 +338,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, TimeSpan newStartTime, TimeSpan length)
 		{
-			var newStartTimeLocal = Date.Date.Add(newStartTime);
-			var startTimeUtc = new DateTime(newStartTimeLocal.Ticks, DateTimeKind.Utc);
-			var newPeriod = new DateTimePeriod(startTimeUtc, startTimeUtc.Add(length));
+			var anyLayerFound = false;
 
-
-			var layerWithSpecificActivity = ShiftLayers
-				.Where(x => x.Payload.Equals(activity) && x.Period.Contains(currentStartTime)).ToArray();
-			if (!layerWithSpecificActivity.Any())
+			foreach (var layer in ShiftLayers.ToArray())
 			{
-				throw new ArgumentException(String.Format("The layer doesn't exist"));
-			}
-			foreach (var layer in layerWithSpecificActivity)
-			{
-				
+				var currentLayerPeriod = new DateTimePeriod(currentStartTime, currentStartTime.Add(length));
+				if(!layer.Payload.Equals(activity) || !layer.Period.Intersect(currentLayerPeriod))
+					continue;
 				var originalOrderIndex = ShiftLayers.ToList().IndexOf(layer);
 				RemoveActivity(layer);
 
-				var currentLayerPeriod = new DateTimePeriod(currentStartTime, currentStartTime.Add(length));
-
 				var layerContainsCurrentLayerPeriod = layer.Period;
-				if (layerContainsCurrentLayerPeriod.Intersect(currentLayerPeriod))
-				{
-					var splittedLayerPeriods = layerContainsCurrentLayerPeriod.ExcludeDateTimePeriod(currentLayerPeriod);
-					splittedLayerPeriods.ForEach(period => InsertActivity(layer.Payload, period, originalOrderIndex));
-				}
+				var splittedLayerPeriods = layerContainsCurrentLayerPeriod.ExcludeDateTimePeriod(currentLayerPeriod);
+				splittedLayerPeriods.ForEach(period => InsertActivity(layer.Payload, period, originalOrderIndex));
+				anyLayerFound = true;
 			}
+			if(!anyLayerFound)
+				throw new ArgumentException("No layer(s) found!", "activity");
 
+			//will be fixed later (=Erik)
+			var newStartTimeLocal = Date.Date.Add(newStartTime);
+			var startTimeUtc = new DateTime(newStartTimeLocal.Ticks, DateTimeKind.Utc);
+			var newPeriod = new DateTimePeriod(startTimeUtc, startTimeUtc.Add(length));
+			///////////////////////////////
 			AddActivity(activity, newPeriod);
 		}
 
