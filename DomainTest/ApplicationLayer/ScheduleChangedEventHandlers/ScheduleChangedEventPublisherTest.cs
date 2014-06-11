@@ -39,5 +39,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			published.StartDateTime.Should().Be(@event.StartDateTime);
 			published.EndDateTime.Should().Be(@event.EndDateTime);
 		}
+
+		[Test]
+		public void ShouldPublishScheduleChangedEventWhenActivityMovedEventHasFired()
+		{
+			var publisher = new FakePublishEventsFromEventHandlers();
+			var target = new ScheduleChangedEventPublisher(publisher);
+
+			var theEvent = new ActivityMovedEvent
+			{
+				Timestamp = DateTime.Now,
+				Datasource = "datasource",
+				BusinessUnitId = Guid.NewGuid(),
+				PersonId = Guid.NewGuid(),
+				ScenarioId = Guid.NewGuid(),
+				StartDateTime = DateTime.Now,
+				EndDateTime = DateTime.Now.AddHours(2)
+			};
+			target.Handle(theEvent);
+
+
+			var published = publisher.Published<ScheduleChangedEvent>();
+			published.Timestamp.Should().Be(theEvent.Timestamp);
+			published.Datasource.Should().Be(theEvent.Datasource);
+			published.BusinessUnitId.Should().Be(theEvent.BusinessUnitId);
+			published.PersonId.Should().Be(theEvent.PersonId);
+			published.ScenarioId.Should().Be(theEvent.ScenarioId);
+			published.StartDateTime.Should().Be(theEvent.StartDateTime);
+			published.EndDateTime.Should().Be(theEvent.EndDateTime);
+		}
 	}
 }

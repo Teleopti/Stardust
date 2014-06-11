@@ -361,7 +361,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var startTimeUtc = new DateTime(newStartTimeLocal.Ticks, DateTimeKind.Utc);
 			var newPeriod = new DateTimePeriod(startTimeUtc, startTimeUtc.Add(length));
 			///////////////////////////////
+			
+			//this will fire ActivityAddedEvent when add an activity, too many events?
 			AddActivity(activity, newPeriod);
+
+			var affectedPeriod = new DateTimePeriod(currentStartTime, currentStartTime.Add(length)).MaximumPeriod(newPeriod);
+			
+			AddEvent(()=> new ActivityMovedEvent
+			{
+				PersonId = Person.Id.Value,
+				StartDateTime = affectedPeriod.StartDateTime,
+				EndDateTime =affectedPeriod.EndDateTime,
+				ScenarioId = Scenario.Id.Value
+			});
 		}
 
 		public virtual IDayOff DayOff()

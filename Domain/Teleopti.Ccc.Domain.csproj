@@ -137,6 +137,7 @@
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommand.cs" />
     <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\ActivityMovedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodAddedEvent.cs" />

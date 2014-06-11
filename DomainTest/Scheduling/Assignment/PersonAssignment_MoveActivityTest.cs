@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
@@ -171,6 +172,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			projection.Count().Should().Be.EqualTo(1);
 			projection.First().Period.StartDateTime.Should().Be.EqualTo(createDateTime(6));
 			projection.First().Period.EndDateTime.Should().Be.EqualTo(createDateTime(10));
+		}
+
+		[Test]
+		public void ShouldRaiseActivityMovedEvent()
+		{
+			var activity = new Activity("theone").WithId();
+			var agent = new Person().WithId();
+			var layerPeriod = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, layerPeriod);
+
+			assignment.MoveActivityAndSetHighestPriority(activity, layerPeriod.StartDateTime, TimeSpan.FromHours(1), layerPeriod.ElapsedTime());
+
+			var affectedPeriod = layerPeriod.MaximumPeriod(assignment.Period);
+			var theEvent = assignment.PopAllEvents().OfType<ActivityMovedEvent>().Single();
+			theEvent.PersonId.Should().Be(agent.Id.Value);
+			theEvent.StartDateTime.Should().Be(affectedPeriod.StartDateTime);
+			theEvent.EndDateTime.Should().Be(affectedPeriod.EndDateTime);
+			theEvent.ScenarioId.Should().Be(assignment.Scenario.Id.Value);
 		}
 
 		private static DateTime createDateTime(int hourOnDay)

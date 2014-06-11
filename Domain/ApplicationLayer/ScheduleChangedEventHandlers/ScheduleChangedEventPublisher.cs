@@ -71,5 +71,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					EndDateTime = @event.EndDateTime
 				});
 		}
+
+		public void Handle(ActivityMovedEvent @event)
+		{
+			_publisher.Publish(new ScheduleChangedEvent
+			{
+				Timestamp = @event.Timestamp,
+				Datasource = @event.Datasource,
+				BusinessUnitId = @event.BusinessUnitId,
+				PersonId = @event.PersonId,
+				ScenarioId = @event.ScenarioId,
+				StartDateTime = @event.StartDateTime,
+				EndDateTime = @event.EndDateTime
+			});
+		}
 	}
 }
