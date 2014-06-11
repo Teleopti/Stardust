@@ -26,6 +26,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         self.Dates = ko.observable();
         self.UpdatedOn = ko.observable();
         self.Text = ko.observable();
+        self.DenyReason = ko.observable();
         self.ListText = ko.observable();
         self.Link = ko.observable();
         self.Id = ko.observable();
@@ -42,6 +43,12 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             var payload = (self.RequestPayload() != '') ? ', ' + self.RequestPayload() : '';
             return self.RequestType() + payload;
         });
+
+        self.StatusAndReason = ko.computed(function () {
+            var temp = (self.DenyReason() != '') ? self.Status() + ': ' : self.Status();
+            return temp + self.DenyReason();
+        });
+
 	    self.isReferred = ko.observable(false);
 	    self.isCreatedByUser = ko.observable(false);
         self.ShowDetails = function (viewmodel, event) {
@@ -239,6 +246,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             self.Dates(data.Dates);
             self.UpdatedOn(data.UpdatedOn);
             self.Text(data.Text);
+            self.DenyReason(data.DenyReason);
             self.ListText(data.Text.length > 50 ? data.Text.substring(0, 50) + '...' : data.Text);
             self.Link(data.Link.href);
             self.Id(data.Id);

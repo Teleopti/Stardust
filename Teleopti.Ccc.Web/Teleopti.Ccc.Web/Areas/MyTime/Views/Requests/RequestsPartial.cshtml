@@ -128,7 +128,7 @@
 								<div class="request-details">
 									<div>
 										<span class="request-caption">@Resources.Type: </span><span data-bind="text: Type" class="request-data-type"></span>
-										<span class="request-caption">@Resources.Status: </span><span class="request-caption" data-bind="visible: isProcessing"> (@Resources.ProcessingDotDotDot) </span><span class="label" data-bind="text: Status, css: StatusClass"></span>
+										<span class="request-caption">@Resources.Status: </span><span class="request-caption" data-bind="visible: isProcessing"> (@Resources.ProcessingDotDotDot) </span><div class="label request-label" data-bind="text: StatusAndReason(), css: StatusClass"></div>
 
 									</div>
 									<span class="request-caption">@Resources.Date: </span><span class="request-data-date" data-bind="text: Dates"></span>

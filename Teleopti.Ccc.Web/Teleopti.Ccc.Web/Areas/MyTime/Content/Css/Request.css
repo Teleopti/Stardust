@@ -345,3 +345,10 @@
 	bottom:25px;
 	right: 22px;
 }
+
+.request-label {
+    max-width: 420px;
+    display: inline-block;
+    white-space: normal;
+    text-align: left;
+}
