@@ -110,7 +110,7 @@ define([
 		});
 
 		self.Configuration(JSON.stringify({
-			Url: "http://localhost:52858/Rta/TeleoptiRtaService.svc",
+			Url: "http://localhost:52858/TeleoptiRtaService.svc",
 			PlatformTypeId: "00000000-0000-0000-0000-000000000000",
 			ExternalLogOns: [2001],
 			States: ["Ready", "OFF"],

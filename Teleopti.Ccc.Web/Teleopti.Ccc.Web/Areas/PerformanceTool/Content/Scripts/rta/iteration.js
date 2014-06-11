@@ -14,23 +14,28 @@ define([
 			self.SendRtaExternalState();
 		};
 
-		this.SendRtaExternalState = function() {
+		this.SendRtaExternalState = function () {
+			var externalState = JSON.stringify({
+				authenticationKey: '!#¤atAbgT%',
+				userCode: data.ExternalLogOn,
+				stateCode: data.StateCode,
+				isLoggedOn: 'true',
+				timestamp: moment.utc().toDate(),
+				platformTypeId: data.PlatformTypeId,
+				sourceId: data.SourceId,
+				isSnapshot: 'false'
+			});
 			$.ajax({
-				url: data.Url,
+				url: data.Url + '/SaveExternalUserState',
 				dataType: 'json',
-				contentType: 'application/json',
-				data: JSON.stringify({
-					authenticationKey: "!#¤atAbgT%",
-					userCode: data.ExternalLogOn,
-					stateCode: data.StateCode,
-					isLoggedOn: "true",
-					timestamp: moment.utc(),
-					platformTypeId: data.PlatformTypeId,
-					sourceId: data.SourceId,
-					isSnapshot: "false"
-				}),
-				error: function() {
+				crossDomain: true,
+				type: 'POST',
+				contentType: 'application/json; charset=utf-8',
+				data: externalState,
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log(arguments);
 					data.Failure();
+
 				},
 				complete: function (jqXHR, text) {
 					if (text === "success")
