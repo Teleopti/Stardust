@@ -8,7 +8,7 @@
 				<!-- ko if: moveActivityVisible -->
 					<li data-bind="css: { active: ActiveView() == 'teamschedule' }"><a href="#teamschedulemove">Schedules</a></li>
 				<!-- /ko -->
-				<!-- ko if: !moveActivityVisible -->
+				<!-- ko ifnot: moveActivityVisible -->
 					<li data-bind="css: { active: ActiveView() == 'teamschedule' }"><a href="#">Schedules</a></li>
 				<!-- /ko -->
 				<!-- ko if: RealTimeAdherenceVisible -->
