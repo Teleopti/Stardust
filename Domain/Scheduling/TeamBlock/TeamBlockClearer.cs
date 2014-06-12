@@ -55,8 +55,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
 				SchedulePartView significant = scheduleDay.SignificantPart();
-				if (significant != SchedulePartView.FullDayAbsence && significant != SchedulePartView.DayOff &&
-				    significant != SchedulePartView.ContractDayOff)
+				//if (significant != SchedulePartView.FullDayAbsence && significant != SchedulePartView.DayOff &&
+				//	significant != SchedulePartView.ContractDayOff)
+				if(significant == SchedulePartView.MainShift)
 					toRemove.Add(scheduleDay);
 			}
 		}
