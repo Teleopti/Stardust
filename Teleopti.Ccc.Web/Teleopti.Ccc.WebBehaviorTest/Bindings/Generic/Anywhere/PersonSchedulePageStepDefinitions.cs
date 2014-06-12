@@ -213,8 +213,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			ScenarioContext.Current.Pending();
 		}
 
-		[When(@"I save")]
-		public void WhenISave()
+		[When(@"I save the shift")]
+		public void WhenISaveTheShift()
 		{
 			ScenarioContext.Current.Pending();
 		}
