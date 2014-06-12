@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -241,13 +242,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 														From = new ShiftTradeEditPersonScheduleViewModel(),
 														To = new ShiftTradeEditPersonScheduleViewModel()
 				                                     };
+		    var detail = MockRepository.GenerateMock<IShiftTradeSwapDetail>();
+		    var details = new ReadOnlyCollection<IShiftTradeSwapDetail>(new List<IShiftTradeSwapDetail>{detail});
 
 			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum,
 			                                          null, null, null, null);
 
 			personRequestProvider.Expect(p => p.RetrieveRequest(personRequestId)).Return(personRequest);
-			requestCheckSum.Expect(s => s.Check(shiftTrade));		
-			mapper.Expect(m => m.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(Arg<IShiftTradeRequest>.Is.Equal(shiftTrade)))
+		    shiftTrade.Stub(x => x.ShiftTradeSwapDetails).Return(details);
+			requestCheckSum.Expect(s => s.Check(shiftTrade));
+            mapper.Expect(m => m.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(Arg<IShiftTradeSwapDetail>.Is.Equal(detail)))
 			      .Return(shiftTradeSwapDetailsViewModel);
 
 			var result = target.CreateShiftTradeRequestSwapDetails(personRequestId);
@@ -275,13 +279,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				To = new ShiftTradeEditPersonScheduleViewModel {StartTimeUtc = startTimeToSchedule}
 			};
 
+            var detail = MockRepository.GenerateMock<IShiftTradeSwapDetail>();
+            var details = new ReadOnlyCollection<IShiftTradeSwapDetail>(new List<IShiftTradeSwapDetail> { detail });
+		    shiftTrade.Stub(x => x.ShiftTradeSwapDetails).Return(details);
 			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum,
 			                                          null, null, null, null);
 
 			personRequestProvider.Expect(p => p.RetrieveRequest(new Guid())).IgnoreArguments().Return(personRequest);
 
 			mapper.Expect(
-				m => m.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(Arg<IShiftTradeRequest>.Is.Equal(shiftTrade)))
+                m => m.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(Arg<IShiftTradeSwapDetail>.Is.Equal(detail)))
 			      .Return(shiftTradeSwapDetailsViewModel);
 
 			var result = target.CreateShiftTradeRequestSwapDetails(new Guid());

@@ -119,8 +119,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			var personRequest =  _personRequestProvider.RetrieveRequest(id);
 			
 			_shiftTradeRequestStatusChecker.Check(personRequest.Request as IShiftTradeRequest);
-
-			var shiftTradeSwapDetails = _mapper.Map<IShiftTradeRequest,ShiftTradeSwapDetailsViewModel>(personRequest.Request as IShiftTradeRequest);
+		    var req = personRequest.Request as IShiftTradeRequest;
+            var shiftTradeSwapDetails = _mapper.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(req.ShiftTradeSwapDetails.First());
 			
 			var startTimeForTimeline = shiftTradeSwapDetails.TimeLineStartDateTime;
 			var startTimeForSchedOne = shiftTradeSwapDetails.From.StartTimeUtc;
