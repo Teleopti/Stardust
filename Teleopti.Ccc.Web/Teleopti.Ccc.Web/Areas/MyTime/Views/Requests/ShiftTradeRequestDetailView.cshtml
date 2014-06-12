@@ -5,8 +5,6 @@
 
 <div>
         <div>
-            <div id="Request-shift-trade-detail-info" class="alert alert-info" data-bind="visible: showInfo">@Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew</div>
-
             <div id="sender-info">
                 <span class="request-caption">@Resources.From: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-sender" data-bind="text: personFrom" ></span>
             </div>
@@ -16,8 +14,9 @@
             </div>
 	
 	<!-- todo, Henke remove all these br ifs!!!! but everything is hardcoded px-->
-	
-	<br  data-bind="visible: !showInfo()"/>
+	<br />
+	<div id="Request-shift-trade-detail-info" class="alert alert-info" data-bind="visible: showInfo">@Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew</div>
+
 	<!-- ko if: !showInfo() -->
 	<!-- ko foreach: DetailedDays-->
 	<div class="trade-day-detail">
