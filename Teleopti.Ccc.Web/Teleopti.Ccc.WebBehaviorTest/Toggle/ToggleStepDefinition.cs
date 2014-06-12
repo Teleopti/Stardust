@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Net;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Common;

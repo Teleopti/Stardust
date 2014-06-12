@@ -26,9 +26,15 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 		/// [web]/ToggleHandler/IsEnabled?toggle=[yourToggle]
 		/// ]]>
 		/// </summary>
-		public bool IsEnabled(Toggles toggle)
+		[HttpGet]
+		public JsonResult IsEnabled(Toggles toggle)
 		{
-			return _toggleManager.IsEnabled(toggle);
+			return Json(new ToggleEnabledResult
+				{
+					IsEnabled = _toggleManager.IsEnabled(toggle)
+				},
+				JsonRequestBehavior.AllowGet
+			);
 		}
 
 		/// <summary>

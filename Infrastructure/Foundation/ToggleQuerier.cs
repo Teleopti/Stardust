@@ -1,7 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Web;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
@@ -21,26 +21,21 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public bool IsEnabled(Toggles toggle)
 		{
-			var request = createWebRequest(toggle);
-
-			using (var response = request.GetResponse())
+			using (var client = new WebClient())
 			{
-				using (var stream = new StreamReader(response.GetResponseStream()))
-				{
-					return Convert.ToBoolean(stream.ReadToEnd());
-				}
+				var jsonString = client.DownloadString(createUrl(toggle));
+				return JsonConvert.DeserializeObject<ToggleEnabledResult>(jsonString).IsEnabled;
 			}
 		}
 
-		private WebRequest createWebRequest(Toggles toggle)
+		private string createUrl(Toggles toggle)
 		{
 			var uriBuilder = new UriBuilder(_url);
 			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 			query["toggle"] = toggle.ToString();
 			query["datasource"] = _currentDataSource.CurrentName();
 			uriBuilder.Query = query.ToString();
-			var request = WebRequest.Create(uriBuilder.ToString());
-			return request;
+			return uriBuilder.ToString();
 		}
 	}
 }
