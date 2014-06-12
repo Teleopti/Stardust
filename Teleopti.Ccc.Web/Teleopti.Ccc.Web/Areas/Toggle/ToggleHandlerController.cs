@@ -17,9 +17,13 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 		}
 
 		/// <summary>
-		/// Url
+		/// Url if not logged in (from desktop app)
 		/// <![CDATA[
 		/// [web]/ToggleHandler/IsEnabled?toggle=[yourToggle]&datasource=[your datasource]
+		/// ]]>
+		/// Url if logged in
+		/// <![CDATA[
+		/// [web]/ToggleHandler/IsEnabled?toggle=[yourToggle]
 		/// ]]>
 		/// </summary>
 		public bool IsEnabled(Toggles toggle)
@@ -29,9 +33,13 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 
 		/// <summary>
 		/// Not used in code. Debug usage only!
-		/// Url
+		/// Url if not logged in
 		/// <![CDATA[
 		/// [web]/ToggleHandler/IsEnabled?toggle=[yourToggle]&datasource=[your datasource]
+		/// ]]>
+		/// Url if logged in
+		/// <![CDATA[
+		/// [web]/ToggleHandler/IsEnabled?toggle=[yourToggle]
 		/// ]]>
 		/// </summary>
 		[HttpGet]
