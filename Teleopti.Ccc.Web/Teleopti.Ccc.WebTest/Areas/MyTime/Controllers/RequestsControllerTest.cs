@@ -338,13 +338,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 														
 				                            };
 
-			requestViewModelFactory.Expect(r => r.CreateShiftTradeRequestSwapDetails(id)).Return(shiftTradeSwapDetails);
+			requestViewModelFactory.Expect(r => r.CreateShiftTradeRequestSwapDetails(id)).Return(new List<ShiftTradeSwapDetailsViewModel> { shiftTradeSwapDetails });
 
 			using (var target = new RequestsController(requestViewModelFactory, null, null, null, null, new FakePermissionProvider()))
 			{
-				var result = (ShiftTradeSwapDetailsViewModel) target.ShiftTradeRequestSwapDetails(id).Data;
-				Assert.That(result.From.Name, Is.EqualTo("xxx"));				
-				Assert.That(result.To.Name,Is.EqualTo("yyy"));
+				var result = (IList<ShiftTradeSwapDetailsViewModel>) target.ShiftTradeRequestSwapDetails(id).Data;
+				Assert.That(result.First().From.Name, Is.EqualTo("xxx"));				
+				Assert.That(result.First().To.Name,Is.EqualTo("yyy"));
 			}
 
 			requestViewModelFactory.VerifyAllExpectations();

@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			      .Return(shiftTradeSwapDetailsViewModel);
 
 			var result = target.CreateShiftTradeRequestSwapDetails(personRequestId);
-			Assert.That(result,Is.SameAs(shiftTradeSwapDetailsViewModel));
+			Assert.That(result.First(),Is.SameAs(shiftTradeSwapDetailsViewModel));
 
 		}
 
@@ -292,8 +292,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			      .Return(shiftTradeSwapDetailsViewModel);
 
 			var result = target.CreateShiftTradeRequestSwapDetails(new Guid());
-			Assert.That(result.From.MinutesSinceTimeLineStart, Is.EqualTo(20));
-			Assert.That(result.To.MinutesSinceTimeLineStart, Is.EqualTo(180));
+			Assert.That(result.First().From.MinutesSinceTimeLineStart, Is.EqualTo(20));
+			Assert.That(result.First().To.MinutesSinceTimeLineStart, Is.EqualTo(180));
 
 		}
 	}

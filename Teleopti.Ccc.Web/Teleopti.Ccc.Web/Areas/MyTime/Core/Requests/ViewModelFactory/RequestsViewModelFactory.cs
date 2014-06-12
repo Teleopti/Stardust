@@ -114,22 +114,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			return _shiftTradeScheduleViewModelMapper.Map(data);
 		}
 
-		public ShiftTradeSwapDetailsViewModel CreateShiftTradeRequestSwapDetails(Guid id)
+		public IList<ShiftTradeSwapDetailsViewModel> CreateShiftTradeRequestSwapDetails(Guid id)
 		{
-			var personRequest =  _personRequestProvider.RetrieveRequest(id);
-			
-			_shiftTradeRequestStatusChecker.Check(personRequest.Request as IShiftTradeRequest);
-		    var req = personRequest.Request as IShiftTradeRequest;
-            var shiftTradeSwapDetails = _mapper.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(req.ShiftTradeSwapDetails.First());
-			
-			var startTimeForTimeline = shiftTradeSwapDetails.TimeLineStartDateTime;
-			var startTimeForSchedOne = shiftTradeSwapDetails.From.StartTimeUtc;
-			var startTimeForSchedTwo = shiftTradeSwapDetails.To.StartTimeUtc;
+			var shiftTradeSwapDetailsList = new List<ShiftTradeSwapDetailsViewModel>();
+			var personRequest = _personRequestProvider.RetrieveRequest(id);
 
-			shiftTradeSwapDetails.From.MinutesSinceTimeLineStart = (int)startTimeForSchedOne.Subtract(startTimeForTimeline).TotalMinutes;
-			shiftTradeSwapDetails.To.MinutesSinceTimeLineStart = (int) startTimeForSchedTwo.Subtract(startTimeForTimeline).TotalMinutes;
-			
-			return shiftTradeSwapDetails;
+			_shiftTradeRequestStatusChecker.Check(personRequest.Request as IShiftTradeRequest);
+			var req = personRequest.Request as IShiftTradeRequest;
+
+			foreach (var detail in req.ShiftTradeSwapDetails)
+			{
+				var shiftTradeSwapDetails = _mapper.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(detail);
+
+				var startTimeForTimeline = shiftTradeSwapDetails.TimeLineStartDateTime;
+				var startTimeForSchedOne = shiftTradeSwapDetails.From.StartTimeUtc;
+				var startTimeForSchedTwo = shiftTradeSwapDetails.To.StartTimeUtc;
+
+				shiftTradeSwapDetails.From.MinutesSinceTimeLineStart = (int) startTimeForSchedOne.Subtract(startTimeForTimeline).TotalMinutes;
+				shiftTradeSwapDetails.To.MinutesSinceTimeLineStart = (int) startTimeForSchedTwo.Subtract(startTimeForTimeline).TotalMinutes;
+
+				shiftTradeSwapDetailsList.Add(shiftTradeSwapDetails);
+			}
+
+			return shiftTradeSwapDetailsList;
 		}
 
 		public string CreateShiftTradeMyTeamSimpleViewModel(DateOnly selectedDate)
