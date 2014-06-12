@@ -352,3 +352,13 @@
     white-space: normal;
     text-align: left;
 }
+
+.trade-day-detail {
+	 height: 86px;
+}
+
+.trade-date {
+	font-size: smaller;
+	font-weight: bold;
+	margin-bottom: 14px;
+}

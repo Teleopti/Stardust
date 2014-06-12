@@ -66,11 +66,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			var schedpartFrom = shiftTradeSwapDetail.SchedulePartFrom;
 			var schedpartTo = shiftTradeSwapDetail.SchedulePartTo;
-            //if (schedpartFrom == null || schedpartTo == null)
-            //{
-            //    //RK - when will this happen?
-            //    return shiftTradeSwapDetail.Period;
-            //}
+			if (schedpartFrom == null || schedpartTo == null)
+			{
+				return ((IShiftTradeRequest)shiftTradeSwapDetail.Parent).Period;
+			}
 			const int extraHourBeforeAndAfter = 1;
 			DateTimePeriod totalPeriod;
 			var fromTotalPeriod = _projectionProvider.Projection(schedpartFrom).Period();
@@ -91,6 +90,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
             {
                 totalPeriod = ((IShiftTradeRequest)shiftTradeSwapDetail.Parent).Period;
             }
+			if (schedpartFrom.SignificantPart() == SchedulePartView.DayOff &&
+			    schedpartTo.SignificantPart() == SchedulePartView.DayOff)
+            {
+				totalPeriod = schedpartFrom.Period;
+            }
+
 			return new DateTimePeriod(totalPeriod.StartDateTime.AddHours(-extraHourBeforeAndAfter), 
 			                          totalPeriod.EndDateTime.AddHours(extraHourBeforeAndAfter));
 		}

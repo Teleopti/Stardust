@@ -2,8 +2,8 @@
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 
 Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
-
 	var self = this;
+	self.DetailedDays = ko.observableArray();
 	self.Link = ko.observable();
 	self.EntityId = ko.observable();
 	self.Subject = ko.observable();
@@ -42,7 +42,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			}
 		});
 	};
-	self.pixelPerMinute = ko.observable(0.3);
+
 	self.Deny = function () {
 		self.CanApproveAndDeny(false);
 		self.ajax.Ajax({
@@ -72,9 +72,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.cancelReferred = function () {
 		ko.eventAggregator.notifySubscribers( { id: self.id() }, 'cancel_request');
 	};
-	self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel());
-	self.otherSchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel());
-	self.hours = ko.observableArray();
 	self.hourWidth = ko.observable(10);
     self.IsPending = ko.observable(false);
     self.showInfo = ko.observable(false);
@@ -86,34 +83,22 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			dataType: "json",
 			type: "GET",
 			success: function (data) {
-			    var numberOfShownHours = data.TimeLineHours.length;
-				var showNumberRatio = Math.floor(numberOfShownHours / 8);
-				self.pixelPerMinute(72 / (numberOfShownHours * 10));
-				self.hours.removeAll();
-				for (var i = 0; i < data.TimeLineHours.length; i++) {
-				    var timelineHour = new Teleopti.MyTimeWeb.Request.TimeLineHourEditShiftTradeViewModel(data.TimeLineHours[i], self);
-					timelineHour.showLabel(!(i % showNumberRatio));
-					self.hours.push(timelineHour);
-				}
-				self.createMySchedule(data.From);
-				self.createOtherSchedule(data.To);
-				self.personFrom(data.PersonFrom);
-				self.personTo(data.PersonTo);
+				self.readDataForDetailedDays(data);
 			}
 		});
-	};
-	self.createMySchedule = function (myScheduleObject) {
-		var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
-		    return new Teleopti.MyTimeWeb.Request.LayerEditShiftTradeViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
+    };
+
+    self.readDataForDetailedDays = function (data) {
+    	if (data.length > 0) {
+			self.personFrom(data[0].PersonFrom);
+			self.personTo(data[0].PersonTo);
+	    }
+	    ko.utils.arrayForEach(data, function (day) {
+			var vm = new ShiftTradeRequestDetailedDayViewModel(day);
+			self.DetailedDays.push(vm);
 		});
-		self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel(mappedlayers, myScheduleObject));
-	};
-	self.createOtherSchedule = function (myScheduleObject) {
-		var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
-		    return new Teleopti.MyTimeWeb.Request.LayerEditShiftTradeViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
-		});
-		self.otherSchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel(mappedlayers, myScheduleObject));
-	};
+	}
+
 	self.id = ko.observable();
 	self.isReferred = ko.observable(false);
 	
@@ -262,3 +247,39 @@ Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (laye
 	    self.agentName = agentName;
 	    self.layers = layers;
 };
+
+ShiftTradeRequestDetailedDayViewModel = function(data) {
+	var self = this;
+
+	self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel());
+	self.otherSchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel());
+
+	self.pixelPerMinute = function () { return (72 / (data.TimeLineHours.length * 10)); }
+	self.hours = ko.observableArray();
+	for (var i = 0; i < data.TimeLineHours.length; i++) {
+		var numberOfShownHours = data.TimeLineHours.length;
+		var showNumberRatio = Math.floor(numberOfShownHours / 8);
+		var timelineHour = new Teleopti.MyTimeWeb.Request.TimeLineHourEditShiftTradeViewModel(data.TimeLineHours[i], self);
+		timelineHour.showLabel(!(i % showNumberRatio));
+		self.hours.push(timelineHour);
+	}
+
+	self.createMySchedule = function (myScheduleObject) {
+		var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
+			return new Teleopti.MyTimeWeb.Request.LayerEditShiftTradeViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
+		});
+		self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel(mappedlayers, myScheduleObject));
+	};
+	self.createOtherSchedule = function (myScheduleObject) {
+		var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
+			return new Teleopti.MyTimeWeb.Request.LayerEditShiftTradeViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
+		});
+		self.otherSchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel(mappedlayers, myScheduleObject));
+	};
+
+	var dateFormat = $("#Request-detail-datepicker-format").val().toUpperCase();
+	self.TradeDate = ko.observable(moment(data.TimeLineStartDateTime).format(dateFormat));
+
+	self.createMySchedule(data.From);
+	self.createOtherSchedule(data.To);
+}
