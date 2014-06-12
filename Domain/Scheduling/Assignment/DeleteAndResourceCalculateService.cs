@@ -24,22 +24,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 
 			IList<IScheduleDay> deleted = _deleteSchedulePartService.Delete(list, rollbackService);
+			resourceCalculate(list, considerShortBreaks);
+
+			return deleted;
+		}
+
+		private void resourceCalculate(IEnumerable<IScheduleDay> list, bool considerShortBreaks)
+		{
 			IDictionary<DateOnly, IList<IScheduleDay>> dic = new Dictionary<DateOnly, IList<IScheduleDay>>();
 			foreach (var scheduleDay in list)
-    		{
-    			DateOnly key = scheduleDay.DateOnlyAsPeriod.DateOnly;
-				if(!dic.ContainsKey(key))
+			{
+				DateOnly key = scheduleDay.DateOnlyAsPeriod.DateOnly;
+				if (!dic.ContainsKey(key))
 					dic.Add(key, new List<IScheduleDay>());
 				dic[key].Add(scheduleDay);
-    		}
+			}
 
-    		foreach (var pair in dic)
-    		{
+			foreach (var pair in dic)
+			{
 				_resourceOptimizationHelper.ResourceCalculateDate(pair.Key, true, considerShortBreaks);
 				_resourceOptimizationHelper.ResourceCalculateDate(pair.Key.AddDays(1), true, considerShortBreaks);
-    		}
-
-    		return deleted;
+			}
 		}
 	}
 }
