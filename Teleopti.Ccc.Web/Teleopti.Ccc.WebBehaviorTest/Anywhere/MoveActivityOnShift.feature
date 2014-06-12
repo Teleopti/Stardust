@@ -9,7 +9,7 @@ Background:
 	| Name  | Phone |
 	| Color | Green |
 
-
+@ignore
 Scenario: The team leader should be able to move an activity
 	Given 'John King' has a shift with
 	| Field          | Value            |

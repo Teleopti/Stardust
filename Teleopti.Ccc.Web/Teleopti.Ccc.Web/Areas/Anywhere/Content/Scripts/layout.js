@@ -34,7 +34,7 @@ define([
 		dataType: "text",
 		url: "ToggleHandler/IsEnabled?toggle=MyTeam_MoveActivity_25206",
 		success: function (data) {
-			menu.moveActivityVisible(data == 'True');
+			menu.moveActivityVisible(data.IsEnabled === true);
 			defaultView = 'teamschedulemove';
 			_initializeRendering();
 		}
@@ -203,7 +203,7 @@ define([
 			}
 		});
 		if(defaultView === 'teamschedulemove' ) {
-				menu.moveActivityVisible(data == 'True');
+				menu.moveActivityVisible(true);
 		}
 		ko.applyBindings(menu, $('nav')[0]);
 	}
