@@ -49,10 +49,9 @@
 			
 			var checkFeature = function() {
 				ajax.ajax({
-					dataType: "text",
 					url: "ToggleHandler/IsEnabled?toggle=RTA_RtaLastStatesOverview_27789",
-					success: function(data) {
-						if (data === "True") {
+					success: function (data) {
+						if (data.IsEnabled) {
 							loadLastStates();
 						}
 					}

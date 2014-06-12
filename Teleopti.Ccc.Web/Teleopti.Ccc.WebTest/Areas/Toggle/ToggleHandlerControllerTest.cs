@@ -2,6 +2,7 @@
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Toggle;
 
 namespace Teleopti.Ccc.WebTest.Areas.Toggle
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Toggle
 			var target = new ToggleHandlerController(toggleManager,null);
 			toggleManager.Expect(x => x.IsEnabled(Toggles.TestToggle)).Return(true);
 
-			target.IsEnabled(Toggles.TestToggle)
+			((ToggleEnabledResult)target.IsEnabled(Toggles.TestToggle).Data).IsEnabled
 				.Should().Be.True();
 		}
 
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Toggle
 			var target = new ToggleHandlerController(toggleManager,null);
 			toggleManager.Expect(x => x.IsEnabled(Toggles.TestToggle)).Return(false);
 
-			target.IsEnabled(Toggles.TestToggle)
+			((ToggleEnabledResult)target.IsEnabled(Toggles.TestToggle).Data).IsEnabled
 				.Should().Be.False();
 		}
 	}

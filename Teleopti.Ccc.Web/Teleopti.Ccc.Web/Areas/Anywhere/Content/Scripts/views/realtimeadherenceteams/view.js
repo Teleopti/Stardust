@@ -45,10 +45,9 @@
 
 			var checkFeature = function () {
 				ajax.ajax({
-					dataType: "text",
 					url: "ToggleHandler/IsEnabled?toggle=RTA_RtaLastStatesOverview_27789",
 					success: function (data) {
-						if (data === "True") {
+						if (data.IsEnabled) {
 							loadLastStates();
 						}
 					}
@@ -57,10 +56,9 @@
 
 			var checkDetailFeature = function () {
 				ajax.ajax({
-					dataType: "text",
 					url: "ToggleHandler/IsEnabled?toggle=RTA_DrilldownToAllAgentsInOneTeam_25234",
 					success: function (data) {
-						if (data === "True") {
+						if (data.IsEnabled) {
 							for (var i = 0; i < viewModel.teams().length; i++) {
 								(function (team) {
 									team.canOpenTeam(true);
