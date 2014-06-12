@@ -7185,13 +7185,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
 							options.Refresh();
-
-							startBackgroundScheduleWork(_backgroundWorkerOvertimeScheduling,
-																					new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
-																						{
-																							OvertimePreferences = overtimePreferences
-																						}, true);
-
+							startBackgroundScheduleWork(_backgroundWorkerOvertimeScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()){OvertimePreferences = overtimePreferences}, true);
 						}
 					}
 				}
