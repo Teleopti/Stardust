@@ -843,6 +843,12 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\team_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedulemove\person-menu.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedulemove\person.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedulemove\shift-menu.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedulemove\shift.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedulemove\view.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedulemove\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\window.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
@@ -891,6 +897,7 @@
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceagents\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceteams\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesites\view.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\teamschedulemove\view.html" />
     <Content Include="Areas\Anywhere\Views\Application\index.aspx" />
     <Content Include="Areas\Diagnosis\Content\Scripts\main.js" />
     <Content Include="Areas\Diagnosis\Content\Scripts\require\configuration.js" />
