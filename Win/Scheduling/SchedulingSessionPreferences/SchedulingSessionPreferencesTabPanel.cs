@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 		#endregion
 
-		private void initShiftCategories()
+	    private void initShiftCategories()
 		{
 			if (_shiftCategories != null)
 			{
@@ -169,8 +169,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			comboBoxBlockType.DisplayMember = "Value";
 			comboBoxBlockType.ValueMember = "Key";
 			comboBoxBlockType.DataSource = LanguageResourceHelper.TranslateEnumToList<BlockFinderType>();
-
-			comboBoxBlockType.SelectedValue = _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling;
+			comboBoxBlockType.SelectedIndex = 0;
 		}
 
 		private void initGroupPages()
@@ -180,16 +179,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			comboBoxTeamGroupPage.DataSource = tempGroupPages;
 			comboBoxTeamGroupPage.DisplayMember = "Name";
 			comboBoxTeamGroupPage.ValueMember = "Key";
-			if (_localSchedulingOptions.GroupOnGroupPageForTeamBlockPer != null)
-			{
-				comboBoxTeamGroupPage.SelectedValue = _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer.Key;
-			}
-			else
-			{
-				comboBoxTeamGroupPage.SelectedValue = _singleAgentEntry.Key;
-			}
-
-			changeGrpSchedulingCommonOptionState(isTeamSelected());
+			comboBoxTeamGroupPage.SelectedIndex = 0;
 		}
 
 		private void initCommonActivity()
@@ -339,13 +329,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			else
 				checkBoxUseShiftCategory.Checked = false;
 
-			if (_localSchedulingOptions.ShiftCategory != null)
-				comboBoxAdvShiftCategory.SelectedItem = _localSchedulingOptions.ShiftCategory;
-
-			comboBoxAdvShiftCategory.Enabled = checkBoxUseShiftCategory.Checked;
-
 			trackBar1.Value = (int) (_localSchedulingOptions.Fairness.Value*100);
-
 
 			checkBoxDoNotBreakMaxSeats.Checked = _localSchedulingOptions.DoNotBreakMaxStaffing;
 			checkBoxUseMaxSeats.Checked = _localSchedulingOptions.UseMaxSeats;
@@ -356,8 +340,28 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 			checkBoxUseAverageShiftLengths.Checked = _localSchedulingOptions.UseAverageShiftLengths;
 
-
 			setTeamBlockDataToSave();
+
+			if (_localSchedulingOptions.ShiftCategory != null)
+				comboBoxAdvShiftCategory.SelectedItem = _localSchedulingOptions.ShiftCategory;
+
+			if (_localSchedulingOptions.GroupOnGroupPageForTeamBlockPer != null)
+			{
+				comboBoxTeamGroupPage.SelectedValue = _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer.Key;
+			}
+			else
+			{
+				comboBoxTeamGroupPage.SelectedValue = _singleAgentEntry.Key;
+			}
+
+			changeGrpSchedulingCommonOptionState(isTeamSelected());
+
+			comboBoxAdvShiftCategory.Enabled = checkBoxUseShiftCategory.Checked;
+
+			comboBoxBlockType.SelectedValue = _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling;
+
+			teamBlockSchedulingSessionOptionsHandler();
+			teamSchedulingSessionOptionsHandler();
 		}
 
 		private void checkBoxUseRotationsCheckedChanged(object sender, EventArgs e)
@@ -581,7 +585,5 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				!checkBoxTeamSameActivity.Checked)
 				comboBoxTeamGroupPage.SelectedIndex = 0;
 		}
-
-
 	}
 }
