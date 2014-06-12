@@ -100,6 +100,8 @@ Scenario: View unpublished schedule when permitted
 	| 11:30      | 12:15    | Yellow |
 	| 12:15      | 17:00    | Green  |
 
+#Bug 28367
+@ignore
 Scenario: View night shift from yesterday
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
