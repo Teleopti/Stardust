@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-	public interface IAgentDayScheduleTagRepository : IRepository<IAgentDayScheduleTag>, ILoadAggregateById<IAgentDayScheduleTag>
+	public interface IAgentDayScheduleTagRepository : IRepository<IAgentDayScheduleTag>, ILoadAggregateById<IAgentDayScheduleTag>, ILoadAggregateFromBroker<IAgentDayScheduleTag>
     {
         /// <summary>
         /// Finds all agent scheduleday tags for the specified period and scenario.
