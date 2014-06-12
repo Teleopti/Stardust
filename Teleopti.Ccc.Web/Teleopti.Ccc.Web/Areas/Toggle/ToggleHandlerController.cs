@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 		}
 
 		/// <summary>
-		/// Not used in code. Debug usage only!
 		/// Url if not logged in
 		/// <![CDATA[
 		/// [web]/ToggleHandler/IsEnabled?toggle=[yourToggle]&datasource=[your datasource]

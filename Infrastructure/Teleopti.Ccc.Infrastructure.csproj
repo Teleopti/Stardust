@@ -160,6 +160,7 @@
     <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
+    <Compile Include="Toggle\IToggleFiller.cs" />
     <Compile Include="Toggle\ToggleEnabledResult.cs" />
     <Compile Include="Toggle\ToggleQuerier.cs" />
     <Compile Include="Toggle\TogglesActive.cs" />

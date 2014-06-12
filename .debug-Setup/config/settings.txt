@@ -36,6 +36,5 @@ $(AGENTPORTALWEB_nhibConfPath)|c:\nhib
 <compilation debug="false"|<compilation debug="true"
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
 $(SDK_nhibConfPath)|c:\nhib
-$(TOGGLE_URL)|http://localhost:52858/ToggleHandler/IsEnabled
 $(DATASOURCE_NAME)|Teleopti CCC
 _replace_|c:\InfraTest.ini
