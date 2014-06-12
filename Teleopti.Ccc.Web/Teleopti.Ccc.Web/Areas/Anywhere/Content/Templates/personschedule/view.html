@@ -1,0 +1,239 @@
+<div class="person-schedule container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="relative">
+
+				<!-- ko with: TimeLine -->
+				<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }">
+					<div class="relative">
+						<div data-bind="foreach: Times">
+							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
+							<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
+						</div>
+					</div>
+				</div>
+				<!-- /ko -->
+
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr class="person selected-person" data-bind="attr: { 'data-person-id': PersonId }">
+							<td class="person-name person-name-column">
+								<div class="person-name nowrap" data-bind="text: Name"></div>
+							</td>
+							<td class="schedule schedule-column">
+								<div class="relative time-line-for">
+									<!-- ko foreach: Shifts -->
+									<div class="shift" data-bind="
+    template: {
+        name: 'layerTemplate',
+        foreach: Layers
+    }">
+									</div>
+									<!-- /ko -->
+									<!-- ko if: IsDayOff() -->
+									<!-- ko with: DayOff -->
+									<!-- ko if: OverlapsTimeLine() -->
+									<div class="dayoff absolute" data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }"></div>
+									<!-- /ko -->
+									<!-- /ko -->
+									<!-- /ko -->
+								</div>
+							</td>
+						</tr>
+
+						<tr class="form-placeholder" data-bind="if: DisplayForm">
+							<td class="person-name-column"></td>
+							<td class="schedule-column">
+								<div class="row space" data-bind="style: { 'margin-left': FormStartPixel() + 'px' }">
+									<div class="col-md-3">
+										<!-- ko if: $root.AddingIntradayAbsence -->
+										<!-- ko with: $root.AddIntradayAbsenceForm -->
+										<form action="#" class="intraday-absence-form">
+											<select class="absence-type input-sm form-control" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence"></select>
+											<div class="bootstrap-timepicker">
+												<div class="input-group">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-step-backward"></i></span>
+													<input type="text" class="start-time input-sm form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
+													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+												</div>
+											</div>
+
+											<div class="bootstrap-timepicker">
+												<div class="input-group">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-step-forward"></i></span>
+													<input type="text" class="end-time input-sm form-control" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
+													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+												</div>
+											</div>
+
+											<!-- ko if: ErrorMessage -->
+											<div class="alert">
+												<span data-bind="text: ErrorMessage"></span>
+											</div>
+											<!-- /ko -->
+											<div>
+												<button class="btn btn-success apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
+											</div>
+										</form>
+
+										<!-- /ko -->
+										<!-- /ko -->
+										<!-- ko if: $root.AddingActivity -->
+										<!-- ko with: $root.AddActivityForm -->
+										<form action="#" class="activity-form">
+											<select class="activity-type input-sm form-control" data-bind="enable: !$root.Loading(), options: ActivityTypes, optionsText: 'Name', optionsValue: 'Id', value: Activity"></select>
+
+											<div class="bootstrap-timepicker">
+												<div class="input-group">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-step-backward"></i></span>
+													<input type="text" class="start-time input-sm form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
+													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+												</div>
+											</div>
+											<div class="bootstrap-timepicker">
+												<div class="input-group">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-step-forward"></i></span>
+													<input type="text" class="end-time input-sm form-control" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
+													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+												</div>
+											</div>
+
+											<!-- ko if: ErrorMessage -->
+											<div class="alert">
+												<span data-bind="text: ErrorMessage"></span>
+											</div>
+											<!-- /ko -->
+											<div>
+												<button class="btn btn-success apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
+											</div>
+										</form>
+
+										<!-- /ko -->
+										<!-- /ko -->
+										<!-- ko if: $root.AddingFullDayAbsence -->
+										<!-- ko with: $root.AddFullDayAbsenceForm -->
+										<form action="#" class="full-day-absence-form">
+
+											<select id="absence-type" class="absence-type input-sm form-control" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: AbsenceType"></select>
+
+											<div class="input-group">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-step-backward"></i>
+												</span>
+												<input type="text" class="start-date form-control" readonly="readonly" data-bind="value: StartDateFormatted" />
+											</div>
+
+											<div class="input-group">
+												<span class="input-group-addon">
+													<i class="glyphicon glyphicon-step-forward"></i>
+												</span>
+												<input type="text" class="end-date form-control" readonly="readonly" data-bind="value: EndDateFormatted" />
+												<div class="date input-group-btn">
+													<button class="btn btn-default" data-bind="datepicker: EndDate, datepickerOptions: { format: $root.Resources.DateFormatForMoment, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
+														<i class="glyphicon glyphicon-calendar"></i>
+													</button>
+												</div>
+											</div>
+
+											<!-- ko if: InvalidEndDate -->
+											<div class="alert">
+												<span data-bind="text: $root.Resources.InvalidEndDate"></span>
+											</div>
+											<!-- /ko -->
+											<div>
+												<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
+											</div>
+										</form>
+										<!-- /ko -->
+										<!-- /ko -->
+									</div>
+								</div>
+							</td>
+						</tr>
+
+						<!-- ko ifnot: Loading -->
+						<!-- ko if: AddingActivity -->
+						<!-- ko foreach: SortedPersons -->
+						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.PersonId() != Id">
+							<td class="person-name person-name-column">
+								<div class="person-name nowrap" data-bind="text: Name"></div>
+							</td>
+							<td class="schedule schedule-column" style="padding-top: 4px">
+								<div class="relative time-line-for">
+									<!-- ko foreach: Shifts -->
+									<div class="shift" data-bind="
+    template: {
+        name: 'layerTemplate',
+        foreach: Layers
+    }
+										">
+									</div>
+									<!-- /ko -->
+									<!-- ko foreach: DayOffs -->
+									<!-- ko if: OverlapsTimeLine -->
+									<div class="dayoff absolute"
+											 data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
+									</div>
+									<!-- /ko -->
+									<!-- /ko -->
+								</div>
+							</td>
+						</tr>
+						<!-- /ko -->
+						<!-- /ko -->
+						<!-- /ko -->
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="row" data-bind="ifnot: DisplayForm">
+		<div class="col-md-8">
+			<table class="table absence-list">
+				<tbody data-bind="foreach: Absences">
+					<tr class="absence">
+						<td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor }">
+						<td class="absence-item"><span class="absence-name" data-bind="text: Name"></span></td>
+						<td class="absence-item"><i class="glyphicon glyphicon-step-backward"></i><span data-bind="text: StartTime"></span></td>
+						<td class="absence-item"><i class="glyphicon glyphicon-minus"></i></td>
+						<td class="absence-item"><span data-bind="text: EndTime"></span><i class="glyphicon glyphicon-step-forward"></i></td>
+						<td class="absence-item">
+							<!-- ko ifnot: AboutToRemove -->
+							<button class="btn remove" data-bind="click: Remove, text: $root.Resources.Remove" />
+							<!-- /ko -->
+							<!-- ko if: AboutToRemove -->
+							<button class="btn btn-danger confirm-removal" data-bind="disable: Removing, click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
+							<!-- /ko -->
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-4"></div>
+	</div>
+</div>
+
+<script id="layerTemplate" type="text/html">
+	<!-- ko if: OverlapsTimeLine -->
+	<div class="layer absolute floatleft" data-bind="
+    style: {
+        left: StartPixels() + 'px',
+        width: LengthPixels() + 'px',
+        backgroundColor: Color
+    },
+    attr: {
+        'data-start-time': StartTime,
+        'data-length-minutes': LengthMinutes(),
+    }
+		">
+	</div>
+	<!-- /ko -->
+</script>
