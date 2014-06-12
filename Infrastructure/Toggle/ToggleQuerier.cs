@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Infrastructure.Toggle
 {
-	//integration tests from Toggle.feature scenario
+	//integration tests from Toggle.feature scenario and unit tests from ioc common
 	public class ToggleQuerier : IToggleManager, IToggleFiller
 	{
 		private readonly ICurrentDataSource _currentDataSource;
