@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Windows.Forms;
 using EO.WebBrowser;
 using Teleopti.Runtime.Environment.Properties;
@@ -25,7 +26,15 @@ namespace Teleopti.Runtime.Environment
         private void webView1_NewWindow(object sender, NewWindowEventArgs e)
         {
             var form=new MainForm();
-            if (e.Height.HasValue)
+			if (e.TargetUrl.ToUpper().Contains("MYTIME/ASM"))
+			{
+				bool currentValue;
+				if (Boolean.TryParse(ConfigurationManager.AppSettings["defaultAlwaysOnTopASM"], out currentValue))
+				{
+					form.TopMost = currentValue;
+				}
+			}
+	        if (e.Height.HasValue)
                 form.Height = e.Height.Value;
             if (e.Width.HasValue)
                 form.Width = e.Width.Value;
@@ -75,7 +84,8 @@ namespace Teleopti.Runtime.Environment
 				var systemMenu = SystemMenu.FromForm(this);
 				systemMenu.InsertSeparator(0);
 
-				systemMenu.InsertMenu(0, ItemFlags.mfUnchecked | ItemFlags.mfString, m_AlwaysOnTopID, Resources.AlwaysOnTop);
+				systemMenu.InsertMenu(0, (TopMost ? ItemFlags.mfChecked : ItemFlags.mfUnchecked) | ItemFlags.mfString,
+					m_AlwaysOnTopID, Resources.AlwaysOnTop);
 			}
 			catch (NoSystemMenuException)
 			{
