@@ -3,9 +3,9 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Toggle;
 
-namespace Teleopti.Ccc.InfrastructureTest.Foundation
+namespace Teleopti.Ccc.InfrastructureTest.Toggle
 {
 	public class TogglesActiveTest
 	{

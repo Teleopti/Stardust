@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Infrastructure.Foundation
+﻿namespace Teleopti.Ccc.Infrastructure.Toggle
 {
 	public class ToggleEnabledResult
 	{

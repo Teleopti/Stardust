@@ -5,10 +5,10 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
-namespace Teleopti.Ccc.Infrastructure.Foundation
+namespace Teleopti.Ccc.Infrastructure.Toggle
 {
 	//integration tests from Toggle.feature scenario
-	public class ToggleQuerier : IToggleManager
+	public class ToggleQuerier : IToggleManager, IToggleFiller
 	{
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly string _url;
@@ -36,6 +36,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			query["datasource"] = _currentDataSource.CurrentName();
 			uriBuilder.Query = query.ToString();
 			return uriBuilder.ToString();
+		}
+
+		public void GetAllToggles()
+		{
+			
 		}
 	}
 }

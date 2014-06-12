@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Foundation;
 
-namespace Teleopti.Ccc.Infrastructure.Foundation
+namespace Teleopti.Ccc.Infrastructure.Toggle
 {
 	public class TogglesActive : ITogglesActive
 	{
