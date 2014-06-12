@@ -192,6 +192,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			theEvent.ScenarioId.Should().Be(assignment.Scenario.Id.Value);
 		}
 
+		[Test]
+		public void ShouldOnlyRaiseActivityMovedEvent()
+		{
+			var activity = new Activity("theone").WithId();
+			var agent = new Person().WithId();
+			var layerPeriod = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, layerPeriod);
+
+			assignment.PopAllEvents();
+
+			assignment.MoveActivityAndSetHighestPriority(activity, layerPeriod.StartDateTime, TimeSpan.FromHours(1), layerPeriod.ElapsedTime());
+
+			assignment.PopAllEvents().Count()
+				.Should().Be.EqualTo(1);
+		}
+
 		private static DateTime createDateTime(int hourOnDay)
 		{
 			return new DateTime(2013, 11, 14, hourOnDay, 0, 0, 0, DateTimeKind.Utc);

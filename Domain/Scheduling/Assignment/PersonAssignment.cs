@@ -276,11 +276,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void AddActivity(IActivity activity, DateTimePeriod period)
 		{
-			var layer = new MainShiftLayer(activity, period);
-			layer.SetParent(this);
-			_shiftLayers.Add(layer);
-			SetDayOff(null);
-
+			addActivityInternal(activity, period);
 			AddEvent(() => new ActivityAddedEvent
 				{
 					Date = Date,
@@ -290,6 +286,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					EndDateTime = period.EndDateTime,
 					ScenarioId = Scenario.Id.Value
 				});
+		}
+
+		private void addActivityInternal(IActivity activity, DateTimePeriod period)
+		{
+			var layer = new MainShiftLayer(activity, period);
+			layer.SetParent(this);
+			_shiftLayers.Add(layer);
+			SetDayOff(null);
 		}
 
 		public virtual void SetShiftCategory(IShiftCategory shiftCategory)
@@ -362,8 +366,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var newPeriod = new DateTimePeriod(startTimeUtc, startTimeUtc.Add(length));
 			///////////////////////////////
 			
-			//this will fire ActivityAddedEvent when add an activity, too many events?
-			AddActivity(activity, newPeriod);
+			addActivityInternal(activity, newPeriod);
 
 			var affectedPeriod = new DateTimePeriod(currentStartTime, currentStartTime.Add(length)).MaximumPeriod(newPeriod);
 			
