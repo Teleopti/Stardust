@@ -145,6 +145,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.DayOffs);
 			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.Activities);
 			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.ShiftCategories);
+			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.ScheduleTags.Where(scheduleTag => scheduleTag.Id != null).ToList());
 		}
 
 		public IEnumerable<IAggregateRoot>[] DataToReassociate(IPerson personToReassociate)
@@ -161,7 +162,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			       		_owner.SchedulerState.CommonStateHolder.Absences,
 			       		_owner.SchedulerState.CommonStateHolder.DayOffs,
 			       		_owner.SchedulerState.CommonStateHolder.Activities,
-			       		_owner.SchedulerState.CommonStateHolder.ShiftCategories
+			       		_owner.SchedulerState.CommonStateHolder.ShiftCategories,
+						_owner.SchedulerState.CommonStateHolder.ScheduleTags.Where(scheduleTag => scheduleTag.Id != null).ToList()
 			       	};
 		}
 
@@ -249,6 +251,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				if (Log.IsInfoEnabled)
 				Log.Info("Message broker - Updating " + eventMessage.DomainObjectType + " [" + eventMessage.DomainObjectId + "]");
+
+			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IAgentDayScheduleTag)))
+			{
+				return _owner.SchedulerState.Schedules.UpdateFromBroker(new AgentDayScheduleTagRepository(unitOfWorkFactory.CurrentUnitOfWork()), eventMessage.DomainObjectId);
+			}
 
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPersonAssignment)))
 				{
