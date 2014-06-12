@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using System.Linq;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private OvertimePreferencesGeneralPersonalSetting _defaultOvertimeGeneralSettings;
 	    private readonly IOvertimePreferences _overtimePreferences;
         private readonly string _settingValue;
-	    private readonly IEnumerable<IActivity> _availableActivity;
+	    private IEnumerable<IActivity> _availableActivity;
 	    private readonly int _resolution;
 	    private readonly IList<IMultiplicatorDefinitionSet> _definitionSets;
 	    private readonly IEnumerable<IScheduleTag> _scheduleTags;
@@ -116,10 +117,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void initActivityList()
         {
+	        _availableActivity = _availableActivity.Where(activity => activity.RequiresSkill).ToList();
             comboBoxAdvActivity.DataSource = _availableActivity;
             comboBoxAdvActivity.DisplayMember = "Name";
             comboBoxAdvActivity.ValueMember = "Name";
-            comboBoxAdvActivity.SelectedItem = _overtimePreferences.SkillActivity;
+
+			if (_availableActivity.Contains(_overtimePreferences.SkillActivity))
+				comboBoxAdvActivity.SelectedItem = _overtimePreferences.SkillActivity;
+			else
+				comboBoxAdvActivity.SelectedIndex = 0;
+			
         }
 
 	    public OvertimePreferencesDialog()
