@@ -25,25 +25,30 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.Register<IToggleManager>(c =>
+			if (togglePathIsAnUrl())
 			{
-				if (togglePathIsNotDefined())
+				builder.Register(c => new ToggleQuerier(c.Resolve<ICurrentDataSource>(), _pathToToggle))
+					.SingleInstance()
+					.As<IToggleManager>()
+					.As<IToggleFiller>();
+			}
+			else
+			{
+				builder.Register<IToggleManager>(c =>
 				{
-					return new falseToggleManager();
-				}
-				if (togglePathIsAnUrl())
-				{
-					return new ToggleQuerier(c.Resolve<ICurrentDataSource>(), _pathToToggle);
-				}
-				var licenseActivatorProvider = c.ResolveNamed<ILicenseActivatorProvider>("querystring");
-				var specMappings = new DefaultSpecificationMappings();
-				specMappings.AddMapping("license", new LicenseSpecification(licenseActivatorProvider));
-				var toggleConfiguration = new ToggleConfiguration(new FileProviderFactory(new FileReader(_pathToToggle), specMappings));
-				toggleConfiguration.SetDefaultSpecification(new DefaultSpecification(licenseActivatorProvider));
-				return new toggleCheckerWrapper(toggleConfiguration.Create());
-			})
+					if (togglePathIsNotDefined())
+						return new falseToggleManager();
+		
+					var licenseActivatorProvider = c.ResolveNamed<ILicenseActivatorProvider>("querystring");
+					var specMappings = new DefaultSpecificationMappings();
+					specMappings.AddMapping("license", new LicenseSpecification(licenseActivatorProvider));
+					var toggleConfiguration = new ToggleConfiguration(new FileProviderFactory(new FileReader(_pathToToggle), specMappings));
+					toggleConfiguration.SetDefaultSpecification(new DefaultSpecification(licenseActivatorProvider));
+					return new toggleCheckerWrapper(toggleConfiguration.Create());
+				})
 				.SingleInstance()
 				.As<IToggleManager>();
+			}
 
 			builder.RegisterType<TogglesActive>()
 				.SingleInstance().As<ITogglesActive>();
