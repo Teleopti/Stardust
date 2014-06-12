@@ -369,7 +369,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<TeamBlockRuleSetBagExtractor>().As<ITeamBlockRuleSetBagExtractor>();
             builder.RegisterType<TeamBlockIncludedWorkShiftRuleFilter>().As<ITeamBlockIncludedWorkShiftRuleFilter>();
 			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>();
-			//IRuleSetSkillActivityChecker
+			builder.RegisterType<PersonalShiftAndMeetingFilter>().As<IPersonalShiftAndMeetingFilter>();
+			//IPersonalShiftAndMeetingFilter
 	    }
     }
 }
