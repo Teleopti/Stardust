@@ -260,7 +260,7 @@ ShiftTradeRequestDetailedDayViewModel = function(data) {
 		var numberOfShownHours = data.TimeLineHours.length;
 		var showNumberRatio = Math.floor(numberOfShownHours / 8);
 		var timelineHour = new Teleopti.MyTimeWeb.Request.TimeLineHourEditShiftTradeViewModel(data.TimeLineHours[i], self);
-		timelineHour.showLabel(!(i % showNumberRatio));
+		timelineHour.showLabel(!(i % showNumberRatio) && timelineHour.hourText.length > 0);
 		self.hours.push(timelineHour);
 	}
 
