@@ -1,215 +1,232 @@
 
 define([
-        'text!templates/layout.html',
-        'text!templates/menu.html',
-        'text!templates/error.html',
-        'crossroads',
-        'hasher',
-        'knockout',
-        'moment',
-        'momentDatepickerKo',
-        'menu',
-        'subscriptions',
-        'ajax',
-        'errorview',
-        'resources'
-    ], function(
-        layoutTemplate,
-        menuTemplate,
-        errorTemplate,
-        crossroads,
-        hasher,
-        ko,
-        moment,
-        datepicker,
-        menuViewModel,
-        subscriptions,
-        ajax,
-        errorview,
-        resources) {
+		'text!templates/layout.html',
+		'text!templates/menu.html',
+		'text!templates/error.html',
+		'crossroads',
+		'hasher',
+		'knockout',
+		'moment',
+		'momentDatepickerKo',
+		'menu',
+		'subscriptions',
+		'ajax',
+		'errorview',
+		'resources'
+], function (
+		layoutTemplate,
+		menuTemplate,
+		errorTemplate,
+		crossroads,
+		hasher,
+		ko,
+		moment,
+		datepicker,
+		menuViewModel,
+		subscriptions,
+		ajax,
+		errorview,
+		resources) {
 
-        var currentView;
-        var defaultView = 'teamschedule';
-        var menu = new menuViewModel(resources);
-        var contentPlaceHolder;
+	var currentView;
+	var defaultView = 'teamschedule';
+	ajax.ajax({
+		dataType: "text",
+		url: "ToggleHandler/IsEnabled?toggle=MyTeam_MoveActivity_25206",
+		success: function (data) {
+			menu.moveActivityVisible(data == 'True');
+			defaultView = 'teamschedulemove';
+			_initializeRendering();
+		}
+	});
 
-        function _displayView(routeInfo) {
+	
+	var menu = new menuViewModel(resources);
+	var contentPlaceHolder;
 
-            errorview.remove();
+	function _displayView(routeInfo) {
 
-            routeInfo.renderHtml = function(html) {
-                contentPlaceHolder.html(html);
-            };
+		errorview.remove();
 
-            routeInfo.bindingElement = contentPlaceHolder[0];
+		routeInfo.renderHtml = function (html) {
+			contentPlaceHolder.html(html);
+		};
 
-            var module = 'views/' + routeInfo.view + '/view';
-            require([module], function(view) {
+		routeInfo.bindingElement = contentPlaceHolder[0];
 
-                if (view == undefined) {
-                    errorview.display("View " + routeInfo.view + " could not be loaded");
-                    return;
-                }
+		var module = 'views/' + routeInfo.view + '/view';
+		require([module], function (view) {
 
-                view.ready = false;
+			if (view == undefined) {
+				errorview.display("View " + routeInfo.view + " could not be loaded");
+				return;
+			}
 
-                if (view != currentView) {
-                    if (currentView && currentView.dispose)
-                        currentView.dispose(routeInfo);
-                    currentView = view;
-                    view.initialize(routeInfo);
-                }
+			view.ready = false;
 
-                var promise = view.display(routeInfo);
+			if (view != currentView) {
+				if (currentView && currentView.dispose)
+					currentView.dispose(routeInfo);
+				currentView = view;
+				view.initialize(routeInfo);
+			}
 
-                if (view.clearaction)
-                    view.clearaction(routeInfo);
-                if (routeInfo.action)
-                    view[routeInfo.action](routeInfo);
+			var promise = view.display(routeInfo);
 
-                if (promise) {
-                    promise.done(function () {
-                        view.ready = true;
-                    });
-                } else {
-                    view.ready = true;
-                }
+			if (view.clearaction)
+				view.clearaction(routeInfo);
+			if (routeInfo.action)
+				view[routeInfo.action](routeInfo);
 
-                _fixBootstrapDropdownForMobileDevices();
-            });
+			if (promise) {
+				promise.done(function () {
+					view.ready = true;
+				});
+			} else {
+				view.ready = true;
+			}
 
-            menu.ActiveView(routeInfo.view);
-        }
+			_fixBootstrapDropdownForMobileDevices();
+		});
 
-        function _setupRoutes() {
-            var viewRegex = '[a-z]+';
-            var actionRegex = '[a-z]+';
-            var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
-            var dateRegex = '\\d{8}';
+		menu.ActiveView(routeInfo.view);
+	}
 
-            crossroads.addRoute(
-                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
-                function(view, id, date, action, secondaryId) {
-                    _displayView({ view: view, id: id, date: date, action: action, secondaryId: secondaryId });
-                });
-            crossroads.addRoute(
-                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
-                function(view, id, action, secondaryId) {
-                    _displayView({ view: view, id: id, action: action, secondaryId: secondaryId });
-                });
-            crossroads.addRoute(
-                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')$', "i"),
-                function (view, personid, date, action) {
-                	_displayView({ view: view, personid: personid, date: date, action: action });
-                });
-            crossroads.addRoute(
-                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')$', "i"),
-                function(view, groupid, personid, date, action) {
-                	_displayView({ view: view, groupid: groupid, personid:personid, date: date, action: action });
-                });
-            crossroads.addRoute(
-                new RegExp('^(' + viewRegex + ')/(' + dateRegex + ')$', "i"),
-                function(view, date) {
-                    _displayView({ view: view, date: date });
-                });
-            crossroads.addRoute(
-                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + actionRegex + ')$', "i"),
-                function(view, id, action) {
-                    _displayView({ view: view, id: id, action: action });
-                });
-	        crossroads.addRoute(
-		        new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
-		        function(view, id, date) {
-			        _displayView({ view: view, id: id, date: date });
-		        });
-            crossroads.addRoute(
-                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + guidRegex + ')$', "i"),
-                function(view, id, date, secondaryId) {
-                    _displayView({ view: view, id: id, date: date, secondaryId: secondaryId });
-                });
-            crossroads.addRoute(
-                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
-                function(view, groupid, personid, date) {
-                    _displayView({ view: view, groupid: groupid, personid: personid, date: date });
-                });
-            crossroads.addRoute(
-                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')$', "i"),
-                function(view, id) {
-                    _displayView({ view: view, id: id });
-                });
-            crossroads.addRoute('{view}', function(view) {
-                _displayView({ view: view });
-            });
-            crossroads.addRoute('', function() {
-                _displayView({ view: defaultView });
-            });
-        }
+	function _setupRoutes() {
+		var viewRegex = '[a-z]+';
+		var actionRegex = '[a-z]+';
+		var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
+		var dateRegex = '\\d{8}';
 
-        function _initializeHasher() {
-            var parseHash = function(newHash, oldHash) {
-                crossroads.parse(newHash);
-            };
-            hasher.initialized.add(parseHash);
-            hasher.changed.add(parseHash);
-            hasher.init();
-        }
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
+			function (view, id, date, action, secondaryId) {
+				_displayView({ view: view, id: id, date: date, action: action, secondaryId: secondaryId });
+			});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
+			function (view, id, action, secondaryId) {
+				_displayView({ view: view, id: id, action: action, secondaryId: secondaryId });
+			});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')$', "i"),
+			function (view, personid, date, action) {
+				_displayView({ view: view, personid: personid, date: date, action: action });
+			});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')$', "i"),
+			function (view, groupid, personid, date, action) {
+				_displayView({ view: view, groupid: groupid, personid: personid, date: date, action: action });
+			});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + dateRegex + ')$', "i"),
+			function (view, date) {
+				_displayView({ view: view, date: date });
+			});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + actionRegex + ')$', "i"),
+			function (view, id, action) {
+				_displayView({ view: view, id: id, action: action });
+			});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
+			function (view, id, date) {
+				_displayView({ view: view, id: id, date: date });
+			});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + guidRegex + ')$', "i"),
+			function (view, id, date, secondaryId) {
+				_displayView({ view: view, id: id, date: date, secondaryId: secondaryId });
+			});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
+			function (view, groupid, personid, date) {
+				_displayView({ view: view, groupid: groupid, personid: personid, date: date });
+			});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')$', "i"),
+			function (view, id) {
+				_displayView({ view: view, id: id });
+			});
+		crossroads.addRoute('{view}', function (view) {
+			_displayView({ view: view });
+		});
+		crossroads.addRoute('', function () {
+			_displayView({ view: defaultView });
+		});
+	}
 
-        function _render() {
-            $('body').append(layoutTemplate);
-            contentPlaceHolder = $('#content-placeholder');
-            $('#menu-placeholder').replaceWith(menuTemplate);
-        }
+	function _initializeHasher() {
+		var parseHash = function (newHash, oldHash) {
+			crossroads.parse(newHash);
+		};
+		hasher.initialized.add(parseHash);
+		hasher.changed.add(parseHash);
+		hasher.init();
+	}
 
-        function _fixBootstrapDropdownForMobileDevices() {
-            $('.dropdown-menu').on('touchstart.dropdown.data-api', function(e) {
-                e.stopPropagation();
-            });
-        }
+	function _render() {
+		$('body').append(layoutTemplate);
+		contentPlaceHolder = $('#content-placeholder');
+		$('#menu-placeholder').replaceWith(menuTemplate);
+	}
 
-        function _initMomentLanguageWithFallback() {
-        	var ietfLanguageTag = resources.LanguageCode.toLowerCase();;
-            var baseLang = 'en'; //Base
-            var languages = [ietfLanguageTag, ietfLanguageTag.split('-')[0], baseLang];
+	function _fixBootstrapDropdownForMobileDevices() {
+		$('.dropdown-menu').on('touchstart.dropdown.data-api', function (e) {
+			e.stopPropagation();
+		});
+	}
 
-            for (var i = 0; i < languages.length; i++) {
-                try {
-                    moment.lang(languages[i]);
-                    if (moment.lang() == languages[i]) return;
-                } catch(e) {
-                    continue;
-                }
-            }
-        }
+	function _initMomentLanguageWithFallback() {
+		var ietfLanguageTag = resources.LanguageCode.toLowerCase();;
+		var baseLang = 'en'; //Base
+		var languages = [ietfLanguageTag, ietfLanguageTag.split('-')[0], baseLang];
 
-        function _bindMenu() {
-            ajax.ajax({
-                url: "Anywhere/Application/NavigationContent",
-                success: function(responseData, textStatus, jqXHR) {
-                    menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
-                    menu.MobileReportsVisible(responseData.IsMobileReportsAvailable === true);
-	                menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
-                    menu.UserName(responseData.UserName);
-                }
-            });
-            ko.applyBindings(menu, $('nav')[0]);
-        }
+		for (var i = 0; i < languages.length; i++) {
+			try {
+				moment.lang(languages[i]);
+				if (moment.lang() == languages[i]) return;
+			} catch (e) {
+				continue;
+			}
+		}
+	}
 
-        function _initSignalR() {
-            var promise = subscriptions.start();
-            promise.fail(function() {
-                _displayError("SignalR failed to start");
-            });
-        }
+	function _bindMenu() {
+		ajax.ajax({
+			url: "Anywhere/Application/NavigationContent",
+			success: function (responseData, textStatus, jqXHR) {
+				menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
+				menu.MobileReportsVisible(responseData.IsMobileReportsAvailable === true);
+				menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
+				menu.UserName(responseData.UserName);
+			}
+		});
+		if(defaultView === 'teamschedulemove' ) {
+				menu.moveActivityVisible(data == 'True');
+		}
+		ko.applyBindings(menu, $('nav')[0]);
+	}
 
-        _render();
+	function _initSignalR() {
+		var promise = subscriptions.start();
+		promise.fail(function () {
+			_displayError("SignalR failed to start");
+		});
+	}
 
-        _initSignalR();
 
-        _setupRoutes();
-        _initializeHasher();
+	function _initializeRendering() { //FIXME This function must be removed after the end of the toggling feature between teamschedule and teamschedulemove
+		_render();
 
-        _initMomentLanguageWithFallback();
+		_initSignalR();
 
-        _bindMenu();
+		_setupRoutes();
+		_initializeHasher();
 
-    });
+		_initMomentLanguageWithFallback();
+
+		_bindMenu();
+	}
+
+});
