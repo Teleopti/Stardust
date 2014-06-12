@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			modifiedLayer.Period.EndDateTime.Should().Be(expectedStart + (orgEnd - orgStart));
 		}
 
-		private DateTime createDateTime(int hourOnDay)
+		private static DateTime createDateTime(int hourOnDay)
 		{
 			return new DateTime(2013, 11, 14, hourOnDay, 0, 0, 0, DateTimeKind.Utc);
 		}
