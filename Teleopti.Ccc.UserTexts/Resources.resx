@@ -12095,4 +12095,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Queue Metrics</value>
     <comment>name of permission and report under my report</comment>
   </data>
+  <data name="TimeInAlarm" xml:space="preserve">
+    <value>Time in Alarm</value>
+  </data>
 </root>
