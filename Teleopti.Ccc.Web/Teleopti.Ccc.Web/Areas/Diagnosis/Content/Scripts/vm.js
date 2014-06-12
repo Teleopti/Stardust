@@ -12,6 +12,8 @@ define([
 
 		var self = this;
 
+		self.messageBrokerHub = $.connection.MessageBrokerHub;
+
 		self.started = ko.observable(false);
 
 		self.showInfo = function(info) {
