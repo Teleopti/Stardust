@@ -51,6 +51,14 @@ define([
 		});
 	};
 
+	var displayMoveButton = function (callback) {
+		ajax.ajax({
+			dataType: "json",
+			url: "ToggleHandler/IsEnabled?toggle=MyTeam_MoveActivity_25206",
+			success: callback
+	});
+	}
+
 	return {
 		initialize: function (options) {
 
@@ -86,6 +94,10 @@ define([
 		display: function (options) {
 
 			viewModel.Loading(true);
+
+			displayMoveButton(function(data) {
+				viewModel.moveActivityVisible(data.IsEnabled);
+			});
 
 			var currentDate = function () {
 				var date = options.date;

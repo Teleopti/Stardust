@@ -30,16 +30,6 @@ define([
 
 	var currentView;
 	var defaultView = 'teamschedule';
-	ajax.ajax({
-		dataType: "text",
-		url: "ToggleHandler/IsEnabled?toggle=MyTeam_MoveActivity_25206",
-		success: function (data) {
-			menu.moveActivityVisible(data.IsEnabled === true);
-			defaultView = 'teamschedulemove';
-			_initializeRendering();
-		}
-	});
-
 	
 	var menu = new menuViewModel(resources);
 	var contentPlaceHolder;
@@ -207,9 +197,6 @@ define([
 				menu.UserName(responseData.UserName);
 			}
 		});
-		if(defaultView === 'teamschedulemove' ) {
-				menu.moveActivityVisible(true);
-		}
 		ko.applyBindings(menu, $('nav')[0]);
 	}
 
@@ -221,7 +208,6 @@ define([
 	}
 
 
-	function _initializeRendering() { //FIXME This function must be removed after the end of the toggling feature between teamschedule and teamschedulemove
 		_render();
 
 		_initSignalR();
@@ -232,6 +218,5 @@ define([
 		_initMomentLanguageWithFallback();
 
 		_bindMenu();
-	}
 
 });
