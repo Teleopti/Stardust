@@ -8,22 +8,15 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 	[TestFixture]
 	public class TeleoptiCccOvertimeAvailabilityLicenseOptionTest
 	{
-		private TeleoptiCccOvertimeAvailabilityLicenseOption _target;
-
-		[SetUp]
-		public void Setup()
-		{
-			_target = new TeleoptiCccOvertimeAvailabilityLicenseOption();
-		}
-
 		[Test]
 		public void VerifyEnable()
 		{
+			var target = new TeleoptiCccOvertimeAvailabilityLicenseOption();
 			IList<IApplicationFunction> inputList = new List<IApplicationFunction>();
 
-			_target.EnableApplicationFunctions(inputList);
-			IList<IApplicationFunction> resultList = _target.EnabledApplicationFunctions;
-			Assert.AreEqual(5, resultList.Count);
+			target.EnableApplicationFunctions(inputList);
+			IList<IApplicationFunction> resultList = target.EnabledApplicationFunctions;
+			Assert.AreEqual(1, resultList.Count);
 		}
 	}
 }

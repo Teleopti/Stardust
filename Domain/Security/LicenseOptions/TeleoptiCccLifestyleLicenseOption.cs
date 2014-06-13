@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 	public class TeleoptiCccLifestyleLicenseOption : LicenseOption
     {
         public TeleoptiCccLifestyleLicenseOption()
-            : base(DefinedLicenseOptionPaths.TeleoptiCccLifestyle, DefinedLicenseOptionNames.TeleoptiCccAss)
+            : base(DefinedLicenseOptionPaths.TeleoptiCccLifestyle, DefinedLicenseOptionNames.TeleoptiCccLifestyle)
         {
         }
 
