@@ -850,6 +850,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\LatestStartTimeLimitationShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\MainShiftOptimizeActivitiesSpecificationShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\NotOverWritableActivitiesShiftFilterTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\PersonalShiftAndMeetingFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\PersonalShiftsShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetAccordingToAccessabilityFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetPersonalSkillsActivityFilterTest.cs" />

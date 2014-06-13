@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -34,9 +35,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void CloneShouldWork()
+		public void ShouldMoveToDestinationDate()
 		{
-			
+			var startTime = new DateTime(2014, 07, 03, 23, 0, 0, DateTimeKind.Utc);
+			var endTime = new DateTime(2014, 07, 04, 02, 0, 0, DateTimeKind.Utc);
+			var activityLayer = new EditableShiftLayer(new Activity("phone"), new DateTimePeriod(startTime, endTime));
+			_target.LayerCollection.Add(activityLayer);
+			var movedShift = _target.MoveTo(new DateOnly(2014, 07, 03), new DateOnly(2014, 06, 30));
+			startTime = new DateTime(2014, 06, 30, 23, 0, 0, DateTimeKind.Utc);
+			endTime = new DateTime(2014, 07, 01, 02, 0, 0, DateTimeKind.Utc);
+			Assert.AreEqual(new DateTimePeriod(startTime, endTime), movedShift.ProjectionService().CreateProjection().Period());
 		}
 
 	}

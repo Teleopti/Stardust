@@ -33,8 +33,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IPerson _person;
 		private IScenario _scenario;
 		private IMeetingPerson _meetingPerson;
-		private IVisualLayerCollection _mainShiftProjection;
-
 			
 		[SetUp]
 		public void Setup()
@@ -59,7 +57,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mainShift.LayerCollection.Add(_mainShiftLayer);
 			_mainShift.LayerCollection.Add(_mainShiftLayerNotInWorkTime);
 			_mainShift.LayerCollection.Add(_mainShiftLayerNoOverwrite);
-			_mainShiftProjection = _mainShift.ProjectionService().CreateProjection();
 			_target = new PersonalShiftMeetingTimeChecker();
 		}
 
@@ -69,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_meeting = new Meeting(_person, new List<IMeetingPerson>(), "subject", "location", "description", _personalActivity,_scenario);
 			_personMeeting = new PersonMeeting(_meeting, _meetingPerson, _mainDateTimePeriodNotInWorkTime);
 			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>{_personMeeting});
-			var result = _target.CheckTimeMeeting(_mainShift, _mainShiftProjection, meetings);
+			var result = _target.CheckTimeMeeting(_mainShift, meetings);
 
 			Assert.IsTrue(result);		
 		}
@@ -80,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
 			_personAssignment.AddPersonalActivity(_personalActivity, _mainDateTimePeriodNotInWorkTime);
 			_personAssignment.AddPersonalActivity(_activity, _mainDateTimePeriod);
-			var result = _target.CheckTimePersonAssignment(_mainShift, _mainShiftProjection, _personAssignment);
+			var result = _target.CheckTimePersonAssignment(_mainShift, _personAssignment);
 
 			Assert.IsTrue(result);			
 		}
@@ -92,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_meeting = new Meeting(_person, new List<IMeetingPerson>(), "subject", "location", "description", _personalActivity, _scenario);
 			_personMeeting = new PersonMeeting(_meeting, _meetingPerson, periodOutside);
 			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { _personMeeting });
-			var result = _target.CheckTimeMeeting(_mainShift, _mainShiftProjection, meetings);
+			var result = _target.CheckTimeMeeting(_mainShift, meetings);
 
 			Assert.IsFalse(result);	
 		}
@@ -103,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var periodOutside = new DateTimePeriod(_mainDateTimePeriod.StartDateTime.AddDays(-1), _mainDateTimePeriod.EndDateTime.AddDays(-1));
 			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
 			_personAssignment.AddPersonalActivity(_personalActivity, periodOutside);
-			var result = _target.CheckTimePersonAssignment(_mainShift, _mainShiftProjection, _personAssignment);
+			var result = _target.CheckTimePersonAssignment(_mainShift, _personAssignment);
 
 			Assert.IsFalse(result);	
 		}
@@ -115,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_meeting = new Meeting(_person, new List<IMeetingPerson>(), "subject", "location", "description", _personalActivity, _scenario);
 			_personMeeting = new PersonMeeting(_meeting, _meetingPerson, _mainDateTimePeriodNotInWorkTime);
 			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { _personMeeting });
-			var result = _target.CheckTimeMeeting(_mainShift, _mainShiftProjection, meetings);
+			var result = _target.CheckTimeMeeting(_mainShift, meetings);
 
 			Assert.IsFalse(result);			
 		}
@@ -126,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_personalActivity.InWorkTime = true;
 			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
 			_personAssignment.AddPersonalActivity(_personalActivity, _mainDateTimePeriodNotInWorkTime);
-			var result = _target.CheckTimePersonAssignment(_mainShift, _mainShiftProjection, _personAssignment);
+			var result = _target.CheckTimePersonAssignment(_mainShift, _personAssignment);
 
 			Assert.IsFalse(result);	
 		}
@@ -139,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_meeting = new Meeting(_person, new List<IMeetingPerson>(), "subject", "location", "description", _personalActivity, _scenario);
 			_personMeeting = new PersonMeeting(_meeting, _meetingPerson, _mainDateTimePeriodNotInWorkTime);
 			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { _personMeeting });
-			var result = _target.CheckTimeMeeting(_mainShift, _mainShiftProjection, meetings);
+			var result = _target.CheckTimeMeeting(_mainShift, meetings);
 
 			Assert.IsFalse(result);	
 		}
@@ -151,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_personalActivity.InContractTime = false;
 			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
 			_personAssignment.AddPersonalActivity(_personalActivity, _mainDateTimePeriodNotInWorkTime);
-			var result = _target.CheckTimePersonAssignment(_mainShift, _mainShiftProjection, _personAssignment);
+			var result = _target.CheckTimePersonAssignment(_mainShift, _personAssignment);
 
 			Assert.IsFalse(result);
 		}
@@ -162,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_meeting = new Meeting(_person, new List<IMeetingPerson>(), "subject", "location", "description", _personalActivity, _scenario);
 			_personMeeting = new PersonMeeting(_meeting, _meetingPerson, _mainDateTimePeriodNoOverwrite);
 			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { _personMeeting });
-			var result = _target.CheckTimeMeeting(_mainShift, _mainShiftProjection, meetings);
+			var result = _target.CheckTimeMeeting(_mainShift, meetings);
 
 			Assert.IsFalse(result);
 		}
@@ -174,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_personAssignment.AddPersonalActivity(_personalActivity, _mainDateTimePeriodNoOverwrite);
 			_personAssignment.AddPersonalActivity(_activity, _mainDateTimePeriod);
 
-			var result = _target.CheckTimePersonAssignment(_mainShift, _mainShiftProjection, _personAssignment);
+			var result = _target.CheckTimePersonAssignment(_mainShift, _personAssignment);
 
 			Assert.IsFalse(result);	
 		}
@@ -185,7 +182,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
 			_mainShift = new EditableShift(_shiftCategory);
 			_mainShift.LayerCollection.Add(_mainShiftLayerNoOverwrite);
-			_mainShiftProjection = _mainShift.ProjectionService().CreateProjection();
 			_personalActivity.InContractTime = false;
 
 			var periodBefore = new DateTimePeriod(_mainDateTimePeriodNoOverwrite.StartDateTime.AddHours(-2), _mainDateTimePeriodNoOverwrite.StartDateTime.AddHours(-1));
@@ -194,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_personAssignment.AddPersonalActivity(_personalActivity, periodBefore);
 			_personAssignment.AddPersonalActivity(_personalActivity, periodAfter);
 
-			var result = _target.CheckTimePersonAssignment(_mainShift, _mainShiftProjection, _personAssignment);
+			var result = _target.CheckTimePersonAssignment(_mainShift, _personAssignment);
 
 			Assert.IsTrue(result);		
 		}
@@ -203,13 +199,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldReturnFalseIfMainShiftProjectionPeriodHasNoValue()
 		{
 			_mainShift.LayerCollection.Clear();
-			var projection = _mainShift.ProjectionService().CreateProjection();
+
 			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { _personMeeting });
 
-			var result1 = _target.CheckTimeMeeting(_mainShift, projection, meetings);
+			var result1 = _target.CheckTimeMeeting(_mainShift, meetings);
 			Assert.IsFalse(result1);
 
-			var result2 = _target.CheckTimePersonAssignment(_mainShift, projection, _personAssignment);
+			var result2 = _target.CheckTimePersonAssignment(_mainShift, _personAssignment);
 			Assert.IsFalse(result2);
 		}
 	}

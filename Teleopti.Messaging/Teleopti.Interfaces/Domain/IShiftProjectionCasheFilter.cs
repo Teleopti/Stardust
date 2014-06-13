@@ -116,13 +116,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="finderResult">The finder result.</param>
         /// <returns></returns>
         IList<IShiftProjectionCache> FilterOnStartAndEndTime(DateTimePeriod startAndEndTime, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult);
-        /// <summary>
-        /// Gets the maximum period for personal shifts and meetings.
-        /// </summary>
-        /// <param name="schedulePart">The schedule part.</param>
-        /// <returns></returns>
-        DateTimePeriod? GetMaximumPeriodForPersonalShiftsAndMeetings(IScheduleDay schedulePart);
-        
+
         /// <summary>
         /// Filters the specified valid min max.
         /// </summary>
@@ -169,15 +163,5 @@ namespace Teleopti.Interfaces.Domain
         IList<IShiftProjectionCache> FilterOnNotOverWritableActivities(IList<IShiftProjectionCache> shiftList,
                                                                     IScheduleDay part,
                                                                     IWorkShiftFinderResult finderResult);
-
-        /// <summary>
-        /// Filters the on personal shifts.
-        /// </summary>
-        /// <param name="shiftList">The shift list.</param>
-        /// <param name="schedulePart">The schedule part.</param>
-        /// <param name="finderResult">The finder result.</param>
-        /// <returns></returns>
-        IList<IShiftProjectionCache> FilterOnPersonalShifts(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult);
-
     }
 }
