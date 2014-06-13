@@ -117,6 +117,8 @@ namespace Teleopti.Support.LicTool
 			chkCalendarLink.Checked = false;
 			chkPerformanceManager.Checked = false;
 			chkPayrollIntegration.Checked = false;
+			chkMyTeam.Checked = false;
+			chkVersion8.Checked = false;
 		}
 
 		private void EnterDemoSettings()
@@ -217,6 +219,8 @@ namespace Teleopti.Support.LicTool
 						if (options.Contains("CalendarLink")) chkCalendarLink.Checked = true;
 						if (options.Contains("PerformanceManager")) chkPerformanceManager.Checked = true;
 						if (options.Contains("PayrollIntegration")) chkPayrollIntegration.Checked = true;
+						if (options.Contains("MyTeam")) chkMyTeam.Checked = true;
+						if (options.Contains("Version8")) chkVersion8.Checked = true;
 						
 						//Freemium
 						if (options.Contains("Forecasts")) chkFreemium.Checked = true;
@@ -290,6 +294,10 @@ namespace Teleopti.Support.LicTool
 					elmOptions.AppendChild(xdoc.CreateElement("PerformanceManager")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkPayrollIntegration.Checked) 
 					elmOptions.AppendChild(xdoc.CreateElement("PayrollIntegration")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkMyTeam.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("MyTeam")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkVersion8.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("Version8")).AppendChild(xdoc.CreateTextNode("true"));
 				
 				rootNode.AppendChild(elmOptions);
 			}
@@ -375,6 +383,40 @@ namespace Teleopti.Support.LicTool
 
 				chkOvertimeAvailability.Checked = false;
 				chkOvertimeAvailability.Enabled = true;
+			}
+		}
+
+
+		private void chkNotify_CheckedChanged(object sender, EventArgs e)
+		{
+			if (chkNotify.Checked)
+			{
+				chkRealtimeAdherence.Checked = true;
+				chkRealtimeAdherence.Enabled = false;
+
+				chkAgentScheduleMessenger.Checked = true;
+				chkAgentScheduleMessenger.Enabled = false;
+
+				chkSMSLink.Checked = true;
+				chkSMSLink.Enabled = false;
+
+				chkCalendarLink.Checked = true;
+				chkCalendarLink.Enabled = false;
+
+			}
+			else
+			{
+				chkRealtimeAdherence.Checked = false;
+				chkRealtimeAdherence.Enabled = true;
+
+				chkAgentScheduleMessenger.Checked = false;
+				chkAgentScheduleMessenger.Enabled = true;
+
+				chkSMSLink.Checked = false;
+				chkSMSLink.Enabled = true;
+
+				chkCalendarLink.Checked = false;
+				chkCalendarLink.Enabled = true;
 			}
 		}
 

@@ -53,6 +53,7 @@
 			this.chkPayrollIntegration = new System.Windows.Forms.CheckBox();
 			this.grpBoxModules = new System.Windows.Forms.GroupBox();
 			this.chkCalendarLink = new System.Windows.Forms.CheckBox();
+			this.chkNotify = new System.Windows.Forms.CheckBox();
 			this.chkSMSLink = new System.Windows.Forms.CheckBox();
 			this.chkAgentScheduleMessenger = new System.Windows.Forms.CheckBox();
 			this.btnAdd2Yrs = new System.Windows.Forms.Button();
@@ -79,7 +80,8 @@
 			this.labelRatio = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.chkFreemium = new System.Windows.Forms.CheckBox();
-			this.chkNotify = new System.Windows.Forms.CheckBox();
+			this.chkMyTeam = new System.Windows.Forms.CheckBox();
+			this.chkVersion8 = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgents)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgentsGrace)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numExpirationGracePeriodDays)).BeginInit();
@@ -328,6 +330,8 @@
 			// 
 			// grpBoxModules
 			// 
+			this.grpBoxModules.Controls.Add(this.chkVersion8);
+			this.grpBoxModules.Controls.Add(this.chkMyTeam);
 			this.grpBoxModules.Controls.Add(this.chkCalendarLink);
 			this.grpBoxModules.Controls.Add(this.chkPayrollIntegration);
 			this.grpBoxModules.Controls.Add(this.chkPerformanceManager);
@@ -342,7 +346,7 @@
 			this.grpBoxModules.Controls.Add(this.chkBase);
 			this.grpBoxModules.Location = new System.Drawing.Point(70, 338);
 			this.grpBoxModules.Name = "grpBoxModules";
-			this.grpBoxModules.Size = new System.Drawing.Size(211, 288);
+			this.grpBoxModules.Size = new System.Drawing.Size(211, 332);
 			this.grpBoxModules.TabIndex = 14;
 			this.grpBoxModules.TabStop = false;
 			this.grpBoxModules.Text = "TeleoptiCCC options";
@@ -357,6 +361,18 @@
 			this.chkCalendarLink.Text = "Calendar Link";
 			this.chkCalendarLink.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.chkCalendarLink.UseVisualStyleBackColor = true;
+			// 
+			// chkNotify
+			// 
+			this.chkNotify.AutoSize = true;
+			this.chkNotify.Location = new System.Drawing.Point(6, 126);
+			this.chkNotify.Name = "chkNotify";
+			this.chkNotify.Size = new System.Drawing.Size(53, 17);
+			this.chkNotify.TabIndex = 16;
+			this.chkNotify.Text = "Notify";
+			this.chkNotify.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.chkNotify.UseVisualStyleBackColor = true;
+			this.chkNotify.CheckedChanged += new System.EventHandler(this.chkNotify_CheckedChanged);
 			// 
 			// chkSMSLink
 			// 
@@ -617,16 +633,25 @@
 			this.chkFreemium.UseVisualStyleBackColor = true;
 			this.chkFreemium.CheckedChanged += new System.EventHandler(this.chkFreemium_CheckedChanged);
 			// 
-			// chkNotify
+			// chkMyTeam
 			// 
-			this.chkNotify.AutoSize = true;
-			this.chkNotify.Location = new System.Drawing.Point(6, 126);
-			this.chkNotify.Name = "chkNotify";
-			this.chkNotify.Size = new System.Drawing.Size(53, 17);
-			this.chkNotify.TabIndex = 16;
-			this.chkNotify.Text = "Notify";
-			this.chkNotify.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-			this.chkNotify.UseVisualStyleBackColor = true;
+			this.chkMyTeam.AutoSize = true;
+			this.chkMyTeam.Location = new System.Drawing.Point(6, 287);
+			this.chkMyTeam.Name = "chkMyTeam";
+			this.chkMyTeam.Size = new System.Drawing.Size(67, 17);
+			this.chkMyTeam.TabIndex = 19;
+			this.chkMyTeam.Text = "MyTeam";
+			this.chkMyTeam.UseVisualStyleBackColor = true;
+			// 
+			// chkVersion8
+			// 
+			this.chkVersion8.AutoSize = true;
+			this.chkVersion8.Location = new System.Drawing.Point(6, 310);
+			this.chkVersion8.Name = "chkVersion8";
+			this.chkVersion8.Size = new System.Drawing.Size(67, 17);
+			this.chkVersion8.TabIndex = 20;
+			this.chkVersion8.Text = "Version8";
+			this.chkVersion8.UseVisualStyleBackColor = true;
 			// 
 			// MainForm
 			// 
@@ -735,6 +760,8 @@
 		private System.Windows.Forms.CheckBox chkSMSLink;
 		private System.Windows.Forms.CheckBox chkCalendarLink;
 		private System.Windows.Forms.CheckBox chkNotify;
+		private System.Windows.Forms.CheckBox chkVersion8;
+		private System.Windows.Forms.CheckBox chkMyTeam;
 	}
 }
 
