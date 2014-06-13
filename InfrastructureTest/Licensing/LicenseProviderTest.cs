@@ -210,7 +210,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
             public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
-			public bool TeleoptiCccSmsLinkEnabled { get; private set; }
+
+			// need to remove after updating secrete
+	        public bool TeleoptiCccMobileReportsEnabled { get; private set; }
+
+
+	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 	        public bool TeleoptiCccVersion8Enabled { get; private set; }
 
@@ -319,7 +324,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccRealTimeAdherenceEnabled { get; private set; }
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
-			public bool TeleoptiCccSmsLinkEnabled { get; private set; }
+
+			//need to remove
+	        public bool TeleoptiCccMobileReportsEnabled { get; private set; }
+	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 	        public bool TeleoptiCccVersion8Enabled { get; private set; }
 
@@ -430,7 +438,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccRealTimeAdherenceEnabled { get; private set; }
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
-			public bool TeleoptiCccSmsLinkEnabled { get; private set; }
+
+			//need to remove
+	        public bool TeleoptiCccMobileReportsEnabled { get; private set; }
+	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 	        public bool TeleoptiCccVersion8Enabled { get; private set; }
 

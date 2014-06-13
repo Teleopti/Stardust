@@ -7,31 +7,26 @@ Background:
 	Given there is a role with
 	| Field                    | Value               |
 	| Name                     | Access to all areas |
-	| Access to mobile reports | true                |
 	| Access to mytime web     | true                |
 	| Access to anywhere       | true                |
 	Given there is a role with
 	| Field                    | Value                 |
 	| Name                     | Access to report only |
-	| Access to mobile reports | true                  |
 	| Access to mytime web     | false                 |
 	| Access to anywhere       | false                 |
 	Given there is a role with
 	| Field                    | Value                 |
 	| Name                     | Access to mytime only |
-	| Access to mobile reports | false                 |
 	| Access to mytime web     | true                  |
 	| Access to anywhere       | false                 |
 	Given there is a role with
 	| Field                    | Value                   |
 	| Name                     | Access to anywhere only |
-	| Access to mobile reports | false                   |
 	| Access to mytime web     | false                   |
 	| Access to anywhere       | true                    |
 	Given there is a role with
 	| Field                    | Value                         |
 	| Name                     | Access to all except anywhere |
-	| Access to mobile reports | true                          |
 	| Access to mytime web     | true                          |
 	| Access to anywhere       | false                         |
 
@@ -54,13 +49,6 @@ Scenario: Browse to root and sign in to MyTime
 	And I sign in
 	Then I should see MyTime
 
-Scenario: Browse to root and sign in to Mobile Reports
-	Given I have the role 'Access to report only'
-	When I navigate to the site's root
-	And I select application logon data source
-	And I sign in
-	Then I should see Mobile Reports
-	
 Scenario: Browse to root and sign in to Anywhere
 	Given I have the role 'Access to anywhere only'
 	When I navigate to the site's root
@@ -81,13 +69,6 @@ Scenario: Browse to MyTime and sign in
 	And I select application logon data source
 	And I sign in
 	Then I should see MyTime
-
-Scenario: Browse to Mobile Reports and sign in
-	Given I have the role 'Access to all areas'
-	When I navigate to Mobile Reports
-	And I select application logon data source
-	And I sign in
-	Then I should see Mobile Reports
 	
 Scenario: Browse to Anywhere and sign in
 	Given I have the role 'Access to all areas'
