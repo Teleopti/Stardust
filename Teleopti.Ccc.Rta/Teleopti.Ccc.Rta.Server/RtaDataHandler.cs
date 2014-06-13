@@ -41,6 +41,8 @@ namespace Teleopti.Ccc.Rta.Server
 
 			if (_asyncMessageSender == null) return;
 
+
+			//TODO: REMOVE DIZ
 			try
 			{
 				_asyncMessageSender.StartBrokerService(useLongPolling:true);

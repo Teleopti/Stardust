@@ -15,7 +15,7 @@ using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class SignalSender : IMessageSender
+	public class SignalSender : IMessageSender, IDisposable
 	{
 		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private readonly ITime _time;
@@ -87,7 +87,8 @@ namespace Teleopti.Messaging.SignalR
 
 		public void SendNotification(Notification notification)
 		{
-			_signalBrokerCommands.NotifyClients(notification);
+			if (_connection != null)
+				_signalBrokerCommands.NotifyClients(notification);
 		}
 
 		public virtual void Dispose()
