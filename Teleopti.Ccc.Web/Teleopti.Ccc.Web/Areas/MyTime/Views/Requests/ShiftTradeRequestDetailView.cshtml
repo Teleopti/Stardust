@@ -22,7 +22,7 @@
 	<div class="trade-day-detail">
 		<div class="trade-date" data-bind="text: TradeDate, visible: $parent.DetailedDays().length > 1"></div>
 		<div>
-			<div class="shift-trade-swap-detail-timeline" data-bind="foreach: hours">
+			<div class="shift-trade-swap-detail-timeline" data-bind="foreach: hours, visible: !$parent.showInfo()">
 				<span class="shift-trade-swap-detail-timeline-line" data-bind="style: { width : hourWidth }">
 					<span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText, style: {left: leftPx}, visible: showLabel"></span>
 				</span>
