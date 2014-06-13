@@ -977,6 +977,7 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccCalendarLinkLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccMyTeamLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccNotifyLicenseOptionTest.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeAvailabilityLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccVersion8LicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersBaseLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersReportsLicenseOptionTest.cs" />
@@ -990,7 +991,7 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccPayrollIntegrationLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPerformanceManagerLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccRealTimeAdherenceLicenseOptionTest.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccHolidayPlannerLicenseOptionTest.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccVacationPlannerLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccAgentScheduleMessengerLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccShiftTradesLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccLifestyleLicenseOptionTest.cs" />

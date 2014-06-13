@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
             licenseOptions.Add(new TeleoptiCccLifestyleLicenseOption());
             licenseOptions.Add(new TeleoptiCccShiftTraderLicenseOption());
 			licenseOptions.Add(new TeleoptiCccVacationPlannerLicenseOption());
+			licenseOptions.Add(new TeleoptiCccOvertimeAvailabilityLicenseOption());
 
 			licenseOptions.Add(new TeleoptiCccNotifyLicenseOption());
 			licenseOptions.Add(new TeleoptiCccAgentScheduleMessengerLicenseOption());

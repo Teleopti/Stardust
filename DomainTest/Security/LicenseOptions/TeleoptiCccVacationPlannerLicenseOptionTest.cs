@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 {
     [TestFixture]
-    public class TeleoptiCccHolidayPlannerLicenseOptionTest
+    public class TeleoptiCccVacationPlannerLicenseOptionTest
     {
         private TeleoptiCccVacationPlannerLicenseOption _target;
 

@@ -25,6 +25,11 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
             vacationPlannerLicenseOption.EnableApplicationFunctions(allApplicationFunctions);
             foreach (IApplicationFunction applicationFunction in vacationPlannerLicenseOption.EnabledApplicationFunctions)
                 EnabledApplicationFunctions.Add(applicationFunction);
+
+			var overtimeAvailabilityLicenseOption = new TeleoptiCccOvertimeAvailabilityLicenseOption();
+			overtimeAvailabilityLicenseOption.EnableApplicationFunctions(allApplicationFunctions);
+			foreach (IApplicationFunction applicationFunction in overtimeAvailabilityLicenseOption.EnabledApplicationFunctions)
+				EnabledApplicationFunctions.Add(applicationFunction);
         }
     }
 }
