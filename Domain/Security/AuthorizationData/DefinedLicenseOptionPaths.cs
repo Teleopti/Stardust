@@ -10,10 +10,6 @@
         /// </summary>
         public const string TeleoptiCccBase = DefinedLicenseSchemaCodes.TeleoptiCccSchema +  "/Base";
         /// <summary>
-        /// Constant string for Developer license option
-        /// </summary>
-        public const string TeleoptiCccDeveloper = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/Developer";
-        /// <summary>
         /// Constant string for Raptor ASS option
         /// </summary>
 		public const string TeleoptiCccLifestyle = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/Lifestyle";

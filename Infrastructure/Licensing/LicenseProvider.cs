@@ -74,8 +74,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
             if (licenseService.TeleoptiCccBaseEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccBase);
-            if (licenseService.TeleoptiCccDeveloperEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccDeveloper);
             if (licenseService.TeleoptiCccAgentSelfServiceEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccLifestyle);
             if (licenseService.TeleoptiCccShiftTradesEnabled)

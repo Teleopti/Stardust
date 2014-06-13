@@ -10,10 +10,6 @@
         /// </summary>
         public const string TeleoptiCccBase = "Teleopti CCC7 Base";
         /// <summary>
-        /// Constant string for Raptor developer option name
-        /// </summary>
-        public const string TeleoptiCccDeveloper = "Teleopti CCC7 Developer";
-        /// <summary>
         /// Constant string for Raptor ASS option name
         /// </summary>
         public const string TeleoptiCccAss = "Teleopti CCC7 Ass";
@@ -34,7 +30,6 @@
         /// </summary>
         public const string TeleoptiCccPilotCustomersBase = "Teleopti CCC7 Pilot Customers Base";
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 		public const string TeleoptiCccSmsLink = "Teleopti CCC7 SMS Link";
 
 		public const string TeleoptiCccCalendarLink = "Teleopti CCC7 Calendar Link";

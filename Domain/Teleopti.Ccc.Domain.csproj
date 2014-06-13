@@ -1217,7 +1217,6 @@
     <Compile Include="Security\Matrix\ApplicationFunctionResolver.cs" />
     <Compile Include="Security\AuthorizationData\ShippedApplicationRoleNames.cs" />
     <Compile Include="Security\AuthorizationEntities\AllLicenseOption.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccDeveloperLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersBaseLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersReportsLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersPermissionsLicenseOption.cs" />
