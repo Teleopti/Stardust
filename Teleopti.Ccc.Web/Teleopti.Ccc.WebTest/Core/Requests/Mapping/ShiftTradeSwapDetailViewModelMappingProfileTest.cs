@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			Mapper.Initialize(
 				c =>
-				c.AddProfile(new ShiftTradeSwapDetailsViewModelMappingProfile(timeLineHoursViewModelFactory, _projectionProvider,
+				c.AddProfile(new ShiftTradeSwapDetailViewModelMappingProfile(timeLineHoursViewModelFactory, _projectionProvider,
 				                                                              _userCulture, _userTimeZone)));
 			AddNeededMappingProfiles();
 
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var timelineHours = new List<ShiftTradeTimeLineHoursViewModel>() { new ShiftTradeTimeLineHoursViewModel(), new ShiftTradeTimeLineHoursViewModel() };
 			timeLineHoursViewModelFactory.Expect(s => s.CreateTimeLineHours(expectedTimelinePeriod)).Return(timelineHours);
 
-			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(shiftTrade);
+			var result = Mapper.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(shiftTrade.ShiftTradeSwapDetails.First());
 
 			timeLineHoursViewModelFactory.VerifyAllExpectations();
 

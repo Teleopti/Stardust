@@ -446,7 +446,6 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeRequestMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeTimeLineHoursViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailsViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceInput.cs" />
