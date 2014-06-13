@@ -76,7 +76,9 @@ define(
                         return moment(date.substring(1));
                     return moment(date);
                 }
-            }
-        };
-
+            },
+					timeFormatForUrl: function(time) {
+						return moment(time, "HH:mm").format("HHmm").toString();
+					}
+    	};
     });
