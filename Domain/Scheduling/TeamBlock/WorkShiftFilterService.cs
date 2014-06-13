@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		private IList<IShiftProjectionCache> runFiltersForRoleModel2(IList<IShiftProjectionCache> shiftList, ITeamBlockInfo teamBlockInfo, IWorkShiftFinderResult finderResult)
 		{
-			foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
+			foreach (var person in teamBlockInfo.TeamInfo.GroupMembers)
 			{
 				foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
 				{
