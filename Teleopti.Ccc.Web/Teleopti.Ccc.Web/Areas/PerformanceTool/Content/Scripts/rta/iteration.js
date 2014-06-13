@@ -1,4 +1,4 @@
-
+﻿
 define([
 ], function(
 ) {
@@ -16,7 +16,7 @@ define([
 
 		this.SendRtaExternalState = function () {
 			var externalState = JSON.stringify({
-				authenticationKey: '!#�atAbgT%',
+				authenticationKey: "!#¤atAbgT%",
 				userCode: data.ExternalLogOn,
 				stateCode: data.StateCode,
 				isLoggedOn: 'true',
@@ -26,11 +26,10 @@ define([
 				isSnapshot: 'false'
 			});
 			$.ajax({
-				url: data.Url + '/SaveExternalUserState',
+				url: data.Url + '/SaveExternalUserState/',
 				dataType: 'json',
-				crossDomain: true,
-				type: 'POST',
-				contentType: 'application/json; charset=utf-8',
+				type: "POST",
+				contentType: "application/json",
 				data: externalState,
 				error: function (jqXHR, textStatus, errorThrown) {
 					console.log(arguments);
