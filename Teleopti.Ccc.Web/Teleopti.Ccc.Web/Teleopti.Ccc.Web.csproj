@@ -366,7 +366,8 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\CreateTemporaryPersonsController.cs" />
-    <Compile Include="Areas\Rta\Controllers\RtaController.cs" />
+    <Compile Include="Areas\Rta\Controllers\RtaServiceController.cs" />
+    <Compile Include="Areas\Rta\Core\IoC\RtaAreaModule.cs" />
     <Compile Include="Areas\Rta\RtaAreaRegistration.cs" />
     <Compile Include="Areas\SSO\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\SSO\Controllers\AuthenticationApiController.cs" />
@@ -626,9 +627,6 @@
     <Compile Include="Filters\IAuthenticationModule.cs" />
     <Compile Include="Filters\ISessionAuthenticationModule.cs" />
     <Compile Include="Filters\SessionAuthenticationModule.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtension.cs" />
@@ -1266,7 +1264,6 @@
     <Content Include="Content\lazy\lazy.min.js" />
     <Content Include="Content\signalr\jquery.signalR-1.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-1.2.0.min.js" />
-    <Content Include="Global.asax" />
     <Content Include="Areas\Rta\TeleoptiRtaService.svc" />
     <Content Include="web.config">
       <SubType>Designer</SubType>

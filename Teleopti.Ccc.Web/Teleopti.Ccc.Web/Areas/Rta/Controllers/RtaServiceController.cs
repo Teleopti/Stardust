@@ -4,11 +4,11 @@ using Newtonsoft.Json;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
-    public class RtaController : Controller
+    public class RtaServiceController : Controller
     {
 	    private readonly ITeleoptiRtaService _teleoptiRtaService;
 
-	    public RtaController(ITeleoptiRtaService teleoptiRtaService)
+	    public RtaServiceController(ITeleoptiRtaService teleoptiRtaService)
 	    {
 		    _teleoptiRtaService = teleoptiRtaService;
 	    }

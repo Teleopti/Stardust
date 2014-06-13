@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Security.Policy;
 using System.Security.Principal;
-using System.Web;
 using Autofac;
 using Autofac.Integration.Wcf;
 using log4net;
-using log4net.Config;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.Interfaces;
+using Teleopti.Ccc.Rta.Server;
 using Teleopti.Ccc.Rta.Server.Adherence;
-using Teleopti.Ccc.Web.Areas.Rta;
-using ContainerBuilder = Teleopti.Ccc.Rta.Server.ContainerBuilder;
 
-namespace Teleopti.Ccc.Web
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.IoC
 {
-	public class Global : System.Web.HttpApplication
+	public class RtaAreaModule : Module
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(Global));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(RtaAreaModule));
 
-		protected void Application_Start(object sender, EventArgs e)
+		protected override void Load(ContainerBuilder builder)
 		{
-			XmlConfigurator.Configure();
 			var container = buildIoc();
 			AutofacHostFactory.Container = container;
 
@@ -31,8 +27,8 @@ namespace Teleopti.Ccc.Web
 
 		private static IContainer buildIoc()
 		{
-			var builder = ContainerBuilder.CreateBuilder();
-			builder.RegisterType<TeleoptiRtaService>().SingleInstance();
+			var builder = RtaContainerBuilder.CreateBuilder();
+			builder.RegisterType<TeleoptiRtaService>().As<ITeleoptiRtaService>().SingleInstance();
 			builder.RegisterModule(new DateAndTimeModule());
 			return builder.Build();
 		}
@@ -50,33 +46,5 @@ namespace Teleopti.Ccc.Web
 			}
 		}
 
-		protected void Session_Start(object sender, EventArgs e)
-		{
-
-		}
-
-		protected void Application_BeginRequest(object sender, EventArgs e)
-		{
-
-		}
-
-		protected void Application_AuthenticateRequest(object sender, EventArgs e)
-		{
-		}
-
-		protected void Application_Error(object sender, EventArgs e)
-		{
-
-		}
-
-		protected void Session_End(object sender, EventArgs e)
-		{
-
-		}
-
-		protected void Application_End(object sender, EventArgs e)
-		{
-
-		}
 	}
 }
