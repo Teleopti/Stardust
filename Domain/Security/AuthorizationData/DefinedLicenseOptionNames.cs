@@ -12,7 +12,7 @@
         /// <summary>
         /// Constant string for Raptor ASS option name
         /// </summary>
-        public const string TeleoptiCccAss = "Teleopti CCC7 Ass";
+		public const string TeleoptiCccLifestyle = "Teleopti CCC7 Lifestyle";
 		/// <summary>
 		/// Constant string for Raptor Notify option name
 		/// </summary>

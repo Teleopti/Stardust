@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
         /// Initializes a new instance of the <see cref="TeleoptiCccPayrollIntegrationLicenseOption"/> class.
         /// </summary>
         public TeleoptiCccPayrollIntegrationLicenseOption()
-            : base(DefinedLicenseOptionPaths.TeleoptiCccPayrollIntegration, DefinedLicenseOptionNames.TeleoptiCccAss)
+            : base(DefinedLicenseOptionPaths.TeleoptiCccPayrollIntegration, DefinedLicenseOptionNames.TeleoptiCccLifestyle)
         {
             //
         }
