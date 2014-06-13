@@ -9671,7 +9671,7 @@
                   <xs:element name="valid_to_date_id" msprop:design-time-name="87b1d3e7-eee6-41a5-a6d9-7390550cd35a" msprop:DbColumnName="valid_to_date_id" type="xs:int" minOccurs="0" />
                   <xs:element name="valid_to_interval_id" msprop:design-time-name="3cf727b1-912c-4993-bc84-34f5b03530ea" msprop:DbColumnName="valid_to_interval_id" type="xs:int" minOccurs="0" />
                   <xs:element name="to_be_deleted" msprop:design-time-name="a417f7c9-6a5a-47f1-acf5-3f5ef5c94def" msprop:DbColumnName="to_be_deleted" type="xs:boolean" minOccurs="0" />
-                  <xs:element name="person_name_employment_number_valid_from" msdata:ReadOnly="true" msprop:design-time-name="5db4ae2a-a9cb-48dd-8bab-69b66f6554f7" msprop:DbColumnName="person_name_employment_number_valid_from" msprop:ComputedColumnExpression="person_name +',' + convert(nvarchar(10),valid_from_date,120)" msprop:Description="Concatinated string - to be renamed!" msprop:IsLogical="True" minOccurs="0">
+                  <xs:element name="person_name_employment_number_valid_from" msdata:ReadOnly="true" msprop:design-time-name="5db4ae2a-a9cb-48dd-8bab-69b66f6554f7" msprop:DbColumnName="person_name_employment_number_valid_from" msprop:ComputedColumnExpression="person_name +',' + convert(nvarchar(10),valid_from_date_local,120)" msprop:Description="Concatinated string - to be renamed!" msprop:IsLogical="True" minOccurs="0">
                     <xs:simpleType>
                       <xs:restriction base="xs:string">
                         <xs:maxLength value="211" />
