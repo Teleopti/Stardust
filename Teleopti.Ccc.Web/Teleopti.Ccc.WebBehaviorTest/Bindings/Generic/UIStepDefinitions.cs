@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		// *NOT* I click the radiobutton with caption 'Probably not'
 		// *NOT* I click the extended preference indication on '2012-06-20'
 		// *NOT* I click on the day symbol area for date '2013-10-03'
-		[When(@"I click( the)? ([a-z]*|[a-z]* [a-z]*) '(.*)'")]
+		[When(@"I click( the)? ([a-z-]*|[a-z]* [a-z]*) '(.*)'")]
 		public void WhenIClickClassWithText(string the, CssClass cssClass, string text)
 		{
 			Browser.Interactions.ClickContaining("." + cssClass.Name, text);
