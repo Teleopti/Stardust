@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Autofac;
+using Autofac.Integration.Wcf;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.IdentityModel.Protocols.WSFederation;
@@ -105,6 +106,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				var pathToToggle = ApplicationStartModule.pathToToggle();
 				var container = _containerConfiguration.Configure(pathToToggle);
+				AutofacHostFactory.Container = container;
 				if (!_testMode)
 				{
 					DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
