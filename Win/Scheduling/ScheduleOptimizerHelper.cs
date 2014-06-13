@@ -718,7 +718,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			                                             optimizationPreferences);
 			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
 
-			if (!_toggleManager.IsEnabled(Toggles.TeamBlue_Seniority_Temporay)) return;
+			if (!_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111)) return;
 
 			////day off fairness
             var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>();

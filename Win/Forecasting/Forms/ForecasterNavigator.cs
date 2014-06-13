@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 	    private void setVisibility()
 	    {
-		    toolStripMenuItemCopyTo.Visible = _toggleManager.IsEnabled(Toggles.Forecast_CopySettingsToWorkflow);
+		    toolStripMenuItemCopyTo.Visible = _toggleManager.IsEnabled(Toggles.Forecast_CopySettingsToWorkflow_11112);
 			var instance = PrincipalAuthorization.Instance();
 			toolStripMenuItemActionSkillImportForecast.Visible =
 	            instance.IsPermitted(

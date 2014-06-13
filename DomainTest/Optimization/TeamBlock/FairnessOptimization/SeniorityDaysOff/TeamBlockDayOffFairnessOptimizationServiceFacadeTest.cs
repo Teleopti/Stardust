@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _weekDayPoints = new Dictionary<DayOfWeek, int>();
             _optimizationPreferences = _mock.StrictMock<IOptimizationPreferences>();
 	        var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-	        toggleManager.Stub(x => x.IsEnabled(Toggles.TeamBlue_Seniority_Temporay)).Return(true);
+	        toggleManager.Stub(x => x.IsEnabled(Toggles.Scheduler_Seniority_11111)).Return(true);
 	        _target = new TeamBlockDayOffFairnessOptimizationServiceFacade(_dayOffStep1,_dayOffStep2,_teamBlockSchedulingOption, toggleManager);
         }
 

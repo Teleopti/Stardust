@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)
         {
             _cancelMe = false;
-			if(!_toggleManager.IsEnabled(Toggles.TeamBlue_Seniority_Temporay)) return;
+			if(!_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111)) return;
             var weekDayPoints = new WeekDayPoints();
             _dayOffStep1.BlockSwapped += ReportProgress;
             _dayOffStep1.PerformStep1(allPersonMatrixList, selectedPeriod, selectedPersons,rollbackService, scheduleDictionary, weekDayPoints.GetWeekDaysPoints(),

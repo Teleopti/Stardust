@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 					tableLayoutPanelFairness.Visible = true;
 					updateFairnessData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState);
 				}
-				else if (_toggleManager.IsEnabled(Toggles.TeamBlue_Seniority_Temporay))
+				else if (_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111))
 				{
 					tableLayoutPanelNoWorkflowControlSet.Visible = false;
 					tableLayoutPanelRanking.Visible = true;

@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Win.Commands
 				                                       optimizationPreferences);
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
-				if (_toggleManager.IsEnabled(Toggles.TeamBlue_Seniority_Temporay))
+				if (_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111))
 				{
 					_teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 					_teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.Schedules,
