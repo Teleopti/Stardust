@@ -163,7 +163,7 @@ Scenario: Time line should cover all scheduled shifts
 	And the current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see the time line hours span from '06:00' to '18:00'
-
+@ignore
 Scenario: When clicking an agent in shift trade list, the other agent's should be hidden
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -227,6 +227,7 @@ Scenario: Sending shift trade request closes the Add Shift Trade Request view
 	Then Add Shift Trade Request view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 
+@ignore
 Scenario: Cancel a shift trade request before sending 
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
