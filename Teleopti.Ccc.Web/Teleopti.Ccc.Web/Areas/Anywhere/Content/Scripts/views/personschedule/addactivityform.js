@@ -22,7 +22,7 @@ define([
 
 		this.Activity = ko.observable("");
 		this.ActivityTypes = ko.observableArray();
-		this.Date = ko.observable();
+		this.ScheduleDate = ko.observable();
 		this.StartTime = ko.observable();
 		this.EndTime = ko.observable();
 		this.WorkingShift = ko.observable();
@@ -35,13 +35,13 @@ define([
 		this.SetData = function (data) {
 			personId = data.PersonId;
 			groupId = data.GroupId;
-			self.Date(data.Date);
+			self.ScheduleDate(data.Date);
 			self.ActivityTypes(data.Activities);
 		};
 
 		this.Apply = function () {
 			var requestData = JSON.stringify({
-				Date: self.Date().format(),
+				Date: self.ScheduleDate().format(),
 				StartTime: startTimeAsMoment.format(),
 				EndTime: endTimeAsMoment.format(),
 				ActivityId: self.Activity(),
@@ -52,7 +52,7 @@ define([
 					type: 'POST',
 					data: requestData,
 					success: function(data, textStatus, jqXHR) {
-						navigation.GotoPersonScheduleWithoutHistory(groupId, personId, self.Date());
+						navigation.GotoPersonScheduleWithoutHistory(groupId, personId, self.ScheduleDate());
 					}
 				}
 			);
@@ -71,17 +71,17 @@ define([
 		this.ShiftStart = ko.computed(function () {
 			var visibleLayers = self.visibleLayers();
 			if (visibleLayers.length > 0) {
-				return moment(self.Date()).add("minutes", visibleLayers[0].StartMinutes());
+				return moment(self.ScheduleDate()).add("minutes", visibleLayers[0].StartMinutes());
 			}
-			return moment(self.Date()).startOf('d');
+			return moment(self.ScheduleDate()).startOf('d');
 		});
 		
 		this.ShiftEnd = ko.computed(function () {
 			var visibleLayers = self.visibleLayers();
 			if (visibleLayers.length > 0) {
-				return moment(self.Date()).add("minutes", visibleLayers[visibleLayers.length - 1].EndMinutes());
+				return moment(self.ScheduleDate()).add("minutes", visibleLayers[visibleLayers.length - 1].EndMinutes());
 			}
-			return moment(self.Date()).startOf('d').add('d', 1);
+			return moment(self.ScheduleDate()).startOf('d').add('d', 1);
 		});
 		
 		this.DefaultStart = ko.computed(function () {
@@ -113,7 +113,7 @@ define([
 
 		var getMomentFromInput = function (input) {
 			var momentInput = moment(input, resources.TimeFormatForMoment);
-			return moment(self.Date()).add('h', momentInput.hours()).add('m', momentInput.minutes());
+			return moment(self.ScheduleDate()).add('h', momentInput.hours()).add('m', momentInput.minutes());
 		};
 
 		this.PossbileIntersectWithShift = ko.computed(function () {

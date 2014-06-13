@@ -30,6 +30,10 @@ define([
 			window.setLocationHash('personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addactivity');
 		},
 
+		GotoPersonScheduleMoveActivityForm: function (groupid, personid, date, startTime) {
+			window.setLocationHash('personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/moveActivity/' + startTime);
+		},
+
 		GotoPersonScheduleAddIntradayAbsenceForm: function (groupid, personid, date) {
 			window.setLocationHash('personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addintradayabsence');
 		},
