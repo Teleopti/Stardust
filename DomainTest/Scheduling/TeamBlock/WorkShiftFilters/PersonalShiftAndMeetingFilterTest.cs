@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				var shiftsList = _target.FilterOnPersonalShifts(shifts, _part, _finderResult);
+				var shiftsList = _target.Filter(shifts, _part, _finderResult);
 				Assert.That(shiftsList.Count, Is.EqualTo(1));
 			}
 		}
@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Playback())
 			{
-				var shiftsList = _target.FilterOnPersonalShifts(shifts, _part, _finderResult);
+				var shiftsList = _target.Filter(shifts, _part, _finderResult);
 				Assert.That(shiftsList.Count, Is.EqualTo(0));
 			}
 		}

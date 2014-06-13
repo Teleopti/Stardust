@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
@@ -13,51 +13,56 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	public class PersonalShiftsShiftFilter : IPersonalShiftsShiftFilter
 	{
 		private readonly ISchedulingResultStateHolder _resultStateHolder;
+		private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
-		public PersonalShiftsShiftFilter(ISchedulingResultStateHolder resultStateHolder)
+		public PersonalShiftsShiftFilter(ISchedulingResultStateHolder resultStateHolder, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker)
 		{
 			_resultStateHolder = resultStateHolder;
+			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IShiftProjectionCache> shiftList,IWorkShiftFinderResult finderResult)
+		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftList == null) return null;
 			if (shiftList.Count == 0) return shiftList;
 
 			var schedulePart = _resultStateHolder.Schedules[person].ScheduledDay(dateOnly);
-			DateTimePeriod? period = getMaximumPeriodForPersonalShiftsAndMeetings(schedulePart);
+			TimePeriod? period = getMaximumPeriodForPersonalShiftsAndMeetings(schedulePart);
 			if (period.HasValue)
 			{
 				var meetings = schedulePart.PersonMeetingCollection();
 				var personalAssignment = schedulePart.PersonAssignment();
-				int cntBefore = shiftList.Count;
 				IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
-				foreach (IShiftProjectionCache t in shiftList)
+				foreach (var shiftProjectionCache in shiftList)
 				{
-					IShiftProjectionCache proj = t;
-					if (!proj.MainShiftProjection.Period().HasValue) continue;
-					DateTimePeriod virtualPeriod = proj.MainShiftProjection.Period().Value;
+					var currentPeriod = shiftProjectionCache.MainShiftProjection.Period();
+					if (!currentPeriod.HasValue) 
+						continue;
 
-					if (virtualPeriod.Contains(period.Value) && t.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignment))
-					{
-						workShiftsWithinPeriod.Add(proj);
-					}
+					TimePeriod virtualPeriod = shiftProjectionCache.MainShiftProjection.Period().Value.TimePeriod(TimeZoneInfo.Utc);
+					if (!virtualPeriod.Contains(period.Value))
+						continue;
+
+					var mainShift = shiftProjectionCache.TheMainShift;
+					var movedShift = mainShift.MoveTo(new DateOnly(shiftProjectionCache.SchedulingDate.Date), dateOnly);
+					if (!_personalShiftMeetingTimeChecker.CheckTimeMeeting(movedShift, meetings))
+						continue;
+
+					if (!_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(movedShift, personalAssignment))
+						continue;
+
+					workShiftsWithinPeriod.Add(shiftProjectionCache);
 				}
-				finderResult.AddFilterResults(
-					new WorkShiftFilterResult(
-						string.Format(TeleoptiPrincipal.Current.Regional.Culture,
-									  UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
-									  period.Value.LocalStartDateTime, period.Value.LocalEndDateTime), cntBefore,
-						workShiftsWithinPeriod.Count));
 
 				return workShiftsWithinPeriod;
 
 			}
+
 			return shiftList;
 		}
 
-		private static DateTimePeriod? getMaximumPeriodForPersonalShiftsAndMeetings(IScheduleDay schedulePart)
+		private static TimePeriod? getMaximumPeriodForPersonalShiftsAndMeetings(IScheduleDay schedulePart)
 		{
 			var ass = schedulePart.PersonAssignment();
 			if (schedulePart.PersonMeetingCollection().Count == 0 && ass==null)
@@ -85,7 +90,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 						period = period.Value.MaximumPeriod(layer.Period);
 				}
 			}
-			return period;
+
+			if (!period.HasValue)
+				return null;
+
+			return period.Value.TimePeriod(TimeZoneInfo.Utc);
 		}
 	}
 }

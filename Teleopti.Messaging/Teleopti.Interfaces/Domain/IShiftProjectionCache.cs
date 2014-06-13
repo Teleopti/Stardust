@@ -89,5 +89,7 @@ namespace Teleopti.Interfaces.Domain
     	/// 
     	/// </summary>
 		TimeSpan WorkShiftEndTime { get; }
+
+	    DateTime SchedulingDate { get; }
     }
 }

@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IPersonalShiftAndMeetingFilter
 	{
-		IList<IShiftProjectionCache> FilterOnPersonalShifts(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult);
+		IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult);
 	}
 
 	public class PersonalShiftAndMeetingFilter : IPersonalShiftAndMeetingFilter
 	{
-		public IList<IShiftProjectionCache> FilterOnPersonalShifts(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult)
+		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftList.Count == 0)
 				return shiftList;

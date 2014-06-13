@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -26,6 +27,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foreach (var layer in LayerCollection)
 			{
 				ret.LayerCollection.Add(new EditableShiftLayer(layer.Payload, layer.Period));
+			}
+			return ret;
+		}
+
+		public IEditableShift MoveTo(DateOnly currentDate, DateOnly destinationDate)
+		{
+			var datediff = destinationDate.Date.Subtract(currentDate.Date);
+			var ret = new EditableShift(ShiftCategory);
+			foreach (var layer in LayerCollection)
+			{
+				var movedLayerPeriod = layer.Period.MovePeriod(datediff);
+				ret.LayerCollection.Add(new EditableShiftLayer(layer.Payload, movedLayerPeriod));
 			}
 			return ret;
 		}

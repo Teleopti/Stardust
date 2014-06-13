@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             
             shiftList = FilterOnNotOverWritableActivities(shiftList, dayPart, finderResult);
 
-	        shiftList = _personalShiftAndMeetingFilter.FilterOnPersonalShifts(shiftList, dayPart, finderResult);
+	        shiftList = _personalShiftAndMeetingFilter.Filter(shiftList, dayPart, finderResult);
 
 	        return shiftList;
         }
