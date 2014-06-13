@@ -20,7 +20,7 @@
 	<!-- ko if: !showInfo() -->
 	<!-- ko foreach: DetailedDays-->
 	<div class="trade-day-detail">
-		<div class="trade-date" data-bind="text: TradeDate"></div>
+		<div class="trade-date" data-bind="text: TradeDate, visible: $parent.DetailedDays().length > 1"></div>
 		<div>
 			<div class="shift-trade-swap-detail-timeline" data-bind="foreach: hours">
 				<span class="shift-trade-swap-detail-timeline-line" data-bind="style: { width : hourWidth }">
