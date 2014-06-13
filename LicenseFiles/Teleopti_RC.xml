@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <License>
   <CustomerName>Teleopti_RC</CustomerName>
-  <ExpirationDate>2015-09-26T13:19:36</ExpirationDate>
+  <ExpirationDate>2016-06-10T04:39:21</ExpirationDate>
   <ExpirationGracePeriod>P15D</ExpirationGracePeriod>
   <MaxActiveAgents>15000</MaxActiveAgents>
   <MaxActiveAgentsGrace>5</MaxActiveAgentsGrace>
@@ -10,18 +10,18 @@
   <SeatRatio>1.5</SeatRatio>
   <TeleoptiCCC>
     <Base>true</Base>
-    <AgentScheduleMessenger>true</AgentScheduleMessenger>
-    <AgentSelfService>true</AgentSelfService>
-    <Developer>true</Developer>
-    <HolidayPlanner>true</HolidayPlanner>
-    <PayrollIntegration>true</PayrollIntegration>
-    <PerformanceManager>true</PerformanceManager>
+    <Lifestyle>true</Lifestyle>
+    <ShiftTrader>true</ShiftTrader>
+    <VacationPlanner>true</VacationPlanner>
+    <OvertimeAvailability>true</OvertimeAvailability>
+    <Notify>true</Notify>
     <RealtimeAdherence>true</RealtimeAdherence>
-    <ShiftTrades>true</ShiftTrades>
-    <MyTimeWeb>true</MyTimeWeb>
-    <MobileReports>true</MobileReports>
+    <AgentScheduleMessenger>true</AgentScheduleMessenger>
     <SMSLink>true</SMSLink>
     <CalendarLink>true</CalendarLink>
+    <PerformanceManager>true</PerformanceManager>
+    <PayrollIntegration>true</PayrollIntegration>
+    <MyTeam>true</MyTeam>
     <Version8>true</Version8>
   </TeleoptiCCC>
   <Agreement>Teleopti.Ccc.Infrastructure.Licensing.Agreements.TeleoptiLic_En_Sw_St.txt</Agreement>
@@ -34,9 +34,9 @@
           <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <DigestValue>bYaBlESvGFOVnG5yvovLeNum1oM=</DigestValue>
+        <DigestValue>NB95eYuvcBDwMuadLp7MpM8Vaxo=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>vWE+9dL1H85MazAqxffSbx6DozKcTfjCqwb/EWG3mCsPk4YHPktKBeS0TwnOfqNgrWjV+N4NBfuExY1eHBLPmb9DYoV5E7Vq2uRI/Cdo8gEDIMuqYQQKLHgjjSYFNYEz6CfaaaANHfMiMZSmPwaqVWlLuUX/2qm/UHMf5VrTY14=</SignatureValue>
+    <SignatureValue>uuTGXxpaOZ9dwaQllcIU0XyWG9wqDrioEvdgzdJwKtg0qjuOfOD1iiTWcZTp1BqZ8/r5dVk69xNmxji0MfBEHpCxvznpNfZnHRs+QxAZY3cgyp+/V9XEEH8vPkL8RJT68OJgnEn7bc7OOmeUocIysYpPcAB0kdzPdZxj0h71iwQ=</SignatureValue>
   </Signature>
 </License>
