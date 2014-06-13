@@ -334,14 +334,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		if (elementToBind !== undefined) {
 		    if ((vm || '') == '') {
 		    	vm = new shiftTradeViewModel(_saveNewShiftTrade);
+		    	ko.applyBindings(vm, elementToBind);
 		    }
 
-		    if (ko.dataFor(elementToBind))
-		    {
-		    	ko.cleanNode(elementToBind);
-		    }
-
-		    ko.applyBindings(vm, elementToBind);
 		    _setWeekStart(vm);
 		}
 	}
