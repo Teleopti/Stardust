@@ -1,11 +1,7 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Licensing;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -29,12 +25,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			registerCommonTypes(builder);
 			registerPortalTypes(builder);
 			registerRequestContextTypes(builder);
-			registerReportTypes(builder);
-		}
-
-		private static void registerReportTypes(ContainerBuilder builder)
-		{
-			builder.RegisterType<WebReportRepository>().As<IWebReportRepository>();
 		}
 
 		private static void registerRequestContextTypes(ContainerBuilder builder)

@@ -587,12 +587,6 @@
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Administrator.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Supervisor.cs" />
-    <Compile Include="MobileReports\MobileReports.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MobileReports.feature</DependentUpon>
-    </Compile>
-    <Compile Include="MobileReports\MobileReportsStepDefinitions.cs" />
     <Compile Include="MyTime\PreferencesPeriodFeedback.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -992,10 +986,6 @@
     <None Include="MyTime\AsmWinterToSummer.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmWinterToSummer.feature.cs</LastGenOutput>
-    </None>
-    <None Include="MobileReports\MobileReports.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MobileReports.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\MyProfile.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

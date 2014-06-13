@@ -389,7 +389,6 @@
     <Compile Include="Repositories\PartTimePercentageRepositoryTest.cs" />
     <Compile Include="Repositories\SiteRepositoryTest.cs" />
     <Compile Include="Repositories\TeamRepositoryTest.cs" />
-    <Compile Include="Repositories\WebReportRepositoryTest.cs" />
     <Compile Include="Repositories\WorkflowControlSetRepositoryTest.cs" />
     <Compile Include="Repositories\WorkloadRepositoryTest.cs" />
     <Compile Include="Rta\AgentStatesReaderTest.cs" />

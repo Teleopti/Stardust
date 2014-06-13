@@ -61,25 +61,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoToWaitForCompleted("MyTime", new ApplicationStartupTimeout());
 		}
-
-		public static void GotoMobileReports()
-		{
-			GoToWaitForCompleted("MobileReports", new ApplicationStartupTimeout());
-		}
-
+		
 		public static void GotoGlobalSignInPage()
 		{
 			GoToWaitForCompleted("Authentication", new ApplicationStartupTimeout());
-		}
-
-		public static void GotoMobileReportsPage()
-		{
-			GoToWaitForCompleted("MobileReports#", new ApplicationStartupTimeout());
-		}
-
-		public static void GotoMobileReportsSettings()
-		{
-			GoToWaitForCompleted("MobileReports#report-settings-view");
 		}
 
 		public static void GotoAnApplicationPageOutsidePortal()
