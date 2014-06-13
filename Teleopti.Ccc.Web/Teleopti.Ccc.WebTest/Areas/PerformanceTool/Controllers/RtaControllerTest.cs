@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebTest.Areas.PerformanceTool.Controllers
 		public void ShouldCallPersonCreator()
 		{
 			var rtaTestPersonCreator = MockRepository.GenerateMock<ITestPersonCreator>();
-			var target = new RtaController(rtaTestPersonCreator);
+			var target = new CreateTemporaryPersonsController(rtaTestPersonCreator);
 
 			target.CreatePersons(1);
 
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.PerformanceTool.Controllers
 		public void ShouldCleanupData()
 		{
 			var rtaTestPersonCreator = MockRepository.GenerateMock<ITestPersonCreator>();
-			var target = new RtaController(rtaTestPersonCreator);
+			var target = new CreateTemporaryPersonsController(rtaTestPersonCreator);
 
 			target.RemoveCreatedData();
 

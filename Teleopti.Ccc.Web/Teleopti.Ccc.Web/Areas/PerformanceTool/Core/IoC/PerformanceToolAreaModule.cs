@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ConfigurationController>().EnableClassInterceptors();
-			builder.RegisterType<RtaController>().EnableClassInterceptors();
+			builder.RegisterType<CreateTemporaryPersonsController>().EnableClassInterceptors();
 			builder.RegisterType<TestPersonCreator>().As<ITestPersonCreator>().SingleInstance();
 		}
 	}

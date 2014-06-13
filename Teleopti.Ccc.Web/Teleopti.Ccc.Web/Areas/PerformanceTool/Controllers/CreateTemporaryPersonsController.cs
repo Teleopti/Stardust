@@ -4,11 +4,11 @@ using Teleopti.Ccc.Web.Core.Aop.Aspects;
 
 namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
 {
-    public class RtaController : Controller
+    public class CreateTemporaryPersonsController : Controller
     {
 	    private readonly ITestPersonCreator _testPersonCreator;
 
-	    public RtaController(ITestPersonCreator testPersonCreator)
+	    public CreateTemporaryPersonsController(ITestPersonCreator testPersonCreator)
 	    {
 		    _testPersonCreator = testPersonCreator;
 	    }
