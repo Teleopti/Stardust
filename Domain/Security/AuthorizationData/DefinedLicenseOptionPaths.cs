@@ -15,7 +15,7 @@
 		public const string TeleoptiCccLifestyle = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/Lifestyle";
         public const string TeleoptiCccShiftTrader = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/ShiftTrader";
         public const string TeleoptiCccAgentScheduleMessenger = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/AgentScheduleMessenger";
-        public const string TeleoptiCccHolidayPlanner = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/HolidayPlanner";
+		public const string TeleoptiCccVacationPlanner = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/VacationPlanner";
         public const string TeleoptiCccRealTimeAdherence = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/RealTimeAdherence";
         public const string TeleoptiCccPerformanceManager = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/PerformanceManager";
         public const string TeleoptiCccPayrollIntegration = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/PayrollIntegration";

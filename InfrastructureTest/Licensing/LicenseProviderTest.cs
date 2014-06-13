@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                     licenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccBase));
                 Assert.IsTrue(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(
-                        DefinedLicenseOptionPaths.TeleoptiCccHolidayPlanner));
+                        DefinedLicenseOptionPaths.TeleoptiCccVacationPlanner));
                 Assert.IsFalse(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(
                         DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBase));
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                     licenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccBase));
                 Assert.IsFalse(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(
-                        DefinedLicenseOptionPaths.TeleoptiCccHolidayPlanner));
+                        DefinedLicenseOptionPaths.TeleoptiCccVacationPlanner));
                 Assert.IsFalse(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(
                         DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBase));
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                     licenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccBase));
                 Assert.IsFalse(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(
-                        DefinedLicenseOptionPaths.TeleoptiCccHolidayPlanner));
+                        DefinedLicenseOptionPaths.TeleoptiCccVacationPlanner));
                 Assert.IsTrue(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(
                         DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBase));

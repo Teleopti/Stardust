@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
         /// Initializes a new instance of the <see cref="TeleoptiCccVacationPlannerLicenseOption"/> class.
         /// </summary>
         public TeleoptiCccVacationPlannerLicenseOption()
-            : base(DefinedLicenseOptionPaths.TeleoptiCccHolidayPlanner, DefinedLicenseOptionNames.TeleoptiCccAss)
+            : base(DefinedLicenseOptionPaths.TeleoptiCccVacationPlanner, DefinedLicenseOptionNames.TeleoptiCccAss)
         {
             //
         }

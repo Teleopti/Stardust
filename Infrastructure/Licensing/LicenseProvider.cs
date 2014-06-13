@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                 licenseActivator.EnabledLicenseOptionPaths.Add(
                     DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger);
             if (licenseService.TeleoptiCccHolidayPlannerEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccHolidayPlanner);
+                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccVacationPlanner);
             if (licenseService.TeleoptiCccRealTimeAdherenceEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccRealTimeAdherence);
             if (licenseService.TeleoptiCccPerformanceManagerEnabled)
