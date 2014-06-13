@@ -102,7 +102,7 @@ Scenario: View unpublished schedule when permitted
 
 #Bug 28367
 @ignore
-Scenario: View night shift from yesterday
+Scenario: Do not show night shift from yesterday
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
@@ -110,8 +110,23 @@ Scenario: View night shift from yesterday
 	| Activity       | Phone            |
 	| Start time     | 2012-12-01 20:00 |
 	| End time       | 2012-12-02 04:00 |
+	And 'Pierre Baldi' has a shift with
+	| Field          | Value            |
+	| Shift category | Night            |
+	| Activity       | Phone            |
+	| Start time     | 2012-12-02 05:00 |
+	| End time       | 2012-12-02 08:00 |
 	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2012-12-02'
-	Then I should not see any shift
+	Then I should see a scheduled activity with
+	| Field      | Value |
+	| Start time | 05:00 |
+	| End time   | 08:00 |
+	| Color      | Green |
+	And I should not see a scheduled activity with
+	| Field      | Value |
+	| Start time | 20:00 |
+	| End time   | 04:00 |
+	| Color      | Green |
 
 Scenario: View night shift from today
 	Given I have the role 'Anywhere Team Green'
