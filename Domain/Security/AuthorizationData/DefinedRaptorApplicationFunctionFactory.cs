@@ -69,8 +69,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenBudgets, "xxBudgets", DefinedRaptorApplicationFunctionForeignIds.OpenBudgets, 70);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AccessToPerformanceManager, "xxPerformanceManager", DefinedRaptorApplicationFunctionForeignIds.AccessToPerformanceManager, 80);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.PayrollIntegration, "xxPayrollIntegration", DefinedRaptorApplicationFunctionForeignIds.PayrollIntegration, 200);
-			IApplicationFunction underConstruction = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.UnderConstruction, "xxUnderConstruction", DefinedRaptorApplicationFunctionForeignIds.UnderConstruction, null);
-			underConstruction.IsPreliminary = true;
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenAgentPortal, "xxAgentPortal", DefinedRaptorApplicationFunctionForeignIds.OpenAgentPortal, null);
 
 			// Global

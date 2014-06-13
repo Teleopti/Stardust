@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.Win.Commands
         private readonly IWeeklyRestSolverCommand  _weeklyRestSolverCommand;
 	    private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 	    private readonly ITeamBlockMoveTimeBetweenDaysCommand _teamBlockMoveTimeBetweenDaysCommand;
+	    private readonly IToggleManager _toggleManager;
 
 	    public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
 											ITeamBlockClearer teamBlockCleaner,
@@ -86,7 +88,7 @@ namespace Teleopti.Ccc.Win.Commands
 											ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
 											ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
 											ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
-											ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand, IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification, ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand)
+											ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand, IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification, ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand, IToggleManager toggleManager)
 	    {
 		    _schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -116,6 +118,7 @@ namespace Teleopti.Ccc.Win.Commands
             _weeklyRestSolverCommand = weeklyRestSolverCommand;
 		    _allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
 		    _teamBlockMoveTimeBetweenDaysCommand = teamBlockMoveTimeBetweenDaysCommand;
+		    _toggleManager = toggleManager;
 	    }
 
         public void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, IScheduleTagSetter tagSetter, ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> selectedSchedules)
@@ -157,8 +160,7 @@ namespace Teleopti.Ccc.Win.Commands
 				                                       optimizationPreferences);
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
-				var instance = PrincipalAuthorization.Instance();
-				if (instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
+				if (_toggleManager.IsEnabled(Toggles.TeamBlue_Seniority_Temporay))
 				{
 					_teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 					_teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.Schedules,

@@ -3655,7 +3655,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				initMessageBroker(period.LoadedPeriod());
 			}
 
-			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
+			var toggleManager = _container.Resolve<IToggleManager>();
+			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, toggleManager);
 		
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation)
 				backgroundWorkerLoadData.ReportProgress(1, Resources.CalculatingResourcesDotDotDot);
@@ -4312,7 +4313,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var requestedPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
 			var outerPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-7), requestedPeriod.EndDate.AddDays(7));
 
-			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _groupPagesProvider, _container, outerPeriod, requestedPeriod);
+			var toggleManager = _container.Resolve<IToggleManager>();
+			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _groupPagesProvider, _container, outerPeriod, requestedPeriod, toggleManager);
 			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl, _schedulerState,
 				_container.Resolve<IEffectiveRestrictionCreator>(), maxCalculatMinMaxCacheEnries);
 

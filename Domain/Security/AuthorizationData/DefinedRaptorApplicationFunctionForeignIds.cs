@@ -28,7 +28,6 @@
 		public const string OpenBudgets = "0050";
 		public const string AccessToPerformanceManager = "0040";
 		public const string PayrollIntegration = "0044";
-		public const string UnderConstruction = "0048";
 		public const string OpenAgentPortal = "0019";
 
 		// Global

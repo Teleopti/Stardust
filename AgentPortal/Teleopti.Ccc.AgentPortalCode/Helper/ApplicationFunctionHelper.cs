@@ -1,4 +1,3 @@
-using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Helper
@@ -6,7 +5,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
     public interface IApplicationFunctionHelper
     {
         DefinedRaptorApplicationFunctionPathsDto DefinedApplicationFunctionPaths { get; }
-        bool IsUnderConstructionVisible();
     }
 
     public class ApplicationFunctionHelper : IApplicationFunctionHelper
@@ -28,21 +26,5 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
         }
 
         public DefinedRaptorApplicationFunctionPathsDto DefinedApplicationFunctionPaths { get; private set; }
-
-        public bool IsUnderConstructionVisible()
-        {
-            var applicationFunctionDtos =
-                SdkServiceHelper.LogOnServiceClient.GetApplicationFunctionsForPerson(
-                    StateHolder.Instance.State.SessionScopeData.LoggedOnPerson);
-
-            foreach (var dto in applicationFunctionDtos)
-            {
-                if (dto.FunctionCode == "UnderConstruction")
-                {
-                    return !dto.IsPreliminary;
-                }
-            }
-            return false;
-        }
     }
 }

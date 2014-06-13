@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -20,20 +21,21 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private readonly IDayOffStep1 _dayOffStep1;
         private readonly IDayOffStep2 _dayOffStep2;
         private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
-        private bool _cancelMe;
+	    private readonly IToggleManager _toggleManager;
+	    private bool _cancelMe;
 
-        public TeamBlockDayOffFairnessOptimizationServiceFacade(IDayOffStep1 dayOffStep1, IDayOffStep2 dayOffStep2, ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
+        public TeamBlockDayOffFairnessOptimizationServiceFacade(IDayOffStep1 dayOffStep1, IDayOffStep2 dayOffStep2, ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IToggleManager toggleManager)
         {
             _dayOffStep1 = dayOffStep1;
             _dayOffStep2 = dayOffStep2;
             _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
+	        _toggleManager = toggleManager;
         }
 
         public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)
         {
             _cancelMe = false;
-            IPrincipalAuthorization instance = PrincipalAuthorization.Instance();
-            if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction)) return;
+			if(!_toggleManager.IsEnabled(Toggles.TeamBlue_Seniority_Temporay)) return;
             var weekDayPoints = new WeekDayPoints();
             _dayOffStep1.BlockSwapped += ReportProgress;
             _dayOffStep1.PerformStep1(allPersonMatrixList, selectedPeriod, selectedPersons,rollbackService, scheduleDictionary, weekDayPoints.GetWeekDaysPoints(),

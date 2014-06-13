@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -41,7 +40,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
             _weekDayPoints = new Dictionary<DayOfWeek, int>();
             _optimizationPreferences = _mock.StrictMock<IOptimizationPreferences>();
-            _target = new TeamBlockDayOffFairnessOptimizationServiceFacade(_dayOffStep1,_dayOffStep2,_teamBlockSchedulingOption);
+	        var toggleManager = MockRepository.GenerateMock<IToggleManager>();
+	        toggleManager.Stub(x => x.IsEnabled(Toggles.TeamBlue_Seniority_Temporay)).Return(true);
+	        _target = new TeamBlockDayOffFairnessOptimizationServiceFacade(_dayOffStep1,_dayOffStep2,_teamBlockSchedulingOption, toggleManager);
         }
 
         [Test]
