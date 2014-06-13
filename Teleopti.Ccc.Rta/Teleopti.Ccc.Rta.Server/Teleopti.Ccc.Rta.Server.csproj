@@ -153,7 +153,7 @@
     <Compile Include="Adherence\RtaAggregationState.cs" />
     <Compile Include="Adherence\TeamAdherenceAggregator.cs" />
     <Compile Include="AlarmMapper.cs" />
-    <Compile Include="ContainerBuilder.cs" />
+    <Compile Include="RtaContainerBuilder.cs" />
     <Compile Include="CurrentAndNextLayerExtractor.cs" />
     <Compile Include="DatabaseReader.cs" />
     <Compile Include="DatabaseConnectionStringHandler.cs" />

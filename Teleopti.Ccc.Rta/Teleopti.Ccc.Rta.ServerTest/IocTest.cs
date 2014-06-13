@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Rta.Server;
 using Teleopti.Ccc.Rta.Server.Adherence;
-using ContainerBuilder = Teleopti.Ccc.Rta.Server.ContainerBuilder;
 
 namespace Teleopti.Ccc.Rta.ServerTest
 {
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldResolveRtaDataHandler()
 		{
-			using (var container = ContainerBuilder.CreateBuilder().Build())
+			using (var container = RtaContainerBuilder.CreateBuilder().Build())
 			{
 				container.Resolve<IRtaDataHandler>()
 					.Should().Not.Be.Null();
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldResolveAdherenceAggregator()
 		{
-			using (var container = ContainerBuilder.CreateBuilder().Build())
+			using (var container = RtaContainerBuilder.CreateBuilder().Build())
 			{
 				container.Resolve<IEnumerable<IActualAgentStateHasBeenSent>>()
 					.Single().GetType().Should().Be<AdherenceAggregator>();
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldResolveAdherenceAggregatorInitializor()
 		{
-			using (var container = ContainerBuilder.CreateBuilder().Build())
+			using (var container = RtaContainerBuilder.CreateBuilder().Build())
 			{
 				container.Resolve<AdherenceAggregatorInitializor>()
 					.Should().Not.Be.Null();
