@@ -12098,4 +12098,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="TimeInAlarm" xml:space="preserve">
     <value>Time in Alarm</value>
   </data>
+  <data name="WebServerDown" xml:space="preserve">
+    <value>Server unavailable. Due to this, some functions could not be activated.</value>
+    <comment>Server unavailable. Due to this, some functions could not be activated.</comment>
+  </data>
 </root>

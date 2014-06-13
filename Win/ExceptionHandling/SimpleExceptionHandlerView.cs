@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using log4net;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
@@ -21,7 +22,8 @@ namespace Teleopti.Ccc.Win.ExceptionHandling
             _presenter.Initialize();
             _log.Error(message, exception);
 
-            SqlConnection.ClearAllPools();
+			if(exception is DataSourceException)
+				SqlConnection.ClearAllPools();
         }
 
         public SimpleExceptionHandlerView()
