@@ -43,16 +43,16 @@ table td.right-align-cell
 .dashboard-purple {
 	background-color: #7250aa;
 }
-.dashboard-orange {
-	background-color: #EC7E2F;;
+.dashboard-avgHandlingTime {
+	background-color: #758bfc
 }
-.dashboard-green {
-	background-color: #6b9d70;
+.dashboard-avgTalkTime {
+	background-color: #EC7E2F;
 }
-.dashboard-gray {
+.dashboard-avgAfterCallWork {
 	background-color: gray;;
 }
-.dashboard-black {
+.dashboard-answeredCalls {
 	background-color: #5a4b4b;
 }
 .dashboard .glyphicon {
@@ -209,7 +209,7 @@ table td.right-align-cell
 	    text-align: center;
     }
     .queue-handling-time {
-        background-color: #EC7E2F;
+        background-color: #758bfc;
         min-height: 40px;
         padding-bottom: 10px;
         padding-top: 10px;
@@ -217,7 +217,7 @@ table td.right-align-cell
         border: 1px white solid;
     }
     .queue-talk-time {
-        background-color : #6b9d70;
+        background-color: #EC7E2F;
         min-height: 40px;
         padding-bottom: 10px;
         padding-top: 10px;
