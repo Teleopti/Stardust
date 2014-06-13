@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
     [TestFixture]
     public class TeleoptiCccHolidayPlannerLicenseOptionTest
     {
-        private TeleoptiCccHolidayPlannerLicenseOption _target;
+        private TeleoptiCccVacationPlannerLicenseOption _target;
 
         [SetUp]
         public void Setup()
         {
-            _target = new TeleoptiCccHolidayPlannerLicenseOption();
+            _target = new TeleoptiCccVacationPlannerLicenseOption();
         }
 
         [Test]

@@ -8,16 +8,16 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
     /// <summary>
     /// Represents the Raptor Ass license option
     /// </summary>
-    public class TeleoptiCccHolidayPlannerLicenseOption : LicenseOption
+    public class TeleoptiCccShiftTraderLicenseOption : LicenseOption
     {
 
         #region Interface
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TeleoptiCccHolidayPlannerLicenseOption"/> class.
+        /// Initializes a new instance of the <see cref="TeleoptiCccShiftTraderLicenseOption"/> class.
         /// </summary>
-        public TeleoptiCccHolidayPlannerLicenseOption()
-            : base(DefinedLicenseOptionPaths.TeleoptiCccHolidayPlanner, DefinedLicenseOptionNames.TeleoptiCccAss)
+        public TeleoptiCccShiftTraderLicenseOption()
+            : base(DefinedLicenseOptionPaths.TeleoptiCccShiftTrader, DefinedLicenseOptionNames.TeleoptiCccAss)
         {
             //
         }
@@ -30,11 +30,10 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
         public override void EnableApplicationFunctions(IList<IApplicationFunction> allApplicationFunctions)
         {
             EnabledApplicationFunctions.Clear();
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.CreateAbsenceRequest));
+            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.CreateShiftTradeRequest));
             EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.RequestSchedulerApprove));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.AbsenceRequests));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb));
-            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.RequestAllowances));
+            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequests));
+            EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
         }
 
         #endregion

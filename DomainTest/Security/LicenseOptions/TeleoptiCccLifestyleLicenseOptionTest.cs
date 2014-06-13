@@ -6,14 +6,14 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 {
     [TestFixture]
-    public class TeleoptiCccAgentSelfServiceLicenseOptionTest
+    public class TeleoptiCccLifestyleLicenseOptionTest
     {
-        private TeleoptiCccAgentSelfServiceLicenseOption _target;
+        private TeleoptiCccLifestyleLicenseOption _target;
 
         [SetUp]
         public void Setup()
         {
-            _target = new TeleoptiCccAgentSelfServiceLicenseOption();
+            _target = new TeleoptiCccLifestyleLicenseOption();
         }
 
         [Test]

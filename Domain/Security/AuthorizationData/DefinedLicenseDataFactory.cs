@@ -68,17 +68,21 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
             IList<LicenseOption> licenseOptions = new List<LicenseOption>();
 
             licenseOptions.Add(new TeleoptiCccBaseLicenseOption());
-            licenseOptions.Add(new TeleoptiCccDeveloperLicenseOption());
-            licenseOptions.Add(new TeleoptiCccAgentSelfServiceLicenseOption());
-            licenseOptions.Add(new TeleoptiCccShiftTradesLicenseOption());
-            licenseOptions.Add(new TeleoptiCccAgentScheduleMessengerLicenseOption());
-            licenseOptions.Add(new TeleoptiCccHolidayPlannerLicenseOption());
+
+            licenseOptions.Add(new TeleoptiCccLifestyleLicenseOption());
+            licenseOptions.Add(new TeleoptiCccShiftTraderLicenseOption());
+			licenseOptions.Add(new TeleoptiCccVacationPlannerLicenseOption());
+
+			licenseOptions.Add(new TeleoptiCccNotifyLicenseOption());
+			licenseOptions.Add(new TeleoptiCccAgentScheduleMessengerLicenseOption());
             licenseOptions.Add(new TeleoptiCccRealTimeAdherenceLicenseOption());
-            licenseOptions.Add(new TeleoptiCccPerformanceManagerLicenseOption());
-            licenseOptions.Add(new TeleoptiCccPayrollIntegrationLicenseOption());
-            licenseOptions.Add(new TeleoptiCccMyTimeWebLicenseOption());
 			licenseOptions.Add(new TeleoptiCccSmsLinkLicenseOption());
 			licenseOptions.Add(new TeleoptiCccCalendarLinkLicenseOption());
+
+            licenseOptions.Add(new TeleoptiCccPerformanceManagerLicenseOption());
+
+            licenseOptions.Add(new TeleoptiCccPayrollIntegrationLicenseOption());
+
 			licenseOptions.Add(new TeleoptiCccVersion8LicenseOption());
             
             licenseOptions.Add(new TeleoptiCccFreemiumForecastsLicenseOption());

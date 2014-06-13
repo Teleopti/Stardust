@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 	public class TeleoptiCccVersion8LicenseOption : LicenseOption
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TeleoptiCccShiftTradesLicenseOption"/> class.
+		/// Initializes a new instance of the <see cref="TeleoptiCccShiftTraderLicenseOption"/> class.
 		/// </summary>
 		public TeleoptiCccVersion8LicenseOption()
 			: base(DefinedLicenseOptionPaths.TeleoptiCccVersion8, DefinedLicenseOptionNames.TeleoptiCccVersion8)

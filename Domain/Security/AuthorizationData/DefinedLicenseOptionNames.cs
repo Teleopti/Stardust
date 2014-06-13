@@ -17,7 +17,15 @@
         /// Constant string for Raptor ASS option name
         /// </summary>
         public const string TeleoptiCccAss = "Teleopti CCC7 Ass";
-        /// <summary>
+		/// <summary>
+		/// Constant string for Raptor Notify option name
+		/// </summary>
+		public const string TeleoptiCccNotify = "Teleopti CCC7 Notify";
+		/// <summary>
+		/// Constant string for Raptor MyTeam option name
+		/// </summary>
+		public const string TeleoptiCccMyTeam = "Teleopti CCC7 MyTeam";
+		/// <summary>
         /// Constant string for Freemium base option name
         /// </summary>
         public const string TeleoptiCccFreemiumBase = "Teleopti CCC7 Freemium Base";
@@ -25,10 +33,6 @@
         /// Constant string for EarlyBird base option name
         /// </summary>
         public const string TeleoptiCccPilotCustomersBase = "Teleopti CCC7 Pilot Customers Base";
-        /// <summary>
-        /// Constant string for EarlyBird base option name
-        /// </summary>
-        public const string TeleoptiCccMyTimeWeb = "Teleopti CCC7 MyTimeWeb";
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 		public const string TeleoptiCccSmsLink = "Teleopti CCC7 SMS Link";
