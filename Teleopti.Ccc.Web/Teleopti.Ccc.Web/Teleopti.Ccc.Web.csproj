@@ -853,7 +853,6 @@
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceagents\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceteams\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesites\view.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\teamschedulemove\view.html" />
     <Content Include="Areas\Anywhere\Views\Application\index.aspx" />
     <Content Include="Areas\Diagnosis\Content\Scripts\main.js" />
     <Content Include="Areas\Diagnosis\Content\Scripts\require\configuration.js" />
