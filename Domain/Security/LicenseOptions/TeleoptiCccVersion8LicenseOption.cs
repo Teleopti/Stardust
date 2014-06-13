@@ -24,29 +24,10 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 		{
 			EnabledApplicationFunctions.Clear();
 
-			var function = ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.Anywhere);
-			function.IsPreliminary = false;
-			EnabledApplicationFunctions.Add(function);
-
-			function = ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere);
-			function.IsPreliminary = false;
-			EnabledApplicationFunctions.Add(function);
-
-			function = ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.IntradayReForecasting);
-			function.IsPreliminary = false;
-			EnabledApplicationFunctions.Add(function);
-
-			function = ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
-			function.IsPreliminary = false;
-			EnabledApplicationFunctions.Add(function);
-
-			function = ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
-			function.IsPreliminary = false;
-			EnabledApplicationFunctions.Add(function);
-
-			function = ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
-			function.IsPreliminary = false;
-			EnabledApplicationFunctions.Add(function);
+			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.IntradayReForecasting));
+			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities));
+			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview));
+			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount));
 		}
 	}
 }

@@ -16,10 +16,27 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 		{
 			EnabledApplicationFunctions.Clear();
 
+			var realTimeAdherenceLicenseOption = new TeleoptiCccRealTimeAdherenceLicenseOption();
+			realTimeAdherenceLicenseOption.EnableApplicationFunctions(allApplicationFunctions);
+			foreach (IApplicationFunction applicationFunction in realTimeAdherenceLicenseOption.EnabledApplicationFunctions)
+				EnabledApplicationFunctions.Add(applicationFunction);
+
 			var scheduleMessengerLicenseOption = new TeleoptiCccAgentScheduleMessengerLicenseOption();
 			scheduleMessengerLicenseOption.EnableApplicationFunctions(allApplicationFunctions);
 			foreach (IApplicationFunction applicationFunction in scheduleMessengerLicenseOption.EnabledApplicationFunctions)
 				EnabledApplicationFunctions.Add(applicationFunction);
+
+			var smsLinkLicenseOption = new TeleoptiCccSmsLinkLicenseOption();
+			smsLinkLicenseOption.EnableApplicationFunctions(allApplicationFunctions);
+			foreach (IApplicationFunction applicationFunction in smsLinkLicenseOption.EnabledApplicationFunctions)
+				EnabledApplicationFunctions.Add(applicationFunction);
+
+			var calendarLinkLicenseOption = new TeleoptiCccCalendarLinkLicenseOption();
+			calendarLinkLicenseOption.EnableApplicationFunctions(allApplicationFunctions);
+			foreach (IApplicationFunction applicationFunction in calendarLinkLicenseOption.EnabledApplicationFunctions)
+				EnabledApplicationFunctions.Add(applicationFunction);
+
+			
 		}
 	}
 }

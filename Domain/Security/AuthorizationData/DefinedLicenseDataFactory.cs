@@ -84,6 +84,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 
             licenseOptions.Add(new TeleoptiCccPayrollIntegrationLicenseOption());
 
+            licenseOptions.Add(new TeleoptiCccMyTeamLicenseOption());
+
 			licenseOptions.Add(new TeleoptiCccVersion8LicenseOption());
             
             licenseOptions.Add(new TeleoptiCccFreemiumForecastsLicenseOption());
