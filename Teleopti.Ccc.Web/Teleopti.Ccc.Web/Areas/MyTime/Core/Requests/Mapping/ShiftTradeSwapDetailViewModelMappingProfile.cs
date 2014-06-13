@@ -74,27 +74,44 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			DateTimePeriod totalPeriod;
 			var fromTotalPeriod = _projectionProvider.Projection(schedpartFrom).Period();
 			var toTotalPeriod = _projectionProvider.Projection(schedpartTo).Period();
-            if (fromTotalPeriod.HasValue && toTotalPeriod.HasValue)
-            {
-                totalPeriod = fromTotalPeriod.Value.MaximumPeriod(toTotalPeriod.Value);
-            }
-            else if (fromTotalPeriod.HasValue)
-            {
-                totalPeriod = getTotalPeriod( ((IShiftTradeRequest) shiftTradeSwapDetail.Parent).Period, fromTotalPeriod.Value, schedpartTo);
-            }
-            else if (toTotalPeriod.HasValue)
-            {
-                totalPeriod = getTotalPeriod(((IShiftTradeRequest)shiftTradeSwapDetail.Parent).Period, toTotalPeriod.Value, schedpartFrom);
-            }
-            else
-            {
-                totalPeriod = ((IShiftTradeRequest)shiftTradeSwapDetail.Parent).Period;
-            }
+			if (fromTotalPeriod.HasValue && toTotalPeriod.HasValue)
+			{
+				totalPeriod = fromTotalPeriod.Value.MaximumPeriod(toTotalPeriod.Value);
+			}
+			else if (fromTotalPeriod.HasValue)
+			{
+				if (schedpartTo.SignificantPart() == SchedulePartView.DayOff)
+				{
+					totalPeriod = schedpartFrom.Period;
+				}
+				else
+				{
+					totalPeriod = getTotalPeriod(((IShiftTradeRequest) shiftTradeSwapDetail.Parent).Period, fromTotalPeriod.Value,
+						schedpartTo);
+				}
+			}
+			else if (toTotalPeriod.HasValue)
+			{
+				if (schedpartFrom.SignificantPart() == SchedulePartView.DayOff)
+				{
+					totalPeriod = schedpartFrom.Period;
+				}
+				else
+				{
+					totalPeriod = getTotalPeriod(((IShiftTradeRequest) shiftTradeSwapDetail.Parent).Period, toTotalPeriod.Value,
+						schedpartFrom);
+				}
+			}
+			else
+			{
+				totalPeriod = ((IShiftTradeRequest) shiftTradeSwapDetail.Parent).Period;
+			}
+
 			if (schedpartFrom.SignificantPart() == SchedulePartView.DayOff &&
 			    schedpartTo.SignificantPart() == SchedulePartView.DayOff)
-            {
+			{
 				totalPeriod = schedpartFrom.Period;
-            }
+			}
 
 			return new DateTimePeriod(totalPeriod.StartDateTime.AddHours(-extraHourBeforeAndAfter), 
 			                          totalPeriod.EndDateTime.AddHours(extraHourBeforeAndAfter));
@@ -211,14 +228,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private static IEnumerable<ShiftTradeEditScheduleLayerViewModel> createShiftTradeDayOffLayer(DateTimePeriod timeLineRange, TimeZoneInfo timeZone)
 		{
 			return new[]
-			       	{
-			       		new ShiftTradeEditScheduleLayerViewModel
-			       			{
-			       				ElapsedMinutesSinceShiftStart = 0,
-			       				LengthInMinutes = (int) (timeLineRange.TimePeriod(timeZone).SpanningTime().TotalMinutes - (timeLineOffset * 2)),
+					{
+						new ShiftTradeEditScheduleLayerViewModel
+							{
+								ElapsedMinutesSinceShiftStart = 0,
+								LengthInMinutes = (int) (timeLineRange.TimePeriod(timeZone).SpanningTime().TotalMinutes - (timeLineOffset * 2)),
 								Color = string.Empty
-			       			}
-			       	};
+							}
+					};
 		}
 	}
 
