@@ -35,19 +35,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Menu
 			result.Single().Area.Should().Be.EqualTo("MyTime");
 			result.Single().Name.Should().Be.EqualTo(Resources.MyTime);
 		}
-		
-		[Test]
-		public void ShouldCreateModelForUserWithAccessOnlyToMobileReports()
-		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MobileReports)).Return(true);
-			var target = new MenuViewModelFactory(permissionProvider);
-
-			var result = target.CreateMenyViewModel();
-
-			result.Single().Area.Should().Be.EqualTo("MobileReports");
-			result.Single().Name.Should().Be.EqualTo(getMenuText(DefinedRaptorApplicationFunctionPaths.MobileReports));
-		}
 
 		[Test]
 		public void ShouldCreateModelForUserWithAccessOnlyToAnywhere()

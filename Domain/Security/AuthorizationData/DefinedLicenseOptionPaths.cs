@@ -24,7 +24,6 @@
         public const string TeleoptiCccPerformanceManager = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/PerformanceManager";
         public const string TeleoptiCccPayrollIntegration = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/PayrollIntegration";
         public const string TeleoptiCccMyTimeWeb = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/MyTimeWeb";
-		public const string TeleoptiCccMobileReports = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/MobileReports";
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 		public const string TeleoptiCccSmsLink = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/SMSLink";
 		public const string TeleoptiCccCalendarLink = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/CalendarLink";

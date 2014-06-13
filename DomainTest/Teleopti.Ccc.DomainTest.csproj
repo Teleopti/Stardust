@@ -976,7 +976,6 @@
     <Compile Include="Security\IsPasswordEncryptedSpecificationTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccCalendarLinkLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccVersion8LicenseOptionTest.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccMobileReportsLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccMyTimeWebLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccDeveloperLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersBaseLicenseOptionTest.cs" />
@@ -1208,7 +1207,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WebReport\ReportDataServiceLevelAgentsReadyTest.cs" />
-    <Compile Include="WebReport\ReportMobileReportInitTest.cs" />
     <Compile Include="WebReport\ReportControlSkillGetTest.cs" />
     <Compile Include="WebReport\ReportDataQueueStatAbandonedTest.cs" />
     <Compile Include="WebReport\ReportDataForecastVersusActualWorkloadTest.cs" />

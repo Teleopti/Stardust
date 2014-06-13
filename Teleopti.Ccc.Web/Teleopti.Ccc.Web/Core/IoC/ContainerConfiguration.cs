@@ -20,7 +20,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
-using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
 using Teleopti.Ccc.Web.Areas.SSO.Core.IoC;
@@ -50,10 +49,10 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<BootstrapperModule>();
 
 			builder.RegisterModule<CommonModule>();
+			builder.RegisterModule<ResourceHandlerModule>();
 			builder.RegisterModule<MyTimeAreaModule>();
 			builder.RegisterModule<SSOAreaModule>();
 			builder.RegisterModule<StartAreaModule>();
-			builder.RegisterModule<MobileReportsAreaModule>();
 			builder.RegisterModule<AnywhereAreaModule>();
 			builder.RegisterModule<PerformanceToolAreaModule>();
 

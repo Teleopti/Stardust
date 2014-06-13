@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			IApplicationFunction underConstruction = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.UnderConstruction, "xxUnderConstruction", DefinedRaptorApplicationFunctionForeignIds.UnderConstruction, null);
 			underConstruction.IsPreliminary = true;
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenAgentPortal, "xxAgentPortal", DefinedRaptorApplicationFunctionForeignIds.OpenAgentPortal, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MobileReports, "xxMobileReports", DefinedRaptorApplicationFunctionForeignIds.MobileReports, null);
 
 			// Global
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifySchedule, "xxModifySchedule", DefinedRaptorApplicationFunctionForeignIds.ModifySchedule, null);
