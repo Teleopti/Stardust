@@ -15,7 +15,7 @@ using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class SignalSender : IMessageSender, IDisposable
+	public class SignalSender : IMessageSender
 	{
 		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private readonly ITime _time;
