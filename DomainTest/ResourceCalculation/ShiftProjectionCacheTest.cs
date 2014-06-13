@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using(_mocks.Record())
 			{
-				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimeMeeting(null, null, null)).IgnoreArguments().Return(false);
+				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimeMeeting(null, null)).IgnoreArguments().Return(false);
 			}
 
 			using(_mocks.Record())
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using(_mocks.Record())
 			{
-				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(null, null, null)).IgnoreArguments().Return(false);
+				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(null, null)).IgnoreArguments().Return(false);
 			}
 
 			using(_mocks.Playback())
@@ -133,8 +133,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimeMeeting(null, null, null)).IgnoreArguments().Return(true);
-				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(null, null, null)).IgnoreArguments().Return(true);
+				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimeMeeting(null, null)).IgnoreArguments().Return(true);
+				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(null, null)).IgnoreArguments().Return(true);
 			}
 
 			using (_mocks.Playback())

@@ -41,11 +41,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public void SetDate(DateOnly schedulingDate, TimeZoneInfo localTimeZoneInfo)
         {
 
-            if (_schedulingDate != schedulingDate || !_localTimeZoneInfo.Equals(localTimeZoneInfo))
+            if (SchedulingDate != schedulingDate || !_localTimeZoneInfo.Equals(localTimeZoneInfo))
             {
                 _localTimeZoneInfo = localTimeZoneInfo;
                 _schedulingDate = schedulingDate;
-                _dayOfWeek = _schedulingDate.DayOfWeek;
+                _dayOfWeek = SchedulingDate.DayOfWeek;
                 _mainShift = _workShift.ToEditorShift(schedulingDate.Date, localTimeZoneInfo);
                 _mainshiftProjection = null;
             }
@@ -132,12 +132,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return true;
             }
 
-            var mainShiftProjection = MainShiftProjection;
-
-			if (meetings.Count > 0 && !_personalShiftMeetingTimeChecker.CheckTimeMeeting(_mainShift, mainShiftProjection, meetings))
+			if (meetings.Count > 0 && !_personalShiftMeetingTimeChecker.CheckTimeMeeting(_mainShift, meetings))
 				return false;
 
-			if (personAssignment != null && !_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(_mainShift, mainShiftProjection, personAssignment))
+			if (personAssignment != null && !_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(_mainShift, personAssignment))
 				return false;
 
             return true;
@@ -163,5 +161,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
     	}
 
+	    public DateTime SchedulingDate
+	    {
+		    get { return _schedulingDate; }
+	    }
     }
 }

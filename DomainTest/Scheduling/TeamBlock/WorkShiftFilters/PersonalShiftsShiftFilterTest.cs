@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private IPerson _person;
 		private DateOnly _dateOnly;
 		private WorkShiftFinderResult _finderResult;
+		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
 		[SetUp]
 		public void Setup()
@@ -39,7 +40,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_person = PersonFactory.CreatePerson("Bill");
 			_resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_finderResult = new WorkShiftFinderResult(_person, _dateOnly);
-			_target = new PersonalShiftsShiftFilter(_resultStateHolder);
+			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
+			_target = new PersonalShiftsShiftFilter(_resultStateHolder, _personalShiftMeetingTimeChecker);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -68,6 +70,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
 			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
 			shifts.Add(c1);
+			var editableShift = new EditableShift(new ShiftCategory("hepp"));
+			editableShift.LayerCollection.Add(new EditableShiftLayer(phone, new DateTimePeriod(currentDate.AddHours(8), currentDate.AddHours(17))));
 
 			using (_mocks.Record())
 			{
@@ -77,10 +81,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
 				Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
 				Expect.Call(_personAssignment.PersonalActivities()).Return(new []{new PersonalShiftLayer(new Activity("sdf"), period)}).Repeat.AtLeastOnce();
+				Expect.Call(c1.TheMainShift).Return(editableShift);
+				Expect.Call(c1.SchedulingDate).Return(currentDate);
 				Expect.Call(meeting.Period).Return(period2).Repeat.AtLeastOnce();
+				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimeMeeting(editableShift, meetings)).IgnoreArguments().Return(true);
+				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(editableShift, _personAssignment)).IgnoreArguments()
+					.Return(true);
+
 				Expect.Call(c1.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
-				Expect.Call(c1.PersonalShiftsAndMeetingsAreInWorkTime(new ReadOnlyCollection<IPersonMeeting>(meetings),
-																	  _personAssignment)).Return(true);
 			}
 
 			using (_mocks.Playback())

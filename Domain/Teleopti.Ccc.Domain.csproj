@@ -1139,6 +1139,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\LatestStartTimeLimitationShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\MainShiftOptimizeActivitiesSpecificationShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\NotOverWritableActivitiesShiftFilter.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\PersonalShiftAndMeetingFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\PersonalShiftsShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetAccordingToAccessabilityFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetPersonalSkillsActivityFilter.cs" />

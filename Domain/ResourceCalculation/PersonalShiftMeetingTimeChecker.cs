@@ -6,14 +6,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public interface IPersonalShiftMeetingTimeChecker
 	{
-		bool CheckTimeMeeting(IEditableShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonMeeting> meetings);
-		bool CheckTimePersonAssignment(IEditableShift mainShift, IVisualLayerCollection mainShiftProjection, IPersonAssignment personAssignment);
+		bool CheckTimeMeeting(IEditableShift mainShift, ReadOnlyCollection<IPersonMeeting> meetings);
+		bool CheckTimePersonAssignment(IEditableShift mainShift, IPersonAssignment personAssignment);
 	}
 
 	public class PersonalShiftMeetingTimeChecker : IPersonalShiftMeetingTimeChecker
 	{
-		public bool CheckTimeMeeting(IEditableShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonMeeting> meetings)
+		public bool CheckTimeMeeting(IEditableShift mainShift, ReadOnlyCollection<IPersonMeeting> meetings)
 		{
+			var mainShiftProjection = mainShift.ProjectionService().CreateProjection();
 			var worktime = mainShiftProjection.WorkTime();
 			var contractTime = mainShiftProjection.ContractTime();
 			var clone = mainShift.MakeCopy();
@@ -45,9 +46,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return (worktime == mainWithMeetingWorkTime) && (contractTime == mainWithMeetingContractTime);
 		}
 
-		public bool CheckTimePersonAssignment(IEditableShift mainShift, IVisualLayerCollection mainShiftProjection,
-		                                      IPersonAssignment personAssignment)
+		public bool CheckTimePersonAssignment(IEditableShift mainShift, IPersonAssignment personAssignment)
 		{
+			var mainShiftProjection = mainShift.ProjectionService().CreateProjection();
 			var worktime = mainShiftProjection.WorkTime();
 			var contractTime = mainShiftProjection.ContractTime();
 			var clone = mainShift.MakeCopy();
