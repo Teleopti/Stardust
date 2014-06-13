@@ -362,3 +362,16 @@
 	font-weight: bold;
 	margin-bottom: 14px;
 }
+
+.request-abcense {
+    max-width: 250px;
+}
+.request-date {
+    width: 150px;
+    padding-left: 15px;
+}
+
+.request-time {
+    width:110px;
+    padding-left: 15px;
+}
