@@ -63,14 +63,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             
             Assert.AreEqual(_extraPreferencesSource.FairnessValue, _extraPreferencesTarget.FairnessValue);
 
-            
-
 		}
 
         [Test]
         public void MappingShouldGetAndSetForTeamBlockOptions()
         {
             _extraPreferencesSource.UseTeamBlockOption  = true;
+			_extraPreferencesSource.UseTeamSameActivity = true;
             _extraPreferencesSource.UseBlockSameEndTime  = true;
             _extraPreferencesSource.UseBlockSameStartTime  = true;
             _extraPreferencesSource.UseBlockSameShift = true;
@@ -82,6 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
 
             Assert.AreEqual(_extraPreferencesSource.UseTeamBlockOption, _extraPreferencesTarget.UseTeamBlockOption);
+			Assert.AreEqual(_extraPreferencesSource.UseTeamSameActivity, _extraPreferencesTarget.UseTeamSameActivity);
             Assert.AreEqual(_extraPreferencesSource.UseBlockSameEndTime, _extraPreferencesTarget.UseBlockSameEndTime);
             Assert.AreEqual(_extraPreferencesSource.UseBlockSameStartTime, _extraPreferencesTarget.UseBlockSameStartTime);
             Assert.AreEqual(_extraPreferencesSource.UseBlockSameShift, _extraPreferencesTarget.UseBlockSameShift);

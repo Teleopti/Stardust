@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private bool _useTeamBlockSameEndTime;
         private bool _useTeamBlockSameShiftCategory;
+		private bool _useTeamBlockSameActivity;
         private bool _useTeamBlockSameStartTime;
         private bool _useTeamBlockSameShift;
         private bool _useTeamBlockOption;
@@ -44,7 +45,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			target.UseTeams = _useTeams;
 			target.UseTeamSameDaysOff = _useSameDaysOffForTeams;
             
-           
 			target.FairnessValue = _fairnessValue;
 
 		    target.UseTeamSameShiftCategory = _useGroupSchedulingCommonCategory;
@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    target.UseBlockSameShift = _useTeamBlockSameShift;
 		    target.UseBlockSameShiftCategory = _useTeamBlockSameShiftCategory;
 		    target.UseBlockSameStartTime = _useTeamBlockSameStartTime;
+			target.UseTeamSameActivity = _useTeamBlockSameActivity;
 		}
 
 		public void MapFrom(IExtraPreferences source)
@@ -83,6 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    _useTeamBlockSameShift = source.UseBlockSameShift;
 		    _useTeamBlockSameShiftCategory = source.UseBlockSameShiftCategory;
 		    _useTeamBlockSameStartTime = source.UseBlockSameStartTime;
+			_useTeamBlockSameActivity = source.UseTeamSameActivity;
 		}
 
 		/// <summary>
