@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<StartAreaModule>();
 			builder.RegisterModule<AnywhereAreaModule>();
 			builder.RegisterModule<PerformanceToolAreaModule>();
-			builder.RegisterModule<RtaAreaModule>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
@@ -73,6 +72,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RuleSetModule(mbCacheModule, false));
 			builder.RegisterModule(new AuthenticationCachedModule(mbCacheModule));
+
+			builder.RegisterModule(new RtaAreaModule(mbCacheModule));
 
 			builder.RegisterModule<ShiftTradeModule>();
 
