@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see timelines")]
 		public void ThenIShouldNotSeeTimelines()
 		{
-			Browser.Interactions.AssertNotVisibleUsingJQuery(".shift-trade-swap-detail-timeline");
+			Browser.Interactions.AssertNotExists("#sender-info", ".shift-trade-swap-detail-timeline");
 		}
 
 		[When(@"I click cancel button")]
