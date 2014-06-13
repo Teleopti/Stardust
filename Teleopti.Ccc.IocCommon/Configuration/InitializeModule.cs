@@ -1,4 +1,3 @@
-using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security;

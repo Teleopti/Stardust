@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Domain;

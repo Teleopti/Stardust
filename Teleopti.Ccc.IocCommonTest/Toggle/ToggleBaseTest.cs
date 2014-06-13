@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using Autofac;
-using Autofac.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;

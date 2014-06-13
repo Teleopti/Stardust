@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Toggle.Net.Specifications;
 
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		public bool IsEnabled(string currentUser, IDictionary<string, string> parameters)
 		{
 			var customerName = _licenseActivatorProvider.Current().CustomerName;
-			return ToggleNetModule.DeveloperLicenseName.Equals(customerName);
+			return ToggleNetModule.DeveloperLicenseName.Equals(customerName, StringComparison.OrdinalIgnoreCase);
 		}
 
 		public void Validate(string toggleName, IDictionary<string, string> parameters)

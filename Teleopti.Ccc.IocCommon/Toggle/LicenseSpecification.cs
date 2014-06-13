@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		{
 			var licenseCustomerName = _licenseActivatorProvide.Current().CustomerName;
 			return licenseCustomerName.Equals(parameters[NameKey], StringComparison.OrdinalIgnoreCase) ||
-					ToggleNetModule.DeveloperLicenseName.Equals(licenseCustomerName);
+					ToggleNetModule.DeveloperLicenseName.Equals(licenseCustomerName, StringComparison.OrdinalIgnoreCase);
 		}
 
 		public void Validate(string toggleName, IDictionary<string, string> parameters)
