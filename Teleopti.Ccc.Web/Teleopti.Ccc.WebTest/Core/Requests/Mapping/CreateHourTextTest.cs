@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
-using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping

@@ -401,7 +401,6 @@
     <Compile Include="Repositories\PartTimePercentageRepository.cs" />
     <Compile Include="Repositories\SiteRepository.cs" />
     <Compile Include="Repositories\TeamRepository.cs" />
-    <Compile Include="Repositories\WebReportRepository.cs" />
     <Compile Include="Repositories\WorkflowControlSetRepository.cs" />
     <Compile Include="Repositories\WorkloadRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />

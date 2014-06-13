@@ -121,9 +121,6 @@
 		public const string ViewPersonalAccount = "0093";
 		public const string MyReportQueueMetrics = "0095";
 
-		// Mobile Reports
-		public const string MobileReports = "0074";
-
 		// Anywhere
 		public const string Anywhere = "0080";
 		public const string SchedulesAnywhere = "0081";

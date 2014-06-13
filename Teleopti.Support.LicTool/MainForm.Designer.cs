@@ -44,19 +44,17 @@
 			this.btnDemoSettings = new System.Windows.Forms.Button();
 			this.btnCreateAndSave = new System.Windows.Forms.Button();
 			this.chkBase = new System.Windows.Forms.CheckBox();
-			this.chkAgentSelfService = new System.Windows.Forms.CheckBox();
-			this.chkShiftTrades = new System.Windows.Forms.CheckBox();
-			this.chkAgentScheduleMessenger = new System.Windows.Forms.CheckBox();
-			this.chkHolidayPlanner = new System.Windows.Forms.CheckBox();
+			this.chkLifestyle = new System.Windows.Forms.CheckBox();
+			this.chkShiftTrader = new System.Windows.Forms.CheckBox();
+			this.chkVacationPlanner = new System.Windows.Forms.CheckBox();
+			this.chkOvertimeAvailability = new System.Windows.Forms.CheckBox();
 			this.chkRealtimeAdherence = new System.Windows.Forms.CheckBox();
 			this.chkPerformanceManager = new System.Windows.Forms.CheckBox();
 			this.chkPayrollIntegration = new System.Windows.Forms.CheckBox();
 			this.grpBoxModules = new System.Windows.Forms.GroupBox();
-			this.checkBoxCalendar = new System.Windows.Forms.CheckBox();
-			this.checkBoxSMS = new System.Windows.Forms.CheckBox();
-			this.chkMobileReports = new System.Windows.Forms.CheckBox();
-			this.chkMyTimeWeb = new System.Windows.Forms.CheckBox();
-			this.chkDeveloper = new System.Windows.Forms.CheckBox();
+			this.chkCalendarLink = new System.Windows.Forms.CheckBox();
+			this.chkSMSLink = new System.Windows.Forms.CheckBox();
+			this.chkAgentScheduleMessenger = new System.Windows.Forms.CheckBox();
 			this.btnAdd2Yrs = new System.Windows.Forms.Button();
 			this.btnAdd3Mon = new System.Windows.Forms.Button();
 			this.grpbxPresets = new System.Windows.Forms.GroupBox();
@@ -81,8 +79,7 @@
 			this.labelRatio = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.chkFreemium = new System.Windows.Forms.CheckBox();
-			this.groupBoxVersion8 = new System.Windows.Forms.GroupBox();
-			this.checkBoxVersion8 = new System.Windows.Forms.CheckBox();
+			this.chkNotify = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgents)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgentsGrace)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numExpirationGracePeriodDays)).BeginInit();
@@ -92,7 +89,6 @@
 			this.menuTopmenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownCountRatio)).BeginInit();
 			this.groupBox1.SuspendLayout();
-			this.groupBoxVersion8.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// txtbxCustomerName
@@ -259,51 +255,51 @@
 			this.chkBase.Text = "Base";
 			this.chkBase.UseVisualStyleBackColor = true;
 			// 
-			// chkAgentSelfService
+			// chkLifestyle
 			// 
-			this.chkAgentSelfService.AutoSize = true;
-			this.chkAgentSelfService.Location = new System.Drawing.Point(6, 41);
-			this.chkAgentSelfService.Name = "chkAgentSelfService";
-			this.chkAgentSelfService.Size = new System.Drawing.Size(132, 17);
-			this.chkAgentSelfService.TabIndex = 7;
-			this.chkAgentSelfService.Text = "Employee Self Service";
-			this.chkAgentSelfService.UseVisualStyleBackColor = true;
-			this.chkAgentSelfService.CheckedChanged += new System.EventHandler(this.chkAgentSelfService_CheckedChanged);
+			this.chkLifestyle.AutoSize = true;
+			this.chkLifestyle.Location = new System.Drawing.Point(6, 41);
+			this.chkLifestyle.Name = "chkLifestyle";
+			this.chkLifestyle.Size = new System.Drawing.Size(64, 17);
+			this.chkLifestyle.TabIndex = 7;
+			this.chkLifestyle.Text = "Lifestyle";
+			this.chkLifestyle.UseVisualStyleBackColor = true;
+			this.chkLifestyle.CheckedChanged += new System.EventHandler(this.chkLifestyle_CheckedChanged);
 			// 
-			// chkShiftTrades
+			// chkShiftTrader
 			// 
-			this.chkShiftTrades.AutoSize = true;
-			this.chkShiftTrades.Location = new System.Drawing.Point(33, 63);
-			this.chkShiftTrades.Name = "chkShiftTrades";
-			this.chkShiftTrades.Size = new System.Drawing.Size(83, 17);
-			this.chkShiftTrades.TabIndex = 8;
-			this.chkShiftTrades.Text = "Shift Trades";
-			this.chkShiftTrades.UseVisualStyleBackColor = true;
+			this.chkShiftTrader.AutoSize = true;
+			this.chkShiftTrader.Location = new System.Drawing.Point(33, 63);
+			this.chkShiftTrader.Name = "chkShiftTrader";
+			this.chkShiftTrader.Size = new System.Drawing.Size(81, 17);
+			this.chkShiftTrader.TabIndex = 8;
+			this.chkShiftTrader.Text = "Shift Trader";
+			this.chkShiftTrader.UseVisualStyleBackColor = true;
 			// 
-			// chkAgentScheduleMessenger
+			// chkVacationPlanner
 			// 
-			this.chkAgentScheduleMessenger.AutoSize = true;
-			this.chkAgentScheduleMessenger.Location = new System.Drawing.Point(33, 85);
-			this.chkAgentScheduleMessenger.Name = "chkAgentScheduleMessenger";
-			this.chkAgentScheduleMessenger.Size = new System.Drawing.Size(157, 17);
-			this.chkAgentScheduleMessenger.TabIndex = 9;
-			this.chkAgentScheduleMessenger.Text = "Agent Schedule Messenger";
-			this.chkAgentScheduleMessenger.UseVisualStyleBackColor = true;
+			this.chkVacationPlanner.AutoSize = true;
+			this.chkVacationPlanner.Location = new System.Drawing.Point(33, 85);
+			this.chkVacationPlanner.Name = "chkVacationPlanner";
+			this.chkVacationPlanner.Size = new System.Drawing.Size(107, 17);
+			this.chkVacationPlanner.TabIndex = 9;
+			this.chkVacationPlanner.Text = "Vacation Planner";
+			this.chkVacationPlanner.UseVisualStyleBackColor = true;
 			// 
-			// chkHolidayPlanner
+			// chkOvertimeAvailability
 			// 
-			this.chkHolidayPlanner.AutoSize = true;
-			this.chkHolidayPlanner.Location = new System.Drawing.Point(33, 107);
-			this.chkHolidayPlanner.Name = "chkHolidayPlanner";
-			this.chkHolidayPlanner.Size = new System.Drawing.Size(100, 17);
-			this.chkHolidayPlanner.TabIndex = 10;
-			this.chkHolidayPlanner.Text = "Holiday Planner";
-			this.chkHolidayPlanner.UseVisualStyleBackColor = true;
+			this.chkOvertimeAvailability.AutoSize = true;
+			this.chkOvertimeAvailability.Location = new System.Drawing.Point(33, 107);
+			this.chkOvertimeAvailability.Name = "chkOvertimeAvailability";
+			this.chkOvertimeAvailability.Size = new System.Drawing.Size(120, 17);
+			this.chkOvertimeAvailability.TabIndex = 10;
+			this.chkOvertimeAvailability.Text = "Overtime Availability";
+			this.chkOvertimeAvailability.UseVisualStyleBackColor = true;
 			// 
 			// chkRealtimeAdherence
 			// 
 			this.chkRealtimeAdherence.AutoSize = true;
-			this.chkRealtimeAdherence.Location = new System.Drawing.Point(6, 129);
+			this.chkRealtimeAdherence.Location = new System.Drawing.Point(33, 149);
 			this.chkRealtimeAdherence.Name = "chkRealtimeAdherence";
 			this.chkRealtimeAdherence.Size = new System.Drawing.Size(122, 17);
 			this.chkRealtimeAdherence.TabIndex = 11;
@@ -313,7 +309,7 @@
 			// chkPerformanceManager
 			// 
 			this.chkPerformanceManager.AutoSize = true;
-			this.chkPerformanceManager.Location = new System.Drawing.Point(6, 152);
+			this.chkPerformanceManager.Location = new System.Drawing.Point(6, 241);
 			this.chkPerformanceManager.Name = "chkPerformanceManager";
 			this.chkPerformanceManager.Size = new System.Drawing.Size(131, 17);
 			this.chkPerformanceManager.TabIndex = 12;
@@ -323,7 +319,7 @@
 			// chkPayrollIntegration
 			// 
 			this.chkPayrollIntegration.AutoSize = true;
-			this.chkPayrollIntegration.Location = new System.Drawing.Point(6, 174);
+			this.chkPayrollIntegration.Location = new System.Drawing.Point(6, 264);
 			this.chkPayrollIntegration.Name = "chkPayrollIntegration";
 			this.chkPayrollIntegration.Size = new System.Drawing.Size(110, 17);
 			this.chkPayrollIntegration.TabIndex = 13;
@@ -332,77 +328,56 @@
 			// 
 			// grpBoxModules
 			// 
-			this.grpBoxModules.Controls.Add(this.checkBoxCalendar);
-			this.grpBoxModules.Controls.Add(this.checkBoxSMS);
-			this.grpBoxModules.Controls.Add(this.chkMobileReports);
-			this.grpBoxModules.Controls.Add(this.chkMyTimeWeb);
+			this.grpBoxModules.Controls.Add(this.chkCalendarLink);
 			this.grpBoxModules.Controls.Add(this.chkPayrollIntegration);
 			this.grpBoxModules.Controls.Add(this.chkPerformanceManager);
-			this.grpBoxModules.Controls.Add(this.chkRealtimeAdherence);
-			this.grpBoxModules.Controls.Add(this.chkHolidayPlanner);
+			this.grpBoxModules.Controls.Add(this.chkNotify);
+			this.grpBoxModules.Controls.Add(this.chkSMSLink);
 			this.grpBoxModules.Controls.Add(this.chkAgentScheduleMessenger);
-			this.grpBoxModules.Controls.Add(this.chkShiftTrades);
-			this.grpBoxModules.Controls.Add(this.chkAgentSelfService);
+			this.grpBoxModules.Controls.Add(this.chkRealtimeAdherence);
+			this.grpBoxModules.Controls.Add(this.chkOvertimeAvailability);
+			this.grpBoxModules.Controls.Add(this.chkVacationPlanner);
+			this.grpBoxModules.Controls.Add(this.chkShiftTrader);
+			this.grpBoxModules.Controls.Add(this.chkLifestyle);
 			this.grpBoxModules.Controls.Add(this.chkBase);
 			this.grpBoxModules.Location = new System.Drawing.Point(70, 338);
 			this.grpBoxModules.Name = "grpBoxModules";
-			this.grpBoxModules.Size = new System.Drawing.Size(211, 280);
+			this.grpBoxModules.Size = new System.Drawing.Size(211, 288);
 			this.grpBoxModules.TabIndex = 14;
 			this.grpBoxModules.TabStop = false;
 			this.grpBoxModules.Text = "TeleoptiCCC options";
 			// 
-			// checkBoxCalendar
+			// chkCalendarLink
 			// 
-			this.checkBoxCalendar.AutoSize = true;
-			this.checkBoxCalendar.Location = new System.Drawing.Point(6, 258);
-			this.checkBoxCalendar.Name = "checkBoxCalendar";
-			this.checkBoxCalendar.Size = new System.Drawing.Size(91, 17);
-			this.checkBoxCalendar.TabIndex = 18;
-			this.checkBoxCalendar.Text = "Calendar Link";
-			this.checkBoxCalendar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-			this.checkBoxCalendar.UseVisualStyleBackColor = true;
+			this.chkCalendarLink.AutoSize = true;
+			this.chkCalendarLink.Location = new System.Drawing.Point(33, 218);
+			this.chkCalendarLink.Name = "chkCalendarLink";
+			this.chkCalendarLink.Size = new System.Drawing.Size(91, 17);
+			this.chkCalendarLink.TabIndex = 18;
+			this.chkCalendarLink.Text = "Calendar Link";
+			this.chkCalendarLink.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.chkCalendarLink.UseVisualStyleBackColor = true;
 			// 
-			// checkBoxSMS
+			// chkSMSLink
 			// 
-			this.checkBoxSMS.AutoSize = true;
-			this.checkBoxSMS.Location = new System.Drawing.Point(6, 237);
-			this.checkBoxSMS.Name = "checkBoxSMS";
-			this.checkBoxSMS.Size = new System.Drawing.Size(72, 17);
-			this.checkBoxSMS.TabIndex = 17;
-			this.checkBoxSMS.Text = "SMS Link";
-			this.checkBoxSMS.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-			this.checkBoxSMS.UseVisualStyleBackColor = true;
+			this.chkSMSLink.AutoSize = true;
+			this.chkSMSLink.Location = new System.Drawing.Point(33, 195);
+			this.chkSMSLink.Name = "chkSMSLink";
+			this.chkSMSLink.Size = new System.Drawing.Size(72, 17);
+			this.chkSMSLink.TabIndex = 17;
+			this.chkSMSLink.Text = "SMS Link";
+			this.chkSMSLink.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.chkSMSLink.UseVisualStyleBackColor = true;
 			// 
-			// chkMobileReports
+			// chkAgentScheduleMessenger
 			// 
-			this.chkMobileReports.AutoSize = true;
-			this.chkMobileReports.Location = new System.Drawing.Point(6, 216);
-			this.chkMobileReports.Name = "chkMobileReports";
-			this.chkMobileReports.Size = new System.Drawing.Size(97, 17);
-			this.chkMobileReports.TabIndex = 16;
-			this.chkMobileReports.Text = "Mobile Reports";
-			this.chkMobileReports.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-			this.chkMobileReports.UseVisualStyleBackColor = true;
-			// 
-			// chkMyTimeWeb
-			// 
-			this.chkMyTimeWeb.AutoSize = true;
-			this.chkMyTimeWeb.Location = new System.Drawing.Point(6, 196);
-			this.chkMyTimeWeb.Name = "chkMyTimeWeb";
-			this.chkMyTimeWeb.Size = new System.Drawing.Size(89, 17);
-			this.chkMyTimeWeb.TabIndex = 15;
-			this.chkMyTimeWeb.Text = "MyTime Web";
-			this.chkMyTimeWeb.UseVisualStyleBackColor = true;
-			// 
-			// chkDeveloper
-			// 
-			this.chkDeveloper.AutoSize = true;
-			this.chkDeveloper.Location = new System.Drawing.Point(76, 624);
-			this.chkDeveloper.Name = "chkDeveloper";
-			this.chkDeveloper.Size = new System.Drawing.Size(75, 17);
-			this.chkDeveloper.TabIndex = 15;
-			this.chkDeveloper.Text = "Developer";
-			this.chkDeveloper.UseVisualStyleBackColor = true;
+			this.chkAgentScheduleMessenger.AutoSize = true;
+			this.chkAgentScheduleMessenger.Location = new System.Drawing.Point(33, 172);
+			this.chkAgentScheduleMessenger.Name = "chkAgentScheduleMessenger";
+			this.chkAgentScheduleMessenger.Size = new System.Drawing.Size(157, 17);
+			this.chkAgentScheduleMessenger.TabIndex = 15;
+			this.chkAgentScheduleMessenger.Text = "Agent Schedule Messenger";
+			this.chkAgentScheduleMessenger.UseVisualStyleBackColor = true;
 			// 
 			// btnAdd2Yrs
 			// 
@@ -642,38 +617,27 @@
 			this.chkFreemium.UseVisualStyleBackColor = true;
 			this.chkFreemium.CheckedChanged += new System.EventHandler(this.chkFreemium_CheckedChanged);
 			// 
-			// groupBoxVersion8
+			// chkNotify
 			// 
-			this.groupBoxVersion8.Controls.Add(this.checkBoxVersion8);
-			this.groupBoxVersion8.Location = new System.Drawing.Point(352, 484);
-			this.groupBoxVersion8.Name = "groupBoxVersion8";
-			this.groupBoxVersion8.Size = new System.Drawing.Size(200, 130);
-			this.groupBoxVersion8.TabIndex = 17;
-			this.groupBoxVersion8.TabStop = false;
-			this.groupBoxVersion8.Text = "Version 8";
-			// 
-			// checkBoxVersion8
-			// 
-			this.checkBoxVersion8.AutoSize = true;
-			this.checkBoxVersion8.Location = new System.Drawing.Point(8, 19);
-			this.checkBoxVersion8.Name = "checkBoxVersion8";
-			this.checkBoxVersion8.Size = new System.Drawing.Size(70, 17);
-			this.checkBoxVersion8.TabIndex = 7;
-			this.checkBoxVersion8.Text = "Version 8";
-			this.checkBoxVersion8.UseVisualStyleBackColor = true;
+			this.chkNotify.AutoSize = true;
+			this.chkNotify.Location = new System.Drawing.Point(6, 126);
+			this.chkNotify.Name = "chkNotify";
+			this.chkNotify.Size = new System.Drawing.Size(53, 17);
+			this.chkNotify.TabIndex = 16;
+			this.chkNotify.Text = "Notify";
+			this.chkNotify.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.chkNotify.UseVisualStyleBackColor = true;
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(639, 682);
-			this.Controls.Add(this.groupBoxVersion8);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.labelRatio);
 			this.Controls.Add(this.numericUpDownCountRatio);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.comboBoxAgentsOrSeats);
-			this.Controls.Add(this.chkDeveloper);
 			this.Controls.Add(this.comboBoxAgreement);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.label8);
@@ -712,8 +676,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownCountRatio)).EndInit();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
-			this.groupBoxVersion8.ResumeLayout(false);
-			this.groupBoxVersion8.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -737,10 +699,10 @@
 		private System.Windows.Forms.Button btnDemoSettings;
 		private System.Windows.Forms.Button btnCreateAndSave;
 		private System.Windows.Forms.CheckBox chkBase;
-		private System.Windows.Forms.CheckBox chkAgentSelfService;
-		private System.Windows.Forms.CheckBox chkShiftTrades;
-		private System.Windows.Forms.CheckBox chkAgentScheduleMessenger;
-		private System.Windows.Forms.CheckBox chkHolidayPlanner;
+		private System.Windows.Forms.CheckBox chkLifestyle;
+		private System.Windows.Forms.CheckBox chkShiftTrader;
+		private System.Windows.Forms.CheckBox chkVacationPlanner;
+		private System.Windows.Forms.CheckBox chkOvertimeAvailability;
 		private System.Windows.Forms.CheckBox chkRealtimeAdherence;
 		private System.Windows.Forms.CheckBox chkPerformanceManager;
 		private System.Windows.Forms.CheckBox chkPayrollIntegration;
@@ -751,10 +713,9 @@
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.NumericUpDown ExpirationGracePeriodHours;
 		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.CheckBox chkDeveloper;
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.ComboBox comboBoxAgreement;
-		private System.Windows.Forms.CheckBox chkMyTimeWeb;
+		private System.Windows.Forms.CheckBox chkAgentScheduleMessenger;
 		private System.Windows.Forms.MenuStrip menuTopmenu;
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem loadLicenseToolStripMenuItem;
@@ -771,11 +732,9 @@
 		private System.Windows.Forms.Label labelRatio;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.CheckBox chkFreemium;
-		private System.Windows.Forms.CheckBox chkMobileReports;
-		private System.Windows.Forms.CheckBox checkBoxSMS;
-		private System.Windows.Forms.GroupBox groupBoxVersion8;
-		private System.Windows.Forms.CheckBox checkBoxVersion8;
-		private System.Windows.Forms.CheckBox checkBoxCalendar;
+		private System.Windows.Forms.CheckBox chkSMSLink;
+		private System.Windows.Forms.CheckBox chkCalendarLink;
+		private System.Windows.Forms.CheckBox chkNotify;
 	}
 }
 

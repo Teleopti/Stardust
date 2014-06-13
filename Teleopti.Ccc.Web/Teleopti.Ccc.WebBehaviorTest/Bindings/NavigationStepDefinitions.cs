@@ -396,13 +396,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoMyTime();
 		}
 
-		[When(@"I navigate to Mobile Reports")]
-		public void WhenINavigateToMobileReposrts()
-		{
-			DataMaker.Data().ApplyDelayed();
-			Navigation.GotoMobileReports();
-		}
-
 		[Given(@"I navigate to Anywhere")]
 		[When(@"I navigate to Anywhere")]
 		public void WhenINavigateToAnywhere()

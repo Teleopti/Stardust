@@ -30,8 +30,6 @@
         /// </summary>
         public const string TeleoptiCccMyTimeWeb = "Teleopti CCC7 MyTimeWeb";
 
-		public const string TeleoptiCccMobileReports = "Teleopti CCC7 Mobile Reports";
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 		public const string TeleoptiCccSmsLink = "Teleopti CCC7 SMS Link";
 

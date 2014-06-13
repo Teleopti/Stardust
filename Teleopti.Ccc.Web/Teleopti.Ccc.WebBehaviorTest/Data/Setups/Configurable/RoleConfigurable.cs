@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public bool ViewUnpublishedSchedules { get; set; }
 		public bool ViewConfidential { get; set; }
-		public bool AccessToMobileReports { get; set; }
 		public bool AccessToExtendedPreferences { get; set; }
 		public bool AccessToMytimeWeb { get; set; }
 		public bool AccessToAnywhere { get; set; }
@@ -61,7 +60,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			ViewConfidential = false;
 			AccessToMyOwn = false;
 			NoDataAccess = false;
-			AccessToMobileReports = false;
 			AccessToExtendedPreferences = true;
 			AccessToMytimeWeb = true;
 			AccessToAsm = true;
@@ -142,11 +140,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!ViewConfidential)
 				applicationFunctions = from f in applicationFunctions
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewConfidential
-											  select f;
-
-			if (!AccessToMobileReports)
-				applicationFunctions = from f in applicationFunctions
-											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MobileReports
 											  select f;
 
 			if (!AccessToExtendedPreferences)

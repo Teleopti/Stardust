@@ -26,7 +26,6 @@
 		public const string UnderConstruction = "Raptor/UnderConstruction";
 		public const string OpenAgentPortal = "Raptor/AgentPortal";
 		public const string MyTimeWeb = "Raptor/MyTimeWeb";
-		public const string MobileReports = "Raptor/MobileReports";
 		public const string Anywhere = "Raptor/Anywhere";
 
 
