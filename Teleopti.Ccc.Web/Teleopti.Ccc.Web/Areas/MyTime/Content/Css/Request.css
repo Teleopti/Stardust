@@ -66,10 +66,6 @@
 	font-size: xx-small;
 }
 
-.request-body-inner .request-warning {
-	font-size: smaller;
-}
-
 .request-edit-subject {
 	max-width: 440px;
 }
@@ -352,4 +348,11 @@
 	height: 100%;
 	float: left;
 	border-left: 1px solid rgb(216, 216, 216);
+}
+
+.request-label {
+    max-width: 420px;
+    display: inline-block;
+    white-space: normal;
+    text-align: left;
 }
