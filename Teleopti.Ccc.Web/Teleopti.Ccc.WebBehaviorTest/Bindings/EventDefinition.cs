@@ -131,7 +131,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Log.Debug("Cleaning up after scenario " + ScenarioContext.Current.ScenarioInfo.Title);
             
-            Browser.Interactions.AssertJavascriptResultContains("if (Teleopti != undefined && Teleopti.MyTimeWeb != undefined && Teleopti.MyTimeWeb.MessageBroker != undefined) { Teleopti.MyTimeWeb.MessageBroker.Stop(); return 'done'; } else { return 'done'; }", "done");
             Browser.Interactions.GoToWaitForUrlAssert("about:blank", "about:blank");
             
 			ScenarioUnitOfWorkState.DisposeUnitOfWork();
