@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheDropdownReportList()
 		{
 			Browser.Interactions.AssertExists("#report-list");
-			Browser.Interactions.AssertJavascriptResultContains(string.Format("return $('#report-list li').length > 0;"), "True");
+			Browser.Interactions.AssertExistsUsingJQuery("#report-list li");
 		}
 
 		[Then(@"I should not see any report menu")]
@@ -44,8 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenTheReportShouldNotBeOpenedInTheSameWindow()
 		{
 			Browser.Interactions.AssertUrlNotContains("MyTime", "Selection.aspx");
+		    Browser.Interactions.CloseWindow();
 		}
-
-
 	}
 }

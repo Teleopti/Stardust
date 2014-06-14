@@ -122,7 +122,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			_helper.DumpUrl(writer, () => _browser.Url);
 		}
 
-		private void validateSelector(string selector)
+	    public void CloseWindow()
+	    {
+	        throw new NotSupportedException("Not supported in IE yet.");
+	    }
+
+	    private void validateSelector(string selector)
 		{
 			if (selector.Contains(":contains("))
 				throw new Exception(":contains() selector should not be used, but was used in " + selector);
