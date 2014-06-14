@@ -62,8 +62,8 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 			var splitDate = splitDatetime[0].split('-');
 			return new Date(splitDate[0].substr(1), splitDate[1] - 1, splitDate[2]);
 		},
-		Close: function() {
-			$.connection.hub.stop();
+		Stop: function() {
+			$.connection.hub.stop(false, true);
 		}
 	};
 })(jQuery)

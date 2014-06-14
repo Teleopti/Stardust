@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Common;
@@ -97,14 +98,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
                 );
         }
 
-        private static void removeExtraDataSource()
-        {
-            if (!ScenarioContext.Current.ScenarioInfo.Tags.Contains("ExtraDataSource")) return;
-            if (File.Exists(TargetTestDataNHibFile))
-                File.Delete(TargetTestDataNHibFile);
-        }
+	    private static void removeExtraDataSource()
+	    {
+	        if (!ScenarioContext.Current.ScenarioInfo.Tags.Contains("ExtraDataSource")) return;
 
-		private static bool shouldIgnoreTest(string featureName, bool shouldBeEnabled)
+	        int i = 0;
+	        while (File.Exists(TargetTestDataNHibFile) && i < 20)
+	        {
+	            i++;
+	            File.Delete(TargetTestDataNHibFile);
+	        }
+	    }
+
+	    private static bool shouldIgnoreTest(string featureName, bool shouldBeEnabled)
 		{
 			var scenario = ScenarioContext.Current.ScenarioInfo.Tags.Where(s => s.StartsWith(featureName));
 			var regex = new Regex(@"\(.*\)");
@@ -124,9 +130,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public static void AfterScenario()
 		{
 			Log.Debug("Cleaning up after scenario " + ScenarioContext.Current.ScenarioInfo.Title);
-
-			Browser.Interactions.Javascript("try { Teleopti.MyTimeWeb.MessageBroker.Close(); } catch(e) {}");
-			Browser.Interactions.Javascript("try { Teleopti.MyTimeWeb.AlertActivity.AbortAjax(); } catch(e) {}");
+            
+            Browser.Interactions.AssertJavascriptResultContains("if (Teleopti != undefined && Teleopti.MyTimeWeb != undefined && Teleopti.MyTimeWeb.MessageBroker != undefined) { Teleopti.MyTimeWeb.MessageBroker.Stop(); return 'done'; } else { return 'done'; }", "done");
+            Browser.Interactions.GoToWaitForUrlAssert("about:blank", "about:blank");
+            
 			ScenarioUnitOfWorkState.DisposeUnitOfWork();
 			HandleScenarioException();
             removeExtraDataSource();
