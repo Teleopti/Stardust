@@ -33,6 +33,8 @@ namespace Teleopti.Ccc.Win.Main
 			this.pnlContent = new System.Windows.Forms.Panel();
 			this.autoLabel2 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabel3 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
+			this.elementHost2 = new System.Windows.Forms.Integration.ElementHost();
+			this.progress1 = new Teleopti.Ccc.WpfControls.Controls.Progress();
 			this.SuspendLayout();
 			// 
 			// autoLabel1
@@ -49,7 +51,7 @@ namespace Teleopti.Ccc.Win.Main
 			// 
 			this.pnlContent.Location = new System.Drawing.Point(4, 32);
 			this.pnlContent.Name = "pnlContent";
-			this.pnlContent.Size = new System.Drawing.Size(475, 235);
+			this.pnlContent.Size = new System.Drawing.Size(475, 231);
 			this.pnlContent.TabIndex = 1;
 			this.pnlContent.Visible = false;
 			// 
@@ -74,6 +76,17 @@ namespace Teleopti.Ccc.Win.Main
 			this.autoLabel3.Text = "Starting...";
 			this.autoLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
+			// elementHost2
+			// 
+			this.elementHost2.AutoSize = true;
+			this.elementHost2.Location = new System.Drawing.Point(12, 161);
+			this.elementHost2.Name = "elementHost2";
+			this.elementHost2.Size = new System.Drawing.Size(455, 57);
+			this.elementHost2.TabIndex = 0;
+			this.elementHost2.Text = "elementHost2";
+			this.elementHost2.Visible = false;
+			this.elementHost2.Child = this.progress1;
+			// 
 			// LogonView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -85,6 +98,7 @@ namespace Teleopti.Ccc.Win.Main
 			this.Controls.Add(this.autoLabel3);
 			this.Controls.Add(this.autoLabel2);
 			this.Controls.Add(this.autoLabel1);
+			this.Controls.Add(this.elementHost2);
 			this.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -105,6 +119,8 @@ namespace Teleopti.Ccc.Win.Main
 		private System.Windows.Forms.Panel pnlContent;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel2;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel3;
+		private System.Windows.Forms.Integration.ElementHost elementHost2;
+		private WpfControls.Controls.Progress progress1;
 
 	}
 }

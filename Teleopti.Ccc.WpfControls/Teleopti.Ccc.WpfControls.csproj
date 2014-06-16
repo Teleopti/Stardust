@@ -551,6 +551,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\Progress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Requests\Views\HandlePersonRequestView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
@@ -1042,6 +1046,9 @@
     </Compile>
     <Compile Include="Controls\PasswordPolicies\PasswordStrengthRulePreview.xaml.cs">
       <DependentUpon>PasswordStrengthRulePreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Progress.xaml.cs">
+      <DependentUpon>Progress.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Requests\Views\HandlePersonRequestView.xaml.cs">
       <DependentUpon>HandlePersonRequestView.xaml</DependentUpon>

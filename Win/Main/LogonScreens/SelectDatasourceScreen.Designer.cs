@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.tabControlChooseDataSource.Margin = new System.Windows.Forms.Padding(0);
 			this.tabControlChooseDataSource.Name = "tabControlChooseDataSource";
 			this.tabControlChooseDataSource.Size = new System.Drawing.Size(352, 140);
-			this.tabControlChooseDataSource.TabIndex = 0;
+			this.tabControlChooseDataSource.TabIndex = 1;
 			this.tabControlChooseDataSource.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabControlChooseDataSource.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			// 
@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.tabPageWindowsDataSources.Location = new System.Drawing.Point(1, 22);
 			this.tabPageWindowsDataSources.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPageWindowsDataSources.Name = "tabPageWindowsDataSources";
+			this.tabPageWindowsDataSources.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageWindowsDataSources.ShowCloseButton = true;
 			this.tabPageWindowsDataSources.Size = new System.Drawing.Size(349, 116);
 			this.tabPageWindowsDataSources.TabBackColor = System.Drawing.Color.White;
@@ -85,11 +86,11 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.listBoxWindowsDataSources.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.listBoxWindowsDataSources.FormattingEnabled = true;
 			this.listBoxWindowsDataSources.ItemHeight = 17;
-			this.listBoxWindowsDataSources.Location = new System.Drawing.Point(0, 0);
+			this.listBoxWindowsDataSources.Location = new System.Drawing.Point(3, 3);
 			this.listBoxWindowsDataSources.Margin = new System.Windows.Forms.Padding(0);
 			this.listBoxWindowsDataSources.Name = "listBoxWindowsDataSources";
-			this.listBoxWindowsDataSources.Size = new System.Drawing.Size(349, 116);
-			this.listBoxWindowsDataSources.TabIndex = 3;
+			this.listBoxWindowsDataSources.Size = new System.Drawing.Size(343, 110);
+			this.listBoxWindowsDataSources.TabIndex = 4;
 			// 
 			// tabPageApplicationDataSources
 			// 
@@ -99,6 +100,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.tabPageApplicationDataSources.Location = new System.Drawing.Point(1, 22);
 			this.tabPageApplicationDataSources.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPageApplicationDataSources.Name = "tabPageApplicationDataSources";
+			this.tabPageApplicationDataSources.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageApplicationDataSources.ShowCloseButton = true;
 			this.tabPageApplicationDataSources.Size = new System.Drawing.Size(349, 116);
 			this.tabPageApplicationDataSources.TabBackColor = System.Drawing.Color.White;
@@ -114,10 +116,10 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.listBoxApplicationDataSources.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.listBoxApplicationDataSources.FormattingEnabled = true;
 			this.listBoxApplicationDataSources.ItemHeight = 17;
-			this.listBoxApplicationDataSources.Location = new System.Drawing.Point(0, 0);
+			this.listBoxApplicationDataSources.Location = new System.Drawing.Point(3, 3);
 			this.listBoxApplicationDataSources.Margin = new System.Windows.Forms.Padding(0);
 			this.listBoxApplicationDataSources.Name = "listBoxApplicationDataSources";
-			this.listBoxApplicationDataSources.Size = new System.Drawing.Size(349, 116);
+			this.listBoxApplicationDataSources.Size = new System.Drawing.Size(343, 110);
 			this.listBoxApplicationDataSources.TabIndex = 4;
 			// 
 			// labelChooseDataSource
@@ -146,7 +148,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonLogOnOK.Location = new System.Drawing.Point(263, 194);
 			this.buttonLogOnOK.Name = "buttonLogOnOK";
 			this.buttonLogOnOK.Size = new System.Drawing.Size(75, 23);
-			this.buttonLogOnOK.TabIndex = 37;
+			this.buttonLogOnOK.TabIndex = 0;
 			this.buttonLogOnOK.Text = "xxOK";
 			this.buttonLogOnOK.UseVisualStyleBackColor = false;
 			this.buttonLogOnOK.Click += new System.EventHandler(this.buttonLogOnOK_Click);
@@ -164,7 +166,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonLogOnCancel.Location = new System.Drawing.Point(344, 194);
 			this.buttonLogOnCancel.Name = "buttonLogOnCancel";
 			this.buttonLogOnCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonLogOnCancel.TabIndex = 38;
+			this.buttonLogOnCancel.TabIndex = 2;
 			this.buttonLogOnCancel.Text = "xxCancel";
 			this.buttonLogOnCancel.UseVisualStyleBackColor = false;
 			this.buttonLogOnCancel.Click += new System.EventHandler(this.buttonLogOnCancel_Click);
@@ -180,7 +182,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.btnBack.Location = new System.Drawing.Point(182, 194);
 			this.btnBack.Name = "btnBack";
 			this.btnBack.Size = new System.Drawing.Size(75, 23);
-			this.btnBack.TabIndex = 39;
+			this.btnBack.TabIndex = 3;
 			this.btnBack.Text = "xxBack";
 			this.btnBack.UseVisualStyleBackColor = false;
 			this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
