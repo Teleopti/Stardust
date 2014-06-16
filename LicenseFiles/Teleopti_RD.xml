@@ -8,7 +8,7 @@
   <AgentsOrSeats>0</AgentsOrSeats>
   <MaxSeats>15000</MaxSeats>
   <SeatRatio>1.5</SeatRatio>
-  <TeleoptiCCC>
+  <TeleoptiWFM>
     <Base>true</Base>
     <Lifestyle>true</Lifestyle>
     <ShiftTrader>true</ShiftTrader>
@@ -23,7 +23,7 @@
     <PayrollIntegration>true</PayrollIntegration>
     <MyTeam>true</MyTeam>
     <Version8>true</Version8>
-  </TeleoptiCCC>
+  </TeleoptiWFM>
   <Agreement>Teleopti.Ccc.Infrastructure.Licensing.Agreements.TeleoptiLic_En_Sw_St.txt</Agreement>
   <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
     <SignedInfo>
@@ -34,9 +34,9 @@
           <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <DigestValue>jBR+gGnAldURu7IsZvUgbm6Ey2M=</DigestValue>
+        <DigestValue>ll4SFn6lwR83w/b0yQhA6zCD4mY=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>KNTGALhwDQcHdGtiO/1yFKQ+gvLXNzo72dMyutue7XfkHf8XMa6PIPOU69KonB3yNKtVrAAJHdsKOg8EWm3wXZXCZs3RH0sLKQCuc3awsjnAbWtepVx2FBlFEYe7evQFFGVLpuzwvyUwgGhTVV1/VT/boGFaJSI9RtkTlg8xDW0=</SignatureValue>
+    <SignatureValue>zK5OvpnOTqOBSXEd3Ovpq5i8fSWPeW4Xgdw/MCqhRT6ogTc73g0IliaAIUyTDC/tk56daoSneQr1guf9U0MhaHycjMDOeXH46HHlXC5/cs9qNjsW52AqaE8EtqwqtGIczOnn/rvA09CP5YufyqUMMvUMvftarpZoA1lNaoDXPkw=</SignatureValue>
   </Signature>
 </License>
