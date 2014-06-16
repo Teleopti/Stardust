@@ -34,13 +34,9 @@ define([
 		},
 
 		display: function (options) {
-			var date = moment(options.date, 'YYYYMMDD');
-
 			viewModel.Loading(true);
 
-			viewModel.PersonId(options.personid || options.id);
-			viewModel.GroupId(options.groupid);
-			viewModel.ScheduleDate(date);
+			viewModel.SetViewOptions(options);
 
 			var personScheduleDeferred = $.Deferred();
 			personsubscriptions.subscribePersonSchedule(

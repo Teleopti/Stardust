@@ -140,6 +140,12 @@ define([
 			return self.AddingActivity();
 		});
 
+		this.SetViewOptions = function (options) {
+			self.Date(moment(options.date, 'YYYYMMDD'));
+			self.PersonId(options.personid || options.id);
+			self.GroupId(options.groupid);
+		};
+
 		this.UpdateData = function (data) {
 			data.Date = self.ScheduleDate();
 			
