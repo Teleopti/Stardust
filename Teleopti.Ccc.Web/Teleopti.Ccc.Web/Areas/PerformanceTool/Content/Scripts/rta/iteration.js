@@ -7,16 +7,14 @@ define([
 
 		var self = this;
 
-		this.Number = data.Number;
-
-		this.Start = function() {
-			self.AllCommandsCompletedPromise = $.Deferred();
+		this.Start = function () {
+			self.StateSentCompletedPromise = $.Deferred();
 			self.SendRtaExternalState();
 		};
 
 		this.SendRtaExternalState = function () {
-			var externalState = JSON.stringify({
-				authenticationKey: "!#¤atAbgT%",
+			var externalState = {
+				authenticationKey: '!#¤atAbgT%',
 				userCode: data.ExternalLogOn,
 				stateCode: data.StateCode,
 				isLoggedOn: 'true',
@@ -24,7 +22,7 @@ define([
 				platformTypeId: data.PlatformTypeId,
 				sourceId: data.SourceId,
 				isSnapshot: 'false'
-			});
+			};
 			$.ajax({
 				url: data.Url ,
 				type: 'POST',
@@ -32,11 +30,9 @@ define([
 				data: JSON.stringify(externalState),
 				error: function () {
 					data.Failure();
-
 				},
-				complete: function (jqXHR, text) {
-					if (text === "success")
-						data.Success();
+				complete: function () {
+					self.StateSentCompletedPromise.resolve();
 				}
 			});
 		};

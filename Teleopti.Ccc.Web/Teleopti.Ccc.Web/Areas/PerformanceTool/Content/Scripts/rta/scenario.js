@@ -3,16 +3,20 @@ define([
 		'knockout',
 		'progressitem-count',
 		'rta/iteration',
-		'result'
+		'result',
+		'messagebroker'
 ], function (
 		ko,
 		ProgressItemCountViewModel,
 		Iteration,
-		ResultViewModel
+		ResultViewModel,
+		messagebroker
 	) {
 	return function () {
 
 		var self = this;
+		var startPromise = messagebroker.start();
+		var agentsAdherenceSubscription;
 		var result;
 
 		this.Name = "Rta Load Test";
@@ -28,13 +32,15 @@ define([
 			}
 		});
 
-		var updateResult = function () {
+		var calculateRunDone = function () {
 			var calculatedInterationsDone = progressItemReadModel.Count();
 			if (calculatedInterationsDone > result.IterationsDone()) {
 				result.IterationsDone(calculatedInterationsDone);
 				if (result.IterationsDone() >= self.IterationsExpected()) {
 					result.RunDone(true);
 					result = null;
+					messagebroker.unsubscribe(agentsAdherenceSubscription);
+					agentsAdherenceSubscription = null;
 				}
 			}
 		};
@@ -47,31 +53,27 @@ define([
 
 			var iterations = [];
 			
-			for (var i = 0; i < configuration.StatesToSend;) {
-				for (var k = 0; k < configuration.States.length; k++) {
-					for (var j = 0; j < configuration.ExternalLogOns.length; j++) {
+			for (var numberOfStates = 0; numberOfStates < configuration.StatesToSend;) {
+				for (var stateCode = 0; stateCode < configuration.States.length; stateCode++) {
+					for (var externalLogOn = 0; externalLogOn < configuration.ExternalLogOns.length; externalLogOn++) {
 						iterations.push(new Iteration({
 							Url: configuration.Url,
 							PlatformTypeId: configuration.PlatformTypeId,
 							SourceId: configuration.SourceId,
 
-							ExternalLogOn: configuration.ExternalLogOns[j],
-							StateCode: configuration.States[k],
-
-							Sent: function() {
-								updateResult();
-							},
+							ExternalLogOn: configuration.ExternalLogOns[externalLogOn],
+							StateCode: configuration.States[stateCode],
 							Success: function() {
 								progressItemReadModel.Success();
-								updateResult();
+								calculateRunDone();
 							},
 							Failure: function() {
 								progressItemReadModel.Failure();
-								updateResult();
+								calculateRunDone();
 							}
 						}));
-						i++;
-						if (i == configuration.StatesToSend)
+						numberOfStates++;
+						if (numberOfStates == configuration.StatesToSend)
 							return iterations;
 					}
 				}
@@ -110,24 +112,45 @@ define([
 		});
 
 		self.Configuration(JSON.stringify({
-			Url: "http://localhost:52858/TeleoptiRtaService.svc",
+			Url: "http://localhost:52858/RtaService/SaveExternalUserState/",
 			PlatformTypeId: "00000000-0000-0000-0000-000000000000",
 			ExternalLogOns: [2001],
 			States: ["Ready", "OFF"],
 			SourceId: 1,
-			StatesToSend: 100
-		}, null, 4));
+			StatesToSend: 4,
+			ExpectedPersonsInAlarm: 4
+	}, null, 4));
 
 		this.Run = function () {
 			var iterations = self.Iterations();
 			progressItemReadModel.Reset();
 			result = new ResultViewModel();
 
-			$.each(iterations, function (i, e) {
-				e.Start();
-			});
+			startPromise.done(function() {
+				agentsAdherenceSubscription = messagebroker.subscribe({
+					domainType: 'SiteAdherenceMessage',
+					callback: function (notification) {
+						if (JSON.parse(notification.BinaryData).OutOfAdherence === self.ConfigurationObject().ExpectedPersonsInAlarm)
+							result.RunDone(true);
+					}
+				});
 
-			result.CommandsDone(true);
+
+				$.when(
+					agentsAdherenceSubscription.promise
+				).done(function() {
+
+					$.each(iterations, function(i, e) {
+						e.Start();
+					});
+					var statesSentPromises = $.map(iterations, function(e) {
+						return e.StateSentCompletedPromise;
+					});
+					$.when.apply($, statesSentPromises).then(function() {
+						result.CommandsDone(true);
+					});
+				});
+			});
 
 			return result;
 		};
