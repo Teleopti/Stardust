@@ -15,6 +15,7 @@ using Autofac.Core;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -899,7 +900,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					if (_scheduleView != null)
 					{
-						var mapper = new SchedulerSortCommandMapper(SchedulerState, SchedulerSortCommandSetting.NoSortCommand);
+						var mapper = new SchedulerSortCommandMapper(SchedulerState, SchedulerSortCommandSetting.NoSortCommand, _container);
 						var sortSetting = mapper.GetSettingFromCommand(_scheduleView.Presenter.SortCommand);
 						_currentSchedulingScreenSettings.SortCommandSetting = sortSetting;
 					}
@@ -2518,7 +2519,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_grid.Selections.SelectRange(GridRangeInfo.Cell(point.Y, point.X), true);
 			_grid.Select();
 			var schedulerSortCommandSetting = _currentSchedulingScreenSettings.SortCommandSetting;
-			var sortCommandMapper = new SchedulerSortCommandMapper(SchedulerState, SchedulerSortCommandSetting.NoSortCommand);
+			var sortCommandMapper = new SchedulerSortCommandMapper(SchedulerState, SchedulerSortCommandSetting.NoSortCommand, _container);
 			var sortCommand = sortCommandMapper.GetCommandFromSetting(schedulerSortCommandSetting);
 			_scheduleView.Sort(sortCommand);
 
@@ -6218,6 +6219,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void ToolStripMenuItemContractTimeDescMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByContractTimeDescendingCommand(SchedulerState));
+		}
+
+		private void toolStripMenuItemSeniorityRankDescMouseUp(object sender, MouseEventArgs e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void toolStripMenuItemSeniorityRankAscMouseUp(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortBySeniorityRankingAscendingCommand(SchedulerState, _container.Resolve<IRankedPersonBasedOnStartDate>()));
 		}
 
 		private void ToolStripMenuItemExportToPDFShiftsPerDay_MouseUp(object sender, MouseEventArgs e)
