@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		[Test]
 		public void ShouldReturnNullIfGivenStaffPeripdIsNull()
 		{
-			Assert.IsNull(_target.ExtractMaxSeatsFlag(null, TimeZoneInfo.Utc));
+			Assert.IsNull(_target.ExtractMaxSeatsFlag(null, TimeZoneInfo.Utc,false));
 		}
 
 		[Test]
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			}
 			using (_mocks.Playback())
 			{
-				Assert.AreEqual(2, _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc).Count());
+				Assert.AreEqual(2, _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc,false).Count());
 			}
 		}
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc);
+				var result = _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc,true);
 				Assert.IsTrue(result[startDateTime].IsMaxSeatReached );
 				Assert.IsFalse(result[startDateTime.AddMinutes(30)].IsMaxSeatReached );
 			}
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc);
+				var result = _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc,false);
 				Assert.IsFalse(result[startDateTime].IsMaxSeatReached );
 				Assert.IsFalse(result[startDateTime.AddMinutes(30)].IsMaxSeatReached );
 			}
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			using (_mocks.Playback())
 			{
 				TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-				var result = _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, tzi);
+				var result = _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, tzi,false);
 				Assert.AreEqual(startDateTime.AddHours(1), result.Keys.First());
 
 			}
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc);
+				var result = _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, TimeZoneInfo.Utc,false);
 				Assert.IsFalse(result[startDateTime].IsMaxSeatReached);
 				Assert.AreEqual(1,result[startDateTime].MaxSeatBoostingFactor );
 				Assert.IsTrue( result[startDateTime.AddMinutes(30)].IsMaxSeatReached);

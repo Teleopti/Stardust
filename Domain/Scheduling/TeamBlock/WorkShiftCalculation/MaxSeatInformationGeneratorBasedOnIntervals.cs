@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public interface IMaxSeatInformationGeneratorBasedOnIntervals
 	{
-		IDictionary<DateTime, IntervalLevelMaxSeatInfo> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone);
+		IDictionary<DateTime, IntervalLevelMaxSeatInfo> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone, bool considerEqualMaxAndCalSeatAsBroken);
 	}
 
 	public class MaxSeatInformationGeneratorBasedOnIntervals : IMaxSeatInformationGeneratorBasedOnIntervals
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			_maxSeatsSpecificationDictionaryExtractor = maxSeatsSpecificationDictionaryExtractor;
 		}
 
-		public IDictionary<DateTime, IntervalLevelMaxSeatInfo> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone)
+		public IDictionary<DateTime, IntervalLevelMaxSeatInfo> GetMaxSeatInfo(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone, bool considerEqualMaxAndCalSeatAsBroken)
 		{
 			var skills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(), new DateOnlyPeriod(datePointer,datePointer ) ).ToList();
 			var skillDaysOnDatePointer = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { datePointer });
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			if (skillDaysHavingMaxSeatInfo.Any( ))
 			{
 				var skillStaffPeriodCollection = skillDaysHavingMaxSeatInfo[0].SkillStaffPeriodCollection;
-				maxSeatInfoOnEachIntervalDic =  _maxSeatsSpecificationDictionaryExtractor.ExtractMaxSeatsFlag(skillStaffPeriodCollection.ToList() , timeZone  );
+				maxSeatInfoOnEachIntervalDic = _maxSeatsSpecificationDictionaryExtractor.ExtractMaxSeatsFlag(skillStaffPeriodCollection.ToList(), timeZone, considerEqualMaxAndCalSeatAsBroken);
 			}
 			return maxSeatInfoOnEachIntervalDic;
 		}

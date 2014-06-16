@@ -695,6 +695,7 @@
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillInterval.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlock.cs" />
+    <Compile Include="Scheduling\TeamBlock\PullTargetValueFromSkillIntervalData.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\BlockRestrictionAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\CommonActivity.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\NightlyRestRestrcition.cs" />
@@ -1112,6 +1113,7 @@
     <Compile Include="Scheduling\TeamBlock\ValidatedTeamBlockInfoExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidSampleDayPickerFromTeamBlock.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\EqualWorkShiftValueDecider.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\ExtractIntervalsVoilatingMaxSeat.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\IntervalLevelMaxSeatInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\IsMaxSeatsReachedOnSkillStaffPeriodSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatBoostingFactorCalculator.cs" />

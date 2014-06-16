@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
-using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
 using Teleopti.Interfaces.Domain;
 

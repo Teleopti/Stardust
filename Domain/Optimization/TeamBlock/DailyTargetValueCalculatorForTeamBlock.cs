@@ -4,13 +4,14 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface IDailyTargetValueCalculatorForTeamBlock
 	{
-		double TargetValue(ITeamBlockInfo teamBlockInfo, IAdvancedPreferences advancedPreferences);
+		double TargetValue(ITeamBlockInfo teamBlockInfo, IAdvancedPreferences advancedPreferences, bool isMaxSeatToggleEnabled);
 	}
 
 	public class DailyTargetValueCalculatorForTeamBlock : IDailyTargetValueCalculatorForTeamBlock
@@ -24,6 +25,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly ILocateMissingIntervalsIfMidNightBreak _locateMissingIntervalsIfMidNightBreak;
 		private readonly IFilterOutIntervalsAfterMidNight _filterOutIntervalsAfterMidNight;
+		private readonly IMaxSeatSkillAggregator _maxSeatSkillAggregator;
+		private readonly IExtractIntervalsVoilatingMaxSeat _extractIntervalsVoilatingMaxSeat;
+		private readonly PullTargetValueFromSkillIntervalData _pullTargetValueFromSkillIntervalData;
 
 		public DailyTargetValueCalculatorForTeamBlock(ISkillResolutionProvider resolutionProvider,
 			ISkillIntervalDataDivider intervalDataDivider,
@@ -31,7 +35,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISchedulingResultStateHolder schedulingResultStateHolder, IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			ILocateMissingIntervalsIfMidNightBreak locateMissingIntervalsIfMidNightBreak,
-			IFilterOutIntervalsAfterMidNight filterOutIntervalsAfterMidNight)
+			IFilterOutIntervalsAfterMidNight filterOutIntervalsAfterMidNight, IMaxSeatSkillAggregator maxSeatSkillAggregator,
+			IExtractIntervalsVoilatingMaxSeat extractIntervalsVoilatingMaxSeat,
+			PullTargetValueFromSkillIntervalData pullTargetValueFromSkillIntervalData)
 		{
 			_resolutionProvider = resolutionProvider;
 			_intervalDataDivider = intervalDataDivider;
@@ -42,46 +48,51 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_locateMissingIntervalsIfMidNightBreak = locateMissingIntervalsIfMidNightBreak;
 			_filterOutIntervalsAfterMidNight = filterOutIntervalsAfterMidNight;
+			_maxSeatSkillAggregator = maxSeatSkillAggregator;
+			_extractIntervalsVoilatingMaxSeat = extractIntervalsVoilatingMaxSeat;
+			_pullTargetValueFromSkillIntervalData = pullTargetValueFromSkillIntervalData;
 		}
 
-		public double TargetValue(ITeamBlockInfo teamBlockInfo, IAdvancedPreferences advancedPreferences)
+		public double TargetValue(ITeamBlockInfo teamBlockInfo, IAdvancedPreferences advancedPreferences,
+			bool isMaxSeatToggleEnabled)
 		{
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;
-			
-	        var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
-	        var dateOnlyList = blockPeriod.DayCollection();
+
+			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
+			var dateOnlyList = blockPeriod.DayCollection();
 			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupMembers, blockPeriod).ToList();
+			var hasMaxSeatSkill = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(),
+				teamBlockInfo.BlockInfo.BlockPeriod);
 			var minimumResolution = _resolutionProvider.MinimumResolution(skills);
+			IDictionary<DateTime, IntervalLevelMaxSeatInfo> aggregatedMaxSeatSkill =
+				new Dictionary<DateTime, IntervalLevelMaxSeatInfo>();
+			if (hasMaxSeatSkill.Any() && isMaxSeatToggleEnabled &&
+			    advancedPreferences.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
+			{
+				minimumResolution = 15;
+				aggregatedMaxSeatSkill = getAggregatedIntervalLevelInfo(teamBlockInfo, dateOnlyList.Min());
+			}
+
 
 			dateOnlyList.Add(dateOnlyList.Max().AddDays(1));
 			var skillIntervalPerDayList = getSkillIntervalListForEachDay(dateOnlyList, skills, minimumResolution);
 			var finalSkillIntervalData = calculateMedianValue(skillIntervalPerDayList, dateOnlyList.Min());
-			return getTargetValue(finalSkillIntervalData, advancedPreferences.TargetValueCalculation);
+			return _pullTargetValueFromSkillIntervalData.GetTargetValue(finalSkillIntervalData,
+				advancedPreferences.TargetValueCalculation, aggregatedMaxSeatSkill);
 		}
 
-		private double getTargetValue(IList<ISkillIntervalData> finalSkillIntervalData,
-			TargetValueOptions targetValueCalculation)
-		{
-			if (targetValueCalculation == TargetValueOptions.RootMeanSquare)
-			{
-				var aggregatedValues = finalSkillIntervalData.Select(interval => interval.AbsoluteDifference).ToList();
-				return Calculation.Variances.RMS(aggregatedValues);
-			}
-			else
-			{
-				var aggregatedValues = finalSkillIntervalData.Select(interval => interval.RelativeDifferenceBoosted()).ToList();
-				if (targetValueCalculation == TargetValueOptions.StandardDeviation)
-					return Calculation.Variances.StandardDeviation(aggregatedValues);
-				return Calculation.Variances.Teleopti(aggregatedValues);
-			}
-
-		}
-
-		private IList<ISkillIntervalData> calculateMedianValue(
+		private IDictionary<DateTime, ISkillIntervalData> calculateMedianValue(
 			IDictionary<DateOnly, IList<ISkillIntervalData>> skillIntervalPerDayList, DateOnly returnListDateOnly)
 		{
 			var intervalData = _dayIntervalDataCalculator.Calculate(skillIntervalPerDayList, returnListDateOnly);
-			return intervalData.Values.ToList();
+			return intervalData;
+		}
+
+		private IDictionary<DateTime, IntervalLevelMaxSeatInfo> getAggregatedIntervalLevelInfo(ITeamBlockInfo teamBlockInfo, DateOnly baseDatePointer)
+		{
+			return _extractIntervalsVoilatingMaxSeat.IdentifyIntervalsWithBrokenMaxSeats(teamBlockInfo,
+				_schedulingResultStateHolder,
+				TimeZoneGuard.Instance.TimeZone, baseDatePointer);
 		}
 
 		private IDictionary<DateOnly, IList<ISkillIntervalData>> getSkillIntervalListForEachDay(IList<DateOnly> dateOnlyList,
@@ -99,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (skill != null && !skills.Contains(skill)) continue;
 				IList<ISkillStaffPeriod> skillStaffPeriodCollection = skillDay.SkillStaffPeriodCollection;
 				if (skillStaffPeriodCollection.Count == 0) continue;
-                
+
 				if (skill.MidnightBreakOffset != TimeSpan.Zero)
 				{
 					var missingIntervals = _locateMissingIntervalsIfMidNightBreak.GetMissingSkillStaffPeriods(currentDate, skill,

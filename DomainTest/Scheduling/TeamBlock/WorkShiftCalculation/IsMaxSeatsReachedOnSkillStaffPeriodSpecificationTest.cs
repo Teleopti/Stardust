@@ -21,19 +21,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		[Test]
 		public void ReturnFalseIfMaxSeatsNotReached()
 		{
-			Assert.IsFalse(_target.IsSatisfiedBy(14, 25));
+			Assert.IsFalse(_target.IsSatisfiedByWithEqualCondition( 14, 25));
 		}
 
 		[Test]
 		public void ReturnTrueIfCalculatedSeatsMoreThanMaxSeats()
 		{
-			Assert.IsTrue(_target.IsSatisfiedBy(27, 25));
+			Assert.IsTrue(_target.IsSatisfiedByWithEqualCondition(27, 25));
 		}
 
 		[Test]
 		public void ReturnTrueIfCalculatedSeatsEqualMaxSeats()
 		{
-			Assert.IsTrue(_target.IsSatisfiedBy(25, 25));
+			Assert.IsTrue(_target.IsSatisfiedByWithEqualCondition(25, 25));
+		}
+
+		[Test]
+		public void ReturnFalseIfMaxAndCalAreEqual()
+		{
+			Assert.IsFalse(_target.IsSatisfiedByWithoutEqualCondition( 14, 14));
+		}
+
+		[Test]
+		public void ReturnFalseIfMaxSeatNotUsedWithoutEqualCondition()
+		{
+			Assert.IsFalse( _target.IsSatisfiedByWithEqualCondition(13, 20));
+		}
+
+		[Test]
+		public void ReturnTrueIfCalSeatMoreThenMaxWithoutEqualCondition()
+		{
+			Assert.IsTrue(_target.IsSatisfiedByWithEqualCondition(28, 20));
 		}
 	}
 }
