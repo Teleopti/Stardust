@@ -71,12 +71,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 				Expect.Call(_skillDay1.Skill).Return(_skill1);
 				Expect.Call(_skillDays[0].SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection);
 				Expect.Call(_maxSeatsSpecificationDictionaryExtractor.ExtractMaxSeatsFlag(_skillStaffPeriodList.ToList(),
-					TimeZoneGuard.Instance.TimeZone)).Return(result);
+					TimeZoneGuard.Instance.TimeZone,false )).Return(result);
 			}
 			using (_mock.Playback())
 			{
 				_target.GetMaxSeatInfo(_teamBlockInfo, new DateOnly(2014, 05, 28), _schedulingResultStateHolder,
-					TimeZoneGuard.Instance.TimeZone);
+					TimeZoneGuard.Instance.TimeZone,false);
 			}
 		}
 	}

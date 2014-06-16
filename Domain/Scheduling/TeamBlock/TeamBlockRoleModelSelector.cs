@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				maxSeatFeatureOption = schedulingOptions.UserOptionMaxSeatsFeature;
 				maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, datePointer,
-					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone);
+					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone,true);
 			}
 			return maxSeatFeatureOption;
 		}

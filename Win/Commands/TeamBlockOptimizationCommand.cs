@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
@@ -24,14 +25,17 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Commands
 {
-    public interface ITeamBlockOptimizationCommand
-    {
-        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-		void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, IScheduleTagSetter tagSetter, ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> selectedSchedules);
-    }
+	public interface ITeamBlockOptimizationCommand
+	{
+		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
+		void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
+			IScheduleTagSetter tagSetter, ISchedulingOptions schedulingOptions,
+			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> selectedSchedules);
+	}
 
-    public class TeamBlockOptimizationCommand : ITeamBlockOptimizationCommand
-    {
+	public class TeamBlockOptimizationCommand : ITeamBlockOptimizationCommand
+	{
 		private readonly IDayOffBackToLegalStateFunctions _dayOffBackToLegalStateFunctions;
 		private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
@@ -54,41 +58,44 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly ITeamBlockSchedulingOptions _teamBlockScheudlingOptions;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairness;
-	    private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
-	    private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
-	    private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationService;
-	    private readonly ITeamBlockScheduler _teamBlockScheduler;
-        private readonly IWeeklyRestSolverCommand  _weeklyRestSolverCommand;
-	    private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
-	    private readonly ITeamBlockMoveTimeBetweenDaysCommand _teamBlockMoveTimeBetweenDaysCommand;
+		private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
+		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+		private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationService;
+		private readonly ITeamBlockScheduler _teamBlockScheduler;
+		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
+		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
+		private readonly ITeamBlockMoveTimeBetweenDaysCommand _teamBlockMoveTimeBetweenDaysCommand;
+		private readonly IToggleManager _toggleManager;
 
-	    public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
-											ITeamBlockClearer teamBlockCleaner,
-                                            IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions,
-                                            IDayOffDecisionMaker dayOffDecisionMaker,
-                                            IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
-                                            IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
-                                            IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
-                                            ILockableBitArrayFactory lockableBitArrayFactory,
-                                            ISchedulingOptionsCreator schedulingOptionsCreator,
-                                            ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
-                                            ITeamBlockInfoFactory teamBlockInfoFactory,
-                                            ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
-                                            ITeamDayOffModifier teamDayOffModifier,
-                                            ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
-                                            ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
-                                            ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
-                                            IRestrictionExtractor restrictionExtractor,
-                                            IMatrixListFactory matrixListFactory, 
-											ITeamBlockSchedulingOptions teamBlockScheudlingOptions, 
-											IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
-											IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness,
-											ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
-											ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
-											ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
-											ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand, IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification, ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand)
-	    {
-		    _schedulerStateHolder = schedulerStateHolder;
+		public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder,
+			ITeamBlockClearer teamBlockCleaner,
+			IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions,
+			IDayOffDecisionMaker dayOffDecisionMaker,
+			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
+			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
+			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
+			ILockableBitArrayFactory lockableBitArrayFactory,
+			ISchedulingOptionsCreator schedulingOptionsCreator,
+			ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
+			ITeamBlockInfoFactory teamBlockInfoFactory,
+			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
+			ITeamDayOffModifier teamDayOffModifier,
+			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
+			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
+			ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
+			IRestrictionExtractor restrictionExtractor,
+			IMatrixListFactory matrixListFactory,
+			ITeamBlockSchedulingOptions teamBlockScheudlingOptions,
+			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
+			IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness,
+			ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
+			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
+			ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
+			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
+			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
+			ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand, IToggleManager toggleManager)
+		{
+			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
 			_dayOffBackToLegalStateFunctions = dayOffBackToLegalStateFunctions;
 			_dayOffDecisionMaker = dayOffDecisionMaker;
@@ -110,62 +117,73 @@ namespace Teleopti.Ccc.Win.Commands
 			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
 			_equalNumberOfCategoryFairness = equalNumberOfCategoryFairness;
 			_teamBlockSeniorityFairnessOptimizationService = teamBlockSeniorityFairnessOptimizationService;
-		    _teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
-		    _teamBlockDayOffFairnessOptimizationService = teamBlockDayOffFairnessOptimizationService;
-		    _teamBlockScheduler = teamBlockScheduler;
-            _weeklyRestSolverCommand = weeklyRestSolverCommand;
-		    _allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
-		    _teamBlockMoveTimeBetweenDaysCommand = teamBlockMoveTimeBetweenDaysCommand;
-	    }
+			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
+			_teamBlockDayOffFairnessOptimizationService = teamBlockDayOffFairnessOptimizationService;
+			_teamBlockScheduler = teamBlockScheduler;
+			_weeklyRestSolverCommand = weeklyRestSolverCommand;
+			_allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
+			_teamBlockMoveTimeBetweenDaysCommand = teamBlockMoveTimeBetweenDaysCommand;
+			_toggleManager = toggleManager;
+		}
 
-        public void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, IScheduleTagSetter tagSetter, ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> selectedSchedules)
-        {
+		public void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+			IOptimizationPreferences optimizationPreferences,
+			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, IScheduleTagSetter tagSetter,
+			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
+			IList<IScheduleDay> selectedSchedules)
+		{
 
 			_backgroundWorker = backgroundWorker;
 
-            IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
+			IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
 
 			var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
 			var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
-															_teamBlockScheudlingOptions);
+				_teamBlockScheudlingOptions);
 
-	        if (optimizationPreferences.General.OptimizationStepDaysOff)
-		        optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
-										 allMatrixes, rollbackServiceWithResourceCalculation,
-		                                 schedulingOptions, teamInfoFactory, resourceCalculateDelayer);
+			if (optimizationPreferences.General.OptimizationStepDaysOff)
+				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
+					allMatrixes, rollbackServiceWithResourceCalculation,
+					schedulingOptions, teamInfoFactory, resourceCalculateDelayer);
 
-	        if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
-		        optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,
-			        rollbackServiceWithResourceCalculation, resourceCalculateDelayer, teamBlockGenerator);
+			if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
+				optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,
+					rollbackServiceWithResourceCalculation, resourceCalculateDelayer, teamBlockGenerator);
 
-			  if (optimizationPreferences.General.OptimizationStepTimeBetweenDays && !optimizationPreferences.Extra.UseBlockSameShift)
-			  {
-				  var matrixesOnSelectedperiod = _matrixListFactory.CreateMatrixList(selectedSchedules, selectedPeriod);
-				  optimizeMoveTimeBetweenDays(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences, rollbackServiceWithResourceCalculation, schedulingOptions, resourceCalculateDelayer, matrixesOnSelectedperiod,allMatrixes);
-			  }
+			if (optimizationPreferences.General.OptimizationStepTimeBetweenDays &&
+			    !optimizationPreferences.Extra.UseBlockSameShift)
+			{
+				var matrixesOnSelectedperiod = _matrixListFactory.CreateMatrixList(selectedSchedules, selectedPeriod);
+				optimizeMoveTimeBetweenDays(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences,
+					rollbackServiceWithResourceCalculation, schedulingOptions, resourceCalculateDelayer, matrixesOnSelectedperiod,
+					allMatrixes);
+			}
 
 			if (optimizationPreferences.General.OptimizationStepFairness)
 			{
-				var rollbackServiceWithoutResourceCalculation = new SchedulePartModifyAndRollbackService(_schedulerStateHolder.SchedulingResultState, new DoNothingScheduleDayChangeCallBack(), tagSetter);
+				var rollbackServiceWithoutResourceCalculation =
+					new SchedulePartModifyAndRollbackService(_schedulerStateHolder.SchedulingResultState,
+						new DoNothingScheduleDayChangeCallBack(), tagSetter);
 				OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _restrictionExtractor,
-																optimizationPreferences, selectedPeriod);
+					optimizationPreferences, selectedPeriod);
 
 				_equalNumberOfCategoryFairness.ReportProgress += resourceOptimizerPersonOptimized;
 				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
-				                                       _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation,
-				                                       optimizationPreferences);
+					_schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation,
+					optimizationPreferences);
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
 				var instance = PrincipalAuthorization.Instance();
 				if (instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
 				{
 					_teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
-					_teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.Schedules,
+					_teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
+						_schedulerStateHolder.Schedules,
 						rollbackServiceWithoutResourceCalculation, optimizationPreferences);
 					_teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 
-			
+
 					_teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 					_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons,
 						schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(),
@@ -175,144 +193,153 @@ namespace Teleopti.Ccc.Win.Commands
 				}
 			}
 
-	        solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer, rollbackServiceWithResourceCalculation, allMatrixes,
-                        _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences) );
+			solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
+				rollbackServiceWithResourceCalculation, allMatrixes,
+				_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences));
 
-        }
+		}
 
-	    private void optimizeMoveTimeBetweenDays(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> matrixesOnSelectedperiod, IList<IScheduleMatrixPro> allMatrixes)
-	    {
-			 IScheduleResultDataExtractor allSkillsDataExtractor =
-	 OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod,
-													_schedulerStateHolder.SchedulingResultState);
-			 IPeriodValueCalculator periodValueCalculatorForAllSkills =
-				  OptimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced,
-																					 allSkillsDataExtractor);
-		    _teamBlockMoveTimeBetweenDaysCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons,
-				 rollbackServiceWithResourceCalculation, resourceCalculateDelayer, selectedPeriod, allMatrixes, backgroundWorker, periodValueCalculatorForAllSkills,
-				 _schedulerStateHolder.SchedulingResultState, matrixesOnSelectedperiod);
-	    }
+		private void optimizeMoveTimeBetweenDays(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod,
+			IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
+			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, ISchedulingOptions schedulingOptions,
+			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> matrixesOnSelectedperiod,
+			IList<IScheduleMatrixPro> allMatrixes)
+		{
+			IScheduleResultDataExtractor allSkillsDataExtractor =
+				OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod,
+					_schedulerStateHolder.SchedulingResultState);
+			IPeriodValueCalculator periodValueCalculatorForAllSkills =
+				OptimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced,
+					allSkillsDataExtractor);
+			_teamBlockMoveTimeBetweenDaysCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons,
+				rollbackServiceWithResourceCalculation, resourceCalculateDelayer, selectedPeriod, allMatrixes, backgroundWorker,
+				periodValueCalculatorForAllSkills,
+				_schedulerStateHolder.SchedulingResultState, matrixesOnSelectedperiod);
+		}
 
-	    private void solveWeeklyRestViolations(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, 
-                    IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService, IList<IScheduleMatrixPro> allMatrixes,
-                            ISchedulingOptions schedulingOptions)
-	    {
-            _weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, allMatrixes, _backgroundWorker);
-	    }
+		private void solveWeeklyRestViolations(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+			IOptimizationPreferences optimizationPreferences,
+			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService,
+			IList<IScheduleMatrixPro> allMatrixes,
+			ISchedulingOptions schedulingOptions)
+		{
+			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService,
+				resourceCalculateDelayer, selectedPeriod, allMatrixes, _backgroundWorker);
+		}
 
-	    private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, 
-											  IList<IPerson> selectedPersons,
-                                              IOptimizationPreferences optimizationPreferences,
-                                              IList<IScheduleMatrixPro> allMatrixes,
-											  ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-											  ISchedulingOptions schedulingOptions,
-												ITeamInfoFactory teamInfoFactory,
-												IResourceCalculateDelayer resourceCalculateDelayer)
-        {
+		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod,
+			IList<IPerson> selectedPersons,
+			IOptimizationPreferences optimizationPreferences,
+			IList<IScheduleMatrixPro> allMatrixes,
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+			ISchedulingOptions schedulingOptions,
+			ITeamInfoFactory teamInfoFactory,
+			IResourceCalculateDelayer resourceCalculateDelayer)
+		{
 
-            OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _restrictionExtractor,
-                                                                optimizationPreferences, selectedPeriod);
+			OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _restrictionExtractor,
+				optimizationPreferences, selectedPeriod);
 
-            ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
-                = new SmartDayOffBackToLegalStateService(
-                    _dayOffBackToLegalStateFunctions,
-                    optimizationPreferences.DaysOff,
-                    100,
-                    _dayOffDecisionMaker);
+			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
+				= new SmartDayOffBackToLegalStateService(
+					_dayOffBackToLegalStateFunctions,
+					optimizationPreferences.DaysOff,
+					100,
+					_dayOffDecisionMaker);
 
-            IScheduleResultDataExtractor allSkillsDataExtractor =
-                OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod,
-																   _schedulerStateHolder.SchedulingResultState);
-            IPeriodValueCalculator periodValueCalculatorForAllSkills =
-                OptimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced,
-                                                                  allSkillsDataExtractor);
-            ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder =
-                new TeamBlockDaysOffMoveFinder(_scheduleResultDataExtractorProvider,
-                                               dayOffBackToLegalStateService,
-                                               _dayOffOptimizationDecisionMakerFactory);
+			IScheduleResultDataExtractor allSkillsDataExtractor =
+				OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod,
+					_schedulerStateHolder.SchedulingResultState);
+			IPeriodValueCalculator periodValueCalculatorForAllSkills =
+				OptimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced,
+					allSkillsDataExtractor);
+			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder =
+				new TeamBlockDaysOffMoveFinder(_scheduleResultDataExtractorProvider,
+					dayOffBackToLegalStateService,
+					_dayOffOptimizationDecisionMakerFactory);
 
-            ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService =
-                new TeamBlockDayOffOptimizerService(
-                    teamInfoFactory,
-                    _lockableBitArrayFactory,
-                    _lockableBitArrayChangesTracker,
-                    _teamBlockScheduler,
-                    _teamBlockInfoFactory,
-                    periodValueCalculatorForAllSkills,
-                    _safeRollbackAndResourceCalculation,
-                    _teamDayOffModifier,
-                    _teamBlockSteadyStateValidator,
-                    _teamBlockCleaner,
-                    _teamBlockRestrictionOverLimitValidator,
-                    _teamBlockMaxSeatChecker,
-                    teamBlockDaysOffMoveFinder, 
-					_teamBlockScheudlingOptions,_allTeamMembersInSelectionSpecification 
-                    );
+			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService =
+				new TeamBlockDayOffOptimizerService(
+					teamInfoFactory,
+					_lockableBitArrayFactory,
+					_lockableBitArrayChangesTracker,
+					_teamBlockScheduler,
+					_teamBlockInfoFactory,
+					periodValueCalculatorForAllSkills,
+					_safeRollbackAndResourceCalculation,
+					_teamDayOffModifier,
+					_teamBlockSteadyStateValidator,
+					_teamBlockCleaner,
+					_teamBlockRestrictionOverLimitValidator,
+					_teamBlockMaxSeatChecker,
+					teamBlockDaysOffMoveFinder,
+					_teamBlockScheudlingOptions, _allTeamMembersInSelectionSpecification
+					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerStateHolder.CommonStateHolder.DayOffs
-                                                      where ((IDeleteTag) item).IsDeleted == false
-                                                      select item).ToList();
+				where ((IDeleteTag) item).IsDeleted == false
+				select item).ToList();
 
-            ((List<IDayOffTemplate>) dayOffTemplates).Sort(new DayOffTemplateSorter());
+			((List<IDayOffTemplate>) dayOffTemplates).Sort(new DayOffTemplateSorter());
 
-            teamBlockDayOffOptimizerService.ReportProgress += resourceOptimizerPersonOptimized;
-            schedulingOptions.DayOffTemplate = dayOffTemplates[0];
-	        teamBlockDayOffOptimizerService.OptimizeDaysOff(
-		        allMatrixes,
-		        selectedPeriod,
-		        selectedPersons,
-		        optimizationPreferences,
-		        schedulePartModifyAndRollbackService, 
-				schedulingOptions, 
+			teamBlockDayOffOptimizerService.ReportProgress += resourceOptimizerPersonOptimized;
+			schedulingOptions.DayOffTemplate = dayOffTemplates[0];
+			teamBlockDayOffOptimizerService.OptimizeDaysOff(
+				allMatrixes,
+				selectedPeriod,
+				selectedPersons,
+				optimizationPreferences,
+				schedulePartModifyAndRollbackService,
+				schedulingOptions,
 				resourceCalculateDelayer,
-		        _schedulerStateHolder.SchedulingResultState);
-            teamBlockDayOffOptimizerService.ReportProgress -= resourceOptimizerPersonOptimized;
-        }
-
-        [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-												IOptimizationPreferences optimizationPreferences,
-												IList<IScheduleMatrixPro> allMatrixes, 
-												ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-												IResourceCalculateDelayer resourceCalculateDelayer,
-												ITeamBlockGenerator teamBlockGenerator)
-        {
-	        
-
-	        ITeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService =
-		        new TeamBlockIntradayOptimizationService(
-			        teamBlockGenerator,
-			        _teamBlockScheduler,
-			        _schedulingOptionsCreator,
-			        _safeRollbackAndResourceCalculation,
-			        _teamBlockIntradayDecisionMaker,
-			        _teamBlockRestrictionOverLimitValidator,
-			        _teamBlockCleaner, 
-					_teamBlockMaxSeatChecker, 
-					_dailyTargetValueCalculatorForTeamBlock,
-					_teamBlockSteadyStateValidator
-			        );
-
-            teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
-	        teamBlockIntradayOptimizationService.Optimize(
-		        allMatrixes,
-		        selectedPeriod,
-		        selectedPersons,
-		        optimizationPreferences,
-		        schedulePartModifyAndRollbackService, 
-				resourceCalculateDelayer, 
 				_schedulerStateHolder.SchedulingResultState);
-            teamBlockIntradayOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
-        }
+			teamBlockDayOffOptimizerService.ReportProgress -= resourceOptimizerPersonOptimized;
+		}
 
-        private void resourceOptimizerPersonOptimized(object sender, ResourceOptimizerProgressEventArgs e)
-        {
-            if (_backgroundWorker.CancellationPending)
-            {
-                e.Cancel = true;
-                e.UserCancel = true;
-            }
-            _backgroundWorker.ReportProgress(1, e);
-        }
-    }
+		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+			IOptimizationPreferences optimizationPreferences,
+			IList<IScheduleMatrixPro> allMatrixes,
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			ITeamBlockGenerator teamBlockGenerator)
+		{
+
+
+			ITeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService =
+				new TeamBlockIntradayOptimizationService(
+					teamBlockGenerator,
+					_teamBlockScheduler,
+					_schedulingOptionsCreator,
+					_safeRollbackAndResourceCalculation,
+					_teamBlockIntradayDecisionMaker,
+					_teamBlockRestrictionOverLimitValidator,
+					_teamBlockCleaner,
+					_teamBlockMaxSeatChecker,
+					_dailyTargetValueCalculatorForTeamBlock,
+					_teamBlockSteadyStateValidator, _toggleManager
+					);
+
+			teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
+			teamBlockIntradayOptimizationService.Optimize(
+				allMatrixes,
+				selectedPeriod,
+				selectedPersons,
+				optimizationPreferences,
+				schedulePartModifyAndRollbackService,
+				resourceCalculateDelayer,
+				_schedulerStateHolder.SchedulingResultState);
+			teamBlockIntradayOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
+		}
+
+		private void resourceOptimizerPersonOptimized(object sender, ResourceOptimizerProgressEventArgs e)
+		{
+			if (_backgroundWorker.CancellationPending)
+			{
+				e.Cancel = true;
+				e.UserCancel = true;
+			}
+			_backgroundWorker.ReportProgress(1, e);
+		}
+	}
 }

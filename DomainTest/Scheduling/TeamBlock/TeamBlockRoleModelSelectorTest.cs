@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -165,13 +164,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																		  , TimeZoneGuard.Instance.TimeZone)).IgnoreArguments()
 					  .Return(shiftProjectionCache);
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, _dateOnly,
-					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone)).Return(new Dictionary<DateTime, IntervalLevelMaxSeatInfo>());
+					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone,true)).Return(new Dictionary<DateTime, IntervalLevelMaxSeatInfo>());
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_groupMembers,
 					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill> { SkillFactory.CreateSkill("") });
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction(), true);
+				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction(),true);
 
 				Assert.That(result, Is.EqualTo(shiftProjectionCache));
 			}

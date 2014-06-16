@@ -414,6 +414,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			 builder.RegisterType<IsMaxSeatsReachedOnSkillStaffPeriodSpecification>().As<IIsMaxSeatsReachedOnSkillStaffPeriodSpecification>();
 			 builder.RegisterType<IntervalLevelMaxSeatInfo >();
 			 builder.RegisterType<MaxSeatBoostingFactorCalculator>();
+			 builder.RegisterType<PullTargetValueFromSkillIntervalData >();
+			 builder.RegisterType<ExtractIntervalsVoilatingMaxSeat >().As<IExtractIntervalsVoilatingMaxSeat >();
 	    }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

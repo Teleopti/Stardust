@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public interface IMaxSeatsSpecificationDictionaryExtractor
 	{
-		IDictionary<DateTime, IntervalLevelMaxSeatInfo> ExtractMaxSeatsFlag(List<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZoneInfo);
+		IDictionary<DateTime, IntervalLevelMaxSeatInfo> ExtractMaxSeatsFlag(List<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZoneInfo, bool considerEqualMaxAndCalSeatAsBroken);
 	}
 
 	public class MaxSeatsSpecificationDictionaryExtractor : IMaxSeatsSpecificationDictionaryExtractor
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			_maxSeatBoostingFactorCalculator = maxSeatBoostingFactorCalculator;
 		}
 
-		public IDictionary<DateTime, IntervalLevelMaxSeatInfo> ExtractMaxSeatsFlag(List<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZoneInfo)
+		public IDictionary<DateTime, IntervalLevelMaxSeatInfo> ExtractMaxSeatsFlag(List<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZoneInfo, bool considerEqualMaxAndCalSeatAsBroken)
 		{
 			if (skillStaffPeriodList.IsNullOrEmpty())
 				return null;
@@ -33,12 +33,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				var localStartTime = DateTime.SpecifyKind(utcPeriod.StartDateTimeLocal(timeZoneInfo), DateTimeKind.Utc);
 				var maxSeat = skillStaffPeriod.Payload.MaxSeats;
 				var calculatedUsedSeats = skillStaffPeriod.Payload.CalculatedUsedSeats;
-				var isMaxSeatsReachedOnGivenInterval = _isMaxSeatsReachedOnSkillStaffPeriodSpecification.IsSatisfiedBy(calculatedUsedSeats,
-					maxSeat);
+				var isMaxSeatsReachedOnGivenInterval = false;
+				if(considerEqualMaxAndCalSeatAsBroken )
+					isMaxSeatsReachedOnGivenInterval =_isMaxSeatsReachedOnSkillStaffPeriodSpecification.IsSatisfiedByWithEqualCondition(calculatedUsedSeats,maxSeat);
+				else
+					isMaxSeatsReachedOnGivenInterval = _isMaxSeatsReachedOnSkillStaffPeriodSpecification.IsSatisfiedByWithoutEqualCondition(calculatedUsedSeats, maxSeat);
 				var boostingFactor = _maxSeatBoostingFactorCalculator.GetBoostingFactor(calculatedUsedSeats, maxSeat);
 				maxSeatsDictionary.Add(localStartTime, new IntervalLevelMaxSeatInfo(isMaxSeatsReachedOnGivenInterval, boostingFactor));
 			}
 			return maxSeatsDictionary;
 		}
+		
 	}
 }

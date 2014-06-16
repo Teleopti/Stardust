@@ -494,6 +494,7 @@
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDaysTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillIntervalTest.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlockTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\PullTargetValueFromSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\BlockRestrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\NightlyRestRestrcitionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\ProposedRestrictionAggregatorTest.cs" />
@@ -883,6 +884,7 @@
     <Compile Include="Scheduling\TeamBlock\TwoDaysIntervalGeneratorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidatedTeamBlockInfoExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidSampleDayPickerFromTeamBlockTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\ExtractIntervalsVoilatingMaxSeatTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatBoostingFactorCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatInformationGeneratorBasedOnIntervalsTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatsCalculationForTeamBlockTest.cs" />
