@@ -15,7 +15,6 @@ Scenario: See my profile
 	Then I should see my culture
 	And I should see my language
 
-@ignore
 Scenario: Change my culture
 	Given I am an agent
 	And I am swedish

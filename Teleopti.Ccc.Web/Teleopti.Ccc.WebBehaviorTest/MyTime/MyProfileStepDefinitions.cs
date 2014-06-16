@@ -20,9 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
 				DataMaker.Data().Apply(new Agent());
 			TestControllerMethods.Logon();
-			Navigation.GotoAnApplicationPage();
-			Browser.Interactions.Click(".user-name-link");
-			Browser.Interactions.Click("#regional-settings");
+			Navigation.GotoRegionalSettings();
 		}
 
 		[When(@"I view password setting page")]
@@ -32,9 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
 				DataMaker.Data().Apply(new Agent());
 			TestControllerMethods.Logon();
-			Navigation.GotoAnApplicationPage();
-			Browser.Interactions.Click(".user-name-link");
-			Browser.Interactions.Click("#change-your-password");
+			Navigation.GotoPasswordPage();
 		}
 
 		[When(@"I change my password to '(.*)'")]
@@ -109,13 +105,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see US date format"), SetCulture("en-US")]
 		public void ThenIShouldSeeUSDateFormat()
 		{
+			TryGotoTeamSchedule();
+			Browser.Interactions.AssertInputValueUsingJQuery(".navbar-form input.span2.text-center", DateOnlyForBehaviorTests.TestToday.Date.ToShortDateString());
+		}
+
+		private void TryGotoTeamSchedule()
+		{
+			//for some unsure reason, it will random failed when go to TeamSchedule page one time, so here try twice
 			Navigation.GotoTeamSchedule();
-			Browser.Interactions.AssertExists(string.Format(@"div:[data-mytime-periodselection*=""""Display"": ""{0}""""]",
-																			DateOnlyForBehaviorTests.TestToday.Date.ToShortDateString()));
-			//Browser.Interactions.AssertExists(string.Format(@"div:[data-mytime-periodselection*="{0}"]",
-			//													DateOnlyForBehaviorTests.TestToday.Date.ToShortDateString()));
-			//Browser.Interactions.AssertAnyContains("#TeamSchedule-body", string.Format("{0}", DateOnlyForBehaviorTests.TestToday.Date.ToShortDateString()));
-			//Browser.Interactions.AssertExistsUsingJQuery("'{0}'", DateOnlyForBehaviorTests.TestToday.Date.ToShortDateString());
+			Navigation.GotoTeamSchedule();
 		}
 
 
