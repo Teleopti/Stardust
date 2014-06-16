@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using MbCache.Configuration;
 using MbCache.Core;
 using MbCache.ProxyImpl.LinFu;
@@ -8,12 +7,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class MbCacheModule : Module
 	{
-		public MbCacheModule(ICache cache, ILockObjectGenerator lockObjectGenerator)
+		public MbCacheModule(ILockObjectGenerator lockObjectGenerator)
 		{
-			if (cache == null)
-				throw new InvalidOperationException();
 			Builder = new CacheBuilder(new LinFuProxyFactory())
-							.SetCache(cache)
+							.SetCache(new InMemoryCache(20))
 							.SetCacheKey(new TeleoptiCacheKey())
 							.SetLockObjectGenerator(lockObjectGenerator);
 		}

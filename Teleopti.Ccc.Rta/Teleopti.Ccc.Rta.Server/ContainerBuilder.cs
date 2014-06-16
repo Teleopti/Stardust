@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using MbCache.Configuration;
 using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.Rta.Server
@@ -10,7 +9,7 @@ namespace Teleopti.Ccc.Rta.Server
 		 {
 			 var builder = new Autofac.ContainerBuilder();
 
-			 var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
+			 var mbCacheModule = new MbCacheModule(null);
 			 builder.RegisterModule(mbCacheModule);
 			 builder.RegisterModule(new RealTimeContainerInstaller(mbCacheModule));
 			 return builder;
