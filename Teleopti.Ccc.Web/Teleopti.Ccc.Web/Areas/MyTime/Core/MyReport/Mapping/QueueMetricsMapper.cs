@@ -2,29 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Analytics.ReportTexts;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 {
 	public class QueueMetricsMapper : IQueueMetricsMapper
 	{
-		private readonly IUserCulture _userCulture;
-
-		public QueueMetricsMapper(IUserCulture userCulture)
-		{
-			_userCulture = userCulture;
-		}
-
 		public ICollection<QueueMetricsViewModel> Map(ICollection<QueueMetricsForDayResult> dataModels)
 		{
 			if (dataModels.Count.Equals(0))
 			{
 				return new List<QueueMetricsViewModel>{new QueueMetricsViewModel{DataAvailable = false}};
 			}
-			//var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
 			var maxTime = (from c in dataModels select c.AverageHandlingTime.TotalSeconds).Max();
 
 			var models= dataModels.Select(model => new QueueMetricsViewModel
@@ -57,6 +47,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 
 		private static string toTimeString(TimeSpan timeSpan)
 		{
+            // to get 320 when it is 319.61 for example
+		    timeSpan = TimeSpan.FromSeconds(Math.Round(timeSpan.TotalSeconds, 0));
 			var temp = timeSpan.ToString(@"hh\:mm\:ss");
 			if (temp.StartsWith("00:"))
 				temp = temp.Substring(3);
