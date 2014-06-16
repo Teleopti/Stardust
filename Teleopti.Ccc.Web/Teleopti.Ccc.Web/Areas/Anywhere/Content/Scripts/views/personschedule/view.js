@@ -47,7 +47,7 @@ define([
 				viewModel.PersonId(),
 				helpers.Date.ToServer(viewModel.Date()),
 				function (data) {
-					viewModel.UpdateData(data, viewModel.TimeLine);
+					viewModel.UpdateData(data);
 					resize.notify();
 					personScheduleDeferred.resolve();
 				}
@@ -58,7 +58,7 @@ define([
 				viewModel.GroupId(),
 				helpers.Date.ToServer(viewModel.Date()),
 				function (data) {
-					viewModel.UpdateSchedules(data, viewModel.TimeLine);
+					viewModel.UpdateSchedules(data);
 					resize.notify();
 					groupScheduleDeferred.resolve();
 				}

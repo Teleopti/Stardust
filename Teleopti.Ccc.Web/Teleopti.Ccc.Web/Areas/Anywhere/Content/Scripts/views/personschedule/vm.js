@@ -139,11 +139,11 @@ define([
 			return self.AddingActivity();
 		});
 
-		this.UpdateData = function (data, timeLine) {
+		this.UpdateData = function (data) {
 			data.Date = self.Date();
 			
 			var person = self.SelectedPerson();
-			person.AddData(data, timeLine);
+			person.AddData(data, self.TimeLine);
 
 			self.Absences([]);
 			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
@@ -161,7 +161,7 @@ define([
 			self.AddIntradayAbsenceForm.SetData(data);
 		};
 
-		this.UpdateSchedules = function (data, timeLine) {
+		this.UpdateSchedules = function (data) {
 			// if we dont display group mates, then filter out their data
 			if (!self.DisplayGroupMates()) {
 				data = lazy(data)
@@ -181,7 +181,7 @@ define([
 				schedule.Date = moment(schedule.Date, resources.FixedDateFormatForMoment);
 				var person = personForId(schedule.PersonId, personArray);
 
-				person.AddData(schedule, timeLine);
+				person.AddData(schedule, self.TimeLine);
 			}
 
 			self.Persons.push.apply(self.Persons, personArray);
