@@ -79,11 +79,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			ScenarioUnitOfWorkState.OpenUnitOfWork();
 
 			Log.Debug("Starting scenario " + ScenarioContext.Current.ScenarioInfo.Title);
-			
-			if (shouldIgnoreTest("OnlyRunIfDisabled", false) || shouldIgnoreTest("OnlyRunIfEnabled", true))
-			{
-				Assert.Ignore("Ignored because of featureflags");
-			}
+
+			checkIfRunTestDueToToggleFlags();
 		}
 
         private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData2.nhib.xml");
@@ -110,21 +107,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	        }
 	    }
 
-	    private static bool shouldIgnoreTest(string featureName, bool shouldBeEnabled)
-		{
-			var scenario = ScenarioContext.Current.ScenarioInfo.Tags.Where(s => s.StartsWith(featureName));
-			var regex = new Regex(@"\(.*\)");
-			foreach (var tags in scenario)
-			{
-				var toggleQuerier1 = new ToggleQuerier(new CurrentDataSource(new CurrentIdentity()), TestSiteConfigurationSetup.Url.ToString());
-				var foo = regex.Match(tags).ToString();
-				foo = foo.Substring(2, foo.Length - 4);
-				var isEnabled = toggleQuerier1.IsEnabled((Toggles)Enum.Parse(typeof(Toggles), foo));
+	    private static void checkIfRunTestDueToToggleFlags()
+	    {
+				const string ignoreMessage = "Ignore toggle {0} because it is {1}.";
 
-				return shouldBeEnabled ? !isEnabled : isEnabled;
-			}
-			return false;
-		}
+				var toggleQuerier = new ToggleQuerier(new CurrentDataSource(new CurrentIdentity()), TestSiteConfigurationSetup.Url.ToString());
+				var matchingEnkelsnuffs = new Regex(@"\'(.*)\'");
+		    var tags = ScenarioContext.Current.ScenarioInfo.Tags;
+
+		    var allOnlyRunIfEnabled = tags.Where(s => s.StartsWith("OnlyRunIfEnabled"))
+					.Select(onlyRunIfEnabled => (Toggles)Enum.Parse(typeof(Toggles), matchingEnkelsnuffs.Match(onlyRunIfEnabled).Groups[1].ToString()));
+		    var allOnlyRunIfDisabled = tags.Where(s => s.StartsWith("OnlyRunIfDisabled"))
+					.Select(onlyRunIfDisabled => (Toggles)Enum.Parse(typeof(Toggles), matchingEnkelsnuffs.Match(onlyRunIfDisabled).Groups[1].ToString()));
+
+		    foreach (var toggleOnlyRunIfDisabled in allOnlyRunIfDisabled.Where(toggleQuerier.IsEnabled))
+		    {
+			    Assert.Ignore(ignoreMessage, toggleOnlyRunIfDisabled, "enabled");
+		    }
+
+		    foreach (var toggleOnlyRunIfEnabled in allOnlyRunIfEnabled.Where(toggleOnlyRunIfEnabled => !toggleQuerier.IsEnabled(toggleOnlyRunIfEnabled)))
+		    {
+			    Assert.Ignore(ignoreMessage, toggleOnlyRunIfEnabled, "disabled");
+		    }
+	    }
 		
 		[AfterScenario]
 		public static void AfterScenario()
