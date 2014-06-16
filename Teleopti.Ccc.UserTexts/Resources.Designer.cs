@@ -18161,7 +18161,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ranking.
+        ///   Looks up a localized string similar to Seniority ranking.
         /// </summary>
         public static string Ranking {
             get {
