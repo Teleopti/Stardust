@@ -98,3 +98,7 @@ update mart.sys_crossdatabaseview_target
 set target_defaultName='TeleoptiCCCAgg'
 where target_id=4
 GO
+-- bug 28436 
+UPDATE mart.report
+set target = '_blank' WHERE ID = 'D45A8874-57E1-4EB9-826D-E216A4CBC45B'
+GO
