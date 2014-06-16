@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 				shiftTradeSwapDetailsList.Add(shiftTradeSwapDetails);
 			}
-
+			shiftTradeSwapDetailsList.Sort((s1, s2) => s1.From.StartTimeUtc.CompareTo(s2.From.StartTimeUtc));
 			return shiftTradeSwapDetailsList;
 		}
 
