@@ -3,8 +3,6 @@
 */
 define(function () {
 
-	Date.prototype.getTeleoptiTime = function () { return new Date().getTime(); };
-
     var timestamp = new Date().getTime();
     
 	//API

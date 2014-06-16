@@ -85,7 +85,7 @@ define([
 		});
 		
 		this.DefaultStart = ko.computed(function () {
-			var now = moment(new Date(new Date().getTeleoptiTime()));
+			var now = moment();
 			var start;
 			if (self.ShiftStart() < now && now < self.ShiftEnd()) {
 				var minutes = Math.ceil(now.minute() / 15) * 15;
