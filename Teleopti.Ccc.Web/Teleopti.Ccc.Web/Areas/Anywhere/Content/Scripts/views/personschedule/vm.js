@@ -141,7 +141,7 @@ define([
 		});
 
 		this.SetViewOptions = function (options) {
-			self.Date(moment(options.date, 'YYYYMMDD'));
+			self.ScheduleDate(moment(options.date, 'YYYYMMDD'));
 			self.PersonId(options.personid || options.id);
 			self.GroupId(options.groupid);
 		};
