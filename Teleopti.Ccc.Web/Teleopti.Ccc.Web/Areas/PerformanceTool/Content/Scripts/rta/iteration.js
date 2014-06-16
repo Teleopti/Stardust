@@ -20,19 +20,17 @@ define([
 				userCode: data.ExternalLogOn,
 				stateCode: data.StateCode,
 				isLoggedOn: 'true',
-				timestamp: moment.utc().toDate(),
+				timestamp: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
 				platformTypeId: data.PlatformTypeId,
 				sourceId: data.SourceId,
 				isSnapshot: 'false'
 			});
 			$.ajax({
-				url: data.Url + '/SaveExternalUserState/',
-				dataType: 'json',
-				type: "POST",
-				contentType: "application/json",
-				data: externalState,
-				error: function (jqXHR, textStatus, errorThrown) {
-					console.log(arguments);
+				url: data.Url ,
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify(externalState),
+				error: function () {
 					data.Failure();
 
 				},
