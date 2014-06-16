@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeUSDateFormat()
 		{
 			TryGotoTeamSchedule();
-			Browser.Interactions.AssertInputValueUsingJQuery(".navbar-form input.span2.text-center", DateOnlyForBehaviorTests.TestToday.Date.ToShortDateString());
+			Browser.Interactions.AssertInputValueUsingJQuery(".navbar-form input.text-center.form-control", DateOnlyForBehaviorTests.TestToday.Date.ToShortDateString());
 		}
 
 		private void TryGotoTeamSchedule()
