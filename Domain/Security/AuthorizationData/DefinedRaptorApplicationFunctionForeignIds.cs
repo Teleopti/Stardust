@@ -122,7 +122,7 @@
 
 		// Anywhere
 		public const string Anywhere = "0080";
-		public const string SchedulesAnywhere = "0081";
+		public const string MyTeamSchedules = "0081";
 		public const string RealTimeAdherenceOverview = "0092";
 	}
 }

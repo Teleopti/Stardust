@@ -117,7 +117,7 @@
 		public const string MyReportQueueMetrics = "Raptor/MyTimeWeb/MyReportWeb/QueueMetrics";
 
 		// Anywhere
-		public const string SchedulesAnywhere = "Raptor/Anywhere/Schedules";
+		public const string MyTeamSchedules = "Raptor/Anywhere/Schedules";
 		public const string RealTimeAdherenceOverview = "Raptor/Anywhere/RealTimeAdherenceOverview";
 	}
 }

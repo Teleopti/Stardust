@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			schedulePersonProvider.Stub(
 				x =>
 				x.GetPermittedPersonsForGroup(date, team.Id.GetValueOrDefault(),
-				                             DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere)).Return(new[] {person});
+				                             DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)).Return(new[] {person});
 			target.ControllerContext = new ControllerContext(new FakeHttpContext("/"), new RouteData(), target);
 
 			dynamic result = target.PeopleInGroup(date.Date,team.Id.GetValueOrDefault()).Data;

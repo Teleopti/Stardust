@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var dateTimePeriod = new DateTimePeriod(dateTimeInUtc, dateTimeInUtc.AddHours(25));
 			var people = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(dateTimeInUtc), groupId,
 			                                                                 DefinedRaptorApplicationFunctionPaths.
-																				 SchedulesAnywhere).ToArray();
+																				 MyTeamSchedules).ToArray();
 			var emptyReadModel = new PersonScheduleDayReadModel[] {};
 			var data = new GroupScheduleData
 				{

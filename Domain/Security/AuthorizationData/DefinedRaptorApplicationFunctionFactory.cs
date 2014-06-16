@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 
 			// Anywhere
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Anywhere, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.Anywhere, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere, "xxSchedules", DefinedRaptorApplicationFunctionForeignIds.SchedulesAnywhere, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, "xxSchedules", DefinedRaptorApplicationFunctionForeignIds.MyTeamSchedules, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "xxRealTimeAdherenceOverview", DefinedRaptorApplicationFunctionForeignIds.RealTimeAdherenceOverview, null);
 
 			return new ReadOnlyCollection<IApplicationFunction>(applicationFunctionList);

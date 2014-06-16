@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			var people = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(date), groupId,
 			                                                                DefinedRaptorApplicationFunctionPaths.
-			                                                                	SchedulesAnywhere);
+			                                                                	MyTeamSchedules);
 			return Json(people.Select(p => new {p.Id, p.Name.FirstName, p.Name.LastName, p.EmploymentNumber}).ToList(),
 			            JsonRequestBehavior.AllowGet);
 		}

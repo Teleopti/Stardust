@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 		{
 			EnabledApplicationFunctions.Clear();
 
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere));
+			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules));
 		}
 	}
 }
