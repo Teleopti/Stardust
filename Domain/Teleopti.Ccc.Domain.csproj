@@ -1209,7 +1209,6 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccMyTeamLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccNotifyLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeAvailabilityLicenseOption.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccVersion8LicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseStatus.cs" />
     <Compile Include="Security\ISystemUserPasswordSpecification.cs" />

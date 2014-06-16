@@ -982,7 +982,6 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccMyTeamLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccNotifyLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeAvailabilityLicenseOptionTest.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccVersion8LicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersBaseLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersReportsLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersPermissionsLicenseOptionTest.cs" />
