@@ -12,16 +12,17 @@
 			"should create timeline with default times": function() {
 				var vm = new viewModel();
 
-				assert.equals(vm.TimeLine.StartMinutes(), 8 * 60);
-				assert.equals(vm.TimeLine.EndMinutes(), 16 * 60);
+				assert.equals(vm.TimeLine.StartTime(), "08:00");
+				assert.equals(vm.TimeLine.EndTime(), "16:00");
 			},
 
 			"should create timeline according to shifts length": function () {
-				assert(true);
-				return;
-
 				var vm = new viewModel();
 
+				vm.SetViewOptions({
+					id: 1,
+					date: '20140616'
+				});
 				var data = [
 					{
 						PersonId: 1,
@@ -48,7 +49,6 @@
 					Projection: [{ Color: "#008000", Description: "Phone", Start: "2013-11-18 14:00", Minutes: 240 }],
 					Offset: "2013-11-18"
 				};
-			
 				var dateMoment = moment(jsonData.Date);
 
 				var vm = new viewModel();
