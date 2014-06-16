@@ -1397,7 +1397,6 @@
       if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Root.Web.config" "$(ProjectDir)web.config"
       if not exist "$(ProjectDir)Areas\MyTime\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.MyTime.Web.config" "$(ProjectDir)Areas\MyTime\Views\web.config"
       if not exist "$(ProjectDir)Areas\Start\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Start.Web.config" "$(ProjectDir)Areas\Start\Views\web.config"
-      if not exist "$(ProjectDir)Areas\MobileReports\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Mobile.Web.config" "$(ProjectDir)Areas\MobileReports\Views\web.config"
       if not exist "$(ProjectDir)Areas\SSO\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.SSO.Web.config" "$(ProjectDir)Areas\SSO\Views\web.config"
 if not exist "$(TargetDir)FeatureFlags" mkdir "$(TargetDir)FeatureFlags"
 copy "$(ProjectDir)..\..\Domain\FeatureFlags\toggles.txt" "$(TargetDir)FeatureFlags\toggles.txt"
