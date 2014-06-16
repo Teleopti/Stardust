@@ -197,7 +197,6 @@ define([
 			url: "Anywhere/Application/NavigationContent",
 			success: function (responseData, textStatus, jqXHR) {
 				menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
-				menu.MobileReportsVisible(responseData.IsMobileReportsAvailable === true);
 				menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
 				menu.UserName(responseData.UserName);
 			}

@@ -5,6 +5,8 @@
 		//Don't remove this one - used in tests
 		TestToggle,
 		//////
+		Scheduler_Seniority_11111,
+		Forecast_CopySettingsToWorkflow_11112,
 
 		Scheduler_WeeklyRestRuleSolver_27108,
 		Scheduler_TeamBlockMoveTimeBetweenDays_22407,

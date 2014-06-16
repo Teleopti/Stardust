@@ -74,14 +74,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 	    private void setVisibility()
 	    {
-	    	var instance = PrincipalAuthorization.Instance();
-	        toolStripMenuItemQuickForecast.Visible =
-	            instance.IsPermitted(
-	                DefinedRaptorApplicationFunctionPaths.UnderConstruction);
-	        toolStripMenuItemCopyTo.Visible =
-	            instance.IsPermitted(
-	                DefinedRaptorApplicationFunctionPaths.UnderConstruction);
-	        toolStripMenuItemActionSkillImportForecast.Visible =
+		    toolStripMenuItemCopyTo.Visible = _toggleManager.IsEnabled(Toggles.Forecast_CopySettingsToWorkflow_11112);
+			var instance = PrincipalAuthorization.Instance();
+			toolStripMenuItemActionSkillImportForecast.Visible =
 	            instance.IsPermitted(
 	                DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile);
 	        toolStripMenuItemSkillsImportForecast.Visible =
@@ -106,7 +101,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
             splitContainer1.SplitterDistance = splitContainer1.Height - _portalSettings.ForecasterActionPaneHeight;
-        }
+			_toggleManager = toggleManager;
+		}
 
 	    private void setColors()
 		{

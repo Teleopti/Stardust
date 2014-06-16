@@ -18,7 +18,6 @@
 ..\TeleoptiCCC\SDK\web.config,BuildArtifacts\SDKWeb.config
 ..\TeleoptiCCC\ServiceBus\log4net.config,BuildArtifacts\ServiceBuslog4net.config
 ..\TeleoptiCCC\ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.Host.exe.config,BuildArtifacts\ServiceBusHost.config
-..\TeleoptiCCC\Web\Areas\MobileReports\Views\web.config,BuildArtifacts\Web.Mobile.Web.config
 ..\TeleoptiCCC\Web\Areas\MyTime\Views\web.config,BuildArtifacts\Web.MyTime.Web.config
 ..\TeleoptiCCC\Web\Areas\Start\Views\web.config,BuildArtifacts\Web.Start.Web.config
 ..\TeleoptiCCC\Web\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml

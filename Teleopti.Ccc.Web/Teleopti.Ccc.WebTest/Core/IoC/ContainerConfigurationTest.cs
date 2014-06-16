@@ -1,16 +1,15 @@
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.Web.Areas.MobileReports.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Core.IoC
 {
@@ -86,22 +85,22 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
-		public void MobileReportsAreaModuleHasBeenLoaded()
-		{
-			using (var container = builder.Configure(string.Empty))
-			{
-				container.IsRegistered<IReportViewModelFactory>()
-					.Should().Be.True();
-			}
-		}
-
-		[Test]
 		public void ShouldResolveNumberOfAgentsInTeamReader()
 		{
 			using (var container = builder.Configure(string.Empty))
 			{
 				container.Resolve<INumberOfAgentsInTeamReader>()
 					.Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ResourceHandlerModuleHasBeenRegistered()
+		{
+			using (var container = builder.Configure(string.Empty))
+			{
+				container.IsRegistered<IUserTextTranslator>()
+					.Should().Be.True();
 			}
 		}
 	}

@@ -7,7 +7,6 @@ define([
 
 			this.Resources = resources;
 			this.MyTimeVisible = ko.observable(false);
-			this.MobileReportsVisible = ko.observable(false);
 			this.RealTimeAdherenceVisible = ko.observable(false);
 			this.moveActivityVisible = ko.observable(false);
 			this.ActiveView = ko.observable("");

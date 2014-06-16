@@ -127,12 +127,13 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Teleopti.Secrets.7.5.800.37\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation">
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.40\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.7.5.800.37\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Secrets">
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.40\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -978,10 +979,10 @@
     <Compile Include="Security\AuthorizationEntities\AllLicenseOptionTest.cs" />
     <Compile Include="Security\IsPasswordEncryptedSpecificationTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccCalendarLinkLicenseOptionTest.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccMyTeamLicenseOptionTest.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccNotifyLicenseOptionTest.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeAvailabilityLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccVersion8LicenseOptionTest.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccMobileReportsLicenseOptionTest.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccMyTimeWebLicenseOptionTest.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccDeveloperLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersBaseLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersReportsLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersPermissionsLicenseOptionTest.cs" />
@@ -994,10 +995,10 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccPayrollIntegrationLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPerformanceManagerLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccRealTimeAdherenceLicenseOptionTest.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccHolidayPlannerLicenseOptionTest.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccVacationPlannerLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccAgentScheduleMessengerLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccShiftTradesLicenseOptionTest.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccAgentSelfServiceLicenseOptionTest.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccLifestyleLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccFreemiumForecastsLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersForecastsLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccBaseLicenseOptionTest.cs" />
@@ -1211,7 +1212,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WebReport\ReportDataServiceLevelAgentsReadyTest.cs" />
-    <Compile Include="WebReport\ReportMobileReportInitTest.cs" />
     <Compile Include="WebReport\ReportControlSkillGetTest.cs" />
     <Compile Include="WebReport\ReportDataQueueStatAbandonedTest.cs" />
     <Compile Include="WebReport\ReportDataForecastVersusActualWorkloadTest.cs" />
@@ -1294,6 +1294,7 @@
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="app.config" />
     <None Include="DayOffPlanning\FreeWeekendValidatorTestCases.xls" />
     <None Include="Helper\StaffingCalculatorServiceModel.xlsm" />
     <None Include="Optimization\RelativeBoostedDailyDifferencesAndPeriodValue.xlsm" />

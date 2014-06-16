@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
     [TestFixture]
     public class TeleoptiCccShiftTradesLicenseOptionTest
     {
-        private TeleoptiCccShiftTradesLicenseOption _target;
+        private TeleoptiCccShiftTraderLicenseOption _target;
 
         [SetUp]
         public void Setup()
         {
-            _target = new TeleoptiCccShiftTradesLicenseOption();
+            _target = new TeleoptiCccShiftTraderLicenseOption();
         }
 
         [Test]

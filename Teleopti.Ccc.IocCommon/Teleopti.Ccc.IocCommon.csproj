@@ -132,6 +132,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ResourceHandlerModule.cs" />
     <Compile Include="Configuration\AuthenticationCachedModule.cs" />
     <Compile Include="Configuration\AuthenticationModule.cs" />
     <Compile Include="Configuration\CommandDispatcherModule.cs" />

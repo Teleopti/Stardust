@@ -23,10 +23,8 @@
 		public const string OpenBudgets = "Raptor/Budgets";
 		public const string AccessToPerformanceManager = "Raptor/PerformanceManager";
 		public const string PayrollIntegration = "Raptor/PayrollIntegration";
-		public const string UnderConstruction = "Raptor/UnderConstruction";
 		public const string OpenAgentPortal = "Raptor/AgentPortal";
 		public const string MyTimeWeb = "Raptor/MyTimeWeb";
-		public const string MobileReports = "Raptor/MobileReports";
 		public const string Anywhere = "Raptor/Anywhere";
 
 

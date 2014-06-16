@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public bool ViewUnpublishedSchedules { get; set; }
 		public bool ViewConfidential { get; set; }
-		public bool AccessToMobileReports { get; set; }
 		public bool AccessToExtendedPreferences { get; set; }
 		public bool AccessToMytimeWeb { get; set; }
 		public bool AccessToAnywhere { get; set; }
@@ -43,7 +42,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToCalendarLink { get; set; }
 		public bool AccessToOvertimeAvailability { get; set; }
 		public bool AccessToMyReport { get; set; }
-		public bool AccessToUnderConstruction { get; set; }
 		public bool AccessToPreferences { get; set; }
 		public bool AccessToRealTimeAdherenceOverview { get; set; }
 		public bool AccessToTeamSchedule { get; set; }
@@ -61,7 +59,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			ViewConfidential = false;
 			AccessToMyOwn = false;
 			NoDataAccess = false;
-			AccessToMobileReports = false;
 			AccessToExtendedPreferences = true;
 			AccessToMytimeWeb = true;
 			AccessToAsm = true;
@@ -73,7 +70,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToCalendarLink = false;
 			AccessToOvertimeAvailability = false;
 			AccessToMyReport = true;
-			AccessToUnderConstruction = true;
 			AccessToPreferences = true;
 			AccessToRealTimeAdherenceOverview = false;
 			AccessToTeamSchedule = true;
@@ -144,11 +140,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewConfidential
 											  select f;
 
-			if (!AccessToMobileReports)
-				applicationFunctions = from f in applicationFunctions
-											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MobileReports
-											  select f;
-
 			if (!AccessToExtendedPreferences)
 				applicationFunctions = from f in applicationFunctions
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb
@@ -204,10 +195,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!AccessToMyReport)
 				applicationFunctions = from f in applicationFunctions
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyReportWeb
-											  select f;
-			if (!AccessToUnderConstruction)
-				applicationFunctions = from f in applicationFunctions
-											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.UnderConstruction
 											  select f;
 			if (!AccessToRealTimeAdherenceOverview)
 				applicationFunctions = from f in applicationFunctions

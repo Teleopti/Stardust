@@ -74,27 +74,21 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
             if (licenseService.TeleoptiCccBaseEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccBase);
-            if (licenseService.TeleoptiCccDeveloperEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccDeveloper);
             if (licenseService.TeleoptiCccAgentSelfServiceEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccAgentSelfService);
+                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccLifestyle);
             if (licenseService.TeleoptiCccShiftTradesEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccShiftTrades);
+                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccShiftTrader);
             if (licenseService.TeleoptiCccAgentScheduleMessengerEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(
                     DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger);
             if (licenseService.TeleoptiCccHolidayPlannerEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccHolidayPlanner);
+                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccVacationPlanner);
             if (licenseService.TeleoptiCccRealTimeAdherenceEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccRealTimeAdherence);
             if (licenseService.TeleoptiCccPerformanceManagerEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccPerformanceManager);
             if (licenseService.TeleoptiCccPayrollIntegrationEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccPayrollIntegration);
-            if (licenseService.TeleoptiCccMyTimeWebEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccMyTimeWeb);
-			if (licenseService.TeleoptiCccMobileReportsEnabled)
-				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccMobileReports);
 			if (licenseService.TeleoptiCccSmsLinkEnabled)
 				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
 			if (licenseService.TeleoptiCccCalendarLinkEnabled)

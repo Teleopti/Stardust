@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			ITeleoptiIdentity identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
 
 			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
-			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MobileReports)).Return(false);
 			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)).Return(false);
 			currentTeleoptiPrincipal.Stub(x => x.Current()).Return(principal);
 			principal.Stub(x => x.Identity).Return(identity);
@@ -57,7 +56,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			((object) content.UserName).Should().Be.EqualTo("fake");
 			((object)content.IsMyTimeAvailable).Should().Be.EqualTo(true);
-			((object)content.IsMobileReportsAvailable).Should().Be.EqualTo(false);
 			((object)content.IsRealTimeAdherenceAvailable).Should().Be.EqualTo(false);
 		}
 

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private int _scheduledCount;
 		private int _sendEventEvery;
 		private readonly ILifetimeScope _container;
+		private readonly IToggleManager _toggleManager;
 		private readonly IExtendReduceTimeHelper _extendReduceTimeHelper;
 		private readonly IExtendReduceDaysOffHelper _extendReduceDaysOffHelper;
 		private readonly ISchedulingResultStateHolder _stateHolder;
@@ -46,9 +48,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IDaysOffSchedulingService _daysOffSchedulingService;
 		private readonly IPersonSkillProvider _personSkillProvider;
 
-		public ScheduleOptimizerHelper(ILifetimeScope container)
+		public ScheduleOptimizerHelper(ILifetimeScope container, IToggleManager toggleManager)
 		{
 			_container = container;
+			_toggleManager = toggleManager;
 			_extendReduceTimeHelper = new ExtendReduceTimeHelper(_container);
 			_extendReduceDaysOffHelper = new ExtendReduceDaysOffHelper(_container);
 			_stateHolder = _container.Resolve<ISchedulingResultStateHolder>();
@@ -715,9 +718,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			                                             optimizationPreferences);
 			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
 
-			var instance = PrincipalAuthorization.Instance();
-			if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
-				return;
+			if (!_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111)) return;
 
 			////day off fairness
             var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>();

@@ -111,6 +111,7 @@
     <Compile Include="Configuration\InitializeModuleTest.cs" />
     <Compile Include="Configuration\LogModuleTest.cs" />
     <Compile Include="Configuration\RepositoryModuleTest.cs" />
+    <Compile Include="Configuration\ResourceHandlerModuleTest.cs" />
     <Compile Include="Configuration\RuleSetTest.cs" />
     <Compile Include="Configuration\SchedulePersistModuleTest.cs" />
     <Compile Include="Configuration\ScheduleScreenRefresherModuleTest.cs" />

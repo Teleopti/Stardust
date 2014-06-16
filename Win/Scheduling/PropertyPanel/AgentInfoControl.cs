@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 	    private readonly ILifetimeScope _container;
 	    private readonly DateOnlyPeriod _dateOnlyPeriod;
 	    private readonly DateOnlyPeriod _requestedPeriod;
+	    private readonly IToggleManager _toggleManager;
 	    private IList<IGroupPageLight> _groupPages;
 	    private IGroupPagePerDate _groupPagePerDate;
 	    private bool _mbCacheDisabled;
@@ -58,7 +60,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         }
 
 	    public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider,
-	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod)
+	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod, IToggleManager toggleManager)
 		    : this()
 	    {
 		    _workShiftWorkTime = workShiftWorkTime;
@@ -66,6 +68,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		    _container = container;
 		    _dateOnlyPeriod = dateOnlyPeriod;
 		    _requestedPeriod = requestedPeriod;
+		    _toggleManager = toggleManager;
 	    }
 
 	    public bool MbCacheDisabled
@@ -151,7 +154,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 					tableLayoutPanelFairness.Visible = true;
 					updateFairnessData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState);
 				}
-				else if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
+				else if (_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111))
 				{
 					tableLayoutPanelNoWorkflowControlSet.Visible = false;
 					tableLayoutPanelRanking.Visible = true;

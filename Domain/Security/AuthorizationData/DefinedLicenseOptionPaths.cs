@@ -10,24 +10,25 @@
         /// </summary>
         public const string TeleoptiCccBase = DefinedLicenseSchemaCodes.TeleoptiCccSchema +  "/Base";
         /// <summary>
-        /// Constant string for Developer license option
-        /// </summary>
-        public const string TeleoptiCccDeveloper = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/Developer";
-        /// <summary>
         /// Constant string for Raptor ASS option
         /// </summary>
-        public const string TeleoptiCccAgentSelfService = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/AgentSelfService";
-        public const string TeleoptiCccShiftTrades = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/ShiftTrades";
+		public const string TeleoptiCccLifestyle = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/Lifestyle";
+        public const string TeleoptiCccShiftTrader = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/ShiftTrader";
+		public const string TeleoptiCccVacationPlanner = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/VacationPlanner";
+		public const string TeleoptiCccOvertimeAvailability = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/OvertimeAvailability";
+
         public const string TeleoptiCccAgentScheduleMessenger = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/AgentScheduleMessenger";
-        public const string TeleoptiCccHolidayPlanner = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/HolidayPlanner";
         public const string TeleoptiCccRealTimeAdherence = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/RealTimeAdherence";
         public const string TeleoptiCccPerformanceManager = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/PerformanceManager";
         public const string TeleoptiCccPayrollIntegration = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/PayrollIntegration";
-        public const string TeleoptiCccMyTimeWeb = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/MyTimeWeb";
-		public const string TeleoptiCccMobileReports = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/MobileReports";
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 		public const string TeleoptiCccSmsLink = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/SMSLink";
 		public const string TeleoptiCccCalendarLink = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/CalendarLink";
+
+		public const string TeleoptiCccNotify = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/Notify";
+
+		public const string TeleoptiCccMyTeam = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/MyTeam";
+
+
         /// <summary>
         /// Constant string for Freemium base option
         /// </summary>
@@ -47,5 +48,5 @@
         public const string TeleoptiCccPilotCustomersReports = DefinedLicenseSchemaCodes.TeleoptiCccPilotCustomersSchema + "/Reports";
 	
 		public const string TeleoptiCccVersion8 = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/Version8";
-	}
+    }
 }

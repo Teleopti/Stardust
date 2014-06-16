@@ -2,7 +2,6 @@
 ..\..\..\sitesroot\1\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 ..\..\..\sitesroot\1\web.config,BuildArtifacts\SDKWeb.config
 ..\..\..\sitesroot\2\web.config,BuildArtifacts\AnalyticsWeb.config
-..\..\..\sitesroot\3\Areas\MobileReports\Views\web.config,BuildArtifacts\Web.Mobile.Web.config
 ..\..\..\sitesroot\3\Areas\MyTime\Views\web.config,BuildArtifacts\Web.MyTime.Web.config
 ..\..\..\sitesroot\3\Areas\Start\Views\web.config,BuildArtifacts\Web.Start.Web.config
 ..\..\..\sitesroot\3\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml

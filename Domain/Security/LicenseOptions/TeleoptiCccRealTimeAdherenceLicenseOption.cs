@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
         /// Initializes a new instance of the <see cref="TeleoptiCccRealTimeAdherenceLicenseOption"/> class.
         /// </summary>
         public TeleoptiCccRealTimeAdherenceLicenseOption()
-            : base(DefinedLicenseOptionPaths.TeleoptiCccRealTimeAdherence, DefinedLicenseOptionNames.TeleoptiCccAss)
+            : base(DefinedLicenseOptionPaths.TeleoptiCccRealTimeAdherence, DefinedLicenseOptionNames.TeleoptiCccLifestyle)
         {
             //
         }

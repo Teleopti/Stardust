@@ -111,13 +111,13 @@
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Teleopti.Secrets.7.5.800.37\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation">
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.40\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Teleopti.Secrets.7.5.800.37\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Secrets">
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.40\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -652,7 +652,6 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\IScheduleProjectionReadOnlyRepository.cs" />
     <Compile Include="Repositories\IScheduleTagRepository.cs" />
     <Compile Include="Repositories\IUserDetailRepository.cs" />
-    <Compile Include="Repositories\IWebReportRepository.cs" />
     <Compile Include="Repositories\Paging.cs" />
     <Compile Include="Repositories\PagingDetail.cs" />
     <Compile Include="ResourceCalculation\ActivitySkillCombinationFromStorage.cs" />
@@ -1207,6 +1206,9 @@
     <Compile Include="Security\AuthorizationEntities\AuthenticationInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\ILicenseActivatorProvider.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccCalendarLinkLicenseOption.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccMyTeamLicenseOption.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccNotifyLicenseOption.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeAvailabilityLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccVersion8LicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseStatus.cs" />
@@ -1216,12 +1218,9 @@
     </Compile>
     <Compile Include="Security\IsPasswordEncryptedSpecification.cs" />
     <Compile Include="Security\ISystemUserSpecification.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccMobileReportsLicenseOption.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccMyTimeWebLicenseOption.cs" />
     <Compile Include="Security\Matrix\ApplicationFunctionResolver.cs" />
     <Compile Include="Security\AuthorizationData\ShippedApplicationRoleNames.cs" />
     <Compile Include="Security\AuthorizationEntities\AllLicenseOption.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccDeveloperLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersBaseLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersReportsLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersPermissionsLicenseOption.cs" />
@@ -1234,9 +1233,9 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccPayrollIntegrationLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPerformanceManagerLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccRealTimeAdherenceLicenseOption.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccHolidayPlannerLicenseOption.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccVacationPlannerLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccAgentScheduleMessengerLicenseOption.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccShiftTradesLicenseOption.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccShiftTraderLicenseOption.cs" />
     <Compile Include="Security\Encryption.cs" />
     <Compile Include="Security\License.cs" />
     <Compile Include="Security\Matrix\MatrixPermissionHolder.cs" />
@@ -1477,7 +1476,7 @@
     <Compile Include="Security\AuthorizationData\DefinedForeignSourceNames.cs" />
     <Compile Include="Security\AuthorizationData\DefinedLicenseOptionPaths.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccBaseLicenseOption.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccAgentSelfServiceLicenseOption.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccLifestyleLicenseOption.cs" />
     <Compile Include="Security\AuthorizationData\DefinedRaptorApplicationFunctionForeignIds.cs" />
     <Compile Include="Security\AuthorizationData\DefinedRaptorApplicationFunctionPaths.cs" />
     <Compile Include="Security\AuthorizationData\DefinedRaptorApplicationFunctionFactory.cs" />
@@ -1542,7 +1541,6 @@
     <Compile Include="WebReport\ReportDataQueueStatAbandoned.cs" />
     <Compile Include="WebReport\ReportDataServiceLevelAgentsReady.cs" />
     <Compile Include="WebReport\ReportControlSkillGet.cs" />
-    <Compile Include="WebReport\ReportMobileReportInit.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestNoneValidator.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenDatePeriod.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriod.cs" />

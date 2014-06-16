@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.contextMenuStripSkillTypes = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItemSkillTypesSkillNew = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemSkillTypesMultisiteSkillNew = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemQuickForecast = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparatorExport = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemExport = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemJobHistory = new System.Windows.Forms.ToolStripMenuItem();
@@ -146,7 +145,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.contextMenuStripSkillTypes.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemSkillTypesSkillNew,
             this.toolStripMenuItemSkillTypesMultisiteSkillNew,
-            this.toolStripMenuItemQuickForecast,
             this.toolStripSeparatorExport,
             this.toolStripMenuItemExport,
             this.toolStripMenuItemJobHistory});
@@ -170,15 +168,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripMenuItemSkillTypesMultisiteSkillNew.Size = new System.Drawing.Size(229, 22);
 			this.toolStripMenuItemSkillTypesMultisiteSkillNew.Text = "xxNewMultisiteSkillThreeDots";
 			this.toolStripMenuItemSkillTypesMultisiteSkillNew.Click += new System.EventHandler(this.toolStripMenuItemSkillTypesMultisiteSkillNew_Click);
-			// 
-			// toolStripMenuItemQuickForecast
-			// 
-			this.toolStripMenuItemQuickForecast.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Forecasts_16x16;
-			this.toolStripMenuItemQuickForecast.Name = "toolStripMenuItemQuickForecast";
-			this.toolStripMenuItemQuickForecast.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
-			this.toolStripMenuItemQuickForecast.Size = new System.Drawing.Size(229, 22);
-			this.toolStripMenuItemQuickForecast.Text = "xxQuickForecast";
-			this.toolStripMenuItemQuickForecast.Click += new System.EventHandler(this.toolStripMenuItemQuickForecastClick);
 			// 
 			// toolStripSeparatorExport
 			// 
@@ -1202,7 +1191,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemManageMultisiteDistributions;
         private System.Windows.Forms.ToolStripButton toolStripButtonManageMultisiteDistributions;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemQuickForecast;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopyTo;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparatorExport;

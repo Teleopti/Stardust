@@ -28,7 +28,6 @@
 		public const string OpenBudgets = "0050";
 		public const string AccessToPerformanceManager = "0040";
 		public const string PayrollIntegration = "0044";
-		public const string UnderConstruction = "0048";
 		public const string OpenAgentPortal = "0019";
 
 		// Global
@@ -120,9 +119,6 @@
 		public const string MyReportWeb = "0090";
 		public const string ViewPersonalAccount = "0093";
 		public const string MyReportQueueMetrics = "0095";
-
-		// Mobile Reports
-		public const string MobileReports = "0074";
 
 		// Anywhere
 		public const string Anywhere = "0080";

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
         /// Initializes a new instance of the <see cref="TeleoptiCccAgentScheduleMessengerLicenseOption"/> class.
         /// </summary>
         public TeleoptiCccAgentScheduleMessengerLicenseOption()
-            : base(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger, DefinedLicenseOptionNames.TeleoptiCccAss)
+            : base(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger, DefinedLicenseOptionNames.TeleoptiCccLifestyle)
         {
             //
         }
