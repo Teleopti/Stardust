@@ -34,13 +34,6 @@ Scenario: Browse to root
 	Given I am not signed in
 	When I navigate to the site's root
 	Then I should see the global sign in page
-	
-Scenario: Browse to root and sign in to menu when no Anywhere permission
-	Given I have the role 'Access to all except anywhere'
-	When I navigate to the site's root
-	And I select application logon data source
-	And I sign in
-	Then I should see the global menu
  
 Scenario: Browse to root and sign in to MyTime
 	Given I have the role 'Access to mytime only'
