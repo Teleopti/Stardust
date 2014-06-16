@@ -225,9 +225,10 @@ namespace Teleopti.Support.LicTool
 						//Freemium
 						if (options.Contains("Forecasts")) chkFreemium.Checked = true;
 
-						if (xlic.SchemaName != "TeleoptiCCC" & xlic.SchemaName != "TeleoptiCCCFreemium")
+						if (xlic.SchemaName != "TeleoptiCCC" && xlic.SchemaName != "TeleoptiCCCFreemium" && xlic.SchemaName != "TeleoptiWFM")
 						{
-							MessageBox.Show("Sorry, this tool can only handle TeleoptiCCC licenses.\nPlease choose another!", "Not a TeleoptiCCC license", MessageBoxButtons.OK);
+							MessageBox.Show("Sorry, this tool can only handle TeleoptiCCC licenses.\nPlease choose another!",
+								"Not a TeleoptiCCC license", MessageBoxButtons.OK);
 							Initialize_form();
 						}
 					}
@@ -269,7 +270,7 @@ namespace Teleopti.Support.LicTool
 				rootNode.AppendChild(xdoc.CreateElement("MaxSeats")).AppendChild(xdoc.CreateTextNode(numMaxActiveAgents.Value.ToString(invariant)));
 				rootNode.AppendChild(xdoc.CreateElement("SeatRatio")).AppendChild(xdoc.CreateTextNode(numericUpDownCountRatio.Value.ToString(invariant)));
 
-				XmlElement elmOptions = xdoc.CreateElement("TeleoptiCCC");
+				XmlElement elmOptions = xdoc.CreateElement("TeleoptiWFM");
 				if (chkBase.Checked)
 					elmOptions.AppendChild(xdoc.CreateElement("Base")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkLifestyle.Checked)
