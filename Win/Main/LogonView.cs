@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Main
 		{
 			_model = model;
 			InitializeComponent();
-			label1.Text = string.Concat("Build ", Application.ProductVersion);
+			autoLabel2.Text = string.Concat("Build ", Application.ProductVersion);
 		}
 
 		public bool StartLogon()
@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.Win.Main
 			var currentStep = _logonSteps[(int) Presenter.CurrentStep];
 			currentStep.SetData();
 			updatePanel((UserControl) currentStep);
-			labelStatusText.Visible = false;
 			currentStep.SetBackButtonVisible(showBackButton);
 			
 			Refresh();
@@ -52,8 +51,7 @@ namespace Teleopti.Ccc.Win.Main
 		public void ClearForm(string labelText)
 		{
 			pnlContent.Controls.Clear();
-			labelStatusText.Text = labelText;
-			labelStatusText.Visible = labelText != "";
+			pnlContent.Visible = false;
 			
 			Refresh();
 		}
@@ -101,6 +99,7 @@ namespace Teleopti.Ccc.Win.Main
 			pnlContent.Controls.Clear();
 			pnlContent.Controls.Add(userControl);
 			ActiveControl = userControl;
+			pnlContent.Visible = true;
 		}
 
 		public void Exit(DialogResult result)

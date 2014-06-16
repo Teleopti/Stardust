@@ -28,11 +28,12 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.labelChooseSDK = new System.Windows.Forms.Label();
 			this.lbxSelectSDK = new System.Windows.Forms.ListBox();
-			this.btnBack = new System.Windows.Forms.Button();
-			this.buttonLogOnCancel = new System.Windows.Forms.Button();
-			this.buttonLogOnOK = new System.Windows.Forms.Button();
+			this.btnBack = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonLogOnCancel = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonLogOnOK = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.SuspendLayout();
 			// 
 			// labelChooseSDK
@@ -61,38 +62,53 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			// 
 			// btnBack
 			// 
+			this.btnBack.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.btnBack.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.btnBack.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.btnBack.ForeColor = System.Drawing.Color.White;
+			this.btnBack.IsBackStageButton = false;
 			this.btnBack.Location = new System.Drawing.Point(186, 197);
 			this.btnBack.Name = "btnBack";
 			this.btnBack.Size = new System.Drawing.Size(75, 23);
 			this.btnBack.TabIndex = 42;
 			this.btnBack.Text = "xxBack";
-			this.btnBack.UseVisualStyleBackColor = true;
+			this.btnBack.UseVisualStyleBackColor = false;
 			this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
 			// 
 			// buttonLogOnCancel
 			// 
 			this.buttonLogOnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonLogOnCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonLogOnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.buttonLogOnCancel.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.buttonLogOnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonLogOnCancel.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.buttonLogOnCancel.ForeColor = System.Drawing.Color.White;
+			this.buttonLogOnCancel.IsBackStageButton = false;
 			this.buttonLogOnCancel.Location = new System.Drawing.Point(348, 197);
 			this.buttonLogOnCancel.Name = "buttonLogOnCancel";
 			this.buttonLogOnCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonLogOnCancel.TabIndex = 41;
 			this.buttonLogOnCancel.Text = "xxCancel";
-			this.buttonLogOnCancel.UseVisualStyleBackColor = true;
+			this.buttonLogOnCancel.UseVisualStyleBackColor = false;
 			this.buttonLogOnCancel.Click += new System.EventHandler(this.buttonLogOnCancel_Click);
 			// 
 			// buttonLogOnOK
 			// 
 			this.buttonLogOnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonLogOnOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonLogOnOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.buttonLogOnOK.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.buttonLogOnOK.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.buttonLogOnOK.ForeColor = System.Drawing.Color.White;
+			this.buttonLogOnOK.IsBackStageButton = false;
 			this.buttonLogOnOK.Location = new System.Drawing.Point(267, 197);
 			this.buttonLogOnOK.Name = "buttonLogOnOK";
 			this.buttonLogOnOK.Size = new System.Drawing.Size(75, 23);
 			this.buttonLogOnOK.TabIndex = 40;
 			this.buttonLogOnOK.Text = "xxOK";
-			this.buttonLogOnOK.UseVisualStyleBackColor = true;
+			this.buttonLogOnOK.UseVisualStyleBackColor = false;
 			this.buttonLogOnOK.Click += new System.EventHandler(this.buttonLogOnOK_Click);
 			// 
 			// SelectSdkScreen
@@ -115,8 +131,8 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
         private System.Windows.Forms.Label labelChooseSDK;
 		private System.Windows.Forms.ListBox lbxSelectSDK;
-		private System.Windows.Forms.Button btnBack;
-		private System.Windows.Forms.Button buttonLogOnCancel;
-		private System.Windows.Forms.Button buttonLogOnOK;
+		private Syncfusion.Windows.Forms.ButtonAdv btnBack;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonLogOnCancel;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonLogOnOK;
 	}
 }

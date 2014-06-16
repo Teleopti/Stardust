@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="Teleopti.Ccc.WpfControls.Controls.Progress"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="65" d:DesignWidth="460
+             ">
+    <Grid Margin="0,20,0,31">
+
+        <ProgressBar HorizontalAlignment="Left" Height="6" Margin="5,0,0,0" VerticalAlignment="Top" Width="450
+                     " IsIndeterminate="True" IsEnabled="True" Background="#FF0099FF" BorderBrush="{x:Null}" Foreground="White"/>
+
+    </Grid>
+</UserControl>
