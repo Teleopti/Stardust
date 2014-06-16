@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		private static void OpenExtendedTooltip(DateTime date)
 		{
 			var extendedIndication = ExtendedIndication(date);
-			Browser.Interactions.AssertExistsUsingJQuery(extendedIndication);
+			Browser.Interactions.AssertVisibleUsingJQuery(extendedIndication);
 			Browser.Interactions.Javascript("$('{0}').trigger('mouseleave')", extendedIndication.JSEncode());
 			Browser.Interactions.Javascript("$('{0}').trigger('mouseenter')", extendedIndication.JSEncode());
 		}
