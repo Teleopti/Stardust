@@ -113,7 +113,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 				var toggleQuerier = new ToggleQuerier(new CurrentDataSource(new CurrentIdentity()), TestSiteConfigurationSetup.Url.ToString());
 				var matchingEnkelsnuffs = new Regex(@"\'(.*)\'");
-		    var tags = ScenarioContext.Current.ScenarioInfo.Tags;
+		    var tags = ScenarioContext.Current.ScenarioInfo.Tags.ToList();
+				tags.AddRange(FeatureContext.Current.FeatureInfo.Tags);
 
 		    var allOnlyRunIfEnabled = tags.Where(s => s.StartsWith("OnlyRunIfEnabled"))
 					.Select(onlyRunIfEnabled => (Toggles)Enum.Parse(typeof(Toggles), matchingEnkelsnuffs.Match(onlyRunIfEnabled).Groups[1].ToString()));
