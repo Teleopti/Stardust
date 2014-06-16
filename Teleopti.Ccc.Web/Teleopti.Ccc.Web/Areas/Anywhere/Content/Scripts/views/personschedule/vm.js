@@ -45,7 +45,8 @@ define([
 
 		this.PersonId = ko.observable();
 		this.GroupId = ko.observable();
-		this.Date = ko.observable();
+		this.ScheduleDate = ko.observable();
+		this.SelectedStartTime = ko.observable();
 
 		var personForId = function(id, personArray) {
 			if (!id)
@@ -140,7 +141,7 @@ define([
 		});
 
 		this.UpdateData = function (data) {
-			data.Date = self.Date();
+			data.Date = self.ScheduleDate();
 			
 			var person = self.SelectedPerson();
 			person.AddData(data, self.TimeLine);
@@ -148,13 +149,13 @@ define([
 			self.Absences([]);
 			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
 				a.PersonId = self.PersonId();
-				a.Date = self.Date();
+				a.Date = self.ScheduleDate();
 				return new absenceListItemViewModel(a);
 			});
 			self.Absences.push.apply(self.Absences, absences);
 
 			data.PersonId = self.PersonId();
-			data.Date = self.Date();
+			data.Date = self.ScheduleDate();
 			data.GroupId = self.GroupId();
 			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);
@@ -177,7 +178,7 @@ define([
 			for (var i = 0; i < data.length; i++) {
 				var schedule = data[i];
 				schedule.GroupId = self.GroupId();
-				schedule.Offset = self.Date();
+				schedule.Offset = self.ScheduleDate();
 				schedule.Date = moment(schedule.Date, resources.FixedDateFormatForMoment);
 				var person = personForId(schedule.PersonId, personArray);
 
@@ -189,6 +190,14 @@ define([
 			self.AddIntradayAbsenceForm.WorkingShift(self.WorkingShift());
 			self.AddActivityForm.WorkingShift(self.WorkingShift());
 		};
-		
+
+		this.SelectedLayer = function () {
+			var selectedLayers = layers().filter(function (layer) {
+				var momentStartTime = moment(layer.StartTime(), resources.FixedDateFormatForMoment).format(resources.FixedTimeFormatForMoment);
+				if (momentStartTime === self.SelectedStartTime().format(resources.FixedTimeFormatForMoment))
+					return layer;
+			});
+			return selectedLayers.first();
+		}
 	};
 });

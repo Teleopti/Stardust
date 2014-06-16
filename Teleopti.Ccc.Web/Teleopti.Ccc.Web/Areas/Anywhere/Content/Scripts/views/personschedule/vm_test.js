@@ -1,15 +1,8 @@
-﻿
-define([
-    'buster',
-    'views/personschedule/vm'
-], function (
-    buster,
-    viewModel
-    ) {
-
+﻿define(['buster', 'views/personschedule/vm', 'shared/layer', 'resources', 'require/resourcesr'],
+	function (buster, viewModel, layer, resources, resourcesr) {
 	return function () {
 
-		buster.testCase("personschedule viewmodel", {
+		buster.testCase("person schedule viewmodel", {
 
 			"should create viewmodel": function () {
 				var vm = new viewModel();
@@ -44,6 +37,30 @@ define([
 
 				assert.equals(vm.TimeLine.StartMinutes(), 12 * 60);
 				assert.equals(vm.TimeLine.EndMinutes(), 13 * 60);
+			},
+			
+			"should get the selected layer from url": function () {
+
+				var jsonData = {
+					"PersonId": "guid",
+					"Name": "John King", "Date": "2013-11-18", "WorkTimeMinutes": 150,
+					"ContractTimeMinutes": 360,
+					"Projection": [{ "Color": "#008000", "Description": "Phone", "Start": "2013-11-18 14:00", "Minutes": 240 }],
+					"Offset": "2013-11-18"
+				};
+				resources.FixedDateTimeFormatForMoment = "YYYY-MM-DD HH:mm";
+				resources.FixedTimeFormatForMoment = "HH:mm";
+				var dateMoment = moment(jsonData.Date);
+
+				var vm = new viewModel();
+				vm.PersonId('guid');
+				vm.ScheduleDate(dateMoment);
+				vm.SelectedStartTime(moment("2013-11-18 14:00", resources.FixedDateTimeFormatForMoment));
+
+				vm.UpdateData(jsonData);
+
+				assert.equals(moment(vm.SelectedLayer().StartTime(), resources.FixedDateTimeFormatForMoment).format(resources.FixedTimeFormatForMoment),
+					vm.SelectedStartTime().format(resources.FixedTimeFormatForMoment));
 			}
 
 		});
