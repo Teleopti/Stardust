@@ -104,7 +104,6 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
             using (_mocks.Record())
             {
                 Expect.Call(authorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
-					 Expect.Call(_licenseActivator.EnabledLicenseOptionPaths).Return(new List<string>());
             }
             using (_mocks.Playback())
             {
@@ -132,7 +131,6 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
             using (_mocks.Record())
             {
                 Expect.Call(authorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
-	            Expect.Call(_licenseActivator.EnabledLicenseOptionPaths).Return(new List<string>());
             }
             using (_mocks.Playback())
             {
