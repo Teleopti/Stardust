@@ -302,21 +302,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var resultHtml = Browser.Interactions.Javascript("return $(\"" + tooltip + "\").html()") as string;
 			Console.WriteLine(@"resultHtml: {0}", resultHtml);
 
-			if (fields.Preference != null) Assert.IsTrue(resultHtml.Contains(fields.Preference));
-			if (fields.StartTimeMinimum != null) Assert.IsTrue(resultHtml.Contains(fields.StartTimeMinimum)); 
-			if (fields.StartTimeMaximum != null) Assert.IsTrue(resultHtml.Contains(fields.StartTimeMaximum));
-			if (fields.EndTimeMinimum != null) Assert.IsTrue(resultHtml.Contains(fields.EndTimeMinimum));
-			if (fields.EndTimeMaximum != null) Assert.IsTrue(resultHtml.Contains(fields.EndTimeMaximum));
-			if (fields.WorkTimeMinimum != null) Assert.IsTrue(resultHtml.Contains(fields.WorkTimeMinimum));
-			if (fields.WorkTimeMaximum != null) Assert.IsTrue(resultHtml.Contains(fields.WorkTimeMaximum));
+			if (fields.Preference != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.Preference));
+			if (fields.StartTimeMinimum != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.StartTimeMinimum));
+			if (fields.StartTimeMaximum != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.StartTimeMaximum));
+			if (fields.EndTimeMinimum != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.EndTimeMinimum));
+			if (fields.EndTimeMaximum != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.EndTimeMaximum));
+			if (fields.WorkTimeMinimum != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.WorkTimeMinimum));
+			if (fields.WorkTimeMaximum != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.WorkTimeMaximum));
 
-			if (fields.Activity != null) Assert.IsTrue(resultHtml.Contains(fields.Activity));
-			if (fields.ActivityStartTimeMinimum != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityStartTimeMinimum));
-			if (fields.ActivityStartTimeMaximum != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityStartTimeMaximum));
-			if (fields.ActivityEndTimeMinimum != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityEndTimeMinimum));
-			if (fields.ActivityEndTimeMaximum != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityEndTimeMaximum));
-			if (fields.ActivityTimeMinimum != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityTimeMinimum));
-			if (fields.ActivityTimeMaximum != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityTimeMaximum));
+			if (fields.Activity != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.Activity));
+			if (fields.ActivityStartTimeMinimum != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityStartTimeMinimum));
+			if (fields.ActivityStartTimeMaximum != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityStartTimeMaximum));
+			if (fields.ActivityEndTimeMinimum != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityEndTimeMinimum));
+			if (fields.ActivityEndTimeMaximum != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityEndTimeMaximum));
+			if (fields.ActivityTimeMinimum != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityTimeMinimum));
+			if (fields.ActivityTimeMaximum != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityTimeMaximum));
 		}
 
 		private static void OpenExtendedTooltip(DateTime date)
