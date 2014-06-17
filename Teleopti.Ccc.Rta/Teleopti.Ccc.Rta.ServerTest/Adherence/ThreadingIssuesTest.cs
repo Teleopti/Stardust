@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 		[Test, Explicit("not yet fixed")]
 		public void LotsOfTeamMessagesShouldNotThrow()
 		{
-			const int numberOfMessages = 5000;
+			const int numberOfMessages = 500;
 			var teamId = Guid.NewGuid();
 			var broker = new MessageSenderExposingNotifications();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			Task.WaitAll(taskar.ToArray());
 
 			broker.AllNotifications.Select(x => x.GetOriginal<TeamAdherenceMessage>().OutOfAdherence)
-				.Should().Contain(numberOfMessages);
+				.OrderByDescending(x => x).First().Should().Be.EqualTo(numberOfMessages);
 		}
 
 		private static void thisShouldGoAwayWhenWeRefactor(IActualAgentStateHasBeenSent target, IEnumerable<Guid> personGuids, IOrganizationForPerson organizationForPerson)
