@@ -143,7 +143,6 @@
     <Compile Include="Adherence\AdherenceAggregator.cs" />
     <Compile Include="Adherence\AdherenceAggregatorInitializor.cs" />
     <Compile Include="Adherence\AgentAdherenceAggregator.cs" />
-    <Compile Include="Adherence\AggregatedValues.cs" />
     <Compile Include="Adherence\IOrganizationForPerson.cs" />
     <Compile Include="Adherence\IPersonOrganizationProvider.cs" />
     <Compile Include="Adherence\OrganizationForPerson.cs" />
