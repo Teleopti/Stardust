@@ -114,7 +114,7 @@ define([
 		self.Configuration(JSON.stringify({
 			Url: "http://localhost:52858/RtaService/SaveExternalUserState/",
 			PlatformTypeId: "00000000-0000-0000-0000-000000000000",
-			ExternalLogOns: [2001],
+			ExternalLogOns: ["2001", "2002", "0063", "2000", "0019", "0068", "0085", "0202", "0238", "2003"],
 			States: ["Ready", "OFF"],
 			SourceId: 1,
 			StatesToSend: 4,
@@ -130,7 +130,11 @@ define([
 				agentsAdherenceSubscription = messagebroker.subscribe({
 					domainType: 'SiteAdherenceMessage',
 					callback: function (notification) {
-						if (JSON.parse(notification.BinaryData).OutOfAdherence === self.ConfigurationObject().ExpectedPersonsInAlarm)
+						var outOfAdherence = JSON.parse(notification.BinaryData).OutOfAdherence;
+						var expectedPersonsInAlarm = self.ConfigurationObject().ExpectedPersonsInAlarm;
+						console.log(outOfAdherence);
+						console.log(expectedPersonsInAlarm);
+						if (outOfAdherence === expectedPersonsInAlarm)
 							result.RunDone(true);
 					}
 				});
