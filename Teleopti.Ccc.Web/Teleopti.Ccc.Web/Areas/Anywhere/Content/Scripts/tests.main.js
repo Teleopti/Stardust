@@ -21,8 +21,20 @@ var testCases = [
 	'helpers_test'
 ];
 
+var parseQueryString = function (queryString) {
+	var params = {}, queries, temp, i, l;
+	queries = queryString.split("&");
+	for (i = 0, l = queries.length; i < l; i++) {
+		temp = queries[i].split('=');
+		params[temp[0]] = temp[1];
+	}
+	return params;
+};
+
 require(testCases, function () {
+	var query = parseQueryString(location.search.substring(1));
 	for (var i = 0, j = arguments.length; i < j; i++) {
+		if (!query.q || testCases[i].indexOf(query.q) > 0)
 			arguments[i]();
 	}
 });
