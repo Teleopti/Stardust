@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.labelChooseSDK.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelChooseSDK.Location = new System.Drawing.Point(0, 0);
 			this.labelChooseSDK.Name = "labelChooseSDK";
-			this.labelChooseSDK.Padding = new System.Windows.Forms.Padding(0, 20, 0, 0);
+			this.labelChooseSDK.Padding = new System.Windows.Forms.Padding(0, 15, 0, 0);
 			this.labelChooseSDK.Size = new System.Drawing.Size(483, 296);
 			this.labelChooseSDK.TabIndex = 36;
 			this.labelChooseSDK.Text = "xxPlease choose SDK";
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.lbxSelectSDK.ItemHeight = 17;
 			this.lbxSelectSDK.Location = new System.Drawing.Point(71, 51);
 			this.lbxSelectSDK.Name = "lbxSelectSDK";
-			this.lbxSelectSDK.Size = new System.Drawing.Size(352, 140);
+			this.lbxSelectSDK.Size = new System.Drawing.Size(352, 123);
 			this.lbxSelectSDK.TabIndex = 37;
 			// 
 			// btnBack
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.btnBack.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnBack.ForeColor = System.Drawing.Color.White;
 			this.btnBack.IsBackStageButton = false;
-			this.btnBack.Location = new System.Drawing.Point(186, 197);
+			this.btnBack.Location = new System.Drawing.Point(186, 190);
 			this.btnBack.Name = "btnBack";
 			this.btnBack.Size = new System.Drawing.Size(75, 23);
 			this.btnBack.TabIndex = 42;
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonLogOnCancel.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonLogOnCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonLogOnCancel.IsBackStageButton = false;
-			this.buttonLogOnCancel.Location = new System.Drawing.Point(348, 197);
+			this.buttonLogOnCancel.Location = new System.Drawing.Point(348, 190);
 			this.buttonLogOnCancel.Name = "buttonLogOnCancel";
 			this.buttonLogOnCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonLogOnCancel.TabIndex = 41;
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonLogOnOK.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonLogOnOK.ForeColor = System.Drawing.Color.White;
 			this.buttonLogOnOK.IsBackStageButton = false;
-			this.buttonLogOnOK.Location = new System.Drawing.Point(267, 197);
+			this.buttonLogOnOK.Location = new System.Drawing.Point(267, 190);
 			this.buttonLogOnOK.Name = "buttonLogOnOK";
 			this.buttonLogOnOK.Size = new System.Drawing.Size(75, 23);
 			this.buttonLogOnOK.TabIndex = 40;
