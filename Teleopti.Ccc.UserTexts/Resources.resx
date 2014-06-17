@@ -11971,8 +11971,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>Monthly schedule in permission tree</comment>
   </data>
   <data name="Ranking" xml:space="preserve">
-    <value>Ranking</value>
-    <comment>Ranking</comment>
+    <value>Seniority ranking</value>
+    <comment>Seniority ranking on agentinfo fairness tab</comment>
   </data>
   <data name="RealTimeAdherenceOverview" xml:space="preserve">
     <value>Real Time Adherence Overview</value>
