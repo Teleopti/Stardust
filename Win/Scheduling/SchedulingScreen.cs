@@ -847,6 +847,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemWriteProtectSchedule.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
 			toolStripMenuItemAddOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
 
+			var seniorityEnabled = _container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_Seniority_11111);
+			toolStripMenuItemSeniorityRankDesc.Visible = seniorityEnabled;
+			toolStripMenuItemSeniorityRankAsc.Visible = seniorityEnabled;
+
 			setPermissionOnControls();
 			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += agentRestrictionGridSelectedAgentIsReady;
 			_backgroundWorkerRunning = true;

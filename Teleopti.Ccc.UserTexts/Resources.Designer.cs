@@ -21528,6 +21528,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seniority ranking ascending.
+        /// </summary>
+        public static string SeniorityRankingAsc {
+            get {
+                return ResourceManager.GetString("SeniorityRankingAsc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seniority ranking descending.
+        /// </summary>
+        public static string SeniorityRankingDesc {
+            get {
+                return ResourceManager.GetString("SeniorityRankingDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sent.
         /// </summary>
         public static string Sent {

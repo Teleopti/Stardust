@@ -103,10 +103,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemStartTimeDesc = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemEndTimeAsc = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemEndTimeDesc = new System.Windows.Forms.ToolStripMenuItem();
-			this.xxContractTimeAscToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.xxContractTimeDescToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.xxSeniorityRankAscToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.xxSeniorityRankDescToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemContractTimeAsc = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemContractTimeDesc = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemSeniorityRankAsc = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemSeniorityRankDesc = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemUnlock = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemUnlockSelectionRM = new System.Windows.Forms.ToolStripMenuItem();
@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripStatusLabelTimeZone,
             this.toolStripStatusLabelScheduleTag,
             this.toolStripStatusLabelContractTime});
-			this.statusStrip1.Location = new System.Drawing.Point(6, 725);
+			this.statusStrip1.Location = new System.Drawing.Point(6, 669);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(1262, 26);
 			this.statusStrip1.TabIndex = 0;
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 7;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 1;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -722,10 +722,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripMenuItemStartTimeDesc,
             this.toolStripMenuItemEndTimeAsc,
             this.toolStripMenuItemEndTimeDesc,
-            this.xxContractTimeAscToolStripMenuItem,
-            this.xxContractTimeDescToolStripMenuItem,
-            this.xxSeniorityRankAscToolStripMenuItem,
-            this.xxSeniorityRankDescToolStripMenuItem});
+            this.toolStripMenuItemContractTimeAsc,
+            this.toolStripMenuItemContractTimeDesc,
+            this.toolStripMenuItemSeniorityRankAsc,
+            this.toolStripMenuItemSeniorityRankDesc});
 			this.toolStripMenuItemSortBy.Name = "toolStripMenuItemSortBy";
 			this.SetShortcut(this.toolStripMenuItemSortBy, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemSortBy.Size = new System.Drawing.Size(305, 22);
@@ -763,37 +763,37 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemEndTimeDesc.Text = "xxEndTimeDesc";
 			this.toolStripMenuItemEndTimeDesc.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemEndTimeDescMouseUp);
 			// 
-			// xxContractTimeAscToolStripMenuItem
+			// toolStripMenuItemContractTimeAsc
 			// 
-			this.xxContractTimeAscToolStripMenuItem.Name = "xxContractTimeAscToolStripMenuItem";
-			this.SetShortcut(this.xxContractTimeAscToolStripMenuItem, System.Windows.Forms.Keys.None);
-			this.xxContractTimeAscToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-			this.xxContractTimeAscToolStripMenuItem.Text = "xxContractTimeAsc";
-			this.xxContractTimeAscToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemContractTimeAscMouseUp);
+			this.toolStripMenuItemContractTimeAsc.Name = "toolStripMenuItemContractTimeAsc";
+			this.SetShortcut(this.toolStripMenuItemContractTimeAsc, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemContractTimeAsc.Size = new System.Drawing.Size(182, 22);
+			this.toolStripMenuItemContractTimeAsc.Text = "xxContractTimeAsc";
+			this.toolStripMenuItemContractTimeAsc.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemContractTimeAscMouseUp);
 			// 
-			// xxContractTimeDescToolStripMenuItem
+			// toolStripMenuItemContractTimeDesc
 			// 
-			this.xxContractTimeDescToolStripMenuItem.Name = "xxContractTimeDescToolStripMenuItem";
-			this.SetShortcut(this.xxContractTimeDescToolStripMenuItem, System.Windows.Forms.Keys.None);
-			this.xxContractTimeDescToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-			this.xxContractTimeDescToolStripMenuItem.Text = "xxContractTimeDesc";
-			this.xxContractTimeDescToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemContractTimeDescMouseUp);
+			this.toolStripMenuItemContractTimeDesc.Name = "toolStripMenuItemContractTimeDesc";
+			this.SetShortcut(this.toolStripMenuItemContractTimeDesc, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemContractTimeDesc.Size = new System.Drawing.Size(182, 22);
+			this.toolStripMenuItemContractTimeDesc.Text = "xxContractTimeDesc";
+			this.toolStripMenuItemContractTimeDesc.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemContractTimeDescMouseUp);
 			// 
-			// xxSeniorityRankAscToolStripMenuItem
+			// toolStripMenuItemSeniorityRankAsc
 			// 
-			this.xxSeniorityRankAscToolStripMenuItem.Name = "xxSeniorityRankAscToolStripMenuItem";
-			this.SetShortcut(this.xxSeniorityRankAscToolStripMenuItem, System.Windows.Forms.Keys.None);
-			this.xxSeniorityRankAscToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-			this.xxSeniorityRankAscToolStripMenuItem.Text = "xxSeniorityRankAsc";
-			this.xxSeniorityRankAscToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemSeniorityRankAscMouseUp);
+			this.toolStripMenuItemSeniorityRankAsc.Name = "toolStripMenuItemSeniorityRankAsc";
+			this.SetShortcut(this.toolStripMenuItemSeniorityRankAsc, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemSeniorityRankAsc.Size = new System.Drawing.Size(182, 22);
+			this.toolStripMenuItemSeniorityRankAsc.Text = "xxSeniorityRankingAsc";
+			this.toolStripMenuItemSeniorityRankAsc.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemSeniorityRankAscMouseUp);
 			// 
-			// xxSeniorityRankDescToolStripMenuItem
+			// toolStripMenuItemSeniorityRankDesc
 			// 
-			this.xxSeniorityRankDescToolStripMenuItem.Name = "xxSeniorityRankDescToolStripMenuItem";
-			this.SetShortcut(this.xxSeniorityRankDescToolStripMenuItem, System.Windows.Forms.Keys.None);
-			this.xxSeniorityRankDescToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-			this.xxSeniorityRankDescToolStripMenuItem.Text = "xxSeniorityRankDesc";
-			this.xxSeniorityRankDescToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemSeniorityRankDescMouseUp);
+			this.toolStripMenuItemSeniorityRankDesc.Name = "toolStripMenuItemSeniorityRankDesc";
+			this.SetShortcut(this.toolStripMenuItemSeniorityRankDesc, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemSeniorityRankDesc.Size = new System.Drawing.Size(182, 22);
+			this.toolStripMenuItemSeniorityRankDesc.Text = "xxSeniorityRankingDesc";
+			this.toolStripMenuItemSeniorityRankDesc.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemSeniorityRankDescMouseUp);
 			// 
 			// toolStripSeparator1
 			// 
@@ -3222,7 +3222,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.schedulerSplitters1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.schedulerSplitters1.Location = new System.Drawing.Point(6, 161);
 			this.schedulerSplitters1.Name = "schedulerSplitters1";
-			this.schedulerSplitters1.Size = new System.Drawing.Size(1262, 564);
+			this.schedulerSplitters1.Size = new System.Drawing.Size(1262, 508);
 			this.schedulerSplitters1.TabIndex = 6;
 			// 
 			// contextMenuStripRequests
@@ -3313,7 +3313,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1274, 757);
+			this.ClientSize = new System.Drawing.Size(1274, 701);
 			this.Controls.Add(this.schedulerSplitters1);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.ribbonControlAdv1);
@@ -3594,9 +3594,9 @@ namespace Teleopti.Ccc.Win.Scheduling
         private ToolStripSplitButton toolStripSplitButtonChangeTag;
         private ToolStripLabel toolStripLabelAutoTag;
         private ToolStripMenuItem toolStripMenuItemChangeTagRM;
-        private ToolStripMenuItem xxContractTimeAscToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItemContractTimeAsc;
         private ToolStripMenuItem toolstripMenuRemoveWriteProtection;
-        private ToolStripMenuItem xxContractTimeDescToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItemContractTimeDesc;
         private ToolStripMenuItem ToolStripMenuItemRemoveWriteProtectionToolBar;
         private ToolStripMenuItem xxViewOldRequestsToolStripMenuItem;
         private ToolStripMenuItem ToolStripMenuItemExportToPDFShiftsPerDay;
@@ -3640,8 +3640,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ToolStripMenuItem ToolStripMenuItemSwapRaw;
 		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExRequestNavigate;
 		private ToolStripButton toolStripButtonRequestBack;
-		private ToolStripMenuItem xxSeniorityRankAscToolStripMenuItem;
-		private ToolStripMenuItem xxSeniorityRankDescToolStripMenuItem;
+		private ToolStripMenuItem toolStripMenuItemSeniorityRankAsc;
+		private ToolStripMenuItem toolStripMenuItemSeniorityRankDesc;
         
         
     }
