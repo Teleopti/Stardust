@@ -4613,6 +4613,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			officeDropDownButtonMainMenuExportTo.DropDownItems.Clear();
 			officeDropDownButtonMainMenuExportTo.DropDownText = Resources.ExportToScenario;
 
+			var contextMenu = new ContextMenu();
+
 			foreach (IScenario scenario in scenarios)
 			{
 				if (_scenario.Description.Name != scenario.Description.Name)
@@ -4622,8 +4624,33 @@ namespace Teleopti.Ccc.Win.Scheduling
 					scenarioMenuItem.Click += scenarioMenuItem_Click;
 					scenarioMenuItem.Tag = scenario;
 					officeDropDownButtonMainMenuExportTo.DropDownItems.Insert(0, scenarioMenuItem);
+
+					var menuItem = new MenuItem(scenario.Description.Name);
+					menuItem.Tag = scenario;
+					menuItem.Click += menuItem_Click;
+					contextMenu.MenuItems.Add(menuItem);
+					backStageButtonMainMenuExportTo.ContextMenu = contextMenu;
 				}
 			}
+		}
+
+		void menuItem_Click(object sender, EventArgs e)
+		{
+			var scenario = (IScenario)((MenuItem)sender).Tag;
+
+			var allNewRules = _schedulerState.SchedulingResultState.GetRulesToRun();
+			var selectedSchedules = _scheduleView.SelectedSchedules();
+			var uowFactory = UnitOfWorkFactory.Current;
+			var scheduleRepository = new ScheduleRepository(uowFactory);
+			using (var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository, new MoveDataBetweenSchedules(allNewRules, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState)),
+															_schedulerMessageBrokerHandler,
+															_scheduleView.AllSelectedPersons(selectedSchedules),
+															selectedSchedules,
+															scenario,
+															_container.Resolve<IScheduleDictionaryPersister>()))
+			{
+				exportForm.ShowDialog(this);
+			}	
 		}
 
 		private void scenarioMenuItem_Click(object sender, EventArgs e)

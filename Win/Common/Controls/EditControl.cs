@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         {
             if (_newSpecialItems.Count == 0)
             {
-                toolStripButtonNew.DropDownButtonWidth = 0;
+                toolStripButtonNew.DropDownButtonWidth = 1;
                 return;
             }
             toolStripButtonNew.DropDownButtonWidth = 15;
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         {
             if (_deleteSpecialItems.Count == 0)
             {
-                this.toolStripButtonDelete.DropDownButtonWidth = 0;
+                this.toolStripButtonDelete.DropDownButtonWidth = 1;
                 return;
             }
             this.toolStripButtonDelete.DropDownButtonWidth = 15;
