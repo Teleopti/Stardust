@@ -1,5 +1,5 @@
 @echo off
-ECHO Start all services needed by Teleopti CCC 7, inluding default instance of OLAP and SQL Server ...
+ECHO Start all services needed by Teleopti WFM, inluding default instance of OLAP and SQL Server ...
 PING -n 2 127.0.0.1>nul
 ::The list of services to manuipulate
 ::set serviceList=mssqlserver;MSSQLServerOLAPService;TeleoptiBrokerService;teleoptiRtaService;teleoptiEtlService

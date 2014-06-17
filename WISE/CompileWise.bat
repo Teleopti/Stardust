@@ -17,10 +17,10 @@ IF %ProductId%==3 SET Product=%ccc7_client%
 IF %ProductId%==4 SET Product=%ccc7_mytime%
 
 ::set Outfile
-IF %ProductId%==1 SET OUTFILE=Teleopti CCC %version%.msi
-IF %ProductId%==2 SET OUTFILE=Teleopti CCC Forecasts %version%.exe
-IF %ProductId%==3 SET OUTFILE=Teleopti CCC Client %version%.msi
-IF %ProductId%==4 SET OUTFILE=Teleopti CCC MyTime %version%.msi
+IF %ProductId%==1 SET OUTFILE=Teleopti WFM %version%.msi
+IF %ProductId%==2 SET OUTFILE=Teleopti WFM Forecasts %version%.exe
+IF %ProductId%==3 SET OUTFILE=Teleopti WFM Client %version%.msi
+IF %ProductId%==4 SET OUTFILE=Teleopti WFM MyTime %version%.msi
 
 ::Exist?
 IF EXIST "%OUTDIR%\%OUTFILE%" (

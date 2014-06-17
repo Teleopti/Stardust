@@ -99,7 +99,7 @@
     <FileUpdate
 			  Files="default.htm"
 			  Regex="#TITLE#"
-			  ReplacementText="TELEOPTI CCC, version 7"/>
+			  ReplacementText="TELEOPTI WFM"/>
     <FileUpdate
 			  Files="default.htm"
 			  Regex="#VERSION#"
@@ -124,8 +124,8 @@
     <GenerateDeploymentManifest AssemblyName="$(ClickOnceAppTitle).application"
 												  AssemblyVersion="$(CCCVersion)"
 												  DeploymentUrl="$(ClickOnceApplicationUrl)"
-												  Description="TELEOPTI CCC, version 7"
-												  Product="TELEOPTI CCC, version 7"
+												  Description="TELEOPTI WFM"
+												  Product="TELEOPTI WFM"
 												  Publisher="$(Company)"
 												  EntryPoint="$(SolutionName).exe.manifest"
 												  Install="true"

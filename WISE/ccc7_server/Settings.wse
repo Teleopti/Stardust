@@ -541,7 +541,7 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(DATASOURCE_NAME)|Teleopti CCC
+  New Text=$(DATASOURCE_NAME)|Teleopti WFM
   Line Number=0
 end
 item: Remark

@@ -10,7 +10,7 @@
 		<MSBuildMercurialTasksLib>$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.dll</MSBuildMercurialTasksLib>
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
 		<Company>Teleopti</Company>
-		<ProductName>Teleopti CCC</ProductName>
+		<ProductName>Teleopti WFM</ProductName>
 		<TfsLibraryLocation>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0</TfsLibraryLocation>
 		<SDKDocProj>$(CCNetWorkingDirectory)\docSdkx64.shfbproj</SDKDocProj>
 		<SDKDocOutput>C:\Help\Documentation.chm</SDKDocOutput>
@@ -121,15 +121,15 @@
 	</Target>
 	
 	<Target Name="ZipServerInstall">
-    <Zip Files="$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).msi"
+    <Zip Files="$(MSIShare)\$(CCCVersion)\Teleopti WFM $(CCCVersion).msi"
      WorkingDirectory="$(MSIShare)\$(CCCVersion)\"
-     ZipFileName="$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip"
+     ZipFileName="$(MSIShare)\$(CCCVersion)\Teleopti WFM $(CCCVersion).zip"
      ZipLevel="9" />
   </Target>
   
   <Target Name="RenameZip" Condition="'$(FullBuild)' == 'No'">
 	<Exec Command="del &quot;$(MSIShare)\$(CCCVersion)\$(CCNetProject).zip&quot;"/>
-	<Exec Command="rename &quot;$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip&quot; $(CCNetProject).zip"/>
+	<Exec Command="rename &quot;$(MSIShare)\$(CCCVersion)\Teleopti WFM $(CCCVersion).zip&quot; $(CCNetProject).zip"/>
   </Target>
   
   <Target Name="MoveToKanbox">
@@ -139,7 +139,7 @@
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(FullBuild)' == 'Yes'">
-		<ZIPName>Teleopti CCC $(CCCVersion)</ZIPName>
+		<ZIPName>Teleopti WFM $(CCCVersion)</ZIPName>
 		<KanboxShare>D:\Installation\PBImsi</KanboxShare>
 	</PropertyGroup>
 	
@@ -561,8 +561,8 @@
 		<!-- adding additional info for the the Client-->
 		<AssemblyInfo CodeLanguage="CS"
 						OutputFile="$(ClientProperties)\AssemblyInfo.cs"
-						AssemblyTitle="Teleopti CCC, version 7"
-					AssemblyDescription="Teleopti CCC, version 7"
+						AssemblyTitle="Teleopti WFM"
+					AssemblyDescription="Teleopti WFM"
 					AssemblyConfiguration=""
 					AssemblyCompany="$(Company)"
 					AssemblyProduct="$(ProductName)"
@@ -582,8 +582,8 @@
 		<Message Text="Update MyTime Version ..."/>
 		<AssemblyInfo CodeLanguage="CS"
 				OutputFile="$(MyTimeProperties)\AssemblyInfo.cs"
-				AssemblyTitle="TELEOPTI CCC, version 7 - MyTime"
-				AssemblyDescription="TELEOPTI CCC, version 7 - MyTime"
+				AssemblyTitle="TELEOPTI WFM - MyTime"
+				AssemblyDescription="TELEOPTI WFM - MyTime"
 				AssemblyConfiguration=""
 				AssemblyCompany="$(Company)"
 				AssemblyProduct="$(ProductName)"
@@ -605,8 +605,8 @@
 		<Message Text="Update Support Tool Version ..."/>
 		<AssemblyInfo CodeLanguage="CS"
 				OutputFile="$(SupportToolProperties)\AssemblyInfo.cs"
-				AssemblyTitle="TELEOPTI CCC Support Tool"
-				AssemblyDescription="TELEOPTI CCC Support Tool"
+				AssemblyTitle="TELEOPTI WFM Support Tool"
+				AssemblyDescription="TELEOPTI WFM Support Tool"
 				AssemblyConfiguration=""
 				AssemblyCompany="$(Company)"
 				AssemblyProduct="$(ProductName)"

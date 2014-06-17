@@ -1,4 +1,4 @@
-﻿Teleopti CCC version 7 was developed using the following components.
+﻿Teleopti WFM was developed using the following components.
 
 /************************************************************************************************************************/
 

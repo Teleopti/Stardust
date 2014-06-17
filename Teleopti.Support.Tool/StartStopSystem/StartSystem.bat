@@ -1,5 +1,5 @@
 @echo off
-ECHO Starting all local Teleopti CCC 7 services and MsDtc
+ECHO Starting all local Teleopti WFM services and MsDtc
 PING -n 1 127.0.0.1>nul
 
 IF "%ROOTDIR%"=="" SET ROOTDIR=%~dp0

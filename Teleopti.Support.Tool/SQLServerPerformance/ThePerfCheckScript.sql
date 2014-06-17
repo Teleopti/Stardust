@@ -365,7 +365,7 @@ Shows the worst interval, worst file
 4) top 3 worst interval by "Total write latency"
 Shows the worst interval, worst file
 
-From Teleopti CCC Pre-reqs:
+From Teleopti WFM Pre-reqs:
 SQL Server storage MUST be configured properly for high IO performance.
 Under sustained load "Ave read speed (ms)" must be <=5ms and "Ave read speed (ms)"  <=20ms. 
 To achieve this there must at least be separate physical disks (and controllers) for 

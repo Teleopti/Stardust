@@ -88,8 +88,8 @@ Sub DetectNET40()
 				intMessage=Msgbox("Can't detect Install-flag in registry key: " & RegKey,48,"Can't find .NET 4.0")
 			End If
 	Else
-		intMessage = Msgbox("Teleopti CCC Server needs .NET 4.0!" & vbCrLf & _
-			"You may continue the installation but Teleopti CCC will NOT work" & vbCrLf & _
+		intMessage = Msgbox("Teleopti WFM Server needs .NET 4.0!" & vbCrLf & _
+			"You may continue the installation but Teleopti WFM will NOT work" & vbCrLf & _
 		"untill .NET 4.0 is properly installed and registered in IIS" & vbCrLf & _
 		"" & vbCrLf & _
 		"Would you like to access the Microsoft download page?"  & vbCrLf & _

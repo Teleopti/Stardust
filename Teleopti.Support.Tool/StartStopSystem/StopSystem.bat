@@ -1,7 +1,7 @@
 @echo off
 ::ToDo:
 ::Find a better way to handle our AppPool names and folder permissions
-ECHO Stopping all local Teleopti CCC 7 services
+ECHO Stopping all local Teleopti WFM services
 ECHO Start mode will be set to "Manual"
 PING -n 4 127.0.0.1>nul
 

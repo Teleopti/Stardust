@@ -25,7 +25,7 @@ for /f "delims=" %%i in ('dir "%DestShare%" /s /b /ad ^| sort /r') do rd "%%i" >
 CALL %ROOTDIR%\head.bat 1 %SrcShare%\%ActiveMajorVersion%.%ActiveBranchVersion%.* > %temp%\Version.txt
 SET /p version= < %temp%\Version.txt
 echo New version is: %version%
-SET CCCEXE=%DestShare%\%version%\Teleopti CCC %version%.msi
+SET CCCEXE=%DestShare%\%version%\Teleopti WFM %version%.msi
 
 ::Copy to local
 ROBOCOPY "%SrcShare%\%version%" "%DestShare%\%version%" "*.msi"

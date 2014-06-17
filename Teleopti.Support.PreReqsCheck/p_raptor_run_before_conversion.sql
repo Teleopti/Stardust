@@ -13,7 +13,7 @@ GO
 =============================================
  Author:		<Author,,Name>
  Create date: <2008-05-07>
- Description:	This procedure is used to check for know errors in version 6 of Teleopti CCC.
+ Description:	This procedure is used to check for know errors in version 6 of Teleopti WFM.
 				If we find an error in the conversion which is due to an error in version 6,
 				we write code here to check for it. An error list is then presented to the 
 				user and he/she need to fix it in the old database before converting.
