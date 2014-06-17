@@ -48,8 +48,7 @@
 					Projection: [{ Color: "#008000", Description: "Phone", Start: "2013-11-18 14:00", Minutes: 240 }],
 					Offset: "2013-11-18"
 				};
-				resources.FixedDateTimeFormatForMoment = "YYYY-MM-DD HH:mm";
-				resources.FixedTimeFormatForMoment = "HH:mm";
+			
 				var dateMoment = moment(jsonData.Date);
 
 				var vm = new viewModel();
@@ -71,8 +70,7 @@
 					Projection: [{ Color: "#008000", Description: "Phone", Start: "2013-11-18 14:00", Minutes: 240 }],
 					Offset: "2013-11-18"
 				};
-				resources.FixedDateTimeFormatForMoment = "YYYY-MM-DD HH:mm";
-				resources.FixedTimeFormatForMoment = "HH:mm";
+				
 				var dateMoment = moment(jsonData.Date);
 
 				var vm = new viewModel();
