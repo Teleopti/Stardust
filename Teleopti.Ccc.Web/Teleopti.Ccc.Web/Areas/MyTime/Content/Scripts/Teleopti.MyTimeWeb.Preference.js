@@ -1,5 +1,4 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
-/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
+﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel.js" />
@@ -43,7 +42,15 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    selectionViewModel.previousPeriodDate(moment(periodData.PeriodNavigation.PrevPeriod));
 	    selectionViewModel.setCurrentDate(moment(periodData.Date));
 
-	    var availablePreferences = eval($(".preference-split-button").data("mytime-preference-option"));
+	    var tmpAvailablePreferences = eval($("#preference-split-button").data("mytime-preference-option"));
+	    var len = tmpAvailablePreferences.length;
+	    var availablePreferences = [];
+	    for (var i = 0; i < len; i++) {
+	    	var pref = tmpAvailablePreferences[i];
+	    	if (pref != undefined) {
+	    		availablePreferences.push(pref);
+	    	}
+	    }
 	    selectionViewModel.availablePreferences(availablePreferences);
 
 	    if (availablePreferences && availablePreferences.length > 0) {
