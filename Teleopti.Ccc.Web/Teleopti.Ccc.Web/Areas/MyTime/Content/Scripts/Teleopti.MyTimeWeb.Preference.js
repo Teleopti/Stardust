@@ -41,7 +41,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    selectionViewModel.setCurrentDate(moment(periodData.Date));
 
 	    var tmpAvailablePreferences = eval($("#preference-split-button").data("mytime-preference-option"));
-	    var len = tmpAvailablePreferences.length;
+	    var len = tmpAvailablePreferences != null ? tmpAvailablePreferences.length : 0;
 	    var availablePreferences = [];
 	    for (var i = 0; i < len; i++) {
 	    	var pref = tmpAvailablePreferences[i];
