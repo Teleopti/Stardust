@@ -2,16 +2,16 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 {
 	public class RtaAggregationStateProvider
 	{
-		private readonly RtaAggregationState snarret;
+		private readonly RtaAggregationState aggregationState;
 
 		public RtaAggregationStateProvider(IOrganizationForPerson organizationForPerson)
 		{
-			snarret = new RtaAggregationState(organizationForPerson);
+			aggregationState = new RtaAggregationState(organizationForPerson);
 		}
 
 		public RtaAggregationState GetState()
 		{
-			return snarret;
+			return aggregationState;
 		}
 	}
 }
