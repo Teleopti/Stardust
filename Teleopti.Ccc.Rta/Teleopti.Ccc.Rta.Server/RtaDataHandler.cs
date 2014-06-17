@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Rta.Server
 	public class RtaDataHandler : IRtaDataHandler
 	{
 		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof (IRtaDataHandler));
-		private readonly IEnumerable<IActualAgentStateHasBeenSent> _afterSends;
+		private readonly IActualAgentStateHasBeenSent _actualAgentStateHasBeenSent;
 
 		private readonly IActualAgentAssembler _agentAssembler;
 		private readonly IDatabaseWriter _databaseWriter;
@@ -30,14 +30,14 @@ namespace Teleopti.Ccc.Rta.Server
 			IPersonResolver personResolver,
 			IActualAgentAssembler agentAssembler,
 													IDatabaseWriter databaseWriter,
-			IEnumerable<IActualAgentStateHasBeenSent> afterSends)
+			IActualAgentStateHasBeenSent actualAgentStateHasBeenSent)
 		{
 			_asyncMessageSender = asyncMessageSender;
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
 			_agentAssembler = agentAssembler;
 			_databaseWriter = databaseWriter;
-			_afterSends = afterSends;
+			_actualAgentStateHasBeenSent = actualAgentStateHasBeenSent;
 
 			if (_asyncMessageSender == null) return;
 
@@ -149,10 +149,9 @@ namespace Teleopti.Ccc.Rta.Server
 			var notification = NotificationFactory.CreateNotification(agentState);
 
 			_asyncMessageSender.SendNotification(notification);
-			if (_afterSends != null)
-
+			if (_actualAgentStateHasBeenSent != null)
 			{
-				_afterSends.ToList().ForEach(s => s.Invoke(agentState));
+				_actualAgentStateHasBeenSent.Invoke(agentState);
 			}
 		}
 	}
