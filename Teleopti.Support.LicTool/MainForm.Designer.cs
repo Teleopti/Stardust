@@ -52,6 +52,7 @@
 			this.chkPerformanceManager = new System.Windows.Forms.CheckBox();
 			this.chkPayrollIntegration = new System.Windows.Forms.CheckBox();
 			this.grpBoxModules = new System.Windows.Forms.GroupBox();
+			this.chkMyTeam = new System.Windows.Forms.CheckBox();
 			this.chkCalendarLink = new System.Windows.Forms.CheckBox();
 			this.chkNotify = new System.Windows.Forms.CheckBox();
 			this.chkSMSLink = new System.Windows.Forms.CheckBox();
@@ -80,8 +81,6 @@
 			this.labelRatio = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.chkFreemium = new System.Windows.Forms.CheckBox();
-			this.chkMyTeam = new System.Windows.Forms.CheckBox();
-			this.chkVersion8 = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgents)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgentsGrace)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numExpirationGracePeriodDays)).BeginInit();
@@ -330,7 +329,6 @@
 			// 
 			// grpBoxModules
 			// 
-			this.grpBoxModules.Controls.Add(this.chkVersion8);
 			this.grpBoxModules.Controls.Add(this.chkMyTeam);
 			this.grpBoxModules.Controls.Add(this.chkCalendarLink);
 			this.grpBoxModules.Controls.Add(this.chkPayrollIntegration);
@@ -346,10 +344,20 @@
 			this.grpBoxModules.Controls.Add(this.chkBase);
 			this.grpBoxModules.Location = new System.Drawing.Point(70, 338);
 			this.grpBoxModules.Name = "grpBoxModules";
-			this.grpBoxModules.Size = new System.Drawing.Size(211, 332);
+			this.grpBoxModules.Size = new System.Drawing.Size(211, 312);
 			this.grpBoxModules.TabIndex = 14;
 			this.grpBoxModules.TabStop = false;
 			this.grpBoxModules.Text = "TeleoptiCCC options";
+			// 
+			// chkMyTeam
+			// 
+			this.chkMyTeam.AutoSize = true;
+			this.chkMyTeam.Location = new System.Drawing.Point(6, 287);
+			this.chkMyTeam.Name = "chkMyTeam";
+			this.chkMyTeam.Size = new System.Drawing.Size(67, 17);
+			this.chkMyTeam.TabIndex = 19;
+			this.chkMyTeam.Text = "MyTeam";
+			this.chkMyTeam.UseVisualStyleBackColor = true;
 			// 
 			// chkCalendarLink
 			// 
@@ -633,26 +641,6 @@
 			this.chkFreemium.UseVisualStyleBackColor = true;
 			this.chkFreemium.CheckedChanged += new System.EventHandler(this.chkFreemium_CheckedChanged);
 			// 
-			// chkMyTeam
-			// 
-			this.chkMyTeam.AutoSize = true;
-			this.chkMyTeam.Location = new System.Drawing.Point(6, 287);
-			this.chkMyTeam.Name = "chkMyTeam";
-			this.chkMyTeam.Size = new System.Drawing.Size(67, 17);
-			this.chkMyTeam.TabIndex = 19;
-			this.chkMyTeam.Text = "MyTeam";
-			this.chkMyTeam.UseVisualStyleBackColor = true;
-			// 
-			// chkVersion8
-			// 
-			this.chkVersion8.AutoSize = true;
-			this.chkVersion8.Location = new System.Drawing.Point(6, 310);
-			this.chkVersion8.Name = "chkVersion8";
-			this.chkVersion8.Size = new System.Drawing.Size(67, 17);
-			this.chkVersion8.TabIndex = 20;
-			this.chkVersion8.Text = "Version8";
-			this.chkVersion8.UseVisualStyleBackColor = true;
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -760,7 +748,6 @@
 		private System.Windows.Forms.CheckBox chkSMSLink;
 		private System.Windows.Forms.CheckBox chkCalendarLink;
 		private System.Windows.Forms.CheckBox chkNotify;
-		private System.Windows.Forms.CheckBox chkVersion8;
 		private System.Windows.Forms.CheckBox chkMyTeam;
 	}
 }

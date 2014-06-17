@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 
 namespace Teleopti.Ccc.InfrastructureTest.Licensing
@@ -160,7 +159,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccMyTimeWebEnabled = true;
 				TeleoptiCccSmsLinkEnabled = true;
 	            TeleoptiCccCalendarLinkEnabled = true;
-				TeleoptiCccVersion8Enabled = true;
             }
 
             #region Implementation of IDisposable
@@ -211,13 +209,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
             public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
 
-			// need to remove after updating secrete
-	        public bool TeleoptiCccMobileReportsEnabled { get; private set; }
-
-
 	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
-	        public bool TeleoptiCccVersion8Enabled { get; private set; }
 
         	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -236,7 +229,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         		get { throw new NotImplementedException(); }
         	}
 
-        	#endregion
+	        public bool TeleoptiCccVersion8Enabled { get; private set; }
+
+	        #endregion
         }
 
         private class stubFreemiumLicenseService : ILicenseService
@@ -273,7 +268,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccMyTimeWebEnabled = false;
 				TeleoptiCccSmsLinkEnabled = false;
 	            TeleoptiCccCalendarLinkEnabled = false;
-				TeleoptiCccVersion8Enabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = true;
             }
@@ -325,11 +319,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
 
-			//need to remove
-	        public bool TeleoptiCccMobileReportsEnabled { get; private set; }
 	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
-	        public bool TeleoptiCccVersion8Enabled { get; private set; }
 
         	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -348,7 +339,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         		get { throw new NotImplementedException(); }
         	}
 
-        	public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
+	        public bool TeleoptiCccVersion8Enabled { get; private set; }
+
+	        public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
 
             #endregion
         }
@@ -387,7 +380,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccMyTimeWebEnabled = false;
             	TeleoptiCccSmsLinkEnabled = false;
 	            TeleoptiCccCalendarLinkEnabled = false;
-            	TeleoptiCccVersion8Enabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = false;
             }
@@ -439,11 +431,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
 
-			//need to remove
-	        public bool TeleoptiCccMobileReportsEnabled { get; private set; }
 	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
-	        public bool TeleoptiCccVersion8Enabled { get; private set; }
 
         	public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
@@ -462,7 +451,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         		get { throw new NotImplementedException(); }
         	}
 
-        	public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
+	        public bool TeleoptiCccVersion8Enabled { get; private set; }
+
+	        public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
 
             #endregion
         }

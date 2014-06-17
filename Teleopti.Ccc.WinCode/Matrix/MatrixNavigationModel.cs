@@ -77,30 +77,25 @@ namespace Teleopti.Ccc.WinCode.Matrix
             }
         }
 
-		 //all version 8 so they  not come under custom reports
-		private static IEnumerable<string> version8Reports()
-		{
-			return    new []{
-				"BB8C21BA-0756-4DDC-8B26-C9D5715A3443"};
-		}
-        private IEnumerable<string> detailedAdherenceReports()
+		private static IEnumerable<string> detailedAdherenceReports()
         {
-			  var ret =new List<string>();
-			 if(DefinedLicenseDataFactory.GetLicenseActivator(DataSourceName).EnabledLicenseOptionPaths.Contains(
-		            DefinedLicenseOptionPaths.TeleoptiCccVersion8))
-				 ret.Add("BB8C21BA-0756-4DDC-8B26-C9D5715A3443");
-                return ret;
+	        return new[]
+	        {
+		        "BB8C21BA-0756-4DDC-8B26-C9D5715A3443"
+	        };
         }
         private static IEnumerable<string> analysisReports()
         {
             // old "21", "18", "17", "19", "26", "29"
-            return    new []{
-                "132E3AF2-3557-4EA7-813E-05CD4869D5DB",
-                "63243F7F-016E-41D1-9432-0787D26F9ED5",
-                "009BCDD2-3561-4B59-A719-142CD9216727",
-                "BAA446C2-C060-4F39-83EA-B836B1669331",
-                "2F222F0A-4571-4462-8FBE-0C747035994A",
-                "C052796F-1C8A-4905-9246-FF1FF8BD30E5"};
+	        return new[]
+	        {
+		        "132E3AF2-3557-4EA7-813E-05CD4869D5DB",
+		        "63243F7F-016E-41D1-9432-0787D26F9ED5",
+		        "009BCDD2-3561-4B59-A719-142CD9216727",
+		        "BAA446C2-C060-4F39-83EA-B836B1669331",
+		        "2F222F0A-4571-4462-8FBE-0C747035994A",
+		        "C052796F-1C8A-4905-9246-FF1FF8BD30E5"
+	        };
         }
 
         private static IEnumerable<string> preferencesReports()
@@ -245,7 +240,6 @@ namespace Teleopti.Ccc.WinCode.Matrix
 						(from g in GroupedPermittedMatrixFunctions
 						from f in g.ApplicationFunctions
 						select f.ForeignId).ToList();
-					groupedMatrixFunctionForeignIds.AddRange(version8Reports());
                 return from f in PermittedMatrixFunctions
                        where groupedMatrixFunctionForeignIds.Contains(f.ForeignId) == false
                        select f;

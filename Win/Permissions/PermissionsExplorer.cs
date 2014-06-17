@@ -339,14 +339,6 @@ namespace Teleopti.Ccc.Win.Permissions
             {
                 rootNode.Enabled = false;
             }
-
-	        if (applicationFunction.ForeignSource != "Matrix") return;
-	        if (applicationFunction.FunctionCode.StartsWith(@"V8/") &&
-                !DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name).EnabledLicenseOptionPaths.Contains(
-		            DefinedLicenseOptionPaths.TeleoptiCccVersion8))
-	        {
-		        rootNode.Enabled = false;
-	        }
         }
 
 		private  bool shouldHideFunction(IApplicationFunction applicationFunction)
