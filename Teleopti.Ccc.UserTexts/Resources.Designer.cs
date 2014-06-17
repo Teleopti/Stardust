@@ -18161,7 +18161,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ranking.
+        ///   Looks up a localized string similar to Seniority ranking.
         /// </summary>
         public static string Ranking {
             get {
@@ -21524,6 +21524,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SeniorityPoints {
             get {
                 return ResourceManager.GetString("SeniorityPoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seniority ranking ascending.
+        /// </summary>
+        public static string SeniorityRankingAsc {
+            get {
+                return ResourceManager.GetString("SeniorityRankingAsc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seniority ranking descending.
+        /// </summary>
+        public static string SeniorityRankingDesc {
+            get {
+                return ResourceManager.GetString("SeniorityRankingDesc", resourceCulture);
             }
         }
         

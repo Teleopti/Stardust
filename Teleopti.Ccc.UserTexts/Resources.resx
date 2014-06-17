@@ -11971,8 +11971,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>Monthly schedule in permission tree</comment>
   </data>
   <data name="Ranking" xml:space="preserve">
-    <value>Ranking</value>
-    <comment>Ranking</comment>
+    <value>Seniority ranking</value>
+    <comment>Seniority ranking on agentinfo fairness tab</comment>
   </data>
   <data name="RealTimeAdherenceOverview" xml:space="preserve">
     <value>Real Time Adherence Overview</value>
@@ -12101,5 +12101,13 @@ Reduce the complexity to use these shifts.</value>
   <data name="WebServerDown" xml:space="preserve">
     <value>Server unavailable. Due to this, some functions could not be activated.</value>
     <comment>Server unavailable. Due to this, some functions could not be activated.</comment>
+  </data>
+  <data name="SeniorityRankingAsc" xml:space="preserve">
+    <value>Seniority ranking ascending</value>
+    <comment>Seniority ranking ascending menu item in scheduler</comment>
+  </data>
+  <data name="SeniorityRankingDesc" xml:space="preserve">
+    <value>Seniority ranking descending</value>
+    <comment>Seniority ranking descendingmenu item in scheduler</comment>
   </data>
 </root>
