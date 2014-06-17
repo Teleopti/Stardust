@@ -37,9 +37,7 @@ define([
 			viewModel.Loading(true);
 
 			viewModel.SetViewOptions(options);
-			if(options.time)
-				viewModel.SelectedStartTime(moment(options.time, 'HHmm'));
-
+			
 			var personScheduleDeferred = $.Deferred();
 			personsubscriptions.subscribePersonSchedule(
 				viewModel.PersonId(),

@@ -19,9 +19,7 @@ var testCases = [
 ];
 
 require(testCases, function () {
-	var query = location.search.substring(1);
 	for (var i = 0, j = arguments.length; i < j; i++) {
-		if (query == '' || testCases[i].indexOf(query) > 0)
 			arguments[i]();
 	}
 });

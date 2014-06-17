@@ -149,6 +149,9 @@ define([
 			self.ScheduleDate(moment(options.date, 'YYYYMMDD'));
 			self.PersonId(options.personid || options.id);
 			self.GroupId(options.groupid);
+			if (options.time)
+				self.SelectedStartTime(moment(options.time, 'HHmm'));
+
 		};
 
 		this.UpdateData = function (data) {
