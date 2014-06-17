@@ -37,6 +37,8 @@ define([
 			viewModel.Loading(true);
 
 			viewModel.SetViewOptions(options);
+			if(options.time)
+				viewModel.SelectedStartTime(moment(options.time, 'HHmm'));
 
 			var personScheduleDeferred = $.Deferred();
 			personsubscriptions.subscribePersonSchedule(
@@ -75,6 +77,7 @@ define([
 			viewModel.AddingFullDayAbsence(false);
 			viewModel.AddingActivity(false);
 			viewModel.AddingIntradayAbsence(false);
+			viewModel.MovingActivity(false);
 		},
 
 		addfulldayabsence: function (options) {
@@ -87,6 +90,10 @@ define([
 
 		addintradayabsence: function (options) {
 			viewModel.AddingIntradayAbsence(true);
+		},
+
+		moveactivity: function (options) {
+			viewModel.MovingActivity(true);
 		},
 
 		setDateFromTest: function (date) {
