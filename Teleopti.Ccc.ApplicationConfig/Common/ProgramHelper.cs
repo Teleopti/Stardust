@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 				string versionNumber = version.ToString();
 
 				return String.Format(CultureInfo.CurrentCulture,
-						     "Teleopti WFM, version 7 Application Configurator version {0}", versionNumber);
+						     "Teleopti WFM, Application Configurator version {0}", versionNumber);
 			}
 		}
 
