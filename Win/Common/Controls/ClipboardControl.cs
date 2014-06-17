@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         {
             if (_copySpecialItems.Count == 0 )
             {
-                toolStripSplitButtonCopy.DropDownButtonWidth = 0;
+                toolStripSplitButtonCopy.DropDownButtonWidth = 1;
                 return;
             }
             toolStripSplitButtonCopy.DropDownButtonWidth = 15;
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         {
             if (_cutSpecialItems.Count == 0 )
             {
-                toolStripSplitButtonCut.DropDownButtonWidth = 0;
+                toolStripSplitButtonCut.DropDownButtonWidth = 1;
                 return;
             }
             toolStripSplitButtonCut.DropDownButtonWidth = 15;
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         {
             if (_pasteSpecialItems.Count == 0 )
             {
-                toolStripSplitButtonPaste.DropDownButtonWidth = 0;
+                toolStripSplitButtonPaste.DropDownButtonWidth = 1;
                 return;
             }
             toolStripSplitButtonPaste.DropDownButtonWidth = 15;
