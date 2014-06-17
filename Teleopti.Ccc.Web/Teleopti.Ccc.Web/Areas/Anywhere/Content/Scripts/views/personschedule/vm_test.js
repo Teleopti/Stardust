@@ -10,10 +10,6 @@
 			},
 
 			"should create timeline with default times": function() {
-				//ignored until we can use TimeFormatForMoment: "HH:mm",
-				assert(true);
-				return;
-
 				var vm = new viewModel();
 
 				assert.equals(vm.TimeLine.StartTime(), "08:00");
@@ -21,10 +17,6 @@
 			},
 
 			"should create timeline according to shifts length": function (done) {
-				//ignored until we can use TimeFormatForMoment: "HH:mm",
-				done();
-				assert(true);
-				return;
 				var vm = new viewModel();
 
 				vm.SetViewOptions({
