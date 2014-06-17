@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			var aggregationState = _stateProvider.GetState();
 			var organizationData = aggregationState.Update(actualAgentState.PersonId, actualAgentState);
 			var actualAgentStateForTeam = aggregationState.GetActualAgentStateForTeam(organizationData.TeamId);
-			var stateList = actualAgentStateForTeam.Select(mapFrom).ToList();
+			var agentStates = actualAgentStateForTeam.Select(mapFrom);
 
-			return createAgentsNotification(stateList, actualAgentState.BusinessUnit, organizationData.TeamId);
+			return createAgentsNotification(agentStates, actualAgentState.BusinessUnit, organizationData.TeamId);
 		}
 
 		private static AgentAdherenceStateInfo mapFrom(IActualAgentState actualAgentState)
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			};
 		}
 
-		private static Notification createAgentsNotification(IEnumerable<AgentAdherenceStateInfo> agentStates , Guid businessUnitId, Guid teamId)
+		private static Notification createAgentsNotification(IEnumerable<AgentAdherenceStateInfo> agentStates, Guid businessUnitId, Guid teamId)
 		{
 			var agentsAdherenceMessage = new AgentsAdherenceMessage { AgentStates = agentStates };
 
