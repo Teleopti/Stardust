@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			var broker = new MessageSenderExposingNotifications();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			var team = Guid.NewGuid();
-			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence1.PersonId)).Return(new PersonOrganizationData{TeamId = team});
-			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence2.PersonId)).Return(new PersonOrganizationData { TeamId = team });
+			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence1.PersonId)).Return(new PersonOrganizationData{TeamId = team, PersonId = outOfAdherence1.PersonId});
+			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence2.PersonId)).Return(new PersonOrganizationData { TeamId = team, PersonId = outOfAdherence2.PersonId });
 			var target = new AdherenceAggregator(broker, organizationForPerson);
 
 			target.Invoke(outOfAdherence1);
@@ -77,8 +77,8 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 
 			var broker = new MessageSenderExposingNotifications();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
-			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence1.PersonId)).Return(new PersonOrganizationData{TeamId = Guid.NewGuid()});
-			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence2.PersonId)).Return(new PersonOrganizationData { TeamId = Guid.NewGuid() });
+			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence1.PersonId)).Return(new PersonOrganizationData { TeamId = Guid.NewGuid(), PersonId = outOfAdherence1.PersonId });
+			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence2.PersonId)).Return(new PersonOrganizationData { TeamId = Guid.NewGuid(), PersonId = outOfAdherence2.PersonId });
 			var target = new AdherenceAggregator(broker, organizationForPerson);
 
 			target.Invoke(outOfAdherence1);
