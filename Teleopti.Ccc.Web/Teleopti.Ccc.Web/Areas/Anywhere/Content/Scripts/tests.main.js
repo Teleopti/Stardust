@@ -1,7 +1,7 @@
 require.config(requireconfiguration);
 
 define('resources', {
-	//TimeFormatForMoment: "HH:mm",
+	TimeFormatForMoment: "HH:mm",
 	FixedDateTimeFormatForMoment: "YYYY-MM-DD HH:mm",
 	FixedTimeFormatForMoment: "HH:mm"
 });

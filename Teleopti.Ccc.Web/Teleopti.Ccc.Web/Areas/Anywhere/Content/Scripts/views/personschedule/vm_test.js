@@ -66,12 +66,11 @@
 				var vm = new viewModel();
 				vm.PersonId('guid');
 				vm.ScheduleDate(dateMoment);
-				vm.SelectedStartTime(moment(jsonData.Projection[0].Start, resources.FixedDateTimeFormatForMoment));
+				vm.SelectedStartMinutes(moment(jsonData.Projection[0].Start, resources.FixedDateTimeFormatForMoment).diff(dateMoment, 'minutes'));
 
 				vm.UpdateData(jsonData);
 
-				assert.equals(moment(vm.SelectedLayer().StartTime(), resources.FixedDateTimeFormatForMoment).format(resources.FixedTimeFormatForMoment),
-					vm.SelectedStartTime().format(resources.FixedTimeFormatForMoment));
+				assert.equals(vm.SelectedLayer().StartMinutes(), vm.SelectedStartMinutes());
 			},
 
 			"should set move activity form when updating data" : function() {
@@ -82,19 +81,17 @@
 					Projection: [{ Color: "#008000", Description: "Phone", Start: "2013-11-18 14:00", Minutes: 240 }],
 					Offset: "2013-11-18"
 				};
-				
 				var dateMoment = moment(jsonData.Date);
 
 				var vm = new viewModel();
 				vm.PersonId('guid');
 				vm.ScheduleDate(dateMoment);
-				vm.SelectedStartTime(moment(jsonData.Projection[0].Start, resources.FixedDateTimeFormatForMoment));
+				vm.SelectedStartMinutes(moment(jsonData.Projection[0].Start, resources.FixedDateTimeFormatForMoment).diff(dateMoment, 'minutes'));
 
 				vm.UpdateData(jsonData);
 				assert.equals(vm.MoveActivityForm.PersonId(), "guid");
 				assert.equals(vm.MoveActivityForm.ScheduleDate(), jsonData.Date);
-				assert.equals(vm.MoveActivityForm.OldStartTime(), moment(jsonData.Projection[0].Start,
-					resources.FixedDateTimeFormatForMoment).format(resources.FixedTimeFormatForMoment));
+				assert.equals(vm.MoveActivityForm.OldStartMinutes(), vm.SelectedStartMinutes());
 				assert.equals(vm.MoveActivityForm.ProjectionLength(), jsonData.Projection[0].Minutes);
 			}
 

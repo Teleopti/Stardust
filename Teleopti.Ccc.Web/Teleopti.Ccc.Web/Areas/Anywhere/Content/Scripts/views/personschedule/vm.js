@@ -48,7 +48,7 @@ define([
 		this.PersonId = ko.observable();
 		this.GroupId = ko.observable();
 		this.ScheduleDate = ko.observable();
-		this.SelectedStartTime = ko.observable();
+		this.SelectedStartMinutes = ko.observable();
 
 		var personForId = function(id, personArray) {
 			if (!id)
@@ -138,7 +138,7 @@ define([
 		this.MovingActivity = ko.observable(false);
 
 		this.DisplayForm = ko.computed(function() {
-			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence();
+			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence() || self.MovingActivity();
 		});
 
 		this.DisplayGroupMates = ko.computed(function () {
@@ -150,7 +150,7 @@ define([
 			self.PersonId(options.personid || options.id);
 			self.GroupId(options.groupid);
 			if (options.time)
-				self.SelectedStartTime(moment(options.time, 'HHmm'));
+				self.SelectedStartMinutes(moment(options.time, 'HHmm').minutes());
 
 		};
 
@@ -176,7 +176,7 @@ define([
 			self.AddIntradayAbsenceForm.SetData(data);
 			var selectedLayer = self.SelectedLayer();
 			if (selectedLayer) {
-				data.OldStartTime = moment(selectedLayer.StartTime(), resources.FixedDateTimeFormatForMoment).format(resources.FixedTimeFormatForMoment);
+				data.OldStartMinutes = selectedLayer.StartMinutes();
 				data.ProjectionLength = selectedLayer.LengthMinutes();
 				self.MoveActivityForm.SetData(data);
 			}
@@ -212,10 +212,9 @@ define([
 		};
 
 		this.SelectedLayer = function () {
-			if (!self.SelectedStartTime()) return null;
+			if (!self.SelectedStartMinutes()) return null;
 			var selectedLayers = layers().filter(function (layer) {
-				var momentStartTime = moment(layer.StartTime(), resources.FixedDateFormatForMoment).format(resources.FixedTimeFormatForMoment);
-				if (momentStartTime === self.SelectedStartTime().format(resources.FixedTimeFormatForMoment))
+				if (layer.StartMinutes() === self.SelectedStartMinutes())
 					return layer;
 			});
 			return selectedLayers.first();
