@@ -117,6 +117,31 @@
 
 										<!-- /ko -->
 										<!-- /ko -->
+
+										<!-- ko if: $root.MovingActivity -->
+										<!-- ko with: $root.MoveActivityForm -->
+										<form action="#" class="activity-form">
+											<div class="bootstrap-timepicker">
+												<div class="input-group">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-step-backward"></i></span>
+													<input type="text" class="start-time input-sm form-control" data-bind="timepicker: NewStartTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
+													<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+												</div>
+											</div>
+
+											<!-- ko if: ErrorMessage -->
+											<div class="alert">
+												<span data-bind="text: ErrorMessage"></span>
+											</div>
+											<!-- /ko -->
+											<div>
+												<button class="btn btn-success apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: 'Move Activity', click: Apply"></button>
+											</div>
+										</form>
+
+										<!-- /ko -->
+										<!-- /ko -->
+
 										<!-- ko if: $root.AddingFullDayAbsence -->
 										<!-- ko with: $root.AddFullDayAbsenceForm -->
 										<form action="#" class="full-day-absence-form">
