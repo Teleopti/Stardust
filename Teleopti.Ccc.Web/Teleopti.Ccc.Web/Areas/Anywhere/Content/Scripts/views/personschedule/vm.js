@@ -149,8 +149,8 @@ define([
 			self.ScheduleDate(moment(options.date, 'YYYYMMDD'));
 			self.PersonId(options.personid || options.id);
 			self.GroupId(options.groupid);
-			if (options.time)
-				self.SelectedStartMinutes(moment(options.time, 'HHmm').minutes());
+			if (options.minutes)
+				self.SelectedStartMinutes(Number(options.minutes));
 
 		};
 
@@ -174,19 +174,14 @@ define([
 			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);
 			self.AddIntradayAbsenceForm.SetData(data);
-			var selectedLayer = self.SelectedLayer();
-			if (selectedLayer) {
-				data.OldStartMinutes = selectedLayer.StartMinutes();
-				data.ProjectionLength = selectedLayer.LengthMinutes();
-				self.MoveActivityForm.SetData(data);
-			}
+			self.MoveActivityForm.SetData(data);
 		};
 
 		this.UpdateSchedules = function (data) {
 			// if we dont display group mates, then filter out their data
 			if (!self.DisplayGroupMates()) {
 				data = lazy(data)
-					.filter(function (x) { return x.PersonId == self.PersonId(); })
+					.filter(function (x) {return x.PersonId == self.PersonId(); })
 					.toArray();
 			}
 			// data might include the same person more than once, with data for more than one day
@@ -209,11 +204,14 @@ define([
 
 			self.AddIntradayAbsenceForm.WorkingShift(self.WorkingShift());
 			self.AddActivityForm.WorkingShift(self.WorkingShift());
+			var selectedLayer = self.SelectedLayer();
+			self.MoveActivityForm.update(selectedLayer);
+			
 		};
 
 		this.SelectedLayer = function () {
 			if (!self.SelectedStartMinutes()) return null;
-			var selectedLayers = layers().filter(function (layer) {
+			var selectedLayers = layers().filter(function (layer) { 
 				if (layer.StartMinutes() === self.SelectedStartMinutes())
 					return layer;
 			});

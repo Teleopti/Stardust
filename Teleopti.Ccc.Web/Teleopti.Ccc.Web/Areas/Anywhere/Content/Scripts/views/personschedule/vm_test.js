@@ -131,7 +131,8 @@
 				vm.SelectedStartMinutes(moment(jsonData.Projection[0].Start, resources.FixedDateTimeFormatForMoment).diff(dateMoment, 'minutes'));
 
 				vm.UpdateData(jsonData);
-				assert.equals(vm.MoveActivityForm.PersonId(), "guid");
+				vm.UpdateSchedules([jsonData]);
+				assert.equals(vm.MoveActivityForm.PersonId(), 'guid');
 				assert.equals(vm.MoveActivityForm.ScheduleDate(), jsonData.Date);
 				assert.equals(vm.MoveActivityForm.OldStartMinutes(), vm.SelectedStartMinutes());
 				assert.equals(vm.MoveActivityForm.ProjectionLength(), jsonData.Projection[0].Minutes);
