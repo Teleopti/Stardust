@@ -148,8 +148,10 @@
     <Compile Include="Adherence\IPersonOrganizationProvider.cs" />
     <Compile Include="Adherence\OrganizationForPerson.cs" />
     <Compile Include="Adherence\PersonOrganizationProvider.cs" />
+    <Compile Include="Adherence\RtaAggregationData.cs" />
+    <Compile Include="Adherence\RtaAggregationStateProvider.cs" />
     <Compile Include="Adherence\SiteAdherenceAggregator.cs" />
-    <Compile Include="Adherence\Slask.cs" />
+    <Compile Include="Adherence\RtaAggregationState.cs" />
     <Compile Include="Adherence\TeamAdherenceAggregator.cs" />
     <Compile Include="AlarmMapper.cs" />
     <Compile Include="ContainerBuilder.cs" />

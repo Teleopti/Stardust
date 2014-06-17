@@ -6,28 +6,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {
-
-	public class RtaAggregationData
-	{
-		public PersonOrganizationData OrganizationData { get; set; }
-		public IActualAgentState ActualAgentState { get; set; }
-	}
-
-	public class RtaAggregationStateProvider
-	{
-		private readonly RtaAggregationState snarret;
-
-		public RtaAggregationStateProvider(IOrganizationForPerson organizationForPerson)
-		{
-			snarret = new RtaAggregationState(organizationForPerson);
-		}
-
-		public RtaAggregationState GetState()
-		{
-			return snarret;
-		}
-	}
-
 	public class RtaAggregationState
 	{
 		private readonly IOrganizationForPerson _organizationForPerson;
