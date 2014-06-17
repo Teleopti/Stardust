@@ -4610,25 +4610,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (scenarios[i].Restricted && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario))
 					scenarios.RemoveAt(i);
 			}
-			officeDropDownButtonMainMenuExportTo.DropDownItems.Clear();
-			officeDropDownButtonMainMenuExportTo.DropDownText = Resources.ExportToScenario;
+			
+			var contextMenu = new ContextMenu();
 
 			foreach (IScenario scenario in scenarios)
 			{
 				if (_scenario.Description.Name != scenario.Description.Name)
 				{
-					var scenarioMenuItem = new ToolStripMenuItem(scenario.Description.Name);
-					scenarioMenuItem.TextAlign = ContentAlignment.MiddleLeft;
-					scenarioMenuItem.Click += scenarioMenuItem_Click;
-					scenarioMenuItem.Tag = scenario;
-					officeDropDownButtonMainMenuExportTo.DropDownItems.Insert(0, scenarioMenuItem);
+					var menuItem = new MenuItem(scenario.Description.Name);
+					menuItem.Tag = scenario;
+					menuItem.Click += menuItemClick;
+					contextMenu.MenuItems.Add(menuItem);
+					backStageButtonMainMenuExportTo.ContextMenu = contextMenu;
 				}
 			}
 		}
 
-		private void scenarioMenuItem_Click(object sender, EventArgs e)
+		void menuItemClick(object sender, EventArgs e)
 		{
-			var scenario = (IScenario)((ToolStripMenuItem)sender).Tag;
+			var scenario = (IScenario)((MenuItem)sender).Tag;
 
 			var allNewRules = _schedulerState.SchedulingResultState.GetRulesToRun();
 			var selectedSchedules = _scheduleView.SelectedSchedules();
@@ -4642,7 +4642,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 															_container.Resolve<IScheduleDictionaryPersister>()))
 			{
 				exportForm.ShowDialog(this);
-			}
+			}	
 		}
 
 		private void loadLockMenues()
