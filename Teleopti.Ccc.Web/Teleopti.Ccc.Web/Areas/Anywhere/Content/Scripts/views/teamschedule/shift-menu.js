@@ -31,8 +31,9 @@ define([
 			navigation.GotoPersonScheduleAddFullDayAbsenceForm(self.GroupId, self.PersonId, self.Date);
 		};
 
-		this.moveActivity = function (layer) {
-			navigation.GotoPersonScheduleMoveActivityForm(self.GroupId, self.PersonId, self.Date, helpers.timeFormatForUrl(layer.StartTime));
+		this.moveActivity = function () {
+			var layer = this;
+			navigation.GotoPersonScheduleMoveActivityForm(self.GroupId, self.PersonId, self.Date, helpers.timeFormatForUrl(layer.StartTime()));
 		};
 	};
 });

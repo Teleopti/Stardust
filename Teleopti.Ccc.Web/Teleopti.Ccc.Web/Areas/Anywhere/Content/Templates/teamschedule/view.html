@@ -151,7 +151,7 @@
                                         <a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
 	                                    <a href="#" class="btn btn-sm remove-absence" data-bind="click: $data.RemoveAbsence"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
 	                                    <!-- ko if: $root.moveActivityVisible -->
-																			<a href="#" class="btn btn-sm move-activity" data-bind="click: $data.moveActivity($parent)"><i class="glyphicon glyphicon-hand-up"></i><span data-bind="    text: 'Move Activity'"></span></a>
+																			<a href="#" class="btn btn-sm move-activity" data-bind="click: $data.moveActivity.bind($parent)"><i class="glyphicon glyphicon-hand-up"></i><span data-bind="    text: 'Move Activity'"></span></a>
 																			<!-- /ko-->
                                     </div>
                                     <!-- /ko -->
