@@ -1,7 +1,7 @@
-LICENSE AGREEMENT TELEOPTI CCC FORECASTS
+LICENSE AGREEMENT TELEOPTI WFM FORECASTS
 
 1. License Grant
-Teleopti AB, org.no. 556523-5925, a Swedish corporation with it principal place of business at PO Box 721, SE-182 17 Danderyd, Sweden ("TELEOPTI"), hereby grants to Licensee a nonexclusive, nontransferable, worldwide, revocable license to install and use the software Teleopti CCC Forecasts ("Software") during the Term (as defined below in section 5) whether the Software is distributed by Teleopti or from a Teleopti Distributor or Reseller, in object code form only, and solely for internal use within Licensee's own business. 
+Teleopti AB, org.no. 556523-5925, a Swedish corporation with it principal place of business at PO Box 721, SE-182 17 Danderyd, Sweden ("TELEOPTI"), hereby grants to Licensee a nonexclusive, nontransferable, worldwide, revocable license to install and use the software Teleopti WFM Forecasts ("Software") during the Term (as defined below in section 5) whether the Software is distributed by Teleopti or from a Teleopti Distributor or Reseller, in object code form only, and solely for internal use within Licensee's own business. 
 Licensee may make one (1) back-up copy of the Software in machine-readable form, provided such copy is used for back-up only and provided all copyright information contained on the original is included in the copy. The use of the Software is subject to the registration and authorization requirements stipulated by TELEOPTI from time to time, and the fulfillment of all requirements stipulated in this License. 
 
 2. Restrictions on Use

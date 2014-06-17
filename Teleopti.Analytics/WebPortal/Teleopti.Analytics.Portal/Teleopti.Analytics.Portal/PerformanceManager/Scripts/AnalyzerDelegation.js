@@ -22,7 +22,7 @@
         }
         catch (e)
         {
-            //Do nothing. This only happens if Analyzer and Teleopti CCC Web is on different sites.
+            //Do nothing. This only happens if Analyzer and Teleopti WFM Web is on different sites.
         }
     }
 }

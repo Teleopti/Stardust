@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         ICollection<string> GetHibernateConfiguration();
 
         /// <summary>
-        /// Verifies the Teleopti CCC license.
+        /// Verifies the Teleopti WFM license.
         /// </summary>
         /// <returns></returns>
         [OperationContract]

@@ -8,30 +8,30 @@
         /// <summary>
         /// Constant string for Raptor base option name
         /// </summary>
-        public const string TeleoptiCccBase = "Teleopti CCC7 Base";
+        public const string TeleoptiCccBase = "Teleopti WFM Base";
         /// <summary>
-        /// Constant string for Raptor ASS option name
+		/// Constant string for Raptor Lifestyle option name
         /// </summary>
-		public const string TeleoptiCccLifestyle = "Teleopti CCC7 Lifestyle";
+		public const string TeleoptiCccLifestyle = "Teleopti WFM Lifestyle";
 		/// <summary>
 		/// Constant string for Raptor Notify option name
 		/// </summary>
-		public const string TeleoptiCccNotify = "Teleopti CCC7 Notify";
+		public const string TeleoptiCccNotify = "Teleopti WFM Notify";
 		/// <summary>
 		/// Constant string for Raptor MyTeam option name
 		/// </summary>
-		public const string TeleoptiCccMyTeam = "Teleopti CCC7 MyTeam";
+		public const string TeleoptiCccMyTeam = "Teleopti WFM MyTeam";
 		/// <summary>
         /// Constant string for Freemium base option name
         /// </summary>
-        public const string TeleoptiCccFreemiumBase = "Teleopti CCC7 Freemium Base";
+        public const string TeleoptiCccFreemiumBase = "Teleopti WFM Freemium Base";
         /// <summary>
         /// Constant string for EarlyBird base option name
         /// </summary>
-        public const string TeleoptiCccPilotCustomersBase = "Teleopti CCC7 Pilot Customers Base";
+        public const string TeleoptiCccPilotCustomersBase = "Teleopti WFM Pilot Customers Base";
 
-		public const string TeleoptiCccSmsLink = "Teleopti CCC7 SMS Link";
+		public const string TeleoptiCccSmsLink = "Teleopti WFM SMS Link";
 
-		public const string TeleoptiCccCalendarLink = "Teleopti CCC7 Calendar Link";
+		public const string TeleoptiCccCalendarLink = "Teleopti WFM Calendar Link";
     }
 }

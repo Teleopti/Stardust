@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
         }
         public static string FormHeaderText
         {
-            get { return "Teleopti CCC"; }
+            get { return "Teleopti WFM"; }
         }
         public static Color FormColor
         {

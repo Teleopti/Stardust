@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
     /// <summary>
     /// Class that handles common texts in the application.
     /// Could be used for texts that are the same for all languages e.g
-    /// Teleopti CCC, Teleopti etc.
+    /// Teleopti WFM, Teleopti etc.
     /// </summary>
     /// <remarks>
     /// Created by: zoet

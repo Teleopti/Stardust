@@ -2067,7 +2067,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>Powered by TELEOPTI CCC©</Value>
+                  <Value>Powered by Teleopti WFM©</Value>
                   <Style>
                     <FontSize>8pt</FontSize>
                     <FontWeight>Bold</FontWeight>

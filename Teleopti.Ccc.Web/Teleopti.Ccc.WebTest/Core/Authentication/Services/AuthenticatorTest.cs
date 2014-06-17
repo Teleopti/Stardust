@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var personRep = MockRepository.GenerateMock<IPersonRepository>();
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			var account = new TokenIdentity { DataSource = "Teleopti CCC", UserIdentifier = "user" };
+			var account = new TokenIdentity { DataSource = "Teleopti WFM", UserIdentifier = "user" };
 
 			IPerson person = new Person();
 

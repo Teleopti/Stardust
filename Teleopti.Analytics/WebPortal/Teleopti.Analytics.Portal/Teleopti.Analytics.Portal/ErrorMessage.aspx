@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head runat="server">
-    <title>TELEOPTI CCC</title>
+    <title>Teleopti WFM</title>
     <link href="App_Themes/Theme1/Styles.css" rel="stylesheet" type="text/css" />
 </head>
 <body style="filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#CADAF9', EndColorStr= '#fcfcfc');">

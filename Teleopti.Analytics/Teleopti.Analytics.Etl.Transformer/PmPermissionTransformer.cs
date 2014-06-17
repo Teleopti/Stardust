@@ -153,7 +153,7 @@ namespace Teleopti.Analytics.Etl.Transformer
                 message.Append("The solution could be to reduce the number of users with such permissions and try to re-run the ETL Tool Permission job. ");
                 message.Append("You can also try to increase the sendTimeout value, in the config file, for the binding named WsHttpBinding_IPMService. ");
                 message.Append("Make that change in config file for both ETL Tool and ETL Service. ");
-                message.Append("Another possible cause of the timeout is PM users with invalid Windows credentials entered in the Teleopti CCC People module.");
+                message.Append("Another possible cause of the timeout is PM users with invalid Windows credentials entered in the Teleopti WFM People module.");
                 throw new PmSynchronizeException(message.ToString(), timeoutException);
             }
             catch (Exception e)

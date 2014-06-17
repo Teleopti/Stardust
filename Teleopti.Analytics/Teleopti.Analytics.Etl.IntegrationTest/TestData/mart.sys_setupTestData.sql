@@ -133,6 +133,6 @@ where time_zone_code = @TimeZoneCode
 
 update mart.sys_datasource
 set time_zone_id = @time_zone_id
-where datasource_name = 'Teleopti CCC Agg: Default log object'
+where datasource_name = 'Teleopti WFM Agg: Default log object'
 
 exec mart.sys_datasource_set_raptor_time_zone

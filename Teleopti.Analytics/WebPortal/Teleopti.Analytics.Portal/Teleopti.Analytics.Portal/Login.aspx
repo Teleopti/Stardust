@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head runat="server">
-    <title>TELEOPTI CCC Login</title>
+    <title>Teleopti WFM Login</title>
     <link rel="shortcut icon" href="~/Images/ccc_menu.ico"/>
 </head>
 <body >

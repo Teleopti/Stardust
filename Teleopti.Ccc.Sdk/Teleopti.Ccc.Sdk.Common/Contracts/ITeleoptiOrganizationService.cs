@@ -223,14 +223,14 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         ICollection<ContractScheduleDto> GetContractSchedules(LoadOptionDto loadOptionDto);
 
         /// <summary>
-        /// Adds the person to Teleopti CCC.
+        /// Adds the person to Teleopti WFM.
         /// </summary>
         /// <param name="personDto">The person details.</param>
         [OperationContract]
         void AddPerson(PersonDto personDto);
 
         /// <summary>
-        /// Updates a person in Teleopti CCC.
+        /// Updates a person in Teleopti WFM.
         /// </summary>
         /// <param name="personDto">The person details.</param>
         [OperationContract, FaultContract(typeof(FaultException))]

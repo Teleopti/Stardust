@@ -18,7 +18,7 @@
 ::"-OM": // Only run merge of default resolution.
 ::-------------------------------------------------------
 
-rem Migrate a Teleopti CCC version 6 db into version 7?
+rem Migrate a Teleopti WFM version 6 db into version 7?
 pause
 "C:\Program Files\Teleopti\ApplicationConfiguration\CccAppConfig.exe" -SSlocalhost -SDteleopticcc6 -SUsa -SPsapwd -DSlocalhost -DDTeleoptiCCC -DUsa -DPsapwd -TZ"W. Europe Standard Time" -FD2008-01-01 -TD2009-12-31 -BUACME -CO -CUen-GB
 rem Finished

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		public void ApplicationIdentityTokenDatasourcesShouldReturnAvailableDatasource()
 		{
 			var validDs = MockRepository.GenerateMock<IDataSource>();
-			const string dataSource = "Teleopti CCC";
+			const string dataSource = "Teleopti WFM";
 			var tokenIdentity = new TokenIdentity {UserIdentifier = "user", DataSource = dataSource};
 
 			validDs.Stub(x => x.DataSourceName).Return(dataSource);
@@ -75,10 +75,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		public void ApplicationIdentityTokenDatasourcesShouldReturnNullWhenNoAvailableDatasource()
 		{
 			var validDs = MockRepository.GenerateMock<IDataSource>();
-			const string dataSource = "Teleopti CCC";
+			const string dataSource = "Teleopti WFM";
 			var tokenIdentity = new TokenIdentity { UserIdentifier = "user", DataSource = dataSource };
 
-			validDs.Stub(x => x.DataSourceName).Return("Wrong Teleopti CCC");
+			validDs.Stub(x => x.DataSourceName).Return("Wrong Teleopti WFM");
 			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(new[] { validDs });
 
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(tokenIdentity);
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		public void ApplicationIdentityTokenDatasourcesShouldReturnNullWhenNoUserFoundInAvailableDatasource()
 		{
 			var validDs = MockRepository.GenerateMock<IDataSource>();
-			const string dataSource = "Teleopti CCC";
+			const string dataSource = "Teleopti WFM";
 			var tokenIdentity = new TokenIdentity { UserIdentifier = "user", DataSource = dataSource };
 
 			validDs.Stub(x => x.DataSourceName).Return(dataSource);

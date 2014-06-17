@@ -57,11 +57,11 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				new ClaimsPrincipal(
 					new ClaimsIdentityCollection(new Collection<IClaimsIdentity>
 						{
-							new ClaimsIdentity(new[] {new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/kunningm@@Teleopti CCC")})
+							new ClaimsIdentity(new[] {new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/kunningm@@Teleopti WFM")})
 						}));
 			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo("kunningm");
-			target.RetrieveToken().DataSource.Should().Be.EqualTo("Teleopti CCC");
-			target.RetrieveToken().OriginalToken.Should().Be.EqualTo("http://fakeschema.com/kunningm@@Teleopti CCC");
+			target.RetrieveToken().DataSource.Should().Be.EqualTo("Teleopti WFM");
+			target.RetrieveToken().OriginalToken.Should().Be.EqualTo("http://fakeschema.com/kunningm@@Teleopti WFM");
 		}
 
 		[Test]

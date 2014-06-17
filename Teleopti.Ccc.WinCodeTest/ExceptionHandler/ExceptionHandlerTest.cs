@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
                 _view.LinkCopyToClipboardText(Resources.CopyErrorMessageToClipboard);
                 _view.CheckBoxIncludeScreenshotText(Resources.IncludeScreenShot);
                 _view.SetColors(ColorHelper.DialogBackColor());
-                _view.FormHeaderText("Teleopti CCC");
+                _view.FormHeaderText("Teleopti WFM");
             }
             using (_mocks.Playback())
             {

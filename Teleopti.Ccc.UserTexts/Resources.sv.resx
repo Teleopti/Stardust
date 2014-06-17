@@ -250,7 +250,7 @@
     <comment>Agent info...</comment>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Teleopti CCC MyTime</value>
+    <value>Teleopti WFM MyTime</value>
     <comment>MyTime</comment>
   </data>
   <data name="Agents" xml:space="preserve">
@@ -2003,15 +2003,15 @@ Periods</comment>
     <comment>Team view</comment>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Prognoser – Teleopti CCC</value>
+    <value>Prognoser – Teleopti WFM</value>
     <comment>Teleopti Raptor : Forecasts</comment>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC: Portal</value>
+    <value>Teleopti WFM: Portal</value>
     <comment>Teleopti Raptor : Main portal</comment>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Scheman – Teleopti CCC</value>
+    <value>Scheman – Teleopti WFM</value>
     <comment>Teleopti Raptor : Schedules</comment>
   </data>
   <data name="Template" xml:space="preserve">
@@ -2452,7 +2452,7 @@ veckodag</value>
     <comment>Leaving date</comment>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>Teleopti CCC Agent Schedule Messenger</value>
+    <value>Teleopti WFM Agent Schedule Messenger</value>
     <comment>Agent Schedule Messenger</comment>
   </data>
   <data name="ASM" xml:space="preserve">
@@ -3342,8 +3342,8 @@ Ersätt</value>
     <value>Till.</value>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Avsluta Teleopti CCC</value>
-    <comment>Teleopti menu exit Teleopti CCC</comment>
+    <value>Avsluta Teleopti WFM</value>
+    <comment>Teleopti menu exit Teleopti WFM</comment>
   </data>
   <data name="Find" xml:space="preserve">
     <value>Sök</value>
@@ -3622,8 +3622,8 @@ Ersätt</value>
     <comment>Function name Reports</comment>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
-    <comment>Funtion name Teleopti CCC</comment>
+    <value>Teleopti WFM</value>
+    <comment>Funtion name Teleopti WFM</comment>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
     <value>Deltidsprocent</value>
@@ -3666,8 +3666,8 @@ Ersätt</value>
     <comment>Please enter your logon credentials</comment>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>Personer – Teleopti CCC</value>
-    <comment>Teleopti CCC : People</comment>
+    <value>Personer – Teleopti WFM</value>
+    <comment>Teleopti WFM : People</comment>
   </data>
   <data name="DecreaseDecimals" xml:space="preserve">
     <value>Minska decimaler</value>
@@ -3726,12 +3726,12 @@ Ersätt</value>
     <comment>Open permissions function in Permissions</comment>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Öppna Teleopti CCC</value>
-    <comment>OpenRaptorApplication	Open TELEOPTI CCC</comment>
+    <value>Öppna Teleopti WFM</value>
+    <comment>OpenRaptorApplication	Open Teleopti WFM</comment>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>Rättigheter – Teleopti CCC</value>
-    <comment>Teleopti CCC : Permissions</comment>
+    <value>Rättigheter – Teleopti WFM</value>
+    <comment>Teleopti WFM : Permissions</comment>
   </data>
   <data name="GapExists" xml:space="preserve">
     <value>Det finns ett mellanrum  {0}. Alla lager måste sitta ihop.</value>
@@ -3746,8 +3746,8 @@ Ersätt</value>
     <comment>New Rule Set ribbon menu</comment>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Skift – Teleopti CCC</value>
-    <comment>Teleopti CCC : Shifts</comment>
+    <value>Skift – Teleopti WFM</value>
+    <comment>Teleopti WFM : Shifts</comment>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt; Regeluppsättningsnamn &gt;</value>
@@ -3865,8 +3865,8 @@ Ersätt</value>
     <comment>Agent</comment>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Inom dag – Teleopti CCC</value>
-    <comment>Teleopti CCC : Intraday</comment>
+    <value>Inom dag – Teleopti WFM</value>
+    <comment>Teleopti WFM : Intraday</comment>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
     <value>MyTime</value>
@@ -7451,20 +7451,20 @@ Uppdaterad den: {1}</value>
 
 2.	Information om vilka data du arbetade med.
 
-3.	En skärmdump av felet med Teleopti CCC i bakgrunden.
+3.	En skärmdump av felet med Teleopti WFM i bakgrunden.
 
 Tack
 Teleopti R&amp;D</value>
     <comment>Error handling</comment>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Ett problem har uppstått och Teleopti CCC måste stängas. Vi beklagar problem detta medför. Information som inte sparats kan ha gått förlorad.
+    <value>Ett problem har uppstått och Teleopti WFM måste stängas. Vi beklagar problem detta medför. Information som inte sparats kan ha gått förlorad.
 
 För att få värdefull information om detta fel, ber vi er att rapportera det genom att klicka på "Skicka e-postrapport"-knappen nedan. Detta kommer öppna ditt förvalda e-postprogram. Var snäll att bifoga följande:
 
 1.  Stegvis förklara hur felet kan återskapas
 2.  Information om vilket data du arbetade med
-3.  Skärmdump av felet med Teleopti CCC i bakgrunden
+3.  Skärmdump av felet med Teleopti WFM i bakgrunden
 
 Du kan också kopiera felet med "Kopiera till urklipp" och klistra in det i ett e-postmeddelande.
 
@@ -7881,7 +7881,7 @@ period</value>
     <value>Rättvisa</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>{0} – Teleopti CCC: {1} – {2} Scenario: {3} </value>
+    <value>{0} – Teleopti WFM: {1} – {2} Scenario: {3} </value>
   </data>
   <data name="BusinessOrientation" xml:space="preserve">
     <value>Tyngdpunkt behov</value>
@@ -7944,10 +7944,10 @@ period</value>
     <value>Ingen kontakt med message broker</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - System OK</value>
+    <value>Teleopti WFM - System OK</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - Systemvarning</value>
+    <value>Teleopti WFM - Systemvarning</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>Schema + begränsningar</value>

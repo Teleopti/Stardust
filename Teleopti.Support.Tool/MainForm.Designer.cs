@@ -167,7 +167,7 @@ namespace Teleopti.Support.Tool
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(341, 13);
             this.label2.TabIndex = 8;
-            this.label2.Text = "List and manage your Teleopti CCC databases";
+            this.label2.Text = "List and manage your Teleopti WFM databases";
             // 
             // label1
             // 
@@ -189,7 +189,7 @@ namespace Teleopti.Support.Tool
             this.linkManageDBVersions.Size = new System.Drawing.Size(196, 17);
             this.linkManageDBVersions.TabIndex = 1;
             this.linkManageDBVersions.TabStop = true;
-            this.linkManageDBVersions.Text = "Teleopti CCC Database Versions";
+            this.linkManageDBVersions.Text = "Teleopti WFM Database Versions";
             this.linkManageDBVersions.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             this.linkManageDBVersions.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 
@@ -264,7 +264,7 @@ namespace Teleopti.Support.Tool
             this.labelHeader.Name = "labelHeader";
             this.labelHeader.Size = new System.Drawing.Size(298, 38);
             this.labelHeader.TabIndex = 5;
-            this.labelHeader.Text = "Teleopti CCC Support Tool";
+            this.labelHeader.Text = "Teleopti WFM Support Tool";
             this.labelHeader.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             this.labelHeader.UseCompatibleTextRendering = true;
             // 
@@ -283,7 +283,7 @@ namespace Teleopti.Support.Tool
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "Teleopti CCC Support Tool";
+            this.Text = "Teleopti WFM Support Tool";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.PTracks.ResumeLayout(false);
             this.PTracks.PerformLayout();

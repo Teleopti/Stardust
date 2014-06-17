@@ -1439,7 +1439,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Teleopti CCC MyTime.
+        ///   Looks up a localized string similar to Teleopti WFM MyTime.
         /// </summary>
         public static string AgentPortal {
             get {
@@ -1466,7 +1466,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Teleopti CCC Agent Schedule Messenger.
+        ///   Looks up a localized string similar to Teleopti WFM Agent Schedule Messenger.
         /// </summary>
         public static string AgentScheduleMessenger {
             get {
@@ -4237,7 +4237,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Teleopti CCC - System ok.
+        ///   Looks up a localized string similar to Teleopti WFM - System ok.
         /// </summary>
         public static string CheckSystemOk {
             get {
@@ -4246,7 +4246,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Teleopti CCC - System warning.
+        ///   Looks up a localized string similar to Teleopti WFM - System warning.
         /// </summary>
         public static string CheckSystemWarning {
             get {
@@ -8041,7 +8041,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exit Teleopti CCC.
+        ///   Looks up a localized string similar to Exit Teleopti WFM.
         /// </summary>
         public static string ExitTELEOPTICCC {
             get {
@@ -15769,7 +15769,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open Teleopti CCC.
+        ///   Looks up a localized string similar to Open Teleopti WFM.
         /// </summary>
         public static string OpenRaptorApplication {
             get {
@@ -15832,7 +15832,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Teleopti CCC.
+        ///   Looks up a localized string similar to Teleopti WFM.
         /// </summary>
         public static string OpenTeleoptiCCC {
             get {
@@ -24007,7 +24007,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} – Teleopti CCC: {1} – {2} Scenario: {3} .
+        ///   Looks up a localized string similar to {0} – Teleopti WFM: {1} – {2} Scenario: {3} .
         /// </summary>
         public static string TeleoptiCCCColonModuleColonFromToDateScenarioColon {
             get {
@@ -24034,7 +24034,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Forecasts – Teleopti CCC.
+        ///   Looks up a localized string similar to Forecasts – Teleopti WFM.
         /// </summary>
         public static string TeleoptiRaptorColonForecaster {
             get {
@@ -24043,7 +24043,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Intraday – Teleopti CCC.
+        ///   Looks up a localized string similar to Intraday – Teleopti WFM.
         /// </summary>
         public static string TeleoptiRaptorColonIntraday {
             get {
@@ -24052,7 +24052,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Teleopti CCC: Main portal.
+        ///   Looks up a localized string similar to Teleopti WFM: Main portal.
         /// </summary>
         public static string TeleoptiRaptorColonMainNavigation {
             get {
@@ -24061,7 +24061,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to People – Teleopti CCC.
+        ///   Looks up a localized string similar to People – Teleopti WFM.
         /// </summary>
         public static string TeleoptiRaptorColonPeople {
             get {
@@ -24070,7 +24070,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Permissions – Teleopti CCC.
+        ///   Looks up a localized string similar to Permissions – Teleopti WFM.
         /// </summary>
         public static string TeleoptiRaptorColonPermissions {
             get {
@@ -24079,7 +24079,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Schedules – Teleopti CCC.
+        ///   Looks up a localized string similar to Schedules – Teleopti WFM.
         /// </summary>
         public static string TeleoptiRaptorColonScheduler {
             get {
@@ -24088,7 +24088,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shifts – Teleopti CCC.
+        ///   Looks up a localized string similar to Shifts – Teleopti WFM.
         /// </summary>
         public static string TeleoptiRaptorColonShifts {
             get {
@@ -25258,7 +25258,7 @@ namespace Teleopti.Ccc.UserTexts {
         ///2.	Information about what data you were working with:
         ///
         ///
-        ///3.	Screenshot of the error with Teleopti CCC in the background:
+        ///3.	Screenshot of the error with Teleopti WFM in the background:
         ///
         ///
         ///Thank you
@@ -25271,7 +25271,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Teleopti CCC has encountered a problem and needs to close. We are sorry for the inconvenience. If you were in the middle of something, the information you were working on might be lost.
+        ///   Looks up a localized string similar to Teleopti WFM has encountered a problem and needs to close. We are sorry for the inconvenience. If you were in the middle of something, the information you were working on might be lost.
         ///
         ///In order to give us valuable information about this error, we ask you to kindly report it by clicking on the &quot;Send e-mail report&quot;Â button below. This will open your default e-mail program. Please also include the following:
         ///

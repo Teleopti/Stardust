@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 	<user>ola.hakansson@teleopti.com</user>
 	<password>cadadi02</password>
 	<api_id>3388480</api_id>
-	<from>Teleopti CCC</from>
+	<from>Teleopti WFM</from>
 	<data>
 		<![CDATA[ <clickAPI><sendMsg>
 		<api_id>3388480</api_id>
