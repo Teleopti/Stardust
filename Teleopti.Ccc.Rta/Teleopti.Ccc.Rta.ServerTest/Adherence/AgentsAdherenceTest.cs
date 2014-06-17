@@ -21,17 +21,12 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 		[Test]
 		public void ShouldSendOutAllAgentsStatesInOneTeam()
 		{
-			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var person = new Person();
-			person.SetId(personId);
-			person.Name = new Name(" "," ");
-			var alarmId = Guid.NewGuid();
 			var actualAgentState = new ActualAgentState()
 			{
 				State = "Ready",
 				StateStart = DateTime.Now,
-				AlarmId = alarmId,
+				AlarmId = Guid.NewGuid(),
 				AlarmName = "Adherencing",
 				AlarmStart = DateTime.Now,
 				Color = Color.Red.ToArgb(),
@@ -60,9 +55,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			var broker = new MessageSenderExposingNotifications();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			organizationForPerson.Stub(x => x.GetOrganization(Guid.Empty)).IgnoreArguments()
-				.Return(new PersonOrganizationData { TeamId = teamId, PersonId = personId});
-			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			personRepository.Stub(x => x.Get(personId)).Return(person);
+				.Return(new PersonOrganizationData { TeamId = Guid.NewGuid(), PersonId = personId});
 			var target = new AdherenceAggregator(broker, organizationForPerson);
 
 			target.Invoke(actualAgentState);
