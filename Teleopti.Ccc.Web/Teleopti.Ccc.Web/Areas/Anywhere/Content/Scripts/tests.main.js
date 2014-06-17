@@ -14,7 +14,6 @@ var testCases = [
 	'views/realtimeadherenceteams/vm_test',
 	'views/realtimeadherenceagents/vm_test',
 	'views/realtimeadherenceteams/team_test',
-	'views/personschedule/moveactivityform_test',
 	'helpers_test'
 ];
 
