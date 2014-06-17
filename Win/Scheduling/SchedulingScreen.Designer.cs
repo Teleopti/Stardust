@@ -769,7 +769,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.xxContractTimeAscToolStripMenuItem, System.Windows.Forms.Keys.None);
 			this.xxContractTimeAscToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
 			this.xxContractTimeAscToolStripMenuItem.Text = "xxContractTimeAsc";
-			this.xxContractTimeAscToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemContractTimeAscMouseUp);
+			this.xxContractTimeAscToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemContractTimeAscMouseUp);
 			// 
 			// xxContractTimeDescToolStripMenuItem
 			// 
@@ -777,7 +777,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.xxContractTimeDescToolStripMenuItem, System.Windows.Forms.Keys.None);
 			this.xxContractTimeDescToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
 			this.xxContractTimeDescToolStripMenuItem.Text = "xxContractTimeDesc";
-			this.xxContractTimeDescToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemSeniorityRankDescMouseUp);
+			this.xxContractTimeDescToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemContractTimeDescMouseUp);
 			// 
 			// xxSeniorityRankAscToolStripMenuItem
 			// 
@@ -793,6 +793,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.xxSeniorityRankDescToolStripMenuItem, System.Windows.Forms.Keys.None);
 			this.xxSeniorityRankDescToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
 			this.xxSeniorityRankDescToolStripMenuItem.Text = "xxSeniorityRankDesc";
+			this.xxSeniorityRankDescToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemSeniorityRankDescMouseUp);
 			// 
 			// toolStripSeparator1
 			// 

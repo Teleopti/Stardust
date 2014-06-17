@@ -6,12 +6,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands
 {
-    public class SortBySeniorityRankingAscendingCommand : SortBySeniorityRankingCommandBase, 
+    public class SortBySeniorityRankingDescendingCommand : SortBySeniorityRankingCommandBase,
 		IScheduleSortCommand
     {
 	    private readonly IRankedPersonBasedOnStartDate _rankingCalculator;
 
-	    public SortBySeniorityRankingAscendingCommand(ISchedulerStateHolder schedulerState, IRankedPersonBasedOnStartDate rankingCalculator)
+		public SortBySeniorityRankingDescendingCommand(ISchedulerStateHolder schedulerState, IRankedPersonBasedOnStartDate rankingCalculator)
 			:base(schedulerState)
 	    {
 		    _rankingCalculator = rankingCalculator;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands
 
 			var sortedPersonList =
 				(from item in rankedDic
-				orderby item.Value ascending 
+				orderby item.Value descending 
 				select item.Key).ToList();
 
 			return sortedPersonList;

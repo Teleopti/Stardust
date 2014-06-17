@@ -57,6 +57,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 			var sortBySeniorityRankAscendingCommand = _target.GetCommandFromSetting(SchedulerSortCommandSetting.SortBySeniorityRankingAscending);
 			Assert.IsTrue(sortBySeniorityRankAscendingCommand is SortBySeniorityRankingAscendingCommand);
 
+			var sortBySeniorityRankDescendingCommand = _target.GetCommandFromSetting(SchedulerSortCommandSetting.SortBySeniorityRankingDescending);
+			Assert.IsTrue(sortBySeniorityRankDescendingCommand is SortBySeniorityRankingDescendingCommand);
+
 		}
 
 		[Test]
@@ -90,6 +93,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 			var sortBySeniorityRankAscendingCommand =
 				_target.GetSettingFromCommand(new SortBySeniorityRankingAscendingCommand(_schedulerStateHolder, new RankedPersonBasedOnStartDate(null)));
 			Assert.IsTrue(sortBySeniorityRankAscendingCommand == SchedulerSortCommandSetting.SortBySeniorityRankingAscending);
+
+			var sortBySeniorityRankDescendingCommand =
+				_target.GetSettingFromCommand(new SortBySeniorityRankingDescendingCommand(_schedulerStateHolder, new RankedPersonBasedOnStartDate(null)));
+			Assert.IsTrue(sortBySeniorityRankDescendingCommand == SchedulerSortCommandSetting.SortBySeniorityRankingDescending);
+
+		
 		}
 	}
 }

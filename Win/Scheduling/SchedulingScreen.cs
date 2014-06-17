@@ -6211,19 +6211,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripSplitButtonChangeTag.Width = toolStripComboBoxAutoTag.Width;
 		}
 
-		private void ToolStripMenuItemContractTimeAscMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemContractTimeAscMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByContractTimeAscendingCommand(SchedulerState));
 		}
 
-		private void ToolStripMenuItemContractTimeDescMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemContractTimeDescMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByContractTimeDescendingCommand(SchedulerState));
 		}
 
 		private void toolStripMenuItemSeniorityRankDescMouseUp(object sender, MouseEventArgs e)
 		{
-			throw new NotImplementedException();
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortBySeniorityRankingDescendingCommand(SchedulerState, _container.Resolve<IRankedPersonBasedOnStartDate>()));
 		}
 
 		private void toolStripMenuItemSeniorityRankAscMouseUp(object sender, MouseEventArgs e)

@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands
 			if (sortCommand is SortByStartAscendingCommand) return SchedulerSortCommandSetting.SortByStartAscending;
 			if (sortCommand is SortByStartDescendingCommand) return SchedulerSortCommandSetting.SortByStartDescending;
 			if (sortCommand is SortBySeniorityRankingAscendingCommand) return SchedulerSortCommandSetting.SortBySeniorityRankingAscending;
+			if (sortCommand is SortBySeniorityRankingDescendingCommand) return SchedulerSortCommandSetting.SortBySeniorityRankingDescending;
 			return _defaultSortSetting;
 		}
 
@@ -57,8 +58,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands
 			if (setting == SchedulerSortCommandSetting.SortByContractTimeAscending) return new SortByContractTimeAscendingCommand(_schedulerStateHolder);
 			if (setting == SchedulerSortCommandSetting.SortByContractTimeDescending) return new SortByContractTimeDescendingCommand(_schedulerStateHolder);
 			if (setting == SchedulerSortCommandSetting.SortBySeniorityRankingAscending) return new SortBySeniorityRankingAscendingCommand(_schedulerStateHolder, _container.Resolve<IRankedPersonBasedOnStartDate>());
-
-
+			if (setting == SchedulerSortCommandSetting.SortBySeniorityRankingDescending) return new SortBySeniorityRankingDescendingCommand(_schedulerStateHolder, _container.Resolve<IRankedPersonBasedOnStartDate>());
 			return new NoSortCommand(_schedulerStateHolder);
 		}
 	}

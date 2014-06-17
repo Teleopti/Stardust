@@ -634,6 +634,8 @@
     <Compile Include="Scheduling\MatrixUnselectedDaysLocker.cs" />
     <Compile Include="Scheduling\Requests\HandlePersonRequestComparer.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityCreator.cs" />
+    <Compile Include="Scheduling\ScheduleSortingCommands\SortBySeniorityRankingCommandBase.cs" />
+    <Compile Include="Scheduling\ScheduleSortingCommands\SortBySeniorityRankingDescendingCommand.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\SortBySeniorityRankingAscendingCommand.cs" />
     <Compile Include="Scheduling\SchedulingScreenPersister.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\INeedShiftCategoryDistributionModel.cs" />
