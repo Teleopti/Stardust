@@ -229,8 +229,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         		get { throw new NotImplementedException(); }
         	}
 
-	        public bool TeleoptiCccVersion8Enabled { get; private set; }
-
 	        #endregion
         }
 
@@ -338,8 +336,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         	{
         		get { throw new NotImplementedException(); }
         	}
-
-	        public bool TeleoptiCccVersion8Enabled { get; private set; }
 
 	        public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
 
@@ -450,8 +446,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         	{
         		get { throw new NotImplementedException(); }
         	}
-
-	        public bool TeleoptiCccVersion8Enabled { get; private set; }
 
 	        public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
 
