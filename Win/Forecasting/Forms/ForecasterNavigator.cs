@@ -42,8 +42,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 	{
 		private TreeNode _lastActionNode;
 		private TreeNode _lastContextMenuNode;
-		private readonly PortalSettings _portalSettings;
-	    private readonly IJobHistoryViewFactory _jobHistoryViewFactory;
+		private readonly IJobHistoryViewFactory _jobHistoryViewFactory;
 	    private readonly IImportForecastViewFactory _importForecastViewFactory;
 	    private readonly ISendCommandToSdk _sendCommandToSdk;
 		private readonly IToggleManager _toggleManager;
@@ -67,9 +66,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				setColors();
 
 				EntityEventAggregator.EntitiesNeedsRefresh += entitiesNeedsRefresh;
-			}
-
-			setVisibility();
+			}		
 		}
 
 	    private void setVisibility()
@@ -93,15 +90,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			 IToggleManager toggleManager)
             : this()
         {
-            _portalSettings = portalSettings;
-            _jobHistoryViewFactory = jobHistoryViewFactory;
+		    _jobHistoryViewFactory = jobHistoryViewFactory;
             _importForecastViewFactory = importForecastViewFactory;
             _sendCommandToSdk = sendCommandToSdk;
 		    _toggleManager = toggleManager;
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
-            splitContainer1.SplitterDistance = splitContainer1.Height - _portalSettings.ForecasterActionPaneHeight;
-			_toggleManager = toggleManager;
+            splitContainer1.SplitterDistance = splitContainer1.Height - portalSettings.ForecasterActionPaneHeight;
+
+			setVisibility();
 		}
 
 	    private void setColors()
@@ -139,11 +136,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 						IWorkload workload = repository.Get(guid);
 						if (workload == null) continue;
 
-						var model = CreateWorkloadModel(workload);
+						var model = createWorkloadModel(workload);
 						if(model.IsDeleted)
 						{
 							foundNodes = treeViewSkills.Nodes.Find(workload.Skill.Id.ToString(), true);
-							if(foundNodes.Length>0) foundNodes[0].Tag = CreateSkillModel(workload.Skill);
+							if(foundNodes.Length>0) foundNodes[0].Tag = createSkillModel(workload.Skill);
 
 							continue;
 						}
@@ -184,10 +181,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							ISkill skill = repository.Get(guid);
 							if (skill==null) continue;
 
-							var model = CreateSkillModel(skill);
+							var model = createSkillModel(skill);
 							if (model.IsDeleted || model.IsChild) continue;
 
-							TreeNode skillNode = GetSkillNode(model);
+							TreeNode skillNode = getSkillNode(model);
 							foundNodes = treeViewSkills.Nodes.Find(skill.SkillType.Id.ToString(), false);
 							if (foundNodes.Length > 0)
 							{
@@ -211,7 +208,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				var repository = _repositoryFactory.CreateSkillRepository(uow);
 				var updatedSkill = repository.Get(skill.Id);
-				node.Tag = CreateSkillModel(updatedSkill);
+				node.Tag = createSkillModel(updatedSkill);
 			}
 		}
 
@@ -232,11 +229,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			ISkillRepository skillRep = _repositoryFactory.CreateSkillRepository(uow);
 			ICollection<ISkill> skills = skillRep.FindAllWithWorkloadAndQueues();
-			skills = skills.Except(skills.OfType<IChildSkill>().Cast<ISkill>()).ToList();
-			return skills.Select(CreateSkillModel).ToList();
+			skills = skills.Except(skills.OfType<IChildSkill>()).ToList();
+			return skills.Select(createSkillModel).ToList();
 		}
 
-		private static SkillModel CreateSkillModel(ISkill skill)
+		private static SkillModel createSkillModel(ISkill skill)
 		{
 			return new SkillModel
 			       	{
@@ -247,11 +244,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			       		IsMultisite = skill is IMultisiteSkill,
 			       		IsChild = skill is IChildSkill,
 			       		IsDeleted = ((IDeleteTag)skill).IsDeleted,
-			       		WorkloadModels = skill.WorkloadCollection.Select(CreateWorkloadModel).ToList()
+			       		WorkloadModels = skill.WorkloadCollection.Select(createWorkloadModel).ToList()
 			       	};
 		}
 
-		private static WorkloadModel CreateWorkloadModel(IWorkload workload)
+		private static WorkloadModel createWorkloadModel(IWorkload workload)
 		{
 			return new WorkloadModel
 			       	{
@@ -264,7 +261,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			       	};
 		}
 
-		private void toolStripMenuItemActionSkillDelete_Click(object sender, EventArgs e)
+		private void toolStripMenuItemActionSkillDeleteClick(object sender, EventArgs e)
 		{
 			var skill = (SkillModel) _lastActionNode.Tag;
 			removeSkill(skill);
@@ -327,10 +324,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 }
                 catch (OptimisticLockException)
                 {
-                    string templateMessage = string.Concat(UserTexts.Resources.SomeoneElseHaveChanged, " {0}{1}{0} ", UserTexts.Resources.YourChangesWillBeDiscardedReloading);
+                    string templateMessage = string.Concat(Resources.SomeoneElseHaveChanged, " {0}{1}{0} ", Resources.YourChangesWillBeDiscardedReloading);
                     string message = string.Format(CultureInfo.CurrentCulture, templateMessage, "\"", workloadModel.Name);
                     
-                    ViewBase.ShowInformationMessage(this, message, UserTexts.Resources.SaveError);
+                    ViewBase.ShowInformationMessage(this, message, Resources.SaveError);
                 }
 			}
 		}
@@ -360,7 +357,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			foreach (SkillModel aSkill in skills) //Program.CommonState.Skills)
 			{
 				if (aSkill.IsDeleted) continue;
-				skillNode = GetSkillNode(aSkill);
+				skillNode = getSkillNode(aSkill);
 				skillNodes[aSkill.SkillTypeId.ToString()].Nodes.Add(skillNode);
 				reloadWorkloadNodes(skillNode);
 			}
@@ -406,7 +403,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private static TreeNode GetSkillNode(SkillModel aSkill)
+		private static TreeNode getSkillNode(SkillModel aSkill)
         {
 
             if (!aSkill.IsMultisite)
@@ -501,11 +498,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			var skillPropertyPages = (AbstractPropertyPages<ISkill>)sender;
 			skillPropertyPages.LoadAggregateRootWorkingCopy();
 			ISkill skill = skillPropertyPages.AggregateRootObject;
-			InitializeWorkloadCollectionForSkill(skill, skillPropertyPages);
+			initializeWorkloadCollectionForSkill(skill, skillPropertyPages);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
-		private void InitializeWorkloadCollectionForSkill(ISkill skill, IAbstractPropertyPages skillPropertyPages)
+		private void initializeWorkloadCollectionForSkill(ISkill skill, IAbstractPropertyPages skillPropertyPages)
 		{
 			if (!skill.WorkloadCollection.Any())
 			{
@@ -531,7 +528,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 						== DialogResult.Yes);
 				}
 				TreeNode[] foundNodes = treeViewSkills.Nodes.Find(skill.Id.GetValueOrDefault().ToString(), true);
-				if (foundNodes.Length > 0) foundNodes[0].Tag = CreateSkillModel(skill); //Just to make sure you can open forecast afterwards
+				if (foundNodes.Length > 0) foundNodes[0].Tag = createSkillModel(skill); //Just to make sure you can open forecast afterwards
 			}
 		}
 
@@ -1119,7 +1116,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			if (result == DialogResult.Cancel) return;
 
 			//Run the ordinary workload flow
-			InitializeWorkloadCollectionForSkill(skill, null);
+			initializeWorkloadCollectionForSkill(skill, null);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]

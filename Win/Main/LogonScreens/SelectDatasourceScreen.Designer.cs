@@ -97,12 +97,12 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.tabPageApplicationDataSources.Controls.Add(this.listBoxApplicationDataSources);
 			this.tabPageApplicationDataSources.Image = null;
 			this.tabPageApplicationDataSources.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageApplicationDataSources.Location = new System.Drawing.Point(1, 22);
+			this.tabPageApplicationDataSources.Location = new System.Drawing.Point(1, 0);
 			this.tabPageApplicationDataSources.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPageApplicationDataSources.Name = "tabPageApplicationDataSources";
 			this.tabPageApplicationDataSources.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageApplicationDataSources.ShowCloseButton = true;
-			this.tabPageApplicationDataSources.Size = new System.Drawing.Size(349, 116);
+			this.tabPageApplicationDataSources.Size = new System.Drawing.Size(349, 138);
 			this.tabPageApplicationDataSources.TabBackColor = System.Drawing.Color.White;
 			this.tabPageApplicationDataSources.TabIndex = 1;
 			this.tabPageApplicationDataSources.Text = "xxApplication logon";
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.listBoxApplicationDataSources.Location = new System.Drawing.Point(3, 3);
 			this.listBoxApplicationDataSources.Margin = new System.Windows.Forms.Padding(0);
 			this.listBoxApplicationDataSources.Name = "listBoxApplicationDataSources";
-			this.listBoxApplicationDataSources.Size = new System.Drawing.Size(343, 110);
+			this.listBoxApplicationDataSources.Size = new System.Drawing.Size(343, 132);
 			this.listBoxApplicationDataSources.TabIndex = 4;
 			// 
 			// labelChooseDataSource
