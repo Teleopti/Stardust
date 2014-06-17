@@ -22,7 +22,6 @@
 		<PerformanceManager>true</PerformanceManager>
 		<PayrollIntegration>true</PayrollIntegration>
 		<MyTeam>true</MyTeam>
-		<Version8>true</Version8>
 	</TeleoptiWFM>
 	<Agreement>Teleopti.Ccc.Infrastructure.Licensing.Agreements.TeleoptiLic_En_Sw_St.txt</Agreement>
 	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
@@ -34,9 +33,9 @@
 					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
 				</Transforms>
 				<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-				<DigestValue>ll4SFn6lwR83w/b0yQhA6zCD4mY=</DigestValue>
+				<DigestValue>yrzvGqE0Fk2t6DyUuZ7LxM6NveU=</DigestValue>
 			</Reference>
 		</SignedInfo>
-		<SignatureValue>zK5OvpnOTqOBSXEd3Ovpq5i8fSWPeW4Xgdw/MCqhRT6ogTc73g0IliaAIUyTDC/tk56daoSneQr1guf9U0MhaHycjMDOeXH46HHlXC5/cs9qNjsW52AqaE8EtqwqtGIczOnn/rvA09CP5YufyqUMMvUMvftarpZoA1lNaoDXPkw=</SignatureValue>
+		<SignatureValue>jOvjv8DB+7r4BRb3qoAdXfAYwkhB3TyVDxupq8dT2PXRIlFKC1vsHZTgqjgp8NaB1Yb8+3VqjdRvxmHNcFI79ionVjtqd+huCf8+U4uas42Qk2vdWDn7NK50USK3ojl2SM0ukX2yWXtqMlxrPYABMr8oPZDJqwrDn8ENeKX3jUM=</SignatureValue>
 	</Signature>
 </License>
