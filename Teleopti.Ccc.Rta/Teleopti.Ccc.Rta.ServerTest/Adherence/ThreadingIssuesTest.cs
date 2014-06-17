@@ -1,46 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.Rta.Server;
 using Teleopti.Ccc.Rta.Server.Adherence;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.SignalR;
+using IMessageSender = Teleopti.Interfaces.MessageBroker.Client.IMessageSender;
 
 namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 {
+	/// If this/these tests "randomly" fails, it _is_ a bug.
+	/// To recreate, set a higher "numberOfIterations" to a higher value
 	public class ThreadingIssuesTest
 	{
-		[Test, Explicit("not yet fixed")]
+		private const int numberOfIterations = 100;
+
+		[Test]
 		public void LotsOfTeamMessagesShouldNotThrow()
 		{
-			const int numberOfMessages = 500;
 			var teamId = Guid.NewGuid();
-			var broker = new MessageSenderExposingNotifications();
+			var siteId = Guid.NewGuid();
+			var broker = new assertBrokerMessageSender(numberOfIterations);
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
-			organizationForPerson.Stub(x => x.GetOrganization(Guid.Empty)).IgnoreArguments()
-				.Return(new PersonOrganizationData { TeamId = teamId });
+
 			var target = new AdherenceAggregator(broker, organizationForPerson);
 
-			//gegga för nu
+
 			var personGuids = new List<Guid>();
-			for (var loop = 0; loop < numberOfMessages; loop++)
+			for (var loop = 0; loop < numberOfIterations; loop++)
 			{
-				personGuids.Add(Guid.NewGuid());
+				var personId = Guid.NewGuid();
+
+				personGuids.Add(personId);
+				organizationForPerson.Stub(x => x.GetOrganization(personId)).Return(new PersonOrganizationData
+				{
+					TeamId = teamId, 
+					PersonId = personId,
+					SiteId = siteId
+				});
 			}
 
-			thisShouldGoAwayWhenWeRefactor(target, personGuids, organizationForPerson);
-
-			/////
-
 			var taskar = new List<Task>();
-			for (var loop = 0; loop < numberOfMessages; loop++)
+			for (var loop = 0; loop < numberOfIterations; loop++)
 			{
 				var loopVarde = loop;
 				taskar.Add(Task.Factory.StartNew(() =>
@@ -52,32 +57,35 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			}
 			Task.WaitAll(taskar.ToArray());
 
-			broker.AllNotifications.Select(x => x.GetOriginal<TeamAdherenceMessage>().OutOfAdherence)
-				.OrderByDescending(x => x).First().Should().Be.EqualTo(numberOfMessages);
+			broker.HasMatchedAdherence.Should().Be.True();
 		}
 
-		private static void thisShouldGoAwayWhenWeRefactor(IActualAgentStateHasBeenSent target, IEnumerable<Guid> personGuids, IOrganizationForPerson organizationForPerson)
+		private class assertBrokerMessageSender : IMessageSender
 		{
-			var actualAgentStateDefault = new ActualAgentState();
-			var personOrgDataColl = new List<PersonOrganizationData>();
-			personGuids.ForEach(id =>
-			{
-				var personOrgData = organizationForPerson.GetOrganization(id);
-				var personData = new PersonOrganizationData
-				{
-					PersonId = id,
-					TeamId = personOrgData.TeamId,
-					SiteId = personOrgData.SiteId
-				};
-				personOrgDataColl.Add(personData);
-			});
+			private readonly int _outofAdherence;
 
-			var loadAgentState = MockRepository.GenerateStub<ILoadActualAgentState>();
-			loadAgentState.Stub(x => x.LoadOldState(Guid.Empty)).IgnoreArguments().Return(actualAgentStateDefault);
-			var personOrgProvider = MockRepository.GenerateStub<IPersonOrganizationProvider>();
-			personOrgProvider.Stub(x => x.LoadAll()).Return(personOrgDataColl);
-			var init = new AdherenceAggregatorInitializor(target, personOrgProvider, loadAgentState);
-			init.Initialize();
+			public assertBrokerMessageSender(int outofAdherence)
+			{
+				_outofAdherence = outofAdherence;
+			}
+
+			public bool IsAlive { get; private set; }
+
+			public bool HasMatchedAdherence { get; private set; }
+
+			public void StartBrokerService(bool useLongPolling = false)
+			{
+			}
+
+			public void SendNotification(Notification notification)
+			{
+				var outOfAdherenceValue = notification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence;
+				if (outOfAdherenceValue > _outofAdherence)
+					throw new Exception("Too high outofadherence");
+				if (Math.Abs(outOfAdherenceValue - _outofAdherence) < 0.1)
+					HasMatchedAdherence = true;
+
+			}
 		}
 	}
 }

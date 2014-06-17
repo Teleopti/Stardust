@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -9,37 +10,40 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 	public class RtaAggregationState
 	{
 		private readonly IOrganizationForPerson _organizationForPerson;
-		private readonly IList<RtaAggregationData> snarr = new List<RtaAggregationData>();
+		private readonly ConcurrentDictionary<Guid, RtaAggregationData> _aggregationDatas;
 
 		public RtaAggregationState(IOrganizationForPerson organizationForPerson)
 		{
 			_organizationForPerson = organizationForPerson;
+			_aggregationDatas = new ConcurrentDictionary<Guid, RtaAggregationData>();
 		}
 
 		public PersonOrganizationData Update(Guid personId, IActualAgentState actualAgentState)
 		{
 			var personOrganizationData = _organizationForPerson.GetOrganization(personId);
-			var snarret = snarr.SingleOrDefault(x => x.OrganizationData.PersonId == personId);
-			if (snarret == null)
+
+			_aggregationDatas.AddOrUpdate(personId, guid => new RtaAggregationData
 			{
-				snarr.Add(new RtaAggregationData { ActualAgentState = actualAgentState, OrganizationData = personOrganizationData });
-			}
-			else
+				ActualAgentState = actualAgentState,
+				OrganizationData = personOrganizationData
+			}, (guid, data) =>
 			{
-				snarret.OrganizationData = personOrganizationData;
-				snarret.ActualAgentState = actualAgentState;
-			}
+				data.ActualAgentState = actualAgentState;
+				data.OrganizationData = personOrganizationData;
+				return data;
+			});
+
 			return personOrganizationData;
 		}
 
 		public IEnumerable<IActualAgentState> GetActualAgentStateForTeam(Guid teamId)
 		{
-			return snarr.Where(k => k.OrganizationData.TeamId == teamId).Select(x => x.ActualAgentState);
+			return _aggregationDatas.Where(k => k.Value.OrganizationData.TeamId == teamId).Select(x => x.Value.ActualAgentState);
 		}
 
 		public IEnumerable<IActualAgentState> GetActualAgentStateForSite(Guid siteId)
 		{
-			return snarr.Where(k => k.OrganizationData.SiteId == siteId).Select(x => x.ActualAgentState);
+			return _aggregationDatas.Where(k => k.Value.OrganizationData.SiteId == siteId).Select(x => x.Value.ActualAgentState);
 		}
 	}
 }
