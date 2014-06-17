@@ -77,13 +77,6 @@ namespace Teleopti.Ccc.WinCode.Matrix
             }
         }
 
-		private static IEnumerable<string> detailedAdherenceReports()
-        {
-	        return new[]
-	        {
-		        "BB8C21BA-0756-4DDC-8B26-C9D5715A3443"
-	        };
-        }
         private static IEnumerable<string> analysisReports()
         {
             // old "21", "18", "17", "19", "26", "29"
@@ -190,14 +183,6 @@ namespace Teleopti.Ccc.WinCode.Matrix
                                         ApplicationFunctions =
                                             from a in PermittedMatrixFunctions
                                             where agentReports().Contains(a.ForeignId)
-                                            select a
-                                    },
-                                    new MatrixFunctionGroup
-                                    {
-                                        LocalizedDescription = Resources.DetailedAdherence,
-                                        ApplicationFunctions =
-                                            from a in PermittedMatrixFunctions
-                                            where detailedAdherenceReports().Contains(a.ForeignId)
                                             select a
                                     },
                                 new MatrixFunctionGroup
