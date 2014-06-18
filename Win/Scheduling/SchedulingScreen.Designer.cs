@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.backStageView = new Syncfusion.Windows.Forms.BackStageView(this.components);
 			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
 			this.backStageButtonMainMenuSave = new Syncfusion.Windows.Forms.BackStageButton();
-			this.backStageButtonMainMenuExportTo = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageTabExportTo = new Syncfusion.Windows.Forms.BackStageTab();
 			this.backStageButtonMainMenuHelp = new Syncfusion.Windows.Forms.BackStageButton();
 			this.backStageButtonMainMenuClose = new Syncfusion.Windows.Forms.BackStageButton();
 			this.backStageButtonOptions = new Syncfusion.Windows.Forms.BackStageButton();
@@ -329,6 +329,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExFilterDays = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.xxShowLastNumberOfDays = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripComboBoxExFilterDays = new Syncfusion.Windows.Forms.Tools.ToolStripComboBoxEx();
+			this.flowLayoutExportToScenario = new Syncfusion.Windows.Forms.Tools.FlowLayout(this.components);
 			this.statusStrip1.SuspendLayout();
 			this.contextMenuViews.SuspendLayout();
 			this.contextMenuStripResultView.SuspendLayout();
@@ -357,6 +358,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.contextMenuStripRestrictionView.SuspendLayout();
 			this.contextMenuStripRequests.SuspendLayout();
 			this.toolStripExFilterDays.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.flowLayoutExportToScenario)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// statusStrip1
@@ -368,7 +370,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripStatusLabelTimeZone,
             this.toolStripStatusLabelScheduleTag,
             this.toolStripStatusLabelContractTime});
-			this.statusStrip1.Location = new System.Drawing.Point(1, 274);
+			this.statusStrip1.Location = new System.Drawing.Point(1, 485);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(1269, 26);
 			this.statusStrip1.TabIndex = 0;
@@ -377,7 +379,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// toolStripSpinningProgressControl1
 			// 
 			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(146)))), ((int)(((byte)(33)))));
-			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = false;
+			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
 			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.Silver;
 			this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
@@ -1342,6 +1344,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.MenuButtonEnabled = true;
 			this.ribbonControlAdv1.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.MenuButtonText = "xxFile";
+			this.ribbonControlAdv1.MenuButtonVisible = false;
 			this.ribbonControlAdv1.MenuButtonWidth = 56;
 			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
 			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
@@ -1404,10 +1407,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// backStage1
 			// 
 			this.backStage1.AllowDrop = true;
-			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1268, 248);
+			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1268, 459);
 			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.backStage1.Controls.Add(this.backStageButtonMainMenuSave);
-			this.backStage1.Controls.Add(this.backStageButtonMainMenuExportTo);
+			this.backStage1.Controls.Add(this.backStageTabExportTo);
 			this.backStage1.Controls.Add(this.backStageButtonMainMenuHelp);
 			this.backStage1.Controls.Add(this.backStageButtonMainMenuClose);
 			this.backStage1.Controls.Add(this.backStageButtonOptions);
@@ -1416,7 +1419,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.backStage1.Location = new System.Drawing.Point(0, 0);
 			this.backStage1.Name = "backStage1";
 			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
-			this.backStage1.Size = new System.Drawing.Size(1268, 248);
+			this.backStage1.Size = new System.Drawing.Size(1268, 459);
 			this.backStage1.TabIndex = 7;
 			this.backStage1.Visible = false;
 			// 
@@ -1433,18 +1436,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.backStageButtonMainMenuSave.Text = "xxSave";
 			this.backStageButtonMainMenuSave.Click += new System.EventHandler(this.toolStripButtonMainMenuSave_Click);
 			// 
-			// backStageButtonMainMenuExportTo
+			// backStageTabExportTo
 			// 
-			this.backStageButtonMainMenuExportTo.Accelerator = "";
-			this.backStageButtonMainMenuExportTo.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButtonMainMenuExportTo.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButtonMainMenuExportTo.ButtonType = Syncfusion.Windows.Forms.Tools.ButtonTypes.ComboXPDown;
-			this.backStageButtonMainMenuExportTo.IsBackStageButton = false;
-			this.backStageButtonMainMenuExportTo.Location = new System.Drawing.Point(0, 41);
-			this.backStageButtonMainMenuExportTo.Name = "backStageButtonMainMenuExportTo";
-			this.backStageButtonMainMenuExportTo.Size = new System.Drawing.Size(110, 25);
-			this.backStageButtonMainMenuExportTo.TabIndex = 4;
-			this.backStageButtonMainMenuExportTo.Text = "xxExportTo";
+			this.backStageTabExportTo.Accelerator = "";
+			this.backStageTabExportTo.BackColor = System.Drawing.Color.White;
+			this.backStageTabExportTo.Image = null;
+			this.backStageTabExportTo.ImageSize = new System.Drawing.Size(16, 16);
+			this.backStageTabExportTo.Location = new System.Drawing.Point(129, 0);
+			this.backStageTabExportTo.Name = "backStageTabExportTo";
+			this.backStageTabExportTo.Position = new System.Drawing.Point(0, 0);
+			this.backStageTabExportTo.ShowCloseButton = true;
+			this.backStageTabExportTo.Size = new System.Drawing.Size(1139, 459);
+			this.backStageTabExportTo.TabIndex = 9;
+			this.backStageTabExportTo.Text = "xxExportTo";
+			this.backStageTabExportTo.ThemesEnabled = false;
 			// 
 			// backStageButtonMainMenuHelp
 			// 
@@ -1452,7 +1457,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.backStageButtonMainMenuHelp.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonMainMenuHelp.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonMainMenuHelp.IsBackStageButton = false;
-			this.backStageButtonMainMenuHelp.Location = new System.Drawing.Point(0, 66);
+			this.backStageButtonMainMenuHelp.Location = new System.Drawing.Point(0, 78);
 			this.backStageButtonMainMenuHelp.Name = "backStageButtonMainMenuHelp";
 			this.backStageButtonMainMenuHelp.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonMainMenuHelp.TabIndex = 5;
@@ -1465,7 +1470,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.backStageButtonMainMenuClose.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonMainMenuClose.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonMainMenuClose.IsBackStageButton = false;
-			this.backStageButtonMainMenuClose.Location = new System.Drawing.Point(0, 91);
+			this.backStageButtonMainMenuClose.Location = new System.Drawing.Point(0, 103);
 			this.backStageButtonMainMenuClose.Name = "backStageButtonMainMenuClose";
 			this.backStageButtonMainMenuClose.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonMainMenuClose.TabIndex = 6;
@@ -1478,7 +1483,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.backStageButtonOptions.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonOptions.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonOptions.IsBackStageButton = false;
-			this.backStageButtonOptions.Location = new System.Drawing.Point(0, 116);
+			this.backStageButtonOptions.Location = new System.Drawing.Point(0, 128);
 			this.backStageButtonOptions.Name = "backStageButtonOptions";
 			this.backStageButtonOptions.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonOptions.TabIndex = 7;
@@ -1491,7 +1496,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.backStageButtonSystemExit.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonSystemExit.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonSystemExit.IsBackStageButton = false;
-			this.backStageButtonSystemExit.Location = new System.Drawing.Point(0, 141);
+			this.backStageButtonSystemExit.Location = new System.Drawing.Point(0, 153);
 			this.backStageButtonSystemExit.Name = "backStageButtonSystemExit";
 			this.backStageButtonSystemExit.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonSystemExit.TabIndex = 8;
@@ -3354,7 +3359,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.schedulerSplitters1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.schedulerSplitters1.Location = new System.Drawing.Point(1, 160);
 			this.schedulerSplitters1.Name = "schedulerSplitters1";
-			this.schedulerSplitters1.Size = new System.Drawing.Size(1269, 114);
+			this.schedulerSplitters1.Size = new System.Drawing.Size(1269, 325);
 			this.schedulerSplitters1.TabIndex = 6;
 			// 
 			// contextMenuStripRequests
@@ -3441,12 +3446,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripComboBoxExFilterDays.ToolTipText = "xxFilterNumberOfDaysBackInTime";
 			this.toolStripComboBoxExFilterDays.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxExFilterDays_SelectedIndexChanged);
 			// 
+			// flowLayoutExportToScenario
+			// 
+			this.flowLayoutExportToScenario.Alignment = Syncfusion.Windows.Forms.Tools.FlowAlignment.Near;
+			this.flowLayoutExportToScenario.ContainerControl = this.backStageTabExportTo;
+			this.flowLayoutExportToScenario.HorzNearMargin = 5;
+			this.flowLayoutExportToScenario.LayoutMode = Syncfusion.Windows.Forms.Tools.FlowLayoutMode.Vertical;
+			// 
 			// SchedulingScreen
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Borders = new System.Windows.Forms.Padding(0);
-			this.ClientSize = new System.Drawing.Size(1271, 300);
+			this.ClientSize = new System.Drawing.Size(1271, 511);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.Controls.Add(this.backStage1);
 			this.Controls.Add(this.schedulerSplitters1);
@@ -3511,6 +3523,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.contextMenuStripRequests.ResumeLayout(false);
 			this.toolStripExFilterDays.ResumeLayout(false);
 			this.toolStripExFilterDays.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.flowLayoutExportToScenario)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -3782,12 +3795,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ToolStripMenuItem toolStripMenuItemSeniorityRankDesc;
 		private Syncfusion.Windows.Forms.BackStage backStage1;
 		private Syncfusion.Windows.Forms.BackStageButton backStageButtonMainMenuSave;
-		private Syncfusion.Windows.Forms.BackStageButton backStageButtonMainMenuExportTo;
 		private Syncfusion.Windows.Forms.BackStageButton backStageButtonMainMenuHelp;
 		private Syncfusion.Windows.Forms.BackStageButton backStageButtonMainMenuClose;
 		private Syncfusion.Windows.Forms.BackStageButton backStageButtonOptions;
 		private Syncfusion.Windows.Forms.BackStageButton backStageButtonSystemExit;
 		private Syncfusion.Windows.Forms.BackStageView backStageView;
+		private Syncfusion.Windows.Forms.BackStageTab backStageTabExportTo;
+		private Syncfusion.Windows.Forms.Tools.FlowLayout flowLayoutExportToScenario;
         
         
     }
