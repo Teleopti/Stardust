@@ -1,5 +1,5 @@
-﻿define(['buster', 'views/personschedule/vm', 'shared/layer', 'resources', 'require/resourcesr'],
-	function (buster, viewModel, layer, resources, resourcesr) {
+﻿define(['buster', 'views/personschedule/vm'],
+	function (buster, viewModel) {
 	return function () {
 
 		buster.testCase("person schedule viewmodel", {
@@ -44,11 +44,11 @@
 				},2);
 			},
 
-			"should not consider nightshifts from yesterday when creating timeline" : function(done) {
-				//henke todo
-				done();
+			"should not consider nightshifts from yesterday when creating timeline": function (done) {
 				assert(true);
+				done();
 				return;
+
 				var vm = new viewModel();
 
 				vm.SetViewOptions({
@@ -71,6 +71,10 @@
 							{
 								Start: '2014-06-15 22:00',
 								Minutes: 180
+							},
+							{
+								Start: '2014-06-16 01:00',
+								Minutes: 60
 							}
 						]
 					}
@@ -88,46 +92,54 @@
 			
 			"should get the selected layer from url": function () {
 
-				var jsonData = {
-					PersonId: "guid",
-					Name: "John King", Date: "2013-11-18", WorkTimeMinutes: 150,
-					ContractTimeMinutes: 360,
-					Projection: [{ Color: "#008000", Description: "Phone", Start: "2013-11-18 14:00", Minutes: 240 }],
-					Offset: "2013-11-18"
-				};
-				var dateMoment = moment(jsonData.Date);
-
 				var vm = new viewModel();
-				vm.PersonId('guid');
-				vm.ScheduleDate(dateMoment);
-				vm.SelectedStartMinutes(moment(jsonData.Projection[0].Start, resources.FixedDateTimeFormatForMoment).diff(dateMoment, 'minutes'));
-
-				vm.UpdateData(jsonData);
+				vm.SetViewOptions({
+					id: 1,
+					date: '20131118'
+				});
+				var data = [
+					{
+						PersonId: 1,
+						Projection: [
+							{
+								Start: '2013-11-18 14:00',
+								Minutes: 240
+							}
+						]
+					}
+				];
+				vm.UpdateSchedules(data);
+				vm.SelectedStartMinutes(840);
 
 				assert.equals(vm.SelectedLayer().StartMinutes(), vm.SelectedStartMinutes());
 			},
 
-			"should set move activity form when updating data" : function() {
-				var jsonData = {
-					PersonId: "guid",
-					Name: "John King", Date: "2013-11-18", WorkTimeMinutes: 150,
-					ContractTimeMinutes: 360,
-					Projection: [{ Color: "#008000", Description: "Phone", Start: "2013-11-18 14:00", Minutes: 240 }],
-					Offset: "2013-11-18"
-				};
-				var dateMoment = moment(jsonData.Date);
+			"should set move activity form when updating data": function () {
 
 				var vm = new viewModel();
-				vm.PersonId('guid');
-				vm.ScheduleDate(dateMoment);
-				vm.SelectedStartMinutes(moment(jsonData.Projection[0].Start, resources.FixedDateTimeFormatForMoment).diff(dateMoment, 'minutes'));
+				vm.SetViewOptions({
+					id: 1,
+					date: '20131118'
+				});
+				var data = [
+					{
+						PersonId: 1,
+						Projection: [
+							{
+								Start: '2013-11-18 14:00',
+								Minutes: 240
+							}
+						]
+					}
+				];
+				vm.SelectedStartMinutes(840);
+				vm.UpdateData({ PersonId: 1 });
+				vm.UpdateSchedules(data);
 
-				vm.UpdateData(jsonData);
-				vm.UpdateSchedules([jsonData]);
-				assert.equals(vm.MoveActivityForm.PersonId(), 'guid');
-				assert.equals(vm.MoveActivityForm.ScheduleDate(), jsonData.Date);
+				assert.equals(vm.MoveActivityForm.PersonId(), 1);
+				assert.equals(vm.MoveActivityForm.ScheduleDate().diff(moment('2013-11-18')), 0);
 				assert.equals(vm.MoveActivityForm.OldStartMinutes(), vm.SelectedStartMinutes());
-				assert.equals(vm.MoveActivityForm.ProjectionLength(), jsonData.Projection[0].Minutes);
+				assert.equals(vm.MoveActivityForm.ProjectionLength(), data[0].Projection[0].Minutes);
 			}
 
 		});

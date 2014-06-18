@@ -53,6 +53,7 @@
 
 				var data = [
 					{
+						Date: '2014-06-16',
 						PersonId: 1,
 						Projection: [
 							{
@@ -62,6 +63,7 @@
 						]
 					},
 					{
+						Date: '2014-06-15',
 						PersonId: 1,
 						Projection: [
 							{
