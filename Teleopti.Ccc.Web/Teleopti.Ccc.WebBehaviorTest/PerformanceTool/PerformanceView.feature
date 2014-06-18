@@ -21,7 +21,6 @@ Scenario: Default configuration for scenario add full day absences
 	And I select scenario 'Add full day absence -> PersonScheduleDayReadModel'
 	Then I should see a default configuration in json format
 
-@Ignore
 Scenario: Measure PersonScheduleDayReadModel by adding full day absences
 	When I am viewing the performance view
 	And I select scenario 'Add full day absence -> PersonScheduleDayReadModel'
