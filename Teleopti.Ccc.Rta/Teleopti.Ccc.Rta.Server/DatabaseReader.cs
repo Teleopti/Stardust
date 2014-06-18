@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.Rta.Server
 					var loadedSourceIdAsString = (string)loadedSourceId;
 					if (dictionary.ContainsKey(loadedSourceIdAsString))
 					{
-						LoggingSvc.WarnFormat("There is already a source defined with the id = {0}",
+						LoggingSvc.InfoFormat("There is already a source defined with the id = {0}",
 												 loadedSourceIdAsString);
 						continue;
 					}
