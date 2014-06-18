@@ -20,26 +20,12 @@ goto done
 
 :yes
 echo System will be stopped and restarted ...
-call :Reset
-goto done
+GOTO Reset
 
 :Reset
-Setlocal
-For /f "tokens=2 delims=[]" %%G in ('ver') Do (set _version=%%G) 
-For /f "tokens=2,3,4 delims=. " %%G in ('echo %_version%') Do (set /A _major=%%G& set _minor=%%H& set _build=%%I) 
-
-if %_major% equ 5 (
 call "%ROOTDIR%StopSystem.bat"
 call "%ROOTDIR%StartSystem.bat"
-)
-
-if %_major% GEQ 6 (
-powershell set-executionpolicy unrestricted
-powershell ". %ROOTDIR%RestartTeleopti.ps1; main"
-)
-
-endlocal
-exit /b
+goto done
 
 :done
 echo done!
