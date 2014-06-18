@@ -24,7 +24,7 @@ define([
 				isSnapshot: 'false'
 			};
 			$.ajax({
-				url: data.Url ,
+				url: 'RtaService/SaveExternalUserState',
 				type: 'POST',
 				contentType: 'application/json',
 				data: JSON.stringify(externalState),
