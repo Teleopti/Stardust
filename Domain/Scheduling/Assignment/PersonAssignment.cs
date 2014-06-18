@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			target.Move(_shiftLayers, layer);
 		}
 
-		public virtual void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, TimeSpan newStartTime, TimeSpan length)
+		public virtual void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, DateTime newStartTime, TimeSpan length)
 		{
 			var anyLayerFound = false;
 
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				throw new ArgumentException("No layer(s) found!", "activity");
 
 			//will be fixed later (=Erik)
-			var newStartTimeLocal = Date.Date.Add(newStartTime);
+			var newStartTimeLocal = newStartTime;
 			var startTimeUtc = new DateTime(newStartTimeLocal.Ticks, DateTimeKind.Utc);
 			var newPeriod = new DateTimePeriod(startTimeUtc, startTimeUtc.Add(length));
 			///////////////////////////////

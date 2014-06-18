@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var assignedAgent = _personForId.Load(command.AgentId);
 			var activity = _activityForId.Load(command.ActivityId);
 			var currentScenario = _currentScenario.Current();
-			var currentDate = command.Date;
+			var currentDate = command.ScheduleDate;
 			var personAssignment = _personAssignmentRepositoryTypedId.LoadAggregate(new PersonAssignmentKey
 			{
 				Date = currentDate,
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			if (personAssignment == null)
 				throw new InvalidOperationException(string.Format("Person assigment is not found. Date: {0} PersonId: {1} Scenario: {2} ", currentDate, assignedAgent.Id, currentScenario.Description));
 
-			personAssignment.MoveActivityAndSetHighestPriority(activity, command.OldStartTime, command.NewStartTime, command.OldProjectionLayerLength);
+			personAssignment.MoveActivityAndSetHighestPriority(activity, command.OldStartTime, command.NewStartTime, TimeSpan.FromMinutes(command.OldProjectionLayerLength));
 		}
 	}
 }

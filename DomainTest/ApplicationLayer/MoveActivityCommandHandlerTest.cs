@@ -26,16 +26,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var cmd = new MoveActivityCommand
 			{
 				AgentId = agent.Id.Value,
-				Date = new DateOnly(DateTime.UtcNow),
+				ScheduleDate = new DateOnly(DateTime.UtcNow),
 				ActivityId = activity.Id.Value,
-				NewStartTime = TimeSpan.FromHours(4),
+				NewStartTime = new DateTime(2000, 1, 1, 4, 0, 0),
 				OldStartTime = new DateTime(2000,1,1),
-				OldProjectionLayerLength = TimeSpan.FromHours(2)
+				OldProjectionLayerLength = 120
 			};
 
 			var ex = Assert.Throws<InvalidOperationException>(()=>target.Handle(cmd)).ToString();
 			ex.Should().Contain(cmd.AgentId.ToString());
-			ex.Should().Contain(cmd.Date.ToString());
+			ex.Should().Contain(cmd.ScheduleDate.ToString());
 			ex.Should().Contain(scenario.Current().Description.ToString());
 		}
 
@@ -57,16 +57,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var cmd = new MoveActivityCommand
 			{
 				AgentId = agent.Id.Value,
-				Date = assignment.Date,
+				ScheduleDate = assignment.Date,
 				ActivityId = activity.Id.Value,
-				NewStartTime = TimeSpan.FromHours(2),
+				NewStartTime = createDateTime(2),
 				OldStartTime = orgStart,
-				OldProjectionLayerLength = orgEnd - orgStart
+				OldProjectionLayerLength = Convert.ToInt32((orgEnd - orgStart).TotalMinutes)
 			};
 
 			target.Handle(cmd);
 
-			var expectedStart = orgStart.Date.Add(cmd.NewStartTime);
+			var expectedStart = cmd.NewStartTime;
 			var modifiedLayer = personAssignmentRepository.Single().ShiftLayers.Single();
 			modifiedLayer.Payload.Should().Be(activity);
 			modifiedLayer.Period.StartDateTime.Should().Be(expectedStart);
