@@ -6,7 +6,7 @@
     Teleopti Authentication Bridge
 </asp:Content>
 <asp:Content ID="loginContent" ContentPlaceHolderID="MainContent" runat="server">
-    <img class="img-responsive login-logo" src="<%= Url.Content("~/Content/Images/mobile_logo.png") %>" />
+	<div><h1 style="color: #003366; font-family: Calibri;">Teleopti WFM</h1></div>
     <div id="selector" class="login-form">
         <form action="" method="get">
             <input type="hidden" name="action" value="verify" />

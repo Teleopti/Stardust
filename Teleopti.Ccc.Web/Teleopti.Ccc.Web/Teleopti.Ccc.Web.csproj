@@ -923,8 +923,6 @@
     <Content Include="Areas\SSO\Content\Images\login_page_bg.png" />
     <Content Include="Areas\SSO\Content\Images\mobile_logo.png" />
     <Content Include="Areas\SSO\Content\Images\signin_bg_sprite.png" />
-    <Content Include="Areas\SSO\Content\Images\windows-small-icon.png" />
-    <Content Include="Areas\SSO\Content\Images\Windows8-icon.png" />
     <Content Include="Areas\SSO\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.AuthenticationState.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ChangePasswordView.js" />
@@ -995,8 +993,6 @@
     <Content Include="Areas\Start\Content\Images\ajax-loader-small.gif" />
     <Content Include="Areas\Start\Content\Images\ccc_icon.png" />
     <Content Include="Areas\Start\Content\Images\mobile_logo.png" />
-    <Content Include="Areas\Start\Content\Images\windows-small-icon.png" />
-    <Content Include="Areas\Start\Content\Images\Windows8-icon.png" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.JQueryAjaxViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.MenuViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ApplicationViewModel.js" />
@@ -1050,6 +1046,7 @@
     <Content Include="Content\busterjs\buster-test.js" />
     <Content Include="Content\crossroads\crossroads.js" />
     <Content Include="Content\crossroads\crossroads.min.js" />
+    <Content Include="Content\favicon.ico" />
     <Content Include="Content\hasher\hasher.js" />
     <Content Include="Content\hasher\hasher.min.js" />
     <Content Include="Content\jquery-plugin\jquery.placeholder.js" />
