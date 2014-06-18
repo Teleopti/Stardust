@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 	public class MaxSeatsCalculationForTeamBlock : IMaxSeatsCalculationForTeamBlock
 	{
-		private const int theBigUglyNumber = -10000;
+		private const double theBigUglyNumber = -1000000;
 
 
 		public double? PeriodValue(double periodValue, MaxSeatsFeatureOptions maxSeatsFeatureOption, bool isMaxSeatsReached, bool requiresSeat, double maxSeatBoostingFactor)
