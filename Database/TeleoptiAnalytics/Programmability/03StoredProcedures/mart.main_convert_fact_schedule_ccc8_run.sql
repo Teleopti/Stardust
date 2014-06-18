@@ -2,9 +2,10 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[main
 DROP PROCEDURE [mart].[main_convert_fact_schedule_ccc8_run]
 GO
 --[mart].[main_convert_fact_schedule_ccc8_estimate]
---[mart].[main_convert_fact_schedule_ccc8_run]
+--[mart].[main_convert_fact_schedule_ccc8_run] 15
 
-CREATE PROCEDURE [mart].[main_convert_fact_schedule_ccc8_run] 
+CREATE PROCEDURE [mart].[main_convert_fact_schedule_ccc8_run]
+@months_back int = 13
 AS
 
 TRUNCATE TABLE [mart].[fact_schedule]
@@ -30,7 +31,14 @@ DECLARE @martfileid int
 
 DECLARE @IntervalLengthMinutes smallint
 DECLARE @IntervalPerDay smallint 
+DECLARE @min_date_id int
 
+SELECT @min_date_id = isnull(date_id-1,0)
+FROM mart.dim_date 
+WHERE	datepart(year,date_date) = datepart(year,dateadd(month,-@months_back,getdate())) 
+and		datepart(month,date_date) = datepart(month,dateadd(month,-@months_back,getdate())) 
+and		datepart(day,date_date) = datepart(day,dateadd(month,-@months_back,getdate()))
+ 
 SET @nl  = char(13) + char(10)
 --check tempdb before
 IF  (SELECT [dbo].[IsAzureDB] ()) <> 1
@@ -125,6 +133,7 @@ INNER JOIN mart.bridge_time_zone btz
 INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
+WHERE f.schedule_date_id >= @min_date_id
 OPTION (MAXDOP 1);
 
 --check tempdb after
