@@ -21,7 +21,6 @@ Scenario: Default configuration for scenario add full day absences
 	And I select scenario 'Add full day absence -> PersonScheduleDayReadModel'
 	Then I should see a default configuration in json format
 
-@Ignore
 Scenario: Measure PersonScheduleDayReadModel by adding full day absences
 	When I am viewing the performance view
 	And I select scenario 'Add full day absence -> PersonScheduleDayReadModel'
@@ -46,5 +45,41 @@ Scenario: Measure ScheduledResourcesReadModel by adding full day absences
 	And I should see total time to send commands
 	And I should see scenarios per second
 
+@ignore
+Scenario: Measure real time adherence by sending in external user state
+	Given the current time is '2014-06-18 12:00'
+	And there is an activity named 'Phone'
+	And there is a site named 'Paris'
+	And there is a team named 'ParisTeam' on site 'Paris'
+	And Pierre Baldi has a person period with
+	| Field      | Value      |
+	| Team       | ParisTeam  |
+	| Start Date | 2014-01-01 |
+	And Pierre Baldi has a shift with
+	| Field      | Value            |
+	| Start time | 2014-06-18 08:00 |
+	| End time   | 2014-06-18 17:00 |
+	| Activity   | Phone            |
+	And there is an alarm with 
+	| Field           | Value    |
+	| Activity        | Phone    |
+	| Phone state     | Ready    |
+	| Name            | Adhering |
+	| Staffing effect | 0        |
+	And there is an alarm with 
+	| Field           | Value        |
+	| Activity        | Phone        |
+	| Phone state     | Pause        |
+	| Name            | Not adhering |
+	| Staffing effect | -1           |
+	When I am viewing the performance view
+	And I select scenario 'Rta Load Test'
+	And I input an RTA configuration with 1 scenarios for 'Pierre Baldi' in json format
+	And I click 'run'
+	Then I should see that the test run has finished
+	And I should see a count of 1 messages received for 'Real Time Adherence Load Test'
+	And I should see total run time
+	And I should see total time to send commands
+	And I should see scenarios per second
 
 

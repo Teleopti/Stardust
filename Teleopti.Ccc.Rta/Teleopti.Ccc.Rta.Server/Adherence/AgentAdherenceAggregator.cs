@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
@@ -11,70 +12,21 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 {
 	public class AgentAdherenceAggregator
 	{
-		private readonly IOrganizationForPerson _organizationForPerson;
-		private readonly Dictionary<Guid, AgentStatesForOneTeam> _agentsAdherences = new Dictionary<Guid, AgentStatesForOneTeam>();
+		private readonly RtaAggregationStateProvider _stateProvider;
 
-		public AgentAdherenceAggregator(IOrganizationForPerson organizationForPerson)
+		public AgentAdherenceAggregator(RtaAggregationStateProvider stateProvider)
 		{
-			_organizationForPerson = organizationForPerson;
+			_stateProvider = stateProvider;
 		}
 
 		public Notification CreateNotification(IActualAgentState actualAgentState)
 		{
-			if (_organizationForPerson == null) return null;
+			var aggregationState = _stateProvider.GetState();
+			var organizationData = aggregationState.Update(actualAgentState.PersonId, actualAgentState);
+			var actualAgentStateForTeam = aggregationState.GetActualAgentStateForTeam(organizationData.TeamId);
+			var agentStates = actualAgentStateForTeam.Select(mapFrom);
 
-			var personId = actualAgentState.PersonId;
-			var personOrganizationData = _organizationForPerson.GetOrganization(personId);
-			var teamId = personOrganizationData.TeamId;
-
-			AgentStatesForOneTeam agentStatesForOneTeam;
-			if (!_agentsAdherences.TryGetValue(teamId, out agentStatesForOneTeam))
-			{
-				agentStatesForOneTeam = new AgentStatesForOneTeam();
-				_agentsAdherences[teamId] = agentStatesForOneTeam;
-			}
-			var changed = agentStatesForOneTeam.TryUpdateAdherence(personId, actualAgentState);
-			return changed
-				? createAgentsNotification(_agentsAdherences[teamId], actualAgentState.BusinessUnit, personOrganizationData.TeamId)
-				: null;
-		}
-
-
-		private static Notification createAgentsNotification(AgentStatesForOneTeam agentStatesForOneTeam, Guid businessUnitId, Guid teamId)
-		{
-			var agentsAdherenceMessage = new AgentsAdherenceMessage {AgentStates = agentStatesForOneTeam.AgentStates};
-
-			return new Notification
-			{
-				BinaryData = JsonConvert.SerializeObject(agentsAdherenceMessage),
-				BusinessUnitId = businessUnitId.ToString(),
-				DomainType = "AgentsAdherenceMessage",
-				DomainId = teamId.ToString(),
-				DomainReferenceId = teamId.ToString()
-			};
-		}
-	}
-
-	public class AgentStatesForOneTeam
-	{
-		private readonly IDictionary<Guid, AgentAdherenceStateInfo> _agentStates = new Dictionary<Guid, AgentAdherenceStateInfo>();
-
-		public bool TryUpdateAdherence(Guid personId, IActualAgentState actualAgentState)
-		{
-			AgentAdherenceStateInfo agentStateInfo;
-			if (!_agentStates.TryGetValue(personId, out agentStateInfo))
-			{
-				_agentStates[personId] = mapFrom(actualAgentState);
-				return true;
-			}
-			var newState = mapFrom(actualAgentState);
-			_agentStates[personId] = newState;
-			return !newState.Equals(agentStateInfo);
-		}
-
-		public IEnumerable<AgentAdherenceStateInfo> AgentStates
-		{
-			get { return _agentStates.Values; }
+			return createAgentsNotification(agentStates, actualAgentState.BusinessUnit, organizationData.TeamId);
 		}
 
 		private static AgentAdherenceStateInfo mapFrom(IActualAgentState actualAgentState)
@@ -90,6 +42,20 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 				NextActivityStartTime = actualAgentState.NextStart,
 				State = actualAgentState.State,
 				StateStart = actualAgentState.StateStart
+			};
+		}
+
+		private static Notification createAgentsNotification(IEnumerable<AgentAdherenceStateInfo> agentStates, Guid businessUnitId, Guid teamId)
+		{
+			var agentsAdherenceMessage = new AgentsAdherenceMessage { AgentStates = agentStates };
+
+			return new Notification
+			{
+				BinaryData = JsonConvert.SerializeObject(agentsAdherenceMessage),
+				BusinessUnitId = businessUnitId.ToString(),
+				DomainType = "AgentsAdherenceMessage",
+				DomainId = teamId.ToString(),
+				DomainReferenceId = teamId.ToString()
 			};
 		}
 	}

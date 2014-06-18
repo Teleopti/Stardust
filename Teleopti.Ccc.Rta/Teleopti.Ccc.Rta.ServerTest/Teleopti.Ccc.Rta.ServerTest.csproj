@@ -161,6 +161,7 @@
     <Compile Include="Adherence\AgentsAdherenceTest.cs" />
     <Compile Include="Adherence\TeamAdherenceTest.cs" />
     <Compile Include="Adherence\SendMessageTest.cs" />
+    <Compile Include="Adherence\ThreadingIssuesTest.cs" />
     <Compile Include="AlarmMapperTest.cs" />
     <Compile Include="CurrentAndNextLayerExtractorTest.cs" />
     <Compile Include="DatabaseConnectionStringHandlerTest.cs" />

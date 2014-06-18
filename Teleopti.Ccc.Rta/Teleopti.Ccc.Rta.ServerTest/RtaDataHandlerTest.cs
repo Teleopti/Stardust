@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			
 			_mocks.ReplayAll();
 
-			_target = new RtaDataHandler(asyncMessageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), new[] { afterSend });
+			_target = new RtaDataHandler(asyncMessageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), afterSend);
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 								   _isSnapshot);
 

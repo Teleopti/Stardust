@@ -2,7 +2,12 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {
-	public class AdherenceAggregatorInitializor 
+	public interface IAdherenceAggregatorInitializor
+	{
+		void Initialize();
+	}
+
+	public class AdherenceAggregatorInitializor : IAdherenceAggregatorInitializor
 	{
 		private readonly IActualAgentStateHasBeenSent _aggregator;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;

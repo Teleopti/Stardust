@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Win.Main
 			// 
 			this.autoLabel1.Font = new System.Drawing.Font("Segoe UI", 26F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.autoLabel1.ForeColor = System.Drawing.Color.White;
-			this.autoLabel1.Location = new System.Drawing.Point(14, 20);
+			this.autoLabel1.Location = new System.Drawing.Point(19, 8);
 			this.autoLabel1.Name = "autoLabel1";
 			this.autoLabel1.Size = new System.Drawing.Size(253, 47);
 			this.autoLabel1.TabIndex = 0;
@@ -49,16 +49,16 @@ namespace Teleopti.Ccc.Win.Main
 			// 
 			// pnlContent
 			// 
-			this.pnlContent.Location = new System.Drawing.Point(4, 32);
+			this.pnlContent.Location = new System.Drawing.Point(4, 75);
 			this.pnlContent.Name = "pnlContent";
-			this.pnlContent.Size = new System.Drawing.Size(475, 231);
+			this.pnlContent.Size = new System.Drawing.Size(475, 218);
 			this.pnlContent.TabIndex = 1;
 			this.pnlContent.Visible = false;
 			// 
 			// autoLabel2
 			// 
 			this.autoLabel2.ForeColor = System.Drawing.Color.White;
-			this.autoLabel2.Location = new System.Drawing.Point(24, 67);
+			this.autoLabel2.Location = new System.Drawing.Point(30, 53);
 			this.autoLabel2.Name = "autoLabel2";
 			this.autoLabel2.Size = new System.Drawing.Size(77, 19);
 			this.autoLabel2.TabIndex = 2;

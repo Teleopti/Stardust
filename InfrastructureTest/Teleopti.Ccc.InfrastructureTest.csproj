@@ -176,6 +176,7 @@
     <Compile Include="NHibernateConfiguration\CompressedStringTest.cs" />
     <Compile Include="Helper\FakeLogon.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />
+    <Compile Include="PeformanceTool\TestPersonCreatorTest.cs" />
     <Compile Include="Persisters\Account\Concurrent\PersonAccountConcurrentTest.cs" />
     <Compile Include="Persisters\Account\Concurrent\UpdateWithUpdateTest.cs" />
     <Compile Include="Persisters\Account\ConflictEagerLoadingTest.cs" />

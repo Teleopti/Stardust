@@ -13,9 +13,10 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		public AdherenceAggregator(IMessageSender messageSender, IOrganizationForPerson organizationForPerson)
 		{
 			_messageSender = messageSender;
-			_teamAdherenceAggregator = new TeamAdherenceAggregator(organizationForPerson);
-			_siteAdherenceAggregator = new SiteAdherenceAggregator(organizationForPerson);
-			_agentAdherenceAggregator = new AgentAdherenceAggregator(organizationForPerson);
+			var stateProvider = new RtaAggregationStateProvider(organizationForPerson);
+			_teamAdherenceAggregator = new TeamAdherenceAggregator(stateProvider);
+			_siteAdherenceAggregator = new SiteAdherenceAggregator(stateProvider);
+			_agentAdherenceAggregator = new AgentAdherenceAggregator(stateProvider);
 		}
 
 		public void Invoke(IActualAgentState actualAgentState)

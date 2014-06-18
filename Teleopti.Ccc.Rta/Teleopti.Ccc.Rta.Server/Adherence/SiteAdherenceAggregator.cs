@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
@@ -9,48 +9,37 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 {
 	public class SiteAdherenceAggregator
 	{
-		private readonly IOrganizationForPerson _organizationForPerson;
-		private readonly Dictionary<Guid, AggregatedValues> _siteAdherences = new Dictionary<Guid, AggregatedValues>();
+		private readonly RtaAggregationStateProvider _stateProvider;
 
-		public SiteAdherenceAggregator(IOrganizationForPerson organizationForPerson)
+		public SiteAdherenceAggregator(RtaAggregationStateProvider stateProvider)
 		{
-			_organizationForPerson = organizationForPerson;
+			_stateProvider = stateProvider;
 		}
 
 		public Notification CreateNotification(IActualAgentState actualAgentState)
 		{
-			if (_organizationForPerson == null) return null;
+			var aggregationState = _stateProvider.GetState();
+			var personOrganizationData = aggregationState.Update(actualAgentState.PersonId, actualAgentState);
+			var numberOfOutOfAdherence = aggregationState.GetActualAgentStateForSite(personOrganizationData.SiteId).Count(x => Math.Abs(x.StaffingEffect) > 0.01);
 
-			var personId = actualAgentState.PersonId;
-			var siteId = _organizationForPerson.GetOrganization(personId).SiteId;
-
-			AggregatedValues siteState;
-			if (!_siteAdherences.TryGetValue(siteId, out siteState))
-			{
-				siteState = new AggregatedValues(siteId);
-				_siteAdherences[siteId] = siteState;
-			}
-
-			var changed = siteState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
-			return changed
-				? createSiteNotification(_siteAdherences[siteId], actualAgentState.BusinessUnit)
-				: null;
+			return createSiteNotification(numberOfOutOfAdherence, actualAgentState.BusinessUnit, personOrganizationData.SiteId);
 		}
 
-		private static Notification createSiteNotification(AggregatedValues aggregatedValues, Guid businessUnitId)
+		private static Notification createSiteNotification(int numberOfOutOfAdherence, Guid businessUnitId, Guid siteId)
 		{
 			var siteAdherenceMessage = new SiteAdherenceMessage
 			{
-				OutOfAdherence = aggregatedValues.NumberOutOfAdherence()
+				OutOfAdherence = numberOfOutOfAdherence
 			};
+
 			return new Notification
 			{
 				BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage),
 				BusinessUnitId = businessUnitId.ToString(),
 				DomainType = "SiteAdherenceMessage",
-				DomainId = aggregatedValues.Key.ToString()
+				DomainId = siteId.ToString(),
+				DomainReferenceId = siteId.ToString()
 			};
-			
 		}
 	}
 }

@@ -1,16 +1,12 @@
 using System;
-using System.Dynamic;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
-using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 {
@@ -43,12 +39,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
 		}
 
+		[When(@"I input an RTA configuration with (.*) scenarios for '(.*)' in json format")]
+		public void WhenIInputAnRtaConfigurationWithScenariosForInJsonFormat(int scnearios, string personName)
+		{
+			var configuration = new
+			{
+				PlatformTypeId = Guid.Empty,
+				ExternalLogOn = personName,
+				State = "Pause",
+				SourceId = "0",
+				StatesToSend = 1,
+				ExpectedPersonsInAlarm = 1
+			};
+
+			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
+		}
+
+
 		[Then(@"I should see a count of (.*) messages received for '(.*)'")]
 		public void ThenIShouldSeeACountOfMessagesReceivedForEachApplicableModelUpdated(int messages, string model)
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(".message-count:contains('{0}') .message-target:contains('{1}')", model, messages);
 			Browser.Interactions.AssertExistsUsingJQuery(".message-count:contains('{0}') .message-successes:contains('{1}')", model, messages);
 		}
+
+
 
 		[Then(@"I should see that the test run has finished")]
 		public void ThenIShouldSeeThatTheTestRunHasFinished()

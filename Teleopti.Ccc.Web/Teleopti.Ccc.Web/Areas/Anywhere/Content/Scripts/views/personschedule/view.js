@@ -23,7 +23,6 @@ define([
 		initialize: function (options) {
 
 			options.renderHtml(view);
-
 			viewModel = new personScheduleViewModel();
 
 			resize.onresize(function () {

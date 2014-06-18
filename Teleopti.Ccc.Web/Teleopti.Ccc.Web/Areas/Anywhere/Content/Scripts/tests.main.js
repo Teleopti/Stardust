@@ -1,10 +1,10 @@
 require.config(requireconfiguration);
 
 define('resources', {
-		//TimeFormatForMoment: "HH:mm",
-		FixedDateTimeFormatForMoment: "YYYY-MM-DD HH:mm",
-		FixedTimeFormatForMoment: "HH:mm"
-	});
+	TimeFormatForMoment: "HH:mm",
+	FixedDateTimeFormatForMoment: "YYYY-MM-DD HH:mm",
+	FixedTimeFormatForMoment: "HH:mm"
+});
 
 define('window', {
 	setLocationHash: function () { },
@@ -14,6 +14,7 @@ define('window', {
 var testCases = [
 	'tests',
 	'views/personschedule/vm_test',
+	'views/teamschedule/vm_test',
 	'views/realtimeadherencesites/vm_test',
 	'views/realtimeadherenceteams/vm_test',
 	'views/realtimeadherenceagents/vm_test',

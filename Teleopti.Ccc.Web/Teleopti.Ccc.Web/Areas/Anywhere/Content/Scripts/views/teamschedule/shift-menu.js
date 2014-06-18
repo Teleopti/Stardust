@@ -1,11 +1,9 @@
 define([
 	'knockout',
-	'navigation',
-	'helpers'
+	'navigation'
 ], function (
 	ko,
-	navigation,
-	helpers
+	navigation
 	) {
 
 	return function (data) {
@@ -33,7 +31,7 @@ define([
 
 		this.moveActivity = function () {
 			var layer = this;
-			navigation.GotoPersonScheduleMoveActivityForm(self.GroupId, self.PersonId, self.Date, helpers.timeFormatForUrl(layer.StartTime()));
+			navigation.GotoPersonScheduleMoveActivityForm(self.GroupId, self.PersonId, self.Date, layer.StartMinutes());
 		};
 	};
 });

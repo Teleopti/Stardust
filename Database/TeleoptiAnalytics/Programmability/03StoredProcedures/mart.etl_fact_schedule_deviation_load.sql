@@ -66,7 +66,8 @@ CREATE TABLE #fact_schedule_deviation(
 	ready_time_s int default 0,
 	is_logged_in int default 0, 
 	contract_time_s int default 0,
-	business_unit_id int
+	business_unit_id int,
+	person_code uniqueidentifier
 )
 
 CREATE TABLE #fact_schedule_deviation_merge(
@@ -98,7 +99,8 @@ CREATE TABLE #fact_schedule (
 	[scheduled_ready_time_m] [int] NULL,
 	[scheduled_contract_time_m] [int] NULL,
 	[scheduled_time_m][int] NULL,
-	[business_unit_id] [int] NULL
+	[business_unit_id] [int] NULL,
+	[person_code] [uniqueidentifier]
 )
 
 CREATE CLUSTERED INDEX [#CIX_fact_schedule] ON #fact_schedule
@@ -110,7 +112,8 @@ CREATE CLUSTERED INDEX [#CIX_fact_schedule] ON #fact_schedule
 
 CREATE TABLE #stg_schedule_changed(
 	[person_id] [int] NOT NULL,
-	[shift_startdate_local_id] [int] NOT NULL
+	[shift_startdate_local_id] [int] NOT NULL,
+	[person_code] [uniqueidentifier]
 )
 
 --get the number of intervals outside shift to consider for adherence calc
@@ -147,9 +150,13 @@ BEGIN
 		sum(isnull(fs.scheduled_ready_time_m,0)) 'scheduled_ready_time_m',
 		sum(isnull(fs.scheduled_time_m,0))'scheduled_time_m',
 		sum(isnull(fs.scheduled_contract_time_m,0))'scheduled_contract_time_m',
-		fs.business_unit_id
+		fs.business_unit_id,
+		p.person_code
 	FROM 
 		mart.fact_schedule fs
+	INNER JOIN 
+		mart.dim_person p 
+	ON p.person_id=fs.person_id
 	WHERE fs.shift_startdate_local_id BETWEEN @start_date_id AND @end_date_id
 		AND fs.business_unit_id = @business_unit_id
 		AND fs.scenario_id = @scenario_id
@@ -162,7 +169,8 @@ BEGIN
 		fs.shift_endtime,
 		fs.interval_id,
 		fs.person_id,
-		fs.business_unit_id
+		fs.business_unit_id,
+		p.person_code
 
 	/* a) Gather agent ready time */
 	INSERT INTO #fact_schedule_deviation
@@ -173,7 +181,8 @@ BEGIN
 		person_id, 
 		ready_time_s,
 		is_logged_in,
-		business_unit_id
+		business_unit_id,
+		person_code
 		)
 	SELECT
 		date_id					= fa.date_id, 
@@ -182,7 +191,8 @@ BEGIN
 		person_id				= b.person_id, 
 		ready_time_s			= fa.ready_time_s,
 		is_logged_in			= 1, --marks that we do have logged in time
-		business_unit_id		= b.business_unit_id
+		business_unit_id		= b.business_unit_id,
+		person_code				= p.person_code
 	FROM 
 		mart.bridge_acd_login_person b
 	JOIN
@@ -208,7 +218,8 @@ if (@isIntraday=1)
 BEGIN
 	INSERT INTO #stg_schedule_changed
 	SELECT  p.person_id,
-			dd.date_id
+			dd.date_id,
+			p.person_code
 	FROM stage.stg_schedule_changed ch
 	INNER JOIN mart.dim_person p
 		ON p.person_code = ch.person_code
@@ -242,7 +253,8 @@ BEGIN
 		sum(isnull(fs.scheduled_ready_time_m,0)) 'scheduled_ready_time_m',
 		sum(isnull(fs.scheduled_time_m,0))'scheduled_time_m',
 		sum(isnull(fs.scheduled_contract_time_m,0))'scheduled_contract_time_m',
-		fs.business_unit_id
+		fs.business_unit_id,
+		ch.person_code
 	FROM mart.fact_schedule fs
 	INNER JOIN #stg_schedule_changed ch
 		ON ch.shift_startdate_local_id = fs.shift_startdate_local_id 
@@ -258,7 +270,8 @@ BEGIN
 		fs.shift_endtime,
 		fs.interval_id,
 		fs.person_id,
-		fs.business_unit_id
+		fs.business_unit_id,
+		ch.person_code
 
 	/* a) Gather agent ready time */
 	INSERT INTO #fact_schedule_deviation
@@ -269,7 +282,8 @@ BEGIN
 		acd_login_id,--new 20131128
 		ready_time_s,
 		is_logged_in,
-		business_unit_id
+		business_unit_id,
+		person_code
 		)
 	SELECT DISTINCT
 		date_id					= fa.date_id, 
@@ -278,7 +292,8 @@ BEGIN
 		acd_login_id			= fa.acd_login_id, --new 20131128
 		ready_time_s			= fa.ready_time_s,
 		is_logged_in			= 1, --marks that we do have logged in time
-		business_unit_id		= b.business_unit_id
+		business_unit_id		= b.business_unit_id,
+		person_code				= ch.person_code
 	FROM mart.bridge_acd_login_person b
 	INNER JOIN mart.fact_agent fa
 		ON b.acd_login_id = fa.acd_login_id
@@ -302,7 +317,8 @@ INSERT INTO #fact_schedule_deviation
 	is_logged_in, 
 	scheduled_ready_time_s,
 	contract_time_s,
-	business_unit_id
+	business_unit_id,
+	person_code
 	)
 SELECT
 	shift_startdate_local_id =fs.shift_startdate_local_id,
@@ -315,7 +331,8 @@ SELECT
 	is_logged_in			= 0, --Mark schedule rows as Not loggged in 
 	scheduled_ready_time_s	= fs.scheduled_ready_time_m*60,
 	contract_time_s			= fs.scheduled_contract_time_m*60,
-	business_unit_id		= fs.business_unit_id
+	business_unit_id		= fs.business_unit_id,
+	person_code				= fs.person_code
 FROM #fact_schedule fs
 
 /*#26421 Update schedule data with acd_login_id to handle nights shifts and person_period change*/
@@ -334,7 +351,7 @@ SET person_id=shifts.person_id--update agent stat data
 FROM #fact_schedule_deviation shifts
 INNER JOIN #fact_schedule_deviation stat
 ON stat.date_id=shifts.date_id AND stat.interval_id=shifts.interval_id AND shifts.acd_login_id=stat.acd_login_id
-WHERE stat.person_id<>shifts.person_id AND shifts.acd_login_id IS NOT NULL --where diff on person but same acd_login
+WHERE stat.person_id<>shifts.person_id AND shifts.acd_login_id IS NOT NULL AND shifts.person_code=stat.person_code--where diff on person but same acd_login (and same person_code #24433)
 AND shifts.shift_startdate_local_id IS NOT NULL  --get from schedule data
 AND stat.shift_startdate_local_id IS NULL
 
@@ -347,15 +364,18 @@ ON stat.date_id=shifts.date_id AND stat.interval_id=shifts.interval_id AND stat.
 WHERE shifts.shift_startdate_local_id IS NOT NULL
 AND stat.shift_startdate_local_id IS NULL
 
---UPDATE ALL SHIFT ROWS WITH STATISTICS TO BE ABLE TO HANDLE OVERLAPPING SHIFTS
+--UPDATE ALL SHIFT ROWS WITH STATISTICS TO BE ABLE TO HANDLE OVERLAPPING SHIFTS AND DUPLICATE LOGINS(#28433)
 UPDATE shifts
 SET ready_time_s=stat.ready_time_s,is_logged_in=stat.is_logged_in
-FROM #fact_schedule_deviation stat
-INNER JOIN #fact_schedule_deviation shifts
-ON stat.date_id=shifts.date_id AND stat.interval_id=shifts.interval_id AND stat.person_id=shifts.person_id
+FROM #fact_schedule_deviation shifts
+INNER JOIN
+(
+  SELECT date_id, interval_id, person_id, sum(ready_time_s)ready_time_s, max(is_logged_in)is_logged_in
+  FROM #fact_schedule_deviation
+  WHERE shift_startdate_local_id IS NULL
+  GROUP BY  date_id, interval_id, person_id
+) stat ON stat.date_id=shifts.date_id AND stat.interval_id=shifts.interval_id AND stat.person_id=shifts.person_id
 WHERE shifts.shift_startdate_local_id IS NOT NULL 
-AND stat.shift_startdate_local_id IS NULL
-
 
 --ALL ROWS BEFORE SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
 UPDATE stat
@@ -387,7 +407,6 @@ AND stat.interval_id >= shifts.interval_id
 AND shifts.shift_startdate_local_id IS NOT NULL 
 
 DELETE FROM #fact_schedule_deviation WHERE shift_startdate_local_id IS NULL
-
 
 /*Merge data*/
 INSERT INTO #fact_schedule_deviation_merge

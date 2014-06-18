@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
@@ -9,39 +9,27 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 {
 	public class TeamAdherenceAggregator
 	{
-		private readonly IOrganizationForPerson _organizationForPerson;
-		private readonly Dictionary<Guid, AggregatedValues> _teamAdherences = new Dictionary<Guid, AggregatedValues>();
+		private readonly RtaAggregationStateProvider _stateProvider;
 
-		public TeamAdherenceAggregator(IOrganizationForPerson organizationForPerson)
+		public TeamAdherenceAggregator(RtaAggregationStateProvider stateProvider)
 		{
-			_organizationForPerson = organizationForPerson;
+			_stateProvider = stateProvider;
 		}
 
 		public Notification CreateNotification(IActualAgentState actualAgentState)
 		{
-			if (_organizationForPerson == null) return null;
+			var aggregationState = _stateProvider.GetState();
+			var personOrganizationData = aggregationState.Update(actualAgentState.PersonId, actualAgentState);
+			var numberOfOutOfAdherence = aggregationState.GetActualAgentStateForTeam(personOrganizationData.TeamId).Count(x => Math.Abs(x.StaffingEffect) > 0.01);
 
-			var personId = actualAgentState.PersonId;
-			var personOrganizationData = _organizationForPerson.GetOrganization(personId);
-			var teamId = personOrganizationData.TeamId;
-
-			AggregatedValues teamState;
-			if (!_teamAdherences.TryGetValue(teamId, out teamState))
-			{
-				teamState = new AggregatedValues(teamId);
-				_teamAdherences[teamId] = teamState;
-			}
-			var changed = teamState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
-			return changed
-				? createTeamNotification(_teamAdherences[teamId], actualAgentState.BusinessUnit, personOrganizationData.SiteId)
-				: null;
+			return createTeamNotification(numberOfOutOfAdherence, actualAgentState.BusinessUnit, personOrganizationData.TeamId, personOrganizationData.SiteId);
 		}
 
-		private static Notification createTeamNotification(AggregatedValues aggregatedValues, Guid businessUnitId, Guid siteId)
+		private static Notification createTeamNotification(int numberOfOutOfAdherence, Guid businessUnitId, Guid teamId, Guid siteId)
 		{
 			var teamAdherenceMessage = new TeamAdherenceMessage
 			{
-				OutOfAdherence = aggregatedValues.NumberOutOfAdherence()
+				OutOfAdherence = numberOfOutOfAdherence
 			};
 
 			return new Notification
@@ -49,7 +37,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 				BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage),
 				BusinessUnitId = businessUnitId.ToString(),
 				DomainType = "TeamAdherenceMessage",
-				DomainId = aggregatedValues.Key.ToString(),
+				DomainId = teamId.ToString(),
 				DomainReferenceId = siteId.ToString()
 			};
 		}

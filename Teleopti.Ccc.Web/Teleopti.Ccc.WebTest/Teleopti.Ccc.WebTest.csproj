@@ -178,6 +178,8 @@
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\DetailedAdherenceMapperTest.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\MyReportViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceWeeklyWorkTimeSettingProviderTest.cs" />
+    <Compile Include="Areas\PerformanceTool\Controllers\RtaControllerTest.cs" />
+    <Compile Include="Areas\Rta\Controllers\RtaControllerTest.cs" />
     <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
@@ -198,6 +200,7 @@
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactoryTest.cs" />
     <Compile Include="Core\Startup\FindAreaRegistrationsTest.cs" />
     <Compile Include="Core\Startup\RegisterAreasTest.cs" />
+    <Compile Include="Core\Startup\RtaStartupTaskTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddPersonScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddScheduleLayerViewModelMapperTest.cs" />
@@ -457,6 +460,10 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Server\Teleopti.Ccc.Rta.Server.csproj">
+      <Project>{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}</Project>
+      <Name>Teleopti.Ccc.Rta.Server</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>

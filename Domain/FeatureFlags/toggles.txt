@@ -7,10 +7,10 @@
 #############################
 #
 #
-##### Disable a feature ###########
-##### Optional, default behavior ##
+############## Disable a feature ##########################
+## This will disable the feature for developers as well! ##
 # MyFeature = false
-###################################
+###########################################################
 #
 #
 ### Enable for specific license #######
@@ -24,5 +24,3 @@ RTA_RtaLastStatesOverview_27789 = true
 RTA_DrilldownToAllAgentsInOneTeam_25234 = true
 Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635.license.name = Teleopti_RC
 MyReport_AgentQueueMetrics_22254.license.name = Teleopti_RC
-Scheduler_Seniority_11111.license.name = Teleopti_RD
-Forecast_CopySettingsToWorkflow_11112.license.name = Teleopti_RD

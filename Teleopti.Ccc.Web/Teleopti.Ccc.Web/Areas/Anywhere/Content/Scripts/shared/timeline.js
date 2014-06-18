@@ -15,6 +15,8 @@ define([
 			this.StartMinutes = ko.computed(function () {
 				var start = undefined;
 				ko.utils.arrayForEach(timeLineLayers(), function (l) {
+					if (!l.TimeLineAffecting())
+						return;
 					var startMinutes = l.TimeLineAffectingStartMinute();
 					if (start === undefined)
 						start = startMinutes;

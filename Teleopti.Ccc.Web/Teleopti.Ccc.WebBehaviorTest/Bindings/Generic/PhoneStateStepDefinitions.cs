@@ -39,11 +39,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				                                                   new AlarmMapper(databaseReader, databaseWriter,
 				                                                                   mbCacheFactory)),
 																	databaseWriter,
-				                          new[]
-					                          {
+				                          
 						                          new AdherenceAggregator(messageSender,
 						                                                  new OrganizationForPerson(personOrganizationProvider))
-					                          });
+					                      );
 			});
 
 		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]

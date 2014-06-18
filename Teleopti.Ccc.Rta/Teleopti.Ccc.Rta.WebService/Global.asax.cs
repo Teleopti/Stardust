@@ -10,7 +10,6 @@ using Teleopti.Ccc.Rta.Server;
 using Teleopti.Ccc.Rta.Server.Adherence;
 using log4net;
 using log4net.Config;
-using ContainerBuilder = Teleopti.Ccc.Rta.Server.ContainerBuilder;
 
 namespace Teleopti.Ccc.Rta.WebService
 {
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Rta.WebService
 
 		private static IContainer buildIoc()
 		{
-			var builder = ContainerBuilder.CreateBuilder();
+			var builder = RtaContainerBuilder.CreateBuilder();
 			builder.RegisterType<TeleoptiRtaService>().SingleInstance();
 			builder.RegisterModule(new DateAndTimeModule());
 			return builder.Build();

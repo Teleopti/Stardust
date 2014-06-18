@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Rta.Server
 			builder.RegisterType<CurrentAndNextLayerExtractor>().As<ICurrentAndNextLayerExtractor>().SingleInstance();
 			builder.RegisterType<DataSourceResolver>().As<IDataSourceResolver>();
 			builder.RegisterType<PersonResolver>().As<IPersonResolver>();
-			builder.RegisterType<AdherenceAggregatorInitializor>();
+			builder.RegisterType<AdherenceAggregatorInitializor>().AsSelf().As<IAdherenceAggregatorInitializor>();
 			builder.RegisterModule<DateAndTimeModule>();
 
 			registerAdherenceComponents(builder);

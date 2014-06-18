@@ -696,7 +696,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripMenuItemActionSkillDelete.Size = new System.Drawing.Size(192, 28);
 			this.toolStripMenuItemActionSkillDelete.Text = "xxDelete";
 			this.toolStripMenuItemActionSkillDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripMenuItemActionSkillDelete.Click += new System.EventHandler(this.toolStripMenuItemActionSkillDelete_Click);
+			this.toolStripMenuItemActionSkillDelete.Click += new System.EventHandler(this.toolStripMenuItemActionSkillDeleteClick);
 			// 
 			// toolStripMenuItemActionSkillProperties
 			// 

@@ -99,16 +99,7 @@ define([
 				viewModel.moveActivityVisible(data.IsEnabled);
 			});
 
-			var currentDate = function () {
-				var date = options.date;
-				if (date == undefined) {
-					return moment().startOf('day');
-				} else {
-					return moment(date, 'YYYYMMDD');
-				}
-			};
-
-			viewModel.Date(currentDate());
+			viewModel.SetViewOptions(options);
 
 			var groupPagesDeferred = $.Deferred();
 			loadGroupPages(
@@ -136,7 +127,7 @@ define([
 					viewModel.GroupId(),
 					helpers.Date.ToServer(viewModel.Date()),
 					function (data) {
-						viewModel.UpdateSchedules(data, viewModel.TimeLine);
+						viewModel.UpdateSchedules(data);
 						groupScheduleDeferred.resolve();
 					}
 				);

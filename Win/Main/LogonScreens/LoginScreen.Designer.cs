@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.labelLogOn.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelLogOn.Location = new System.Drawing.Point(0, 0);
 			this.labelLogOn.Name = "labelLogOn";
-			this.labelLogOn.Padding = new System.Windows.Forms.Padding(0, 30, 0, 0);
+			this.labelLogOn.Padding = new System.Windows.Forms.Padding(0, 15, 0, 0);
 			this.labelLogOn.Size = new System.Drawing.Size(483, 245);
 			this.labelLogOn.TabIndex = 40;
 			this.labelLogOn.Text = "xxPlease enter your logon credentials";
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.btnBack.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnBack.ForeColor = System.Drawing.Color.White;
 			this.btnBack.IsBackStageButton = false;
-			this.btnBack.Location = new System.Drawing.Point(183, 198);
+			this.btnBack.Location = new System.Drawing.Point(183, 190);
 			this.btnBack.Name = "btnBack";
 			this.btnBack.Size = new System.Drawing.Size(75, 23);
 			this.btnBack.TabIndex = 43;
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonLogOnCancel.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonLogOnCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonLogOnCancel.IsBackStageButton = false;
-			this.buttonLogOnCancel.Location = new System.Drawing.Point(345, 198);
+			this.buttonLogOnCancel.Location = new System.Drawing.Point(345, 190);
 			this.buttonLogOnCancel.Name = "buttonLogOnCancel";
 			this.buttonLogOnCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonLogOnCancel.TabIndex = 42;
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonLogOnOK.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonLogOnOK.ForeColor = System.Drawing.Color.White;
 			this.buttonLogOnOK.IsBackStageButton = false;
-			this.buttonLogOnOK.Location = new System.Drawing.Point(264, 198);
+			this.buttonLogOnOK.Location = new System.Drawing.Point(264, 190);
 			this.buttonLogOnOK.Name = "buttonLogOnOK";
 			this.buttonLogOnOK.Size = new System.Drawing.Size(75, 23);
 			this.buttonLogOnOK.TabIndex = 41;

@@ -14,7 +14,7 @@ define([
 		helpers
 	) {
 
-	return function (timeline, data) {
+	return function (timeline, data, affectTimeLine) {
 		var self = this;
 
 		var unit = new unitViewModel(timeline, data);
@@ -30,10 +30,12 @@ define([
 		this.EndTime = unit.EndTime;
 
 		this.Color = data.Color;
-		this.TextColor = helpers.TextColor.BasedOnBackgroundColor(helpers.TextColor.HexToRgb(self.Color));
+		if(this.Color)
+			this.TextColor = helpers.TextColor.BasedOnBackgroundColor(helpers.TextColor.HexToRgb(self.Color));
 		this.Description = data.Description;
 		this.IsFullDayAbsence = data.IsFullDayAbsence;
 
+		this.TimeLineAffecting = function () { return affectTimeLine; }
 		this.TimeLineAffectingStartMinute = unit.CutInsideDayStartMinutes;
 		this.TimeLineAffectingEndMinute = unit.EndMinutes;
 

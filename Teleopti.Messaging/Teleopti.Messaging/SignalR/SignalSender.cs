@@ -87,7 +87,8 @@ namespace Teleopti.Messaging.SignalR
 
 		public void SendNotification(Notification notification)
 		{
-			_signalBrokerCommands.NotifyClients(notification);
+			if (_connection != null)
+				_signalBrokerCommands.NotifyClients(notification);
 		}
 
 		public virtual void Dispose()

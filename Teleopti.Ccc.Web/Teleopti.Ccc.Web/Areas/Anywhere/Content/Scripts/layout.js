@@ -87,7 +87,7 @@ define([
 		var actionRegex = '[a-z]+';
 		var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
 		var dateRegex = '\\d{8}';
-		var timeRegex = '\\d{4}';
+		var timeRegex = '\\d*';
 
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
@@ -111,8 +111,8 @@ define([
 			});
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')/(' + timeRegex + ')$', "i"),
-			function (view, groupid, personid, date, action, time) {
-				_displayView({ view: view, groupid: groupid, personid: personid, date: date, action: action, time: time });
+			function (view, groupid, personid, date, action, minutes) {
+				_displayView({ view: view, groupid: groupid, personid: personid, date: date, action: action, minutes: minutes });
 			});
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + dateRegex + ')$', "i"),

@@ -84,6 +84,11 @@
       <HintPath>..\..\packages\Autofac.SignalR.TeleoptiKey.3.0.1\lib\net40\Autofac.Integration.SignalR.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Autofac.Integration.Wcf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Autofac.Wcf.3.0.0\lib\net40\Autofac.Integration.Wcf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="AutoMapper, Version=2.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
@@ -202,6 +207,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.10\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
@@ -210,6 +216,8 @@
       <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -357,6 +365,10 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
+    <Compile Include="Areas\PerformanceTool\Controllers\CreateTemporaryPersonsController.cs" />
+    <Compile Include="Areas\Rta\Controllers\RtaServiceController.cs" />
+    <Compile Include="Areas\Rta\Core\IoC\RtaAreaModule.cs" />
+    <Compile Include="Areas\Rta\RtaAreaRegistration.cs" />
     <Compile Include="Areas\SSO\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\SSO\Controllers\AuthenticationApiController.cs" />
     <Compile Include="Areas\SSO\Core\ApplicationAuthenticationType.cs" />
@@ -559,6 +571,7 @@
     <Compile Include="Core\Startup\IRegisterAreas.cs" />
     <Compile Include="Core\Startup\RegisterArea.cs" />
     <Compile Include="Core\Startup\RegisterAreas.cs" />
+    <Compile Include="Core\Startup\RtaStartupTask.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
@@ -782,6 +795,8 @@
     <Compile Include="Areas\MyTime\Models\WeekSchedule\WeekScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Areas\Rta\ITeleoptiRtaService.cs" />
+    <Compile Include="Areas\Rta\TeleoptiRtaService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\feature.js" />
@@ -807,6 +822,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\team_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\window.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
@@ -903,6 +919,9 @@
     <Content Include="Areas\PerformanceTool\Content\Scripts\result.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\addfulldayabsence\scheduledresourcesreadmodel.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\progressitem-count.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\rta\iteration.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\rta\scenario.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\rta\scenario_test.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\signalrhubs.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\template\iteration.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\template\scenario.js" />
@@ -1245,6 +1264,7 @@
     <Content Include="Content\lazy\lazy.min.js" />
     <Content Include="Content\signalr\jquery.signalR-1.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-1.2.0.min.js" />
+    <Content Include="Areas\Rta\TeleoptiRtaService.svc" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1277,6 +1297,14 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Interfaces\Teleopti.Ccc.Rta.Interfaces.csproj">
+      <Project>{DD380C37-8FC1-4209-BC63-9B88B483264D}</Project>
+      <Name>Teleopti.Ccc.Rta.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Server\Teleopti.Ccc.Rta.Server.csproj">
+      <Project>{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}</Project>
+      <Name>Teleopti.Ccc.Rta.Server</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
       <Project>{98105BFE-6C3B-4C57-9141-6BD065C7E966}</Project>

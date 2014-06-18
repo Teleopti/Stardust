@@ -22,6 +22,7 @@ using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
+using Teleopti.Ccc.Web.Areas.Rta.Core.IoC;
 using Teleopti.Ccc.Web.Areas.SSO.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Start.Core.IoC;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
@@ -71,6 +72,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RuleSetModule(mbCacheModule, false));
 			builder.RegisterModule(new AuthenticationCachedModule(mbCacheModule));
+
+			builder.RegisterModule(new RtaAreaModule(mbCacheModule));
 
 			builder.RegisterModule<ShiftTradeModule>();
 

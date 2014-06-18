@@ -242,6 +242,9 @@
     <Compile Include="NHibernateConfiguration\VersionStateRollbackInterceptor.cs" />
     <Compile Include="NHibernateConfiguration\XmlType.cs" />
     <Compile Include="Licensing\LicenseProvider.cs" />
+    <Compile Include="PeformanceTool\ITestPersonCreator.cs" />
+    <Compile Include="PeformanceTool\TestPersonCreator.cs" />
+    <Compile Include="PeformanceTool\ThingsForTestPersonsStateHolder.cs" />
     <Compile Include="Persisters\Account\IPersonAccountConflictCollector.cs" />
     <Compile Include="Persisters\Account\IPersonAccountConflictResolver.cs" />
     <Compile Include="Persisters\Account\IPersonAccountPersister.cs" />

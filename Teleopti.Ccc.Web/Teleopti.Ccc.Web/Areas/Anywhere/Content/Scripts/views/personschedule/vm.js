@@ -48,7 +48,7 @@ define([
 		this.PersonId = ko.observable();
 		this.GroupId = ko.observable();
 		this.ScheduleDate = ko.observable();
-		this.SelectedStartTime = ko.observable();
+		this.SelectedStartMinutes = ko.observable();
 
 		var personForId = function(id, personArray) {
 			if (!id)
@@ -138,7 +138,7 @@ define([
 		this.MovingActivity = ko.observable(false);
 
 		this.DisplayForm = ko.computed(function() {
-			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence();
+			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence() || self.MovingActivity();
 		});
 
 		this.DisplayGroupMates = ko.computed(function () {
@@ -149,8 +149,8 @@ define([
 			self.ScheduleDate(moment(options.date, 'YYYYMMDD'));
 			self.PersonId(options.personid || options.id);
 			self.GroupId(options.groupid);
-			if (options.time)
-				self.SelectedStartTime(moment(options.time, 'HHmm'));
+			if (options.minutes)
+				self.SelectedStartMinutes(Number(options.minutes));
 
 		};
 
@@ -174,19 +174,14 @@ define([
 			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);
 			self.AddIntradayAbsenceForm.SetData(data);
-			var selectedLayer = self.SelectedLayer();
-			if (selectedLayer) {
-				data.OldStartTime = moment(selectedLayer.StartTime(), resources.FixedDateTimeFormatForMoment).format(resources.FixedTimeFormatForMoment);
-				data.ProjectionLength = selectedLayer.LengthMinutes();
-				self.MoveActivityForm.SetData(data);
-			}
+			self.MoveActivityForm.SetData(data);
 		};
 
 		this.UpdateSchedules = function (data) {
 			// if we dont display group mates, then filter out their data
 			if (!self.DisplayGroupMates()) {
 				data = lazy(data)
-					.filter(function (x) { return x.PersonId == self.PersonId(); })
+					.filter(function (x) {return x.PersonId == self.PersonId(); })
 					.toArray();
 			}
 			// data might include the same person more than once, with data for more than one day
@@ -209,13 +204,15 @@ define([
 
 			self.AddIntradayAbsenceForm.WorkingShift(self.WorkingShift());
 			self.AddActivityForm.WorkingShift(self.WorkingShift());
+			var selectedLayer = self.SelectedLayer();
+			self.MoveActivityForm.update(selectedLayer);
+			
 		};
 
 		this.SelectedLayer = function () {
-			if (!self.SelectedStartTime()) return null;
-			var selectedLayers = layers().filter(function (layer) {
-				var momentStartTime = moment(layer.StartTime(), resources.FixedDateFormatForMoment).format(resources.FixedTimeFormatForMoment);
-				if (momentStartTime === self.SelectedStartTime().format(resources.FixedTimeFormatForMoment))
+			if (!self.SelectedStartMinutes()) return null;
+			var selectedLayers = layers().filter(function (layer) { 
+				if (layer.StartMinutes() === self.SelectedStartMinutes())
 					return layer;
 			});
 			return selectedLayers.first();

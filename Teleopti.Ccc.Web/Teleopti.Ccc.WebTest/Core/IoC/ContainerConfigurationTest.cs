@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.Rta.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
@@ -101,6 +102,16 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			{
 				container.IsRegistered<IUserTextTranslator>()
 					.Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveRtaController()
+		{
+			using (var container = builder.Configure(string.Empty))
+			{
+				container.Resolve<RtaServiceController>()
+					.Should().Not.Be.Null();
 			}
 		}
 	}
