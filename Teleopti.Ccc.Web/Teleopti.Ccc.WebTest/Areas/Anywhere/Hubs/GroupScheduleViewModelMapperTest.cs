@@ -252,5 +252,43 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			result.Single().Date.Should().Be(new DateTime(2013, 12, 18).ToFixedDateFormat());
 		}
 
+		[Test]
+		public void ShouldMapLayerActivityId()
+		{
+			var target = new GroupScheduleViewModelMapper();
+			var person = PersonFactory.CreatePersonWithId();
+			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			var activityId = Guid.NewGuid();
+			var data = new GroupScheduleData
+			{
+				UserTimeZone = userTimeZone,
+				CanSeePersons = new[] { person },
+				Schedules = new[]
+						{
+							new PersonScheduleDayReadModel
+								{
+									PersonId = person.Id.Value,
+									Model = JsonConvert.SerializeObject(new Model
+										{
+											Shift = new Shift
+												{
+													Projection = new[]
+														{
+															new SimpleLayer
+																{
+																	ActivityId = activityId
+																}
+														}
+												}
+										})
+								}
+						}
+			};
+
+			var result = target.Map(data);
+
+			result.Single().Projection.Single().ActivityId.Should().Be(activityId.ToString());
+		}
+
 	}
 }

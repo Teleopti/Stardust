@@ -82,18 +82,20 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			var layers = shift.Projection ?? new SimpleLayer[] { };
 			return (
-					   from l in layers
-					   let canSeeLayerInfo = CanSeeLayerInfo(canSeeConfidentialAbsence, l)
-					   let color = canSeeLayerInfo ? l.Color : ConfidentialPayloadValues.DisplayColorHex
-					   let description = canSeeLayerInfo ? l.Description : ConfidentialPayloadValues.Description.Name
-					   let start = TimeZoneInfo.ConvertTimeFromUtc(l.Start, userTimeZone)
-					   select new GroupScheduleLayerViewModel
-					   {
-						   Color = color,
-						   Description = description,
-						   Start = start.ToFixedDateTimeFormat(),
-						   Minutes = l.Minutes
-					   })
+				from l in layers
+				let canSeeLayerInfo = CanSeeLayerInfo(canSeeConfidentialAbsence, l)
+				let color = canSeeLayerInfo ? l.Color : ConfidentialPayloadValues.DisplayColorHex
+				let description = canSeeLayerInfo ? l.Description : ConfidentialPayloadValues.Description.Name
+				let start = TimeZoneInfo.ConvertTimeFromUtc(l.Start, userTimeZone)
+				let activityId = l.ActivityId
+				select new GroupScheduleLayerViewModel
+				{
+					ActivityId = activityId.ToString(),
+					Color = color,
+					Description = description,
+					Start = start.ToFixedDateTimeFormat(),
+					Minutes = l.Minutes
+				})
 				.ToArray();
 		}
 

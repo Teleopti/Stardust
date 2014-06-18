@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
+﻿using System;
+
+namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	public class GroupScheduleLayerViewModel
 	{
@@ -6,5 +8,6 @@
 		public string Description { get; set; }
 		public string Start { get; set; }
 		public int Minutes { get; set; }
+		public string ActivityId { get; set; }
 	}
 }
