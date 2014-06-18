@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Teleopti CCC</title>
-    <style type="text/css">
+	<title>Teleopti CCC</title>
+	<style type="text/css">
 		
 	body {
 		margin-left:20px;margin-top:20px;
@@ -21,15 +21,14 @@
 	color:black;
 	text-decoration: none;
 	}
-        
+	.appAnywhere
+	{
+		background: lightblue url('images/mobile.png') 12px 90px no-repeat;
+	}    
 	.appSDK
 	{
 		background: lightblue url('images/Wheels.png') 12px 90px no-repeat;
 	
-	}
-	.appmytime
-	{
-		background: lightgreen url('images/calendar.png') 12px 90px no-repeat;	
 	}
 	.appAnalytics
 	{
@@ -52,73 +51,69 @@
 		background: khaki url('images/wheels.png') 12px 90px no-repeat;
 	}
 	.app a
-    {
-        text-decoration: none;
-        color:red;
-    }
-    </style>
+	{
+		text-decoration: none;
+		color:red;
+	}
+	</style>
 
 </head>
 <body>
 
-<div style="font-size:20px; line-height:22px; font-family:Segoe UI Light">
-	<img src="images/teleopti_logo.png" />
-	<br />
-	Teleopti CCC<br />
-	<br/>
+	<div style="font-size:20px; line-height:22px; font-family:Segoe UI Light">
+		<img src="images/teleopti_logo.png" />
+		<br />
+		<br />
+		<div style="font-family: Calibri; color:#003366; font-size: 50px">Teleopti WFM</div>
+		<br />
+		<br />
 
-<div style="float:left;font-size:16px">
-<hr />
-<p style="bottom: 1px">Client Applications</p>
-	<a href="/TeleoptiCCC/Web/Anywhere">
-		<span class="app">
-			Anywhere
-			<div style="font-size:16px">Easy access to schedules in your favorite device</div>
-		</span>	
-	</a>
-	<a href="/TeleoptiCCC/Web/MyTime">
-		<span class="app MyTimeWeb">
-			MyTimeWeb 
-			<div style="font-size:16px">Easy access to schedules in your favorite browser</div>
-		</span>	
-	</a>
-	<a href="/TeleoptiCCC/Client">
-		<span class="app appWin">
-			AdminClient 
-			<div style="font-size:16px">A top workforce management solution</div>	
-		</span>	
-	</a>
-	<a href="/TeleoptiCCC/MyTime">
-		<span  class="app appmytime">
-			MyTime 
-			<div style="font-size:16px">Easy access to schedules, work time preferences, etc.</div>	
-		</span>	
-	</a>
-</div>
-<div style="clear:both"></div>
-<div style="float:left;font-size:16px">
-<hr />
-<p style="bottom: 1px">Tools and web services</p>
-    <a href="/TeleoptiCCC/RTA/TeleoptiRtaService.svc">
-		<span class="app appRTA">
-			RTA Web Service 
-			<div style="font-size:16px">Used for Real Time integration</div>
-		</span>	
-	</a>
-    <a href="/TeleoptiCCC/broker/signalr/negotiate">
-		<span class="app appBroker">
-			Broker 
-			<div style="font-size:16px">Used internally to send message and events</div>
-		</span>	
-	</a>
-	<a href="/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc">
-		<span  class="app appSDK">
-			SDK Web Service
-            <div style="font-size:16px">Provides your organisation with custom functionality</div>	
-		</span>	
-	</a>
-</div>
-</div>
+		<div style="float:left;font-size:16px">
+			<hr />
+			<p style="bottom: 1px">Client Applications</p>
+			<a href="/TeleoptiCCC/Web/Anywhere">
+				<span class="app appAnywhere">
+					Anywhere
+					<div style="font-size:16px">Easy access to schedules in your favorite device</div>
+				</span>
+			</a>
+			<a href="/TeleoptiCCC/Web/MyTime">
+				<span class="app MyTimeWeb">
+					MyTimeWeb
+					<div style="font-size:16px">Easy access to schedules in your favorite browser</div>
+				</span>
+			</a>
+			<a href="/TeleoptiCCC/Client">
+				<span class="app appWin">
+					AdminClient
+					<div style="font-size:16px">A top workforce management solution</div>
+				</span>
+			</a> 
+		</div>
+		<div style="clear:both"></div>
+		<div style="float:left;font-size:16px">
+			<hr />
+			<p style="bottom: 1px">Tools and web services</p>
+			<a href="/TeleoptiCCC/RTA/TeleoptiRtaService.svc">
+				<span class="app appRTA">
+					RTA Web Service
+					<div style="font-size:16px">Used for Real Time integration</div>
+				</span>
+			</a>
+			<a href="/TeleoptiCCC/broker/signalr/negotiate">
+				<span class="app appBroker">
+					Broker
+					<div style="font-size:16px">Used internally to send message and events</div>
+				</span>
+			</a>
+			<a href="/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc">
+				<span class="app appSDK">
+					SDK Web Service
+					<div style="font-size:16px">Provides your organisation with custom functionality</div>
+				</span>
+			</a>
+		</div>
+	</div>
 
 </body>
 </html>
