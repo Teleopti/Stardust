@@ -4617,24 +4617,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 					scenarios.RemoveAt(i);
 			}
 			
-			var contextMenu = new ContextMenu();
-
-			foreach (IScenario scenario in scenarios)
+			foreach (var scenario in scenarios)
 			{
-				if (_scenario.Description.Name != scenario.Description.Name)
-				{
-					var menuItem = new MenuItem(scenario.Description.Name);
-					menuItem.Tag = scenario;
-					menuItem.Click += menuItemClick;
-					contextMenu.MenuItems.Add(menuItem);
-					backStageButtonMainMenuExportTo.ContextMenu = contextMenu;
-				}
+				if (_scenario.Description.Name == scenario.Description.Name) continue;
+				var button = new ButtonAdv
+					{
+						Text = scenario.Description.Name,
+						Width = 300,
+						Height = 80,
+						Appearance = ButtonAppearance.Metro,
+						UseVisualStyle = true,
+						Tag = scenario
+					};
+
+				button.Font.ChangeToBold();
+				button.Click += menuItemClick;
+				flowLayoutExportToScenario.ContainerControl.Controls.Add(button);
 			}
 		}
 
 		void menuItemClick(object sender, EventArgs e)
 		{
-			var scenario = (IScenario)((MenuItem)sender).Tag;
+			var scenario = (IScenario)((ButtonAdv)sender).Tag;
 
 			var allNewRules = _schedulerState.SchedulingResultState.GetRulesToRun();
 			var selectedSchedules = _scheduleView.SelectedSchedules();
