@@ -7,10 +7,10 @@
 #############################
 #
 #
-##### Disable a feature ###########
-##### Optional, default behavior ##
+############## Disable a feature ##########################
+## This will disable the feature for developers as well! ##
 # MyFeature = false
-###################################
+###########################################################
 #
 #
 ### Enable for specific license #######
