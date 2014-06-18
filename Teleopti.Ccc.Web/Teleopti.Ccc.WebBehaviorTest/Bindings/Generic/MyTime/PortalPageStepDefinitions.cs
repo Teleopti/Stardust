@@ -1,4 +1,7 @@
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
@@ -24,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeLicensedToInformation()
 		{
 			Browser.Interactions.AssertFirstContains("#licensed-to-label", UserTexts.Resources.LicensedToColon);
-			Browser.Interactions.AssertFirstContains("#licensed-to-text", "Teleopti_RD");
+			Browser.Interactions.AssertExists("#licensed-to-text"); 
 		}
 
 		[Then(@"I should see an application page")]
