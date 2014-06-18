@@ -43,9 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                               new NewNightlyRestRule(new WorkTimeStartEndExtractor()),
                               new NewMaxWeekWorkTimeRule(
                                   new WeeksFromScheduleDaysExtractor()),
-                              new MinWeeklyRestRule(
-                                  new WeeksFromScheduleDaysExtractor(), ensureWeeklyRestRule,
-                              new VerifyWeeklyRestAroundDayOffSpecification(), new ExtractDayOffFromGivenWeek()),
+                              new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), new PersonWeekVoilatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),new VerifyWeeklyRestAroundDayOffSpecification(),ensureWeeklyRestRule )),
                               new NewDayOffRule(new WorkTimeStartEndExtractor()),
                               new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts)
 
