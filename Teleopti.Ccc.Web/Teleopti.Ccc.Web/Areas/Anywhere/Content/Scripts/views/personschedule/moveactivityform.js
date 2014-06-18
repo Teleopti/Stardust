@@ -21,9 +21,10 @@
 
 		self.DisplayedStartTime = ko.computed({
 			read: function () {
-				return moment().startOf('day').add('minutes', self.StartTime()).format(resources.TimeFormatForMoment);
+				if (!self.ScheduleDate() || !self.StartTime()) return '';
+				return moment(self.ScheduleDate()).add('minutes', self.StartTime()).format(resources.TimeFormatForMoment);
 			},
-			write:	function (option) {
+			write: function (option) {
 				self.StartTime(getMomentFromInput(option).diff(self.ScheduleDate(), 'minutes'));
 			}
 		});
@@ -46,8 +47,8 @@
 			var requestData = JSON.stringify({
 				AgentId: self.PersonId(),
 				ScheduleDate: self.ScheduleDate().format(),
-				NewStartTime: moment().startOf('day').add('minutes', self.StartTime()).format(),
-				OldStartTime: moment().startOf('day').add('minutes', self.OldStartMinutes()).format(),
+				NewStartTime: moment(self.ScheduleDate()).add('minutes', self.StartTime()).format(),
+				OldStartTime: moment(self.ScheduleDate()).add('minutes', self.OldStartMinutes()).format(),
 				ActivityId: self.ActivityId(),
 				OldProjectionLayerLength: self.ProjectionLength()
 			});
