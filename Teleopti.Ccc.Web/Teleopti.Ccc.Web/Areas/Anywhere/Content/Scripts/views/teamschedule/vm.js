@@ -80,7 +80,20 @@ define([
 			return personvm;
 		};
 
-		this.UpdateSchedules = function (data, timeLine) {
+		this.SetViewOptions = function(options) {
+
+			self.Date(function() {
+				var date = options.date;
+				if (date == undefined) {
+					return moment().startOf('day');
+				} else {
+					return moment(date, 'YYYYMMDD');
+				}
+			}());
+
+		};
+
+		this.UpdateSchedules = function (data) {
 			// data might include the same person more than once, with data for more than one day
 			
 			self.Persons([]);
@@ -92,7 +105,7 @@ define([
 				schedule.Offset = self.Date();
 				schedule.Date = moment(schedule.Date, resources.FixedDateFormatForMoment);
 				var personvm = personForId(schedule.PersonId, personArray);
-				personvm.AddData(schedule, timeLine);
+				personvm.AddData(schedule, self.TimeLine);
 			}
 			self.Persons.push.apply(self.Persons, personArray);
 		};

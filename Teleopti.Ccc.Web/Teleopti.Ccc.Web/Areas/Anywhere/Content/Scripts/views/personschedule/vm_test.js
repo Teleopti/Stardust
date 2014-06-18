@@ -45,7 +45,7 @@
 			},
 
 			"should not consider nightshifts from yesterday when creating timeline" : function(done) {
-				//ignored until we can use TimeFormatForMoment: "HH:mm",
+				//henke todo
 				done();
 				assert(true);
 				return;
