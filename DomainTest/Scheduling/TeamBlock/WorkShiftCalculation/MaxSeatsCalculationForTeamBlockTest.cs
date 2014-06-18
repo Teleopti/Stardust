@@ -43,14 +43,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		[Test]
 		public void ShouldReturnAPunishedPeriodValueIfConsiderMaxSeatsWhenMaxSeatsReached()
 		{
-			Assert.AreEqual(12.45 + (-10000*10),
+			Assert.AreEqual(12.45 + (-1000000*10),
 				_target.PeriodValue(12.45, MaxSeatsFeatureOptions.ConsiderMaxSeats, true, true,10));
 		}
 
 		[Test]
 		public void ReturnAPunishedPeriodValueIfConsiderMaxSeatsWhenMaxSeatsReachedWithZeroPeriodValue()
 		{
-			Assert.AreEqual((-10000 * 10),
+			Assert.AreEqual((-1000000 * 10),
 				_target.PeriodValue(0, MaxSeatsFeatureOptions.ConsiderMaxSeats, true, true, 10));
 		}
 
