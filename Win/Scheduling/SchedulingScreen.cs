@@ -3602,7 +3602,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_permissionHelper.SetPermissionOnContextMenuItems(toolStripMenuItemInsertAbsence, toolStripMenuItemInsertDayOff, toolStripMenuItemDelete, toolStripMenuItemDeleteSpecial, toolStripMenuItemWriteProtectSchedule,
 															  toolStripMenuItemWriteProtectSchedule2, toolStripMenuItemAddStudentAvailabilityRestriction, toolStripMenuItemAddStudentAvailability,
 															  toolStripMenuItemAddPreferenceRestriction, toolStripMenuItemAddPreference, toolStripMenuItemViewReport, toolStripMenuItemScheduledTimePerActivity);
-			_permissionHelper.SetPermissionOnMenuButtons(toolStripButtonRequestView, toolStripButtonOptions, toolStripButtonFilterOvertimeAvailability, ToolStripMenuItemScheduleOvertime, toolStripButtonFilterStudentAvailability);
+			_permissionHelper.SetPermissionOnMenuButtons(toolStripButtonRequestView, backStageButtonOptions, toolStripButtonFilterOvertimeAvailability, ToolStripMenuItemScheduleOvertime, toolStripButtonFilterStudentAvailability);
 			setPermissionOnScheduleControl();
 		}
 
