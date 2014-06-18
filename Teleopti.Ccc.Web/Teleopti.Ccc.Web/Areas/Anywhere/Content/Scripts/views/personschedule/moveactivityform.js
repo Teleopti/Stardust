@@ -1,9 +1,11 @@
 ﻿define([
 	'knockout',
-	'resources'
+	'resources',
+	'ajax'
 ], function (
 	ko,
-	resources
+	resources,
+	ajax
     ) {
 
 	return function () {
@@ -15,6 +17,8 @@
 		self.OldStartMinutes = ko.observable();
 		self.ProjectionLength = ko.observable();
 		self.StartTime = ko.observable();
+		self.ActivityId = ko.observable();
+
 		self.DisplayedStartTime = ko.computed({
 			read: function () {
 				return moment().startOf('day').add('minutes', self.StartTime()).format(resources.TimeFormatForMoment);
@@ -34,10 +38,28 @@
 				self.OldStartMinutes(layer.StartMinutes());
 				self.StartTime(layer.StartMinutes());
 				self.ProjectionLength(layer.LengthMinutes());
+				self.ActivityId(layer.ActivityId);
 			}
 		}
 
 		this.Apply = function () {
+			var requestData = JSON.stringify({
+				AgentId: self.PersonId(),
+				ScheduleDate: self.ScheduleDate().format(),
+				NewStartTime: moment().startOf('day').add('minutes', self.StartTime()).format(),
+				OldStartTime: moment().startOf('day').add('minutes', self.OldStartMinutes()).format(),
+				ActivityId: self.ActivityId(),
+				OldProjectionLayerLength: self.ProjectionLength()
+			});
+			ajax.ajax({
+				url: 'PersonScheduleCommand/MoveActivity',
+				type: 'POST',
+				data: requestData,
+				success: function (data, textStatus, jqXHR) {
+					navigation.GotoPersonScheduleWithoutHistory(groupId, personId, self.ScheduleDate());
+				}
+			}
+			);
 		};
 
 		this.ErrorMessage = ko.computed(function () {

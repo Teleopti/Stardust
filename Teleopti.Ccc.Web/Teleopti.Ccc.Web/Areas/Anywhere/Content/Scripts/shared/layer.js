@@ -40,5 +40,7 @@ define([
 		this.TimeLineAffectingEndMinute = unit.EndMinutes;
 
 		this.Selected = ko.observable(false);
+
+		this.ActivityId = data.ActivityId;
 	};
 });

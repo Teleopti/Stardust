@@ -126,7 +126,8 @@
 						Projection: [
 							{
 								Start: '2013-11-18 14:00',
-								Minutes: 240
+								Minutes: 240,
+								ActivityId:"guid"
 							}
 						]
 					}
@@ -139,6 +140,7 @@
 				assert.equals(vm.MoveActivityForm.ScheduleDate().diff(moment('2013-11-18')), 0);
 				assert.equals(vm.MoveActivityForm.OldStartMinutes(), vm.SelectedStartMinutes());
 				assert.equals(vm.MoveActivityForm.ProjectionLength(), data[0].Projection[0].Minutes);
+				assert.equals(vm.MoveActivityForm.ActivityId(), data[0].Projection[0].ActivityId);
 			}
 
 		});
