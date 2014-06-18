@@ -12110,4 +12110,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Seniority ranking descending</value>
     <comment>Seniority ranking descendingmenu item in scheduler</comment>
   </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+    <comment>Text for tab like File, Edit, View....</comment>
+  </data>
 </root>

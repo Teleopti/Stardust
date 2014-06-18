@@ -4275,6 +4275,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_gridChartManager = new GridChartManager(_chartControlSkillData, true, true, true);
 			_gridChartManager.Create();
 			ColorHelper.SetRibbonQuickAccessTexts(ribbonControlAdv1);
+			ribbonControlAdv1.MenuButtonText = Resources.File;
 		}
 
 		private void ribbonTemplatePanelsClose()
