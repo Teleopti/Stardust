@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			var configuration = new
 			{
 				PlatformTypeId = Guid.Empty,
-				ExternalLogOn = personName,
-				State = "Pause",
+				ExternalLogOns = new []{personName},
+				States = new[] { "Pause" },
 				SourceId = "0",
 				StatesToSend = 1,
 				ExpectedPersonsInAlarm = 1
