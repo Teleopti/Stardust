@@ -7911,7 +7911,7 @@ period</value>
     <value>Sluttid stigande</value>
   </data>
   <data name="EndTimeDesc" xml:space="preserve">
-    <value>Sluttid sjunkande</value>
+    <value>Sluttid fallande</value>
   </data>
   <data name="SortBy" xml:space="preserve">
     <value>Sortera efter</value>
@@ -7920,7 +7920,7 @@ period</value>
     <value>Starttid stigande</value>
   </data>
   <data name="StartTimeDesc" xml:space="preserve">
-    <value>Starttid sjunkande</value>
+    <value>Starttid fallande</value>
   </data>
   <data name="ShowEditor" xml:space="preserve">
     <value>Skiftredigerare</value>
@@ -10239,7 +10239,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Kontraktstid stigande</value>
   </data>
   <data name="ContractTimeDesc" xml:space="preserve">
-    <value>Kontraktstid sjunkande</value>
+    <value>Kontraktstid fallande</value>
   </data>
   <data name="RemoveWriteProtection" xml:space="preserve">
     <value>Ta bort skrivskydd</value>
@@ -11441,8 +11441,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <comment>Text on summary tab on web my report</comment>
   </data>
   <data name="Ranking" xml:space="preserve">
-    <value>Ranking</value>
-    <comment>Ranking</comment>
+    <value>Erfarenhetsrankning</value>
+    <comment>Seniority ranking on AgentInfo Fairness tab</comment>
   </data>
   <data name="DayOffPoints" xml:space="preserve">
     <value>Fridagspoäng:</value>
@@ -11565,5 +11565,20 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="QueueMetrics" xml:space="preserve">
     <value>Köstatistik</value>
+  </data>
+  <data name="SeniorityRankingAsc" xml:space="preserve">
+    <value>Erfarenhetsrankning stigande</value>
+  </data>
+  <data name="SeniorityRankingDesc" xml:space="preserve">
+    <value>Erfarenhetsrankning fallande</value>
+  </data>
+  <data name="TimeInAlarm" xml:space="preserve">
+    <value>Larmtid</value>
+  </data>
+  <data name="WebServerDown" xml:space="preserve">
+    <value>Servern är inte tillgänglig. På grund av detta kan några funktioner inte aktiveras.</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Fil</value>
   </data>
 </root>
