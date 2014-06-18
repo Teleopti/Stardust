@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 							         Start = layer.StartDateTime,
 							         End = layer.EndDateTime,
 							         Minutes = (int) layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,
-							         IsAbsenceConfidential = layer.IsAbsenceConfidential
+							         IsAbsenceConfidential = layer.IsAbsenceConfidential,
+									 ActivityId = layer.PayloadId
 						         };
 
 					layers.AddRange(ls);

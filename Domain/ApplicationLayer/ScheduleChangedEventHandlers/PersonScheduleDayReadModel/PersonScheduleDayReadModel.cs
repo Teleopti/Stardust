@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public int Minutes { get; set; }
 		public string Description { get; set; }
 		public bool IsAbsenceConfidential { get; set; }
+		public Guid ActivityId { get; set; }
 	}
 
 }
