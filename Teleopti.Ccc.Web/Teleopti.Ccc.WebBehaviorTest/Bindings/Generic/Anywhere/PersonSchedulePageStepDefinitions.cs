@@ -208,15 +208,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 		[When(@"I move the activity")]
-		public void WhenIMoveTheActivity(Table table)
+		public void WhenIMoveTheActivity(Table scheduledActivityInfotable)
 		{
-			ScenarioContext.Current.Pending();
+			var scheduledActivityInfo = scheduledActivityInfotable.CreateInstance<ScheduleActivityInfo>();
+			Browser.Interactions.ClickUsingJQuery(".layer[data-start-time='"+scheduledActivityInfo.StartTimeFormatted()+"']");
+			Browser.Interactions.ClickUsingJQuery("a.move-activity");
+
+			var values = scheduledActivityInfotable.CreateInstance<MoveActivityFormInfo>();
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".activity-form .start-time", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
 		}
 
 		[When(@"I save the shift")]
 		public void WhenISaveTheShift()
 		{
-			ScenarioContext.Current.Pending();
+			Browser.Interactions.ClickUsingJQuery(".apply");
 		}
 
 		public class TimeLineInfo
@@ -292,6 +297,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			public string Activity { get; set; }
 			public DateTime StartTime { get; set; }
 			public DateTime EndTime { get; set; }
+		}
+
+		public class MoveActivityFormInfo
+		{
+			public DateTime StartTime { get; set; }
 		}
 
 	}
