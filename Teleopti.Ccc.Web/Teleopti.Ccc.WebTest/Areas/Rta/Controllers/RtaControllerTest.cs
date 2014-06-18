@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Web.Areas.Rta;
+using Teleopti.Ccc.Web.Areas.Rta.Controllers;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta.Controllers
 {
@@ -11,16 +12,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Controllers
 		[Test]
 		public void ShouldCallRtaWebService()
 		{
-			const string externalState =
-				@"{
-'authenticationKey':'!#¤atAbgT%',
-'userCode':2001,
-'stateCode':'OFF',
-'isLoggedOn':'true',
-'timestamp':'2014-06-13T10:54:27',
-'platformTypeId':'00000000-0000-0000-0000-000000000000',
-'sourceId':1,
-'isSnapshot':'false'}";
+			var externalState = new AjaxUserState
+			{
+				AuthenticationKey = "!#¤atAbgT%",
+				UserCode = "2001",
+				StateCode = "OFF",
+				IsLoggedOn = true,
+				Timestamp = "2014-06-13T10:54:27",
+				PlatformTypeId = "00000000-0000-0000-0000-000000000000",
+				SourceId = "1",
+				IsSnapshot = false
+			};
 			var rtaWebService = MockRepository.GenerateMock<ITeleoptiRtaService>();
 			var target = new RtaServiceController(rtaWebService);
 

@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Rta.LogClientTest
         	{
 				Expect.Call(rtaDataHandler.Timeout).Return(15).Repeat.AtLeastOnce();
 				Expect.Call(()=>loggingSvc.Warn("")).IgnoreArguments();
-				rtaDataHandler.ProcessRtaData("001", "AUX1", TimeSpan.FromSeconds(55), timestamp, platformId, "1", SqlDateTime.MinValue.Value, false);
+				Expect.Call(rtaDataHandler.ProcessRtaData("001", "AUX1", TimeSpan.FromSeconds(55), timestamp, platformId, "1", SqlDateTime.MinValue.Value, false)).Return(1);
 				LastCall.Repeat.Once();
         	}
         	using (mocks.Playback())

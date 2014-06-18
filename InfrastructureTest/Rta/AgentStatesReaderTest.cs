@@ -62,12 +62,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			                  {
 				                  PersonId = person.Id.GetValueOrDefault(),
 				                  State = "Ready",
-								  StateStart = DateTime.Now,
+								  StateStart = now.UtcDateTime(),
 				                  Scheduled = "Phone",
 				                  ScheduledNext = "Lunch",
-				                  NextStart = DateTime.Now,
+								  NextStart = now.UtcDateTime(),
 				                  AlarmName = "Out of adherence",
-				                  AlarmStart = DateTime.Now,
+								  AlarmStart = now.UtcDateTime(),
 								  Color = Color.Red.ToArgb()
 			                  };
 
