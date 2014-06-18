@@ -25,6 +25,7 @@
 				});
 				var data = [
 					{
+						Date: '2014-06-16',
 						PersonId: 1,
 						Projection: [
 							{
@@ -45,10 +46,6 @@
 			},
 
 			"should not consider nightshifts from yesterday when creating timeline": function (done) {
-				assert(true);
-				done();
-				return;
-
 				var vm = new viewModel();
 
 				vm.SetViewOptions({
@@ -57,6 +54,7 @@
 				});
 				var data = [
 					{
+						Date: '2014-06-16',
 						PersonId: 1,
 						Projection: [
 							{
@@ -66,6 +64,7 @@
 						]
 					},
 					{
+						Date: '2014-06-15',
 						PersonId: 1,
 						Projection: [
 							{

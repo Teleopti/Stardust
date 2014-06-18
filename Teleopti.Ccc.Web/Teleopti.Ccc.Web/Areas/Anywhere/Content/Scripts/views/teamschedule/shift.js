@@ -4,16 +4,14 @@ define([
 		'navigation',
 		'lazy',
 		'shared/layer',
-		'views/teamschedule/shift-menu',
-		'resources'
+		'views/teamschedule/shift-menu'
 ], function (
 	ko,
 	moment,
 	navigation,
 	lazy,
 	layer,
-	shiftMenu,
-	resources
+	shiftMenu
 	) {
 
 	return function(data, timeline) {
@@ -28,7 +26,7 @@ define([
 			var newItems = ko.utils.arrayMap(data.Projection, function (l) {
 				l.Offset = data.Offset;
 				l.IsFullDayAbsence = data.IsFullDayAbsence;
-				return new layer(timeline, l);
+				return new layer(timeline, l, true);
 			});
 			self.Layers.push.apply(self.Layers, newItems);
 			

@@ -14,7 +14,7 @@ define([
 		helpers
 	) {
 
-	return function (timeline, data) {
+	return function (timeline, data, affectTimeLine) {
 		var self = this;
 
 		var unit = new unitViewModel(timeline, data);
@@ -35,6 +35,7 @@ define([
 		this.Description = data.Description;
 		this.IsFullDayAbsence = data.IsFullDayAbsence;
 
+		this.TimeLineAffecting = function () { return affectTimeLine; }
 		this.TimeLineAffectingStartMinute = unit.CutInsideDayStartMinutes;
 		this.TimeLineAffectingEndMinute = unit.EndMinutes;
 
