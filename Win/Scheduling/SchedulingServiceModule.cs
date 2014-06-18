@@ -470,6 +470,7 @@ namespace Teleopti.Ccc.Win.Scheduling
           builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>();
             builder.RegisterType<VerifyWeeklyRestAroundDayOffSpecification>().As<IVerifyWeeklyRestAroundDayOffSpecification>();
              builder.RegisterType<AllTeamMembersInSelectionSpecification>().As<IAllTeamMembersInSelectionSpecification>();
+			builder.RegisterType<PersonWeekVoilatingWeeklyRestSpecification>().As<IPersonWeekVoilatingWeeklyRestSpecification>();
 	    }
 			
 			

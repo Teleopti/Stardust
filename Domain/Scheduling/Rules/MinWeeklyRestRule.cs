@@ -1,186 +1,125 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
-    public class MinWeeklyRestRule : INewBusinessRule
-    {
-        private bool _haltModify = true;
-        private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
-        private readonly IEnsureWeeklyRestRule _ensureWeeklyRestRule;
-        private readonly IVerifyWeeklyRestAroundDayOffSpecification _verifyWeeklyRestAroundDayOffSpecification;
-        private readonly IExtractDayOffFromGivenWeek _extractDayOffFromGivenWeek;
+	public class MinWeeklyRestRule : INewBusinessRule
+	{
+		private bool _haltModify = true;
+		private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
+		private readonly IPersonWeekVoilatingWeeklyRestSpecification _personWeekVoilatingWeeklyRestSpecification;
 
-        public MinWeeklyRestRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor, IEnsureWeeklyRestRule ensureWeeklyRestRule, IVerifyWeeklyRestAroundDayOffSpecification verifyWeeklyRestAroundDayOffSpecification, IExtractDayOffFromGivenWeek extractDayOffFromGivenWeek)
+		public MinWeeklyRestRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor,
+			IPersonWeekVoilatingWeeklyRestSpecification personWeekVoilatingWeeklyRestSpecification)
 		{
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
-            _ensureWeeklyRestRule = ensureWeeklyRestRule;
-            _verifyWeeklyRestAroundDayOffSpecification = verifyWeeklyRestAroundDayOffSpecification;
-            _extractDayOffFromGivenWeek = extractDayOffFromGivenWeek;
+			_personWeekVoilatingWeeklyRestSpecification = personWeekVoilatingWeeklyRestSpecification;
 		}
 
-    	public string ErrorMessage
-        {
-            get { return ""; }
-        }
+		public string ErrorMessage
+		{
+			get { return ""; }
+		}
 
-        public bool IsMandatory
-        {
-            get { return false; }
-        }
+		public bool IsMandatory
+		{
+			get { return false; }
+		}
 
-        public bool HaltModify
-        {
-            get { return _haltModify; }
-            set { _haltModify = value; }
-        }
+		public bool HaltModify
+		{
+			get { return _haltModify; }
+			set { _haltModify = value; }
+		}
 
-        public bool ForDelete { get; set; }
+		public bool ForDelete { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Scheduling.Rules.MinWeeklyRestRule.createResponse(Teleopti.Interfaces.Domain.IPerson,Teleopti.Interfaces.Domain.DateOnly,System.String,System.Type)")]
-		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
-        {
-            var responseList = new HashSet<IBusinessRuleResponse>();
-            var personWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDays,true);
-            
-            foreach (PersonWeek personWeek in personWeeks)
-            {
-                var person = personWeek.Person;
-                IScheduleRange currentSchedules = rangeClones [person];
-                var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
-                foreach (DateOnly day in personWeek.Week.DayCollection())
-                {
-                    oldResponses.Remove(createResponse(person, day, "remove", typeof(MinWeeklyRestRule)));
-                }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
+			"CA1303:Do not pass literals as localized parameters",
+			MessageId =
+				"Teleopti.Ccc.Domain.Scheduling.Rules.MinWeeklyRestRule.createResponse(Teleopti.Interfaces.Domain.IPerson,Teleopti.Interfaces.Domain.DateOnly,System.String,System.Type)"
+			)]
+		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
+			IEnumerable<IScheduleDay> scheduleDays)
+		{
+			var responseList = new HashSet<IBusinessRuleResponse>();
+			var personWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDays, true);
 
-                TimeSpan weeklyRest;
-                if (!setWeeklyRest(out weeklyRest, personWeek))
-                {
-                    // set errors on all days
-                    foreach (DateOnly dateOnly in personWeek.Week.DayCollection())
-                    {
-                        string message = string.Format(CultureInfo.CurrentCulture,
-                                                 UserTexts.Resources.BusinessRuleNoContractErrorMessage, person.Name,
-                                                 dateOnly.Date.ToShortDateString());
-                        IBusinessRuleResponse response = createResponse(person, dateOnly, message,
-                                                                        typeof(MinWeeklyRestRule));
-                        if(!ForDelete)
-                            responseList.Add(response);
-                        oldResponses.Add(response);
-                    }
-                }
-                else
-                {
-                    var scheduleDayList = currentSchedules.ScheduledDayCollection(personWeek.Week);
-                    var daysOffInProvidedWeek = _extractDayOffFromGivenWeek.GetDaysOff(scheduleDayList);
-                    if (_verifyWeeklyRestAroundDayOffSpecification.IsSatisfy(daysOffInProvidedWeek, currentSchedules))
-                    {
-                        if (!_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, currentSchedules, weeklyRest))
-                        {
-                            string weeklyRestString = DateHelper.HourMinutesString(weeklyRest.TotalMinutes);
-                            string message = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
-                                UserTexts.Resources.BusinessRuleWeeklyRestErrorMessage, weeklyRestString);
-                            foreach (DateOnly dateOnly in personWeek.Week.DayCollection())
-                            {
-                                IBusinessRuleResponse response = createResponse(person, dateOnly, message,
-                                    typeof (MinWeeklyRestRule));
-                                responseList.Add(response);
-                                oldResponses.Add(response);
-                            }
-                        }
-                    }
-                }
-            }
+			foreach (PersonWeek personWeek in personWeeks)
+			{
+				var person = personWeek.Person;
+				IScheduleRange currentSchedules = rangeClones[person];
+				var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
+				foreach (DateOnly day in personWeek.Week.DayCollection())
+				{
+					oldResponses.Remove(createResponse(person, day, "remove", typeof (MinWeeklyRestRule)));
+				}
 
-            return responseList;
-        }
+				TimeSpan weeklyRest;
+				if (!setWeeklyRest(out weeklyRest, personWeek))
+				{
+					// set errors on all days
+					foreach (DateOnly dateOnly in personWeek.Week.DayCollection())
+					{
+						string message = string.Format(CultureInfo.CurrentCulture,
+							UserTexts.Resources.BusinessRuleNoContractErrorMessage, person.Name,
+							dateOnly.Date.ToShortDateString());
+						IBusinessRuleResponse response = createResponse(person, dateOnly, message,
+							typeof (MinWeeklyRestRule));
+						if (!ForDelete)
+							responseList.Add(response);
+						oldResponses.Add(response);
+					}
+				}
+				else
+				{
+					if (!_personWeekVoilatingWeeklyRestSpecification.IsSatisfyBy(currentSchedules, personWeek, weeklyRest))
+					{
+						string weeklyRestString = DateHelper.HourMinutesString(weeklyRest.TotalMinutes);
+						string message = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
+							UserTexts.Resources.BusinessRuleWeeklyRestErrorMessage, weeklyRestString);
+						foreach (DateOnly dateOnly in personWeek.Week.DayCollection())
+						{
+							IBusinessRuleResponse response = createResponse(person, dateOnly, message,
+								typeof (MinWeeklyRestRule));
+							responseList.Add(response);
+							oldResponses.Add(response);
+						}
+						// }
+					}
+				}
+			}
 
-        //private bool hasMinWeeklyRest(PersonWeek personWeek, IScheduleRange currentSchedules, TimeSpan weeklyRest)
-        //{
-        //    var extendedWeek = new DateOnlyPeriod(personWeek.Week.StartDate.AddDays(-1),
-        //                                          personWeek.Week.EndDate.AddDays(1));
-        //    var pAss = new List<IPersonAssignment>();
-        //    foreach (var schedule in currentSchedules.ScheduledDayCollection(extendedWeek))
-        //    {
-        //        var ass = schedule.PersonAssignment();
-        //                    if (ass != null)
-        //                    {
-        //                        pAss.Add(ass);
-        //                    }
-        //    }
-        //    if (pAss.Count == 0)
-        //        return true;
+			return responseList;
+		}
 
-        //    DateTime endOfPeriodBefore = TimeZoneHelper.ConvertToUtc(extendedWeek.StartDate, personWeek.Person.PermissionInformation.DefaultTimeZone());
+		private static bool setWeeklyRest(out TimeSpan weeklyRest, PersonWeek personWeek)
+		{
+			var person = personWeek.Person;
 
-        //    var scheduleDayBefore1 = currentSchedules.ScheduledDay(personWeek.Week.StartDate.AddDays(-1));
-        //    var scheduleDayBefore2 = currentSchedules.ScheduledDay(personWeek.Week.StartDate.AddDays(-2));
-        //    var result = _dayOffMaxFlexCalculator.MaxFlex(scheduleDayBefore1, scheduleDayBefore2);
-        //    if (result != null)
-        //        endOfPeriodBefore = result.Value.EndDateTime; 
-		
-        //    foreach (IPersonAssignment ass in pAss)
-        //    {
-        //        var proj = ass.ProjectionService().CreateProjection();
-        //        var nextStartDateTime =
-        //            _workTimeStartEndExtractor.WorkTimeStart(proj);
-        //        if(nextStartDateTime != null)
-        //        {
-        //            if ((nextStartDateTime - endOfPeriodBefore) >= weeklyRest)
-        //            {                   
-        //                // the majority must be in this week
-        //                if (endOfPeriodBefore.Add(TimeSpan.FromMinutes(weeklyRest.TotalMinutes / 2.0)) <= personWeek.Week.EndDate.AddDays(1) && nextStartDateTime.Value.Add(TimeSpan.FromMinutes(-weeklyRest.TotalMinutes / 2.0)) > personWeek.Week.StartDate)
-        //                return true;
-        //            }
-        //            var end = _workTimeStartEndExtractor.WorkTimeEnd(proj);
-        //            if(end.HasValue)
-        //                endOfPeriodBefore = end.Value;
-        //        }
-        //    }
-        //    DateTime endOfPeriodAfter = TimeZoneHelper.ConvertToUtc(extendedWeek.EndDate.AddDays(1), personWeek.Person.PermissionInformation.DefaultTimeZone());
-
-
-        //    var scheduleDayAfter1 = currentSchedules.ScheduledDay(personWeek.Week.EndDate.AddDays(1));
-        //    var scheduleDayAfter2 = currentSchedules.ScheduledDay(personWeek.Week.EndDate.AddDays(2));
-        //    result = _dayOffMaxFlexCalculator.MaxFlex(scheduleDayAfter1, scheduleDayAfter2);
-        //    if (result != null)
-        //        endOfPeriodAfter = result.Value.StartDateTime; 
-
-        //    if ((endOfPeriodAfter - endOfPeriodBefore) >= weeklyRest)
-        //        return true;
-
-        //    return false;
-        //}
-
-        private static bool setWeeklyRest(out TimeSpan weeklyRest, PersonWeek personWeek)
-        {
-            var person = personWeek.Person;
-			// If the Person starts in the week we cant't find a person period
-			// then we try with the last day
 			var period = person.Period(personWeek.Week.StartDate) ?? person.Period(personWeek.Week.EndDate);
-            if (period == null)
-            {
-                weeklyRest = TimeSpan.FromSeconds(0);
-                return false;
-            }
-            weeklyRest = period.PersonContract.Contract.WorkTimeDirective.WeeklyRest;
+			if (period == null)
+			{
+				weeklyRest = TimeSpan.FromSeconds(0);
+				return false;
+			}
+			weeklyRest = period.PersonContract.Contract.WorkTimeDirective.WeeklyRest;
 
-            return true;
-        }
+			return true;
+		}
 
-        private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)
-        {
-            var dop = new DateOnlyPeriod(dateOnly, dateOnly);
-            DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop)
-                                                 {Overridden = !_haltModify};
-            return response;
-        }
-    }
+		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)
+		{
+			var dop = new DateOnlyPeriod(dateOnly, dateOnly);
+			DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+			IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person,
+				dop)
+			{Overridden = !_haltModify};
+			return response;
+		}
+	}
 }

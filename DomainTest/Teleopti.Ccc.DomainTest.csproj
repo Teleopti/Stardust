@@ -422,6 +422,7 @@
     <Compile Include="Optimization\WeeklyRestSolver\EnsureWeeklyRestRuleTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ExtractDayOffFromGivenWeekTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\IdentifyDayOffWithHighestSpanTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\PersonWeekVoilatingWeeklyRestSpecificationTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ScheduleDayWorkShiftTimeExtractorTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeEarlierTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ContractWeeklyRestForPersonWeekTest.cs" />
