@@ -7005,8 +7005,8 @@ Uppdaterad den: {1}</value>
     <comment>Page {0} of {1}</comment>
   </data>
   <data name="PoweredByTeleoptCCC" xml:space="preserve">
-    <value>Powered by TeleoptiCCC</value>
-    <comment>Powered by TeleoptiCCC</comment>
+    <value>Powered by Teleopti WFM</value>
+    <comment>Powered by Teleopti WFM</comment>
   </data>
   <data name="AllActivities" xml:space="preserve">
     <value>Alla aktivitieter</value>

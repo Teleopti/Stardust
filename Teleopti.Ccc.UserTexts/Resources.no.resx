@@ -5378,7 +5378,7 @@ Oppdatert den: {1}</value>
     <value>Side {0} av {1}</value>
   </data>
   <data name="PoweredByTeleoptCCC" xml:space="preserve">
-    <value>Powered by TeleoptiCCC</value>
+    <value>Powered by Teleopti WFM</value>
   </data>
   <data name="ReportLevelDetailLunch" xml:space="preserve">
     <value>Lunsj</value>

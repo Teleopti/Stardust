@@ -7094,7 +7094,7 @@ Opdateret den: {1}</value>
   </data>
   <data name="PoweredByTeleoptCCC" xml:space="preserve">
     <value>Drevet af TeleoptiCCC</value>
-    <comment>Powered by TeleoptiCCC</comment>
+    <comment>Powered by Teleopti WFM</comment>
   </data>
   <data name="ReportLevelDetailLunch" xml:space="preserve">
     <value>Frokost</value>
