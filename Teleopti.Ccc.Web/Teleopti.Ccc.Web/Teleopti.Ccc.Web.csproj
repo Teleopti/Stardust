@@ -572,7 +572,6 @@
     <Compile Include="Core\Startup\IRegisterAreas.cs" />
     <Compile Include="Core\Startup\RegisterArea.cs" />
     <Compile Include="Core\Startup\RegisterAreas.cs" />
-    <Compile Include="Core\Startup\RtaStartupTask.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
