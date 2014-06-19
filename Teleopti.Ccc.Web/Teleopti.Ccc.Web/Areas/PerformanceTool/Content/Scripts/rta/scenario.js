@@ -44,7 +44,6 @@ define([
 				for (var stateCode = 0; stateCode < configuration.States.length; stateCode++) {
 					for (var externalLogOn = 0; externalLogOn < configuration.ExternalLogOns.length; externalLogOn++) {
 						iterations.push(new Iteration({
-							Url: configuration.Url,
 							PlatformTypeId: configuration.PlatformTypeId,
 							SourceId: configuration.SourceId,
 
@@ -62,6 +61,8 @@ define([
 						numberOfStates++;
 						if (numberOfStates == configuration.StatesToSend)
 							return iterations;
+						if (numberOfStates > 2000)
+							return undefined;
 					}
 				}
 			}
