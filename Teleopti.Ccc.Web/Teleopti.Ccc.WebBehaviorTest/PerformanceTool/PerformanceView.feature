@@ -70,7 +70,7 @@ Scenario: Measure real time adherence by sending in external user state
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	When I am viewing the performance view
-	And I select scenario 'Rta Load Test'
+	And I select scenario 'Real Time Adherence Load Test'
 	And I input an RTA configuration scenario for 'Pierre Baldi' in json format on datasource 6
 	And I click 'run'
 	Then I should see that the test run has finished

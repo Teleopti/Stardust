@@ -19,7 +19,7 @@ define([
 		var agentsAdherenceSubscription;
 		var result;
 
-		this.Name = "Rta Load Test";
+		this.Name = "Real Time Adherence Load Test";
 		this.Text = "";
 
 		this.Configuration = ko.observable();
@@ -135,8 +135,11 @@ define([
 						var outOfAdherence = JSON.parse(notification.BinaryData).OutOfAdherence;
 						console.log(outOfAdherence);
 						console.log(expectedPersonsInAlarm);
-						if (outOfAdherence === expectedPersonsInAlarm)
+						if (outOfAdherence === expectedPersonsInAlarm) {
+							progressItemReadModel.Success();
 							result.RunDone(true);
+							
+						}
 					}
 				});
 
