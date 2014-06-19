@@ -3560,6 +3560,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\WFM-Schedules.ico" />
     <None Include="Resources\WFM-Circle-Schedules.ico" />
     <None Include="Resources\warning.png" />
     <None Include="Resources\XSDSchema_GraphLeftToRight.png" />
