@@ -55,6 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 
 			if (temp.StartsWith("00:"))
 				temp = temp.Substring(3) + UserTexts.Resources.SecondShort;
+			if (temp.EndsWith("s") && temp.StartsWith("0"))
+				temp = temp.Substring(1);
 			return temp;
 		}
 	}
