@@ -32,19 +32,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 			var queueMetricsEnabled =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics) &&
 				_toggleManager.IsEnabled(Toggles.MyReport_AgentQueueMetrics_22254);
-			var avgHandlingTime = Math.Round(dataModel.HandlingTimeAverage.TotalSeconds, 0) ==
-									Math.Round(dataModel.TalkTimeAverage.TotalSeconds, 0) +
-									Math.Round(dataModel.AfterCallWorkTimeAverage.TotalSeconds, 0)
-										? dataModel.HandlingTimeAverage
-										: TimeSpan.FromSeconds(Math.Round(dataModel.TalkTimeAverage.TotalSeconds, 0) +
-				                       Math.Round(dataModel.AfterCallWorkTimeAverage.TotalSeconds, 0));
 
 			return new DailyMetricsViewModel
 			{
 				AnsweredCalls = dataModel.AnsweredCalls,
 				AverageAfterCallWork = dataModel.AfterCallWorkTimeAverage.TotalSeconds.ToString(culture),
 				AverageTalkTime = dataModel.TalkTimeAverage.TotalSeconds.ToString(culture),
-				AverageHandlingTime = avgHandlingTime.TotalSeconds.ToString(culture),
+				AverageHandlingTime = dataModel.HandlingTimeAverage.TotalSeconds.ToString(culture),
 				ReadyTimePerScheduledReadyTime = dataModel.ReadyTimePerScheduledReadyTime.ValueAsPercent().ToString(culture),
 				Adherence = dataModel.Adherence.ValueAsPercent().ToString(culture),
 				DataAvailable = true,

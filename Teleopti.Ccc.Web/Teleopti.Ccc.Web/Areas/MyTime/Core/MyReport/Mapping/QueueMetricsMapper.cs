@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 				TalkTimePercent = toPercentString(model.AverageTalkTime, maxTime),
 				AfterCallWorkPercent = toRestPercentString(model.AverageHandlingTime,model.AverageTalkTime, maxTime),
 				AverageAfterCallWork = toTimeString(model.AverageAfterCallWorkTime),
-				AverageHandlingTime = toTimeString(Math.Round(model.AverageHandlingTime.TotalSeconds, 0) == (Math.Round(model.AverageTalkTime.TotalSeconds, 0) + Math.Round(model.AverageAfterCallWorkTime.TotalSeconds, 0)) ? model.AverageHandlingTime : TimeSpan.FromSeconds((Math.Round(model.AverageTalkTime.TotalSeconds, 0) + Math.Round(model.AverageAfterCallWorkTime.TotalSeconds, 0)))),
+				AverageHandlingTime = toTimeString(model.AverageHandlingTime),
 				AverageTalkTime = toTimeString(model.AverageTalkTime),
 			}).ToList();
 

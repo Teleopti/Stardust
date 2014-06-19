@@ -61,10 +61,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 		[Test]
 		public void ShouldMapHandlingTimeAverage()
 		{
-			var dataModel = new DailyMetricsForDayResult { HandlingTimeAverage = new TimeSpan(0, 0, 120),  TalkTimeAverage = new TimeSpan(0, 0, 110), AfterCallWorkTimeAverage = new TimeSpan(0, 0, 5)};
+			var dataModel = new DailyMetricsForDayResult { HandlingTimeAverage = new TimeSpan(0, 0, 120)};
 			var viewModel = _target.Map(dataModel);
 
-			viewModel.AverageHandlingTime.Should().Be.EqualTo("115");
+			viewModel.AverageHandlingTime.Should().Be.EqualTo("120");
 		}
 
 		[Test]
