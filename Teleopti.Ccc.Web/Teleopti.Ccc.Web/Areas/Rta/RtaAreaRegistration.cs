@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
 			context.MapRoute(
-				"RtaEndpoint",
-				"RtaEndPoint/{controller}/{action}",
-				new { controller = "RtaService", action = "SaveExternalUserState" });
+				"Rta-default",
+				"Rta/{controller}/{action}",
+				new { controller = "Service", action = "SaveExternalUserState" });
 
 			context.Routes.Add(new ServiceRoute("Rta/TeleoptiRtaService.svc", new AutofacServiceHostFactory(), typeof(TeleoptiRtaService)));
 			context.Routes.Add(new ServiceRoute("TeleoptiRtaService.svc", new AutofacServiceHostFactory(), typeof(TeleoptiRtaService)));

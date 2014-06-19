@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Controllers
 				IsSnapshot = false
 			};
 			var rtaWebService = MockRepository.GenerateMock<ITeleoptiRtaService>();
-			var target = new RtaServiceController(rtaWebService);
+			var target = new ServiceController(rtaWebService);
 
 			target.SaveExternalUserState(externalState);
 

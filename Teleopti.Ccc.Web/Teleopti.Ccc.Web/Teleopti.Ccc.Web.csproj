@@ -366,7 +366,7 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\CreateTemporaryPersonsController.cs" />
-    <Compile Include="Areas\Rta\Controllers\RtaServiceController.cs" />
+    <Compile Include="Areas\Rta\Controllers\ServiceController.cs" />
     <Compile Include="Areas\Rta\Core\IoC\RtaAreaModule.cs" />
     <Compile Include="Areas\Rta\RtaAreaRegistration.cs" />
     <Compile Include="Areas\SSO\Controllers\ApplicationAuthenticationApiController.cs" />

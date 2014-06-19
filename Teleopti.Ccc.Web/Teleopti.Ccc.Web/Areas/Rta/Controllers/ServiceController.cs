@@ -4,21 +4,27 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
-    public class RtaServiceController : Controller
+    public class ServiceController : Controller
     {
 	    private readonly ITeleoptiRtaService _teleoptiRtaService;
 
-	    public RtaServiceController(ITeleoptiRtaService teleoptiRtaService)
+	    public ServiceController(ITeleoptiRtaService teleoptiRtaService)
 	    {
 		    _teleoptiRtaService = teleoptiRtaService;
 	    }
 
+		[HttpGet]
+		public virtual JsonResult A()
+		{
+			return Json(1, JsonRequestBehavior.AllowGet);
+		}
+
 		[HttpPost]
-		public int SaveExternalUserState(AjaxUserState state)
+		public JsonResult SaveExternalUserState(AjaxUserState state)
 		{
 			var timestamp = DateTime.Parse(state.Timestamp);
 
-		    return _teleoptiRtaService.SaveExternalUserState(state.AuthenticationKey, 
+		    return Json(_teleoptiRtaService.SaveExternalUserState(state.AuthenticationKey, 
 				state.UserCode, 
 				state.StateCode,
 			    state.StateDescription, 
@@ -27,8 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				timestamp, 
 				state.PlatformTypeId,
 			    state.SourceId, 
-				state.BatchId, 
-				state.IsSnapshot);
+				state.BatchId,
+				state.IsSnapshot));
 	    }
     }
 }

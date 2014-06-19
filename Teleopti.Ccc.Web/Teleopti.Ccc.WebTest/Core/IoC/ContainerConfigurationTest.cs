@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			using (var container = builder.Configure(string.Empty))
 			{
-				container.Resolve<RtaServiceController>()
+				container.Resolve<ServiceController>()
 					.Should().Not.Be.Null();
 			}
 		}
