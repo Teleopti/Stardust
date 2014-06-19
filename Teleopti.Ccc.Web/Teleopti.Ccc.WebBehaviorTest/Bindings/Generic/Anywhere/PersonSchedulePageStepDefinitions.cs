@@ -207,13 +207,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.ClickUsingJQuery(".absence-list .absence:contains('" + absenceName + "') ." + cssClass.Name);
 		}
 
+		[When(@"I select the activity with")]
+		public void WhenISelectTheActivityWith(Table table)
+		{
+			var scheduledActivityInfo = table.CreateInstance<ScheduleActivityInfo>();
+			Browser.Interactions.ClickUsingJQuery(".layer[data-start-time='" + scheduledActivityInfo.StartTimeFormatted() + "']");
+		}
+
+		[When(@"I click move activity button")]
+		public void WhenIClickMoveActivityButton()
+		{
+			Browser.Interactions.ClickUsingJQuery("a.move-activity");
+		}
+
 		[When(@"I move the activity")]
 		public void WhenIMoveTheActivity(Table scheduledActivityInfotable)
 		{
-			var scheduledActivityInfo = scheduledActivityInfotable.CreateInstance<ScheduleActivityInfo>();
-			Browser.Interactions.ClickUsingJQuery(".layer[data-start-time='"+scheduledActivityInfo.StartTimeFormatted()+"']");
-			Browser.Interactions.ClickUsingJQuery("a.move-activity");
-
 			var values = scheduledActivityInfotable.CreateInstance<MoveActivityFormInfo>();
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".activity-form .start-time", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
 		}
@@ -222,6 +231,37 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenISaveTheShift()
 		{
 			Browser.Interactions.ClickUsingJQuery(".apply");
+		}
+
+		[Then(@"I should see the moved schedule activity details for '(.*)' with")]
+		public void ThenIShouldSeeTheMovedScheduleActivityDetailsForWith(string personName, Table table)
+		{
+			var scheduledActivity = table.CreateInstance<ScheduledActivityInfo>();
+			assertScheduledActivity(personName, scheduledActivity);
+		}
+
+
+		private static void assertScheduledActivity(string personName, ScheduledActivityInfo layer)
+		{
+			if (layer.StartTime.Equals("00:00"))
+			{
+				// not sure how to assert the length for the night shift starting from yesterday
+				Browser.Interactions.AssertExistsUsingJQuery(
+					".person:contains('{0}') .shift .layer[style*='background-color: {1}'][style*='left: 0px']",
+					personName,
+					PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color)
+					);
+			}
+			else
+			{
+				Browser.Interactions.AssertExistsUsingJQuery(
+					".person:contains('{0}') .shift .layer[data-start-time='{1}'][data-length-minutes='{2}'][style*='background-color: {3}']",
+					personName,
+					layer.StartTime,
+					layer.LengthMinutes(),
+					PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color)
+					);
+			}
 		}
 
 		public class TimeLineInfo
@@ -257,6 +297,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			public string EndTime { get; set; }
 			public string Color { get; set; }
 			public string Description { get; set; }
+			public string Name { get; set; }
 
 			public int LengthMinutes()
 			{
