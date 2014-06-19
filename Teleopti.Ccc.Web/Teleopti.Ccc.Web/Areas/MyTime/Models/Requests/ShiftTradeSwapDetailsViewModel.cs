@@ -16,5 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public IEnumerable<ShiftTradeTimeLineHoursViewModel> TimeLineHours { get; set; }
 
 		public DateTime TimeLineStartDateTime { get; set; }
+		public DateTime Date { get; set; }
 	}
 }

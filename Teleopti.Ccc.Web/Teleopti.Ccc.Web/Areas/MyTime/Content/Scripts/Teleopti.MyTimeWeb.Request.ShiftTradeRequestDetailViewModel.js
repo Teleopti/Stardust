@@ -278,7 +278,7 @@ ShiftTradeRequestDetailedDayViewModel = function(data) {
 	};
 
 	var dateFormat = $("#Request-detail-datepicker-format").val().toUpperCase();
-	self.TradeDate = ko.observable(moment(data.TimeLineStartDateTime).format(dateFormat));
+	self.TradeDate = ko.observable(moment(data.Date).format(dateFormat));
 
 	self.createMySchedule(data.From);
 	self.createOtherSchedule(data.To);

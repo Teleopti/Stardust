@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.To, o => o.MapFrom(s => s.SchedulePartTo))
 				.ForMember(d => d.From, o => o.MapFrom(s => s.SchedulePartFrom))
 				.ForMember(d=> d.TimeLineHours, o=>o.MapFrom(s=> _timelineViewModelFactory.CreateTimeLineHours(createTimelinePeriod(s))))
-				.ForMember(d=> d.TimeLineStartDateTime, o=>o.MapFrom(s=> createTimelinePeriod(s).StartDateTime));
+				.ForMember(d=> d.TimeLineStartDateTime, o=>o.MapFrom(s=> createTimelinePeriod(s).StartDateTime))
+				.ForMember(d=> d.Date, o => o.MapFrom(s => s.DateFrom.Date));
 
 			CreateMap<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>()
 				.ConvertUsing(o =>
