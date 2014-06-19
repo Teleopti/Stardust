@@ -22,16 +22,6 @@
 		self.StartTime = ko.observable();
 		self.ActivityId = ko.observable();
 
-		self.DisplayedStartTime = ko.computed({
-			read: function () {
-				if (!self.ScheduleDate() || !self.StartTime()) return '';
-				return moment(self.ScheduleDate()).add('minutes', self.StartTime()).format(resources.TimeFormatForMoment);
-			},
-			write: function (option) {
-				self.StartTime(getMomentFromInput(option).diff(self.ScheduleDate(), 'minutes'));
-			}
-		});
-
 		this.SetData = function (data) {
 			self.PersonId(data.PersonId);
 			self.GroupId(data.GroupId);
@@ -41,7 +31,7 @@
 		this.update = function(layer) {
 			if (layer) {
 				self.OldStartMinutes(layer.StartMinutes());
-				self.StartTime(layer.StartMinutes());
+				self.StartTime(moment(self.ScheduleDate()).add('minutes', self.OldStartMinutes()).format(resources.TimeFormatForMoment));
 				self.ProjectionLength(layer.LengthMinutes());
 				self.ActivityId(layer.ActivityId);
 			}
@@ -51,7 +41,7 @@
 			var requestData = JSON.stringify({
 				AgentId: self.PersonId(),
 				ScheduleDate: self.ScheduleDate().format(),
-				NewStartTime: moment(self.ScheduleDate()).add('minutes', self.StartTime()).format(),
+				NewStartTime: moment(self.ScheduleDate()).add('minutes', getMomentFromInput(self.StartTime()).diff(self.ScheduleDate(), 'minutes')).format(),
 				OldStartTime: moment(self.ScheduleDate()).add('minutes', self.OldStartMinutes()).format(),
 				ActivityId: self.ActivityId(),
 				OldProjectionLayerLength: self.ProjectionLength()
