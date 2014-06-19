@@ -369,6 +369,7 @@ Scenario: Should be able to see current states of all agents
 		| Alarm Color              | Green              |
 
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
+@ignore
 Scenario: Should be able to see state updates of all agents
 	Given  the current time is '2014-01-21 12:30:00'
 	And there is an activity named 'Phone'
@@ -445,6 +446,7 @@ Scenario: Should be able to see state updates of all agents
 		| Alarm Color              | Green              |
 
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
+ @ignore
 Scenario: Should be able to see all agents of the team with or without state updates
 	Given  the current time is '2014-01-21 12:30:00'
 	And there is an activity named 'Phone'
