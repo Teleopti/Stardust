@@ -2249,17 +2249,7 @@ namespace Teleopti.Ccc.Win.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap WFM_Schedules {
-            get {
-                object obj = ResourceManager.GetObject("WFM_Schedules", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
+           
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
