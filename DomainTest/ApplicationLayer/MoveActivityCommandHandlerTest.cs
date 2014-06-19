@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository();
 			var scenario = new ThisCurrentScenario(new Scenario(" "));
 			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
-			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, new FakeWriteSideRepository<IActivity>{activity}, scenario);
+			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, new FakeWriteSideRepository<IActivity>{activity}, scenario, new UtcTimeZone());
 
 			var cmd = new MoveActivityCommand
 			{
@@ -44,22 +45,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var agent = new Person().WithId();
 			var activity = new Activity("_").WithId();
-			var orgStart = createDateTime(6);
-			var orgEnd = createDateTime(11);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(orgStart, orgEnd));
+			var orgStart = createDateTimeLocal(6);
+			var orgEnd = createDateTimeLocal(11);
+			var userTimeZone = new UtcTimeZone();
+			var assignment = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
 
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { assignment };
 			var activityRepository = new FakeWriteSideRepository<IActivity> { activity };
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
 			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
-			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, activityRepository, scenario);
+			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, activityRepository, scenario, userTimeZone);
 
 			var cmd = new MoveActivityCommand
 			{
 				AgentId = agent.Id.Value,
 				ScheduleDate = assignment.Date,
 				ActivityId = activity.Id.Value,
-				NewStartTime = createDateTime(2),
+				NewStartTime = createDateTimeLocal(2),
 				OldStartTime = orgStart,
 				OldProjectionLayerLength = Convert.ToInt32((orgEnd - orgStart).TotalMinutes)
 			};
@@ -73,9 +75,53 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			modifiedLayer.Period.EndDateTime.Should().Be(expectedStart + (orgEnd - orgStart));
 		}
 
-		private static DateTime createDateTime(int hourOnDay)
+		[Test]
+		public void ShouldHandleTimeZoneForStartTime()
 		{
-			return new DateTime(2013, 11, 14, hourOnDay, 0, 0, 0, DateTimeKind.Utc);
+			var agent = new Person().WithId();
+			var activity = new Activity("_").WithId();
+			var orgStart = createDateTimeLocal(6);
+			var orgEnd = createDateTimeLocal(11);
+			var userTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
+			var userTimeZone = new SpecificTimeZone(userTimeZoneInfo);
+			var assignment = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
+
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { assignment };
+			var activityRepository = new FakeWriteSideRepository<IActivity> { activity };
+			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
+			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, activityRepository, scenario, userTimeZone);
+
+			var cmd = new MoveActivityCommand
+			{
+				AgentId = agent.Id.Value,
+				ScheduleDate = assignment.Date,
+				ActivityId = activity.Id.Value,
+				NewStartTime = createDateTimeLocal(2),
+				OldStartTime = orgStart,
+				OldProjectionLayerLength = Convert.ToInt32((orgEnd - orgStart).TotalMinutes)
+			};
+
+			target.Handle(cmd);
+
+			var expectedStartInLocal = new DateTime(cmd.NewStartTime.Ticks, DateTimeKind.Local);
+			var expectedStartInUtc = TimeZoneHelper.ConvertToUtc(expectedStartInLocal, userTimeZoneInfo);
+			var modifiedLayer = personAssignmentRepository.Single().ShiftLayers.Single();
+			modifiedLayer.Period.StartDateTime.Should().Be(expectedStartInUtc);
+		}
+
+
+		private static IPersonAssignment createPersonAssignmentWithOneLayer(IActivity activity, IPerson agent, DateTime orgStart, DateTime orgEnd, IUserTimeZone userTimeZone)
+		{
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent,
+				new DateTimePeriod(TimeZoneHelper.ConvertToUtc(orgStart, userTimeZone.TimeZone()),
+					TimeZoneHelper.ConvertToUtc(orgEnd, userTimeZone.TimeZone())));
+			return assignment;
+		}
+
+		private static DateTime createDateTimeLocal(int hourOnDay)
+		{
+			return new DateTime(2013, 11, 14, hourOnDay, 0, 0, 0, DateTimeKind.Local);
 		}
 	}
 }

@@ -10,16 +10,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IProxyForId<IPerson> _personForId;
 		private readonly IProxyForId<IActivity> _activityForId;
 		private readonly ICurrentScenario _currentScenario;
+		private readonly IUserTimeZone _userTimezone;
 
 		public MoveActivityCommandHandler(IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepositoryTypedId, 
-																		IProxyForId<IPerson> personForId, 
-																		IProxyForId<IActivity> activityForId,
-																		ICurrentScenario currentScenario)
+										IProxyForId<IPerson> personForId, 
+										IProxyForId<IActivity> activityForId, 
+										ICurrentScenario currentScenario, 
+										IUserTimeZone userTimezone)
 		{
 			_personAssignmentRepositoryTypedId = personAssignmentRepositoryTypedId;
 			_personForId = personForId;
 			_activityForId = activityForId;
 			_currentScenario = currentScenario;
+			_userTimezone = userTimezone;
 		}
 
 		public void Handle(MoveActivityCommand command)
@@ -38,7 +41,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			if (personAssignment == null)
 				throw new InvalidOperationException(string.Format("Person assigment is not found. Date: {0} PersonId: {1} Scenario: {2} ", currentDate, assignedAgent.Id, currentScenario.Description));
 
-			personAssignment.MoveActivityAndSetHighestPriority(activity, command.OldStartTime, command.NewStartTime, TimeSpan.FromMinutes(command.OldProjectionLayerLength));
+			var timeZone = _userTimezone.TimeZone();
+			var oldStartTimeUtc = TimeZoneHelper.ConvertToUtc(command.OldStartTime, timeZone);
+			var newStartTimeUtc = TimeZoneHelper.ConvertToUtc(command.NewStartTime, timeZone);
+			personAssignment.MoveActivityAndSetHighestPriority(activity, oldStartTimeUtc, newStartTimeUtc, TimeSpan.FromMinutes(command.OldProjectionLayerLength));
 		}
 	}
 }
