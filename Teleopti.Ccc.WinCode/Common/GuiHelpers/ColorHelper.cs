@@ -492,7 +492,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 
         public static Color PortalTreeViewSeparator()
         {
-            return Color.LightGray;
+	        return Color.White;
         }
         public static Color ChangeInfoTextColor()
         {

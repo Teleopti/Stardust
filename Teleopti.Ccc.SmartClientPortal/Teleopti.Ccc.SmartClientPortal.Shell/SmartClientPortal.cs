@@ -428,38 +428,38 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 switch (module.FunctionPath)
                 {
                     case DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage:
-                        outlookBarSmartPartInfo.Icon = Resources.ccc_People;
+                        outlookBarSmartPartInfo.Icon = Resources.WFM_People;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.OpenForecasterPage:
-                        outlookBarSmartPartInfo.Icon = Resources.ccc_Forecasts;
+                        outlookBarSmartPartInfo.Icon = Resources.WFM_Forecasts;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.OpenSchedulePage:
-                        outlookBarSmartPartInfo.Icon = Resources.ccc_Schedule;
+                        outlookBarSmartPartInfo.Icon = Resources.WFM_Schedules;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.OpenIntradayPage:
-                        outlookBarSmartPartInfo.Icon = Resources.ccc_Intraday;
+                        outlookBarSmartPartInfo.Icon = Resources.WFM_Intraday;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.OpenPermissionPage:
                         outlookBarSmartPartInfo.Icon = Resources.ccc_permission;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.Shifts:
-                        outlookBarSmartPartInfo.Icon = Resources.ccc_Shift;
+                        outlookBarSmartPartInfo.Icon = Resources.WFM_Shifts;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.AccessToReports:
-                        outlookBarSmartPartInfo.Icon = Resources.ccc_Reports;
+                        outlookBarSmartPartInfo.Icon = Resources.WFM_Reports;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.OpenOptionsPage:
                         outlookBarSmartPartInfo.Icon = Resources.ccc_Settings;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.OpenBudgets:
-                        outlookBarSmartPartInfo.Icon = Resources.ccc_Settings;
+                        outlookBarSmartPartInfo.Icon = Resources.WFM_Budgets;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.PayrollIntegration:
-                        outlookBarSmartPartInfo.Icon = Resources.ccc_payroll;
+                        outlookBarSmartPartInfo.Icon = Resources.WFM_Payroll_Integration;
                         break;
                     default:
                         // add default image as a resource to your module.
-                        outlookBarSmartPartInfo.Icon = Resources.ccc_temp_Settings;
+                        outlookBarSmartPartInfo.Icon = Resources.WFM_Performance_Manager;
                         break;
                 }
                 _outlookBarWorkspaceModel.Add(outlookBarSmartPartInfo);
