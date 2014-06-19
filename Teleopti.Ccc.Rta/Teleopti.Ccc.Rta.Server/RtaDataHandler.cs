@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Rta.Server
 			IDataSourceResolver dataSourceResolver,
 			IPersonResolver personResolver,
 			IActualAgentAssembler agentAssembler,
-													IDatabaseWriter databaseWriter,
+			IDatabaseWriter databaseWriter,
 			IActualAgentStateHasBeenSent actualAgentStateHasBeenSent)
 		{
 			_asyncMessageSender = asyncMessageSender;
@@ -38,21 +38,6 @@ namespace Teleopti.Ccc.Rta.Server
 			_agentAssembler = agentAssembler;
 			_databaseWriter = databaseWriter;
 			_actualAgentStateHasBeenSent = actualAgentStateHasBeenSent;
-
-			if (_asyncMessageSender == null) return;
-
-
-			//TODO: REMOVE DIZ
-			try
-			{
-				_asyncMessageSender.StartBrokerService(useLongPolling:true);
-			}
-			catch (BrokerNotInstantiatedException ex)
-			{
-				LoggingSvc.Error(
-					"The message broker will be unavailable until this service is restarted and initialized with correct parameters",
-					ex);
-			}
 		}
 
 		public void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)

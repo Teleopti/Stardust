@@ -566,6 +566,7 @@
     <Compile Include="Core\Startup\FindAreaRegistrations.cs" />
     <Compile Include="Core\Startup\IFindAreaRegistrations.cs" />
     <Compile Include="Core\Startup\InitializeApplication\BundleScripts.cs" />
+    <Compile Include="Core\Startup\InitializeApplication\SignalSenderTask.cs" />
     <Compile Include="Core\Startup\InitializeApplication\MessageBrokerTask.cs" />
     <Compile Include="Core\Startup\IRegisterArea.cs" />
     <Compile Include="Core\Startup\IRegisterAreas.cs" />

@@ -4,7 +4,7 @@ using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Startup
 {
-	[TaskPriority(2)]
+	[TaskPriority(15)]
 	public class RtaStartupTask : IBootstrapperTask
 	{
 		private readonly IAdherenceAggregatorInitializor _initializor;
