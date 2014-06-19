@@ -97,12 +97,12 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.tabPageApplicationDataSources.Controls.Add(this.listBoxApplicationDataSources);
 			this.tabPageApplicationDataSources.Image = null;
 			this.tabPageApplicationDataSources.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageApplicationDataSources.Location = new System.Drawing.Point(1, 0);
+			this.tabPageApplicationDataSources.Location = new System.Drawing.Point(1, 22);
 			this.tabPageApplicationDataSources.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPageApplicationDataSources.Name = "tabPageApplicationDataSources";
 			this.tabPageApplicationDataSources.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageApplicationDataSources.ShowCloseButton = true;
-			this.tabPageApplicationDataSources.Size = new System.Drawing.Size(349, 138);
+			this.tabPageApplicationDataSources.Size = new System.Drawing.Size(349, 116);
 			this.tabPageApplicationDataSources.TabBackColor = System.Drawing.Color.White;
 			this.tabPageApplicationDataSources.TabIndex = 1;
 			this.tabPageApplicationDataSources.Text = "xxApplication logon";
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.listBoxApplicationDataSources.Location = new System.Drawing.Point(3, 3);
 			this.listBoxApplicationDataSources.Margin = new System.Windows.Forms.Padding(0);
 			this.listBoxApplicationDataSources.Name = "listBoxApplicationDataSources";
-			this.listBoxApplicationDataSources.Size = new System.Drawing.Size(343, 132);
+			this.listBoxApplicationDataSources.Size = new System.Drawing.Size(343, 110);
 			this.listBoxApplicationDataSources.TabIndex = 4;
 			// 
 			// labelChooseDataSource
@@ -142,6 +142,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonLogOnOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonLogOnOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.buttonLogOnOK.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonLogOnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonLogOnOK.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonLogOnOK.ForeColor = System.Drawing.Color.White;
 			this.buttonLogOnOK.IsBackStageButton = false;
@@ -159,7 +160,9 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonLogOnCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonLogOnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.buttonLogOnCancel.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonLogOnCancel.BorderStyleAdv = Syncfusion.Windows.Forms.ButtonAdvBorderStyle.Flat;
 			this.buttonLogOnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.buttonLogOnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonLogOnCancel.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonLogOnCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonLogOnCancel.IsBackStageButton = false;
@@ -176,6 +179,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.btnBack.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.btnBack.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnBack.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnBack.ForeColor = System.Drawing.Color.White;
 			this.btnBack.IsBackStageButton = false;

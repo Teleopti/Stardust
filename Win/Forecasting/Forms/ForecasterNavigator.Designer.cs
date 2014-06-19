@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.toolStripMenuItemExport,
             this.toolStripMenuItemJobHistory});
 			this.contextMenuStripSkillTypes.Name = "contextMenuStripForecasts";
-			this.contextMenuStripSkillTypes.Size = new System.Drawing.Size(230, 120);
+			this.contextMenuStripSkillTypes.Size = new System.Drawing.Size(230, 98);
 			// 
 			// toolStripMenuItemSkillTypesSkillNew
 			// 
@@ -487,13 +487,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.splitContainer1.Panel2.Controls.Add(this.toolStrip1);
 			this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.splitContainer1.Size = new System.Drawing.Size(218, 556);
-			this.splitContainer1.SplitterDistance = 353;
+			this.splitContainer1.SplitterDistance = 355;
 			this.splitContainer1.SplitterWidth = 2;
 			this.splitContainer1.TabIndex = 4;
 			// 
 			// treeViewSkills
 			// 
-			this.treeViewSkills.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.treeViewSkills.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.treeViewSkills.ContextMenuStrip = this.contextMenuStripSkillTypes;
 			this.treeViewSkills.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeViewSkills.ImageIndex = 0;
@@ -503,7 +503,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.treeViewSkills.Name = "treeViewSkills";
 			this.treeViewSkills.RightToLeftLayout = true;
 			this.treeViewSkills.SelectedImageIndex = 0;
-			this.treeViewSkills.Size = new System.Drawing.Size(218, 353);
+			this.treeViewSkills.Size = new System.Drawing.Size(218, 355);
 			this.treeViewSkills.TabIndex = 1;
 			this.treeViewSkills.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewSkills_BeforeSelect);
 			this.treeViewSkills.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeViewSkills_MouseDown);

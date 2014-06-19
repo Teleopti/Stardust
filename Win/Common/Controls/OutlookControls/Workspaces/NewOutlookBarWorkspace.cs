@@ -16,8 +16,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
             _clientPortalCallback = clientPortalCallback;
             _presenter = new OutlookBarWorkspacePresenter(this, model);
             InitializeComponent();
-			groupBarModules.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-			groupBarModules.ForeColor = Color.Black;
+			//groupBarModules.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			//groupBarModules.ForeColor = Color.Violet;
+
         }
 
         public int NumberOfVisibleGroupBars
@@ -32,6 +33,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
                 return count;
             }
         }
+
+		
 
         public void SetNumberOfVisibleGroupBars(int visibleCount)
         {
@@ -117,7 +120,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
                 groupBarItem.Tag = outlookBarSmartPartInfo;
                 groupBarItem.BackColor = Color.White;
                 groupBarItem.Tag = outlookBarSmartPartInfo.EventTopicName;
+				groupBarItem.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 0);
+	            groupBarItem.ForeColor = groupBarModules.HeaderForeColor;
+				groupBarItem.ClientBorderColors = new BorderColors(Color.White, Color.FromArgb(22, 165, 220), Color.FromArgb(22, 165, 220), Color.White);
                 groupBarItem.InNavigationPane = true;
+
                 return groupBarItem;
             }
         }

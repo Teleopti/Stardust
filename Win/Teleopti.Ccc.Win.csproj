@@ -3560,6 +3560,24 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\WFM-Shifts.png" />
+    <None Include="Resources\WFM-Schedules.png" />
+    <None Include="Resources\WFM-Reports.png" />
+    <None Include="Resources\WFM-Performance-Manager - Copy.png" />
+    <None Include="Resources\WFM-People - Copy.png" />
+    <None Include="Resources\WFM-Payroll-Integration - Copy.png" />
+    <None Include="Resources\WFM-Intraday - Copy.png" />
+    <None Include="Resources\WFM-Forecasts - Copy.png" />
+    <None Include="Resources\WFM-Budgets - Copy.png" />
+    <None Include="Resources\WFM-Shifts.ico" />
+    <None Include="Resources\WFM-Schedules.ico" />
+    <None Include="Resources\WFM-Reports.ico" />
+    <None Include="Resources\WFM-Performance-Manager.ico" />
+    <None Include="Resources\WFM-People.ico" />
+    <None Include="Resources\WFM-Payroll-Integration.ico" />
+    <None Include="Resources\WFM-Intraday.ico" />
+    <None Include="Resources\WFM-Forecasts.ico" />
+    <None Include="Resources\WFM-Budgets.ico" />
     <None Include="Resources\warning.png" />
     <None Include="Resources\XSDSchema_GraphLeftToRight.png" />
     <None Include="..\Teleopti.Ccc.snk">

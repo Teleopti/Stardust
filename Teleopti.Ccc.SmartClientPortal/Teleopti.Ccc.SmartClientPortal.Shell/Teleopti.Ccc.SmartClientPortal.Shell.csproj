@@ -295,6 +295,15 @@
     <None Include="Resources\help_32.png" />
     <None Include="Resources\information_16.png" />
     <Content Include="Resources\permission.png" />
+    <None Include="Resources\WFM-Budgets - Copy.png" />
+    <None Include="Resources\WFM-Forecasts - Copy.png" />
+    <None Include="Resources\WFM-Intraday - Copy.png" />
+    <None Include="Resources\WFM-Payroll-Integration - Copy.png" />
+    <None Include="Resources\WFM-People - Copy.png" />
+    <None Include="Resources\WFM-Performance-Manager - Copy.png" />
+    <None Include="Resources\WFM-Reports.png" />
+    <None Include="Resources\WFM-Schedules.png" />
+    <None Include="Resources\WFM-Shifts.png" />
     <Content Include="TeleoptiCCCv7.ico" />
   </ItemGroup>
   <ItemGroup>
