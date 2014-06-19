@@ -727,4 +727,7 @@
   <data name="WFM_Circle_Schedules" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WFM-Circle-Schedules.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="WFM_Schedules" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WFM-Schedules.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
