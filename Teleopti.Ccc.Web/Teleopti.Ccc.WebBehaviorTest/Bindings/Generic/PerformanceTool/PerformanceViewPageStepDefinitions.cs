@@ -39,15 +39,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
 		}
 
-		[When(@"I input an RTA configuration with (.*) scenarios for '(.*)' in json format")]
-		public void WhenIInputAnRtaConfigurationWithScenariosForInJsonFormat(int scnearios, string personName)
+		[When(@"I input an RTA configuration scenario for '(.*)' in json format on datasource (.*)")]
+		public void WhenIInputAnRTAConfigurationScenarioForInJsonFormatOnDatasource(string personName, int datasource)
 		{
 			var configuration = new
 			{
 				PlatformTypeId = Guid.Empty,
-				ExternalLogOns = new []{personName},
+				ExternalLogOns = new[] { personName },
 				States = new[] { "Pause" },
-				SourceId = "0",
+				SourceId = datasource,
 				StatesToSend = 1,
 				ExpectedPersonsInAlarm = 1
 			};
@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
 		}
+
 
 
 		[Then(@"I should see a count of (.*) messages received for '(.*)'")]

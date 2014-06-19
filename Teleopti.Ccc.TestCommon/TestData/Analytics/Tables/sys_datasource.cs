@@ -27,6 +27,39 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			return table;
 		}
 
+		public static void AddDataSource(
+			this DataTable dataTable,
+			int dataSourceId,
+			string name,
+			int logObjectId,
+			string logObjectName,
+			int dataSourceDatabaseId,
+			string dataSourceDatabaseName,
+			string dataSourceTypeName,
+			int timeZoneId,
+			bool inactive,
+			string sourceId,
+			bool @internal)
+		{
+			var row = dataTable.NewRow();
+
+			row["datasource_id"] = dataSourceId;
+			row["datasource_name"] = name;
+			row["log_object_id"] = logObjectId;
+			row["log_object_name"] = logObjectName;
+			row["datasource_database_id"] = dataSourceDatabaseId;
+			row["datasource_database_name"] = dataSourceDatabaseName;
+			row["datasource_type_name"] = dataSourceTypeName;
+			row["time_zone_id"] = timeZoneId;
+			row["inactive"] = inactive;
+			row["insert_date"] = DateTime.Now;
+			row["update_date"] = DateTime.Now;
+			row["source_id"] = sourceId;
+			row["internal"] = @internal;
+			
+
+			dataTable.Rows.Add(row);
+		}
 		public static int FindTimeZoneIdByDatasourceId(
 			this IEnumerable<DataRow> dataTable,
 			int datasource_id)

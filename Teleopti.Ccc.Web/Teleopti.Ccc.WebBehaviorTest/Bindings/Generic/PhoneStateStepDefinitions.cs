@@ -11,6 +11,8 @@ using Teleopti.Ccc.Rta.Server;
 using Teleopti.Ccc.Rta.Server.Adherence;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
@@ -45,12 +47,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 					                      );
 			});
 
+		[Given(@"there is an external logon named '(.*)' with datasource (.*)")]
+		public void GivenThereIsAnExternalLogonNamedWithDatasource(string acdLogOnName, int datasourceId)
+		{
+			DataMaker.Data().Apply(new ExternalLogonConfigurable()
+			{
+				AcdLogOnName = acdLogOnName,
+				DataSourceId = datasourceId,
+				AcdLogOnOriginalId = acdLogOnName
+			});
+		}
+
+
 		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		[When(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		public void WhenSetsHisPhoneStateTo(string personName, string state)
 		{
 			rtaFactory.Value.ProcessRtaData(personName, state, TimeSpan.Zero, CurrentTime.Value(), Guid.Empty, "0",
 																			DateHelper.MinSmallDateTime, false);
+		}
+
+		[Given(@"there is a datasouce with id (.*)")]
+		public void GivenThereIsADatasouceWithId(int datasourceId)
+		{
+			var datasource = new Datasources(datasourceId, " ", -1, " ", -1, " ", " ", 1, false, "6", false);
+			DataMaker.Analytics().Setup(datasource);
 		}
 	}
 
