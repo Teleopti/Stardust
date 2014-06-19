@@ -83,9 +83,10 @@ ELSE
 	SET @hide_time_zone = 0
 
 
-SELECT	d.date_date,
+SELECT	DISTINCT
+		d.date_date,
 		i.interval_name,
-		p.person_id,
+		p.person_code,
 		isnull(l.term_language,p.person_name) person_name,
 		da.acd_login_id,
 		da.acd_login_name,
@@ -122,7 +123,7 @@ AND (p.team_id IN (select right_id from #rights_teams)OR p.team_id=-1)
 --AND (p.person_id in (SELECT right_id FROM #rights_agents) OR p.person_id=-1) 
 AND (p.person_id in (SELECT right_id FROM #rights_agents)) 
 AND (@date_from	between p.valid_from_date AND p.valid_to_date OR  @date_to	between p.valid_from_date AND p.valid_to_date)
-ORDER BY d.date_date,i.interval_name,p.person_name,da.acd_login_name
+ORDER BY d.date_date,i.interval_name,isnull(l.term_language,p.person_name),p.person_code,da.acd_login_name,da.acd_login_id
 
 
 GO
