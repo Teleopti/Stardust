@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				builder.Register<IToggleManager>(c =>
 				{
 					if (togglePathIsNotDefined())
-						return new falseToggleManager();
+						return new FalseToggleManager();
 		
 					var licenseActivatorProvider = c.ResolveNamed<ILicenseActivatorProvider>("querystring");
 					var specMappings = new DefaultSpecificationMappings();
@@ -85,14 +85,6 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			public bool IsEnabled(Toggles toggle)
 			{
 				return _toggleChecker.IsEnabled(toggle.ToString());
-			}
-		}
-
-		private class falseToggleManager : IToggleManager
-		{
-			public bool IsEnabled(Toggles toggle)
-			{
-				return false;
 			}
 		}
 	}
