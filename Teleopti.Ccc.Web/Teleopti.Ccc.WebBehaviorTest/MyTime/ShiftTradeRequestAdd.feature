@@ -39,10 +39,13 @@ Background:
 	| Start date | 2012-06-18 |
 	| Team		 | Other team |
 	And there are shift categories
-	| Name  |
-	| Day   |
-	| Night |
-	| Late  |
+	| Name   |
+	| Day    |
+	| Night  |
+	| Late   |
+	And there is a dayoff with
+	| Field | Value  |
+	| Name  | DayOff |
 
 Scenario: No access to make shift trade reuquests
 	Given there is a role with
@@ -432,6 +435,22 @@ Scenario: Sort possible shift trades by starttime
 	Then I should see 'OtherAgent2' first in the list
 	And I should see 'OtherAgent' last in the list
 
+Scenario: Show possible shift trades by day off
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 06:00 |
+	| EndTime        | 2030-01-01 16:00 |
+	| Shift category | Day              |
+	And 'OtherAgent' has a day off with
+	| Field | Value      |
+	| Name  | DayOff     |
+	| Date  | 2030-01-01 |
+	And the current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see 'OtherAgent' last in the list
 
 
 

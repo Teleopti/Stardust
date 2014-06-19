@@ -73,14 +73,15 @@
                 </tbody>
                 <tbody data-bind="foreach: possibleTradeSchedules">
                     <tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
-                        <td class="shift-trade-agent-name" data-bind="text: $data.agentName"></td>
-                        <td class="shift-trade-possible-trade-schedule">
-                            <div style="height: 22px;width: 100%;" data-bind="foreach: $data.layers">
-                                <div class="shift-trade-layer-container floatleft">
-                                    <div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }, attr: { 'scheduleinfo': tooltipText() }"></div>
-                                </div>
-                            </div>
-                        </td>
+							  <td class="shift-trade-agent-name" data-bind="text: $data.agentName"></td>
+							  <td class="shift-trade-possible-trade-schedule">
+								  <div style="height: 22px; width: 100%;" data-bind="foreach: $data.layers, css: { 'dayoff': $data.isDayOff }">
+									  <div class="shift-trade-layer-container floatleft">
+										  <div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }, attr: { 'scheduleinfo': tooltipText() }"></div>
+										  <span style="padding-left: 300px;">@Resources.DayOff</span>
+									  </div>
+								  </div>
+							  </td>
                     </tr>
                 </tbody>
             </table>

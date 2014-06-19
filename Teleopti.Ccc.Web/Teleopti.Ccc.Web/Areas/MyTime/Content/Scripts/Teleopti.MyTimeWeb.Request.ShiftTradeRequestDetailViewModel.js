@@ -237,15 +237,18 @@ Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (laye
 	    var self = this;
 	    var agentName = '';
 	    var personId = null;
+		 var isDayOff = false;
 	    if (scheduleObject) {
 	        agentName = scheduleObject.Name;
 	        personId = scheduleObject.PersonId;
+		     isDayOff = scheduleObject.IsDayOff;
 	    }
 
 	    self.personId = personId;
 	    self.isVisible = ko.observable(true);
 	    self.agentName = agentName;
 	    self.layers = layers;
+	    self.isDayOff = isDayOff;
 };
 
 ShiftTradeRequestDetailedDayViewModel = function(data) {

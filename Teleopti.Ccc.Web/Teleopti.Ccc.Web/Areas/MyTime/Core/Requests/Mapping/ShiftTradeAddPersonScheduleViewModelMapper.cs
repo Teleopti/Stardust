@@ -23,17 +23,45 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return null;
 
 			var shiftReadModel = JsonConvert.DeserializeObject<Model>(scheduleReadModel.Model);
-			if(shiftReadModel.Shift.Projection.Count == 0)
-				return null;
-			return new ShiftTradeAddPersonScheduleViewModel
+			ShiftTradeAddPersonScheduleViewModel ret = null;
+			if ((shiftReadModel.Shift != null) && (shiftReadModel.Shift.Projection.Count > 0))
 			{
-				PersonId = scheduleReadModel.PersonId,
-				StartTimeUtc = scheduleReadModel.Start.Value,
-				Name = string.Format(CultureInfo.InvariantCulture, "{0} {1}", shiftReadModel.FirstName, shiftReadModel.LastName),
-				ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection),
-				MinStart = scheduleReadModel.MinStart,
-				IsLastPage = scheduleReadModel.IsLastPage
-			};
+				ret = new ShiftTradeAddPersonScheduleViewModel
+					{
+						PersonId = scheduleReadModel.PersonId,
+						StartTimeUtc = scheduleReadModel.Start.Value,
+						Name = string.Format(CultureInfo.InvariantCulture, "{0} {1}", shiftReadModel.FirstName, shiftReadModel.LastName),
+						ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection),
+						MinStart = scheduleReadModel.MinStart,
+						IsLastPage = scheduleReadModel.IsLastPage,
+						IsDayOff = false
+					};
+			}
+
+			if (shiftReadModel.DayOff != null)
+			{
+				var dayOffProjection = new List<SimpleLayer>();
+				var sl = new SimpleLayer
+					{
+						Start = shiftReadModel.DayOff.Start,
+						End = shiftReadModel.DayOff.End,
+						Description = shiftReadModel.DayOff.Title,
+						Minutes = (int)(shiftReadModel.DayOff.End - shiftReadModel.DayOff.Start).TotalMinutes
+					};
+
+				dayOffProjection.Add(sl);
+				ret = new ShiftTradeAddPersonScheduleViewModel
+				{
+					PersonId = scheduleReadModel.PersonId,
+					StartTimeUtc = scheduleReadModel.Start.Value,
+					Name = string.Format(CultureInfo.InvariantCulture, "{0} {1}", shiftReadModel.FirstName, shiftReadModel.LastName),
+					ScheduleLayers = _layerMapper.Map(dayOffProjection),
+					MinStart = scheduleReadModel.MinStart,
+					IsLastPage = scheduleReadModel.IsLastPage,
+					IsDayOff = true
+				};
+			}
+			return ret;
 		}
 
 		public IList<ShiftTradeAddPersonScheduleViewModel> Map(IEnumerable<IPersonScheduleDayReadModel> scheduleReadModels)
