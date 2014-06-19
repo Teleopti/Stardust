@@ -22,7 +22,7 @@ Background:
 	| Name  | Lunch  |
 	| Color | Yellow |
 
-@ignore
+@OnlyRunIfEnabled('MyTeam_MoveActivity_25206')
 Scenario: The team leader should be able to move an activity
 	Given 'John King' has a person period with
 	| Field      | Value      |
@@ -38,17 +38,18 @@ Scenario: The team leader should be able to move an activity
 	| Lunch start time     | 2013-11-18 12:00 |
 	| Lunch end time       | 2013-11-18 13:00 |
 	When I view schedules for 'Team green' on '2013-11-18'
-	And I move the activity
+	And I select the activity with
 	| Field          | Value            |
-	| Agent          | John King        |
-	| Date           | 2013-11-18       |
 	| Activity       | Lunch            |
 	| Start time     | 2013-11-18 12:00 |
-	| End time     | 2013-11-18 13:00 |
+	And I click move activity button
+	And I move the activity
+	| Field          | Value            |
+	| Start time     | 2013-11-18 13:00 |
 	And I save the shift
-	Then I should see schedule activity details for 'John King' with
+	Then I should see the moved schedule activity details for 'John King' with
 	| Field      | Value |
-	| Name       | Lunch |
-	| Start time | 12:00 |
-	| End time   | 13:00 |
+	| Color      | Yellow |
+	| Start time | 13:00 |
+	| End time   | 14:00 |
 
