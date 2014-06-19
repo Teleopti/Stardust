@@ -1,11 +1,13 @@
 ﻿define([
 	'knockout',
 	'resources',
-	'ajax'
+	'ajax',
+	'navigation'
 ], function (
 	ko,
 	resources,
-	ajax
+	ajax,
+	navigation
     ) {
 
 	return function () {
@@ -13,6 +15,7 @@
 		var self = this;
 
 		self.PersonId = ko.observable();
+		self.GroupId = ko.observable();
 		self.ScheduleDate = ko.observable();
 		self.OldStartMinutes = ko.observable();
 		self.ProjectionLength = ko.observable();
@@ -31,6 +34,7 @@
 
 		this.SetData = function (data) {
 			self.PersonId(data.PersonId);
+			self.GroupId(data.GroupId);
 			self.ScheduleDate(data.Date);
 		};
 
@@ -57,7 +61,7 @@
 				type: 'POST',
 				data: requestData,
 				success: function (data, textStatus, jqXHR) {
-					navigation.GotoPersonScheduleWithoutHistory(groupId, personId, self.ScheduleDate());
+					navigation.GotoPersonScheduleWithoutHistory(self.GroupId(), self.PersonId(), self.ScheduleDate());
 				}
 			}
 			);

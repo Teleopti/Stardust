@@ -361,9 +361,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				throw new ArgumentException("No layer(s) found!", "activity");
 
 			//will be fixed later (=Erik)
-			var newStartTimeLocal = newStartTime;
-			var startTimeUtc = new DateTime(newStartTimeLocal.Ticks, DateTimeKind.Utc);
-			var newPeriod = new DateTimePeriod(startTimeUtc, startTimeUtc.Add(length));
+			var newPeriod = new DateTimePeriod(newStartTime, newStartTime.Add(length));
 			///////////////////////////////
 			
 			addActivityInternal(activity, newPeriod);

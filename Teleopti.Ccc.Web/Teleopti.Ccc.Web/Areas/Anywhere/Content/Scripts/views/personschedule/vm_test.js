@@ -118,7 +118,8 @@
 				var vm = new viewModel();
 				vm.SetViewOptions({
 					id: 1,
-					date: '20131118'
+					date: '20131118',
+					groupid: 2
 				});
 				var data = [
 					{
@@ -133,10 +134,11 @@
 					}
 				];
 				vm.SelectedStartMinutes(840);
-				vm.UpdateData({ PersonId: 1 });
+				vm.UpdateData({ PersonId: 1});
 				vm.UpdateSchedules(data);
 
 				assert.equals(vm.MoveActivityForm.PersonId(), 1);
+				assert.equals(vm.MoveActivityForm.GroupId(), 2);
 				assert.equals(vm.MoveActivityForm.ScheduleDate().diff(moment('2013-11-18')), 0);
 				assert.equals(vm.MoveActivityForm.OldStartMinutes(), vm.SelectedStartMinutes());
 				assert.equals(vm.MoveActivityForm.ProjectionLength(), data[0].Projection[0].Minutes);
