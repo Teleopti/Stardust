@@ -214,12 +214,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	function _init() {
 		var elementToBind = $('#Request-add-shift-trade')[0];
 		if (elementToBind !== undefined) {
-		    if ((vm || '') == '') {
-		    	vm = new shiftTradeViewModel(_saveNewShiftTrade);
-		    	ko.applyBindings(vm, elementToBind);
-		    }
-
-		    _setWeekStart(vm);
+			if ((vm || '') == '') {
+				vm = new shiftTradeViewModel(_saveNewShiftTrade);
+				ko.applyBindings(vm, elementToBind);
+			}
+			vm.chooseAgent(null);
+			_setWeekStart(vm);
 		}
 	}
 
@@ -305,7 +305,14 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			})
 		;
 	}
-    
+
+	function _cleanUp() {
+		var addShiftTradeElement = $('#Request-add-shift-trade')[0];
+		if (addShiftTradeElement) {
+			ko.cleanNode(addShiftTradeElement);
+		}
+		vm = null;
+	}
 	return {
 		Init: function () {
 		},
@@ -320,7 +327,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		HideShiftTradeWindow: function () {
 			_hideShiftTradeWindow();
 		},
-		Dispose: function() {
+		Dispose: function () {
+			_cleanUp();
 		}
 	};
 

@@ -83,7 +83,8 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
 		},
 	    RequestPartialDispose: function() {
-	        Teleopti.MyTimeWeb.Request.List.Dispose();
+	    	Teleopti.MyTimeWeb.Request.List.Dispose();
+		    Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.Dispose();
 	    },
 	    ResetToolbarActiveButtons: function () {
 	        requestNavigationViewModel.resetToolbarActiveButtons();
