@@ -43,9 +43,7 @@ IF ERRORLEVEL 3 SET licensefile=Teleopti_Prod.xml
 )
 
 ::copy licensefile to webbehaviortest
-copy /y "%rootdir%\LicenseFiles\%licensefile%" "%rootdir%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\license.xml"
-::ugly - if compiled, copy to bin folder (fix this!)
-if exist "%rootdir%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\license.xml" copy /y "%rootdir%\LicenseFiles\%licensefile%" "%rootdir%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\license.xml"
+copy /y "%rootdir%\LicenseFiles\%licensefile%" "%rootdir%\LicenseFiles\license.xml"
 
 SET MySettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings.txt
 
