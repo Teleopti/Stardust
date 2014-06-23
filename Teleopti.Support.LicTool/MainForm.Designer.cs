@@ -347,7 +347,7 @@
 			this.grpBoxModules.Size = new System.Drawing.Size(211, 312);
 			this.grpBoxModules.TabIndex = 14;
 			this.grpBoxModules.TabStop = false;
-			this.grpBoxModules.Text = "TeleoptiCCC options";
+			this.grpBoxModules.Text = "Teleopti WFM options";
 			// 
 			// chkMyTeam
 			// 
