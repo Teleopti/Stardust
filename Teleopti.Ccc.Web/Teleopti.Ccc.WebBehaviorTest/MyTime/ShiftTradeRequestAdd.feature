@@ -452,6 +452,22 @@ Scenario: Show possible shift trades with day off
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see 'OtherAgent' last in the list
 
+Scenario: Show MySchedule when it is day off
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And 'I' has a day off with
+	| Field | Value      |
+	| Name  | DayOff     |
+	| Date  | 2030-01-01 |
+	And 'OtherAgent' has a day off with
+	| Field | Value      |
+	| Name  | DayOff     |
+	| Date  | 2030-01-01 |
+	And the current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see MySchedule is dayoff
+
 @ignore
 Scenario: Should able to add a day to a shift trade
 	Given I have the role 'Full access to mytime'
