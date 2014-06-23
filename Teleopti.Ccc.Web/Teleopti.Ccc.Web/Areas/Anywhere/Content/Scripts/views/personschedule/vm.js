@@ -216,7 +216,8 @@ define([
 					return layer;
 			});
 			var activeLayer = selectedLayers.first();
-			activeLayer.Selected(true);
+			if (activeLayer)
+				activeLayer.Selected(true);
 			return activeLayer;
 		};
 		

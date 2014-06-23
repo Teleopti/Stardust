@@ -1,21 +1,21 @@
 ﻿define(['buster', 'views/personschedule/vm'],
-	function(buster, viewModel) {
-		return function() {
+	function (buster, viewModel) {
+		return function () {
 
 			buster.testCase("person schedule viewmodel", {
-				"should create viewmodel": function() {
+				"should create viewmodel": function () {
 					var vm = new viewModel();
 					assert(vm);
 				},
 
-				"should create timeline with default times": function() {
+				"should create timeline with default times": function () {
 					var vm = new viewModel();
 
 					assert.equals(vm.TimeLine.StartTime(), "08:00");
 					assert.equals(vm.TimeLine.EndTime(), "16:00");
 				},
 
-				"should create timeline according to shifts length": function(done) {
+				"should create timeline according to shifts length": function (done) {
 					var vm = new viewModel();
 
 					vm.SetViewOptions({
@@ -37,14 +37,14 @@
 
 					vm.UpdateSchedules(data);
 
-					setTimeout(function() {
+					setTimeout(function () {
 						assert.equals(vm.TimeLine.StartTime(), "12:00");
 						assert.equals(vm.TimeLine.EndTime(), "13:00");
 						done();
 					}, 2);
 				},
 
-				"should not consider nightshifts from yesterday when creating timeline": function(done) {
+				"should not consider nightshifts from yesterday when creating timeline": function (done) {
 					var vm = new viewModel();
 
 					vm.SetViewOptions({
@@ -80,7 +80,7 @@
 
 					vm.UpdateSchedules(data);
 
-					setTimeout(function() {
+					setTimeout(function () {
 						assert.equals(vm.TimeLine.StartTime(), "12:00");
 						assert.equals(vm.TimeLine.EndTime(), "13:00");
 						done();
@@ -88,7 +88,7 @@
 
 				},
 
-				"should get the selected layer from url": function() {
+				"should get the selected layer from url": function () {
 
 					var vm = new viewModel();
 					vm.SetViewOptions({
@@ -112,7 +112,7 @@
 					assert.equals(vm.SelectedLayer().StartMinutes(), vm.SelectedStartMinutes());
 				},
 
-				"should set move activity form when updating data": function() {
+				"should set move activity form when updating data": function () {
 
 					var vm = new viewModel();
 					vm.SetViewOptions({
@@ -144,7 +144,7 @@
 					assert.equals(vm.MoveActivityForm.ActivityId(), data[0].Projection[0].ActivityId);
 				},
 
-				"should update starttime when DisplayedStartTime changes": function() {
+				"should update starttime when DisplayedStartTime changes": function () {
 
 					var vm = new viewModel();
 					vm.SetViewOptions({
@@ -171,7 +171,7 @@
 					assert.equals(vm.MoveActivityForm.StartTime().format(), momentExpected.format());
 				},
 
-				"should update DisplayedStartTime when startTime changes": function() {
+				"should update DisplayedStartTime when startTime changes": function () {
 
 					var vm = new viewModel();
 					vm.SetViewOptions({
@@ -197,6 +197,35 @@
 					var momentExpected = moment(expected, 'HH:mm');
 					vm.MoveActivityForm.StartTime(momentExpected);
 					assert.equals(vm.MoveActivityForm.DisplayedStartTime(), expected);
+				},
+
+
+				"should not try to select layer if layer not choosen": function () {
+					var vm = new viewModel();
+					vm.SetViewOptions({
+						id: 1,
+						date: '20131118',
+						groupid: 2
+					});
+					var data = [
+						{
+							PersonId: 1,
+							Projection: [
+								{
+									Start: '2013-11-18 14:00',
+									Minutes: 240,
+									ActivityId: "guid"
+								}
+							]
+						}
+					];
+
+					vm.SelectedStartMinutes(340);
+					vm.UpdateData({ PersonId: 1 });
+					vm.UpdateSchedules(data);
+
+					//just verifies it doesn't throw
+					assert.equals(vm.MoveActivityForm.PersonId(), 1);
 				}
 			});
 		}
