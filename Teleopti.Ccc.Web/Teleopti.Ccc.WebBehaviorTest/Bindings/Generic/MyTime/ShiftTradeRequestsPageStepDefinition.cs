@@ -272,5 +272,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Select2Box.OpenWhenOptionsAreLoaded("Team-Picker");
 			Select2Box.SelectItemByText("Team-Picker", optionToSelect);
 		}
+
+		[Then(@"I should see MySchedule is dayoff")]
+		public void ThenIShouldSeeMyScheduleIsDayoff()
+		{
+			Browser.Interactions.AssertExists(".shift-trade-my-schedule .shift-trade-layer-container .dayoff");
+		}
+
 	}
 }

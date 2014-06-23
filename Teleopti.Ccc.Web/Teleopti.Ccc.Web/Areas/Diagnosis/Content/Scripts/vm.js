@@ -1,56 +1,57 @@
 define([
 		'knockout',
-		'jquery',
-		'signalRHubs'
+		'jquery'
 ], function (
 	ko,
-	$,
-	sigR
+	$
 	) {
 
 	return function() {
 
 		var self = this;
 
-		self.started = ko.observable(false);
+		self.hub = '';
+		self.connectionStates = { 0: 'connecting', 1: 'connected', 2: 'reconnecting', 3: 'disconnected' };
+		self.connectionState = ko.observable(3);
+		self.recievedPings = ko.observableArray();
 
-		self.showInfo = function(info) {
-			console.log('*******');
-			console.log(info);
-			console.log('*******');
+		self.messageBrokerStatus = ko.observable(self.connectionStates[3]);
+		self.isOnline = ko.computed(function() {
+			return self.connectionState() == 1;
+		});
+		self.messageBrokerStatus = ko.computed(function() {
+			return self.connectionStates[self.connectionState()];
+		});
+
+		self.initialize = function (options) {
+
+			if (options) {
+				self.hub = options.messageBroker;
+				if (options.signalR) {
+					options.signalR.start();
+				}
+
+				if (self.hub && self.hub.client) {
+					self.hub.client.pong = function (id) {
+						self.recievedPings.push(id);
+					}
+				}
+			}
 		}
 
-		self.sendTestMessage = function() {
-			alert('sending testmessage');
+		self.sendPing = function(numberOfmessages) {
+			self.recievedPings([]);
+			for (var pingId = 0; pingId < numberOfmessages; ++pingId) {
+				self.hub.server.pingWithId(pingId);
+			}
+		}
+
+		self.updateMessageBrokerConnection = function () {
+			var state = self.hub.connection.state;
+			self.connectionState(state);
 		};
 
-		self.startSignalR = function() {
-			sigR.start();
-			self.started(true);
-		};
-
-		self.subscribeToPing = function() {
-			var hub = $.connection.MessageBrokerHub;
-			hub.client.pong = function(someNumber) {
-				self.showInfo('ping recieved from messagebroker');
-				console.log(someNumber);
-			};
-		};
-
-		self.sendMessageBrokerPing = function() {
-			var hub = $.connection.MessageBrokerHub;
-			self.showInfo('ping sent');
-			hub.server.pingWithId(155);
-		};
-
-		self.checkMessageBrokerConnection = function() {
-			var hub = $.connection.MessageBrokerHub;
-			var stateConversion = { 0: 'connecting', 1: 'connected', 2: 'reconnecting', 3: 'disconnected' }
-			var connectionInfo = 'SignalR connectionstatus: ' + stateConversion[hub.connection.state];
-			self.showInfo(connectionInfo);			
-		};
-
-		self.testMessage = ko.observable('Send message');
+		
 	};
 
 });

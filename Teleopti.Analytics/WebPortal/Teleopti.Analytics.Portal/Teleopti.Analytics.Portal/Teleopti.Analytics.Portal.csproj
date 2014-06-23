@@ -151,6 +151,7 @@
       <Link>CodeAnalysisDictionary.xml</Link>
     </CodeAnalysisDictionary>
     <Content Include="images\down.png" />
+    <Content Include="images\favicon.ico" />
     <Content Include="images\up.png" />
     <Content Include="PerformanceManager\test_login.aspx" />
     <Content Include="PmContainer.aspx" />

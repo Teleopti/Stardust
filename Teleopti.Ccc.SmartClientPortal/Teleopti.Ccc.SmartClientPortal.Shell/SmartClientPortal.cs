@@ -178,8 +178,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var loggedOnBu = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit;
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
 
-			populateFeatureToggleFlags();
-
             setNotifyData(_systemChecker.IsOk());
             //_logOnScreen.Refresh();
 
@@ -219,37 +217,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             splitContainer.Panel1.Controls.Add(_outlookBarWorkspace);
             _outlookBarWorkspace.Visible = true;
         }
-
-	    private void populateFeatureToggleFlags()
-	    {
-		    try
-		    {
-				_container.Resolve<IToggleFiller>().FillAllToggles();
-		    }
-		    catch (Exception ex)
-		    {
-				using (var view = new SimpleExceptionHandlerView(ex, UserTexts.Resources.OpenTeleoptiCCC, toggleExceptionMessageBuilder().ToString()))
-				{
-					view.ShowDialog();
-				}
-			    
-		    }
-	    }
-
-	    private StringBuilder toggleExceptionMessageBuilder()
-	    {
-		    var ret = new StringBuilder();
-			ret.AppendLine(UserTexts.Resources.WebServerDown);
-
-			foreach (var toggle in Enum.GetValues(typeof(Toggles)))
-			{
-				var x = (Toggles) toggle;
-				if(x != Toggles.TestToggle)
-					ret.AppendLine(x.ToString());
-			}
-
-		    return ret;
-	    }
 
         private void showMem()
         {

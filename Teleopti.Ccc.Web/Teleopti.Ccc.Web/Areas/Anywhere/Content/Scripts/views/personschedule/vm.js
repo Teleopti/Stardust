@@ -175,6 +175,8 @@ define([
 			self.AddActivityForm.SetData(data);
 			self.AddIntradayAbsenceForm.SetData(data);
 			self.MoveActivityForm.SetData(data);
+			var selectedLayer = self.SelectedLayer();
+			self.MoveActivityForm.update(selectedLayer);
 		};
 
 		this.UpdateSchedules = function (data) {
@@ -209,13 +211,26 @@ define([
 			
 		};
 
-		this.SelectedLayer = function () {
+		this.SelectedLayer = function() {
 			if (!self.SelectedStartMinutes()) return null;
-			var selectedLayers = layers().filter(function (layer) { 
+			var selectedLayers = layers().filter(function(layer) {
 				if (layer.StartMinutes() === self.SelectedStartMinutes())
 					return layer;
 			});
-			return selectedLayers.first();
+			var activeLayer = selectedLayers.first();
+			activeLayer.Selected(true);
+			return activeLayer;
+		};
+		
+		this.updateStartTime = function (pixels) {
+			var minutes = pixels / this.TimeLine.PixelsPerMinute();
+			var newStartTime = (this.MoveActivityForm.OldStartMinutes() + Math.round(minutes/15)*15);
+			this.MoveActivityForm.StartTime(newStartTime);
 		}
+
+		this.lengthMinutesToPixels = function (minutes) {
+			var pixels = minutes * self.TimeLine.PixelsPerMinute();
+			return Math.round(pixels);
+		};
 	};
 });

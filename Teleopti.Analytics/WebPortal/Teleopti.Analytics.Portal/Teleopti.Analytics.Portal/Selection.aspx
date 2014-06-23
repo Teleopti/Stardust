@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 <head runat="server">
     <title>Selection</title>
-    <link rel="shortcut icon" href="~/Images/ccc_menu.ico"/>
+    <link rel="shortcut icon" href="~/Images/favicon.ico"/>
 </head>
 <body>
     <form id="aspnetForm" runat="server">

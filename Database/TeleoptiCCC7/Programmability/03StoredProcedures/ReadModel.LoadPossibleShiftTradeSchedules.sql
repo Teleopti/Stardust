@@ -47,7 +47,7 @@ AS
 		INNER JOIN @TempList t ON t.Person = sd.PersonId
 		WHERE [BelongsToDate] = @shiftTradeDate
 		AND sd.Start IS NOT NULL
-		AND DATEDIFF(MINUTE,Start, [End] ) < 1440
+		AND DATEDIFF(MINUTE,Start, [End] ) <= 1440
 		ORDER BY sd.Start
 	) 
 	

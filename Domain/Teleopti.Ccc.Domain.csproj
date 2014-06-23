@@ -535,7 +535,7 @@
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeBetweenDaysService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockScheduleCloner.cs" />
-    <Compile Include="Optimization\WeeklyRestSolver\BrokenWeekOutsideSelectionSpecification.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\BrokenWeekCounterForAPerson.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ContractWeeklyRestForPersonWeek.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\DeleteScheduleDayFromUnsolvedPersonWeek.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\EnsureWeeklyRestRule.cs" />

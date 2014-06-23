@@ -102,6 +102,5 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			pongedWith.Should().Be(12);
 		}
 
-
 	}
 }

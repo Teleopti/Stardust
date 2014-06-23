@@ -6,7 +6,8 @@ define([
 		'subscriptions.groupschedule',
 		'helpers',
 		'text!templates/personschedule/view.html',
-		'resizeevent'
+		'resizeevent',
+		'jqueryui'
 ], function (
 		ko,
 		personScheduleViewModel,
@@ -62,6 +63,22 @@ define([
 			return $.when(personScheduleDeferred, groupScheduleDeferred)
 				.done(function () {
 					viewModel.Loading(false);
+
+					// bind events
+					var activeLayer = $(".layer.active");
+					if (activeLayer.length !== 0) {
+						var pixelByNMinutes = viewModel.lengthMinutesToPixels(15);
+						var initialX = $(".layer.active")[0].offsetLeft;
+						$(".layer.active").draggable({
+							axis: 'x',
+							containment: 'parent',
+							grid: [pixelByNMinutes, 0],
+							drag: function (e) {
+								var pixelsChanged = e.target.offsetLeft - initialX;
+								viewModel.updateStartTime(pixelsChanged);
+							}
+						});
+					}
 				});
 		},
 
@@ -91,6 +108,7 @@ define([
 
 		moveactivity: function (options) {
 			viewModel.MovingActivity(true);
+			
 		},
 
 		setDateFromTest: function (date) {

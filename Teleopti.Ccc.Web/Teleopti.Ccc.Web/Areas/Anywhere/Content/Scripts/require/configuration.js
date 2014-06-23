@@ -1,6 +1,7 @@
 ﻿var requireconfiguration = {
 	paths: {
 		jquery: '../../../../Content/jquery/jquery-1.10.2',
+		jqueryui: '../../../../Content/jqueryui/jquery-ui-1.10.2.custom.min',
 		lazy: '../../../../Content/lazy/lazy.min',
 		knockout: '../../../../Content/Scripts/knockout-2.2.1',
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
