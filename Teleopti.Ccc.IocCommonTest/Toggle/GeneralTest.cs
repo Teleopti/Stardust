@@ -1,7 +1,9 @@
-﻿using Autofac;
+﻿using System.IO;
+using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -61,6 +63,29 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				container.Resolve<ITogglesActive>()
 					.Should().Not.Be.Null();
 			}
-		} 
+		}
+
+		[Test]
+		public void ShouldWorkWithoutHavingQuerystringLicenseActivatorProviderRegistered_UsedWhenNonWebUsingFileDirectly()
+		{
+			var tempFile = Path.GetTempFileName();
+			try
+			{
+				File.WriteAllLines(tempFile, new[] { "TestToggle=false" });
+				var containerBuilder = new ContainerBuilder();
+				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
+				ToggleNetModule.RegisterDependingModules(containerBuilder);
+				using (var container = containerBuilder.Build())
+				{
+					var toggleChecker = container.Resolve<IToggleManager>();
+					toggleChecker.IsEnabled(Toggles.TestToggle)
+						.Should().Be.EqualTo(false);
+				}
+			}
+			finally
+			{
+				File.Delete(tempFile);
+			}
+		}
 	}
 }

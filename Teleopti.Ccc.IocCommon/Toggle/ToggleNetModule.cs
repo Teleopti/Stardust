@@ -38,8 +38,11 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				{
 					if (togglePathIsNotDefined())
 						return new FalseToggleManager();
-		
-					var licenseActivatorProvider = c.ResolveNamed<ILicenseActivatorProvider>("querystring");
+
+					const string licenseActivatorReadingFromQuerystring = "querystring";
+					var licenseActivatorProvider = c.IsRegisteredWithName<ILicenseActivatorProvider>(licenseActivatorReadingFromQuerystring) ?
+								c.ResolveNamed<ILicenseActivatorProvider>(licenseActivatorReadingFromQuerystring) : 
+								c.Resolve<ILicenseActivatorProvider>();
 					var specMappings = new DefaultSpecificationMappings();
 					specMappings.AddMapping("license", new LicenseSpecification(licenseActivatorProvider));
 					var toggleConfiguration = new ToggleConfiguration(new FileProviderFactory(new FileReader(_pathToToggle), specMappings));
