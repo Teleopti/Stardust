@@ -43,12 +43,12 @@ exec mart.sys_configuration_save @key=N'TimeZoneCode',@value=N'W. Europe Standar
 EXEC mart.etl_job_delete_schedule_All
 
 --Get Agg Data into Analytics
-INSERT [TeleoptiAnalytics_Demo].[dbo].[acd_type]
+INSERT [TeleoptiWFMAnalytics_Demo].[dbo].[acd_type]
 SELECT [acd_type_id]
       ,[acd_type_desc]
-  FROM [TeleoptiCCC7Agg_Demo].[dbo].[acd_type]
+  FROM [TeleoptiWFMAgg_Demo].[dbo].[acd_type]
 
-INSERT [TeleoptiAnalytics_Demo].[dbo].[log_object]
+INSERT [TeleoptiWFMAnalytics_Demo].[dbo].[log_object]
 SELECT [log_object_id]
       ,[acd_type_id]
       ,[log_object_desc]
@@ -56,10 +56,10 @@ SELECT [log_object_id]
       ,[intervals_per_day]
       ,[default_service_level_sec]
       ,[default_short_call_treshold]
-  FROM [TeleoptiCCC7Agg_Demo].[dbo].[log_object]
+  FROM [TeleoptiWFMAgg_Demo].[dbo].[log_object]
 
-SET IDENTITY_INSERT [TeleoptiAnalytics_Demo].dbo.agent_info ON
-INSERT [TeleoptiAnalytics_Demo].[dbo].[agent_info]
+SET IDENTITY_INSERT [TeleoptiWFMAnalytics_Demo].dbo.agent_info ON
+INSERT [TeleoptiWFMAnalytics_Demo].[dbo].[agent_info]
 ([Agent_id]
       ,[Agent_name]
       ,[is_active]
@@ -70,11 +70,11 @@ SELECT [Agent_id]
       ,[is_active]
       ,[log_object_id]
       ,[orig_agent_id]
-  FROM [TeleoptiCCC7Agg_Demo].[dbo].[agent_info]
-SET IDENTITY_INSERT [TeleoptiAnalytics_Demo].dbo.agent_info OFF
+  FROM [TeleoptiWFMAgg_Demo].[dbo].[agent_info]
+SET IDENTITY_INSERT [TeleoptiWFMAnalytics_Demo].dbo.agent_info OFF
 
-SET IDENTITY_INSERT [TeleoptiAnalytics_Demo].dbo.queues ON
-INSERT [TeleoptiAnalytics_Demo].[dbo].[queues]
+SET IDENTITY_INSERT [TeleoptiWFMAnalytics_Demo].dbo.queues ON
+INSERT [TeleoptiWFMAnalytics_Demo].[dbo].[queues]
 ([queue]
       ,[orig_desc]
       ,[log_object_id]
@@ -86,10 +86,10 @@ SELECT [queue]
       ,[log_object_id]
       ,[orig_queue_id]
       ,[display_desc]
-  FROM [TeleoptiCCC7Agg_Demo].[dbo].[queues]
-SET IDENTITY_INSERT [TeleoptiAnalytics_Demo].dbo.queues OFF
+  FROM [TeleoptiWFMAgg_Demo].[dbo].[queues]
+SET IDENTITY_INSERT [TeleoptiWFMAnalytics_Demo].dbo.queues OFF
 
-INSERT [TeleoptiAnalytics_Demo].[dbo].[queue_logg]
+INSERT [TeleoptiWFMAnalytics_Demo].[dbo].[queue_logg]
 SELECT [queue]
       ,[date_from]
       ,[interval]
@@ -109,10 +109,10 @@ SELECT [queue]
       ,[wait_dur]
       ,[aband_short_call_cnt]
       ,[aband_within_sl_cnt]
-  FROM [TeleoptiCCC7Agg_Demo].[dbo].[queue_logg]
+  FROM [TeleoptiWFMAgg_Demo].[dbo].[queue_logg]
 
 
-INSERT [TeleoptiAnalytics_Demo].[dbo].[agent_logg]
+INSERT [TeleoptiWFMAnalytics_Demo].[dbo].[agent_logg]
 SELECT [queue]
       ,[date_from]
       ,[interval]
@@ -131,4 +131,4 @@ SELECT [queue]
       ,[direct_in_call_dur]
       ,[transfer_out_call_cnt]
       ,[admin_dur]
-  FROM [TeleoptiCCC7Agg_Demo].[dbo].[agent_logg]
+  FROM [TeleoptiWFMAgg_Demo].[dbo].[agent_logg]
