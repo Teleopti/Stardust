@@ -64,11 +64,20 @@
                 <tbody>
                     <tr class="shift-trade-my-schedule-row">
 	                    <td class="shift-trade-agent-name">@Resources.MySchedule</td>
+							  <!--ko if: !mySchedule().isDayOff-->
 	                    <td class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
 		                    <div class="shift-trade-layer-container floatleft">
 			                    <div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }, attr: { 'scheduleinfo': tooltipText() }"></div>                                
 		                    </div>
 	                    </td>
+	                    <!--/ko-->	
+							  <!--ko if: mySchedule().isDayOff-->
+	                    <td class="shift-trade-my-schedule ">
+		                    <div class="shift-trade-layer-container floatleft shift-trade-dayoff">
+			                    <div class="dayoff">@Resources.DayOff</div>
+		                    </div>
+	                    </td>
+							  <!--/ko-->
                     </tr>
                 </tbody>
 					<tbody data-bind="foreach: possibleTradeSchedules">
@@ -77,7 +86,7 @@
 							<td class="shift-trade-possible-trade-schedule">
 								<!--ko if:$data.isDayOff-->
 								<div style="height: 22px; width: 100%;" class="dayoff">
-									<div class="shift-trade-layer-container floatleft">@Resources.DayOff</div>
+									<div class="shift-trade-layer-container floatleft shift-trade-dayoff">@Resources.DayOff</div>
 								</div>
 								<!--/ko-->
 								<!--ko if:!$data.isDayOff-->
