@@ -30,14 +30,15 @@ cscript .\common\replace.vbs "TeleoptiCCC7_Demo" "%CCC7DB%" "%MySettings%" > NUL
 
 ::Build Teleopti.Support.Tool.exe
 ECHO Building %ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj
-%MSBUILD% /t:rebuild "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
+IF EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD% /t:rebuild "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
+COPY "%MySettings%" "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%configuration%\settings.txt"
 
 ::add fixed encryption/decryption keys to match the ones used in WebTest
-ECHO %validationKey%>"%ROOTDIR%\..\Teleopti.Support.Tool\bin\Debug\validation.key"
-ECHO %decryptionKey%>"%ROOTDIR%\..\Teleopti.Support.Tool\bin\Debug\decryption.key"
+ECHO %validationKey%>"%ROOTDIR%\..\Teleopti.Support.Tool\bin\%configuration%\validation.key"
+ECHO %decryptionKey%>"%ROOTDIR%\..\Teleopti.Support.Tool\bin\%configuration%\decryption.key"
 
 ::Run supportTool to replace all config
-"%ROOTDIR%\..\Teleopti.Support.Tool\bin\Debug\Teleopti.Support.Tool.exe" -MODebug
+"%ROOTDIR%\..\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MODebug
 
 ENDLOCAL
 goto:eof

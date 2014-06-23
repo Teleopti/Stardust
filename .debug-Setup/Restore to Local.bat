@@ -7,11 +7,15 @@ set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 COLOR A
 cls
 SET DefaultDB=%1
+SET configuration=%2
+SET /A Sikuli=%3
+
+IF "%Sikuli%"=="" SET /A Sikuli=0
 IF NOT "%DefaultDB%"=="" SET IFFLOW=y
 IF "%DefaultDB%"=="" SET DefaultDB=DemoSales
 
 ::Default values
-SET configuration=Debug
+IF "%configuration%"=="" SET configuration=Debug
 SET /A ERRORLEV=0
 
 SET Customer=%DefaultDB%
@@ -55,9 +59,17 @@ IF EXIST DBManager*.log DEL DBManager*.log /Q
 ::Instance were the Baseline will  be restored
 SET INSTANCE=%COMPUTERNAME%
 
+IF %Sikuli% equ 1 (
+CALL "%ROOTDIR%\SikulitestConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics" ALL %configuration%
+SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+PAUSE
+PAUSE
+GOTO Finish
+)
+
 ::Build DbManager
 ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
-%MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%temp%\build.log"
+IF EXIST "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% EQU 0 (
 SET DATABASEPATH="%ROOTDIR%\..\Database"
 SET DBMANAGER="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%configuration%\DBManager.exe"
@@ -295,7 +307,7 @@ CD "%ROOTDIR%"
 
 ::Build Teleopti.Support.Security.exe
 ECHO Building %ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj
-%MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
+IF EXIST "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 
 ECHO Running: scheduleConverter, ForecasterDateAdjustment, PersonFirstDayOfWeekSetter, PasswordEncryption, LicenseStatusChecker
@@ -306,11 +318,17 @@ ECHO Running: CrossDatabaseViewUpdate
 "%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiAnalytics" -CD"%Branch%_%Customer%_TeleoptiCCCAgg" -EE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
+IF %Sikuli% equ 1 (
+CALL "%ROOTDIR%\SikulitestConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics" ALL %configuration%
+SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+GOTO Finish
+)
+
 Set IFFLOW=%IFFLOW:Y=y%
 IF "%IFFLOW%"=="y" (
-SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
 CALL "%ROOTDIR%\FixMyConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics"
-CALL "%ROOTDIR%\InfratestConfig.bat"
+CALL "%ROOTDIR%\InfratestConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics" ALL %configuration%
+SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
 GOTO Finish
 )
 
@@ -325,7 +343,8 @@ CHOICE /C yn /M "Fix my config?"
 IF ERRORLEVEL 2 GOTO Finish
 IF ERRORLEVEL 1 (
 CALL "%ROOTDIR%\FixMyConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics"
-CALL "%ROOTDIR%\InfratestConfig.bat" Infratest_CCC7 Infratest_Analytics ALL Debug
+CALL "%ROOTDIR%\InfratestConfig.bat" Infratest_CCC7 Infratest_Analytics ALL %configuration%
+SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
 )
 
 GOTO Finish
