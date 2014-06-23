@@ -48,7 +48,8 @@ define(['buster','vm'], function (buster,viewmodel) {
 					messageBroker: messagebroker
 				});
 
-				vm.sendPing(20);
+				vm.numberOfPings(20);
+				vm.sendPing();
 				var sortedById = sentPings.sort();
 
 				var duplicates = [];
@@ -61,25 +62,6 @@ define(['buster','vm'], function (buster,viewmodel) {
 				assert.equals(sentPings.length, 20);
 				assert.equals(duplicates.length, 0); //no duplicates
 
-			},
-
-
-			"viewmodel subscribe to pong from messagebroker": function() {
-				var vm = new viewmodel();
-
-				var client = {};
-				var messagebroker = {
-					client: client
-				}
-
-				vm.initialize({
-					messageBroker: messagebroker
-				});
-
-				client.pong(1);
-				client.pong(2);
-
-				assert.equals(vm.recievedPings().length, 2);
 			},
 
 			"messagebroker default connectionstate should be disconnected": function() {
@@ -118,9 +100,47 @@ define(['buster','vm'], function (buster,viewmodel) {
 
 				assert.equals(vm.messageBrokerStatus(), vm.connectionStates[1]);
 				assert(vm.isOnline());
+			},
+
+			"finished should be true when all sent pings are recieved as pong": function() {
+				var vm = new viewmodel();
+				var sentPings = [];
+
+				// we need a client so we can fake the pong from messagebroker
+				var client = {};
+
+				var messagebroker = {
+					server: {
+						pingWithId: function (id) {
+							sentPings.push(id);
+						}
+					},
+					client: client
+				}
+
+				vm.initialize({
+					messageBroker: messagebroker
+				});
+				vm.numberOfPings(10);
+				vm.sendPing();
+				assert(!vm.hasRecievedAllPongs());
+
+				assert.equals(vm.pongsLeft(), 10);
+
+				for (i = 0; i < 6; i++) {
+					client.pong(i);
+				}
+
+				assert(!vm.hasRecievedAllPongs());
+				assert.equals(vm.pongsLeft(), 4);
+
+				for (i = 6; i < 10; i++) {
+					client.pong(i);
+				}
+				assert(vm.hasRecievedAllPongs());
+				assert.equals(vm.pongsLeft(), 0);
+
 			}
-
-
 	});
 
 	};

@@ -10,11 +10,11 @@ define([
 	) {
 
     var vm = new viewmodel();
+    ko.applyBindings(vm);
 	
-    ko.applyBindings(viewmodel);
-
     vm.initialize({
-    	signalR: sigR
+    	signalR: sigR,
+    	messageBroker: $.connection.MessageBrokerHub
     });
 
 });

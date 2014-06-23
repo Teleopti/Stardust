@@ -1,30 +1,35 @@
 define([
-		'knockout',
-		'jquery'
+		'knockout'
 ], function (
-	ko,
-	$
+	ko
 	) {
 
-	return function() {
+	return function () {
 
 		var self = this;
-
 		self.hub = '';
 		self.connectionStates = { 0: 'connecting', 1: 'connected', 2: 'reconnecting', 3: 'disconnected' };
 		self.connectionState = ko.observable(3);
 		self.recievedPings = ko.observableArray();
-
 		self.messageBrokerStatus = ko.observable(self.connectionStates[3]);
-		self.isOnline = ko.computed(function() {
+		self.expectedPongs = ko.observable(0);
+		self.numberOfPings = ko.observable(0);
+		self.hasRecievedAllPongs = ko.computed(function () {
+			return self.expectedPongs() <= self.recievedPings().length;
+		});
+		self.pongsLeft = ko.computed(function () {
+			return self.expectedPongs() - self.recievedPings().length;
+		});
+		self.sentPings = ko.observable(0);
+
+		self.isOnline = ko.computed(function () {
 			return self.connectionState() == 1;
 		});
-		self.messageBrokerStatus = ko.computed(function() {
+		self.messageBrokerStatus = ko.computed(function () {
 			return self.connectionStates[self.connectionState()];
 		});
 
 		self.initialize = function (options) {
-
 			if (options) {
 				self.hub = options.messageBroker;
 				if (options.signalR) {
@@ -34,15 +39,25 @@ define([
 				if (self.hub && self.hub.client) {
 					self.hub.client.pong = function (id) {
 						self.recievedPings.push(id);
+
 					}
 				}
 			}
 		}
 
-		self.sendPing = function(numberOfmessages) {
+		self.sendPing = function () {
+			self.sendPings(self.numberOfPings());
+		};
+
+		self.sendPings = function (pings) {
 			self.recievedPings([]);
-			for (var pingId = 0; pingId < numberOfmessages; ++pingId) {
-				self.hub.server.pingWithId(pingId);
+			self.sentPings(0);
+			self.expectedPongs(pings);
+			for (var pingId = 0; pingId < pings; ++pingId) {
+
+				self.hub.server.pingWithId(pingId).done(function () {
+					self.sentPings(pingId);
+				});
 			}
 		}
 
@@ -50,6 +65,10 @@ define([
 			var state = self.hub.connection.state;
 			self.connectionState(state);
 		};
+
+		self.logMe = function () {
+			console.log(self);
+		}
 	};
 
 });
