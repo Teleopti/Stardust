@@ -101,11 +101,26 @@
 				<div class="teamschedule-timeline absolute">
 					<div class="teamschedule-timeline-spacer floatleft">&nbsp;</div>
 					<ul class="teamschedule-timeline-times floatleft relative">
-						@foreach (var time in Model.TimeLine)
+						@if (Model.TimeLine.Count() < 20)
 						{
-							<li class="teamschedule-timeline-time @(time.IsFullHour? "hour": "minute") absolute" style="@left: @(Math.Round(scheduleWidth * time.PositionPercent))px;">
-								<div class="teamschedule-timeline-label label label-info ui-corner-all">@time.ShortTime</div>
-							</li>
+							foreach (var time in Model.TimeLine)
+							{
+								<li class="teamschedule-timeline-time @(time.IsFullHour ? "hour" : "minute") absolute" style="@left: @(Math.Round(scheduleWidth*time.PositionPercent))px;">
+									<div class="teamschedule-timeline-label label label-info ui-corner-all">@time.ShortTime</div>
+								</li>
+							}
+						}
+						else
+						{
+							var list = Model.TimeLine.ToArray();
+							var len = list.Length;
+							for (var i = 0; i < len; i++)
+							{
+								<li class="teamschedule-timeline-time @(list[i].IsFullHour ? "hour" : "minute") absolute" style="@left: @(Math.Round(scheduleWidth*list[i].PositionPercent))px;">
+									<div class="teamschedule-timeline-label label label-info ui-corner-all">@list[i].ShortTime</div>
+								</li>
+								i++;
+							}
 						}
 					</ul>
 				</div>
