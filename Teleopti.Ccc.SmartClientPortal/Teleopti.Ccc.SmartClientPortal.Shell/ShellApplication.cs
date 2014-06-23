@@ -2,19 +2,19 @@ using System;
 using System.Collections;
 using System.Configuration;
 using System.Globalization;
+using System.Text;
 using System.Threading;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Markup;
 using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Constants;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Library;
 using Teleopti.Ccc.Win.Forecasting;
-using Teleopti.Ccc.WinCode.Main;
 using log4net.Config;
-using MbCache.Configuration;
 using Microsoft.Practices.CompositeUI;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
@@ -40,7 +40,6 @@ using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Application=System.Windows.Forms.Application;
-using MessageBox=System.Windows.Forms.MessageBox;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
@@ -77,6 +76,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		    {
 			    try
 			    {
+						populateFeatureToggleFlags(container);
 				    applicationStarter.LoadShellApplication();
 			    }
 			    catch (Exception exception)
@@ -86,14 +86,49 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		    }
 #endif
 #if (DEBUG)
-            var applicationStarter = container.Resolve<ApplicationStartup>();
+				var applicationStarter = container.Resolve<ApplicationStartup>();
             if (applicationStarter.LogOn())
             {
                 killNotNeededSessionFactories();
+								populateFeatureToggleFlags(container);
                 applicationStarter.LoadShellApplication();
             }
 #endif
 	    }
+
+			private static void populateFeatureToggleFlags(IContainer container)
+			{
+				try
+				{
+					container.Resolve<IToggleFiller>().FillAllToggles();
+				}
+				catch (Exception ex)
+				{
+					using (var view = new SimpleExceptionHandlerView(ex, UserTexts.Resources.OpenTeleoptiCCC, toggleExceptionMessageBuilder()))
+					{
+						view.ShowDialog();
+					}
+					//if exception -> replace with a toggle manager returning false for everything
+					var updater = new ContainerBuilder();
+					updater.RegisterType<FalseToggleManager>().SingleInstance().As<IToggleManager>();
+					updater.Update(container);
+				}
+			}
+
+			private static string toggleExceptionMessageBuilder()
+			{
+				var ret = new StringBuilder();
+				ret.AppendLine(UserTexts.Resources.WebServerDown);
+
+				foreach (var toggle in Enum.GetValues(typeof(Toggles)))
+				{
+					var x = (Toggles)toggle;
+					if (x != Toggles.TestToggle)
+						ret.AppendLine(x.ToString());
+				}
+
+				return ret.ToString();
+			}
 
 	    private static void killNotNeededSessionFactories()
     	{
