@@ -53,8 +53,8 @@ if exist "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD
 ::get a fresh Settings.txt
 COPY "%masterSettings%" "%MySettings%"
 ECHO. >> "%MySettings%"
-ECHO $(FeatureToggle)^|c:\nhib\Toggles.txt>>"%MySettings%"
-ECHO $(nhibconfpath)^|c:\nhib>>"%MySettings%"
+ECHO $(FeatureToggle)^|%ROOTDIR%\Domain\FeatureFlags\toggles.txt>>"%MySettings%"
+ECHO $(nhibconfpath)^|%ROOTDIR%\nhib>>"%MySettings%"
 ECHO $(DB_CCC7)^|%CCC7DB%>>"%MySettings%"
 ECHO $(DB_ANALYTICS)^|%AnalyticsDB%>>"%MySettings%"
 ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%MySettings%"
@@ -65,7 +65,7 @@ set configFilesFolder=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Config
 set buildServerConfigFiles="%configFilesFolder%\BuildServerConfigFiles.txt"
 if not exist "%configFilesFolder%" mkdir "%configFilesFolder%"
 echo ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config,BuildArtifacts\Teleopti.Ccc.SmartClientPortal.Shell.Sikuli.config>%buildServerConfigFiles%
-echo c:\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml>>%buildServerConfigFiles%
+echo %ROOTDIR%\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml>>%buildServerConfigFiles%
 
 ::Run supportTool to replace all config
 "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MOTest
