@@ -175,6 +175,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
 		private void SmartClientShellForm_Load(object sender, EventArgs e)
 		{
+			
 			var loggedOnBu = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit;
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
 
@@ -215,6 +216,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             _outlookBarWorkspace.Size = splitContainer.Panel1.Size;
             _outlookBarWorkspace.Dock = DockStyle.Fill;
             splitContainer.Panel1.Controls.Add(_outlookBarWorkspace);
+			SetTexts();
             _outlookBarWorkspace.Visible = true;
         }
 
