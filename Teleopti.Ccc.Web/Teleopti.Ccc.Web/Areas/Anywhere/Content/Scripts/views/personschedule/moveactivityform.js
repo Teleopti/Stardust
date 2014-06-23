@@ -28,20 +28,32 @@
 			self.ScheduleDate(data.Date);
 		};
 
+		this.DisplayedStartTime = ko.computed({
+			read: function () {
+				if (!self.ScheduleDate() || !self.StartTime()) return '';
+				return self.StartTime().format(resources.TimeFormatForMoment);
+			},
+			write: function (option) {
+				self.StartTime(getMomentFromInput(option));
+			}
+		});
+
+
+
 		this.update = function(layer) {
 			if (layer) {
 				self.OldStartMinutes(layer.StartMinutes());
-				self.StartTime(moment(self.ScheduleDate()).add('minutes', self.OldStartMinutes()).format(resources.TimeFormatForMoment));
+				self.StartTime(moment(self.ScheduleDate()).add('minutes', self.OldStartMinutes()));
 				self.ProjectionLength(layer.LengthMinutes());
 				self.ActivityId(layer.ActivityId);
 			}
-		}
+		};
 
 		this.Apply = function () {
 			var requestData = JSON.stringify({
 				AgentId: self.PersonId(),
 				ScheduleDate: self.ScheduleDate().format(),
-				NewStartTime: moment(self.ScheduleDate()).add('minutes', getMomentFromInput(self.StartTime()).diff(self.ScheduleDate(), 'minutes')).format(),
+				NewStartTime: self.StartTime().format(),
 				OldStartTime: moment(self.ScheduleDate()).add('minutes', self.OldStartMinutes()).format(),
 				ActivityId: self.ActivityId(),
 				OldProjectionLayerLength: self.ProjectionLength()
