@@ -1,15 +1,21 @@
 
 define([
     'knockout',
-    'vm'
+    'vm',
+	'signalRHubs'
 ], function (
     ko,
-    ViewModel
+    viewmodel,
+	sigR
 	) {
 
-    var viewModel = new ViewModel();
+    var vm = new viewmodel();
+	
+    ko.applyBindings(viewmodel);
 
-    ko.applyBindings(viewModel);
+    vm.initialize({
+    	signalR: sigR
+    });
 
 });
 
