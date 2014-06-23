@@ -163,7 +163,7 @@ namespace Teleopti.Support.LicTool
 		{
 			using (var openFileDialog = new OpenFileDialog())
 			{
-				openFileDialog.InitialDirectory = "\\\\a380\\T-Files\\BU Teleopti CCC\\LICENSE KEYS V7";
+				openFileDialog.InitialDirectory = "\\\\a380\\T-Files\\BU Teleopti CCC\\LICENSE KEYS V8";
 				openFileDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
 				openFileDialog.FilterIndex = 2;
 				openFileDialog.RestoreDirectory = true;

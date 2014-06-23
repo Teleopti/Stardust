@@ -676,7 +676,7 @@
 			this.Controls.Add(this.menuTopmenu);
 			this.MainMenuStrip = this.menuTopmenu;
 			this.Name = "MainForm";
-			this.Text = "CCC v.7 License Tool";
+			this.Text = "WFM License Tool";
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgents)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgentsGrace)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numExpirationGracePeriodDays)).EndInit();
