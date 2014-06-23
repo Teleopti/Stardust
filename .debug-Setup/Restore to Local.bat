@@ -43,7 +43,7 @@ SET DbBaseline=C:\DbBaseline.txt
 if not exist "%DbBaseline%" (
 echo %Tfiles%> "%DbBaseline%"
 )
-set /p Tfiles= <"%DbBaseline%"
+set /p Tfiles=<"%DbBaseline%"
 
 ::Get current Branch
 CD "%ROOTDIR%\.."
@@ -88,7 +88,7 @@ ECHO.
 goto MakeCustomPath
 :MakeCustomPath
 if exist "%CustomPathConfig%" (
-set /p CustomPath= <%CustomPathConfig%
+set /p CustomPath=<%CustomPathConfig%
 ) ELSE (
 CALL :GETDATAPATH
 )
@@ -115,6 +115,7 @@ CALL :GETDATAPATH
 )
 COLOR A
 
+dir c: >NUL
 IF NOT EXIST "%CustomPath%" MKDIR "%CustomPath%"
 IF %ERRORLEVEL% NEQ 0 (
 echo could not create direcroty: %CustomPath%
