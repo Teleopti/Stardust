@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Windows.Forms;
 using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.WinCode.Converters
@@ -46,6 +47,11 @@ namespace Teleopti.Ccc.WinCode.Converters
 		private string getValueAsString(object target)
 		{
 			var val = _reflector.GetValue(target, PropertyPath);
+		    if (val is  DateTime && (DateTime)val == DateTime.MinValue)
+		    {
+		        val = System.Threading.Thread.CurrentThread.CurrentUICulture.Calendar.MinSupportedDateTime;
+		    }
+            
 			return val != null ? val.ToString() : string.Empty;
 		}
 	}
