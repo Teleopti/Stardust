@@ -21,7 +21,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <ApplicationIcon>images\ccc_Menu.ico</ApplicationIcon>
+    <ApplicationIcon>images\favicon.ico</ApplicationIcon>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
@@ -378,9 +378,6 @@
     <Content Include="Reports\Ccc\report_agent_schedule_adherence.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="images\ccc_Menu.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="PerformanceManager\Default.aspx" />
     <Content Include="PerformanceManager\images\delete.png" />
     <Content Include="PerformanceManager\images\edge.png" />
