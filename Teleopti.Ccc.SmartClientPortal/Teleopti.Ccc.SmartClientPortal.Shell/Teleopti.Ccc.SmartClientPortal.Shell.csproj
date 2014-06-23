@@ -266,7 +266,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="ShellApplication.cs" />
-    <Compile Include="SmartClientPortal.cs" />
+    <Compile Include="SmartClientPortal.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SmartClientPortal.designer.cs">
       <DependentUpon>SmartClientPortal.cs</DependentUpon>
     </Compile>
