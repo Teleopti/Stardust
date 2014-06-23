@@ -6,7 +6,7 @@
     Teleopti Authentication Bridge
 </asp:Content>
 <asp:Content ID="loginContent" ContentPlaceHolderID="MainContent" runat="server">
-	<div><h1 style="color: #003366; font-family: Calibri;">Teleopti WFM</h1></div>
+	<div class="app-title">Teleopti WFM</div>
     <div id="selector" class="login-form">
         <form action="" method="get">
             <input type="hidden" name="action" value="verify" />
