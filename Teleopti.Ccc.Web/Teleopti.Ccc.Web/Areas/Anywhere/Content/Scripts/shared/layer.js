@@ -28,6 +28,10 @@ define([
 
 		this.StartTime = unit.StartTime;
 		this.EndTime = unit.EndTime;
+		this.Selected = ko.observable();
+		this.Active = ko.computed(function () {
+			return self.Selected() ? 'active' : '';
+		});
 
 		this.Color = data.Color;
 		if(this.Color)
@@ -39,7 +43,7 @@ define([
 		this.TimeLineAffectingStartMinute = unit.CutInsideDayStartMinutes;
 		this.TimeLineAffectingEndMinute = unit.EndMinutes;
 
-		this.Selected = ko.observable(false);
+		
 
 		this.ActivityId = data.ActivityId;
 	};
