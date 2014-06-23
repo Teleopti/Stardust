@@ -175,8 +175,6 @@ define([
 			self.AddActivityForm.SetData(data);
 			self.AddIntradayAbsenceForm.SetData(data);
 			self.MoveActivityForm.SetData(data);
-			var selectedLayer = self.SelectedLayer();
-			self.MoveActivityForm.update(selectedLayer);
 		};
 
 		this.UpdateSchedules = function (data) {
