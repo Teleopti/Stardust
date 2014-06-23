@@ -23,6 +23,7 @@ Background:
 	| Color | Yellow |
 
 @OnlyRunIfEnabled('MyTeam_MoveActivity_25206')
+@ignore
 Scenario: The team leader should be able to move an activity
 	Given 'John King' has a person period with
 	| Field      | Value      |
