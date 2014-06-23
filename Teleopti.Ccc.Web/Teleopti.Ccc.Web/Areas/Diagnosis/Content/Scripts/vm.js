@@ -50,8 +50,6 @@ define([
 			var state = self.hub.connection.state;
 			self.connectionState(state);
 		};
-
-		
 	};
 
 });

@@ -19,28 +19,6 @@ define(['buster','vm'], function (buster,viewmodel) {
 				assert(signalRStarted);
 			},
 
-			"viewmodel sends given number of ping-messages to messagebroker hub": function() {
-
-				var vm = new viewmodel();
-				var sentPings = [];
-				var messagebroker = {
-					server: {
-						pingWithId: function(id) {
-							sentPings.push(id);
-						}
-					}
-				}
-
-				vm.initialize({
-					messageBroker: messagebroker
-				});
-
-				vm.sendPing(100);
-
-				assert.equals(sentPings.length, 100);
-			},
-
-
 			"recieved pings should be cleared when we start sending new pings": function() {
 
 				var vm = new viewmodel();
@@ -54,6 +32,37 @@ define(['buster','vm'], function (buster,viewmodel) {
 
 				assert.equals(vm.recievedPings().length, 0);
 			},
+
+			"sending 20 pings should send 20 pings with unique ids for each ping": function() {
+				var vm = new viewmodel();
+				var sentPings = [];
+				var messagebroker = {
+					server: {
+						pingWithId: function (id) {
+							sentPings.push(id);
+						}
+					}
+				}
+
+				vm.initialize({
+					messageBroker: messagebroker
+				});
+
+				vm.sendPing(20);
+				var sortedById = sentPings.sort();
+
+				var duplicates = [];
+				for (var i = 0; i < sortedById.length - 1; i++) {
+					if (sortedById[i + 1] == sortedById[i]) {
+						duplicates.push(sortedById[i]);
+					}
+				}
+
+				assert.equals(sentPings.length, 20);
+				assert.equals(duplicates.length, 0); //no duplicates
+
+			},
+
 
 			"viewmodel subscribe to pong from messagebroker": function() {
 				var vm = new viewmodel();
