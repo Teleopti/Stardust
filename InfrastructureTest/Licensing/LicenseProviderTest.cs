@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
@@ -15,19 +14,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
     [Category("LongRunning")]
     public class LicenseProviderTest
     {
-        private MockRepository _mocks;
-
-        private const string customerName = "Kundnamn";
+	    private const string customerName = "Kundnamn";
         private readonly DateTime _expirationDate = DateTime.Now.AddDays(100);
         private readonly TimeSpan _expirationGracePeriod = new TimeSpan(30, 0, 0, 0);
         private const int maxActiveAgents = 120;
         private readonly Percent _maxActiveAgentsGrace = new Percent(0.2);
-
-        [SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-        }
 
         [Test]
         public void CanGetLicenseActivator()
@@ -36,14 +27,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 ILicenseService licenseService = new stubStandardLicenseService(_expirationDate, _expirationGracePeriod,
                                                                                 _maxActiveAgentsGrace.Value))
             {
-                _mocks.ReplayAll();
                 ILicenseActivator licenseActivator = LicenseProvider.GetLicenseActivator(licenseService);
-                _mocks.VerifyAll();
-                Assert.IsTrue(
+             
+				Assert.IsTrue(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccBase));
                 Assert.IsTrue(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(
                         DefinedLicenseOptionPaths.TeleoptiCccVacationPlanner));
+                Assert.IsTrue(
+                    licenseActivator.EnabledLicenseOptionPaths.Contains(
+                        DefinedLicenseOptionPaths.TeleoptiCccShiftTrader));
+                Assert.IsTrue(
+                    licenseActivator.EnabledLicenseOptionPaths.Contains(
+                        DefinedLicenseOptionPaths.TeleoptiCccMyTeam));
+                Assert.IsTrue(
+                    licenseActivator.EnabledLicenseOptionPaths.Contains(
+                        DefinedLicenseOptionPaths.TeleoptiCccLifestyle));
+                Assert.IsTrue(
+                    licenseActivator.EnabledLicenseOptionPaths.Contains(
+                        DefinedLicenseOptionPaths.TeleoptiCccNotify));
+                Assert.IsTrue(
+                    licenseActivator.EnabledLicenseOptionPaths.Contains(
+                        DefinedLicenseOptionPaths.TeleoptiCccOvertimeAvailability));
                 Assert.IsFalse(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(
                         DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBase));
@@ -61,10 +66,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 ILicenseService licenseService = new stubFreemiumLicenseService(_expirationDate, _expirationGracePeriod,
                                                                                 _maxActiveAgentsGrace.Value))
             {
-                _mocks.ReplayAll();
                 ILicenseActivator licenseActivator = LicenseProvider.GetLicenseActivator(licenseService);
-                _mocks.VerifyAll();
-                Assert.IsFalse(
+                
+				Assert.IsFalse(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccBase));
                 Assert.IsFalse(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(
@@ -88,10 +92,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                                                                                       _expirationGracePeriod,
                                                                                       _maxActiveAgentsGrace.Value))
             {
-                _mocks.ReplayAll();
                 ILicenseActivator licenseActivator = LicenseProvider.GetLicenseActivator(licenseService);
-                _mocks.VerifyAll();
-                Assert.IsFalse(
+                
+				Assert.IsFalse(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccBase));
                 Assert.IsFalse(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(
@@ -159,6 +162,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccMyTimeWebEnabled = true;
 				TeleoptiCccSmsLinkEnabled = true;
 	            TeleoptiCccCalendarLinkEnabled = true;
+	            TeleoptiWFMLifestyleEnabled = true;
+	            TeleoptiWFMMyTeamEnabled = true;
+	            TeleoptiWFMNotifyEnabled = true;
+	            TeleoptiWFMOvertimeAvailabilityEnabled = true;
+	            TeleoptiWFMShiftTraderEnabled = true;
+	            TeleoptiWFMVacationPlannerEnabled = true;
             }
 
             #region Implementation of IDisposable
@@ -228,6 +237,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         	{
         		get { throw new NotImplementedException(); }
         	}
+
+	        public bool TeleoptiWFMVacationPlannerEnabled { get; private set; }
+	        public bool TeleoptiWFMShiftTraderEnabled { get; private set; }
+	        public bool TeleoptiWFMLifestyleEnabled { get; private set; }
+	        public bool TeleoptiWFMOvertimeAvailabilityEnabled { get; private set; }
+	        public bool TeleoptiWFMNotifyEnabled { get; private set; }
+	        public bool TeleoptiWFMMyTeamEnabled { get; private set; }
 
 	        #endregion
         }
@@ -336,6 +352,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         	{
         		get { throw new NotImplementedException(); }
         	}
+
+	        public bool TeleoptiWFMVacationPlannerEnabled { get; private set; }
+	        public bool TeleoptiWFMShiftTraderEnabled { get; private set; }
+	        public bool TeleoptiWFMLifestyleEnabled { get; private set; }
+	        public bool TeleoptiWFMOvertimeAvailabilityEnabled { get; private set; }
+	        public bool TeleoptiWFMNotifyEnabled { get; private set; }
+	        public bool TeleoptiWFMMyTeamEnabled { get; private set; }
 
 	        public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
 
@@ -446,6 +469,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         	{
         		get { throw new NotImplementedException(); }
         	}
+
+	        public bool TeleoptiWFMVacationPlannerEnabled { get; private set; }
+	        public bool TeleoptiWFMShiftTraderEnabled { get; private set; }
+	        public bool TeleoptiWFMLifestyleEnabled { get; private set; }
+	        public bool TeleoptiWFMOvertimeAvailabilityEnabled { get; private set; }
+	        public bool TeleoptiWFMNotifyEnabled { get; private set; }
+	        public bool TeleoptiWFMMyTeamEnabled { get; private set; }
 
 	        public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
 

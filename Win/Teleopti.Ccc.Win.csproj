@@ -264,12 +264,14 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Teleopti.Ccc.Domain.Calculation">
-      <HintPath>..\packages\Teleopti.Secrets.7.5.800.41\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.42\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets">
-      <HintPath>..\packages\Teleopti.Secrets.7.5.800.41\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.42\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="UIAutomationProvider" />

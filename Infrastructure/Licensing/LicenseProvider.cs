@@ -74,15 +74,21 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
             if (licenseService.TeleoptiCccBaseEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccBase);
-            if (licenseService.TeleoptiCccAgentSelfServiceEnabled)
+            if (licenseService.TeleoptiCccAgentSelfServiceEnabled||licenseService.TeleoptiWFMLifestyleEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccLifestyle);
-            if (licenseService.TeleoptiCccShiftTradesEnabled)
+            if (licenseService.TeleoptiCccShiftTradesEnabled||licenseService.TeleoptiWFMShiftTraderEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccShiftTrader);
             if (licenseService.TeleoptiCccAgentScheduleMessengerEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(
                     DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger);
-            if (licenseService.TeleoptiCccHolidayPlannerEnabled)
+            if (licenseService.TeleoptiCccHolidayPlannerEnabled||licenseService.TeleoptiWFMVacationPlannerEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccVacationPlanner);
+	        if (licenseService.TeleoptiWFMMyTeamEnabled)
+		        licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccMyTeam);
+	        if (licenseService.TeleoptiWFMNotifyEnabled)
+		        licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccNotify);
+			if (licenseService.TeleoptiWFMOvertimeAvailabilityEnabled)
+				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccOvertimeAvailability);
             if (licenseService.TeleoptiCccRealTimeAdherenceEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccRealTimeAdherence);
             if (licenseService.TeleoptiCccPerformanceManagerEnabled)
@@ -93,7 +99,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
 			if (licenseService.TeleoptiCccCalendarLinkEnabled)
 				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccCalendarLink);
-
+			
             if (licenseService.TeleoptiCccFreemiumForecastsEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccFreemiumForecasts);
 
