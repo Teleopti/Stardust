@@ -100,15 +100,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// _mainStatusStrip
 			// 
 			this._mainStatusStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this._mainStatusStrip.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this._mainStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelSpring,
             this.toolStripStatusLabelCurrentDatabase,
             this.toolStripStatusLabelLicense,
             this.toolStripStatusLabelRoger65,
             this.toolStripStatusLabelLoggedOnUser});
-			this._mainStatusStrip.Location = new System.Drawing.Point(1, 526);
+			this._mainStatusStrip.Location = new System.Drawing.Point(1, 597);
 			this._mainStatusStrip.Name = "_mainStatusStrip";
-			this._mainStatusStrip.Size = new System.Drawing.Size(820, 24);
+			this._mainStatusStrip.Size = new System.Drawing.Size(1172, 24);
 			this._mainStatusStrip.TabIndex = 2;
 			this._mainStatusStrip.Text = "yystatusStrip1";
 			// 
@@ -116,45 +117,53 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			this.toolStripStatusLabelSpring.Name = "toolStripStatusLabelSpring";
 			this.SetShortcut(this.toolStripStatusLabelSpring, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelSpring.Size = new System.Drawing.Size(412, 19);
+			this.toolStripStatusLabelSpring.Size = new System.Drawing.Size(706, 19);
 			this.toolStripStatusLabelSpring.Spring = true;
 			this.toolStripStatusLabelSpring.Click += new System.EventHandler(this.toolStripStatusLabelSpring_Click);
 			// 
 			// toolStripStatusLabelCurrentDatabase
 			// 
+			this.toolStripStatusLabelCurrentDatabase.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
 			this.toolStripStatusLabelCurrentDatabase.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabelCurrentDatabase.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripStatusLabelCurrentDatabase.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.toolStripStatusLabelCurrentDatabase.ForeColor = System.Drawing.Color.White;
 			this.toolStripStatusLabelCurrentDatabase.Name = "toolStripStatusLabelCurrentDatabase";
 			this.SetShortcut(this.toolStripStatusLabelCurrentDatabase, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelCurrentDatabase.Size = new System.Drawing.Size(121, 19);
+			this.toolStripStatusLabelCurrentDatabase.Size = new System.Drawing.Size(125, 19);
 			this.toolStripStatusLabelCurrentDatabase.Text = "xxConnectedToColon";
 			this.toolStripStatusLabelCurrentDatabase.Visible = false;
 			// 
 			// toolStripStatusLabelLicense
 			// 
+			this.toolStripStatusLabelLicense.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
 			this.toolStripStatusLabelLicense.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabelLicense.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripStatusLabelLicense.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.toolStripStatusLabelLicense.ForeColor = System.Drawing.Color.White;
 			this.toolStripStatusLabelLicense.Name = "toolStripStatusLabelLicense";
 			this.SetShortcut(this.toolStripStatusLabelLicense, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelLicense.Size = new System.Drawing.Size(109, 19);
+			this.toolStripStatusLabelLicense.Size = new System.Drawing.Size(113, 19);
 			this.toolStripStatusLabelLicense.Text = "xxLicensedToColon";
 			// 
 			// toolStripStatusLabelRoger65
 			// 
+			this.toolStripStatusLabelRoger65.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+			this.toolStripStatusLabelRoger65.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.toolStripStatusLabelRoger65.ForeColor = System.Drawing.Color.White;
 			this.toolStripStatusLabelRoger65.Name = "toolStripStatusLabelRoger65";
 			this.SetShortcut(this.toolStripStatusLabelRoger65, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelRoger65.Size = new System.Drawing.Size(0, 19);
+			this.toolStripStatusLabelRoger65.Size = new System.Drawing.Size(54, 19);
+			this.toolStripStatusLabelRoger65.Text = "Roger65";
 			// 
 			// toolStripStatusLabelLoggedOnUser
 			// 
-			this.toolStripStatusLabelLoggedOnUser.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
 			this.toolStripStatusLabelLoggedOnUser.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
+			this.toolStripStatusLabelLoggedOnUser.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.toolStripStatusLabelLoggedOnUser.ForeColor = System.Drawing.Color.White;
 			this.toolStripStatusLabelLoggedOnUser.Name = "toolStripStatusLabelLoggedOnUser";
 			this.SetShortcut(this.toolStripStatusLabelLoggedOnUser, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelLoggedOnUser.Size = new System.Drawing.Size(132, 19);
+			this.toolStripStatusLabelLoggedOnUser.Size = new System.Drawing.Size(128, 19);
 			this.toolStripStatusLabelLoggedOnUser.Text = "xxLoggedOnUserColon";
 			// 
 			// _statusLabel
@@ -186,8 +195,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.splitContainer.Panel2.Controls.Add(this.gridWorkspace);
 			this.splitContainer.Panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.splitContainer.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel1;
-			this.splitContainer.Size = new System.Drawing.Size(820, 465);
-			this.splitContainer.SplitterDistance = 170;
+			this.splitContainer.Size = new System.Drawing.Size(1172, 536);
+			this.splitContainer.SplitterDistance = 242;
 			this.splitContainer.SplitterWidth = 5;
 			this.splitContainer.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
 			this.splitContainer.TabIndex = 3;
@@ -211,7 +220,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.gridWorkspace.Location = new System.Drawing.Point(0, 0);
 			this.gridWorkspace.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.gridWorkspace.Name = "gridWorkspace";
-			this.gridWorkspace.Size = new System.Drawing.Size(645, 465);
+			this.gridWorkspace.Size = new System.Drawing.Size(925, 536);
 			this.gridWorkspace.TabIndex = 0;
 			this.gridWorkspace.Tag = "0";
 			this.gridWorkspace.WorkspaceGridSizeChanged += new System.EventHandler<System.EventArgs>(this.GridWorkspace_WorkspaceGridSizeChanged);
@@ -266,7 +275,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.ribbonControlAdv1.ShowLauncher = false;
 			this.ribbonControlAdv1.ShowQuickItemsDropDownButton = false;
 			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = false;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(824, 61);
+			this.ribbonControlAdv1.Size = new System.Drawing.Size(1176, 61);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Start menu";
 			this.ribbonControlAdv1.TabIndex = 1;
 			this.ribbonControlAdv1.Text = "yyribbonControlAdv1";
@@ -538,7 +547,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Borders = new System.Windows.Forms.Padding(0);
-			this.ClientSize = new System.Drawing.Size(822, 550);
+			this.ClientSize = new System.Drawing.Size(1174, 621);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.Controls.Add(this.splitContainer);
 			this.Controls.Add(this.ribbonControlAdv1);
