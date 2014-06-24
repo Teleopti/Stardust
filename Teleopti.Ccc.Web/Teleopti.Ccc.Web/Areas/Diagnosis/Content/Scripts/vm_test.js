@@ -28,7 +28,7 @@ define(['buster','vm'], function (buster,viewmodel) {
 				vm.recievedPings.push('1');
 				vm.recievedPings.push('2');
 
-				vm.sendPing(0);
+				vm.sendAllPings();
 
 				assert.equals(vm.recievedPings().length, 0);
 			},
@@ -49,7 +49,7 @@ define(['buster','vm'], function (buster,viewmodel) {
 				});
 
 				vm.numberOfPings(20);
-				vm.sendPing();
+				vm.sendAllPings();
 				var sortedById = sentPings.sort();
 
 				var duplicates = [];
@@ -122,7 +122,7 @@ define(['buster','vm'], function (buster,viewmodel) {
 					messageBroker: messagebroker
 				});
 				vm.numberOfPings(10);
-				vm.sendPing();
+				vm.sendAllPings();
 				assert(!vm.hasRecievedAllPongs());
 
 				assert.equals(vm.pongsLeft(), 10);
@@ -140,7 +140,149 @@ define(['buster','vm'], function (buster,viewmodel) {
 				assert(vm.hasRecievedAllPongs());
 				assert.equals(vm.pongsLeft(), 0);
 
-			}
+			},
+
+			"when sending multiple messages, sent messages should be increased for each message that is sent":function() {
+				var vm = new viewmodel();
+				var messagebroker = {
+					server: {
+						pingWithId: function () {
+						}
+					}
+				}
+
+				vm.initialize({
+					messageBroker: messagebroker
+				});
+
+				vm.numberOfPings(2);
+				vm.sendAllPings();
+			
+				assert.equals(vm.sentPings(), 2);
+			},
+
+			"send batch should send a given number of messages until it reaches total number of messages" : function() {
+
+			
+				var vm = new viewmodel();
+
+				var sentPings = [];
+				var messagebroker = {
+					server: {
+						pingWithId: function (id) {
+							sentPings.push(id);
+						}
+					}
+				}
+
+				vm.initialize({
+					messageBroker: messagebroker
+				});
+
+
+				vm.batchSize(5);
+				vm.numberOfPings(10);
+
+				vm.sendBatch();
+				var expected = [0, 1, 2, 3, 4];
+				assert.equals(sentPings, expected);
+
+				vm.sendBatch();
+				expected = [0, 1, 2, 3, 4, 5, 6 ,7, 8 ,9];
+				assert.equals(sentPings, expected);
+
+				vm.sendBatch();
+				assert.equals(sentPings, expected);
+
+			},
+
+			"send when delay is set should send message each time the interval ticks": function() {
+
+				var expectedIntervalTimeMs = 0;
+				var fakeTickInterval = function (){}
+				window.setInterval = function (callBack, timeMs) {
+					expectedIntervalTimeMs = timeMs;
+					fakeTickInterval = callBack;
+				}
+
+				var vm = new viewmodel();
+
+				var sentPings = [];
+				var messagebroker = {
+					server: {
+						pingWithId: function (id) {
+							sentPings.push(id);
+						}
+					}
+				}
+
+				vm.initialize({
+					messageBroker: messagebroker
+				});
+
+				vm.numberOfPings(3);
+				vm.interval_ms(5);
+				vm.sendAllPings();
+
+				assert.equals(expectedIntervalTimeMs, 5);
+				assert.equals(sentPings.length, 0); //should not have sent any messages yet
+
+				//fake interval tick:
+				fakeTickInterval();
+				fakeTickInterval();
+				fakeTickInterval();
+				assert.equals(sentPings.length, 3);
+			},
+
+			"sending delayed messages should stop when maximum is reached": function () {
+
+				var fakeTickInterval = function () { }
+				var timerId = 'myId';
+				var clearedId = '';
+				var timerIsRunning = function() {
+					return clearedId != timerId;
+				};
+				window.setInterval = function (callBack) {
+					fakeTickInterval = callBack;
+					return timerId;
+				}
+
+				window.clearInterval = function(id) {
+					clearedId = id;
+				};
+
+				var vm = new viewmodel();
+
+				var sentPings = [];
+				var messagebroker = {
+					server: {
+						pingWithId: function (id) {
+							sentPings.push(id);
+						}
+					}
+				}
+
+				vm.initialize({
+					messageBroker: messagebroker
+				});
+
+				vm.numberOfPings(2);
+				vm.interval_ms(1);
+				vm.sendAllPings();
+				assert(timerIsRunning()); 
+
+				fakeTickInterval();
+				assert(timerIsRunning()); 
+
+				fakeTickInterval();
+				assert.equals(sentPings.length, 2);
+
+				assert(!timerIsRunning());
+
+				fakeTickInterval();
+				assert.equals(sentPings.length, 2);
+			},
+
 	});
 
 	};
