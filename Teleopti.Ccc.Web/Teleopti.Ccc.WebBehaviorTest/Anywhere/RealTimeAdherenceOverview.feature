@@ -75,29 +75,34 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
+	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
 	And there is a site named 'London'
 	And there is a team named 'Red' on site 'London'
+	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
-	| Field      | Value      |
-	| Team       | Green      |
-	| Start Date | 2014-01-01 |
+	| Field          | Value        |
+	| Team           | Green        |
+	| Start Date     | 2014-01-01   |
+	| External Logon | Pierre Baldi |
+	And there is an external logon named 'Ashley Andeen' with datasource 6
 	And Ashley Andeen has a person period with
-		| Field      | Value      |
-		| Team       | Red        |
-		| Start Date | 2014-01-01 |
+	| Field          | Value         |
+	| Team           | Red           |
+	| Start Date     | 2014-01-01    |
+	| External Logon | Ashley Andeen |
 	And Pierre Baldi has a shift with
-		| Field      | Value            |
-		| Start time | 2014-01-21 12:00 |
-		| End time   | 2014-01-21 19:00 |
-		| Activity   | Phone            |
+	| Field      | Value            |
+	| Start time | 2014-01-21 12:00 |
+	| End time   | 2014-01-21 19:00 |
+	| Activity   | Phone            |
 	And Ashley Andeen has a shift with
-		| Field      | Value            |
-		| Start time | 2014-01-21 12:00 |
-		| End time   | 2014-01-21 19:00 |
-		| Activity   | Phone            |
+	| Field      | Value            |
+	| Start time | 2014-01-21 12:00 |
+	| End time   | 2014-01-21 19:00 |
+	| Activity   | Phone            |
 	And there is an alarm with 
 	| Field           | Value    |
 	| Activity        | Phone    |
@@ -111,8 +116,8 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	 When I view Real time adherence overview
-	 And 'Pierre Baldi' sets his phone state to 'Pause'
-	 And 'Ashley Andeen' sets her phone state to 'Ready'
+	 And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
+	 And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
 	 Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	 And I should see site 'London' with 0 of 1 employees out of adherence
 
@@ -122,28 +127,33 @@ Scenario: View updates of sum of employees not adhering to schedule for each tea
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
+	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
 	And there is a team named 'Red' on site 'Paris'
+	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
-	| Field      | Value      |
-	| Team       | Green      |
-	| Start Date | 2014-01-21 |
+	| Field          | Value        |
+	| Team           | Green        |
+	| Start Date     | 2014-01-21   |
+	| External Logon | Pierre Baldi |
+	And there is an external logon named 'Ashley Andeen' with datasource 6
 	And Ashley Andeen has a person period with
-		| Field      | Value      |
-		| Team       | Red        |
-		| Start Date | 2014-01-21 |
+	| Field          | Value         |
+	| Team           | Red           |
+	| Start Date     | 2014-01-21    |
+	| External Logon | Ashley Andeen |
 	 And Pierre Baldi has a shift with
 	| Field      | Value            |
 	| Start time | 2014-01-21 12:00 |
 	| End time   | 2014-01-21 19:00 |
 	| Activity   | Phone            |
 	 And Ashley Andeen has a shift with
-		| Field      | Value            |
-		| Start time | 2014-01-21 12:00 |
-		| End time   | 2014-01-21 19:00 |
-		| Activity   | Phone            |
+	| Field      | Value            |
+	| Start time | 2014-01-21 12:00 |
+	| End time   | 2014-01-21 19:00 |
+	| Activity   | Phone            |
 	And there is an alarm with 
 	| Field           | Value    |
 	| Activity        | Phone    |
@@ -157,8 +167,8 @@ Scenario: View updates of sum of employees not adhering to schedule for each tea
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	 When I view Real time adherence for site 'Paris'
-	 And 'Pierre Baldi' sets his phone state to 'Pause'
-	 And 'Ashley Andeen' sets her phone state to 'Ready'
+	 And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
+	 And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
 
@@ -194,19 +204,24 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
+	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
 	And there is a site named 'London'
 	And there is a team named 'Red' on site 'London'
+	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
-	| Field      | Value      |
-	| Team       | Green      |
-	| Start Date | 2014-01-01 |
+	| Field          | Value        |
+	| Team           | Green        |
+	| Start Date     | 2014-01-01   |
+	| External Logon | Pierre Baldi |
+	And there is an external logon named 'Ashley Andeen' with datasource 6
 	And Ashley Andeen has a person period with
-	| Field      | Value      |
-	| Team       | Red        |
-	| Start Date | 2014-01-01 |
+	| Field          | Value         |
+	| Team           | Red           |
+	| Start Date     | 2014-01-01    |
+	| External Logon | Ashley Andeen |
 	And Pierre Baldi has a shift with
 	| Field      | Value            |
 	| Start time | 2014-01-21 12:00 |
@@ -229,8 +244,8 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	| Phone state     | Pause        |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
-	And 'Pierre Baldi' sets his phone state to 'Pause'
-	And 'Ashley Andeen' sets her phone state to 'Ready'
+	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
+	And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
 	When I view Real time adherence overview
 	Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	And I should see site 'London' with 0 of 1 employees out of adherence
@@ -242,18 +257,23 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
+	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
 	And there is a team named 'Red' on site 'Paris'
+	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
-	| Field      | Value      |
-	| Team       | Green      |
-	| Start Date | 2014-01-21 |
+	| Field          | Value        |
+	| Team           | Green        |
+	| Start Date     | 2014-01-21   |
+	| External Logon | Pierre Baldi |
+	And there is an external logon named 'Ashley Andeen' with datasource 6
 	And Ashley Andeen has a person period with
-	| Field      | Value      |
-	| Team       | Red        |
-	| Start Date | 2014-01-21 |
+	| Field          | Value         |
+	| Team           | Red           |
+	| Start Date     | 2014-01-21    |
+	| External Logon | Ashley Andeen |
 	 And Pierre Baldi has a shift with
 	| Field      | Value            |
 	| Start time | 2014-01-21 12:00 |
@@ -276,8 +296,8 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	| Phone state     | Pause        |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
-	 And 'Pierre Baldi' sets his phone state to 'Pause'
-	 And 'Ashley Andeen' sets her phone state to 'Ready'
+	 And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
+	 And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
 	 When I view Real time adherence for site 'Paris'
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
@@ -302,17 +322,22 @@ Scenario: Should be able to see current states of all agents
 	And I have a role with
 	 | Field                                  | Value       |
 	 | Name                                   | Team leader |
-	 | Access to team						  | Red	|
-	 | Access to real time adherence overview | True		|
+	 | Access to team                         | Red         |
+	 | Access to real time adherence overview | True        |
+	And there is a datasouce with id 6
 	And I am located in 'London'
+	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
-	 | Field      | Value      |
-	 | Team       | Red        |
-	 | Start Date | 2014-01-21 |
+	 | Field          | Value        |
+	 | Team           | Red          |
+	 | Start Date     | 2014-01-21   |
+	 | External Logon | Pierre Baldi |
+	And there is an external logon named 'Ashley Andeen' with datasource 6
 	And Ashley Andeen has a person period with
-	 | Field      | Value      |
-	 | Team       | Red        |
-	 | Start Date | 2014-01-21 |
+	 | Field          | Value         |
+	 | Team           | Red           |
+	 | Start Date     | 2014-01-21    |
+	 | External Logon | Ashley Andeen |
 	And Pierre Baldi has a shift with
 	| Field			| Value            |
 	| Start time	| 2014-01-21 12:00 |
@@ -343,8 +368,8 @@ Scenario: Should be able to see current states of all agents
 	| Alarm Color           | Red	|
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
-	And 'Pierre Baldi' sets his phone state to 'Pause'
-	And 'Ashley Andeen' sets his phone state to 'Ready'
+	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
+	And 'Ashley Andeen' sets his phone state to 'Ready' on datasource 6
 	When I view real time adherence for team 'Red'
 	And the browser time is '2014-01-21 12:45:00'
 	Then I should see real time agent details for 'Pierre Baldi'
@@ -378,25 +403,30 @@ Scenario: Should be able to see state updates of all agents
 	And I have a role with
 	 | Field                                  | Value       |
 	 | Name                                   | Team leader |
-	 | Access to team						  | Red	|
-	 | Access to real time adherence overview | True		|
+	 | Access to team                         | Red         |
+	 | Access to real time adherence overview | True        |
+	And there is a datasouce with id 6
 	And I am located in 'London'
+	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
-	 | Field      | Value      |
-	 | Team       | Red        |
-	 | Start Date | 2014-01-21 |
+	 | Field          | Value        |
+	 | Team           | Red          |
+	 | Start Date     | 2014-01-21   |
+	 | External Logon | Pierre Baldi |
+	And there is an external logon named 'Ashley Andeen' with datasource 6
 	And Ashley Andeen has a person period with
-	 | Field      | Value      |
-	 | Team       | Red        |
-	 | Start Date | 2014-01-21 |
+	 | Field          | Value         |
+	 | Team           | Red           |
+	 | Start Date     | 2014-01-21    |
+	 | External Logon | Ashley Andeen |
 	And Pierre Baldi has a shift with
-	| Field			| Value            |
-	| Start time	| 2014-01-21 12:00 |
-	| End time		| 2014-01-21 13:00 |
-	| Activity		| Phone            |
-	| Next activity	| Lunch            |
+	| Field                    | Value            |
+	| Start time               | 2014-01-21 12:00 |
+	| End time                 | 2014-01-21 13:00 |
+	| Activity                 | Phone            |
+	| Next activity            | Lunch            |
 	| Next activity start time | 2014-01-21 13:00 |
-	| Next activity end time | 2014-01-21 13:30 |
+	| Next activity end time   | 2014-01-21 13:30 |
 	And Ashley Andeen has a shift with
 	| Field			| Value            |
 	| Start time	| 2014-01-21 12:00 |
@@ -410,39 +440,39 @@ Scenario: Should be able to see state updates of all agents
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
-	| Alarm Color           | Green	|
+	| Alarm Color     | Green    |
 	| Staffing effect | 0        |
 	And there is an alarm with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
-	| Alarm Color           | Red	|
+	| Alarm Color     | Red          |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	When I view real time adherence for team 'Red'
 	And the browser time is '2014-01-21 12:45:00'
-	And 'Pierre Baldi' sets his phone state to 'Pause'
-	And 'Ashley Andeen' sets his phone state to 'Ready'
+	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
+	And 'Ashley Andeen' sets his phone state to 'Ready' on datasource 6
 	Then I should see real time agent details for 'Pierre Baldi'
-		| Name                     |                  |
-		| Name                     | Pierre Baldi     |
-		| State                    | Pause            |
-		| Activity                 | Phone            |
-		| Next activity            | Lunch            |
-		| Next activity start time | 13:00 |
-		| Alarm                    | Not adhering     |
-		| Alarm Time               | 0:15:00 |
-		| Alarm Color              | Red              |
+		| Name                     |              |
+		| Name                     | Pierre Baldi |
+		| State                    | Pause        |
+		| Activity                 | Phone        |
+		| Next activity            | Lunch        |
+		| Next activity start time | 13:00        |
+		| Alarm                    | Not adhering |
+		| Alarm Time               | 0:15:00      |
+		| Alarm Color              | Red          |
 	And I should see real time agent details for 'Ashley Andeen'
-		| Field				| Value				|
-		| Name				| Ashley Andeen		|
-		| State				| Ready		|
-		| Activity			| Phone		|
-		| Next activity		| Lunch		|
-		| Next activity start time	| 13:00	|
-		| Alarm	| Adhering	|
-		| Alarm Time	| 0:15:00 |
-		| Alarm Color              | Green              |
+		| Field                    | Value         |
+		| Name                     | Ashley Andeen |
+		| State                    | Ready         |
+		| Activity                 | Phone         |
+		| Next activity            | Lunch         |
+		| Next activity start time | 13:00         |
+		| Alarm                    | Adhering      |
+		| Alarm Time               | 0:15:00       |
+		| Alarm Color              | Green         |
 
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
 Scenario: Should be able to see all agents of the team with or without state updates
@@ -454,63 +484,68 @@ Scenario: Should be able to see all agents of the team with or without state upd
 	And I have a role with
 	 | Field                                  | Value       |
 	 | Name                                   | Team leader |
-	 | Access to team						  | Red	|
-	 | Access to real time adherence overview | True		|
+	 | Access to team                         | Red         |
+	 | Access to real time adherence overview | True        |
+	And there is a datasouce with id 6
 	And I am located in 'London'
+	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
-	 | Field      | Value      |
-	 | Team       | Red        |
-	 | Start Date | 2014-01-21 |
+	 | Field          | Value        |
+	 | Team           | Red          |
+	 | Start Date     | 2014-01-21   |
+	 | External Logon | Pierre Baldi |
+	And there is an external logon named 'Ashley Andeen' with datasource 6
 	And Ashley Andeen has a person period with
-	 | Field      | Value      |
-	 | Team       | Red        |
-	 | Start Date | 2014-01-21 |
+	 | Field          | Value         |
+	 | Team           | Red           |
+	 | Start Date     | 2014-01-21    |
+	 | External Logon | Ashley Andeen |
 	 And John Smith has a person period with
 	 | Field      | Value      |
 	 | Team       | Red        |
 	 | Start Date | 2014-01-21 |
 	And Pierre Baldi has a shift with
-	| Field			| Value            |
-	| Start time	| 2014-01-21 12:00 |
-	| End time		| 2014-01-21 13:00 |
-	| Activity		| Phone            |
-	| Next activity	| Lunch            |
+	| Field                    | Value            |
+	| Start time               | 2014-01-21 12:00 |
+	| End time                 | 2014-01-21 13:00 |
+	| Activity                 | Phone            |
+	| Next activity            | Lunch            |
 	| Next activity start time | 2014-01-21 13:00 |
-	| Next activity end time | 2014-01-21 13:30 |
+	| Next activity end time   | 2014-01-21 13:30 |
 	And Ashley Andeen has a shift with
-	| Field			| Value            |
-	| Start time	| 2014-01-21 12:00 |
-	| End time		| 2014-01-21 13:00 |
-	| Activity		| Phone            |
-	| Next activity	| Lunch            |
+	| Field                    | Value            |
+	| Start time               | 2014-01-21 12:00 |
+	| End time                 | 2014-01-21 13:00 |
+	| Activity                 | Phone            |
+	| Next activity            | Lunch            |
 	| Next activity start time | 2014-01-21 13:00 |
-	| Next activity end time | 2014-01-21 13:30 |
+	| Next activity end time   | 2014-01-21 13:30 |
 	And John Smith has a shift with
-	| Field			| Value            |
-	| Start time	| 2014-01-21 12:00 |
-	| End time		| 2014-01-21 13:00 |
-	| Activity		| Phone            |
-	| Next activity	| Lunch            |
+	| Field                    | Value            |
+	| Start time               | 2014-01-21 12:00 |
+	| End time                 | 2014-01-21 13:00 |
+	| Activity                 | Phone            |
+	| Next activity            | Lunch            |
 	| Next activity start time | 2014-01-21 13:00 |
-	| Next activity end time | 2014-01-21 13:30 |
+	| Next activity end time   | 2014-01-21 13:30 |
 	And there is an alarm with 
 	| Field           | Value    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
-	| Alarm Color           | Green	|
+	| Alarm Color     | Green    |
 	| Staffing effect | 0        |
 	And there is an alarm with 
 	| Field           | Value        |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
-	| Alarm Color           | Red	|
+	| Alarm Color     | Red          |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	When I view real time adherence for team 'Red'
 	And the browser time is '2014-01-21 12:45:00'
-	And 'Pierre Baldi' sets his phone state to 'Pause'
-	And 'Ashley Andeen' sets his phone state to 'Ready'
+	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
+	And 'Ashley Andeen' sets his phone state to 'Ready' on datasource 6
 	Then I should see real time agent details for 'Pierre Baldi'
 		| Name                     |                  |
 		| Name                     | Pierre Baldi     |
@@ -519,16 +554,16 @@ Scenario: Should be able to see all agents of the team with or without state upd
 		| Next activity            | Lunch            |
 		| Next activity start time | 2014-01-21 13:00 |
 		| Alarm                    | Not adhering     |
-		| Alarm Time               | 0:15:00 |
+		| Alarm Time               | 0:15:00          |
 		| Alarm Color              | Red              |
 	And I should see real time agent details for 'Ashley Andeen'
-		| Field				| Value				|
-		| Name				| Ashley Andeen		|
-		| State				| Ready		|
-		| Activity			| Phone		|
-		| Next activity		| Lunch		|
-		| Next activity start time	| 2014-01-21 13:00	|
-		| Alarm	| Adhering	|
-		| Alarm Time	| 0:15:00 |
-		| Alarm Color              | Green              |
+		| Field                    | Value            |
+		| Name                     | Ashley Andeen    |
+		| State                    | Ready            |
+		| Activity                 | Phone            |
+		| Next activity            | Lunch            |
+		| Next activity start time | 2014-01-21 13:00 |
+		| Alarm                    | Adhering         |
+		| Alarm Time               | 0:15:00          |
+		| Alarm Color              | Green            |
 	And I should see real time agent name for 'John Smith'

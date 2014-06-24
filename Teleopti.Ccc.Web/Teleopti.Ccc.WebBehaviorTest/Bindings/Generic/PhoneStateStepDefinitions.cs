@@ -1,9 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using MbCache.Core;
+using Newtonsoft.Json;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Rta.Interfaces;
@@ -59,20 +64,48 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			});
 		}
 
-
-		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
-		[When(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
-		public void WhenSetsHisPhoneStateTo(string personName, string state)
+		[When(@"'(.*)' sets (?:his|her) phone state to '(.*)' on datasource (.*)")]
+		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)' on datasource (.*)")]
+		public void WhenSetsHisPhoneStateToOnDatasource(string personName, string stateCode, int datasource)
 		{
-			rtaFactory.Value.ProcessRtaData(personName, state, TimeSpan.Zero, CurrentTime.Value(), Guid.Empty, "0",
-																			DateHelper.MinSmallDateTime, false);
+			var rtaUri = new Uri(TestSiteConfigurationSetup.Url, "Rta/Service/SaveExternalUserState");
+			var request = (HttpWebRequest) WebRequest.Create(rtaUri);
+			request.Method = "POST";
+			request.ContentType = "application/json";
+
+			var externalState = JsonConvert.SerializeObject(new AjaxUserState
+			{
+				AuthenticationKey = "!#¤atAbgT%",
+				UserCode = personName,
+				StateCode = stateCode,
+				IsLoggedOn = true,
+				Timestamp = CurrentTime.Value().ToString("yyyy-MM-dd HH:mm:ss"),
+				PlatformTypeId = Guid.Empty.ToString(),
+				SourceId = datasource.ToString(CultureInfo.InvariantCulture),
+				IsSnapshot = false
+			});
+
+			using (var writer = new StreamWriter(request.GetRequestStream()))
+			{
+				writer.Write(externalState);
+			}
+			request.GetResponse();
 		}
+
+
+		//[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
+		//[When(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
+		//public void WhenSetsHisPhoneStateTo(string personName, string state)
+		//{
+		//	rtaFactory.Value.ProcessRtaData(personName, state, TimeSpan.Zero, CurrentTime.Value(), Guid.Empty, "0",
+		//																	DateHelper.MinSmallDateTime, false);
+		//}
 
 		[Given(@"there is a datasouce with id (.*)")]
 		public void GivenThereIsADatasouceWithId(int datasourceId)
 		{
 			var datasource = new Datasources(datasourceId, " ", -1, " ", -1, " ", " ", 1, false, "6", false);
-			DataMaker.Analytics().Setup(datasource);
+			DataMaker.Analytics().Apply(datasource);
 		}
 	}
 

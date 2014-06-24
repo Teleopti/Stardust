@@ -10,7 +10,17 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 	public class AnalyticsDataFactory
 	{
 		private readonly IList<IAnalyticsDataSetup> _analyticsSetups = new List<IAnalyticsDataSetup>();
-		
+
+		public void Apply(IAnalyticsDataSetup analyticsDataSetup)
+		{
+			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			{
+				var culture = Thread.CurrentThread.CurrentCulture;
+				connection.Open();
+				analyticsDataSetup.Apply(connection, culture, CultureInfo.GetCultureInfo("sv-SE"));
+			}
+		}
+
 		public void Setup(IAnalyticsDataSetup analyticsDataSetup)
 		{
 			_analyticsSetups.Add(analyticsDataSetup);
