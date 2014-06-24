@@ -218,11 +218,16 @@ namespace Teleopti.Analytics.Parameters
                     // Avoid saving settings for group page, and also values that are null.
                     if (!Value.Equals(DBNull.Value))
                     {
-                        DataReader.SaveUserSetting(Component, Selector.CurrentUserCode, ParamName, SavedId, Value.ToString());
+                        DataReader.SaveUserSetting(Component, Selector.CurrentUserCode, ParamName, SavedId, StringValue());
                     }
                 }
 			}
 		}
+
+	    public virtual string StringValue()
+	    {
+	        return Value.ToString();
+	    }
 
 		protected abstract void SetData();
 		protected abstract void SetAutoPostBack();

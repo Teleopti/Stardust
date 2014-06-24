@@ -13,12 +13,12 @@ namespace Teleopti.Analytics.Parameters
 	/// </summary>
 	class ParameterDate :ParameterBase
 	{
-	    private TextBox _textBox;
+		private TextBox _textBox;
 		private Label _label;
 		private Image _buttonDate;
 		//private RequiredFieldValidator _Validator;
 		private RegularExpressionValidator  _dateValidator;
-        private CalendarExtender _calExt;
+		private CalendarExtender _calExt;
 		private static readonly DateTime SqlSmallDateTimeMinValue = new DateTime(1900, 1, 1);
 		private static readonly DateTime SqlSmallDateTimeMaxValue = new DateTime(2079, 6, 6);
 
@@ -35,14 +35,14 @@ namespace Teleopti.Analytics.Parameters
 		protected override void SetAutoPostBack()
 		{
 			EnsureChildControls();
-            _textBox.AutoPostBack = true;
+			_textBox.AutoPostBack = true;
 		}
 
-	    protected override void Clear()
-	    {
-	    }
+		protected override void Clear()
+		{
+		}
 
-	    protected override void SetData()
+		protected override void SetData()
 		{
 			EnsureChildControls();
 			try
@@ -63,73 +63,82 @@ namespace Teleopti.Analytics.Parameters
 				_dateValidator.IsValid = false;
 				_valid = false;
 			}
-		} 
+		}
+
+	    public override string StringValue()
+	    {
+            var date = DateTime.Parse(Value.ToString());
+	        return date.ToShortDateString();
+	        //return Value.ToString();
+	    }
 
 		protected override void CreateChildControls() 
 		{	
 			var regexp = new StringBuilder();
 			_label = new Label {Text = Text};
-		    _textBox = new TextBox {ID = "txtBox" + Dbid};
-		    _textBox.Attributes.Add("name","Selector_" + _textBox.ID);
+			_textBox = new TextBox {ID = "txtBox" + Dbid};
+			_textBox.Attributes.Add("name","Selector_" + _textBox.ID);
 			
 			_textBox.CssClass = "ControlStyle";
-            _textBox.Width = new Unit(100);
+			_textBox.Width = new Unit(100);
 
 			_dateValidator=new RegularExpressionValidator
-			                   {
-			                       ControlToValidate = _textBox.ID,
-			                       Display = ValidatorDisplay.Dynamic,
-			                       Text = "*",
+							   {
+								   ControlToValidate = _textBox.ID,
+								   Display = ValidatorDisplay.Dynamic,
+								   Text = "*",
 								   ForeColor = Color.Red
-			                   };
-		    regexp.Append(@"^\d{1,2}(\-|\/|\.)\d{1,2}(\-|\/|\.)\d{2}$|");
+							   };
+			regexp.Append(@"^\d{1,2}(\-|\/|\.)\d{1,2}(\-|\/|\.)\d{2}$|");
 			regexp.Append(@"^\d{1,2}(\-|\/|\.)\d{1,2}(\-|\/|\.)\d{4}$|");
-            regexp.Append(@"^\d{1,2}(\-|\/|\.)\s\d{1,2}(\-|\/|\.)\s\d{4}$|");
+			regexp.Append(@"^\d{1,2}(\-|\/|\.)\s\d{1,2}(\-|\/|\.)\s\d{4}$|");
 			regexp.Append(@"^\d{2}(\-|\/|\.)\d{1,2}(\-|\/|\.)\d{1,2}$|");
 			regexp.Append(@"^\d{4}(\-|\/|\.)\d{1,2}(\-|\/|\.)\d{1,2}$|");
 			regexp.Append(@"^\d{1,2}(\-|\/|\.)\d{2}(\-|\/|\.)\d{1,2}$|");
-            regexp.Append(@"^\d{1,2}(\-|\/|\.)\d{4}(\-|\/|\.)\d{1,2}$|");
-            regexp.Append(@"^\d{4}(.)\s\d{1,2}(.)\s\d{1,2}(.)$"); // Supports Hungarian hopefully...
-
+			regexp.Append(@"^\d{1,2}(\-|\/|\.)\d{4}(\-|\/|\.)\d{1,2}$|");
+			regexp.Append(@"^\d{4}(.)\s\d{1,2}(.)\s\d{1,2}(.)$"); // Supports Hungarian hopefully...
 
 			_dateValidator.ValidationExpression=regexp.ToString();
 			_dateValidator.ErrorMessage=Selector.ErrorMessageValText+ " '" + Text +"'";
 
-			_buttonDate = new Image {SkinID = "OpenCalSmall", ID = "ButtonDate" + Dbid};
-		    _buttonDate.Attributes.Add("name","Selector_" + _buttonDate.ID);
-			
-			_textBox.TextChanged += textBoxTextChanged;
-            
-            _calExt = new CalendarExtender
-                          {
-                              ID = "CalExt" + Dbid,
-                              TargetControlID = _textBox.ID,
-                              PopupButtonID = _buttonDate.ID,
-                              CssClass = "MyCalendar"
-                          };
+		    
+            _buttonDate = new Image {SkinID = "OpenCalSmall", ID = "ButtonDate" + Dbid};
+            _buttonDate.Attributes.Add("name", "Selector_" + _buttonDate.ID);
+		    _buttonDate.Visible = System.Threading.Thread.CurrentThread.CurrentUICulture.IetfLanguageTag != "fa-IR";
 
-		    base.Controls.Add(_label);
+		    _textBox.TextChanged += textBoxTextChanged;
+		    
+		    _calExt = new CalendarExtender
+		    {
+		        ID = "CalExt" + Dbid,
+		        TargetControlID = _textBox.ID,
+		        PopupButtonID = _buttonDate.ID,
+		        CssClass = "MyCalendar",
+                Enabled = System.Threading.Thread.CurrentThread.CurrentUICulture.IetfLanguageTag != "fa-IR"
+		    };
+		    
+			base.Controls.Add(_label);
 			base.Controls.Add(_buttonDate);
 			base.Controls.Add(_textBox);
-            base.Controls.Add(_calExt);
-            AddValidator(_dateValidator);
+            if(_calExt != null)
+			    base.Controls.Add(_calExt);
+			AddValidator(_dateValidator);
 
-            if (!Page.IsPostBack)
-            {
-                LoadData();
-            }
-            
+			if (!Page.IsPostBack)
+			{
+				LoadData();
+			}
 		}
 
 		protected override void BindData()
 		{
-            string s = Convert.ToString(Value);
-		    DateTime date;
+			string s = Convert.ToString(Value);
+			DateTime date;
 			
 			try
 			{
-                // Sätter dagens datum om usersettings saknas,
-                // förtuom om det står ett vanligt heltal.
+				// Sätter dagens datum om usersettings saknas,
+				// förtuom om det står ett vanligt heltal.
 				if (s == "")
 				{
 
@@ -143,40 +152,40 @@ namespace Teleopti.Analytics.Parameters
 			}
 			catch
 			{
-                try
-                {
-                    // Inget datum eller klockslag 
-                    // Om det står ett heltal konverteras det till dagens datum plus/minus antal dgr
-                    // Dvs 0 blir dagens datum, 1 nästa dag och -1 föregående dag
-                    int test = int.Parse(s);
-                    date = DateTime.Now.Date;
-                    date = date.AddDays(test);
-                }
-                catch(Exception)
-                {
-				    s = DateTime.Now.Date.ToShortDateString();
-				    date = DateTime.Now.Date;
-                }
+				try
+				{
+					// Inget datum eller klockslag 
+					// Om det står ett heltal konverteras det till dagens datum plus/minus antal dgr
+					// Dvs 0 blir dagens datum, 1 nästa dag och -1 föregående dag
+					int test = int.Parse(s);
+					date = DateTime.Now.Date;
+					date = date.AddDays(test);
+				}
+				catch(Exception)
+				{
+					s = DateTime.Now.Date.ToShortDateString();
+					date = DateTime.Now.Date;
+				}
 			}
 
-            // if it depends of a start date the end date can not be smaller
-            if (DependentOf.Count > 0)
-            {
-                try
-                {
-                    if ((DateTime)DependentOf[0].Parameter.Value > date)
-                    {
-                        date = (DateTime)DependentOf[0].Parameter.Value;
-                    }
-                }
-                catch (Exception)
-                {
+			// if it depends of a start date the end date can not be smaller
+			if (DependentOf.Count > 0)
+			{
+				try
+				{
+					if ((DateTime)DependentOf[0].Parameter.Value > date)
+					{
+						date = (DateTime)DependentOf[0].Parameter.Value;
+					}
+				}
+				catch (Exception)
+				{
 
-                }
-            }
+				}
+			}
 
 			//Visar i rätt format för användaren
-            string f = date.ToShortDateString();
+			string f = date.ToShortDateString();
 			_textBox.Text = f;   
 		}
 
@@ -190,18 +199,18 @@ namespace Teleopti.Analytics.Parameters
 			writer.RenderEndTag();
 
 			writer.AddAttribute("valign", "top");
-            writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:3px 0px 3px 0px");
-            writer.AddAttribute(HtmlTextWriterAttribute.Class, "MyCalender");
+			writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:3px 0px 3px 0px");
+			writer.AddAttribute(HtmlTextWriterAttribute.Class, "MyCalender");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			_textBox.RenderControl(writer);
-            writer.Write("&nbsp;");
+			writer.Write("&nbsp;");
 			_buttonDate.RenderControl(writer);
-            
-            _calExt.RenderControl(writer);
+			
+			_calExt.RenderControl(writer);
 			writer.RenderEndTag();
 
 			writer.AddAttribute(HtmlTextWriterAttribute.Style,"padding:0px 0px 0px 0px");
-            writer.AddStyleAttribute("colspan","2");
+			writer.AddStyleAttribute("colspan","2");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			_dateValidator.RenderControl(writer);
 			 
@@ -210,13 +219,29 @@ namespace Teleopti.Analytics.Parameters
 
 		private void textBoxTextChanged(object sender, EventArgs e)
 		{
-			Value = _textBox.Text; //Validatorerna kollar att datum
-            foreach (ParameterBase ctrl in Dependent)
-            {
-                ctrl.LoadData();
-            }
-            // Do a bind to check dependecies
-            BindData();
+			DateTime theDate;
+			if (DateTime.TryParse(_textBox.Text, out theDate))
+					Value = theDate.ToShortDateString();
+			else
+				Value = _textBox.Text; //Validatorerna kollar att datum
+			foreach (ParameterBase ctrl in Dependent)
+			{
+				ctrl.LoadData();
+			}
+			// Do a bind to check dependecies
+			BindData();
+		}
+
+		protected override void OnPreRender(EventArgs e)//Skapar och registrerar javascript på sidan
+		{
+            if(System.Threading.Thread.CurrentThread.CurrentUICulture.IetfLanguageTag != "fa-IR") return;
+			var scriptKey = "Jalali" + _textBox.ID;
+			var scriptBlock = @"<script type=""text/javascript"">
+			$(function() {
+				$(""#Parameter_" + _textBox.ID + @""").persianDatepicker({persianNumbers: false, selectedDate: """ + Value + @"""}); 
+			});</script>";
+			
+			Page.ClientScript.RegisterClientScriptBlock(GetType(), scriptKey, scriptBlock);
 		}
 	}
 }

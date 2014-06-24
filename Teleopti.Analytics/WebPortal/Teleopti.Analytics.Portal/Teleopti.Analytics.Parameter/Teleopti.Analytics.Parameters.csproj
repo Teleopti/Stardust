@@ -204,6 +204,7 @@
     <Compile Include="ParameterTextBox.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PersianCultureHelper.cs" />
     <Compile Include="Reader.cs">
       <SubType>Code</SubType>
     </Compile>
