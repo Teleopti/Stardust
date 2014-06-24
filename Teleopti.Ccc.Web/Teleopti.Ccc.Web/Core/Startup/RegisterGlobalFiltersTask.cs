@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.Rta.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Toggle;
@@ -42,8 +43,9 @@ namespace Teleopti.Ccc.Web.Core.Startup
 																		typeof(UrlController),
 																		typeof(OpenIdController),
 																		typeof(Areas.SSO.Controllers.AuthenticationApiController),
-																		typeof(Areas.SSO.Controllers.ApplicationAuthenticationApiController),
-																		typeof(ToggleHandlerController)
+																		typeof(ApplicationAuthenticationApiController),
+																		typeof(ToggleHandlerController),
+																		typeof(ServiceController)
 			                                                    	}));
 			filters.Add(new CheckStartupResultAttribute());
 		}
