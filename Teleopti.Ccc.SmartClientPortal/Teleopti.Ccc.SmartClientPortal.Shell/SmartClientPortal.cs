@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.SmartClientPortal.Shell.Controls;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using log4net;
 using Syncfusion.Windows.Forms;
@@ -432,6 +433,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                         break;
                 }
                 _outlookBarWorkspaceModel.Add(outlookBarSmartPartInfo);
+				flowLayoutPanelModules.Controls.Add(new ModulePanelItem{ModuleImage = outlookBarSmartPartInfo.Icon, ModuleText = outlookBarSmartPartInfo.Title});
             }
         }
 

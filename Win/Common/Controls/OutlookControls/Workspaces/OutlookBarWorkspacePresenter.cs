@@ -32,12 +32,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
             _model.LastModule = _view.LastModule;
         }
 
-        public string SpecialModule
-        {
-            get { return _model.SpecialModule; }
-            set { _model.SpecialModule = value; }
-        }
-
         //Crap to convert to icon, should'nt be here, dunno how to fix this fxCop
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public Icon ConvertToIcon(Image image, int size, bool keepAspRatio)

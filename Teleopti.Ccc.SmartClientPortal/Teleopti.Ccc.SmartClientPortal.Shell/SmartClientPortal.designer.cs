@@ -87,6 +87,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.toolStripButtonSystemOptions = new System.Windows.Forms.ToolStripButton();
 			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.notifyTimer = new System.Windows.Forms.Timer(this.components);
+			this.flowLayoutPanelModules = new System.Windows.Forms.FlowLayoutPanel();
 			this._mainStatusStrip.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			this.toolStripStatusLabelSpring.Name = "toolStripStatusLabelSpring";
 			this.SetShortcut(this.toolStripStatusLabelSpring, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelSpring.Size = new System.Drawing.Size(706, 19);
+			this.toolStripStatusLabelSpring.Size = new System.Drawing.Size(862, 19);
 			this.toolStripStatusLabelSpring.Spring = true;
 			this.toolStripStatusLabelSpring.Click += new System.EventHandler(this.toolStripStatusLabelSpring_Click);
 			// 
@@ -177,7 +178,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			this.splitContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
 			this.splitContainer.BeforeTouchSize = 5;
-			this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainer.Location = new System.Drawing.Point(1, 61);
 			this.splitContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.splitContainer.Name = "splitContainer";
@@ -195,8 +195,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.splitContainer.Panel2.Controls.Add(this.gridWorkspace);
 			this.splitContainer.Panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.splitContainer.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel1;
-			this.splitContainer.Size = new System.Drawing.Size(1172, 536);
-			this.splitContainer.SplitterDistance = 242;
+			this.splitContainer.Size = new System.Drawing.Size(973, 408);
+			this.splitContainer.SplitterDistance = 201;
 			this.splitContainer.SplitterWidth = 5;
 			this.splitContainer.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
 			this.splitContainer.TabIndex = 3;
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.gridWorkspace.Location = new System.Drawing.Point(0, 0);
 			this.gridWorkspace.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.gridWorkspace.Name = "gridWorkspace";
-			this.gridWorkspace.Size = new System.Drawing.Size(925, 536);
+			this.gridWorkspace.Size = new System.Drawing.Size(767, 408);
 			this.gridWorkspace.TabIndex = 0;
 			this.gridWorkspace.Tag = "0";
 			this.gridWorkspace.WorkspaceGridSizeChanged += new System.EventHandler<System.EventArgs>(this.GridWorkspace_WorkspaceGridSizeChanged);
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// backStage1
 			// 
 			this.backStage1.AllowDrop = true;
-			this.backStage1.BeforeTouchSize = new System.Drawing.Size(819, 498);
+			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1171, 569);
 			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.backStage1.Controls.Add(this.backStageButtonPermissions);
 			this.backStage1.Controls.Add(this.backStageButtonMyProfile);
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStage1.Location = new System.Drawing.Point(0, 0);
 			this.backStage1.Name = "backStage1";
 			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
-			this.backStage1.Size = new System.Drawing.Size(819, 498);
+			this.backStage1.Size = new System.Drawing.Size(1171, 569);
 			this.backStage1.TabIndex = 5;
 			this.backStage1.Visible = false;
 			// 
@@ -542,6 +542,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.notifyTimer.Interval = 1000;
 			this.notifyTimer.Tick += new System.EventHandler(this.notifyTimer_Tick);
 			// 
+			// flowLayoutPanelModules
+			// 
+			this.flowLayoutPanelModules.AutoSize = true;
+			this.flowLayoutPanelModules.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.flowLayoutPanelModules.Location = new System.Drawing.Point(1, 597);
+			this.flowLayoutPanelModules.Name = "flowLayoutPanelModules";
+			this.flowLayoutPanelModules.Size = new System.Drawing.Size(1172, 0);
+			this.flowLayoutPanelModules.TabIndex = 7;
+			// 
 			// SmartClientShellForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -549,6 +558,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.Borders = new System.Windows.Forms.Padding(0);
 			this.ClientSize = new System.Drawing.Size(1174, 621);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
+			this.Controls.Add(this.flowLayoutPanelModules);
 			this.Controls.Add(this.splitContainer);
 			this.Controls.Add(this.ribbonControlAdv1);
 			this.Controls.Add(this.backStage1);
@@ -616,6 +626,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private Syncfusion.Windows.Forms.BackStageButton backStageButtonAbout;
 		private Syncfusion.Windows.Forms.BackStageButton backStageButtonExitTELEOPTICCC;
 		private ToolStripTabItem toolStripTabItem1;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelModules;
     }
 }
 
