@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Teleopti.Ccc.Infrastructure.Rta;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
@@ -15,8 +14,10 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 
 		public PersonOrganizationData GetOrganization(Guid personId)
 		{
-			return _personOrganizationProvider.LoadAll()
-				.Single(x => x.PersonId == personId);
+			PersonOrganizationData ret;
+			return _personOrganizationProvider.LoadAll().TryGetValue(personId, out ret) ? 
+				ret : 
+				null;
 		}
 	}
 }

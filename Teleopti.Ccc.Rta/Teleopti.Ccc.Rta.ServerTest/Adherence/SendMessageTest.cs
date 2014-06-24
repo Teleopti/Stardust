@@ -112,5 +112,22 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 
 			broker.LastSiteNotification.DomainType.Should().Be.EqualTo(typeof(SiteAdherenceMessage).Name);
 		}
+
+		[Test]
+		public void ShouldNotSendMessageIfPersonIdIsNotAvailable()
+		{
+			var agentState = new ActualAgentState{PersonId = Guid.NewGuid()};
+
+			var broker = new MessageSenderExposingNotifications();
+			var personOrganizationReader = MockRepository.GenerateStub<IPersonOrganizationReader>();
+			var organizationForPerson = new OrganizationForPerson(new PersonOrganizationProvider(personOrganizationReader));
+			var target = new AdherenceAggregator(broker, organizationForPerson);
+
+			personOrganizationReader.Stub(x => x.LoadAll()).Return(Enumerable.Empty<PersonOrganizationData>());
+
+			target.Invoke(agentState);
+
+			broker.AllNotifications.Should().Be.Empty();
+		}
 	}
 }

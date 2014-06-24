@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -56,9 +57,9 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			_result = result;
 		}
 
-		public IEnumerable<PersonOrganizationData> LoadAll()
+		public IDictionary<Guid, PersonOrganizationData> LoadAll()
 		{
-			return _result;
+			return _result.ToDictionary(data => data.PersonId);
 		}
 	}
 }
