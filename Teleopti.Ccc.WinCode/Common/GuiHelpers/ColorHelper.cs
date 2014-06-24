@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
         //todo: another setting in ForecasterSettings
         public static Color FormBackgroundColor()
         {
-            return MySettings.StandardFormBackgroundColor;
+	        return Color.White;
         }
 
         public static Color StandardContextMenuColor()
