@@ -214,8 +214,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				var frequency = _model.GetFrequencyForShiftCategory(selectedShiftCategory);
 
 				frequency = addFakeValuesForEmptyPoints(frequency);
-				perShiftCategoryChart1.PrimaryXAxis.Range = new MinMaxInfo(-1, frequency.Count, 1);
-
+				perShiftCategoryChart1.PrimaryXAxis.Range = new MinMaxInfo(0, frequency.Count, 1);
+				perShiftCategoryChart1.PrimaryYAxis.Range = new MinMaxInfo(0,frequency.Values.Max( ),1);
 				foreach (var item in frequency)
 				{
 					chartSeries.Points.Add(item.Key, item.Value);
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			var adjustededFrequency = new Dictionary<int, int>();
 			var max = frequency.Select(keyValuePair => keyValuePair.Key).Concat(new[] { 0 }).Max();
 
-			for (var i = -1; i <= max + 1; i++)
+			for (var i = 0; i <= max + 1; i++)
 			{
 				if (!frequency.ContainsKey(i))
 				{
