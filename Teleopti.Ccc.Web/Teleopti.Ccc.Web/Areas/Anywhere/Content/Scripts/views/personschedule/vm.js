@@ -1,7 +1,7 @@
 define([
 	'knockout',
 	'navigation',
-	'shared/timeline',
+	'views/personschedule/timeline',
 	'views/personschedule/person',
 	'views/personschedule/addactivityform',
 	'views/personschedule/addfulldayabsenceform',
@@ -92,13 +92,14 @@ define([
 			var person = self.SelectedPerson();
 			if (person)
 				return lazy(person.Shifts()).filter(function(x) {
-					return x.Layers()[0].StartMinutes() > 0;
+					return x.Layers()[0]().StartMinutes() > 0;
 				}).toArray()[0];
 			return undefined;
 		});
 
 		this.Shifts = ko.computed(function() {
 			var person = self.SelectedPerson();
+			
 			if (person)
 				return person.Shifts();
 			return undefined;
@@ -206,30 +207,32 @@ define([
 			self.AddActivityForm.WorkingShift(self.WorkingShift());
 			var selectedLayer = self.SelectedLayer();
 			self.MoveActivityForm.update(selectedLayer);
-			
 		};
 
 		this.SelectedLayer = function() {
 			if (!self.SelectedStartMinutes()) return null;
-			var selectedLayers = layers().filter(function(layer) {
-				if (layer.StartMinutes() === self.SelectedStartMinutes())
-					return layer;
+
+			var selectedLayers = layers().filter(function (layer) {
+				if (layer().StartMinutes() === self.SelectedStartMinutes())
+				return layer();
 			});
 			var activeLayer = selectedLayers.first();
 			if (activeLayer)
-				activeLayer.Selected(true);
+				activeLayer().Selected(true);
 			return activeLayer;
 		};
 		
 		this.updateStartTime = function (pixels) {
-			var minutes = pixels / this.TimeLine.PixelsPerMinute();
-			var newStartTime = (this.MoveActivityForm.OldStartMinutes() + Math.round(minutes/15)*15);
-			this.MoveActivityForm.StartTime(newStartTime);
+			var minutes = pixels / self.TimeLine.PixelsPerMinute();
+			var newStartTime = (self.MoveActivityForm.OldStartMinutes() + Math.round(minutes / 15) * 15);
+			self.MoveActivityForm.StartTime(moment(self.MoveActivityForm.ScheduleDate()).add('minutes', newStartTime));
 		}
 
 		this.lengthMinutesToPixels = function (minutes) {
 			var pixels = minutes * self.TimeLine.PixelsPerMinute();
 			return Math.round(pixels);
 		};
+
+		
 	};
 });

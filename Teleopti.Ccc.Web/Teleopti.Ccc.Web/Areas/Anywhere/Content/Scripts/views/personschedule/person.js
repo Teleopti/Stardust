@@ -70,12 +70,12 @@ define([
 
 		var visibleLayers = function () {
 			return layers()
-				.filter(function (x) { return x.OverlapsTimeLine(); });
+				.filter(function (x) { return x().OverlapsTimeLine(); });
 		};
 
 		var visibleDayOffs = function () {
 			return lazy(self.DayOffs())
-				.filter(function (x) { return x.OverlapsTimeLine(); });
+				.filter(function (x) { return x().OverlapsTimeLine(); });
 		};
 
 		this.OrderBy = function () {
@@ -83,11 +83,11 @@ define([
 			var visibleShiftLayers = visibleLayers().filter(function (x) { return !x.IsFullDayAbsence; });
 			
 			if (visibleShiftLayers.some())
-				return visibleShiftLayers.map(function (x) { return x.StartMinutes(); }).min();
+				return visibleShiftLayers.map(function (x) { return x().StartMinutes(); }).min();
 			
-			var visibleFullDayAbsences = visibleLayers().filter(function (x) { return x.IsFullDayAbsence; });
+			var visibleFullDayAbsences = visibleLayers().filter(function (x) { return x().IsFullDayAbsence; });
 			if (visibleFullDayAbsences.some())
-				return 5000 + visibleFullDayAbsences.map(function (x) { return x.StartMinutes(); }).min();
+				return 5000 + visibleFullDayAbsences.map(function (x) { return x().StartMinutes(); }).min();
 			
 			if (visibleDayOffs().some())
 				return 10000;

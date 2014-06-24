@@ -22,6 +22,8 @@
 		self.StartTime = ko.observable();
 		self.ActivityId = ko.observable();
 
+		self.layer = ko.observable();
+
 		this.SetData = function (data) {
 			self.PersonId(data.PersonId);
 			self.GroupId(data.GroupId);
@@ -35,19 +37,21 @@
 			},
 			write: function (option) {
 				self.StartTime(getMomentFromInput(option));
+				self.layer().UpdateUnit({ Start: self.StartTime().format(resources.FixedDateTimeFormatForMoment) });
 			}
 		});
 
-
-
-		this.update = function(layer) {
+		this.update = function (layer) {
+			
 			if (layer) {
-				self.OldStartMinutes(layer.StartMinutes());
+				self.layer(layer());
+				self.OldStartMinutes(layer().StartMinutes());
 				self.StartTime(moment(self.ScheduleDate()).add('minutes', self.OldStartMinutes()));
-				self.ProjectionLength(layer.LengthMinutes());
-				self.ActivityId(layer.ActivityId);
+				self.ProjectionLength(layer().LengthMinutes());
+				self.ActivityId(layer().ActivityId);
 			}
 		};
+
 
 		this.Apply = function () {
 			var requestData = JSON.stringify({

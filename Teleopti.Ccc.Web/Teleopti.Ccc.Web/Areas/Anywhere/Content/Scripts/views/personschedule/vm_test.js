@@ -109,7 +109,7 @@
 					vm.UpdateSchedules(data);
 					vm.SelectedStartMinutes(840);
 
-					assert.equals(vm.SelectedLayer().StartMinutes(), vm.SelectedStartMinutes());
+					assert.equals(vm.SelectedLayer()().StartMinutes(), vm.SelectedStartMinutes());
 				},
 
 				"should set move activity form when updating data": function () {
@@ -226,6 +226,38 @@
 
 					//just verifies it doesn't throw
 					assert.equals(vm.MoveActivityForm.PersonId(), 1);
+				},
+
+				"should change the active layer start time when the move activity form start time changes": function () {
+					var vm = new viewModel();
+					vm.SetViewOptions({
+						id: 1,
+						date: '20131118',
+						groupid: 2
+					});
+					var data = [
+						{
+							PersonId: 1,
+							Projection: [
+								{
+									Start: '2013-11-18 14:00',
+									Minutes: 240,
+									ActivityId: "guid"
+								}
+							]
+						}
+					];
+
+					vm.SelectedStartMinutes(840);
+					vm.UpdateData({ PersonId: 1 });
+					vm.UpdateSchedules(data);
+
+					var selectedLayer = vm.SelectedLayer();
+					var momentExpected = moment('2013-11-18 15:00', 'YYYY-MM-DD HH:mm');
+
+					vm.MoveActivityForm.DisplayedStartTime('15:00');
+
+					assert.equals(selectedLayer().StartTime(), momentExpected.format('HH:mm'));
 				}
 			});
 		}
