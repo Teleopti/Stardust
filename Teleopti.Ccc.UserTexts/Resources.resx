@@ -12084,7 +12084,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>time in the alarm state</comment>
   </data>
   <data name="MinimumTimePerWeekColon" xml:space="preserve">
-    <value>Minimum Time Per Week:</value>
+    <value>Minimum Time Per Week</value>
     <comment>Minimum Time Per Week:</comment>
   </data>
   <data name="WeeklyWorkTimeBroken" xml:space="preserve">
