@@ -14,8 +14,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<TeleoptiPrincipalCacheableFactory>().As<IPrincipalFactory>().SingleInstance();
-			builder.RegisterType<TeleoptiPrincipalInternalsFactory>()
-				.IntegrateWithMbCache()
+			builder.RegisterConcreteMbCacheComponent<TeleoptiPrincipalInternalsFactory>()
 				.As<IMakeRegionalFromPerson>()
 				.As<IMakeOrganisationMembershipFromPerson>()
 				.As<IRetrievePersonNameForPerson>()
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.CacheMethod(m => m.NameForPerson(null))
 				.AsImplemented()
 				;
-
 		}
 	}
 }
