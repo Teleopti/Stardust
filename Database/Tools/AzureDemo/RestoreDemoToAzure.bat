@@ -75,7 +75,7 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
 ::Restore Demo to Local SQL Server
 SQLCMD -S. -E -v BakDir = "%workingdir%\DatabaseInstaller\DemoDatabase" -i"%workingdir%\DatabaseInstaller\DemoDatabase\RestoreDemo.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :Error
-SQLCMD -S. -E -v BakDir = "%workingdir%\DatabaseInstaller\DemoDatabase" -i"%workingdir%\DatabaseInstaller\DemoDatabase\RestoreUsers.sql"
+SQLCMD -S. -E -v BakDir = "%workingdir%\DatabaseInstaller\DemoDatabase" -i"%workingdir%\DatabaseInstaller\DemoDatabase\RestoreUsers.sql" -v CurrentUser=""
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=4 & GOTO :Error
 
 ::Patch local database

@@ -42,7 +42,7 @@ net stop TeleoptiServiceBus
 ::--------
 ::Restore Demo to Local SQL Server
 SQLCMD -S. -E -v BakDir = "%workingdir%\DatabaseInstaller\DemoDatabase" -i"%workingdir%\DatabaseInstaller\DemoDatabase\RestoreDemo.sql"
-SQLCMD -S. -E -v BakDir = "%workingdir%\DatabaseInstaller\DemoDatabase" -i"%workingdir%\DatabaseInstaller\DemoDatabase\RestoreUsers.sql"
+SQLCMD -S. -E -v BakDir = "%workingdir%\DatabaseInstaller\DemoDatabase" -i"%workingdir%\DatabaseInstaller\DemoDatabase\RestoreUsers.sql" -v CurrentUser=""
 
 ::Patch local database
 "%workingdir%\DatabaseInstaller\DBManager.exe" -S. -D%SRCANALYTICS% -OTeleoptiAnalytics -E -T

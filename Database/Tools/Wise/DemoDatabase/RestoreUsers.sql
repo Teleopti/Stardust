@@ -6,6 +6,10 @@ DECLARE @userid uniqueidentifier
 
 SET @userid = '10957ad5-5489-48e0-959a-9b5e015b2b5c'
 SELECT @csv=system_user
+IF (CHARINDEX('\',@csv,0)=0)
+BEGIN
+	SET @csv = '$(CurrentUser)'
+END
 
 --delete all Windows domains as they stall IIS -> AD-lookup in TeleoptiPM
 DELETE FROM TeleoptiWFM_Demo.dbo.AuthenticationInfo
