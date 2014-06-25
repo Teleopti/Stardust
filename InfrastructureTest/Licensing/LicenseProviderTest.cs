@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 Assert.IsFalse(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(
                         DefinedLicenseOptionPaths.TeleoptiCccFreemiumForecasts));
-                Assert.AreEqual(DefinedLicenseSchemaCodes.TeleoptiCccSchema, licenseActivator.EnabledLicenseSchemaName);
+                Assert.AreEqual(DefinedLicenseSchemaCodes.TeleoptiWFMSchema, licenseActivator.EnabledLicenseSchemaName);
             }
         }
 
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 Assert.IsTrue(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(
                         DefinedLicenseOptionPaths.TeleoptiCccFreemiumForecasts));
-                Assert.AreEqual(DefinedLicenseSchemaCodes.TeleoptiCccForecastsSchema,
+                Assert.AreEqual(DefinedLicenseSchemaCodes.TeleoptiWFMForecastsSchema,
                                 licenseActivator.EnabledLicenseSchemaName);
             }
         }
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 Assert.IsFalse(
                     licenseActivator.EnabledLicenseOptionPaths.Contains(
                         DefinedLicenseOptionPaths.TeleoptiCccFreemiumForecasts));
-                Assert.AreEqual(DefinedLicenseSchemaCodes.TeleoptiCccPilotCustomersSchema,
+                Assert.AreEqual(DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema,
                                 licenseActivator.EnabledLicenseSchemaName);
             }
         }

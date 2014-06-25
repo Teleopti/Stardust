@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         	// changes a bit the default schema
             schema.LicenseOptions[0].Enabled = true;
             schema.LicenseOptions[1].Enabled = false;
-            schema.EnabledLicenseSchema = DefinedLicenseSchemaCodes.TeleoptiCccSchema;
+            schema.EnabledLicenseSchema = DefinedLicenseSchemaCodes.TeleoptiWFMSchema;
             
             var result = target.LicensedFunctions("for test");
             result.IsEmpty().Should().Be.False();
