@@ -11581,4 +11581,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="File" xml:space="preserve">
     <value>Fil</value>
   </data>
+  <data name="OpenShiftsTreeDots" xml:space="preserve">
+    <value>Öppna Skift...</value>
+    <comment>Open Shifts...</comment>
+  </data>
 </root>

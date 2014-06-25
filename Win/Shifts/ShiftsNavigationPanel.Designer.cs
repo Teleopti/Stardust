@@ -28,62 +28,73 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tableLayoutPanelLinks = new System.Windows.Forms.TableLayoutPanel();
-            this.linkLabelShifts = new System.Windows.Forms.LinkLabel();
-            this.tableLayoutPanelLinks.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // tableLayoutPanelLinks
-            // 
-            this.tableLayoutPanelLinks.ColumnCount = 1;
-            this.tableLayoutPanelLinks.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelLinks.Controls.Add(this.linkLabelShifts, 0, 0);
-            this.tableLayoutPanelLinks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelLinks.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanelLinks.Name = "tableLayoutPanelLinks";
-            this.tableLayoutPanelLinks.RowCount = 5;
-            this.tableLayoutPanelLinks.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanelLinks.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanelLinks.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanelLinks.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanelLinks.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelLinks.Size = new System.Drawing.Size(193, 560);
-            this.tableLayoutPanelLinks.TabIndex = 7;
-            // 
-            // linkLabelShifts
-            // 
-            this.linkLabelShifts.AutoSize = true;
-            this.linkLabelShifts.BackColor = System.Drawing.Color.Transparent;
-            this.linkLabelShifts.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.linkLabelShifts.LinkColor = System.Drawing.Color.DodgerBlue;
-            this.linkLabelShifts.Location = new System.Drawing.Point(3, 3);
-            this.linkLabelShifts.Margin = new System.Windows.Forms.Padding(3);
-            this.linkLabelShifts.Name = "linkLabelShifts";
-            this.linkLabelShifts.Padding = new System.Windows.Forms.Padding(10, 5, 0, 0);
-            this.linkLabelShifts.Size = new System.Drawing.Size(53, 18);
-            this.linkLabelShifts.TabIndex = 5;
-            this.linkLabelShifts.TabStop = true;
-            this.linkLabelShifts.Text = "xxShifts";
-            this.linkLabelShifts.Visible = false;
-            this.linkLabelShifts.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelShifts_LinkClicked);
-            // 
-            // ShiftsNavigationPanel
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tableLayoutPanelLinks);
-            this.Name = "ShiftsNavigationPanel";
-            this.Size = new System.Drawing.Size(193, 560);
-            this.tableLayoutPanelLinks.ResumeLayout(false);
-            this.tableLayoutPanelLinks.PerformLayout();
-            this.ResumeLayout(false);
+			this.toolStripEx1 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
+			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripEx1.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// toolStripEx1
+			// 
+			this.toolStripEx1.BackColor = System.Drawing.Color.White;
+			this.toolStripEx1.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripEx1.Image = null;
+			this.toolStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1,
+            this.toolStripButton1});
+			this.toolStripEx1.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
+			this.toolStripEx1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+			this.toolStripEx1.Location = new System.Drawing.Point(0, 0);
+			this.toolStripEx1.Margin = new System.Windows.Forms.Padding(3);
+			this.toolStripEx1.Name = "toolStripEx1";
+			this.toolStripEx1.Office12Mode = false;
+			this.toolStripEx1.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
+			this.toolStripEx1.ShowCaption = false;
+			this.toolStripEx1.ShowLauncher = false;
+			this.toolStripEx1.Size = new System.Drawing.Size(256, 81);
+			this.toolStripEx1.TabIndex = 0;
+			this.toolStripEx1.Text = "toolStripEx1";
+			this.toolStripEx1.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
+			// 
+			// toolStripLabel1
+			// 
+			this.toolStripLabel1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.toolStripLabel1.Name = "toolStripLabel1";
+			this.toolStripLabel1.Size = new System.Drawing.Size(244, 17);
+			this.toolStripLabel1.Text = "xxActions";
+			// 
+			// toolStripButton1
+			// 
+			this.toolStripButton1.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Open_small;
+			this.toolStripButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton1.Name = "toolStripButton1";
+			this.toolStripButton1.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripButton1.Size = new System.Drawing.Size(244, 28);
+			this.toolStripButton1.Text = "xxOpenShiftsTreeDots";
+			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+			// 
+			// ShiftsNavigationPanel
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.White;
+			this.Controls.Add(this.toolStripEx1);
+			this.Name = "ShiftsNavigationPanel";
+			this.Size = new System.Drawing.Size(256, 560);
+			this.toolStripEx1.ResumeLayout(false);
+			this.toolStripEx1.PerformLayout();
+			this.ResumeLayout(false);
+			this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelLinks;
-        private System.Windows.Forms.LinkLabel linkLabelShifts;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx1;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+		private System.Windows.Forms.ToolStripButton toolStripButton1;
 
-    }
+
+	}
 }

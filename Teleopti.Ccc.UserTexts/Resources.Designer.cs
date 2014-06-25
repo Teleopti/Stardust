@@ -15823,6 +15823,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Shifts....
+        /// </summary>
+        public static string OpenShiftsTreeDots {
+            get {
+                return ResourceManager.GetString("OpenShiftsTreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift trade denied because selected dates are not open for requests..
         /// </summary>
         public static string OpenShiftTradePeriodDenyReason {

@@ -102,6 +102,9 @@
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="LinFu.DynamicProxy">
       <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
@@ -422,15 +425,7 @@
     <Compile Include="Common\Controls\Columns\SelectedItemChangeEventArgs.cs" />
     <Compile Include="Common\Controls\Columns\TypeChangeEventArgs.cs" />
     <Compile Include="Common\GridStyleInfoExtensions.cs" />
-    <Compile Include="Common\Controls\OutlookControls\Workspaces\NewOutlookBarWorkspace.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\OutlookControls\Workspaces\NewOutlookBarWorkspace.Designer.cs">
-      <DependentUpon>NewOutlookBarWorkspace.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarInfo.cs" />
-    <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspaceModel.cs" />
-    <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspacePresenter.cs" />
     <Compile Include="Common\Controls\FromToTimeDurationPicker.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -673,6 +668,7 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.designer.cs">
       <DependentUpon>WizardNoRoot.cs</DependentUpon>
     </Compile>
+    <Compile Include="Main\IDummyInterface.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2499,9 +2495,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\MaskedTimeSpanTextBox.resx">
       <DependentUpon>MaskedTimeSpanTextBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\Controls\OutlookControls\Workspaces\NewOutlookBarWorkspace.resx">
-      <DependentUpon>NewOutlookBarWorkspace.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\SkillResultHighlightGridControl.resx">
       <DependentUpon>SkillResultHighlightGridControl.cs</DependentUpon>

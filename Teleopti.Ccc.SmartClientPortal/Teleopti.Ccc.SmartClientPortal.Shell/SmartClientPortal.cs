@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.SmartClientPortal.Shell.Controls;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using log4net;
 using Syncfusion.Windows.Forms;
@@ -36,11 +37,11 @@ using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceExc
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
-    /// <summary>
+	/// <summary>
     /// Main application SmartClientShell view.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-    public partial class SmartClientShellForm : BaseRibbonForm, IClientPortalCallback
+    public partial class SmartClientShellForm : BaseRibbonForm, IDummyInterface
     {
         private readonly ILog _logger = LogManager.GetLogger(typeof (SmartClientShellForm));
         private readonly IComponentContext _container;
@@ -49,8 +50,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         private bool _lastSystemCheck = true;
         private readonly OutlookPanelContentWorker _outlookPanelContentWorker;
         private readonly PortalSettings _portalSettings;
-        private readonly OutlookBarWorkspaceModel _outlookBarWorkspaceModel;
-        private NewOutlookBarWorkspace _outlookBarWorkspace;
 
         /// <summary>
         /// Default class initializer.
@@ -107,7 +106,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             _systemChecker = _container.Resolve<SystemCheckerValidator>();
             _outlookPanelContentWorker = _container.Resolve<OutlookPanelContentWorker>();
             _portalSettings = _container.Resolve<PortalSettings>();
-            _outlookBarWorkspaceModel = _container.Resolve<OutlookBarWorkspaceModel>();
         }
 
         void toolStripButtonHelp_Click(object sender, EventArgs e)
@@ -170,7 +168,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
         private void StartModule(string modulePath)
         {
-            _outlookBarWorkspaceModel.StartupModule = modulePath;
+	        foreach (var modulePanelItem in outlookBar1.Items)
+	        {
+				if (modulePanelItem.Tag.Equals(modulePath))
+		        {
+			        outlookBar1.SelectItem(modulePanelItem);
+					return;
+		        }
+	        }
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
@@ -193,8 +198,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
             SetPermissionOnToolStripButtonControls();
 
-
-            _outlookBarWorkspaceModel.NumberOfVisibleGroupBars = _portalSettings.NumberOfVisibleGroupBars;
             if (!string.IsNullOrEmpty(_portalSettings.LastModule))
                 StartModule(_portalSettings.LastModule);
 
@@ -211,14 +214,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                     showMem();
                 }                
             }
-
-			_outlookBarWorkspace = _container.Resolve<NewOutlookBarWorkspace>(new NamedParameter("clientPortalCallback", this));
-            _outlookBarWorkspace.Visible = false;
-            _outlookBarWorkspace.Size = splitContainer.Panel1.Size;
-            _outlookBarWorkspace.Dock = DockStyle.Fill;
-            splitContainer.Panel1.Controls.Add(_outlookBarWorkspace);
-			SetTexts();
-            _outlookBarWorkspace.Visible = true;
         }
 
         private void showMem()
@@ -255,9 +250,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 e.Cancel = true;
                 return; // a form was canceled
             }
-
-            _portalSettings.NumberOfVisibleGroupBars = _outlookBarWorkspaceModel.NumberOfVisibleGroupBars;
-            _portalSettings.LastModule = _outlookBarWorkspaceModel.LastModule;
 
             try
             {
@@ -432,7 +424,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                         outlookBarSmartPartInfo.Icon = Resources.WFM_Performance_Manager;
                         break;
                 }
-                _outlookBarWorkspaceModel.Add(outlookBarSmartPartInfo);
+
+				outlookBar1.AddItem(new ModulePanelItem
+				{
+					ItemImage = outlookBarSmartPartInfo.Icon,
+					ItemText = outlookBarSmartPartInfo.Title,
+					ItemEnabled = outlookBarSmartPartInfo.Enable,
+					Tag = outlookBarSmartPartInfo.EventTopicName
+				});
             }
         }
 
@@ -568,6 +567,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
         }
 
+	    public void ModuleSelected(ModulePanelItem modulePanelItem)
+	    {
+		    if (modulePanelItem == null)
+			    return;
+
+			_portalSettings.LastModule = modulePanelItem.Tag.ToString();
+			SmartPartInvoker.ClearAllSmartParts();
+			var uc = _outlookPanelContentWorker.GetOutlookPanelContent(_portalSettings.LastModule);
+
+			if (uc == null) 
+				return;
+
+			outlookBarWorkSpace1.SetNavigatorControl(uc);
+			
+			var navigator = uc as AbstractNavigator;
+			if (navigator != null)
+				navigator.RefreshNavigator();
+
+			//var shifts = uc as Win.Shifts.ShiftsNavigationPanel;
+			//if (shifts != null && !startup)
+			//	shifts.OpenShifts();
+	    }
+
         //dont know? Robin!
         public void SelectedModule(GroupBarItem selectedItem, bool startup)
         {
@@ -614,5 +636,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 }
             }
         }
+
+		private void outlookBar1_SizeChanged(object sender, EventArgs e)
+		{
+			splitContainer.Size = new Size(outlookBar1.Width, outlookBar1.Top);
+		}
+
+		private void outlookBar1_SelectedItemChanged(object sender, SelectedItemChangedEventArgs e)
+		{
+			outlookBarWorkSpace1.SetHeader(e.SelectedItem);
+			ModuleSelected(e.SelectedItem);
+		}
+
     }
 }
