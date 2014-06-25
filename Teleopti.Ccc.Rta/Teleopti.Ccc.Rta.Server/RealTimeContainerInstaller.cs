@@ -2,6 +2,7 @@
 using System.Configuration;
 using Autofac;
 using MbCache.Configuration;
+using MbCache.Core;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.Interfaces;
@@ -34,8 +35,8 @@ namespace Teleopti.Ccc.Rta.Server
 				.CacheMethod(svc => svc.StateGroups())
 				.CacheMethod(svc => svc.GetReadModel(Guid.NewGuid()))
 				.As<IDatabaseReader>();
-
 			builder.RegisterMbCacheComponent<DatabaseReader, IDatabaseReader>();
+
 			builder.Register<ILoadActualAgentState>(c => c.Resolve<DatabaseReader>());
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
 			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>();
@@ -56,11 +57,19 @@ namespace Teleopti.Ccc.Rta.Server
 			registerAdherenceComponents(builder);
 		}
 
-		private static void registerAdherenceComponents(Autofac.ContainerBuilder builder)
+		private void registerAdherenceComponents(ContainerBuilder builder)
 		{
 			builder.RegisterType<AdherenceAggregator>().SingleInstance().As<IActualAgentStateHasBeenSent>();
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
-			builder.RegisterType<PersonOrganizationProvider>().SingleInstance().As<IPersonOrganizationProvider>();
+
+			_cacheBuilder
+				.For<PersonOrganizationProvider>()
+				.CacheMethod(svc => svc.LoadAll())
+				.As<IPersonOrganizationProvider>();
+			builder.RegisterType<PersonOrganizationProvider>().SingleInstance().AsSelf();
+			builder.Register<IPersonOrganizationProvider>(c => c.Resolve<PersonOrganizationProvider>()).SingleInstance().IntegrateWithMbCache();
+
+				
 			//messy for now
 			builder.Register(c => new PersonOrganizationReader(c.Resolve<INow>(), c.Resolve<IDatabaseConnectionStringHandler>().AppConnectionString()))
 				.SingleInstance().As<IPersonOrganizationReader>();
