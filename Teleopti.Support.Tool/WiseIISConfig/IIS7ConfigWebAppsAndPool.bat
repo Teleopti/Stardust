@@ -27,6 +27,7 @@ ECHO Call was: IIS7ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
 
 SET "DefaultSite="
 SET MainSiteName=TeleoptiWFM
+SET PhysicalPath=TeleoptiCCC
 SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
 
 for /f "delims==" %%g in ('"%appcmd%" list site /text:name') do (
@@ -50,14 +51,14 @@ for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level1;%MainSiteName%;" Ap
 %appcmd% DELETE vdir "%DefaultSite%/%MainSiteName%"
 
 ::Add web site
-"%appcmd%" add vdir /app.name:"%DefaultSite%/" /path:"/%MainSiteName%" /physicalPath:"%INSTALLDIR%\TeleoptiCCC"
+"%appcmd%" add vdir /app.name:"%DefaultSite%/" /path:"/%MainSiteName%" /physicalPath:"%INSTALLDIR%\%PhysicalPath%"
 
 ::create AppPools
 for /f "tokens=3,4 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%
 
 ::create applications
 for /f "tokens=2,3,4,5,8 delims=;" %%g in ('FINDSTR /C:"Level1;%MainSiteName%;" Apps\ApplicationsInAppPool.txt') do CALL:CreateApp "%DefaultSite%" "%%g" "%%k" "%%j" "%INSTALLDIR%" >> %logfile%
-for /f "tokens=2,3,4,5,8 delims=;" %%g in ('FINDSTR /C:"Level2;" Apps\ApplicationsInAppPool.txt') do CALL:CreateApp "%DefaultSite%" "%MainSiteName%/%%g" "%%k" "%%j" "%INSTALLDIR%\%MainSiteName%" >> %logfile%
+for /f "tokens=2,3,4,5,8 delims=;" %%g in ('FINDSTR /C:"Level2;" Apps\ApplicationsInAppPool.txt') do CALL:CreateApp "%DefaultSite%" "%MainSiteName%/%%g" "%%k" "%%j" "%INSTALLDIR%\%PhysicalPath%" >> %logfile%
 
 ::disable directoryBrowse
 "%appcmd%" set config "%DefaultSite%" -section:system.webServer/directoryBrowse /enabled:"False"
