@@ -61,6 +61,9 @@ SET SRCDIR=%WISEDIR:~0,-5%
 ::This is were we put src files after successful build
 SET HISTORYDIR=%DEPLOYSHARE%\%Version%
 
+::This must be before the drive mapping below
+SET WORKINGDIR=C:\Temp\WiseWORKINGDIR
+
 ::Hardcoded drive letter used inside WISE project.
 SET WISEDRIVELETTER=K:
 
@@ -98,7 +101,6 @@ SET DEPENDENCIESSRC=\\a380\t-files\RnD\MSI_Dependencies
 ECHO WISESOURCEFILE: %WISESOURCEFILE%
 ECHO WISEPROJFILE: %WISEPROJFILE%
 ECHO DYNAMICCONTENT: %DYNAMICCONTENT%
-SET WORKINGDIR=C:\Temp\WiseWORKINGDIR
 SET WISEEXE=C:\Program Files (x86)\Altiris\Wise\Windows Installer Editor\WfWI.exe
 SET WISESCRIPT=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor\Wise32.exe
 SET DEPLOYSHARE=D:\Installation\PreviousBuilds
