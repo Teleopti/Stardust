@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             using(PerformanceOutput.ForOperation("SmartClientPortal ctor"))
             {
                 InitializeComponent();
+	            ribbonControlAdv1.MenuButtonText = UserTexts.Resources.File;
 
                 if (!DesignMode)
                 {
