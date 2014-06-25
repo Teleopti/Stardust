@@ -1033,8 +1033,8 @@
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Left>0.25cm</Left>
-        <Height>6.3529cm</Height>
-        <Width>26.91219cm</Width>
+        <Height>6.35291cm</Height>
+        <Width>26.91218cm</Width>
         <Style />
       </Tablix>
       <Tablix Name="matrix1">
@@ -1388,7 +1388,7 @@
                       <Paragraph>
                         <TextRuns>
                           <TextRun>
-                            <Value>=FormatDateTime(Fields!date_date.Value,DateFormat.ShortDate)</Value>
+                            <Value>=Code.ShortDateString(Fields!date_date.Value)</Value>
                             <Style>
                               <FontSize>8pt</FontSize>
                               <Color>DimGray</Color>
@@ -1471,7 +1471,7 @@
         <Top>7.25812cm</Top>
         <Left>0.25cm</Left>
         <Height>2.75001cm</Height>
-        <Width>7.25002cm</Width>
+        <Width>7.25003cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <FontSize>8pt</FontSize>
@@ -1916,6 +1916,11 @@
   </ReportParameters>
   <Code>Public Function TimeString(i as integer)as string
 	return Math.Floor(i / 60) &amp; ":"  &amp; Format(i Mod 60, "00")
+End function
+
+Public Function ShortDateString(d as System.DateTime)as string
+	Dim format =  System.Globalization.CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern
+	return d.ToString(format ,System.Globalization.CultureInfo.CurrentUICulture)
 End function</Code>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>

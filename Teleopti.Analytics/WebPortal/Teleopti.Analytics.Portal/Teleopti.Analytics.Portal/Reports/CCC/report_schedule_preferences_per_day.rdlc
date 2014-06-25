@@ -1489,7 +1489,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!date.Value,DateFormat.ShortDate)</Value>
+                              <Value>=Code.ShortDateString(Fields!date.Value)</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2386,6 +2386,11 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
   </ReportParameters>
   <Code>Public Function TimeString(i as integer)as string
 	return Math.Floor(i / 3600) &amp; ":" &amp; Format(Math.Floor((i Mod 3600) / 60), "00") &amp; ":" &amp; Format(i Mod 60, "00")
+End function
+
+Public Function ShortDateString(d as System.DateTime)as string
+	Dim format =  System.Globalization.CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern
+	return d.ToString(format ,System.Globalization.CultureInfo.CurrentUICulture)
 End function</Code>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
