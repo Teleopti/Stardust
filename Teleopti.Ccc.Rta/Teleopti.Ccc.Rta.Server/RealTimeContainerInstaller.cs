@@ -66,9 +66,7 @@ namespace Teleopti.Ccc.Rta.Server
 				.For<PersonOrganizationProvider>()
 				.CacheMethod(svc => svc.LoadAll())
 				.As<IPersonOrganizationProvider>();
-			builder.RegisterType<PersonOrganizationProvider>().SingleInstance().AsSelf();
-			builder.Register<IPersonOrganizationProvider>(c => c.Resolve<PersonOrganizationProvider>()).SingleInstance().IntegrateWithMbCache();
-
+			builder.RegisterMbCacheComponent<PersonOrganizationProvider, IPersonOrganizationProvider>().SingleInstance();
 				
 			//messy for now
 			builder.Register(c => new PersonOrganizationReader(c.Resolve<INow>(), c.Resolve<IDatabaseConnectionStringHandler>().AppConnectionString()))
