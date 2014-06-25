@@ -31,9 +31,11 @@ namespace Teleopti.Ccc.Rta.Server
 			//mark activityalarms and stategroups to be cached
 			_cacheBuilder
 				.For<DatabaseReader>()
-				.CacheMethod(svc => svc.ActivityAlarms())
-				.CacheMethod(svc => svc.StateGroups())
-				.CacheMethod(svc => svc.GetReadModel(Guid.NewGuid()))
+				.CacheMethod(x => x.ActivityAlarms())
+				.CacheMethod(x => x.StateGroups())
+				.CacheMethod(x => x.GetReadModel(Guid.NewGuid()))
+				.CacheMethod(x => x.LoadDatasources())
+				.CacheMethod(x => x.LoadAllExternalLogOns())
 				.As<IDatabaseReader>();
 			builder.RegisterMbCacheComponent<DatabaseReader, IDatabaseReader>();
 
