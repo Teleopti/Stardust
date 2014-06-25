@@ -26,7 +26,7 @@ ECHO Settings up IIS web sites and applictions ...
 ECHO Call was: IIS7ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
 
 SET "DefaultSite="
-SET MainSiteName=TeleoptiCCC
+SET MainSiteName=TeleoptiWFM
 SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
 
 for /f "delims==" %%g in ('"%appcmd%" list site /text:name') do (
@@ -44,6 +44,13 @@ IF "%DefaultSite%"=="" SET DefaultSite=Default Web Site
 CALL:DeleteApp "%DefaultSite%" "%MainSiteName%/ContextHelp" "app" >> %logfile%
 for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level2;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%/%MainSiteName%" "%%g" "%%j" >> %logfile%
 for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level1;%MainSiteName%;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%" "%%g" "%%j" >> %logfile%
+
+::remove web site
+%appcmd% DELETE vdir "%DefaultSite%/TeleoptiCCC"
+%appcmd% DELETE vdir "%DefaultSite%/%MainSiteName%"
+
+::Add web site
+"%appcmd%" add vdir /app.name:"%DefaultSite%/" /path:"/%MainSiteName%" /physicalPath:"%INSTALLDIR%\TeleoptiCCC"
 
 ::create AppPools
 for /f "tokens=3,4 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%

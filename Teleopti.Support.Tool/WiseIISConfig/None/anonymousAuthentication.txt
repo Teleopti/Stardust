@@ -7,6 +7,6 @@ SDK;True
 Web;True
 Client;True
 MyTime;True
-TeleoptiCCC;True
+TeleoptiWFM;True
 AuthenticationBridge;True
 WindowsIdentityProvider;True
