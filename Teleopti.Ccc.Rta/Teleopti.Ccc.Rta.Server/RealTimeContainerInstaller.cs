@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Rta.Server
 			_cacheBuilder = mbCacheModule.Builder;
 		}
 
-		protected override void Load(Autofac.ContainerBuilder builder)
+		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<DatabaseConnectionStringHandler>().As<IDatabaseConnectionStringHandler>();
 			builder.RegisterType<DatabaseConnectionFactory>().As<IDatabaseConnectionFactory>();
@@ -35,9 +35,7 @@ namespace Teleopti.Ccc.Rta.Server
 				.CacheMethod(svc => svc.GetReadModel(Guid.NewGuid()))
 				.As<IDatabaseReader>();
 
-			builder.RegisterType<DatabaseReader>().AsSelf();
-			builder.Register<IDatabaseReader>(c => c.Resolve<DatabaseReader>())
-				.IntegrateWithMbCache();
+			builder.RegisterMbCacheComponent<DatabaseReader, IDatabaseReader>();
 			builder.Register<ILoadActualAgentState>(c => c.Resolve<DatabaseReader>());
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
 			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>();
