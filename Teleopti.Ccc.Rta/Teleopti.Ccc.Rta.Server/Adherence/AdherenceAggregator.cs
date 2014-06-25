@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		private readonly TeamAdherenceAggregator _teamAdherenceAggregator;
 		private readonly SiteAdherenceAggregator _siteAdherenceAggregator;
 		private readonly AgentAdherenceAggregator _agentAdherenceAggregator;
-		private IOrganizationForPerson _organizationForPerson;
+		private readonly IOrganizationForPerson _organizationForPerson;
 
 		public AdherenceAggregator(IMessageSender messageSender, IOrganizationForPerson organizationForPerson)
 		{

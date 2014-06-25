@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MbCache.Core;
 using Microsoft.IdentityModel.Claims;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Rta.Server;
+using Teleopti.Ccc.Rta.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
@@ -21,7 +23,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
     public class TestController : Controller
 	{
 		private readonly IMutateNow _mutateNow;
-		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
+	    private readonly IMbCacheFactory _cacheFactory;
+	    private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IAuthenticator _authenticator;
 		private readonly IWebLogOn _logon;
 		private readonly IBusinessUnitProvider _businessUnitProvider;
@@ -30,10 +33,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IToggleManager _toggleManager;
         private readonly IIdentityProviderProvider _identityProviderProvider;
 
-        public TestController(IMutateNow mutateNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider)
+        public TestController(IMutateNow mutateNow, IMbCacheFactory cacheFactory, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider)
 		{
 			_mutateNow = mutateNow;
-			_sessionSpecificDataProvider = sessionSpecificDataProvider;
+	        _cacheFactory = cacheFactory;
+	        _sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_authenticator = authenticator;
 			_logon = logon;
 			_businessUnitProvider = businessUnitProvider;
@@ -44,7 +48,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		}
 
         public ViewResult BeforeScenario(bool enableMyTimeMessageBroker, string defaultProvider = null)
-		{
+        {
+	        if (_cacheFactory != null)
+			{
+				_cacheFactory.Invalidate<IDatabaseReader>();
+				_cacheFactory.Invalidate<IPersonOrganizationProvider>();
+	        }
+
 			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 
