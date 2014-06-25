@@ -46,13 +46,14 @@
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(271, 32);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(249, 38);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// paneImagelHeader
 			// 
+			this.paneImagelHeader.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.paneImagelHeader.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.paneImagelHeader.Location = new System.Drawing.Point(0, 0);
+			this.paneImagelHeader.Location = new System.Drawing.Point(0, 3);
 			this.paneImagelHeader.Margin = new System.Windows.Forms.Padding(0);
 			this.paneImagelHeader.Name = "paneImagelHeader";
 			this.paneImagelHeader.Size = new System.Drawing.Size(32, 32);
@@ -65,7 +66,7 @@
 			this.autoLabelHeader.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.autoLabelHeader.Location = new System.Drawing.Point(35, 0);
 			this.autoLabelHeader.Name = "autoLabelHeader";
-			this.autoLabelHeader.Size = new System.Drawing.Size(233, 32);
+			this.autoLabelHeader.Size = new System.Drawing.Size(233, 38);
 			this.autoLabelHeader.TabIndex = 1;
 			this.autoLabelHeader.Text = "Header";
 			this.autoLabelHeader.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -74,12 +75,11 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BackColor = System.Drawing.Color.LightGray;
+			this.BackColor = System.Drawing.Color.Gainsboro;
 			this.Controls.Add(this.tableLayoutPanel1);
-			this.MaximumSize = new System.Drawing.Size(400, 32);
 			this.MinimumSize = new System.Drawing.Size(32, 32);
 			this.Name = "SelectedModulePanel";
-			this.Size = new System.Drawing.Size(271, 32);
+			this.Size = new System.Drawing.Size(249, 38);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 

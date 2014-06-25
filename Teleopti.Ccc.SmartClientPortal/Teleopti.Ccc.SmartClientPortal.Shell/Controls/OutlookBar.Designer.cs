@@ -34,10 +34,11 @@
 			// flowLayoutPanel1
 			// 
 			this.flowLayoutPanel1.AutoSize = true;
+			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(709, 63);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(150, 35);
 			this.flowLayoutPanel1.TabIndex = 0;
 			// 
 			// OutlookBar
@@ -45,10 +46,11 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
+			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.Controls.Add(this.flowLayoutPanel1);
 			this.MinimumSize = new System.Drawing.Size(150, 35);
 			this.Name = "OutlookBar";
-			this.Size = new System.Drawing.Size(709, 63);
+			this.Size = new System.Drawing.Size(150, 35);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

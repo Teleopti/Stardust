@@ -440,7 +440,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					ItemImage = outlookBarSmartPartInfo.Icon,
 					ItemText = outlookBarSmartPartInfo.Title,
-					ItemEnabled = outlookBarSmartPartInfo.Enable
+					ItemEnabled = outlookBarSmartPartInfo.Enable,
+					Tag = outlookBarSmartPartInfo.EventTopicName
 				});
             }
         }
@@ -577,6 +578,35 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
         }
 
+	    public void ModuleSelected(ModulePanelItem modulePanelItem)
+	    {
+		    if (modulePanelItem == null)
+			    return;
+
+			_portalSettings.LastModule = modulePanelItem.Tag.ToString();
+			SmartPartInvoker.ClearAllSmartParts();
+			var uc = _outlookPanelContentWorker.GetOutlookPanelContent(_portalSettings.LastModule);
+
+			if (uc == null) 
+				return;
+
+			outlookBarWorkSpace1.SetNavigatorControl(uc);
+			//uc.Dock = DockStyle.None;
+
+			//if (selectedItem.Client == null)
+			//{
+			//	selectedItem.Client = uc;
+			//}
+
+			var navigator = uc as AbstractNavigator;
+			if (navigator != null)
+				navigator.RefreshNavigator();
+
+			//var shifts = uc as Win.Shifts.ShiftsNavigationPanel;
+			//if (shifts != null && !startup)
+			//	shifts.OpenShifts();
+	    }
+
         //dont know? Robin!
         public void SelectedModule(GroupBarItem selectedItem, bool startup)
         {
@@ -626,12 +656,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void outlookBar1_SizeChanged(object sender, EventArgs e)
 		{
-			splitContainer.Size = new Size(outlookBar1.Width, outlookBar1.Top - ribbonControlAdv1.Bottom);
+			splitContainer.Size = new Size(outlookBar1.Width, outlookBar1.Top);
 		}
 
 		private void outlookBar1_SelectedItemChanged(object sender, SelectedItemChangedEventArgs e)
 		{
 			outlookBarWorkSpace1.SetHeader(e.SelectedItem);
+			ModuleSelected(e.SelectedItem);
 		}
 
     }

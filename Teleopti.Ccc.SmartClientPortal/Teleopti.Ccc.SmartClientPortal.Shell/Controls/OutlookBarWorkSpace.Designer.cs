@@ -30,6 +30,7 @@
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.selectedModulePanel1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.SelectedModulePanel();
+			this.panel1 = new System.Windows.Forms.Panel();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -37,25 +38,35 @@
 			// 
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Controls.Add(this.selectedModulePanel1, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 2;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 92F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(246, 500);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// selectedModulePanel1
 			// 
+			this.selectedModulePanel1.BackColor = System.Drawing.Color.LightGray;
+			this.selectedModulePanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.selectedModulePanel1.Location = new System.Drawing.Point(3, 3);
 			this.selectedModulePanel1.MaximumSize = new System.Drawing.Size(400, 32);
 			this.selectedModulePanel1.MinimumSize = new System.Drawing.Size(32, 32);
 			this.selectedModulePanel1.Name = "selectedModulePanel1";
 			this.selectedModulePanel1.Size = new System.Drawing.Size(240, 32);
 			this.selectedModulePanel1.TabIndex = 0;
+			// 
+			// panel1
+			// 
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel1.Location = new System.Drawing.Point(3, 43);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(240, 454);
+			this.panel1.TabIndex = 1;
 			// 
 			// OutlookBarWorkSpace
 			// 
@@ -73,5 +84,6 @@
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private SelectedModulePanel selectedModulePanel1;
+		private System.Windows.Forms.Panel panel1;
 	}
 }

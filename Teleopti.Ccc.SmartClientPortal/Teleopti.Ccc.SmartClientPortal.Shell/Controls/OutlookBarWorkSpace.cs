@@ -23,7 +23,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 
 		public void SetNavigatorControl(Control navigatorControl)
 		{
-			tableLayoutPanel1.Controls.Add(navigatorControl);
+			panel1.Controls.Clear();
+			panel1.Controls.Add(navigatorControl);
+			navigatorControl.Dock = DockStyle.Fill;
 		}
 	}
 }
