@@ -16,11 +16,6 @@ namespace Teleopti.Ccc.Win.Shifts
             SetTexts();
         }
 
-        private void linkLabelShifts_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            open();
-        }
-
         private void open()
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -45,7 +40,11 @@ namespace Teleopti.Ccc.Win.Shifts
         public void OpenShifts()
         {
             open();
-            //linkLabelShifts_LinkClicked(this, new LinkLabelLinkClickedEventArgs(linkLabelShifts.Links[0]));
         }
+
+		private void toolStripButton1_Click(object sender, System.EventArgs e)
+		{
+			open();
+		}
     }
 }

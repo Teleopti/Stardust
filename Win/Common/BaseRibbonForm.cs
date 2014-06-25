@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
+using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Common;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 
@@ -215,7 +216,7 @@ namespace Teleopti.Ccc.Win.Common
                 if (form == caller)
                     continue;
                 //SmartClientShellForm 
-                if(form is IClientPortalCallback)
+				if (form is IDummyInterface)
                     continue;
 
                 int formCount = Application.OpenForms.Count;

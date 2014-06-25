@@ -64,7 +64,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.toolStripStatusLabelLoggedOnUser = new System.Windows.Forms.ToolStripStatusLabel();
 			this._statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.splitContainer = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
-			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.outlookBarWorkSpace1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.OutlookBarWorkSpace();
 			this.webBrowser1 = new System.Windows.Forms.WebBrowser();
 			this.gridWorkspace = new Teleopti.Common.UI.SmartPartControls.SmartParts.GridWorkspace();
@@ -96,7 +95,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
 			this.splitContainer.SuspendLayout();
-			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			this.ribbonControlAdv1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.backStage1)).BeginInit();
@@ -124,7 +122,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			this.toolStripStatusLabelSpring.Name = "toolStripStatusLabelSpring";
 			this.SetShortcut(this.toolStripStatusLabelSpring, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelSpring.Size = new System.Drawing.Size(835, 19);
+			this.toolStripStatusLabelSpring.Size = new System.Drawing.Size(827, 19);
 			this.toolStripStatusLabelSpring.Spring = true;
 			this.toolStripStatusLabelSpring.Click += new System.EventHandler(this.toolStripStatusLabelSpring_Click);
 			// 
@@ -137,8 +135,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.toolStripStatusLabelCurrentDatabase.ForeColor = System.Drawing.Color.White;
 			this.toolStripStatusLabelCurrentDatabase.Name = "toolStripStatusLabelCurrentDatabase";
 			this.SetShortcut(this.toolStripStatusLabelCurrentDatabase, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelCurrentDatabase.Size = new System.Drawing.Size(125, 19);
-			this.toolStripStatusLabelCurrentDatabase.Text = "xxConnectedToColon";
+			this.toolStripStatusLabelCurrentDatabase.Size = new System.Drawing.Size(129, 19);
+			this.toolStripStatusLabelCurrentDatabase.Text = "XXConnectedToColon";
 			this.toolStripStatusLabelCurrentDatabase.Visible = false;
 			// 
 			// toolStripStatusLabelLicense
@@ -150,8 +148,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.toolStripStatusLabelLicense.ForeColor = System.Drawing.Color.White;
 			this.toolStripStatusLabelLicense.Name = "toolStripStatusLabelLicense";
 			this.SetShortcut(this.toolStripStatusLabelLicense, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelLicense.Size = new System.Drawing.Size(113, 19);
-			this.toolStripStatusLabelLicense.Text = "xxLicensedToColon";
+			this.toolStripStatusLabelLicense.Size = new System.Drawing.Size(117, 19);
+			this.toolStripStatusLabelLicense.Text = "XXLicensedToColon";
 			// 
 			// toolStripStatusLabelRoger65
 			// 
@@ -170,8 +168,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.toolStripStatusLabelLoggedOnUser.ForeColor = System.Drawing.Color.White;
 			this.toolStripStatusLabelLoggedOnUser.Name = "toolStripStatusLabelLoggedOnUser";
 			this.SetShortcut(this.toolStripStatusLabelLoggedOnUser, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelLoggedOnUser.Size = new System.Drawing.Size(128, 19);
-			this.toolStripStatusLabelLoggedOnUser.Text = "xxLoggedOnUserColon";
+			this.toolStripStatusLabelLoggedOnUser.Size = new System.Drawing.Size(132, 19);
+			this.toolStripStatusLabelLoggedOnUser.Text = "XXLoggedOnUserColon";
 			// 
 			// _statusLabel
 			// 
@@ -193,7 +191,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// splitContainer.Panel1
 			// 
 			this.splitContainer.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
-			this.splitContainer.Panel1.Controls.Add(this.tableLayoutPanel1);
+			this.splitContainer.Panel1.Controls.Add(this.outlookBarWorkSpace1);
 			this.splitContainer.Panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.splitContainer.Panel1MinSize = 30;
 			// 
@@ -210,27 +208,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.splitContainer.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
 			this.splitContainer.TabIndex = 3;
 			// 
-			// tableLayoutPanel1
-			// 
-			this.tableLayoutPanel1.ColumnCount = 2;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Controls.Add(this.outlookBarWorkSpace1, 1, 0);
-			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 1;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(235, 532);
-			this.tableLayoutPanel1.TabIndex = 0;
-			// 
 			// outlookBarWorkSpace1
 			// 
 			this.outlookBarWorkSpace1.BackColor = System.Drawing.Color.White;
 			this.outlookBarWorkSpace1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.outlookBarWorkSpace1.Location = new System.Drawing.Point(120, 3);
+			this.outlookBarWorkSpace1.Location = new System.Drawing.Point(0, 0);
 			this.outlookBarWorkSpace1.Name = "outlookBarWorkSpace1";
-			this.outlookBarWorkSpace1.Size = new System.Drawing.Size(112, 526);
+			this.outlookBarWorkSpace1.Size = new System.Drawing.Size(235, 532);
 			this.outlookBarWorkSpace1.TabIndex = 0;
 			// 
 			// webBrowser1
@@ -261,6 +245,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			this.ribbonControlAdv1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.ribbonControlAdv1.BackStageView = this.backStageViewMain;
+			this.ribbonControlAdv1.BorderStyle = Syncfusion.Windows.Forms.Tools.ToolStripBorderStyle.None;
 			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.Header.AddMainItem(toolStripTabItem1);
 			this.ribbonControlAdv1.HideMenuButtonToolTip = false;
@@ -453,12 +438,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.toolStripTabItem1.Panel.Name = "ribbonPanel1";
 			this.toolStripTabItem1.Panel.ScrollPosition = 0;
 			this.toolStripTabItem1.Panel.TabIndex = 2;
-			this.toolStripTabItem1.Panel.Text = "xxHome";
+			this.toolStripTabItem1.Panel.Text = "XXHome";
 			this.toolStripTabItem1.Position = 0;
 			this.SetShortcut(this.toolStripTabItem1, System.Windows.Forms.Keys.None);
-			this.toolStripTabItem1.Size = new System.Drawing.Size(67, 25);
+			this.toolStripTabItem1.Size = new System.Drawing.Size(69, 25);
 			this.toolStripTabItem1.Tag = "1";
-			this.toolStripTabItem1.Text = "xxHome";
+			this.toolStripTabItem1.Text = "XXHome";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripTabItem1, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripTabItem1, false);
 			// 
@@ -586,7 +571,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			// outlookBar1
 			// 
-			this.outlookBar1.AutoSize = true;
+			this.outlookBar1.AutoScroll = true;
+			this.outlookBar1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.outlookBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.outlookBar1.Location = new System.Drawing.Point(0, 537);
 			this.outlookBar1.MinimumSize = new System.Drawing.Size(150, 35);
@@ -626,14 +612,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.splitContainer.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
 			this.splitContainer.ResumeLayout(false);
-			this.tableLayoutPanel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
 			this.ribbonControlAdv1.ResumeLayout(false);
 			this.ribbonControlAdv1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.backStage1)).EndInit();
 			this.backStage1.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -676,7 +660,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private ToolStripTabItem toolStripTabItem1;
 		private Controls.OutlookBar outlookBar1;
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private Controls.OutlookBarWorkSpace outlookBarWorkSpace1;
     }
 }

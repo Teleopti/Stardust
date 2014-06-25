@@ -17,9 +17,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 
 		public event EventHandler<SelectedItemChangedEventArgs> SelectedItemChanged;
 
+		public IEnumerable<ModulePanelItem> Items
+		{
+			get { return _items; }
+		}
+
 		public void ClearItems()
 		{
-			foreach (var modulePanelItem in _items)
+			foreach (var modulePanelItem in Items)
 			{
 				modulePanelItem.ModulePanelItemClick -= modulePanelItemClick;
 			}
@@ -35,6 +40,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 			flowLayoutPanel1.Controls.Add(modulePanelItem);
 		}
 
+		public void SelectItem(ModulePanelItem modulePanelItem)
+		{
+			if (!_items.Contains(modulePanelItem))
+				return;
+
+			modulePanelItemClick(modulePanelItem, new EventArgs());
+		}
+
 		protected virtual void OnSelectedItemChanged(SelectedItemChangedEventArgs e)
 		{
 			var handler = SelectedItemChanged;
@@ -48,7 +61,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 		void modulePanelItemClick(object sender, EventArgs e)
 		{
 			var item = ((ModulePanelItem) sender);
-			foreach (var modulePanelItem in _items)
+			foreach (var modulePanelItem in Items)
 			{
 				modulePanelItem.SetSelected(false);
 			}

@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			// splitContainerAdv1
 			// 
 			this.splitContainerAdv1.BackColor = System.Drawing.Color.Transparent;
+			this.splitContainerAdv1.BeforeTouchSize = 4;
 			this.splitContainerAdv1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainerAdv1.Location = new System.Drawing.Point(0, 0);
 			this.splitContainerAdv1.Name = "splitContainerAdv1";
@@ -72,6 +73,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			// splitContainerAdv1.Panel2
 			// 
 			this.splitContainerAdv1.Panel2.AutoScroll = true;
+			this.splitContainerAdv1.Panel2.BackColor = System.Drawing.Color.White;
 			this.splitContainerAdv1.Panel2.Controls.Add(this.toolStripPeople);
 			this.splitContainerAdv1.Panel2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.splitContainerAdv1.Size = new System.Drawing.Size(262, 606);
@@ -103,15 +105,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.toolStripPeople.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
 			this.toolStripPeople.Location = new System.Drawing.Point(10, 0);
 			this.toolStripPeople.Name = "toolStripPeople";
-			this.toolStripPeople.Size = new System.Drawing.Size(235, 296);
+			this.toolStripPeople.Size = new System.Drawing.Size(235, 297);
 			this.toolStripPeople.TabIndex = 0;
 			// 
 			// toolStripLabel1
 			// 
 			this.toolStripLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripLabel1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.toolStripLabel1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.toolStripLabel1.Name = "toolStripLabel1";
-			this.toolStripLabel1.Size = new System.Drawing.Size(233, 16);
+			this.toolStripLabel1.Size = new System.Drawing.Size(233, 17);
 			this.toolStripLabel1.Text = "xxActions";
 			// 
 			// toolStripButtonOpen

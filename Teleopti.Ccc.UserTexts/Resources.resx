@@ -12114,4 +12114,8 @@ Reduce the complexity to use these shifts.</value>
     <value>File</value>
     <comment>Text for tab like File, Edit, View....</comment>
   </data>
+  <data name="OpenShiftsTreeDots" xml:space="preserve">
+    <value>Open Shifts...</value>
+    <comment>Open Shifts...</comment>
+  </data>
 </root>

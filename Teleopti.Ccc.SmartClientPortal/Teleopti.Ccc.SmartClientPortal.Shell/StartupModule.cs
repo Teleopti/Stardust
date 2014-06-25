@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		    //       .SingleInstance();
 		    builder.RegisterType<ApplicationStartup>()
 		           .SingleInstance();
-		    builder.RegisterType<SmartClientShellForm>().As<SmartClientShellForm>().As<IClientPortalCallback>();
 		    builder.RegisterType<EnvironmentWindowsUserProvider>()
 		           .As<IWindowsUserProvider>()
 		           .SingleInstance();
@@ -29,8 +28,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			    <IMessageBroker>().ExternallyOwned();
 		    builder.RegisterType<SystemCheckerValidator>();
 		    builder.RegisterType<OutlookPanelContentWorker>();
-		    builder.RegisterType<NewOutlookBarWorkspace>();
-		    builder.RegisterType<OutlookBarWorkspaceModel>().SingleInstance();
 
 			builder.RegisterType<LogonModel>().SingleInstance();
             builder.RegisterType<LogonPresenter>().As<ILogonPresenter>().SingleInstance();
