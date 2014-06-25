@@ -159,7 +159,7 @@ namespace Teleopti.Analytics.Portal
                 {
                     if (repInfo.Name.StartsWith("Res",StringComparison.CurrentCultureIgnoreCase))
                     {
-                        @params.Add(new ReportParameter(repInfo.Name,ReportTexts.Resources.ResourceManager.GetString(repInfo.Name), false));
+                        @params.Add(new ReportParameter(repInfo.Name,Resources.ResourceManager.GetString(repInfo.Name), false));
                         added = true;
                     }
                     if (param.ParameterName.ToLower(CultureInfo.CurrentCulture) == "@" + repInfo.Name.ToLower(CultureInfo.CurrentCulture))

@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				var databaseReader = new DatabaseReader(databaseConnectionFactory, databaseConnectionStringHandler, now);
 				var mbCacheFactory = new MbCacheFactoryFake();
 				var messageSender = new SignalSender(TestSiteConfigurationSetup.Url.ToString(), new IConnectionKeepAliveStrategy[]{}, new Time(now));
+				messageSender.StartBrokerService();
 				var personOrganizationProvider = new PersonOrganizationProvider(new PersonOrganizationReader(now, ConnectionStringHelper.ConnectionStringUsedInTests));
 				return new RtaDataHandler(messageSender,
 				                          new DataSourceResolverFake(),

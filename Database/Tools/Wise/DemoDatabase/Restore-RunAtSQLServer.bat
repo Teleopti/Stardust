@@ -16,7 +16,7 @@ FindStr /C:"1" "%TEMP%\out.txt"
 IF %ERRORLEVEL% EQU 0 (
 ECHO Succesfully connected as SysAdmin to: %InstanceName%
 SQLCMD -S%InstanceName% %Login% -v BakDir = "%ROOTDIR%" -i"RestoreDemo.sql"
-SQLCMD -S%InstanceName% %Login% -v BakDir = "%ROOTDIR%" -i"RestoreUsers.sql"
+SQLCMD -S%InstanceName% %Login% -v BakDir = "%ROOTDIR%" -i"RestoreUsers.sql" -v CurrentUser=""
 GOTO :done
 ) ELSE (
 GOTO :error

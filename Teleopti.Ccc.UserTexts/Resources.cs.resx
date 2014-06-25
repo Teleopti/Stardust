@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Absence" xml:space="preserve">
     <value>Absence</value>
@@ -2012,15 +2012,15 @@ Periods</comment>
     <comment>Team view</comment>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>TELEOPTI CCC : Předpovědi</value>
+    <value>TELEOPTI WFM: Předpovědi</value>
     <comment>Teleopti CCC : Forecasts</comment>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>TELEOPTI CCC : Hlavní portál</value>
+    <value>TELEOPTI WFM: Hlavní portál</value>
     <comment>Teleopti CCC : Main window</comment>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>TELEOPTI CCC : Plány</value>
+    <value>TELEOPTI WFM: Plány</value>
     <comment>Teleopti CCC : Schedules</comment>
   </data>
   <data name="Template" xml:space="preserve">
@@ -3462,7 +3462,7 @@ Sloupce</value>
     <comment>Auto Position</comment>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Ukončit TELEOPTI CCC</value>
+    <value>Ukončit TELEOPTI WFM</value>
     <comment>Teleopti menu exit Teleopti CCC</comment>
   </data>
   <data name="Find" xml:space="preserve">
@@ -3774,7 +3774,7 @@ Sloupce</value>
     <comment>Function name Reports</comment>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>TELEOPTI CCC</value>
+    <value>TELEOPTI WFM</value>
     <comment>Funtion name Teleopti CCC</comment>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
@@ -3842,7 +3842,7 @@ Sloupce</value>
     <comment>Windows logon</comment>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>TELEOPTI CCC : Lidé</value>
+    <value>TELEOPTI WFM: Lidé</value>
     <comment>Teleopti CCC : People</comment>
   </data>
   <data name="DecreaseDecimals" xml:space="preserve">
@@ -3902,11 +3902,11 @@ Sloupce</value>
     <comment>Open permissions function in Permissions</comment>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Spustit TELEOPTI CCC</value>
+    <value>Spustit TELEOPTI WFM</value>
     <comment>OpenRaptorApplication	Open TELEOPTI CCC</comment>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>TELEOPTI CCC : Oprávnění</value>
+    <value>TELEOPTI WFM: Oprávnění</value>
     <comment>Teleopti CCC : Permissions</comment>
   </data>
   <data name="GapExists" xml:space="preserve">
@@ -3930,7 +3930,7 @@ Sloupce</value>
     <comment>New Rule Set ribbon menu</comment>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>TELEOPTI CCC : Směny</value>
+    <value>TELEOPTI WFM: Směny</value>
     <comment>Teleopti CCC : Shifts</comment>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
@@ -4155,7 +4155,7 @@ Sloupce</value>
     <comment>Agent</comment>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Během dne - Teleopti CCC</value>
+    <value>Během dne - Teleopti WFM</value>
     <comment>Teleopti CCC : Intraday</comment>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
@@ -7520,13 +7520,13 @@ Aktualizováno: {1}</value>
     <value>E-mailová adresa podpory</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC zaznamenal problém a musí být uzavřen. Omlouváme se způsobené nepříjemnosti. Pokud jste byli uprostřed práce, informace, se kterými jste pracovali mohou být ztraceny.
+    <value>Teleopti WFM zaznamenal problém a musí být uzavřen. Omlouváme se způsobené nepříjemnosti. Pokud jste byli uprostřed práce, informace, se kterými jste pracovali mohou být ztraceny.
 
 Abychom Vám mohli dát relevantní informace o této chybě, žádáme Vás, abyste byli tak laskaví a odeslali report kliknutím na tlačítko níže "Odeslat report e-mailem". Bude otevřen Váš výchozí e-mailový klient. Prosím přidejte následující:
 
 1. Jak zopakovat chybu krok za krokem
 2. Informace o datech, se kterými jste pracovali
-3. Snímek obrazovky s chybou s Teleopti CCC na pozadí</value>
+3. Snímek obrazovky s chybou s Teleopti WFM na pozadí</value>
   </data>
   <data name="CopyErrorMessageToClipboard" xml:space="preserve">
     <value>Zkopírujte chybovou hlášku do schránky</value>
@@ -7544,7 +7544,7 @@ Abychom Vám mohli dát relevantní informace o této chybě, žádáme Vás, ab
 
 2. Informace o datech, se kterými jste pracovali
 
-3. Snímek obrazovky s chybou s Teleopti CCC na pozadí:</value>
+3. Snímek obrazovky s chybou s Teleopti WFM na pozadí:</value>
   </data>
   <data name="AFileContainingTheErrorMessageCouldNotBeCreated" xml:space="preserve">
     <value>Soubor obsahující chybové hlášení nemohl být vytvořen. Prosím zkopírujte do schránky a vložte </value>
@@ -8009,7 +8009,7 @@ Abychom Vám mohli dát relevantní informace o této chybě, žádáme Vás, ab
     <value>Zaměření spravedlnosti</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>Teleopti CCC: {0} {1} - {2} Scénář: {3}</value>
+    <value>Teleopti WFM: {0} {1} - {2} Scénář: {3}</value>
   </data>
   <data name="OpenFile" xml:space="preserve">
     <value>Otevřít soubor</value>
@@ -8066,10 +8066,10 @@ Abychom Vám mohli dát relevantní informace o této chybě, žádáme Vás, ab
     <value>Není spojení s message broker</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - system ok</value>
+    <value>Teleopti WFM - system ok</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - systemové varování</value>
+    <value>Teleopti WFM - systemové varování</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>Plán + Omezení</value>

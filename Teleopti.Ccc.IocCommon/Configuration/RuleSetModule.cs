@@ -29,34 +29,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftCreatorService>()
 				.As<IShiftCreatorService>()
 				.SingleInstance();
-			builder.RegisterType<RuleSetProjectionService>().AsSelf();
-			builder.RegisterType<RuleSetProjectionEntityService>().AsSelf();
-			builder.RegisterType<WorkShiftWorkTime>().AsSelf();
-
 			if (_perLifetimeScope)
 			{
-				builder.Register<IRuleSetProjectionService>(c => c.Resolve<RuleSetProjectionService>())
+				builder.RegisterMbCacheComponent<RuleSetProjectionService, IRuleSetProjectionService>()
 					.InstancePerLifetimeScope()
-					.IntegrateWithMbCache()
 					.OnRelease(s => ((ICachingComponent)s).Invalidate());
-				builder.Register<IRuleSetProjectionEntityService>(c => c.Resolve<RuleSetProjectionEntityService>())
+				builder.RegisterMbCacheComponent<RuleSetProjectionEntityService, IRuleSetProjectionEntityService>()
 					.InstancePerLifetimeScope()
-					.IntegrateWithMbCache()
 					.OnRelease(s => ((ICachingComponent) s).Invalidate());
-				builder.Register<IWorkShiftWorkTime>(c => c.Resolve<WorkShiftWorkTime>())
-					.IntegrateWithMbCache()
+				builder.RegisterMbCacheComponent<WorkShiftWorkTime, IWorkShiftWorkTime>()
 					.OnRelease(s => ((ICachingComponent)s).Invalidate());
 			}
 			else
 			{
-				builder.Register<IRuleSetProjectionService>(c => c.Resolve<RuleSetProjectionService>())
-					.IntegrateWithMbCache<IRuleSetProjectionService>()
+				builder.RegisterMbCacheComponent<RuleSetProjectionService, IRuleSetProjectionService>()
 					.SingleInstance();
-				builder.Register<IRuleSetProjectionEntityService>(c => c.Resolve<RuleSetProjectionEntityService>())
-					.IntegrateWithMbCache<IRuleSetProjectionEntityService>()
+				builder.RegisterMbCacheComponent<RuleSetProjectionEntityService, IRuleSetProjectionEntityService>()
 					.SingleInstance();
-				builder.Register<IWorkShiftWorkTime>(c => c.Resolve<WorkShiftWorkTime>())
-					.IntegrateWithMbCache<IWorkShiftWorkTime>()
+				builder.RegisterMbCacheComponent<WorkShiftWorkTime, IWorkShiftWorkTime>()
 					.SingleInstance();
 			}
 			_cacheBuilder

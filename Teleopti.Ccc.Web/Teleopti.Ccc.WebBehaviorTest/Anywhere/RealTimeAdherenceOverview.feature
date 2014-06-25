@@ -69,7 +69,6 @@ Scenario: Show team without always loading status
 	When I view Real time adherence for site 'London'
 	Then I should see the team 'Red'
 
-@ignore
 Scenario: View updates of sum of employees not adhering to schedule for each site
 	Given the current time is '2014-01-21 13:00'
 	And I have a role with
@@ -117,7 +116,6 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	 Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	 And I should see site 'London' with 0 of 1 employees out of adherence
 
-@ignore
 Scenario: View updates of sum of employees not adhering to schedule for each team within a site
 	Given the current time is '2014-01-21 13:00'
 	And I have a role with
@@ -371,7 +369,6 @@ Scenario: Should be able to see current states of all agents
 		| Alarm Color              | Green              |
 
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
-@ignore
 Scenario: Should be able to see state updates of all agents
 	Given  the current time is '2014-01-21 12:30:00'
 	And there is an activity named 'Phone'
@@ -448,7 +445,6 @@ Scenario: Should be able to see state updates of all agents
 		| Alarm Color              | Green              |
 
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
- @ignore
 Scenario: Should be able to see all agents of the team with or without state updates
 	Given  the current time is '2014-01-21 12:30:00'
 	And there is an activity named 'Phone'

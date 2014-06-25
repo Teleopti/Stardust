@@ -21,7 +21,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <ApplicationIcon>images\ccc_Menu.ico</ApplicationIcon>
+    <ApplicationIcon>images\favicon.ico</ApplicationIcon>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
@@ -150,11 +150,15 @@
     <CodeAnalysisDictionary Include="..\..\..\..\CodeAnalysisDictionary.xml">
       <Link>CodeAnalysisDictionary.xml</Link>
     </CodeAnalysisDictionary>
+    <Content Include="Css\persianDatepicker-default.css" />
     <Content Include="images\down.png" />
+    <Content Include="images\favicon.ico" />
     <Content Include="images\up.png" />
     <Content Include="PerformanceManager\test_login.aspx" />
     <Content Include="PmContainer.aspx" />
     <Content Include="ReportViewer.aspx" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\persianDatepicker.min.js" />
     <Content Include="Selection.aspx" />
     <Content Include="Timeout.aspx" />
     <Content Include="Web.config">
@@ -377,9 +381,6 @@
     <Content Include="Reports\Ccc\report_agent_schedule_adherence.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="images\ccc_Menu.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="PerformanceManager\Default.aspx" />
     <Content Include="PerformanceManager\images\delete.png" />
     <Content Include="PerformanceManager\images\edge.png" />
@@ -497,6 +498,9 @@
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

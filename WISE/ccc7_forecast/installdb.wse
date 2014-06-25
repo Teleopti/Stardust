@@ -111,6 +111,14 @@ item: Custom Script Item
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
+item: Get Environment Variable
+  Variable=MYUSER
+  Environment=username
+end
+item: Get Environment Variable
+  Variable=MYUSERDOMAIN
+  Environment=userdomain
+end
 item: Set Variable
   Variable=FAILED_MESS
   Value=Failed to install database
@@ -121,13 +129,13 @@ item: If/While Statement
 end
 item: Set Variable
   Variable=SA
-  Value=-E
+  Value=-E -v CurrentUser=""
 end
 item: Else Statement
 end
 item: Set Variable
   Variable=SA
-  Value=-U"%SUSER%" -P"%SPASS%"
+  Value=-U"%SUSER%" -P"%SPASS%" -v CurrentUser="%MYUSERDOMAIN%\%MYUSER%"
 end
 item: End Block
 end

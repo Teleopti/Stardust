@@ -15,20 +15,33 @@
     <link rel="stylesheet" href="Content/bootstrap/Content/bootstrap.css" />
     <link rel="stylesheet" href="Content/bootstrap/Content/bootstrap-theme.css" />	
 	
-	  <script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>
+	  <%--<script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>--%>
+	  <script>var require = { urlArgs: 'v=<%=1%>' };</script>
 
     <script data-main="Areas/Diagnosis/Content/Scripts/main" type="text/javascript" src="Content/require/require.js"></script>
+
 </head>
 
-<body>
+<body >
+	
     <!--[if lt IE 7]>
         <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this application.</p>
     <![endif]-->
-  
-   <button class="btn btn-danger" data-bind="click: sendTestMessage, text: testMessage"></button>
-   <button class="btn btn-danger" data-bind="click: startSignalR">Start SignalR</button>
-	<button class="btn btn-danger" data-bind="click: checkMessageBrokerConnection">Check connection</button>
-	<button class="btn btn-danger" data-bind="click: sendMessageBrokerPing">Send Ping</button>
-	<button class="btn btn-danger" data-bind="click: subscribeToPing">Subscribe Ping</button>
+  <div id="bjs">
+	<div>messagebroker is running...</div>
+	<br/>
+	
+	<div>sent: </div><div data-bind="text: sentPings"></div>
+	<br/>
+	<div>left: </div><div data-bind="text: pongsLeft"></div>
+
+	<br/>
+	</div>
+	
+	
+<p>Number of pings: <input data-bind="value: numberOfPings" /></p>
+
+   <button class="btn btn-danger" data-bind="click: sendPing">Send</button>
+   <button class="btn btn-danger" data-bind="click: logMe">Log me</button>
 </body>
 </html>

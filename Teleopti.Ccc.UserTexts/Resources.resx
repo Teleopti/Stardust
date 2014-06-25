@@ -7495,7 +7495,7 @@ Updated on: {1}</value>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
     <value>Teleopti WFM has encountered a problem and needs to close. We are sorry for the inconvenience. If you were in the middle of something, the information you were working on might be lost.
 
-In order to give us valuable information about this error, we ask you to kindly report it by clicking on the "Send e-mail report"Â button below. This will open your default e-mail program. Please also include the following:
+In order to give us valuable information about this error, we ask you to kindly report it by clicking on the "Send e-mail report" button below. This will open your default e-mail program. Please also include the following:
 
 1.  Step by step on how to reproduce the error
 2.  Information about what data you were working with
@@ -11851,7 +11851,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Add intraday absence</comment>
   </data>
   <data name="IntradayAbsence" xml:space="preserve">
-    <value>Intraday absence</value>
+    <value>Intraday Absence</value>
     <comment>Intraday absence</comment>
   </data>
   <data name="IllegalTeamBlockCombination" xml:space="preserve">
@@ -12084,7 +12084,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>time in the alarm state</comment>
   </data>
   <data name="MinimumTimePerWeekColon" xml:space="preserve">
-    <value>Minimum Time Per Week:</value>
+    <value>Minimum Time Per Week</value>
     <comment>Minimum Time Per Week:</comment>
   </data>
   <data name="WeeklyWorkTimeBroken" xml:space="preserve">

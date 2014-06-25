@@ -77,12 +77,10 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation">
-      <HintPath>..\packages\Teleopti.Secrets.7.5.800.41\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.42\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets">
-      <HintPath>..\packages\Teleopti.Secrets.7.5.800.41\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.42\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

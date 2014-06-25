@@ -1,0 +1,28 @@
+﻿$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
+$(AS_SERVER_NAME)|.
+$(SQL_SERVER_NAME)|.
+$(IIS_AUTH)|Windows
+$(LOCAL_WIKI)^|c:\temp
+$(PM_ASMX)|http://localhost/analyzer/services/Analyzer2005.asmx
+$(PM_AUTH_MODE)|Windows
+$(PM_ANONYMOUS_DOMAINUSER)|YourDomain\theUser
+$(PM_ANONYMOUS_PWD)|pw
+$(PM_INSTALL)|False
+$(PM_SERVICE)|http://localhost:53396/PMService.svc
+$(SDK_SSL_SECURITY_MODE)|TransportCredentialOnly
+$(SDK_CRED_PROT)|Ntlm
+$(AGENT_SERVICE)|http://localhost:1335/TeleoptiCccSdkService.svc
+$(RTA_SERVICE)|http://localhost:52130/TeleoptiRtaService.svc
+$(RTA_QUEUE_ID)|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003
+$(RTA_STATE_CODE)|Ready,InCall,ACW,AUX1,AUX2,AUX3,AUX4,AUX5
+$(HTTPGETENABLED)|true
+$(HTTPSGETENABLED)|false
+$(SDK_SSL_MEX_BINDING)|mexHttpBinding
+$(MATRIX_WEB_SITE_URL)|http://localhost:52500
+$(LocalWiki)|http://localhost/TeleoptiCCC/LocalWiki/
+$(WEB_BROKER_FOR_WEB)|http://localhost:52858
+$(WEB_BROKER)|http://localhost:54903/
+$(WEB_BROKER_BACKPLANE)|
+<compilation debug="false"|<compilation debug="true"
+<compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
+

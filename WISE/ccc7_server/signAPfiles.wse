@@ -101,7 +101,7 @@ item: Set Variable
 end
 remarked item: Set Variable
   Variable=URL
-  Value=http://*/TeleoptiCCC/MyTime
+  Value=http://*/TeleoptiWFM/MyTime
 end
 item: If/While Statement
   Variable=METHOD

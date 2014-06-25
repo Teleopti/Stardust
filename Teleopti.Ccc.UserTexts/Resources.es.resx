@@ -1522,13 +1522,13 @@
     <value>Vista del Equipo</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Teleopti CCC: Forecasts</value>
+    <value>Teleopti WFM: Forecasts</value>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC: Portal Principal</value>
+    <value>Teleopti WFM: Portal Principal</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Teleopti CCC: Schedules</value>
+    <value>Teleopti WFM: Schedules</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Plantilla</value>
@@ -2579,7 +2579,7 @@ Opcionales</value>
     <value>Autoposición</value>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Salir de Teleopti CCC</value>
+    <value>Salir de Teleopti WFM</value>
   </data>
   <data name="Find" xml:space="preserve">
     <value>Encontrar</value>
@@ -2807,7 +2807,7 @@ Opcionales</value>
     <value>Reportes</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
+    <value>Teleopti WFM</value>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
     <value>Porcentaje de tiempo parcial</value>
@@ -2858,7 +2858,7 @@ Opcionales</value>
     <value>Iniciando sesión de Windows</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>Teleopti CCC: People</value>
+    <value>Teleopti WFM: People</value>
   </data>
   <data name="DecreaseDecimals" xml:space="preserve">
     <value>Disminuir decimales</value>
@@ -2903,10 +2903,10 @@ Opcionales</value>
     <value>Permisos</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Abrir Teleopti CCC</value>
+    <value>Abrir Teleopti WFM</value>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>Teleopti CCC: Permisos</value>
+    <value>Teleopti WFM: Permisos</value>
   </data>
   <data name="GapExists" xml:space="preserve">
     <value>Gap existente en {0}. Todas las capas deben de ser adyacentes, o de intersección, a otras capas.</value>
@@ -2924,7 +2924,7 @@ Opcionales</value>
     <value>Nuevo Conjunto de Normas</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Teleopti CCC: Shifts</value>
+    <value>Teleopti WFM: Shifts</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt; Nombre de conjunto de normas &gt;</value>
@@ -3101,7 +3101,7 @@ Opcionales</value>
     <value>Agente</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Teleopti CCC: Intraday</value>
+    <value>Teleopti WFM: Intraday</value>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
     <value>Portal de Agente</value>
@@ -5290,7 +5290,7 @@ Actualizado en: {1}</value>
     <value>Página {0} de {1}</value>
   </data>
   <data name="PoweredByTeleoptCCC" xml:space="preserve">
-    <value>Generado por TeleoptiCCC</value>
+    <value>Generado por Teleopti WFM</value>
   </data>
   <data name="ReportLevelDetailLunch" xml:space="preserve">
     <value>Comida</value>
@@ -5611,13 +5611,13 @@ Actualizado en: {1}</value>
     <value>Soporte, dirección de e-mail</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC ha encontrado un problema y necesita ser cerrado. Sentimos las molestias. Si se encontraba en mitad de un proceso, la información sobre la que estaba trabajando podría perderse.
+    <value>Teleopti WFM ha encontrado un problema y necesita ser cerrado. Sentimos las molestias. Si se encontraba en mitad de un proceso, la información sobre la que estaba trabajando podría perderse.
 
 A fin de que pueda darnos información de valor sobre este error, le pedimos que tenga a bien reportarlo haciendo click en "Enviar un reporte por e-mail" en el botón de abajo. Esto abrirá su correo electrónico por defecto. Por favor, incluya también en el e-mail lo siguiente:
 
 1. Paso a paso como se reprodujo el error
 2. Información sobre los datos en los que estaba trabajando
-3. Captura de pantalla del error con Teleopti CCC en el fondo
+3. Captura de pantalla del error con Teleopti WFM en el fondo
 
 También puede copiar el mensaje de error en un archivo-portapapeles y pegarlo en el cuerpo del e-mail.
 
@@ -5640,7 +5640,7 @@ Teleopti R&amp;D</value>
 
 2. Información sobre qué dato estaba usted trabajando:
 
-3. Captura de la pantalla del error con Teleopti CCC de fondo:
+3. Captura de la pantalla del error con Teleopti WFM de fondo:
 
 Muchas gracias.
 Teleopti R&amp;D</value>
@@ -5978,7 +5978,7 @@ Anterior</value>
     <value>Equidad</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>Teleopti CCC: {0} {1} - {2} Escenario: {3}</value>
+    <value>Teleopti WFM: {0} {1} - {2} Escenario: {3}</value>
   </data>
   <data name="OpenFile" xml:space="preserve">
     <value>Abrir archivo</value>
@@ -6035,10 +6035,10 @@ Anterior</value>
     <value>No hay conexión con el intermediario de mensajes</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - Sistema OK</value>
+    <value>Teleopti WFM - Sistema OK</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - Alerta de Sistemas</value>
+    <value>Teleopti WFM - Alerta de Sistemas</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>Planificación + Restricciones</value>

@@ -2007,15 +2007,15 @@ Periods</comment>
     <comment>Team view</comment>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>TELEOPTI CCC : Прогнозы</value>
+    <value>TELEOPTI WFM: Прогнозы</value>
     <comment>Teleopti CCC : Forecasts</comment>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>TELEOPTI CCC : Главный портал</value>
+    <value>TELEOPTI WFM: Главный портал</value>
     <comment>Teleopti CCC : Main window</comment>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>TELEOPTI CCC : Расписание работы</value>
+    <value>TELEOPTI WFM: Расписание работы</value>
     <comment>Teleopti CCC : Schedules</comment>
   </data>
   <data name="Template" xml:space="preserve">
@@ -3457,7 +3457,7 @@ Periods</comment>
     <comment>Auto Position</comment>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Выход из TELEOPTI CCC</value>
+    <value>Выход из TELEOPTI WFM</value>
     <comment>Teleopti menu exit Teleopti CCC</comment>
   </data>
   <data name="Find" xml:space="preserve">
@@ -3769,7 +3769,7 @@ Periods</comment>
     <comment>Function name Reports</comment>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>TELEOPTI CCC</value>
+    <value>TELEOPTI WFM</value>
     <comment>Funtion name Teleopti CCC</comment>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
@@ -3837,7 +3837,7 @@ Periods</comment>
     <comment>Windows logon</comment>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>TELEOPTI CCC : Сотрудники</value>
+    <value>TELEOPTI WFM: Сотрудники</value>
     <comment>Teleopti CCC : People</comment>
   </data>
   <data name="DecreaseDecimals" xml:space="preserve">
@@ -3897,11 +3897,11 @@ Periods</comment>
     <comment>Open permissions function in Permissions</comment>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Открыть TELEOPTI CCC</value>
+    <value>Открыть TELEOPTI WFM</value>
     <comment>OpenRaptorApplication	Open TELEOPTI CCC</comment>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>TELEOPTI CCC : Права доступа</value>
+    <value>TELEOPTI WFM: Права доступа</value>
     <comment>Teleopti CCC : Permissions</comment>
   </data>
   <data name="GapExists" xml:space="preserve">
@@ -3925,7 +3925,7 @@ Periods</comment>
     <comment>New Rule Set ribbon menu</comment>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>TELEOPTI CCC : Смены</value>
+    <value>TELEOPTI WFM: Смены</value>
     <comment>Teleopti CCC : Shifts</comment>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
@@ -4150,7 +4150,7 @@ Periods</comment>
     <comment>Agent</comment>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>TELEOPTI CCC : Мониторинг</value>
+    <value>TELEOPTI WFM: Мониторинг</value>
     <comment>Teleopti CCC : Intraday</comment>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
@@ -7322,10 +7322,10 @@ Periods</comment>
     <value>Настройки</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - системное предупреждение</value>
+    <value>Teleopti WFM - системное предупреждение</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - система в порядке</value>
+    <value>Teleopti WFM - система в порядке</value>
   </data>
   <data name="ShiftsPerDay" xml:space="preserve">
     <value>Смен в день</value>
@@ -7627,13 +7627,13 @@ Periods</comment>
     <value>"Обязательные" пожелания</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>В Teleopti CCC обнаружена ошибка. Приложение будет закрыто. Приносим извинения за доставленные неудобства. Информация, с которой вы работали, могла быть потеряна.
+    <value>В Teleopti WFM обнаружена ошибка. Приложение будет закрыто. Приносим извинения за доставленные неудобства. Информация, с которой вы работали, могла быть потеряна.
 
 Для решения этой проблемы, информация об ошибке будет крайне ценна для нас. Сообщить нам об ошибке Вы можете, нажав на кнопку "Отправить сообщение по электронной почте", расположенную ниже. Это позволит открыть по умолчанию программу электронной почты. Просьба также в письмо включать следующее:
 
 1. Максимально подробное описание Ваших шагов перед возникновением ошибки
 2. С какими данными в системе вы работали непосредственно перед возникновением ошибки
-3. Скриншот с ошибкой Teleopti ССС
+3. Скриншот с ошибкой Teleopti WFM
 
 Вы можете также скопировать текст сообщения об ошибке в буфер обмена и вставить его в сообщение электронной почты.
 
@@ -7872,7 +7872,7 @@ Teleopti R&amp;D</value>
     <value>Файл не может быть открыт. Пожалуйста, проверьте, что PDF файлы ассоциированыс программой.</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>TELEOPTI CCC: {0} {1} - {2} Сценарий: {3} </value>
+    <value>TELEOPTI WFM: {0} {1} - {2} Сценарий: {3} </value>
   </data>
   <data name="Fairness" xml:space="preserve">
     <value>Справедливое распределение</value>

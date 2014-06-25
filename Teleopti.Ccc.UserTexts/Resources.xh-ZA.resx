@@ -2020,15 +2020,15 @@ Periods</comment>
     <comment>Team view</comment>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>TELEOPTI CCC : Forecasts</value>
+    <value>TELEOPTI WFM: Forecasts</value>
     <comment>Teleopti CCC : Forecasts</comment>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>TELEOPTI CCC : Main portal</value>
+    <value>TELEOPTI WFM: Main portal</value>
     <comment>Teleopti CCC : Main window</comment>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>TELEOPTI CCC : Schedules</value>
+    <value>TELEOPTI WFM: Schedules</value>
     <comment>Teleopti CCC : Schedules</comment>
   </data>
   <data name="Template" xml:space="preserve">
@@ -3434,7 +3434,7 @@ Columns</value>
     <comment>Auto Position</comment>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Exit TELEOPTI CCC</value>
+    <value>Exit TELEOPTI WFM</value>
     <comment>Teleopti menu exit Teleopti CCC</comment>
   </data>
   <data name="Find" xml:space="preserve">
@@ -3746,7 +3746,7 @@ Columns</value>
     <comment>Function name Reports</comment>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>TELEOPTI CCC</value>
+    <value>TELEOPTI WFM</value>
     <comment>Funtion name Teleopti CCC</comment>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
@@ -3814,7 +3814,7 @@ Columns</value>
     <comment>Windows logon</comment>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>TELEOPTI CCC : People</value>
+    <value>TELEOPTI WFM: People</value>
     <comment>Teleopti CCC : People</comment>
   </data>
   <data name="DecreaseDecimals" xml:space="preserve">
@@ -3874,11 +3874,11 @@ Columns</value>
     <comment>Open permissions function in Permissions</comment>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Open TELEOPTI CCC</value>
+    <value>Open TELEOPTI WFM</value>
     <comment>OpenRaptorApplication	Open TELEOPTI CCC</comment>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>TELEOPTI CCC : Permissions</value>
+    <value>TELEOPTI WFM: Permissions</value>
     <comment>Teleopti CCC : Permissions</comment>
   </data>
   <data name="GapExists" xml:space="preserve">
@@ -3902,7 +3902,7 @@ Columns</value>
     <comment>New Rule Set ribbon menu</comment>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>TELEOPTI CCC : Shifts</value>
+    <value>TELEOPTI WFM: Shifts</value>
     <comment>Teleopti CCC : Shifts</comment>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
@@ -4127,7 +4127,7 @@ Accounts</value>
     <comment>Agent</comment>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>TELEOPTI CCC : Intraday</value>
+    <value>TELEOPTI WFM: Intraday</value>
     <comment>Teleopti CCC : Intraday</comment>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
@@ -7110,7 +7110,7 @@ Updated on: {1}</value>
     <comment>Page {0} of {1}</comment>
   </data>
   <data name="PoweredByTeleoptCCC" xml:space="preserve">
-    <value>Powered by TeleoptiCCC</value>
+    <value>Powered by Teleopti WFM</value>
     <comment>Powered by TeleoptiCCC</comment>
   </data>
   <data name="ReportLevelDetailLunch" xml:space="preserve">
@@ -7529,13 +7529,13 @@ Updated on: {1}</value>
     <comment>System setting</comment>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC has encountered a problem and needs to close. We are sorry for the inconvenience. If you were in the middle of something, the information you were working on might be lost.
+    <value>Teleopti WFM has encountered a problem and needs to close. We are sorry for the inconvenience. If you were in the middle of something, the information you were working on might be lost.
 
 In order to give us valuable information about this error, we ask you to kindly report it by clicking on the “Send e-mail report” button below. This will open your default e-mail program. Please also include the following:
 
 1.  Step by step on how to reproduce the error
 2.  Information about what data you were working with
-3.  Screenshot of the error with Teleopti CCC in the background
+3.  Screenshot of the error with Teleopti WFM in the background
 
 You can also copy the error message text to the clipboard, and paste it in the e-mail body.
 
@@ -7564,7 +7564,7 @@ Teleopti R&amp;D</value>
 2.	Information about what data you were working with:
 
 
-3.	Screenshot of the error with Teleopti CCC in the background:
+3.	Screenshot of the error with Teleopti WFM in the background:
 
 
 Thank you
@@ -8015,7 +8015,7 @@ Weekday</value>
     <comment>Fairness Orientation</comment>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>TELEOPTI CCC: {0} {1} - {2} Scenario: {3} </value>
+    <value>TELEOPTI WFM: {0} {1} - {2} Scenario: {3} </value>
     <comment>Header in portal</comment>
   </data>
   <data name="OpenFile" xml:space="preserve">
@@ -8084,10 +8084,10 @@ Weekday</value>
     <value>No connection with message broker</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - System ok</value>
+    <value>Teleopti WFM - System ok</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - System warning</value>
+    <value>Teleopti WFM - System warning</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>Schedule + Restrictions</value>

@@ -6,13 +6,13 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TeleoptiCCC Shell")]
-[assembly: AssemblyDescription("TeleoptiCCC Shell application")]
+[assembly: AssemblyTitle("TeleoptiWFM Shell")]
+[assembly: AssemblyDescription("TeleoptiWFM Shell application")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Teleopti AB")]
-[assembly: AssemblyProduct("TeleoptiCCC")]
-[assembly: AssemblyCopyright("Copyright ?2009 Teleopti AB")]
-[assembly: AssemblyTrademark("TradeMark ?TeleoptiCCC")]
+[assembly: AssemblyProduct("TeleoptiWFM")]
+[assembly: AssemblyCopyright("Copyright ?2014 Teleopti AB")]
+[assembly: AssemblyTrademark("TradeMark ?TeleoptiWFM")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

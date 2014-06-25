@@ -8,14 +8,14 @@
         /// <summary>
         /// Constant string for Raptor schema
         /// </summary>
-        public const string TeleoptiCccSchema = "TeleoptiCcc";
+        public const string TeleoptiWFMSchema = "TeleoptiWFM";
         /// <summary>
         /// Constant string for Forecaster/Freemium schema
         /// </summary>
-        public const string TeleoptiCccForecastsSchema = "TeleoptiCccForecasts";
+        public const string TeleoptiWFMForecastsSchema = "TeleoptiWFMForecasts";
         /// <summary>
         /// Constant string for Early bird schema
         /// </summary>
-        public const string TeleoptiCccPilotCustomersSchema = "TeleoptiCccPilotCustomers";
+        public const string TeleoptiWFMPilotCustomersSchema = "TeleoptiWFMPilotCustomers";
     }
 }

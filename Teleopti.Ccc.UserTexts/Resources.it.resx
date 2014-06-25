@@ -226,7 +226,7 @@
     <value>Indo agente...</value>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Teleopti CCC MyTime</value>
+    <value>Teleopti WFM MyTime</value>
   </data>
   <data name="Agents" xml:space="preserve">
     <value>Agenti</value>
@@ -1198,13 +1198,13 @@
     <value>Vista Team</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Forecasts - Teleopti CCC</value>
+    <value>Forecasts - Teleopti WFM</value>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC -</value>
+    <value>Teleopti WFM -</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Schedules - Teleopti CCC</value>
+    <value>Schedules - Teleopti WFM</value>
   </data>
   <data name="TenMinutes" xml:space="preserve">
     <value>10 minuti</value>
@@ -1738,7 +1738,7 @@
     <value>Data termine rapporto</value>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>Teleopti CCC Agent Schedule Messenger</value>
+    <value>Teleopti WFM Agent Schedule Messenger</value>
   </data>
   <data name="ASM" xml:space="preserve">
     <value>Apri ASM</value>
@@ -2356,13 +2356,13 @@
     <value>Indirizzo e-mail per assistenza</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC ha riscontrato un problema e necessita di essere chiuso. Siamo spiacenti per l'inconveniente. Se stavi facendo qualcosa, le informazioni su cui stavi lavorando potrebbero andare perdute. 
+    <value>Teleopti WFM ha riscontrato un problema e necessita di essere chiuso. Siamo spiacenti per l'inconveniente. Se stavi facendo qualcosa, le informazioni su cui stavi lavorando potrebbero andare perdute. 
 
 Al fine di fornirci informazioni utili riguardo questo errore, ti chiediamo gentilmente di inviarcene i dettagli premendo sul bottone "Invia report via e-mail" sottostante. Facendo ciò si aprirà il tuo programma di e-mail predefinito. Per favore, includi anche quanto segue: 
 
 1. La descrizione dei passi da seguire per riprodurre l'errore 
 2. Informazioni riguardo ai dati su cui stavi lavorando 
-3. Uno screenshot dell'errore con Teleopti CCC nello sfondo
+3. Uno screenshot dell'errore con Teleopti WFM nello sfondo
 
 Inoltre, puoi copiare il messaggio di errore negli appunti e incollarlo nel corpo della e-mail.
 
@@ -2553,10 +2553,10 @@ Teleopti R&amp;D</value>
     <value>Nessuna connessione con il Message Broker</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - Sistema ok</value>
+    <value>Teleopti WFM - Sistema ok</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - Avviso di Sistema</value>
+    <value>Teleopti WFM - Avviso di Sistema</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>Pianificazione + Limitazioni</value>
@@ -2982,7 +2982,7 @@ Teleopti R&amp;D</value>
     <value>Verifica autorizzazioni...</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>People - Teleopti CCC</value>
+    <value>People - Teleopti WFM</value>
   </data>
   <data name="AutomaticScheduling" xml:space="preserve">
     <value>Pianificazione automatica</value>
@@ -2991,7 +2991,7 @@ Teleopti R&amp;D</value>
     <value>Autorizzazioni</value>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>Autorizzazioni - Teleopti CCC</value>
+    <value>Autorizzazioni - Teleopti WFM</value>
   </data>
   <data name="PeopleInsertScreen" xml:space="preserve">
     <value>Finestra Inserimento Dipendente</value>
@@ -3756,7 +3756,7 @@ Creato il: {1}</value>
 
 2. Informazioni riguardo ai dati su cui stavi lavorando 
 
-3. Uno screenshot dell'errore con Teleopti CCC nello sfondo
+3. Uno screenshot dell'errore con Teleopti WFM nello sfondo
 
 Grazie
 Teleopti R&amp;D</value>
@@ -3828,7 +3828,7 @@ Teleopti R&amp;D</value>
     <value>Salva ancora quando avrai rivisto le modifiche apportate per favore.</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>{0} - Teleopti CCC: {1} - {2} Scenario: {3}</value>
+    <value>{0} - Teleopti WFM: {1} - {2} Scenario: {3}</value>
   </data>
   <data name="TheFileCouldNotBeOpenedPleaseCheckIfPdfFilesAreAssociatedWithAProgram" xml:space="preserve">
     <value>Il file non può essere aperto. Controlla se i file pdf sono associati a un programma per favore.</value>
@@ -4967,7 +4967,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Pagina {0} di {1}</value>
   </data>
   <data name="PoweredByTeleoptCCC" xml:space="preserve">
-    <value>Powered by Teleopti CCC</value>
+    <value>Powered by Teleopti WFM</value>
   </data>
   <data name="ReportLevelDetailLunch" xml:space="preserve">
     <value>Pranzo</value>
@@ -5453,7 +5453,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Auto posizionamento</value>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Esci da Teleopti CCC</value>
+    <value>Esci da Teleopti WFM</value>
   </data>
   <data name="Find" xml:space="preserve">
     <value>Trova</value>
@@ -5531,7 +5531,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Report</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
+    <value>Teleopti WFM</value>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
     <value>Percentuale Part-Time</value>
@@ -5986,13 +5986,13 @@ Dettagli errore:
     <value>Caricamento...</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Apri Teleopti CCC</value>
+    <value>Apri Teleopti WFM</value>
   </data>
   <data name="NewRuleSet" xml:space="preserve">
     <value>Nuovo Set di regole</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Shifts - Teleopti CCC</value>
+    <value>Shifts - Teleopti WFM</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt; Nome Set di regole &gt;</value>
@@ -6211,7 +6211,7 @@ Dettagli errore:
     <value>Agente</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Intraday - Teleopti CCC</value>
+    <value>Intraday - Teleopti WFM</value>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
     <value>Portale agente</value>

@@ -127,12 +127,20 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		    var firstTimeLineHour = moment(hours[0].StartTime);
 		    var lastTimeLineHour = moment(hours[hours.length - 1].EndTime);
 		    self.setTimeLineLengthInMinutes(firstTimeLineHour, lastTimeLineHour);
-			var arrayMap = ko.utils.arrayMap(hours, function (hour) {
-			    return new Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel(hour, self);
-			});
-		    
-			self.hours([]);
-			self.hours.push.apply(self.hours, arrayMap);
+		    self.hours([]);
+			if (hours.length < 18) {
+				var arrayMap = ko.utils.arrayMap(hours, function(hour) {
+					return new Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel(hour, self);
+				});
+
+				self.hours.push.apply(self.hours, arrayMap);
+			} else {
+				for (var i = 0; i < hours.length; i++) {
+					var newHour = new Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel(hours[i], self);
+					self.hours.push(newHour);
+					i++;
+				}
+			}
 		};
 
         self.requestedDate = ko.computed({

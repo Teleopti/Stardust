@@ -109,13 +109,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=2.5.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.2.5\lib\net40\MbCache.dll</HintPath>
+    <Reference Include="MbCache">
+      <HintPath>..\packages\MbCache.2.6\lib\net40\MbCache.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.5.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.2.5\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    <Reference Include="MbCache.ProxyImpl.LinFu">
+      <HintPath>..\packages\MbCache.2.6\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -264,12 +264,14 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Teleopti.Ccc.Domain.Calculation">
-      <HintPath>..\packages\Teleopti.Secrets.7.5.800.41\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.42\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets">
-      <HintPath>..\packages\Teleopti.Secrets.7.5.800.41\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.42\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="UIAutomationProvider" />
@@ -386,6 +388,24 @@
     <Compile Include="Commands\TeamBlockOptimizationCommand.cs" />
     <Compile Include="Commands\WeeklyRestSolverCommand.cs" />
     <Compile Include="Common\AvailableSkillWithPreselectedSkill.cs" />
+    <Compile Include="Common\BaseDialogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\BaseDialogForm.Designer.cs">
+      <DependentUpon>BaseDialogForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\BaseRibbonForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\BaseRibbonFormWithUnitOfWork.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\BaseUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\BaseUserControlWithMessageBrokerHandler.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Common\Configuration\Columns\ColumnCollectionExtensions.cs" />
     <Compile Include="Common\Configuration\Columns\ActivityUpdatedReadOnlyTextColumn.cs" />
     <Compile Include="Common\Configuration\SmsSettingsControl.cs">
@@ -469,12 +489,6 @@
     <Compile Include="Common\Controls\Rows\SkillStaffPeriodGridRowSchedulerMinMaxIssuesSummary.cs" />
     <Compile Include="Common\Controls\Rows\SkillStaffPeriodGridRowSchedulerStaffingIssuesSummary.cs" />
     <Compile Include="Common\GracefulDataSourceExceptionHandler.cs" />
-    <Compile Include="Common\BaseDialogForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\BaseDialogForm.Designer.cs">
-      <DependentUpon>BaseDialogForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\ClipboardOperationsForText.cs" />
     <Compile Include="Common\Configuration\AbsenceControl.cs">
       <SubType>UserControl</SubType>
@@ -559,9 +573,6 @@
     <Compile Include="Common\Controls\Cells\VisualProjectionNoHScrollBarCellModel.cs" />
     <Compile Include="Common\Controls\Columns\DateOnlyColumn.cs" />
     <Compile Include="Common\Controls\Columns\DynamicDropDownColumn.cs" />
-    <Compile Include="Common\BaseUserControlWithMessageBrokerHandler.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Common\Controls\Columns\NullableDateOnlyColumn.cs" />
     <Compile Include="Common\Controls\Columns\ActivityDropDownColumn.cs" />
     <Compile Include="Common\Controls\Columns\ProficiencyColumn.cs" />
@@ -1727,12 +1738,6 @@
     <Compile Include="Common\Controls\TeleoptiGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Common\BaseRibbonForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\BaseRibbonFormWithUnitOfWork.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Common\Controls\Cells\ColorPickerCellModel.cs" />
     <Compile Include="Common\Controls\Cells\GridDropDownMonthCalendarAdvCellModel.cs" />
     <Compile Include="Common\Controls\Cells\TimeCellModelRenderer.cs" />
@@ -2267,9 +2272,6 @@
       <DependentUpon>PeopleWorksheet.cs</DependentUpon>
     </Compile>
     <Compile Include="PeopleAdmin\Views\SchedulePeriodGridView.cs" />
-    <Compile Include="Common\BaseUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Common\Controls\Cells\NumericReadOnlyCell.cs" />
     <Compile Include="Permissions\PermissionsExplorerStateHolder.cs" />
     <Compile Include="Permissions\PermissionsExplorer.cs">
@@ -2477,6 +2479,9 @@
     <EmbeddedResource Include="Budgeting\EditShrinkageForm.resx">
       <DependentUpon>EditShrinkageForm.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\BaseRibbonForm.resx">
+      <DependentUpon>BaseRibbonForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\AuditingPage.resx">
       <DependentUpon>AuditingPage.cs</DependentUpon>
@@ -3002,10 +3007,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Budgeting\BudgetGroupTabView.resx">
       <DependentUpon>BudgetGroupTabView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\BaseRibbonForm.resx">
-      <DependentUpon>BaseRibbonForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\AbsenceControl.resx">

@@ -111,13 +111,12 @@
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Teleopti.Secrets.7.5.800.41\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation">
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.42\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Teleopti.Secrets.7.5.800.41\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.42\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -535,7 +534,7 @@
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeBetweenDaysService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockScheduleCloner.cs" />
-    <Compile Include="Optimization\WeeklyRestSolver\BrokenWeekOutsideSelectionSpecification.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\BrokenWeekCounterForAPerson.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ContractWeeklyRestForPersonWeek.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\DeleteScheduleDayFromUnsolvedPersonWeek.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\EnsureWeeklyRestRule.cs" />

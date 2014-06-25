@@ -299,23 +299,23 @@ item: End Block
 end
 item: Set Variable
   Variable=WEB_BROKER_FOR_WEB_TMP
-  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web
+  Value=%DNS_ALIAS_TMP%TeleoptiWFM/Web
 end
 item: Set Variable
   Variable=URLWINDOWSIDENTITYPROVIDER_TMP
-  Value=%DNS_ALIAS_TMP%TeleoptiCCC/WindowsIdentityProvider/
+  Value=%DNS_ALIAS_TMP%TeleoptiWFM/WindowsIdentityProvider/
 end
 item: Set Variable
   Variable=URL_TMP
-  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web/
+  Value=%DNS_ALIAS_TMP%TeleoptiWFM/Web/
 end
 item: Set Variable
   Variable=TELEOPTI_CLAIM_PROVIDER_TMP
-  Value=<add identifier="urn:Teleopti" displayName="Teleopti application" url="%DNS_ALIAS_TMP%TeleoptiCCC/Web/sso" protocolHandler="OpenIdHandler" />
+  Value=<add identifier="urn:Teleopti" displayName="Teleopti application" url="%DNS_ALIAS_TMP%TeleoptiWFM/Web/sso" protocolHandler="OpenIdHandler" />
 end
 item: Set Variable
   Variable=WINDOWS_CLAIM_PROVIDER_TMP
-  Value=<add identifier="urn:Windows" displayName="Windows" url="%DNS_ALIAS_TMP%TeleoptiCCC/WindowsIdentityProvider/" protocolHandler="OpenIdHandler" />
+  Value=<add identifier="urn:Windows" displayName="Windows" url="%DNS_ALIAS_TMP%TeleoptiWFM/WindowsIdentityProvider/" protocolHandler="OpenIdHandler" />
 end
 item: If/While Statement
   Variable=IDENTITY_PROVIDERS_TMP
@@ -332,21 +332,21 @@ item: If/While Statement
 end
 item: Set Variable
   Variable=WEB_BROKER_TMP
-  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web
+  Value=%DNS_ALIAS_TMP%TeleoptiWFM/Web
 end
 item: Set Variable
   Variable=WEB_BROKER_BACKPLANE_TMP
-  Value=%INSIDE_HOSTNAME_TMP%TeleoptiCCC/Broker.backplane/backplane
+  Value=%INSIDE_HOSTNAME_TMP%TeleoptiWFM/Broker.backplane/backplane
 end
 item: Else Statement
 end
 item: Set Variable
   Variable=WEB_BROKER_TMP
-  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Broker/
+  Value=%DNS_ALIAS_TMP%TeleoptiWFM/Broker/
 end
 item: Set Variable
   Variable=WEB_BROKER_BACKPLANE_TMP
-  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Broker.backplane/backplane
+  Value=%DNS_ALIAS_TMP%TeleoptiWFM/Broker.backplane/backplane
 end
 item: End Block
 end
@@ -371,7 +371,7 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(UrlAuthenticationBridge)|%DNS_ALIAS_TMP%TeleoptiCCC/AuthenticationBridge/
+  New Text=$(UrlAuthenticationBridge)|%DNS_ALIAS_TMP%TeleoptiWFM/AuthenticationBridge/
   Line Number=0
 end
 item: Insert Line into Text File
@@ -421,12 +421,12 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(MATRIX_WEB_SITE_URL)|%DNS_ALIAS_TMP%TeleoptiCCC/Analytics
+  New Text=$(MATRIX_WEB_SITE_URL)|%DNS_ALIAS_TMP%TeleoptiWFM/Analytics
   Line Number=0
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(PM_SERVICE)|%DNS_ALIAS_TMP%TeleoptiCCC/PMService/PMService.svc
+  New Text=$(PM_SERVICE)|%DNS_ALIAS_TMP%TeleoptiWFM/PMService/PMService.svc
   Line Number=0
 end
 item: Insert Line into Text File
@@ -436,7 +436,7 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(AGENT_SERVICE)|%DNS_ALIAS_TMP%TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc
+  New Text=$(AGENT_SERVICE)|%DNS_ALIAS_TMP%TeleoptiWFM/SDK/TeleoptiCCCSdkService.svc
   Line Number=0
 end
 item: Insert Line into Text File
@@ -486,7 +486,7 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(LOCAL_WIKI)|%DNS_ALIAS_TMP%TeleoptiCCC/LocalWiki/
+  New Text=$(LOCAL_WIKI)|%DNS_ALIAS_TMP%TeleoptiWFM/LocalWiki/
   Line Number=0
 end
 item: Insert Line into Text File
@@ -516,7 +516,7 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(RTA_SERVICE)|%DNS_ALIAS_TMP%TeleoptiCCC/RTA/TeleoptiRtaService.svc
+  New Text=$(RTA_SERVICE)|%DNS_ALIAS_TMP%TeleoptiWFM/RTA/TeleoptiRtaService.svc
   Line Number=0
 end
 item: Insert Line into Text File

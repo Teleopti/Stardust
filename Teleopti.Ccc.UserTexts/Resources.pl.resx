@@ -193,7 +193,7 @@
     <value>Informacje o agencie ...</value>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Teleopti CCC MyTime</value>
+    <value>Teleopti WFM MyTime</value>
   </data>
   <data name="Agents" xml:space="preserve">
     <value>Agenci</value>
@@ -1744,13 +1744,13 @@
     <value>Widok zespołu</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Prognozy - Teleopti CCC</value>
+    <value>Prognozy - Teleopti WFM</value>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC: Portal</value>
+    <value>Teleopti WFM: Portal</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Plany - Teleopti CCC</value>
+    <value>Plany - Teleopti WFM</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Wzór</value>
@@ -2002,7 +2002,7 @@
     <value>Data opuszczenia</value>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>Wiadomości planowania agenta w Teleopti CCC</value>
+    <value>Wiadomości planowania agenta w Teleopti WFM</value>
   </data>
   <data name="ASM" xml:space="preserve">
     <value>Otwórz ASM</value>
@@ -2686,7 +2686,7 @@
     <value>Automatyczna pozycja</value>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Wyjdź z Teleopti CCC</value>
+    <value>Wyjdź z Teleopti WFM</value>
   </data>
   <data name="Find" xml:space="preserve">
     <value>Znajdź</value>
@@ -2953,7 +2953,7 @@
     <value>Login Windows</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>Ludzie - Teleopti CCC</value>
+    <value>Ludzie - Teleopti WFM</value>
   </data>
   <data name="DecreaseDecimals" xml:space="preserve">
     <value>Zmniejsz dziesiętne</value>
@@ -2995,10 +2995,10 @@
     <value>Uprawnienia</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Otwórz Teleopti CCC</value>
+    <value>Otwórz Teleopti WFM</value>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>Uprawnienia - Teleopti CCC</value>
+    <value>Uprawnienia - Teleopti WFM</value>
   </data>
   <data name="GapExists" xml:space="preserve">
     <value>Odstęp na pozycji {0}. Wszystkie wartwy muszą się stykać lub przecinać.</value>
@@ -3016,7 +3016,7 @@
     <value>Nowy zestaw reguł</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Zmiany - Teleopti CCC</value>
+    <value>Zmiany - Teleopti WFM</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt; Nazwa zestawu reguł &gt;</value>
@@ -3184,7 +3184,7 @@
     <value>Twój plan uległ zmianie. Kliknij tutaj aby zobaczyć aktualny plan.</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>W trakcie dnia - Teleopti CCC</value>
+    <value>W trakcie dnia - Teleopti WFM</value>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
     <value>Portal Agenta</value>
@@ -5694,12 +5694,12 @@ Można w tym czasie korzystać z innych funkcji systemu.</value>
     <value>Adres emailowy serwisu</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Aplikacja Teleopti CCC napotkała problem i musi zostać zamknięta. Przepraszamy za kłopot. Niezapisane zmiany zostały prawdopodobnie utracone.
+    <value>Aplikacja Teleopti WFM napotkała problem i musi zostać zamknięta. Przepraszamy za kłopot. Niezapisane zmiany zostały prawdopodobnie utracone.
 
 Aby przekazać producentowi cenne informacje o tym błędzie, bardzo prosimy o zgłoszenie go przyciskiem "Wyślij raport o błędzie emailem". Otworzy to twój normalny program pocztowy. Prosimy bardzo o poniżesz informacje:
 1. Kroki prowadzące do wystąpinia błędu
 2. Informacje o danych, które obrabiałeś(aś)
-3. Obrazek ekranu z widocznym Teleopti CCC
+3. Obrazek ekranu z widocznym Teleopti WFM
 
 Możesz też skopiować tekst komunikatu błędu do emaila.
 
@@ -5716,7 +5716,7 @@ Dział Rozwoju Teleopti</value>
     <value>Aby pomóc nam w rozwoju produktu Teleopti CCC, bylibyśmy wdzięczni za poniższe informacje:
 1. Kroki prowadzące do wystąpinia błędu
 2. Informacje o danych, które obrabiałeś(aś)
-3. Obrazek ekranu z widocznym Teleopti CCC
+3. Obrazek ekranu z widocznym Teleopti WFM
 
 Z góry dziękujemy,
 Dział Rozwoju Teleopti</value>
@@ -6067,7 +6067,7 @@ Okres</value>
     <value>Orientacja uczciwości</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>{0} - Teleopti CCC: {1} - {2} Scenariusz: {3}</value>
+    <value>{0} - Teleopti WFM: {1} - {2} Scenariusz: {3}</value>
   </data>
   <data name="OpenFile" xml:space="preserve">
     <value>Otwórz plik</value>
@@ -6124,10 +6124,10 @@ Okres</value>
     <value>Brak połączenia z brokerem wiadomości</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - System OK</value>
+    <value>Teleopti WFM - System OK</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - System ma problem</value>
+    <value>Teleopti WFM - System ma problem</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>Plan + Restrykcje</value>
@@ -8646,7 +8646,7 @@ Aktywne opcje:
     <value>AFW ???</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
+    <value>Teleopti WFM</value>
   </data>
   <data name="DescriptionTimeTracker" xml:space="preserve">
     <value>Kompensacja</value>

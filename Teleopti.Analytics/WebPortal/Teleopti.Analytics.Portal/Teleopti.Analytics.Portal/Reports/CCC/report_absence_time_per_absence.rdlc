@@ -815,7 +815,7 @@
         <DataSetName>DataSet1</DataSetName>
         <Top>0.25cm</Top>
         <Left>0.75001cm</Left>
-        <Height>5.48785cm</Height>
+        <Height>5.48786cm</Height>
         <Width>26.49997cm</Width>
         <Style />
       </Tablix>
@@ -2038,7 +2038,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!date.Value,DateFormat.ShortDate)</Value>
+                              <Value>=Code.ShortDateString(Fields!date.Value)</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2619,7 +2619,7 @@
         <Top>6.77847cm</Top>
         <Left>0.77647cm</Left>
         <Height>4.26984cm</Height>
-        <Width>24.24999cm</Width>
+        <Width>24.24998cm</Width>
         <ZIndex>1</ZIndex>
         <Style />
       </Tablix>
@@ -3090,6 +3090,11 @@
   </ReportParameters>
   <Code>Public Function TimeString(i as integer)as string
 	return Math.Floor(i / 60) &amp; ":"  &amp; Format(i Mod 60, "00")
+End function
+
+Public Function ShortDateString(d as System.DateTime)as string
+	Dim format =  System.Globalization.CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern
+	return d.ToString(format ,System.Globalization.CultureInfo.CurrentUICulture)
 End function</Code>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>

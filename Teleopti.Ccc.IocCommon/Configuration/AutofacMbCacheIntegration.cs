@@ -6,14 +6,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public static class AutofacMbCacheIntegration
 	{
-		public static IRegistrationBuilder<T, SimpleActivatorData, SingleRegistrationStyle> IntegrateWithMbCache<T>(this IRegistrationBuilder<T, SimpleActivatorData, SingleRegistrationStyle> builder) where T : class
+		public static IRegistrationBuilder<TInterface, SimpleActivatorData, SingleRegistrationStyle> RegisterMbCacheComponent<TClass, TInterface>(this ContainerBuilder containerBuilder)
+			where TInterface : class
+			where TClass : TInterface
 		{
-			return builder.OnActivating(e => e.ReplaceInstance(e.Context.Resolve<IMbCacheFactory>().ToCachedComponent(e.Instance)));
+			containerBuilder.RegisterType<TClass>().AsSelf();
+			return containerBuilder.Register<TInterface>(c => c.Resolve<TClass>())
+				.OnActivating(e => e.ReplaceInstance(e.Context.Resolve<IMbCacheFactory>().ToCachedComponent(e.Instance)));
 		}
 
-		public static IRegistrationBuilder<T, ConcreteReflectionActivatorData, SingleRegistrationStyle> IntegrateWithMbCache<T>(this IRegistrationBuilder<T, ConcreteReflectionActivatorData, SingleRegistrationStyle> builder) where T : class
+		public static IRegistrationBuilder<TClass, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterConcreteMbCacheComponent<TClass>(this ContainerBuilder containerBuilder)
+			where TClass : class
 		{
-			return builder.OnActivating(e => e.ReplaceInstance(e.Context.Resolve<IMbCacheFactory>().ToCachedComponent(e.Instance)));
-		} 
+			return containerBuilder.RegisterType<TClass>()
+				.OnActivating(e => e.ReplaceInstance(e.Context.Resolve<IMbCacheFactory>().ToCachedComponent(e.Instance)));
+		}
 	}
 }

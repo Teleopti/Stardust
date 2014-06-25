@@ -80,8 +80,8 @@ namespace Teleopti.Analytics.Portal
         }
         private void setCulture()
         {
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo(TheUser.LangId, false);
-            Thread.CurrentThread.CurrentCulture = new CultureInfo(TheUser.CultureId, false);
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(TheUser.LangId, false).FixPersianCulture();
+            Thread.CurrentThread.CurrentCulture = new CultureInfo(TheUser.CultureId, false).FixPersianCulture();
         }
 
         protected int LangId

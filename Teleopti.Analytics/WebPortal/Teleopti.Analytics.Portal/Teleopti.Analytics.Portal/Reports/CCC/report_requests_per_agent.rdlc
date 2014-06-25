@@ -1,120 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
-  <DataSources>
-    <DataSource Name="DataSource2">
-      <DataSourceReference>DataSource2</DataSourceReference>
-      <rd:DataSourceID>bceec683-a8e5-4fbe-855b-9001b4ef4201</rd:DataSourceID>
-    </DataSource>
-  </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet1">
-      <Fields>
-        <Field Name="start_date">
-          <DataField>start_date</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="end_date">
-          <DataField>end_date</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="date_of_request">
-          <DataField>date_of_request</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="person_id">
-          <DataField>person_id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="person_name">
-          <DataField>person_name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="request_type_id">
-          <DataField>request_type_id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="request_type_name">
-          <DataField>request_type_name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="request_status_id">
-          <DataField>request_status_id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="request_status_name">
-          <DataField>request_status_name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="request_start_date_count">
-          <DataField>request_start_date_count</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="request_day_count">
-          <DataField>request_day_count</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="hide_time_zone">
-          <DataField>hide_time_zone</DataField>
-          <rd:TypeName>System.Bool</rd:TypeName>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>DataSource2</DataSourceName>
-        <CommandType>StoredProcedure</CommandType>
-        <CommandText>report_data_schedule_preferences_per_day</CommandText>
-        <QueryParameters>
-          <QueryParameter Name="@scenario_id">
-            <Value>=Parameters!scenario_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@date_from">
-            <Value>=Parameters!date_from.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@date_to">
-            <Value>=Parameters!date_to.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@site_id">
-            <Value>=Parameters!site_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@team_set">
-            <Value>=Parameters!team_set.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@agent_set">
-            <Value>=Parameters!agent_set.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@person_code">
-            <Value>=Parameters!person_code.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@report_id">
-            <Value>=Parameters!report_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@language_id">
-            <Value>=Parameters!language_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@request_type_id">
-            <Value>=Parameters!request_type_id.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-      </Query>
-    </DataSet>
-  </DataSets>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
       <Tablix Name="table1">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.4461in</Width>
+              <Width>3.67309cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.99939in</Width>
+              <Width>10.15845cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.83798in</Width>
+              <Width>4.66847cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -158,7 +61,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -225,7 +128,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -300,7 +203,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -375,7 +278,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -452,7 +355,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -533,7 +436,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -612,7 +515,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -683,7 +586,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -822,7 +725,7 @@
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Left>0.25cm</Left>
-        <Height>4.99999cm</Height>
+        <Height>5cm</Height>
         <Width>18.50001cm</Width>
         <Style />
       </Tablix>
@@ -830,30 +733,30 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.81299in</Width>
+              <Width>4.60499cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.4156in</Width>
+              <Width>3.59562cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.90092in</Width>
+              <Width>4.82834cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.98425in</Width>
+              <Width>2.49999cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.04175in</Width>
+              <Width>2.64604cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.1811in</Width>
+              <Width>2.99999cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.1811in</Width>
+              <Width>2.99999cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.3937in</Height>
+              <Height>1cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1084,7 +987,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1369,7 +1272,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1586,7 +1489,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1624,7 +1527,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatDateTime(Fields!date_of_request.Value,DateFormat.ShortDate)</Value>
+                              <Value>=Code.ShortDateString(Fields!date_of_request.Value)</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1863,7 +1766,7 @@
         <Top>6.0675cm</Top>
         <Left>0.25cm</Left>
         <Height>2.5cm</Height>
-        <Width>24.175cm</Width>
+        <Width>24.17496cm</Width>
         <ZIndex>1</ZIndex>
         <Style />
       </Tablix>
@@ -1871,6 +1774,277 @@
     <Height>8.86667cm</Height>
     <Style />
   </Body>
+  <Width>27.21667cm</Width>
+  <Page>
+    <PageHeader>
+      <Height>2cm</Height>
+      <PrintOnFirstPage>true</PrintOnFirstPage>
+      <PrintOnLastPage>true</PrintOnLastPage>
+      <ReportItems>
+        <Textbox Name="textbox4">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Parameters!ResReportRequestsPerAgent.Value</Value>
+                  <Style>
+                    <FontSize>22pt</FontSize>
+                    <Color>DimGray</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Left</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>textbox4</rd:DefaultName>
+          <Left>0.25cm</Left>
+          <Height>1.50529cm</Height>
+          <Width>14.5cm</Width>
+          <Style>
+            <Border>
+              <Color>#d3e5ef</Color>
+              <Width>2pt</Width>
+            </Border>
+            <BottomBorder>
+              <Style>None</Style>
+            </BottomBorder>
+            <VerticalAlign>Bottom</VerticalAlign>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="textbox7">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Format(Globals.ExecutionTime, "g")</Value>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                    <Color>DimGray</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>textbox7</rd:DefaultName>
+          <Left>23.255cm</Left>
+          <Height>0.5cm</Height>
+          <Width>3.75cm</Width>
+          <ZIndex>1</ZIndex>
+          <Style>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="textbox1">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Globals.PageNumber &amp; " ( " &amp; Globals.TotalPages &amp; " ) "</Value>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                    <Color>DimGray</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>textbox1</rd:DefaultName>
+          <Top>0.53528cm</Top>
+          <Left>24.755cm</Left>
+          <Height>0.5cm</Height>
+          <Width>2.25cm</Width>
+          <ZIndex>2</ZIndex>
+          <Style>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Line Name="line1">
+          <Top>1.75cm</Top>
+          <Left>0.25cm</Left>
+          <Height>0cm</Height>
+          <Width>26.755cm</Width>
+          <ZIndex>3</ZIndex>
+          <Style>
+            <Border>
+              <Color>#d3e5ef</Color>
+              <Style>Solid</Style>
+              <Width>2pt</Width>
+            </Border>
+          </Style>
+        </Line>
+      </ReportItems>
+      <Style />
+    </PageHeader>
+    <PageFooter>
+      <Height>1.01721cm</Height>
+      <PrintOnFirstPage>true</PrintOnFirstPage>
+      <PrintOnLastPage>true</PrintOnLastPage>
+      <ReportItems>
+        <Textbox Name="textbox50">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>Powered by Teleopti WFM©</Value>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                    <Color>DimGray</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Center</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <Top>0.19114cm</Top>
+          <Left>3.175cm</Left>
+          <Height>0.50265cm</Height>
+          <Width>18.75cm</Width>
+          <Style>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+      </ReportItems>
+      <Style />
+    </PageFooter>
+    <PageHeight>21cm</PageHeight>
+    <PageWidth>29.7cm</PageWidth>
+    <LeftMargin>1cm</LeftMargin>
+    <RightMargin>1cm</RightMargin>
+    <TopMargin>1cm</TopMargin>
+    <BottomMargin>1cm</BottomMargin>
+    <ColumnSpacing>1cm</ColumnSpacing>
+    <Style />
+  </Page>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource2">
+      <DataSourceReference>DataSource2</DataSourceReference>
+      <rd:DataSourceID>bceec683-a8e5-4fbe-855b-9001b4ef4201</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet1">
+      <Query>
+        <DataSourceName>DataSource2</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@scenario_id">
+            <Value>=Parameters!scenario_id.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@date_from">
+            <Value>=Parameters!date_from.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@date_to">
+            <Value>=Parameters!date_to.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@site_id">
+            <Value>=Parameters!site_id.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@team_set">
+            <Value>=Parameters!team_set.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@agent_set">
+            <Value>=Parameters!agent_set.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@person_code">
+            <Value>=Parameters!person_code.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@report_id">
+            <Value>=Parameters!report_id.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@language_id">
+            <Value>=Parameters!language_id.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@request_type_id">
+            <Value>=Parameters!request_type_id.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>report_data_schedule_preferences_per_day</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="start_date">
+          <DataField>start_date</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="end_date">
+          <DataField>end_date</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="date_of_request">
+          <DataField>date_of_request</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="person_id">
+          <DataField>person_id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="person_name">
+          <DataField>person_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="request_type_id">
+          <DataField>request_type_id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="request_type_name">
+          <DataField>request_type_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="request_status_id">
+          <DataField>request_status_id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="request_status_name">
+          <DataField>request_status_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="request_start_date_count">
+          <DataField>request_start_date_count</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="request_day_count">
+          <DataField>request_day_count</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="hide_time_zone">
+          <DataField>hide_time_zone</DataField>
+          <rd:TypeName>System.Bool</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
   <ReportParameters>
     <ReportParameter Name="scenario_id">
       <DataType>String</DataType>
@@ -2117,182 +2291,14 @@
   </ReportParameters>
   <Code>Public Function TimeString(i as integer)as string
 	return Math.Floor(i / 3600) &amp; ":" &amp; Format(Math.Floor((i Mod 3600) / 60), "00") &amp; ":" &amp; Format(i Mod 60, "00")
+End function
+
+Public Function ShortDateString(d as System.DateTime)as string
+	Dim format =  System.Globalization.CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern
+	return d.ToString(format ,System.Globalization.CultureInfo.CurrentUICulture)
 End function</Code>
-  <Width>27.21667cm</Width>
-  <Page>
-    <PageHeader>
-      <Height>2cm</Height>
-      <PrintOnFirstPage>true</PrintOnFirstPage>
-      <PrintOnLastPage>true</PrintOnLastPage>
-      <ReportItems>
-        <Textbox Name="textbox4">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=Parameters!ResReportRequestsPerAgent.Value</Value>
-                  <Style>
-                    <FontSize>22pt</FontSize>
-                    <Color>DimGray</Color>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style>
-                <TextAlign>Left</TextAlign>
-              </Style>
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>textbox4</rd:DefaultName>
-          <Left>0.25cm</Left>
-          <Height>1.50529cm</Height>
-          <Width>14.5cm</Width>
-          <Style>
-            <Border>
-              <Color>#d3e5ef</Color>
-              <Width>2pt</Width>
-            </Border>
-            <BottomBorder>
-              <Style>None</Style>
-            </BottomBorder>
-            <VerticalAlign>Bottom</VerticalAlign>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Textbox Name="textbox7">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=Format(Globals.ExecutionTime, "g")</Value>
-                  <Style>
-                    <FontSize>8pt</FontSize>
-                    <Color>DimGray</Color>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style>
-                <TextAlign>Right</TextAlign>
-              </Style>
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>textbox7</rd:DefaultName>
-          <Left>23.255cm</Left>
-          <Height>0.5cm</Height>
-          <Width>3.75cm</Width>
-          <ZIndex>1</ZIndex>
-          <Style>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Textbox Name="textbox1">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=Globals.PageNumber &amp; " ( " &amp; Globals.TotalPages &amp; " ) "</Value>
-                  <Style>
-                    <FontSize>8pt</FontSize>
-                    <Color>DimGray</Color>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style>
-                <TextAlign>Right</TextAlign>
-              </Style>
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>textbox1</rd:DefaultName>
-          <Top>0.53528cm</Top>
-          <Left>24.755cm</Left>
-          <Height>0.5cm</Height>
-          <Width>2.25cm</Width>
-          <ZIndex>2</ZIndex>
-          <Style>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Line Name="line1">
-          <Top>1.75cm</Top>
-          <Left>0.25cm</Left>
-          <Height>0cm</Height>
-          <Width>26.755cm</Width>
-          <ZIndex>3</ZIndex>
-          <Style>
-            <Border>
-              <Color>#d3e5ef</Color>
-              <Style>Solid</Style>
-              <Width>2pt</Width>
-            </Border>
-          </Style>
-        </Line>
-      </ReportItems>
-      <Style />
-    </PageHeader>
-    <PageFooter>
-      <Height>1.01721cm</Height>
-      <PrintOnFirstPage>true</PrintOnFirstPage>
-      <PrintOnLastPage>true</PrintOnLastPage>
-      <ReportItems>
-        <Textbox Name="textbox50">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>Powered by Teleopti WFM©</Value>
-                  <Style>
-                    <FontSize>8pt</FontSize>
-                    <FontWeight>Bold</FontWeight>
-                    <Color>DimGray</Color>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style>
-                <TextAlign>Center</TextAlign>
-              </Style>
-            </Paragraph>
-          </Paragraphs>
-          <Top>0.19114cm</Top>
-          <Left>3.175cm</Left>
-          <Height>0.50265cm</Height>
-          <Width>18.75cm</Width>
-          <Style>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-      </ReportItems>
-      <Style />
-    </PageFooter>
-    <PageHeight>21cm</PageHeight>
-    <PageWidth>29.7cm</PageWidth>
-    <LeftMargin>1cm</LeftMargin>
-    <RightMargin>1cm</RightMargin>
-    <TopMargin>1cm</TopMargin>
-    <BottomMargin>1cm</BottomMargin>
-    <ColumnSpacing>1cm</ColumnSpacing>
-    <Style />
-  </Page>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
-  <rd:ReportID>51da61bd-585a-4466-956c-80175da319a5</rd:ReportID>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>51da61bd-585a-4466-956c-80175da319a5</rd:ReportID>
 </Report>

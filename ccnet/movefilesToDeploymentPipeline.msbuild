@@ -40,6 +40,9 @@
 			<WebBehaviourData Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\$(Configuration)\Data\*.*"/>
 			<DebugSetupFiles Include="$(CCNetWorkingDirectory)\.debug-Setup\**\*.*"/>
 			<LicenseFiles Include="$(CCNetWorkingDirectory)\LicenseFiles\**\*.*" />
+			<BuildArtifacts Include="$(CCNetWorkingDirectory)\BuildArtifacts\**\*.*" />
+			<BuildArtifactsSupportTool Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\bin\$(Configuration)\BuildArtifacts\**\*.*" />
+			<ToggleFiles Include="$(CCNetWorkingDirectory)\Domain\FeatureFlags\**\*.*" />
 		</ItemGroup>
 		<RemoveDir Directories="$(DestinationFolder)"/>
 		<MakeDir Directories="$(DestinationFolder)"/>
@@ -63,6 +66,12 @@
     			DestinationFiles="@(DebugSetupFiles->'$(DestinationFolder)\.debug-Setup\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(LicenseFiles)"
     			DestinationFiles="@(LicenseFiles->'$(DestinationFolder)\LicenseFiles\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(BuildArtifacts)"
+    			DestinationFiles="@(BuildArtifacts->'$(DestinationFolder)\BuildArtifacts\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(BuildArtifactsSupportTool)"
+    			DestinationFiles="@(BuildArtifactsSupportTool->'$(DestinationFolder)\Teleopti.Support.Tool\bin\$(Configuration)\BuildArtifacts\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(ToggleFiles)"
+    			DestinationFiles="@(ToggleFiles->'$(DestinationFolder)\Domain\FeatureFlags\%(RecursiveDir)%(Filename)%(Extension)')" />
 	</Target>
 	
 	<Target Name="CreateHgChangesetFile">

@@ -232,7 +232,7 @@
     <value>Info Agent...</value>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Teleopti CCC MyTime</value>
+    <value>Teleopti WFM MyTime</value>
   </data>
   <data name="Agents" xml:space="preserve">
     <value>Agents</value>
@@ -1621,7 +1621,7 @@
     <value>Position Auto</value>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Déconnexion Teleopti CCC</value>
+    <value>Déconnexion Teleopti WFM</value>
   </data>
   <data name="Periods" xml:space="preserve">
     <value>Périodes</value>
@@ -1687,7 +1687,7 @@
     <value>Rapports</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
+    <value>Teleopti WFM</value>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
     <value>Pourcentage Temps-Partiel</value>
@@ -1735,7 +1735,7 @@
     <value>Modifier heures supplémentaires</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Ouvrir Teleopti CCC</value>
+    <value>Ouvrir Teleopti WFM</value>
   </data>
   <data name="DeleteActivity" xml:space="preserve">
     <value>Supprimer Activité</value>
@@ -2350,10 +2350,10 @@
     <value>Aperçu résumé</value>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC: Portail principal</value>
+    <value>Teleopti WFM: Portail principal</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Plannings - Teleopti CCC</value>
+    <value>Plannings - Teleopti WFM</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Outils</value>
@@ -2464,7 +2464,7 @@
     <value>Banque d'horaires</value>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>Teleopti CCC Agent Schedule Messenger</value>
+    <value>Teleopti WFM Agent Schedule Messenger</value>
   </data>
   <data name="GridRowsInChart" xml:space="preserve">
     <value>Propriétés Diagramme</value>
@@ -2827,7 +2827,7 @@
     <value>Connexion Windows</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>Personnes - Teleopti CCC</value>
+    <value>Personnes - Teleopti WFM</value>
   </data>
   <data name="RemoveParticipant" xml:space="preserve">
     <value>Supprimer Participants Sélectionnés</value>
@@ -2842,7 +2842,7 @@
     <value>Permissions</value>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>Permissions - Teleopti CCC</value>
+    <value>Permissions - Teleopti WFM</value>
   </data>
   <data name="SelectPeopleToAddToRole" xml:space="preserve">
     <value>Sélectioner Personnes à ajouter au Rôle</value>
@@ -2854,7 +2854,7 @@
     <value>Nouvelle règle d'horaires</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Horaires - Teleopti CCC</value>
+    <value>Horaires - Teleopti WFM</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt; Nom règle d'horaires &gt;</value>
@@ -2977,7 +2977,7 @@
     <value>Seuil</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Intra-journalier - Teleopti CCC</value>
+    <value>Intra-journalier - Teleopti WFM</value>
   </data>
   <data name="OpenASM" xml:space="preserve">
     <value>Agent Schedule Messenger</value>
@@ -5218,7 +5218,7 @@
     <value>Periode objectif à partir de</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Prévisions - Teleopti CCC</value>
+    <value>Prévisions - Teleopti WFM</value>
   </data>
   <data name="TimeZone" xml:space="preserve">
     <value>Fuseau horaire</value>
@@ -6082,10 +6082,10 @@
     <value>Utiliser Déviation Intra Intervalle </value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - Système OK</value>
+    <value>Teleopti WFM - Système OK</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - Alerte Système </value>
+    <value>Teleopti WFM - Alerte Système </value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>Planning + Restrictions</value>
@@ -6700,7 +6700,7 @@
     <value>Orientation équité</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>{0} - Teleopti CCC: {1} - {2} Scénario: {3}</value>
+    <value>{0} - Teleopti WFM: {1} - {2} Scénario: {3}</value>
   </data>
   <data name="TheAttachedFileContainsScheduleForDateParameters" xml:space="preserve">
     <value>Le fichier PDF attaché contient votre planning de {0} à {1}.</value>
@@ -7549,14 +7549,14 @@ Supprimez la date de l'évènement spécial ou choisissez une autre date.</value
     <value>Le système est occupé par une autre requête d'arrière-plan. Merci de ré-essayer plus tard.</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC a rencontré un problème et doit fermer.  Nous sommes désolés pour le désagrément causé. Si vous étiez en plein travail, les informations sur lesquelles vous travailliez peuvent être perdues.
+    <value>Teleopti WFM a rencontré un problème et doit fermer.  Nous sommes désolés pour le désagrément causé. Si vous étiez en plein travail, les informations sur lesquelles vous travailliez peuvent être perdues.
 
 Pour nous donner des informations pertinentes sur cette erreur, nous vous demandons de bien vouloir nous le signaler en cliquant sur le bouton "Envoyer rapport par e-mail". Cela va ouvrir votre programme d'e-mail par défaut.
 Merci d'inclure:
 
 1. Comment reproduire l'erreur étape par étape:
 2. Informations sur les données avec lesquelles vous travailliez:
-3. Capture d'écran de l'erreur avec Teleopti CCC en arrière-plan:
+3. Capture d'écran de l'erreur avec Teleopti WFM en arrière-plan:
 
 Vous pouvez aussi copier le message d'erreur dans le presse-papiers et le copier dans l'e-mail.
 
@@ -7572,7 +7572,7 @@ Teleopti R&amp;D</value>
 2. Informations sur les données avec lesquelles vous travailliez:
 
 
-3. Capture d'écran de l'erreur avec Teleopti CCC en arrière-plan:
+3. Capture d'écran de l'erreur avec Teleopti WFM en arrière-plan:
 
 
 Merci

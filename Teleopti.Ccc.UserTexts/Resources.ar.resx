@@ -1711,7 +1711,7 @@
     <comment>إنهاء/إغلاق</comment>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>إنهاء TELEOPTI CCC</value>
+    <value>إنهاء TELEOPTI WFM</value>
     <comment>إنهاء قائمة Teleopti Teleopti CCC</comment>
   </data>
   <data name="Export" xml:space="preserve">
@@ -3067,7 +3067,7 @@
     <comment>أشخاص</comment>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>فتح TELEOPTI CCC</value>
+    <value>فتح TELEOPTI WFM</value>
     <comment>فتح_تطبيق_Raptor	فتح TELEOPTI CCC</comment>
   </data>
   <data name="OpenReports" xml:space="preserve">
@@ -3083,7 +3083,7 @@
     <comment>لوحة تنقل خاصة بفتح الجداول</comment>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>TELEOPTI CCC</value>
+    <value>TELEOPTI WFM</value>
     <comment>اسم الوظيفة لـ Teleopti CCC</comment>
   </data>
   <data name="OperationCanNotProceedWithTheExternalMatrixSystem" xml:space="preserve">
@@ -4476,31 +4476,31 @@
     <comment>عرض الفريق</comment>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>TELEOPTI CCC : توقعات</value>
+    <value>TELEOPTI WFM: توقعات</value>
     <comment>Teleopti CCC : توقعات</comment>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>TELEOPTI CCC : خلال اليوم</value>
+    <value>TELEOPTI WFM: خلال اليوم</value>
     <comment>Teleopti CCC : خلال اليوم</comment>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>TELEOPTI CCC : مدخل رئيسي</value>
+    <value>TELEOPTI WFM: مدخل رئيسي</value>
     <comment>Teleopti CCC : إطار رئيسي</comment>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>TELEOPTI CCC : أشخاص</value>
+    <value>TELEOPTI WFM: أشخاص</value>
     <comment>Teleopti CCC : أشخاص</comment>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>TELEOPTI CCC : أذون</value>
+    <value>TELEOPTI WFM: أذون</value>
     <comment>Teleopti CCC : أذون</comment>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>TELEOPTI CCC : جداول</value>
+    <value>TELEOPTI WFM: جداول</value>
     <comment>Teleopti CCC : جداول</comment>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>TELEOPTI CCC : نوبات عمل</value>
+    <value>TELEOPTI WFM: نوبات عمل</value>
     <comment>Teleopti CCC : نوبات عمل</comment>
   </data>
   <data name="Template" xml:space="preserve">
@@ -6127,7 +6127,7 @@
     <value>توجه العدالة</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>TELEOPTI CCC: {0} {1} - {2} سيناريو: {3}</value>
+    <value>TELEOPTI WFM: {0} {1} - {2} سيناريو: {3}</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>الجداول + القيود</value>
@@ -6592,10 +6592,10 @@
     <value>لا يوجد اتصال مع عميل الرسائل</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>TELEOPTI CCC - النظام بحالة جيدة</value>
+    <value>TELEOPTI WFM - النظام بحالة جيدة</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>TELEOPTI CCC - النظام</value>
+    <value>TELEOPTI WFM - النظام</value>
   </data>
   <data name="DayOfWeekCapital" xml:space="preserve">
     <value>يوم من الاسبوع</value>
@@ -7165,7 +7165,7 @@
     <value>صفحة {0} من {1}</value>
   </data>
   <data name="PoweredByTeleoptCCC" xml:space="preserve">
-    <value>مدعوم من TeleoptiCCC</value>
+    <value>مدعوم من Teleopti WFM</value>
   </data>
   <data name="ReportLevelDetailLunch" xml:space="preserve">
     <value>غداء</value>
@@ -7351,10 +7351,10 @@
     <value>انهيار كل الشُعب</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC يواجه خطأ و يجب أن يغلق. نأسف للعطل. يمكن أن تفقد المعلومات اتي كنت تعمل عليها.   نرجو أن تعطينا معلومات عن العطل و ذلك بالضغط على send email report. سيتم فتح الايميل الخاص بك. نرجو اضافة التالي:   1. شرح خطوة بخطوة عن طريقة حدوث الخطأ    2. معلومات عن البيانات التي كنت تعمل عليها   3.صورة عن الخطأ مع Teleopti CCC في الخلفية.    يمكنك ايضاً نسخ و لصق نص رسالة الخطأ في رسالة الايميل     مع تحيات Teleopti R&amp;D و شكراً</value>
+    <value>Teleopti WFM يواجه خطأ و يجب أن يغلق. نأسف للعطل. يمكن أن تفقد المعلومات اتي كنت تعمل عليها.   نرجو أن تعطينا معلومات عن العطل و ذلك بالضغط على send email report. سيتم فتح الايميل الخاص بك. نرجو اضافة التالي:   1. شرح خطوة بخطوة عن طريقة حدوث الخطأ    2. معلومات عن البيانات التي كنت تعمل عليها   3.صورة عن الخطأ مع Teleopti WFM في الخلفية.    يمكنك ايضاً نسخ و لصق نص رسالة الخطأ في رسالة الايميل     مع تحيات Teleopti R&amp;D و شكراً</value>
   </data>
   <data name="UnhandledExceptionEmailBody" xml:space="preserve">
-    <value>لتساعدنا على التطور نرجو أن توافينا بالمعلومات التالية     1. شرح خطوة بخطوة عن طريقة حدوث الخطأ    2. معلومات عن البيانات التي كنت تعمل عليها   3.صورة عن الخطأ مع Teleopti CCC في الخلفية.    يمكنك ايضاً نسخ و لصق نص رسالة الخطأ في رسالة الايميل     مع تحيات Teleopti R&amp;D و شكرا.</value>
+    <value>لتساعدنا على التطور نرجو أن توافينا بالمعلومات التالية     1. شرح خطوة بخطوة عن طريقة حدوث الخطأ    2. معلومات عن البيانات التي كنت تعمل عليها   3.صورة عن الخطأ مع Teleopti WFM في الخلفية.    يمكنك ايضاً نسخ و لصق نص رسالة الخطأ في رسالة الايميل     مع تحيات Teleopti R&amp;D و شكرا.</value>
   </data>
   <data name="AFileContainingTheErrorMessageCouldNotBeCreated" xml:space="preserve">
     <value>لا يمكن انشاء ملف يحتوي على رسالة الخطأ. يرجى نسخ و لصق نص رسالة الخطأ في رسالة الايميل     </value>

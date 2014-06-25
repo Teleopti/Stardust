@@ -41,11 +41,11 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 		/// <summary>
 		/// Url if not logged in
 		/// <![CDATA[
-		/// [web]/ToggleHandler/IsEnabled?toggle=[yourToggle]&datasource=[your datasource]
+		/// [web]/ToggleHandler/AllToggles?datasource=[your datasource]
 		/// ]]>
 		/// Url if logged in
 		/// <![CDATA[
-		/// [web]/ToggleHandler/IsEnabled?toggle=[yourToggle]
+		/// [web]/ToggleHandler/AllToggles
 		/// ]]>
 		/// </summary>
 		[HttpGet]

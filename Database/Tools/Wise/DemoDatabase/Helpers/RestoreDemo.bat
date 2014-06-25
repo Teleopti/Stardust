@@ -35,7 +35,7 @@ SQLCMD -S%SQL_SERVER_NAME% -E -v BakDir = "%INSTALLDIR%\DatabaseInstaller\DemoDa
 "%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%SQL_SERVER_NAME% -DTeleoptiCCC7Agg_Demo -OTeleoptiCCCAgg -E -T -R -LTeleoptiDemoUser:TeleoptiDemoPwd2
 "%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%SQL_SERVER_NAME% -DTeleoptiAnalytics_Demo -OTeleoptiAnalytics -E -T -R -LTeleoptiDemoUser:TeleoptiDemoPwd2
 
-SQLCMD -S%SQL_SERVER_NAME% -E -v BakDir = "%INSTALLDIR%\DatabaseInstaller\DemoDatabase" -i"%INSTALLDIR%\DatabaseInstaller\DemoDatabase\RestoreUsers.sql"
+SQLCMD -S%SQL_SERVER_NAME% -E -v BakDir = "%INSTALLDIR%\DatabaseInstaller\DemoDatabase" -i"%INSTALLDIR%\DatabaseInstaller\DemoDatabase\RestoreUsers.sql" -v CurrentUser=""
 
 "%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%SQL_SERVER_NAME% -DD"TeleoptiCCC7_Demo" -EE
 echo re-add CrossDb views

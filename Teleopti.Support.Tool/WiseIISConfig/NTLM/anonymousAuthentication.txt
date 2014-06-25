@@ -7,6 +7,6 @@ SDK;False
 Web;True
 Client;False
 MyTime;False
-TeleoptiCCC;True
+TeleoptiWFM;True
 AuthenticationBridge;True
 WindowsIdentityProvider;True

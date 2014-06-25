@@ -94,9 +94,15 @@ SET WISESOURCEFILE=%WISEDRIVELETTER%\Src
 SET WISEPROJFILE=%WISESOURCEFILE%\WISE
 SET DYNAMICCONTENT=%WISESOURCEFILE%\WiseArtifact
 SET DEPENDENCIES=%WISEDRIVELETTER%\Dependencies
+SET DEPENDENCIESSRC=\\a380\t-files\RnD\MSI_Dependencies
 ECHO WISESOURCEFILE: %WISESOURCEFILE%
 ECHO WISEPROJFILE: %WISEPROJFILE%
 ECHO DYNAMICCONTENT: %DYNAMICCONTENT%
+SET WORKINGDIR=C:\Temp\WiseWORKINGDIR
+SET WISEEXE=C:\Program Files (x86)\Altiris\Wise\Windows Installer Editor\WfWI.exe
+SET WISESCRIPT=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor\Wise32.exe
+SET DEPLOYSHARE=D:\Installation\PreviousBuilds
+SET AZUREOUTDIR=D:\Installation\Azure
 
 ::Set Product folders. note: Folder namd must correspond to .wsi-file name. See: sub batch file: CompileWise.bat
 SET ccc7_server=ccc7_server
@@ -160,11 +166,10 @@ XCOPY "%DEPENDENCIESSRC%\ccc7_server\sqlio.exe" "%WISESOURCEFILE%\SupportTools\S
 ROBOCOPY "%DEPENDENCIESSRC%\images" "%WISESOURCEFILE%\images" /MIR
 
 ::get short version
-if not "%version:~-2%"==".0" (
+if "%Version:~0,-6%"=="7.5.390" (
 set shortVersion=%Version:~0,-6%
 ) else (
-CALL "%WISEDIR%\head.bat" 1 "%DEPENDENCIESSRC%\wsi\" > %temp%\Version.txt
-SET /p shortVersion= < %temp%\Version.txt
+set shortVersion=Default
 )
 
 if exist "%DEPENDENCIESSRC%\wsi\%shortVersion%" (

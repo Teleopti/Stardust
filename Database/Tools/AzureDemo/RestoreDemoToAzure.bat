@@ -11,9 +11,9 @@ set SOURCEPWD=abc123456
 set PREVIOUSBUILD=\\hebe\Installation\PreviousBuilds
 set DESTUSER=TeleoptiDemoUser
 set DESTPWD=TeleoptiDemoPwd2
-set SRCANALYTICS=TeleoptiAnalytics_Demo
-set SRCCCC7=TeleoptiCCC7_Demo
-set SRCAGG=TeleoptiCCC7Agg_Demo
+set SRCANALYTICS=TeleoptiWFMAnalytics_Demo
+set SRCCCC7=TeleoptiWFM_Demo
+set SRCAGG=TeleoptiWFMAgg_Demo
 set workingdir=c:\temp\AzureRestore
 set ROOTDIR=%~dp0
 set ROOTDIR=%ROOTDIR:~0,-1%
@@ -75,7 +75,7 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
 ::Restore Demo to Local SQL Server
 SQLCMD -S. -E -v BakDir = "%workingdir%\DatabaseInstaller\DemoDatabase" -i"%workingdir%\DatabaseInstaller\DemoDatabase\RestoreDemo.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :Error
-SQLCMD -S. -E -v BakDir = "%workingdir%\DatabaseInstaller\DemoDatabase" -i"%workingdir%\DatabaseInstaller\DemoDatabase\RestoreUsers.sql"
+SQLCMD -S. -E -v BakDir = "%workingdir%\DatabaseInstaller\DemoDatabase" -i"%workingdir%\DatabaseInstaller\DemoDatabase\RestoreUsers.sql" -v CurrentUser=""
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=4 & GOTO :Error
 
 ::Patch local database

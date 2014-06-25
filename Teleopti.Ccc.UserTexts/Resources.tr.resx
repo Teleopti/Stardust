@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Gizli Biçimle Metin Kutusu</value>
@@ -1525,13 +1525,13 @@
     <value>Takım görünümü</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>TELEOPTI CCC : Tahminleri</value>
+    <value>TELEOPTI WFM: Tahminleri</value>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>TELEOPTI CCC: Ana portal</value>
+    <value>TELEOPTI WFM: Ana portal</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>TELEOPTI CCC : Vardiya Planları</value>
+    <value>TELEOPTI WFM: Vardiya Planları</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Şablon</value>
@@ -2551,7 +2551,7 @@
     <value>Oto Pozisyon</value>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>TELEOPTI CCC'den Çık</value>
+    <value>TELEOPTI WFM'den Çık</value>
   </data>
   <data name="Find" xml:space="preserve">
     <value>Bul</value>
@@ -2782,7 +2782,7 @@
     <value>Raporlar</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>TELEOPTI CCC</value>
+    <value>TELEOPTI WFM</value>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
     <value>Yarı-zamanlı oranı</value>
@@ -2833,7 +2833,7 @@
     <value>Windows giriş</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>TELEOPTI CCC: Kişiler</value>
+    <value>TELEOPTI WFM: Kişiler</value>
   </data>
   <data name="DecreaseDecimals" xml:space="preserve">
     <value>Ondalık basamak azalt</value>
@@ -2878,10 +2878,10 @@
     <value>Yetkiler</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>TELEOPTI CCC'yi aç</value>
+    <value>TELEOPTI WFM'yi aç</value>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>TELEOPTI CCC: Yetkiler</value>
+    <value>TELEOPTI WFM: Yetkiler</value>
   </data>
   <data name="SelectPeopleToAddToRole" xml:space="preserve">
     <value>Rol eklemek için kişileri seç</value>
@@ -2893,7 +2893,7 @@
     <value>Yeni Kural Seti</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>TELEOPTI CCC: Vardiyalar</value>
+    <value>TELEOPTI WFM: Vardiyalar</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt;Kural seti ismi&gt;</value>
@@ -3064,7 +3064,7 @@
     <value>Müşteri Temsilcisi</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>TELEOPTI CCC: Gün içi</value>
+    <value>TELEOPTI WFM: Gün içi</value>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
     <value>Müşteri Temsilcisi Portali</value>
