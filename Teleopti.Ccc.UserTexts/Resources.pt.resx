@@ -220,7 +220,7 @@
     <value>Dados do agente...</value>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Teleopti CCC MyTime</value>
+    <value>Teleopti WFM MyTime</value>
   </data>
   <data name="Agents" xml:space="preserve">
     <value>Agentes</value>
@@ -1537,13 +1537,13 @@
     <value>Visão da equipe</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Teleopti CCC: Previsões</value>
+    <value>Teleopti WFM: Previsões</value>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC: Portal Principal</value>
+    <value>Teleopti WFM: Portal Principal</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Teleopti CCC: Agendas</value>
+    <value>Teleopti WFM: Agendas</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Template</value>
@@ -2185,7 +2185,7 @@
     <value>Novo Conjunto de Regras</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Teleopti CCC: Turnos</value>
+    <value>Teleopti WFM: Turnos</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt; Nome do conjunto de regras &gt;</value>
@@ -3151,7 +3151,7 @@
     <value>Auto Posicionamento</value>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Sair do Teleopti CCC</value>
+    <value>Sair do Teleopti WFM</value>
   </data>
   <data name="Find" xml:space="preserve">
     <value>Localizar</value>
@@ -3226,7 +3226,7 @@
     <value>Relatórios</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
+    <value>Teleopti WFM</value>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
     <value>Percentual de tempo parcial</value>
@@ -3274,7 +3274,7 @@
     <value>Windows Login</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>Teleopti CCC: Pessoas</value>
+    <value>Teleopti WFM: Pessoas</value>
   </data>
   <data name="DecreaseDecimals" xml:space="preserve">
     <value>Diminuir decimais</value>
@@ -3313,10 +3313,10 @@
     <value>Permissões</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Abrir Teleopti CCC</value>
+    <value>Abrir Teleopti WFM</value>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>Teleopti CCC: Permissões</value>
+    <value>Teleopti WFM: Permissões</value>
   </data>
   <data name="PeopleInsertScreen" xml:space="preserve">
     <value>Página para Inserir Pessoas</value>
@@ -3451,7 +3451,7 @@
     <value>Agente</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Teleopti CCC: Intradiário</value>
+    <value>Teleopti WFM: Intradiário</value>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
     <value>Portal do Agente</value>
@@ -6920,13 +6920,13 @@ Atualizado em: {1}</value>
     <value>Endereço de e-mail do suporte</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>O Teleopti CCC encontrou um problema e precisará ser fechado. As informações com as quais você estava trabalhando podem ter sido perdidas. Por favor desculpem-nos pelo transtorno.
+    <value>O Teleopti WFM encontrou um problema e precisará ser fechado. As informações com as quais você estava trabalhando podem ter sido perdidas. Por favor desculpem-nos pelo transtorno.
 
 Para obter informações valiosas sobre este erro, nós pedimos que você o relate clicando no botão: "Enviar relatório por e-mail" abaixo. Ao clicar nesse botão o seu programa de e-mails padrão será aberto. Por favor inclua também as seguintes informações no relatório:
 
 1. Um passo a passo de como reproduzir o erro
 2. Informações sobre quais eram os dados com os quais você estava trabalhando quando o erro ocorreu
-3. Uma imagem da tela de erro (printscreen) com o Teleopti CCC ao fundo
+3. Uma imagem da tela de erro (printscreen) com o Teleopti WFM ao fundo
 
 Você também pode copiar o texto da mensagem de erro para a área de transferência e colá-lo no corpo do e-mail.
 
@@ -7213,7 +7213,7 @@ Período: {3}</value>
 
 2. Informações sobre quais eram os dados com os quais você estava trabalhando quando o erro ocorreu:
 
-3. Uma imagem da tela de erro (printscreen) com o Teleopti CCC ao fundo:
+3. Uma imagem da tela de erro (printscreen) com o Teleopti WFM ao fundo:
 
 Obrigado,
 Teleopti P&amp;D
@@ -7437,7 +7437,7 @@ Teleopti P&amp;D
     <value>Necessidades de negócio</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>{0} – Teleopti CCC: {1} – {2} Cenário: {3} </value>
+    <value>{0} – Teleopti WFM: {1} – {2} Cenário: {3} </value>
   </data>
   <data name="OpenFile" xml:space="preserve">
     <value>Abrir arquivo</value>
@@ -7488,7 +7488,7 @@ Teleopti P&amp;D
     <value>Sem conexão com o message broker</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - Sistema ok</value>
+    <value>Teleopti WFM - Sistema ok</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>Agendas + Restrições</value>
@@ -7773,7 +7773,7 @@ Teleopti P&amp;D
     <value>Número Original de Chamadas Recebidas</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - Aviso de sistema</value>
+    <value>Teleopti WFM - Aviso de sistema</value>
   </data>
   <data name="ContractTimeDoesNotMeetTheTargetTime" xml:space="preserve">
     <value>O tempo de contrato não equivale ao tempo alvo</value>

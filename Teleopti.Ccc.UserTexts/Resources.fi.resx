@@ -238,7 +238,7 @@
     <comment>Agent info...</comment>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Teleopti CCC MyTime</value>
+    <value>Teleopti WFM MyTime</value>
     <comment>MyTime</comment>
   </data>
   <data name="Agents" xml:space="preserve">
@@ -2008,15 +2008,15 @@ Periods</comment>
     <comment>Team view</comment>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Teleopti CCC : Ennusteet</value>
+    <value>Teleopti WFM: Ennusteet</value>
     <comment>Teleopti CCC : Forecasts</comment>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC : Pääportaali</value>
+    <value>Teleopti WFM: Pääportaali</value>
     <comment>Teleopti CCC : Main window</comment>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Teleopti CCC : Työvuorot</value>
+    <value>Teleopti WFM: Työvuorot</value>
     <comment>Teleopti CCC : Schedules</comment>
   </data>
   <data name="Template" xml:space="preserve">
@@ -2469,7 +2469,7 @@ n rajaus</value>
     <comment>Leaving date</comment>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>Teleopti CCC Agent Schedule Messenger</value>
+    <value>Teleopti WFM Agent Schedule Messenger</value>
     <comment>Agent Schedule Messenger</comment>
   </data>
   <data name="ASM" xml:space="preserve">
@@ -3450,7 +3450,7 @@ korvaa</value>
     <comment>Auto Position</comment>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Kirjaudu ulos Teleopti CCC:tä</value>
+    <value>Kirjaudu ulos Teleopti WFM:tä</value>
     <comment>Teleopti menu exit Teleopti CCC</comment>
   </data>
   <data name="Find" xml:space="preserve">
@@ -3762,7 +3762,7 @@ korvaa</value>
     <comment>Function name Reports</comment>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
+    <value>Teleopti WFM</value>
     <comment>Funtion name Teleopti CCC</comment>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
@@ -3830,7 +3830,7 @@ korvaa</value>
     <comment>Windows logon</comment>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>Teleopti CCC: Henkilöt</value>
+    <value>Teleopti WFM: Henkilöt</value>
     <comment>Teleopti CCC : People</comment>
   </data>
   <data name="DecreaseDecimals" xml:space="preserve">
@@ -3890,11 +3890,11 @@ korvaa</value>
     <comment>Open permissions function in Permissions</comment>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Avaa Teleopti CCC</value>
+    <value>Avaa Teleopti WFM</value>
     <comment>OpenRaptorApplication	Open TELEOPTI CCC</comment>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>Teleopti CCC: Oikeudet</value>
+    <value>Teleopti WFM: Oikeudet</value>
     <comment>Teleopti CCC : Permissions</comment>
   </data>
   <data name="GapExists" xml:space="preserve">
@@ -3918,7 +3918,7 @@ korvaa</value>
     <comment>New Rule Set ribbon menu</comment>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Teleopti CCC: Vuorot</value>
+    <value>Teleopti WFM: Vuorot</value>
     <comment>Teleopti CCC : Shifts</comment>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
@@ -4143,7 +4143,7 @@ tilit</value>
     <comment>Agent</comment>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Teleopti CCC: Päivänsisäinen näkymä</value>
+    <value>Teleopti WFM: Päivänsisäinen näkymä</value>
     <comment>Teleopti CCC : Intraday</comment>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
@@ -7629,7 +7629,7 @@ Päivitetty: {1}</value>
     <comment>System setting</comment>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC:ssä on tapahtunut odottamaton virhe ja se suljetaan. Pahoittelemme tästä aiheutuvaa harmia. Jos sinulla oli jotain kesken, tallentamattomat tiedot voivat kadota.
+    <value>Teleopti WFM:ssä on tapahtunut odottamaton virhe ja se suljetaan. Pahoittelemme tästä aiheutuvaa harmia. Jos sinulla oli jotain kesken, tallentamattomat tiedot voivat kadota.
 
 Jotta saisimme arvokasta tietoa tapahtuneesta virheestä, niin pyydämme sinua raportoimaan siitä klikkaamalla alla olevaa ”Lähetä sähköposti” -näppäintä. Tämä toiminto avaa oletus sähköpostiohjelmasi. 
 
@@ -7637,7 +7637,7 @@ Kerro meillä mitä olit tekemässä:
 
 1.  Kerro vaihe vaiheelta mitä olit tekemässä.
 2.  Kerro missä modulissa olit virheen tapahtuessa.
-3.  Liitä Teleopti CCC:n virheilmoitus kuvankaappauksena, jos se ei ole sähköpostin liitteenä.
+3.  Liitä Teleopti WFM:n virheilmoitus kuvankaappauksena, jos se ei ole sähköpostin liitteenä.
 
 Voit myös kopioida virheilmoituksen viestin leikepöydälle ja liittää sen sähköpostiin.
 
@@ -7659,13 +7659,13 @@ Teleopti R&amp;D</value>
     <comment>Error handling</comment>
   </data>
   <data name="UnhandledExceptionEmailBody" xml:space="preserve">
-    <value>Auta meitä kehittämään Teleoti CCC:tä kertomalla meille;  
+    <value>Auta meitä kehittämään Teleoti WFM:tä kertomalla meille;  
 
 1.  Kerro vaihe vaiheelta mitä olit tekemässä.
 
 2.  Kerro missä modulissa olit virheen tapahtuessa.
 
-3.  Liitä Teleopti CCC:n virheilmoitus kuvankaappauksena, jos se ei ole tämän sähköpostin liitteenä.
+3.  Liitä Teleopti WFM:n virheilmoitus kuvankaappauksena, jos se ei ole tämän sähköpostin liitteenä.
 
 
 Kiitos sinulle avustasi.
@@ -8029,7 +8029,7 @@ päivämäärä</value>
     <value>Oikeudenmukaisuus </value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>Teleopti CCC: {0} {1} - {2} Skenaario: {3}</value>
+    <value>Teleopti WFM: {0} {1} - {2} Skenaario: {3}</value>
   </data>
   <data name="OpenFile" xml:space="preserve">
     <value>Avaa tiedosto</value>
@@ -8086,10 +8086,10 @@ päivämäärä</value>
     <value>Ei yhteyttä message brokeriin.</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - Järjestelmä ok</value>
+    <value>Teleopti WFM - Järjestelmä ok</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - Järjestelmävaroitus</value>
+    <value>Teleopti WFM - Järjestelmävaroitus</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>Työvuorot + Rajoitukset</value>
@@ -9773,7 +9773,7 @@ Jakso: {3}</value>
     <value>Kaikki toteutuneet pakollisten toiveet</value>
   </data>
   <data name="InterruptedShutDown" xml:space="preserve">
-    <value>{0} estää Teleopti CCC:n sulkemisen. Haluatko pakottaa järjestelmän sulkemisen?</value>
+    <value>{0} estää Teleopti WFM:n sulkemisen. Haluatko pakottaa järjestelmän sulkemisen?</value>
   </data>
   <data name="AllFulFilledDaysOff" xml:space="preserve">
     <value>Kaikki toteutuneet vapaapäivät</value>

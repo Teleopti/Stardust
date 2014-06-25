@@ -2205,7 +2205,7 @@ Ausnahme</value>
     <comment>Exit/Close</comment>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Teleopti CCC beenden</value>
+    <value>Teleopti WFM beenden</value>
     <comment>Teleopti menu exit Teleopti CCC</comment>
   </data>
   <data name="Export" xml:space="preserve">
@@ -4107,7 +4107,7 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <comment>People</comment>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Öffne TELEOPTI CCC</value>
+    <value>Öffne TELEOPTI WFM</value>
     <comment>OpenRaptorApplication	Open TELEOPTI CCC</comment>
   </data>
   <data name="OpenReports" xml:space="preserve">
@@ -4127,7 +4127,7 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <comment>Function OpenScorecard</comment>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>TELEOPTI CCC</value>
+    <value>TELEOPTI WFM</value>
     <comment>Funtion name Teleopti CCC</comment>
   </data>
   <data name="OperationCanNotProceedWithTheExternalMatrixSystem" xml:space="preserve">
@@ -5993,31 +5993,31 @@ Periods</comment>
     <comment>Teleopti License Exception</comment>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Teleopti CCC: Forecasts</value>
+    <value>Teleopti WFM: Forecasts</value>
     <comment>Teleopti CCC : Forecasts</comment>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Teleopti CCC: Intra-Tag</value>
+    <value>Teleopti WFM: Intra-Tag</value>
     <comment>Teleopti CCC : Intraday</comment>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC: Hauptportal</value>
+    <value>Teleopti WFM: Hauptportal</value>
     <comment>Teleopti CCC : Main window</comment>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>Teleopti CCC: Personen</value>
+    <value>Teleopti WFM: Personen</value>
     <comment>Teleopti CCC : People</comment>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>Teleopti CCC: Berechtigungen</value>
+    <value>Teleopti WFM: Berechtigungen</value>
     <comment>Teleopti CCC : Permissions</comment>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Teleopti CCC: Pläne</value>
+    <value>Teleopti WFM: Pläne</value>
     <comment>Teleopti CCC : Schedules</comment>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Teleopti CCC: Schichten</value>
+    <value>Teleopti WFM: Schichten</value>
     <comment>Teleopti CCC : Shifts</comment>
   </data>
   <data name="Template" xml:space="preserve">
@@ -7574,13 +7574,13 @@ Datum</value>
     <value>Support E-Mail- Adresse</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC ist auf ein Problem gestossen und muss beendet werden. Wir beklagen die Unannehmlichkeit. Die Information Ihrer gegenwärtigen Arbeit geht möglicherweise verloren.
+    <value>Teleopti WFM ist auf ein Problem gestossen und muss beendet werden. Wir beklagen die Unannehmlichkeit. Die Information Ihrer gegenwärtigen Arbeit geht möglicherweise verloren.
 
 Um uns wertvolle Information über diesen Fehler zu geben, bitten wir Sie  den “Sende E-Mail Bericht”-Button zu drücken. Dies öffnet Ihr Standard E-Mail Programm. Bitte fügen Sie das Folgende hinzu::
 
 1.  Schritte zur Reproduktion des Fehlers
 2.  Information über die Daten mit denen Sie arbeiteten
-3.  Screenshot vom Fehler mit Teleopti CCC im Hintergrund
+3.  Screenshot vom Fehler mit Teleopti WFM im Hintergrund
 
 Sie können auch die Fehlermitteilung zur Zwischenablage kopieren, und in die E-mail einfügen.
 
@@ -7602,7 +7602,7 @@ Teleopti R&amp;D</value>
 2.	Information über die Daten mit denen Sie arbeiteten:
 
 
-3.	Screenshot des Fehlers mit Teleopti CCC im Hintergrund:
+3.	Screenshot des Fehlers mit Teleopti WFM im Hintergrund:
 
 
 Vielen Dank
@@ -7885,10 +7885,10 @@ Teleopti R&amp;D</value>
     <value>Plan + Beschränkung</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - Systemwarnung</value>
+    <value>Teleopti WFM - Systemwarnung</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - System ok</value>
+    <value>Teleopti WFM - System ok</value>
   </data>
   <data name="CheckMessageBrokerWarning" xml:space="preserve">
     <value>Keine Verbindung mit dem Message Broker</value>
@@ -7951,7 +7951,7 @@ Teleopti R&amp;D</value>
     <value>Fairness Orientierung</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>TELEOPTI CCC: {0} {1} - {2} Szenario: {3}</value>
+    <value>TELEOPTI WFM: {0} {1} - {2} Szenario: {3}</value>
   </data>
   <data name="OpenFile" xml:space="preserve">
     <value>Datei öffnen</value>

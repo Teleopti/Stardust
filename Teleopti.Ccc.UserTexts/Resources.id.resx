@@ -997,7 +997,7 @@
     <value>Tampilan tim</value>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC: Portal utama</value>
+    <value>Teleopti WFM: Portal utama</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Template</value>
@@ -1354,7 +1354,7 @@
     <value>Mempersiapkan Skill...</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>Orang - Telopti CCC</value>
+    <value>Orang - Telopti WFM</value>
   </data>
   <data name="EditMeeting" xml:space="preserve">
     <value>Ubah Pertemuan</value>
@@ -2801,7 +2801,7 @@ Opsi berikut diaktfikan:
     <value>Aksi</value>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Teleopti CCC MyTime</value>
+    <value>Teleopti WFM MyTime</value>
   </data>
   <data name="ApplicationLogInName" xml:space="preserve">
     <value>Nama login aplikasi</value>
@@ -3014,7 +3014,7 @@ Opsi berikut diaktfikan:
     <value>&amp;Target</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Jadwal - Teleopti CCC</value>
+    <value>Jadwal - Teleopti WFM</value>
   </data>
   <data name="TenMinutes" xml:space="preserve">
     <value>10 Menit</value>
@@ -3191,7 +3191,7 @@ Opsi berikut diaktfikan:
     <value>Tanggal pergi</value>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>Teleopti CCC Agent Schedule Messenger</value>
+    <value>Teleopti WFM Agent Schedule Messenger</value>
   </data>
   <data name="ASM" xml:space="preserve">
     <value>Buka ASM</value>
@@ -3543,7 +3543,7 @@ Tidak Termasuk</value>
     <value>Posisi Otomatis</value>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Keluar Teleopti CCC</value>
+    <value>Keluar Teleopti WFM</value>
   </data>
   <data name="Find" xml:space="preserve">
     <value>Cari</value>
@@ -3699,7 +3699,7 @@ Tidak Termasuk</value>
     <value>Laporan</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
+    <value>Teleopti WFM</value>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
     <value>m.</value>
@@ -3759,13 +3759,13 @@ Tidak Termasuk</value>
     <value>Modifikasi nama dan password</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Buka Teleopti CCC</value>
+    <value>Buka Teleopti WFM</value>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>Ijin - Teleopti CCC</value>
+    <value>Ijin - Teleopti WFM</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Shift - Teleopti CCC</value>
+    <value>Shift - Teleopti WFM</value>
   </data>
   <data name="CutLimitation" xml:space="preserve">
     <value>Potong Batasan</value>
@@ -3840,7 +3840,7 @@ Tidak Termasuk</value>
     <value>Agent</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Intraday - Teleopti CCC</value>
+    <value>Intraday - Teleopti WFM</value>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
     <value>Portal Agent</value>
@@ -4934,13 +4934,13 @@ Diupdate pada: {1}</value>
     <value>Kirim Email</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC menemui masalah dan perlu ditutup. Kami minta maaf atas ketidaknyamananya. Bila anda sedang mengerjakan sesuatu, pekerjaan anda mungkin akan hilang.
+    <value>Teleopti WFM menemui masalah dan perlu ditutup. Kami minta maaf atas ketidaknyamananya. Bila anda sedang mengerjakan sesuatu, pekerjaan anda mungkin akan hilang.
 
 Supaya kami mengetahui kesalahan ini, kami meminta anda untuk melaporkannya dengan cara mengklik tombol "Kirim email laporan" di bawah. Ini akan membuka program email standar anda. Tolong cantumkan :
 
 1. Langkah-langkah yang anda lakukan sehingga menyebabkan kesalahan terjadi
 2. Informasi mengenai data yang sedang anda kerjakan
-3. Screenshot kesalahan dengan layar Teleopti CCC sebagai latar belakang
+3. Screenshot kesalahan dengan layar Teleopti WFM sebagai latar belakang
 
 Anda juga bisa menyalin pesan kesalahan pada clipboard, dan menempelkannya pada email.
 
@@ -4952,7 +4952,7 @@ R&amp;D Teleopti</value>
 
 1. Langkah-langkah yang anda lakukan sehingga menyebabkan kesalahan terjadi
 2. Informasi mengenai data yang sedang anda kerjakan
-3. Screenshot kesalahan dengan layar Teleopti CCC sebagai latar belakang
+3. Screenshot kesalahan dengan layar Teleopti WFM sebagai latar belakang
 
 Anda juga bisa menyalin pesan kesalahan pada clipboard, dan menempelkannya pada email.
 
@@ -5209,7 +5209,7 @@ R&amp;D Teleopti</value>
     <value>Orientasi Keadilan</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>{0} - Teleopti CCC: {1} - {2} Skenario: {3}</value>
+    <value>{0} - Teleopti WFM: {1} - {2} Skenario: {3}</value>
   </data>
   <data name="OpenFile" xml:space="preserve">
     <value>Buka file</value>
@@ -5251,10 +5251,10 @@ R&amp;D Teleopti</value>
     <value>Jadwal anda dari {0} dari {1}</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - Sistem ok</value>
+    <value>Teleopti WFM - Sistem ok</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - Peringatan sistem</value>
+    <value>Teleopti WFM - Peringatan sistem</value>
   </data>
   <data name="DayOfWeekCapital" xml:space="preserve">
     <value>Hari Dalam Minggu</value>
@@ -5767,7 +5767,7 @@ R&amp;D Teleopti</value>
     <value>Waktu bicara</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Prakiraan - Teleopti CCC</value>
+    <value>Prakiraan - Teleopti WFM</value>
   </data>
   <data name="CreateForecastFor" xml:space="preserve">
     <value>Buat prakiraan untuk</value>

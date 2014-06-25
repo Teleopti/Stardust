@@ -214,7 +214,7 @@
     <value>エージェント情報...</value>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Teleopti CCC MyTime</value>
+    <value>Teleopti WFM MyTime</value>
   </data>
   <data name="Agents" xml:space="preserve">
     <value>エージェント</value>
@@ -1422,13 +1422,13 @@
     <value>チームビュー</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>予測 - Teleopti CCC</value>
+    <value>予測 - Teleopti WFM</value>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC: メインポータル</value>
+    <value>Teleopti WFM: メインポータル</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>スケジュール - Teleopti CCC</value>
+    <value>スケジュール - Teleopti WFM</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>テンプレート</value>
@@ -2354,7 +2354,7 @@
     <value>活動</value>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Teleopti CCCの終了</value>
+    <value>Teleopti WFMの終了</value>
   </data>
   <data name="Find" xml:space="preserve">
     <value>検索</value>
@@ -2504,7 +2504,7 @@
     <value>レポート</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
+    <value>Teleopti WFM</value>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
     <value>パートタイム比率</value>
@@ -2552,7 +2552,7 @@
     <value>Windowsのログオン</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>要員 - Teleopti CCC</value>
+    <value>要員 - Teleopti WFM</value>
   </data>
   <data name="DecreaseDecimals" xml:space="preserve">
     <value>小数桁を減らす</value>
@@ -2591,7 +2591,7 @@
     <value>残業の変更</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Teleopti CCCを開く</value>
+    <value>Teleopti WFMを開く</value>
   </data>
   <data name="PeopleInsertScreen" xml:space="preserve">
     <value>要員挿入画面</value>
@@ -2603,7 +2603,7 @@
     <value>新規ルールセット</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>シフト - Teleopti CCC</value>
+    <value>シフト - Teleopti WFM</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt; ルールセット名 &gt;</value>
@@ -4779,7 +4779,7 @@
     <value>退職日</value>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>Teleopti CCC エージェントスケジュールメッセンジャー (ASM)</value>
+    <value>Teleopti WFM エージェントスケジュールメッセンジャー (ASM)</value>
   </data>
   <data name="SkillDaysLoaded" xml:space="preserve">
     <value>スキルの日数が読み込まれました</value>
@@ -4974,7 +4974,7 @@
     <value>権限</value>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>権限 - Teleopti CCC</value>
+    <value>権限 - Teleopti WFM</value>
   </data>
   <data name="GapExists" xml:space="preserve">
     <value>{0} にギャップが存在します。全てのレイヤーは他のレイヤーと隣り合わせになる（または他のレイヤーと交差する）必要があります。</value>
@@ -5050,7 +5050,7 @@
     <value>スケジュールが変更されました。更新されたスケジュールを見るにはここをクリックしてください。</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>日中 - Teleopti CCC</value>
+    <value>日中 - Teleopti WFM</value>
   </data>
   <data name="OpenASM" xml:space="preserve">
     <value>エージェントスケジュールメッセンジャー(ASM)</value>
@@ -6864,7 +6864,7 @@
     <value>フェアネスの方向性</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>{0} - Teleopti CCC: {1} ～ {2} シナリオ: {3}</value>
+    <value>{0} - Teleopti WFM: {1} ～ {2} シナリオ: {3}</value>
   </data>
   <data name="OpenFile" xml:space="preserve">
     <value>ファイルを開く</value>
@@ -6921,10 +6921,10 @@
     <value>メッセージブローカーに接続されていません</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - システム正常</value>
+    <value>Teleopti WFM - システム正常</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - システム警告</value>
+    <value>Teleopti WFM - システム警告</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>スケジュール＋制限</value>
@@ -8466,13 +8466,13 @@
     <value>1週間の最小休暇日数は最大日数以下でなければなりません。</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>問題が発生したため、Teleopti CCCを終了します。ご不便をおかけして申し訳ありません。作業中の内容は失われます。
+    <value>問題が発生したため、Teleopti WFMを終了します。ご不便をおかけして申し訳ありません。作業中の内容は失われます。
 
 エラーに関する有益な情報を得るため、[Eメールレポートを送信] ボタンをクリックしてレポートをお送りください。このボタンをクリックすると、既定のEメールプログラムが開きます。このレポートには以下の情報も含めてください。
 
 1. エラーの再現手順
 2. 作業していたデータに関する情報
-3. Teleopti CCCの画面をバックにしたエラーのスクリーンショット
+3. Teleopti WFMの画面をバックにしたエラーのスクリーンショット
 
 エラーメッセージのテキストをクリップボードにコピーして、Eメールの本文に貼り付けていただいても構いません。
 
@@ -8486,7 +8486,7 @@ Teleopti研究開発グループ</value>
 
 2. 作業していたデータに関する情報
 
-3. Teleopti CCCの画面をバックにしたエラーのスクリーンショット
+3. Teleopti WFMの画面をバックにしたエラーのスクリーンショット
 
 ご協力ありがとうございます。
 Teleopti研究開発グループ</value>

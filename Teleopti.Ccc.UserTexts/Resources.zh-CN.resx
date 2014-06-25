@@ -439,7 +439,7 @@
     <comment>Agent Name</comment>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Teleopti CCC MyTime</value>
+    <value>Teleopti WFM MyTime</value>
     <comment>MyTime</comment>
   </data>
   <data name="AgentPortalOptions" xml:space="preserve">
@@ -1833,7 +1833,7 @@
     <comment>Exit/Close</comment>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>退出Teleopti CCC</value>
+    <value>退出Teleopti WFM</value>
     <comment>Teleopti menu exit Teleopti CCC</comment>
   </data>
   <data name="Export" xml:space="preserve">
@@ -4846,15 +4846,15 @@ Periods</comment>
     <comment>Team view</comment>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>预测 - Teleopti CCC</value>
+    <value>预测 - Teleopti WFM</value>
     <comment>Teleopti CCC : Forecasts</comment>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC：主页</value>
+    <value>Teleopti WFM：主页</value>
     <comment>Teleopti CCC : Main window</comment>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Teleopti CCC：班表</value>
+    <value>Teleopti WFM：班表</value>
     <comment>Teleopti CCC : Schedules</comment>
   </data>
   <data name="Template" xml:space="preserve">
@@ -6249,7 +6249,7 @@ Periods</comment>
     <value>电话后工作时间</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
+    <value>Teleopti WFM</value>
   </data>
   <data name="LogOnFailedInvalidUserNameOrPassword" xml:space="preserve">
     <value>登录失败！无效的用户名或密码。</value>
@@ -6676,10 +6676,10 @@ Periods</comment>
     <value>增加新的分组页面</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>Teleopti CCC：人员</value>
+    <value>Teleopti WFM：人员</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Teleopti CCC：当日</value>
+    <value>Teleopti WFM：当日</value>
   </data>
   <data name="OperatorLimiterGreaterThen" xml:space="preserve">
     <value>大于</value>
@@ -6712,13 +6712,13 @@ Periods</comment>
     <value>任务后的工作</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>打开Teleopti CCC</value>
+    <value>打开Teleopti WFM</value>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>Teleopti CCC：许可</value>
+    <value>Teleopti WFM：许可</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Teleopti CCC：班次</value>
+    <value>Teleopti WFM：班次</value>
   </data>
   <data name="Seniority" xml:space="preserve">
     <value>资历</value>
@@ -6769,7 +6769,7 @@ Periods</comment>
     <value>输出到PDF</value>
   </data>
   <data name="PoweredByTeleoptCCC" xml:space="preserve">
-    <value>Teleopti CCC 支持</value>
+    <value>Teleopti WFM 支持</value>
   </data>
   <data name="ReportLevelDetailLunch" xml:space="preserve">
     <value>午餐</value>
@@ -7078,13 +7078,13 @@ Periods</comment>
     <value>支持的电子邮件地址</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC 遇到问题需要关闭。我们对因此造成的不便深表歉意。如果您正进行某项操作，您的工作信息可能会丢失。
+    <value>Teleopti WFM 遇到问题需要关闭。我们对因此造成的不便深表歉意。如果您正进行某项操作，您的工作信息可能会丢失。
 
 为给我们提供关于本错误有用的信息，我们希望您，点击下面的“发送电子邮件报告”按钮，这将打开您的默认电子邮件程序，并请您在邮件内容中包括以下内容：
 
 1. 重现错误的每步操作
 2. 关于您发生错误当时工作相关的数据信息。
-3. Teleopti CCC 背景错误的截屏。
+3. Teleopti WFM 背景错误的截屏。
 
 您还可以复制错误信息到剪贴板并粘贴在邮件正文中。
 
@@ -7105,7 +7105,7 @@ Teleopti R&amp;D</value>
 
 1. 重现错误的每步操作
 2. 关于您发生错误当时工作相关的数据信息
-3. Teleopti CCC背景错误的截屏
+3. Teleopti WFM背景错误的截屏
 
 非常感谢
 Teleopti R&amp;D</value>
@@ -7479,10 +7479,10 @@ Teleopti R&amp;D</value>
     <value>与消息代理服务器无连接</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - 系统正常</value>
+    <value>Teleopti WFM - 系统正常</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - 系统告警</value>
+    <value>Teleopti WFM - 系统告警</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>报表 + 限制</value>
@@ -7758,7 +7758,7 @@ Teleopti R&amp;D</value>
     <value>您应该工作 {0} 小时，您的偏好为{1}到{2}小时。</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>TeleoptiCCC：{0}{1}－{2}情景{3}</value>
+    <value>Teleopti WFM：{0}{1}－{2}情景{3}</value>
   </data>
   <data name="TheAttachedFileContainsScheduleForDateParameters" xml:space="preserve">
     <value>附件的PDF包含 {0} - {1} 的班表。</value>
@@ -10566,14 +10566,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="AllowDesktopNotifications" xml:space="preserve">
     <value>允许桌面提醒</value>
-  </data>
-  <data name="ShiftEndingMessage" xml:space="preserve">
-    <value>当前班次将于 {0} 结束</value>
-    <comment>The notify message show in MyTimeWeb when latest activity ending</comment>
-  </data>
-  <data name="NextActivityComingMessage" xml:space="preserve">
-    <value>下一个活动“{0}”将于 {1} 开始</value>
-    <comment>The notify message show in MyTimeWeb when next activity coming</comment>
   </data>
   <data name="ShiftEndingMessage" xml:space="preserve">
     <value>当前班次将于 {0} 结束</value>

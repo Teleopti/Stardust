@@ -1544,13 +1544,13 @@ Dato</value>
     <value>Teamoversikt</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Teleopti CCC : Forecasts</value>
+    <value>Teleopti WFM: Forecasts</value>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC : Main window</value>
+    <value>Teleopti WFM: Main window</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Teleopti CCC : Schedules</value>
+    <value>Teleopti WFM: Schedules</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Mal</value>
@@ -2612,7 +2612,7 @@ Dato</value>
     <value>Autoposisjon</value>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Exit Teleopti CCC</value>
+    <value>Exit Teleopti WFM</value>
   </data>
   <data name="Find" xml:space="preserve">
     <value>Finne</value>
@@ -2846,7 +2846,7 @@ Dato</value>
     <value>Rapporter</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
+    <value>Teleopti WFM</value>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
     <value>Deltid prosent</value>
@@ -2897,7 +2897,7 @@ Dato</value>
     <value>Windows pålogging</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>Teleopti CCC : People</value>
+    <value>Teleopti WFM: People</value>
   </data>
   <data name="DecreaseDecimals" xml:space="preserve">
     <value>Reduser desimaler</value>
@@ -2942,10 +2942,10 @@ Dato</value>
     <value>Tillatelser</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Åpne Teleopti CCC</value>
+    <value>Åpne Teleopti WFM</value>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>Teleopti CCC : Permissions</value>
+    <value>Teleopti WFM: Permissions</value>
   </data>
   <data name="GapExists" xml:space="preserve">
     <value>Det er brudd ved {0}.  Alle lag må ligge opp til eller krysse et annet lag.</value>
@@ -2963,7 +2963,7 @@ Dato</value>
     <value>Nytt regelsett</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Teleopti CCC : Shifts</value>
+    <value>Teleopti WFM: Shifts</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt; Regelsett navn &gt;</value>
@@ -3140,7 +3140,7 @@ Dato</value>
     <value>Agent</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Teleopti CCC : Intraday</value>
+    <value>Teleopti WFM: Intraday</value>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
     <value>Agentportal</value>
@@ -4300,7 +4300,7 @@ standard</value>
 * Hvis du har noen arbeider påvente spare i søknaden, bortsett fra at før du søker konsesjon 
 * Bla til lisensfilen ved knappen nedenfor 
 * Bruk lisens
-Teleopti CCC lukkes automatisk
+Teleopti WFM lukkes automatisk
 * Start om MyTime å få ny lisens alternativer 
 * Start programmet på nytt
 Ved ny oppstart skal ikke varsel om lisensnøkkel komme opp på ny
@@ -5702,7 +5702,7 @@ Oppdatert den: {1}</value>
     <value>Brukerstøtte e-post</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC har et problem og må lukkes. Vi beklager det inntrufne. Hvis du var i midten av noe, kan den informasjon du arbeidet med være tapt. 
+    <value>Teleopti WFM har et problem og må lukkes. Vi beklager det inntrufne. Hvis du var i midten av noe, kan den informasjon du arbeidet med være tapt. 
 
 For å gi oss verdifull informasjon om denne feilen, ber vi deg vennligst til å rapportere det ved å klikke på "Send e-post rapport"-knappen nedenfor. Dette vil åpne ditt standard e-postprogram. Ta også med følgende:  
 
@@ -5710,7 +5710,7 @@ For å gi oss verdifull informasjon om denne feilen, ber vi deg vennligst til å
 
 2. Informasjon om hvilke data du arbeider med. 
 
-3. Skjermbilde av feilen med Teleopti CCC i bakgrunnen. Du kan også kopiere feilmeldingen til utklippstavlen, og lim den inn i e-posten. 
+3. Skjermbilde av feilen med Teleopti WFM i bakgrunnen. Du kan også kopiere feilmeldingen til utklippstavlen, og lim den inn i e-posten. 
 
 Takk, 
 Teleopti R &amp; D</value>
@@ -5731,7 +5731,7 @@ Teleopti R &amp; D</value>
 
 2. Informasjon om hvilke data du arbeider med. 
 
-3. Skjermbilde av feilen med Teleopti CCC i bakgrunnen.
+3. Skjermbilde av feilen med Teleopti WFM i bakgrunnen.
 
 Takk,
 Teleopti R&amp;D</value>
@@ -6080,7 +6080,7 @@ Ukedag</value>
     <value>Rettferdighetspresentasjon</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>Teleopti CCC: {0} {1} - {2} Scenario: {3} </value>
+    <value>Teleopti WFM: {0} {1} - {2} Scenario: {3} </value>
   </data>
   <data name="OpenFile" xml:space="preserve">
     <value>Åpne fil</value>
@@ -6137,10 +6137,10 @@ Ukedag</value>
     <value>Ingen forbindelse med message broker</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - system OK</value>
+    <value>Teleopti WFM - system OK</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC – systemadvarsel</value>
+    <value>Teleopti WFM – systemadvarsel</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>Skjema + Restriksjoner</value>
