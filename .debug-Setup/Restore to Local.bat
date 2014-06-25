@@ -386,7 +386,11 @@ set "%~3=%localTfiles%"
 goto:eof
 
 :GETDATAPATH
+IF %Sikuli% equ 1 (
+SET CustomPath=c:\temp\RestoreToLocal
+) else (
 SET /P CustomPath=Please provide a custom path for data storage:
+)
 GOTO :EOF
 
 :SETDATAPATH
