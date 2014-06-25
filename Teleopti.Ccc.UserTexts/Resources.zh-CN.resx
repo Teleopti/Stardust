@@ -3147,7 +3147,7 @@
     <comment>No</comment>
   </data>
   <data name="NoAllowedBusinessUnitFoundInCurrentDatabase" xml:space="preserve">
-    <value>在当前数据库里发现未经许可的业务单位</value>
+    <value>在当前数据库中没有找到允许访问的业务单位</value>
     <comment>No allowed business unit found in current database</comment>
   </data>
   <data name="NoAvailableDataSourcesHasBeenFound" xml:space="preserve">
@@ -5525,7 +5525,7 @@ Periods</comment>
     <value>显示没有公布的班表</value>
   </data>
   <data name="GlobalFunctions" xml:space="preserve">
-    <value>全球功能</value>
+    <value>全局功能</value>
   </data>
   <data name="EnterSettingsForEachWeek" xml:space="preserve">
     <value>请输入每周的设置</value>
