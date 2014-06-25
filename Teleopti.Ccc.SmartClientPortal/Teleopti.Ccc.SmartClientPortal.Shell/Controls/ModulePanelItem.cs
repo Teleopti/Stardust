@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 	public partial class ModulePanelItem : UserControl
 	{
 		private bool _selected;
+		private bool _itemEnabled = true;
 
 		public ModulePanelItem()
 		{
@@ -15,16 +16,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 
 		public event EventHandler ModulePanelItemClick;
 
-		public Image ModuleImage
+		public Image ItemImage
 		{
 			get { return panelImage.BackgroundImage; }
 			set { panelImage.BackgroundImage = value; }
 		}
 
-		public string ModuleText
+		public string ItemText
 		{
 			get { return labelModuleText.Text; }
 			set { labelModuleText.Text = value; }
+		}
+
+		public bool ItemEnabled
+		{
+			get { return _itemEnabled; }
+			set
+			{
+				_itemEnabled = value;
+				labelModuleText.ForeColor = _itemEnabled ? Color.Black : Color.DarkGray;
+			}
 		}
 
 		public bool Selected()
@@ -34,6 +45,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 
 		public void SetSelected(bool selected)
 		{
+			if (!_itemEnabled)
+				return;
+
 			_selected = selected;
 			labelModuleText.ForeColor = selected ? Color.FromArgb(0, 153, 255) : Color.Black;
 		}
@@ -50,7 +64,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 
 		private void onMouseEnter(object sender, EventArgs e)
 		{
-			if (_selected)
+			if (_selected || !_itemEnabled)
 				return;
 			
 			labelModuleText.ForeColor = Color.FromArgb(0, 153, 255);
@@ -58,6 +72,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 
 		private void onMouseLeave(object sender, EventArgs e)
 		{
+			if (_selected || !_itemEnabled)
+				return;
+
 			labelModuleText.ForeColor = Color.Black;
 		}
 

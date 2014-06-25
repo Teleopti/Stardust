@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
 
         public int NumberOfVisibleGroupBars { get; set; }
         public string StartupModule { get; set; }
-        public string SpecialModule { get; set; }
         public string LastModule { get; set; }
 
         public IList<OutlookBarInfo> ItemCollection

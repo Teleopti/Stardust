@@ -76,7 +76,7 @@
 			this.labelModuleText.Name = "labelModuleText";
 			this.labelModuleText.Size = new System.Drawing.Size(143, 32);
 			this.labelModuleText.TabIndex = 1;
-			this.labelModuleText.Text = "ModuleText";
+			this.labelModuleText.Text = "ItemText";
 			this.labelModuleText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.labelModuleText.Click += new System.EventHandler(this.onClick);
 			this.labelModuleText.MouseEnter += new System.EventHandler(this.onMouseEnter);

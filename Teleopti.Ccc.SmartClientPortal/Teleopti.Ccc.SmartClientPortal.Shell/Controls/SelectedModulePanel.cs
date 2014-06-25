@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 
 		public void Set(ModulePanelItem modulePanel)
 		{
-			autoLabelHeader.Text = modulePanel.ModuleText;
-			paneImagelHeader.BackgroundImage = modulePanel.ModuleImage;
+			autoLabelHeader.Text = modulePanel.ItemText;
+			paneImagelHeader.BackgroundImage = modulePanel.ItemImage;
 		}
 	}
 }

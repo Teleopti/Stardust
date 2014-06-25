@@ -74,6 +74,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.LightGray;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.MaximumSize = new System.Drawing.Size(400, 32);
 			this.MinimumSize = new System.Drawing.Size(32, 32);

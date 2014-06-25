@@ -216,7 +216,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             _outlookBarWorkspace.Visible = false;
             _outlookBarWorkspace.Size = splitContainer.Panel1.Size;
             _outlookBarWorkspace.Dock = DockStyle.Fill;
-            splitContainer.Panel1.Controls.Add(_outlookBarWorkspace);
+			var control = splitContainer.Panel1.Controls.Find("tableLayoutPanel1", false);
+			TableLayoutPanel panel = (TableLayoutPanel) control[0];
+			panel.Controls.Add(_outlookBarWorkspace);
+            //splitContainer.Panel1.tableLayoutPanel1.Controls.Add(_outlookBarWorkspace);
 			SetTexts();
             _outlookBarWorkspace.Visible = true;
         }
@@ -433,7 +436,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                         break;
                 }
                 _outlookBarWorkspaceModel.Add(outlookBarSmartPartInfo);
-				flowLayoutPanelModules.Controls.Add(new ModulePanelItem{ModuleImage = outlookBarSmartPartInfo.Icon, ModuleText = outlookBarSmartPartInfo.Title});
+				outlookBar1.AddItem(new ModulePanelItem
+				{
+					ItemImage = outlookBarSmartPartInfo.Icon,
+					ItemText = outlookBarSmartPartInfo.Title,
+					ItemEnabled = outlookBarSmartPartInfo.Enable
+				});
             }
         }
 
@@ -615,5 +623,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 }
             }
         }
+
+		private void outlookBar1_SizeChanged(object sender, EventArgs e)
+		{
+			splitContainer.Size = new Size(outlookBar1.Width, outlookBar1.Top - ribbonControlAdv1.Bottom);
+		}
+
+		private void outlookBar1_SelectedItemChanged(object sender, SelectedItemChangedEventArgs e)
+		{
+			outlookBarWorkSpace1.SetHeader(e.SelectedItem);
+		}
+
     }
 }

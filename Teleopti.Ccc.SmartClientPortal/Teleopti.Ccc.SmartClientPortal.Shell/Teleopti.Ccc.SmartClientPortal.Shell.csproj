@@ -254,6 +254,18 @@
     <Compile Include="Controls\ModulePanelItem.Designer.cs">
       <DependentUpon>ModulePanelItem.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\OutlookBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OutlookBar.Designer.cs">
+      <DependentUpon>OutlookBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OutlookBarWorkSpace.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OutlookBarWorkSpace.Designer.cs">
+      <DependentUpon>OutlookBarWorkSpace.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SelectedModulePanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -270,6 +282,12 @@
     <Compile Include="StartupModule.cs" />
     <EmbeddedResource Include="Controls\ModulePanelItem.resx">
       <DependentUpon>ModulePanelItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\OutlookBar.resx">
+      <DependentUpon>OutlookBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\OutlookBarWorkSpace.resx">
+      <DependentUpon>OutlookBarWorkSpace.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SelectedModulePanel.resx">
       <DependentUpon>SelectedModulePanel.cs</DependentUpon>
