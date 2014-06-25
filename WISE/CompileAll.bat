@@ -94,9 +94,15 @@ SET WISESOURCEFILE=%WISEDRIVELETTER%\Src
 SET WISEPROJFILE=%WISESOURCEFILE%\WISE
 SET DYNAMICCONTENT=%WISESOURCEFILE%\WiseArtifact
 SET DEPENDENCIES=%WISEDRIVELETTER%\Dependencies
+SET DEPENDENCIESSRC=\\a380\t-files\RnD\MSI_Dependencies
 ECHO WISESOURCEFILE: %WISESOURCEFILE%
 ECHO WISEPROJFILE: %WISEPROJFILE%
 ECHO DYNAMICCONTENT: %DYNAMICCONTENT%
+SET WORKINGDIR=C:\Temp\WiseWORKINGDIR
+SET WISEEXE=C:\Program Files (x86)\Altiris\Wise\Windows Installer Editor\WfWI.exe
+SET WISESCRIPT=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor\Wise32.exe
+SET DEPLOYSHARE=D:\Installation\PreviousBuilds
+SET AZUREOUTDIR=D:\Installation\Azure
 
 ::Set Product folders. note: Folder namd must correspond to .wsi-file name. See: sub batch file: CompileWise.bat
 SET ccc7_server=ccc7_server
