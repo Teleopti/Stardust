@@ -63,6 +63,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		});
 		self.subject = ko.observable();
 		self.message = ko.observable();
+		self.isTradeForMultiDaysEnabled = ko.observable(false);
 
 	    self.setTimeLineLengthInMinutes = function(firstHour, lastHour) {
 	        self.timeLineStartTime(firstHour);
@@ -335,6 +336,17 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.previousDate = function () {
 		    self.changeRequestedDate(-1);
 		};
+
+		self.featureCheck = function () {
+			ajax.Ajax({
+				url: "../ToggleHandler/IsEnabled?toggle=Request_ShiftTradeRequestForMoreDays_20918",
+				success: function (data) {
+					if (data.IsEnabled) {
+						self.isTradeForMultiDaysEnabled(true);
+					}
+				}
+			});
+		}
 	}
 
 	function _init() {
@@ -342,6 +354,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		if (elementToBind !== undefined) {
 			if ((vm || '') == '') {
 				vm = new shiftTradeViewModel(_saveNewShiftTrade);
+				vm.featureCheck();
 				ko.applyBindings(vm, elementToBind);
 			}
 			vm.chooseAgent(null);
@@ -430,6 +443,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			})
 		;
 	}
+
+
 
 	function _cleanUp() {
 		var addShiftTradeElement = $('#Request-add-shift-trade')[0];

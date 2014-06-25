@@ -58,7 +58,10 @@
                 <thead>
                     <tr>
                         <td>&nbsp;</td>
-                        <td></td>
+	                    <td></td>
+							  <!-- ko if: isTradeForMultiDaysEnabled-->
+						  	<td></td>
+						  	<!--/ko-->
                     </tr>
                 </thead>
                 <tbody>
@@ -77,7 +80,10 @@
 			                    <div class="dayoff">@Resources.DayOff</div>
 		                    </div>
 	                    </td>
-							  <!--/ko-->
+	                    <!--/ko-->
+							  <!-- ko if: isTradeForMultiDaysEnabled-->
+	                    <td></td>
+						  		<!--/ko-->
                     </tr>
                 </tbody>
 					<tbody data-bind="foreach: possibleTradeSchedules">
@@ -96,8 +102,15 @@
 									</div>
 								</div>
 								<!--/ko-->
-			            </td>
-		            </tr>
+							</td>
+							<!-- ko if: $root.isTradeForMultiDaysEnabled-->
+							<td class="col-sm-1">
+								<button type="button" class="btn btn-primary btn-xs" data-bind="visible: $root.isDetailVisible">
+									<i class="glyphicon glyphicon-plus"></i>
+								</button>
+							</td>
+							<!-- /ko -->
+						</tr>
 	            </tbody>
             </table>
             <div id="tooltipContainer" class="tooltipContainer"></div>
@@ -105,6 +118,7 @@
 		
         <p></p>
         <div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-small" style="width: 50%; overflow: hidden;">
+		    
             <div class="form-group">
                 <input id="Request-add-shift-trade-subject-input" class="form-control" type="text" data-bind="value: subject" class="input-block-level" placeholder="@Resources.Subject" maxlength="80" />
             </div>
