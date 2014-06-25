@@ -93,7 +93,7 @@ item: Set Variable
 end
 remarked item: Set Variable
   Variable=URL
-  Value=http://*/TeleoptiCCC/Client
+  Value=http://*/TeleoptiWFM/Client
 end
 item: Set Variable
   Variable=MAN
