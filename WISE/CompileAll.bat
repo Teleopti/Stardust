@@ -46,17 +46,17 @@ SET WISEDIR=%WISEDIR:~0,-1%
 ::remove \wise
 SET SRCDIR=%WISEDIR:~0,-5%
 
-IF EXIST "%WISEDIR%\Machines\%COMPUTERNAME%.bat" (
-ECHO Setting machine config
-CALL "%WISEDIR%\Machines\%COMPUTERNAME%.bat"
-) ELSE (
-SET ERRORLEV=2
-GOTO error
-)
-IF %errorlevel% NEQ 0 (
-SET ERRORLEV=3
-GOTO EOF
-)
+::IF EXIST "%WISEDIR%\Machines\%COMPUTERNAME%.bat" (
+::ECHO Setting machine config
+::CALL "%WISEDIR%\Machines\%COMPUTERNAME%.bat"
+::) ELSE (
+::SET ERRORLEV=2
+::GOTO error
+::)
+::IF %errorlevel% NEQ 0 (
+::SET ERRORLEV=3
+::GOTO EOF
+::)
 
 ::This is were we put src files after successful build
 SET HISTORYDIR=%DEPLOYSHARE%\%Version%
