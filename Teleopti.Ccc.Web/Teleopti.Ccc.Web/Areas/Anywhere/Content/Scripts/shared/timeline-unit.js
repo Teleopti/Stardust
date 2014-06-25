@@ -27,16 +27,14 @@ define([
 			return Math.round(pixels);
 		};
 
-		this.StartMinutes = function() {
-			return startTimeMinutes;
-		};
+		this.StartMinutes = ko.observable(startTimeMinutes);
 
 		this.LengthMinutes = function() {
 			return lengthMinutes;
 		};
 
 		this.EndMinutes = function () {
-			return startTimeMinutes + lengthMinutes;
+			return self.StartMinutes() + lengthMinutes;
 		};
 
 		this.StartPixels = ko.computed(function () {

@@ -3,7 +3,7 @@ define([
 		'moment',
 		'navigation',
 		'lazy',
-		'views/personschedule/layer'
+		'shared/layer'
 ], function (
 	ko,
 	moment,
@@ -23,15 +23,14 @@ define([
 				l.Offset = data.Offset;
 				l.IsFullDayAbsence = data.IsFullDayAbsence;
 				var affectTimeLine = data.Date.diff(data.Offset) == 0;
-				var obsLayer = ko.observable(new layer(timeline, l, affectTimeLine));
-				return obsLayer;
+				return new layer(timeline, l, affectTimeLine);
 			});
 			self.Layers.push.apply(self.Layers, newItems);
 		};
 
 		this.ShiftStartPixels = ko.computed(function () {
 			if (self.Layers().length > 0)
-				return self.Layers()[0]().StartPixels();
+				return self.Layers()[0].StartPixels();
 			return 0;
 		});
 	};

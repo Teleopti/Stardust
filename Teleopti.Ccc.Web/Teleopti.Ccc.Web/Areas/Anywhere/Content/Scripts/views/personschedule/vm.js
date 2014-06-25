@@ -1,7 +1,7 @@
 define([
 	'knockout',
 	'navigation',
-	'views/personschedule/timeline',
+	'shared/timeline',
 	'views/personschedule/person',
 	'views/personschedule/addactivityform',
 	'views/personschedule/addfulldayabsenceform',
@@ -86,13 +86,15 @@ define([
 				.flatten();
 		};
 
+		this.Layers = layers;
+
 		this.TimeLine = new timeLineViewModel(ko.computed(function () { return layers().toArray(); }));
 
 		this.WorkingShift = ko.computed(function () {
 			var person = self.SelectedPerson();
 			if (person)
 				return lazy(person.Shifts()).filter(function(x) {
-					return x.Layers()[0]().StartMinutes() > 0;
+					return x.Layers()[0].StartMinutes() > 0;
 				}).toArray()[0];
 			return undefined;
 		});
@@ -213,12 +215,12 @@ define([
 			if (!self.SelectedStartMinutes()) return null;
 
 			var selectedLayers = layers().filter(function (layer) {
-				if (layer().StartMinutes() === self.SelectedStartMinutes())
-				return layer();
+				if (layer.StartMinutes() === self.SelectedStartMinutes())
+				return layer;
 			});
 			var activeLayer = selectedLayers.first();
 			if (activeLayer)
-				activeLayer().Selected(true);
+				activeLayer.Selected(true);
 			return activeLayer;
 		};
 		
@@ -232,6 +234,10 @@ define([
 			var pixels = minutes * self.TimeLine.PixelsPerMinute();
 			return Math.round(pixels);
 		};
+
+		this.setTimelineWidth = function(width) {
+			self.TimeLine.WidthPixels(width);
+		}
 
 		
 	};

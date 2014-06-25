@@ -109,7 +109,7 @@
 					vm.UpdateSchedules(data);
 					vm.SelectedStartMinutes(840);
 
-					assert.equals(vm.SelectedLayer()().StartMinutes(), vm.SelectedStartMinutes());
+					assert.equals(vm.SelectedLayer().StartMinutes(), vm.SelectedStartMinutes());
 				},
 
 				"should set move activity form when updating data": function () {
@@ -257,8 +257,54 @@
 
 					vm.MoveActivityForm.DisplayedStartTime('15:00');
 
-					assert.equals(selectedLayer().StartTime(), momentExpected.format('HH:mm'));
-				}
+					assert.equals(selectedLayer.StartTime(), momentExpected.format('HH:mm'));
+				},
+
+				"should calculate shifts width lower than timeline width when groupmates are displayed": function () {
+					var vm = new viewModel();
+
+					vm.SetViewOptions({
+						id: 1,
+						date: '20140616'
+					});
+					var data = [
+						{
+							Date: '2014-06-16',
+							PersonId: 1,
+							Projection: [
+								{
+									Start: '2014-06-16 8:00',
+									Minutes: 60
+								}
+							]
+						},
+						{
+							Date: '2014-06-16',
+							PersonId: 2,
+							Projection: [
+								{
+									Start: '2014-06-16 16:00',
+									Minutes: 20
+								}
+							]
+						}
+					];
+					vm.setTimelineWidth(600);
+					vm.AddingActivity(true);
+					vm.UpdateData({ PersonId: 1 });
+					vm.UpdateSchedules(data);
+
+					vm.setTimelineWidth(600);
+
+					assert.equals(vm.Layers().size(), 2);
+
+					vm.Layers().forEach(function (layer) {
+						var startPX = layer.StartPixels();
+						var lengthPX = layer.LengthPixels();
+						assert.isTrue(vm.TimeLine.WidthPixels() >= (startPX + lengthPX));
+					});
+					
+				},
 			});
 		}
 	}

@@ -37,18 +37,18 @@
 			},
 			write: function (option) {
 				self.StartTime(getMomentFromInput(option));
-				self.layer().UpdateUnit({ Start: self.StartTime().format(resources.FixedDateTimeFormatForMoment) });
+				self.layer().StartMinutes(self.StartTime().diff(self.ScheduleDate(), 'minutes'));
 			}
 		});
 
 		this.update = function (layer) {
 			
 			if (layer) {
-				self.layer(layer());
-				self.OldStartMinutes(layer().StartMinutes());
+				self.layer(layer);
+				self.OldStartMinutes(layer.StartMinutes());
 				self.StartTime(moment(self.ScheduleDate()).add('minutes', self.OldStartMinutes()));
-				self.ProjectionLength(layer().LengthMinutes());
-				self.ActivityId(layer().ActivityId);
+				self.ProjectionLength(layer.LengthMinutes());
+				self.ActivityId(layer.ActivityId);
 			}
 		};
 
