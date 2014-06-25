@@ -67,9 +67,9 @@
 
 			<div class="navbar-right">
 				<ul class="nav navbar-nav">
-					<li class="dropdown">
+					<li class="dropdown" id="user-settings">
 						<a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i><span class="user-name" title="@User.Identity.Name"><small>@User.Identity.Name</small></span> <b class="caret"></b></a>
-						<ul class="dropdown-menu" id="user-link-dropdown">
+						<ul class="dropdown-menu">
 							<li><a href="#" id="regional-settings" data-mytime-action="Settings/Index">@Resources.Settings</a></li>
 							@if (Model.ShowChangePassword)
 							{
