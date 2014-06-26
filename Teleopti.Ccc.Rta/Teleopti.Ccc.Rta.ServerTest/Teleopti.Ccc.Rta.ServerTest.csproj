@@ -165,9 +165,6 @@
     <Compile Include="CurrentAndNextLayerExtractorTest.cs" />
     <Compile Include="DatabaseConnectionStringHandlerTest.cs" />
     <Compile Include="IocTest.cs" />
-    <Compile Include="Repeater\MessageRepeaterTest.cs" />
-    <Compile Include="Repeater\MinuteTriggerTest.cs" />
-    <Compile Include="Repeater\SimpleTrigger.cs" />
     <Compile Include="Resolvers\DataSourceResolverTest.cs" />
     <Compile Include="InvalidateRtaDataHandlerCacheTest.cs" />
     <Compile Include="Resolvers\PersonResolverTest.cs" />

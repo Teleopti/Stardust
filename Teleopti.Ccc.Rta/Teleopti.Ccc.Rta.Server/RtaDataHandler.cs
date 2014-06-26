@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Rta.Server.Repeater;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.SignalR;
 using log4net;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.Exceptions;
 
 namespace Teleopti.Ccc.Rta.Server
 {
