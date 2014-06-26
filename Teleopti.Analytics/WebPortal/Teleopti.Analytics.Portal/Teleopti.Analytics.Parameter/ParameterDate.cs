@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Drawing;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -89,7 +89,8 @@ namespace Teleopti.Analytics.Parameters
 			regexp.Append(@"^\d{4}(\-|\/|\.)\d{1,2}(\-|\/|\.)\d{1,2}$|");
 			regexp.Append(@"^\d{1,2}(\-|\/|\.)\d{2}(\-|\/|\.)\d{1,2}$|");
             regexp.Append(@"^\d{1,2}(\-|\/|\.)\d{4}(\-|\/|\.)\d{1,2}$|");
-            regexp.Append(@"^\d{4}(.)\s\d{1,2}(.)\s\d{1,2}(.)$"); // Supports Hungarian hopefully...
+            regexp.Append(@"^\d{4}(.)\s\d{1,2}(.)\s\d{1,2}(.)$|"); // Supports Hungarian hopefully...
+            regexp.Append(@"^\d\d?\.\d\d?\.\d\d\d?\d? ?–≥.$"); // Supports Bulgarian hopefully...the r is not r it is some unicode character
 
 
 			_dateValidator.ValidationExpression=regexp.ToString();
@@ -128,8 +129,8 @@ namespace Teleopti.Analytics.Parameters
 			
 			try
 			{
-                // S‰tter dagens datum om usersettings saknas,
-                // fˆrtuom om det stÂr ett vanligt heltal.
+				// S√§tter dagens datum om usersettings saknas,
+				// f√∂rtuom om det st√•r ett vanligt heltal.
 				if (s == "")
 				{
 
@@ -146,8 +147,8 @@ namespace Teleopti.Analytics.Parameters
                 try
                 {
                     // Inget datum eller klockslag 
-                    // Om det stÂr ett heltal konverteras det till dagens datum plus/minus antal dgr
-                    // Dvs 0 blir dagens datum, 1 n‰sta dag och -1 fˆregÂende dag
+					// Om det st√•r ett heltal konverteras det till dagens datum plus/minus antal dgr
+					// Dvs 0 blir dagens datum, 1 n√§sta dag och -1 f√∂reg√•ende dag
                     int test = int.Parse(s);
                     date = DateTime.Now.Date;
                     date = date.AddDays(test);
@@ -175,13 +176,13 @@ namespace Teleopti.Analytics.Parameters
                 }
             }
 
-			//Visar i r‰tt format fˆr anv‰ndaren
+			//Visar i r√§tt format f√∂r anv√§ndaren
             string f = date.ToShortDateString();
 			_textBox.Text = f;   
 		}
 
 		
-		protected override void RenderContents(HtmlTextWriter writer)//Ritar upp kontrollerna samt skapar sˆkv‰gar till filer och s‰tter attribut pÂ knapparna
+		protected override void RenderContents(HtmlTextWriter writer)//Ritar upp kontrollerna samt skapar s√∂kv√§gar till filer och s√§tter attribut p√• knapparna
 		{			
 			writer.AddStyleAttribute(HtmlTextWriterStyle.Width,Selector._LabelWidth.ToString());
 			writer.AddAttribute(HtmlTextWriterAttribute.Style,"padding:0px 0px 0px 0px");
