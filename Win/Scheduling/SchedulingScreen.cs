@@ -5543,6 +5543,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void SchedulingScreen_FormClosed(object sender, FormClosedEventArgs e)
 		{
+            // bug 28705 hide it so we don't get strange paint events
+            Hide();
 			if (_schedulerState != null && _schedulerState.Schedules != null)
 			{
 				_schedulerState.Schedules.Clear();
