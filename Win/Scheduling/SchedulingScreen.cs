@@ -854,6 +854,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setPermissionOnControls();
 			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += agentRestrictionGridSelectedAgentIsReady;
 			_backgroundWorkerRunning = true;
+			enableQuickAccessPanel();
 			backgroundWorkerLoadData.RunWorkerAsync();
 			//No code after the call to runworkerasynk
 		}
@@ -5624,16 +5625,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripTabItem1_Click(object sender, EventArgs e)
 		{
 			ActiveControl = _elementHostRequests;
+			enableQuickAccessPanel();
 		}
 
 		private void toolStripTabItemChart_Click(object sender, EventArgs e)
 		{
 			ActiveControl = _chartControlSkillData;
+			enableQuickAccessPanel();
 		}
 
 		private void toolStripTabItemHome_Click(object sender, EventArgs e)
 		{
 			ActiveControl = null;
+			enableQuickAccessPanel();
 		}
 
 		private void toolStripMenuItemUseShrinkage_Click(object sender, EventArgs e)
@@ -6522,6 +6526,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			toolStripTabItemHome.Checked = true;
 			zoom(_previousZoomLevel);
+		}
+
+		private void  enableQuickAccessPanel()
+		{
+			ribbonControlAdv1.QuickPanelVisible = true;
 		}
 	}
 }
