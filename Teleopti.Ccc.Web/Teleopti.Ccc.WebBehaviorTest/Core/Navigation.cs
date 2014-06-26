@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				date.Day.ToString("00"),
 				minutes),
 				"Anywhere#personschedule",
-				new ApplicationStartupTimeout(), new WaitUntilShiftIsDisplayed());
+				new ApplicationStartupTimeout(), new WaitUntilSubscriptionIsCompleted());
 		}
 
 		public static void GotoAnywhereRealTimeAdherenceOverview(bool waitUntilSubscriptionIsCompleted)
@@ -358,18 +358,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
                     date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
                     new ApplicationStartupTimeout());
 	    }
-	}
-
-	public class WaitUntilShiftIsDisplayed : IGoToInterceptor
-	{
-		public void Before(GotoArgs args)
-		{
-		}
-
-		public void After(GotoArgs args)
-		{
-				Browser.Interactions.AssertExistsUsingJQuery(".layer");
-		}
 	}
 
 	public class WaitUntilSubscriptionIsCompleted : IGoToInterceptor
