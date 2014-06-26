@@ -137,7 +137,7 @@ function replaceLinks() {
 			}
 		}
 		document.links[i].href = document.links[i].href.replace(/\+/g, '_');
-		document.links[i].href = document.links[i].href.replace('wiki.teleopti.com/TeleoptiCCC/', 'localhost/TeleoptiCCC/LocalWIki/');
+		document.links[i].href = document.links[i].href.replace('wiki.teleopti.com/TeleoptiCCC/', 'localhost/TeleoptiWFM/LocalWIki/');
 		document.links[i].href = document.links[i].href.replace('%3A', '%253A');
 	}
 	fixNavigationLinkTexts(pageName);

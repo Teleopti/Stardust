@@ -89,7 +89,7 @@ item: Set Variable
 end
 item: Set Variable
   Variable=ADMIN_CLIENT
-  Value=%ROOT%TeleoptiCCC\Client\
+  Value=%ROOT%TeleoptiWFM\Client\
 end
 remarked item: Set Variable
   Variable=URL

@@ -31,7 +31,7 @@ function BaseUrl-get {
     else
     {
          $BaseUrl = fnDnsAlias-Get
-         $BaseUrl = $BaseUrl + "TeleoptiCCC/"
+         $BaseUrl = $BaseUrl + "TeleoptiWFM/"
     }
 	return $BaseUrl
 }

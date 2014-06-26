@@ -99,7 +99,7 @@ function TearDown {
         
 		It "should stop the SDK" {
 			stop-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
-			$SDKUrl = $global:BaseURL + "TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"
+			$SDKUrl = $global:BaseURL + "TeleoptiWFM/SDK/TeleoptiCCCSdkService.svc"
 			{Check-HttpStatus -url $SDKUrl -credentials $cred}  | Should Throw
 		}
 
@@ -226,12 +226,12 @@ function Test-SitesAndServicesOk {
 		
 		#something goes wrong with 32 vs. 64 bit implementation of management tools or IIS runtime
 		# It "SDK should be windows" {
-			# $enabled = Get-Authentication "/TeleoptiCCC/SDK" "windowsAuthentication"
+			# $enabled = Get-Authentication "/TeleoptiWFM/SDK" "windowsAuthentication"
 			# $enabled | Should Be "True"
 		# }
 
 		# It "SDK should not be anonymous" {
-			# $enabled = Get-Authentication "/TeleoptiCCC/SDK" "anonymousAuthentication"
+			# $enabled = Get-Authentication "/TeleoptiWFM/SDK" "anonymousAuthentication"
 			# $enabled | Should Be "False"
 		# }
 
