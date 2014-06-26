@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -30,12 +31,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)' on datasource (.*)")]
 		public void WhenSetsHisPhoneStateToOnDatasource(string personName, string stateCode, int datasource)
 		{
-			var rtaUri = new Uri(TestSiteConfigurationSetup.Url, "Rta/Service/SaveExternalUserState");
-			var request = (HttpWebRequest) WebRequest.Create(rtaUri);
-			request.Method = "POST";
-			request.ContentType = "application/json";
+			var uri = new Uri(TestSiteConfigurationSetup.Url, "Rta/Service/SaveExternalUserState");
 
-			var externalState = JsonConvert.SerializeObject(new AjaxUserState
+			var data = JsonConvert.SerializeObject(new AjaxUserState
 			{
 				AuthenticationKey = "!#¤atAbgT%",
 				UserCode = personName,
@@ -47,11 +45,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				IsSnapshot = false
 			});
 
+			var request = (HttpWebRequest) WebRequest.Create(uri);
+			request.Method = "POST";
+			request.ContentType = "application/json";
 			using (var writer = new StreamWriter(request.GetRequestStream()))
 			{
-				writer.Write(externalState);
+				writer.Write(data);
 			}
-			request.GetResponse();
+			// dont forget to close!
+			request.GetResponse().Close();
 		}
 
 		[Given(@"there is a datasouce with id (.*)")]
