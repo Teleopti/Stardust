@@ -130,15 +130,12 @@ INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
 WHERE f.schedule_date_id between @start_date_id and @end_date_id
-AND NOT EXISTS(	SELECT * FROM mart.fact_schedule_old old 
-				INNER JOIN mart.fact_schedule new
-				ON new.schedule_date_id=old.schedule_date_id
-				AND new.person_id=old.person_id
-				AND new.interval_id=old.interval_id
-				AND new.activity_starttime=old.activity_starttime
-				AND new.scenario_id=old.scenario_id
-				WHERE new.schedule_date_id between @start_date_id and @end_date_id)
-
+AND NOT EXISTS(SELECT * FROM mart.fact_schedule new
+				WHERE new.schedule_date_id=f.schedule_date_id
+				AND new.person_id=f.person_id
+				AND new.interval_id=f.interval_id
+				AND new.activity_starttime=f.activity_starttime
+				AND new.scenario_id=f.scenario_id)
 OPTION (MAXDOP 1);
 
 --check tempdb after
