@@ -294,8 +294,6 @@
 					vm.UpdateData({ PersonId: 1 });
 					vm.UpdateSchedules(data);
 
-					vm.setTimelineWidth(600);
-
 					assert.equals(vm.Layers().size(), 2);
 
 					vm.Layers().forEach(function (layer) {
@@ -304,7 +302,7 @@
 						assert.isTrue(vm.TimeLine.WidthPixels() >= (startPX + lengthPX));
 					});
 					
-				},
+				}
 			});
 		}
 	}
