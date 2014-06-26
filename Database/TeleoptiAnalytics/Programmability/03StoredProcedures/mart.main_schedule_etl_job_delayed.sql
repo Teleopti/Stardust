@@ -4,36 +4,37 @@ GO
 
 --[mart].[main_schedule_etl_job_delayed] 15
 CREATE PROCEDURE [mart].[main_schedule_etl_job_delayed]
-@months_back int = 13
+@months_back int = 18
 AS
 
 --chunk up the insert in 1 month/run
---declare @months_back int
-DECLARE @months_back_id int
+DECLARE @start_date_id int
 DECLARE @min_date_in_new_schedule int
 DECLARE @min_date_old_schedule int 
 DECLARE @today_id int
+DECLARE @today_date smalldatetime
 
-SELECT @months_back_id =  date_id from mart.dim_date where date_date=dateadd(month,-@months_back, CONVERT(smalldatetime,CONVERT(nvarchar(30), getdate(), 112)) )
-SELECT @today_id = date_id from mart.dim_date where date_date=CONVERT(smalldatetime,CONVERT(nvarchar(30), getdate(), 112)) 
+SELECT @today_date=DATEADD(dd, 0, DATEDIFF(dd, 0, GETDATE()))
+SELECT @start_date_id =  date_id from mart.dim_date where date_date=dateadd(month,-@months_back, @today_date)
+SELECT @today_id = date_id from mart.dim_date where date_date=@today_date
 SELECT @min_date_old_schedule = isnull(min(schedule_date_id),@today_id) from mart.fact_schedule_old
 SELECT @min_date_in_new_schedule = isnull(min(schedule_date_id),@today_id) from mart.fact_schedule
 
-IF @min_date_old_schedule>@months_back_id 
-	SET @months_back_id=@min_date_old_schedule
+IF @min_date_old_schedule>@start_date_id 
+	SET @start_date_id=@min_date_old_schedule
 
 --debug
---SELECT @min_date_old_schedule,@min_date_in_new_schedule,@months_back_id
+--SELECT @min_date_old_schedule,@min_date_in_new_schedule,@start_date_id
 
 CREATE TABLE #data(	id int IDENTITY(1,1) NOT NULL,
 					parameter_string nvarchar(1000))
 
-WHILE @months_back_id < @min_date_in_new_schedule
+WHILE @start_date_id < @min_date_in_new_schedule
 BEGIN
 	INSERT #data(parameter_string)
-	SELECT '@start_date_id=' + convert(nvarchar(10),@months_back_id) + ',@end_date_id=' + convert(nvarchar(10),@months_back_id+30) 
+	SELECT '@start_date_id=' + convert(nvarchar(10),@start_date_id) + ',@end_date_id=' + convert(nvarchar(10),@start_date_id+30) 
 
-	SET @months_back_id=@months_back_id+31
+	SET @start_date_id=@start_date_id+31
 END
 
 INSERT mart.etl_job_delayed( stored_procedured, parameter_string, insert_date)
@@ -43,5 +44,7 @@ ORDER BY id desc
 
 SELECT * FROM mart.etl_job_delayed
 
-
+GO
+--run once upon deploy
+EXEC [mart].[main_schedule_etl_job_delayed]
 GO
