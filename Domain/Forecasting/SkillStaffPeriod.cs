@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private double _aggregatedFStaff;
         private double _aggregatedCalculatedResources;
 	    private Percent _estimatedServiceLevel;
+        private Percent _estimatedServiceLevelShrinkage; 
         private IPeriodDistribution _periodDistribution;
 
 	    private static readonly object Locker = new object();
@@ -115,6 +116,19 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     return _estimatedServiceLevel;
                 }
             } 
+        }
+
+        public Percent EstimatedServiceLevelShrinkage
+        {
+            get
+            {
+                lock (Locker)
+                {
+                    if (_isAggregate)
+                        return ((IAggregateSkillStaffPeriod)this).AggregatedEstimatedServiceLevel;
+                    return _estimatedServiceLevelShrinkage;
+                }
+            }
         }
 
         public Percent ActualServiceLevel
@@ -333,26 +347,43 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 if (Payload.ForecastedIncomingDemand == 0)
                 {
                     _estimatedServiceLevel = new Percent(1);
+                    _estimatedServiceLevelShrinkage = new Percent(1);
                     return;
                 }
 
                 if (ScheduledAgentsIncoming >= Payload.ForecastedIncomingDemand)
                 {
                     _estimatedServiceLevel = new Percent(1);
+                    _estimatedServiceLevelShrinkage = new Percent(1);
                     return;
                 }
+
                 _estimatedServiceLevel = new Percent(ScheduledAgentsIncoming / Payload.ForecastedIncomingDemand);
+                var shrinkage = 1 - Payload.Shrinkage.Value;
+                var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming * shrinkage;
+                _estimatedServiceLevelShrinkage = new Percent(
+                    scheduledAgentsIncomingWithShrinkage/Payload.ForecastedIncomingDemand);
             }
             else
             {
-	            var tmpScheduled = ScheduledAgentsIncoming * SkillDay.Skill.MaxParallelTasks;
                 _estimatedServiceLevel = new Percent(_staffingCalculatorService.ServiceLevelAchieved(
-												   tmpScheduled * Payload.Efficiency.Value,
-                                                   Payload.ServiceAgreementData.ServiceLevel.Seconds,
-                                                   Payload.TaskData.Tasks,
-                                                   Payload.TaskData.AverageTaskTime.TotalSeconds + Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
-                                                   Period.ElapsedTime(),
-                                                   (int)(Payload.ServiceAgreementData.ServiceLevel.Percent.Value * 100)));
+                    ScheduledAgentsIncoming * SkillDay.Skill.MaxParallelTasks * Payload.Efficiency.Value,
+                    Payload.ServiceAgreementData.ServiceLevel.Seconds,
+                    Payload.TaskData.Tasks,
+                    Payload.TaskData.AverageTaskTime.TotalSeconds + Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
+                    Period.ElapsedTime(),
+                    (int)(Payload.ServiceAgreementData.ServiceLevel.Percent.Value * 100)));
+
+                var shrinkage = 1 - Payload.Shrinkage.Value;
+                var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming * shrinkage;
+                _estimatedServiceLevelShrinkage = new Percent(_staffingCalculatorService.ServiceLevelAchieved(
+                    scheduledAgentsIncomingWithShrinkage * SkillDay.Skill.MaxParallelTasks * Payload.Efficiency.Value,
+                    Payload.ServiceAgreementData.ServiceLevel.Seconds,
+                    Payload.TaskData.Tasks,
+                    Payload.TaskData.AverageTaskTime.TotalSeconds + Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
+                    Period.ElapsedTime(),
+                    (int)(Payload.ServiceAgreementData.ServiceLevel.Percent.Value * 100)));
+
             }
         }
 
