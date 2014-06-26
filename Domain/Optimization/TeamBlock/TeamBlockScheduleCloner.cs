@@ -21,8 +21,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var teamInfo = teamBlock.TeamInfo;
 			foreach (var groupMember in teamInfo.GroupMembers)
 			{
-				var rangeForMember =
-					teamInfo.MatrixForMemberAndDate(groupMember, dates.First()).ActiveScheduleRange;
+				var scheduleMatrixPro = teamInfo.MatrixForMemberAndDate(groupMember, dates.First());
+				if (scheduleMatrixPro == null) continue;
+				var rangeForMember = scheduleMatrixPro.ActiveScheduleRange;
 				foreach (var dateOnly in dates)
 				{
 					clonedSchedules.Add((IScheduleDay)rangeForMember.ScheduledDay(dateOnly).Clone());

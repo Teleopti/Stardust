@@ -60,15 +60,28 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var leftDate = dayOffDateToWorkWith.AddDays(-1);
 			var rightDate = dayOffDateToWorkWith.AddDays(1);
 
-			var leftTeamBlock =
-				teamBlockGenerator.Generate(allPersonMatrixList, new DateOnlyPeriod(leftDate, leftDate), new List<IPerson> {person},
-					schedulingOptions).First();
-			lockUnSelectedInTeamBlock(leftTeamBlock, selectedPersons, selectedPeriod);
-			var rightTeamBlock =
-				teamBlockGenerator.Generate(allPersonMatrixList, new DateOnlyPeriod(rightDate, rightDate),
-					new List<IPerson> {person}, schedulingOptions).First();
-			lockUnSelectedInTeamBlock(rightTeamBlock, selectedPersons, selectedPeriod);
+			var possibleLeftTeamBlocks = teamBlockGenerator.Generate(allPersonMatrixList, new DateOnlyPeriod(leftDate, leftDate),
+				new List<IPerson> {person},
+				schedulingOptions);
+			ITeamBlockInfo  leftTeamBlock =null;
+			if (possibleLeftTeamBlocks.Any())
+			{
+				leftTeamBlock = possibleLeftTeamBlocks.First();
+				lockUnSelectedInTeamBlock(leftTeamBlock, selectedPersons, selectedPeriod);
+			}
 
+
+			var possibleRightTeamBlocks = teamBlockGenerator.Generate(allPersonMatrixList,
+				new DateOnlyPeriod(rightDate, rightDate),
+				new List<IPerson> {person}, schedulingOptions);
+			ITeamBlockInfo rightTeamBlock = null;
+			if (possibleRightTeamBlocks.Any())
+			{
+				rightTeamBlock = possibleRightTeamBlocks.First();
+				lockUnSelectedInTeamBlock(rightTeamBlock, selectedPersons, selectedPeriod);
+			}
+
+			if (leftTeamBlock == null || rightTeamBlock == null) return false;
 			var fullySelectedBlocks =
 				_filterForTeamBlockInSelection.Filter(new List<ITeamBlockInfo> {leftTeamBlock, rightTeamBlock}, selectedPersons,
 					selectedPeriod);

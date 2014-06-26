@@ -228,6 +228,37 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		}
 
 		[Test]
+		public void ShouldReturnFalseIfOneOfTheteamBlockIsNull()
+		{
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
+				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29),
+				new List<IPerson> { _person }, _schedulingOptions))
+				.Return(_leftTeamBlockInfoList);
+				Expect.Call(_leftTeamBlockInfo.BlockInfo).Return(_leftBlockInfo);
+				Expect.Call(() => _leftBlockInfo.ClearLocks());
+				Expect.Call(_leftTeamBlockInfo.TeamInfo).Return(_leftTeamInfo);
+				Expect.Call(() => _leftTeamInfo.ClearLocks());
+				Expect.Call(_leftBlockInfo.BlockPeriod).Return(new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29));
+				Expect.Call(_leftTeamInfo.GroupMembers).Return(new List<IPerson> { _person });
+
+				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31),
+					new List<IPerson> { _person }, _schedulingOptions))
+					.Return(new List<ITeamBlockInfo>( ));
+			}
+
+			using (_mocks.Playback())
+			{
+				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
+					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
+						  _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences, null);
+				Assert.IsFalse(result);
+			}
+		}
+
+		[Test]
 		public void ShouldReturnFalseIfBlockIsSchedulePeriod()
 		{
 			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
