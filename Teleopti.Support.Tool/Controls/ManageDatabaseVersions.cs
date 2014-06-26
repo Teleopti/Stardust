@@ -517,7 +517,7 @@ namespace Teleopti.Support.Tool.Controls
 						Version dbVersion;
 						if (Version.TryParse(clickedVersion, out dbVersion))
 						{
-							if (IsSameOrLowerThanCurrentVersion(dbVersion))
+							if (dbVersion <= _currentVersion)
 							{
 								buttonUpdate.Enabled = true;
 								break;
@@ -533,21 +533,21 @@ namespace Teleopti.Support.Tool.Controls
 			_lastSelectedItemText = e.Item.Text;
 		}
 
-		private bool IsSameOrLowerThanCurrentVersion(Version clickedVersion)
-		{
-			if (clickedVersion.Major <= _currentVersion.Major)
-			{
-				if (clickedVersion.Minor <= _currentVersion.Minor)
-				{
-					if (clickedVersion.Build <= _currentVersion.Build)
-					{
-						return true;
-					}
-				}
+        //private bool IsSameOrLowerThanCurrentVersion(Version clickedVersion)
+        //{
+        //    if (clickedVersion.Major <= _currentVersion.Major)
+        //    {
+        //        if (clickedVersion.Minor <= _currentVersion.Minor)
+        //        {
+        //            if (clickedVersion.Build <= _currentVersion.Build)
+        //            {
+        //                return true;
+        //            }
+        //        }
 
-			}
-			return false;
-		}
+        //    }
+        //    return false;
+        //}
 
 		private void listViewDatabases_SelectedIndexChanged(object sender, EventArgs e)
 		{
