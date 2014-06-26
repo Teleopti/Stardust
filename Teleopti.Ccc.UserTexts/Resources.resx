@@ -12118,4 +12118,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Open Shifts...</value>
     <comment>Open Shifts...</comment>
   </data>
+  <data name="MoveActivity" xml:space="preserve">
+    <value>Move Activity</value>
+  </data>
 </root>
