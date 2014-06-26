@@ -110,25 +110,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", "Completely loaded");
 		}
 
-		public class WebClientWithTimeout : WebClient
-		{
-			private readonly TimeSpan _timeout;
-
-			public WebClientWithTimeout(TimeSpan timeout)
-			{
-				_timeout = timeout;
-			}
-
-			protected override WebRequest GetWebRequest(Uri address)
-			{
-				var request = base.GetWebRequest(address);
-				var webRequest = request as HttpWebRequest;
-				if (webRequest != null)
-					webRequest.Timeout = (int)_timeout.TotalMilliseconds;
-				return request;
-			}
-
-		}
-
 	}
 }
