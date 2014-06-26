@@ -43,7 +43,7 @@ Scenario: The team leader should be able to move an activity
 	| Field          | Value            |
 	| Activity       | Lunch            |
 	| Start time     | 2013-11-18 12:00 |
-	And I click move activity button
+	And I view person schedules move activity form for 'John King' in 'Team green' on '2013-11-18' with selected start minutes of '720'
 	And I move the activity
 	| Field          | Value            |
 	| Start time     | 2013-11-18 13:00 |

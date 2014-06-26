@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using log4net;
 
@@ -245,6 +246,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new ApplicationStartupTimeout());
 		}
 
+		public static void GotoAnywherePersonScheduleMoveActivityForm(Guid personId, Guid groupId, DateTime date, string minutes)
+		{
+			GoToWaitForUrlAssert(
+				string.Format("Anywhere#personschedule/{0}/{1}/{2}{3}{4}/moveactivity/{5}",
+				groupId,
+				personId,
+				date.Year.ToString("0000"),
+				date.Month.ToString("00"),
+				date.Day.ToString("00"),
+				minutes),
+				"Anywhere#personschedule",
+				new ApplicationStartupTimeout(), new WaitUntilShiftIsDisplayed());
+		}
+
 		public static void GotoAnywhereRealTimeAdherenceOverview(bool waitUntilSubscriptionIsCompleted)
 		{
 			if (waitUntilSubscriptionIsCompleted)
@@ -343,6 +358,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
                     date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
                     new ApplicationStartupTimeout());
 	    }
+	}
+
+	public class WaitUntilShiftIsDisplayed : IGoToInterceptor
+	{
+		public void Before(GotoArgs args)
+		{
+		}
+
+		public void After(GotoArgs args)
+		{
+				Browser.Interactions.AssertExistsUsingJQuery(".layer");
+		}
 	}
 
 	public class WaitUntilSubscriptionIsCompleted : IGoToInterceptor
