@@ -1,4 +1,7 @@
-﻿namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
+﻿using System.Drawing;
+using Syncfusion.Drawing;
+
+namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 {
     partial class DateNavigateControl
     {
@@ -43,6 +46,7 @@
 			this.dateTimePickerAdv1.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.dateTimePickerAdv1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(193)))), ((int)(((byte)(222)))));
 			this.dateTimePickerAdv1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.dateTimePickerAdv1.NoneButtonVisible = false;
 			// 
 			// 
 			// 
@@ -51,11 +55,11 @@
 			this.dateTimePickerAdv1.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdv1.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdv1.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.dateTimePickerAdv1.Calendar.DayNamesColor = System.Drawing.Color.Empty;
-			this.dateTimePickerAdv1.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
-			this.dateTimePickerAdv1.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
+			this.dateTimePickerAdv1.Calendar.DayNamesColor = System.Drawing.SystemColors.ControlText;
+			this.dateTimePickerAdv1.Calendar.DayNamesFont = new System.Drawing.Font("Segoe", 8.25F, System.Drawing.FontStyle.Bold);
+			this.dateTimePickerAdv1.Calendar.DaysFont = new System.Drawing.Font("Segoe", 8F);
 			this.dateTimePickerAdv1.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dateTimePickerAdv1.Calendar.Font = new System.Drawing.Font("Tahoma", 8F);
+			this.dateTimePickerAdv1.Calendar.Font = new System.Drawing.Font("Segoe", 8F);
 			this.dateTimePickerAdv1.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdv1.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
 			this.dateTimePickerAdv1.Calendar.HeaderEndColor = System.Drawing.Color.White;
@@ -75,20 +79,8 @@
 			this.dateTimePickerAdv1.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdv1.Calendar.TabIndex = 0;
 			this.dateTimePickerAdv1.Calendar.ThemedEnabledGrid = true;
-			this.dateTimePickerAdv1.Calendar.WeekFont = new System.Drawing.Font("Verdana", 8F);
-			this.dateTimePickerAdv1.Calendar.WeekInterior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.PeachPuff, System.Drawing.Color.AntiqueWhite);
-			// 
-			// 
-			// 
-			this.dateTimePickerAdv1.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.dateTimePickerAdv1.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.dateTimePickerAdv1.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
-			this.dateTimePickerAdv1.Calendar.NoneButton.IsBackStageButton = false;
-			this.dateTimePickerAdv1.Calendar.NoneButton.Location = new System.Drawing.Point(136, 1);
-			this.dateTimePickerAdv1.Calendar.NoneButton.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.dateTimePickerAdv1.Calendar.NoneButton.Size = new System.Drawing.Size(72, 21);
-			this.dateTimePickerAdv1.Calendar.NoneButton.Text = "None";
-			this.dateTimePickerAdv1.Calendar.NoneButton.UseVisualStyle = true;
+			this.dateTimePickerAdv1.Calendar.WeekInterior = new BrushInfo();
+			this.dateTimePickerAdv1.Calendar.WeekFont = new System.Drawing.Font("Segoe", 8F, FontStyle.Bold);
 			// 
 			// 
 			// 
