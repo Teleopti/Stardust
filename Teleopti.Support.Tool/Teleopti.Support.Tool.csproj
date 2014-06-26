@@ -256,6 +256,7 @@
     <Content Include="config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\ccc_icon.png" />
     <None Include="Resources\ccc_Menu.png" />
     <None Include="Resources\warning.png" />
     <None Include="Resources\PlayHS.png" />

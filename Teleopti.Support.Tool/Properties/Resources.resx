@@ -112,32 +112,41 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="info1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\info1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ajax_loader" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\ajax-loader.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="headerLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\headerlogo.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="accept1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\accept1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ConnectedWithLimitedAccess" xml:space="preserve">
+    <value>Connected with limited access</value>
+    <comment>Connected with limited access</comment>
   </data>
   <data name="accept" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\accept.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="block" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\block.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ConnectedAsSystemAdmin" xml:space="preserve">
+    <value>Connected as System Admin</value>
+    <comment>Connected as System Admin</comment>
+  </data>
+  <data name="NotConnected" xml:space="preserve">
+    <value>Not Connected</value>
+    <comment>Not Connected</comment>
+  </data>
+  <data name="Connecting" xml:space="preserve">
+    <value>Connecting...</value>
+  </data>
   <data name="delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\delete.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="block" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\block.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="headerLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\headerlogo.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="PlayHS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\playhs.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -145,27 +154,20 @@
   <data name="warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\warning.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ccc_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Menu.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ClickVerifytoCheckYourCredentials">
-    <value xml:space="preserve">Click "Verify" to check your credentials</value>
+  <data name="ClickVerifytoCheckYourCredentials" xml:space="preserve">
+    <value>Click "Verify" to check your credentials</value>
     <comment>Click "Verify" to check your credentials</comment>
   </data>
-  <data name="ConnectedAsSystemAdmin">
-    <value xml:space="preserve">Connected as System Admin</value>
-    <comment>Connected as System Admin</comment>
+  <data name="info1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\info1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ConnectedWithLimitedAccess">
-    <value xml:space="preserve">Connected with limited access</value>
-    <comment>Connected with limited access</comment>
+  <data name="accept1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\accept1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="NotConnected">
-    <value xml:space="preserve">Not Connected</value>
-    <comment>Not Connected</comment>
-  </data>
-  <data name="Connecting">
-    <value xml:space="preserve">Connecting...</value>
+  <data name="ccc_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
