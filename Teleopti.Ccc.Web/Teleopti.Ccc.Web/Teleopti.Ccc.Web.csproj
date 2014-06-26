@@ -815,9 +815,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm_test.js" />
-    <None Include="Areas\Anywhere\Content\Scripts\views\personschedule\layerjs" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\moveactivityform.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\timeline.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agent.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agentstate.js" />
