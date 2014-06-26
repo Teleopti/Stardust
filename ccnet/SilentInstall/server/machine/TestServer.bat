@@ -5,9 +5,9 @@
 SET INSTALLDIR=C:\Program Files (x86)\Teleopti\
 SET DBServerInstance=tcp:ARES\CCC
 SET AppServer=%COMPUTERNAME%
-SET DB_ANALYTICS=%COMPUTERNAME%_TeleoptiAnalytics
-SET DB_CCC7=%COMPUTERNAME%_TeleoptiCCC7
-SET DB_CCCAGG=%COMPUTERNAME%_TeleoptiCCCAgg
+SET DB_ANALYTICS=%COMPUTERNAME%_TeleoptiWFMAnalytics
+SET DB_CCC7=%COMPUTERNAME%_TeleoptiWFM
+SET DB_CCCAGG=%COMPUTERNAME%_TeleoptiWFMAgg
 SET DB_WINGROUP=TOPTINET\#secDevelopCCC
 SET /A SSL=0
 SET ADDLOCAL=Database,AgentPortalWeb,Analytics,ClickOnce,AgentPortal,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker
