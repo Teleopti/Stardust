@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Rta.WebService
 			var container = buildIoc();
 			AutofacHostFactory.Container = container;
 
-			container.Resolve<IMessageSender>().StartBrokerService();
+			container.Resolve<IMessageSender>().StartBrokerService(useLongPolling: true);
 			container.Resolve<AdherenceAggregatorInitializor>().Initialize();
 			setDefaultGenericPrincipal();
 		}
