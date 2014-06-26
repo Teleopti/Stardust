@@ -279,5 +279,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists(".shift-trade-my-schedule .shift-trade-layer-container .dayoff");
 		}
 
+		[When(@"I choose '(.*)' to make a shift trade")]
+		public void WhenIChooseToMakeAShiftTrade(string p0)
+		{
+			Browser.Interactions.Click(".shift-trade-possible-trade-schedule .shift-trade-layer-container .shift-trade-layer");
+	}
+
+		[When(@"I add '(.*)' to my shift trade list")]
+		public void WhenIAddToMyShiftTradeList(string p0)
+		{
+			Browser.Interactions.Click("#shift-trade-add");
+		}
+
+		[Then(@"I should see '(.*)' in my shift trade list for date '(.*)'")]
+		public void ThenIShouldSeeInMyShiftTradeListForDate(string agentName, string date)
+		{
+			Browser.Interactions.AssertAnyContains("#choose-history-list", agentName);
+			Browser.Interactions.AssertAnyContains(".choose-history-trade-date", date);
+		}
+
 	}
 }

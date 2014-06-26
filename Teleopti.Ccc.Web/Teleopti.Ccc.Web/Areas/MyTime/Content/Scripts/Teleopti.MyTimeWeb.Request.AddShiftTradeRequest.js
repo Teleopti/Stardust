@@ -76,8 +76,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			$.each(self.possibleTradeSchedules(), function(index, schedule) {
 				if (self.agentChoosed().agentName == schedule.agentName) {
 					currentTrade.tradedSchedule = schedule;
-					var currentView = new Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel(currentTrade);
-					self.chooseHistorys.push(currentView);
+					var currentChooseView = new Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel(currentTrade);
+					self.chooseHistorys.push(currentChooseView);
 				}
 			});
 		};

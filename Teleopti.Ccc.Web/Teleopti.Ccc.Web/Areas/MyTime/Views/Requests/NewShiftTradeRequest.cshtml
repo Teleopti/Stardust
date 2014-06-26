@@ -115,9 +115,10 @@
             </table>
             <div id="tooltipContainer" class="tooltipContainer"></div>
         </div>
-	 	<p></p>
+	    
+		 <p></p>
 		 <!-- choose history list-->
-	    <div class="shift-trade-add-schedule" style="height: 80px; overflow: scroll" data-bind="visible: isDetailVisible, foreach:chooseHistorys()">
+	    <div id="choose-history-list" class="shift-trade-add-schedule" style="height: 80px; margin-top: 10px;" data-bind="visible: isDetailVisible, foreach:chooseHistorys()">
 			<div class="choose-history-trade-date" data-bind="text: $data.selectedDate"></div>
 		    <div class="shift-trade-timeline">
 			    <div class="relative">
@@ -172,7 +173,7 @@
 					    </td>
 					    <!-- ko if: $root.isTradeForMultiDaysEnabled-->
 					    <td class="col-sm-1">
-						    <button type="button" class="btn btn-primary btn-xs" data-bind="visible: $root.isDetailVisible, click: $root.add">
+						    <button id="shift-trade-add" type="button" class="btn btn-primary btn-xs" data-bind="visible: $root.isDetailVisible, click: $root.add">
 							    <i class="glyphicon glyphicon-minus"></i>
 						    </button>
 					    </td>
@@ -183,9 +184,8 @@
 	    </div>
 	    <!-- choose history list-->
 		
-        <p></p>
 	    <p></p>
-        <div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-small" style="width: 50%; xoverflow: hidden;">
+        <div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-small" style="width: 50%; overflow: hidden;">
 		    
             <div class="form-group">
                 <input id="Request-add-shift-trade-subject-input" class="form-control" type="text" data-bind="value: subject" class="input-block-level" placeholder="@Resources.Subject" maxlength="80" />

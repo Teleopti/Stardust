@@ -468,8 +468,8 @@ Scenario: Show MySchedule when it is day off
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see MySchedule is dayoff
 
-@ignore
-Scenario: Should able to add a day to a shift trade
+@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
+Scenario: Should be able to add a day to a shift trade
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -627,7 +627,7 @@ Scenario: Should be able to cancel a not sent shift trade and go back to overvie
 	And the current time is '2029-12-27'
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I choose 'OtherAgent' to make a shift trade
-	When I cancel to make a shift trade
+	When I cancel this shift trade request
 	Then I should see 'OtherAgent' last in the list
 
 @ignore
