@@ -105,6 +105,7 @@ Scenario: Push staffing metrics changes
 	| Difference percentage   | -100.00 |
 	| Estimated service level | 0.00    |
 
+@OnlyRunIfEnabled('MyTeam_StaffingMetrics_25562')
 Scenario: View skill selection
 	Given I have the role 'Anywhere Team Green'
 	And there is a forecast with
@@ -121,6 +122,7 @@ Scenario: View skill selection
 	| Direct Sales  |
 	| Channel Sales |
 	
+@OnlyRunIfEnabled('MyTeam_StaffingMetrics_25562')
 Scenario: Remember skill selection when changing date
 	Given I have the role 'Anywhere Team Green'
 	And there is a forecast with
@@ -143,6 +145,7 @@ Scenario: Remember skill selection when changing date
 	When  I select date '2013-04-10'
 	Then I should see staffing metrics for skill 'Direct Sales'
 
+@OnlyRunIfEnabled('MyTeam_StaffingMetrics_25562')
 Scenario: Remember skill selection when changing team
 	Given there is a team with
 	| Field | Value      |
