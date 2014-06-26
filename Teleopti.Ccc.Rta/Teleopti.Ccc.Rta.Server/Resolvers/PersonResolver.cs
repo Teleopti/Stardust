@@ -23,16 +23,7 @@ namespace Teleopti.Ccc.Rta.Server.Resolvers
 			}
 			
 			var dictionary = _databaseReader.LoadAllExternalLogOns();
-			addBatchSignature(dictionary);
 			return dictionary.TryGetValue(lookupKey, out personId);
-		}
-
-		private static void addBatchSignature(ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>> dictionary)
-		{
-			IEnumerable<PersonWithBusinessUnit> foundIds;
-			if (dictionary.TryGetValue(string.Empty, out foundIds)) return;
-			var emptyArray = new[] { new PersonWithBusinessUnit { PersonId = Guid.Empty, BusinessUnitId = Guid.Empty } };
-			dictionary.AddOrUpdate(string.Empty, emptyArray, (s, units) => emptyArray);
 		}
 	}
 }
