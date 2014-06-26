@@ -380,3 +380,8 @@
 	width:100%; 
 	height: 100%
 }
+
+.choose-history-trade-date {
+	font-size: medium;
+	font-weight: bold;
+}
