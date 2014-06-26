@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Security.Policy;
 using System.Security.Principal;
-using System.Threading;
 using Autofac;
 using Autofac.Integration.Wcf;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Rta.Server;
 using Teleopti.Ccc.Rta.Server.Adherence;
 using log4net;
 using log4net.Config;
+using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Rta.WebService
 {
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.Rta.WebService
 			var container = buildIoc();
 			AutofacHostFactory.Container = container;
 
-			container.Resolve<IRtaDataHandler>();
+			container.Resolve<IMessageSender>().StartBrokerService();
 			container.Resolve<AdherenceAggregatorInitializor>().Initialize();
 			setDefaultGenericPrincipal();
 		}
