@@ -35,15 +35,9 @@ DECLARE @IntervalLengthMinutes smallint
 DECLARE @IntervalPerDay smallint 
 DECLARE @min_date_id int
 
---SELECT @min_date_id = isnull(date_id-1,0)
---FROM mart.dim_date 
---WHERE	datepart(year,date_date) = datepart(year,dateadd(month,-@months_back,getdate())) 
---and		datepart(month,date_date) = datepart(month,dateadd(month,-@months_back,getdate())) 
---and		datepart(day,date_date) = datepart(day,dateadd(month,-@months_back,getdate()))
- 
 SET @nl  = char(13) + char(10)
 --check tempdb before
-IF  (SELECT [dbo].[IsAzureDB] ()) <> 1
+IF  (SELECT [dbo].[IsAzureDB] ()) <> 1 AND @is_delayed_job=0
 BEGIN
 	SELECT @martfileid=fileid
 	FROM sys.sysfiles
@@ -135,7 +129,6 @@ INNER JOIN mart.bridge_time_zone btz
 INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
---WHERE f.schedule_date_id >= @min_date_id
 WHERE f.schedule_date_id between @start_date_id and @end_date_id
 AND NOT EXISTS(	SELECT * FROM mart.fact_schedule_old old 
 				INNER JOIN mart.fact_schedule new
@@ -149,7 +142,7 @@ AND NOT EXISTS(	SELECT * FROM mart.fact_schedule_old old
 OPTION (MAXDOP 1);
 
 --check tempdb after
-IF  (SELECT [dbo].[IsAzureDB] ()) <> 1
+IF  (SELECT [dbo].[IsAzureDB] ()) <> 1 AND @is_delayed_job=0
 BEGIN
 	PRINT 'tempdb I/O stats:'
 	SELECT @io_statistics_string =

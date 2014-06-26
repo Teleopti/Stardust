@@ -8,7 +8,6 @@ GO
 -- =============================================
 CREATE PROCEDURE [mart].[etl_execute_delayed_job]
 @stored_procedure nvarchar(300) = null
-WITH EXECUTE AS OWNER
 AS
 
 declare @sqlcommand nvarchar(4000)
@@ -25,20 +24,11 @@ else
 	where stored_procedured = @stored_procedure --specified SP
 	order by Id
 
-BEGIN TRY
-	update mart.etl_job_delayed
-	set execute_date = getdate()
-	where Id=@Id
+update mart.etl_job_delayed
+set execute_date = getdate()
+where Id=@Id
 
-	exec sp_executesql @sqlcommand
+exec sp_executesql @sqlcommand
 
-	delete from mart.etl_job_delayed
-	where Id=@Id
-END TRY
-BEGIN CATCH
-  DECLARE @ErrMsg nvarchar(4000)
-  DECLARE @ErrSeverity int
-  SELECT @ErrMsg = ERROR_MESSAGE(),
-         @ErrSeverity = ERROR_SEVERITY()
-  RAISERROR(@ErrMsg, @ErrSeverity, 1)
-END CATCH
+delete from mart.etl_job_delayed
+where Id=@Id
