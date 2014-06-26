@@ -22,8 +22,8 @@ dir /B "%ROOTDIR%\*.zip" > %temp%\zipFileName.txt
 set /p zipFileName= <%temp%\zipFileName.txt
 
 :: Unzip wikifiles to Local folder
-echo "%ROOTDIR%\7za.exe" x -y -o"%INSTALLPATH%\TeleoptiWFM\LocalWiki" "%ROOTDIR%\%zipFileName%"
-"%ROOTDIR%\7za.exe" x -y -o"%INSTALLPATH%\TeleoptiWFM\LocalWiki" "%ROOTDIR%\%zipFileName%"
+echo "%ROOTDIR%\7za.exe" x -y -o"%INSTALLPATH%\TeleoptiCCC\LocalWiki" "%ROOTDIR%\%zipFileName%"
+"%ROOTDIR%\7za.exe" x -y -o"%INSTALLPATH%\TeleoptiCCC\LocalWiki" "%ROOTDIR%\%zipFileName%"
 
 :: Deploy virtual directory to IIS
 %SYSTEMROOT%\system32\inetsrv\APPCMD add vdir /app.name:"Default Web Site/" /path:/TeleoptiWFM/LocalWiki /physicalPath:"%INSTALLPATH%TeleoptiCCC\LocalWiki"
