@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
@@ -237,9 +238,13 @@ namespace Teleopti.Analytics.Parameters
 		{
             if(System.Threading.Thread.CurrentThread.CurrentUICulture.IetfLanguageTag != "fa-IR") return;
 			var scriptKey = "Jalali" + _textBox.ID;
+		    string stringDate = "";
+            if(Value is DateTime)
+                stringDate = ((DateTime)Value).ToString("d", CultureInfo.CurrentCulture);
+
 			var scriptBlock = @"<script type=""text/javascript"">
 			$(function() {
-				$(""#Parameter_" + _textBox.ID + @""").persianDatepicker({persianNumbers: false, selectedDate: """ + Value + @"""}); 
+				$(""#Parameter_" + _textBox.ID + @""").persianDatepicker({persianNumbers: false, selectedDate: """ + stringDate + @"""}); 
 			});</script>";
 			
 			Page.ClientScript.RegisterClientScriptBlock(GetType(), scriptKey, scriptBlock);
