@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -359,7 +360,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 }
 
                 _estimatedServiceLevel = new Percent(ScheduledAgentsIncoming / Payload.ForecastedIncomingDemand);
-                var shrinkage = 1 - Payload.Shrinkage.Value;
+                var shrinkage = Payload.UseShrinkage ? 1 - Payload.Shrinkage.Value : 1;
                 var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming * shrinkage;
                 _estimatedServiceLevelShrinkage = new Percent(
                     scheduledAgentsIncomingWithShrinkage/Payload.ForecastedIncomingDemand);
@@ -374,7 +375,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     Period.ElapsedTime(),
                     (int)(Payload.ServiceAgreementData.ServiceLevel.Percent.Value * 100)));
 
-                var shrinkage = 1 - Payload.Shrinkage.Value;
+                var shrinkage = Payload.UseShrinkage ? 1 - Payload.Shrinkage.Value : 1;
                 var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming * shrinkage;
                 _estimatedServiceLevelShrinkage = new Percent(_staffingCalculatorService.ServiceLevelAchieved(
                     scheduledAgentsIncomingWithShrinkage * SkillDay.Skill.MaxParallelTasks * Payload.Efficiency.Value,
