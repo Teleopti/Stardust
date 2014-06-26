@@ -1,5 +1,6 @@
 <div class="container team-schedule">
-    <table class="table table-condensed well well-small" data-bind="visible: DisplayStaffingMetrics">
+	<!-- ko if: StaffingMetricsVisible -->
+	<table class="table table-condensed well well-small" data-bind="visible: DisplayStaffingMetrics">
         <thead>
             <tr>
                 <th>
@@ -23,7 +24,7 @@
             </tr>
         </thead>
     </table>
-
+	<!-- /ko -->
     <div class="row">
         <div class="col-xs-4">
             <select id="group-picker" class="col-xs-12" style="height: 30px" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: GroupId } ">
@@ -45,7 +46,6 @@
                     <button type="button" class="btn btn-default" data-bind="datepicker: Date, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
                         <i class="glyphicon glyphicon-calendar"></i>
                     </button>
-                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>-->
                     <button class="btn btn-default" data-bind="attr: { title: Resources.Next }, click: NextDay">
                         <i class="glyphicon glyphicon-chevron-right"></i>
                     </button>

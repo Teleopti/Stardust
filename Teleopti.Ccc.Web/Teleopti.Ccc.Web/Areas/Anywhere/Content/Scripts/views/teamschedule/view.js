@@ -51,10 +51,10 @@ define([
 		});
 	};
 
-	var displayMoveButton = function (callback) {
+	var checkToggle = function (toggle, callback) {
 		ajax.ajax({
 			dataType: "json",
-			url: "ToggleHandler/IsEnabled?toggle=MyTeam_MoveActivity_25206",
+			url: "ToggleHandler/IsEnabled?toggle="+ toggle,
 			success: callback
 	});
 	}
@@ -95,7 +95,7 @@ define([
 
 			viewModel.Loading(true);
 
-			displayMoveButton(function(data) {
+			checkToggle("MyTeam_MoveActivity_25206", function (data) {
 				viewModel.moveActivityVisible(data.IsEnabled);
 			});
 
@@ -132,45 +132,54 @@ define([
 					}
 				);
 			});
-			
+
 			var skillsDeferred = $.Deferred();
-			loadSkills(
-				helpers.Date.ToServer(viewModel.Date()),
-				function (data) {
-					
-					var currentSkillId = function () {
-						if (options.secondaryId)
-							return options.secondaryId;
-						var skills = viewModel.Skills();
-						if (skills.length > 0)
-							return skills[0].Id;
-						return null;
-					};
-
-					viewModel.SetSkills(data.Skills);
-					viewModel.SelectSkillById(currentSkillId());
+			checkToggle("MyTeam_StaffingMetrics_25562", function (d) {
+				viewModel.StaffingMetricsVisible(d.IsEnabled);
+				if (!d.IsEnabled) {
 					skillsDeferred.resolve();
-				});
-
-			skillsDeferred.done(function() {
-				if (!viewModel.SelectedSkill())
 					return;
-				viewModel.LoadingStaffingMetrics(true);
+				}
 
-				staffingmetricssubscriptions.subscribeDailyStaffingMetrics(
+				loadSkills(
 					helpers.Date.ToServer(viewModel.Date()),
-					viewModel.SelectedSkill().Id,
 					function (data) {
-						viewModel.SetDailyMetrics(data);
-						viewModel.LoadingStaffingMetrics(false);
+
+						var currentSkillId = function () {
+							if (options.secondaryId)
+								return options.secondaryId;
+							var skills = viewModel.Skills();
+							if (skills.length > 0)
+								return skills[0].Id;
+							return null;
+						};
+
+						viewModel.SetSkills(data.Skills);
+						viewModel.SelectSkillById(currentSkillId());
+						skillsDeferred.resolve();
 					});
-			});
-			
-			return $.when(groupPagesDeferred, groupScheduleDeferred, skillsDeferred)
-				.done(function() {
-					viewModel.Loading(false);
-					resize.notify();
+
+				skillsDeferred.done(function () {
+					if (!viewModel.SelectedSkill())
+						return;
+					viewModel.LoadingStaffingMetrics(true);
+
+					staffingmetricssubscriptions.subscribeDailyStaffingMetrics(
+						helpers.Date.ToServer(viewModel.Date()),
+						viewModel.SelectedSkill().Id,
+						function (data) {
+							viewModel.SetDailyMetrics(data);
+							viewModel.LoadingStaffingMetrics(false);
+						});
 				});
+			});
+
+			return $.when(groupPagesDeferred, groupScheduleDeferred, skillsDeferred)
+					.done(function () {
+						viewModel.Loading(false);
+						resize.notify();
+					});
+			
 		},
 
 		dispose: function (options) {

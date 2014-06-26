@@ -171,7 +171,7 @@ define([
 
 
 
-
+		this.StaffingMetricsVisible = ko.observable(false);
 
 		this.Skills = ko.observableArray();
 		this.SetSkills = function (skills) {
