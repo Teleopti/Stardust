@@ -32,7 +32,9 @@ define([
 					domainType: 'SiteAdherenceMessage',
 					callback: callback
 				});
-				subscriptionDone();
+				siteAdherenceSubscription.promise.done(function () {
+					subscriptionDone();
+				});
 			});
 		},
 

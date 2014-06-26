@@ -33,7 +33,9 @@ define([
 					domainReferenceId: siteId,
 					callback: callback
 				});
-				subscriptionDone();
+				teamAdherenceSubscription.promise.done(function () {
+					subscriptionDone();
+				});
 			});
 		},
 

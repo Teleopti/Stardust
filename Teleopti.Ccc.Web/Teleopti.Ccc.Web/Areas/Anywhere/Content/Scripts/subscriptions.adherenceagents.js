@@ -33,7 +33,9 @@ define([
 					domainReferenceId: teamId,
 					callback: callback
 				});
-				subscriptionDone();
+				agentAdherenceSubscription.promise.done(function() {
+					subscriptionDone();
+				});
 			});
 		},
 
