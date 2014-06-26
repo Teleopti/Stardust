@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 		private IUnitOfWorkFactory _unitOfWorkFactory;
 		private ISettingDataRepository _settingDataRepository;
 		private ICanModifyMeeting _canModifyMeeting;
+	    private IToggleManager _toggleManager;
 
 		[SetUp]
 		public void Setup()
@@ -31,7 +33,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 			_settingDataRepository = _mocks.StrictMock<ISettingDataRepository>();
 			_unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
 			_canModifyMeeting = _mocks.StrictMock<ICanModifyMeeting>();
-			_target = new EditMeetingCommand(_view, _settingDataRepository, _unitOfWorkFactory, _canModifyMeeting);
+            _toggleManager = _mocks.StrictMock<IToggleManager>();
+            _target = new EditMeetingCommand(_view, _settingDataRepository, _unitOfWorkFactory, _canModifyMeeting, _toggleManager);
 
 		}
 
@@ -73,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 				Expect.Call(meeting.EntityClone()).Return(meeting);
 				Expect.Call(meeting.MeetingRecurrenceOption).Return(null);
 				Expect.Call(meeting.Snapshot);
-				Expect.Call(() => _view.EditMeeting(meetingViewModel)).IgnoreArguments();
+				Expect.Call(() => _view.EditMeeting(meetingViewModel, _toggleManager)).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{

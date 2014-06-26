@@ -9,6 +9,7 @@ using Syncfusion.Schedule;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Schedule;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -411,11 +412,11 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        public void EditMeeting(IMeetingViewModel meetingViewModel)
+        public void EditMeeting(IMeetingViewModel meetingViewModel, IToggleManager toggleManager)
         {
             var viewSchedulesPermission = isPermittedToViewSchedules();
             var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
-                                                              _eventAggregator);
+                                                              _eventAggregator, toggleManager);
             meetingComposerView.ShowDialog(this);
         }
 

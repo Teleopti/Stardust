@@ -33,15 +33,17 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 
         private readonly IToggleManager _toggleManager;
 
-        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, ChartSettings chartSettings)
+        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, ChartSettings chartSettings, IToggleManager toggleManager)
         {
             _gridControl = gridControl;
             _chartSettings = chartSettings;
+            _toggleManager = toggleManager;
         }
 
-        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, string settingName)
+        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, string settingName, IToggleManager toggleManager)
         {
             _gridControl = gridControl;
+            _toggleManager = toggleManager;
             setupChartDefault();
 
             //temp

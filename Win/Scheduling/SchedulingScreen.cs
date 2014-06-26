@@ -276,7 +276,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Application.DoEvents();
 			loadSchedulingScreenSettings();
 			_skillDayGridControl = new SkillDayGridControl { ContextMenu = contextMenuStripResultView.ContextMenu };
-			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart") { ContextMenu = contextMenuStripResultView.ContextMenu };
 			_skillWeekGridControl = new SkillWeekGridControl { ContextMenu = contextMenuStripResultView.ContextMenu };
 			_skillMonthGridControl = new SkillMonthGridControl { ContextMenu = contextMenuStripResultView.ContextMenu };
 			_skillFullPeriodGridControl = new SkillFullPeriodGridControl { ContextMenu = contextMenuStripResultView.ContextMenu };
@@ -286,6 +285,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
 			_container = lifetimeScope.BeginLifetimeScope();
+            _skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", _container.Resolve<IToggleManager>()) { ContextMenu = contextMenuStripResultView.ContextMenu };
 			_optimizerOriginalPreferences = new OptimizerOriginalPreferences(new SchedulingOptions());
 			_optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
 			_overriddenBusinessRulesHolder = _container.Resolve<IOverriddenBusinessRulesHolder>();
@@ -2678,7 +2678,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						IList<ITeam> meetingPersonsTeams = getDistinctTeamList(meeting);
 						bool editPermission = _permissionHelper.HasFunctionPermissionForTeams(meetingPersonsTeams, DefinedRaptorApplicationFunctionPaths.ModifyMeetings) && _permissionHelper.IsPermittedToEditMeeting(_scheduleView, _temporarySelectedEntitiesFromTreeView, _scenario);
 						bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
-						_schedulerMeetingHelper.MeetingComposerStart(meeting, _scheduleView, editPermission, viewSchedulesPermission);
+						_schedulerMeetingHelper.MeetingComposerStart(meeting, _scheduleView, editPermission, viewSchedulesPermission, _container.Resolve<IToggleManager>());
 					}
 				}
 			}
@@ -5318,13 +5318,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			bool editPermission = _permissionHelper.IsPermittedToEditMeeting(_scheduleView, _temporarySelectedEntitiesFromTreeView, _scenario);
 			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
-			_schedulerMeetingHelper.MeetingComposerStart(e.Value.BelongsToMeeting, _scheduleView, editPermission, viewSchedulesPermission);
+            _schedulerMeetingHelper.MeetingComposerStart(e.Value.BelongsToMeeting, _scheduleView, editPermission, viewSchedulesPermission, _container.Resolve<IToggleManager>());
 		}
 
 		private void wpfShiftEditor1_CreateMeeting(object sender, CustomEventArgs<IPersonMeeting> e)
 		{
 			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
-			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission);
+            _schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission, _container.Resolve<IToggleManager>());
 		}
 
 		private void notesEditor_NotesChanged(object sender, System.Windows.RoutedEventArgs e)
@@ -6074,7 +6074,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (e.Button != MouseButtons.Left) return;
 			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
-			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission);
+            _schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission, _container.Resolve<IToggleManager>());
 
 		}
 

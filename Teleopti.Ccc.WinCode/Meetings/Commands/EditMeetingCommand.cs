@@ -1,4 +1,5 @@
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
@@ -16,15 +17,17 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
         private readonly IMeetingOverviewView _meetingOverviewView;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ICanModifyMeeting _canModifyMeeting;
+        private readonly IToggleManager _toggleManager;
         private readonly ISettingDataRepository _settingDataRepository;
 
         public EditMeetingCommand(IMeetingOverviewView meetingOverviewView, ISettingDataRepository settingDataRepository,
-            IUnitOfWorkFactory unitOfWorkFactory, ICanModifyMeeting canModifyMeeting)
+            IUnitOfWorkFactory unitOfWorkFactory, ICanModifyMeeting canModifyMeeting, IToggleManager toggleManager)
         {
             _meetingOverviewView = meetingOverviewView;
             _settingDataRepository = settingDataRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _canModifyMeeting = canModifyMeeting;
+            _toggleManager = toggleManager;
         }
 
         public void Execute()
@@ -45,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
                 
                 meetingViewModel = new MeetingViewModel(theMeeting, commonNameDescription);
             }
-            _meetingOverviewView.EditMeeting(meetingViewModel);
+            _meetingOverviewView.EditMeeting(meetingViewModel, _toggleManager);
         }
 
         public bool CanExecute()

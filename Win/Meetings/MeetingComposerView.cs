@@ -4,6 +4,7 @@ using System.Security;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.Win.Meetings
         private readonly bool _viewSchedulesPermission;
 	    private IMeetingDetailView _currentView;
 	    private readonly IEventAggregator _eventAggregator;
+	    private readonly IToggleManager _toogleManager;
 
 	    public event EventHandler<ModifyMeetingEventArgs> ModificationOccurred;
 
@@ -34,13 +36,14 @@ namespace Teleopti.Ccc.Win.Meetings
         }
 
 	    public MeetingComposerView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, 
-            bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator)
+            bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator, IToggleManager toogleManager)
             : this()
         {
             _editMeetingPermission = editPermission;
             _viewSchedulesPermission = viewSchedulesPermission;
             _eventAggregator = eventAggregator;
-            _meetingComposerPresenter = new MeetingComposerPresenter(this,meetingViewModel,schedulerStateHolder);
+	        _toogleManager = toogleManager;
+	        _meetingComposerPresenter = new MeetingComposerPresenter(this,meetingViewModel,schedulerStateHolder);
             panelContent.Enabled = _editMeetingPermission;
             ribbonControlAdv1.Enabled = _editMeetingPermission;
             toolStripButtonSchedules.Enabled = _viewSchedulesPermission;
@@ -315,7 +318,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private IMeetingImpactView GetImpactView()
 		{
-			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder, this);
+			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder, this, _toogleManager);
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
