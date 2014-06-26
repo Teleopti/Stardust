@@ -1,10 +1,15 @@
 using System;
+using System.Globalization;
+using System.Linq;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
@@ -214,10 +219,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.ClickUsingJQuery(".layer[data-start-time='" + scheduledActivityInfo.StartTimeFormatted() + "']");
 		}
 
-		[When(@"I click move activity button")]
-		public void WhenIClickMoveActivityButton()
+		[When(@"I view person schedules move activity form for '(.*)' in '(.*)' on '(.*)' with selected start minutes of '(.*)'")]
+		public void WhenIViewPersonSchedulesMoveActivityFormForInOnWithSelectedStartTimeOf(string name, string teamName, DateTime date, string startTime)
 		{
-			Browser.Interactions.ClickUsingJQuery("a.move-activity");
+				DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+				TestControllerMethods.Logon();
+				var personId = DataMaker.Person(name).Person.Id.Value;
+				var teamId = (from t in DataMaker.Data().UserDatasOfType<TeamConfigurable>()
+											let team = t.Team
+											where team.Description.Name.Equals(teamName)
+											select team.Id.GetValueOrDefault()).First();
+				Navigation.GotoAnywherePersonScheduleMoveActivityForm(personId, teamId, date, startTime);
 		}
 
 		[When(@"I move the activity")]
