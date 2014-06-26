@@ -27,7 +27,7 @@ define([
 			viewModel = new personScheduleViewModel();
 
 			resize.onresize(function () {
-				viewModel.TimeLine.WidthPixels($('.time-line-for').width());
+				viewModel.setTimelineWidth($('.time-line-for').width());
 			});
 
 			ko.applyBindings(viewModel, options.bindingElement);
@@ -63,23 +63,25 @@ define([
 			return $.when(personScheduleDeferred, groupScheduleDeferred)
 				.done(function () {
 					viewModel.Loading(false);
-
-					// bind events
-					var activeLayer = $(".layer.active");
-					if (activeLayer.length !== 0) {
-						var pixelByNMinutes = viewModel.lengthMinutesToPixels(15);
-						var initialX = $(".layer.active")[0].offsetLeft;
-						$(".layer.active").draggable({
-							axis: 'x',
-							containment: 'parent',
-							grid: [pixelByNMinutes, 0],
-							drag: function (e) {
-								var pixelsChanged = e.target.offsetLeft - initialX;
-								viewModel.updateStartTime(pixelsChanged);
-							}
-						});
+					if (viewModel.MovingActivity) {
+						// bind events
+						var activeLayer = $(".layer.active");
+						if (activeLayer.length !== 0) {
+							var pixelByNMinutes = viewModel.lengthMinutesToPixels(15);
+							var initialX = $(".layer.active")[0].offsetLeft;
+							$(".layer.active").draggable({
+								axis: 'x',
+								containment: 'parent',
+								grid: [pixelByNMinutes, 0],
+								drag: function (e) {
+									var pixelsChanged = e.target.offsetLeft - initialX;
+									viewModel.updateStartTime(pixelsChanged);
+								}
+							});
+						}
+						viewModel.InitMoveActivityForm();
 					}
-				});
+			});
 		},
 
 		dispose: function (options) {
