@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsTrue(_target.IsAvailable);
             Assert.IsNotNull(_target.ToString());
             Assert.IsNotNull(_target.EstimatedServiceLevel);
+            Assert.IsNotNull(_target.EstimatedServiceLevelShrinkage);
             Assert.IsNotNull(_target.ActualServiceLevel);
 
             Assert.AreEqual(MinMaxStaffBroken.Ok, _target.AggregatedMinMaxStaffAlarm);
@@ -123,6 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             //Demand is 0
             Assert.IsTrue(new Percent(1) == _target.EstimatedServiceLevel);
+            Assert.IsTrue(new Percent(1) == _target.EstimatedServiceLevelShrinkage);
             double demand = 172.2;
             typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(_target.Payload, demand);
 
@@ -130,6 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             //Normal non phone calculation
             Assert.IsTrue(new Percent(1) > _target.EstimatedServiceLevel);
+            Assert.IsTrue(new Percent(1) > _target.EstimatedServiceLevelShrinkage);
             demand = 10.2;
             typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(_target.Payload, demand);
 
@@ -137,6 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             //Over 100% non phone
             Assert.AreEqual(new Percent(1), _target.EstimatedServiceLevel);
+            Assert.AreEqual(new Percent(1), _target.EstimatedServiceLevelShrinkage);
 
             //Phone, Erlang calc is used
             double serviceLevel =
