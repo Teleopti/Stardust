@@ -17,6 +17,8 @@
 		RTA_RtaLastStatesOverview_27789,
 		RTA_DrilldownToAllAgentsInOneTeam_25234,
 
-		MyTeam_MoveActivity_25206
+		MyTeam_MoveActivity_25206,
+
+        Scheduler_ShowIntadayESLWithShrinkage_21874
 	}
 }

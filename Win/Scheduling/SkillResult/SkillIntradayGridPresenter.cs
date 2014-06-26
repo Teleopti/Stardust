@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common.Controls;
@@ -29,6 +30,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 
         private  ChartSettings _chartSettings = new ChartSettings();
         private readonly ChartSettings _defaultChartSettings = new ChartSettings();
+
+        private readonly IToggleManager _toggleManager;
 
         public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, ChartSettings chartSettings)
         {
@@ -268,8 +271,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 					_gridRows.Add(_rowManager.AddRow(gridRow));
 
 				}
+
+                //feature flag here
+                var estimatedServiceLevelPropertyName = "EstimatedServiceLevel";
+			    if (_toggleManager.IsEnabled(Toggles.Scheduler_ShowIntadayESLWithShrinkage_21874))
+			        estimatedServiceLevelPropertyName = "EstimatedServiceLevelShrinkage";
+
 				gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "PercenFromPercentReadOnlyCellModel",
-				                                               "EstimatedServiceLevel", UserTexts.Resources.ESL);
+				                                               estimatedServiceLevelPropertyName, UserTexts.Resources.ESL);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 			}
