@@ -37,6 +37,6 @@ ROBOCOPY "%SrcCode%\ccnet\SilentInstall" "%DestShare%\SilentInstall" /MIR
 Call "%DestShare%\SilentInstall\server\SilentInstall.bat" "%CCCEXE%" "Neptune" "toptinet\tfsintegration" "m8kemew0rk"
 
 ::Add Lic
-SQLCMD -S. -E -d"TeleoptiCCC7_Demo" -i"%SrcCode%\Database\Tools\Restore\tsql\AddLic.sql" -v LicFile="%SrcCode%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+SQLCMD -S. -E -d"TeleoptiWFM_Demo" -i"%SrcCode%\Database\Tools\Restore\tsql\AddLic.sql" -v LicFile="%SrcCode%\LicenseFiles\Teleopti_RD.xml"
 
 ENDLOCAL
