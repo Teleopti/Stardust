@@ -11,8 +11,8 @@ namespace Teleopti.Support.CodeTest.Tool
         public void GetSearchReplaceListTest()
         {
             var theString =
-                @"$(ConnectionStringApp)|Data Source=.;Initial Catalog=TeleoptiCCC7_Demo;Integrated Security=True
-$(ConnectionStringAnalytics)|Data Source=.;Initial Catalog=TeleoptiAnalytics_Demo;Integrated Security=True";
+                @"$(ConnectionStringApp)|Data Source=.;Initial Catalog=TeleoptiWFM_Demo;Integrated Security=True
+$(ConnectionStringAnalytics)|Data Source=.;Initial Catalog=TeleoptiWFMAnalytics_Demo;Integrated Security=True";
 
             var target = new SettingsReader();
             var ret = target.GetSearchReplaceList(theString);

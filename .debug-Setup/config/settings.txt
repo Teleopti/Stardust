@@ -1,8 +1,8 @@
 ﻿$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
 $(AS_SERVER_NAME)|.
-$(DB_CCC7)|TeleoptiCCC7_Demo
-$(DB_ANALYTICS)|TeleoptiAnalytics_Demo
-$(AS_DATABASE)|TeleoptiAnalytics_Demo
+$(DB_CCC7)|TeleoptiWFM_Demo
+$(DB_ANALYTICS)|TeleoptiWFMAnalytics_Demo
+$(AS_DATABASE)|TeleoptiWFMAnalytics_Demo
 $(IIS_AUTH)|Windows
 $(LOCAL_WIKI)|c:\temp
 $(PM_ASMX)|http://CCCRC/TeleoptiPM/services/Analyzer2005.asmx
