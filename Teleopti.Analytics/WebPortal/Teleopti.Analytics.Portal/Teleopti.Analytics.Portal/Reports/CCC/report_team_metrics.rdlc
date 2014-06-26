@@ -3140,7 +3140,7 @@ Public Function AdheranceCalc(a as decimal, b as decimal) as decimal
 End function
 
 Public Function ShortDateString(d as System.DateTime)as string
-	return d.ToString("d",System.Globalization.CultureInfo.CurrentCulture)
+	return d.ToString("d",System.Globalization.CultureInfo.CurrentUICulture)
 End function</Code>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
