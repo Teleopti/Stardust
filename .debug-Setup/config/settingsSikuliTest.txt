@@ -19,7 +19,7 @@ $(HTTPGETENABLED)|true
 $(HTTPSGETENABLED)|false
 $(SDK_SSL_MEX_BINDING)|mexHttpBinding
 $(MATRIX_WEB_SITE_URL)|http://localhost:52500
-$(LocalWiki)|http://localhost/TeleoptiCCC/LocalWiki/
+$(LocalWiki)|http://localhost/TeleoptiWFM/LocalWiki/
 $(WEB_BROKER_FOR_WEB)|http://localhost:52858
 $(WEB_BROKER)|http://localhost:54903/
 $(WEB_BROKER_BACKPLANE)|
