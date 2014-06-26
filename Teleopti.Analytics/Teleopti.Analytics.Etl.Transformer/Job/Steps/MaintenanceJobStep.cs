@@ -16,7 +16,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
         {
             // Purge Audit Trail tables in raptor db. No return value here
             //_jobParameters.Helper.Repository.PurgeAuditTrailTables();
-
+            //Run Delayed job
+            _jobParameters.Helper.Repository.RunDelayedJob();
             // Run maintenance sp
             return _jobParameters.Helper.Repository.PerformMaintenance();
         }

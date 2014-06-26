@@ -2,13 +2,15 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[main
 DROP PROCEDURE [mart].[main_convert_fact_schedule_ccc8_run]
 GO
 --[mart].[main_convert_fact_schedule_ccc8_estimate]
---[mart].[main_convert_fact_schedule_ccc8_run] 15
+--[mart].[main_convert_fact_schedule_ccc8_run] @start_date_id=4927,@end_date_id=4957
 
 CREATE PROCEDURE [mart].[main_convert_fact_schedule_ccc8_run]
-@months_back int = 13
+@start_date_id int,
+@end_date_id int,
+@is_delayed_job int = 1
 AS
 
-TRUNCATE TABLE [mart].[fact_schedule]
+--TRUNCATE TABLE [mart].[fact_schedule]
 DECLARE @io_statistics_string nvarchar(2000)
 DECLARE @nl Char(2)
 DECLARE @tempdb_time_Start datetime
@@ -33,11 +35,11 @@ DECLARE @IntervalLengthMinutes smallint
 DECLARE @IntervalPerDay smallint 
 DECLARE @min_date_id int
 
-SELECT @min_date_id = isnull(date_id-1,0)
-FROM mart.dim_date 
-WHERE	datepart(year,date_date) = datepart(year,dateadd(month,-@months_back,getdate())) 
-and		datepart(month,date_date) = datepart(month,dateadd(month,-@months_back,getdate())) 
-and		datepart(day,date_date) = datepart(day,dateadd(month,-@months_back,getdate()))
+--SELECT @min_date_id = isnull(date_id-1,0)
+--FROM mart.dim_date 
+--WHERE	datepart(year,date_date) = datepart(year,dateadd(month,-@months_back,getdate())) 
+--and		datepart(month,date_date) = datepart(month,dateadd(month,-@months_back,getdate())) 
+--and		datepart(day,date_date) = datepart(day,dateadd(month,-@months_back,getdate()))
  
 SET @nl  = char(13) + char(10)
 --check tempdb before
@@ -133,7 +135,17 @@ INNER JOIN mart.bridge_time_zone btz
 INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
-WHERE f.schedule_date_id >= @min_date_id
+--WHERE f.schedule_date_id >= @min_date_id
+WHERE f.schedule_date_id between @start_date_id and @end_date_id
+AND NOT EXISTS(	SELECT * FROM mart.fact_schedule_old old 
+				INNER JOIN mart.fact_schedule new
+				ON new.schedule_date_id=old.schedule_date_id
+				AND new.person_id=old.person_id
+				AND new.interval_id=old.interval_id
+				AND new.activity_starttime=old.activity_starttime
+				AND new.scenario_id=old.scenario_id
+				WHERE new.schedule_date_id between @start_date_id and @end_date_id)
+
 OPTION (MAXDOP 1);
 
 --check tempdb after

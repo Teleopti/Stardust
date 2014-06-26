@@ -547,6 +547,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             return 0;
         }
 
+        public int RunDelayedJob()
+        {
+            return 0;
+        }
         public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
         {
             return new List<IScheduleDay>();
