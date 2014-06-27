@@ -16,18 +16,18 @@ exec xp_cmdshell 'net stop TeleoptiETLService'
 exec xp_cmdshell 'net stop TeleoptiBrokerService'
 
 --upgrade local databases
-SELECT @XpCommand='"C:\Data\RaptorScrum\Root-Azure\Database\DBManager.exe" -S. -DTeleoptiWFMAnalytics_Demo -OTeleoptiAnalytics -E -T'
+SELECT @XpCommand='"C:\Data\RaptorScrum\Root-Azure\Database\DBManager.exe" -S. -DTeleoptiAnalytics_Demo -OTeleoptiAnalytics -E -T'
 exec xp_cmdshell @XpCommand
 
-SELECT @XpCommand='"C:\Data\RaptorScrum\Root-Azure\Database\DBManager.exe" -S. -DTeleoptiWFM_Demo -OTeleoptiCCC7 -E -T'
+SELECT @XpCommand='"C:\Data\RaptorScrum\Root-Azure\Database\DBManager.exe" -S. -DTeleoptiApp_Demo -OTeleoptiCCC7 -E -T'
 exec xp_cmdshell @XpCommand
 
 --encrypt local pwd
-SELECT @XpCommand='"C:\Data\RaptorScrum\Root-Azure\Database\Tools\Encryption\Teleopti.Support.Security.exe" -DS. -DDTeleoptiWFM_Demo -EE'
+SELECT @XpCommand='"C:\Data\RaptorScrum\Root-Azure\Database\Tools\Encryption\Teleopti.Support.Security.exe" -DS. -DDTeleoptiApp_Demo -EE'
 exec xp_cmdshell @XpCommand
 
 --clean out unwanted data in source db
-USE TeleoptiWFMAnalytics_Demo
+USE TeleoptiAnalytics_Demo
 	-- Delete data from bridge and other tables
 	DELETE FROM mart.bridge_queue_workload
 	DELETE FROM mart.bridge_skillset_skill

@@ -26,8 +26,8 @@ SET /P AnalyticsDB=AnalyticsDB?
 COPY "%masterSettings%" "%MySettings%"
 
 ::Replace some parameters according to current RestoreToLocal.bat
-cscript .\common\replace.vbs "TeleoptiWFMAnalytics_Demo" "%AnalyticsDB%" "%MySettings%" > NUL
-cscript .\common\replace.vbs "TeleoptiWFM_Demo" "%CCC7DB%" "%MySettings%" > NUL
+cscript .\common\replace.vbs "TeleoptiAnalytics_Demo" "%AnalyticsDB%" "%MySettings%" > NUL
+cscript .\common\replace.vbs "TeleoptiApp_Demo" "%CCC7DB%" "%MySettings%" > NUL
 
 ::Build Teleopti.Support.Tool.exe
 ECHO Building %ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj

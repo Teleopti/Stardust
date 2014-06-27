@@ -27,19 +27,19 @@ FROM sys.database_files
 WHERE name = 'mastlog'
 */
 ---
-PRINT 'Restoring TeleoptiWFMAnalytics_Demo'
-IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = 'TeleoptiWFMAnalytics_Demo')
+PRINT 'Restoring TeleoptiAnalytics_Demo'
+IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = 'TeleoptiAnalytics_Demo')
 ALTER DATABASE [TeleoptiAnalytics_Demo] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
 
-SELECT @SQLString = 'RESTORE DATABASE [TeleoptiWFMAnalytics_Demo]
+SELECT @SQLString = 'RESTORE DATABASE [TeleoptiAnalytics_Demo]
 FROM  DISK = N''$(BakDir)\TeleoptiAnalytics_Demo.BAK''
 WITH  FILE = 1,
-MOVE N''TeleoptiAnalytics_Primary'' TO N''' + @DataDir +'\TeleoptiWFMAnalytics_demo_Primary.mdf'',
-MOVE N''TeleoptiAnalytics_Log'' TO N''' + @DataDir +'\TeleoptiWFMAnalytics_demo_Log.ldf'',
-MOVE N''TeleoptiAnalytics_Stage'' TO N''' + @DataDir +'\TeleoptiWFMAnalytics_demo_Stage.ndf'',
-MOVE N''TeleoptiAnalytics_Mart'' TO N''' + @DataDir +'\TeleoptiWFMAnalytics_demo_Mart.ndf'',
-MOVE N''TeleoptiAnalytics_Msg'' TO N''' + @DataDir +'\TeleoptiWFMAnalytics_demo_Msg.ndf'',
-MOVE N''TeleoptiAnalytics_Rta'' TO N''' + @DataDir +'\TeleoptiWFMAnalytics_demo_Rta.ndf'',
+MOVE N''TeleoptiAnalytics_Primary'' TO N''' + @DataDir +'\TeleoptiAnalytics_Demo_Primary.mdf'',
+MOVE N''TeleoptiAnalytics_Log'' TO N''' + @DataDir +'\TeleoptiAnalytics_Demo_Log.ldf'',
+MOVE N''TeleoptiAnalytics_Stage'' TO N''' + @DataDir +'\TeleoptiAnalytics_Demo_Stage.ndf'',
+MOVE N''TeleoptiAnalytics_Mart'' TO N''' + @DataDir +'\TeleoptiAnalytics_Demo_Mart.ndf'',
+MOVE N''TeleoptiAnalytics_Msg'' TO N''' + @DataDir +'\TeleoptiAnalytics_Demo_Msg.ndf'',
+MOVE N''TeleoptiAnalytics_Rta'' TO N''' + @DataDir +'\TeleoptiAnalytics_Demo_Rta.ndf'',
 NOUNLOAD,
 REPLACE,
 STATS = 10'
@@ -48,14 +48,14 @@ EXEC (@SQLString)
 
 -----
 PRINT 'Restoring TeleoptiWFM'
-IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = 'TeleoptiWFM_Demo')
+IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = 'TeleoptiApp_Demo')
 ALTER DATABASE [TeleoptiCCC7_Demo] SET  SINGLE_USER WITH ROLLBACK IMMEDIATE
 
-SELECT @SQLString = 'RESTORE DATABASE [TeleoptiWFM_Demo]
+SELECT @SQLString = 'RESTORE DATABASE [TeleoptiApp_Demo]
 FROM  DISK = N''$(BakDir)\TeleoptiCCC7_Demo.BAK''
 WITH  FILE = 1,
-MOVE N''TeleoptiCCC7_Data'' TO N''' + @DataDir +'\TeleoptiWFM_Demo.mdf'',
-MOVE N''TeleoptiCCC7_Log'' TO N''' + @DataDir +'\TeleoptiWFM_Demo.ldf'',
+MOVE N''TeleoptiCCC7_Data'' TO N''' + @DataDir +'\TeleoptiApp_Demo.mdf'',
+MOVE N''TeleoptiCCC7_Log'' TO N''' + @DataDir +'\TeleoptiApp_Demo.ldf'',
 NOUNLOAD,
 REPLACE,
 STATS = 10'
@@ -63,15 +63,15 @@ STATS = 10'
 EXEC (@SQLString)
 
 ---
-PRINT 'Restoring TeleoptiWFMAgg_Demo'
-IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = 'TeleoptiWFMAgg_Demo')
+PRINT 'Restoring TeleoptiAgg_Demo'
+IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = 'TeleoptiAgg_Demo')
 ALTER DATABASE [TeleoptiCCC7Agg_Demo] SET  SINGLE_USER WITH ROLLBACK IMMEDIATE
 
-SELECT @SQLString = 'RESTORE DATABASE [TeleoptiWFMAgg_Demo]
+SELECT @SQLString = 'RESTORE DATABASE [TeleoptiAgg_Demo]
 FROM  DISK = N''$(BakDir)\TeleoptiCCC7Agg_Demo.BAK''
 WITH  FILE = 1,
-MOVE N''TeleoptiCCCAgg_Data'' TO N''' + @DataDir +'\TeleoptiWFMAgg_Demo.mdf'',
-MOVE N''TeleoptiCCCAgg_Log'' TO N''' + @DataDir +'\TeleoptiWFMAgg_Demo.ldf'',
+MOVE N''TeleoptiCCCAgg_Data'' TO N''' + @DataDir +'\TeleoptiAgg_Demo.mdf'',
+MOVE N''TeleoptiCCCAgg_Log'' TO N''' + @DataDir +'\TeleoptiAgg_Demo.ldf'',
 NOUNLOAD,
 REPLACE,
 STATS = 10'
@@ -80,15 +80,15 @@ EXEC (@SQLString)
 GO
 
 --Re-move TeleoptiDemoUser. Will be re-added by DBManager
-USE [TeleoptiWFMAnalytics_Demo]
+USE [TeleoptiAnalytics_Demo]
 IF  EXISTS (SELECT * FROM sys.database_principals WHERE name = N'TeleoptiDemoUser')
 DROP USER [TeleoptiDemoUser]
 
-USE [TeleoptiWFMAgg_Demo]
+USE [TeleoptiAgg_Demo]
 IF  EXISTS (SELECT * FROM sys.database_principals WHERE name = N'TeleoptiDemoUser')
 DROP USER [TeleoptiDemoUser]
 
-USE [TeleoptiWFM_Demo]
+USE [TeleoptiApp_Demo]
 IF  EXISTS (SELECT * FROM sys.database_principals WHERE name = N'TeleoptiDemoUser')
 DROP USER [TeleoptiDemoUser]
 

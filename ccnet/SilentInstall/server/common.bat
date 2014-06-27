@@ -10,6 +10,14 @@ SET DNS_ALIAS=http://%AppServer%/
 SET SDK_SSL=False
 )
 
+::If RestoreDemo then use default demo names
+echo %ADDLOCAL% | findstr /C:"RestoreDemo"
+if %ERRORLEVEL% equ 0 (
+SET DB_ANALYTICS=TeleoptiAnalytics_Demo
+SET DB_CCC7=TeleoptiApp_Demo
+SET DB_CCCAGG=TeleoptiAgg_Demo
+)
+
 SET SDK_CRED_PROT=Ntlm
 SET SERVICEBUSENABLED=true
 SET SQL_SERVER_NAME=%DBServerInstance%
