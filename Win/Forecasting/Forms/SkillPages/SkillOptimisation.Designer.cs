@@ -109,7 +109,8 @@
 			// trackBarExOverStaffingFactor
 			// 
 			this.trackBarExOverStaffingFactor.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.trackBarExOverStaffingFactor.LargeChange = 25;
+			this.trackBarExOverStaffingFactor.LargeChange = 20;
+	        this.trackBarExOverStaffingFactor.SmallChange = 10;
 			this.trackBarExOverStaffingFactor.Location = new System.Drawing.Point(84, 109);
 			this.trackBarExOverStaffingFactor.Name = "trackBarExOverStaffingFactor";
 			this.trackBarExOverStaffingFactor.ShowButtons = false;
