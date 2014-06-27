@@ -73,6 +73,7 @@ define([
 								helper: 'clone',
 								cursor: "move",
 								zIndex: 100,
+								stack: ".layer",
 								axis: 'x',
 								containment: 'parent',
 								stop: function (e, ui) {
