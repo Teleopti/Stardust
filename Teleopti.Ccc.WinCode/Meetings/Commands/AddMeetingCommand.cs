@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -21,13 +22,14 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IMeetingOverviewViewModel _model;
         private readonly ICanModifyMeeting _canModifyMeeting;
+        private readonly IToggleManager _toggleManager;
         private readonly ISettingDataRepository _settingDataRepository;
         private readonly IActivityRepository _activityRepository;
         private readonly IPersonRepository _personRepository;
 
         public AddMeetingCommand(IMeetingOverviewView meetingOverviewView, ISettingDataRepository settingDataRepository,
             IActivityRepository activityRepository, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IMeetingOverviewViewModel model,
-            ICanModifyMeeting canModifyMeeting)
+            ICanModifyMeeting canModifyMeeting, IToggleManager toggleManager)
         {
             _meetingOverviewView = meetingOverviewView;
             _activityRepository = activityRepository;
@@ -36,6 +38,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
             _unitOfWorkFactory = unitOfWorkFactory;
             _model = model;
             _canModifyMeeting = canModifyMeeting;
+            _toggleManager = toggleManager;
         }
 
         public void Execute()
@@ -67,7 +70,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
                 }
 
                 if (meetingViewModel != null)
-                    _meetingOverviewView.EditMeeting(meetingViewModel);
+                    _meetingOverviewView.EditMeeting(meetingViewModel, _toggleManager);
             }
         }
 

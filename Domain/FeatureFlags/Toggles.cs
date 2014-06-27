@@ -20,5 +20,6 @@
 
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562
+        Scheduler_ShowIntadayESLWithShrinkage_21874
 	}
 }

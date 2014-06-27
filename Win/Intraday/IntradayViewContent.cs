@@ -8,6 +8,7 @@ using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -58,9 +59,10 @@ namespace Teleopti.Ccc.Win.Intraday
         private ISchedulerStateHolder _schedulerStateHolder;
         private bool _userWantsToCloseIntraday;
 	    private MultipleHostControl shiftEditorHost;
+        private readonly IToggleManager _toggleManager;
 
         public IntradayViewContent(IntradayPresenter presenter, IIntradayView owner, IEventAggregator eventAggregator, ISchedulerStateHolder schedulerStateHolder,
-            IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder)
+            IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IToggleManager toggleManager)
         {
             if (presenter == null) throw new ArgumentNullException("presenter");
             if (owner == null) throw new ArgumentNullException("owner");
@@ -69,6 +71,7 @@ namespace Teleopti.Ccc.Win.Intraday
             _eventAggregator = eventAggregator;
             _settingManager = settingManager;
             _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
+            _toggleManager = toggleManager;
             _presenter = presenter;
             _schedulerStateHolder = schedulerStateHolder;
             _owner = owner;
@@ -154,7 +157,7 @@ namespace Teleopti.Ccc.Win.Intraday
             _backgroundWorkerResources.ProgressChanged += _backgroundWorkerResources_ProgressChanged;
 
 			_optimizerHelper = new ResourceOptimizationHelperWin(_schedulerStateHolder, new PersonSkillProvider());
-            _skillIntradayGridControl = new SkillIntradayGridControl(_settingManager.ChartSetting);
+            _skillIntradayGridControl = new SkillIntradayGridControl(_settingManager.ChartSetting, _toggleManager);
             _skillIntradayGridControl.SelectionChanged += skillIntradayGridControl_SelectionChanged;
             InitializeIntradayViewContent();
         }

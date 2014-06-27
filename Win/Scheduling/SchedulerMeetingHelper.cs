@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -137,7 +138,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    /// <summary>
         /// start meeting composer with supplied meeting, or null if new meeting should be created
         /// </summary>
-        internal void MeetingComposerStart(IMeeting meeting, IScheduleViewBase scheduleViewBase, bool editPermission, bool viewSchedulesPermission)
+        internal void MeetingComposerStart(IMeeting meeting, IScheduleViewBase scheduleViewBase, bool editPermission, bool viewSchedulesPermission, IToggleManager toggleManager)
         {
             if(scheduleViewBase == null) return;
 
@@ -188,7 +189,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
             }
 
-            using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator()))
+            using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), toggleManager))
             {
 				meetingComposerView.SetInstanceId(_initiatorIdentifier.InitiatorId);
                 meetingComposerView.ModificationOccurred += meetingComposerView_ModificationOccurred;

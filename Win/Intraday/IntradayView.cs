@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -35,8 +36,9 @@ namespace Teleopti.Ccc.Win.Intraday
         private readonly IEventAggregator _eventAggregator;
         private readonly IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
     	private readonly ISendCommandToSdk _sendCommandToSdk;
+        private readonly IToggleManager _toggleManager;
 
-    	private DateNavigateControl _timeNavigationControl;
+        private DateNavigateControl _timeNavigationControl;
         private GridRowInChartSettingButtons _gridrowInChartSetting;
         private IntradayViewContent _intradayViewContent;
         private ToolStripGalleryItem _previousClickedGalleryItem;
@@ -44,13 +46,14 @@ namespace Teleopti.Ccc.Win.Intraday
         private bool _forceClose;
         private readonly IntradaySettingManager _settingManager;
 
-		public IntradayView(IEventAggregator eventAggregator, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, ISendCommandToSdk sendCommandToSdk)
+		public IntradayView(IEventAggregator eventAggregator, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, ISendCommandToSdk sendCommandToSdk, IToggleManager toggleManager)
         {
             _eventAggregator = eventAggregator;
             _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
 			_sendCommandToSdk = sendCommandToSdk;
+		    _toggleManager = toggleManager;
 
-			var authorization = PrincipalAuthorization.Instance();
+		    var authorization = PrincipalAuthorization.Instance();
 
 			InitializeComponent();
             if (DesignMode) return;
@@ -529,7 +532,7 @@ namespace Teleopti.Ccc.Win.Intraday
                 throw e.Error;
             }
 
-            _intradayViewContent = new IntradayViewContent(Presenter, this, _eventAggregator, Presenter.SchedulerStateHolder, _settingManager, _overriddenBusinessRulesHolder);
+            _intradayViewContent = new IntradayViewContent(Presenter, this, _eventAggregator, Presenter.SchedulerStateHolder, _settingManager, _overriddenBusinessRulesHolder, _toggleManager);
             _intradayViewContent.RightToLeft = RightToLeft; //To solve error with wrong dock labels running RTL
             _timeNavigationControl.SetSelectedDate(Presenter.IntradayDate);
             Presenter.ExternalAgentStateReceived += presenter_ExternalAgentStateReceived;
