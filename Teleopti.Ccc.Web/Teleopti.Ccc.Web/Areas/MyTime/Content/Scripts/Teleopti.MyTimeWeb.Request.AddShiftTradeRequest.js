@@ -90,6 +90,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			return showList;
 		});
 
+		self.tradeCartHeight = ko.computed(function() {
+			var oneCandidateDayHeight = 100;
+			return oneCandidateDayHeight * self.chooseHistorys().length + 'px';
+		});
+
 	    self.setTimeLineLengthInMinutes = function(firstHour, lastHour) {
 	        self.timeLineStartTime(firstHour);
 	        self.timeLineLengthInMinutes(lastHour.diff(firstHour, 'minutes'));

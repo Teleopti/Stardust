@@ -381,14 +381,10 @@
 	height: 100%
 }
 
-.choose-history-trade-date {
+#choose-history-list .trade-date {
 	font-size: small;
 	font-weight: bold;
-}
-
-.choose-history-one-shift-trade {
-	height: 200px !important; 
-	margin-top: 10px;
+	margin-bottom: 0;
 }
 
 .choose-history-divider {
