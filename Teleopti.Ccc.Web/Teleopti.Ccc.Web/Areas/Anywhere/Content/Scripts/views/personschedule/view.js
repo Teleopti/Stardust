@@ -64,18 +64,19 @@ define([
 				.done(function () {
 					viewModel.Loading(false);
 					$('.time-line-for').attr("data-subscription-done", " ");
-					if (viewModel.MovingActivity) {
+					if (viewModel.MovingActivity) { 
 						// bind events
 						var activeLayer = $(".layer.active");
 						if (activeLayer.length !== 0) {
-							var pixelByNMinutes = viewModel.lengthMinutesToPixels(15);
-							var initialX = $(".layer.active")[0].offsetLeft;
+
 							$(".layer.active").draggable({
+								helper: 'clone',
+								cursor: "move",
+								zIndex: 100,
 								axis: 'x',
 								containment: 'parent',
-								grid: [pixelByNMinutes, 0],
-								drag: function (e) {
-									var pixelsChanged = e.target.offsetLeft - initialX;
+								stop: function (e, ui) {
+									var pixelsChanged = ui.position.left - ui.originalPosition.left;
 									viewModel.updateStartTime(pixelsChanged);
 								}
 							});

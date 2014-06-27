@@ -37,7 +37,7 @@
 			},
 			write: function (option) {
 				self.StartTime(getMomentFromInput(option));
-				self.layer().StartMinutes(self.StartTime().diff(self.ScheduleDate(), 'minutes'));
+				self.layer().StartMinutes(self.getMinutesFromStartTime());
 			}
 		});
 
@@ -52,6 +52,14 @@
 			}
 		};
 
+		// these two methods could be refactored to be more generic
+		this.getMinutesFromStartTime = function() {
+			return self.StartTime().diff(self.ScheduleDate(), 'minutes');
+		};
+
+		this.getStartTimeFromMinutes = function (minutes) {
+			return moment(self.ScheduleDate()).add('minutes', minutes);
+		}
 
 		this.Apply = function () {
 			var requestData = JSON.stringify({

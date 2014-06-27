@@ -226,8 +226,8 @@ define([
 		
 		this.updateStartTime = function (pixels) {
 			var minutes = pixels / self.TimeLine.PixelsPerMinute();
-			var newStartTime = (self.MoveActivityForm.OldStartMinutes() + Math.round(minutes / 15) * 15);
-			self.MoveActivityForm.StartTime(moment(self.MoveActivityForm.ScheduleDate()).add('minutes', newStartTime));
+			var newStartTimeMinutes = self.MoveActivityForm.getMinutesFromStartTime() + Math.round(minutes / 15) * 15;
+			self.MoveActivityForm.StartTime(self.MoveActivityForm.getStartTimeFromMinutes(newStartTimeMinutes));
 		}
 
 		this.lengthMinutesToPixels = function (minutes) {

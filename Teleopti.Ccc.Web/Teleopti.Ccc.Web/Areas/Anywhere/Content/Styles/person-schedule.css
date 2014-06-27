@@ -67,17 +67,6 @@
 	width: auto;
 }
 
-.person-schedule .person-name 
-{
-}
-.person-schedule tbody tr
-{
-	
-}
-.person-schedule .schedule
-{
-}
-
 .person-schedule .dayoff {
 	text-align: center;
 	width: 100%;
@@ -195,4 +184,22 @@ sh
 
 .person-schedule .space {
 	margin-top: 15px;
+}
+
+.layer.active::after
+{
+	content: '';
+	border: dashed 2px grey;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.layer.ui-draggable-dragging::after{
+	content: '';
+	background-color: rgba(230,230,230, 0.5);
+	height: 100%;
+	width: 100%;
+	position: absolute;
 }
