@@ -202,6 +202,7 @@ define([
 			self.AddActivityForm.WorkingShift(self.WorkingShift());
 			var selectedLayer = self.SelectedLayer();
 			self.MoveActivityForm.update(selectedLayer);
+			self.MoveActivityForm.WorkingShift(self.WorkingShift());
 		};
 
 		this.SelectedLayer = function() {

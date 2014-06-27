@@ -243,6 +243,11 @@
 									Start: '2013-11-18 14:00',
 									Minutes: 240,
 									ActivityId: "guid"
+								},
+								{
+									Start: '2013-11-18 18:00',
+									Minutes: 240,
+									ActivityId: "guid"
 								}
 							]
 						}
@@ -302,6 +307,39 @@
 						assert.isTrue(vm.TimeLine.WidthPixels() >= (startPX + lengthPX));
 					});
 					
+				},
+
+				"should not input a start time that makes the layer outside of the shift in move activity form" : function() {
+					var vm = new viewModel();
+					vm.SetViewOptions({
+						id: 1,
+						date: '20131118',
+						groupid: 2
+					});
+					var data = [
+						{
+							PersonId: 1,
+							Projection: [
+								{
+									Start: '2013-11-18 14:00',
+									Minutes: 60
+								}
+							]
+						}
+					];
+					vm.SelectedStartMinutes(840);
+					vm.UpdateData({ PersonId: 1 });
+					vm.UpdateSchedules(data);
+
+					var momentInput = moment('13:00', 'HH:mm');
+					var expected = '14:00';
+					var momentExpected = moment(expected, 'HH:mm');
+					vm.MoveActivityForm.DisplayedStartTime(momentInput);
+					assert.equals(vm.MoveActivityForm.DisplayedStartTime(), expected);
+
+					momentInput = moment('14:30', 'HH:mm');
+					vm.MoveActivityForm.DisplayedStartTime(momentInput);
+					assert.equals(vm.MoveActivityForm.DisplayedStartTime(), expected);
 				}
 			});
 		}

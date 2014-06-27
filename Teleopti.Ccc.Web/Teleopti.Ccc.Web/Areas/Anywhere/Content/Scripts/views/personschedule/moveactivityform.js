@@ -21,7 +21,7 @@
 		self.ProjectionLength = ko.observable();
 		self.StartTime = ko.observable();
 		self.ActivityId = ko.observable();
-
+		self.WorkingShift = ko.observable();
 		self.layer = ko.observable();
 
 		this.SetData = function (data) {
@@ -36,10 +36,26 @@
 				return self.StartTime().format(resources.TimeFormatForMoment);
 			},
 			write: function (option) {
-				self.StartTime(getMomentFromInput(option));
-				self.layer().StartMinutes(self.getMinutesFromStartTime());
+				var inputTime = getMomentFromInput(option);
+				if (!isLayerWithinShift(inputTime)) {
+					self.StartTime(self.getStartTimeFromMinutes(self.OldStartMinutes()));
+				} else {
+					self.StartTime(inputTime);
+					self.layer().StartMinutes(self.getMinutesFromTime(self.StartTime()));
+				}
 			}
 		});
+
+		var isLayerWithinShift = function (startTime) {
+			if (!self.WorkingShift()) return false;
+			var shiftLayers = self.WorkingShift().Layers().sort(function (a, b) { return a.StartMinutes() > b.StartMinutes(); });
+			var shiftStartMinutes = shiftLayers[0].StartMinutes();
+			var shiftEndMinutes = shiftLayers[shiftLayers.length - 1].EndMinutes();
+			var inputMinutes = self.getMinutesFromTime(startTime);
+			if (inputMinutes < shiftStartMinutes || inputMinutes + self.layer().LengthMinutes() > shiftEndMinutes)
+				return false;
+			return true;
+		};
 
 		this.update = function (layer) {
 			
@@ -53,8 +69,12 @@
 		};
 
 		// these two methods could be refactored to be more generic
-		this.getMinutesFromStartTime = function() {
-			return self.StartTime().diff(self.ScheduleDate(), 'minutes');
+		this.getMinutesFromTime = function(time) {
+			return time.diff(self.ScheduleDate(), 'minutes');
+		};
+
+		this.getMinutesFromStartTime = function () {
+			return self.getMinutesFromTime(self.StartTime());
 		};
 
 		this.getStartTimeFromMinutes = function (minutes) {
