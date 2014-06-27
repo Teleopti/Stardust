@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeInMyShiftTradeListForDate(string agentName, string date)
 		{
 			Browser.Interactions.AssertAnyContains("#choose-history-list", agentName);
-			Browser.Interactions.AssertAnyContains(".choose-history-trade-date", date);
+			Browser.Interactions.AssertAnyContains("#choose-history-list .trade-date", date);
 		}
 
 	}
