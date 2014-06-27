@@ -47,7 +47,7 @@ STATS = 10'
 EXEC (@SQLString)
 
 -----
-PRINT 'Restoring TeleoptiWFM'
+PRINT 'Restoring TeleoptiApp_Demo'
 IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = 'TeleoptiApp_Demo')
 ALTER DATABASE [TeleoptiCCC7_Demo] SET  SINGLE_USER WITH ROLLBACK IMMEDIATE
 
