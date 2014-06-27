@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Globalization;
 using System.Web;
 using log4net;
 using log4net.Config;
@@ -34,14 +35,37 @@ namespace Teleopti.Ccc.Web.Core.Logging
 		}
 
 		private readonly ILog _logger;
-		private readonly Func<ICollection> _configureLogging;
+		private readonly Action _configureLogging;
 		private readonly Func<Exception> _getServerError;
 		public const string LogMessageException = "Log4NetModule caught an unhandled exception";
 		public const string LogMessage404 = "A 404 occurred";
 
-		public Log4NetModule() : this(LogManager.GetLogger(typeof(Log4NetModule)), XmlConfigurator.Configure, () => HttpContext.Current.Server.GetLastError()) { }
+		public Log4NetModule() : this(LogManager.GetLogger(typeof(Log4NetModule)), configureLogging, () => HttpContext.Current.Server.GetLastError()) { }
 
-		public Log4NetModule(ILog logger, Func<ICollection> configureLogging, Func<Exception> getServerError)
+		private static void configureLogging()
+		{
+			var logName = "WebApps";
+			var appId = "Web";
+
+			if (HttpContext.Current.Request.ApplicationPath.EndsWith("Rta", true, CultureInfo.CurrentCulture))
+			{
+				logName = "RtaWebService";
+				appId = "Rta";
+			}
+
+			if (HttpContext.Current.Request.ApplicationPath.EndsWith("Broker", true, CultureInfo.CurrentCulture))
+			{
+				logName = "WebBroker";
+				appId = "Broker";
+			}
+
+			GlobalContext.Properties["logName"] = logName;
+			GlobalContext.Properties["appId"] = appId;
+
+			XmlConfigurator.Configure();
+		}
+
+		public Log4NetModule(ILog logger, Action configureLogging, Func<Exception> getServerError)
 		{
 			_logger = logger;
 			_configureLogging = configureLogging;

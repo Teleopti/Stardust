@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.WebTest.Core.Logging
 			var configured = false;
 			var httpApplication = MockRepository.GenerateMock<HttpApplication>();
 			var target = new Log4NetModule(null, () =>
-			                                     	{
-			                                     		configured = true; return null; 
-																}, null);
+			{
+				configured = true;
+			}, null);
 
 			target.Init(httpApplication);
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.Logging
 		public void ShouldRegisterEventHandler()
 		{
 			var httpApplication = MockRepository.GenerateMock<HttpApplication>();
-			var target = new Log4NetModule(null, () => null, null);
+			var target = new Log4NetModule(null, () => { }, null);
 
 			target.Init(httpApplication);
 
