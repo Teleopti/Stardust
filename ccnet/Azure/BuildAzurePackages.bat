@@ -52,7 +52,7 @@ ECHO copy done
 XCOPY /S /d /y "%ContentSource%\StartPage" "%ContentDest%\TeleoptiCCC"
 
 ::Replace URL in index.html
-cscript replace.vbs "/TeleoptiCCC/" "/" "%ContentDest%\TeleoptiCCC\index.html"
+cscript replace.vbs "/TeleoptiWFM/" "/" "%ContentDest%\TeleoptiCCC\index.html"
 
 ::Get ReportViewer
 XCOPY /d /y "%Dependencies%\ReportViewer2010.exe" "%ContentDest%\TeleoptiCCC\bin"
