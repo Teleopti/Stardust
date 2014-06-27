@@ -6532,6 +6532,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			ribbonControlAdv1.QuickPanelVisible = true;
 		}
+
+		private void ribbonControlAdv1_MenuButtonClick(object sender, EventArgs e)
+		{
+			enableQuickAccessPanel();
+		}
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 

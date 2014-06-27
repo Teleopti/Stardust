@@ -1398,6 +1398,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.ribbonControlAdv1.TitleFont = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ribbonControlAdv1.MenuButtonClick += new System.EventHandler(this.ribbonControlAdv1_MenuButtonClick);
 			// 
 			// backStageView
 			// 
