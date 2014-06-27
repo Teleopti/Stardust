@@ -119,13 +119,6 @@ define([
 				return true;
 			return false;
 		});
-		
-		this.FormStartPixel = ko.computed(function () {
-			if (self.WorkingShift()) {
-				return self.WorkingShift().Layers().length > 0 ? self.WorkingShift().ShiftStartPixels() : 0;
-			}
-			return 0;
-		});
 
 		this.Resources = resources;
 
