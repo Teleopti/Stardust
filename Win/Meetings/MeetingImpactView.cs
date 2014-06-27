@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		private SkillIntradayGridControl _skillIntradayGridControl;
 		private readonly TransparentMeetingMeetingControl _transparentMeetingMeetingControl;
 		private readonly MeetingStateHolderLoaderHelper _meetingStateHolderLoaderHelper;
+	    private readonly IToggleManager _toggleManager;
 
 		public MeetingImpactView()
 		{
@@ -42,11 +44,12 @@ namespace Teleopti.Ccc.Win.Meetings
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public MeetingImpactView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, MeetingComposerView meetingComposerView)
+		public MeetingImpactView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, MeetingComposerView meetingComposerView, IToggleManager toggleManager)
 			: this()
 		{
+		    _toggleManager = toggleManager;
 			_transparentMeetingMeetingControl = new TransparentMeetingMeetingControl();
-			_skillIntradayGridControl = new SkillIntradayGridControl("MeetingSkillIntradayGridAndChart");
+            _skillIntradayGridControl = new SkillIntradayGridControl("MeetingSkillIntradayGridAndChart", _toggleManager);
 
 			_meetingComposerView = meetingComposerView;
 			outlookTimePickerStartTime.CreateAndBindList();
@@ -169,7 +172,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			if (_skillIntradayGridControl != null)
 				_skillIntradayGridControl.LeftColChanged -= SkillIntradayGridControlLeftColChanged;
 
-			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart") { DefaultColWidth = 45 };
+			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", _toggleManager) { DefaultColWidth = 45 };
 			_skillIntradayGridControl.SetupDataSource(skillStaffPeriods, skill, schedulerStateHolder);
 			_skillIntradayGridControl.TurnoffHelp();
 			_skillIntradayGridControl.SetRowsAndCols();

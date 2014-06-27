@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
         private IMeetingOverviewViewModel _model;
         private ICanModifyMeeting _canModifyMeeting;
         private IPersonRepository _personRepository;
+        private IToggleManager _toggleManager;
 
         [SetUp]
         public void Setup()
@@ -40,8 +42,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 	        _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             _model = _mocks.StrictMock<IMeetingOverviewViewModel>();
             _canModifyMeeting = _mocks.StrictMock<ICanModifyMeeting>();
+            _toggleManager = _mocks.StrictMock<IToggleManager>();
             _target = new AddMeetingCommand(_view, _settingDataRepository, _activityRepository, _personRepository,
-                _currentUnitOfWorkFactory, _model, _canModifyMeeting);
+                _currentUnitOfWorkFactory, _model, _canModifyMeeting, _toggleManager);
         
         }
 
@@ -70,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
                                                                   new CommonNameDescriptionSetting()).IgnoreArguments();
             Expect.Call(_view.SelectedPeriod()).Return(new DateTimePeriod(2011,3,25,2011,3,25)).Repeat.Twice();
             Expect.Call(_canModifyMeeting.CanExecute).Return(true);
-            Expect.Call(() =>_view.EditMeeting(meetingViewModel)).IgnoreArguments();
+            Expect.Call(() => _view.EditMeeting(meetingViewModel, _toggleManager)).IgnoreArguments();
             _mocks.ReplayAll();
             _target.Execute();
             _mocks.VerifyAll();

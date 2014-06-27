@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Meetings;
@@ -119,7 +120,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             public void ShowMeetingComposerView(IPersonSelectorView parent, IMeetingViewModel meetingViewModel, bool viewSchedulesPermission)
             {
                 var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
-                                                               new EventAggregator());
+                                                               new EventAggregator(), _container.Resolve<IToggleManager>());
                 meetingComposerView.Show((Control)parent);
             }
         }
