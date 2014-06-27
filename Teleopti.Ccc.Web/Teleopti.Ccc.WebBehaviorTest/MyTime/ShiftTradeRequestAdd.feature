@@ -609,7 +609,7 @@ Scenario: Should be able to choose a date in calender and show the shift for the
 	Then I should see 'OtherAgent' in my shift trade list for date '2030-01-01'
 	And I should see 'OtherAgent' can be added for date '2030-01-05'
 
-@ignore
+@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
 Scenario: Should be able to cancel a not sent shift trade and go back to overview
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -627,7 +627,7 @@ Scenario: Should be able to cancel a not sent shift trade and go back to overvie
 	And the current time is '2029-12-27'
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I choose 'OtherAgent' to make a shift trade
-	When I cancel this shift trade request
+	When I click cancel button
 	Then I should see 'OtherAgent' last in the list
 
 @ignore

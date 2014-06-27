@@ -279,6 +279,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists(".shift-trade-my-schedule .shift-trade-layer-container .dayoff");
 		}
 
+		[Given(@"I choose '(.*)' to make a shift trade")]
 		[When(@"I choose '(.*)' to make a shift trade")]
 		public void WhenIChooseToMakeAShiftTrade(string p0)
 		{
