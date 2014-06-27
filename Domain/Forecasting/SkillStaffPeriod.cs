@@ -360,10 +360,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 }
 
                 _estimatedServiceLevel = new Percent(ScheduledAgentsIncoming / Payload.ForecastedIncomingDemand);
-                var shrinkage = Payload.UseShrinkage ? 1 - Payload.Shrinkage.Value : 1;
-                var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming * shrinkage;
-                _estimatedServiceLevelShrinkage = new Percent(
-                    scheduledAgentsIncomingWithShrinkage/Payload.ForecastedIncomingDemand);
+                // this case the shrinkage is already calculated in ForecastedIncomingDemand, so the following is ok
+                _estimatedServiceLevelShrinkage = _estimatedServiceLevel;
             }
             else
             {
