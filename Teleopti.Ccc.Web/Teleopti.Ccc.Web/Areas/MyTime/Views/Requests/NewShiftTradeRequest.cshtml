@@ -117,10 +117,13 @@
         </div>
 	    
 		 <p></p>
-		 <!-- choose history list-->
-	    <div id="choose-history-list" class="shift-trade-add-schedule" style="height: 80px; margin-top: 10px;" data-bind="visible: isDetailVisible, foreach:chooseHistorys()">
-			<div class="choose-history-trade-date" data-bind="text: $data.selectedDate"></div>
-		    <div class="shift-trade-timeline">
+	    <!-- choose history list-->
+		 <!-- ko if: isShowList-->
+	    <div class="divider choose-history-divider"></div>
+	    <div><strong>@Resources.MyTradeCart</strong></div>
+	    <div id="choose-history-list" class="shift-trade-add-schedule choose-history-one-shift-trade" data-bind="visible: isDetailVisible, foreach:chooseHistorys()">
+		    <div class="choose-history-trade-date" data-bind="text: $data.selectedDate" style=" padding-top: 10px "></div>
+		    <div class="shift-trade-timeline" style ="height: 80px;">
 			    <div class="relative">
 				    <div data-bind="foreach: $data.hours()">
 					    <div class="shift-trade-ruler absolute" data-bind="style: rulerStyleJson, visible: showHourLine"></div>
@@ -136,17 +139,17 @@
 				    </tr>
 			    </thead>
 			    <tbody>
-				    <tr class="shift-trade-my-schedule-row">
+				    <tr>
 					    <td class="shift-trade-agent-name">@Resources.MySchedule</td>
 					    <!--ko if: !$data.mySchedule().isDayOff-->
-					    <td class="shift-trade-my-schedule" data-bind="foreach: $data.mySchedule().layers">
+					    <td data-bind="foreach: $data.mySchedule().layers">
 						    <div class="shift-trade-layer-container floatleft">
 							    <div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }, attr: { 'scheduleinfo': tooltipText() }"></div>
 						    </div>
 					    </td>
 					    <!--/ko-->
 					    <!--ko if: $data.mySchedule().isDayOff-->
-					    <td class="shift-trade-my-schedule">
+					    <td>
 						    <div class="shift-trade-layer-container floatleft shift-trade-dayoff">
 							    <div class="dayoff">@Resources.DayOff</div>
 						    </div>
@@ -154,10 +157,10 @@
 					    <!--/ko-->
 				    </tr>
 			    </tbody>
-			    <tbody >
-				    <tr class="shift-trade-person-schedule-row agent" data-bind="hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
+			    <tbody>
+				    <tr data-bind="hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
 					    <td class="shift-trade-agent-name" data-bind="text: $data.agentName"></td>
-					    <td class="shift-trade-possible-trade-schedule">
+					    <td >
 						    <!--ko if:$data.selectedSchedule().isDayOff-->
 						    <div style="height: 22px; width: 100%;" class="dayoff">
 							    <div class="shift-trade-layer-container floatleft shift-trade-dayoff">@Resources.DayOff</div>
@@ -173,7 +176,7 @@
 					    </td>
 					    <!-- ko if: $root.isTradeForMultiDaysEnabled-->
 					    <td class="col-sm-1">
-						    <button id="shift-trade-add" type="button" class="btn btn-primary btn-xs" data-bind="visible: $root.isDetailVisible, click: $root.add">
+						    <button id="shift-trade-add" type="button" class="btn btn-primary btn-xs" data-bind="visible: $root.isDetailVisible">
 							    <i class="glyphicon glyphicon-minus"></i>
 						    </button>
 					    </td>
@@ -182,6 +185,7 @@
 			    </tbody>
 		    </table>
 	    </div>
+	 	<!-- /ko -->
 	    <!-- choose history list-->
 		
 	    <p></p>

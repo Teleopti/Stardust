@@ -12121,4 +12121,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="MoveActivity" xml:space="preserve">
     <value>Move Activity</value>
   </data>
+  <data name="MyTradeCart" xml:space="preserve">
+    <value>My Trade Cart:</value>
+    <comment>the title for multi shift trade list</comment>
+  </data>
 </root>

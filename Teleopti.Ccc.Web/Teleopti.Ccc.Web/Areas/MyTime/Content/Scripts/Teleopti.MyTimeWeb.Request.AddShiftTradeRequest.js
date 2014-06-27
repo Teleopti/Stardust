@@ -82,6 +82,14 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		};
 
+		self.isShowList = ko.computed(function () {
+			var showList = false;
+			if (self.isDetailVisible() && self.chooseHistorys().length > 0) {
+				showList = true;
+			}
+			return showList;
+		});
+
 	    self.setTimeLineLengthInMinutes = function(firstHour, lastHour) {
 	        self.timeLineStartTime(firstHour);
 	        self.timeLineLengthInMinutes(lastHour.diff(firstHour, 'minutes'));
@@ -138,7 +146,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self.cancelRequest = function () {
-		    self.chooseAgent(null);
+			self.chooseAgent(null);
+			self.chooseHistorys.removeAll();
 		};
 
 		self._createTimeLine = function (hours) {
