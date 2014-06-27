@@ -66,6 +66,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.isTradeForMultiDaysEnabled = ko.observable(false);
 		self.chooseHistorys = ko.observableArray();
+		self.selectedInternal = ko.observable(false);
 		self.add = function () {
 			var currentTrade = {
 				date: self.requestedDate,
@@ -78,9 +79,18 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					currentTrade.tradedSchedule = schedule;
 					var currentChooseView = new Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel(currentTrade);
 					self.chooseHistorys.push(currentChooseView);
+					self.selectedInternal(true);
 				}
 			});
 		};
+
+		self.isAddVisible = ko.computed(function(){
+			var addVisible = false;
+			if (self.isDetailVisible() && !self.selectedInternal()) {
+				addVisible = true;
+			}
+			return addVisible;
+		});
 
 		self.isShowList = ko.computed(function () {
 			var showList = false;
@@ -91,7 +101,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		});
 
 		self.tradeCartHeight = ko.computed(function() {
-			var oneCandidateDayHeight = 100;
+			var oneCandidateDayHeight = 110;
 			return oneCandidateDayHeight * self.chooseHistorys().length + 'px';
 		});
 
@@ -153,6 +163,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.cancelRequest = function () {
 			self.chooseAgent(null);
 			self.chooseHistorys.removeAll();
+			self.selectedInternal(false);
 		};
 
 		self._createTimeLine = function (hours) {
