@@ -668,6 +668,12 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.designer.cs">
       <DependentUpon>WizardNoRoot.cs</DependentUpon>
     </Compile>
+    <Compile Include="Grouping\PersonSelectorViewNew.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Grouping\PersonSelectorViewNew.Designer.cs">
+      <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -2587,6 +2593,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Grouping\PersonSelectorView.resx">
       <DependentUpon>PersonSelectorView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Grouping\PersonSelectorViewNew.resx">
+      <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Intraday\IntradayNavigator.resx">
       <DependentUpon>IntradayNavigator.cs</DependentUpon>

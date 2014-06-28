@@ -5,15 +5,12 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Controls;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using log4net;
-using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -29,6 +26,7 @@ using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.Win.Permissions;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
@@ -51,25 +49,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         private readonly OutlookPanelContentWorker _outlookPanelContentWorker;
         private readonly PortalSettings _portalSettings;
 
-        /// <summary>
-        /// Default class initializer.
-        /// </summary>
         protected SmartClientShellForm()
         {
             using(PerformanceOutput.ForOperation("SmartClientPortal ctor"))
             {
                 InitializeComponent();
-	            ribbonControlAdv1.MenuButtonText = UserTexts.Resources.File;
-
-                if (!DesignMode)
-                {
-                    SetTexts();
-                   toolStripButtonSystemExit.Click += toolStripButtonSystemExit_Click;
-                    toolStripButtonHelp.Click += toolStripButtonHelp_Click;
-					ribbonControlAdv1.BeforeContextMenuOpen += ribbonControlAdv1BeforeContextMenuOpen;
+				
+	            if (!DesignMode)
+	            {
+		            SetTexts();
 					
-                    setColor();
-                }
+		            toolStripButtonSystemExit.Click += toolStripButtonSystemExit_Click;
+		            toolStripButtonHelp.Click += toolStripButtonHelp_Click;
+		            ribbonControlAdv1.BeforeContextMenuOpen += ribbonControlAdv1BeforeContextMenuOpen;
+	            }
             }
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
@@ -112,15 +105,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         {
             ViewBase.ShowHelp(this,false);
         }
-
-        private void setColor()
-        {
-            gridWorkspace.BackColor = ColorHelper.FormBackgroundColor();
-            ColorScheme = ColorSchemeType.Managed;
-            Office12ColorTable.ApplyManagedColors(this, ColorHelper.RibbonFormBaseColor());
-            Office2007Colors.ApplyManagedColors(this, ColorHelper.RibbonFormBaseColor());
-        }
-
 
         private void toolStripButtonAbout_Click(object sender, EventArgs e)
         {
@@ -184,26 +168,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			
 			var loggedOnBu = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit;
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
+			ribbonControlAdv1.MenuButtonText = LanguageResourceHelper.Translate(ribbonControlAdv1.MenuButtonText);
+			toolStripStatusLabelLicense.Text = ApplicationTextHelper.LicensedToCustomerText(toolStripStatusLabelLicense.Text);
+			toolStripStatusLabelLoggedOnUser.Text = ApplicationTextHelper.LoggedOnUserText(toolStripStatusLabelLoggedOnUser.Text);
 
             setNotifyData(_systemChecker.IsOk());
-            //_logOnScreen.Refresh();
 
             LoadOutLookBar();
 
             InitializeSmartPartInvoker();
 
             Roger65(string.Empty);
-            licensedToText();
-            loggedOnUserText();
-
             SetPermissionOnToolStripButtonControls();
 
             if (!string.IsNullOrEmpty(_portalSettings.LastModule))
                 StartModule(_portalSettings.LastModule);
-
-            //_logOnScreen.Close();
-            //_logOnScreen.Dispose();
-            //_logOnScreen = null;
  
             var showMemConfig = ConfigurationManager.AppSettings.Get("ShowMem");
             bool showMemBool;
@@ -218,6 +197,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
         private void showMem()
         {
+	        toolStripStatusLabelRoger65.Visible = true;
             var t = new Timer { Interval = 1000, Enabled = true };
             t.Tick += updateMem;
         }
@@ -231,16 +211,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 	        if (mem > maxMem)
 		        maxMem = mem;
             Roger65(string.Format(CultureInfo.CurrentCulture, "Mem: {0:#.00} MB (max mem: {1:#} MB)", (double)mem/1024/1024, maxMem/1024/1024));
-        }
-
-        private void licensedToText()
-        {
-            toolStripStatusLabelLicense.Text = ApplicationTextHelper.LicensedToCustomerText;
-        }
-
-        private void loggedOnUserText()
-        {
-            toolStripStatusLabelLoggedOnUser.Text = ApplicationTextHelper.LoggedOnUserText;
         }
 
         private void SmartClientShellForm_FormClosing(object sender, FormClosingEventArgs e)

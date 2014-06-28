@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvMainTabPage;
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PersonSelectorView));
 			this.treeViewAdvMainTabTree = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
 			this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -235,14 +234,15 @@
 			// 
 			// tabControlAdv
 			// 
+			this.tabControlAdv.ActiveTabFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tabControlAdv.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabControlAdv.BackColor = System.Drawing.Color.White;
 			this.tabControlAdv.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlAdv.BorderWidth = 0;
-			this.tabControlAdv.Controls.Add(tabPageAdvMainTabPage);
+			this.tabControlAdv.Controls.Add(this.tabPageAdvMainTabPage);
 			this.tabControlAdv.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControlAdv.Location = new System.Drawing.Point(0, 0);
 			this.tabControlAdv.Name = "tabControlAdv";
-			this.tabControlAdv.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.tabControlAdv.ShowCloseButtonForActiveTabOnly = true;
 			this.tabControlAdv.ShowScroll = false;
 			this.tabControlAdv.Size = new System.Drawing.Size(326, 430);
@@ -254,8 +254,7 @@
 			this.tabControlAdv.TabPrimitivesHost.TabPrimitives.Add(new Syncfusion.Windows.Forms.Tools.TabPrimitive(Syncfusion.Windows.Forms.Tools.TabPrimitiveType.LastTab, null, System.Drawing.Color.Empty, true, 1, "TabPrimitive5", ""));
 			this.tabControlAdv.TabPrimitivesHost.TabPrimitives.Add(new Syncfusion.Windows.Forms.Tools.TabPrimitive(Syncfusion.Windows.Forms.Tools.TabPrimitiveType.DropDown, null, System.Drawing.Color.Empty, true, 1, "TabPrimitive0", ""));
 			this.tabControlAdv.TabPrimitivesHost.Visible = true;
-			this.tabControlAdv.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererIE7);
-			this.tabControlAdv.ThemesEnabled = true;
+			this.tabControlAdv.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			this.tabControlAdv.SelectedIndexChanged += new System.EventHandler(this.tabControlAdvSelectedIndexChanged);
 			// 
 			// PersonSelectorView
@@ -279,6 +278,7 @@
         #endregion
 
         private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlAdv;
+		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvMainTabPage;
         private Syncfusion.Windows.Forms.Tools.TreeViewAdv treeViewAdvMainTabTree;
         private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv xdtpDate;
         private System.Windows.Forms.ImageList ImageList;

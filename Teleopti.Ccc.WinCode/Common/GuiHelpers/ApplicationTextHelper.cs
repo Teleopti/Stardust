@@ -15,26 +15,25 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
     /// </remarks>
     public static class ApplicationTextHelper
     {
-        /// <summary>
-        /// Gets the licensed to customer text.
-        /// </summary>
-        /// <value>The licensed to customer text.</value>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-11-27
-        /// </remarks>
-        public static string LicensedToCustomerText
-        {
-            get
-            {
-                return String.Concat(UserTexts.Resources.LicensedToColon, " ", DefinedLicenseDataFactory.GetLicenseActivator(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.DataSourceName).CustomerName);
-            }
-        }
+	    /// <summary>
+	    /// Gets the licensed to customer text.
+	    /// </summary>
+	    /// <value>The licensed to customer text.</value>
+	    /// <remarks>
+	    /// Created by: zoet
+	    /// Created date: 2008-11-27
+	    /// </remarks>
+	    public static string LicensedToCustomerText(string translatedText)
+	    {
+		    return String.Concat(translatedText, " ",
+			    DefinedLicenseDataFactory.GetLicenseActivator(
+				    ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).DataSource.DataSourceName).CustomerName);
+	    }
 
-        public static string LoggedOnUserText
+	    public static string LoggedOnUserText(string translatedText)
         {
-            get {
-                return String.Concat(UserTexts.Resources.LoggedOnUserColon, " ", ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Name); }
-        }
+			return String.Concat(translatedText, " ", ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Name); 
+		}
+
     }
 }

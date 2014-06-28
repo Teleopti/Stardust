@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.Win.Grouping
             _groupPageHelper = groupPageHelper;
             InitializeComponent();
 			xdtpDate.Value = DateTime.Today;
-			xdtpDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+			xdtpDate.SetCalendarMetroStyle();
+			xdtpDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);			
             SetTexts();
 	        makeSureDropdownButtonWorksInRightToLeftCultures();
 	        PreselectedPersonIds = new List<Guid>();

@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
         public DateNavigateControl()
         {
             InitializeComponent();
+			dateTimePickerAdv1.SetCalendarMetroStyle();
             dateTimePickerAdv1.SetCultureInfoSafe(CultureInfo.CurrentCulture);
 			dateTimePickerAdv1.PopupClosed += PopupClosed;
         }

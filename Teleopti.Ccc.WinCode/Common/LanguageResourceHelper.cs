@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using System.Reflection;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -112,9 +113,25 @@ namespace Teleopti.Ccc.WinCode.Common
         private static string TranslateString(string stringToTranslate)
         {
             string translatedString = String.Empty;
+	        bool toUpper = false;
             if (stringToTranslate.StartsWith("xxx", StringComparison.OrdinalIgnoreCase)) translatedString = stringToTranslate.Substring(3);
-            if (stringToTranslate.StartsWith("xx", StringComparison.OrdinalIgnoreCase)) translatedString = stringToTranslate.Substring(2);
-            return UserTexts.Resources.ResourceManager.GetString(translatedString);
+            if (stringToTranslate.StartsWith("xx", StringComparison.Ordinal)) translatedString = stringToTranslate.Substring(2);
+			if (stringToTranslate.StartsWith("XX", StringComparison.Ordinal))
+			{
+				translatedString = stringToTranslate.Substring(2);
+				toUpper = true;
+			}
+
+			string resourceText = UserTexts.Resources.ResourceManager.GetString(translatedString);
+	        if (toUpper && !resourceText.IsNullOrEmpty() && StateHolderReader.IsInitialized)
+	        {
+		        if (Thread.CurrentPrincipal is TeleoptiPrincipal)
+		        {
+			        var cultureInfo = ((IUnsafePerson) TeleoptiPrincipal.Current).Person.PermissionInformation.UICulture();
+			        resourceText = resourceText.ToUpper(cultureInfo);
+		        }
+	        }
+	        return resourceText;
         }
 
         #endregion
