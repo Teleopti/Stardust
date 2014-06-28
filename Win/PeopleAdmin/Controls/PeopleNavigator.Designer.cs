@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.components = new System.ComponentModel.Container();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.splitContainerAdv1 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
-			this.toolStripPeople = new System.Windows.Forms.ToolStrip();
+			this.toolStripPeople = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonAddPerson = new System.Windows.Forms.ToolStripButton();
@@ -87,8 +87,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			// 
 			this.toolStripPeople.BackColor = System.Drawing.Color.Transparent;
 			this.toolStripPeople.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.toolStripPeople.CanOverflow = false;
-			this.toolStripPeople.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.toolStripPeople.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.toolStripPeople.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripPeople.Image = null;
 			this.toolStripPeople.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
             this.toolStripButtonOpen,
@@ -102,18 +103,22 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             this.toolStripButtonSendInstantMessage,
             this.toolStripRefresh,
             this.toolStripButtonSearch});
+			this.toolStripPeople.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.toolStripPeople.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
 			this.toolStripPeople.Location = new System.Drawing.Point(10, 0);
 			this.toolStripPeople.Name = "toolStripPeople";
-			this.toolStripPeople.Size = new System.Drawing.Size(235, 297);
+			this.toolStripPeople.Office12Mode = false;
+			this.toolStripPeople.ShowCaption = false;
+			this.toolStripPeople.Size = new System.Drawing.Size(252, 203);
 			this.toolStripPeople.TabIndex = 0;
+			this.toolStripPeople.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
 			// 
 			// toolStripLabel1
 			// 
 			this.toolStripLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripLabel1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.toolStripLabel1.Name = "toolStripLabel1";
-			this.toolStripLabel1.Size = new System.Drawing.Size(233, 17);
+			this.toolStripLabel1.Size = new System.Drawing.Size(250, 17);
 			this.toolStripLabel1.Text = "xxActions";
 			// 
 			// toolStripButtonOpen
@@ -123,7 +128,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.toolStripButtonOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonOpen.Name = "toolStripButtonOpen";
 			this.toolStripButtonOpen.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonOpen.Size = new System.Drawing.Size(233, 28);
+			this.toolStripButtonOpen.Size = new System.Drawing.Size(250, 28);
 			this.toolStripButtonOpen.Text = "xxOpenPeople";
 			this.toolStripButtonOpen.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -134,14 +139,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.toolStripButtonAddPerson.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonAddPerson.Name = "toolStripButtonAddPerson";
 			this.toolStripButtonAddPerson.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonAddPerson.Size = new System.Drawing.Size(233, 28);
+			this.toolStripButtonAddPerson.Size = new System.Drawing.Size(250, 28);
 			this.toolStripButtonAddPerson.Text = "xxAddPerson";
 			this.toolStripButtonAddPerson.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(233, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(250, 6);
 			// 
 			// tsAddGroupPage
 			// 
@@ -150,7 +155,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.tsAddGroupPage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsAddGroupPage.Name = "tsAddGroupPage";
 			this.tsAddGroupPage.Padding = new System.Windows.Forms.Padding(4);
-			this.tsAddGroupPage.Size = new System.Drawing.Size(233, 28);
+			this.tsAddGroupPage.Size = new System.Drawing.Size(250, 28);
 			this.tsAddGroupPage.Text = "xxAddNewGroupPage";
 			this.tsAddGroupPage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.tsAddGroupPage.Click += new System.EventHandler(this.tsAddGroupPageClick);
@@ -162,7 +167,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.tsRenameGroupPage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsRenameGroupPage.Name = "tsRenameGroupPage";
 			this.tsRenameGroupPage.Padding = new System.Windows.Forms.Padding(4);
-			this.tsRenameGroupPage.Size = new System.Drawing.Size(233, 28);
+			this.tsRenameGroupPage.Size = new System.Drawing.Size(250, 28);
 			this.tsRenameGroupPage.Text = "xxRenameGroupPage";
 			this.tsRenameGroupPage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.tsRenameGroupPage.Click += new System.EventHandler(this.tsRenameGroupPageClick);
@@ -174,7 +179,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.tsEditGroupPage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsEditGroupPage.Name = "tsEditGroupPage";
 			this.tsEditGroupPage.Padding = new System.Windows.Forms.Padding(4);
-			this.tsEditGroupPage.Size = new System.Drawing.Size(233, 28);
+			this.tsEditGroupPage.Size = new System.Drawing.Size(124, 28);
 			this.tsEditGroupPage.Text = "xxEditGroupPage";
 			this.tsEditGroupPage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.tsEditGroupPage.Click += new System.EventHandler(this.tsEditGroupPageClick);
@@ -186,7 +191,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.tsDeleteGroupPage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsDeleteGroupPage.Name = "tsDeleteGroupPage";
 			this.tsDeleteGroupPage.Padding = new System.Windows.Forms.Padding(4);
-			this.tsDeleteGroupPage.Size = new System.Drawing.Size(233, 28);
+			this.tsDeleteGroupPage.Size = new System.Drawing.Size(137, 28);
 			this.tsDeleteGroupPage.Text = "xxDeleteGroupPage";
 			this.tsDeleteGroupPage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.tsDeleteGroupPage.Click += new System.EventHandler(this.tsDeleteGroupPageClick);
@@ -202,7 +207,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.toolStripButtonSendInstantMessage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonSendInstantMessage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonSendInstantMessage.Name = "toolStripButtonSendInstantMessage";
-			this.toolStripButtonSendInstantMessage.Size = new System.Drawing.Size(233, 20);
+			this.toolStripButtonSendInstantMessage.Size = new System.Drawing.Size(88, 20);
 			this.toolStripButtonSendInstantMessage.Text = "xxMessages";
 			this.toolStripButtonSendInstantMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonSendInstantMessage.Click += new System.EventHandler(this.toolStripButtonSendInstantMessageClick);
@@ -214,7 +219,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.toolStripRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripRefresh.Name = "toolStripRefresh";
 			this.toolStripRefresh.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripRefresh.Size = new System.Drawing.Size(233, 28);
+			this.toolStripRefresh.Size = new System.Drawing.Size(84, 28);
 			this.toolStripRefresh.Text = "xxRefresh";
 			this.toolStripRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripRefresh.Click += new System.EventHandler(this.toolStripRefreshClick);
@@ -225,7 +230,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.toolStripButtonSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonSearch.Name = "toolStripButtonSearch";
-			this.toolStripButtonSearch.Size = new System.Drawing.Size(233, 20);
+			this.toolStripButtonSearch.Size = new System.Drawing.Size(114, 20);
 			this.toolStripButtonSearch.Text = "xxFindThreeDots";
 			this.toolStripButtonSearch.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonSearch.Click += new System.EventHandler(this.toolStripButtonSearchClick);
@@ -251,7 +256,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         #endregion
 
         private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv1;
-        private System.Windows.Forms.ToolStrip toolStripPeople;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripPeople;
         private System.Windows.Forms.ToolStripButton toolStripButtonOpen;
         private System.Windows.Forms.ToolStripButton toolStripRefresh;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
@@ -264,6 +269,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         private System.Windows.Forms.ToolStripButton toolStripButtonSendInstantMessage;
         private System.Windows.Forms.ToolStripButton toolStripButtonSearch;
         private System.Windows.Forms.ToolStripButton tsRenameGroupPage;
-        private System.Windows.Forms.ToolStripButton tsDeleteGroupPage;
+		private System.Windows.Forms.ToolStripButton tsDeleteGroupPage;
     }
 }
