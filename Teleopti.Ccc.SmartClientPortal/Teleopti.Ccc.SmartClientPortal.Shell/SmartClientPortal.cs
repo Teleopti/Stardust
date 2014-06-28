@@ -166,15 +166,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void SmartClientShellForm_Load(object sender, EventArgs e)
 		{
 			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
-			var user = (IUnsafePerson) TeleoptiPrincipal.Current;
-			var activator = DefinedLicenseDataFactory.GetLicenseActivator(identity.DataSource.DataSourceName);
-			var customerName = activator.CustomerName;
+			//var user = (IUnsafePerson) TeleoptiPrincipal.Current;
+			//var activator = DefinedLicenseDataFactory.GetLicenseActivator(identity.DataSource.DataSourceName);
+			//var customerName = activator.CustomerName;
 
 			var loggedOnBu = identity.BusinessUnit;
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
 			ribbonControlAdv1.MenuButtonText = LanguageResourceHelper.Translate(ribbonControlAdv1.MenuButtonText);
-			toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + @" " + customerName;
-			toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text + @" " + user.Person.Name;
+			toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;
+			//toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text + @" " + user.Person.Name;
 
 
             setNotifyData(_systemChecker.IsOk());
@@ -200,15 +200,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             }
         }
 
-		private void licensedToText()
-		{
-			toolStripStatusLabelLicense.Text = ApplicationTextHelper.LicensedToCustomerText;
-		}
+		//private void licensedToText()
+		//{
+		//	toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;
+		//}
 
-		private void loggedOnUserText()
-		{
-			toolStripStatusLabelLoggedOnUser.Text = ApplicationTextHelper.LoggedOnUserText;
-		}
+		//private void loggedOnUserText()
+		//{
+		//	toolStripStatusLabelLoggedOnUser.Text = ApplicationTextHelper.LoggedOnUserText;
+		//}
 
         private void showMem()
         {

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 	    {
             get
             {
-	            return String.Concat(UserTexts.Resources.LicensedToColon, " ",
+	            return String.Concat( " ",
 		            DefinedLicenseDataFactory.GetLicenseActivator(
 			            ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).DataSource.DataSourceName).CustomerName);
             }
