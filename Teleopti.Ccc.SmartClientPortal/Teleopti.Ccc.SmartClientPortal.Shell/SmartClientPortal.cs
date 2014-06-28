@@ -169,8 +169,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var loggedOnBu = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit;
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
 			ribbonControlAdv1.MenuButtonText = LanguageResourceHelper.Translate(ribbonControlAdv1.MenuButtonText);
-			toolStripStatusLabelLicense.Text = ApplicationTextHelper.LicensedToCustomerText(toolStripStatusLabelLicense.Text);
-			toolStripStatusLabelLoggedOnUser.Text = ApplicationTextHelper.LoggedOnUserText(toolStripStatusLabelLoggedOnUser.Text);
+			var x = new ApplicationTextHelper();
+			toolStripStatusLabelLicense.Text = x.LicensedToCustomerText(toolStripStatusLabelLicense.Text);
+			toolStripStatusLabelLoggedOnUser.Text =x.LoggedOnUserText(toolStripStatusLabelLoggedOnUser.Text);
 
             setNotifyData(_systemChecker.IsOk());
 
