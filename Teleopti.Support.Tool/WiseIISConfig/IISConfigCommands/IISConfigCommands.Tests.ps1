@@ -43,6 +43,8 @@ $global:Server = ''
 $global:Db = ''
 $global:resetToBaseline="False"
 $global:insertedLicense=0
+$global:SubSite = 'TeleoptiWFM'
+$global:PhysicalSubPath = 'TeleoptiCCC'
 
 function Config-Load {
 	Describe "Shold load config from Hebe "{
@@ -68,6 +70,11 @@ function Config-Load {
 					if ($testServer.BaseURL)
 					{
 						$global:BaseURL = $testServer.BaseURL
+					}
+					
+					if ($global:version -ne 'main')
+					{
+						$global:SubSite = 'TeleoptiCCC'
 					}
                 }
                 
@@ -99,7 +106,7 @@ function TearDown {
         
 		It "should stop the SDK" {
 			stop-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
-			$SDKUrl = $global:BaseURL + "TeleoptiWFM/SDK/TeleoptiCCCSdkService.svc"
+			$SDKUrl = $global:BaseURL + $global:SubSite + "/SDK/TeleoptiCCCSdkService.svc"
 			{Check-HttpStatus -url $SDKUrl -credentials $cred}  | Should Throw
 		}
 
@@ -121,7 +128,7 @@ function TearDown {
 			
 		It "should throw exeption when http URL does not exist" {
 			$computerName=(get-childitem -path env:computername).Value
-			{Check-HttpStatus -url $global:BaseURL + "TeleoptiCCC/"}  | Should Throw
+			{Check-HttpStatus -url $global:BaseURL + $global:SubSite + "/"}  | Should Throw
 		}
 		
 		It "Should destroy working folder" {
@@ -219,24 +226,24 @@ function Test-SitesAndServicesOk {
         #start system
 		It "should start SDK" {
 			start-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
-			$SDKUrl = $global:BaseURL + "TeleoptiWFM/SDK/TeleoptiCCCSdkService.svc"
+			$SDKUrl = $global:BaseURL + $global:SubSite + "/SDK/TeleoptiCCCSdkService.svc"
 			$temp = Check-HttpStatus -url $SDKUrl -credentials $cred
 			$temp | Should be $True
 		}
 		
 		#something goes wrong with 32 vs. 64 bit implementation of management tools or IIS runtime
 		# It "SDK should be windows" {
-			# $enabled = Get-Authentication "/TeleoptiWFM/SDK" "windowsAuthentication"
+			# $enabled = Get-Authentication $global:SubSite + "/SDK" "windowsAuthentication"
 			# $enabled | Should Be "True"
 		# }
 
 		# It "SDK should not be anonymous" {
-			# $enabled = Get-Authentication "/TeleoptiWFM/SDK" "anonymousAuthentication"
+			# $enabled = Get-Authentication $global:SubSite + "/SDK" "anonymousAuthentication"
 			# $enabled | Should Be "False"
 		# }
 
 		#It "Nhib file should exist and contain SQL Auth connection string" {
-		#	$nhibFile = "C:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml"
+		#	$nhibFile = "C:\Program Files (x86)\Teleopti\" + $global:PhysicalSubPath + "\SDK\TeleoptiCCC7.nhib.xml"
 		#	$computerName=(get-childitem -path env:computername).Value
 		#	$connectionString="Data Source=$computerName;User Id=TeleoptiDemoUser;Password=TeleoptiDemoPwd2;initial Catalog=TeleoptiCCC7_Demo;Current Language=us_english"
 		#	$nhibFile | Should Exist
