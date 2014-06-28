@@ -2,6 +2,8 @@
 ::=====================
 ::hard coded for each environment
 ::=====================
+
+SET SUB_SITE=TeleoptiCCC
 SET INSTALLDIR=C:\Program Files (x86)\Teleopti\
 SET DBServerInstance=tcp:ARES\CCC
 SET AppServer=%COMPUTERNAME%
