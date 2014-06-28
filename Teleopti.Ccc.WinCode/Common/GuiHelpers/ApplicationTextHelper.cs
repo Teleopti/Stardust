@@ -6,17 +6,20 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 {
     public class ApplicationTextHelper
     {
-	    public string LicensedToCustomerText(string translatedText)
+	    public string LicensedToCustomerText
 	    {
-		    return String.Concat(translatedText, " ",
-			    DefinedLicenseDataFactory.GetLicenseActivator(
-				    ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).DataSource.DataSourceName).CustomerName);
-	    }
+            get
+            {
+	            return String.Concat(UserTexts.Resources.LicensedToColon, " ",
+		            DefinedLicenseDataFactory.GetLicenseActivator(
+			            ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).DataSource.DataSourceName).CustomerName);
+            }
+        }
 
-	    public string LoggedOnUserText(string translatedText)
+	    public string LoggedOnUserText
         {
-			return String.Concat(translatedText, " ", ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Name); 
-		}
-
+            get {
+                return String.Concat(UserTexts.Resources.LoggedOnUserColon, " ", ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Name); }
+        }
     }
 }

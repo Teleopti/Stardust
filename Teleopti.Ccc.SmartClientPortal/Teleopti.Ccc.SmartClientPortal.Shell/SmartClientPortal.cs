@@ -200,6 +200,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             }
         }
 
+		private void licensedToText()
+		{
+			toolStripStatusLabelLicense.Text = ApplicationTextHelper.LicensedToCustomerText;
+		}
+
+		private void loggedOnUserText()
+		{
+			toolStripStatusLabelLoggedOnUser.Text = ApplicationTextHelper.LoggedOnUserText;
+		}
+
         private void showMem()
         {
 	        toolStripStatusLabelRoger65.Visible = true;
