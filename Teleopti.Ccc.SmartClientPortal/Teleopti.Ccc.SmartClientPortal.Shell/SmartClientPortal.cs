@@ -166,16 +166,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void SmartClientShellForm_Load(object sender, EventArgs e)
 		{
 			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
-			//var user = (IUnsafePerson) TeleoptiPrincipal.Current;
-			//var activator = DefinedLicenseDataFactory.GetLicenseActivator(identity.DataSource.DataSourceName);
-			//var customerName = activator.CustomerName;
-
 			var loggedOnBu = identity.BusinessUnit;
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
 			ribbonControlAdv1.MenuButtonText = LanguageResourceHelper.Translate(ribbonControlAdv1.MenuButtonText);
 			toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;
-			//toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text + @" " + user.Person.Name;
-
+			toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text +
+			                                        ApplicationTextHelper.LoggedOnUserText;
 
             setNotifyData(_systemChecker.IsOk());
 

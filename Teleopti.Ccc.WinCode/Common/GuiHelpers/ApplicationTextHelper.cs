@@ -10,16 +10,18 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 	    {
             get
             {
-	            return String.Concat( " ",
+	            return String.Concat(" ",
 		            DefinedLicenseDataFactory.GetLicenseActivator(
 			            ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).DataSource.DataSourceName).CustomerName);
             }
         }
 
 	    public static string LoggedOnUserText
-        {
-            get {
-                return String.Concat(UserTexts.Resources.LoggedOnUserColon, " ", ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Name); }
-        }
+	    {
+		    get
+		    {
+			    return String.Concat(" ", ((IUnsafePerson) TeleoptiPrincipal.Current).Person.Name);
+		    }
+	    }
     }
 }

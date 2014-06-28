@@ -733,7 +733,6 @@
     <Compile Include="Settings\TrackerViewTest.cs" />
     <Compile Include="Common\CustomEventArgsTest.cs" />
     <Compile Include="Common\Clipboard\PasteBehaviorTest.cs" />
-    <Compile Include="Common\GuiHelpers\ApplicationTextHelperTest.cs" />
     <Compile Include="Common\Rows\GridRowTest.cs" />
     <Compile Include="Common\Rows\IntervalHeaderGridRowTest.cs" />
     <Compile Include="Common\Rows\CellInfoTest.cs" />
