@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 {
     public class ApplicationTextHelper
     {
-	    public string LicensedToCustomerText
+	    public static string LicensedToCustomerText
 	    {
             get
             {
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
             }
         }
 
-	    public string LoggedOnUserText
+	    public static string LoggedOnUserText
         {
             get {
                 return String.Concat(UserTexts.Resources.LoggedOnUserColon, " ", ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Name); }
