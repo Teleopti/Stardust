@@ -236,8 +236,7 @@ function destroy-WorkingFolder{
         $workingFolder
     )
 	if (Test-Path "$workingFolder") {
-		remove-item "$workingFolder\*" -recurse
-		remove-item "$workingFolder\"
+		remove-item "$workingFolder\" -Recurse
 	}
 }
 
