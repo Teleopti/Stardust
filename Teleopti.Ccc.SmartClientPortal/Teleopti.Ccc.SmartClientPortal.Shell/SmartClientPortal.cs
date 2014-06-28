@@ -165,13 +165,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
 		private void SmartClientShellForm_Load(object sender, EventArgs e)
 		{
-			
-			var loggedOnBu = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit;
+			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
+			var user = (IUnsafePerson) TeleoptiPrincipal.Current;
+			var activator = DefinedLicenseDataFactory.GetLicenseActivator(identity.DataSource.DataSourceName);
+			var customerName = activator.CustomerName;
+
+			var loggedOnBu = identity.BusinessUnit;
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
 			ribbonControlAdv1.MenuButtonText = LanguageResourceHelper.Translate(ribbonControlAdv1.MenuButtonText);
-			var x = new ApplicationTextHelper();
-			toolStripStatusLabelLicense.Text = x.LicensedToCustomerText(toolStripStatusLabelLicense.Text);
-			toolStripStatusLabelLoggedOnUser.Text =x.LoggedOnUserText(toolStripStatusLabelLoggedOnUser.Text);
+			toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + @" " + customerName;
+			toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text + @" " + user.Person.Name;
+
 
             setNotifyData(_systemChecker.IsOk());
 
