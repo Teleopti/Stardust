@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripMenuItemPropertiesFromSkill = new System.Windows.Forms.ToolStripMenuItem();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.treeViewAdvBudgetGroups = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
-			this.toolStripBudgetGroups = new System.Windows.Forms.ToolStrip();
+			this.toolStripBudgetGroups = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripLabelSkillActions = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripButtonNewBudgetGroup = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonOpenBudgetGroup = new System.Windows.Forms.ToolStripButton();
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButtonBudgetGroupProperties = new System.Windows.Forms.ToolStripButton();
-			this.toolStripRoot = new System.Windows.Forms.ToolStrip();
+			this.toolStripRoot = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripLabelNewPlanningGroup = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripButtonNewBudgetGroup2 = new System.Windows.Forms.ToolStripButton();
 			this.contextMenuStripBudgetGroup.SuspendLayout();
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Win.Budgeting
             this.toolStripSeparator3,
             this.toolStripMenuItemProperty});
 			this.contextMenuBudgetGroup.Name = "contextMenuStrip1";
-			this.contextMenuBudgetGroup.Size = new System.Drawing.Size(239, 126);
+			this.contextMenuBudgetGroup.Size = new System.Drawing.Size(239, 104);
 			// 
 			// toolStripMenuItemNewBudgetGroup
 			// 
@@ -193,13 +193,15 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.splitContainer1.Panel2.Controls.Add(this.toolStripRoot);
 			this.splitContainer1.Panel2.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
 			this.splitContainer1.Size = new System.Drawing.Size(198, 536);
-			this.splitContainer1.SplitterDistance = 413;
+			this.splitContainer1.SplitterDistance = 417;
 			this.splitContainer1.SplitterWidth = 2;
 			this.splitContainer1.TabIndex = 5;
 			// 
 			// treeViewAdvBudgetGroups
 			// 
+			this.treeViewAdvBudgetGroups.BeforeTouchSize = new System.Drawing.Size(198, 417);
 			this.treeViewAdvBudgetGroups.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.treeViewAdvBudgetGroups.CanSelectDisabledNode = false;
 			this.treeViewAdvBudgetGroups.ContextMenuStrip = this.contextMenuStripBudgetGroup;
 			this.treeViewAdvBudgetGroups.Dock = System.Windows.Forms.DockStyle.Fill;
 			// 
@@ -213,9 +215,11 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.treeViewAdvBudgetGroups.HelpTextControl.Text = "help text";
 			this.treeViewAdvBudgetGroups.LeftImageList = this.imageListBudgetGroup;
 			this.treeViewAdvBudgetGroups.Location = new System.Drawing.Point(0, 0);
+			this.treeViewAdvBudgetGroups.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.treeViewAdvBudgetGroups.Name = "treeViewAdvBudgetGroups";
 			this.treeViewAdvBudgetGroups.ShowFocusRect = true;
-			this.treeViewAdvBudgetGroups.Size = new System.Drawing.Size(198, 413);
+			this.treeViewAdvBudgetGroups.Size = new System.Drawing.Size(198, 417);
+			this.treeViewAdvBudgetGroups.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Default;
 			this.treeViewAdvBudgetGroups.TabIndex = 0;
 			this.treeViewAdvBudgetGroups.Text = "treeViewAdv1";
 			this.treeViewAdvBudgetGroups.ThemesEnabled = true;
@@ -233,8 +237,10 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// 
 			// toolStripBudgetGroups
 			// 
-			this.toolStripBudgetGroups.BackColor = System.Drawing.Color.Transparent;
-			this.toolStripBudgetGroups.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.toolStripBudgetGroups.BackColor = System.Drawing.Color.White;
+			this.toolStripBudgetGroups.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.toolStripBudgetGroups.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripBudgetGroups.Image = null;
 			this.toolStripBudgetGroups.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabelSkillActions,
             this.toolStripButtonNewBudgetGroup,
@@ -243,20 +249,25 @@ namespace Teleopti.Ccc.Win.Budgeting
             this.toolStripButtonDelete,
             this.toolStripSeparator1,
             this.toolStripButtonBudgetGroupProperties});
+			this.toolStripBudgetGroups.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.toolStripBudgetGroups.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
 			this.toolStripBudgetGroups.Location = new System.Drawing.Point(0, 0);
 			this.toolStripBudgetGroups.Name = "toolStripBudgetGroups";
-			this.toolStripBudgetGroups.Padding = new System.Windows.Forms.Padding(1);
-			this.toolStripBudgetGroups.Size = new System.Drawing.Size(181, 181);
+			this.toolStripBudgetGroups.Office12Mode = false;
+			this.toolStripBudgetGroups.Padding = new System.Windows.Forms.Padding(10, 1, 1, 1);
+			this.toolStripBudgetGroups.ShowCaption = false;
+			this.toolStripBudgetGroups.ShowLauncher = false;
+			this.toolStripBudgetGroups.Size = new System.Drawing.Size(198, 117);
 			this.toolStripBudgetGroups.TabIndex = 5;
 			this.toolStripBudgetGroups.Text = "xxActions";
 			this.toolStripBudgetGroups.Visible = false;
+			this.toolStripBudgetGroups.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
 			// 
 			// toolStripLabelSkillActions
 			// 
 			this.toolStripLabelSkillActions.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.toolStripLabelSkillActions.Name = "toolStripLabelSkillActions";
-			this.toolStripLabelSkillActions.Size = new System.Drawing.Size(178, 19);
+			this.toolStripLabelSkillActions.Size = new System.Drawing.Size(186, 19);
 			this.toolStripLabelSkillActions.Text = "xxActions";
 			// 
 			// toolStripButtonNewBudgetGroup
@@ -266,7 +277,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripButtonNewBudgetGroup.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonNewBudgetGroup.Name = "toolStripButtonNewBudgetGroup";
 			this.toolStripButtonNewBudgetGroup.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonNewBudgetGroup.Size = new System.Drawing.Size(178, 28);
+			this.toolStripButtonNewBudgetGroup.Size = new System.Drawing.Size(186, 28);
 			this.toolStripButtonNewBudgetGroup.Text = "xxNewBudgetGroupThreeDots";
 			this.toolStripButtonNewBudgetGroup.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonNewBudgetGroup.Click += new System.EventHandler(this.toolStripButtonNewBudgetGroup_Click);
@@ -278,7 +289,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripButtonOpenBudgetGroup.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonOpenBudgetGroup.Name = "toolStripButtonOpenBudgetGroup";
 			this.toolStripButtonOpenBudgetGroup.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonOpenBudgetGroup.Size = new System.Drawing.Size(178, 28);
+			this.toolStripButtonOpenBudgetGroup.Size = new System.Drawing.Size(186, 28);
 			this.toolStripButtonOpenBudgetGroup.Text = "xxOpenBudgetGroupThreeDots";
 			this.toolStripButtonOpenBudgetGroup.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonOpenBudgetGroup.Click += new System.EventHandler(this.toolStripButtonOpenBudgetGroup_Click);
@@ -286,7 +297,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(178, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(186, 6);
 			// 
 			// toolStripButtonDelete
 			// 
@@ -295,7 +306,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonDelete.Name = "toolStripButtonDelete";
 			this.toolStripButtonDelete.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonDelete.Size = new System.Drawing.Size(178, 28);
+			this.toolStripButtonDelete.Size = new System.Drawing.Size(78, 28);
 			this.toolStripButtonDelete.Text = "xxDelete";
 			this.toolStripButtonDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
@@ -312,7 +323,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripButtonBudgetGroupProperties.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonBudgetGroupProperties.Name = "toolStripButtonBudgetGroupProperties";
 			this.toolStripButtonBudgetGroupProperties.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonBudgetGroupProperties.Size = new System.Drawing.Size(178, 28);
+			this.toolStripButtonBudgetGroupProperties.Size = new System.Drawing.Size(152, 28);
 			this.toolStripButtonBudgetGroupProperties.Text = "xxPropertiesThreeDots";
 			this.toolStripButtonBudgetGroupProperties.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonBudgetGroupProperties.Click += new System.EventHandler(this.toolStripButtonBudgetGroupProperties_Click);
@@ -320,24 +331,32 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// toolStripRoot
 			// 
 			this.toolStripRoot.BackColor = System.Drawing.Color.Transparent;
-			this.toolStripRoot.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.toolStripRoot.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.toolStripRoot.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripRoot.Image = null;
 			this.toolStripRoot.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabelNewPlanningGroup,
             this.toolStripButtonNewBudgetGroup2});
+			this.toolStripRoot.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.toolStripRoot.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
 			this.toolStripRoot.Location = new System.Drawing.Point(0, 0);
 			this.toolStripRoot.Name = "toolStripRoot";
-			this.toolStripRoot.Padding = new System.Windows.Forms.Padding(1);
-			this.toolStripRoot.Size = new System.Drawing.Size(198, 68);
+			this.toolStripRoot.Office12Mode = false;
+			this.toolStripRoot.Padding = new System.Windows.Forms.Padding(10, 1, 1, 1);
+			this.toolStripRoot.ShowCaption = false;
+			this.toolStripRoot.ShowLauncher = false;
+			this.toolStripRoot.Size = new System.Drawing.Size(198, 117);
 			this.toolStripRoot.TabIndex = 5;
 			this.toolStripRoot.Text = "xxActions";
 			this.toolStripRoot.Visible = false;
+			this.toolStripRoot.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
 			// 
 			// toolStripLabelNewPlanningGroup
 			// 
 			this.toolStripLabelNewPlanningGroup.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.toolStripLabelNewPlanningGroup.Name = "toolStripLabelNewPlanningGroup";
-			this.toolStripLabelNewPlanningGroup.Size = new System.Drawing.Size(195, 19);
+			this.toolStripLabelNewPlanningGroup.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripLabelNewPlanningGroup.Size = new System.Drawing.Size(186, 27);
 			this.toolStripLabelNewPlanningGroup.Text = "xxActions";
 			// 
 			// toolStripButtonNewBudgetGroup2
@@ -346,7 +365,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripButtonNewBudgetGroup2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonNewBudgetGroup2.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonNewBudgetGroup2.Name = "toolStripButtonNewBudgetGroup2";
-			this.toolStripButtonNewBudgetGroup2.Size = new System.Drawing.Size(195, 20);
+			this.toolStripButtonNewBudgetGroup2.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripButtonNewBudgetGroup2.Size = new System.Drawing.Size(186, 28);
 			this.toolStripButtonNewBudgetGroup2.Text = "xxNewBudgetGroupThreeDots";
 			this.toolStripButtonNewBudgetGroup2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonNewBudgetGroup2.Click += new System.EventHandler(this.toolStripButtonNewBudgetGroup_Click);
@@ -380,11 +400,11 @@ namespace Teleopti.Ccc.Win.Budgeting
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private Syncfusion.Windows.Forms.Tools.TreeViewAdv treeViewAdvBudgetGroups;
-        private System.Windows.Forms.ToolStrip toolStripBudgetGroups;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripBudgetGroups;
         private System.Windows.Forms.ToolStripLabel toolStripLabelSkillActions;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStrip toolStripRoot;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripRoot;
         private System.Windows.Forms.ToolStripLabel toolStripLabelNewPlanningGroup;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripBudgetGroup;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBudgetGroupNewBudgetGroup;

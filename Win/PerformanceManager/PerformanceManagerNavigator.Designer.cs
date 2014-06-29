@@ -35,11 +35,11 @@
 			this.toolStripMenuItemNewReport = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripLabelReportActions = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripLabelReports = new System.Windows.Forms.ToolStripLabel();
-			this.toolStripRoot = new System.Windows.Forms.ToolStrip();
+			this.toolStripRoot = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripDropDownViewReports = new System.Windows.Forms.ToolStripDropDownButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripDropDownNewReport = new System.Windows.Forms.ToolStripDropDownButton();
-			this.toolStripReportGroups = new System.Windows.Forms.ToolStrip();
+			this.toolStripReportGroups = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.toolStripRoot.SuspendLayout();
 			this.toolStripReportGroups.SuspendLayout();
@@ -59,7 +59,7 @@
 			this.treeViewReports.Location = new System.Drawing.Point(0, 0);
 			this.treeViewReports.Name = "treeViewReports";
 			this.treeViewReports.SelectedImageIndex = 1;
-			this.treeViewReports.Size = new System.Drawing.Size(232, 303);
+			this.treeViewReports.Size = new System.Drawing.Size(232, 305);
 			this.treeViewReports.TabIndex = 1;
 			// 
 			// imageListPlanningGroup
@@ -75,7 +75,9 @@
 			this.toolStripMenuItemNewReport.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_New2;
 			this.toolStripMenuItemNewReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripMenuItemNewReport.Name = "toolStripMenuItemNewReport";
-			this.toolStripMenuItemNewReport.Size = new System.Drawing.Size(209, 20);
+			this.toolStripMenuItemNewReport.Overflow = System.Windows.Forms.ToolStripItemOverflow.AsNeeded;
+			this.toolStripMenuItemNewReport.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripMenuItemNewReport.Size = new System.Drawing.Size(219, 28);
 			this.toolStripMenuItemNewReport.Text = "xxNewPlanningGroupThreeDots";
 			this.toolStripMenuItemNewReport.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -83,7 +85,7 @@
 			// 
 			this.toolStripLabelReportActions.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.toolStripLabelReportActions.Name = "toolStripLabelReportActions";
-			this.toolStripLabelReportActions.Size = new System.Drawing.Size(209, 19);
+			this.toolStripLabelReportActions.Size = new System.Drawing.Size(219, 19);
 			this.toolStripLabelReportActions.Text = "xxActions";
 			// 
 			// toolStripLabelReports
@@ -96,19 +98,26 @@
 			// toolStripRoot
 			// 
 			this.toolStripRoot.BackColor = System.Drawing.Color.Transparent;
-			this.toolStripRoot.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.toolStripRoot.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.toolStripRoot.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripRoot.Image = null;
 			this.toolStripRoot.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabelReports,
             this.toolStripDropDownViewReports,
             this.toolStripSeparator1,
             this.toolStripDropDownNewReport});
+			this.toolStripRoot.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.toolStripRoot.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
 			this.toolStripRoot.Location = new System.Drawing.Point(10, 0);
 			this.toolStripRoot.Name = "toolStripRoot";
+			this.toolStripRoot.Office12Mode = false;
 			this.toolStripRoot.Padding = new System.Windows.Forms.Padding(1);
-			this.toolStripRoot.Size = new System.Drawing.Size(222, 94);
+			this.toolStripRoot.ShowCaption = false;
+			this.toolStripRoot.ShowLauncher = false;
+			this.toolStripRoot.Size = new System.Drawing.Size(222, 164);
 			this.toolStripRoot.TabIndex = 5;
 			this.toolStripRoot.Text = "xxActions";
+			this.toolStripRoot.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
 			// 
 			// toolStripDropDownViewReports
 			// 
@@ -145,18 +154,25 @@
 			// toolStripReportGroups
 			// 
 			this.toolStripReportGroups.BackColor = System.Drawing.Color.Transparent;
-			this.toolStripReportGroups.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.toolStripReportGroups.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.toolStripReportGroups.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripReportGroups.Image = null;
 			this.toolStripReportGroups.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabelReportActions,
             this.toolStripMenuItemNewReport});
+			this.toolStripReportGroups.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.toolStripReportGroups.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-			this.toolStripReportGroups.Location = new System.Drawing.Point(0, 78);
+			this.toolStripReportGroups.Location = new System.Drawing.Point(10, 0);
 			this.toolStripReportGroups.Name = "toolStripReportGroups";
+			this.toolStripReportGroups.Office12Mode = false;
 			this.toolStripReportGroups.Padding = new System.Windows.Forms.Padding(1);
-			this.toolStripReportGroups.Size = new System.Drawing.Size(212, 65);
+			this.toolStripReportGroups.ShowCaption = false;
+			this.toolStripReportGroups.ShowLauncher = false;
+			this.toolStripReportGroups.Size = new System.Drawing.Size(222, 164);
 			this.toolStripReportGroups.TabIndex = 5;
 			this.toolStripReportGroups.Text = "xxActions";
 			this.toolStripReportGroups.Visible = false;
+			this.toolStripReportGroups.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
 			// 
 			// splitContainer1
 			// 
@@ -180,7 +196,7 @@
 			this.splitContainer1.Panel2.Controls.Add(this.toolStripRoot);
 			this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.splitContainer1.Size = new System.Drawing.Size(232, 471);
-			this.splitContainer1.SplitterDistance = 303;
+			this.splitContainer1.SplitterDistance = 305;
 			this.splitContainer1.SplitterWidth = 2;
 			this.splitContainer1.TabIndex = 5;
 			// 
@@ -213,9 +229,9 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNewReport;
         private System.Windows.Forms.ToolStripLabel toolStripLabelReportActions;
         private System.Windows.Forms.ToolStripLabel toolStripLabelReports;
-        private System.Windows.Forms.ToolStrip toolStripRoot;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripRoot;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownNewReport;
-        private System.Windows.Forms.ToolStrip toolStripReportGroups;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripReportGroups;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownViewReports;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
