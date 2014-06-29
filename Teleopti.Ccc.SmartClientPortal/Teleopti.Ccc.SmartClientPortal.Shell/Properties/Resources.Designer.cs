@@ -304,6 +304,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Online {
+            get {
+                object obj = ResourceManager.GetObject("Online", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap permission {
             get {
                 object obj = ResourceManager.GetObject("permission", resourceCulture);

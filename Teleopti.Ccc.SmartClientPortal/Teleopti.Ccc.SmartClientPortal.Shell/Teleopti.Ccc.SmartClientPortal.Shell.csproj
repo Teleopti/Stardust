@@ -215,6 +215,8 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -331,6 +333,7 @@
     <Content Include="Resources\ccc_permission.png" />
     <None Include="Resources\help_32.png" />
     <None Include="Resources\information_16.png" />
+    <None Include="Resources\Online.jpg" />
     <Content Include="Resources\permission.png" />
     <None Include="Resources\WFM-Budgets - Copy.png" />
     <None Include="Resources\WFM-Forecasts - Copy.png" />
