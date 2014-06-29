@@ -27,7 +27,7 @@ ECHO Call was: IIS7ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
 
 SET "DefaultSite="
 SET MainSiteName=TeleoptiWFM
-SET PhysicalPath=TeleoptiWFM
+SET PhysicalPath=TeleoptiCCC
 SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
 
 for /f "delims==" %%g in ('"%appcmd%" list site /text:name') do (
@@ -143,11 +143,11 @@ SET NETVersion=%~3
 SET SiteOrApp=%~4
 
 SET SitePath=%MainSiteName%/%SubSiteName%
-SET FolderPath=%PhysicalPath%\%SubSiteName%
+SET FolderPath=%MainSiteName%\%SubSiteName%
 
 ::special case for TeleoptCCC root site, skip subsite
-if "%SubSiteName%"=="TeleoptiWFM" SET SitePath=%MainSiteName%
-if "%SubSiteName%"=="TeleoptiWFM" SET FolderPath=%PhysicalPath%
+if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%MainSiteName%
+if "%SubSiteName%"=="TeleoptiCCC" SET FolderPath=%MainSiteName%
 
 ::2 - Change app pool
 %windir%\system32\inetsrv\APPCMD.exe set app "%DefaultSite%/%SitePath%" /applicationPool:"%PoolName%" /commit:apphost

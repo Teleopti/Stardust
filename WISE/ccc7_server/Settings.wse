@@ -245,15 +245,6 @@ item: Custom Script Item
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=SUB_SITE
-  Variable Name2=_PROP_VAR_
-  Variable Value2=SUB_PATH_TMP
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
 item: Remark
   Text===============================================
 end
@@ -539,22 +530,22 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(ETL_SERVICE_nhibConfPath)|%INSTALLDIR_TMP%%SUB_PATH_TMP%\ETL\Service
+  New Text=$(ETL_SERVICE_nhibConfPath)|%INSTALLDIR_TMP%TeleoptiCCC\ETL\Service
   Line Number=0
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(ETL_TOOL_nhibConfPath)|%INSTALLDIR_TMP%%SUB_PATH_TMP%\ETL\Tools
+  New Text=$(ETL_TOOL_nhibConfPath)|%INSTALLDIR_TMP%TeleoptiCCC\ETL\Tools
   Line Number=0
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(SDK_nhibConfPath)|%INSTALLDIR_TMP%%SUB_PATH_TMP%\SDK
+  New Text=$(SDK_nhibConfPath)|%INSTALLDIR_TMP%TeleoptiCCC\SDK
   Line Number=0
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(AGENTPORTALWEB_nhibConfPath)|%INSTALLDIR_TMP%%SUB_PATH_TMP%\Web
+  New Text=$(AGENTPORTALWEB_nhibConfPath)|%INSTALLDIR_TMP%TeleoptiCCC\Web
   Line Number=0
 end
 item: Insert Line into Text File
