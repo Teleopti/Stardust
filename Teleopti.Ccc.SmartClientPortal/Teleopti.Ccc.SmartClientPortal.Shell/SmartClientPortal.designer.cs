@@ -67,6 +67,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.outlookBarWorkSpace1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.OutlookBarWorkSpace();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.panel2 = new System.Windows.Forms.Panel();
+			this.autoLabel1 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
+			this.autoLabel2 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
+			this.autoLabel3 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
+			this.autoLabel4 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.webBrowser1 = new System.Windows.Forms.WebBrowser();
 			this.gridWorkspace = new Teleopti.Common.UI.SmartPartControls.SmartParts.GridWorkspace();
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
@@ -92,10 +96,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.notifyTimer = new System.Windows.Forms.Timer(this.components);
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.outlookBar1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.OutlookBar();
-			this.autoLabel1 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.autoLabel2 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.autoLabel3 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.autoLabel4 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this._mainStatusStrip.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
@@ -246,6 +246,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(183, 307);
 			this.tableLayoutPanel1.TabIndex = 6;
+			this.tableLayoutPanel1.Visible = false;
 			// 
 			// panel2
 			// 
@@ -256,6 +257,56 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(177, 144);
 			this.panel2.TabIndex = 0;
+			// 
+			// autoLabel1
+			// 
+			this.autoLabel1.AutoSize = false;
+			this.autoLabel1.BackColor = System.Drawing.Color.Gainsboro;
+			this.autoLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.autoLabel1.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.autoLabel1.ForeColor = System.Drawing.Color.Black;
+			this.autoLabel1.Location = new System.Drawing.Point(3, 150);
+			this.autoLabel1.Name = "autoLabel1";
+			this.autoLabel1.Size = new System.Drawing.Size(177, 40);
+			this.autoLabel1.TabIndex = 1;
+			this.autoLabel1.Text = "Visit Teleopti WFM online";
+			this.autoLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// autoLabel2
+			// 
+			this.autoLabel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.autoLabel2.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.autoLabel2.ForeColor = System.Drawing.Color.DeepSkyBlue;
+			this.autoLabel2.Location = new System.Drawing.Point(3, 190);
+			this.autoLabel2.Name = "autoLabel2";
+			this.autoLabel2.Size = new System.Drawing.Size(177, 40);
+			this.autoLabel2.TabIndex = 2;
+			this.autoLabel2.Text = "Home";
+			this.autoLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// autoLabel3
+			// 
+			this.autoLabel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.autoLabel3.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.autoLabel3.ForeColor = System.Drawing.Color.Black;
+			this.autoLabel3.Location = new System.Drawing.Point(3, 230);
+			this.autoLabel3.Name = "autoLabel3";
+			this.autoLabel3.Size = new System.Drawing.Size(177, 40);
+			this.autoLabel3.TabIndex = 3;
+			this.autoLabel3.Text = "Customer Web";
+			this.autoLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// autoLabel4
+			// 
+			this.autoLabel4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.autoLabel4.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.autoLabel4.ForeColor = System.Drawing.Color.Black;
+			this.autoLabel4.Location = new System.Drawing.Point(3, 270);
+			this.autoLabel4.Name = "autoLabel4";
+			this.autoLabel4.Size = new System.Drawing.Size(177, 37);
+			this.autoLabel4.TabIndex = 4;
+			this.autoLabel4.Text = "Wiki";
+			this.autoLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// webBrowser1
 			// 
@@ -623,56 +674,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.outlookBar1.TabIndex = 7;
 			this.outlookBar1.SelectedItemChanged += new System.EventHandler<Teleopti.Ccc.SmartClientPortal.Shell.Controls.SelectedItemChangedEventArgs>(this.outlookBar1_SelectedItemChanged);
 			this.outlookBar1.SizeChanged += new System.EventHandler(this.outlookBar1_SizeChanged);
-			// 
-			// autoLabel1
-			// 
-			this.autoLabel1.AutoSize = false;
-			this.autoLabel1.BackColor = System.Drawing.Color.Gainsboro;
-			this.autoLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.autoLabel1.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.autoLabel1.ForeColor = System.Drawing.Color.Black;
-			this.autoLabel1.Location = new System.Drawing.Point(3, 150);
-			this.autoLabel1.Name = "autoLabel1";
-			this.autoLabel1.Size = new System.Drawing.Size(177, 40);
-			this.autoLabel1.TabIndex = 1;
-			this.autoLabel1.Text = "Visit Teleopti WFM online";
-			this.autoLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// autoLabel2
-			// 
-			this.autoLabel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.autoLabel2.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.autoLabel2.ForeColor = System.Drawing.Color.DeepSkyBlue;
-			this.autoLabel2.Location = new System.Drawing.Point(3, 190);
-			this.autoLabel2.Name = "autoLabel2";
-			this.autoLabel2.Size = new System.Drawing.Size(177, 40);
-			this.autoLabel2.TabIndex = 2;
-			this.autoLabel2.Text = "Home";
-			this.autoLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// autoLabel3
-			// 
-			this.autoLabel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.autoLabel3.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.autoLabel3.ForeColor = System.Drawing.Color.Black;
-			this.autoLabel3.Location = new System.Drawing.Point(3, 230);
-			this.autoLabel3.Name = "autoLabel3";
-			this.autoLabel3.Size = new System.Drawing.Size(177, 40);
-			this.autoLabel3.TabIndex = 3;
-			this.autoLabel3.Text = "Customer Web";
-			this.autoLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// autoLabel4
-			// 
-			this.autoLabel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.autoLabel4.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.autoLabel4.ForeColor = System.Drawing.Color.Black;
-			this.autoLabel4.Location = new System.Drawing.Point(3, 270);
-			this.autoLabel4.Name = "autoLabel4";
-			this.autoLabel4.Size = new System.Drawing.Size(177, 37);
-			this.autoLabel4.TabIndex = 4;
-			this.autoLabel4.Text = "Wiki";
-			this.autoLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// SmartClientShellForm
 			// 
