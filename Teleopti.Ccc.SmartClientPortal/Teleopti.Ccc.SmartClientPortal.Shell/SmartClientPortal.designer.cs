@@ -64,6 +64,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.toolStripStatusLabelLoggedOnUser = new System.Windows.Forms.ToolStripStatusLabel();
 			this._statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.splitContainer = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
+			this.outlookBarWorkSpace1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.OutlookBarWorkSpace();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.panel2 = new System.Windows.Forms.Panel();
+			this.autoLabel1 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
+			this.autoLabel2 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
+			this.autoLabel3 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
+			this.autoLabel4 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.webBrowser1 = new System.Windows.Forms.WebBrowser();
 			this.gridWorkspace = new Teleopti.Common.UI.SmartPartControls.SmartParts.GridWorkspace();
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
@@ -89,12 +96,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.notifyTimer = new System.Windows.Forms.Timer(this.components);
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.outlookBar1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.OutlookBar();
-			this.outlookBarWorkSpace1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.OutlookBarWorkSpace();
 			this._mainStatusStrip.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
 			this.splitContainer.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			this.ribbonControlAdv1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.backStage1)).BeginInit();
@@ -199,6 +206,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// splitContainer.Panel2
 			// 
 			this.splitContainer.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+			this.splitContainer.Panel2.Controls.Add(this.tableLayoutPanel1);
 			this.splitContainer.Panel2.Controls.Add(this.webBrowser1);
 			this.splitContainer.Panel2.Controls.Add(this.gridWorkspace);
 			this.splitContainer.Panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -208,6 +216,97 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.splitContainer.SplitterWidth = 5;
 			this.splitContainer.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
 			this.splitContainer.TabIndex = 3;
+			// 
+			// outlookBarWorkSpace1
+			// 
+			this.outlookBarWorkSpace1.BackColor = System.Drawing.Color.White;
+			this.outlookBarWorkSpace1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.outlookBarWorkSpace1.Location = new System.Drawing.Point(0, 0);
+			this.outlookBarWorkSpace1.Name = "outlookBarWorkSpace1";
+			this.outlookBarWorkSpace1.Size = new System.Drawing.Size(235, 532);
+			this.outlookBarWorkSpace1.TabIndex = 0;
+			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
+			this.tableLayoutPanel1.ColumnCount = 1;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.autoLabel1, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.autoLabel2, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.autoLabel3, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.autoLabel4, 0, 4);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(2, 2);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 5;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(183, 307);
+			this.tableLayoutPanel1.TabIndex = 6;
+			this.tableLayoutPanel1.Visible = false;
+			// 
+			// panel2
+			// 
+			this.panel2.BackgroundImage = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.Online;
+			this.panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel2.Location = new System.Drawing.Point(3, 3);
+			this.panel2.Name = "panel2";
+			this.panel2.Size = new System.Drawing.Size(177, 144);
+			this.panel2.TabIndex = 0;
+			// 
+			// autoLabel1
+			// 
+			this.autoLabel1.AutoSize = false;
+			this.autoLabel1.BackColor = System.Drawing.Color.Gainsboro;
+			this.autoLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.autoLabel1.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.autoLabel1.ForeColor = System.Drawing.Color.Black;
+			this.autoLabel1.Location = new System.Drawing.Point(3, 150);
+			this.autoLabel1.Name = "autoLabel1";
+			this.autoLabel1.Size = new System.Drawing.Size(177, 40);
+			this.autoLabel1.TabIndex = 1;
+			this.autoLabel1.Text = "Visit Teleopti WFM online";
+			this.autoLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// autoLabel2
+			// 
+			this.autoLabel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.autoLabel2.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.autoLabel2.ForeColor = System.Drawing.Color.DeepSkyBlue;
+			this.autoLabel2.Location = new System.Drawing.Point(3, 190);
+			this.autoLabel2.Name = "autoLabel2";
+			this.autoLabel2.Size = new System.Drawing.Size(177, 40);
+			this.autoLabel2.TabIndex = 2;
+			this.autoLabel2.Text = "Home";
+			this.autoLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// autoLabel3
+			// 
+			this.autoLabel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.autoLabel3.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.autoLabel3.ForeColor = System.Drawing.Color.Black;
+			this.autoLabel3.Location = new System.Drawing.Point(3, 230);
+			this.autoLabel3.Name = "autoLabel3";
+			this.autoLabel3.Size = new System.Drawing.Size(177, 40);
+			this.autoLabel3.TabIndex = 3;
+			this.autoLabel3.Text = "Customer Web";
+			this.autoLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// autoLabel4
+			// 
+			this.autoLabel4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.autoLabel4.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.autoLabel4.ForeColor = System.Drawing.Color.Black;
+			this.autoLabel4.Location = new System.Drawing.Point(3, 270);
+			this.autoLabel4.Name = "autoLabel4";
+			this.autoLabel4.Size = new System.Drawing.Size(177, 37);
+			this.autoLabel4.TabIndex = 4;
+			this.autoLabel4.Text = "Wiki";
+			this.autoLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// webBrowser1
 			// 
@@ -576,15 +675,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.outlookBar1.SelectedItemChanged += new System.EventHandler<Teleopti.Ccc.SmartClientPortal.Shell.Controls.SelectedItemChangedEventArgs>(this.outlookBar1_SelectedItemChanged);
 			this.outlookBar1.SizeChanged += new System.EventHandler(this.outlookBar1_SizeChanged);
 			// 
-			// outlookBarWorkSpace1
-			// 
-			this.outlookBarWorkSpace1.BackColor = System.Drawing.Color.White;
-			this.outlookBarWorkSpace1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.outlookBarWorkSpace1.Location = new System.Drawing.Point(0, 0);
-			this.outlookBarWorkSpace1.Name = "outlookBarWorkSpace1";
-			this.outlookBarWorkSpace1.Size = new System.Drawing.Size(235, 532);
-			this.outlookBarWorkSpace1.TabIndex = 0;
-			// 
 			// SmartClientShellForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -615,6 +705,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.splitContainer.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
 			this.splitContainer.ResumeLayout(false);
+			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
 			this.ribbonControlAdv1.ResumeLayout(false);
 			this.ribbonControlAdv1.PerformLayout();
@@ -665,6 +757,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private Controls.OutlookBar outlookBar1;
 		private System.Windows.Forms.Panel panel1;
 		private Controls.OutlookBarWorkSpace outlookBarWorkSpace1;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.Panel panel2;
+		private AutoLabel autoLabel1;
+		private AutoLabel autoLabel2;
+		private AutoLabel autoLabel3;
+		private AutoLabel autoLabel4;
     }
 }
 

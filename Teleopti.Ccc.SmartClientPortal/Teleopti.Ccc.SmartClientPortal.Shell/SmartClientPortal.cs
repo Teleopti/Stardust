@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             base.OnKeyDown(e);
         }
 
-        private void StartModule(string modulePath)
+        private void startModule(string modulePath)
         {
 	        foreach (var modulePanelItem in outlookBar1.Items)
 	        {
@@ -161,6 +161,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		        }
 	        }
         }
+
+		private void startFirstEnabledModule()
+		{
+			foreach (var modulePanelItem in outlookBar1.Items)
+			{
+				if (modulePanelItem.ItemEnabled)
+				{
+					outlookBar1.SelectItem(modulePanelItem);
+					return;
+				}
+			}
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
 		private void SmartClientShellForm_Load(object sender, EventArgs e)
@@ -183,7 +195,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             SetPermissionOnToolStripButtonControls();
 
             if (!string.IsNullOrEmpty(_portalSettings.LastModule))
-                StartModule(_portalSettings.LastModule);
+            {
+	            startModule(_portalSettings.LastModule);
+            }
+            else
+            {
+	            startFirstEnabledModule();
+            }
  
             var showMemConfig = ConfigurationManager.AppSettings.Get("ShowMem");
             bool showMemBool;
@@ -196,16 +214,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             }
         }
 
-		//private void licensedToText()
-		//{
-		//	toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;
-		//}
-
-		//private void loggedOnUserText()
-		//{
-		//	toolStripStatusLabelLoggedOnUser.Text = ApplicationTextHelper.LoggedOnUserText;
-		//}
-
         private void showMem()
         {
 	        toolStripStatusLabelRoger65.Visible = true;
@@ -214,7 +222,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         }
 
 	    private long maxMem = 0;
-	   // private LogonView _logonView;
 
 	    private void updateMem(object sender, EventArgs e)
         {
@@ -570,33 +577,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			//if (shifts != null && !startup)
 			//	shifts.OpenShifts();
 	    }
-
-        //dont know? Robin!
-        public void SelectedModule(GroupBarItem selectedItem, bool startup)
-        {
-            if (selectedItem != null)
-            {
-                _portalSettings.LastModule = selectedItem.Tag.ToString();
-                SmartPartInvoker.ClearAllSmartParts();
-                var uc = _outlookPanelContentWorker.GetOutlookPanelContent(_portalSettings.LastModule);
-                
-                if (uc == null) return;
-                uc.Dock = DockStyle.None;
-
-				if (selectedItem.Client == null)
-				{
-					selectedItem.Client = uc;
-				}
-
-				var navigator = uc as AbstractNavigator;
-				if (navigator != null)
-					navigator.RefreshNavigator();
-
-                var shifts = uc as Win.Shifts.ShiftsNavigationPanel;
-                if(shifts != null && !startup)
-                    shifts.OpenShifts();
-            }
-        }
 
         private void toolStripButtonCustomerWeb_Click(object sender, EventArgs e)
         {

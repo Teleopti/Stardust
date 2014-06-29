@@ -207,7 +207,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.toolStripButtonSendInstantMessage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonSendInstantMessage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonSendInstantMessage.Name = "toolStripButtonSendInstantMessage";
-			this.toolStripButtonSendInstantMessage.Size = new System.Drawing.Size(88, 20);
+			this.toolStripButtonSendInstantMessage.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripButtonSendInstantMessage.Size = new System.Drawing.Size(96, 28);
 			this.toolStripButtonSendInstantMessage.Text = "xxMessages";
 			this.toolStripButtonSendInstantMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonSendInstantMessage.Click += new System.EventHandler(this.toolStripButtonSendInstantMessageClick);
@@ -230,7 +231,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.toolStripButtonSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonSearch.Name = "toolStripButtonSearch";
-			this.toolStripButtonSearch.Size = new System.Drawing.Size(114, 20);
+			this.toolStripButtonSearch.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripButtonSearch.Size = new System.Drawing.Size(122, 28);
 			this.toolStripButtonSearch.Text = "xxFindThreeDots";
 			this.toolStripButtonSearch.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonSearch.Click += new System.EventHandler(this.toolStripButtonSearchClick);

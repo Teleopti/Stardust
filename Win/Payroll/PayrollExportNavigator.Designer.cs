@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Win.Payroll
 			this.toolStripMenuItemDeleteWorkload = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemWorkloadProperties = new System.Windows.Forms.ToolStripMenuItem();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-			this.toolStripPayrollExport = new System.Windows.Forms.ToolStrip();
+			this.toolStripPayrollExport = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripLabelSkillActions = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripMenuItemNew = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Win.Payroll
 			this.treeViewMain.RightToLeftLayout = true;
 			this.treeViewMain.SelectedImageIndex = 0;
 			this.treeViewMain.ShowLines = false;
-			this.treeViewMain.Size = new System.Drawing.Size(218, 350);
+			this.treeViewMain.Size = new System.Drawing.Size(218, 354);
 			this.treeViewMain.TabIndex = 1;
 			this.treeViewMain.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewMain_BeforeSelect);
 			this.treeViewMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeViewMain_MouseDown);
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.Win.Payroll
 			// 
 			// splitContainer1
 			// 
-			this.splitContainer1.BackColor = System.Drawing.Color.Transparent;
+			this.splitContainer1.BackColor = System.Drawing.Color.Gainsboro;
 			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
 			this.splitContainer1.Location = new System.Drawing.Point(0, 0);
@@ -222,13 +222,15 @@ namespace Teleopti.Ccc.Win.Payroll
 			this.splitContainer1.Panel2.Controls.Add(this.toolStripPayrollExport);
 			this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.splitContainer1.Size = new System.Drawing.Size(218, 556);
-			this.splitContainer1.SplitterDistance = 350;
+			this.splitContainer1.SplitterDistance = 354;
 			this.splitContainer1.SplitterWidth = 2;
 			this.splitContainer1.TabIndex = 4;
 			// 
 			// toolStripPayrollExport
 			// 
-			this.toolStripPayrollExport.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.toolStripPayrollExport.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.toolStripPayrollExport.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripPayrollExport.Image = null;
 			this.toolStripPayrollExport.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabelSkillActions,
             this.toolStripMenuItemNew,
@@ -237,12 +239,17 @@ namespace Teleopti.Ccc.Win.Payroll
             this.toolStripSeparator1,
             this.toolStripMenuItemDelete,
             this.toolStripMenuItemProperties});
+			this.toolStripPayrollExport.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.toolStripPayrollExport.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
 			this.toolStripPayrollExport.Location = new System.Drawing.Point(10, 0);
 			this.toolStripPayrollExport.Name = "toolStripPayrollExport";
-			this.toolStripPayrollExport.Size = new System.Drawing.Size(208, 148);
+			this.toolStripPayrollExport.Office12Mode = false;
+			this.toolStripPayrollExport.ShowCaption = false;
+			this.toolStripPayrollExport.ShowLauncher = false;
+			this.toolStripPayrollExport.Size = new System.Drawing.Size(208, 200);
 			this.toolStripPayrollExport.TabIndex = 0;
 			this.toolStripPayrollExport.Text = "toolStrip1";
+			this.toolStripPayrollExport.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
 			// 
 			// toolStripLabelSkillActions
 			// 
@@ -256,6 +263,7 @@ namespace Teleopti.Ccc.Win.Payroll
 			this.toolStripMenuItemNew.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_New2;
 			this.toolStripMenuItemNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripMenuItemNew.Name = "toolStripMenuItemNew";
+			this.toolStripMenuItemNew.Overflow = System.Windows.Forms.ToolStripItemOverflow.AsNeeded;
 			this.toolStripMenuItemNew.Padding = new System.Windows.Forms.Padding(4);
 			this.toolStripMenuItemNew.Size = new System.Drawing.Size(206, 28);
 			this.toolStripMenuItemNew.Text = "xxNewThreeDots";
@@ -272,6 +280,7 @@ namespace Teleopti.Ccc.Win.Payroll
 			this.toolStripMenuItemRunExport.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Export2;
 			this.toolStripMenuItemRunExport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripMenuItemRunExport.Name = "toolStripMenuItemRunExport";
+			this.toolStripMenuItemRunExport.Overflow = System.Windows.Forms.ToolStripItemOverflow.AsNeeded;
 			this.toolStripMenuItemRunExport.Padding = new System.Windows.Forms.Padding(4);
 			this.toolStripMenuItemRunExport.Size = new System.Drawing.Size(206, 28);
 			this.toolStripMenuItemRunExport.Text = "xxRunExport";
@@ -289,6 +298,7 @@ namespace Teleopti.Ccc.Win.Payroll
 			this.toolStripMenuItemDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Delete;
 			this.toolStripMenuItemDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
+			this.toolStripMenuItemDelete.Overflow = System.Windows.Forms.ToolStripItemOverflow.AsNeeded;
 			this.toolStripMenuItemDelete.Padding = new System.Windows.Forms.Padding(4);
 			this.toolStripMenuItemDelete.Size = new System.Drawing.Size(206, 28);
 			this.toolStripMenuItemDelete.Text = "xxDelete";
@@ -300,6 +310,7 @@ namespace Teleopti.Ccc.Win.Payroll
 			this.toolStripMenuItemProperties.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemProperties.Image")));
 			this.toolStripMenuItemProperties.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripMenuItemProperties.Name = "toolStripMenuItemProperties";
+			this.toolStripMenuItemProperties.Overflow = System.Windows.Forms.ToolStripItemOverflow.AsNeeded;
 			this.toolStripMenuItemProperties.Padding = new System.Windows.Forms.Padding(4);
 			this.toolStripMenuItemProperties.Size = new System.Drawing.Size(206, 28);
 			this.toolStripMenuItemProperties.Text = "xxPropertiesThreeDots";
@@ -339,7 +350,7 @@ namespace Teleopti.Ccc.Win.Payroll
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ToolStripMenuItem xxEditForecastThreeDotsToolStripMenuItem;
-        private System.Windows.Forms.ToolStrip toolStripPayrollExport;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripPayrollExport;
         private System.Windows.Forms.ToolStripLabel toolStripLabelSkillActions;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNew;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripPayrollExport;
