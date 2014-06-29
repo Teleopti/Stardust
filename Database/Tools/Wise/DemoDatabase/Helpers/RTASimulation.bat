@@ -4,4 +4,4 @@
 SET ROOTDIR=%~dp0
 
 ::Start RTA Simulation
-CALL "%ROOTDIR%\..\..\..\TeleoptiCCC\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe"
+CALL "%ROOTDIR%\..\..\..\TeleoptiWFM\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe"
