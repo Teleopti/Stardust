@@ -86,6 +86,8 @@
 			// 
 			this.toolStripPeople.BackColor = System.Drawing.Color.White;
 			this.toolStripPeople.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.toolStripPeople.CaptionAlignment = Syncfusion.Windows.Forms.Tools.CaptionAlignment.Center;
+			this.toolStripPeople.CaptionFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.toolStripPeople.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripPeople.ForeColor = System.Drawing.Color.MidnightBlue;
 			this.toolStripPeople.Image = null;
@@ -109,16 +111,18 @@
 			this.toolStripPeople.Name = "toolStripPeople";
 			this.toolStripPeople.Office12Mode = false;
 			this.toolStripPeople.ShowCaption = false;
+			this.toolStripPeople.ShowLauncher = false;
 			this.toolStripPeople.Size = new System.Drawing.Size(252, 193);
 			this.toolStripPeople.TabIndex = 0;
+			this.toolStripPeople.Text = "xxActions";
 			this.toolStripPeople.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
 			// 
 			// toolStripLabel1
 			// 
 			this.toolStripLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripLabel1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.toolStripLabel1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.toolStripLabel1.Name = "toolStripLabel1";
-			this.toolStripLabel1.Size = new System.Drawing.Size(250, 16);
+			this.toolStripLabel1.Size = new System.Drawing.Size(250, 17);
 			this.toolStripLabel1.Text = "xxActions";
 			// 
 			// toolStripButtonToday
