@@ -42,7 +42,7 @@ CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Tel
 echo Start App Pools. Done
 echo.
 
-if exist "%ROOTDIR%\..\..\TeleoptiCCC\SDK\TeleoptiCccSdkService.svc" call:browseSDK
+call:browseSDK
 Echo.
 
 ::For each service in list
