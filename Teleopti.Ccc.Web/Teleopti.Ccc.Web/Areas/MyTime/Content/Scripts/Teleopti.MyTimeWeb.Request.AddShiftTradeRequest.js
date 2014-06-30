@@ -83,7 +83,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				}
 			});
 		};
-
+		
+		self.remove = function (day) {
+			var date = day.selectedDate;
+			var dayToDelete = $.grep(self.chooseHistorys(), function (e) { return e.selectedDate == date; })[0];
+			self.chooseHistorys.remove(dayToDelete);
+		};
 		self.isAddVisible = ko.computed(function(){
 			var addVisible = false;
 			if (self.isDetailVisible() && !self.selectedInternal()) {
