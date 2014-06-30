@@ -121,6 +121,7 @@
 		public const string AddFullDayAbsence = "Raptor/Anywhere/Schedules/AddFullDayAbsence";
 		public const string AddIntradayAbsence = "Raptor/Anywhere/Schedules/AddIntradayAbsence";
 		public const string RemoveAbsence = "Raptor/Anywhere/Schedules/RemoveAbsence";
+		public const string AddActivity = "Raptor/Anywhere/Schedules/AddActivity";
 		public const string RealTimeAdherenceOverview = "Raptor/Anywhere/RealTimeAdherenceOverview";
 	}
 }

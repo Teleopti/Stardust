@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 		[HttpPost]
 		[UnitOfWorkAction]
+		[AddActivityPermission]
 		public JsonResult AddActivity(AddActivityCommand command)
 		{
 			_commandDispatcher.Execute(command);

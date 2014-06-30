@@ -152,7 +152,9 @@
 										<!-- ko if: $root.permissionAddIntradayAbsence -->
                                         <a href="#" class="btn btn-sm add-intraday-absence" data-bind="click: $data.AddIntradayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.IntradayAbsence"></span></a>
 										<!-- /ko-->
+										<!-- ko if: $root.permissionAddActivity -->
 	                                    <a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
+										<!-- /ko-->
 										<!-- ko if: $root.permissionRemoveAbsence -->
 	                                    <a href="#" class="btn btn-sm remove-absence" data-bind="click: $data.RemoveAbsence"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
 										<!-- /ko-->
@@ -178,7 +180,9 @@
 										<!-- ko if: $root.permissionAddFullDayAbsence -->
 		                                <a href="#" class="btn btn-sm add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
 										<!-- /ko -->
+										<!-- ko if: $root.permissionAddActivity -->
 		                                <a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
+										<!-- /ko -->
 	                                </div>
                                     <!-- /ko -->
                                 </div>

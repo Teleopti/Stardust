@@ -29,6 +29,14 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
+	public sealed class AddActivityPermissionAttribute : ApplicationFunctionAnywhereAttribute
+	{
+		public AddActivityPermissionAttribute()
+			: base(DefinedRaptorApplicationFunctionPaths.AddActivity)
+		{
+		}
+	}
+
 	public class ApplicationFunctionAnywhereAttribute : AuthorizeAttribute
 	{
 		private readonly string[] _applicationFunctionPaths;
