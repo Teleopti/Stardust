@@ -115,7 +115,7 @@ item: Remark
 end
 item: Execute Program
   Pathname=SQLCMD
-  Command Line=-S"%SRV%" -d"TeleoptiAnalytics_Demo" %SA% -i"%DIR%DemoDatabase\RestoreUsers.sql"
+  Command Line=-S"%SRV%" -d"TeleoptiAnalytics_Demo" %SA% -i"%DIR%DemoDatabase\RestoreUsers.sql" -o"%DIR%RestoreUsers.log"
   Default Directory=%DIR%
   Flags=00000110
 end
