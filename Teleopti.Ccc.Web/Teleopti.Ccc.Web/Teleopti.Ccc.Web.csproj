@@ -273,6 +273,16 @@
     <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarTransformer.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\CheckCalendarActiveCommand.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\CheckCalendarPermissionCommand.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\FindSharedCalendarScheduleDays.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\ICalendarTransformer.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\ICheckCalendarActiveCommand.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\ICheckCalendarPermissionCommand.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\IFindSharedCalendarScheduleDays.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\IPrincipalAuthorizationFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\ShareCalendar\PrincipalAuthorizationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IOvertimeAvailabilityPersister.cs" />
