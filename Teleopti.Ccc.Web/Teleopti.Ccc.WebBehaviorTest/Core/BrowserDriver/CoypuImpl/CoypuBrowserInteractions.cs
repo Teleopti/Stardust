@@ -4,6 +4,8 @@ using System.Text.RegularExpressions;
 using Coypu;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
@@ -58,6 +60,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		public void ClickContaining(string selector, string text)
 		{
 			_browser.FindCss(selector, new Regex(Regex.Escape(text)), options()).Click(options());
+		}
+
+		public void DragnDrop(string selector, int x, int y)
+		{
+				var selenium = ((OpenQA.Selenium.Remote.RemoteWebDriver)_browser.Native);
+				var start =selenium.FindElement(By.CssSelector(selector));
+				var end = selenium.FindElement(By.CssSelector(selector));
+				new Actions(selenium).DragAndDropToOffset(start, 200, 200).Perform();
 		}
 		
 		public void AssertExists(string selector)

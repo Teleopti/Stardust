@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 
 		void DumpInfo(Action<string> writer);
 		void DumpUrl(Action<string> writer);
-	    void CloseWindow();
+	  void CloseWindow();
+		void DragnDrop(string selector, int x, int y);
 	}
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
@@ -126,6 +128,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 	    {
 	        throw new NotSupportedException("Not supported in IE yet.");
 	    }
+
+			public void DragnDrop(string selector, int x, int y)
+			{
+					throw new NotSupportedException("Not supported in IE yet.");
+					/*var selenium = ((OpenQA.Selenium.Remote.RemoteWebDriver)_browser.Native);
+					var start = selenium.FindElement(By.CssSelector(selector));
+					var end = selenium.FindElement(By.CssSelector(selector));
+					new Actions(selenium).DragAndDropToOffset(start, 200, 200).Perform();*/
+			}
 
 	    private void validateSelector(string selector)
 		{

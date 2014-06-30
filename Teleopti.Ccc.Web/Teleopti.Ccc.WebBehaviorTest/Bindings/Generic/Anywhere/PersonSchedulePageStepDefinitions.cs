@@ -239,6 +239,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".activity-form .start-time", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
 		}
 
+		[When(@"I move the activity by dnd")]
+		public void WhenIMoveTheActivityByDnd(Table scheduledActivityInfotable)
+		{
+				var values = scheduledActivityInfotable.CreateInstance<MoveActivityFormInfo>();
+				Browser.Interactions.DragnDrop(".layer.active", 10, 0);
+		}
+
 		[When(@"I save the shift")]
 		public void WhenISaveTheShift()
 		{
