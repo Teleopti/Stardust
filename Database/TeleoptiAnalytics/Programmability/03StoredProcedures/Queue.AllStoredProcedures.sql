@@ -250,11 +250,18 @@ BEGIN
 			UPDATE Queue.Messages
 			SET ProcessingUntil = DateAdd(mi,1,GetUtcDate()),
 			ProcessedCount=ProcessedCount+1
-			WHERE MessageId=@MessageId
-			
-			SELECT *
-			FROM Queue.Messages
-			WHERE MessageId=@MessageId
+			WHERE MessageId=@MessageId AND ProcessingUntil<GetUtcDate()
+			IF (@@ROWCOUNT > 0)
+				BEGIN
+					SELECT *
+					FROM Queue.Messages
+					WHERE MessageId=@MessageId
+				END
+			ELSE
+				BEGIN
+					SELECT TOP 0 *
+					FROM Queue.Messages;
+				END
 		END
 	else
 		BEGIN
