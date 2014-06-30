@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				IsAddFullDayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
 				IsAddIntradayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence),
 				IsRemoveAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveAbsence),
-				IsAddActivityAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddActivity)
+				IsAddActivityAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddActivity),
+				IsMoveActivityAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveActivity)
 			}, JsonRequestBehavior.AllowGet);
 		}
 

@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 		[HttpPost]
 		[UnitOfWorkAction]
+		[MoveActivityPermission]
 		public JsonResult MoveActivity(MoveActivityCommand command)
 		{
 			_commandDispatcher.Execute(command);

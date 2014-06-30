@@ -127,6 +127,7 @@
 		public const string AddIntradayAbsence = "0097";
 		public const string RemoveAbsence = "0098";
 		public const string AddActivity = "0099";
+		public const string MoveActivity = "0100";
 		public const string RealTimeAdherenceOverview = "0092";
 	}
 }

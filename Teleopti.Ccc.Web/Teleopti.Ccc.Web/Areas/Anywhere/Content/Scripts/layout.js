@@ -210,6 +210,7 @@ define([
 				permissions.addIntradayAbsence = responseData.IsAddIntradayAbsenceAvailable;
 				permissions.removeAbsence = responseData.IsRemoveAbsenceAvailable;
 				permissions.addActivity = responseData.IsAddActivityAvailable;
+				permissions.moveActivity = responseData.IsMoveActivityAvailable;
 			}
 		});
 	}
