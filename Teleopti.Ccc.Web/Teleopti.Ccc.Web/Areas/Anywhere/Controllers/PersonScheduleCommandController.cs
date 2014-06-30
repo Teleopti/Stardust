@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 		[HttpPost]
 		[UnitOfWorkAction]
+		[AddIntradayAbsencePermission]
 		public JsonResult AddIntradayAbsence(AddIntradayAbsenceCommand command)
 		{
 			if (!command.IsValid())

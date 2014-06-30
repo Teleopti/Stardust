@@ -13,6 +13,14 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
+	public sealed class AddIntradayAbsencePermissionAttribute : ApplicationFunctionAnywhereAttribute
+	{
+		public AddIntradayAbsencePermissionAttribute()
+			: base(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence)
+		{
+		}
+	}
+
 	public class ApplicationFunctionAnywhereAttribute : AuthorizeAttribute
 	{
 		private readonly string[] _applicationFunctionPaths;
