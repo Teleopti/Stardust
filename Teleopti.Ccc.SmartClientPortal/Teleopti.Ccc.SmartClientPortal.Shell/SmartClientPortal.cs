@@ -358,6 +358,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             var authorization = PrincipalAuthorization.Instance();
             IEnumerable<IApplicationFunction> modules = authorization.GrantedFunctionsBySpecification(new ModuleSpecification());
 
+	        IList<ModulePanelItem> modulePanelItems = new List<ModulePanelItem>();
             foreach (IApplicationFunction module in modules.OrderBy(m => m.SortOrder.GetValueOrDefault(1000000)))
             {
                 if(module.IsPreliminary)
@@ -412,8 +413,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                         outlookBarSmartPartInfo.Icon = Resources.WFM_Performance_Manager;
                         break;
                 }
-
-				outlookBar1.AddItem(new ModulePanelItem
+				modulePanelItems.Add(new ModulePanelItem
 				{
 					ItemImage = outlookBarSmartPartInfo.Icon,
 					ItemText = outlookBarSmartPartInfo.Title,
@@ -421,6 +421,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					Tag = outlookBarSmartPartInfo.EventTopicName
 				});
             }
+
+			outlookBar1.AddItems(modulePanelItems.ToArray());
         }
 
         /// <summary>
