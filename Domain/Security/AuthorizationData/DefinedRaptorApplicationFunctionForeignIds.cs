@@ -125,6 +125,7 @@
 		public const string MyTeamSchedules = "0081";
 		public const string AddFullDayAbsence = "0096";
 		public const string AddIntradayAbsence = "0097";
+		public const string RemoveAbsence = "0098";
 		public const string RealTimeAdherenceOverview = "0092";
 	}
 }

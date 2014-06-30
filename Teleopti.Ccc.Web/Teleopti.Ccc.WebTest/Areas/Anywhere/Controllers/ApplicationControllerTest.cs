@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence)).Return(true);
 			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence)).Return(true);
+			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveAbsence)).Return(true);
 
 			currentTeleoptiPrincipal.Stub(x => x.Current()).Return(principal);
 
@@ -74,6 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			((object)content.IsAddFullDayAbsenceAvailable).Should().Be.EqualTo(true);
 			((object)content.IsAddIntradayAbsenceAvailable).Should().Be.EqualTo(true);
+			((object)content.IsRemoveAbsenceAvailable).Should().Be.EqualTo(true);
 		}
 
 		[Test]

@@ -21,6 +21,14 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
+	public sealed class RemoveAbsencePermissionAttribute : ApplicationFunctionAnywhereAttribute
+	{
+		public RemoveAbsencePermissionAttribute()
+			: base(DefinedRaptorApplicationFunctionPaths.RemoveAbsence)
+		{
+		}
+	}
+
 	public class ApplicationFunctionAnywhereAttribute : AuthorizeAttribute
 	{
 		private readonly string[] _applicationFunctionPaths;

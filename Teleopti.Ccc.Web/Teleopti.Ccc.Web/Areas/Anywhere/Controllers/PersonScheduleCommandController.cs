@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 		[HttpPost]
 		[UnitOfWorkAction]
+		[RemoveAbsencePermission]
 		public JsonResult RemovePersonAbsence(RemovePersonAbsenceCommand command)
 		{
 			_commandDispatcher.Execute(command);

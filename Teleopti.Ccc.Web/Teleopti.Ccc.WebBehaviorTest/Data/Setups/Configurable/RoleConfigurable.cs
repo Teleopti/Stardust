@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public bool AddFullDayAbsence { get; set; }
 		public bool AddIntradayAbsence { get; set; }
+		public bool RemoveAbsence { get; set; }
 
 		public RoleConfigurable()
 		{
@@ -82,6 +83,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToMyReportQueueMetrics = true;
 			AddFullDayAbsence = true;
 			AddIntradayAbsence = true;
+			RemoveAbsence = true;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -229,6 +231,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!AddIntradayAbsence)
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence
+									   select f;
+
+			if (!RemoveAbsence)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.RemoveAbsence
 									   select f;
 
 			return applicationFunctions;

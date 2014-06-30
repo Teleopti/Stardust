@@ -54,3 +54,22 @@ Scenario: No permission to add intraday absence
 	When I view schedules for 'Team green' on '2014-06-30'
 	And I select any schedule activity for 'Pierre Baldi'
 	Then I should not see 'Add intraday absence' option in shift menu
+
+Scenario: No permission to remove absence 
+	Given I have a role with
+	| Field                      | Value                        |
+	| Name                       | Green without remove absence |
+	| Access to team             | Team green                   |
+	| Access to Anywhere         | true                         |
+	| View unpublished schedules | true                         |
+	| Remove absence             | false                        |
+	And 'Pierre Baldi' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2014-06-30 09:00 |
+	| End time       | 2014-06-30 16:00 |
+	When I view schedules for 'Team green' on '2014-06-30'
+	And I select any schedule activity for 'Pierre Baldi'
+	Then I should not see 'Remove absence' option in shift menu
+

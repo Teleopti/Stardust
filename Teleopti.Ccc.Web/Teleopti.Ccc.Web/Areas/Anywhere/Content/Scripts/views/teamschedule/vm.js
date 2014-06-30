@@ -24,6 +24,7 @@ define([
 
 		this.permissionAddFullDayAbsence = ko.observable(permissions.addFullDayAbsence);
 		this.permissionAddIntradayAbsence = ko.observable(permissions.addIntradayAbsence);
+		this.permissionRemoveAbsence = ko.observable(permissions.removeAbsence);
 
 		this.Loading = ko.observable(false);
 
