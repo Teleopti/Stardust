@@ -87,6 +87,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<CalendarLinkIdGenerator>().As<ICalendarLinkIdGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkGenerator>().As<ICalendarLinkGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkViewModelFactory>().As<ICalendarLinkViewModelFactory>().SingleInstance();
+            builder.RegisterType<CalendarTransformer>().As<ICalendarTransformer>().SingleInstance();
+            builder.RegisterType<FindSharedCalendarScheduleDays>().As<IFindSharedCalendarScheduleDays>().SingleInstance();
+            builder.RegisterType<CheckCalendarActiveCommand>().As<ICheckCalendarActiveCommand>().SingleInstance();
+            builder.RegisterType<CheckCalendarPermissionCommand>().As<ICheckCalendarPermissionCommand>().SingleInstance();
+            builder.RegisterType<PrincipalAuthorizationFactory>().As<IPrincipalAuthorizationFactory>().SingleInstance();
 		}
 
 		private static void registerRequestsType(ContainerBuilder builder)

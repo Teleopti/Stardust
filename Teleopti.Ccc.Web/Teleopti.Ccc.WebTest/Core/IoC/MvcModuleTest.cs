@@ -134,6 +134,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				.Should().Not.Be.Null();
 		}
 
+        [Test]
+        public void ShouldRegisterCalendarShareController()
+        {
+            requestContainer.Resolve<ShareCalendarController>()
+                .Should().Not.Be.Null();
+        }
+
 		[Test]
 		public void ShouldRegisterMessageBrokerController()
 		{

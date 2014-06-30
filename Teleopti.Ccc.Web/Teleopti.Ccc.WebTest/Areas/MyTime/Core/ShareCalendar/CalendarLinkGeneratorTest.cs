@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Threading;
+using System.Dynamic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -11,7 +13,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -27,14 +29,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 		private IUnitOfWorkFactory _unitOfWorkFactory;
 		private IUnitOfWork _unitOfWork;
 		private IPersonRepository _personRepository;
-		private IDataSourcesProvider _dataSourcesProvider;
-		private IPersonScheduleDayReadModelFinder _personScheduleDayReadModelFinder;
-		private ICurrentPrincipalContext _currentPrincipalContext;
-		private IPersonalSettingDataRepository _personalSettingDataRepository;
-		private IRoleToPrincipalCommand _roleToPrincipalCommand;
-		private IPermissionProvider _permissionProvider;
-		private const string dataSourceName = "Main";
-
+	    private ICheckCalendarPermissionCommand _checkCalendarPermissionCommand;
+	    private ICheckCalendarActiveCommand _checkCalendarActiveCommand;
+	    private IFindSharedCalendarScheduleDays _findSharedCalendarScheduleDays;
+	    
 		[SetUp]
 		public void Setup()
 		{
@@ -46,150 +44,232 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_unitOfWork)).Return(_personRepository);
-			_dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
-			_dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(dataSourceName)).Return(_dataSource);
-			_personScheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			_currentPrincipalContext = MockRepository.GenerateMock<ICurrentPrincipalContext>();
-			_personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
-			_roleToPrincipalCommand = MockRepository.GenerateMock<IRoleToPrincipalCommand>();
-			_permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+            _checkCalendarPermissionCommand = MockRepository.GenerateMock<ICheckCalendarPermissionCommand>();
+            _checkCalendarActiveCommand = MockRepository.GenerateMock<ICheckCalendarActiveCommand>();
+            _findSharedCalendarScheduleDays = MockRepository.GenerateMock<IFindSharedCalendarScheduleDays>();
 		}
 
 		[Test]
 		public void ShouldGetCalendarForPerson()
 		{
-			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(DateOnly.Today.AddDays(181));
-			_personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
-			_personalSettingDataRepository.Stub(
-				x => x.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person, new CalendarLinkSettings())).IgnoreArguments()
-			                              .Return(new CalendarLinkSettings
-				                              {
-					                              IsActive = true
-				                              });
-			_repositoryFactory.Stub(x => x.CreatePersonalSettingDataRepository(_unitOfWork)).Return(_personalSettingDataRepository);
-			_personScheduleDayReadModelFinder.Stub(x => x.ForPerson(DateOnly.Today.AddDays(-60), DateOnly.Today.AddDays(180), person.Id.Value)).Return(new[]
-				{
-					new PersonScheduleDayReadModel
-						{
-							Model = Newtonsoft.Json.JsonConvert.SerializeObject(new Model
-								{
-									Shift = new Shift
-										{
-											Projection = new[]
-												{
-													new SimpleLayer
-														{
-															Start = new DateTime(2013, 7, 8, 6, 30, 0, DateTimeKind.Utc),
-															End = new DateTime(2013, 7, 8, 8, 30, 0, DateTimeKind.Utc),
-														}
-												}
-										}
-								}),
-						}
-				});
-			_repositoryFactory.Stub(x => x.CreatePersonScheduleDayReadModelFinder(_unitOfWork)).Return(_personScheduleDayReadModelFinder);
-			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
-			                   .Return(true);
+		    const string dataSourceName = "Main";
+		    var dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
+            dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(dataSourceName)).Return(_dataSource);
 
-			var deserializer = new NewtonsoftJsonDeserializer();
-			var calendarlinkid = new CalendarLinkId
-				{
-					DataSourceName = dataSourceName,
-					PersonId = person.Id.Value
-				};
+            var calendarTransformer = MockRepository.GenerateMock<ICalendarTransformer>();
+	    
+            var scheduledTo = DateOnly.Today.AddDays(181);
+		    var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(scheduledTo);
+			_personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
+		    var models = new[]
+		    {
+		        new PersonScheduleDayReadModel
+		        {
+		            Model =
+		                Newtonsoft.Json.JsonConvert.SerializeObject(new Model
+		                {
+		                    Shift =
+		                        new Shift
+		                        {
+		                            Projection =
+		                                new[]
+		                                {
+		                                    new SimpleLayer
+		                                    {
+		                                        Start = new DateTime(2013, 7, 8, 6, 30, 0, DateTimeKind.Utc),
+		                                        End = new DateTime(2013, 7, 8, 8, 30, 0, DateTimeKind.Utc),
+		                                    }
+		                                }
+		                        }
+		                }),
+		        }
+		    };
 
-			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider, deserializer, new Now(), 
-			                                       _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider
-				);
-			var result = target.Generate(calendarlinkid);
+            var calendarlinkid = new CalendarLinkId
+            {
+                DataSourceName = dataSourceName,
+                PersonId = person.Id.GetValueOrDefault()
+            };
+            
+            _findSharedCalendarScheduleDays.Stub(x => x.GetScheduleDays(calendarlinkid, _unitOfWork, scheduledTo)).Return(models);
+			calendarTransformer.Stub(x => x.Transform(models)).Return("success!");
 
-			_currentPrincipalContext.AssertWasCalled(x => x.SetCurrentPrincipal(person, _dataSource, null));
-			_roleToPrincipalCommand.AssertWasCalled(
-				x => x.Execute(Thread.CurrentPrincipal as ITeleoptiPrincipal, _unitOfWorkFactory, _personRepository));
-			result.Should().Contain("DTSTART:20130708T063000Z");
-			result.Should().Contain("DTEND:20130708T083000Z");
+		    var target = new CalendarLinkGenerator(_repositoryFactory, dataSourcesProvider, calendarTransformer,
+		        _findSharedCalendarScheduleDays, _checkCalendarPermissionCommand, _checkCalendarActiveCommand);
+			target.Generate(calendarlinkid).Should().Be.EqualTo("success!");
+
+			_checkCalendarActiveCommand.AssertWasCalled(x => x.Execute(_unitOfWork,person));
+		    _checkCalendarPermissionCommand.AssertWasCalled(x => x.Execute(_dataSource, person, _personRepository));
 		}
+
+        [Test]
+        public void ShouldTransformCalendar()
+        {
+            var target = new CalendarTransformer(new NewtonsoftJsonDeserializer());
+            var result = target.Transform(new[]
+            {
+                new PersonScheduleDayReadModel
+                {
+                    Model = Newtonsoft.Json.JsonConvert.SerializeObject(new Model
+                    {
+                        Shift = new Shift
+                        {
+                            Projection = new[]
+                            {
+                                new SimpleLayer
+                                {
+                                    Start = new DateTime(2013, 7, 8, 6, 30, 0, DateTimeKind.Utc),
+                                    End = new DateTime(2013, 7, 8, 8, 30, 0, DateTimeKind.Utc),
+                                }
+                            }
+                        }
+                    }),
+                }
+            });
+
+            result.Should().Contain("DTSTART:20130708T063000Z");
+            result.Should().Contain("DTEND:20130708T083000Z");
+        }
+        
+        [Test]
+        public void ShouldTransformCalendarWithoutShift()
+        {
+            var target = new CalendarTransformer(new NewtonsoftJsonDeserializer());
+            var result = target.Transform(new[]
+            {
+                new PersonScheduleDayReadModel
+                {
+                    Model = Newtonsoft.Json.JsonConvert.SerializeObject(new Model
+                    {
+                        Shift = null
+                    }),
+                }
+            });
+
+            result.Should().Contain("Teleopti");
+        }
+
+        [Test]
+        public void ShouldTransformCalendarWithoutModel()
+        {
+            var target = new CalendarTransformer(new NewtonsoftJsonDeserializer());
+            var result = target.Transform(new[]
+            {
+                new PersonScheduleDayReadModel
+                {
+                    Model = null,
+                }
+            });
+
+            result.Should().Contain("Teleopti");
+        }
 
 		[Test]
 		public void ShouldNotGetUnpublishedCalendarForPerson()
 		{
+            var personScheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
+		    var personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
+		
+            const string dataSourceName = "Main";
 			var publishedToDate = DateOnly.Today.AddDays(30);
 			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(publishedToDate);
-			_personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
-			_personalSettingDataRepository.Stub(
+			_personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
+			personalSettingDataRepository.Stub(
 				x => x.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person, new CalendarLinkSettings())).IgnoreArguments()
 										  .Return(new CalendarLinkSettings
 										  {
 											  IsActive = true
 										  });
-			_repositoryFactory.Stub(x => x.CreatePersonalSettingDataRepository(_unitOfWork)).Return(_personalSettingDataRepository);
-			_repositoryFactory.Stub(x => x.CreatePersonScheduleDayReadModelFinder(_unitOfWork)).Return(_personScheduleDayReadModelFinder);
-			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
-							   .Return(true);
-			var deserializer = new NewtonsoftJsonDeserializer();
-			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider, deserializer, new Now(),
-												   _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider
-				);
+			_repositoryFactory.Stub(x => x.CreatePersonalSettingDataRepository(_unitOfWork)).Return(personalSettingDataRepository);
+			_repositoryFactory.Stub(x => x.CreatePersonScheduleDayReadModelFinder(_unitOfWork)).Return(personScheduleDayReadModelFinder);
+			
+            var target = new FindSharedCalendarScheduleDays(_repositoryFactory, new Now());
 			var calendarlinkid = new CalendarLinkId
 			{
 				DataSourceName = dataSourceName,
-				PersonId = person.Id.Value
+				PersonId = person.Id.GetValueOrDefault()
 			};
 			var startDate = DateOnly.Today.AddDays(-60);
-			_personScheduleDayReadModelFinder.Stub(x => x.ForPerson(startDate, publishedToDate, person.Id.Value)).Return(new PersonScheduleDayReadModel[] { });
+			personScheduleDayReadModelFinder.Stub(x => x.ForPerson(startDate, publishedToDate, person.Id.GetValueOrDefault())).Return(new PersonScheduleDayReadModel[] { });
 
-			target.Generate(calendarlinkid);
+			target.GetScheduleDays(calendarlinkid,_unitOfWork,publishedToDate);
 
-			_personScheduleDayReadModelFinder.AssertWasNotCalled(x => x.ForPerson(startDate, DateOnly.Today.AddDays(180), person.Id.Value));
-			_personScheduleDayReadModelFinder.AssertWasCalled(x => x.ForPerson(startDate, publishedToDate, person.Id.Value));
+			personScheduleDayReadModelFinder.AssertWasNotCalled(x => x.ForPerson(startDate, DateOnly.Today.AddDays(180), person.Id.GetValueOrDefault()));
+			personScheduleDayReadModelFinder.AssertWasCalled(x => x.ForPerson(startDate, publishedToDate, person.Id.GetValueOrDefault()));
 		}
 
 		[Test, ExpectedException(typeof(PermissionException))]
 		public void ShouldThrowIfNoCalendarLinkPermission()
 		{
 			var person = PersonFactory.CreatePersonWithGuid("first", "last");
-			_personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
-			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
-			                   .Return(false);
+            var roleToPrincipalCommand = MockRepository.GenerateMock<IRoleToPrincipalCommand>();
+            var principalFactory = MockRepository.GenerateMock<IPrincipalFactory>();
+            var principalAuthorizationFactory = MockRepository.GenerateMock<IPrincipalAuthorizationFactory>();
+            var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+            var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
+			_personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
+		    principalFactory.Stub(x => x.MakePrincipal(person, _dataSource, null)).Return(principal);
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShareCalendar)).Return(false);
+            principalAuthorizationFactory.Stub(x => x.FromPrincipal(principal)).Return(principalAuthorization);
 
-			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider,
-			                                       new NewtonsoftJsonDeserializer(), null,
-			                                       _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider);
-			var calendarlinkid = new CalendarLinkId
-				{
-					DataSourceName = dataSourceName,
-					PersonId = person.Id.Value
-				};
-			target.Generate(calendarlinkid);
+		    var target = new CheckCalendarPermissionCommand(roleToPrincipalCommand, principalFactory, principalAuthorizationFactory);
+			target.Execute(_dataSource,person,_personRepository);
 		}
+
+        [Test]
+        public void ShouldPassIfCalendarLinkPermission()
+        {
+            var person = PersonFactory.CreatePersonWithGuid("first", "last");
+            var roleToPrincipalCommand = MockRepository.GenerateMock<IRoleToPrincipalCommand>();
+            var principalFactory = MockRepository.GenerateMock<IPrincipalFactory>();
+            var principalAuthorizationFactory = MockRepository.GenerateMock<IPrincipalAuthorizationFactory>();
+            var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+            var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
+            _personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
+            principalFactory.Stub(x => x.MakePrincipal(person, _dataSource, null)).Return(principal);
+            principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShareCalendar)).Return(true);
+            principalAuthorizationFactory.Stub(x => x.FromPrincipal(principal)).Return(principalAuthorization);
+
+            var target = new CheckCalendarPermissionCommand(roleToPrincipalCommand, principalFactory, principalAuthorizationFactory);
+            target.Execute(_dataSource, person, _personRepository);
+        }
 
 		[Test, ExpectedException(typeof(InvalidOperationException))]
 		public void ShouldThrowIfCalendarLinkNonActive()
 		{
-			var person = PersonFactory.CreatePersonWithGuid("first", "last");
-			_personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
-			_personalSettingDataRepository.Stub(
+		    var personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
+		    var person = PersonFactory.CreatePersonWithGuid("first", "last");
+			_personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
+			personalSettingDataRepository.Stub(
 				x => x.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person, new CalendarLinkSettings())).IgnoreArguments()
 			                              .Return(new CalendarLinkSettings
 				                              {
 					                              IsActive = false
 				                              });
 			_repositoryFactory.Stub(x => x.CreatePersonalSettingDataRepository(_unitOfWork))
-			                  .Return(_personalSettingDataRepository);
-			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
-			                   .Return(true);
-
-			var calendarlinkid = new CalendarLinkId
-				{
-					DataSourceName = dataSourceName,
-					PersonId = person.Id.Value
-				};
-
-			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider,
-			                                       new NewtonsoftJsonDeserializer(), null,
-			                                       _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider
-				);
-			target.Generate(calendarlinkid);
+			                  .Return(personalSettingDataRepository);
+			
+			var target = new CheckCalendarActiveCommand(_repositoryFactory);
+			target.Execute(_unitOfWork,person);
 		}
+
+        [Test]
+        public void ShouldPassIfCalendarLinkIsActive()
+        {
+            var personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
+            var person = PersonFactory.CreatePersonWithGuid("first", "last");
+            _personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
+            personalSettingDataRepository.Stub(
+                x => x.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person, new CalendarLinkSettings())).IgnoreArguments()
+                                          .Return(new CalendarLinkSettings
+                                          {
+                                              IsActive = true
+                                          });
+            _repositoryFactory.Stub(x => x.CreatePersonalSettingDataRepository(_unitOfWork))
+                              .Return(personalSettingDataRepository);
+            
+            var target = new CheckCalendarActiveCommand(_repositoryFactory);
+            target.Execute(_unitOfWork, person);
+        }
 	}
 }

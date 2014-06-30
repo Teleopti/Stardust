@@ -287,6 +287,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 	}
 
 		[When(@"I add '(.*)' to my shift trade list")]
+		[Given(@"I add '(.*)' to my shift trade list")]
 		public void WhenIAddToMyShiftTradeList(string p0)
 		{
 			Browser.Interactions.Click("#shift-trade-add");
@@ -297,6 +298,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.AssertAnyContains("#choose-history-list", agentName);
 			Browser.Interactions.AssertAnyContains("#choose-history-list .trade-date", date);
+		}
+
+		[When(@"I remove the selected day from the shift trade list")]
+		public void WhenIRemoveTheSelectedDayFromTheShiftTradeList()
+		{
+			Browser.Interactions.Click("#shift-trade-remove");
+		}
+
+		[Then(@"I should not see schedule on date '(.*)' in my shift trade list with '(.*)'")]
+		public void ThenIShouldNotSeeScheduleDayForInMyShiftTradeListWith(string date, string agentName)
+		{
+			Browser.Interactions.AssertNotExists("#Request-add-shift-trade-detail-section", string.Format("#choose-history-list .trade-date:contains('{0}')", date));
+			Browser.Interactions.AssertNotExists("#Request-add-shift-trade-detail-section", string.Format("#choose-history-list .shift-trade-agent-name:contains('{0}')", agentName));
 		}
 
 	}
