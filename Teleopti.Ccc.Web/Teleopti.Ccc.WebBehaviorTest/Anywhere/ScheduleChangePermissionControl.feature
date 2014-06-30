@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Schedule change actions under permission control
+﻿Feature: Schedule change actions under permission control
 	In order to let team leaders only manage their own staff
 	As a manager
 	I want to restrict what schedule change actions team leaders are allowed to do
