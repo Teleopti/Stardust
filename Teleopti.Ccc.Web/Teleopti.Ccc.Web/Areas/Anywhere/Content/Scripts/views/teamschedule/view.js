@@ -51,12 +51,12 @@ define([
 		});
 	};
 
-	var checkToggle = function (toggle, callback) {
+	var checkToggle = function(toggle, callback) {
 		ajax.ajax({
 			dataType: "json",
-			url: "ToggleHandler/IsEnabled?toggle="+ toggle,
+			url: "ToggleHandler/IsEnabled?toggle=" + toggle,
 			success: callback
-	});
+		});
 	}
 
 	return {
@@ -64,7 +64,7 @@ define([
 
 			options.renderHtml(view);
 
-			viewModel = new teamScheduleViewModel();
+			viewModel = new teamScheduleViewModel(options.permissions);
 
 			resize.onresize(function () {
 				viewModel.TimeLine.WidthPixels($('.time-line-for').width());

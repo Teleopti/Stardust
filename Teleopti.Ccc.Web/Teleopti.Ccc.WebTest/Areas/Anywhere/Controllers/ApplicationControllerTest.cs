@@ -60,6 +60,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		}
 
 		[Test]
+		public void ShouldReturnPermissionsIHave()
+		{
+			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
+
+			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence)).Return(true);
+
+			currentTeleoptiPrincipal.Stub(x => x.Current()).Return(principal);
+
+			var result = target.Permissions();
+			dynamic content = result.Data;
+
+			((object)content.IsAddFullDayAbsenceAvailable).Should().Be.EqualTo(true);
+		}
+
+		[Test]
 		public void ShouldReturnTranslation()
 		{
 			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://localhost/"), new Uri("http://localhost/"));

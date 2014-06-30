@@ -51,6 +51,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToMyReportQueueMetrics { get; set; }
 		public bool CanLogonAsAnotherUser { get; set; }
 
+		public bool AddFullDayAbsence { get; set; }
+
 		public RoleConfigurable()
 		{
 			Name = DefaultName.Make("A role");
@@ -77,6 +79,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToPersonalAbsenceAccount = true;
 			CanLogonAsAnotherUser = true;
 			AccessToMyReportQueueMetrics = true;
+			AddFullDayAbsence = true;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -216,6 +219,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics
 									   select f;
+
+			if(!AddFullDayAbsence)
+				applicationFunctions= from f in applicationFunctions
+									  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence
+									  select f;
+			
+
 			return applicationFunctions;
 		}
 	}

@@ -118,6 +118,7 @@
 
 		// Anywhere
 		public const string MyTeamSchedules = "Raptor/Anywhere/Schedules";
+		public const string AddFullDayAbsence = "Raptor/Anywhere/Schedules/AddFullDayAbsence";
 		public const string RealTimeAdherenceOverview = "Raptor/Anywhere/RealTimeAdherenceOverview";
 	}
 }

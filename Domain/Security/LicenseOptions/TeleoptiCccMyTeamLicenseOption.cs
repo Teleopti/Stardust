@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 			EnabledApplicationFunctions.Clear();
 
 			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.MyTeamSchedules));
+			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence));
 		}
 	}
 }

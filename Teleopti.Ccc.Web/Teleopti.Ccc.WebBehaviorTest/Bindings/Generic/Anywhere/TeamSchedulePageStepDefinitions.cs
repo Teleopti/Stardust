@@ -67,6 +67,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 
 
+		[Then(@"I should not see '(.*)' option")]
+		public void ThenIShouldNotSeeOption(CssClass cssClass)
+		{
+			Browser.Interactions.AssertNotExists(".schedule-menu a", string.Format(".schedule-menu a.{0}", cssClass.Name));
+		}
 
 		[Then(@"I should see schedule activity details for '(.*)' with")]
 		public void ThenIShouldSeeScheduleActivityDetailsForWith(string name, Table table)

@@ -105,6 +105,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Anywhere\ScheduleChangePermissionControl.feature.cs">
+      <DependentUpon>ScheduleChangePermissionControl.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Anywhere\MoveActivityOnShift.feature.cs">
       <DependentUpon>MoveActivityOnShift.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -746,6 +751,10 @@
     <Content Include="BeforeTestRun.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Anywhere\ScheduleChangePermissionControl.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ScheduleChangePermissionControl.feature.cs</LastGenOutput>
+    </None>
     <None Include="Anywhere\MoveActivityOnShift.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MoveActivityOnShift.feature.cs</LastGenOutput>

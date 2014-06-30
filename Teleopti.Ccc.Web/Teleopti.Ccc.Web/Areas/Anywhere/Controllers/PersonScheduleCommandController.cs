@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 		[HttpPost]
 		[UnitOfWorkAction]
+		[AddFullDayAbsencePermission]
 		public JsonResult AddFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
 			_commandDispatcher.Execute(command);

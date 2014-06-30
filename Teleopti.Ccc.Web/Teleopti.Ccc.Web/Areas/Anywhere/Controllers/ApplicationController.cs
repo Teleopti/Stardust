@@ -34,6 +34,15 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			            	}, JsonRequestBehavior.AllowGet);
 		}
 
+		[HttpGet, OutputCache(NoStore = true, Duration = 0)]
+		public JsonResult Permissions()
+		{
+			return Json(new
+			{
+				IsAddFullDayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
+			}, JsonRequestBehavior.AllowGet);
+		}
+
 		[HttpGet,OutputCache(Duration = 0,NoStore = true)]
 		public ActionResult Resources()
 		{

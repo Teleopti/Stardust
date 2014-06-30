@@ -18,9 +18,11 @@ define([
 	moment
     ) {
 
-	return function () {
+	return function (permissions) {
 
 		var self = this;
+
+		this.permissionAddFullDayAbsence = ko.observable(permissions.addFullDayAbsence);
 
 		this.Loading = ko.observable(false);
 

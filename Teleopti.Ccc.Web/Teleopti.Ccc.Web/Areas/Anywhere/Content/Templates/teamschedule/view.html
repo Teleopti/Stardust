@@ -146,7 +146,9 @@
                                 <div class="shift-menu" data-bind="style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
                                     <!-- ko with: $parent.ShiftMenu -->
                                     <div class="btn-group">
+										<!-- ko if: $root.permissionAddFullDayAbsence -->
                                         <a href="#" class="btn btn-sm add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
+										<!-- /ko-->
                                         <a href="#" class="btn btn-sm add-intraday-absence" data-bind="click: $data.AddIntradayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.IntradayAbsence"></span></a>
                                         <a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
 	                                    <a href="#" class="btn btn-sm remove-absence" data-bind="click: $data.RemoveAbsence"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
@@ -168,10 +170,12 @@
                             <td class="schedule-column" colspan="2">
                                 <div class="schedule-menu">
                                     <!-- ko with: Menu -->
-                                    <div class="btn-group">
-                                        <a href="#" class="btn btn-sm add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
-                                        <a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
-                                    </div>
+	                                <div class="btn-group">
+										<!-- ko if: $root.permissionAddFullDayAbsence -->
+		                                <a href="#" class="btn btn-sm add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
+										<!-- /ko -->
+		                                <a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
+	                                </div>
                                     <!-- /ko -->
                                 </div>
                             </td>
