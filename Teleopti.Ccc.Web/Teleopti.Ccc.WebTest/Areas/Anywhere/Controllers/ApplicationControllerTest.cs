@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
 
 			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence)).Return(true);
+			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence)).Return(true);
 
 			currentTeleoptiPrincipal.Stub(x => x.Current()).Return(principal);
 
@@ -72,6 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			dynamic content = result.Data;
 
 			((object)content.IsAddFullDayAbsenceAvailable).Should().Be.EqualTo(true);
+			((object)content.IsAddIntradayAbsenceAvailable).Should().Be.EqualTo(true);
 		}
 
 		[Test]

@@ -207,6 +207,7 @@ define([
 			url: "Anywhere/Application/Permissions",
 			success: function (responseData, textStatus, jqXHR) {
 				permissions.addFullDayAbsence = responseData.IsAddFullDayAbsenceAvailable;
+				permissions.addIntradayAbsence = responseData.IsAddIntradayAbsenceAvailable;
 			}
 		});
 	}

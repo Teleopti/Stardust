@@ -9,13 +9,6 @@ Background:
 	Given there is a team with
 	| Field | Value            |
 	| Name  | Team green       |
-	And I have a role with
-	| Field                      | Value                          |
-	| Name                       | Green without Full day absence |
-	| Access to team             | Team green                     |
-	| Access to Anywhere         | true                           |
-	| View unpublished schedules | true                           |
-	| Add full day absence       | false                          |
 	And 'Pierre Baldi' has a person period with
 	| Field      | Value      |
 	| Team       | Team green |
@@ -27,7 +20,13 @@ Background:
 	| Color | Green |
 
 Scenario: No permission to add full day absence 
-	Given I have the role 'Green without Full day absence'
+	Given I have a role with
+	| Field                      | Value                              |
+	| Name                       | Green without add full day absence |
+	| Access to team             | Team green                         |
+	| Access to Anywhere         | true                               |
+	| View unpublished schedules | true                               |
+	| Add full day absence       | false                              |
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
@@ -36,16 +35,22 @@ Scenario: No permission to add full day absence
 	| End time       | 2014-06-30 16:00 |
 	When I view schedules for 'Team green' on '2014-06-30'
 	And I click person name 'Pierre Baldi'
-	Then I should not see 'Add full day absence' option
+	Then I should not see 'Add full day absence' option in schedule menu
 
-Scenario: Cannot navigate to add full day absence 
-	Given I have the role 'Green without Full day absence'
+Scenario: No permission to add intraday absence 
+	Given I have a role with
+	| Field                      | Value                              |
+	| Name                       | Green without add intraday absence |
+	| Access to team             | Team green                         |
+	| Access to Anywhere         | true                               |
+	| View unpublished schedules | true                               |
+	| Add intraday absence       | false                              |
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
 	| Start time     | 2014-06-30 09:00 |
 	| End time       | 2014-06-30 16:00 |
-	When I view person schedules add full day absence form for 'Pierre Baldi' in 'Team green' on '2014-06-30'
-	Then I should see an error message
-
+	When I view schedules for 'Team green' on '2014-06-30'
+	And I select any schedule activity for 'Pierre Baldi'
+	Then I should not see 'Add intraday absence' option in shift menu

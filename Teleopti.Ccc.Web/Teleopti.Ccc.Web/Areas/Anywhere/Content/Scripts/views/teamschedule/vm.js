@@ -23,6 +23,7 @@ define([
 		var self = this;
 
 		this.permissionAddFullDayAbsence = ko.observable(permissions.addFullDayAbsence);
+		this.permissionAddIntradayAbsence = ko.observable(permissions.addIntradayAbsence);
 
 		this.Loading = ko.observable(false);
 

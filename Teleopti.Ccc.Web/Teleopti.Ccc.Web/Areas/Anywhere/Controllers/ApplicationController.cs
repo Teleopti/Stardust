@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Json(new
 			{
 				IsAddFullDayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
+				IsAddIntradayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence)
 			}, JsonRequestBehavior.AllowGet);
 		}
 
