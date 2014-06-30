@@ -168,7 +168,6 @@
     <Compile Include="Licensing\LicenseActivatorProvider.cs" />
     <Compile Include="Licensing\XmlLicenseServiceFactory.cs" />
     <Compile Include="NHibernateConfiguration\CompressedString.cs" />
-    <Compile Include="NHibernateConfiguration\FasterProxyFactoryFactory.cs" />
     <Compile Include="Foundation\IMakeOrganisationMembershipFromPerson.cs" />
     <Compile Include="Foundation\IMakeRegionalFromPerson.cs" />
     <Compile Include="Foundation\IPrincipalFactory.cs" />
