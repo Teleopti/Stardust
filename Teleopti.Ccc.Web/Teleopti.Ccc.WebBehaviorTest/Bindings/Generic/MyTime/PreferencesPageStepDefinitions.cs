@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -290,8 +291,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			var fields = table.CreateInstance<ExtendedPreferenceFields>();
 
-			OpenExtendedTooltip(fields.Date);
-
 			var tooltip = ExtendedTooltip(fields.Date);
 			Console.WriteLine(@"tooltip: {0}", tooltip);
 			Browser.Interactions.AssertExistsUsingJQuery(tooltip);
@@ -324,6 +323,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var extendedIndication = ExtendedIndication(date);
 			Browser.Interactions.AssertVisibleUsingJQuery(extendedIndication);
 			Browser.Interactions.Javascript("$('{0}').trigger('mouseleave')", extendedIndication.JSEncode());
+			Thread.Sleep(100); //pause to make sure the last operation finished successfully
 			Browser.Interactions.Javascript("$('{0}').trigger('mouseenter')", extendedIndication.JSEncode());
 		}
 
