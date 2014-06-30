@@ -12,10 +12,11 @@ define([
 			self.SendRtaExternalState();
 		};
 
+		this.Data = data;
 		this.SendRtaExternalState = function () {
 			var externalState = {
 				authenticationKey: '!#¤atAbgT%',
-				userCode: data.ExternalLogOn,
+				userCode: data.Person.ExternalLogOn,
 				stateCode: data.StateCode,
 				isLoggedOn: 'true',
 				timestamp: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
@@ -30,12 +31,27 @@ define([
 				cache: false,
 				data: JSON.stringify(externalState),
 				error: function () {
-					data.Failure();
 				},
 				complete: function () {
 					self.StateSentCompletedPromise.resolve();
 				}
 			});
 		};
+
+		var successed = false;
+
+		this.IncomingActualAgentState = function (state) {
+			if (successed)
+				return;
+			if (!data.IsEndingIteration)
+				return;
+			if (data.ExpectedEndingStateGroup !== state.State)
+				return;
+			if (data.Person.PersonId.toUpperCase() === state.PersonId.toUpperCase()) {
+				successed = true;
+				data.Success();
+			}
+		};
+
 	};
 });

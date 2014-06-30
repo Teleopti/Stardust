@@ -20,7 +20,7 @@
 
 	<link href="content/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
-	<script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>
+	<script>var require = { urlArgs: 'v=1' };</script>
 	<script src="Areas/PerformanceTool/Content/Scripts/require/configuration.js"></script>
 	<script data-main="Areas/PerformanceTool/Content/Scripts/main" type="text/javascript" src="Content/require/require.js"></script>
 

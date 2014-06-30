@@ -20,7 +20,15 @@ define([
 		var result;
 
 		this.Name = "Real Time Adherence Load Test";
-		this.Text = "";
+
+		var text =
+		"\
+		Before running this scenario make sure that:<br /> \
+		- All external logons exists in the system as persons.<br /> \
+		- No agent is currently in expected state group.<br /> \
+		- Too few agents or states.<br /> \
+		";
+		this.Text = text;
 
 		this.Configuration = ko.observable();
 
@@ -32,40 +40,38 @@ define([
 			}
 		});
 
-		this.Iterations = ko.computed(function () {
-
+		var personsInConfiguration = ko.observable(0);
+		var forceReevaluateOfIterations = ko.observable();
+		this.Iterations = ko.computed(function() {
 			var configuration = self.ConfigurationObject();
 			if (!configuration)
 				return;
 
 			var iterations = [];
-			
-			for (var numberOfStates = 0; numberOfStates < configuration.StatesToSend;) {
-				for (var stateCode = 0; stateCode < configuration.States.length; stateCode++) {
-					for (var externalLogOn = 0; externalLogOn < configuration.ExternalLogOns.length; externalLogOn++) {
-						iterations.push(new Iteration({
-							PlatformTypeId: configuration.PlatformTypeId,
-							SourceId: configuration.SourceId,
+			forceReevaluateOfIterations();
+			for (var s = 0; s < configuration.States.length; s++) {
+				for (var p = 0; p < configuration.Persons.length; p++) {
 
-							ExternalLogOn: configuration.ExternalLogOns[externalLogOn],
-							StateCode: configuration.States[stateCode],
-							Success: function() {
-								progressItemReadModel.Success();
-								calculateRunDone();
-							},
-							Failure: function() {
-								progressItemReadModel.Failure();
-								calculateRunDone();
-							}
-						}));
-						numberOfStates++;
-						if (numberOfStates == configuration.StatesToSend)
-							return iterations;
-						if (numberOfStates > 2000)
-							return undefined;
-					}
+					iterations.push(new Iteration({
+						PlatformTypeId: configuration.PlatformTypeId,
+						SourceId: configuration.SourceId,
+						Person: configuration.Persons[p],
+						StateCode: configuration.States[s],
+						IsEndingIteration: s === configuration.States.length - 1,
+						ExpectedEndingStateGroup: configuration.ExpectedEndingStateGroup,
+						Success: function () {
+							progressItemReadModel.Success();
+							calculateRunDone();
+						}
+					}));
+
+					if (iterations.length > 2000)
+						return undefined;
 				}
 			}
+
+			personsInConfiguration(configuration.Persons.length);
+
 			return iterations;
 
 		});
@@ -79,10 +85,8 @@ define([
 		});
 
 		var progressItemReadModel = new ProgressItemCountViewModel(
-			"Rta",
-			ko.computed(function() {
-				return self.IterationsExpected();
-			}) 
+			"Persons in expected ending state group",
+			personsInConfiguration 
 		);
 
 		this.ProgressItems = [
@@ -101,11 +105,15 @@ define([
 
 		self.Configuration(JSON.stringify({
 			PlatformTypeId: "00000000-0000-0000-0000-000000000000",
-			ExternalLogOns: ["2001", "2002", "0063", "2000", "0019", "0068", "0085", "0202", "0238", "2003"],
-			States: ["Ready", "OFF"],
 			SourceId: 1,
-			StatesToSend: 4,
-			ExpectedPersonsInAlarm: 4
+			Persons: [
+				{
+					ExternalLogOn: "2001",
+					PersonId: "B46A2588-8861-42E3-AB03-9B5E015B257C"
+				}
+			],
+			States: ["Ready", "OFF"],
+			ExpectedEndingStateGroup: "Logged off",
 		}, null, 4));
 
 
@@ -113,7 +121,7 @@ define([
 			var calculatedInterationsDone = progressItemReadModel.Count();
 			if (calculatedInterationsDone > result.IterationsDone()) {
 				result.IterationsDone(calculatedInterationsDone);
-				if (result.IterationsDone() >= self.IterationsExpected()) {
+				if (result.IterationsDone() >= personsInConfiguration()) {
 					result.RunDone(true);
 					result = null;
 					messagebroker.unsubscribe(agentsAdherenceSubscription);
@@ -123,31 +131,28 @@ define([
 		};
 
 		this.Run = function () {
+			forceReevaluateOfIterations.notifySubscribers();
 			var iterations = self.Iterations();
 			progressItemReadModel.Reset();
 			result = new ResultViewModel();
-
-			var expectedPersonsInAlarm = self.ConfigurationObject().ExpectedPersonsInAlarm;
 			startPromise.done(function() {
 				agentsAdherenceSubscription = messagebroker.subscribe({
-					domainType: 'SiteAdherenceMessage',
+					domainType: 'AgentsAdherenceMessage',
 					callback: function (notification) {
-						var outOfAdherence = JSON.parse(notification.BinaryData).OutOfAdherence;
-						console.log(outOfAdherence);
-						console.log(expectedPersonsInAlarm);
-						if (outOfAdherence === expectedPersonsInAlarm) {
-							progressItemReadModel.Success();
-							result.RunDone(true);
-							
-						}
+						var message = JSON.parse(notification.BinaryData);
+						var actualAgentStates = message.AgentStates;
+						
+						$.each(iterations, function (i, iteration) {
+							$.each(actualAgentStates, function (ii, state) {
+								iteration.IncomingActualAgentState(state);
+							});
+						});
 					}
 				});
 
-
 				$.when(
 					agentsAdherenceSubscription.promise
-				).done(function() {
-
+				).done(function () {
 					$.each(iterations, function(i, e) {
 						e.Start();
 					});
@@ -162,5 +167,7 @@ define([
 
 			return result;
 		};
+
+
 	};
 });

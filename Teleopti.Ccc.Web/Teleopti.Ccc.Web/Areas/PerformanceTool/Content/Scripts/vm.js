@@ -64,6 +64,17 @@ define([
 				}
 			}
 		});
+
+		this.SelectScenarioByName = function(name) {
+			for (var i = 0; i < self.Scenarios.length; i++) {
+				if (self.Scenarios[i].Name == name) {
+					self.Scenario(self.Scenarios[i]);
+					return;
+				}
+			}
+			throw "Scenario not found with name " + name;
+		}
+
 		this.Text = ko.computed(function () {
 			return self.Scenario().Text;
 		});
