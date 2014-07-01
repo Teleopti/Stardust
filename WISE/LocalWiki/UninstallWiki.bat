@@ -1,7 +1,7 @@
 @ECHO OFF
 
 :: Remove virtual directory from IIS
-%systemroot%\system32\inetsrv\APPCMD delete vdir /vdir.name:"Default Web Site/TeleoptiCCC/LocalWiki"
+%systemroot%\system32\inetsrv\APPCMD delete vdir /vdir.name:"Default Web Site/TeleoptiWFM/LocalWiki"
 
 :: Get installpath from registry
 SETLOCAL ENABLEEXTENSIONS
