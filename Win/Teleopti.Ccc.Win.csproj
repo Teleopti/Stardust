@@ -1450,7 +1450,14 @@
     <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
     <Compile Include="Scheduling\SchedulerStateScheduleDayChangedCallback.cs" />
     <Compile Include="Scheduling\ScheduleTimeType.cs" />
+    <Compile Include="Scheduling\SchedulingScreenInternals\BaseCutPasteHandler.cs" />
+    <Compile Include="Scheduling\SchedulingScreenInternals\ICutPasteHandler.cs" />
+    <Compile Include="Scheduling\SchedulingScreenInternals\CutPasteHandlerFactory.cs" />
+    <Compile Include="Scheduling\SchedulingScreenInternals\DummyCutPasteHandler.cs" />
+    <Compile Include="Scheduling\SchedulingScreenInternals\EditorCutPasteHandler.cs" />
     <Compile Include="Scheduling\SchedulingScreenInternals\LoaderMethod.cs" />
+    <Compile Include="Scheduling\SchedulingScreenInternals\ResourceGridCutPasteHandler.cs" />
+    <Compile Include="Scheduling\SchedulingScreenInternals\ScheduleGridCutPasteHandler.cs" />
     <Compile Include="Scheduling\SchedulingScreenInternals\SchedulingAndOptimizeArgument.cs" />
     <Compile Include="Scheduling\SchedulingScreenInternals\SchedulingScreenEnums.cs" />
     <Compile Include="Scheduling\SchedulingScreenInternals\SchedulingScreenPermissionHelper.cs" />

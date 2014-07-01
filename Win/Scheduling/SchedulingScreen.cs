@@ -11,7 +11,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
-using System.Windows.Input;
 using Autofac;
 using Autofac.Core;
 using MbCache.Core;
@@ -206,7 +205,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DateTimePeriod _selectedPeriod;
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
-		private readonly SchedulingScreenPermissionHelper _permissionHelper;
+        private readonly SchedulingScreenPermissionHelper _permissionHelper;
+        private readonly CutPasteHandlerFactory _factory;
 
 		#region Constructors
 
@@ -401,6 +401,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_personRequestAuthorizationChecker = new PersonRequestCheckAuthorization();
 
 			_permissionHelper = new SchedulingScreenPermissionHelper();
+            _factory = new CutPasteHandlerFactory(this, () => _scheduleView, deleteFromSchedulePart, checkPastePermissions, pasteFromClipboard, enablePasteOperation);
 		}
 
 		//flytta ut till modul
@@ -525,7 +526,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			switch ((ClipboardItems)e.ClickedItem.Tag)
 			{
 				case ClipboardItems.Special:
-					deleteSpecialSwitch();
+                    _factory.For(_controlType).DeleteSpecial();
 					break;
 
 			}
@@ -533,7 +534,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void editControlDeleteClicked(object sender, EventArgs e)
 		{
-			deleteSwitch();
+            _factory.For(_controlType).Delete();
 		}
 
 		private void editControlNewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -605,10 +606,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			if (e.KeyCode == Keys.D && e.Modifiers == Keys.Control)
 			{
-				var options = new PasteOptions();
-				options.PersonalShifts = true;
-				_scheduleView.GridClipboardPaste(options, _undoRedo);
-				checkCutMode();
+			    _factory.For(_controlType).PastePersonalShift();
 			}
 			if (e.KeyCode == Keys.Z && e.Modifiers == Keys.Control)
 			{
@@ -730,64 +728,64 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void clipboardControlCutClicked(object sender, EventArgs e)
 		{
-			cutSwitch();
+            _factory.For(_controlType).Cut();
 		}
 
 		private void clipboardControlPasteClicked(object sender, EventArgs e)
 		{
-			pasteSwitch();
+            _factory.For(_controlType).Paste();
 		}
 
 		private void clipboardControlCopyClicked(object sender, EventArgs e)
 		{
-			copySwitch();
+            _factory.For(_controlType).Copy();
 		}
 
 		private void clipboardControlPasteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
+		    var handler = _factory.For(_controlType);
 			switch ((ClipboardItems)e.ClickedItem.Tag)
 			{
 				case ClipboardItems.Shift:
-					pasteAssignmentSwitch();
+					handler.PasteAssignment();
 					break;
 				case ClipboardItems.Absence:
-					pasteAbsenceSwitch();
+					handler.PasteAbsence();
 					break;
 				case ClipboardItems.DayOff:
-					pasteDayOffSwitch();
+					handler.PasteDayOff();
 					break;
 				case ClipboardItems.PersonalShift:
-					pastePersonalShiftSwitch();
+					handler.PastePersonalShift();
 					break;
 				case ClipboardItems.Special:
-					pasteSpecialSwitch();
+					handler.PasteSpecial();
 					break;
 				case ClipboardItems.ShiftFromShifts:
-					pasteShiftFromShiftsSwitch();
-					break;
-				default:
+					handler.PasteShiftFromShifts();
 					break;
 			}
 		}
 
 		private void clipboardControlCutSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
+		    var handler = _factory.For(_controlType);
 			switch ((ClipboardItems)e.ClickedItem.Tag)
 			{
 				case ClipboardItems.Shift:
-					cutAssignmentSwitch();
+					handler.CutAssignment();
 					break;
 				case ClipboardItems.Absence:
-					cutAbsenceSwitch();
+					handler.CutAbsence();
 					break;
 				case ClipboardItems.DayOff:
-					cutDayOffSwitch();
+                    handler.CutDayOff();
 					break;
 				case ClipboardItems.PersonalShift:
-					cutPersonalShiftSwitch();
+					handler.CutPersonalShift();
 					break;
 				case ClipboardItems.Special:
-					cutSpecialSwitch();
+					handler.CutSpecial();
 					break;
 			}
 		}
@@ -797,7 +795,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			switch ((ClipboardItems)e.ClickedItem.Tag)
 			{
 				case ClipboardItems.Special:
-					copySpecialSwitch();
+					_factory.For(_controlType).CopySpecial();
 					break;
 			}
 		}
@@ -1250,7 +1248,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_scheduleView.Presenter.ClipHandlerSchedule.Clear();
 						_scheduleView.Presenter.ClipHandlerSchedule.AddClip(1, 1, clone);
 						_externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
-						pasteDayOff();
+						_factory.For(_controlType).PasteDayOff();
 						_scheduleView.Presenter.ClipHandlerSchedule.Clear();
 					}
 				}
@@ -1263,67 +1261,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemCopyClick(object sender, EventArgs e)
 		{
-			if (_scheduleView != null)
-			{
-				_scheduleView.GridClipboardCopy(false);
-				_permissionHelper.CheckPastePermissions(toolStripMenuItemPaste, toolStripMenuItemPasteSpecial);
-				_clipboardControl.SetButtonState(ClipboardAction.Paste, true);
-				_clipboardControlRestrictions.SetButtonState(ClipboardAction.Paste, true);
-			}
+			_factory.For(_controlType).Copy();
 		}
 
-		private void copySwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					if (_scheduleView != null)
-					{
-						_scheduleView.GridClipboardCopy(false);
-						_permissionHelper.CheckPastePermissions(toolStripMenuItemPaste, toolStripMenuItemPasteSpecial);
-						_clipboardControl.SetButtonState(ClipboardAction.Paste, true);
-					}
-					break;
-				case ControlType.SchedulerGridSkillData:
-					var guiHelper = new ColorHelper();
-					Control activeControl = guiHelper.GetActiveControl(this);
-					var control = (GridControl)activeControl;
-					control.CutPaste.Copy();
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("ShiftEditor copy");
-                    var focusedElement = Keyboard.FocusedElement;
-                    if (focusedElement != null)
-		            {
-                        ApplicationCommands.Copy.Execute(null, focusedElement);
-		            }
-					break;
-			}
-		}
-
-		private void copySpecialSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					clipboardMessage("Main copy special");
-					break;
-				case ControlType.SchedulerGridSkillData:
-					var guiHelper = new ColorHelper();
-					Control activeControl = guiHelper.GetActiveControl(this);
-					var control = (GridControl)activeControl;
-					GridHelper.CopySelectedValuesAndHeadersToPublicClipboard(control);
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("ShiftEditor copy special");
-                    var focusedElement = Keyboard.FocusedElement;
-                    if (focusedElement != null)
-		            {
-                        ApplicationCommands.Copy.Execute(null, focusedElement);
-		            }
-					break;
-			}
-		}
+	    private void enablePasteOperation()
+        {
+            if (_clipboardControl != null)
+                _clipboardControl.SetButtonState(ClipboardAction.Paste, true);
+            if (_clipboardControlRestrictions != null)
+                _clipboardControlRestrictions.SetButtonState(ClipboardAction.Paste, true);
+	    }
 
 		#endregion
 
@@ -1331,17 +1278,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonDeleteClick(object sender, EventArgs e)
 		{
-			if (_scheduleView != null)
-			{
-				var deleteOptions = new PasteOptions();
-				deleteOptions.Default = true;
-				deleteInMainGrid(deleteOptions);
-			}
+            _factory.For(_controlType).Delete();
 		}
 
 		private void toolStripMenuItemDeleteSpecial2Click(object sender, EventArgs e)
 		{
-			deleteSpecial();
+            _factory.For(_controlType).DeleteSpecial();
 		}
 
 		#endregion
@@ -1679,250 +1621,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void ToolStripMenuItemPaste_Click(object sender, EventArgs e)
 		{
-			paste();
+            _factory.For(_controlType).Paste();
 			updateShiftEditor();
 		}
 
 		private void toolStripMenuItemPasteSpecial2_Click(object sender, EventArgs e)
 		{
-			pasteSpecial();
+			_factory.For(_controlType).PasteSpecial();
 			updateShiftEditor();
 		}
 
 		private void toolStripMenuItemPasteShiftFromShiftsClick(object sender, EventArgs e)
 		{
-			pasteShiftFromShiftsSwitch();
+            _factory.For(_controlType).PasteShiftFromShifts();
 		}
 
-	    private void paste()
+	    private void pasteFromClipboard(PasteOptions options)
 	    {
-	        if (_scheduleView != null)
-	        {
-	            var options = new PasteOptions();
-	            options.Default = true;
-
-	            if (ClipsHandlerSchedule.IsInCutMode)
-	                options = ClipsHandlerSchedule.CutMode;
-
-	            _backgroundWorkerRunning = true;
-	            _scheduleView.GridClipboardPaste(options, _undoRedo);
-	            _backgroundWorkerRunning = false;
-	            RecalculateResources();
-	            checkCutMode();
-	        }
+            _backgroundWorkerRunning = true;
+            _scheduleView.GridClipboardPaste(options, _undoRedo);
+            _backgroundWorkerRunning = false;
+            RecalculateResources();
 	    }
-
-
-	    private void pasteAssignment()
-		{
-			if (_scheduleView != null)
-			{
-				var options = new PasteOptions { MainShift = true };
-				_scheduleView.GridClipboardPaste(options, _undoRedo);
-				checkCutMode();
-			}
-		}
-
-		private void pasteAbsence()
-		{
-			if (_scheduleView != null)
-			{
-				var options = new PasteOptions { Absences = PasteAction.Add };
-				_scheduleView.GridClipboardPaste(options, _undoRedo);
-
-				checkCutMode();
-			}
-		}
-
-		private void pasteDayOff()
-		{
-			if (_scheduleView != null)
-			{
-				var options = new PasteOptions { DayOff = true };
-				_scheduleView.GridClipboardPaste(options, _undoRedo);
-
-				checkCutMode();
-			}
-		}
-
-		private void pastePersonalShift()
-		{
-			if (_scheduleView != null)
-			{
-				var options = new PasteOptions { PersonalShifts = true };
-				_scheduleView.GridClipboardPaste(options, _undoRedo);
-
-				checkCutMode();
-			}
-		}
-
-		private void pasteSpecial()
-		{
-			var options = new PasteOptions();
-			var clipboardSpecialOptions = new ClipboardSpecialOptions();
-			clipboardSpecialOptions.ShowRestrictions = _scheduleView is AgentRestrictionsDetailView;
-			clipboardSpecialOptions.DeleteMode = false;
-			clipboardSpecialOptions.ShowOvertimeAvailability = false;
-			clipboardSpecialOptions.ShowShiftAsOvertime = true;
-
-			var pasteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, MultiplicatorDefinitionSet) { Text = Resources.PasteSpecial };
-			pasteSpecial.ShowDialog();
-
-			if (_scheduleView != null)
-			{
-				if (!pasteSpecial.Cancel())
-				{
-					_scheduleView.GridClipboardPaste(options, _undoRedo);
-					checkCutMode();
-				}
-			}
-
-			pasteSpecial.Close();
-		}
-
-		private void pasteSwitch()
-		{
-		    switch (_controlType)
-		    {
-		        case ControlType.SchedulerGridMain:
-		            paste();
-		            break;
-		        case ControlType.SchedulerGridSkillData:
-		            //do nothing
-		            break;
-		        case ControlType.ShiftEditor:
-		            clipboardMessage("ShiftEditor paste");
-		            var focusedElement = Keyboard.FocusedElement;
-                    if (focusedElement != null)
-		            {
-                        ApplicationCommands.Paste.Execute(null, focusedElement);
-		            }
-		            break;
-		    }
-		}
-
-		private void pasteAssignmentSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					pasteAssignment();
-					break;
-				case ControlType.SchedulerGridSkillData:
-					//do nothing
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("Shifteditor paste ass");
-					break;
-			}
-		}
-
-		private void pasteAbsenceSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					pasteAbsence();
-					break;
-				case ControlType.SchedulerGridSkillData:
-					// do nothing
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("Shifteditor paste absence");
-					break;
-			}
-		}
-
-		private void pasteDayOffSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					pasteDayOff();
-					break;
-				case ControlType.SchedulerGridSkillData:
-					//do nothing
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("ShiftEditor paste day off");
-					break;
-			}
-		}
-
-		private void pastePersonalShiftSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					pastePersonalShift();
-					break;
-				case ControlType.SchedulerGridSkillData:
-					// do nothing
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("ShiftEditor paste personal shift");
-					break;
-			}
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private void pasteShiftFromShiftsSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					IWorkShift workShift = StateHolderReader.Instance.StateReader.SessionScopeData.Clip as WorkShift;
-					if (workShift == null)
-						return;
-					if (WorkShiftMasterActivityChecker.DoesContainMasterActivity(workShift))
-					{
-						ShowErrorMessage(Resources.CannotPasteAShiftWithMasterActivity, Resources.PasteError);
-						return;
-					}
-
-					IScheduleDay scheduleDay;
-					if (!tryGetFirstSelectedSchedule(out scheduleDay)) return;
-
-					var part = (IScheduleDay)_schedulerState.Schedules[scheduleDay.Person].ReFetch(scheduleDay).Clone();
-
-					part.Clear<IScheduleData>();
-					IEditableShift mainShift = workShift.ToEditorShift(part.DateOnlyAsPeriod.DateOnly, part.Person.PermissionInformation.DefaultTimeZone());
-					foreach (var cat in _schedulerState.CommonStateHolder.ShiftCategories.Where(cat => cat.Id.Equals(workShift.ShiftCategory.Id)))
-					{
-						mainShift.ShiftCategory = cat;
-					}
-
-					part.AddMainShift(mainShift);
-
-					_clipHandlerSchedule.Clear();
-					_clipHandlerSchedule.AddClip(0, 0, part);
-					_externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
-					paste();
-					break;
-				case ControlType.SchedulerGridSkillData:
-					// do nothing
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("Shifteditor paste shift from Shifts");
-					break;
-			}
-		}
-
-		private void pasteSpecialSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					pasteSpecial();
-					break;
-				case ControlType.SchedulerGridSkillData:
-					// do nothing
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("Shifteditor paste special");
-					break;
-			}
-		}
 
 		#endregion
 
@@ -2797,29 +2517,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void deleteFromSchedulePart(DeleteOption deleteOption)
-		{
-			if (_scheduleView != null)
-			{
-				if (_backgroundWorkerRunning) return;
-				if (_backgroundWorkerDelete.IsBusy)
-					return;
-
-				disableAllExceptCancelInRibbon();
-				var clipHandler = new ClipHandler<IScheduleDay>();
-				GridHelper.GridCopySelection(_scheduleView.ViewGrid, clipHandler, true);
-				var list = _scheduleView.DeleteList(clipHandler, deleteOption);
-				IGridlockRemoverForDelete gridlockRemoverForDelete = new GridlockRemoverForDelete(_gridLockManager);
-				list = gridlockRemoverForDelete.RemoveLocked(list);
-				toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, Resources.DeletingSchedules, list.Count);
-				_deleteOption = deleteOption;
-				Cursor = Cursors.WaitCursor;
-				_backgroundWorkerDelete.WorkerReportsProgress = true;
-				_backgroundWorkerRunning = true;
-				_backgroundWorkerDelete.RunWorkerAsync(list);
-			}
-		}
-
 		private void _backgroundWorkerDelete_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			if (Disposing)
@@ -2848,18 +2545,43 @@ namespace Teleopti.Ccc.Win.Scheduling
 			RecalculateResources();
 		}
 
-		private DeleteOption _deleteOption;
+	    private bool shouldCancelBeforeStartingDeleteAction()
+	    {
+	        return (_backgroundWorkerRunning || _backgroundWorkerDelete.IsBusy);
+	    }
+
+        private void deleteFromSchedulePart(DeleteOption deleteOption)
+        {
+            if (_scheduleView != null)
+            {
+                if (shouldCancelBeforeStartingDeleteAction()) return;
+
+                disableAllExceptCancelInRibbon();
+                var clipHandler = new ClipHandler<IScheduleDay>();
+                GridHelper.GridCopySelection(_scheduleView.ViewGrid, clipHandler, true);
+                var list = _scheduleView.DeleteList(clipHandler, deleteOption);
+                IGridlockRemoverForDelete gridlockRemoverForDelete = new GridlockRemoverForDelete(_gridLockManager);
+                list = gridlockRemoverForDelete.RemoveLocked(list);
+                toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, Resources.DeletingSchedules, list.Count);
+
+                Cursor = Cursors.WaitCursor;
+                _backgroundWorkerDelete.WorkerReportsProgress = true;
+                _backgroundWorkerRunning = true;
+                _backgroundWorkerDelete.RunWorkerAsync(new Tuple<DeleteOption, IList<IScheduleDay>>(deleteOption, list));
+            }
+        }
 
 		private void _backgroundWorkerDelete_DoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
-			var list = (IList<IScheduleDay>)e.Argument;
+		    var argument = (Tuple<DeleteOption, IList<IScheduleDay>>) e.Argument;
+			var list = argument.Item2;
 			_undoRedo.CreateBatch(string.Format(CultureInfo.CurrentCulture, Resources.UndoRedoDeleteSchedules, list.Count));
 			var deleteService = new DeleteSchedulePartService(SchedulerState.SchedulingResultState);
 			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState), new ScheduleTagSetter(_defaultScheduleTag));
 			if (!list.IsEmpty())
 			{
-				deleteService.Delete(list, _deleteOption, rollbackService, _backgroundWorkerDelete, NewBusinessRuleCollection.AllForDelete(SchedulerState.SchedulingResultState));
+				deleteService.Delete(list, argument.Item1, rollbackService, _backgroundWorkerDelete, NewBusinessRuleCollection.AllForDelete(SchedulerState.SchedulingResultState));
 			}
 
 			_undoRedo.CommitBatch();
@@ -2950,244 +2672,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Cut
 
-		private void cutAssignmentSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					var deleteOptions = new PasteOptions();
-					deleteOptions.MainShift = true;
-					setCutMode(deleteOptions);
-					deleteInMainGrid(deleteOptions);
-					break;
-				case ControlType.SchedulerGridSkillData:
-					//do nothing
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("ShiftEditor cut ass");
-					break;
-			}
-		}
-
-		private void cutAbsenceSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					var deleteOptions = new PasteOptions();
-					deleteOptions.Absences = PasteAction.Replace;
-					setCutMode(deleteOptions);
-					deleteInMainGrid(deleteOptions);
-					break;
-				case ControlType.SchedulerGridSkillData:
-					//do nothing
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("ShiftEditor cut abs");
-					break;
-			}
-		}
-
-		private void cutDayOffSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					var deleteOptions = new PasteOptions();
-					deleteOptions.DayOff = true;
-					setCutMode(deleteOptions);
-					deleteInMainGrid(deleteOptions);
-					break;
-				case ControlType.SchedulerGridSkillData:
-					//do nothing
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("ShiftEditor cut off");
-					break;
-			}
-		}
-
-		private void cutPersonalShiftSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					var deleteOptions = new PasteOptions();
-					deleteOptions.PersonalShifts = true;
-					setCutMode(deleteOptions);
-					deleteInMainGrid(deleteOptions);
-					break;
-				case ControlType.SchedulerGridSkillData:
-					//do nothing
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("ShiftEditor cut personal shift");
-					break;
-			}
-		}
-
-		private void cutSpecialSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					cutSpecial();
-					break;
-				case ControlType.SchedulerGridSkillData:
-					//do nothing
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("ShiftEditor cut special");
-                    var focusedElement = Keyboard.FocusedElement;
-                    if (focusedElement != null)
-		            {
-                        ApplicationCommands.Cut.Execute(null, focusedElement);
-		            }
-					break;
-			}
-		}
-
-		private void cutSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					var deleteOptions = new PasteOptions();
-					deleteOptions.Default = true;
-					setCutMode(deleteOptions);
-					deleteInMainGrid(deleteOptions);
-					break;
-				case ControlType.SchedulerGridSkillData:
-					//do nothing
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("ShiftEditor cut");
-                    var focusedElement = Keyboard.FocusedElement;
-                    if (focusedElement != null)
-		            {
-                        ApplicationCommands.Cut.Execute(null, focusedElement);
-		            }
-					break;
-			}
-		}
-
 		private void toolStripMenuItemCut_Click(object sender, EventArgs e)
 		{
-			var deleteOptions = new PasteOptions();
-			deleteOptions.Default = true;
-			setCutMode(deleteOptions);
-			deleteInMainGrid(deleteOptions);
+            _factory.For(_controlType).Cut();
 		}
 
 		private void toolStripMenuItemCutSpecial2_Click(object sender, EventArgs e)
 		{
-			cutSpecial();
-		}
-
-		private void cutSpecial()
-		{
-			var options = new PasteOptions();
-			var clipboardSpecialOptions = new ClipboardSpecialOptions();
-			clipboardSpecialOptions.ShowRestrictions = _scheduleView is AgentRestrictionsDetailView;
-			clipboardSpecialOptions.DeleteMode = true;
-			clipboardSpecialOptions.ShowOvertimeAvailability = false;
-			clipboardSpecialOptions.ShowShiftAsOvertime = false;
-
-			var cutSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, MultiplicatorDefinitionSet) { Text = Resources.CutSpecial };
-			cutSpecial.ShowDialog();
-
-			if (_scheduleView != null)
-			{
-				if (!cutSpecial.Cancel())
-				{
-					setCutMode(options);
-					deleteInMainGrid(options);
-				}
-			}
-
-			cutSpecial.Close();
+			_factory.For(_controlType).CutSpecial();
 		}
 
 		#endregion
-
-
-		#region Delete
-
-		private void deleteSpecial()
-		{
-			var authorization = PrincipalAuthorization.Instance();
-			var options = new PasteOptions();
-			var clipboardSpecialOptions = new ClipboardSpecialOptions();
-			clipboardSpecialOptions.ShowRestrictions = _scheduleView is AgentRestrictionsDetailView;
-			clipboardSpecialOptions.DeleteMode = true;
-			clipboardSpecialOptions.ShowOvertimeAvailability = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
-			clipboardSpecialOptions.ShowShiftAsOvertime = false;
-
-			using (var deleteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, MultiplicatorDefinitionSet))
-			{
-				deleteSpecial.Text = Resources.DeleteSpecial;
-				deleteSpecial.ShowDialog();
-
-				if (_scheduleView != null)
-				{
-					if (!deleteSpecial.Cancel())
-					{
-						deleteInMainGrid(options);
-					}
-				}
-			}
-		}
-
-		private void deleteSpecialSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.ShiftEditor:
-					clipboardMessage("ShiftEditor delete special");
-                    var focusedElement = Keyboard.FocusedElement;
-                    if (focusedElement != null)
-		            {
-                        ApplicationCommands.Delete.Execute(null, focusedElement);
-		            }
-					break;
-				case ControlType.SchedulerGridMain:
-					deleteSpecial();
-					break;
-				case ControlType.SchedulerGridSkillData:
-					//not possible
-					break;
-			}
-		}
-
-		private void deleteSwitch()
-		{
-			switch (_controlType)
-			{
-				case ControlType.ShiftEditor:
-					clipboardMessage("ShiftEditor delete");
-                    var focusedElement = Keyboard.FocusedElement;
-                    if (focusedElement != null)
-		            {
-                        ApplicationCommands.Delete.Execute(null, focusedElement);
-		            }
-					break;
-
-				case ControlType.SchedulerGridMain:
-					if (_scheduleView != null)
-					{
-						var deleteOptions = new PasteOptions();
-						deleteOptions.Default = true;
-						deleteInMainGrid(deleteOptions); //, clipHandler);
-					}
-					break;
-
-				case ControlType.SchedulerGridSkillData:
-					//not possible
-					break;
-			}
-		}
-
-		#endregion//delete
 
 		private void scheduleSelected()
 		{
@@ -3625,26 +3120,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 									_optimizationPreferences, argument.OptimizationMethod == OptimizationMethod.BackToLegalState, argument.DaysOffPreferences);
 		}
 
-		private void checkCutMode()
-		{
-			if (ClipsHandlerSchedule.IsInCutMode)
-			{
-				ClipsHandlerSchedule.IsInCutMode = false;
-			}
-		}
-
-		private void setCutMode(PasteOptions cutMode)
-		{
-			if (_scheduleView != null)
-			{
-				_scheduleView.GridClipboardCopy(true);
-				ClipsHandlerSchedule.IsInCutMode = true;
-				ClipsHandlerSchedule.CutMode = cutMode;
-				_permissionHelper.CheckPastePermissions(toolStripMenuItemPaste, toolStripMenuItemPasteSpecial);
-			}
-			else
-				ClipsHandlerSchedule.IsInCutMode = false;
-		}
+	    private void checkPastePermissions()
+	    {
+            _permissionHelper.CheckPastePermissions(toolStripMenuItemPaste, toolStripMenuItemPasteSpecial);
+	    }
 
 		private void setPermissionOnControls()
 		{
@@ -4746,27 +4225,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var updater = new UpdateSelectionForAgentInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag);
 			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfoControl, _scheduleTimeType);
-		}
-
-		private void deleteInMainGrid(PasteOptions deleteOptions)
-		{
-			if (_scheduleView != null)
-			{
-				var localDeleteOption = new DeleteOption();
-				localDeleteOption.MainShift = deleteOptions.MainShift;
-				localDeleteOption.DayOff = deleteOptions.DayOff;
-				localDeleteOption.PersonalShift = deleteOptions.PersonalShifts;
-				localDeleteOption.Overtime = deleteOptions.Overtime;
-				localDeleteOption.Preference = deleteOptions.Preference;
-				localDeleteOption.StudentAvailability = deleteOptions.StudentAvailability;
-				localDeleteOption.OvertimeAvailability = deleteOptions.OvertimeAvailability;
-				PasteAction pasteAction = deleteOptions.Absences;
-				if (pasteAction == PasteAction.Replace)
-					localDeleteOption.Absence = true;
-
-				localDeleteOption.Default = deleteOptions.Default;
-				deleteFromSchedulePart(localDeleteOption);
-			}
 		}
 
 		private void drawSkillGrid()
@@ -5912,7 +5370,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DateTime _lastclickLabels;
 
 
-		private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
+	    private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
 		{
 			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
 			if (_lastclickLabels.AddSeconds(1) > DateTime.Now) return;
@@ -6223,7 +5681,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						return;
 					IScheduleDay target = _schedulerState.Schedules[form.Selected()].ScheduledDay(selected.DateOnlyAsPeriod.DateOnly);
 					_scheduleView.SetSelectionFromParts(new List<IScheduleDay> { target });
-					paste();
+					_factory.For(_controlType).Paste();
 					updateShiftEditor();
 				}
 			}
