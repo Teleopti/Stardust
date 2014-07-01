@@ -8,8 +8,10 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
+using System.Windows.Input;
 using Autofac;
 using Autofac.Core;
 using MbCache.Core;
@@ -17,7 +19,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
@@ -91,8 +92,16 @@ using Teleopti.Ccc.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WpfControls.Controls.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Application = System.Windows.Forms.Application;
+using Clipboard = System.Windows.Forms.Clipboard;
+using Cursor = System.Windows.Forms.Cursor;
+using Cursors = System.Windows.Forms.Cursors;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
+using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
+using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 using PersistConflict = Teleopti.Ccc.Infrastructure.Persisters.Schedules.PersistConflict;
+using Point = System.Drawing.Point;
+using SystemColors = System.Drawing.SystemColors;
 
 #endregion
 
@@ -852,14 +861,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemSeniorityRankAsc.Visible = seniorityEnabled;
 
 			setPermissionOnControls();
-			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += agentRestrictionGridSelectedAgentIsReady;
+            schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += agentRestrictionGridSelectedAgentIsReady;
+            schedulerSplitters1.MultipleHostControl3.GotFocus += MultipleHostControl3OnGotFocus;
 			_backgroundWorkerRunning = true;
 			enableQuickAccessPanel();
 			backgroundWorkerLoadData.RunWorkerAsync();
 			//No code after the call to runworkerasynk
 		}
 
-		private void loadQuickAccessState()
+	    private void MultipleHostControl3OnGotFocus(object sender, RoutedEventArgs routedEventArgs)
+	    {
+	        updateRibbon(ControlType.ShiftEditor);
+	    }
+
+	    private void loadQuickAccessState()
 		{
 			var loader = new QuickAccessState(_currentSchedulingScreenSettings, ribbonControlAdv1);
 			loader.Load(toolStripButtonQuickAccessSave, toolStripSplitButtonQuickAccessUndo, toolStripButtonQuickAccessRedo, toolStripButtonQuickAccessCancel, toolStripButtonShowTexts);
@@ -1277,6 +1292,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 					break;
 				case ControlType.ShiftEditor:
 					clipboardMessage("ShiftEditor copy");
+                    var focusedElement = Keyboard.FocusedElement;
+                    if (focusedElement != null)
+		            {
+                        ApplicationCommands.Copy.Execute(null, focusedElement);
+		            }
 					break;
 			}
 		}
@@ -1669,26 +1689,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 			pasteShiftFromShiftsSwitch();
 		}
 
-		private void paste()
-		{
-			if (_scheduleView != null)
-			{
-				var options = new PasteOptions();
-				options.Default = true;
+	    private void paste()
+	    {
+	        if (_scheduleView != null)
+	        {
+	            var options = new PasteOptions();
+	            options.Default = true;
 
-				if (ClipsHandlerSchedule.IsInCutMode)
-					options = ClipsHandlerSchedule.CutMode;
+	            if (ClipsHandlerSchedule.IsInCutMode)
+	                options = ClipsHandlerSchedule.CutMode;
 
-				_backgroundWorkerRunning = true;
-				_scheduleView.GridClipboardPaste(options, _undoRedo);
-				_backgroundWorkerRunning = false;
-				RecalculateResources();
-				checkCutMode();
-			}
-		}
+	            _backgroundWorkerRunning = true;
+	            _scheduleView.GridClipboardPaste(options, _undoRedo);
+	            _backgroundWorkerRunning = false;
+	            RecalculateResources();
+	            checkCutMode();
+	        }
+	    }
 
 
-		private void pasteAssignment()
+	    private void pasteAssignment()
 		{
 			if (_scheduleView != null)
 			{
@@ -1757,18 +1777,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void pasteSwitch()
 		{
-			switch (_controlType)
-			{
-				case ControlType.SchedulerGridMain:
-					paste();
-					break;
-				case ControlType.SchedulerGridSkillData:
-					//do nothing
-					break;
-				case ControlType.ShiftEditor:
-					clipboardMessage("ShiftEditor paste");
-					break;
-			}
+		    switch (_controlType)
+		    {
+		        case ControlType.SchedulerGridMain:
+		            paste();
+		            break;
+		        case ControlType.SchedulerGridSkillData:
+		            //do nothing
+		            break;
+		        case ControlType.ShiftEditor:
+		            clipboardMessage("ShiftEditor paste");
+		            var focusedElement = Keyboard.FocusedElement;
+                    if (focusedElement != null)
+		            {
+                        ApplicationCommands.Paste.Execute(null, focusedElement);
+		            }
+		            break;
+		    }
 		}
 
 		private void pasteAssignmentSwitch()
@@ -3027,6 +3052,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 					break;
 				case ControlType.ShiftEditor:
 					clipboardMessage("ShiftEditor cut");
+                    var focusedElement = Keyboard.FocusedElement;
+                    if (focusedElement != null)
+		            {
+                        ApplicationCommands.Cut.Execute(null, focusedElement);
+		            }
 					break;
 			}
 		}

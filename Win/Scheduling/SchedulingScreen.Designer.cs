@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _splitterManager.Dispose();
                 if (schedulerSplitters1!=null)
                 {
+                    schedulerSplitters1.MultipleHostControl3.GotFocus -= MultipleHostControl3OnGotFocus;
                     schedulerSplitters1.Dispose();
                     schedulerSplitters1 = null;
                 }
