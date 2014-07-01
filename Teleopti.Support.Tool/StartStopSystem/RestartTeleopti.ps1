@@ -185,6 +185,7 @@ function EventlogSource-Create {
 ##===========
 function main {
 [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.Web.Administration")
+[Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
 $JOB = "Teleopti.Ccc.RestartSystem"
 
     Try
