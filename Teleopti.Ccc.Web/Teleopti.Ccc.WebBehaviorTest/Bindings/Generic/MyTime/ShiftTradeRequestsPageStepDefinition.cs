@@ -146,6 +146,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.Click(".previous-date");
 		}
 
+		[When(@"I select date '(.*)' by calender")]
+		public void WhenISelectDateByCalender(DateTime date)
+		{
+			Browser.Interactions.Click("#Request-add-shift-trade .glyphicon-calendar");
+			string selector = string.Format(".datepicker-days .day:contains('{0}')", date.Day);
+			Browser.Interactions.ClickUsingJQuery(selector);
+		}
+
 		[Then(@"I should see the time line hours span from '(.*)' to '(.*)'")]
 		public void ThenIShouldSeeTheTimeLineHoursSpanFromTo(string timeLineHourFrom, string timeLineHourTo)
 		{

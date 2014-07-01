@@ -577,7 +577,7 @@ Scenario: Should navigate to previous day for the agent I am going to trade with
 	Then I should see 'OtherAgent' in my shift trade list for date '2030-01-02'
 	And I should see 'OtherAgent' can be added for date '2030-01-01'
 
-@ignore
+@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
 Scenario: Should be able to choose a date in calender and show the shift for the agent I am going to trade with
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -606,7 +606,7 @@ Scenario: Should be able to choose a date in calender and show the shift for the
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I choose 'OtherAgent' to make a shift trade
 	And I add 'OtherAgent' to my shift trade list
-	When I navigate to date '2030-01-05' by calender
+	When I select date '2030-01-05' by calender
 	Then I should see 'OtherAgent' in my shift trade list for date '2030-01-01'
 	And I should see 'OtherAgent' can be added for date '2030-01-05'
 
