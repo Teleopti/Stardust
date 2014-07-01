@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
+using Teleopti.Ccc.AgentPortalCode.Common;
 
 namespace Teleopti.Ccc.AgentPortal.Helper
 {
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.AgentPortal.Helper
 
         public static void ShowWarningMessage(IWin32Window owner, string text, string caption)
         {
-			MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpaces), caption,
+            MessageBoxAdv.Show(new WeakOwner(owner), string.Concat(text, DoubleSpaces), caption,
                                                         MessageBoxButtons.OK, MessageBoxIcon.Warning,
                                                         MessageBoxDefaultButton.Button1,
                                                          CultureInfo.CurrentCulture.TextInfo.IsRightToLeft

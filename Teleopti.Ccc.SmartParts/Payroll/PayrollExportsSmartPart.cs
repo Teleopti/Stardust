@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.SmartParts.Payroll
                         }
                         catch (IOException)
                         {
-                            MessageBoxAdv.Show(this, UserTexts.Resources.TheFileIsLockedByAnotherProgram,
+                            MessageBoxAdv.Show(new WeakOwner(this), UserTexts.Resources.TheFileIsLockedByAnotherProgram,
                                             UserTexts.Resources.OpenTeleoptiCCC, MessageBoxButtons.OK,
                                             MessageBoxIcon.Error, MessageBoxDefaultButton.Button1,
                                             (((IUnsafePerson) TeleoptiPrincipal.Current).Person.PermissionInformation.
@@ -175,5 +175,23 @@ namespace Teleopti.Ccc.SmartParts.Payroll
         }
 
         #endregion
+    }
+
+    public class WeakOwner : IWin32Window
+    {
+        private readonly WeakReference _window;
+
+        public WeakOwner(IWin32Window window)
+        {
+            _window = new WeakReference(window);
+        }
+
+        public IntPtr Handle
+        {
+            get
+            {
+                return _window.IsAlive ? ((IWin32Window)_window.Target).Handle : IntPtr.Zero;
+            }
+        }
     }
 }

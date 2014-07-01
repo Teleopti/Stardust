@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 
 namespace Teleopti.Ccc.AgentPortalCode.Common
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             alert(owner);
 
             MessageBoxAdv.Show(
-                owner,
+                new WeakOwner(owner),
                 message,
                 caption,
                 MessageBoxButtons.OK,
@@ -28,6 +29,24 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             if (form != null)
             {
                 form.Activate();
+            }
+        }
+    }
+
+    public class WeakOwner : IWin32Window
+    {
+        private readonly WeakReference _window;
+
+        public WeakOwner(IWin32Window window)
+        {
+            _window = new WeakReference(window);
+        }
+
+        public IntPtr Handle
+        {
+            get
+            {
+                return _window.IsAlive ? ((IWin32Window)_window.Target).Handle : IntPtr.Zero;
             }
         }
     }

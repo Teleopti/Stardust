@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common;
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.Win.Common
 		public static void ShowErrorMessage(IWin32Window owner, string text, string caption)
 		{
 			LocalizationProvider.Provider = new Localizer();
-			MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
+            MessageBoxAdv.Show(new WeakOwner(owner), string.Concat(text, DoubleSpace), caption,
 														MessageBoxButtons.OK, MessageBoxIcon.Error,
 														MessageBoxDefaultButton.Button1,
 														rightToLeftOptions());
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.Win.Common
         public static void ShowInformationMessage(IWin32Window owner, string text, string caption)
         {
 			LocalizationProvider.Provider = new Localizer();
-            MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
+            MessageBoxAdv.Show(new WeakOwner(owner), string.Concat(text, DoubleSpace), caption,
                                                         MessageBoxButtons.OK, MessageBoxIcon.Information,
                                                         MessageBoxDefaultButton.Button1,
 														rightToLeftOptions());
@@ -126,14 +127,14 @@ namespace Teleopti.Ccc.Win.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         public static DialogResult ShowYesNoMessage(IWin32Window owner, string text, string caption)
         {
-	        return ShowYesNoMessage(owner, text, caption, MessageBoxDefaultButton.Button2);
+            return ShowYesNoMessage(new WeakOwner(owner), text, caption, MessageBoxDefaultButton.Button2);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
 		public static DialogResult ShowYesNoMessage(IWin32Window owner, string text, string caption, MessageBoxDefaultButton defaultButton)
 		{
 			LocalizationProvider.Provider = new Localizer();
-			return MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
+			return MessageBoxAdv.Show(new WeakOwner(owner), string.Concat(text, DoubleSpace), caption,
 															   MessageBoxButtons.YesNo, MessageBoxIcon.Question, defaultButton,
 															   rightToLeftOptions());
 		}
@@ -152,11 +153,28 @@ namespace Teleopti.Ccc.Win.Common
 		public static DialogResult ShowConfirmationMessage(IWin32Window owner, string text, string caption)
 		{
 			LocalizationProvider.Provider = new Localizer();
-            return MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
+            return MessageBoxAdv.Show(new WeakOwner(owner), string.Concat(text, DoubleSpace), caption,
 															   MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question,
 															   MessageBoxDefaultButton.Button1,
 															   rightToLeftOptions());
 		}
+
+        public class WeakOwner : IWin32Window
+        {
+            private readonly WeakReference _window;
+
+            public WeakOwner(IWin32Window window)
+            {
+                _window = new WeakReference(window);
+            }
+
+            public IntPtr Handle
+            {
+                get {
+                    return _window.IsAlive ? ((IWin32Window) _window.Target).Handle : IntPtr.Zero;
+                }
+            }
+        }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         public static DialogResult ShowOkCancelMessage(string text, string caption)

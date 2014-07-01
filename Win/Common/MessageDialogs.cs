@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Win.Common
             alert(owner);
 
             MessageBoxAdv.Show(
-                owner,
+                new ViewBase.WeakOwner(owner),
                 message,
                 caption,
                 MessageBoxButtons.OK,
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Win.Common
             alert(owner);
 
             MessageBoxAdv.Show(
-                owner,
+                new ViewBase.WeakOwner(owner),
                 message,
                 caption,
                 MessageBoxButtons.OK,
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Common
 			alert(owner);
 
 			MessageBoxAdv.Show(
-				owner,
+                new ViewBase.WeakOwner(owner),
 				message,
 				caption,
 				MessageBoxButtons.OK,
