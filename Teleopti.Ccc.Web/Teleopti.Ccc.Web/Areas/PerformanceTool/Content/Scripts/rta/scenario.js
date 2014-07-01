@@ -26,7 +26,8 @@ define([
 		Before running this scenario make sure that:<br /> \
 		- All external logons exists in the system as persons.<br /> \
 		- No agent is currently in expected state group.<br /> \
-		- Too few agents or states.<br /> \
+		- Too few agents or states. <br/> \
+		Default is only to show you how to set it up, not an actual test<br />\
 		";
 		this.Text = text;
 
