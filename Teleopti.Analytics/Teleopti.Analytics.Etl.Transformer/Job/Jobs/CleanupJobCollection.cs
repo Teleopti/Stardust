@@ -14,6 +14,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new DimTimeZoneDeleteJobStep(jobParameters));   // BU independent
             Add(new MaintenanceJobStep(jobParameters));     // BU independent
             Add(new PurgeJobStep(jobParameters));     // BU independent
+			Add(new SqlServerUpdateStatistics(jobParameters));
         }
     }
 }

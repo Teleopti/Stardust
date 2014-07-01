@@ -78,7 +78,7 @@ EXEC TeleoptiAnalytics_Demo.mart.etl_job_delete_schedule_All
 DECLARE @main_job_schedule_id INT, @minutes_of_day INT, @job_start_time_string NVARCHAR(100)
 DECLARE @relative_period_start INT, @relative_period_end INT
 DECLARE @delayJobByMin int
-SET @delayJobByMin = 5
+SET @delayJobByMin = 25 --Gives the user some time to apply the license before Nightly job is executed
 
 SET @relative_period_start = -10
 SET @relative_period_end = 20

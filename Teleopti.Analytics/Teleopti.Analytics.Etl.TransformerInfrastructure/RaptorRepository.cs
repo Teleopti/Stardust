@@ -689,6 +689,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_execute_delayed_job", null,
                                                    _dataMartConnectionString);
         }
+		public int SqlServerUpdateStatistics()
+		{
+			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_data_mart_updatestat", null,
+			                                       _dataMartConnectionString);
+		}
 
 		public int PerformPurge()
 		{

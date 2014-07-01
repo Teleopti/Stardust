@@ -27,6 +27,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StageGroupPagePersonJobStep(jobParameters));
 			Add(new StageOvertimeJobStep(jobParameters));
 			Add(new StageRequestJobStep(jobParameters));
+			Add(new SqlServerUpdateStatistics(jobParameters));
 			Add(new DimBusinessUnitJobStep(jobParameters));
 			Add(new DimDateJobStep(jobParameters));
 			Add(new DimScorecardJobStep(jobParameters));

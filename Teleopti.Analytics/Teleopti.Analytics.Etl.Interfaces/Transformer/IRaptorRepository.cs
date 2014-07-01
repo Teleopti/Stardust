@@ -159,6 +159,8 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		int DimTimeZoneDeleteData(IBusinessUnit businessUnit);
         int PerformMaintenance();
         int RunDelayedJob();
+		int SqlServerUpdateStatistics();
+
         /// <summary>
         /// Loads the schedule parts per person and date.
         /// </summary>

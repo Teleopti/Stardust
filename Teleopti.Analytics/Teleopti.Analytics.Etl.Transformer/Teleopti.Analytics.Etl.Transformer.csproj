@@ -100,6 +100,7 @@
     <Compile Include="HourlyAvailabilityTransformer.cs" />
     <Compile Include="IntradaySchedulePreferenceTransformer.cs" />
     <Compile Include="Job\Steps\StageStateGroupJobStep.cs" />
+    <Compile Include="Job\Steps\SQLServerUpdateStatistics.cs" />
     <Compile Include="Job\Steps\DimStateGroupJobStep.cs" />
     <Compile Include="Job\Steps\FactAgentStateJobStep.cs" />
     <Compile Include="Job\Steps\FactAgentSkillJobStep.cs" />
