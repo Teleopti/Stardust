@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeCanBeAddedForDate(string agentName, string date)
 		{
 			Browser.Interactions.AssertAnyContains(".shift-trade-person-schedule-row.agent", agentName);
-			Browser.Interactions.AssertAnyContains(".add-shifttrade-datepicker", date);
+			Browser.Interactions.AssertInputValueUsingJQuery(".add-shifttrade-datepicker", date);
 			Browser.Interactions.AssertExists("#shift-trade-add");
 		}
 
