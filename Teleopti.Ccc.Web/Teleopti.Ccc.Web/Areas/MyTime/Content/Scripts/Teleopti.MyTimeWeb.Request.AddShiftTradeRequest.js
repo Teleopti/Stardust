@@ -90,7 +90,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			self.chooseHistorys.remove(dayToDelete);
 
 			if (chooseHistoryViewModel.selectedDate() == self.requestedDate().format(self.DatePickerFormat())) {
-										self.selectedInternal(false);
+				self.selectedInternal(false);
 			}
 		};
 
@@ -235,7 +235,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	    self.prepareLoad = function() {
 	        self.possibleTradeSchedulesRaw = [];
 	        self.IsLastPage = false;
-	        self.chooseAgent(null);
+			if (self.agentChoosed() != null) {
+				self.keepSelectedAgentVisible();
+			}
+	        else
+				self.chooseAgent(null);
 	        self.IsLoading(false);
 	    };
 
@@ -248,6 +252,23 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	        return true;
         };
         
+		self.keepSelectedAgentVisible = function() {
+			if (self.agentChoosed() != null && self.possibleTradeSchedules() != null) {
+				$.each(self.possibleTradeSchedules(), function (index, value) {
+					value.isVisible(value.agentName == self.agentChoosed().agentName);
+				});
+			}
+
+			var isAddAvaiable = false;
+			$.each(self.chooseHistorys(), function (index, chooseHistoryViewModel) {
+				if (self.requestedDateInternal().format(self.DatePickerFormat()) == chooseHistoryViewModel.selectedDate()) {
+					isAddAvaiable = true;
+					return false;
+				}
+			});
+			self.selectedInternal(isAddAvaiable);
+		}
+
         self.loadMyTeamId = function () {
             ajax.Ajax({
                 url: "Requests/ShiftTradeRequestMyTeam",
@@ -364,6 +385,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				    });
 					
 				    self._createPossibleTradeSchedules(self.possibleTradeSchedulesRaw);
+					self.keepSelectedAgentVisible();
 					self.isReadyLoaded(true);
 				},
 				error: function(e) {
@@ -378,7 +400,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.changeRequestedDate = function (movement) {
 			var date = moment(self.requestedDateInternal()).add('days', movement);
 	      if (self.isRequestedDateValid(date))
-	          self.requestedDate(date);
+	      	self.requestedDate(date);
 		};
 
 		self.nextDate = function () {
