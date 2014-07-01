@@ -140,6 +140,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
             Browser.Interactions.Click(".next-date");
 		}
 
+		[When(@"I click on the previous date")]
+		public void WhenIClickOnThePreviousDate()
+		{
+			Browser.Interactions.Click(".previous-date");
+		}
+
 		[Then(@"I should see the time line hours span from '(.*)' to '(.*)'")]
 		public void ThenIShouldSeeTheTimeLineHoursSpanFromTo(string timeLineHourFrom, string timeLineHourTo)
 		{
