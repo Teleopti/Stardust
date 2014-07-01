@@ -39,7 +39,7 @@
             this.webControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.webControl1.Location = new System.Drawing.Point(0, 0);
             this.webControl1.Name = "webControl1";
-            this.webControl1.Size = new System.Drawing.Size(858, 542);
+            this.webControl1.Size = new System.Drawing.Size(1020, 600);
             this.webControl1.TabIndex = 0;
             this.webControl1.Text = "webControl1";
             this.webControl1.WebView = this.webView1;
