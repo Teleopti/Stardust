@@ -614,18 +614,8 @@ namespace Teleopti.Support.Tool.Controls
 			{
 				nHibDataSource.Version = dbHelper.GetDatabaseVersion();
 				Version dbVersion = new Version(nHibDataSource.Version);
-				if (
-					 dbVersion.Major < _currentVersion.Major ||
-					 dbVersion.Minor < _currentVersion.Minor ||
-					 dbVersion.Build < _currentVersion.Build
-					 )
-				{
-					CallSetListViewIcon(ImageIndexDatabaseVersionNotOk, listViewItem.Index);
-				}
-				else
-				{
-					CallSetListViewIcon(ImageIndexDatabaseVersionOk, listViewItem.Index);
-				}
+			    CallSetListViewIcon(dbVersion < _currentVersion ? ImageIndexDatabaseVersionNotOk : ImageIndexDatabaseVersionOk,
+			        listViewItem.Index);
 			}
 			else
 			{
