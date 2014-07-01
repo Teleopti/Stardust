@@ -329,9 +329,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 ISkillStaffPeriod tempPeriod = SkillStaffPeriod.Combine(keyValuePair.Value);
                 var aggregate = (IAggregateSkillStaffPeriod)tempPeriod;
                 aggregate.IsAggregate = true;
-
+                recalculateMinMaxStaffAlarm((SkillStaffPeriod)aggregate);
                 foreach (ISkillStaffPeriod staffPeriod in keyValuePair.Value)
                 {
+                    recalculateMinMaxStaffAlarm((SkillStaffPeriod)staffPeriod);
                     var asAgg = (IAggregateSkillStaffPeriod) staffPeriod;
                     if(!asAgg.IsAggregate)
                     {
@@ -349,6 +350,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             return SortedPeriods(skillStaffPeriodsToReturn);
             }
+        }
+
+        private static void recalculateMinMaxStaffAlarm(SkillStaffPeriod staffPeriod)
+        {
+            staffPeriod.AggregatedMinMaxStaffAlarm = MinMaxStaffBroken.Ok;
+            if (staffPeriod.Payload.SkillPersonData.MinimumPersons > staffPeriod.CalculatedLoggedOn)
+                staffPeriod.AggregatedMinMaxStaffAlarm = MinMaxStaffBroken.MinStaffBroken;
+            if (staffPeriod.Payload.SkillPersonData.MaximumPersons > 0 && staffPeriod.Payload.SkillPersonData.MaximumPersons < staffPeriod.CalculatedLoggedOn)
+                staffPeriod.AggregatedMinMaxStaffAlarm = MinMaxStaffBroken.MaxStaffBroken;
         }
 
     	private static int getMinimumResolution(IAggregateSkill skill)
