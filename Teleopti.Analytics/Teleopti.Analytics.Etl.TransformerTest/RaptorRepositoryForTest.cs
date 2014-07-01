@@ -121,6 +121,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             return 0;
         }
 
+		public int SqlServerUpdateStatistics()
+		{
+			return 0;
+		}
+
         public IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, ICommonStateHolder stateHolder)
         {
             IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(new DateTimePeriod());
