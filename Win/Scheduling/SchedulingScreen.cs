@@ -1316,6 +1316,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 					break;
 				case ControlType.ShiftEditor:
 					clipboardMessage("ShiftEditor copy special");
+                    var focusedElement = Keyboard.FocusedElement;
+                    if (focusedElement != null)
+		            {
+                        ApplicationCommands.Copy.Execute(null, focusedElement);
+		            }
 					break;
 			}
 		}
@@ -3033,6 +3038,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 					break;
 				case ControlType.ShiftEditor:
 					clipboardMessage("ShiftEditor cut special");
+                    var focusedElement = Keyboard.FocusedElement;
+                    if (focusedElement != null)
+		            {
+                        ApplicationCommands.Cut.Execute(null, focusedElement);
+		            }
 					break;
 			}
 		}
@@ -3134,6 +3144,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				case ControlType.ShiftEditor:
 					clipboardMessage("ShiftEditor delete special");
+                    var focusedElement = Keyboard.FocusedElement;
+                    if (focusedElement != null)
+		            {
+                        ApplicationCommands.Delete.Execute(null, focusedElement);
+		            }
 					break;
 				case ControlType.SchedulerGridMain:
 					deleteSpecial();
@@ -3150,6 +3165,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				case ControlType.ShiftEditor:
 					clipboardMessage("ShiftEditor delete");
+                    var focusedElement = Keyboard.FocusedElement;
+                    if (focusedElement != null)
+		            {
+                        ApplicationCommands.Delete.Execute(null, focusedElement);
+		            }
 					break;
 
 				case ControlType.SchedulerGridMain:
