@@ -42,14 +42,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 		[When(@"I input an RTA configuration scenario for '(.*)' in json format on datasource (.*)")]
 		public void WhenIInputAnRTAConfigurationScenarioForInJsonFormatOnDatasource(string personName, int datasource)
 		{
+			var personId = DataMaker.Person(personName).Person.Id.Value;
 			var configuration = new
 			{
 				PlatformTypeId = Guid.Empty,
-				ExternalLogOns = new[] { personName },
-				States = new[] { "Pause" },
 				SourceId = datasource,
-				StatesToSend = 1,
-				ExpectedPersonsInAlarm = 1
+				Persons = new[]
+				{
+					new
+					{
+						ExternalLogOn = personName,
+						PersonId = personId
+					}
+				},
+				States = new[] {"Phone"},
+				ExpectedEndingStateGroup = "Phone"
 			};
 
 			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);

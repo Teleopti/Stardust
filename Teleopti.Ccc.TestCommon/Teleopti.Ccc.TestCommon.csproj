@@ -275,6 +275,7 @@
     <Compile Include="TestData\Setups\Configurable\ShiftConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\SiteConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\SkillConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\StateGroupConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\TeamConfigurable.cs" />
     <Compile Include="TestData\LayersExtensions.cs" />
     <Compile Include="TestData\Setups\Configurable\AbsenceRequestConfigurable.cs" />

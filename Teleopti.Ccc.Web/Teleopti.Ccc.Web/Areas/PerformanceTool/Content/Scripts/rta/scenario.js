@@ -113,7 +113,7 @@ define([
 					PersonId: "B46A2588-8861-42E3-AB03-9B5E015B257C"
 				}
 			],
-			States: ["Ready", "OFF"],
+			States: ["Ready","OFF"],
 			ExpectedEndingStateGroup: "Logged off",
 		}, null, 4));
 
