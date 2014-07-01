@@ -684,6 +684,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 												   _dataMartConnectionString);
 		}
 
+		public int SqlServerUpdateStatistics()
+		{
+			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_data_mart_updatestat", null,
+			                                       _dataMartConnectionString);
+		}
+
 		public int PerformPurge()
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

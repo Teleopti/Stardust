@@ -53,6 +53,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
             Add(new StageGroupPagePersonJobStep(jobParameters));
         	Add(new StageOvertimeJobStep(jobParameters));
             Add(new StageRequestJobStep(jobParameters));
+			Add(new SqlServerUpdateStatistics(jobParameters));
 
             // DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
             Add(new BridgeTimeZoneJobStep(jobParameters));              // BU independent

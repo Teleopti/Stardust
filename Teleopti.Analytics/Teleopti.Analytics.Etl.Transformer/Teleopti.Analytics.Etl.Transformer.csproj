@@ -98,6 +98,7 @@
     <Compile Include="IntradayHourlyAvailabilityTransformer.cs" />
     <Compile Include="HourlyAvailabilityTransformer.cs" />
     <Compile Include="IntradaySchedulePreferenceTransformer.cs" />
+    <Compile Include="Job\Steps\SQLServerUpdateStatistics.cs" />
     <Compile Include="Job\Steps\FactAgentSkillJobStep.cs" />
     <Compile Include="Job\Steps\IntradayStageForecastWorkloadJobStep.cs" />
     <Compile Include="Job\Steps\FactAvailabilityJobStep.cs" />
