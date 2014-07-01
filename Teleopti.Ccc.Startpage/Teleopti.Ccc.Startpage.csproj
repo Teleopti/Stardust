@@ -44,6 +44,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="favicon.ico" />
     <Content Include="Images\android.png" />
     <Content Include="Images\blackberry.png" />
     <Content Include="Images\body_bg.jpg" />
