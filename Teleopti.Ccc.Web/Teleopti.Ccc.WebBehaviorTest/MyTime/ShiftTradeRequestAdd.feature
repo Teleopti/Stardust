@@ -511,9 +511,10 @@ Scenario: Should be able to remove a day from a shift trade
 	When I remove the selected day from the shift trade list
 	Then I should not see schedule on date '2030-01-01' in my shift trade list with 'OtherAgent'
 
-@ignore
+@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
 Scenario: Should navigate to next day for the agent I am going to trade with
 	Given I have the role 'Full access to mytime'
+	And I am american
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
@@ -540,7 +541,7 @@ Scenario: Should navigate to next day for the agent I am going to trade with
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I choose 'OtherAgent' to make a shift trade
 	And I add 'OtherAgent' to my shift trade list
-	When I navigate to next date
+	When I click on the next date
 	Then I should see 'OtherAgent' in my shift trade list for date '2030-01-01'
 	And I should see 'OtherAgent' can be added for date '2030-01-02'
 

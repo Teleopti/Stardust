@@ -313,5 +313,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertNotExists("#Request-add-shift-trade-detail-section", string.Format("#choose-history-list .shift-trade-agent-name:contains('{0}')", agentName));
 		}
 
+		[Then(@"I should see '(.*)' can be added for date '(.*)'")]
+		public void ThenIShouldSeeCanBeAddedForDate(string agentName, string date)
+		{
+			Browser.Interactions.AssertAnyContains(".shift-trade-person-schedule-row.agent", agentName);
+			Browser.Interactions.AssertAnyContains(".add-shifttrade-datepicker", date);
+			Browser.Interactions.AssertExists("#shift-trade-add");
+		}
+
 	}
 }
