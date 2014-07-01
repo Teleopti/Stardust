@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -525,6 +526,44 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
                 var list = _skillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, dateTimePeriod5, true);
                 list.Count.Should().Be.EqualTo(0);
+            }
+        }
+
+        [Test]
+        public void ShouldRecalcualteMinMaxStaffAlarm()
+        {
+            var mocks = new MockRepository();
+            var skill1 = SkillFactory.CreateSkill(" ");
+            skill1.DefaultResolution = 15;
+            var aggregateSkillSkill = mocks.StrictMock<IAggregateSkill>();
+            var dateTime = new DateTime(2014, 7, 1, 0, 0, 0, DateTimeKind.Utc);
+            var skillDay1 = mocks.StrictMock<ISkillDay>();
+            var skillDays1 = new List<ISkillDay> { skillDay1 };
+            var aggregatedSkills = new ReadOnlyCollection<ISkill>(new List<ISkill>{skill1});
+            var dateTimePeriod1 = new DateTimePeriod(dateTime, dateTime.AddMinutes(15));
+
+            var period1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod1, new Task(5, TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(20)), ServiceAgreement.DefaultValues(), skillDay1);
+            period1.AggregatedMinMaxStaffAlarm = MinMaxStaffBroken.BothBroken;
+            period1.Payload.SkillPersonData = new SkillPersonData(0, 0);
+            period1.Payload.CalculatedLoggedOn = 0;
+
+            var skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1};
+            var readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
+            var skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 } };
+
+            using (mocks.Record())
+            {
+                Expect.Call(skillDay1.Skill).Return(skill1);
+                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
+                Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
+            }
+
+            using (mocks.Playback())
+            {
+                var target = new SkillStaffPeriodHolder(skillDaysDictionary);
+                var aggregatedSkillStaffPeriod = (IAggregateSkillStaffPeriod)target.SkillStaffPeriodList(aggregateSkillSkill, dateTimePeriod1).First();
+
+                Assert.That(aggregatedSkillStaffPeriod.AggregatedMinMaxStaffAlarm, Is.EqualTo(MinMaxStaffBroken.Ok));
             }
         }
 
