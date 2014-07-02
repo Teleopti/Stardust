@@ -207,6 +207,7 @@ Scenario: Time line should cover scheduled night shift
 	When I view Add Shift Trade Request for date '2030-01-03'
 	Then I should see the time line hours span from '22:00' to '07:00'
 
+@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
 Scenario: Sending shift trade request closes the Add Shift Trade Request view
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
