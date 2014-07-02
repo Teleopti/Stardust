@@ -46,12 +46,15 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			// 
 			// tabControlChooseDataSource
 			// 
+			this.tabControlChooseDataSource.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.tabControlChooseDataSource.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControlChooseDataSource.BeforeTouchSize = new System.Drawing.Size(352, 140);
+			this.tabControlChooseDataSource.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlChooseDataSource.Controls.Add(this.tabPageWindowsDataSources);
 			this.tabControlChooseDataSource.Controls.Add(this.tabPageApplicationDataSources);
+			this.tabControlChooseDataSource.FixedSingleBorderColor = System.Drawing.Color.White;
 			this.tabControlChooseDataSource.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabControlChooseDataSource.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlChooseDataSource.Location = new System.Drawing.Point(71, 45);
@@ -67,12 +70,12 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.tabPageWindowsDataSources.Controls.Add(this.listBoxWindowsDataSources);
 			this.tabPageWindowsDataSources.Image = null;
 			this.tabPageWindowsDataSources.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageWindowsDataSources.Location = new System.Drawing.Point(1, 22);
+			this.tabPageWindowsDataSources.Location = new System.Drawing.Point(0, 21);
 			this.tabPageWindowsDataSources.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPageWindowsDataSources.Name = "tabPageWindowsDataSources";
 			this.tabPageWindowsDataSources.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageWindowsDataSources.ShowCloseButton = true;
-			this.tabPageWindowsDataSources.Size = new System.Drawing.Size(349, 116);
+			this.tabPageWindowsDataSources.Size = new System.Drawing.Size(352, 119);
 			this.tabPageWindowsDataSources.TabBackColor = System.Drawing.Color.White;
 			this.tabPageWindowsDataSources.TabIndex = 1;
 			this.tabPageWindowsDataSources.Text = "xxWindows logon";
@@ -80,29 +83,30 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			// 
 			// listBoxWindowsDataSources
 			// 
-			this.listBoxWindowsDataSources.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.listBoxWindowsDataSources.DisplayMember = "DataSourceName";
 			this.listBoxWindowsDataSources.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.listBoxWindowsDataSources.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.listBoxWindowsDataSources.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.listBoxWindowsDataSources.FormattingEnabled = true;
 			this.listBoxWindowsDataSources.ItemHeight = 17;
 			this.listBoxWindowsDataSources.Location = new System.Drawing.Point(3, 3);
 			this.listBoxWindowsDataSources.Margin = new System.Windows.Forms.Padding(0);
 			this.listBoxWindowsDataSources.Name = "listBoxWindowsDataSources";
-			this.listBoxWindowsDataSources.Size = new System.Drawing.Size(343, 110);
+			this.listBoxWindowsDataSources.Size = new System.Drawing.Size(346, 113);
 			this.listBoxWindowsDataSources.TabIndex = 4;
+			this.listBoxWindowsDataSources.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBoxWindowsDataSources_DrawItem);
 			// 
 			// tabPageApplicationDataSources
 			// 
 			this.tabPageApplicationDataSources.Controls.Add(this.listBoxApplicationDataSources);
 			this.tabPageApplicationDataSources.Image = null;
 			this.tabPageApplicationDataSources.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageApplicationDataSources.Location = new System.Drawing.Point(1, 22);
+			this.tabPageApplicationDataSources.Location = new System.Drawing.Point(0, -1);
 			this.tabPageApplicationDataSources.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPageApplicationDataSources.Name = "tabPageApplicationDataSources";
 			this.tabPageApplicationDataSources.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageApplicationDataSources.ShowCloseButton = true;
-			this.tabPageApplicationDataSources.Size = new System.Drawing.Size(349, 116);
+			this.tabPageApplicationDataSources.Size = new System.Drawing.Size(352, 141);
 			this.tabPageApplicationDataSources.TabBackColor = System.Drawing.Color.White;
 			this.tabPageApplicationDataSources.TabIndex = 1;
 			this.tabPageApplicationDataSources.Text = "xxApplication logon";
@@ -110,17 +114,18 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			// 
 			// listBoxApplicationDataSources
 			// 
-			this.listBoxApplicationDataSources.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.listBoxApplicationDataSources.DisplayMember = "DataSourceName";
 			this.listBoxApplicationDataSources.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.listBoxApplicationDataSources.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.listBoxApplicationDataSources.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.listBoxApplicationDataSources.FormattingEnabled = true;
 			this.listBoxApplicationDataSources.ItemHeight = 17;
 			this.listBoxApplicationDataSources.Location = new System.Drawing.Point(3, 3);
 			this.listBoxApplicationDataSources.Margin = new System.Windows.Forms.Padding(0);
 			this.listBoxApplicationDataSources.Name = "listBoxApplicationDataSources";
-			this.listBoxApplicationDataSources.Size = new System.Drawing.Size(343, 110);
+			this.listBoxApplicationDataSources.Size = new System.Drawing.Size(346, 135);
 			this.listBoxApplicationDataSources.TabIndex = 4;
+			this.listBoxApplicationDataSources.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBoxApplicationDataSources_DrawItem);
 			// 
 			// labelChooseDataSource
 			// 
@@ -140,7 +145,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			// 
 			this.buttonLogOnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonLogOnOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonLogOnOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.buttonLogOnOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonLogOnOK.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.buttonLogOnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonLogOnOK.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -158,7 +163,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			// 
 			this.buttonLogOnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonLogOnCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonLogOnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.buttonLogOnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonLogOnCancel.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.buttonLogOnCancel.BorderStyleAdv = Syncfusion.Windows.Forms.ButtonAdvBorderStyle.Flat;
 			this.buttonLogOnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -177,7 +182,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			// btnBack
 			// 
 			this.btnBack.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.btnBack.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnBack.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
