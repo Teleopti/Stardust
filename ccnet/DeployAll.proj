@@ -491,6 +491,8 @@
 		</ReadLinesFromFile>
 		<Message Text="MajorVersion: $(CCCMajorMinor)" Importance="high"/>
 
+    <HgUpdate LocalPath="$(MSBuildProjectDirectory)" Timeout="5000" Clean="true" />
+      
 		<HgVersion LocalPath="$(MSBuildProjectDirectory)" Timeout="5000">
 			<Output TaskParameter="Revision" PropertyName="Revision" />
 		</HgVersion>
@@ -739,7 +741,7 @@
 			<Output TaskParameter="Changeset" PropertyName="HgChangeset" />
 		</HgVersion>
 		<WriteLinesToFile File="$(MSIPath)\lastchangeset.txt"
-						Lines="$(HgChangeset)" />
+						Lines="$(HgChangeset)" Overwrite="true" />
 	</Target>
 
 	<Target Name="TagAndPush" DependsOnTargets="GetVersion" Condition="'$(doTagging)'=='true'">
