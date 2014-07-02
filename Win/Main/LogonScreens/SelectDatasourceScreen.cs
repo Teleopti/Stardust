@@ -1,5 +1,7 @@
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
@@ -89,6 +91,50 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		private void btnBack_Click(object sender, System.EventArgs e)
 		{
 			_logonView.BtnBackClick(sender, e);
+		}
+
+		private void listBoxWindowsDataSources_DrawItem(object sender, DrawItemEventArgs e)
+		{
+			ListBox listBox = (ListBox)sender;
+			e.DrawBackground();
+			Brush myBrush = Brushes.Black;
+
+			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+			{
+				myBrush = Brushes.White;
+				e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(0, 153, 255)), e.Bounds);
+			}
+
+			else
+			{
+				e.Graphics.FillRectangle(Brushes.White, e.Bounds);
+
+			}
+
+			e.Graphics.DrawString(((DataSourceContainer)(listBox.Items[e.Index])).DataSourceName, e.Font, myBrush, e.Bounds);
+			e.DrawFocusRectangle();
+		}
+
+		private void listBoxApplicationDataSources_DrawItem(object sender, DrawItemEventArgs e)
+		{
+			ListBox listBox = (ListBox)sender;
+			e.DrawBackground();
+			Brush myBrush = Brushes.Black;
+
+			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+			{
+				myBrush = Brushes.White;
+				e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(0, 153, 255)), e.Bounds);
+			}
+
+			else
+			{
+				e.Graphics.FillRectangle(Brushes.White, e.Bounds);
+
+			}
+
+			e.Graphics.DrawString(((DataSourceContainer)(listBox.Items[e.Index])).DataSourceName, e.Font, myBrush, e.Bounds);
+			e.DrawFocusRectangle();
 		}
 	}
 }

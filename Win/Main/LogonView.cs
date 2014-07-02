@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Win.Main
 
 		public void ShowStep(bool showBackButton)
 		{
+			autoLabel2.Visible = false;
 			var currentStep = _logonSteps[(int) Presenter.CurrentStep];
 			currentStep.SetData();
 			updatePanel((UserControl) currentStep);
@@ -196,5 +197,7 @@ namespace Teleopti.Ccc.Win.Main
 					break;
 			}
 		}
+
+		
 	}
 }

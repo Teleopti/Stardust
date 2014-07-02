@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			// lbxSelectBu
 			// 
 			this.lbxSelectBu.DisplayMember = "Name";
+			this.lbxSelectBu.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.lbxSelectBu.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lbxSelectBu.FormattingEnabled = true;
 			this.lbxSelectBu.ItemHeight = 17;
@@ -60,12 +61,14 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.lbxSelectBu.Name = "lbxSelectBu";
 			this.lbxSelectBu.Size = new System.Drawing.Size(352, 123);
 			this.lbxSelectBu.TabIndex = 37;
+			this.lbxSelectBu.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbxSelectBu_DrawItem);
 			// 
 			// btnBack
 			// 
 			this.btnBack.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.btnBack.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnBack.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnBack.ForeColor = System.Drawing.Color.White;
 			this.btnBack.IsBackStageButton = false;
@@ -81,9 +84,10 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			// 
 			this.buttonLogOnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonLogOnCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonLogOnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.buttonLogOnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonLogOnCancel.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.buttonLogOnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.buttonLogOnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonLogOnCancel.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonLogOnCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonLogOnCancel.IsBackStageButton = false;
@@ -99,8 +103,9 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			// 
 			this.buttonLogOnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonLogOnOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonLogOnOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.buttonLogOnOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonLogOnOK.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonLogOnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonLogOnOK.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonLogOnOK.ForeColor = System.Drawing.Color.White;
 			this.buttonLogOnOK.IsBackStageButton = false;

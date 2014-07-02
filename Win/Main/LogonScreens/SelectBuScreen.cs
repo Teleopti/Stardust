@@ -1,4 +1,6 @@
+using System.Drawing;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
@@ -61,6 +63,28 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		private void buttonLogOnCancel_Click(object sender, System.EventArgs e)
 		{
 			_logonView.ButtonLogOnCancelClick(sender, e);
+		}
+
+		private void lbxSelectBu_DrawItem(object sender, DrawItemEventArgs e)
+		{
+			ListBox listBox = (ListBox)sender;
+			e.DrawBackground();
+			Brush myBrush = Brushes.Black;
+
+			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+			{
+				myBrush = Brushes.White;
+				e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(0,153,255)), e.Bounds);
+			}
+
+			else
+			{
+				e.Graphics.FillRectangle(Brushes.White, e.Bounds);
+
+			}
+
+			e.Graphics.DrawString(((BusinessUnit)(listBox.Items[e.Index])).Name, e.Font, myBrush, e.Bounds);
+			e.DrawFocusRectangle();
 		}
 	}
 }
