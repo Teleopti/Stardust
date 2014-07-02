@@ -1,14 +1,11 @@
-﻿
-#region wohoo!! 51 usings in one form
+﻿#region wohoo!! 51 usings in one form
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
@@ -91,17 +88,6 @@ using Teleopti.Ccc.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WpfControls.Controls.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Application = System.Windows.Forms.Application;
-using Clipboard = System.Windows.Forms.Clipboard;
-using Cursor = System.Windows.Forms.Cursor;
-using Cursors = System.Windows.Forms.Cursors;
-using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
-using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
-using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
-using PersistConflict = Teleopti.Ccc.Infrastructure.Persisters.Schedules.PersistConflict;
-using Point = System.Drawing.Point;
-using SystemColors = System.Drawing.SystemColors;
-
 #endregion
 
 namespace Teleopti.Ccc.Win.Scheduling
@@ -109,7 +95,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 	[CLSCompliant(true)]
 	public partial class SchedulingScreen : BaseRibbonForm
 	{
-		#region Fields
 		private readonly ILifetimeScope _container;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(SchedulingScreen));
 		private ISchedulerStateHolder _schedulerState;
@@ -165,7 +150,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private bool _showGraph = true;
 		private bool _showRibbonTexts = true;
 		private bool _showInfoPanel = true;
-		#endregion
 		private ControlType _controlType;
 		private SchedulerMessageBrokerHandler _schedulerMessageBrokerHandler;
 		private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
@@ -206,7 +190,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
         private readonly SchedulingScreenPermissionHelper _permissionHelper;
-        private readonly CutPasteHandlerFactory _factory;
+        private readonly CutPasteHandlerFactory _cutPasteHandlerFactory;
 
 		#region Constructors
 
@@ -401,7 +385,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_personRequestAuthorizationChecker = new PersonRequestCheckAuthorization();
 
 			_permissionHelper = new SchedulingScreenPermissionHelper();
-            _factory = new CutPasteHandlerFactory(this, () => _scheduleView, deleteFromSchedulePart, checkPastePermissions, pasteFromClipboard, enablePasteOperation);
+            _cutPasteHandlerFactory = new CutPasteHandlerFactory(this, () => _scheduleView, deleteFromSchedulePart, checkPastePermissions, pasteFromClipboard, enablePasteOperation);
 		}
 
 		//flytta ut till modul
@@ -526,15 +510,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			switch ((ClipboardItems)e.ClickedItem.Tag)
 			{
 				case ClipboardItems.Special:
-                    _factory.For(_controlType).DeleteSpecial();
+                    _cutPasteHandlerFactory.For(_controlType).DeleteSpecial();
 					break;
-
 			}
 		}
 
 		private void editControlDeleteClicked(object sender, EventArgs e)
 		{
-            _factory.For(_controlType).Delete();
+            _cutPasteHandlerFactory.For(_controlType).Delete();
 		}
 
 		private void editControlNewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -556,9 +539,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_scheduleView.Presenter.AddActivity();
 						break;
 					case ClipboardItems.Overtime:
-						var definitionSets = from set in MultiplicatorDefinitionSet
-																 where set.MultiplicatorType == MultiplicatorType.Overtime
-																 select set;
+						var definitionSets = MultiplicatorDefinitionSet.Where(m => m.MultiplicatorType == MultiplicatorType.Overtime);
 						_scheduleView.Presenter.AddOvertime(definitionSets.ToList());
 						break;
 					case ClipboardItems.Absence:
@@ -606,7 +587,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			if (e.KeyCode == Keys.D && e.Modifiers == Keys.Control)
 			{
-			    _factory.For(_controlType).PastePersonalShift();
+			    _cutPasteHandlerFactory.For(_controlType).PastePersonalShift();
 			}
 			if (e.KeyCode == Keys.Z && e.Modifiers == Keys.Control)
 			{
@@ -678,12 +659,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void clipboardMessage(string message)
-		{
-			string s = (message + " " + _skillDayGridControl.Name);
-			Trace.WriteLine(s);
-		}
-
 		#region Clipboardcontrol
 
 		private void instantiateClipboardControl()
@@ -710,9 +685,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			clipboardhost.Visible = false;
 		}
 
-		/// <summary>
-		/// Disable the paste clipboard control at the beginning.
-		/// </summary>
 		private void setInitialClipboardControlState()
 		{
 			if (_clipboardControl != null)
@@ -728,22 +700,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void clipboardControlCutClicked(object sender, EventArgs e)
 		{
-            _factory.For(_controlType).Cut();
+            _cutPasteHandlerFactory.For(_controlType).Cut();
 		}
 
 		private void clipboardControlPasteClicked(object sender, EventArgs e)
 		{
-            _factory.For(_controlType).Paste();
+            _cutPasteHandlerFactory.For(_controlType).Paste();
 		}
 
 		private void clipboardControlCopyClicked(object sender, EventArgs e)
 		{
-            _factory.For(_controlType).Copy();
+            _cutPasteHandlerFactory.For(_controlType).Copy();
 		}
 
 		private void clipboardControlPasteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
-		    var handler = _factory.For(_controlType);
+		    var handler = _cutPasteHandlerFactory.For(_controlType);
 			switch ((ClipboardItems)e.ClickedItem.Tag)
 			{
 				case ClipboardItems.Shift:
@@ -769,7 +741,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void clipboardControlCutSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
-		    var handler = _factory.For(_controlType);
+		    var handler = _cutPasteHandlerFactory.For(_controlType);
 			switch ((ClipboardItems)e.ClickedItem.Tag)
 			{
 				case ClipboardItems.Shift:
@@ -795,7 +767,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			switch ((ClipboardItems)e.ClickedItem.Tag)
 			{
 				case ClipboardItems.Special:
-					_factory.For(_controlType).CopySpecial();
+					_cutPasteHandlerFactory.For(_controlType).CopySpecial();
 					break;
 			}
 		}
@@ -867,7 +839,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//No code after the call to runworkerasynk
 		}
 
-	    private void MultipleHostControl3OnGotFocus(object sender, RoutedEventArgs routedEventArgs)
+	    private void MultipleHostControl3OnGotFocus(object sender, System.Windows.RoutedEventArgs routedEventArgs)
 	    {
 	        updateRibbon(ControlType.ShiftEditor);
 	    }
@@ -894,9 +866,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_cachedPersonsFilterView != null && _cachedPersonsFilterView.Disposing == false)
 				_cachedPersonsFilterView.Dispose();
 
-			int res = checkIfUserWantsToSaveUnsavedData();
-
-			if (res == -1)
+			if (checkIfUserWantsToSaveUnsavedData() == -1)
 				e.Cancel = true;
 
 			if (!e.Cancel)
@@ -1248,7 +1218,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_scheduleView.Presenter.ClipHandlerSchedule.Clear();
 						_scheduleView.Presenter.ClipHandlerSchedule.AddClip(1, 1, clone);
 						_externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
-						_factory.For(_controlType).PasteDayOff();
+						_cutPasteHandlerFactory.For(_controlType).PasteDayOff();
 						_scheduleView.Presenter.ClipHandlerSchedule.Clear();
 					}
 				}
@@ -1257,11 +1227,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#endregion
 
-		#region Copy
-
 		private void toolStripMenuItemCopyClick(object sender, EventArgs e)
 		{
-			_factory.For(_controlType).Copy();
+			_cutPasteHandlerFactory.For(_controlType).Copy();
 		}
 
 	    private void enablePasteOperation()
@@ -1272,21 +1240,15 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _clipboardControlRestrictions.SetButtonState(ClipboardAction.Paste, true);
 	    }
 
-		#endregion
-
-		#region Delete
-
 		private void toolStripButtonDeleteClick(object sender, EventArgs e)
 		{
-            _factory.For(_controlType).Delete();
+            _cutPasteHandlerFactory.For(_controlType).Delete();
 		}
 
 		private void toolStripMenuItemDeleteSpecial2Click(object sender, EventArgs e)
 		{
-            _factory.For(_controlType).DeleteSpecial();
+            _cutPasteHandlerFactory.For(_controlType).DeleteSpecial();
 		}
-
-		#endregion
 
 		#region Lock
 
@@ -1413,7 +1375,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Cursor = Cursors.Default;
 		}
 
-		//lock all with specified absencens
 		private void toolStripMenuItemLockAbsencesClick(object sender, EventArgs e)
 		{
 			lockAbsence(sender);
@@ -1435,7 +1396,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Cursor = Cursors.Default;
 		}
 
-		//lock all with specified shiftcategory
 		private void toolStripMenuItemLockShiftCategoriesClick(object sender, EventArgs e)
 		{
 			lockShiftCategory(sender);
@@ -1617,23 +1577,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#endregion
 
-		#region paste
-
 		private void ToolStripMenuItemPaste_Click(object sender, EventArgs e)
 		{
-            _factory.For(_controlType).Paste();
+            _cutPasteHandlerFactory.For(_controlType).Paste();
 			updateShiftEditor();
 		}
 
 		private void toolStripMenuItemPasteSpecial2_Click(object sender, EventArgs e)
 		{
-			_factory.For(_controlType).PasteSpecial();
+			_cutPasteHandlerFactory.For(_controlType).PasteSpecial();
 			updateShiftEditor();
 		}
 
 		private void toolStripMenuItemPasteShiftFromShiftsClick(object sender, EventArgs e)
 		{
-            _factory.For(_controlType).PasteShiftFromShifts();
+            _cutPasteHandlerFactory.For(_controlType).PasteShiftFromShifts();
 		}
 
 	    private void pasteFromClipboard(PasteOptions options)
@@ -1643,8 +1601,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             _backgroundWorkerRunning = false;
             RecalculateResources();
 	    }
-
-		#endregion
 
 		#endregion
 
@@ -2670,19 +2626,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Private methods
 
-		#region Cut
-
 		private void toolStripMenuItemCut_Click(object sender, EventArgs e)
 		{
-            _factory.For(_controlType).Cut();
+            _cutPasteHandlerFactory.For(_controlType).Cut();
 		}
 
 		private void toolStripMenuItemCutSpecial2_Click(object sender, EventArgs e)
 		{
-			_factory.For(_controlType).CutSpecial();
+			_cutPasteHandlerFactory.For(_controlType).CutSpecial();
 		}
-
-		#endregion
 
 		private void scheduleSelected()
 		{
@@ -5681,7 +5633,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						return;
 					IScheduleDay target = _schedulerState.Schedules[form.Selected()].ScheduledDay(selected.DateOnlyAsPeriod.DateOnly);
 					_scheduleView.SetSelectionFromParts(new List<IScheduleDay> { target });
-					_factory.For(_controlType).Paste();
+					_cutPasteHandlerFactory.For(_controlType).Paste();
 					updateShiftEditor();
 				}
 			}
@@ -6005,15 +5957,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private static IEnumerable<ISkill> aggregateSkills(IPerson person, DateOnly dateOnly)
 		{
-			var ret = new List<ISkill>();
 			var personPeriod = person.Period(dateOnly);
-
-			foreach (var personSkill in personPeriod.PersonSkillCollection)
-			{
-				if (!ret.Contains(personSkill.Skill))
-					ret.Add(personSkill.Skill);
-			}
-			return ret;
+            return personPeriod.PersonSkillCollection.Where(s => s.Active).Select(s => s.Skill).Distinct();
 		}
 
 		private void toolStripMenuItemContractTime_Click(object sender, EventArgs e)
