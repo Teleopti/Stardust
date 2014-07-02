@@ -295,10 +295,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 		[Given(@"I choose '(.*)' to make a shift trade")]
 		[When(@"I choose '(.*)' to make a shift trade")]
+		[Then(@"I choose '(.*)' to make a shift trade")]
 		public void WhenIChooseToMakeAShiftTrade(string p0)
 		{
 			Browser.Interactions.Click(".shift-trade-possible-trade-schedule .shift-trade-layer-container .shift-trade-layer");
-	}
+		}
 
 		[When(@"I add '(.*)' to my shift trade list")]
 		[Given(@"I add '(.*)' to my shift trade list")]

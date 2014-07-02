@@ -233,6 +233,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                 return self.selectedTeamInternal();
             },
             write: function (value) {
+            	if (value != null && self.selectedTeamInternal() != null && value != self.selectedTeamInternal()) {
+            		self.chooseAgent(null);
+		            self.chooseHistorys.removeAll();
+	            }
                 self.selectedTeamInternal(value);
                 if (value == null) return;
                 self.prepareLoad();
