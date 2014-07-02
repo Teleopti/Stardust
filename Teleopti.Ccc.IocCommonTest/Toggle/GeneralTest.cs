@@ -63,28 +63,5 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 					.Should().Not.Be.Null();
 			}
 		}
-
-		[Test]
-		public void ShouldWorkWithoutHavingQuerystringLicenseActivatorProviderRegistered_UsedWhenNonWebUsingFileDirectly()
-		{
-			var tempFile = Path.GetTempFileName();
-			try
-			{
-				File.WriteAllLines(tempFile, new[] { "TestToggle=false" });
-				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new ToggleNetModule(tempFile, string.Empty));
-				ToggleNetModule.RegisterDependingModules(containerBuilder);
-				using (var container = containerBuilder.Build())
-				{
-					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.TestToggle)
-						.Should().Be.EqualTo(false);
-				}
-			}
-			finally
-			{
-				File.Delete(tempFile);
-			}
-		}
 	}
 }
