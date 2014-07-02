@@ -50,18 +50,20 @@ define([
 		this.ScheduleDate = ko.observable();
 		this.SelectedStartMinutes = ko.observable();
 
-		var personForId = function(id, personArray) {
+		var personForId = function (id) {
+
 			if (!id)
 				return undefined;
 			var person = lazy(self.Persons())
-				.filter(function (x) { return x.Id == id; })
+				.filter(function(x) {
+					console.log({ checkingId: x.Id, forId: id, conclusion: x.Id == id });
+					return x.Id == id;
+				})
 				.first();
 			if (!person) {
+
 				person = new personViewModel({ Id: id });
-				if (!personArray)
 					self.Persons.push(person);
-				else
-					personArray.push(person);
 			}
 			return person;
 		};
@@ -182,21 +184,19 @@ define([
 			}
 			// data might include the same person more than once, with data for more than one day
 			
-			self.Persons([]);
 
 			// add schedule data. a person might get more than 1 schedule added
-			var personArray = [];
 			for (var i = 0; i < data.length; i++) {
 				var schedule = data[i];
 				schedule.GroupId = self.GroupId();
 				schedule.Offset = self.ScheduleDate();
 				schedule.Date = moment(schedule.Date, resources.FixedDateFormatForMoment);
-				var person = personForId(schedule.PersonId, personArray);
+
+				var person = personForId(schedule.PersonId);
 
 				person.AddData(schedule, self.TimeLine);
 			}
 
-			self.Persons.push.apply(self.Persons, personArray);
 
 			self.AddIntradayAbsenceForm.WorkingShift(self.WorkingShift());
 			self.AddActivityForm.WorkingShift(self.WorkingShift());

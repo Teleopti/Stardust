@@ -1,5 +1,5 @@
-﻿define(['buster', 'views/personschedule/vm'],
-	function (buster, viewModel) {
+﻿define(['buster', 'views/personschedule/vm','lazy'],
+	function (buster, viewModel,lazy) {
 		return function () {
 
 			buster.testCase("person schedule viewmodel", {
@@ -345,6 +345,26 @@
 					momentInput = moment('14:30', 'HH:mm');
 					vm.MoveActivityForm.DisplayedStartTime(momentInput);
 					assert.equals(vm.MoveActivityForm.DisplayedStartTime(), expected);
+				},
+
+				"should not display duplicated teammates" : function() {
+
+					var vm = new viewModel();
+					vm.AddingActivity(true); //for showing the other agents in team
+
+					vm.PersonId('1');
+
+					var data = [
+						{PersonId:'2'},
+						{PersonId:'3'},
+						{PersonId:'3'},
+						{PersonId:'3'},
+						{PersonId:'2'}
+					];
+
+					vm.UpdateSchedules(data);
+
+					assert.equals(3, vm.SortedPersons().length);
 				}
 			});
 		}
