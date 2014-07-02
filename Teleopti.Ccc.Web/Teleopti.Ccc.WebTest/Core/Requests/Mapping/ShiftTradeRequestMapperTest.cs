@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 					Message = "sdfsdfsdf",
 					Subject = "sdfsdff",
 					PersonToId = Guid.NewGuid(),
-					Date = new DateOnly(2000, 1, 1)
+					Dates = new List<DateOnly> { new DateOnly(2000, 1, 1) }
 				};
 			personRepository.Expect(x => x.Get(form.PersonToId)).Return(new Person());
 			loggedOnUserSvc.Expect(x => x.CurrentUser()).Return(loggedOnUser);
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapShiftTradeRequestWithCorrectDate()
 		{
 			var expected = new DateOnly(2010, 1, 1);
-			form.Date = expected;
+			form.Dates = new List<DateOnly> {expected};
 
 			var res = target.Map(form);
 			var swapDetail = ((IShiftTradeRequest) res.Request).ShiftTradeSwapDetails[0];
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test, SetCulture("ar-SA")]
 		public void ShouldMapShiftTradeRequestWithCorrectDateForArabicCulture()
 		{
-			form.Date = new DateOnly(1434, 5, 1);
+			form.Dates = new List<DateOnly> {new DateOnly(1434, 5, 1)};
 			var expected = new DateOnly(new DateTime(1434, 5, 1, CultureInfo.CurrentCulture.Calendar));
 
 			var res = target.Map(form);
