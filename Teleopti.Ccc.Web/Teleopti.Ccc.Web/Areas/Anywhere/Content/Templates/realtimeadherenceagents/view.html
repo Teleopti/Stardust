@@ -4,6 +4,11 @@
 		<li><a  data-bind="text: siteName, attr:{href: siteURI}"></a></li>
 		<li class="active" data-bind="text: teamName">Red</li>
 	</ul>
+	<div align="right">
+		<form>
+			Filter: <input type="text" data-bind="value: filter, valueUpdate: 'input'"/>
+		</form>
+	</div>
 	<div class="panel panel-default">
 		<table class="table table-stripped table-condensed rta-agents-details">
 			<thead>
@@ -17,7 +22,7 @@
 					<th data-bind="text: resources.TimeInAlarm"></th>
 				</tr>
 			</thead>
-			<tbody data-bind="foreach: agentStates">
+			<tbody data-bind="foreach: filteredAgents">
 				<tr data-bind="style:  { backgroundColor: AlarmColor, 'transition': 'background-color 2000ms linear', fontWeight: TextWeight}">
 					<td class="agent-name" data-bind="text: Name"></td>
 					<td data-bind="text: State"></td>

@@ -19,8 +19,39 @@
 		that.siteName = ko.observable();
 		that.siteId = ko.observable();
 		that.siteURI = ko.observable();
+		that.filter = ko.observable();
 		
-		
+		that.filteredAgents = ko.computed(function() {
+			var filter = that.filter();
+			if (!filter) {
+				return that.agentStates();
+			} else {
+				return ko.utils.arrayFilter(that.agentStates(), function (item) {
+					return arrayContains(
+					[
+						item.Alarm(),
+						item.Name,
+						item.State(),
+						item.Activity()
+					], filter);
+
+				});
+			}
+		});
+
+		var arrayContains = function(items, filter) {
+			for (var i = 0; i < items.length; i++) {
+				var item = items[i];
+				if (stringContains(item, filter))
+					return true;
+			}
+			return false;
+		};
+
+		var stringContains = function (item, filter) {
+			return item.toUpperCase().indexOf(filter.toUpperCase()) > -1;
+		}
+
 		that.fillAgents = function (data) {
 			for (var i = 0; i < data.length; i++) {
 				var a = agent();
@@ -61,22 +92,19 @@
 				}
 			}
 			that.agentStates.sort(function(left, right) { return left.Name == right.Name ? 0 : (left.Name < right.Name ? -1 : 1); });
-		}
-
+		};
 		that.getExistingAgentState = function(id) {
 			var existingState = that.agentStates().filter(function(obj) {
 						return obj.PersonId === id;
 				});
 			return existingState;
-		}
-
+		};
 		that.getAgent = function(id) {
 			var agent = that.agents.filter(function(item) {
 				return item.PersonId === id;
 				});
 			return agent[0];
-		}
-		
+		};
 		that.refreshAlarmTime = function () {
 			that.agentStates().forEach(function (item) {
 				item.refreshAlarmTime();
@@ -87,7 +115,7 @@
 			var data = JSON.parse(notification.BinaryData);
 			data.Id = notification.DomainId;
 			that.fillAgentsStates(data.AgentStates);
-		}
+		};
 
 		return that;
 	};
