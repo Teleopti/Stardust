@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			{
 				builder.Register<IToggleManager>(c =>
 				{
-					const string developerMode = "DEV";
+					const string developerMode = "ALL";
 					const string rcMode = "RC";
 
 					var toggleMode = _toggleMode==null ? 

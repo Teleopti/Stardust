@@ -24,7 +24,7 @@
 
 		protected override string ToggleMode
 		{
-			get { return " dEv	"; }
+			get { return " AlL	"; }
 		}
 	}
 }
