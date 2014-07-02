@@ -3,7 +3,6 @@ using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldUseToggleQuerierIfStartsWithHttp()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new ToggleNetModule("http://tralala"));
+			containerBuilder.RegisterModule(new ToggleNetModule("http://tralala", string.Empty));
 			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldUseToggleQuerierIfStartsWithHttps()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new ToggleNetModule("https://hejsan"));
+			containerBuilder.RegisterModule(new ToggleNetModule("https://hejsan", string.Empty));
 			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldRegisterToggleFillerIfToggleQuerierIsUsed()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new ToggleNetModule("https://hejsan"));
+			containerBuilder.RegisterModule(new ToggleNetModule("https://hejsan", string.Empty));
 			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldResolveTogglesActive()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new ToggleNetModule("http://something"));
+			containerBuilder.RegisterModule(new ToggleNetModule("http://something", string.Empty));
 			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle=false" });
 				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
+				containerBuilder.RegisterModule(new ToggleNetModule(tempFile, string.Empty));
 				ToggleNetModule.RegisterDependingModules(containerBuilder);
 				using (var container = containerBuilder.Build())
 				{

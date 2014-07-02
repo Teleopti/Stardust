@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.IocCommon.Toggle;
-
-namespace Teleopti.Ccc.IocCommonTest.Toggle
+﻿namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
 	public class DeveloperTest : ToggleBaseTest
 	{
@@ -24,9 +22,9 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			get { return true; }
 		}
 
-		protected override string LicenseCustomerName
+		protected override string ToggleMode
 		{
-			get { return ToggleNetModule.DeveloperLicenseName; }
+			get { return " dEv	"; }
 		}
 	}
 }

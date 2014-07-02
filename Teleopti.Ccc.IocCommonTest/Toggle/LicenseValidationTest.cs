@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle=license"});
 				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
+				containerBuilder.RegisterModule(new ToggleNetModule(tempFile, string.Empty));
 				ToggleNetModule.RegisterDependingModules(containerBuilder);
 				containerBuilder.Register(_ => MockRepository.GenerateStub<ILicenseActivatorProvider>()).Named<ILicenseActivatorProvider>("querystring");
 				using (var container = containerBuilder.Build())

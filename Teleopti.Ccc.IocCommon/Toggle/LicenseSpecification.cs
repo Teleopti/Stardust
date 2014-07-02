@@ -18,8 +18,9 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		public bool IsEnabled(string currentUser, IDictionary<string, string> parameters)
 		{
 			var licenseCustomerName = _licenseActivatorProvide.Current().CustomerName;
-			return licenseCustomerName.Equals(parameters[NameKey], StringComparison.OrdinalIgnoreCase) ||
-					ToggleNetModule.DeveloperLicenseName.Equals(licenseCustomerName, StringComparison.OrdinalIgnoreCase);
+			return licenseCustomerName.Equals(parameters[NameKey], StringComparison.OrdinalIgnoreCase);
+			//||
+			//	ToggleNetModule.DeveloperMode.Equals(licenseCustomerName, StringComparison.OrdinalIgnoreCase);
 		}
 
 		public void Validate(string toggleName, IDictionary<string, string> parameters)

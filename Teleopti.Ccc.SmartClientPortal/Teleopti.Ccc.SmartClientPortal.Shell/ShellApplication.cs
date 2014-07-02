@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 builder.RegisterModule(new PermissionsModule());
                 builder.RegisterModule(new RequestHistoryModule());
 				builder.RegisterModule(new MainModule());
-				builder.RegisterModule(new ToggleNetModule(ConfigurationManager.AppSettings["FeatureToggle"]));
+				builder.RegisterModule(new ToggleNetModule(ConfigurationManager.AppSettings["FeatureToggle"], ConfigurationManager.AppSettings["ToggleMode"]));
 							//hack to get old behavior work
 	            builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory()).ExternallyOwned().As<IUnitOfWorkFactory>();
 							builder.RegisterModule(new RepositoryModule() { ConstructorTypeToUse = typeof(IUnitOfWorkFactory) });
@@ -252,12 +252,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             IMapiMailMessage message = new MapiMailMessage(string.Empty, string.Empty);
 
 	        var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
-			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new ToggleNetModule(ConfigurationManager.AppSettings["FeatureToggle"]));
+					tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new ToggleNetModule(ConfigurationManager.AppSettings["FeatureToggle"], ConfigurationManager.AppSettings["ToggleMode"]));
 					ToggleNetModule.RegisterDependingModules(tempContainerBecauseWeDontHaveAGlobalOneHere);
 			ExceptionHandlerModel exceptionHandlerModel;
 			using (var container = tempContainerBecauseWeDontHaveAGlobalOneHere.Build())
 	        {
-				exceptionHandlerModel = new ExceptionHandlerModel(ex, defaultEmail,message, fileWriter, container.Resolve<ITogglesActive>());		        
+				exceptionHandlerModel = new ExceptionHandlerModel(ex, defaultEmail,message, fileWriter, container.Resolve<ITogglesActive>());
 	        }
 	        using (var view = new ExceptionHandlerView(exceptionHandlerModel))
             {

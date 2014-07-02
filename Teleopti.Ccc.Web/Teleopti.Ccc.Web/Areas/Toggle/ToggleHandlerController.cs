@@ -18,11 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 		}
 
 		/// <summary>
-		/// Url if not logged in (from desktop app)
-		/// <![CDATA[
-		/// [web]/ToggleHandler/IsEnabled?toggle=[yourToggle]&datasource=[your datasource]
-		/// ]]>
-		/// Url if logged in
+		/// Url
 		/// <![CDATA[
 		/// [web]/ToggleHandler/IsEnabled?toggle=[yourToggle]
 		/// ]]>
@@ -39,11 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 		}
 
 		/// <summary>
-		/// Url if not logged in
-		/// <![CDATA[
-		/// [web]/ToggleHandler/AllToggles?datasource=[your datasource]
-		/// ]]>
-		/// Url if logged in
+		/// Url
 		/// <![CDATA[
 		/// [web]/ToggleHandler/AllToggles
 		/// ]]>

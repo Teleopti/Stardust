@@ -1,10 +1,8 @@
 ﻿using System.IO;
 using Autofac;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.IocCommonTest.Toggle
@@ -19,8 +17,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle=false" });
 				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => createLicenseActivitor()).Named<ILicenseActivatorProvider>("querystring");
+				containerBuilder.RegisterModule(new ToggleNetModule(tempFile, ToggleMode));
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -42,8 +39,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle=true" });
 				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => createLicenseActivitor()).Named<ILicenseActivatorProvider>("querystring");
+				containerBuilder.RegisterModule(new ToggleNetModule(tempFile, ToggleMode));
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -65,8 +61,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new string[0]);
 				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => createLicenseActivitor()).Named<ILicenseActivatorProvider>("querystring");
+				containerBuilder.RegisterModule(new ToggleNetModule(tempFile, ToggleMode));
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -86,10 +81,9 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var tempFile = Path.GetTempFileName();
 			try
 			{
-				File.WriteAllLines(tempFile, new[] { "TestToggle.license.name=" + ToggleNetModule.RcLicenseName });
+				File.WriteAllLines(tempFile, new[] {"TestToggle=rc"});
 				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => createLicenseActivitor()).Named<ILicenseActivatorProvider>("querystring");
+				containerBuilder.RegisterModule(new ToggleNetModule(tempFile, ToggleMode));
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -109,33 +103,9 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var tempFile = Path.GetTempFileName();
 			try
 			{
-				File.WriteAllLines(tempFile, new[] { "TestToggle.license.name=" + ToggleNetModule.RcLicenseName.ToUpper()});
+				File.WriteAllLines(tempFile, new[] { "TestToggle= Rc	 " });
 				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => createLicenseActivitor()).Named<ILicenseActivatorProvider>("querystring");
-				using (var container = containerBuilder.Build())
-				{
-					var toggleChecker = container.Resolve<IToggleManager>();
-					toggleChecker.IsEnabled(Toggles.TestToggle)
-						.Should().Be.EqualTo(RcFeatureShouldBe);
-				}
-			}
-			finally
-			{
-				File.Delete(tempFile);
-			}
-		}
-
-		[Test]
-		public void RcFeatureInFileUntrimmed()
-		{
-			var tempFile = Path.GetTempFileName();
-			try
-			{
-				File.WriteAllLines(tempFile, new[] { "TestToggle.license.name  =	 " + ToggleNetModule.RcLicenseName.ToUpper() + "		"});
-				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new ToggleNetModule(tempFile));
-				containerBuilder.Register(_ => createLicenseActivitor()).Named<ILicenseActivatorProvider>("querystring");
+				containerBuilder.RegisterModule(new ToggleNetModule(tempFile, ToggleMode));
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -154,15 +124,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		protected abstract bool DisabledFeatureShouldBe { get; }
 		protected abstract bool RcFeatureShouldBe { get; }
 
-		private ILicenseActivatorProvider createLicenseActivitor()
-		{
-			var provider = MockRepository.GenerateMock<ILicenseActivatorProvider>();
-			var activator = MockRepository.GenerateMock<ILicenseActivator>();
-			provider.Stub(x => x.Current()).Return(activator);
-			activator.Stub(x => x.CustomerName).Return(LicenseCustomerName);
-			return provider;
-		}
-
-		protected abstract string LicenseCustomerName { get; }
+		protected abstract string ToggleMode { get; }
 	}
 }

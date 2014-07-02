@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
-			builder.RegisterModule(new ToggleNetModule(featureTogglePath));
+			builder.RegisterModule(new ToggleNetModule(featureTogglePath, ConfigurationManager.AppSettings["ToggleMode"]));
 
 			return builder.Build();
 		}

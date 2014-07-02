@@ -22,7 +22,7 @@
 			get { return false; }
 		}
 
-		protected override string LicenseCustomerName
+		protected override string ToggleMode
 		{
 			get { return "someCustomer"; }
 		}

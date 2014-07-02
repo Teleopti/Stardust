@@ -1,25 +1,25 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Toggle.Net;
 using Toggle.Net.Configuration;
 using Toggle.Net.Providers.TextFile;
+using Toggle.Net.Specifications;
 
 namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	public class ToggleNetModule : Module
 	{
-		public const string DeveloperLicenseName = "Teleopti_RD";
-		public const string RcLicenseName = "Teleopti_RC";
-		
 		private readonly string _pathToToggle;
+		private readonly string _toggleMode;
 		
-		public ToggleNetModule(string pathToToggle)
+		public ToggleNetModule(string pathToToggle, string toggleMode)
 		{
+			_toggleMode = toggleMode;
 			_pathToToggle = pathToToggle.Trim();
 		}
 
@@ -36,17 +36,28 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			{
 				builder.Register<IToggleManager>(c =>
 				{
+					const string developerMode = "DEV";
+					const string rcMode = "RC";
+
+					var toggleMode = _toggleMode==null ? 
+						string.Empty : 
+						_toggleMode.Trim();
+
 					if (togglePathIsNotDefined())
 						return new FalseToggleManager();
 
-					const string licenseActivatorReadingFromQuerystring = "querystring";
-					var licenseActivatorProvider = c.IsRegisteredWithName<ILicenseActivatorProvider>(licenseActivatorReadingFromQuerystring) ?
-								c.ResolveNamed<ILicenseActivatorProvider>(licenseActivatorReadingFromQuerystring) : 
-								c.Resolve<ILicenseActivatorProvider>();
+					var defaultSpecification = toggleMode.Equals(developerMode, StringComparison.OrdinalIgnoreCase)
+						? (IToggleSpecification) new TrueSpecification()
+						: new FalseSpecification();
+					var rcSpecification = toggleMode.Equals(developerMode, StringComparison.OrdinalIgnoreCase) ||
+																toggleMode.Equals(rcMode, StringComparison.OrdinalIgnoreCase)
+						? (IToggleSpecification) new TrueSpecification()
+						: new FalseSpecification();
+
 					var specMappings = new DefaultSpecificationMappings();
-					specMappings.AddMapping("license", new LicenseSpecification(licenseActivatorProvider));
+					specMappings.AddMapping("rc", rcSpecification);
 					var toggleConfiguration = new ToggleConfiguration(new FileProviderFactory(new FileReader(_pathToToggle), specMappings));
-					toggleConfiguration.SetDefaultSpecification(new DefaultSpecification(licenseActivatorProvider));
+					toggleConfiguration.SetDefaultSpecification(defaultSpecification);
 					return new toggleCheckerWrapper(toggleConfiguration.Create());
 				})
 				.SingleInstance()
