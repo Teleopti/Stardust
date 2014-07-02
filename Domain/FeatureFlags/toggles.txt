@@ -13,15 +13,15 @@
 ###########################################################
 #
 #
-### Enable for specific license #######
-### eg enable for RC license ##########
-# MyFeature.license.name = Teleopti_RC
+######### Enable for testers ##########
+## (togglemode = rc in app settings) ##
+# MyFeature = RC
 #######################################
 #
 
 Scheduler_WeeklyRestRuleSolver_27108 = true
 RTA_RtaLastStatesOverview_27789 = true
 RTA_DrilldownToAllAgentsInOneTeam_25234 = true
-Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635.license.name = Teleopti_RC
-MyReport_AgentQueueMetrics_22254.license.name = Teleopti_RC
-MyTeam_MoveActivity_25206.license.name = Teleopti_RC
+Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = RC
+MyReport_AgentQueueMetrics_22254 = RC
+MyTeam_MoveActivity_25206 = RC
