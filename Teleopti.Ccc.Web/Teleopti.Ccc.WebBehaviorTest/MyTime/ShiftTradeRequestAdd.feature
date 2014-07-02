@@ -224,6 +224,7 @@ Scenario: Sending shift trade request closes the Add Shift Trade Request view
 	And the current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	And I click agent 'OtherAgent'
+	And I add 'OtherAgent' to my shift trade list
 	And I enter subject 'A nice subject'
 	And I enter message 'A cute little message'
 	And I click send shifttrade button
