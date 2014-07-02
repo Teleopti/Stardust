@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
@@ -10,7 +9,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Broker;
-using Teleopti.Ccc.Web.Core.Licensing;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
@@ -66,8 +64,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<IpAddressResolver>().As<IIpAddressResolver>();
 			builder.RegisterType<AuthenticationModule>().As<IAuthenticationModule>().SingleInstance();
 			builder.RegisterType<IdentityProviderProvider>().As<IIdentityProviderProvider>().SingleInstance();
-			builder.RegisterType<QueryStringReader>().As<IQueryStringReader>().SingleInstance();
-			builder.RegisterType<LicenseActivatorDecoratorReadFromQueryString>().Named<ILicenseActivatorProvider>("querystring").SingleInstance();
 		}
 	}
 }

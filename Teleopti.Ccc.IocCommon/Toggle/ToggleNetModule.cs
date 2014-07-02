@@ -1,10 +1,8 @@
 ﻿using System;
 using Autofac;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Toggle.Net;
 using Toggle.Net.Configuration;
 using Toggle.Net.Providers.TextFile;
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		{
 			if (togglePathIsAnUrl())
 			{
-				builder.Register(c => new ToggleQuerier(c.Resolve<ICurrentDataSource>(), _pathToToggle))
+				builder.Register(c => new ToggleQuerier(_pathToToggle))
 					.SingleInstance()
 					.As<IToggleManager>()
 					.As<IToggleFiller>();
@@ -72,9 +70,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 		public static void RegisterDependingModules(ContainerBuilder builder)
 		{
-			//if using in scenarios where not all modules are registered
-			builder.RegisterModule<UnitOfWorkModule>();
-			builder.RegisterModule<AuthenticationModule>();
+			//put module dependencies here if using in scenarios where not all modules are registered
 		}
 
 		private bool togglePathIsAnUrl()

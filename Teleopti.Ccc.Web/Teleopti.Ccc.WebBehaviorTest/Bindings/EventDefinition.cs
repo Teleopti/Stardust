@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	    {
 				const string ignoreMessage = "Ignore toggle {0} because it is {1}.";
 
-				var toggleQuerier = new ToggleQuerier(new CurrentDataSource(new CurrentIdentity()), TestSiteConfigurationSetup.Url.ToString());
+				var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.Url.ToString());
 				var matchingEnkelsnuffs = new Regex(@"\'(.*)\'");
 		    var tags = ScenarioContext.Current.ScenarioInfo.Tags.Union(FeatureContext.Current.FeatureInfo.Tags).ToArray();
 
