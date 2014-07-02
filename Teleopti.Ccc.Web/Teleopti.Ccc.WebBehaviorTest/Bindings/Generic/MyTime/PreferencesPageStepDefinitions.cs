@@ -323,7 +323,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var extendedIndication = ExtendedIndication(date);
 			Browser.Interactions.AssertVisibleUsingJQuery(extendedIndication);
 			Browser.Interactions.Javascript("$('{0}').trigger('mouseleave')", extendedIndication.JSEncode());
-			Thread.Sleep(100); //pause to make sure the last operation finished successfully
 			Browser.Interactions.Javascript("$('{0}').trigger('mouseenter')", extendedIndication.JSEncode());
 		}
 
