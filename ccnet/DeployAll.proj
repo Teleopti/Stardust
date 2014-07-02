@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <Project DefaultTargets="DeployAll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
@@ -539,7 +539,7 @@
 						OutputFile="%(AssemblyInfos.FullPath)"
 					AssemblyCompany="$(Company)"
 					AssemblyProduct="$(ProductName)"
-					AssemblyCopyright="Copyright © Teleopti AB 2009"
+					AssemblyCopyright="Copyright © Teleopti AB 2014"
 					AssemblyVersion="$(CCCVersion)"
 					AssemblyFileVersion="$(CCCVersion)"
 					CLSCompliant ="false"
@@ -566,7 +566,7 @@
 					AssemblyConfiguration=""
 					AssemblyCompany="$(Company)"
 					AssemblyProduct="$(ProductName)"
-					AssemblyCopyright="Copyright © Teleopti AB 2009"
+					AssemblyCopyright="Copyright © Teleopti AB 2014"
 					AssemblyTrademark=""
 					CLSCompliant ="false"
 					ComVisible="false"
@@ -587,7 +587,7 @@
 				AssemblyConfiguration=""
 				AssemblyCompany="$(Company)"
 				AssemblyProduct="$(ProductName)"
-				AssemblyCopyright="Copyright © Teleopti AB 2009"
+				AssemblyCopyright="Copyright © Teleopti AB 2014"
 				AssemblyTrademark=""
 				CLSCompliant ="false"
 				ComVisible="false"
@@ -610,7 +610,7 @@
 				AssemblyConfiguration=""
 				AssemblyCompany="$(Company)"
 				AssemblyProduct="$(ProductName)"
-				AssemblyCopyright="Copyright © Teleopti AB 2009"
+				AssemblyCopyright="Copyright © Teleopti AB 2014"
 				AssemblyTrademark=""
 				CLSCompliant ="false"
 				ComVisible="false"
