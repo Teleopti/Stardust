@@ -30,6 +30,7 @@ using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Editor;
 using Teleopti.Ccc.WpfControls.Common.Interop;
 using Teleopti.Ccc.WpfControls.Controls.Intraday;
+using Teleopti.Ccc.WpfControls.Controls.Notes;
 using Teleopti.Interfaces.Domain;
 using Cursors = System.Windows.Forms.Cursors;
 using Teleopti.Ccc.WpfControls.Controls.Editor;
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.Win.Intraday
         private IntradayScheduleView _scheduleView;
         private PinnedLayerView pinnedLayerView;
         private WpfShiftEditor wpfShiftEditor1;
+        private NotesEditor notesEditor1;
         private IntradayPresenter _presenter;
         private GridChartManager _gridChartManager;
         private SkillIntradayGridControl _skillIntradayGridControl;
@@ -145,7 +147,9 @@ namespace Teleopti.Ccc.Win.Intraday
         {
 			shiftEditorHost = new MultipleHostControl();
 			wpfShiftEditor1 = new WpfShiftEditor(_eventAggregator, new CreateLayerViewModelService(), false) { MinHeight = 80 };
-			shiftEditorHost.AddItem("", wpfShiftEditor1);
+			notesEditor1 = new NotesEditor(true) { MinHeight = 80 };
+			shiftEditorHost.AddItem(Resources.ShiftEditor, wpfShiftEditor1);
+			shiftEditorHost.AddItem(Resources.Note, notesEditor1);
             pinnedLayerView = new PinnedLayerView();
 			elementHostShiftEditor.Child = shiftEditorHost;
             elementHostPinnedLayerView.Child = pinnedLayerView;
@@ -201,6 +205,10 @@ namespace Teleopti.Ccc.Win.Intraday
             wpfShiftEditor1.AddPersonalShift += wpfShiftEditor_AddPersonalShift;
             wpfShiftEditor1.SetTimeZone(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
             dayLayerView1.UpdateShiftEditor += dayLayerView1_UpdateShiftEditor;
+			notesEditor1.NotesChanged += notesEditor1NotesChanged;
+			notesEditor1.PublicNotesChanged += notesEditor1NotesChanged;
+
+
             ToggleSchedulePartModified(true);
             timerRefreshSchedule.Enabled = _presenter.RealTimeAdherenceEnabled;
             Cursor = Cursors.Default;
@@ -420,6 +428,7 @@ namespace Teleopti.Ccc.Win.Intraday
                         _presenter.SchedulerStateHolder.Schedules[person].ReFetch(
                             _lastSchedulePartInEditor);
                     wpfShiftEditor1.LoadSchedulePart(currentPart);
+					notesEditor1.LoadNote(currentPart);
                 }
             }
         }
@@ -436,6 +445,7 @@ namespace Teleopti.Ccc.Win.Intraday
             }
 
             wpfShiftEditor1.LoadSchedulePart(null);
+			notesEditor1.LoadNote(null);
             if (scheduleParts.Count == 1)
             {
                 currentPart = scheduleParts[0];
@@ -447,6 +457,7 @@ namespace Teleopti.Ccc.Win.Intraday
                     _presenter.SchedulerStateHolder.Schedules[currentPart.Person].ReFetch(currentPart);
             }
             wpfShiftEditor1.LoadSchedulePart(currentPart);
+            notesEditor1.LoadNote(currentPart);
         }
 
         private void ReloadChart()
@@ -507,6 +518,13 @@ namespace Teleopti.Ccc.Win.Intraday
         {
             _scheduleView.Presenter.LastUnsavedSchedulePart = e.SchedulePart;
         }
+
+		void notesEditor1NotesChanged(object sender, System.Windows.RoutedEventArgs e)
+		{
+			_scheduleView.Presenter.LastUnsavedSchedulePart = notesEditor1.SchedulePart;
+			UpdateFromEditor();
+			InvalidateScheduleView(notesEditor1.SchedulePart);
+		}
 
         private void ShiftEditor_CommitChanges(object sender, ShiftEditorEventArgs e)
         {
