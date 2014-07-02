@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
 	public class ShiftTradeRequestForm
 	{
-		public DateOnly Date { get; set; }
+		public IList<DateOnly> Dates { get; set; }
 
 		public Guid PersonToId { get; set; }
 

@@ -23,9 +23,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			var loggedOnUser = _loggedOnUser.CurrentUser();
 			var personTo = _personRepository.Get(form.PersonToId);
-			var calendarDate = new DateOnly(new DateTime(form.Date.Year, form.Date.Month, form.Date.Day, CultureInfo.CurrentCulture.Calendar));
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(loggedOnUser, personTo, calendarDate, calendarDate);
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var shiftTradeSwapDetailList = new List<IShiftTradeSwapDetail>();
+			foreach (var date in form.Dates)
+			{
+				var calendarDate = new DateOnly(new DateTime(date.Year, date.Month, date.Day, CultureInfo.CurrentCulture.Calendar));
+				var shiftTradeSwapDetail = new ShiftTradeSwapDetail(loggedOnUser, personTo, calendarDate, calendarDate);
+				shiftTradeSwapDetailList.Add(shiftTradeSwapDetail);
+			}
+
+			var shiftTradeRequest = new ShiftTradeRequest(shiftTradeSwapDetailList);
 			var ret = new PersonRequest(loggedOnUser) {Request = shiftTradeRequest, Subject = form.Subject};
 			ret.TrySetMessage(form.Message);
 			return ret;

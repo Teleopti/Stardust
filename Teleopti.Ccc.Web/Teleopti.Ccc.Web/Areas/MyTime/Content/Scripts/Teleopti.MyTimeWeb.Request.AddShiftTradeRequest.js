@@ -66,6 +66,13 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.isTradeForMultiDaysEnabled = ko.observable(false);
 		self.chooseHistorys = ko.observableArray();
+		self.requestedDates = ko.computed(function() {
+			var dates = [];
+			$.each(self.chooseHistorys(), function(index, chooseHistoryViewModel) {
+				dates.push(chooseHistoryViewModel.selectedDate());
+			});
+			return dates;
+		});
 		self.selectedInternal = ko.observable(false);
 		self.add = function () {
 			var currentTrade = {
@@ -168,6 +175,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		    self.isSendEnabled(false);
 		    sendRequestCallback(self);
 		    self.chooseAgent(null);
+			self.chooseHistorys.removeAll();
 		};
 
 		self.cancelRequest = function () {
@@ -449,7 +457,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			contentType: 'application/json; charset=utf-8',
 			type: 'POST',
 			data: JSON.stringify({
-				Date: viewModel.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase()),
+				Dates: viewModel.requestedDates(),
 				Subject: viewModel.subject(),
 				Message: viewModel.message(),
 				PersonToId: viewModel.agentChoosed().personId
