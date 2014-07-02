@@ -633,15 +633,15 @@ Scenario: Should be able to cancel a not sent shift trade and go back to overvie
 	When I click cancel button
 	Then I should see 'OtherAgent' last in the list
 
-@ignore
+@OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
 Scenario: The added days should be sorted by date
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field          | Value            |
-	| StartTime      | 2030-01-01 06:00 |
-	| EndTime        | 2030-01-01 16:00 |
+	| StartTime      | 2030-01-03 06:00 |
+	| EndTime        | 2030-01-03 16:00 |
 	| Shift category | Day              |
 	And I have a shift with
 	| Field          | Value            |
@@ -650,22 +650,21 @@ Scenario: The added days should be sorted by date
 	| Shift category | Day              |
 	And OtherAgent has a shift with
 	| Field          | Value            |
-	| StartTime      | 2030-01-01 09:00 |
-	| EndTime        | 2030-01-01 18:00 |
+	| StartTime      | 2030-01-03 09:00 |
+	| EndTime        | 2030-01-03 18:00 |
 	| Shift category | Day              |
 	And OtherAgent has a shift with
 	| Field          | Value            |
 	| StartTime      | 2030-01-05 09:00 |
 	| EndTime        | 2030-01-05 18:00 |
 	| Shift category | Day              |
-	And the current time is '2029-12-27'
+	And the current time is '2030-01-01'
 	And I view Add Shift Trade Request for date '2030-01-05'
 	And I choose 'OtherAgent' to make a shift trade
 	And I add 'OtherAgent' to my shift trade list
-	When I navigate to date '2030-01-01' by calender
+	When I select date '2030-01-03' by calender
 	And I add 'OtherAgent' to my shift trade list
-	Then I should see 'OtherAgent' for date '2030-01-01' at top of my shift trade list
-	Then I should see 'OtherAgent' for date '2030-01-05' at bottom of my shift trade list
+	Then I should see 'OtherAgent' for date '2030-01-03' at top of my shift trade list
 
 @ignore
 Scenario: Should cancel the current shift trade when switch to another team to trade

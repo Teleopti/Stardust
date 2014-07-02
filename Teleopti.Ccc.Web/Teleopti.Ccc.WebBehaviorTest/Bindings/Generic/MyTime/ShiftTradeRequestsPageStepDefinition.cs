@@ -335,5 +335,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists("#shift-trade-add");
 		}
 
+		[Then(@"I should see '(.*)' for date '(.*)' at top of my shift trade list")]
+		public void ThenIShouldSeeForDateAtTopOfMyShiftTradeList(string agentName, string date)
+		{
+			Browser.Interactions.AssertFirstContains("#choose-history-list", agentName);
+			Browser.Interactions.AssertFirstContains("#choose-history-list .trade-date", date);
 	}
+
+}
 }
