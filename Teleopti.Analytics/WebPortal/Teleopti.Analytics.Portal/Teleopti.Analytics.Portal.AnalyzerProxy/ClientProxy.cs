@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Web;
 using Teleopti.Analytics.Portal.AnalyzerProxy.AnalyzerRef;
 using Teleopti.Analytics.Portal.AnalyzerProxy.Properties;
@@ -38,7 +40,9 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
 
         public ClientProxy(string olapServer, string olapDatabase)
             : this()
-        {
+				{
+					ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
+
             _log.Debug("Start of ClientProxy constructor");
             _az = new Analyzer2005();
 
@@ -61,7 +65,12 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
             AnalyzerAuthentication();
         }
 
-        private void AnalyzerAuthentication()
+	    private bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+	    {
+		    return true;
+	    }
+
+	    private void AnalyzerAuthentication()
         {
             if (Settings.Default.PM_Authentication_Mode.Trim() == "Anonymous")
             {
@@ -496,9 +505,19 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
         {
             if (reportInstance != null)
             {
-                string url = _az.GetReportInstanceUrl(CurrentContext, reportInstance,
+	            var serviceUrl = new Uri(_az.Url);
+
+	            string url;
+							if (serviceUrl.Scheme == "https")
+								url = _az.GetSecureReportInstanceUrl(CurrentContext, reportInstance,
                                                                  string.Format(CultureInfo.InvariantCulture, "{0}/{1}",
                                                                                new object[] { _analyzerServer, _analyzerVirtualDirectory }));
+							else
+							{
+								url = _az.GetReportInstanceUrl(CurrentContext, reportInstance,
+																								 string.Format(CultureInfo.InvariantCulture, "{0}/{1}",
+																															 new object[] { _analyzerServer, _analyzerVirtualDirectory }));
+							}
                 Uri reportUri;
                 string logText;
                 if (url == null)
