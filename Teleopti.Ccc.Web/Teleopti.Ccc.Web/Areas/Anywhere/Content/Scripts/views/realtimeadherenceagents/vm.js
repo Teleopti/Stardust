@@ -42,6 +42,7 @@
 		var arrayContains = function(items, filter) {
 			for (var i = 0; i < items.length; i++) {
 				var item = items[i];
+				if (!item) continue;
 				if (stringContains(item, filter))
 					return true;
 			}
@@ -80,7 +81,8 @@
 				});
 			} else {
 				for (var i = 0; i < data.length; i++) {
-					var a = that.getAgent(data[i].PersonId);	
+					var a = that.getAgent(data[i].PersonId);
+					if (!a) continue;
 					existingState = that.getExistingAgentState(data[i].PersonId);
 					if (existingState.length !== 0) {
 						existingState[0].fill(data[i], a.Name, a.TimeZoneOffset);
