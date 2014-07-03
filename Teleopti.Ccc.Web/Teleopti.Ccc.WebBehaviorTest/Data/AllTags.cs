@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		public AllTags()
 		{
-			Add("TOGGLE_MODE", IniFileInfo.TOGGLE_MODE);
+			Add("TOGGLEMODE", IniFileInfo.TOGGLE_MODE);
 			Add("SQL_AUTH_STRING", IniFileInfo.SQL_AUTH_STRING);
 			Add("WEB_BROKER_BACKPLANE", IniFileInfo.WEB_BROKER_BACKPLANE);
 			Add("ConnectionString", IniFileInfo.ConnectionString);
