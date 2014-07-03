@@ -232,6 +232,32 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_tmpTimer.Tick += _tmpTimer_Tick;
 		}
 
+		private void setMenuItemsHardToLeftToRight()
+		{
+			foreach (ToolStripTabItem	ribbonTabItem in ribbonControlAdv1.Header.MainItems)
+			{
+				foreach (ToolStripEx toolStrip in ribbonTabItem.Panel.Controls)
+				{
+					foreach (var stripPanelItem in toolStrip.Items)
+					{
+						var toolStripPanelItem = stripPanelItem as ToolStripPanelItem;
+						if (toolStripPanelItem == null)
+							continue;
+
+						foreach (var item in toolStripPanelItem.Items)
+						{
+							var toolstripButton = item as ToolStripItem;
+							if (toolstripButton != null)
+							{
+								toolstripButton.RightToLeft = RightToLeft.No;
+							}
+							
+						}
+					}
+				}
+			}
+		}
+
 		private void _tmpTimer_Tick(object sender, EventArgs e)
 		{
 			_tmpTimer.Enabled = false;
@@ -381,6 +407,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setHeaderText(loadingPeriod.StartDate, loadingPeriod.EndDate);
 			setLoadingOptions();
 			setShowRibbonTexts();
+			setMenuItemsHardToLeftToRight();
 
 			_personRequestAuthorizationChecker = new PersonRequestCheckAuthorization();
 
