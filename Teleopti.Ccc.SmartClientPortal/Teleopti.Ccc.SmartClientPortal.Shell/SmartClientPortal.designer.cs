@@ -76,14 +76,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
 			this.backStageViewMain = new Syncfusion.Windows.Forms.BackStageView(this.components);
 			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
-			this.backStageButtonPermissions = new Syncfusion.Windows.Forms.BackStageButton();
-			this.backStageButtonMyProfile = new Syncfusion.Windows.Forms.BackStageButton();
-			this.backStageButtonHelp = new Syncfusion.Windows.Forms.BackStageButton();
-			this.backStageButtonSignCustomerWeb = new Syncfusion.Windows.Forms.BackStageButton();
-			this.backStageSeparator1 = new Syncfusion.Windows.Forms.BackStageSeparator();
-			this.backStageButtonOptions = new Syncfusion.Windows.Forms.BackStageButton();
-			this.backStageButtonAbout = new Syncfusion.Windows.Forms.BackStageButton();
-			this.backStageButtonExitTELEOPTICCC = new Syncfusion.Windows.Forms.BackStageButton();
 			this.toolStripTabItem1 = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.toolStripButtonPermissions = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonMyProfile = new System.Windows.Forms.ToolStripButton();
@@ -96,6 +88,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.notifyTimer = new System.Windows.Forms.Timer(this.components);
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.outlookBar1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.OutlookBar();
+			this.backStageTab1 = new Syncfusion.Windows.Forms.BackStageTab();
+			this.backStageButtonPermissions = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageButtonMyProfile = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageButtonHelp = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageButtonSignCustomerWeb = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageSeparator1 = new Syncfusion.Windows.Forms.BackStageSeparator();
+			this.backStageButtonOptions = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageButtonAbout = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageButtonExitTELEOPTICCC = new Syncfusion.Windows.Forms.BackStageButton();
 			this._mainStatusStrip.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
@@ -402,6 +403,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStage1.AllowDrop = true;
 			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1144, 605);
 			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.backStage1.Controls.Add(this.backStageTab1);
 			this.backStage1.Controls.Add(this.backStageButtonPermissions);
 			this.backStage1.Controls.Add(this.backStageButtonMyProfile);
 			this.backStage1.Controls.Add(this.backStageButtonHelp);
@@ -417,106 +419,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStage1.Size = new System.Drawing.Size(1144, 605);
 			this.backStage1.TabIndex = 5;
 			this.backStage1.Visible = false;
-			// 
-			// backStageButtonPermissions
-			// 
-			this.backStageButtonPermissions.Accelerator = "";
-			this.backStageButtonPermissions.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButtonPermissions.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButtonPermissions.IsBackStageButton = false;
-			this.backStageButtonPermissions.Location = new System.Drawing.Point(0, 16);
-			this.backStageButtonPermissions.Name = "backStageButtonPermissions";
-			this.backStageButtonPermissions.Size = new System.Drawing.Size(110, 25);
-			this.backStageButtonPermissions.TabIndex = 2;
-			this.backStageButtonPermissions.Text = "xxPermissions";
-			this.backStageButtonPermissions.Click += new System.EventHandler(this.toolStripButtonPermissons_Click);
-			// 
-			// backStageButtonMyProfile
-			// 
-			this.backStageButtonMyProfile.Accelerator = "";
-			this.backStageButtonMyProfile.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButtonMyProfile.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButtonMyProfile.IsBackStageButton = false;
-			this.backStageButtonMyProfile.Location = new System.Drawing.Point(0, 41);
-			this.backStageButtonMyProfile.Name = "backStageButtonMyProfile";
-			this.backStageButtonMyProfile.Size = new System.Drawing.Size(110, 25);
-			this.backStageButtonMyProfile.TabIndex = 3;
-			this.backStageButtonMyProfile.Text = "xxMyProfile";
-			this.backStageButtonMyProfile.Click += new System.EventHandler(this.toolStripButtonMyProfile_Click);
-			// 
-			// backStageButtonHelp
-			// 
-			this.backStageButtonHelp.Accelerator = "";
-			this.backStageButtonHelp.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButtonHelp.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButtonHelp.IsBackStageButton = false;
-			this.backStageButtonHelp.Location = new System.Drawing.Point(0, 66);
-			this.backStageButtonHelp.Name = "backStageButtonHelp";
-			this.backStageButtonHelp.Size = new System.Drawing.Size(110, 25);
-			this.backStageButtonHelp.TabIndex = 4;
-			this.backStageButtonHelp.Text = "xxHelp";
-			this.backStageButtonHelp.Click += new System.EventHandler(this.toolStripButtonHelp_Click);
-			// 
-			// backStageButtonSignCustomerWeb
-			// 
-			this.backStageButtonSignCustomerWeb.Accelerator = "";
-			this.backStageButtonSignCustomerWeb.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButtonSignCustomerWeb.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButtonSignCustomerWeb.IsBackStageButton = false;
-			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(0, 91);
-			this.backStageButtonSignCustomerWeb.Name = "backStageButtonSignCustomerWeb";
-			this.backStageButtonSignCustomerWeb.Size = new System.Drawing.Size(110, 25);
-			this.backStageButtonSignCustomerWeb.TabIndex = 5;
-			this.backStageButtonSignCustomerWeb.Text = "xxSignCustomerWeb";
-			this.backStageButtonSignCustomerWeb.Click += new System.EventHandler(this.toolStripButtonCustomerWeb_Click);
-			// 
-			// backStageSeparator1
-			// 
-			this.backStageSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(134)))), ((int)(((byte)(213)))), ((int)(((byte)(242)))));
-			this.backStageSeparator1.Location = new System.Drawing.Point(15, 122);
-			this.backStageSeparator1.Name = "backStageSeparator1";
-			this.backStageSeparator1.Size = new System.Drawing.Size(100, 1);
-			this.backStageSeparator1.TabIndex = 6;
-			this.backStageSeparator1.Text = "backStageSeparator1";
-			// 
-			// backStageButtonOptions
-			// 
-			this.backStageButtonOptions.Accelerator = "";
-			this.backStageButtonOptions.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButtonOptions.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButtonOptions.IsBackStageButton = false;
-			this.backStageButtonOptions.Location = new System.Drawing.Point(0, 128);
-			this.backStageButtonOptions.Name = "backStageButtonOptions";
-			this.backStageButtonOptions.Size = new System.Drawing.Size(110, 25);
-			this.backStageButtonOptions.TabIndex = 7;
-			this.backStageButtonOptions.Text = "xxOptions";
-			this.backStageButtonOptions.Click += new System.EventHandler(this.toolStripButtonSystemOptions_Click);
-			// 
-			// backStageButtonAbout
-			// 
-			this.backStageButtonAbout.Accelerator = "";
-			this.backStageButtonAbout.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButtonAbout.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButtonAbout.IsBackStageButton = false;
-			this.backStageButtonAbout.Location = new System.Drawing.Point(0, 153);
-			this.backStageButtonAbout.Name = "backStageButtonAbout";
-			this.backStageButtonAbout.Size = new System.Drawing.Size(110, 25);
-			this.backStageButtonAbout.TabIndex = 8;
-			this.backStageButtonAbout.Text = "xxAbout";
-			this.backStageButtonAbout.Click += new System.EventHandler(this.toolStripButtonAbout_Click);
-			// 
-			// backStageButtonExitTELEOPTICCC
-			// 
-			this.backStageButtonExitTELEOPTICCC.Accelerator = "";
-			this.backStageButtonExitTELEOPTICCC.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButtonExitTELEOPTICCC.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButtonExitTELEOPTICCC.IsBackStageButton = false;
-			this.backStageButtonExitTELEOPTICCC.Location = new System.Drawing.Point(0, 178);
-			this.backStageButtonExitTELEOPTICCC.Name = "backStageButtonExitTELEOPTICCC";
-			this.backStageButtonExitTELEOPTICCC.Size = new System.Drawing.Size(110, 25);
-			this.backStageButtonExitTELEOPTICCC.TabIndex = 9;
-			this.backStageButtonExitTELEOPTICCC.Text = "xxExitTELEOPTICCC";
-			this.backStageButtonExitTELEOPTICCC.Click += new System.EventHandler(this.toolStripButtonSystemExit_Click);
 			// 
 			// toolStripTabItem1
 			// 
@@ -675,6 +577,121 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.outlookBar1.SelectedItemChanged += new System.EventHandler<Teleopti.Ccc.SmartClientPortal.Shell.Controls.SelectedItemChangedEventArgs>(this.outlookBar1_SelectedItemChanged);
 			this.outlookBar1.SizeChanged += new System.EventHandler(this.outlookBar1_SizeChanged);
 			// 
+			// backStageTab1
+			// 
+			this.backStageTab1.Accelerator = "";
+			this.backStageTab1.BackColor = System.Drawing.Color.White;
+			this.backStageTab1.Image = null;
+			this.backStageTab1.ImageSize = new System.Drawing.Size(16, 16);
+			this.backStageTab1.Location = new System.Drawing.Point(137, 0);
+			this.backStageTab1.Name = "backStageTab1";
+			this.backStageTab1.Position = new System.Drawing.Point(0, 0);
+			this.backStageTab1.ShowCloseButton = true;
+			this.backStageTab1.Size = new System.Drawing.Size(1007, 605);
+			this.backStageTab1.TabIndex = 10;
+			this.backStageTab1.Text = "Teleopti WFM";
+			this.backStageTab1.ThemesEnabled = false;
+			// 
+			// backStageButtonPermissions
+			// 
+			this.backStageButtonPermissions.Accelerator = "";
+			this.backStageButtonPermissions.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButtonPermissions.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButtonPermissions.IsBackStageButton = false;
+			this.backStageButtonPermissions.Location = new System.Drawing.Point(0, 53);
+			this.backStageButtonPermissions.Name = "backStageButtonPermissions";
+			this.backStageButtonPermissions.Size = new System.Drawing.Size(137, 38);
+			this.backStageButtonPermissions.TabIndex = 11;
+			this.backStageButtonPermissions.Text = "xxPermissions";
+			this.backStageButtonPermissions.Click += new System.EventHandler(this.toolStripButtonPermissons_Click);
+			// 
+			// backStageButtonMyProfile
+			// 
+			this.backStageButtonMyProfile.Accelerator = "";
+			this.backStageButtonMyProfile.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButtonMyProfile.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButtonMyProfile.IsBackStageButton = false;
+			this.backStageButtonMyProfile.Location = new System.Drawing.Point(0, 91);
+			this.backStageButtonMyProfile.Name = "backStageButtonMyProfile";
+			this.backStageButtonMyProfile.Size = new System.Drawing.Size(137, 38);
+			this.backStageButtonMyProfile.TabIndex = 12;
+			this.backStageButtonMyProfile.Text = "xxMyProfile";
+			this.backStageButtonMyProfile.Click += new System.EventHandler(this.toolStripButtonMyProfile_Click);
+			// 
+			// backStageButtonHelp
+			// 
+			this.backStageButtonHelp.Accelerator = "";
+			this.backStageButtonHelp.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButtonHelp.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButtonHelp.IsBackStageButton = false;
+			this.backStageButtonHelp.Location = new System.Drawing.Point(0, 129);
+			this.backStageButtonHelp.Name = "backStageButtonHelp";
+			this.backStageButtonHelp.Size = new System.Drawing.Size(137, 38);
+			this.backStageButtonHelp.TabIndex = 13;
+			this.backStageButtonHelp.Text = "xxHelp";
+			this.backStageButtonHelp.Click += new System.EventHandler(this.toolStripButtonHelp_Click);
+			// 
+			// backStageButtonSignCustomerWeb
+			// 
+			this.backStageButtonSignCustomerWeb.Accelerator = "";
+			this.backStageButtonSignCustomerWeb.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButtonSignCustomerWeb.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButtonSignCustomerWeb.IsBackStageButton = false;
+			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(0, 167);
+			this.backStageButtonSignCustomerWeb.Name = "backStageButtonSignCustomerWeb";
+			this.backStageButtonSignCustomerWeb.Size = new System.Drawing.Size(137, 38);
+			this.backStageButtonSignCustomerWeb.TabIndex = 14;
+			this.backStageButtonSignCustomerWeb.Text = "xxSignCustomerWeb";
+			this.backStageButtonSignCustomerWeb.Click += new System.EventHandler(this.toolStripButtonCustomerWeb_Click);
+			// 
+			// backStageSeparator1
+			// 
+			this.backStageSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(134)))), ((int)(((byte)(213)))), ((int)(((byte)(242)))));
+			this.backStageSeparator1.Location = new System.Drawing.Point(19, 211);
+			this.backStageSeparator1.Name = "backStageSeparator1";
+			this.backStageSeparator1.Size = new System.Drawing.Size(100, 1);
+			this.backStageSeparator1.TabIndex = 15;
+			this.backStageSeparator1.Text = "backStageSeparator1";
+			// 
+			// backStageButtonOptions
+			// 
+			this.backStageButtonOptions.Accelerator = "";
+			this.backStageButtonOptions.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButtonOptions.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButtonOptions.IsBackStageButton = false;
+			this.backStageButtonOptions.Location = new System.Drawing.Point(0, 217);
+			this.backStageButtonOptions.Name = "backStageButtonOptions";
+			this.backStageButtonOptions.Size = new System.Drawing.Size(137, 38);
+			this.backStageButtonOptions.TabIndex = 16;
+			this.backStageButtonOptions.Text = "xxOptions";
+			this.backStageButtonOptions.Click += new System.EventHandler(this.toolStripButtonSystemOptions_Click);
+			// 
+			// backStageButtonAbout
+			// 
+			this.backStageButtonAbout.Accelerator = "";
+			this.backStageButtonAbout.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButtonAbout.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButtonAbout.IsBackStageButton = false;
+			this.backStageButtonAbout.Location = new System.Drawing.Point(0, 255);
+			this.backStageButtonAbout.Name = "backStageButtonAbout";
+			this.backStageButtonAbout.Size = new System.Drawing.Size(137, 38);
+			this.backStageButtonAbout.TabIndex = 17;
+			this.backStageButtonAbout.Text = "xxAbout";
+			this.backStageButtonAbout.Click += new System.EventHandler(this.toolStripButtonAbout_Click);
+			// 
+			// backStageButtonExitTELEOPTICCC
+			// 
+			this.backStageButtonExitTELEOPTICCC.Accelerator = "";
+			this.backStageButtonExitTELEOPTICCC.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButtonExitTELEOPTICCC.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButtonExitTELEOPTICCC.IsBackStageButton = false;
+			this.backStageButtonExitTELEOPTICCC.Location = new System.Drawing.Point(0, 293);
+			this.backStageButtonExitTELEOPTICCC.Name = "backStageButtonExitTELEOPTICCC";
+			this.backStageButtonExitTELEOPTICCC.Size = new System.Drawing.Size(137, 38);
+			this.backStageButtonExitTELEOPTICCC.TabIndex = 18;
+			this.backStageButtonExitTELEOPTICCC.Text = "xxExitTELEOPTICCC";
+			this.backStageButtonExitTELEOPTICCC.Click += new System.EventHandler(this.toolStripButtonSystemExit_Click);
+			// 
 			// SmartClientShellForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -745,14 +762,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         private System.Windows.Forms.WebBrowser webBrowser1;
 		private Syncfusion.Windows.Forms.BackStageView backStageViewMain;
 		private Syncfusion.Windows.Forms.BackStage backStage1;
-		private Syncfusion.Windows.Forms.BackStageButton backStageButtonPermissions;
-		private Syncfusion.Windows.Forms.BackStageButton backStageButtonMyProfile;
-		private Syncfusion.Windows.Forms.BackStageButton backStageButtonHelp;
-		private Syncfusion.Windows.Forms.BackStageButton backStageButtonSignCustomerWeb;
-		private Syncfusion.Windows.Forms.BackStageSeparator backStageSeparator1;
-		private Syncfusion.Windows.Forms.BackStageButton backStageButtonOptions;
-		private Syncfusion.Windows.Forms.BackStageButton backStageButtonAbout;
-		private Syncfusion.Windows.Forms.BackStageButton backStageButtonExitTELEOPTICCC;
 		private ToolStripTabItem toolStripTabItem1;
 		private Controls.OutlookBar outlookBar1;
 		private System.Windows.Forms.Panel panel1;
@@ -763,6 +772,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private AutoLabel autoLabel2;
 		private AutoLabel autoLabel3;
 		private AutoLabel autoLabel4;
+		private Syncfusion.Windows.Forms.BackStageTab backStageTab1;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButtonPermissions;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButtonMyProfile;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButtonHelp;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButtonSignCustomerWeb;
+		private Syncfusion.Windows.Forms.BackStageSeparator backStageSeparator1;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButtonOptions;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButtonAbout;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButtonExitTELEOPTICCC;
     }
 }
 
