@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 {
@@ -14,6 +16,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 		{
 			InitializeComponent();
 			_menuLauncher.ModulePanelMenuClick += menuLauncherModulePanelMenuClick;
+			if (!DesignMode)
+				contextMenuStripEx1.Items[0].Text = Resources.CompactView;
 		}
 
 		public event EventHandler<SelectedItemChangedEventArgs> SelectedItemChanged;

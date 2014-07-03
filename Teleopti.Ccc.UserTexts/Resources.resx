@@ -12125,4 +12125,8 @@ Reduce the complexity to use these shifts.</value>
     <value>My Trade Cart:</value>
     <comment>the title for multi shift trade list</comment>
   </data>
+  <data name="CompactView" xml:space="preserve">
+    <value>Compact View</value>
+    <comment>Compact View</comment>
+  </data>
 </root>
