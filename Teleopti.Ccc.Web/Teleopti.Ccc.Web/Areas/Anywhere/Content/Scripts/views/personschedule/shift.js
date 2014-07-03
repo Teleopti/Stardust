@@ -26,6 +26,9 @@ define([
 				return new layer(timeline, l, affectTimeLine);
 			});
 			self.Layers.push.apply(self.Layers, newItems);
+			self.OriginalShiftStartMinutes = self.Layers()[0].StartMinutes();
+		    var lastLayer = self.Layers()[self.Layers().length - 1];
+		    self.OriginalShiftEndMinutes = lastLayer.EndMinutes();
 		};
 
 		this.ShiftStartPixels = ko.computed(function () {

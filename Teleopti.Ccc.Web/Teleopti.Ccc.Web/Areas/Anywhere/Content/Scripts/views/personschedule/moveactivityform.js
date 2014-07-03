@@ -48,13 +48,12 @@
 
 		var isLayerWithinShift = function (startTime) {
 			if (!self.WorkingShift()) return false;
-			var shiftLayers = self.WorkingShift().Layers().sort(function (a, b) { return a.StartMinutes() > b.StartMinutes(); });
-			var shiftStartMinutes = shiftLayers[0].StartMinutes();
-			var shiftEndMinutes = shiftLayers[shiftLayers.length - 1].EndMinutes();
+			var shiftStartMinutes = self.WorkingShift().OriginalShiftStartMinutes;
+			var shiftEndMinutes = self.WorkingShift().OriginalShiftEndMinutes;
 			var inputMinutes = self.getMinutesFromTime(startTime);
-			if (inputMinutes < shiftStartMinutes || inputMinutes + self.layer().LengthMinutes() > shiftEndMinutes)
-				return false;
-			return true;
+			if (inputMinutes >= shiftStartMinutes && inputMinutes + self.layer().LengthMinutes() <= shiftEndMinutes)
+				return true;
+			return false;
 		};
 
 		this.update = function (layer) {
@@ -62,7 +61,7 @@
 			if (layer) {
 				self.layer(layer);
 				self.OldStartMinutes(layer.StartMinutes());
-				self.StartTime(moment(self.ScheduleDate()).add('minutes', self.OldStartMinutes()));
+				self.StartTime(self.getStartTimeFromMinutes(self.OldStartMinutes()));
 				self.ProjectionLength(layer.LengthMinutes());
 				self.ActivityId(layer.ActivityId);
 			}
@@ -78,7 +77,8 @@
 		};
 
 		this.getStartTimeFromMinutes = function (minutes) {
-			return moment(self.ScheduleDate()).add('minutes', minutes);
+		    var date = self.ScheduleDate();
+		    return moment(new Date(date.year(), date.month(), date.date(), minutes / 60, minutes%60, 0));
 		}
 
 		this.Apply = function () {
@@ -106,8 +106,9 @@
 		});
 
 		var getMomentFromInput = function (input) {
-			var momentInput = moment(input, resources.TimeFormatForMoment);
-			return moment(self.ScheduleDate()).add('h', momentInput.hours()).add('m', momentInput.minutes());
+		    var momentInput = moment(input, resources.TimeFormatForMoment);
+		    var date = self.ScheduleDate();
+			return moment(new Date(date.year(), date.month(), date.date(), momentInput.hour(), momentInput.minute(), 0));
 		};
 
 	};
