@@ -15,7 +15,7 @@
         @Resources.AbsenceType
     </label>
     <div class ="row">
-	    <div style="padding-left: 15px">
+	    <div class="col-md-3">
             <select class="request-new-absence request-abcense input-sm form-control" data-bind="value: AbsenceId">
                 @foreach (var absenceType in Model.AbsenceTypes)
                 {
@@ -24,7 +24,7 @@
             </select>
 	    </div>
 		<!-- ko if: ShowAbsenceAccount -->
-	    <div id="absence-personal-account">
+	    <div id="absence-personal-account" class="col-md-4" style="padding-top: 5px; padding-left: 0">
 		    <label>
 			    @Resources.Remaining:
 		    </label>
