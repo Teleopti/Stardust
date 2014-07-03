@@ -47,6 +47,12 @@
 			var checkFeature = function() {
 				toggleQuerier('RTA_RtaLastStatesOverview_27789', {enabled: loadLastStates});
 			}
+				ajax.ajax({
+					url: "ToggleHandler/IsEnabled?toggle=RTA_ViewAgentsForMultipleTeams_28967",
+					success: function (data) {
+						viewModel.agentStatesForMultipleTeams(data.IsEnabled);
+					}
+				});
 
 			var checkDetailFeature = function () {
 				toggleQuerier('RTA_DrilldownToAllAgentsInOneTeam_25234', {

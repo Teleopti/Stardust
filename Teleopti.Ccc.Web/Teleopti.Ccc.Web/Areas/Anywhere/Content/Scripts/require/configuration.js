@@ -1,4 +1,5 @@
-﻿var requireconfiguration = {
+﻿/// <reference path="C:\Data\Main2\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Content/amplify/amplify.min.js" />
+var requireconfiguration = {
 	paths: {
 		jquery: '../../../../Content/jquery/jquery-1.10.2',
 		jqueryui: '../../../../Content/jqueryui/jquery-ui-1.10.2.custom.min',
@@ -19,6 +20,7 @@
 		select2: '../../../../Content/select2/select2',
 		timepicker: '../../../../Content/bootstrap-timepicker/js/bootstrap-timepicker',
 		buster: '../../../../Content/busterjs/buster-test',
+		amplify: '../../../../Content/amplify/amplify.min',
 
 		//depends on eve, hardcoded in  justgage.20130410.js
 		justgage: '../../../../Content/justgage/justgage.20130410',
@@ -60,6 +62,9 @@
 		'justgage': {
 			exports: 'JustGage',
 			deps: ['require/raphaelloader']
+		},
+		'amplify': {
+			exports: 'amplify'
 		}
 	}
 };
