@@ -8,7 +8,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:wpfConverters="clr-namespace:Teleopti.Ccc.WpfControls.Converters" d:DesignWidth="1448"
-    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode">
+    xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
+    xmlns:common="clr-namespace:Teleopti.Ccc.WinCode.Common;assembly=Teleopti.Ccc.WinCode">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -221,13 +222,36 @@
 											 Width="2400">
 
 					<DataGridTemplateColumn.Header>
-						<timeline:TimelineControl IsHitTestVisible="False" DataContext="{Binding Path=TimelineModel}" Loaded="TimelineControl_Loaded"/>
+						<timeline:TimelineControl IsHitTestVisible="False" DataContext="{Binding Path=TimelineModel}" Loaded="TimelineControl_Loaded" x:Name="henkeTimeline"/>
 						<!--<RtaTimeSchedule:RealTimeScheduleViewModel />-->
 					</DataGridTemplateColumn.Header>
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<layers:LayerListBox DataContext="{Binding Path=Layers}" Loaded="LayerListBox_Loaded" PreviewMouseLeftButtonDown="layer_Clicked"
-											    Background="{StaticResource RaptorStandardLightGradientBrush}" Style="{StaticResource LayerListBoxStyle}" />
+							<Grid >
+
+								<layers:LayerListBox x:Name="layrBox" DataContext="{Binding Path=Layers}" Loaded="LayerListBox_Loaded" PreviewMouseLeftButtonDown="layer_Clicked"
+											    Background="{StaticResource RaptorStandardLightGradientBrush}" Style="{StaticResource LayerListBoxStyle}" 
+												ToolTip="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.TimelineModel.NowPeriod}"/>
+								
+								<!-- Just ripped the timeindicator from the timeline, could be in a common view -->
+								<common:DateTimePeriodPanel  common:DateTimePeriodPanel.DateTimePeriod="{Binding ElementName=layrBox, Path=Period}" 
+									 HorizontalAlignment="Stretch" 
+									 VerticalAlignment="Stretch"
+									 IsHitTestVisible="False"
+									 Background="Transparent">
+
+									<Border HorizontalAlignment="Stretch" 
+					VerticalAlignment="Stretch"
+					common:DateTimePeriodPanel.DateTimePeriod="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.TimelineModel.NowPeriod}"
+					Background="Transparent"
+					BorderBrush="Red"
+					BorderThickness="0,0,1,0">
+
+									</Border>
+								</common:DateTimePeriodPanel>
+
+							</Grid>
+
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
