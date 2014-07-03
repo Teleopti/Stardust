@@ -556,6 +556,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			return setShiftTradeRequestDate(date);
 		},
 		OpenAddShiftTradeWindow: function (date) {
+			if (vm.chooseHistorys != undefined) {
+				vm.chooseHistorys.removeAll();
+			}
 			_init();
 		    vm.loadPeriod(date);
 		    _openAddShiftTradeWindow();
