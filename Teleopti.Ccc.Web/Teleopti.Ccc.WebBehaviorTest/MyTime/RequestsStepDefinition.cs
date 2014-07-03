@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click the Approve button on the shift request")]
 		public void WhenIClickTheApproveButtonOnTheShiftRequest()
 		{
-			Browser.Interactions.Click("#Approve-shift-trade");
+			Browser.Interactions.ClickUsingJQuery("#Approve-shift-trade");
 		}
 
 		[Then(@"I should not see the approve button")]
