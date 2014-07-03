@@ -77,7 +77,11 @@
 							<div class="form-group col-xs-12">
 								<div class="input-group bootstrap-timepicker " title="@Resources.EarliestStartTime">
 									<input type="text" class="preference-start-time-min input-sm form-control" data-bind="timepicker: EarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-									<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+									<span class="input-group-btn">
+										<button class="btn btn-default btn-sm" data-bind="timepicker: EarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian }">
+											<i class="glyphicon glyphicon-time"></i>
+										</button>
+									</span>
 								</div>
 							</div>
 						</div>
@@ -88,7 +92,11 @@
 							<div class="form-group col-xs-12">
 								<div class="input-group bootstrap-timepicker" title="@Resources.LatestStartTime">
 									<input type="text" class="preference-start-time-max input-sm form-control" data-bind="timepicker: LatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-									<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+									<span class="input-group-btn">
+										<button class="btn btn-default btn-sm" data-bind="timepicker: LatestStartTime, timepickerOptions: { showMeridian: ShowMeridian }">
+											<i class="glyphicon glyphicon-time"></i>
+										</button>
+									</span>
 								</div>
 							</div>
 						</div>
@@ -104,7 +112,11 @@
 							<div class="form-group col-xs-12">
 								<div class="input-group bootstrap-timepicker" title="@Resources.EarliestEndTime">
 									<input type="text" class="preference-end-time-min input-sm form-control" data-bind="timepicker: EarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-									<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+									<span class="input-group-btn">
+										<button class="btn btn-default btn-sm" data-bind="timepicker: EarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian }">
+											<i class="glyphicon glyphicon-time"></i>
+										</button>
+									</span>
 								</div>
 							</div>
 						</div>
@@ -120,7 +132,11 @@
 							<div class="form-group col-xs-12">
 								<div class="input-group bootstrap-timepicker" title="@Resources.LatestEndTime">
 									<input type="text" class="preference-end-time-max input-sm form-control" data-bind="timepicker: LatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-									<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+									<span class="input-group-btn">
+										<button class="btn btn-default btn-sm" data-bind="timepicker: LatestEndTime, timepickerOptions: { showMeridian: ShowMeridian }">
+											<i class="glyphicon glyphicon-time"></i>
+										</button>
+									</span>
 								</div>
 							</div>
 						</div>
@@ -144,8 +160,10 @@
 									<li class="ui-menu-item" role="presentation"><a href="#" class="ui-corner-all" data-bind="click: function (data, event) { MinimumWorkTime('@timeSpan.Value'); }" tabindex="-1">@timeSpan.Text</a></li>
 								}
 							</ul>
-							<span class="input-group-addon dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-								<span class="caret"></span>
+							<span class="input-group-btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+								<button class="btn btn-default btn-sm">
+									<span class="caret"></span>
+								</button>
 							</span>
 						</div>
 					</td>
@@ -159,8 +177,10 @@
 									<li class="ui-menu-item" role="presentation"><a href="#" class="ui-corner-all" data-bind="click: function (data, event) { MaximumWorkTime('@timeSpan.Value'); }" tabindex="-1">@timeSpan.Text</a></li>
 								}
 							</ul>
-							<span class="input-group-addon dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-								<span class="caret"></span>
+							<span class="input-group-btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+								<button class="btn btn-default btn-sm">
+									<span class="caret"></span>
+								</button>
 							</span>
 						</div>
 					</td>
@@ -198,13 +218,21 @@
 					<td class="col-xs-1">
 						<div class="input-group bootstrap-timepicker " title="@Resources.EarliestStartTime">
 							<input type="text" class="preference-activity-start-time-min form-control input-sm" data-bind="timepicker: ActivityEarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-							<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+							<span class="input-group-btn">
+								<button class="btn btn-default btn-sm" data-bind="timepicker: ActivityEarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian }">
+									<i class="glyphicon glyphicon-time"></i>
+								</button>
+							</span>
 						</div>
 					</td>
 					<td class="col-xs-3">
 						<div class="input-group bootstrap-timepicker" title="@Resources.LatestStartTime">
 							<input type="text" class="preference-activity-start-time-max form-control input-sm" data-bind="timepicker: ActivityLatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-							<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+							<span class="input-group-btn">
+								<button class="btn btn-default btn-sm" data-bind="timepicker: ActivityLatestStartTime, timepickerOptions: { showMeridian: ShowMeridian }">
+									<i class="glyphicon glyphicon-time"></i>
+								</button>
+							</span>
 						</div>
 					</td>
 				</tr>
@@ -215,13 +243,21 @@
 					<td class="col-xs-3">
 						<div class="input-group bootstrap-timepicker" title="@Resources.EarliestEndTime">
 							<input type="text" class="preference-activity-end-time-min form-control input-sm" data-bind="timepicker: ActivityEarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-							<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+							<span class="input-group-btn">
+								<button class="btn btn-default btn-sm" data-bind="timepicker: ActivityEarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian }">
+									<i class="glyphicon glyphicon-time"></i>
+								</button>
+							</span>
 						</div>
 					</td>
 					<td class="col-xs-3">
 						<div class="input-group bootstrap-timepicker" title="@Resources.LatestEndTime">
 							<input type="text" class="preference-activity-end-time-max form-control input-sm" data-bind="timepicker: ActivityLatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-							<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+							<span class="input-group-btn">
+								<button class="btn btn-default btn-sm" data-bind="timepicker: ActivityLatestEndTime, timepickerOptions: { showMeridian: ShowMeridian }">
+									<i class="glyphicon glyphicon-time"></i>
+								</button>
+							</span>
 						</div>
 					</td>
 				</tr>
@@ -238,8 +274,10 @@
 									<li class="ui-menu-item" role="presentation"><a href="#" class="ui-corner-all" data-bind="click: function (data, event) { ActivityMinimumTime('@timeSpan.Value'); }" tabindex="-1">@timeSpan.Text</a></li>
 								}
 							</ul>
-							<span class="input-group-addon dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-								<span class="caret"></span>
+							<span class="input-group-btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+								<button class="btn btn-default btn-sm">
+									<span class="caret"></span>
+								</button>
 							</span>
 						</div>
 					</td>
@@ -252,8 +290,10 @@
 									<li class="ui-menu-item" role="presentation"><a href="#" class="ui-corner-all" data-bind="click: function (data, event) { ActivityMaximumTime('@timeSpan.Value'); }" tabindex="-1">@timeSpan.Text</a></li>
 								}
 							</ul>
-							<span class="input-group-addon dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-								<span class="caret"></span>
+							<span class="input-group-btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+								<button class="btn btn-default btn-sm">
+									<span class="caret"></span>
+								</button>
 							</span>
 						</div>
 					</td>

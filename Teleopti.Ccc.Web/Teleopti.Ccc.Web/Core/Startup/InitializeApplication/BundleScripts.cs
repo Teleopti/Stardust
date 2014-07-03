@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			var cssBundle = new StyleBundle(MyTimeCss)
 				.Include(
 					"~/Content/moment-datepicker/datepicker.css",
-					"~/Content/jqueryui/smoothness/jquery-ui-1.10.2.custom.css",
 					"~/Content/Scripts/jquery.qtip.css",
 					"~/Content/bootstrap-timepicker/css/bootstrap-timepicker.css",
 					"~/Content/Scripts/pinify/content/jquery.pinify.min.css"

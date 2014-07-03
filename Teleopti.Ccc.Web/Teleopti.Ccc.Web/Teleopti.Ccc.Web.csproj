@@ -1046,7 +1046,6 @@
     <Content Include="Areas\Start\Content\Css\Site.css" />
     <Content Include="Areas\MyTime\Content\Images\arrow-down.png" />
     <Content Include="Areas\MyTime\Content\Images\main_content_bottom_bg.jpg" />
-    <Content Include="Areas\MyTime\Content\Css\jquery.ui.custom.css" />
     <Content Include="Areas\Start\Content\Images\body_bg.jpg" />
     <Content Include="Areas\Start\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Common.js" />
