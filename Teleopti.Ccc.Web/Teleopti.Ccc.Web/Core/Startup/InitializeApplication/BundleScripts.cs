@@ -79,7 +79,8 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		private static void registerSelect2CssIndividualDueToRelativePathsInsideCss()
 		{
 			var select2Css = new StyleBundle(Select2Css)
-				.Include("~/Content/select2/select2.css");
+				.Include("~/Content/select2/select2.css")
+				.Include("~/Content/select2/select2-bootstrap.css");
 			BundleTable.Bundles.Add(select2Css);
 		}
 
