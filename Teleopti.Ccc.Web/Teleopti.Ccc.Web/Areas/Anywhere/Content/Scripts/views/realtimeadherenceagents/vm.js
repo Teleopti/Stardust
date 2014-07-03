@@ -32,7 +32,8 @@
 						item.Alarm(),
 						item.Name,
 						item.State(),
-						item.Activity()
+						item.Activity(),
+						item.TeamName
 					], filter);
 
 				});
@@ -72,10 +73,10 @@
 				that.agents.forEach(function(agent) {
 					existingState = that.getExistingAgentState(agent.PersonId);
 					if (existingState.length !== 0) {
-						existingState[0].fill({PersonId: agent.PersonId}, agent.Name, agent.TimeZoneOffset);
+						existingState[0].fill({PersonId: agent.PersonId}, agent.Name, agent.TimeZoneOffset, agent.TeamName);
 					} else {
 						newagentState = agentstate();
-						newagentState.fill({ PersonId: agent.PersonId}, agent.Name, agent.TimeZoneOffset);
+						newagentState.fill({ PersonId: agent.PersonId }, agent.Name, agent.TimeZoneOffset, agent.TeamName);
 						that.agentStates.push(newagentState);
 					}
 				});

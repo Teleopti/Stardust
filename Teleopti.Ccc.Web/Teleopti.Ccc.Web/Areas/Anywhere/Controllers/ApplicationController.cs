@@ -88,6 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.WaitingThreeDots,
 					UserTexts.Resources.InsufficientPermission,
 					UserTexts.Resources.AgentName,
+					UserTexts.Resources.Team,
 					UserTexts.Resources.State,
 					UserTexts.Resources.TimeInState,
 					UserTexts.Resources.NextActivity,

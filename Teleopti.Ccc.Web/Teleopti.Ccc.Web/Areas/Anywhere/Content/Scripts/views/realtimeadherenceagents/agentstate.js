@@ -25,9 +25,10 @@
     		that.EnteredCurrentAlarm = ko.observable();
     		that.TextWeight = ko.observable();
 
-    		that.fill = function (data, name, offset) {
+    		that.fill = function (data, name, offset, teamName) {
     			that.PersonId = data.PersonId;
-				that.Name = name,
+			    that.Name = name;
+			    that.TeamName = teamName;
     			that.State(data.State);
 				that.Activity(data.Activity);
 				that.NextActivity(data.NextActivity);
