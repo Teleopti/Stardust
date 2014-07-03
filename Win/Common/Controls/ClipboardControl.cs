@@ -122,6 +122,9 @@ namespace Teleopti.Ccc.Win.Common.Controls
             toolStripSplitButtonCut.ButtonClick += toolStripSplitButtonCut_Click;
             toolStripSplitButtonPaste.ButtonClick += toolStripSplitButtonPaste_Click;
 
+						toolStripSplitButtonCopy.RightToLeft = RightToLeft.No;
+						toolStripSplitButtonCut.RightToLeft = RightToLeft.No;
+						toolStripSplitButtonPaste.RightToLeft = RightToLeft.No;
         }
         #region statehandling
  

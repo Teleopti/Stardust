@@ -233,8 +233,10 @@ define([
 			self.TimeLine.WidthPixels(width);
 		}
 
-		this.InitMoveActivityForm = function() {
-			self.MoveActivityForm.StartTime(moment(self.ScheduleDate()).add('minutes', self.SelectedStartMinutes()));
+		this.InitMoveActivityForm = function () {
+		    var date = self.ScheduleDate();
+		    var time = self.SelectedStartMinutes();
+			self.MoveActivityForm.StartTime(moment(new Date(date.year(), date.month(), date.date(), time/60, time%60, 0)));
 		}
 	};
 });

@@ -71,18 +71,21 @@ namespace Teleopti.Ccc.Win.Common.Controls
             _deleteSpecialItems = new List<ToolStripItem>();
             _newSpecialItems = new List<ToolStripItem>();
             Load += new EventHandler(NewDeleteControl_Load);
-            this.toolStripButtonNew.ButtonClick += new EventHandler(toolStripButtonNew_Click);
-            this.toolStripButtonDelete.ButtonClick += new EventHandler(toolStripButtonDelete_Click);
+            toolStripButtonNew.ButtonClick += new EventHandler(toolStripButtonNew_Click);
+            toolStripButtonDelete.ButtonClick += new EventHandler(toolStripButtonDelete_Click);
+
+						toolStripButtonNew.RightToLeft = RightToLeft.No;
+						toolStripButtonDelete.RightToLeft = RightToLeft.No;
         }
 
         public ToolStripSplitButton ToolStripButtonNew
         {
-            get { return this.toolStripButtonNew; }   
+            get { return toolStripButtonNew; }   
         }
 
         public ToolStripPanelItem PanelItem
         {
-            get { return this.toolStripPanelItem1; }
+            get { return toolStripPanelItem1; }
         }
 
         public void SetButtonState(EditAction thisButton, bool enabled)
@@ -90,10 +93,10 @@ namespace Teleopti.Ccc.Win.Common.Controls
             switch (thisButton)
             {
                 case EditAction.Delete:
-                    this.toolStripButtonDelete.Enabled = enabled;
+                    toolStripButtonDelete.Enabled = enabled;
                     break;
                 case EditAction.New:
-                    this.toolStripButtonNew.Enabled = enabled;
+                    toolStripButtonNew.Enabled = enabled;
                     break;
             }
         }
@@ -103,10 +106,10 @@ namespace Teleopti.Ccc.Win.Common.Controls
             switch (thisDropDown)
             {
                 case EditAction.Delete:
-                    SetEnabled(thisTag, enabled, this._deleteSpecialItems);
+                    SetEnabled(thisTag, enabled, _deleteSpecialItems);
                     break;
                 case EditAction.New:
-                    SetEnabled(thisTag, enabled, this._newSpecialItems);
+                    SetEnabled(thisTag, enabled, _newSpecialItems);
                     break;
             }
         }
@@ -211,18 +214,18 @@ namespace Teleopti.Ccc.Win.Common.Controls
         {
             if (_deleteSpecialItems.Count == 0)
             {
-                this.toolStripButtonDelete.DropDownButtonWidth = 1;
+                toolStripButtonDelete.DropDownButtonWidth = 1;
                 return;
             }
-            this.toolStripButtonDelete.DropDownButtonWidth = 15;
+            toolStripButtonDelete.DropDownButtonWidth = 15;
 
             var drop = new ToolStripDropDown();
             foreach (var item in _deleteSpecialItems)
             {
                 drop.Items.Add(item);
             }
-            this.toolStripButtonDelete.DropDown = drop;
-            this.toolStripButtonDelete.DropDown.ItemClicked += new ToolStripItemClickedEventHandler(DeleteDropDown_ItemClicked);
+            toolStripButtonDelete.DropDown = drop;
+            toolStripButtonDelete.DropDown.ItemClicked += new ToolStripItemClickedEventHandler(DeleteDropDown_ItemClicked);
         }
 
        

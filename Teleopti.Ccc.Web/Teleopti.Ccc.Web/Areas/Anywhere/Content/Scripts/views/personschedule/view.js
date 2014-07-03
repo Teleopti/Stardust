@@ -76,10 +76,9 @@ define([
 								axis: 'x',
 								containment: 'parent',
 								stop: function (e, ui) {
-									var workingShiftLayers = viewModel.WorkingShift().Layers().sort(function(a,b) { return a.StartPixels() > b.StartPixels(); });
-									var minStartPixel = workingShiftLayers[0].StartPixels();
-									var lastLayer = workingShiftLayers[workingShiftLayers.length - 1];
-									var maxEndPixel = lastLayer.StartPixels() + lastLayer.LengthPixels();
+									var workingShift = viewModel.WorkingShift();
+									var minStartPixel = (workingShift.OriginalShiftStartMinutes - viewModel.TimeLine.StartMinutes()) * viewModel.TimeLine.PixelsPerMinute();
+									var maxEndPixel = (workingShift.OriginalShiftEndMinutes - viewModel.TimeLine.StartMinutes()) * viewModel.TimeLine.PixelsPerMinute();
 									if (ui.position.left + ui.helper[0].offsetWidth <= maxEndPixel && 
 										ui.position.left >= minStartPixel) {
 										var pixelsChanged = ui.position.left - ui.originalPosition.left;

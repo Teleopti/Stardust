@@ -110,6 +110,11 @@ sh
 	text-align: center;
 }
 
+.layer.active
+{
+    z-index: 100 !important;
+}
+
 .person-schedule .shift .layer:first-of-type
 {
 	-webkit-border-radius: 4px 0px 0px 4px;
