@@ -5,7 +5,8 @@
 	'subscriptions.adherenceagents',
 	'errorview',
 	'ajax',
-	'resources'
+	'resources',
+	'amplify'
 ], function (
 	ko,
 	view,
@@ -13,7 +14,8 @@
 	subscriptions,
 	errorview,
 	ajax,
-	resources
+	resources,
+	amplify
 ) {
 	var viewModel;
 	return {
