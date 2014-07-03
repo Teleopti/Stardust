@@ -95,6 +95,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self.chooseHistorys.push(currentChooseView);
 					self.sortByDate();
 					self.selectedInternal(true);
+					self.isSendEnabled(true);
 				}
 			});
 		};
@@ -107,6 +108,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			if (chooseHistoryViewModel.selectedDate() == self.requestedDate().format(self.DatePickerFormat())) {
 				self.selectedInternal(false);
 			}
+			if (self.chooseHistorys().length < 1) self.isSendEnabled(false);
 		};
 
 		self.isAddVisible = ko.computed(function(){
@@ -174,6 +176,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				agent.isVisible(true);
 				//rk - don't really like to put DOM stuff here...
 				window.scrollTo(0, 0);
+				setSendEnableStatus(self);
 			}
 			self.agentChoosed(agent);
 			self.errorMessage('');
@@ -462,6 +465,14 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		});
 	}
 
+	function setSendEnableStatus(viewModel) {
+		if (viewModel.isTradeForMultiDaysEnabled() && viewModel.chooseHistorys().length < 1) {
+			viewModel.isSendEnabled(false);
+		} else {
+			viewModel.isSendEnabled(true);
+		}
+	}
+	
 	function _saveNewShiftTrade(viewModel) {
 		ajax.Ajax({
 			url: "Requests/ShiftTradeRequest",
@@ -475,8 +486,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				PersonToId: viewModel.agentChoosed().personId
 			}),
 			success: function (data) {
-			    viewModel.agentChoosed(null);
-			    viewModel.isSendEnabled(true);
+				viewModel.agentChoosed(null);
+				setSendEnableStatus(viewModel);
 				_hideShiftTradeWindow();
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
 			},
@@ -484,7 +495,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				if (jqXHR.status == 400) {
 					var data = $.parseJSON(jqXHR.responseText);
 					viewModel.errorMessage(data.Errors.join('</br>'));
-					viewModel.isSendEnabled(true);
+					setSendEnableStatus(viewModel);
 					return;
 				}
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
