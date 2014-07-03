@@ -142,6 +142,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.ja.resx" />
+    <EmbeddedResource Include="Resources.nl.resx" />
     <EmbeddedResource Include="Resources.no.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
