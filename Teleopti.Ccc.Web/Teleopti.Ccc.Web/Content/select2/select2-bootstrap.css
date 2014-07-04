@@ -31,11 +31,11 @@
 .select2-container .select2-choice {
 	border-radius: 0;
 	background-image: none ;
-	height: 30px;
+	height: 43px;
 }
 
 .select2-container .select2-choice span {
-	line-height: 30px;
+	line-height: 43px;
 }
 
 .select2-container .select2-choice .select2-arrow {
@@ -46,4 +46,12 @@
 
 .select2-container .select2-choices {
     border: 0;
+}
+
+.select2-container .select2-choice .select2-arrow b {
+	background: url('select2.png') no-repeat 0 6px;
+}
+
+.select2-dropdown-open .select2-choice .select2-arrow b {
+	background-position: -18px 6px;
 }

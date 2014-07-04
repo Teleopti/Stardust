@@ -126,3 +126,7 @@ fieldset[disabled] .navbar-teleopti .btn-link:focus {
 	background-color: #3fb618;
 	border-color: #3fb618;
 }
+
+.radio, .checkbox {
+padding-left: 20px;
+}
