@@ -1012,12 +1012,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExtMinTimePerWeek.DefaultInterpretAsMinutes = false;
 			this.textBoxExtMinTimePerWeek.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.textBoxExtMinTimePerWeek.Location = new System.Drawing.Point(580, 30);
-			this.textBoxExtMinTimePerWeek.Margin = new System.Windows.Forms.Padding(6, 3, 0, 0);
+			this.textBoxExtMinTimePerWeek.Margin = new System.Windows.Forms.Padding(6, 30, 0, 0);
 			this.textBoxExtMinTimePerWeek.MaximumValue = System.TimeSpan.Parse("3.12:00:00");
 			this.textBoxExtMinTimePerWeek.Name = "textBoxExtMinTimePerWeek";
-			this.textBoxExtMinTimePerWeek.Size = new System.Drawing.Size(74, 22);
+			this.textBoxExtMinTimePerWeek.Size = new System.Drawing.Size(74, 15);
 			this.textBoxExtMinTimePerWeek.TabIndex = 11;
-			this.textBoxExtMinTimePerWeek.TimeSpanBoxHeight = 20;
+			this.textBoxExtMinTimePerWeek.TimeSpanBoxHeight = 15;
 			this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 33;
 			this.textBoxExtMinTimePerWeek.Leave += new System.EventHandler(this.textBoxExtMinTimePerWeek_Validated);
 			// 
