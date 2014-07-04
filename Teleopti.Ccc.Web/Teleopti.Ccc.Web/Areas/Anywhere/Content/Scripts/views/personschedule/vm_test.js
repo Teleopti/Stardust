@@ -157,8 +157,13 @@
 							PersonId: 1,
 							Projection: [
 								{
-									Start: '2013-11-18 14:00'
-								}
+								    Start: '2013-11-18 14:00',
+								    Minutes: 60
+								},
+                                {
+                                    Start: '2013-11-18 15:00',
+                                    Minutes: 420
+                                }
 							]
 						}
 					];

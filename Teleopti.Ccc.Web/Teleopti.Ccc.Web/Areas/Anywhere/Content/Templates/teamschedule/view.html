@@ -27,7 +27,7 @@
 	<!-- /ko -->
     <div class="row">
         <div class="col-xs-4">
-            <select id="group-picker" class="col-xs-12" style="height: 30px" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: GroupId } ">
+            <select id="group-picker" class="col-xs-12" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: GroupId } ">
                 <optgroup data-bind="attr: { label: Name }, foreach: Groups" label="Missing">
                     <option data-bind="text: Name, value: Id"></option>
                 </optgroup>

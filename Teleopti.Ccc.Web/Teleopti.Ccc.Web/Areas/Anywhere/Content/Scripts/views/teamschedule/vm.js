@@ -18,15 +18,15 @@ define([
 	moment
     ) {
 
-	return function (permissions) {
+	return function () {
 
 		var self = this;
 
-		this.permissionAddFullDayAbsence = ko.observable(permissions.addFullDayAbsence);
-		this.permissionAddIntradayAbsence = ko.observable(permissions.addIntradayAbsence);
-		this.permissionRemoveAbsence = ko.observable(permissions.removeAbsence);
-		this.permissionAddActivity = ko.observable(permissions.addActivity);
-		this.permissionMoveActivity = ko.observable(permissions.moveActivity);
+		this.permissionAddFullDayAbsence = ko.observable();
+		this.permissionAddIntradayAbsence = ko.observable();
+		this.permissionRemoveAbsence = ko.observable();
+		this.permissionAddActivity = ko.observable();
+		this.permissionMoveActivity = ko.observable();
 
 		this.Loading = ko.observable(false);
 
@@ -96,7 +96,14 @@ define([
 					return moment(date, 'YYYYMMDD');
 				}
 			}());
-
+			var permissions = options.permissions;
+            if (permissions) {
+                this.permissionAddFullDayAbsence(permissions.addFullDayAbsence);
+                this.permissionAddIntradayAbsence(permissions.addIntradayAbsence);
+                this.permissionRemoveAbsence(permissions.removeAbsence);
+                this.permissionAddActivity(permissions.addActivity);
+                this.permissionMoveActivity(permissions.moveActivity);
+            }
 		};
 
 		this.UpdateSchedules = function (data) {
