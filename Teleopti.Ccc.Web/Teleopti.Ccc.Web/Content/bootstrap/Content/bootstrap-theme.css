@@ -94,3 +94,35 @@ fieldset[disabled] .navbar-teleopti .btn-link:hover,
 fieldset[disabled] .navbar-teleopti .btn-link:focus {
   color: #9ccc33;
 }
+
+.navbar-teleopti .btn-default {
+	background-color: #9ccc33;
+	border-color: #9ccc33;
+}
+.navbar-teleopti .btn-default:hover,
+.navbar-teleopti .btn-default:focus,
+.navbar-teleopti .btn-default:active,
+.navbar-teleopti .btn-default.active,
+.navbar-teleopti .open > .dropdown-toggle.btn-default {
+	background-color: #3fb618;
+	border-color: #3fb618;
+}
+
+.navbar-teleopti .btn-default.disabled,
+.navbar-teleopti .btn-default[disabled],
+.navbar-teleopti fieldset[disabled] .btn-default,
+.navbar-teleopti .btn-default.disabled:hover,
+.navbar-teleopti .btn-default[disabled]:hover,
+.navbar-teleopti fieldset[disabled] .btn-default:hover,
+.navbar-teleopti .btn-default.disabled:focus,
+.navbar-teleopti .btn-default[disabled]:focus,
+.navbar-teleopti fieldset[disabled] .btn-default:focus,
+.navbar-teleopti .btn-default.disabled:active,
+.navbar-teleopti .btn-default[disabled]:active,
+.navbar-teleopti fieldset[disabled] .btn-default:active,
+.navbar-teleopti .btn-default.disabled.active,
+.navbar-teleopti .btn-default[disabled].active,
+.navbar-teleopti fieldset[disabled] .btn-default.active {
+	background-color: #3fb618;
+	border-color: #3fb618;
+}
