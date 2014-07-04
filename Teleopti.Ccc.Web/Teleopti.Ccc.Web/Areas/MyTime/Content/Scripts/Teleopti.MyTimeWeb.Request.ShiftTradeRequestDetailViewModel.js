@@ -186,15 +186,16 @@ Teleopti.MyTimeWeb.Request.LayerEditShiftTradeViewModel = function (layer, minut
 	});
 };
 
-Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minutesSinceTimeLineStart, pixelPerMinute) {
+Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minutesSinceTimeLineStart) {
     var self = this;
     self.payload = layer.Payload;
     self.backgroundColor = layer.Color;
+    self.pixelPerMinute = ko.observable();
     self.leftPx = ko.computed(function () {
-        return (minutesSinceTimeLineStart * pixelPerMinute) + 'px';
+    	return (minutesSinceTimeLineStart * self.pixelPerMinute()) + 'px';
     });
     self.widthPx = ko.computed(function () {
-        return layer.LengthInMinutes * pixelPerMinute + 'px';
+    	return layer.LengthInMinutes * self.pixelPerMinute() + 'px';
     });
     self.tooltipText = ko.computed(function () {
         return "<div>{0}</div>{1}".format(layer.TitleHeader, layer.TitleTime);

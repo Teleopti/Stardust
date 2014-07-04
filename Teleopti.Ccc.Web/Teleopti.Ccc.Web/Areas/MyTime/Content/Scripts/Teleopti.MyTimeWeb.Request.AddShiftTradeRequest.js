@@ -24,7 +24,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 	function shiftTradeViewModel(sendRequestCallback) {
 		var self = this;
-		var layerCanvasPixelWidth = 700;
+		self.layerCanvasPixelWidth = ko.observable();
 
 		self.now = null;
 		self.weekStart = ko.observable(1); 
@@ -136,8 +136,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	        self.timeLineStartTime(firstHour);
 	        self.timeLineLengthInMinutes(lastHour.diff(firstHour, 'minutes'));
 	    };
-		self.pixelPerMinute = ko.computed(function () {
-			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
+	    self.pixelPerMinute = ko.computed(function () {
+	    	return self.layerCanvasPixelWidth() / self.timeLineLengthInMinutes();
 		});
         
 		self._createMySchedule = function (myScheduleObject) {
@@ -145,7 +145,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		    if (myScheduleObject != null) {
 		        mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
 		            var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
-		            return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
+		            return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart);
 		        });
 		    }
 		    self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers, myScheduleObject));
@@ -157,7 +157,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				
 			    var mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
 			    	var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
-			    	return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());;
+			    	return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart);;
 			    });
 			    var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, personSchedule);
 				 self.possibleTradeSchedules.push(model);
@@ -410,6 +410,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				    self._createPossibleTradeSchedules(self.possibleTradeSchedulesRaw);
 					self.keepSelectedAgentVisible();
 					self.isReadyLoaded(true);
+
+					// Redraw layers after data loaded
+					_redrawLayers();
 				},
 				error: function(e) {
 				    //console.log(e);
@@ -446,6 +449,34 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		}
 	}
 
+	function _redrawLayers() {
+		var canvasWidth;
+
+		if (vm.isReadyLoaded()) {
+			canvasWidth = $("td.shift-trade-possible-trade-schedule").width();
+		} else {
+			var containerWidth = $("#Request-add-shift-trade").width();
+			var nameCellWidth = $("td.shift-trade-agent-name").width();
+			canvasWidth = containerWidth - nameCellWidth;
+		}
+
+		vm.layerCanvasPixelWidth(canvasWidth);
+
+		if (vm.mySchedule() != undefined) {
+			$.each(vm.mySchedule().layers, function (index, vmScheduleAddShiftTrade) {
+				vmScheduleAddShiftTrade.pixelPerMinute(vm.pixelPerMinute());
+			});
+		}
+
+		if (vm.possibleTradeSchedules() != undefined) {
+			$.each(vm.possibleTradeSchedules(), function (index, vmPersonScheduleAddShiftTrade) {
+				$.each(vmPersonScheduleAddShiftTrade.layers, function (index, vmScheduleAddShiftTrade) {
+					vmScheduleAddShiftTrade.pixelPerMinute(vm.pixelPerMinute());
+				});
+			});
+		}
+	}
+
 	function _init() {
 		var elementToBind = $('#Request-add-shift-trade')[0];
 		if (elementToBind !== undefined) {
@@ -457,6 +488,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			vm.chooseAgent(null);
 			_setWeekStart(vm);
 		}
+
+		$(window).resize(function () {
+			_redrawLayers();
+		});
 	}
 
 	function _setWeekStart(vm) {
