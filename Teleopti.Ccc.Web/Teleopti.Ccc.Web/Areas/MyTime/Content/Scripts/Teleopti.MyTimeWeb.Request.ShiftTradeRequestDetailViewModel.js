@@ -294,5 +294,6 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function (chooseHistory) {
 	self.mySchedule = ko.observable(chooseHistory.mySchedule());
 	self.selectedSchedule = ko.observable(chooseHistory.tradedSchedule);
 	var dateFormat = $("#Request-detail-datepicker-format").val().toUpperCase();
-	self.selectedDate = ko.observable(moment(chooseHistory.date()).format(dateFormat));
+	self.selectedDateInFormat = ko.observable(moment(chooseHistory.date()).format(dateFormat));
+	self.selectedDate = ko.observable(chooseHistory.date());
 }

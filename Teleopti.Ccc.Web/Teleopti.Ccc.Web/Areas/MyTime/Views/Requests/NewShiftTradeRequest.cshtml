@@ -123,7 +123,7 @@
 	    <div class="divider choose-history-divider"></div>
 	    <div><strong>@Resources.MyTradeCart</strong></div>
 	    <div id="choose-history-list" class="shift-trade-add-schedule" data-bind="foreach:chooseHistorys(), style:{height:tradeCartHeight()}">
-		    <div class="trade-date" data-bind="text: $data.selectedDate"></div>
+		    <div class="trade-date" data-bind="text: $data.selectedDateInFormat"></div>
 		    <div class="shift-trade-timeline" style="height: 80px;">
 			    <div class="relative">
 				    <div data-bind="foreach: $data.hours()">

@@ -105,7 +105,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			var dayToDelete = $.grep(self.chooseHistorys(), function (e) { return e.selectedDate == date; })[0];
 			self.chooseHistorys.remove(dayToDelete);
 
-			if (chooseHistoryViewModel.selectedDate() == self.requestedDate().format(self.DatePickerFormat())) {
+			if (chooseHistoryViewModel.selectedDateInFormat() == self.requestedDate().format(self.DatePickerFormat())) {
 				self.selectedInternal(false);
 			}
 			if (self.chooseHistorys().length < 1) self.isSendEnabled(false);
@@ -284,7 +284,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 			var isAddAvaiable = false;
 			$.each(self.chooseHistorys(), function (index, chooseHistoryViewModel) {
-				if (self.requestedDateInternal().format(self.DatePickerFormat()) == chooseHistoryViewModel.selectedDate()) {
+				if (self.requestedDateInternal().format(self.DatePickerFormat()) == chooseHistoryViewModel.selectedDateInFormat()) {
 					isAddAvaiable = true;
 					return false;
 				}
