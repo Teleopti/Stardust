@@ -41,7 +41,6 @@ namespace Teleopti.Support.Tool.Controls
         public MainChangeDBSettings(MainForm mainForm, DBHelper dbHelper)
         {
             InitializeComponent();
-
             _mainForm = mainForm;
             configFile = System.Configuration.ConfigurationManager.AppSettings["configFilePath"];
             setConfileParam();

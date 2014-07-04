@@ -52,7 +52,7 @@ namespace Teleopti.Support.Tool
         {
             //this.Controls.Remove(activeControl);
             panelContent.Controls.Remove(activeControl);
-            activeControl = new ChangeSettings();
+            activeControl = new ChangeSettings(this);
             PTracks.Hide();
             panelContent.Controls.Add(activeControl);
             activeControl.Dock = DockStyle.Fill;
