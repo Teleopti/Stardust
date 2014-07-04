@@ -7,7 +7,7 @@
 }
 <input id="showweeklyworktime" type="hidden"  value="@Model.IsWeeklyWorkTimeEnabled.ToString()" />
 <div class="hidden-lg hidden-md topbarparent">
-	<div class="navbar navbar-default collapse navbar-collapse subnavbar">
+	<div class="navbar navbar-teleopti collapse navbar-collapse subnavbar">
 		<div class="container">
 			<ul class="nav navbar-nav">
 				<li>
@@ -58,10 +58,10 @@
 							                                                                                  }
 						                                                                                  }
 					                                                                                  }]">
-							<button type="button" data-toggle="dropdown" style="margin-left: 15px" class="btn btn-default navbar-btn dropdown-toggle">
-								<span data-bind="'text': selectedPreferenceText()"></span>
-								<span class="caret"></span>
-							</button>
+						<button type="button" data-toggle="dropdown" style="margin-left: 15px" class="btn btn-default navbar-btn dropdown-toggle">
+							<span data-bind="'text': selectedPreferenceText()"></span>
+							<span class="caret"></span>
+						</button>
 						<ul role="menu" class="dropdown-menu" data-bind="foreach: availablePreferences">
 							<!-- ko if: Value != '-' -->
 							<li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
@@ -75,19 +75,19 @@
 				<li><a href="#" data-bind="click: deletePreference"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
 			</ul>
 			<!-- ko if: mustHaveEnabled -->
-				<ul class="list-inline musthave-textcolor">
-					<li>
-						<i class="glyphicon glyphicon-heart"></i>&nbsp;<span>@Resources.MustHave</span>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="	text: maxMustHave" class="musthave-max"></span>)
-					</li>
-					<li><a href="#" class="musthave-textcolor" data-bind="click: removeMustHave"><i class="glyphicon glyphicon-minus"></i></a></li>
-					<li><a href="#" class="musthave-textcolor add-musthave" data-bind="click: addMustHave, enabled: addMustHaveEnabled"><i class="glyphicon glyphicon-plus"></i></a></li>
-				</ul>
+			<ul class="list-inline musthave-textcolor">
+				<li>
+					<i class="glyphicon glyphicon-heart"></i>&nbsp;<span>@Resources.MustHave</span>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="	text: maxMustHave" class="musthave-max"></span>)
+				</li>
+				<li><a href="#" class="musthave-textcolor" data-bind="click: removeMustHave"><i class="glyphicon glyphicon-minus"></i></a></li>
+				<li><a href="#" class="musthave-textcolor add-musthave" data-bind="click: addMustHave, enabled: addMustHaveEnabled"><i class="glyphicon glyphicon-plus"></i></a></li>
+			</ul>
 			<!-- /ko -->
 		</div>
 	</div>
 </div>
 <div class="container">
-	<div class="navbar navbar-default hidden-sm hidden-xs">
+	<div class="navbar navbar-teleopti hidden-sm hidden-xs">
 		<div class="container">
 			<div class="navbar-left">
 				<div class="navbar-form">
@@ -111,11 +111,11 @@
 			</div>
 			<ul class="nav navbar-nav">
 				@if (Model.ExtendedPreferencesPermission)
-	{
+				{
 					<li><a href="#" class="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Preference</a></li>
-			}
-	else
-	{
+				}
+				else
+				{
 					<li class="dropdown preference-split-button" data-mytime-preference-option="[@{
 				var oIdx = 0;
 				foreach (var optionGroup in Model.Options.PreferenceOptions)
@@ -153,7 +153,7 @@
 							<!-- /ko -->
 						</ul>
 					</li>
-			}
+				}
 				<li><a href="#" data-bind="click: deletePreference"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
 			</ul>
 			<!-- ko if: mustHaveEnabled -->
