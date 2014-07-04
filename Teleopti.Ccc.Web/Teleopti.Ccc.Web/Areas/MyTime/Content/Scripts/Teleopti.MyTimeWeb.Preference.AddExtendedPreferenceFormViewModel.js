@@ -253,6 +253,6 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 
 	    if (option.text.length === 0) return option.text;
 	    
-	    return '<span class="pull-left" style="padding-left: 16px;margin-right: 5px;border-radius: 4px;background-color: ' + activityColor + '">&nbsp;</span>' + option.text;
+	    return '<span class="pull-left" style="padding-left: 16px;margin-right: 5px;background-color: ' + activityColor + '">&nbsp;</span>' + option.text;
 	};
 };
