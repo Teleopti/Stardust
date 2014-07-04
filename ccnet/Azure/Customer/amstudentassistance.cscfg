@@ -13,10 +13,7 @@
       <Setting name="TeleoptiDriveMap.AccountName" value="" />
       <Setting name="TeleoptiDriveMap.AccountKey" value="IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ==" />
       <Setting name="TeleoptiDriveMap.ContainerName" value="teleopticcc/Payroll" />
-      <Setting name="TeleoptiDriveMap.DataSourceName" value="StudioModerna" />
-<!--
-		<Setting name="TeleoptiDriveMap.AzureCloudServiceName" value="studiomoderna" />
--->	  	  
+      <Setting name="TeleoptiDriveMap.DataSourceName" value="amstudentassistance" />
     </ConfigurationSettings>
     <Certificates>
 	  <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="9F477F46A320B45AC3576961A150AB7D911A3BB3" thumbprintAlgorithm="sha1" />
