@@ -24,14 +24,14 @@
         <div class="clearfix">
             <!-- ko if: IsNotificationSupported() -->
             <span class="btn-group">
-                <button class="btn btn-default" data-bind="click: RequestNotificationPermission">@Resources.AllowDesktopNotifications</button>
+                <button class="btn btn-primary" data-bind="click: RequestNotificationPermission">@Resources.AllowDesktopNotifications</button>
             </span>
             <!-- /ko -->
             @if (Model.ShareCalendarPermission)
             {
                 <div class="btn-group">
-                    <button class="btn btn-default share-my-calendar" data-bind="css: { active: CalendarSharingActive() }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</button>
-                    <button class="btn btn-default revoke" data-bind="css: { active: !CalendarSharingActive() }, click: DeactivateCalendarSharing">@Resources.Revoke</button>
+					<button class="btn btn-primary share-my-calendar" data-bind="css: { active: CalendarSharingActive() }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</button>
+					<button class="btn btn-primary revoke" data-bind="css: { active: !CalendarSharingActive() }, click: DeactivateCalendarSharing">@Resources.Revoke</button>
                 </div>
 				<!-- ko if: CalendarSharingActive() -->
                 <div>

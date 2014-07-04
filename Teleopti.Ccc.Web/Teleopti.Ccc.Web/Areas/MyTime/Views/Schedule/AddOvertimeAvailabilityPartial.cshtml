@@ -62,7 +62,7 @@
 	<div class="overtime-availability-error alert alert-danger" data-bind="html: ErrorMessage" />   
 </div>
 <div class="pull-right">
-	<button class="request-new-cancel btn btn-default" data-bind="click: $parent.CancelAddingNewRequest">@Resources.Cancel</button>
+	<button class="request-new-cancel btn" data-bind="click: $parent.CancelAddingNewRequest">@Resources.Cancel</button>
 	<button class="request-new-delete btn btn-danger" data-bind="click: DeleteOvertimeAvailability, visible: HasOvertimeAvailability()">@Resources.Delete</button>
 	<button class="request-new-send btn btn-primary" data-bind="click: SetOvertimeAvailability">@Resources.Save</button>
 </div>

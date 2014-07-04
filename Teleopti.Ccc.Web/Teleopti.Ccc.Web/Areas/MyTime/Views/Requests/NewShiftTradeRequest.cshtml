@@ -11,7 +11,7 @@
 				<td>
 					<div style="margin-bottom: 10px" class="input-group">
 						<span class="input-group-btn">
-                            <button class="previous-date btn btn-default" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateValid">
+                            <button class="previous-date btn" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateValid">
                                 <i class="glyphicon glyphicon-chevron-left" data-bind="enable: !IsLoading()"></i>
                             </button>
 						</span>
@@ -22,10 +22,10 @@
                         <input type="text" class="col-xs-2 form-control add-shifttrade-datepicker" data-bind="value: requestedDate().format(DatePickerFormat())" readonly="readonly" />
                         <![endif]-->
 						<span class="input-group-btn">
-							<button class="btn btn-default" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
+							<button class="btn" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</button>
-                            <button class="next-date btn btn-default" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
+                            <button class="next-date btn" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
                                 <i class="glyphicon glyphicon-chevron-right" data-bind="enable: !IsLoading()"></i>
                             </button>
 						</span>
@@ -196,7 +196,7 @@
                 <textarea id="Request-add-shift-trade-message-input" class="form-control" data-bind="value: message, valueUpdate: 'afterkeydown', limitCharacters: 2000" rows="4" class="input-block-level" placeholder="@Resources.Message" />
             </div>
             <div class="pull-right">
-                <button class="btn btn-default cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
+                <button class="btn cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
                 <button class="btn btn-primary send-button" data-bind="enable: isSendEnabled, click: sendRequest">@Resources.Send</button>
             </div>
             <div class="error" data-bind="html: errorMessage"></div>
