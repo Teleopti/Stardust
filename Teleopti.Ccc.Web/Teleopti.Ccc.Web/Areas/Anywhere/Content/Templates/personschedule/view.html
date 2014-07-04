@@ -79,7 +79,7 @@
 											</div>
 											<!-- /ko -->
 											<div>
-												<button class="btn btn-success apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
+												<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
 											</div>
 										</form>
 
@@ -111,7 +111,7 @@
 											</div>
 											<!-- /ko -->
 											<div>
-												<button class="btn btn-success apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
+												<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
 											</div>
 										</form>
 
@@ -135,7 +135,7 @@
 											</div>
 											<!-- /ko -->
 											<div>
-												<button class="btn btn-success apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.MoveActivity, click: Apply"></button>
+												<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.MoveActivity, click: Apply"></button>
 											</div>
 										</form>
 
@@ -161,7 +161,7 @@
 												</span>
 												<input type="text" class="end-date form-control" readonly="readonly" data-bind="value: EndDateFormatted" />
 												<div class="date input-group-btn">
-													<button class="btn btn-default" data-bind="datepicker: EndDate, datepickerOptions: { format: $root.Resources.DateFormatForMoment, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
+													<button class="btn" data-bind="datepicker: EndDate, datepickerOptions: { format: $root.Resources.DateFormatForMoment, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
 														<i class="glyphicon glyphicon-calendar"></i>
 													</button>
 												</div>
@@ -173,7 +173,7 @@
 											</div>
 											<!-- /ko -->
 											<div>
-												<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
+												<button class="btn btn-primary apply" style="margin-top: 10px" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
 											</div>
 										</form>
 										<!-- /ko -->
