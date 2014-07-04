@@ -201,8 +201,9 @@ define([
 			self.AddIntradayAbsenceForm.WorkingShift(self.WorkingShift());
 			self.AddActivityForm.WorkingShift(self.WorkingShift());
 			var selectedLayer = self.SelectedLayer();
-			self.MoveActivityForm.update(selectedLayer);
 			self.MoveActivityForm.WorkingShift(self.WorkingShift());
+			self.MoveActivityForm.ScheduleDate(self.ScheduleDate());
+			self.MoveActivityForm.update(selectedLayer);
 		};
 
 		this.SelectedLayer = function() {

@@ -174,6 +174,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 			if (agent != null) {
 				agent.isVisible(true);
+				_redrawLayers();
 				//rk - don't really like to put DOM stuff here...
 				window.scrollTo(0, 0);
 				setSendEnableStatus(self);
@@ -453,11 +454,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		var canvasWidth;
 
 		if (vm.isReadyLoaded()) {
-			canvasWidth = $("td.shift-trade-possible-trade-schedule").width();
+			canvasWidth = $("td.shift-trade-possible-trade-schedule:visible").width();
 		} else {
 			var containerWidth = $("#Request-add-shift-trade").width();
 			var nameCellWidth = $("td.shift-trade-agent-name").width();
 			canvasWidth = containerWidth - nameCellWidth;
+			if (vm.isTradeForMultiDaysEnabled()) {
+				var buttonAddCellWidth = $("td.day-add").width();
+				canvasWidth = canvasWidth - buttonAddCellWidth;
+			}
 		}
 
 		vm.layerCanvasPixelWidth(canvasWidth);
@@ -471,6 +476,16 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		if (vm.possibleTradeSchedules() != undefined) {
 			$.each(vm.possibleTradeSchedules(), function (index, vmPersonScheduleAddShiftTrade) {
 				$.each(vmPersonScheduleAddShiftTrade.layers, function (index, vmScheduleAddShiftTrade) {
+					vmScheduleAddShiftTrade.pixelPerMinute(vm.pixelPerMinute());
+				});
+			});
+		}
+		if (vm.chooseHistorys() != undefined) {
+			$.each(vm.chooseHistorys(), function (index, chooseHistory) {
+				$.each(chooseHistory.mySchedule().layers, function (index, vmScheduleAddShiftTrade) {
+					vmScheduleAddShiftTrade.pixelPerMinute(vm.pixelPerMinute());
+				});
+				$.each(chooseHistory.selectedSchedule().layers, function (index, vmScheduleAddShiftTrade) {
 					vmScheduleAddShiftTrade.pixelPerMinute(vm.pixelPerMinute());
 				});
 			});
