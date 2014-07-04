@@ -30,8 +30,11 @@
         {
 			this.toolStripEx1 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripPanelItem1 = new Syncfusion.Windows.Forms.Tools.ToolStripPanelItem();
+			this.toolStripButtonCut = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSplitButtonCut = new System.Windows.Forms.ToolStripSplitButton();
+			this.toolStripButtonCopy = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSplitButtonCopy = new System.Windows.Forms.ToolStripSplitButton();
+			this.toolStripButtonPaste = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSplitButtonPaste = new System.Windows.Forms.ToolStripSplitButton();
 			this.toolStripEx1.SuspendLayout();
 			this.SuspendLayout();
@@ -63,8 +66,11 @@
 			this.toolStripPanelItem1.CausesValidation = false;
 			this.toolStripPanelItem1.ForeColor = System.Drawing.Color.MidnightBlue;
 			this.toolStripPanelItem1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonCut,
             this.toolStripSplitButtonCut,
+            this.toolStripButtonCopy,
             this.toolStripSplitButtonCopy,
+            this.toolStripButtonPaste,
             this.toolStripSplitButtonPaste});
 			this.toolStripPanelItem1.Margin = new System.Windows.Forms.Padding(0);
 			this.toolStripPanelItem1.Name = "toolStripPanelItem1";
@@ -72,6 +78,14 @@
 			this.toolStripPanelItem1.Size = new System.Drawing.Size(84, 65);
 			this.toolStripPanelItem1.Text = "yytoolStripPanelItem1";
 			this.toolStripPanelItem1.Transparent = true;
+			// 
+			// toolStripButtonCut
+			// 
+			this.toolStripButtonCut.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Cut_16x16;
+			this.toolStripButtonCut.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonCut.Name = "toolStripButtonCut";
+			this.toolStripButtonCut.Size = new System.Drawing.Size(57, 20);
+			this.toolStripButtonCut.Text = "xxCut";
 			// 
 			// toolStripSplitButtonCut
 			// 
@@ -86,6 +100,14 @@
 			this.toolStripSplitButtonCut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripSplitButtonCut.TextChanged += new System.EventHandler(this.toolStripSplitButtonCut_TextChanged);
 			// 
+			// toolStripButtonCopy
+			// 
+			this.toolStripButtonCopy.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Copy_16x16;
+			this.toolStripButtonCopy.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonCopy.Name = "toolStripButtonCopy";
+			this.toolStripButtonCopy.Size = new System.Drawing.Size(66, 20);
+			this.toolStripButtonCopy.Text = "xxCopy";
+			// 
 			// toolStripSplitButtonCopy
 			// 
 			this.toolStripSplitButtonCopy.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Copy_16x16;
@@ -98,6 +120,14 @@
 			this.toolStripSplitButtonCopy.Text = "xxCopy";
 			this.toolStripSplitButtonCopy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripSplitButtonCopy.TextChanged += new System.EventHandler(this.toolStripSplitButtonCopy_TextChanged);
+			// 
+			// toolStripButtonPaste
+			// 
+			this.toolStripButtonPaste.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_paste_16x16;
+			this.toolStripButtonPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonPaste.Name = "toolStripButtonPaste";
+			this.toolStripButtonPaste.Size = new System.Drawing.Size(71, 20);
+			this.toolStripButtonPaste.Text = "xxPaste";
 			// 
 			// toolStripSplitButtonPaste
 			// 
@@ -133,8 +163,11 @@
 
         #endregion
 
+        private System.Windows.Forms.ToolStripButton toolStripButtonPaste;
         private System.Windows.Forms.ToolStripSplitButton toolStripSplitButtonPaste;
+        private System.Windows.Forms.ToolStripButton toolStripButtonCut;
         private System.Windows.Forms.ToolStripSplitButton toolStripSplitButtonCut;
+        private System.Windows.Forms.ToolStripButton toolStripButtonCopy;
         private System.Windows.Forms.ToolStripSplitButton toolStripSplitButtonCopy;
 
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx1;

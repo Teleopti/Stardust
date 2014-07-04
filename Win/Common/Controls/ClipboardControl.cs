@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
         private IList<ToolStripItem> _pasteSpecialItems;
         private const int textMaxLength = 11;
+	    private bool _internalFlag;
 
         public ToolStripSplitButton ToolStripSplitButtonCopy
         {
@@ -119,13 +120,97 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
             Load += Clipboard_Load;
             toolStripSplitButtonCopy.ButtonClick += toolStripSplitButtonCopy_Click;
+						toolStripSplitButtonCopy.VisibleChanged += toolStripSplitButtonCopy_VisibleChanged;
+						toolStripSplitButtonCopy.EnabledChanged += toolStripSplitButtonCopy_EnabledChanged;
+						toolStripButtonCopy.Click += toolStripSplitButtonCopy_Click;
+
             toolStripSplitButtonCut.ButtonClick += toolStripSplitButtonCut_Click;
+						toolStripSplitButtonCut.VisibleChanged += toolStripSplitButtonCut_VisibleChanged;
+						toolStripSplitButtonCut.EnabledChanged += toolStripSplitButtonCut_EnabledChanged;
+            toolStripButtonCut.Click += toolStripSplitButtonCut_Click;
+
             toolStripSplitButtonPaste.ButtonClick += toolStripSplitButtonPaste_Click;
+						toolStripSplitButtonPaste.VisibleChanged += toolStripSplitButtonPaste_VisibleChanged;
+						toolStripSplitButtonPaste.EnabledChanged += toolStripSplitButtonPaste_EnabledChanged;
+						toolStripButtonPaste.Click += toolStripSplitButtonPaste_Click;
 
 						toolStripSplitButtonCopy.RightToLeft = RightToLeft.No;
+						toolStripButtonCopy.RightToLeft = RightToLeft.No;
 						toolStripSplitButtonCut.RightToLeft = RightToLeft.No;
+						toolStripButtonCut.RightToLeft = RightToLeft.No;
+						toolStripButtonPaste.RightToLeft = RightToLeft.No;
 						toolStripSplitButtonPaste.RightToLeft = RightToLeft.No;
+
+						toolStripButtonCopy.Visible = false;
+						toolStripButtonCut.Visible = false;
+						toolStripButtonPaste.Visible = false;
         }
+
+				void toolStripSplitButtonPaste_EnabledChanged(object sender, EventArgs e)
+				{
+					if (_internalFlag)
+					{
+						toolStripButtonPaste.Enabled = !((ToolStripSplitButton)sender).Enabled;
+						_internalFlag = false;
+						return;
+					}
+					toolStripButtonPaste.Enabled = ((ToolStripSplitButton)sender).Enabled;
+				}
+
+				void toolStripSplitButtonPaste_VisibleChanged(object sender, EventArgs e)
+				{
+					if (_internalFlag)
+					{
+						toolStripButtonPaste.Visible = !((ToolStripSplitButton)sender).Visible;
+						_internalFlag = false;
+						return;
+					}
+					toolStripButtonPaste.Visible = ((ToolStripSplitButton)sender).Visible;
+				}
+
+				void toolStripSplitButtonCopy_EnabledChanged(object sender, EventArgs e)
+				{
+					if (_internalFlag)
+					{
+						toolStripButtonCopy.Enabled = !((ToolStripSplitButton)sender).Enabled;
+						_internalFlag = false;
+						return;
+					}
+					toolStripButtonCopy.Enabled = ((ToolStripSplitButton)sender).Enabled;
+				}
+
+				void toolStripSplitButtonCopy_VisibleChanged(object sender, EventArgs e)
+				{
+					if (_internalFlag)
+					{
+						toolStripButtonCopy.Visible = !((ToolStripSplitButton)sender).Visible;
+						_internalFlag = false;
+						return;
+					}
+					toolStripButtonCopy.Visible = ((ToolStripSplitButton)sender).Visible;
+				}
+
+				void toolStripSplitButtonCut_EnabledChanged(object sender, EventArgs e)
+				{
+					if (_internalFlag)
+					{
+						toolStripButtonCut.Enabled = !((ToolStripSplitButton)sender).Enabled;
+						_internalFlag = false;
+						return;
+					}
+					toolStripButtonCut.Enabled = ((ToolStripSplitButton)sender).Enabled;
+				}
+
+				void toolStripSplitButtonCut_VisibleChanged(object sender, EventArgs e)
+				{
+					if (_internalFlag)
+					{
+						toolStripButtonCut.Visible = !((ToolStripSplitButton)sender).Visible;
+						_internalFlag = false;
+						return;
+					}
+					toolStripButtonCut.Visible = ((ToolStripSplitButton)sender).Visible;
+				}
         #region statehandling
  
         /// <summary>
@@ -146,6 +231,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
                     break;
                 case ClipboardAction.Cut:
                     toolStripSplitButtonCut.Enabled = enabled;
+                    toolStripButtonCut.Enabled = enabled;
                     break;
                 case ClipboardAction.Paste:
                     toolStripSplitButtonPaste.Enabled = enabled;
@@ -248,12 +334,13 @@ namespace Teleopti.Ccc.Win.Common.Controls
         /// </remarks>
         private void CopyDropDownHandler()
         {
+						_internalFlag = true;
             if (_copySpecialItems.Count == 0 )
             {
-                toolStripSplitButtonCopy.DropDownButtonWidth = 1;
-                return;
+	            toolStripSplitButtonCopy.Visible = false;
+              return;
             }
-            toolStripSplitButtonCopy.DropDownButtonWidth = 15;
+						toolStripSplitButtonCopy.Visible = true;
             var drop = new ToolStripDropDown();
             foreach (var item in _copySpecialItems)
             {
@@ -296,12 +383,13 @@ namespace Teleopti.Ccc.Win.Common.Controls
      /// </remarks>
      private void CutDropDownHandler()
         {
-            if (_cutSpecialItems.Count == 0 )
+					_internalFlag = true;
+						if (_cutSpecialItems.Count == 0 )
             {
-                toolStripSplitButtonCut.DropDownButtonWidth = 1;
-                return;
+							toolStripSplitButtonCut.Visible = false;
+	            return;
             }
-            toolStripSplitButtonCut.DropDownButtonWidth = 15;
+						toolStripSplitButtonCut.Visible = true;
 
             var drop = new ToolStripDropDown();
             foreach (var item in _cutSpecialItems)
@@ -343,12 +431,13 @@ namespace Teleopti.Ccc.Win.Common.Controls
         /// </remarks>
         private void PasteDropDownHandler()
         {
+						_internalFlag = true;
             if (_pasteSpecialItems.Count == 0 )
             {
-                toolStripSplitButtonPaste.DropDownButtonWidth = 1;
-                return;
+	            toolStripSplitButtonPaste.Visible = false;
+              return;
             }
-            toolStripSplitButtonPaste.DropDownButtonWidth = 15;
+						toolStripSplitButtonPaste.Visible = true;
             var drop = new ToolStripDropDown();
             foreach (var item in _pasteSpecialItems)
             {
