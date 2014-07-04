@@ -54,7 +54,6 @@ Scenario: The team leader should be able to move an activity
 	| End time   | 14:00 |
 
 	@OnlyRunIfEnabled('MyTeam_MoveActivity_25206')
-	@ignore
 Scenario: The team leader should be able to move an activity by drag and drop
 	Given 'John King' has a person period with
 	| Field      | Value      |
@@ -75,11 +74,10 @@ Scenario: The team leader should be able to move an activity by drag and drop
 	| Activity       | Lunch            |
 	| Start time     | 2013-11-18 12:00 |
 	And I view person schedules move activity form for 'John King' in 'Team green' on '2013-11-18' with selected start minutes of '720'
-	And I move the activity by dnd
-	| Field          | Value            |
-	| Start time     | 2013-11-18 13:00 |
+	And I move the activity by dnd of '60' minutes
 	And I save the shift
 	Then I should see the moved schedule activity details for 'John King' with
 	| Field      | Value |
 	| Color      | Yellow |
 	| Start time | 13:00 |
+	| End time   | 14:00 |

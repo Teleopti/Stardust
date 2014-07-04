@@ -4,14 +4,14 @@
 			<div class="relative">
 
 				<!-- ko with: TimeLine -->
-				<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }">
-					<div class="relative">
-						<div data-bind="foreach: Times">
-							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
-							<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
-						</div>
+					<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime, 'data-minute-length': PixelsPerMinute }">
+							<div class="relative">
+									<div data-bind="foreach: Times">
+											<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
+											<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
+									</div>
+							</div>
 					</div>
-				</div>
 				<!-- /ko -->
 
 				<table class="table table-hover">

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 				var selenium = ((OpenQA.Selenium.Remote.RemoteWebDriver)_browser.Native);
 				var start =selenium.FindElement(By.CssSelector(selector));
 				var end = selenium.FindElement(By.CssSelector(selector));
-				new Actions(selenium).DragAndDropToOffset(start, 200, 200).Perform();
+				new Actions(selenium).DragAndDropToOffset(start, x, y).Perform();
 		}
 		
 		public void AssertExists(string selector)

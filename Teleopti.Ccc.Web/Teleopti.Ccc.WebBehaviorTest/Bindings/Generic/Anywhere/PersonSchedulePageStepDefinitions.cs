@@ -239,11 +239,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".activity-form .start-time", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
 		}
 
-		[When(@"I move the activity by dnd")]
-		public void WhenIMoveTheActivityByDnd(Table scheduledActivityInfotable)
+		[When(@"I move the activity by dnd of '(.*)' minutes")]
+		public void WhenIMoveTheActivityByDnd(string minutes)
 		{
-				var values = scheduledActivityInfotable.CreateInstance<MoveActivityFormInfo>();
-				Browser.Interactions.DragnDrop(".layer.active", 10, 0);
+				var pixelsPerMinute = Browser.Interactions.Javascript("return document.querySelectorAll('.time-line')[0].getAttribute('data-minute-length');");
+				Browser.Interactions.DragnDrop(".layer.active", (int)Math.Round(Convert.ToDouble(pixelsPerMinute), 0) * Convert.ToInt32(minutes), 0);
 		}
 
 		[When(@"I save the shift")]
