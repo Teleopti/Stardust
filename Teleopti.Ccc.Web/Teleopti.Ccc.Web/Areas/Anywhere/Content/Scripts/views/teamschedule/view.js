@@ -58,7 +58,7 @@ define([
 
 			options.renderHtml(view);
 
-			viewModel = new teamScheduleViewModel(options.permissions);
+			viewModel = new teamScheduleViewModel();
 
 			resize.onresize(function () {
 				viewModel.TimeLine.WidthPixels($('.time-line-for').width());
