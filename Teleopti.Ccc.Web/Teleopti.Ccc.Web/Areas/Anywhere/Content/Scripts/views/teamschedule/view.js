@@ -13,6 +13,7 @@ define([
 		'resizeevent',
 		'shared/current-state',
 		'ajax',
+		'toggleQuerier',
 		'select2'
 ], function (
 		ko,
@@ -28,6 +29,7 @@ define([
 		resize,
 		currentState,
 		ajax,
+		toggleQuerier,
 		select2 // not a direct dependency, but still a view dependency
 	) {
 
@@ -47,14 +49,6 @@ define([
 		ajax.ajax({
 			url: 'GroupPage/AvailableGroupPages',
 			data: { date: date },
-			success: callback
-		});
-	};
-
-	var checkToggle = function(toggle, callback) {
-		ajax.ajax({
-			dataType: "json",
-			url: "ToggleHandler/IsEnabled?toggle=" + toggle,
 			success: callback
 		});
 	}
@@ -95,8 +89,10 @@ define([
 
 			viewModel.Loading(true);
 
-			checkToggle("MyTeam_MoveActivity_25206", function (data) {
-				viewModel.moveActivityVisible(data.IsEnabled);
+			toggleQuerier('MyTeam_MoveActivity_25206', {
+				enabled: function() {
+					viewModel.moveActivityVisible(true);
+				}
 			});
 
 			viewModel.SetViewOptions(options);
@@ -134,44 +130,44 @@ define([
 			});
 
 			var skillsDeferred = $.Deferred();
-			checkToggle("MyTeam_StaffingMetrics_25562", function (d) {
-				viewModel.StaffingMetricsVisible(d.IsEnabled);
-				if (!d.IsEnabled) {
-					skillsDeferred.resolve();
-					return;
-				}
-
-				loadSkills(
-					helpers.Date.ToServer(viewModel.Date()),
-					function (data) {
-
-						var currentSkillId = function () {
-							if (options.secondaryId)
-								return options.secondaryId;
-							var skills = viewModel.Skills();
-							if (skills.length > 0)
-								return skills[0].Id;
-							return null;
-						};
-
-						viewModel.SetSkills(data.Skills);
-						viewModel.SelectSkillById(currentSkillId());
-						skillsDeferred.resolve();
-					});
-
-				skillsDeferred.done(function () {
-					if (!viewModel.SelectedSkill())
-						return;
-					viewModel.LoadingStaffingMetrics(true);
-
-					staffingmetricssubscriptions.subscribeDailyStaffingMetrics(
+			toggleQuerier('MyTeam_StaffingMetrics_25562', {
+				enabled: function() {
+					viewModel.StaffingMetricsVisible(true);
+					loadSkills(
 						helpers.Date.ToServer(viewModel.Date()),
-						viewModel.SelectedSkill().Id,
-						function (data) {
-							viewModel.SetDailyMetrics(data);
-							viewModel.LoadingStaffingMetrics(false);
+						function(data) {
+
+							var currentSkillId = function() {
+								if (options.secondaryId)
+									return options.secondaryId;
+								var skills = viewModel.Skills();
+								if (skills.length > 0)
+									return skills[0].Id;
+								return null;
+							};
+
+							viewModel.SetSkills(data.Skills);
+							viewModel.SelectSkillById(currentSkillId());
+							skillsDeferred.resolve();
 						});
-				});
+
+					skillsDeferred.done(function() {
+						if (!viewModel.SelectedSkill())
+							return;
+						viewModel.LoadingStaffingMetrics(true);
+
+						staffingmetricssubscriptions.subscribeDailyStaffingMetrics(
+							helpers.Date.ToServer(viewModel.Date()),
+							viewModel.SelectedSkill().Id,
+							function(data) {
+								viewModel.SetDailyMetrics(data);
+								viewModel.LoadingStaffingMetrics(false);
+							});
+					});
+				},
+				disabled: function() {
+					skillsDeferred.resolve();
+				}
 			});
 
 			return $.when(groupPagesDeferred, groupScheduleDeferred, skillsDeferred)
