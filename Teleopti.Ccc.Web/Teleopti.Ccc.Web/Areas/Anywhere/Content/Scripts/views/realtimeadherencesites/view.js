@@ -6,7 +6,8 @@
 		'subscriptions.adherencesites',
 		'errorview',
 		'ajax',
-		'resources'
+		'resources',
+		'toggleQuerier'
 ], function (
 		ko,
 		justGageBinding,
@@ -15,7 +16,8 @@
 		subscriptions,
 		errorview,
 		ajax,
-		resources
+		resources,
+		toggleQuerier
 	) {
 
 	var viewModel;
@@ -46,17 +48,11 @@
 					checkFeature();
 				}
 			});
+
+			var checkFeature = function () {
+				toggleQuerier('RTA_RtaLastStatesOverview_27789', { enabled: loadLastStates });
+			}
 			
-			var checkFeature = function() {
-				ajax.ajax({
-					url: "ToggleHandler/IsEnabled?toggle=RTA_RtaLastStatesOverview_27789",
-					success: function (data) {
-						if (data.IsEnabled) {
-							loadLastStates();
-						}
-					}
-				});
-			};
 
 			var loadLastStates = function () {
 				for (var i = 0; i < viewModel.sites().length; i++) {
