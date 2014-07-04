@@ -233,7 +233,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         Initialize: function (data, isProcessing) {
         	var self = this;
 	        self.isProcessing(isProcessing);
-            self.Subject(data.Subject == null ? '<br>' : data.Subject);
+            self.Subject(data.Subject == null ? '' : data.Subject);
             self.RequestType(data.Type);
             self.Status(data.Status);
             self.Dates(data.Dates);
