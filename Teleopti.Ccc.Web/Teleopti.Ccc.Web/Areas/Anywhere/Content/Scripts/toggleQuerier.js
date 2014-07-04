@@ -1,14 +1,18 @@
 ﻿define([
 	'ajax'
 ], function (ajax) {
-	return function (toggleName, enabledCallback, disabledCallback) {
+	return function (toggleName, callbacks) {
 		ajax.ajax({
 			url: 'ToggleHandler/IsEnabled?toggle=' + toggleName,
 			success: function (data) {
+				var callback;
 				if (data.IsEnabled) {
-					enabledCallback();
+					callback = callbacks.enabled;
 				} else {
-					disabledCallback();
+					callback = callbacks.disabled;
+				}
+				if (typeof (callback) === typeof (Function)) {
+					callback();
 				}
 			}
 		});
