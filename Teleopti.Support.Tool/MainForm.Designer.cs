@@ -58,6 +58,9 @@ namespace Teleopti.Support.Tool
             // 
             // PTracks
             // 
+            this.PTracks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.PTracks.Controls.Add(this.smoothLabelTools);
             this.PTracks.Controls.Add(this.smoothLabelConnected);
             this.PTracks.Controls.Add(this.buttonVerifyCredentials);
@@ -70,7 +73,6 @@ namespace Teleopti.Support.Tool
             this.PTracks.Controls.Add(this.label1);
             this.PTracks.Controls.Add(this.linkManageDBVersions);
             this.PTracks.Controls.Add(this.LLChangeSettings);
-            this.PTracks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PTracks.Location = new System.Drawing.Point(0, 0);
             this.PTracks.Name = "PTracks";
             this.PTracks.Size = new System.Drawing.Size(670, 320);
@@ -78,6 +80,7 @@ namespace Teleopti.Support.Tool
             // 
             // buttonVerifyCredentials
             // 
+            this.buttonVerifyCredentials.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonVerifyCredentials.Location = new System.Drawing.Point(188, 132);
             this.buttonVerifyCredentials.Name = "buttonVerifyCredentials";
             this.buttonVerifyCredentials.Size = new System.Drawing.Size(66, 22);
@@ -88,6 +91,8 @@ namespace Teleopti.Support.Tool
             // 
             // textBoxPassword
             // 
+            this.textBoxPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxPassword.Location = new System.Drawing.Point(27, 132);
             this.textBoxPassword.Name = "textBoxPassword";
             this.textBoxPassword.PasswordChar = '*';
@@ -98,6 +103,8 @@ namespace Teleopti.Support.Tool
             // 
             // textBoxUserName
             // 
+            this.textBoxUserName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxUserName.Location = new System.Drawing.Point(27, 106);
             this.textBoxUserName.Name = "textBoxUserName";
             this.textBoxUserName.Size = new System.Drawing.Size(155, 20);
@@ -107,6 +114,8 @@ namespace Teleopti.Support.Tool
             // 
             // textBoxServerName
             // 
+            this.textBoxServerName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxServerName.Location = new System.Drawing.Point(27, 57);
             this.textBoxServerName.Name = "textBoxServerName";
             this.textBoxServerName.Size = new System.Drawing.Size(227, 20);
@@ -127,14 +136,16 @@ namespace Teleopti.Support.Tool
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(326, 151);
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Location = new System.Drawing.Point(323, 151);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(341, 13);
+            this.label2.Size = new System.Drawing.Size(344, 12);
             this.label2.TabIndex = 8;
             this.label2.Text = "List and manage your Teleopti WFM databases";
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.Location = new System.Drawing.Point(323, 78);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(344, 46);
@@ -144,6 +155,7 @@ namespace Teleopti.Support.Tool
             // 
             // BClose
             // 
+            this.BClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.BClose.Location = new System.Drawing.Point(605, 381);
             this.BClose.Name = "BClose";
             this.BClose.Size = new System.Drawing.Size(75, 23);
@@ -181,7 +193,7 @@ namespace Teleopti.Support.Tool
             // 
             // smoothLabelVersion
             // 
-            this.smoothLabelVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.smoothLabelVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.smoothLabelVersion.AutoSize = true;
             this.smoothLabelVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.smoothLabelVersion.ForeColor = System.Drawing.Color.Gray;
@@ -206,6 +218,7 @@ namespace Teleopti.Support.Tool
             // 
             // smoothLabelTools
             // 
+            this.smoothLabelTools.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.smoothLabelTools.AutoSize = true;
             this.smoothLabelTools.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.smoothLabelTools.Location = new System.Drawing.Point(306, 28);
@@ -218,11 +231,14 @@ namespace Teleopti.Support.Tool
             // 
             // smoothLabelConnected
             // 
+            this.smoothLabelConnected.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.smoothLabelConnected.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.smoothLabelConnected.ForeColor = System.Drawing.Color.Blue;
-            this.smoothLabelConnected.Location = new System.Drawing.Point(6, 155);
+            this.smoothLabelConnected.Location = new System.Drawing.Point(27, 155);
             this.smoothLabelConnected.Name = "smoothLabelConnected";
-            this.smoothLabelConnected.Size = new System.Drawing.Size(248, 114);
+            this.smoothLabelConnected.Size = new System.Drawing.Size(237, 151);
             this.smoothLabelConnected.TabIndex = 15;
             this.smoothLabelConnected.Text = "Click \"Verify\" to check your credentials";
             this.smoothLabelConnected.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -242,6 +258,7 @@ namespace Teleopti.Support.Tool
             // 
             // linkManageDBVersions
             // 
+            this.linkManageDBVersions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.linkManageDBVersions.AutoSize = true;
             this.linkManageDBVersions.Enabled = false;
             this.linkManageDBVersions.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -257,6 +274,7 @@ namespace Teleopti.Support.Tool
             // 
             // LLChangeSettings
             // 
+            this.LLChangeSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.LLChangeSettings.AutoSize = true;
             this.LLChangeSettings.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LLChangeSettings.Location = new System.Drawing.Point(323, 57);
@@ -280,9 +298,8 @@ namespace Teleopti.Support.Tool
             this.Controls.Add(this.labelHeader);
             this.Controls.Add(this.BClose);
             this.Controls.Add(this.panelContent);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "MainForm";
             this.Text = "Teleopti WFM Support Tool";
             this.Load += new System.EventHandler(this.MainForm_Load);
