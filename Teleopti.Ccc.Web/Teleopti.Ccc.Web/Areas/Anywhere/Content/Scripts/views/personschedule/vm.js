@@ -56,7 +56,6 @@ define([
 				return undefined;
 			var person = lazy(self.Persons())
 				.filter(function(x) {
-					console.log({ checkingId: x.Id, forId: id, conclusion: x.Id == id });
 					return x.Id == id;
 				})
 				.first();
@@ -183,7 +182,7 @@ define([
 					.toArray();
 			}
 			// data might include the same person more than once, with data for more than one day
-			
+			self.Persons([]);
 
 			// add schedule data. a person might get more than 1 schedule added
 			for (var i = 0; i < data.length; i++) {
