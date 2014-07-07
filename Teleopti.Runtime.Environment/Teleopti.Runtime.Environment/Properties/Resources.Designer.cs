@@ -61,6 +61,15 @@ namespace Teleopti.Runtime.Environment.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Teleopti WFM Agent Schedule Messenger.
+        /// </summary>
+        internal static string AgentScheduleMessenger {
+            get {
+                return ResourceManager.GetString("AgentScheduleMessenger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Always on top.
         /// </summary>
         internal static string AlwaysOnTop {

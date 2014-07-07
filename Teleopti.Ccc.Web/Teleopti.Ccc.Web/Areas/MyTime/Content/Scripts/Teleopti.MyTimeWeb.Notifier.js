@@ -104,6 +104,9 @@
 			_webNotification(notifyText);
 			_pinnedNotification();
 			_blinkDocumentTitle(notifyText);
+			if (envelopeNotification) {
+				envelopeNotification(notifyText);
+			}
 		}
 	};
 })(jQuery);
