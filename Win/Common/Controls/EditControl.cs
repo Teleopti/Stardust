@@ -63,24 +63,35 @@ namespace Teleopti.Ccc.Win.Common.Controls
         /// </remarks>
         public event EventHandler<EventArgs> NewClicked;
 
-        public EditControl()
+		private bool _internalFlag;
+
+	    public EditControl()
+	    {
+		    InitializeComponent();
+		    if (!DesignMode) SetTexts();
+
+		    _deleteSpecialItems = new List<ToolStripItem>();
+		    _newSpecialItems = new List<ToolStripItem>();
+		    Load += new EventHandler(NewDeleteControl_Load);
+		    toolStripSplitButtonNew.ButtonClick += new EventHandler(toolStripSplitButtonNew_Click);
+		    toolStripButtonNew.Click += toolStripSplitButtonNew_Click;
+
+		    toolStripSplitButtonDelete.ButtonClick += new EventHandler(toolStripSplitButtonDelete_Click);
+		    toolStripButtonDelete.Click += toolStripSplitButtonDelete_Click;
+
+		    toolStripSplitButtonNew.RightToLeft = RightToLeft.No;
+		    toolStripSplitButtonDelete.RightToLeft = RightToLeft.No;
+
+		    toolStripButtonNew.RightToLeft = RightToLeft.No;
+		    toolStripButtonDelete.RightToLeft = RightToLeft.No;
+
+		    toolStripButtonNew.Visible = false;
+		    toolStripButtonDelete.Visible = false;
+	    }
+
+	    public ToolStripSplitButton ToolStripButtonNew
         {
-            InitializeComponent();
-            if (!DesignMode) SetTexts();
-
-            _deleteSpecialItems = new List<ToolStripItem>();
-            _newSpecialItems = new List<ToolStripItem>();
-            Load += new EventHandler(NewDeleteControl_Load);
-            toolStripButtonNew.ButtonClick += new EventHandler(toolStripButtonNew_Click);
-            toolStripButtonDelete.ButtonClick += new EventHandler(toolStripButtonDelete_Click);
-
-						toolStripButtonNew.RightToLeft = RightToLeft.No;
-						toolStripButtonDelete.RightToLeft = RightToLeft.No;
-        }
-
-        public ToolStripSplitButton ToolStripButtonNew
-        {
-            get { return toolStripButtonNew; }   
+            get { return toolStripSplitButtonNew; }   
         }
 
         public ToolStripPanelItem PanelItem
@@ -93,10 +104,10 @@ namespace Teleopti.Ccc.Win.Common.Controls
             switch (thisButton)
             {
                 case EditAction.Delete:
-                    toolStripButtonDelete.Enabled = enabled;
+                    toolStripSplitButtonDelete.Enabled = enabled;
                     break;
                 case EditAction.New:
-                    toolStripButtonNew.Enabled = enabled;
+                    toolStripSplitButtonNew.Enabled = enabled;
                     break;
             }
         }
@@ -130,7 +141,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
             NewDropdownHandler();
 
         }
-        void toolStripButtonNew_Click(object sender, EventArgs e)
+        void toolStripSplitButtonNew_Click(object sender, EventArgs e)
         {
         	var handler = NewClicked;
             if(handler != null)
@@ -138,7 +149,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
             	handler.Invoke(this,e);
             }
         }
-        void toolStripButtonDelete_Click(object sender, EventArgs e)
+        void toolStripSplitButtonDelete_Click(object sender, EventArgs e)
         {
         	var handler = DeleteClicked;
             if(handler!=null)
@@ -166,19 +177,20 @@ namespace Teleopti.Ccc.Win.Common.Controls
         /// </remarks>
         private void NewDropdownHandler()
         {
+			_internalFlag = true;
             if (_newSpecialItems.Count == 0)
             {
-                toolStripButtonNew.DropDownButtonWidth = 1;
+	            toolStripSplitButtonNew.Visible = false;
                 return;
             }
-            toolStripButtonNew.DropDownButtonWidth = 15;
+			toolStripSplitButtonNew.Visible = true;
             var drop = new ToolStripDropDown();
             foreach (var item in _newSpecialItems)
             {
                 drop.Items.Add(item);
             }
-            toolStripButtonNew.DropDown = drop;
-            toolStripButtonNew.DropDown.ItemClicked += newDropDown_ItemClicked;
+            toolStripSplitButtonNew.DropDown = drop;
+            toolStripSplitButtonNew.DropDown.ItemClicked += newDropDown_ItemClicked;
         }
 
         void newDropDown_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -212,20 +224,21 @@ namespace Teleopti.Ccc.Win.Common.Controls
         /// </remarks>
         private void DeleteDropDownHandler()
         {
+			_internalFlag = true;
             if (_deleteSpecialItems.Count == 0)
             {
-                toolStripButtonDelete.DropDownButtonWidth = 1;
+	            toolStripSplitButtonDelete.Visible = false;
                 return;
             }
-            toolStripButtonDelete.DropDownButtonWidth = 15;
+			toolStripSplitButtonDelete.Visible = true;
 
             var drop = new ToolStripDropDown();
             foreach (var item in _deleteSpecialItems)
             {
                 drop.Items.Add(item);
             }
-            toolStripButtonDelete.DropDown = drop;
-            toolStripButtonDelete.DropDown.ItemClicked += new ToolStripItemClickedEventHandler(DeleteDropDown_ItemClicked);
+            toolStripSplitButtonDelete.DropDown = drop;
+            toolStripSplitButtonDelete.DropDown.ItemClicked += new ToolStripItemClickedEventHandler(DeleteDropDown_ItemClicked);
         }
 
        
@@ -248,9 +261,53 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
         public void CloseDropDown()
         {
-            toolStripButtonNew.DropDown.Close();
-            toolStripButtonDelete.DropDown.Close();
+            toolStripSplitButtonNew.DropDown.Close();
+            toolStripSplitButtonDelete.DropDown.Close();
         }
+
+		private void toolStripSplitButtonNew_VisibleChanged(object sender, EventArgs e)
+		{
+			if (_internalFlag)
+			{
+				toolStripButtonNew.Visible = !((ToolStripSplitButton)sender).Visible;
+				_internalFlag = false;
+				return;
+			}
+			toolStripButtonNew.Visible = ((ToolStripSplitButton)sender).Visible;
+		}
+
+		private void toolStripSplitButtonNew_EnabledChanged(object sender, EventArgs e)
+		{
+			if (_internalFlag)
+			{
+				toolStripButtonNew.Enabled = !((ToolStripSplitButton)sender).Enabled;
+				_internalFlag = false;
+				return;
+			}
+			toolStripButtonNew.Enabled = ((ToolStripSplitButton)sender).Enabled;
+		}
+
+		private void toolStripSplitButtonDelete_VisibleChanged(object sender, EventArgs e)
+		{
+			if (_internalFlag)
+		    {
+				toolStripButtonDelete.Visible = !((ToolStripSplitButton)sender).Visible;
+			    _internalFlag = false;
+			    return;
+		    }
+			toolStripButtonDelete.Visible = ((ToolStripSplitButton)sender).Visible;
+		}
+
+		private void toolStripSplitButtonDelete_EnabledChanged(object sender, EventArgs e)
+		{
+			if (_internalFlag)
+		    {
+				toolStripButtonDelete.Enabled = !((ToolStripSplitButton)sender).Enabled;
+			    _internalFlag = false;
+			    return;
+		    }
+			toolStripButtonDelete.Enabled = ((ToolStripSplitButton)sender).Enabled;
+		}
     }
 
     public enum EditAction
