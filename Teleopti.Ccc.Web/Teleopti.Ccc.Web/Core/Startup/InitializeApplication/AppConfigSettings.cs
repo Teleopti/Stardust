@@ -14,5 +14,10 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		{
 			return ConfigurationManager.AppSettings["MessageBroker"];
 		}
+
+		public string MessageBrokerLongPolling()
+		{
+			return ConfigurationManager.AppSettings["MessageBrokerLongPolling"];
+		}
 	}
 }

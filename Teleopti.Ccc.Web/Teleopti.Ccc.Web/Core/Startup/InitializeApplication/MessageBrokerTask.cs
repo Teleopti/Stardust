@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		{
 			_messageBroker.ConnectionString = ConnectionString();
 			bool useLongPolling;
-			return bool.TryParse(ConfigurationManager.AppSettings["MessageBrokerLongPolling"], out useLongPolling) 
+			return bool.TryParse(_settings.MessageBrokerLongPolling(), out useLongPolling) 
 				? Task.Factory.StartNew(() => _messageBroker.StartMessageBroker(useLongPolling)) 
 				: Task.Factory.StartNew(() => _messageBroker.StartMessageBroker(true));
 		}
