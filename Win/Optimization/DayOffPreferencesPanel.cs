@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Win.Optimization
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
-        private bool validateMinMax(CheckBox checkBoxToUse, NumericUpDown numericUpDownMin, NumericUpDown numericUpDownMax, string message)
+        private bool validateMinMax(CheckBoxAdv checkBoxToUse, NumericUpDown numericUpDownMin, NumericUpDown numericUpDownMax, string message)
         {
             if (checkBoxToUse.Checked)
             {
