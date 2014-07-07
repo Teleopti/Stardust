@@ -393,10 +393,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             }
             catch (OptimisticLockException optLockEx)
             {
-                //rk : temp
-                string objText = "[" + optLockEx.EntityName + ":" + optLockEx.RootId + "]";
-
-                _view.ShowInformationMessage(string.Concat(UserTexts.Resources.SomeoneElseHaveChanged, " ", objText, " ",
+                _view.ShowInformationMessage(string.Concat(UserTexts.Resources.SomeoneElseHaveChanged," ",
                          UserTexts.Resources.YourChangesWillBeDiscardedReloading), "  ");
 
                 _view.ToggleSchedulePartModified(false);
