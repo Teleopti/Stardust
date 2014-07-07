@@ -104,7 +104,7 @@
 			_webNotification(notifyText);
 			_pinnedNotification();
 			_blinkDocumentTitle(notifyText);
-			if (envelopeNotification) {
+			if (typeof envelopeNotification !== 'undefined') {
 				envelopeNotification(notifyText);
 			}
 		}
