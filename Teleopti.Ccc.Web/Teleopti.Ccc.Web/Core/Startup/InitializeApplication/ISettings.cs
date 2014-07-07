@@ -4,5 +4,6 @@
 	{
 		string nhibConfPath();
 		string MessageBroker();
+		string MessageBrokerLongPolling();
 	}
 }

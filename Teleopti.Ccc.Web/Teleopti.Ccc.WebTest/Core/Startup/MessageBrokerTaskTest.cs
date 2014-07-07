@@ -47,11 +47,13 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			var currentHttpContext = CurrentHttpContext("http://localhost", "/");
 			var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
-			var target = new MessageBrokerTask(messageBroker, currentHttpContext, MockRepository.GenerateMock<ISettings>());
+			var settings = MockRepository.GenerateMock<ISettings>();
+			settings.Stub(x => x.MessageBrokerLongPolling()).Return("true");
+			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);
 
 			Task.WaitAll(target.Execute());
 
-			messageBroker.AssertWasCalled(x => x.StartMessageBroker());
+			messageBroker.AssertWasCalled(x => x.StartMessageBroker(true));
 		}
 
 		private static ICurrentHttpContext CurrentHttpContext(string url, string applicationPath)
