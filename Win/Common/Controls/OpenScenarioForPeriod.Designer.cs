@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this.buttonOK = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.comboBoxScenario = new System.Windows.Forms.ComboBox();
+			this.comboBoxScenario = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.labelScenario = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -137,13 +137,13 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			// 
 			this.comboBoxScenario.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxScenario.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.comboBoxScenario.FormattingEnabled = true;
 			this.comboBoxScenario.Location = new System.Drawing.Point(114, 5);
 			this.comboBoxScenario.Margin = new System.Windows.Forms.Padding(4, 5, 5, 5);
 			this.comboBoxScenario.Name = "comboBoxScenario";
 			this.comboBoxScenario.Size = new System.Drawing.Size(155, 21);
 			this.comboBoxScenario.TabIndex = 3;
-			  this.comboBoxScenario.FlatStyle = FlatStyle.Flat;
+			this.comboBoxScenario.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
+			this.comboBoxScenario.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
 			// 
 			// labelScenario
 			// 
@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
         private DateSelectionControl dateSelectionControl1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		  private System .Windows.Forms.ComboBox comboBoxScenario;
+		  private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxScenario;
         private System.Windows.Forms.Label labelScenario;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvShrinkage;

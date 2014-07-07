@@ -56,24 +56,36 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			// ribbonControlAdv1
 			// 
 			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ribbonControlAdv1.HideMenuButtonToolTip = false;
+			this.ribbonControlAdv1.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
 			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
+			this.ribbonControlAdv1.MenuButtonEnabled = true;
+			this.ribbonControlAdv1.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.MenuButtonText = "";
 			this.ribbonControlAdv1.MenuButtonVisible = false;
+			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
 			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
+			this.ribbonControlAdv1.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
 			// 
 			// ribbonControlAdv1.OfficeMenu
 			// 
 			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
 			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
+			this.ribbonControlAdv1.OverFlowButtonToolTip = "Show DropDown";
+			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.ribbonControlAdv1.QuickPanelVisible = false;
+			this.ribbonControlAdv1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.ribbonControlAdv1.SelectedTab = null;
+			this.ribbonControlAdv1.Show2010CustomizeQuickItemDialog = false;
 			this.ribbonControlAdv1.ShowLauncher = false;
+			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = true;
 			this.ribbonControlAdv1.Size = new System.Drawing.Size(467, 33);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "StartMenu";
 			this.ribbonControlAdv1.TabIndex = 2;
 			this.ribbonControlAdv1.Text = "ribbonControlAdv1";
+			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.Black;
 			// 
 			// tableLayoutPanel1
 			// 
@@ -107,8 +119,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			// 
 			// buttonOK
 			// 
-			this.buttonOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonOK.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonOK.BorderStyleAdv = Syncfusion.Windows.Forms.ButtonAdvBorderStyle.Flat;
 			this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.buttonOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonOK.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.buttonOK.ForeColor = System.Drawing.Color.White;
+			this.buttonOK.IsBackStageButton = false;
 			this.buttonOK.Location = new System.Drawing.Point(3, 3);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(75, 23);
@@ -119,8 +138,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			// 
 			// buttonCancel
 			// 
-			this.buttonCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.buttonCancel.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonCancel.BorderStyleAdv = Syncfusion.Windows.Forms.ButtonAdvBorderStyle.Flat;
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonCancel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.buttonCancel.ForeColor = System.Drawing.Color.White;
+			this.buttonCancel.IsBackStageButton = false;
 			this.buttonCancel.Location = new System.Drawing.Point(90, 3);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
