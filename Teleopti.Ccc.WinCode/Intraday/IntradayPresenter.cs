@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                     uow.PersistAll(this);
                 }
             }
-            catch (OptimisticLockException optLockEx)
+            catch (OptimisticLockException)
             {
                 _view.ShowInformationMessage(string.Concat(UserTexts.Resources.SomeoneElseHaveChanged," ",
                          UserTexts.Resources.YourChangesWillBeDiscardedReloading), "  ");
