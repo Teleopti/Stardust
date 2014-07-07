@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Windows.Forms;
 using EO.WebBrowser;
 using Teleopti.Runtime.Environment.Properties;
@@ -57,6 +58,11 @@ namespace Teleopti.Runtime.Environment
 
 		private void WebView_NewWindow(object sender, NewWindowEventArgs e)
 		{
+			if (e.TargetUrl.ToLower().StartsWith("http://wiki.teleopti.com"))
+			{
+				var sInfo = new ProcessStartInfo(e.TargetUrl);
+				Process.Start(sInfo);
+			}
 		}
 
 		private void webView1_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
