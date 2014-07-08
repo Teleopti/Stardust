@@ -20,7 +20,7 @@
 		self.OldStartMinutes = ko.observable();
 		self.ProjectionLength = ko.observable();
 		self.StartTime = ko.observable();
-		self.ActivityId = ko.observable();
+		self.Activities = ko.observableArray();
 		self.WorkingShift = ko.observable();
 		self.layer = ko.observable();
 
@@ -28,6 +28,7 @@
 			self.PersonId(data.PersonId);
 			self.GroupId(data.GroupId);
 			self.ScheduleDate(data.Date);
+		    self.Activities(data.Activities);
 		};
 
 		this.DisplayedStartTime = ko.computed({
@@ -63,7 +64,6 @@
 				self.OldStartMinutes(layer.StartMinutes());
 				self.StartTime(self.getStartTimeFromMinutes(self.OldStartMinutes()));
 				self.ProjectionLength(layer.LengthMinutes());
-				self.ActivityId(layer.ActivityId);
 			}
 		};
 
@@ -87,7 +87,7 @@
 				ScheduleDate: self.ScheduleDate().format(),
 				NewStartTime: self.StartTime().format(),
 				OldStartTime: moment(self.ScheduleDate()).add('minutes', self.OldStartMinutes()).format(),
-				ActivityId: self.ActivityId(),
+				ActivityId: self.getActivityId(),
 				OldProjectionLayerLength: self.ProjectionLength()
 			});
 			ajax.ajax({
@@ -100,6 +100,13 @@
 			}
 			);
 		};
+
+	    this.getActivityId = function() {
+	        var activity = ko.utils.arrayFirst(self.Activities(), function (a) {
+	            return a.Name === self.layer().Description;
+	        });
+            return activity.Id;
+	    };
 
 		this.ErrorMessage = ko.computed(function () {
 			return undefined;

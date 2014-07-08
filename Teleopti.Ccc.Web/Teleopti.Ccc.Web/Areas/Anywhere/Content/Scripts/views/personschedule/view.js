@@ -62,8 +62,8 @@ define([
 			return $.when(personScheduleDeferred, groupScheduleDeferred)
 				.done(function () {
 					viewModel.Loading(false);
-					$('.time-line-for').attr("data-subscription-done", " ");
-					if (viewModel.MovingActivity) { 
+					if (viewModel.MovingActivity()) {
+					    $('.time-line-for').attr("data-subscription-done", " ");
 						// bind events
 						var activeLayer = $(".layer.active");
 						if (activeLayer.length !== 0) {
