@@ -5,9 +5,11 @@
 	</ul>
 	<!-- ko if: agentStatesForMultipleTeams()-->
 	<div align="right">
-		<button data-bind="click: openSelectedTeams">Open selected teams</button>
+		<button class="btn-xs" data-bind="click: openSelectedTeams">Open selected teams</button>
 	</div>
+	<br />
 	<!-- /ko -->
+
 	<div class="row" data-bind="foreach: teams">
 		<div data-bind="if: NumberOfAgents > 0">
 			<div class="col-md-4">
