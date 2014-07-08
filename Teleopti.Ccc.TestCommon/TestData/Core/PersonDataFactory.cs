@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Setups;
@@ -45,10 +46,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			_userDataSetups.Add(setup);
 		}
 
+
 		public IEnumerable<object> Applied { get { return _userSetups.Cast<object>().Union(_userDataSetups); } }
 
 		public string LogOnName { get { return Person.ApplicationAuthenticationInfo.ApplicationLogOnName; } }
 		public IPerson Person { get; private set; }
 		public CultureInfo Culture { get { return Person.PermissionInformation.Culture(); } }
+	}
+
+	public class LeavingDateForUser : IUserSetup
+	{
+		public DateTime LeavingDate { get; set; }
+
+		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		{
+			user.TerminatePerson(new DateOnly(LeavingDate), new PersonAccountUpdaterDummy());
+		}
 	}
 }
