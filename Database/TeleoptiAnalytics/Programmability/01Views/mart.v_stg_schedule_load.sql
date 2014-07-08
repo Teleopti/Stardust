@@ -51,7 +51,7 @@ ON
 				(f.schedule_date_local	>= dp.valid_from_date_local)
 
 			AND
-				(f.schedule_date_local < dp.valid_to_date_local)
+				(f.schedule_date_local < DATEADD(DAY,1,dp.valid_to_date_local)) --include everything on LeavingDate
 		)
 INNER JOIN
 	mart.dim_date		dl
