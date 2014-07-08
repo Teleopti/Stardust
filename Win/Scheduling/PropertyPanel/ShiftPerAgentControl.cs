@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			gridControl1.CellModels.Add("IntegerReadOnlyCell", initializeNumericNoDecimalsReadOnlyCell());
 			gridControl1.ResetVolatileData();
 		}
-
+		
 		public void SetModel(IShiftCategoryDistributionModel model)
 		{
 			if (_presenter == null)

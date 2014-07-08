@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.BackColor = ColorHelper.GridControlGridExteriorColor();
 			this.tabControlShiftCategoryDistribution = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPagePerDate = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.shiftPerDateControl1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.ShiftPerDateControl();
@@ -51,29 +50,31 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			// 
 			// tabControlShiftCategoryDistribution
 			// 
-			this.tabControlShiftCategoryDistribution.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.tabControlShiftCategoryDistribution.BeforeTouchSize = new System.Drawing.Size(352, 530);
+			this.tabControlShiftCategoryDistribution.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlShiftCategoryDistribution.Controls.Add(this.tabPagePerDate);
 			this.tabControlShiftCategoryDistribution.Controls.Add(this.tabPagePerAgent);
 			this.tabControlShiftCategoryDistribution.Controls.Add(this.tabPageDistribution);
 			this.tabControlShiftCategoryDistribution.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControlShiftCategoryDistribution.FixedSingleBorderColor = System.Drawing.Color.White;
+			this.tabControlShiftCategoryDistribution.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlShiftCategoryDistribution.Location = new System.Drawing.Point(0, 0);
 			this.tabControlShiftCategoryDistribution.Name = "tabControlShiftCategoryDistribution";
 			this.tabControlShiftCategoryDistribution.Size = new System.Drawing.Size(352, 530);
-			this.tabControlShiftCategoryDistribution.TabGap = 10;
 			this.tabControlShiftCategoryDistribution.TabIndex = 0;
-			this.tabControlShiftCategoryDistribution.TabPanelBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(216)))), ((int)(((byte)(237)))));
-			this.tabControlShiftCategoryDistribution.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererOffice2007);
+			this.tabControlShiftCategoryDistribution.TabPanelBackColor = System.Drawing.Color.White;
+			this.tabControlShiftCategoryDistribution.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			// 
 			// tabPagePerDate
 			// 
 			this.tabPagePerDate.Controls.Add(this.shiftPerDateControl1);
 			this.tabPagePerDate.Image = null;
 			this.tabPagePerDate.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPagePerDate.Location = new System.Drawing.Point(1, 22);
+			this.tabPagePerDate.Location = new System.Drawing.Point(0, 21);
 			this.tabPagePerDate.Name = "tabPagePerDate";
 			this.tabPagePerDate.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPagePerDate.ShowCloseButton = true;
-			this.tabPagePerDate.Size = new System.Drawing.Size(349, 506);
+			this.tabPagePerDate.Size = new System.Drawing.Size(352, 509);
 			this.tabPagePerDate.TabIndex = 1;
 			this.tabPagePerDate.Text = "xxPerDate";
 			this.tabPagePerDate.ThemesEnabled = false;
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.shiftPerDateControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.shiftPerDateControl1.Location = new System.Drawing.Point(3, 3);
 			this.shiftPerDateControl1.Name = "shiftPerDateControl1";
-			this.shiftPerDateControl1.Size = new System.Drawing.Size(343, 500);
+			this.shiftPerDateControl1.Size = new System.Drawing.Size(346, 503);
 			this.shiftPerDateControl1.TabIndex = 0;
 			// 
 			// tabPagePerAgent
@@ -149,6 +150,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			// 
 			// perShiftCategoryChartControl1
 			// 
+			this.perShiftCategoryChartControl1.BackColor = System.Drawing.Color.White;
 			this.perShiftCategoryChartControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.perShiftCategoryChartControl1.Location = new System.Drawing.Point(3, 3);
 			this.perShiftCategoryChartControl1.Name = "perShiftCategoryChartControl1";
@@ -159,6 +161,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.tabControlShiftCategoryDistribution);
 			this.Name = "ShiftCategoryDistributionControl";
 			this.Size = new System.Drawing.Size(352, 530);

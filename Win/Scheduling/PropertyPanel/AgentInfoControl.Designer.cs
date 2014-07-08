@@ -108,7 +108,9 @@
 			// 
 			// tabControlAgentInfo
 			// 
-			this.tabControlAgentInfo.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.tabControlAgentInfo.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.tabControlAgentInfo.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
+			this.tabControlAgentInfo.BackColor = System.Drawing.Color.White;
 			this.tabControlAgentInfo.BeforeTouchSize = new System.Drawing.Size(453, 462);
 			this.tabControlAgentInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlAgentInfo.Controls.Add(this.tabPageAdvSchedulePeriod);
@@ -117,13 +119,15 @@
 			this.tabControlAgentInfo.Controls.Add(this.tabPageAdvPerson);
 			this.tabControlAgentInfo.Controls.Add(this.tabPageFairness);
 			this.tabControlAgentInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControlAgentInfo.FixedSingleBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.tabControlAgentInfo.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tabControlAgentInfo.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlAgentInfo.Location = new System.Drawing.Point(0, 0);
 			this.tabControlAgentInfo.Name = "tabControlAgentInfo";
 			this.tabControlAgentInfo.Size = new System.Drawing.Size(453, 462);
-			this.tabControlAgentInfo.TabGap = 10;
 			this.tabControlAgentInfo.TabIndex = 1;
-			this.tabControlAgentInfo.TabPanelBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(216)))), ((int)(((byte)(237)))));
-			this.tabControlAgentInfo.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererOffice2007);
+			this.tabControlAgentInfo.TabPanelBackColor = System.Drawing.Color.White;
+			this.tabControlAgentInfo.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			this.tabControlAgentInfo.SelectedIndexChanged += new System.EventHandler(this.tabControlAgentInfo_SelectedIndexChanged);
 			// 
 			// tabPageAdvSchedulePeriod
@@ -359,7 +363,7 @@
 			this.labelMissingWorkflowControlSet.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.labelMissingWorkflowControlSet.Location = new System.Drawing.Point(3, 0);
 			this.labelMissingWorkflowControlSet.Name = "labelMissingWorkflowControlSet";
-			this.labelMissingWorkflowControlSet.Size = new System.Drawing.Size(202, 47);
+			this.labelMissingWorkflowControlSet.Size = new System.Drawing.Size(201, 47);
 			this.labelMissingWorkflowControlSet.TabIndex = 1;
 			this.labelMissingWorkflowControlSet.Text = "xxMissingWorkflowControlSet";
 			this.labelMissingWorkflowControlSet.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

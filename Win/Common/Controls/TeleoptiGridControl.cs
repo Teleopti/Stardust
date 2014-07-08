@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
         protected void TriggerDataToChart(GridRangeInfo gridRangeInfo)
         {
-        	var handler = DataToChart;
+			  var handler = DataToChart;
             if (handler != null &&
                 gridRangeInfo.Height==1)
             {
@@ -99,7 +99,9 @@ namespace Teleopti.Ccc.Win.Common.Controls
         {
             initializeDefaultValues();
             initializeGrid();
-            
+				GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
+				GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
+				MetroScrollBars = true;
             ClipboardPaste += TeleoptiGridControl_ClipboardPaste;
             KeyDown += TeleoptiGridControl_KeyDown;
         }
