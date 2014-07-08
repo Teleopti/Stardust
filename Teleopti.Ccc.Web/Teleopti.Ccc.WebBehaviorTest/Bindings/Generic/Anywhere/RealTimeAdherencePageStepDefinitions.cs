@@ -65,6 +65,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.Javascript(setJsDate);
 		}
 
+		
+		[When(@"I click the site checkbox for '(.*)'")]
+		[When(@"I click the team checkbox for '(.*)'")]
+		public void WhenIClickTheCheckboxFor(string name)
+		{
+			Browser.Interactions.ClickUsingJQuery(string.Format(".checkbox[name='{0}']", name));
+		}
+
 		private static void assertRealTimeAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)
 		{
 			const string selector = ".agent-name:contains('{0}') ~ td:contains('{1}')";

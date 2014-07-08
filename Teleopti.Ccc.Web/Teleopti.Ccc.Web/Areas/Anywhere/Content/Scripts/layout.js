@@ -151,6 +151,11 @@ define([
 			function(view, multipleTeams) {
 				_displayView({ view: view, id: multipleTeams });
 			});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(MultipleSites)$', "i"),
+			function(view, multipleTeams) {
+				_displayView({ view: view, id: multipleTeams });
+			});
 		crossroads.addRoute('{view}', function (view) {
 			_displayView({ view: view });
 		});

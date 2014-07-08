@@ -2,13 +2,17 @@
 		'knockout',
 		'lazy',
 		'views/realtimeadherencesites/site',
-		'resources'
+		'resources',
+		'amplify',
+		'navigation'
 ],
 	function (
 		ko,
 		lazy,
 		site,
-		resources
+		resources,
+		amplify,
+		navigation
 	) {
 		return function () {
 
@@ -17,7 +21,8 @@
 			that.resources = resources;
 
 			that.sites = ko.observableArray();
-
+			that.sitesToOpen = ko.observableArray();
+			that.agentStatesForMultipleSites = ko.observable(true);
 			var siteForId = function (id) {
 				if (!id)
 					return undefined;
@@ -34,7 +39,7 @@
 					that.sites.push(newSite);
 				}
 			};
-
+			
 			that.updateFromNotification = function (notification) {
 				
 				var data = JSON.parse(notification.BinaryData);
@@ -48,6 +53,11 @@
 					existingSite.OutOfAdherence(data.OutOfAdherence);
 					existingSite.hasBeenUpdated(true);
 				}
+			};
+
+			that.openSelectedSites = function() {
+				amplify.store("MultipleSites", that.sitesToOpen());
+				navigation.GotoRealTimeAdherenceMultipleSiteDetails('MultipleSites');
 			};
 
 			return that;
