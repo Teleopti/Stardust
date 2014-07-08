@@ -2,60 +2,60 @@
 @using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 @section head {
-    @Styles.Render(BundleScripts.SignInCss)
-    @Scripts.Render(BundleScripts.SignInJs)
+	@Styles.Render(BundleScripts.SignInCss)
+	@Scripts.Render(BundleScripts.SignInJs)
 
-   <script type="text/javascript">
-        var authentication;
-        $(function () {
-            Teleopti.Start.Authentication.Settings = {
-                baseUrl: '@Url.Content("~/")'
+	<script type="text/javascript">
+		var authentication;
+		$(function () {
+			Teleopti.Start.Authentication.Settings = {
+				baseUrl: '@Url.Content("~/")'
 			};
-		    authentication = new Teleopti.Start.Authentication.Init();
+			authentication = new Teleopti.Start.Authentication.Init();
 		});
-    </script>
+	</script>
 }
 
 <section id="page-signin">
-    <div class="container" id="Login-container">
-        <div id="Exception-div" class="alert alert-danger hide">
-            <button type="button" class="close" data-dismiss="alert">×</button>
-            <span id="Exception-message"></span>
-        </div>
-        <div class="login-logo">
+	<div class="container" id="Login-container">
+		<div id="Exception-div" class="alert alert-danger hide">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<span id="Exception-message"></span>
+		</div>
+		<div class="login-logo">
 			<div><h1 style="color: #003366; font-family: Calibri;">Teleopti WFM</h1></div>
-        </div>
+		</div>
 
-        <div id="view" class="login-form"></div>
+		<div id="view" class="login-form"></div>
 
-        <div id="signin">
+		<div id="signin">
 
-            <div id="DataSources" data-bind="visible: HasDataSources, foreach: DataSources" class="list-group">
-                <a href="#" class="list-group-item" data-bind="click: $parent.SignIn">
-                    <span data-bind="text: Name"></span>
-                </a>
-            </div>
-            <div id="Signin-error" 
-					 class="alert alert-warning" 
-					 data-bind="visible: HasErrorMessage, text: ErrorMessage"
-                     data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase"
-					 data-nodatasourcetext="@Resources.NoDatasource">
-                </div>
+			<div id="DataSources" data-bind="visible: DataSourcesVisible, foreach: DataSources" class="list-group">
+				<a href="#" class="list-group-item" data-bind="click: $parent.SignIn">
+					<span data-bind="text: Name"></span>
+				</a>
+			</div>
+			<div id="Signin-error"
+				 class="alert alert-warning"
+				 data-bind="visible: HasErrorMessage, text: ErrorMessage"
+				 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase"
+				 data-nodatasourcetext="@Resources.NoDatasource">
+			</div>
 
-                <img data-bind="visible: Ajax.Active" src="@Url.Content("~/Areas/Start/Content/Images/ajax-loader-small.gif")" alt="..." />
-        </div>
+			<img data-bind="visible: Ajax.Active" src="@Url.Content("~/Areas/Start/Content/Images/ajax-loader-small.gif")" alt="..." />
+		</div>
 
-        <div id="businessunit">
-            <div id="BusinessUnits" data-bind="foreach: BusinessUnits" class="list-group">
-                <a href="#" class="list-group-item" data-bind="text: Name, click: Select"></a>
-            </div>
-        </div>
+		<div id="businessunit">
+			<div id="BusinessUnits" data-bind="foreach: BusinessUnits" class="list-group">
+				<a href="#" class="list-group-item" data-bind="text: Name, click: Select"></a>
+			</div>
+		</div>
 
-        <div id="menu">
-            <div data-bind="foreach: Applications" class="list-group">
-                <a href="#" class="list-group-item" data-bind="attr: { href: Url }, text: Name"></a>
-            </div>
-        </div>
-    </div>
+		<div id="menu">
+			<div data-bind="foreach: Applications" class="list-group">
+				<a href="#" class="list-group-item" data-bind="attr: { href: Url }, text: Name"></a>
+			</div>
+		</div>
+	</div>
 </section>
 

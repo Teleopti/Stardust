@@ -11,8 +11,8 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 
 	this.Ajax = new Teleopti.Start.Authentication.JQueryAjaxViewModel();
 	
-	this.HasDataSources = ko.computed(function() {
-		return self.DataSources().length > 0;
+	this.DataSourcesVisible = ko.computed(function () {
+		return self.DataSources().length > 1;
 	});
 
 	this.LoadDataSources = function () {
