@@ -6,7 +6,8 @@
 	'errorview',
 	'ajax',
 	'resources',
-	'amplify'
+	'amplify',
+	'toggleQuerier'
 ], function (
 	ko,
 	view,
@@ -15,7 +16,8 @@
 	errorview,
 	ajax,
 	resources,
-	amplify
+	amplify,
+	toggleQuerier
 ) {
 	var viewModel;
 	return {
@@ -69,16 +71,12 @@
 			}
 
 			if (options.id === 'MultipleTeams') {
-				ajax.ajax({
-					url: "ToggleHandler/IsEnabled?toggle=RTA_ViewAgentsForMultipleTeams_28967",
-					success: function (data) {
-						if (data.IsEnabled) {
-							var teams = amplify.store('MultipleTeams');
-							for (var i = 0; i < teams.length; i++) {
-								populateViewModel(teams[i]);
-							}
-						};
-						return;
+				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', {
+					enabled: function() {
+						var teams = amplify.store('MultipleTeams');
+						for (var i = 0; i < teams.length; i++) {
+							populateViewModel(teams[i]);
+						}
 					}
 				});
 			} else {
