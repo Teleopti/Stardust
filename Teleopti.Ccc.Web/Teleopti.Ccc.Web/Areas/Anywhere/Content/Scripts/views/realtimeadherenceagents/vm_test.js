@@ -146,6 +146,7 @@
 				vm.fillAgents([agent1, agent2]);
 				vm.fillAgentsStates([agent1State, agent2State]);
 				vm.filter("Kurt");
+				assert.equals(vm.filteredAgents().length, 1);
 				assert.equals(vm.filteredAgents()[0].Name, "Kurt");
 			}
 		});
