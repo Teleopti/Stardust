@@ -90,7 +90,8 @@ namespace Teleopti.Analytics.Parameters
 			regexp.Append(@"^\d{1,2}(\-|\/|\.)\d{2}(\-|\/|\.)\d{1,2}$|");
             regexp.Append(@"^\d{1,2}(\-|\/|\.)\d{4}(\-|\/|\.)\d{1,2}$|");
             regexp.Append(@"^\d{4}(.)\s\d{1,2}(.)\s\d{1,2}(.)$|"); // Supports Hungarian hopefully...
-            regexp.Append(@"^\d\d?\.\d\d?\.\d\d\d?\d? ?г.$"); // Supports Bulgarian hopefully...the r is not r it is some unicode character
+			regexp.Append(@"^\d{1,2}(\.)\d{1,2}(\.)\d{4}(\.)$|"); // Supports Croatian format (hr-HR)
+			regexp.Append(@"^\d\d?\.\d\d?\.\d\d\d?\d? ?г.$"); // Supports Bulgarian hopefully...the r is not r it is some unicode character
 
 
 			_dateValidator.ValidationExpression=regexp.ToString();
