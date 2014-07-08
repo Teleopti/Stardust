@@ -553,7 +553,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 
         public static GridVisualStyles GridVisualStyle
         {
-            get { return GridVisualStyles.Office2007Blue; }
+            get { return GridVisualStyles.Metro ; }
         }
 
         public static Color ScheduleControlClickedItemBorder

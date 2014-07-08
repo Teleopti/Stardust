@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		private void InitializeComponent()
 		{
-			this.BackColor = ColorHelper.GridControlGridExteriorColor();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.comboBoxAdvActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.perShiftCategoryChart1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.PerShiftCategoryChart();
@@ -47,6 +46,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.tableLayoutPanel1.Controls.Add(this.perShiftCategoryChart1, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
@@ -58,13 +58,14 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			// 
 			// comboBoxAdvActivity
 			// 
-			this.comboBoxAdvActivity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxAdvActivity.BackColor = System.Drawing.Color.White;
+			this.comboBoxAdvActivity.BeforeTouchSize = new System.Drawing.Size(160, 21);
 			this.comboBoxAdvActivity.Dock = System.Windows.Forms.DockStyle.Left;
 			this.comboBoxAdvActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvActivity.Location = new System.Drawing.Point(3, 33);
 			this.comboBoxAdvActivity.Name = "comboBoxAdvActivity";
 			this.comboBoxAdvActivity.Size = new System.Drawing.Size(160, 21);
-			this.comboBoxAdvActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+			this.comboBoxAdvActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvActivity.TabIndex = 15;
 			this.comboBoxAdvActivity.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvActivitySelectedIndexChanged);
 			// 
@@ -76,6 +77,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.perShiftCategoryChart1.ChartArea.CursorReDraw = false;
 			this.perShiftCategoryChart1.ChartAreaMargins = new Syncfusion.Windows.Forms.Chart.ChartMargins(5, 5, 5, 5);
 			this.perShiftCategoryChart1.ChartInterior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(194)))), ((int)(((byte)(229))))), System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(236)))), ((int)(((byte)(250))))));
+			this.perShiftCategoryChart1.DataSourceName = "";
 			this.perShiftCategoryChart1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.perShiftCategoryChart1.ElementsSpacing = 1;
 			this.perShiftCategoryChart1.IsWindowLess = false;
@@ -111,12 +113,13 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(3, 8);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(80, 13);
+			this.label1.Size = new System.Drawing.Size(87, 13);
 			this.label1.TabIndex = 17;
 			this.label1.Text = "xxShiftCategory";
 			// 
 			// PerShiftCategoryChartControl
 			// 
+			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "PerShiftCategoryChartControl";
 			this.Size = new System.Drawing.Size(258, 267);
