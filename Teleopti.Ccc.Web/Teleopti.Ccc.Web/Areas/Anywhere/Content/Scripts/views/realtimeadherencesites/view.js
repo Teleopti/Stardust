@@ -46,6 +46,7 @@
 				success: function(data) {
 					viewModel.fill(data);
 					checkFeature();
+					checkAgentsForMultipleTeamsFeature();
 				}
 			});
 
@@ -53,7 +54,6 @@
 				toggleQuerier('RTA_RtaLastStatesOverview_27789', { enabled: loadLastStates });
 			}
 			
-
 			var loadLastStates = function () {
 				for (var i = 0; i < viewModel.sites().length; i++) {
 					(function(s) {
@@ -66,6 +66,10 @@
 					})(viewModel.sites()[i]);
 				}
 			};
+
+			var checkAgentsForMultipleTeamsFeature = function () {
+				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', { enabled: function () { viewModel.agentStatesForMultipleSites(true); } });
+			}
 
 			subscriptions.subscribeAdherence(function (notification) {
 				viewModel.updateFromNotification(notification);

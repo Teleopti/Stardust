@@ -22,7 +22,7 @@
 
 			that.sites = ko.observableArray();
 			that.sitesToOpen = ko.observableArray();
-			that.agentStatesForMultipleSites = ko.observable(true);
+			that.agentStatesForMultipleSites = ko.observable();
 			var siteForId = function (id) {
 				if (!id)
 					return undefined;
