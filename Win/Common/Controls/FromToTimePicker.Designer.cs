@@ -58,42 +58,47 @@
 			// 
 			// office2007OutlookTimePickerStartTime
 			// 
-			this.office2007OutlookTimePickerStartTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.office2007OutlookTimePickerStartTime.BackColor = System.Drawing.Color.White;
+			this.office2007OutlookTimePickerStartTime.BeforeTouchSize = new System.Drawing.Size(79, 21);
 			this.office2007OutlookTimePickerStartTime.BindableTimeValue = System.TimeSpan.Parse("20:07:00");
 			this.office2007OutlookTimePickerStartTime.Dock = System.Windows.Forms.DockStyle.Left;
 			this.office2007OutlookTimePickerStartTime.Location = new System.Drawing.Point(3, 3);
 			this.office2007OutlookTimePickerStartTime.MaxValue = System.TimeSpan.Parse("2.00:00:00");
 			this.office2007OutlookTimePickerStartTime.MinValue = System.TimeSpan.Parse("00:00:00");
 			this.office2007OutlookTimePickerStartTime.Name = "office2007OutlookTimePickerStartTime";
-			this.office2007OutlookTimePickerStartTime.Size = new System.Drawing.Size(79, 19);
-			this.office2007OutlookTimePickerStartTime.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+			this.office2007OutlookTimePickerStartTime.Size = new System.Drawing.Size(79, 21);
+			this.office2007OutlookTimePickerStartTime.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.office2007OutlookTimePickerStartTime.TabIndex = 0;
 			this.office2007OutlookTimePickerStartTime.Text = "office2007OutlookTimePicker";
 			// 
 			// office2007OutlookTimePickerEndTime
 			// 
-			this.office2007OutlookTimePickerEndTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.office2007OutlookTimePickerEndTime.BackColor = System.Drawing.Color.White;
+			this.office2007OutlookTimePickerEndTime.BeforeTouchSize = new System.Drawing.Size(79, 21);
 			this.office2007OutlookTimePickerEndTime.BindableTimeValue = System.TimeSpan.Parse("00:00:00");
 			this.office2007OutlookTimePickerEndTime.Dock = System.Windows.Forms.DockStyle.Left;
 			this.office2007OutlookTimePickerEndTime.Location = new System.Drawing.Point(88, 3);
 			this.office2007OutlookTimePickerEndTime.MaxValue = System.TimeSpan.Parse("2.00:00:00");
 			this.office2007OutlookTimePickerEndTime.MinValue = System.TimeSpan.Parse("00:00:00");
 			this.office2007OutlookTimePickerEndTime.Name = "office2007OutlookTimePickerEndTime";
-			this.office2007OutlookTimePickerEndTime.Size = new System.Drawing.Size(79, 19);
-			this.office2007OutlookTimePickerEndTime.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+			this.office2007OutlookTimePickerEndTime.Size = new System.Drawing.Size(79, 21);
+			this.office2007OutlookTimePickerEndTime.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.office2007OutlookTimePickerEndTime.TabIndex = 1;
 			this.office2007OutlookTimePickerEndTime.Text = "office2007OutlookTimePicker2";
 			// 
 			// checkBoxAdvWholeDay
 			// 
+			this.checkBoxAdvWholeDay.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.checkBoxAdvWholeDay.Dock = System.Windows.Forms.DockStyle.Left;
+			this.checkBoxAdvWholeDay.DrawFocusRectangle = false;
 			this.checkBoxAdvWholeDay.Location = new System.Drawing.Point(173, 3);
+			this.checkBoxAdvWholeDay.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvWholeDay.Name = "checkBoxAdvWholeDay";
 			this.checkBoxAdvWholeDay.Size = new System.Drawing.Size(112, 21);
+			this.checkBoxAdvWholeDay.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAdvWholeDay.TabIndex = 2;
 			this.checkBoxAdvWholeDay.Text = "xxNextDay";
-			this.checkBoxAdvWholeDay.ThemesEnabled = true;
-			this.checkBoxAdvWholeDay.WrapText = false;
+			this.checkBoxAdvWholeDay.ThemesEnabled = false;
 			// 
 			// FromToTimePicker
 			// 

@@ -41,33 +41,41 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
-			this.checkBox2 = new System.Windows.Forms.CheckBox();
+			this.checkBox1 = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBox2 = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-			this.checkBoxKeepShifts = new System.Windows.Forms.CheckBox();
+			this.checkBoxKeepShifts = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.twoListSelectorActivities = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.fromToTimePicker1 = new Teleopti.Ccc.Win.Common.Controls.FromToTimePicker();
-			this.checkBoxBetween = new System.Windows.Forms.CheckBox();
+			this.checkBoxBetween = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.comboBoxAdvActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.checkBoxKeepShiftCategories = new System.Windows.Forms.CheckBox();
+			this.checkBoxKeepShiftCategories = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.label1 = new System.Windows.Forms.Label();
-			this.numericUpDownKeepShifts = new System.Windows.Forms.NumericUpDown();
-			this.checkBoxKeepStartTimes = new System.Windows.Forms.CheckBox();
-			this.checkBoxKeepEndTimes = new System.Windows.Forms.CheckBox();
-			this.checkBoxKeepActivityLength = new System.Windows.Forms.CheckBox();
+			this.numericUpDownKeepShifts = new Syncfusion.Windows.Forms.Tools.NumericUpDownExt();
+			this.checkBoxKeepStartTimes = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxKeepEndTimes = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxKeepActivityLength = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanelTagWith.SuspendLayout();
 			this.tableLayoutPanel7.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.checkBox1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBox2)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepShifts)).BeginInit();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.groupBox2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxBetween)).BeginInit();
 			this.groupBox1.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvActivity)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepShiftCategories)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownKeepShifts)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepStartTimes)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepEndTimes)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepActivityLength)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -149,23 +157,25 @@
 			// 
 			// checkBox1
 			// 
-			this.checkBox1.AutoSize = true;
+			this.checkBox1.BeforeTouchSize = new System.Drawing.Size(119, 17);
 			this.checkBox1.Location = new System.Drawing.Point(15, 23);
+			this.checkBox1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new System.Drawing.Size(119, 17);
 			this.checkBox1.TabIndex = 8;
 			this.checkBox1.Text = "xxScheduleOnlyAvailabilityDays";
-			this.checkBox1.UseVisualStyleBackColor = true;
+			this.checkBox1.ThemesEnabled = false;
 			// 
 			// checkBox2
 			// 
-			this.checkBox2.AutoSize = true;
+			this.checkBox2.BeforeTouchSize = new System.Drawing.Size(104, 17);
 			this.checkBox2.Location = new System.Drawing.Point(3, 3);
+			this.checkBox2.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBox2.Name = "checkBox2";
 			this.checkBox2.Size = new System.Drawing.Size(104, 17);
 			this.checkBox2.TabIndex = 7;
 			this.checkBox2.Text = "xxUseAvailability";
-			this.checkBox2.UseVisualStyleBackColor = true;
+			this.checkBox2.ThemesEnabled = false;
 			// 
 			// tableLayoutPanel3
 			// 
@@ -187,14 +197,17 @@
 			// 
 			// checkBoxKeepShifts
 			// 
-			this.checkBoxKeepShifts.AutoSize = true;
+			this.checkBoxKeepShifts.BeforeTouchSize = new System.Drawing.Size(232, 19);
 			this.checkBoxKeepShifts.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.checkBoxKeepShifts.DrawFocusRectangle = false;
 			this.checkBoxKeepShifts.Location = new System.Drawing.Point(3, 3);
+			this.checkBoxKeepShifts.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxKeepShifts.Name = "checkBoxKeepShifts";
 			this.checkBoxKeepShifts.Size = new System.Drawing.Size(232, 19);
+			this.checkBoxKeepShifts.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxKeepShifts.TabIndex = 9;
 			this.checkBoxKeepShifts.Text = "xxShifts";
-			this.checkBoxKeepShifts.UseVisualStyleBackColor = true;
+			this.checkBoxKeepShifts.ThemesEnabled = false;
 			this.checkBoxKeepShifts.CheckedChanged += new System.EventHandler(this.checkBoxKeepShifts_CheckedChanged);
 			// 
 			// tableLayoutPanel2
@@ -248,13 +261,16 @@
 			// 
 			// checkBoxBetween
 			// 
-			this.checkBoxBetween.AutoSize = true;
+			this.checkBoxBetween.BeforeTouchSize = new System.Drawing.Size(99, 17);
+			this.checkBoxBetween.DrawFocusRectangle = false;
 			this.checkBoxBetween.Location = new System.Drawing.Point(6, 15);
+			this.checkBoxBetween.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxBetween.Name = "checkBoxBetween";
 			this.checkBoxBetween.Size = new System.Drawing.Size(99, 17);
+			this.checkBoxBetween.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxBetween.TabIndex = 5;
 			this.checkBoxBetween.Text = "xxAlterBetween";
-			this.checkBoxBetween.UseVisualStyleBackColor = true;
+			this.checkBoxBetween.ThemesEnabled = false;
 			// 
 			// groupBox1
 			// 
@@ -295,26 +311,30 @@
 			// 
 			// comboBoxAdvActivity
 			// 
-			this.comboBoxAdvActivity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxAdvActivity.BackColor = System.Drawing.Color.White;
+			this.comboBoxAdvActivity.BeforeTouchSize = new System.Drawing.Size(152, 21);
 			this.tableLayoutPanel5.SetColumnSpan(this.comboBoxAdvActivity, 2);
 			this.comboBoxAdvActivity.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxAdvActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvActivity.Location = new System.Drawing.Point(241, 103);
 			this.comboBoxAdvActivity.Name = "comboBoxAdvActivity";
 			this.comboBoxAdvActivity.Size = new System.Drawing.Size(152, 21);
-			this.comboBoxAdvActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+			this.comboBoxAdvActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvActivity.TabIndex = 26;
 			// 
 			// checkBoxKeepShiftCategories
 			// 
-			this.checkBoxKeepShiftCategories.AutoSize = true;
+			this.checkBoxKeepShiftCategories.BeforeTouchSize = new System.Drawing.Size(232, 19);
 			this.checkBoxKeepShiftCategories.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.checkBoxKeepShiftCategories.DrawFocusRectangle = false;
 			this.checkBoxKeepShiftCategories.Location = new System.Drawing.Point(3, 28);
+			this.checkBoxKeepShiftCategories.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxKeepShiftCategories.Name = "checkBoxKeepShiftCategories";
 			this.checkBoxKeepShiftCategories.Size = new System.Drawing.Size(232, 19);
+			this.checkBoxKeepShiftCategories.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxKeepShiftCategories.TabIndex = 22;
 			this.checkBoxKeepShiftCategories.Text = "xxShiftCategories";
-			this.checkBoxKeepShiftCategories.UseVisualStyleBackColor = true;
+			this.checkBoxKeepShiftCategories.ThemesEnabled = false;
 			// 
 			// label1
 			// 
@@ -329,14 +349,19 @@
 			// numericUpDownKeepShifts
 			// 
 			this.numericUpDownKeepShifts.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.numericUpDownKeepShifts.BeforeTouchSize = new System.Drawing.Size(40, 22);
+			this.numericUpDownKeepShifts.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+			this.numericUpDownKeepShifts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.numericUpDownKeepShifts.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.numericUpDownKeepShifts.Increment = new decimal(new int[] {
             10,
             0,
             0,
             0});
 			this.numericUpDownKeepShifts.Location = new System.Drawing.Point(241, 3);
+			this.numericUpDownKeepShifts.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownKeepShifts.Name = "numericUpDownKeepShifts";
-			this.numericUpDownKeepShifts.Size = new System.Drawing.Size(40, 20);
+			this.numericUpDownKeepShifts.Size = new System.Drawing.Size(40, 22);
 			this.numericUpDownKeepShifts.TabIndex = 17;
 			this.numericUpDownKeepShifts.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDownKeepShifts.Value = new decimal(new int[] {
@@ -344,39 +369,49 @@
             0,
             0,
             0});
+			this.numericUpDownKeepShifts.VisualStyle = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			// 
 			// checkBoxKeepStartTimes
 			// 
-			this.checkBoxKeepStartTimes.AutoSize = true;
+			this.checkBoxKeepStartTimes.BeforeTouchSize = new System.Drawing.Size(232, 19);
 			this.checkBoxKeepStartTimes.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.checkBoxKeepStartTimes.DrawFocusRectangle = false;
 			this.checkBoxKeepStartTimes.Location = new System.Drawing.Point(3, 53);
+			this.checkBoxKeepStartTimes.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxKeepStartTimes.Name = "checkBoxKeepStartTimes";
 			this.checkBoxKeepStartTimes.Size = new System.Drawing.Size(232, 19);
+			this.checkBoxKeepStartTimes.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxKeepStartTimes.TabIndex = 23;
 			this.checkBoxKeepStartTimes.Text = "xxStartTime";
-			this.checkBoxKeepStartTimes.UseVisualStyleBackColor = true;
+			this.checkBoxKeepStartTimes.ThemesEnabled = false;
 			// 
 			// checkBoxKeepEndTimes
 			// 
-			this.checkBoxKeepEndTimes.AutoSize = true;
+			this.checkBoxKeepEndTimes.BeforeTouchSize = new System.Drawing.Size(232, 19);
 			this.checkBoxKeepEndTimes.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.checkBoxKeepEndTimes.DrawFocusRectangle = false;
 			this.checkBoxKeepEndTimes.Location = new System.Drawing.Point(3, 78);
+			this.checkBoxKeepEndTimes.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxKeepEndTimes.Name = "checkBoxKeepEndTimes";
 			this.checkBoxKeepEndTimes.Size = new System.Drawing.Size(232, 19);
+			this.checkBoxKeepEndTimes.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxKeepEndTimes.TabIndex = 24;
 			this.checkBoxKeepEndTimes.Text = "xxEndTime";
-			this.checkBoxKeepEndTimes.UseVisualStyleBackColor = true;
+			this.checkBoxKeepEndTimes.ThemesEnabled = false;
 			// 
 			// checkBoxKeepActivityLength
 			// 
-			this.checkBoxKeepActivityLength.AutoSize = true;
+			this.checkBoxKeepActivityLength.BeforeTouchSize = new System.Drawing.Size(232, 21);
 			this.checkBoxKeepActivityLength.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.checkBoxKeepActivityLength.DrawFocusRectangle = false;
 			this.checkBoxKeepActivityLength.Location = new System.Drawing.Point(3, 103);
+			this.checkBoxKeepActivityLength.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxKeepActivityLength.Name = "checkBoxKeepActivityLength";
 			this.checkBoxKeepActivityLength.Size = new System.Drawing.Size(232, 21);
+			this.checkBoxKeepActivityLength.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxKeepActivityLength.TabIndex = 25;
 			this.checkBoxKeepActivityLength.Text = "xxLengthOfActivity";
-			this.checkBoxKeepActivityLength.UseVisualStyleBackColor = true;
+			this.checkBoxKeepActivityLength.ThemesEnabled = false;
 			this.checkBoxKeepActivityLength.CheckedChanged += new System.EventHandler(this.checkBoxKeepActivityLength_CheckedChanged);
 			// 
 			// ShiftsPreferencesPanel
@@ -391,15 +426,21 @@
 			this.tableLayoutPanelTagWith.ResumeLayout(false);
 			this.tableLayoutPanelTagWith.PerformLayout();
 			this.tableLayoutPanel7.ResumeLayout(false);
-			this.tableLayoutPanel7.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.checkBox1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBox2)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepShifts)).EndInit();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
-			this.groupBox2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxBetween)).EndInit();
 			this.groupBox1.ResumeLayout(false);
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.tableLayoutPanel5.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvActivity)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepShiftCategories)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownKeepShifts)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepStartTimes)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepEndTimes)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxKeepActivityLength)).EndInit();
 			this.ResumeLayout(false);
 
         }
@@ -408,26 +449,26 @@
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBox1;
+        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBox2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTagWith;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.CheckBox checkBoxKeepShifts;
+        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepShifts;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-        private System.Windows.Forms.CheckBox checkBoxKeepShiftCategories;
+        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepShiftCategories;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown numericUpDownKeepShifts;
-        private System.Windows.Forms.CheckBox checkBoxKeepStartTimes;
-        private System.Windows.Forms.CheckBox checkBoxKeepEndTimes;
+        private Syncfusion.Windows.Forms.Tools.NumericUpDownExt numericUpDownKeepShifts;
+        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepStartTimes;
+        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepEndTimes;
         private System.Windows.Forms.GroupBox groupBox2;
         private Common.Controls.FromToTimePicker fromToTimePicker1;
-        private System.Windows.Forms.CheckBox checkBoxBetween;
+        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxBetween;
         private Common.Controls.TwoListSelector twoListSelectorActivities;
-		private System.Windows.Forms.CheckBox checkBoxKeepActivityLength;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepActivityLength;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvActivity;
     }
 }
