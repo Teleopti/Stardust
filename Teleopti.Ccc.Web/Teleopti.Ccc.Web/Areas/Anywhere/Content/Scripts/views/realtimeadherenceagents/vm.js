@@ -27,7 +27,7 @@
 				return that.agentStates();
 			} else {
 				return ko.utils.arrayFilter(that.agentStates(), function (item) {
-					return arrayContains(
+					return match(
 					[
 						item.Alarm(),
 						item.Name,
@@ -40,7 +40,7 @@
 			}
 		});
 
-		var arrayContains = function(items, filter) {
+		var match = function(items, filter) {
 			for (var i = 0; i < items.length; i++) {
 				var item = items[i];
 				if (!item) continue;
@@ -66,14 +66,14 @@
 			that.siteURI('#realtimeadherenceteams/' + that.siteId());
 		};
 
-		that.fillAgentsStates = function (data) {
+		that.fillAgentsStates = function(data) {
 			var newagentState, existingState;
 
 			if (!data) {
 				that.agents.forEach(function(agent) {
 					existingState = that.getExistingAgentState(agent.PersonId);
 					if (existingState.length !== 0) {
-						existingState[0].fill({PersonId: agent.PersonId}, agent.Name, agent.TimeZoneOffset, agent.TeamName);
+						existingState[0].fill({ PersonId: agent.PersonId }, agent.Name, agent.TimeZoneOffset, agent.TeamName);
 					} else {
 						newagentState = agentstate();
 						newagentState.fill({ PersonId: agent.PersonId }, agent.Name, agent.TimeZoneOffset, agent.TeamName);
@@ -87,7 +87,7 @@
 					existingState = that.getExistingAgentState(data[i].PersonId);
 					if (existingState.length !== 0) {
 						existingState[0].fill(data[i], a.Name, a.TimeZoneOffset);
-				} else {
+					} else {
 						newagentState = agentstate();
 						newagentState.fill(data[i], a.Name, a.TimeZoneOffset);
 						that.agentStates.push(newagentState);
