@@ -115,28 +115,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			model.Shift.IsFullDayAbsence.Should().Be.True();
 		}
 
-		[Test]
-		public void ShouldUpdateActivityId()
-		{
-			var repository = new FakePersonScheduleDayReadModelPersister();
-			var personRepository = new FakePersonRepository();
-			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository);
-			var activityId = Guid.NewGuid();
-			target.Handle(new ProjectionChangedEvent
-			{
-				PersonId = personRepository.Single().Id.Value,
-				ScheduleDays = new[]
-						{
-							new ProjectionChangedEventScheduleDay
-								{
-									Shift = new ProjectionChangedEventShift{Layers = new []{new ProjectionChangedEventLayer{PayloadId = activityId}}}
-								}
-						}
-			});
-
-			var model = new NewtonsoftJsonDeserializer().DeserializeObject<Model>(repository.Updated.Single().Model);
-			model.Shift.Projection.Single().ActivityId.Should().Be(activityId);
-		}
-
 	}
 }

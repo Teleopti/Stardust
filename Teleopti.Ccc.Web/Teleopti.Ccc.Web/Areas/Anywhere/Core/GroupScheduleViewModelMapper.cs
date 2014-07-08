@@ -87,10 +87,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				let color = canSeeLayerInfo ? l.Color : ConfidentialPayloadValues.DisplayColorHex
 				let description = canSeeLayerInfo ? l.Description : ConfidentialPayloadValues.Description.Name
 				let start = TimeZoneInfo.ConvertTimeFromUtc(l.Start, userTimeZone)
-				let activityId = l.ActivityId
 				select new GroupScheduleLayerViewModel
 				{
-					ActivityId = activityId.ToString(),
 					Color = color,
 					Description = description,
 					Start = start.ToFixedDateTimeFormat(),
