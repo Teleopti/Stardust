@@ -160,10 +160,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		            var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
 		            return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
 		        });
-		        var agentName = myScheduleObject.agentName != undefined ? myScheduleObject.agentName : myScheduleObject.Name;
-		        var personId = myScheduleObject.personId != undefined ? myScheduleObject.personId : myScheduleObject.PersonId;
-			    var isDayOff = myScheduleObject.isDayOff != undefined ? myScheduleObject.isDayOff : myScheduleObject.IsDayOff;
-				self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers, agentName, personId, isDayOff));
+			    self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers, myScheduleObject.Name, myScheduleObject.PersonId, myScheduleObject.IsDayOff));
 			} else {
 				self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers, '', '', false));
 		    }
