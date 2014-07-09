@@ -75,9 +75,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.chooseHistorys = ko.observableArray();
 		self.requestedDates = ko.computed(function() {
 			var dates = [];
-			$.each(self.chooseHistorys(), function(index, chooseHistoryViewModel) {
-				dates.push(chooseHistoryViewModel.selectedDate());
-			});
+			
+			if (self.isTradeForMultiDaysEnabled()) {
+				$.each(self.chooseHistorys(), function(index, chooseHistoryViewModel) {
+					dates.push(chooseHistoryViewModel.selectedDateInFormat());
+				});
+			} else {
+				dates.push(self.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase()));
+			}
+			
 			return dates;
 		});
 		self.selectedInternal = ko.observable(false);
