@@ -2,12 +2,14 @@
 	'knockout',
 	'resources',
 	'ajax',
-	'navigation'
+	'navigation',
+    'errorview',
 ], function (
 	ko,
 	resources,
 	ajax,
-	navigation
+	navigation,
+    errorview
     ) {
 
 	return function () {
@@ -84,13 +86,18 @@
 	    };
 
 
-		this.Apply = function () {
+	    this.Apply = function () {
+	        var activity = self.getActivity();
+	        if (!activity) {
+	            errorview.display(resources.FunctionNotAvailable);
+	            return;
+	        }
 			var requestData = JSON.stringify({
 				AgentId: self.PersonId(),
 				ScheduleDate: self.ScheduleDate().format(),
 				NewStartTime: self.StartTime().format(),
 				OldStartTime: moment(self.ScheduleDate()).add('minutes', self.OldStartMinutes()).format(),
-				ActivityId: self.getActivityId(),
+				ActivityId: activity.Id,
 				OldProjectionLayerLength: self.ProjectionLength()
 			});
 			ajax.ajax({
@@ -99,16 +106,19 @@
 				data: requestData,
 				success: function (data, textStatus, jqXHR) {
 					navigation.GotoPersonScheduleWithoutHistory(self.GroupId(), self.PersonId(), self.ScheduleDate());
-				}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+				    errorview.display(resources.FunctionNotAvailable);
+				},
 			}
 			);
 		};
 
-	    this.getActivityId = function() {
+	    this.getActivity = function() {
 	        var activity = ko.utils.arrayFirst(self.Activities(), function (a) {
 	            return a.Name === self.layer().Description;
 	        });
-            return activity.Id;
+            return activity;
 	    };
 
 		this.ErrorMessage = ko.computed(function () {

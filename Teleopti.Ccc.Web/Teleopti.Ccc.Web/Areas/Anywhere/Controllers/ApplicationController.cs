@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.Alarm,
 					UserTexts.Resources.TimeInAlarm,
 					UserTexts.Resources.MoveActivity,
-
+                    UserTexts.Resources.FunctionNotAvailable,
 
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,
