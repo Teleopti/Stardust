@@ -52,6 +52,8 @@
 			var shiftStartMinutes = self.WorkingShift().OriginalShiftStartMinutes;
 			var shiftEndMinutes = self.WorkingShift().OriginalShiftEndMinutes;
 			var inputMinutes = self.getMinutesFromTime(startTime);
+		    if (inputMinutes < shiftStartMinutes && shiftOverMidnight())
+		        inputMinutes += 24 * 60;
 			if (inputMinutes >= shiftStartMinutes && inputMinutes + self.layer().LengthMinutes() <= shiftEndMinutes)
 				return true;
 			return false;
@@ -76,10 +78,11 @@
 			return self.getMinutesFromTime(self.StartTime());
 		};
 
-		this.getStartTimeFromMinutes = function (minutes) {
-		    var date = self.ScheduleDate();
-		    return moment(new Date(date.year(), date.month(), date.date(), minutes / 60, minutes%60, 0));
-		}
+	    this.getStartTimeFromMinutes = function(minutes) {
+	        var date = self.ScheduleDate();
+	        return moment([date.year(), date.month(), date.date(), minutes / 60, minutes % 60]);
+	    };
+
 
 		this.Apply = function () {
 			var requestData = JSON.stringify({
@@ -115,8 +118,19 @@
 		var getMomentFromInput = function (input) {
 		    var momentInput = moment(input, resources.TimeFormatForMoment);
 		    var date = self.ScheduleDate();
-			return moment(new Date(date.year(), date.month(), date.date(), momentInput.hour(), momentInput.minute(), 0));
+		    if (!beforeMidnight(momentInput) && shiftOverMidnight())
+		        return moment([date.year(), date.month(), date.date(), momentInput.hour(), momentInput.minute()]).add(1, 'day');
+			return moment([date.year(), date.month(), date.date(), momentInput.hour(), momentInput.minute()]);
 		};
+
+	    var shiftOverMidnight = function() {
+	        return self.WorkingShift().OriginalShiftEndMinutes > 24 * 60;
+	    };
+
+	    var beforeMidnight = function (momentInput) {
+	        var shiftStartTime = self.getStartTimeFromMinutes(self.WorkingShift().OriginalShiftStartMinutes).format(resources.TimeFormatForMoment);
+	        return momentInput <= moment("23:59", resources.TimeFormatForMoment) && momentInput >= moment(shiftStartTime, resources.TimeFormatForMoment);
+	    };
 
 	};
 });
