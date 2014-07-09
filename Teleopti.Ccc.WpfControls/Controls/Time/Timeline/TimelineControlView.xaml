@@ -197,6 +197,7 @@
                     <Setter Property="Control.Padding" Value="0"/>
                     <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
                     <Setter Property="Control.VerticalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Control.BorderThickness" Value="0"/>
                 </Style>
             </ItemsControl.ItemContainerStyle>
 

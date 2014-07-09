@@ -10,6 +10,8 @@
         <ResourceDictionary Source="Icons.xaml"/>
         <ResourceDictionary Source="/PresentationFramework.Aero, Version=3.0.0.0, Culture=neutral,PublicKeyToken=31bf3856ad364e35, ProcessorArchitecture=MSIL;component/themes/aero.normalcolor.xaml" />
 		<!--<ResourceDictionary Source="Flat/AllFlatStyles.xaml/>-->
+		<ResourceDictionary Source="Flat/AllFlatStyles.xaml"/>
+
 	</ResourceDictionary.MergedDictionaries>
 
     <Converters1:ColorConverterSoft x:Key="colorConverter"/>

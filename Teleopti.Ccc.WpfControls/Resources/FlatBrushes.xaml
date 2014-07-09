@@ -57,7 +57,7 @@
 	<Color x:Key="DarkGradientStopColor">Gray</Color>
 	<Color x:Key="LightColor">White</Color>
 	<Color x:Key="GrayColor">Gray</Color>
-	<Color x:Key="DarkColor">Black</Color>
+	<Color x:Key="DarkColor">#FF0099FF</Color>
 	<Color x:Key="CellBorderColor">Gray</Color>
 	<Color x:Key="RaptorBlackColor">Black</Color>
 
@@ -116,7 +116,7 @@
 
 	<SolidColorBrush x:Key="RaptorStandardCellBorderBrush" Color="{StaticResource LightColor}"/>
 
-	<SolidColorBrush x:Key="RaptorStandardBorderBrush" Color="#FF0099FF"/>
+	<SolidColorBrush x:Key="RaptorStandardBorderBrush" Color="{StaticResource DarkColor}"/>
 
 	<SolidColorBrush x:Key="RaptorNotValidBrush"   Color="Red" >
 	</SolidColorBrush>

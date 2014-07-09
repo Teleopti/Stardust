@@ -7,6 +7,7 @@
 	ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 	ScrollViewer.VerticalScrollBarVisibility="Disabled"
 	BorderThickness="0"
+	BorderBrush="Transparent"
 	x:Name="Main">
 	<ListBox.Resources>
 		<DataTemplate x:Key="LayerTemplate">

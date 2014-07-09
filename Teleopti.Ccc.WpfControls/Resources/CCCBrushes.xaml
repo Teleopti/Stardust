@@ -57,7 +57,7 @@
     <Color x:Key="DarkGradientStopColor">DarkGray</Color>
     <Color x:Key="LightColor">White</Color>
     <Color x:Key="GrayColor">Gray</Color>
-    <Color x:Key="DarkColor">Black</Color>
+	<Color x:Key="DarkColor">Black</Color>
     <Color x:Key="CellBorderColor">Gray</Color>
     <Color x:Key="RaptorBlackColor">Black</Color>
 

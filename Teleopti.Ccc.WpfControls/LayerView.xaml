@@ -36,7 +36,7 @@
                     <SplineThicknessKeyFrame KeyTime="00:00:00" Value="1,1,2,2"/>
                 </ThicknessAnimationUsingKeyFrames>
             <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="theBorder" Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
-                <SplineColorKeyFrame KeyTime="00:00:00.2000000" Value="#FF000000"/>
+					<SplineColorKeyFrame KeyTime="00:00:00.2000000" Value="{StaticResource DarkColor}"/>
             </ColorAnimationUsingKeyFrames>
         </Storyboard>
         </ResourceDictionary>
@@ -60,7 +60,7 @@
                 Thumb.DragCompleted="Thumb_Drag_Completed" 
 				Thumb.DragStarted="Thumb_Drag_Started"
                 Opacity="1"
-                CornerRadius="2"
+                CornerRadius="0"
                 Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}, FallbackValue=White}"
                 x:Name="theBorder">
         <Border.Resources>
