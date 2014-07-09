@@ -132,6 +132,7 @@
 							]
 						}
 					];
+					vm.MovingActivity(true);
 					vm.SelectedStartMinutes(840);
 					vm.UpdateData({ PersonId: 1 });
 					vm.UpdateSchedules(data);
@@ -141,7 +142,6 @@
 					assert.equals(vm.MoveActivityForm.ScheduleDate().diff(moment('2013-11-18')), 0);
 					assert.equals(vm.MoveActivityForm.OldStartMinutes(), vm.SelectedStartMinutes());
 					assert.equals(vm.MoveActivityForm.ProjectionLength(), data[0].Projection[0].Minutes);
-					assert.equals(vm.MoveActivityForm.ActivityId(), data[0].Projection[0].ActivityId);
 				},
 
 				"should update starttime when DisplayedStartTime changes": function () {
@@ -167,6 +167,7 @@
 							]
 						}
 					];
+				    vm.MovingActivity(true);
 					vm.SelectedStartMinutes(840);
 					vm.UpdateData({ PersonId: 1, Date: moment('20131118', 'YYYYMMDD') });
 					vm.UpdateSchedules(data);
@@ -257,7 +258,7 @@
 							]
 						}
 					];
-
+					vm.MovingActivity(true);
 					vm.SelectedStartMinutes(840);
 					vm.UpdateData({ PersonId: 1 });
 					vm.UpdateSchedules(data);
@@ -332,6 +333,7 @@
 							]
 						}
 					];
+					vm.MovingActivity(true);
 					vm.SelectedStartMinutes(840);
 					vm.UpdateData({ PersonId: 1 });
 					vm.UpdateSchedules(data);
