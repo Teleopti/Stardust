@@ -70,14 +70,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
             if (!_showEditor)
             {
                 GridEditorSplitter.Panel2Collapsed = true;
-                GridEditorSplitter.SplitterWidth = 7;
+                GridEditorSplitter.SplitterWidth = 1;
                 GridEditorSplitter.Style = Style.None;
             }
             if (_showEditor)
             {
                 GridEditorSplitter.Panel2Collapsed = false;
-                GridEditorSplitter.Style = Style.Office2007Blue;
-                GridEditorSplitter.SplitterWidth = 7;
+                GridEditorSplitter.Style = Style.Default;
+                GridEditorSplitter.SplitterWidth = 1;
+					 GridEditorSplitter.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.Silver);
                 //GridEditorSplitter.SplitterDistance = GridEditorSplitter.Height - _editorHeight;
 
 				int preferedMainSplitterDistance = LeftMainSplitter.Height - _editorHeight - LeftMainSplitter.Panel2MinSize;
@@ -137,14 +138,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
             if (!_showRestrictionView)
             {
                 RestrictionViewSplitter.Panel1Collapsed = true;
-                RestrictionViewSplitter.SplitterWidth = 7;
+                RestrictionViewSplitter.SplitterWidth = 1;
                 RestrictionViewSplitter.Style = Style.None;
             }
             if (_showRestrictionView)
             {
                 RestrictionViewSplitter.Panel1Collapsed = false;
-                RestrictionViewSplitter.Style = Style.Office2007Blue;
-                RestrictionViewSplitter.SplitterWidth = 7;
+					 RestrictionViewSplitter.Style = Style.Default;
+                RestrictionViewSplitter.SplitterWidth = 1;
+					 RestrictionViewSplitter.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.Silver);
             }
         }
 
@@ -186,10 +188,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
             }
             else
             {
-				LeftMainSplitter.Style = Style.Office2007Blue;
-				LeftMainSplitter.SplitterWidth = 7;
-                GraphResultSplitter.Style = Style.Office2007Blue;
-                GraphResultSplitter.SplitterWidth = 7;
+					LeftMainSplitter.Style = Style.Default;
+					LeftMainSplitter.SplitterWidth = 1;
+					LeftMainSplitter.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.Silver);
+					GraphResultSplitter.Style = Style.Default;
+               GraphResultSplitter.SplitterWidth = 1;
+					GraphResultSplitter.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.Silver);
             }
         }
 
