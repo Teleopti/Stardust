@@ -196,3 +196,7 @@ sh
 	min-width: 160px;
 }
 
+.team-schedule th {
+	vertical-align: middle !important;
+}
+
