@@ -122,20 +122,18 @@ ko.utils.extend(Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.prot
 
 Teleopti.MyTimeWeb.Request.TimeLineHourEditShiftTradeViewModel = function (hour, pixelPerMinute) {
 	var self = this;
-	self.borderSize = 1;
 	self.showLabel = ko.observable(true);
 	self.hourText = hour.HourText;
 	self.leftPx = Teleopti.MyTimeWeb.Common.IsRtl() ? "17px" : "-17px";
 	self.pixelPerMinute = ko.observable(pixelPerMinute);
 
 	self.hourWidth = ko.computed(function () {
-	    return hour.LengthInMinutesToDisplay * self.pixelPerMinute() - self.borderSize + 'px';
+	    return hour.LengthInMinutesToDisplay * self.pixelPerMinute() + 'px';
 	});
 };
 
 Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel = function (hour, timeLineStartTime, pixelPerMinute, isVisible) {
     var self = this;
-    self.borderSize = 1;
     self.hourText = hour.HourText;
     self.startTime = moment(hour.StartTime);
     self.timeLineStartTime = ko.observable(timeLineStartTime);
@@ -167,7 +165,6 @@ Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel = function (hour, 
 
 Teleopti.MyTimeWeb.Request.CloneTimeLineHourAddShiftTradeViewModel = function (hour, timeLineStartTime, pixelPerMinute) {
     var self = this;
-    self.borderSize = 1;
     self.hourText = hour.hourText;
     self.startTime = hour.startTime;
     self.timeLineStartTime = ko.observable(timeLineStartTime);

@@ -288,7 +288,6 @@
 
 .shift-trade-swap-detail-timeline 
 {
-	margin-left: 10px;
 	height: 46px;
 	position: absolute;
 	/*hack to make LTR work - remove when were using "true" LTR in requests"". See bug 22898*/
