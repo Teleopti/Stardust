@@ -86,10 +86,10 @@
 					if (!a) continue;
 					existingState = that.getExistingAgentState(data[i].PersonId);
 					if (existingState.length !== 0) {
-						existingState[0].fill(data[i], a.Name, a.TimeZoneOffset);
+						existingState[0].fill(data[i], a.Name, a.TimeZoneOffset, a.TeamName);
 					} else {
 						newagentState = agentstate();
-						newagentState.fill(data[i], a.Name, a.TimeZoneOffset);
+						newagentState.fill(data[i], a.Name, a.TimeZoneOffset, a.TeamName);
 						that.agentStates.push(newagentState);
 					}
 				}
