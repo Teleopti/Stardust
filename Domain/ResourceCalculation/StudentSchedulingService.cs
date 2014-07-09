@@ -51,11 +51,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule,
 			ISchedulePartModifyAndRollbackService rollbackService)
         {
+            var skills = _schedulingResultStateHolder.Skills;
+            if (skills.Count == 0) return false;
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
 																		useOccupancyAdjustment,
 																		schedulingOptions.ConsiderShortBreaks);
-			
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _schedulingResultStateHolder.Skills.Min(s => s.DefaultResolution));
+
+            var extractor = new ScheduleProjectionExtractor(_personSkillProvider, skills.Min(s => s.DefaultResolution));
 			var resources = extractor.CreateRelevantProjectionList(_schedulingResultStateHolder.Schedules);
 	        using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 	        {

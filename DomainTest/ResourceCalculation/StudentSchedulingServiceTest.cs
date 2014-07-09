@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -492,7 +493,28 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
-        
+        [Test]
+        public void ShouldSkipSchedulingWhenNoSkillAvailable()
+        {
+            using (_mocks.Record())
+            {
+
+                Expect.Call(_schedulingResultStateHolder.Skills).Return(new List<ISkill>());
+            }
+
+            _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
+                _effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper, _personSkillProvider);
+
+            using (_mocks.Playback())
+            {
+                var result =
+                    _studentSchedulingService.DoTheScheduling(new List<IScheduleDay>(),
+                        null, true, true, _rollbackService);
+                result.Should().Be(false);
+            }
+        }
+
+
     }
 
     
