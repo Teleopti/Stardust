@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
+using Teleopti.MessagingTest.SignalR.TestDoubles;
 
 namespace Teleopti.MessagingTest.SignalR
 {

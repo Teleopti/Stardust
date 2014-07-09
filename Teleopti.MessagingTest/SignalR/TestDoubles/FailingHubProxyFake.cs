@@ -4,7 +4,7 @@ using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
 
-namespace Teleopti.MessagingTest.SignalR
+namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
 	public class FailingHubProxyFake : IHubProxyWrapper
 	{

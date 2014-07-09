@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Interfaces.MessageBroker.Core;
 
-namespace Teleopti.MessagingTest.SignalR
+namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
 	public class MessageFilterManagerFake : IMessageFilterManager
 	{

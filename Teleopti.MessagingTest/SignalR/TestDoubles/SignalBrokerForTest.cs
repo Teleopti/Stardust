@@ -4,7 +4,7 @@ using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
 
-namespace Teleopti.MessagingTest.SignalR
+namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
 	public class SignalBrokerForTest : SignalBroker
 	{

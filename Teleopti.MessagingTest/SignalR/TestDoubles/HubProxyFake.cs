@@ -10,7 +10,7 @@ using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
 using Subscription = Microsoft.AspNet.SignalR.Client.Hubs.Subscription;
 
-namespace Teleopti.MessagingTest.SignalR
+namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
 	public class HubProxyFake : IHubProxyWrapper
 	{
