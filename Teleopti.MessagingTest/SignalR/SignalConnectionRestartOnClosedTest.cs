@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
+using Teleopti.MessagingTest.SignalR.TestDoubles;
 
 namespace Teleopti.MessagingTest.SignalR
 {
