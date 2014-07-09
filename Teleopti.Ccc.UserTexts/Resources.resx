@@ -422,7 +422,7 @@
     <comment>Change your password</comment>
   </data>
   <data name="Chart" xml:space="preserve">
-    <value>Chart</value>
+    <value>CHART</value>
     <comment>Chart</comment>
   </data>
   <data name="ChartSettings" xml:space="preserve">
@@ -919,7 +919,7 @@ Date</value>
     <comment>Holiday</comment>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>Home</value>
+    <value>HOME</value>
     <comment>Home</comment>
   </data>
   <data name="IndexACW" xml:space="preserve">
@@ -12111,7 +12111,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Seniority ranking descendingmenu item in scheduler</comment>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>FILE</value>
     <comment>Text for tab like File, Edit, View....</comment>
   </data>
   <data name="OpenShiftsTreeDots" xml:space="preserve">
@@ -12128,5 +12128,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="CompactView" xml:space="preserve">
     <value>Compact View</value>
     <comment>Compact View</comment>
+  </data>
+  <data name="RequestsMenu" xml:space="preserve">
+    <value>REQUESTS</value>
+    <comment>Request menu</comment>
   </data>
 </root>

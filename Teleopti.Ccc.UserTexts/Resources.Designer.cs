@@ -4129,7 +4129,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chart.
+        ///   Looks up a localized string similar to CHART.
         /// </summary>
         public static string Chart {
             get {
@@ -8527,7 +8527,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File.
+        ///   Looks up a localized string similar to FILE.
         /// </summary>
         public static string File {
             get {
@@ -9977,7 +9977,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Home.
+        ///   Looks up a localized string similar to HOME.
         /// </summary>
         public static string Home {
             get {
@@ -19150,6 +19150,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RequestScreen {
             get {
                 return ResourceManager.GetString("RequestScreen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to REQUESTS.
+        /// </summary>
+        public static string RequestsMenu {
+            get {
+                return ResourceManager.GetString("RequestsMenu", resourceCulture);
             }
         }
         

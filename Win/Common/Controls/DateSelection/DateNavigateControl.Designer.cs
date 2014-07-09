@@ -44,9 +44,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// dateTimePickerAdv1
 			// 
 			this.dateTimePickerAdv1.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-			this.dateTimePickerAdv1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(193)))), ((int)(((byte)(222)))));
 			this.dateTimePickerAdv1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.dateTimePickerAdv1.NoneButtonVisible = false;
 			// 
 			// 
 			// 
@@ -55,55 +53,68 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.dateTimePickerAdv1.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdv1.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdv1.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.dateTimePickerAdv1.Calendar.DayNamesColor = System.Drawing.SystemColors.ControlText;
-			this.dateTimePickerAdv1.Calendar.DayNamesFont = new System.Drawing.Font("Segoe", 8.25F, System.Drawing.FontStyle.Bold);
-			this.dateTimePickerAdv1.Calendar.DaysFont = new System.Drawing.Font("Segoe", 8F);
+			this.dateTimePickerAdv1.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
 			this.dateTimePickerAdv1.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dateTimePickerAdv1.Calendar.Font = new System.Drawing.Font("Segoe", 8F);
+			this.dateTimePickerAdv1.Calendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
 			this.dateTimePickerAdv1.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdv1.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
 			this.dateTimePickerAdv1.Calendar.HeaderEndColor = System.Drawing.Color.White;
-			this.dateTimePickerAdv1.Calendar.HeaderHeight = 34;
 			this.dateTimePickerAdv1.Calendar.HeaderStartColor = System.Drawing.Color.White;
+			this.dateTimePickerAdv1.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdv1.Calendar.HighlightColor = System.Drawing.Color.White;
 			this.dateTimePickerAdv1.Calendar.Iso8601CalenderFormat = false;
 			this.dateTimePickerAdv1.Calendar.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdv1.Calendar.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdv1.Calendar.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdv1.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdv1.Calendar.Office2007Theme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.dateTimePickerAdv1.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdv1.Calendar.SelectedDates = new System.DateTime[0];
 			this.dateTimePickerAdv1.Calendar.ShowWeekNumbers = true;
-			this.dateTimePickerAdv1.Calendar.Size = new System.Drawing.Size(209, 174);
+			this.dateTimePickerAdv1.Calendar.Size = new System.Drawing.Size(135, 174);
 			this.dateTimePickerAdv1.Calendar.SizeToFit = true;
 			this.dateTimePickerAdv1.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdv1.Calendar.TabIndex = 0;
 			this.dateTimePickerAdv1.Calendar.ThemedEnabledGrid = true;
-			this.dateTimePickerAdv1.Calendar.WeekInterior = new BrushInfo();
-			this.dateTimePickerAdv1.Calendar.WeekFont = new System.Drawing.Font("Segoe", 8F, FontStyle.Bold);
+			this.dateTimePickerAdv1.Calendar.WeekFont = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+			this.dateTimePickerAdv1.Calendar.WeekInterior = new Syncfusion.Drawing.BrushInfo();
+			// 
+			// 
+			// 
+			this.dateTimePickerAdv1.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.dateTimePickerAdv1.Calendar.NoneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdv1.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.dateTimePickerAdv1.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
+			this.dateTimePickerAdv1.Calendar.NoneButton.IsBackStageButton = false;
+			this.dateTimePickerAdv1.Calendar.NoneButton.Location = new System.Drawing.Point(63, 0);
+			this.dateTimePickerAdv1.Calendar.NoneButton.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.dateTimePickerAdv1.Calendar.NoneButton.Size = new System.Drawing.Size(72, 25);
+			this.dateTimePickerAdv1.Calendar.NoneButton.UseVisualStyle = true;
 			// 
 			// 
 			// 
 			this.dateTimePickerAdv1.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.dateTimePickerAdv1.Calendar.TodayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.dateTimePickerAdv1.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdv1.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdv1.Calendar.TodayButton.IsBackStageButton = false;
-			this.dateTimePickerAdv1.Calendar.TodayButton.Location = new System.Drawing.Point(2, 1);
+			this.dateTimePickerAdv1.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
 			this.dateTimePickerAdv1.Calendar.TodayButton.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.dateTimePickerAdv1.Calendar.TodayButton.Size = new System.Drawing.Size(134, 21);
+			this.dateTimePickerAdv1.Calendar.TodayButton.Size = new System.Drawing.Size(63, 25);
 			this.dateTimePickerAdv1.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdv1.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdv1.CalendarSize = new System.Drawing.Size(189, 176);
-			this.dateTimePickerAdv1.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdv1.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdv1.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateTimePickerAdv1.DropDownImage = null;
-			this.dateTimePickerAdv1.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(181)))), ((int)(((byte)(203)))), ((int)(((byte)(232)))));
+			this.dateTimePickerAdv1.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdv1.DropDownPressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdv1.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdv1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
 			this.dateTimePickerAdv1.Location = new System.Drawing.Point(3, 3);
-			this.dateTimePickerAdv1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdv1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdv1.MinValue = new System.DateTime(((long)(0)));
 			this.dateTimePickerAdv1.Name = "dateTimePickerAdv1";
+			this.dateTimePickerAdv1.NoneButtonVisible = false;
 			this.dateTimePickerAdv1.Office2007Theme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.dateTimePickerAdv1.ShowCheckBox = false;
 			this.dateTimePickerAdv1.Size = new System.Drawing.Size(137, 20);
@@ -116,7 +127,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// buttonAdv1
 			// 
 			this.buttonAdv1.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdv1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.buttonAdv1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonAdv1.BeforeTouchSize = new System.Drawing.Size(31, 40);
 			this.buttonAdv1.ForeColor = System.Drawing.Color.White;
 			this.buttonAdv1.IsBackStageButton = false;
@@ -132,7 +143,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// buttonAdv2
 			// 
 			this.buttonAdv2.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdv2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.buttonAdv2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonAdv2.BeforeTouchSize = new System.Drawing.Size(31, 40);
 			this.buttonAdv2.ForeColor = System.Drawing.Color.White;
 			this.buttonAdv2.IsBackStageButton = false;
@@ -148,7 +159,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// buttonAdv3
 			// 
 			this.buttonAdv3.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdv3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.buttonAdv3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonAdv3.BeforeTouchSize = new System.Drawing.Size(31, 40);
 			this.buttonAdv3.ForeColor = System.Drawing.Color.White;
 			this.buttonAdv3.IsBackStageButton = false;
@@ -164,7 +175,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// buttonAdv4
 			// 
 			this.buttonAdv4.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdv4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.buttonAdv4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonAdv4.BeforeTouchSize = new System.Drawing.Size(31, 40);
 			this.buttonAdv4.ForeColor = System.Drawing.Color.White;
 			this.buttonAdv4.IsBackStageButton = false;
