@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				if (schedpartTo.SignificantPart() == SchedulePartView.DayOff)
 				{
-					totalPeriod = schedpartFrom.Period;
+					totalPeriod = (DateTimePeriod)fromTotalPeriod;
 				}
 				else
 				{
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				if (schedpartFrom.SignificantPart() == SchedulePartView.DayOff)
 				{
-					totalPeriod = schedpartFrom.Period;
+					totalPeriod = (DateTimePeriod)toTotalPeriod;
 				}
 				else
 				{
@@ -105,13 +105,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 			else
 			{
-				totalPeriod = ((IShiftTradeRequest) shiftTradeSwapDetail.Parent).Period;
-			}
-
-			if (schedpartFrom.SignificantPart() == SchedulePartView.DayOff &&
-			    schedpartTo.SignificantPart() == SchedulePartView.DayOff)
-			{
 				totalPeriod = schedpartFrom.Period;
+				totalPeriod = new DateTimePeriod(totalPeriod.StartDateTime.AddHours(9), totalPeriod.EndDateTime.AddHours(-7));
 			}
 
 			return new DateTimePeriod(totalPeriod.StartDateTime.AddHours(-extraHourBeforeAndAfter), 
