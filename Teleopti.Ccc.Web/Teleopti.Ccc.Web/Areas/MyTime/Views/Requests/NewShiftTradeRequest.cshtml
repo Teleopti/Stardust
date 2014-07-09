@@ -50,7 +50,7 @@
                 <div class="relative">
                     <div data-bind="foreach: hours">
                         <div class="shift-trade-ruler absolute" data-bind="style: rulerStyleJson, visible: showHourLine"></div>
-                        <div class="shift-trade-label label label-info absolute" data-bind="style: labelStyleJson, text: hourText"></div>
+                        <div class="shift-trade-label label label-info absolute" data-bind="style: labelStyleJson, text: hourText, visible: isVisible"></div>
                     </div>
                 </div>
             </div>

@@ -133,13 +133,46 @@ Teleopti.MyTimeWeb.Request.TimeLineHourEditShiftTradeViewModel = function (hour,
 	});
 };
 
-Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel = function (hour, timeLineStartTime, pixelPerMinute) {
+Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel = function (hour, timeLineStartTime, pixelPerMinute, isVisible) {
     var self = this;
     self.borderSize = 1;
     self.hourText = hour.HourText;
     self.startTime = moment(hour.StartTime);
     self.timeLineStartTime = ko.observable(timeLineStartTime);
-	self.pixelPerMinute = ko.observable(pixelPerMinute);
+    self.pixelPerMinute = ko.observable(pixelPerMinute);
+	self.isVisible = ko.observable(isVisible);
+
+	self.leftPos = ko.computed(function () {
+		var minutesSinceTimeLineStart = self.startTime.diff(self.timeLineStartTime(), 'minutes');
+		return minutesSinceTimeLineStart * self.pixelPerMinute();
+    });
+	
+    var isRtl = Teleopti.MyTimeWeb.Common.IsRtl();
+	
+    self.rulerStyleJson = ko.computed(function () {
+    	if (isRtl)
+    		return { 'right': self.leftPos() + 'px' };
+	    return { 'left': self.leftPos() + 'px' };
+    });
+    self.labelStyleJson = ko.computed(function () {
+	    if (isRtl)
+	    	return { 'right': self.leftPos() - 16 + 'px' };
+    	return { 'left': self.leftPos() - 16 + 'px' };
+    });
+
+    self.showHourLine = ko.computed(function () {
+        return self.hourText.length > 0;
+    });
+};
+
+Teleopti.MyTimeWeb.Request.CloneTimeLineHourAddShiftTradeViewModel = function (hour, timeLineStartTime, pixelPerMinute) {
+    var self = this;
+    self.borderSize = 1;
+    self.hourText = hour.hourText;
+    self.startTime = hour.startTime;
+    self.timeLineStartTime = ko.observable(timeLineStartTime);
+    self.pixelPerMinute = ko.observable(pixelPerMinute);
+    self.isVisible = ko.observable(hour.isVisible());
 
 	self.leftPos = ko.computed(function () {
 		var minutesSinceTimeLineStart = self.startTime.diff(self.timeLineStartTime(), 'minutes');
@@ -192,11 +225,16 @@ Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minute
     self.payload = layer.Payload;
     self.backgroundColor = layer.Color;
     self.pixelPerMinute = ko.observable(pixelPerMinute);
+    self.minutesSinceTimeLineStart = ko.observable(minutesSinceTimeLineStart);
+    self.lengthInMinutes = ko.observable(layer.LengthInMinutes);
+	self.titleHeader = layer.TitleHeader;
+	self.titleTime = layer.TitleTime;
+	self.startTime = layer.Start;
     self.leftPx = ko.computed(function () {
-    	return (minutesSinceTimeLineStart * self.pixelPerMinute()) + 'px';
+    	return (self.minutesSinceTimeLineStart() * self.pixelPerMinute()) + 'px';
     });
     self.widthPx = ko.computed(function () {
-    	return layer.LengthInMinutes * self.pixelPerMinute() + 'px';
+    	return self.lengthInMinutes() * self.pixelPerMinute() + 'px';
     });
     self.tooltipText = ko.computed(function () {
         return "<div>{0}</div>{1}".format(layer.TitleHeader, layer.TitleTime);
@@ -209,15 +247,28 @@ Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minute
     });
 };
 
-Teleopti.MyTimeWeb.Request.CloneLayerAddShiftTradeViewModel = function (layer) {
+Teleopti.MyTimeWeb.Request.CloneLayerAddShiftTradeViewModel = function (layer, minutesSinceTimeLineStart) {
 	var self = this;
 	self.payload = layer.payload;
 	self.backgroundColor = layer.backgroundColor;
 	self.pixelPerMinute = ko.observable(layer.pixelPerMinute());
-	self.leftPx = ko.observable(layer.leftPx());
-	self.widthPx = ko.observable(layer.widthPx());
-	self.tooltipText = ko.observable(layer.tooltipText());
-	self.styleJson = ko.observable(layer.styleJson());
+	self.minutesSinceTimeLineStart = ko.observable(minutesSinceTimeLineStart);
+	self.lengthInMinutes = ko.observable(layer.lengthInMinutes());
+	self.leftPx = ko.computed(function () {
+		return (self.minutesSinceTimeLineStart() * self.pixelPerMinute()) + 'px';
+	});
+	self.widthPx = ko.computed(function () {
+		return layer.lengthInMinutes() * self.pixelPerMinute() + 'px';
+	});
+	self.tooltipText = ko.computed(function () {
+		return "<div>{0}</div>{1}".format(layer.titleHeader, layer.titleTime);
+	});
+	var isRtl = Teleopti.MyTimeWeb.Common.IsRtl();
+	self.styleJson = ko.computed(function () {
+		if (isRtl)
+			return { 'right': self.leftPx(), 'backgroundColor': self.backgroundColor, 'paddingRight': self.widthPx() };
+		return { 'left': self.leftPx(), 'backgroundColor': self.backgroundColor, 'paddingLeft': self.widthPx() };
+	});
 };
 
 Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel = function(layers, scheduleObject) {
@@ -246,9 +297,11 @@ Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel = function(laye
     };
 };
 
-Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (layers, agentName, personId, isDayOff) {
+Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (layers, scheduleStartTime, scheduleEndTime, agentName, personId, isDayOff) {
 	var self = this;
 
+	self.scheduleStartTime = ko.observable(scheduleStartTime);
+	self.scheduleEndTime = ko.observable(scheduleEndTime);
 	self.personId = personId;
 	self.isVisible = ko.observable(true);
 	self.agentName = agentName;
@@ -292,13 +345,81 @@ ShiftTradeRequestDetailedDayViewModel = function(data) {
 	self.createOtherSchedule(data.To);
 }
 
-Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function (chooseHistory) {
+Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function (chooseHistory, canvasPixelWidth) {
 	var self = this;
 	self.agentName = chooseHistory.tradedSchedule.agentName;
-	self.hours = ko.observableArray(chooseHistory.hours);
-	self.mySchedule = ko.observable(chooseHistory.mySchedule);
-	self.selectedSchedule = ko.observable(chooseHistory.tradedSchedule);
 	var dateFormat = $("#Request-detail-datepicker-format").val().toUpperCase();
 	self.selectedDateInFormat = ko.observable(moment(chooseHistory.date).format(dateFormat));
 	self.selectedDate = ko.observable(chooseHistory.date);
+	self.timeLineStartTime = ko.observable();
+	self.timeLineLengthInMinutes = ko.observable();
+	self.canvasPixelWidth = ko.observable(canvasPixelWidth);
+
+
+	self.setTimeLineLengthInMinutes = function (firstHour, lastHour) {
+		self.timeLineStartTime(firstHour);
+		self.timeLineLengthInMinutes(lastHour.diff(firstHour, 'minutes'));
+	};
+
+
+	self.pixelPerMinute = ko.computed(function() {
+		return self.canvasPixelWidth() / self.timeLineLengthInMinutes();
+	});
+
+	self.hours = ko.computed(function () {
+		var allHours = chooseHistory.hours;
+
+		if (chooseHistory.mySchedule != undefined && chooseHistory.tradedSchedule != undefined) {
+			var mySchedule = chooseHistory.mySchedule;
+			var selectedSchedule = chooseHistory.tradedSchedule;
+			var scheduleStartTime;
+			var scheduleEndTime;
+
+			if (mySchedule.isDayOff && !selectedSchedule.isDayOff) {
+				scheduleStartTime = selectedSchedule.scheduleStartTime();
+				scheduleEndTime = selectedSchedule.scheduleEndTime();
+			} else if (!mySchedule.isDayOff && selectedSchedule.isDayOff) {
+				scheduleStartTime = mySchedule.scheduleStartTime();
+				scheduleEndTime = mySchedule.scheduleEndTime();
+			} else if (mySchedule.isDayOff && selectedSchedule.isDayOff) {
+				return allHours;
+			} else {
+				scheduleStartTime = mySchedule.scheduleStartTime() < selectedSchedule.scheduleStartTime() ? mySchedule.scheduleStartTime() : selectedSchedule.scheduleStartTime();
+				scheduleEndTime = selectedSchedule.scheduleEndTime() > mySchedule.scheduleEndTime() ? selectedSchedule.scheduleEndTime() : mySchedule.scheduleEndTime();
+			}
+
+			self.setTimeLineLengthInMinutes(scheduleStartTime, scheduleEndTime);
+
+			var truncatedHours = [];
+			$.each(allHours, function (index, hour) {
+				if ((hour.startTime >= scheduleStartTime) && (hour.startTime <= scheduleEndTime)) {
+					var newHour = new Teleopti.MyTimeWeb.Request.CloneTimeLineHourAddShiftTradeViewModel(hour, scheduleStartTime, self.pixelPerMinute());
+					truncatedHours.push(newHour);
+				}
+			});
+			if (truncatedHours.length < 18) {
+				$.each(truncatedHours, function(index, hour) {
+					hour.isVisible(true);
+				});
+			}
+			return truncatedHours;
+		} else {
+			return allHours;
+		}
+	});
+
+
+	self.mySchedule = ko.computed(function () {
+		$.each(chooseHistory.mySchedule.layers, function (index, vmScheduleAddShiftTrade) {
+			vmScheduleAddShiftTrade.pixelPerMinute(self.pixelPerMinute());
+		});
+		return chooseHistory.mySchedule;
+	});
+
+	self.selectedSchedule = ko.computed(function () {
+		$.each(chooseHistory.tradedSchedule.layers, function (index, vmScheduleAddShiftTrade) {
+			vmScheduleAddShiftTrade.pixelPerMinute(self.pixelPerMinute());
+		});
+		return chooseHistory.tradedSchedule;
+	});
 }
