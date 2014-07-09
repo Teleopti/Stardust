@@ -30,7 +30,7 @@
 
 
 
-            <ComboBox Style="{StaticResource BasicComboBox}"	ItemsSource="{Binding ShiftCategories}" 
+            <ComboBox Style="{StaticResource BasicComboBox}" ItemsSource="{Binding ShiftCategories}" 
 						IsSynchronizedWithCurrentItem="True"
 						Grid.ColumnSpan="2" Visibility="Hidden"/>
 			

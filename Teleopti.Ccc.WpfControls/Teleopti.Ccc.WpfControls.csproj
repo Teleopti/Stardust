@@ -812,6 +812,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\Flat\FlatMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Flat\FlatRadio.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

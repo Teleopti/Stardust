@@ -1,6 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="../CommonBrushes.xaml">
+			
+		</ResourceDictionary>
+	</ResourceDictionary.MergedDictionaries>
 	<Color x:Key="WindowBackgroundColor">#ffffff</Color>
 
 	<!-- default accent colors and brushes -->
@@ -30,16 +35,16 @@
 		<Setter Property="Margin" Value="{StaticResource ContentMargin}" />
 	</Style>
 
-	<SolidColorBrush x:Key="ButtonBackground" Color="#ffffff" />
-	<SolidColorBrush x:Key="ButtonBackgroundHover" Color="#dddddd" />
-	<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource AccentColor}" />
+	<SolidColorBrush x:Key="ButtonBackground" Color="{StaticResource DarkColor}" />
+	<SolidColorBrush x:Key="ButtonBackgroundHover" Color="#FF86D5F2" />
+	<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{StaticResource DarkColor}" />
 	<SolidColorBrush x:Key="ButtonBorder" Color="#cccccc" />
-	<SolidColorBrush x:Key="ButtonBorderHover" Color="#cccccc" />
+	<SolidColorBrush x:Key="ButtonBorderHover" Color="{StaticResource LightColor}" />
 	<SolidColorBrush x:Key="ButtonBorderPressed" Color="{DynamicResource AccentColor}" />
-	<SolidColorBrush x:Key="ButtonText" Color="#333333" />
-	<SolidColorBrush x:Key="ButtonTextHover" Color="#333333" />
-	<SolidColorBrush x:Key="ButtonTextPressed" Color="#ffffff" />
-	<SolidColorBrush x:Key="ButtonTextDisabled" Color="#a1a1a1" />
+	<SolidColorBrush x:Key="ButtonText" Color="{StaticResource LightColor}" />
+	<SolidColorBrush x:Key="ButtonTextHover" Color="{StaticResource LightColor}" />
+	<SolidColorBrush x:Key="ButtonTextPressed" Color="{StaticResource LightColor}" />
+	<SolidColorBrush x:Key="ButtonTextDisabled" Color="{StaticResource LightColor}" />
 
 	<SolidColorBrush x:Key="DataGridBackground" Color="Transparent" />
 	<SolidColorBrush x:Key="DataGridForeground" Color="#333333" />

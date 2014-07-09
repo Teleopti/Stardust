@@ -9,7 +9,7 @@
         <ResourceDictionary Source="CommonBrushes.xaml"/>
         <ResourceDictionary Source="Icons.xaml"/>
         <ResourceDictionary Source="/PresentationFramework.Aero, Version=3.0.0.0, Culture=neutral,PublicKeyToken=31bf3856ad364e35, ProcessorArchitecture=MSIL;component/themes/aero.normalcolor.xaml" />
-		<!--<ResourceDictionary Source="Flat/AllFlatStyles.xaml/>-->
+	
 		<ResourceDictionary Source="Flat/AllFlatStyles.xaml"/>
 
 	</ResourceDictionary.MergedDictionaries>
@@ -244,28 +244,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="RepeatButton" x:Key="RaptorMoveForwardButtonStyle">
-        <Style.Setters>
-            <Setter Property="RepeatButton.Delay" Value="300"/>
-            <Setter Property="RepeatButton.Content">
-                <Setter.Value>
-                    <TextBlock Text="+"/>
-                </Setter.Value>
-            </Setter>
-        </Style.Setters>
-    </Style>
-
-    <Style TargetType="RepeatButton" 
-           BasedOn="{StaticResource RaptorMoveForwardButtonStyle}" 
-           x:Key="RaptorMoveBackwardsButton">
-        <Style.Setters>
-            <Setter Property="RepeatButton.Content">
-                <Setter.Value>
-                    <TextBlock Text="-"/>
-                </Setter.Value>
-            </Setter>
-        </Style.Setters>
-    </Style>
+   
 
     <Style TargetType="ListBox" x:Key="BasicListBox">
         <Setter Property="ItemContainerStyle">
@@ -278,10 +257,10 @@
         </Setter>
     </Style>
 
-    <Style TargetType="ComboBox" x:Key="BasicComboBox">
+	<Style TargetType="ComboBox" x:Key="BasicComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
-                <Style TargetType="ComboBoxItem">
+				<Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
                     <Setter Property="HorizontalContentAlignment" Value="Left"/>
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
                 </Style>

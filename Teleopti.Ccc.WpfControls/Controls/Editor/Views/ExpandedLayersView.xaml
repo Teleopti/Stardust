@@ -33,7 +33,8 @@
 						 Background="{StaticResource RaptorStandardLightGradientBrush}"
                          Offset="0"
 						 VerticalAlignment="Stretch"
-					     Height="{Binding Path=LayerHeight}"/>
+					     Height="{Binding Path=LayerHeight}"
+						 BorderThickness="0"/>
 
         <!-- The expanded layers -->
         <Layers:ExpandedLayersExpandedView
@@ -41,7 +42,8 @@
                                 Offset="1"
                                 Grid.Row="1"
 								VerticalAlignment="Stretch"
-								Visibility="{Binding Path=EditMode,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}"/>
+								Visibility="{Binding Path=EditMode,Converter={StaticResource visibilityConverter}, FallbackValue=Visible}"
+								BorderThickness="0"/>
                 
                 
                 <Button Content="{x:Static UserTexts:Resources.Show}"
