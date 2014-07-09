@@ -32,7 +32,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Control" >
 
-                        <Border BorderBrush="Black" 
+							<Border BorderBrush="{StaticResource CommonDarkBrush}" 
 								BorderThickness="0.2" 
 								VerticalAlignment="Stretch" 
 								Background="Transparent" >
@@ -93,7 +93,7 @@
                                 
                                 <Label  x:Name="timePanel" 
                                         Grid.RowSpan="2"
-                                        HorizontalAlignment="Left">
+                                        HorizontalAlignment="Left" Foreground="{StaticResource CommonDarkBrush}">
                                     <Label.Content>
                                         <MultiBinding Converter="{StaticResource dateTimeToDateResolutionConverter}">
                                             <Binding Path="Period.StartDateTime"/>
@@ -107,7 +107,7 @@
                                     <Label  x:Name="shortTimePanel" 
                                         Grid.RowSpan="2"
                                         HorizontalAlignment="Left"
-                                        Visibility="Collapsed">
+                                        Visibility="Collapsed" Foreground="{StaticResource CommonDarkBrush}" >
                                         <Label.Content>
                                             <MultiBinding  Converter="{StaticResource dateTimeToHourConverter}">
                                                 <MultiBinding.Bindings>
@@ -139,8 +139,9 @@
         </ResourceDictionary>
 
     </UserControl.Resources>
-    <Grid VerticalAlignment="Stretch" Background="{StaticResource RaptorStandardGradientBrush}">
-        <Control Style="{StaticResource SizeBasedVisual}" VerticalAlignment="Stretch" Margin="0" Padding="0" />
+    <!--<Grid VerticalAlignment="Stretch" Background="{StaticResource RaptorStandardGradientBrush}">-->
+	<Grid VerticalAlignment="Stretch" Background="{StaticResource CommonLightBrush}">
+		<Control Style="{StaticResource SizeBasedVisual}" VerticalAlignment="Stretch" Margin="0" Padding="0" />
     </Grid>
 
 </UserControl>

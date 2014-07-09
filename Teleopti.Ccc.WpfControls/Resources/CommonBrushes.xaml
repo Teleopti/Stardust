@@ -3,7 +3,7 @@
     <ResourceDictionary.MergedDictionaries>
         <!-- For now, it just gets all the brushes from CCC, brushes that are common Avaya/CCC can be placed here and removed from parent, ore overidden here
              Also, this logic should  be moved to Themes and swapped at runtime-->
-        <ResourceDictionary Source="CCCBrushes.xaml"/>
+        <ResourceDictionary Source="FlatBrushes.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     
     <!--Brushes that are the same in both styles

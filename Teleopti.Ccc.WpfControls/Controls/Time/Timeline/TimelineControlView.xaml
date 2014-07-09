@@ -49,9 +49,9 @@
                 <Rectangle Grid.ColumnSpan="5" Fill="{DynamicResource RaptorStandardHoverGradientBrush}">
 
                 </Rectangle>
-               
 
-                    <Label Grid.Column="0">
+
+					<Label Grid.Column="0" Foreground="{StaticResource CommonDarkBrush}">
                         <Label.Content>
                             <MultiBinding  Converter="{StaticResource DateTimeToTimeConverter}">
                                 <MultiBinding.Bindings>
