@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="FlatButton.xaml"></ResourceDictionary>
+		<ResourceDictionary Source="FlatCheckBox.xaml"></ResourceDictionary>
+		<ResourceDictionary Source="FlatCombo.xaml"></ResourceDictionary>
+		<ResourceDictionary Source="FlatToolTip.xaml"></ResourceDictionary>
+		<ResourceDictionary Source="FlatContextMenu.xaml"></ResourceDictionary>
+		<ResourceDictionary Source="FlatListBox.xaml"></ResourceDictionary>
+		<ResourceDictionary Source="FlatTextBox.xaml"></ResourceDictionary>
+		<ResourceDictionary Source="FlatTextBlock.xaml"></ResourceDictionary>
+		<ResourceDictionary Source="FlatSlider.xaml"></ResourceDictionary>
+		<ResourceDictionary Source="FlatListView.xaml"></ResourceDictionary>
+		<ResourceDictionary Source="FlatRadio.xaml"></ResourceDictionary>
+		<ResourceDictionary Source="FlatColors.xaml"></ResourceDictionary>
+	</ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

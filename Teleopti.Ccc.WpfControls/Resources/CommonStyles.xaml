@@ -5,6 +5,7 @@
 
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="Common.xaml"/>
+	
 	</ResourceDictionary.MergedDictionaries>
 	<!-- TabItem -->
 	<Style TargetType="{x:Type TabItem}">
