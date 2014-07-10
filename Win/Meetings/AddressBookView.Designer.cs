@@ -73,23 +73,34 @@
 			// ribbonControlForm
 			// 
 			this.ribbonControlForm.CaptionFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ribbonControlForm.HideMenuButtonToolTip = false;
 			this.ribbonControlForm.Location = new System.Drawing.Point(1, 0);
 			this.ribbonControlForm.MaximizeToolTip = "Maximize Ribbon";
+			this.ribbonControlForm.MenuButtonEnabled = true;
+			this.ribbonControlForm.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlForm.MenuButtonText = "";
 			this.ribbonControlForm.MenuButtonVisible = false;
+			this.ribbonControlForm.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
 			this.ribbonControlForm.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlForm.Name = "ribbonControlForm";
+			this.ribbonControlForm.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
 			// 
 			// ribbonControlForm.OfficeMenu
 			// 
 			this.ribbonControlForm.OfficeMenu.Name = "OfficeMenu";
 			this.ribbonControlForm.OfficeMenu.Size = new System.Drawing.Size(12, 65);
+			this.ribbonControlForm.OverFlowButtonToolTip = "Show DropDown";
+			this.ribbonControlForm.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.ribbonControlForm.QuickPanelVisible = false;
+			this.ribbonControlForm.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.ribbonControlForm.SelectedTab = null;
+			this.ribbonControlForm.Show2010CustomizeQuickItemDialog = false;
+			this.ribbonControlForm.ShowRibbonDisplayOptionButton = true;
 			this.ribbonControlForm.Size = new System.Drawing.Size(574, 33);
 			this.ribbonControlForm.SystemText.QuickAccessDialogDropDownName = "xxStart menu";
 			this.ribbonControlForm.TabIndex = 3;
 			this.ribbonControlForm.Text = "ribbonControlAdv1";
+			this.ribbonControlForm.TitleColor = System.Drawing.Color.Black;
 			// 
 			// tableLayoutPanelForm
 			// 
@@ -133,12 +144,16 @@
 			this.gridControlPeople.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gridControlPeople.ExcelLikeCurrentCell = true;
 			this.gridControlPeople.ExcelLikeSelectionFrame = true;
-			this.gridControlPeople.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
+			this.gridControlPeople.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
 			this.gridControlPeople.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
 			this.gridControlPeople.Location = new System.Drawing.Point(11, 40);
+			this.gridControlPeople.MetroScrollBars = true;
 			this.gridControlPeople.Name = "gridControlPeople";
 			this.gridControlPeople.Office2007ScrollBars = true;
 			this.gridControlPeople.Properties.DisplayVertLines = false;
+			this.gridControlPeople.Properties.ForceImmediateRepaint = false;
+			this.gridControlPeople.Properties.MarkColHeader = false;
+			this.gridControlPeople.Properties.MarkRowHeader = false;
 			this.gridControlPeople.ReadOnly = true;
 			this.gridControlPeople.RowCount = 1;
 			this.gridControlPeople.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
@@ -172,7 +187,11 @@
 			// 
 			// buttonAdvOptional
 			// 
-			this.buttonAdvOptional.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvOptional.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvOptional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvOptional.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonAdvOptional.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvOptional.IsBackStageButton = false;
 			this.buttonAdvOptional.Location = new System.Drawing.Point(3, 36);
 			this.buttonAdvOptional.Name = "buttonAdvOptional";
 			this.buttonAdvOptional.Size = new System.Drawing.Size(75, 23);
@@ -183,7 +202,11 @@
 			// 
 			// buttonAdvRequired
 			// 
-			this.buttonAdvRequired.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvRequired.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvRequired.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvRequired.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonAdvRequired.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvRequired.IsBackStageButton = false;
 			this.buttonAdvRequired.Location = new System.Drawing.Point(3, 7);
 			this.buttonAdvRequired.Name = "buttonAdvRequired";
 			this.buttonAdvRequired.Size = new System.Drawing.Size(75, 23);
@@ -196,14 +219,20 @@
 			// 
 			this.textBoxExtOptionalParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBoxExtOptionalParticipant.BackColor = System.Drawing.Color.White;
+			this.textBoxExtOptionalParticipant.BeforeTouchSize = new System.Drawing.Size(461, 21);
+			this.textBoxExtOptionalParticipant.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+			this.textBoxExtOptionalParticipant.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.textBoxExtOptionalParticipant.ContextMenuStrip = this.contextMenuStripEx1;
 			this.textBoxExtOptionalParticipant.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxExtOptionalParticipant.Location = new System.Drawing.Point(84, 36);
+			this.textBoxExtOptionalParticipant.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtOptionalParticipant.Multiline = true;
 			this.textBoxExtOptionalParticipant.Name = "textBoxExtOptionalParticipant";
 			this.textBoxExtOptionalParticipant.OverflowIndicatorToolTipText = null;
 			this.textBoxExtOptionalParticipant.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBoxExtOptionalParticipant.Size = new System.Drawing.Size(461, 21);
+			this.textBoxExtOptionalParticipant.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Metro;
 			this.textBoxExtOptionalParticipant.TabIndex = 3;
 			this.textBoxExtOptionalParticipant.TextChanged += new System.EventHandler(this.textBoxExtOptionalParticipant_TextChanged);
 			this.textBoxExtOptionalParticipant.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExtOptionalParticipant_KeyDown);
@@ -264,14 +293,20 @@
 			// 
 			this.textBoxExtRequiredParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBoxExtRequiredParticipant.BackColor = System.Drawing.Color.White;
+			this.textBoxExtRequiredParticipant.BeforeTouchSize = new System.Drawing.Size(461, 21);
+			this.textBoxExtRequiredParticipant.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+			this.textBoxExtRequiredParticipant.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtRequiredParticipant.ContextMenuStrip = this.contextMenuStripEx1;
 			this.textBoxExtRequiredParticipant.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxExtRequiredParticipant.Location = new System.Drawing.Point(84, 7);
+			this.textBoxExtRequiredParticipant.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtRequiredParticipant.Multiline = true;
 			this.textBoxExtRequiredParticipant.Name = "textBoxExtRequiredParticipant";
 			this.textBoxExtRequiredParticipant.OverflowIndicatorToolTipText = null;
 			this.textBoxExtRequiredParticipant.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBoxExtRequiredParticipant.Size = new System.Drawing.Size(461, 21);
+			this.textBoxExtRequiredParticipant.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Metro;
 			this.textBoxExtRequiredParticipant.TabIndex = 2;
 			this.textBoxExtRequiredParticipant.TextChanged += new System.EventHandler(this.textBoxExtRequiredParticipant_TextChanged);
 			this.textBoxExtRequiredParticipant.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxExtRequiredParticipant_KeyDown);
@@ -309,26 +344,30 @@
 			// 
 			// 
 			this.dateTimePickerAdvtDate.Calendar.AllowMultipleSelection = false;
+			this.dateTimePickerAdvtDate.Calendar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+			this.dateTimePickerAdvtDate.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.dateTimePickerAdvtDate.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdvtDate.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
+			this.dateTimePickerAdvtDate.Calendar.DayNamesColor = System.Drawing.Color.Empty;
+			this.dateTimePickerAdvtDate.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
 			this.dateTimePickerAdvtDate.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
 			this.dateTimePickerAdvtDate.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateTimePickerAdvtDate.Calendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvtDate.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvtDate.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
-			this.dateTimePickerAdvtDate.Calendar.HeaderEndColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255)))));
-			this.dateTimePickerAdvtDate.Calendar.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.dateTimePickerAdvtDate.Calendar.HeaderHeight = 20;
-			this.dateTimePickerAdvtDate.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
-			this.dateTimePickerAdvtDate.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
-			this.dateTimePickerAdvtDate.Calendar.HeadGradient = true;
+			this.dateTimePickerAdvtDate.Calendar.HeaderEndColor = System.Drawing.Color.White;
+			this.dateTimePickerAdvtDate.Calendar.HeaderHeight = 34;
+			this.dateTimePickerAdvtDate.Calendar.HeaderStartColor = System.Drawing.Color.White;
+			this.dateTimePickerAdvtDate.Calendar.HighlightColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvtDate.Calendar.Iso8601CalenderFormat = false;
 			this.dateTimePickerAdvtDate.Calendar.Location = new System.Drawing.Point(0, 0);
+			this.dateTimePickerAdvtDate.Calendar.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.dateTimePickerAdvtDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvtDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvtDate.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvtDate.Calendar.Size = new System.Drawing.Size(200, 174);
+			this.dateTimePickerAdvtDate.Calendar.Size = new System.Drawing.Size(209, 174);
 			this.dateTimePickerAdvtDate.Calendar.SizeToFit = true;
-			this.dateTimePickerAdvtDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+			this.dateTimePickerAdvtDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvtDate.Calendar.TabIndex = 0;
 			this.dateTimePickerAdvtDate.Calendar.ThemedEnabledScrollButtons = false;
 			this.dateTimePickerAdvtDate.Calendar.WeekFont = new System.Drawing.Font("Verdana", 8F);
@@ -336,8 +375,11 @@
 			// 
 			// 
 			// 
-			this.dateTimePickerAdvtDate.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.dateTimePickerAdvtDate.Calendar.NoneButton.Location = new System.Drawing.Point(130, 0);
+			this.dateTimePickerAdvtDate.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.dateTimePickerAdvtDate.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.dateTimePickerAdvtDate.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
+			this.dateTimePickerAdvtDate.Calendar.NoneButton.IsBackStageButton = false;
+			this.dateTimePickerAdvtDate.Calendar.NoneButton.Location = new System.Drawing.Point(124, 0);
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.Text = "None";
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.UseVisualStyle = true;
@@ -345,33 +387,43 @@
 			// 
 			// 
 			// 
-			this.dateTimePickerAdvtDate.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.dateTimePickerAdvtDate.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvtDate.Calendar.TodayButton.Size = new System.Drawing.Size(200, 20);
+			this.dateTimePickerAdvtDate.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.dateTimePickerAdvtDate.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.dateTimePickerAdvtDate.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
+			this.dateTimePickerAdvtDate.Calendar.TodayButton.IsBackStageButton = false;
+			this.dateTimePickerAdvtDate.Calendar.TodayButton.Location = new System.Drawing.Point(2, 1);
+			this.dateTimePickerAdvtDate.Calendar.TodayButton.Size = new System.Drawing.Size(206, 21);
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvtDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.dateTimePickerAdvtDate.CalendarSize = new System.Drawing.Size(189, 176);
 			this.dateTimePickerAdvtDate.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvtDate.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvtDate.ClipboardFormat = System.Windows.Forms.DateTimePickerFormat.Short;
 			this.dateTimePickerAdvtDate.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateTimePickerAdvtDate.DropDownImage = null;
+			this.dateTimePickerAdvtDate.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvtDate.EnableNullDate = false;
 			this.dateTimePickerAdvtDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
 			this.dateTimePickerAdvtDate.Location = new System.Drawing.Point(441, 3);
+			this.dateTimePickerAdvtDate.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.dateTimePickerAdvtDate.MinValue = new System.DateTime(((long)(0)));
 			this.dateTimePickerAdvtDate.Name = "dateTimePickerAdvtDate";
 			this.dateTimePickerAdvtDate.NoneButtonVisible = false;
 			this.dateTimePickerAdvtDate.ShowCheckBox = false;
 			this.dateTimePickerAdvtDate.Size = new System.Drawing.Size(104, 20);
-			this.dateTimePickerAdvtDate.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+			this.dateTimePickerAdvtDate.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvtDate.TabIndex = 5;
 			this.dateTimePickerAdvtDate.ThemesEnabled = true;
 			this.dateTimePickerAdvtDate.Value = new System.DateTime(2008, 8, 5, 8, 1, 24, 984);
 			// 
 			// buttonAdvGo
 			// 
-			this.buttonAdvGo.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvGo.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvGo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvGo.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonAdvGo.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvGo.IsBackStageButton = false;
 			this.buttonAdvGo.Location = new System.Drawing.Point(334, 3);
 			this.buttonAdvGo.Name = "buttonAdvGo";
 			this.buttonAdvGo.Size = new System.Drawing.Size(75, 23);
@@ -392,12 +444,18 @@
 			// 
 			// textBoxExtFilterCriteria
 			// 
+			this.textBoxExtFilterCriteria.BackColor = System.Drawing.Color.White;
+			this.textBoxExtFilterCriteria.BeforeTouchSize = new System.Drawing.Size(461, 21);
+			this.textBoxExtFilterCriteria.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+			this.textBoxExtFilterCriteria.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtFilterCriteria.ContextMenuStrip = this.contextMenuStripEx1;
 			this.textBoxExtFilterCriteria.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxExtFilterCriteria.Location = new System.Drawing.Point(111, 3);
+			this.textBoxExtFilterCriteria.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtFilterCriteria.Name = "textBoxExtFilterCriteria";
 			this.textBoxExtFilterCriteria.OverflowIndicatorToolTipText = null;
 			this.textBoxExtFilterCriteria.Size = new System.Drawing.Size(217, 21);
+			this.textBoxExtFilterCriteria.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Metro;
 			this.textBoxExtFilterCriteria.TabIndex = 3;
 			this.textBoxExtFilterCriteria.Enter += new System.EventHandler(this.textBoxExtFilterCriteria_Enter);
 			this.textBoxExtFilterCriteria.Leave += new System.EventHandler(this.textBoxExtFilterCriteria_Leave);
@@ -424,8 +482,12 @@
 			// 
 			// buttonAdvCancel
 			// 
-			this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvCancel.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.buttonAdvCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.buttonAdvCancel.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvCancel.IsBackStageButton = false;
 			this.buttonAdvCancel.Location = new System.Drawing.Point(88, 7);
 			this.buttonAdvCancel.Name = "buttonAdvCancel";
 			this.buttonAdvCancel.Size = new System.Drawing.Size(75, 23);
@@ -435,8 +497,12 @@
 			// 
 			// buttonAdvOK
 			// 
-			this.buttonAdvOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvOK.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.buttonAdvOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.buttonAdvOK.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvOK.IsBackStageButton = false;
 			this.buttonAdvOK.Location = new System.Drawing.Point(3, 7);
 			this.buttonAdvOK.Name = "buttonAdvOK";
 			this.buttonAdvOK.Size = new System.Drawing.Size(75, 23);
@@ -447,9 +513,11 @@
 			// 
 			// statusStripExAddressBook
 			// 
+			this.statusStripExAddressBook.BeforeTouchSize = new System.Drawing.Size(564, 22);
 			this.statusStripExAddressBook.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelMessage});
 			this.statusStripExAddressBook.Location = new System.Drawing.Point(6, 447);
+			this.statusStripExAddressBook.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
 			this.statusStripExAddressBook.Name = "statusStripExAddressBook";
 			this.statusStripExAddressBook.Size = new System.Drawing.Size(564, 22);
 			this.statusStripExAddressBook.TabIndex = 7;

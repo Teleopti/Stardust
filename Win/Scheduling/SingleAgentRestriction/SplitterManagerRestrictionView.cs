@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
             {
                 GridEditorSplitter.Panel2Collapsed = false;
                 GridEditorSplitter.Style = Style.Default;
-                GridEditorSplitter.SplitterWidth = 1;
+                GridEditorSplitter.SplitterWidth = 3;
 					 GridEditorSplitter.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.Silver);
                 //GridEditorSplitter.SplitterDistance = GridEditorSplitter.Height - _editorHeight;
 
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
             {
                 RestrictionViewSplitter.Panel1Collapsed = false;
 					 RestrictionViewSplitter.Style = Style.Default;
-                RestrictionViewSplitter.SplitterWidth = 1;
+                RestrictionViewSplitter.SplitterWidth = 3;
 					 RestrictionViewSplitter.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.Silver);
             }
         }
@@ -189,10 +189,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
             else
             {
 					LeftMainSplitter.Style = Style.Default;
-					LeftMainSplitter.SplitterWidth = 1;
+					LeftMainSplitter.SplitterWidth = 3;
 					LeftMainSplitter.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.Silver);
 					GraphResultSplitter.Style = Style.Default;
-               GraphResultSplitter.SplitterWidth = 1;
+               GraphResultSplitter.SplitterWidth = 3;
 					GraphResultSplitter.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.Silver);
             }
         }
