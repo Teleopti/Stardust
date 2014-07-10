@@ -320,7 +320,7 @@ item: Set Variable
 end
 item: Set Variable
   Variable=TELEOPTI_CLAIM_PROVIDER_TMP
-  Value=<add identifier="urn:Teleopti" displayName="Teleopti application" url="%DNS_ALIAS_TMP%%SUB_SITE_TMP%/Web/sso" protocolHandler="OpenIdHandler" />
+  Value=<add identifier="urn:Teleopti" displayName="Teleopti" url="%DNS_ALIAS_TMP%%SUB_SITE_TMP%/Web/sso" protocolHandler="OpenIdHandler" />
 end
 item: Set Variable
   Variable=WINDOWS_CLAIM_PROVIDER_TMP
