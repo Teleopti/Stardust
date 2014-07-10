@@ -504,7 +504,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			var nameCellWidth = $("td.shift-trade-agent-name").width();
 			canvasWidth = containerWidth - nameCellWidth;
 			if (vm.isTradeForMultiDaysEnabled()) {
-				var buttonAddCellWidth = $("td.day-add").width();
+				var buttonAddCellWidth = $("td.shift-trade-button-cell").width();
 				canvasWidth = canvasWidth - buttonAddCellWidth;
 			}
 		}

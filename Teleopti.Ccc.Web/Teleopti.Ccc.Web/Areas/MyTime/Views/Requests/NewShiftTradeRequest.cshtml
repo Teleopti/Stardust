@@ -82,7 +82,7 @@
 	                    </td>
 	                    <!--/ko-->
 							  <!-- ko if: isTradeForMultiDaysEnabled-->
-	                    <td></td>
+						<td class="shift-trade-button-cell"></td>
 						  		<!--/ko-->
                     </tr>
                 </tbody>
@@ -104,7 +104,7 @@
 								<!--/ko-->
 							</td>
 							<!-- ko if: $root.isTradeForMultiDaysEnabled-->
-							<td class="col-xs-1 day-add">
+							<td class="shift-trade-button-cell">
 								<!-- ko if: $root.isAddVisible-->
 								<button id="shift-trade-add" type="button" class="btn btn-primary btn-xs" data-bind="click: $root.add">
 									<i class="glyphicon glyphicon-plus"></i>
@@ -175,7 +175,7 @@
 						    </div>
 						    <!--/ko-->
 					    </td>
-					    <td class="col-xs-1">
+						<td class="shift-trade-button-cell">
 						    <button type="button" id="shift-trade-remove" class="btn btn-primary btn-xs" data-bind="visible: $root.isDetailVisible, click: $root.remove">
 							    <i class="glyphicon glyphicon-minus"></i>
 						    </button>

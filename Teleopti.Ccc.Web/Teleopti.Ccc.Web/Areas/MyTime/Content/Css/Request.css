@@ -256,6 +256,12 @@
 	white-space: nowrap;
 	width: 166px;
 }
+
+.shift-trade-button-cell {
+	width: 30px;
+	text-align: right;
+}
+
 .shift-trade-agent-name-hover
 {
 	padding-right: 10px;
