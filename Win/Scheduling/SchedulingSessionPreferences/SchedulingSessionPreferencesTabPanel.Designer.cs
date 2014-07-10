@@ -29,8 +29,8 @@
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameShift"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxBlock"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxShiftCategoryLimitations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyPreferenceMustHave"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRotations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameEndTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseTeamScheduling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseShiftCategoryRestrictions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseShiftCategory"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseSameDayOffs"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseRotations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseRestriction"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUsePreferencesMustHavesOnly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUsePreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMinStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMaxStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMaxSeats"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseBlockScheduling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxTagChangesWithColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxShiftSelection"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSchedulePeriod"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOrSchedules"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyRotationDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyPreferenceDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyAvailabilityDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameStartTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameShiftCategory"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxResourceCalculateEveryColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRefreshScreenEveryColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxGeneral"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxIncludeTroubleshootingInformation"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxFairness"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExtra"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxDoNotBreakMaxSeats"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxCompareWith"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxBusiness"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxBetweenDayOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAdvanced"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
         private void InitializeComponent()
         {
-			this.tabControl1 = new System.Windows.Forms.TabControl();
-			this.tabPageGeneral = new System.Windows.Forms.TabPage();
+			this.tabControl1 = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
+			this.tabPageGeneral = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.checkBoxShowTroubleShot = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.tableLayoutPanelRestrictions = new System.Windows.Forms.TableLayoutPanel();
@@ -47,7 +47,7 @@
 			this.label6 = new System.Windows.Forms.Label();
 			this.comboBoxAdvTag = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.lblUseRestrictions = new System.Windows.Forms.Label();
-			this.tabPageExtra = new System.Windows.Forms.TabPage();
+			this.tabPageExtra = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblFairness = new System.Windows.Forms.Label();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
@@ -71,7 +71,7 @@
 			this.checkBoxBlockSameShift = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label7 = new System.Windows.Forms.Label();
-			this.tabPageAdvance = new System.Windows.Forms.TabPage();
+			this.tabPageAdvance = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblShiftSelection = new System.Windows.Forms.Label();
 			this.pnlShiftCategory = new System.Windows.Forms.Panel();
@@ -91,6 +91,7 @@
 			this.checkBoxUseMinimumPersons = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxDoNotBreakMaxSeats = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxUseAverageShiftLengths = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			((System.ComponentModel.ISupportInitialize)(this.tabControl1)).BeginInit();
 			this.tabControl1.SuspendLayout();
 			this.tabPageGeneral.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -144,28 +145,37 @@
 			// 
 			// tabControl1
 			// 
+			this.tabControl1.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+			this.tabControl1.BeforeTouchSize = new System.Drawing.Size(446, 528);
+			this.tabControl1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControl1.Controls.Add(this.tabPageGeneral);
 			this.tabControl1.Controls.Add(this.tabPageExtra);
 			this.tabControl1.Controls.Add(this.tabPageAdvance);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tabControl1.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControl1.Location = new System.Drawing.Point(0, 0);
 			this.tabControl1.Name = "tabControl1";
-			this.tabControl1.SelectedIndex = 0;
 			this.tabControl1.Size = new System.Drawing.Size(446, 528);
 			this.tabControl1.TabIndex = 0;
+			this.tabControl1.TabPanelBackColor = System.Drawing.Color.White;
+			this.tabControl1.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1SelectedIndexChanged);
 			// 
 			// tabPageGeneral
 			// 
+			this.tabPageGeneral.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tabPageGeneral.Controls.Add(this.tableLayoutPanel1);
-			this.tabPageGeneral.Location = new System.Drawing.Point(4, 22);
+			this.tabPageGeneral.Image = null;
+			this.tabPageGeneral.ImageSize = new System.Drawing.Size(16, 16);
+			this.tabPageGeneral.Location = new System.Drawing.Point(0, 21);
 			this.tabPageGeneral.Name = "tabPageGeneral";
 			this.tabPageGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageGeneral.Size = new System.Drawing.Size(438, 502);
-			this.tabPageGeneral.TabIndex = 0;
+			this.tabPageGeneral.ShowCloseButton = true;
+			this.tabPageGeneral.Size = new System.Drawing.Size(446, 507);
+			this.tabPageGeneral.TabIndex = 1;
 			this.tabPageGeneral.Text = "xxGeneral";
-			this.tabPageGeneral.UseVisualStyleBackColor = true;
+			this.tabPageGeneral.ThemesEnabled = false;
 			// 
 			// tableLayoutPanel1
 			// 
@@ -184,7 +194,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 61.77967F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.22033F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(432, 496);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(438, 499);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// checkBoxShowTroubleShot
@@ -192,7 +202,7 @@
 			this.checkBoxShowTroubleShot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBoxShowTroubleShot.BeforeTouchSize = new System.Drawing.Size(228, 19);
 			this.tableLayoutPanel1.SetColumnSpan(this.checkBoxShowTroubleShot, 2);
-			this.checkBoxShowTroubleShot.Location = new System.Drawing.Point(3, 474);
+			this.checkBoxShowTroubleShot.Location = new System.Drawing.Point(3, 477);
 			this.checkBoxShowTroubleShot.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxShowTroubleShot.Name = "checkBoxShowTroubleShot";
 			this.checkBoxShowTroubleShot.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
@@ -228,7 +238,7 @@
 			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
 			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-			this.tableLayoutPanelRestrictions.Size = new System.Drawing.Size(426, 247);
+			this.tableLayoutPanelRestrictions.Size = new System.Drawing.Size(432, 249);
 			this.tableLayoutPanelRestrictions.TabIndex = 23;
 			// 
 			// checkBoxUseShiftCategoryRestrictions
@@ -350,13 +360,13 @@
 			// 
 			// checkBoxMustHaves
 			// 
-			this.checkBoxMustHaves.BeforeTouchSize = new System.Drawing.Size(390, 17);
+			this.checkBoxMustHaves.BeforeTouchSize = new System.Drawing.Size(396, 17);
 			this.checkBoxMustHaves.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxMustHaves.DrawFocusRectangle = false;
 			this.checkBoxMustHaves.Location = new System.Drawing.Point(33, 49);
 			this.checkBoxMustHaves.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxMustHaves.Name = "checkBoxMustHaves";
-			this.checkBoxMustHaves.Size = new System.Drawing.Size(390, 17);
+			this.checkBoxMustHaves.Size = new System.Drawing.Size(396, 17);
 			this.checkBoxMustHaves.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxMustHaves.TabIndex = 14;
 			this.checkBoxMustHaves.Text = "xxScheduleOnlyPreferenceMustHave";
@@ -375,7 +385,7 @@
 			this.tableLayoutPanelTagWith.Name = "tableLayoutPanelTagWith";
 			this.tableLayoutPanelTagWith.RowCount = 1;
 			this.tableLayoutPanelTagWith.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelTagWith.Size = new System.Drawing.Size(426, 29);
+			this.tableLayoutPanelTagWith.Size = new System.Drawing.Size(432, 29);
 			this.tableLayoutPanelTagWith.TabIndex = 22;
 			// 
 			// label6
@@ -411,14 +421,18 @@
 			// 
 			// tabPageExtra
 			// 
+			this.tabPageExtra.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tabPageExtra.Controls.Add(this.tableLayoutPanel2);
-			this.tabPageExtra.Location = new System.Drawing.Point(4, 22);
+			this.tabPageExtra.Image = null;
+			this.tabPageExtra.ImageSize = new System.Drawing.Size(16, 16);
+			this.tabPageExtra.Location = new System.Drawing.Point(0, 21);
 			this.tabPageExtra.Name = "tabPageExtra";
 			this.tabPageExtra.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageExtra.Size = new System.Drawing.Size(438, 502);
+			this.tabPageExtra.ShowCloseButton = true;
+			this.tabPageExtra.Size = new System.Drawing.Size(446, 507);
 			this.tabPageExtra.TabIndex = 1;
 			this.tabPageExtra.Text = "xxExtra";
-			this.tabPageExtra.UseVisualStyleBackColor = true;
+			this.tabPageExtra.ThemesEnabled = false;
 			// 
 			// tableLayoutPanel2
 			// 
@@ -434,13 +448,13 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(432, 496);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(438, 499);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// lblFairness
 			// 
 			this.lblFairness.AutoSize = true;
-			this.lblFairness.Location = new System.Drawing.Point(3, 312);
+			this.lblFairness.Location = new System.Drawing.Point(3, 314);
 			this.lblFairness.Margin = new System.Windows.Forms.Padding(3);
 			this.lblFairness.Name = "lblFairness";
 			this.lblFairness.Size = new System.Drawing.Size(59, 14);
@@ -457,14 +471,14 @@
 			this.tableLayoutPanel5.Controls.Add(this.label5, 0, 1);
 			this.tableLayoutPanel5.Controls.Add(this.comboBoxGroupingFairness, 1, 1);
 			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 332);
+			this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 334);
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
 			this.tableLayoutPanel5.RowCount = 4;
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(426, 161);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(432, 162);
 			this.tableLayoutPanel5.TabIndex = 25;
 			// 
 			// panel1
@@ -476,7 +490,7 @@
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(3, 3);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(400, 84);
+			this.panel1.Size = new System.Drawing.Size(406, 84);
 			this.panel1.TabIndex = 21;
 			// 
 			// label3
@@ -494,7 +508,7 @@
 			// 
 			this.label4.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(341, 63);
+			this.label4.Location = new System.Drawing.Point(347, 63);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(59, 15);
 			this.label4.TabIndex = 2;
@@ -509,7 +523,7 @@
 			this.trackBar1.Location = new System.Drawing.Point(6, 15);
 			this.trackBar1.Maximum = 100;
 			this.trackBar1.Name = "trackBar1";
-			this.trackBar1.Size = new System.Drawing.Size(391, 45);
+			this.trackBar1.Size = new System.Drawing.Size(397, 45);
 			this.trackBar1.TabIndex = 39;
 			this.trackBar1.TickFrequency = 5;
 			this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1ValueChanged);
@@ -527,12 +541,12 @@
 			// comboBoxGroupingFairness
 			// 
 			this.comboBoxGroupingFairness.BackColor = System.Drawing.Color.White;
-			this.comboBoxGroupingFairness.BeforeTouchSize = new System.Drawing.Size(178, 19);
+			this.comboBoxGroupingFairness.BeforeTouchSize = new System.Drawing.Size(184, 21);
 			this.comboBoxGroupingFairness.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxGroupingFairness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxGroupingFairness.Location = new System.Drawing.Point(225, 93);
 			this.comboBoxGroupingFairness.Name = "comboBoxGroupingFairness";
-			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(178, 19);
+			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(184, 21);
 			this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxGroupingFairness.TabIndex = 40;
 			// 
@@ -542,7 +556,7 @@
 			this.pnlBlockTeamScheduling.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.pnlBlockTeamScheduling.Location = new System.Drawing.Point(3, 3);
 			this.pnlBlockTeamScheduling.Name = "pnlBlockTeamScheduling";
-			this.pnlBlockTeamScheduling.Size = new System.Drawing.Size(426, 303);
+			this.pnlBlockTeamScheduling.Size = new System.Drawing.Size(432, 305);
 			this.pnlBlockTeamScheduling.TabIndex = 24;
 			// 
 			// tableLayoutPanel4
@@ -578,7 +592,7 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 11F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(426, 303);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(432, 305);
 			this.tableLayoutPanel4.TabIndex = 1;
 			// 
 			// checkBoxTeamSameActivity
@@ -601,13 +615,13 @@
 			// comboBoxTeamActivity
 			// 
 			this.comboBoxTeamActivity.BackColor = System.Drawing.Color.White;
-			this.comboBoxTeamActivity.BeforeTouchSize = new System.Drawing.Size(178, 19);
+			this.comboBoxTeamActivity.BeforeTouchSize = new System.Drawing.Size(184, 21);
 			this.comboBoxTeamActivity.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamActivity.Enabled = false;
 			this.comboBoxTeamActivity.Location = new System.Drawing.Point(225, 220);
 			this.comboBoxTeamActivity.Name = "comboBoxTeamActivity";
-			this.comboBoxTeamActivity.Size = new System.Drawing.Size(178, 19);
+			this.comboBoxTeamActivity.Size = new System.Drawing.Size(184, 21);
 			this.comboBoxTeamActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxTeamActivity.TabIndex = 40;
 			// 
@@ -665,13 +679,13 @@
 			// comboBoxTeamGroupPage
 			// 
 			this.comboBoxTeamGroupPage.BackColor = System.Drawing.Color.White;
-			this.comboBoxTeamGroupPage.BeforeTouchSize = new System.Drawing.Size(178, 19);
+			this.comboBoxTeamGroupPage.BeforeTouchSize = new System.Drawing.Size(184, 21);
 			this.comboBoxTeamGroupPage.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamGroupPage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamGroupPage.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
 			this.comboBoxTeamGroupPage.Location = new System.Drawing.Point(225, 114);
 			this.comboBoxTeamGroupPage.Name = "comboBoxTeamGroupPage";
-			this.comboBoxTeamGroupPage.Size = new System.Drawing.Size(178, 19);
+			this.comboBoxTeamGroupPage.Size = new System.Drawing.Size(184, 21);
 			this.comboBoxTeamGroupPage.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxTeamGroupPage.TabIndex = 35;
 			this.comboBoxTeamGroupPage.SelectedIndexChanged += new System.EventHandler(this.comboBoxTeamGroupPageSelectedIndexChanged);
@@ -679,13 +693,13 @@
 			// comboBoxBlockType
 			// 
 			this.comboBoxBlockType.BackColor = System.Drawing.Color.White;
-			this.comboBoxBlockType.BeforeTouchSize = new System.Drawing.Size(178, 19);
+			this.comboBoxBlockType.BeforeTouchSize = new System.Drawing.Size(184, 21);
 			this.comboBoxBlockType.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxBlockType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxBlockType.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
 			this.comboBoxBlockType.Location = new System.Drawing.Point(225, 3);
 			this.comboBoxBlockType.Name = "comboBoxBlockType";
-			this.comboBoxBlockType.Size = new System.Drawing.Size(178, 19);
+			this.comboBoxBlockType.Size = new System.Drawing.Size(184, 21);
 			this.comboBoxBlockType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxBlockType.TabIndex = 47;
 			this.comboBoxBlockType.SelectedValueChanged += new System.EventHandler(this.comboBoxBlockType_SelectedValueChanged);
@@ -767,13 +781,17 @@
 			// 
 			// tabPageAdvance
 			// 
+			this.tabPageAdvance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tabPageAdvance.Controls.Add(this.tableLayoutPanel3);
-			this.tabPageAdvance.Location = new System.Drawing.Point(4, 22);
+			this.tabPageAdvance.Image = null;
+			this.tabPageAdvance.ImageSize = new System.Drawing.Size(16, 16);
+			this.tabPageAdvance.Location = new System.Drawing.Point(0, 21);
 			this.tabPageAdvance.Name = "tabPageAdvance";
-			this.tabPageAdvance.Size = new System.Drawing.Size(438, 502);
+			this.tabPageAdvance.ShowCloseButton = true;
+			this.tabPageAdvance.Size = new System.Drawing.Size(446, 507);
 			this.tabPageAdvance.TabIndex = 2;
 			this.tabPageAdvance.Text = "xxAdvanced";
-			this.tabPageAdvance.UseVisualStyleBackColor = true;
+			this.tabPageAdvance.ThemesEnabled = false;
 			// 
 			// tableLayoutPanel3
 			// 
@@ -792,7 +810,7 @@
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(438, 502);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(444, 505);
 			this.tableLayoutPanel3.TabIndex = 0;
 			// 
 			// lblShiftSelection
@@ -809,9 +827,9 @@
 			// 
 			this.pnlShiftCategory.Controls.Add(this.tableLayoutPanel7);
 			this.pnlShiftCategory.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.pnlShiftCategory.Location = new System.Drawing.Point(3, 183);
+			this.pnlShiftCategory.Location = new System.Drawing.Point(3, 184);
 			this.pnlShiftCategory.Name = "pnlShiftCategory";
-			this.pnlShiftCategory.Size = new System.Drawing.Size(432, 154);
+			this.pnlShiftCategory.Size = new System.Drawing.Size(438, 155);
 			this.pnlShiftCategory.TabIndex = 22;
 			// 
 			// tableLayoutPanel7
@@ -827,7 +845,7 @@
 			this.tableLayoutPanel7.RowCount = 2;
 			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.88312F));
 			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 83.11688F));
-			this.tableLayoutPanel7.Size = new System.Drawing.Size(432, 154);
+			this.tableLayoutPanel7.Size = new System.Drawing.Size(438, 155);
 			this.tableLayoutPanel7.TabIndex = 18;
 			// 
 			// checkBoxUseShiftCategory
@@ -848,13 +866,13 @@
 			// comboBoxAdvShiftCategory
 			// 
 			this.comboBoxAdvShiftCategory.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvShiftCategory.BeforeTouchSize = new System.Drawing.Size(173, 19);
+			this.comboBoxAdvShiftCategory.BeforeTouchSize = new System.Drawing.Size(173, 21);
 			this.comboBoxAdvShiftCategory.Dock = System.Windows.Forms.DockStyle.Left;
 			this.comboBoxAdvShiftCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(28, 29);
 			this.comboBoxAdvShiftCategory.MaxDropDownItems = 16;
 			this.comboBoxAdvShiftCategory.Name = "comboBoxAdvShiftCategory";
-			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 19);
+			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 21);
 			this.comboBoxAdvShiftCategory.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvShiftCategory.SuppressDropDownEvent = true;
 			this.comboBoxAdvShiftCategory.TabIndex = 56;
@@ -874,12 +892,12 @@
 			this.tableLayoutPanel8.Controls.Add(this.numericUpDownResourceCalculateEvery, 2, 0);
 			this.tableLayoutPanel8.Controls.Add(this.labelResourceCalculateEveryColon, 1, 0);
 			this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Top;
-			this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 343);
+			this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 345);
 			this.tableLayoutPanel8.Name = "tableLayoutPanel8";
 			this.tableLayoutPanel8.RowCount = 2;
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-			this.tableLayoutPanel8.Size = new System.Drawing.Size(432, 58);
+			this.tableLayoutPanel8.Size = new System.Drawing.Size(438, 58);
 			this.tableLayoutPanel8.TabIndex = 23;
 			// 
 			// labelScheduleOrSchedules2
@@ -887,7 +905,7 @@
 			this.labelScheduleOrSchedules2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.labelScheduleOrSchedules2.Location = new System.Drawing.Point(272, 28);
 			this.labelScheduleOrSchedules2.Name = "labelScheduleOrSchedules2";
-			this.labelScheduleOrSchedules2.Size = new System.Drawing.Size(157, 30);
+			this.labelScheduleOrSchedules2.Size = new System.Drawing.Size(163, 30);
 			this.labelScheduleOrSchedules2.TabIndex = 22;
 			this.labelScheduleOrSchedules2.Text = "xxScheduleOrSchedules";
 			this.labelScheduleOrSchedules2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -931,7 +949,7 @@
 			this.labelScheduleOrSchedules1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.labelScheduleOrSchedules1.Location = new System.Drawing.Point(272, 0);
 			this.labelScheduleOrSchedules1.Name = "labelScheduleOrSchedules1";
-			this.labelScheduleOrSchedules1.Size = new System.Drawing.Size(157, 28);
+			this.labelScheduleOrSchedules1.Size = new System.Drawing.Size(163, 28);
 			this.labelScheduleOrSchedules1.TabIndex = 19;
 			this.labelScheduleOrSchedules1.Text = "xxScheduleOrSchedules";
 			this.labelScheduleOrSchedules1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -989,7 +1007,7 @@
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel6.Size = new System.Drawing.Size(432, 154);
+			this.tableLayoutPanel6.Size = new System.Drawing.Size(438, 155);
 			this.tableLayoutPanel6.TabIndex = 17;
 			// 
 			// checkBoxUseMaxSeats
@@ -1070,6 +1088,7 @@
 			this.Name = "SchedulingSessionPreferencesTabPanel";
 			this.Size = new System.Drawing.Size(446, 528);
 			this.Tag = "Main";
+			((System.ComponentModel.ISupportInitialize)(this.tabControl1)).EndInit();
 			this.tabControl1.ResumeLayout(false);
 			this.tabPageGeneral.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
@@ -1132,10 +1151,10 @@
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPageGeneral;
-        private System.Windows.Forms.TabPage tabPageExtra;
-        private System.Windows.Forms.TabPage tabPageAdvance;
+		  private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControl1;
+		  private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageGeneral;
+		  private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageExtra;
+		  private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvance;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTagWith;
         private System.Windows.Forms.Label label6;
