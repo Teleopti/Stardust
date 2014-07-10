@@ -91,8 +91,8 @@
 							<td class="shift-trade-agent-name" data-bind="text: $data.agentName"></td>
 							<td class="shift-trade-possible-trade-schedule">
 								<!--ko if:$data.isDayOff-->
-								<div style="height: 22px; width: 100%;" class="dayoff">
-									<div class="shift-trade-layer-container floatleft shift-trade-dayoff">@Resources.DayOff</div>
+								<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
+									<div class="dayoff">@Resources.DayOff</div>
 								</div>
 								<!--/ko-->
 								<!--ko if:!$data.isDayOff-->
@@ -163,8 +163,8 @@
 					    <td class="shift-trade-agent-name" data-bind="text: $data.agentName"></td>
 					    <td>
 						    <!--ko if:$data.selectedSchedule().isDayOff-->
-						    <div style="height: 22px; width: 100%;" class="dayoff">
-							    <div class="shift-trade-layer-container floatleft shift-trade-dayoff">@Resources.DayOff</div>
+							<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
+								<div class="dayoff">@Resources.DayOff</div>
 						    </div>
 						    <!--/ko-->
 						    <!--ko if:!$data.selectedSchedule().isDayOff-->
