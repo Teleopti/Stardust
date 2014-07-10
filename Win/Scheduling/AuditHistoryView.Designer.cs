@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle1 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle2 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
@@ -54,9 +55,13 @@
 			// 
 			// buttonRestore
 			// 
-			this.buttonRestore.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonRestore.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonRestore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonRestore.BeforeTouchSize = new System.Drawing.Size(86, 23);
 			this.buttonRestore.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.buttonRestore.Dock = System.Windows.Forms.DockStyle.Top;
+			this.buttonRestore.ForeColor = System.Drawing.Color.White;
+			this.buttonRestore.IsBackStageButton = false;
 			this.buttonRestore.Location = new System.Drawing.Point(603, 464);
 			this.buttonRestore.Name = "buttonRestore";
 			this.buttonRestore.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
@@ -68,9 +73,13 @@
 			// 
 			// buttonClose
 			// 
-			this.buttonClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonClose.BeforeTouchSize = new System.Drawing.Size(82, 23);
 			this.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonClose.Dock = System.Windows.Forms.DockStyle.Top;
+			this.buttonClose.ForeColor = System.Drawing.Color.White;
+			this.buttonClose.IsBackStageButton = false;
 			this.buttonClose.Location = new System.Drawing.Point(695, 464);
 			this.buttonClose.Name = "buttonClose";
 			this.buttonClose.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
@@ -164,9 +173,10 @@
 			this.grid.ExcelLikeCurrentCell = true;
 			this.grid.ExcelLikeSelectionFrame = true;
 			this.grid.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.grid.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
+			this.grid.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
 			this.grid.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
 			this.grid.Location = new System.Drawing.Point(3, 3);
+			this.grid.MetroScrollBars = true;
 			this.grid.Name = "grid";
 			this.grid.NumberedColHeaders = false;
 			this.grid.NumberedRowHeaders = false;

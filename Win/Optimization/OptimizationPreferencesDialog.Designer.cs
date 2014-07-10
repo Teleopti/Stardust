@@ -35,20 +35,21 @@
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonOK = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.tabControlTopLevel = new System.Windows.Forms.TabControl();
-			this.tabPageGeneral = new System.Windows.Forms.TabPage();
+			this.tabControlTopLevel = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
+			this.tabPageGeneral = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.generalPreferencesPanel1 = new Teleopti.Ccc.Win.Optimization.GeneralPreferencesPanel();
-			this.tabPageDaysOff = new System.Windows.Forms.TabPage();
+			this.tabPageDaysOff = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.dayOffPreferencesPanel1 = new Teleopti.Ccc.Win.Optimization.DayOffPreferencesPanel();
-			this.tabPageExtra = new System.Windows.Forms.TabPage();
+			this.tabPageExtra = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.extraPreferencesPanel1 = new Teleopti.Ccc.Win.Optimization.ExtraPreferencesPanel();
-			this.tabPageShifts = new System.Windows.Forms.TabPage();
+			this.tabPageShifts = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.shiftsPreferencesPanel1 = new Teleopti.Ccc.Win.Optimization.ShiftsPreferencesPanel();
-			this.tabPageAdvanced = new System.Windows.Forms.TabPage();
+			this.tabPageAdvanced = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.advancedPreferencesPanel1 = new Teleopti.Ccc.Win.Optimization.AdvancedPreferencesPanel();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControHeader)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.tabControlTopLevel)).BeginInit();
 			this.tabControlTopLevel.SuspendLayout();
 			this.tabPageGeneral.SuspendLayout();
 			this.tabPageDaysOff.SuspendLayout();
@@ -159,30 +160,39 @@
 			// 
 			// tabControlTopLevel
 			// 
+			this.tabControlTopLevel.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+			this.tabControlTopLevel.BeforeTouchSize = new System.Drawing.Size(440, 484);
+			this.tabControlTopLevel.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlTopLevel.Controls.Add(this.tabPageGeneral);
 			this.tabControlTopLevel.Controls.Add(this.tabPageDaysOff);
 			this.tabControlTopLevel.Controls.Add(this.tabPageExtra);
 			this.tabControlTopLevel.Controls.Add(this.tabPageShifts);
 			this.tabControlTopLevel.Controls.Add(this.tabPageAdvanced);
 			this.tabControlTopLevel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControlTopLevel.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlTopLevel.ItemSize = new System.Drawing.Size(111, 22);
 			this.tabControlTopLevel.Location = new System.Drawing.Point(3, 3);
 			this.tabControlTopLevel.Name = "tabControlTopLevel";
-			this.tabControlTopLevel.SelectedIndex = 0;
 			this.tabControlTopLevel.Size = new System.Drawing.Size(440, 484);
 			this.tabControlTopLevel.TabIndex = 6;
+			this.tabControlTopLevel.TabPanelBackColor = System.Drawing.Color.White;
+			this.tabControlTopLevel.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			this.tabControlTopLevel.SelectedIndexChanged += new System.EventHandler(this.tabControlTopLevel_SelectedIndexChanged);
 			// 
 			// tabPageGeneral
 			// 
+			this.tabPageGeneral.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tabPageGeneral.Controls.Add(this.generalPreferencesPanel1);
-			this.tabPageGeneral.Location = new System.Drawing.Point(4, 26);
+			this.tabPageGeneral.Image = null;
+			this.tabPageGeneral.ImageSize = new System.Drawing.Size(16, 16);
+			this.tabPageGeneral.Location = new System.Drawing.Point(0, 21);
 			this.tabPageGeneral.Name = "tabPageGeneral";
 			this.tabPageGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageGeneral.Size = new System.Drawing.Size(432, 454);
-			this.tabPageGeneral.TabIndex = 0;
+			this.tabPageGeneral.ShowCloseButton = true;
+			this.tabPageGeneral.Size = new System.Drawing.Size(440, 463);
+			this.tabPageGeneral.TabIndex = 1;
 			this.tabPageGeneral.Text = "xxGeneral";
-			this.tabPageGeneral.UseVisualStyleBackColor = true;
+			this.tabPageGeneral.ThemesEnabled = false;
 			// 
 			// generalPreferencesPanel1
 			// 
@@ -190,38 +200,45 @@
 			this.generalPreferencesPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.generalPreferencesPanel1.Location = new System.Drawing.Point(3, 3);
 			this.generalPreferencesPanel1.Name = "generalPreferencesPanel1";
-			this.generalPreferencesPanel1.Size = new System.Drawing.Size(426, 448);
+			this.generalPreferencesPanel1.Size = new System.Drawing.Size(432, 455);
 			this.generalPreferencesPanel1.TabIndex = 0;
 			// 
 			// tabPageDaysOff
 			// 
+			this.tabPageDaysOff.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tabPageDaysOff.Controls.Add(this.dayOffPreferencesPanel1);
-			this.tabPageDaysOff.ImageKey = "on";
-			this.tabPageDaysOff.Location = new System.Drawing.Point(4, 26);
+			this.tabPageDaysOff.Image = null;
+			this.tabPageDaysOff.ImageSize = new System.Drawing.Size(16, 16);
+			this.tabPageDaysOff.Location = new System.Drawing.Point(0, 21);
 			this.tabPageDaysOff.Name = "tabPageDaysOff";
 			this.tabPageDaysOff.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageDaysOff.Size = new System.Drawing.Size(432, 454);
+			this.tabPageDaysOff.ShowCloseButton = true;
+			this.tabPageDaysOff.Size = new System.Drawing.Size(440, 463);
 			this.tabPageDaysOff.TabIndex = 1;
 			this.tabPageDaysOff.Text = "xxDaysOff";
-			this.tabPageDaysOff.UseVisualStyleBackColor = true;
+			this.tabPageDaysOff.ThemesEnabled = false;
 			// 
 			// dayOffPreferencesPanel1
 			// 
 			this.dayOffPreferencesPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dayOffPreferencesPanel1.Location = new System.Drawing.Point(3, 3);
 			this.dayOffPreferencesPanel1.Name = "dayOffPreferencesPanel1";
-			this.dayOffPreferencesPanel1.Size = new System.Drawing.Size(426, 448);
+			this.dayOffPreferencesPanel1.Size = new System.Drawing.Size(432, 455);
 			this.dayOffPreferencesPanel1.TabIndex = 0;
 			// 
 			// tabPageExtra
 			// 
+			this.tabPageExtra.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tabPageExtra.Controls.Add(this.extraPreferencesPanel1);
-			this.tabPageExtra.Location = new System.Drawing.Point(4, 26);
+			this.tabPageExtra.Image = null;
+			this.tabPageExtra.ImageSize = new System.Drawing.Size(16, 16);
+			this.tabPageExtra.Location = new System.Drawing.Point(0, 21);
 			this.tabPageExtra.Name = "tabPageExtra";
-			this.tabPageExtra.Size = new System.Drawing.Size(432, 454);
+			this.tabPageExtra.ShowCloseButton = true;
+			this.tabPageExtra.Size = new System.Drawing.Size(440, 463);
 			this.tabPageExtra.TabIndex = 2;
 			this.tabPageExtra.Text = "xxExtra";
-			this.tabPageExtra.UseVisualStyleBackColor = true;
+			this.tabPageExtra.ThemesEnabled = false;
 			// 
 			// extraPreferencesPanel1
 			// 
@@ -229,18 +246,22 @@
 			this.extraPreferencesPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.extraPreferencesPanel1.Location = new System.Drawing.Point(0, 0);
 			this.extraPreferencesPanel1.Name = "extraPreferencesPanel1";
-			this.extraPreferencesPanel1.Size = new System.Drawing.Size(432, 454);
+			this.extraPreferencesPanel1.Size = new System.Drawing.Size(438, 461);
 			this.extraPreferencesPanel1.TabIndex = 0;
 			// 
 			// tabPageShifts
 			// 
+			this.tabPageShifts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tabPageShifts.Controls.Add(this.shiftsPreferencesPanel1);
-			this.tabPageShifts.Location = new System.Drawing.Point(4, 26);
+			this.tabPageShifts.Image = null;
+			this.tabPageShifts.ImageSize = new System.Drawing.Size(16, 16);
+			this.tabPageShifts.Location = new System.Drawing.Point(0, 21);
 			this.tabPageShifts.Name = "tabPageShifts";
-			this.tabPageShifts.Size = new System.Drawing.Size(432, 454);
+			this.tabPageShifts.ShowCloseButton = true;
+			this.tabPageShifts.Size = new System.Drawing.Size(440, 463);
 			this.tabPageShifts.TabIndex = 4;
 			this.tabPageShifts.Text = "xxShifts";
-			this.tabPageShifts.UseVisualStyleBackColor = true;
+			this.tabPageShifts.ThemesEnabled = false;
 			// 
 			// shiftsPreferencesPanel1
 			// 
@@ -248,18 +269,22 @@
 			this.shiftsPreferencesPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.shiftsPreferencesPanel1.Location = new System.Drawing.Point(0, 0);
 			this.shiftsPreferencesPanel1.Name = "shiftsPreferencesPanel1";
-			this.shiftsPreferencesPanel1.Size = new System.Drawing.Size(432, 454);
+			this.shiftsPreferencesPanel1.Size = new System.Drawing.Size(438, 461);
 			this.shiftsPreferencesPanel1.TabIndex = 0;
 			// 
 			// tabPageAdvanced
 			// 
+			this.tabPageAdvanced.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tabPageAdvanced.Controls.Add(this.advancedPreferencesPanel1);
-			this.tabPageAdvanced.Location = new System.Drawing.Point(4, 26);
+			this.tabPageAdvanced.Image = null;
+			this.tabPageAdvanced.ImageSize = new System.Drawing.Size(16, 16);
+			this.tabPageAdvanced.Location = new System.Drawing.Point(0, 21);
 			this.tabPageAdvanced.Name = "tabPageAdvanced";
-			this.tabPageAdvanced.Size = new System.Drawing.Size(432, 454);
+			this.tabPageAdvanced.ShowCloseButton = true;
+			this.tabPageAdvanced.Size = new System.Drawing.Size(440, 463);
 			this.tabPageAdvanced.TabIndex = 3;
 			this.tabPageAdvanced.Text = "xxAdvanced";
-			this.tabPageAdvanced.UseVisualStyleBackColor = true;
+			this.tabPageAdvanced.ThemesEnabled = false;
 			// 
 			// advancedPreferencesPanel1
 			// 
@@ -267,7 +292,7 @@
 			this.advancedPreferencesPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.advancedPreferencesPanel1.Location = new System.Drawing.Point(0, 0);
 			this.advancedPreferencesPanel1.Name = "advancedPreferencesPanel1";
-			this.advancedPreferencesPanel1.Size = new System.Drawing.Size(432, 454);
+			this.advancedPreferencesPanel1.Size = new System.Drawing.Size(438, 461);
 			this.advancedPreferencesPanel1.TabIndex = 0;
 			// 
 			// OptimizationPreferencesDialog
@@ -290,6 +315,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControHeader)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.tabControlTopLevel)).EndInit();
 			this.tabControlTopLevel.ResumeLayout(false);
 			this.tabPageGeneral.ResumeLayout(false);
 			this.tabPageDaysOff.ResumeLayout(false);
@@ -307,16 +333,16 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private Syncfusion.Windows.Forms.ButtonAdv buttonOK;
         private Syncfusion.Windows.Forms.ButtonAdv buttonCancel;
-        private System.Windows.Forms.TabControl tabControlTopLevel;
-        private System.Windows.Forms.TabPage tabPageDaysOff;
-        private System.Windows.Forms.TabPage tabPageGeneral;
-        private System.Windows.Forms.TabPage tabPageExtra;
-        private System.Windows.Forms.TabPage tabPageAdvanced;
+		  private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlTopLevel;
+		  private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageDaysOff;
+		  private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageGeneral;
+		  private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageExtra;
+		  private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvanced;
         private GeneralPreferencesPanel generalPreferencesPanel1;
         private DayOffPreferencesPanel dayOffPreferencesPanel1;
         private ExtraPreferencesPanel  extraPreferencesPanel1;
         private AdvancedPreferencesPanel advancedPreferencesPanel1;
-        private System.Windows.Forms.TabPage tabPageShifts;
+		  private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageShifts;
         private ShiftsPreferencesPanel shiftsPreferencesPanel1;
     }
 }
