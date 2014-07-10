@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			// 
 			// tabControlShiftCategoryDistribution
 			// 
+			this.tabControlShiftCategoryDistribution.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
 			this.tabControlShiftCategoryDistribution.BeforeTouchSize = new System.Drawing.Size(352, 530);
 			this.tabControlShiftCategoryDistribution.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlShiftCategoryDistribution.Controls.Add(this.tabPagePerDate);
@@ -67,6 +68,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			// 
 			// tabPagePerDate
 			// 
+			this.tabPagePerDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tabPagePerDate.Controls.Add(this.shiftPerDateControl1);
 			this.tabPagePerDate.Image = null;
 			this.tabPagePerDate.ImageSize = new System.Drawing.Size(16, 16);
@@ -84,19 +86,20 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.shiftPerDateControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.shiftPerDateControl1.Location = new System.Drawing.Point(3, 3);
 			this.shiftPerDateControl1.Name = "shiftPerDateControl1";
-			this.shiftPerDateControl1.Size = new System.Drawing.Size(346, 503);
+			this.shiftPerDateControl1.Size = new System.Drawing.Size(344, 501);
 			this.shiftPerDateControl1.TabIndex = 0;
 			// 
 			// tabPagePerAgent
 			// 
+			this.tabPagePerAgent.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tabPagePerAgent.Controls.Add(this.shiftPerAgentControl1);
 			this.tabPagePerAgent.Image = null;
 			this.tabPagePerAgent.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPagePerAgent.Location = new System.Drawing.Point(1, 22);
+			this.tabPagePerAgent.Location = new System.Drawing.Point(0, 21);
 			this.tabPagePerAgent.Name = "tabPagePerAgent";
 			this.tabPagePerAgent.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPagePerAgent.ShowCloseButton = true;
-			this.tabPagePerAgent.Size = new System.Drawing.Size(349, 506);
+			this.tabPagePerAgent.Size = new System.Drawing.Size(352, 509);
 			this.tabPagePerAgent.TabIndex = 1;
 			this.tabPagePerAgent.Text = "xxPerAgent";
 			this.tabPagePerAgent.ThemesEnabled = false;
@@ -107,19 +110,20 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.shiftPerAgentControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.shiftPerAgentControl1.Location = new System.Drawing.Point(3, 3);
 			this.shiftPerAgentControl1.Name = "shiftPerAgentControl1";
-			this.shiftPerAgentControl1.Size = new System.Drawing.Size(343, 500);
+			this.shiftPerAgentControl1.Size = new System.Drawing.Size(344, 501);
 			this.shiftPerAgentControl1.TabIndex = 0;
 			// 
 			// tabPageDistribution
 			// 
+			this.tabPageDistribution.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tabPageDistribution.Controls.Add(this.tableLayoutPanel1);
 			this.tabPageDistribution.Image = null;
 			this.tabPageDistribution.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageDistribution.Location = new System.Drawing.Point(1, 22);
+			this.tabPageDistribution.Location = new System.Drawing.Point(0, 21);
 			this.tabPageDistribution.Name = "tabPageDistribution";
 			this.tabPageDistribution.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageDistribution.ShowCloseButton = true;
-			this.tabPageDistribution.Size = new System.Drawing.Size(349, 506);
+			this.tabPageDistribution.Size = new System.Drawing.Size(352, 509);
 			this.tabPageDistribution.TabIndex = 2;
 			this.tabPageDistribution.Text = "xxDistribution";
 			this.tabPageDistribution.ThemesEnabled = false;
@@ -137,7 +141,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(343, 500);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(344, 501);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// shiftStatisticsControl1
@@ -145,7 +149,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.shiftStatisticsControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.shiftStatisticsControl1.Location = new System.Drawing.Point(3, 203);
 			this.shiftStatisticsControl1.Name = "shiftStatisticsControl1";
-			this.shiftStatisticsControl1.Size = new System.Drawing.Size(337, 294);
+			this.shiftStatisticsControl1.Size = new System.Drawing.Size(338, 295);
 			this.shiftStatisticsControl1.TabIndex = 0;
 			// 
 			// perShiftCategoryChartControl1
@@ -154,7 +158,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.perShiftCategoryChartControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.perShiftCategoryChartControl1.Location = new System.Drawing.Point(3, 3);
 			this.perShiftCategoryChartControl1.Name = "perShiftCategoryChartControl1";
-			this.perShiftCategoryChartControl1.Size = new System.Drawing.Size(337, 194);
+			this.perShiftCategoryChartControl1.Size = new System.Drawing.Size(338, 194);
 			this.perShiftCategoryChartControl1.TabIndex = 1;
 			// 
 			// ShiftCategoryDistributionControl
