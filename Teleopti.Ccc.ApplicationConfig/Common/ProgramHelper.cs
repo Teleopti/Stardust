@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			Thread.CurrentThread.CurrentUICulture = argument.CultureInfo;
 		}
 
-		public void CreateNewEmptyCcc7(DefaultAggregateRoot defaultAggregateRoot)
+		public void CreateNewEmptyCcc7(Action saveBusinessUnitAction)
 		{
 			//Create standard absences
             AbsenceCreator absenceCreator = new AbsenceCreator();
@@ -137,6 +137,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 
 			//This path ends up on the root where the dll's are stored /Peter /David
 			RtaStateGroupCreator rtaStateGroupCreator = new RtaStateGroupCreator(@"RtaStates.xml");
+
+			saveBusinessUnitAction.Invoke();
 
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{

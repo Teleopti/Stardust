@@ -64,17 +64,18 @@ namespace Teleopti.Ccc.ApplicationConfig
 			{
 				//Create default aggregate roots
                 ProgramHelper programHelper = new ProgramHelper();
-				DefaultAggregateRoot defaultAggregateRoot = programHelper.GetDefaultAggregateRoot(argument);
 
 				if (argument.ConvertMode)
 				{
+					DefaultAggregateRoot defaultAggregateRoot = programHelper.GetDefaultAggregateRoot(argument);
 					//start the converter
 					convertCCC6(argument, defaultAggregateRoot);
 				}
 				else
 				{
 					//create new "empty"
-					programHelper.CreateNewEmptyCcc7(defaultAggregateRoot);
+					var saveBusinessUnitAction = new Action(() => programHelper.GetDefaultAggregateRoot(argument));
+					programHelper.CreateNewEmptyCcc7(saveBusinessUnitAction);
 				}
 			}
 		}

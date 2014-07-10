@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
         public void CanCreateNew()
         {
             target.LogOn(_commandLineArgument, _databaseHandler, _defaultAggregateRoot.BusinessUnit);
-            target.CreateNewEmptyCcc7(_defaultAggregateRoot);
+            target.CreateNewEmptyCcc7(() => { });
         }
 
         private void logonForTest()
