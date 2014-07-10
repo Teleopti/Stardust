@@ -96,14 +96,7 @@ define([
 					return moment(date, 'YYYYMMDD');
 				}
 			}());
-			var permissions = options.permissions;
-            if (permissions) {
-                this.permissionAddFullDayAbsence(permissions.addFullDayAbsence);
-                this.permissionAddIntradayAbsence(permissions.addIntradayAbsence);
-                this.permissionRemoveAbsence(permissions.removeAbsence);
-                this.permissionAddActivity(permissions.addActivity);
-                this.permissionMoveActivity(permissions.moveActivity);
-            }
+			
 		};
 
 		this.UpdateSchedules = function (data) {

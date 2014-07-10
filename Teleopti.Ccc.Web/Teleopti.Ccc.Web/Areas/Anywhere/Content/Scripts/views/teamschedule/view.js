@@ -14,7 +14,8 @@ define([
 		'shared/current-state',
 		'ajax',
 		'toggleQuerier',
-		'select2'
+		'select2',
+		'permissions'
 ], function (
 		ko,
 		$,
@@ -30,7 +31,8 @@ define([
 		currentState,
 		ajax,
 		toggleQuerier,
-		select2 // not a direct dependency, but still a view dependency
+		select2, // not a direct dependency, but still a view dependency
+		permissions
 	) {
 
 	var viewModel;
@@ -168,6 +170,14 @@ define([
 				disabled: function() {
 					skillsDeferred.resolve();
 				}
+			});
+
+			permissions.get().done(function (data) {
+				viewModel.permissionAddFullDayAbsence(data.IsAddFullDayAbsenceAvailable);
+				viewModel.permissionAddIntradayAbsence(data.IsAddIntradayAbsenceAvailable);
+				viewModel.permissionRemoveAbsence(data.IsRemoveAbsenceAvailable);
+				viewModel.permissionAddActivity(data.IsAddActivityAvailable);
+				viewModel.permissionMoveActivity(data.IsMoveActivityAvailable);
 			});
 
 			return $.when(groupPagesDeferred, groupScheduleDeferred, skillsDeferred)

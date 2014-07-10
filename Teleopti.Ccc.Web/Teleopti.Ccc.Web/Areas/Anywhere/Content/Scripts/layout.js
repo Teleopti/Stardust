@@ -32,7 +32,6 @@ define([
 	var defaultView = 'teamschedule';
 	
 	var menu = new menuViewModel(resources);
-	var permissions= {};
 	var contentPlaceHolder;
 
 	function _displayView(routeInfo) {
@@ -59,7 +58,6 @@ define([
 				if (currentView && currentView.dispose)
 					currentView.dispose(routeInfo);
 				currentView = view;
-				routeInfo.permissions = permissions;
 				view.initialize(routeInfo);
 			}
 
@@ -212,19 +210,6 @@ define([
 		ko.applyBindings(menu, $('nav')[0]);
 	}
 
-	function _loadPermissions() {
-		ajax.ajax({
-			url: "Anywhere/Application/Permissions",
-			success: function (responseData, textStatus, jqXHR) {
-				permissions.addFullDayAbsence = responseData.IsAddFullDayAbsenceAvailable;
-				permissions.addIntradayAbsence = responseData.IsAddIntradayAbsenceAvailable;
-				permissions.removeAbsence = responseData.IsRemoveAbsenceAvailable;
-				permissions.addActivity = responseData.IsAddActivityAvailable;
-				permissions.moveActivity = responseData.IsMoveActivityAvailable;
-			}
-		});
-	}
-
 	function _initSignalR() {
 		var promise = subscriptions.start();
 		promise.fail(function () {
@@ -243,7 +228,4 @@ define([
 		_initMomentLanguageWithFallback();
 
 		_bindMenu();
-
-		_loadPermissions();
-
 });
