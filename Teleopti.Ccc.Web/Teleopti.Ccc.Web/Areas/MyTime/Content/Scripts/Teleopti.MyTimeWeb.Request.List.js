@@ -1,6 +1,5 @@
 ﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
@@ -42,11 +41,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         self.Type = ko.computed(function () {
             var payload = (self.RequestPayload() != '') ? ', ' + self.RequestPayload() : '';
             return self.RequestType() + payload;
-        });
-
-        self.StatusAndReason = ko.computed(function () {
-            var temp = (self.DenyReason() != '') ? self.Status() + ': ' : self.Status();
-            return temp + self.DenyReason();
         });
 
 	    self.isReferred = ko.observable(false);
