@@ -187,8 +187,8 @@
 	 	<!-- /ko -->
 		
 	    <p></p>
-        <div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-small" style="width: 50%; overflow: hidden;">
-		    
+		<div class="row" style="margin: 0;">
+        <div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-sm col-xs-12 col-md-6" style="margin-bottom: 0">
             <div class="form-group">
                 <input id="Request-add-shift-trade-subject-input" class="form-control" type="text" data-bind="value: subject" class="input-block-level" placeholder="@Resources.Subject" maxlength="80" />
             </div>
@@ -201,6 +201,7 @@
             </div>
             <div class="error" data-bind="html: errorMessage"></div>
         </div>
+		</div>
         <div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">
             @Resources.NoAgentsAvailableForShiftTrade
         </div>
