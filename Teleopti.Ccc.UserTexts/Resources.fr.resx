@@ -9285,4 +9285,85 @@ Réduisez la complexité pour utiliser ces horaires.</value>
   <data name="SignInWith" xml:space="preserve">
     <value>Se loguer avec:</value>
   </data>
+  <data name="SignInAsAnotherUserInPermission" xml:space="preserve">
+    <value>Se loguer comme autre Utilisateur</value>
+  </data>
+  <data name="CalculateLegalState" xml:space="preserve">
+    <value>Calcule l'état légal</value>
+  </data>
+  <data name="SecondShort" xml:space="preserve">
+    <value>s</value>
+  </data>
+  <data name="ShiftEndingMessage" xml:space="preserve">
+    <value>L'horaire courant va se terminer à {0}</value>
+  </data>
+  <data name="NextActivityComingMessage" xml:space="preserve">
+    <value>La prochaine activité ({0}) va débuter à {1}</value>
+  </data>
+  <data name="ResolvingWeeklyRestFor" xml:space="preserve">
+    <value>Résout le temps de repos hebdomadaire pour {0} {1}</value>
+  </data>
+  <data name="TeamScheduling" xml:space="preserve">
+    <value>Planification par équipe</value>
+  </data>
+  <data name="BlockFinderTypeSingleDay" xml:space="preserve">
+    <value>&lt;Pas de Bloc&gt;</value>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>&lt;Pas d'équipe&gt;</value>
+  </data>
+  <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
+    <value>Période de Planification</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Bureau</value>
+  </data>
+  <data name="Mobile" xml:space="preserve">
+    <value>Mobile</value>
+  </data>
+  <data name="MoveTimeOn" xml:space="preserve">
+    <value>Déplacer le temps sur</value>
+  </data>
+  <data name="NextActivity" xml:space="preserve">
+    <value>Activité Suivante</value>
+  </data>
+  <data name="NextActivityStartTime" xml:space="preserve">
+    <value>Heure de Début Activité Suivante</value>
+  </data>
+  <data name="TimeInState" xml:space="preserve">
+    <value>Temps dans l'Etat</value>
+  </data>
+  <data name="MinimumTimePerWeekColon" xml:space="preserve">
+    <value>Temps Minimum Par Semaine</value>
+  </data>
+  <data name="WeeklyWorkTimeBroken" xml:space="preserve">
+    <value>Vous avez enfreint une limite de temps de travail hebdomadaire</value>
+  </data>
+  <data name="QueueMetrics" xml:space="preserve">
+    <value>Métriques File</value>
+  </data>
+  <data name="TimeInAlarm" xml:space="preserve">
+    <value>Temps en Alarme</value>
+  </data>
+  <data name="WebServerDown" xml:space="preserve">
+    <value>Serveur inaccessible. Par conséquent certaines fonctions n'ont pas pu être activiées.</value>
+  </data>
+  <data name="SeniorityRankingAsc" xml:space="preserve">
+    <value>Classment Séniorité ascendant</value>
+  </data>
+  <data name="SeniorityRankingDesc" xml:space="preserve">
+    <value>Classement Séniorité descendant</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>FICHIER</value>
+  </data>
+  <data name="OpenShiftsTreeDots" xml:space="preserve">
+    <value>Ouvrir Horaires...</value>
+  </data>
+  <data name="MoveActivity" xml:space="preserve">
+    <value>Déplacer Activité</value>
+  </data>
+  <data name="MyTradeCart" xml:space="preserve">
+    <value>Mon Panier d'Echange:</value>
+  </data>
 </root>
