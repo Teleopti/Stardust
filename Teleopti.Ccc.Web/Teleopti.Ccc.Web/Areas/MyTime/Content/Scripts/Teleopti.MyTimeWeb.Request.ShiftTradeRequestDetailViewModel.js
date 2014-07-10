@@ -124,6 +124,7 @@ Teleopti.MyTimeWeb.Request.TimeLineHourEditShiftTradeViewModel = function (hour,
 	var self = this;
 	self.showLabel = ko.observable(true);
 	self.hourText = hour.HourText;
+	self.isTimeLineVisible = (hour.HourText.length > 0);
 	self.leftPx = Teleopti.MyTimeWeb.Common.IsRtl() ? "17px" : "-17px";
 	self.pixelPerMinute = ko.observable(pixelPerMinute);
 
