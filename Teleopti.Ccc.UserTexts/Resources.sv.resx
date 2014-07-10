@@ -5353,7 +5353,8 @@ Feldetaljer:
   <data name="LicenseApplicationSuccess" xml:space="preserve">
     <value>Installationen av licensen lyckades.
 Applikationen kommer att stängas. 
-Starta sedan om den. Du kan även behöva starta om MyTime för att aktivera nyligen licensierade delar.</value>
+
+För att alla tjänster och webbapplikationer ska fungera normalt och för att aktivera nylicensierade tillval, var god kör "Restart Teleopti WFM" som du hittar i Teleopti-mappen i Startmenyn.</value>
     <comment>license upload success message</comment>
   </data>
   <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
