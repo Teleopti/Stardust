@@ -127,8 +127,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 				var shiftTradeSwapDetails = _mapper.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(detail);
 
 				var startTimeForTimeline = shiftTradeSwapDetails.TimeLineStartDateTime;
-				var startTimeForSchedOne = shiftTradeSwapDetails.From.StartTimeUtc;
-				var startTimeForSchedTwo = shiftTradeSwapDetails.To.StartTimeUtc;
+				
+				DateTime startTimeForSchedOne;
+				DateTime startTimeForSchedTwo;
+				if (detail.SchedulePartFrom != null && detail.SchedulePartTo != null)
+				{
+					var isFromDayoff = detail.SchedulePartFrom.SignificantPart() == SchedulePartView.DayOff;
+					var isToDayoff = detail.SchedulePartTo.SignificantPart() == SchedulePartView.DayOff;
+					if (isFromDayoff && !isToDayoff)
+					{
+						startTimeForSchedTwo = shiftTradeSwapDetails.To.StartTimeUtc;
+						startTimeForSchedOne = shiftTradeSwapDetails.To.StartTimeUtc;
+					}
+					else if (!isFromDayoff && isToDayoff)
+					{
+						startTimeForSchedOne = shiftTradeSwapDetails.From.StartTimeUtc;
+						startTimeForSchedTwo = shiftTradeSwapDetails.From.StartTimeUtc;
+					}
+					else
+					{
+						startTimeForSchedOne = shiftTradeSwapDetails.From.StartTimeUtc;
+						startTimeForSchedTwo = shiftTradeSwapDetails.To.StartTimeUtc;
+					}
+				}
+				else
+				{
+					startTimeForSchedOne = shiftTradeSwapDetails.From.StartTimeUtc;
+					startTimeForSchedTwo = shiftTradeSwapDetails.To.StartTimeUtc;
+				}
 
 				shiftTradeSwapDetails.From.MinutesSinceTimeLineStart = (int) startTimeForSchedOne.Subtract(startTimeForTimeline).TotalMinutes;
 				shiftTradeSwapDetails.To.MinutesSinceTimeLineStart = (int) startTimeForSchedTwo.Subtract(startTimeForTimeline).TotalMinutes;
