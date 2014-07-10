@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Requests;
@@ -105,174 +104,174 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
             using (IUnitOfWork unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
-                foreach (var action in _loadDataActions)
-                {
-                    if (!action.Invoke(message))
-                    {
-                        ClearStateHolder();
-                        return;
-                    }
-                }
+	            foreach (var action in _loadDataActions)
+	            {
+		            if (!action.Invoke(message))
+		            {
+			            ClearStateHolder();
+			            return;
+		            }
+	            }
 
-                var agentTimeZone = _absenceRequest.Person.PermissionInformation.DefaultTimeZone();
-                var dateOnlyPeriod = _absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
+	            var agentTimeZone = _absenceRequest.Person.PermissionInformation.DefaultTimeZone();
+	            var dateOnlyPeriod = _absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
 
-                IEnumerable<IAbsenceRequestValidator> validatorList = null;
-                IPersonAccountBalanceCalculator personAccountBalanceCalculator = null;
-                IRequestApprovalService requestApprovalServiceScheduler = null;
-                var undoRedoContainer = new UndoRedoContainer(400);
+	            IEnumerable<IAbsenceRequestValidator> validatorList = null;
+	            IPersonAccountBalanceCalculator personAccountBalanceCalculator = null;
+	            IRequestApprovalService requestApprovalServiceScheduler = null;
+	            var undoRedoContainer = new UndoRedoContainer(400);
 
-                if (!HasWorkflowControlSet())
-                {
-                    denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoWorkflow", _absenceRequest.Person.PermissionInformation.Culture()));
+	            if (!HasWorkflowControlSet())
+	            {
+		            denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoWorkflow",
+			            _absenceRequest.Person.PermissionInformation.Culture()));
 
-                    if (Logger.IsDebugEnabled)
-                    {
-                        Logger.DebugFormat(CultureInfo.CurrentCulture,
-                                          "No workflow control set defined for {0}, {1} (PersonId = {2}). The request with Id = {3} will be denied.",
-                                          _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name,
-                                          _absenceRequest.Person.Id, message.PersonRequestId);
-                    }
-                }
+		            if (Logger.IsDebugEnabled)
+		            {
+			            Logger.DebugFormat(CultureInfo.CurrentCulture,
+				            "No workflow control set defined for {0}, {1} (PersonId = {2}). The request with Id = {3} will be denied.",
+				            _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name,
+				            _absenceRequest.Person.Id, message.PersonRequestId);
+		            }
+	            }
 
-                if (HasWorkflowControlSet())
-                {
-                    IOpenAbsenceRequestPeriodExtractor extractor =
-                        _absenceRequest.Person.WorkflowControlSet.GetExtractorForAbsence(_absenceRequest.Absence);
-                    extractor.ViewpointDate = DateOnly.Today;
+	            if (HasWorkflowControlSet())
+	            {
+		            IOpenAbsenceRequestPeriodExtractor extractor =
+			            _absenceRequest.Person.WorkflowControlSet.GetExtractorForAbsence(_absenceRequest.Absence);
+		            extractor.ViewpointDate = DateOnly.Today;
 
-                    var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod, _absenceRequest.Person.PermissionInformation.Culture());
+		            var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod,
+			            _absenceRequest.Person.PermissionInformation.Culture());
 
-                    var mergedPeriod = _absenceRequestOpenPeriodMerger.Merge(openPeriods);
+		            var mergedPeriod = _absenceRequestOpenPeriodMerger.Merge(openPeriods);
 
-                    validatorList = mergedPeriod.GetSelectedValidatorList();
+		            validatorList = mergedPeriod.GetSelectedValidatorList();
 
-                    _process = mergedPeriod.AbsenceRequestProcess;
+		            _process = mergedPeriod.AbsenceRequestProcess;
 
-                    LoadDataForResourceCalculation(validatorList);
+		            LoadDataForResourceCalculation(validatorList);
 
-                    _schedulingResultStateHolder.Schedules.TakeSnapshot();
-                    _schedulingResultStateHolder.Schedules.SetUndoRedoContainer(undoRedoContainer);
+		            _schedulingResultStateHolder.Schedules.TakeSnapshot();
+		            _schedulingResultStateHolder.Schedules.SetUndoRedoContainer(undoRedoContainer);
 
 
-                    IPersonAccountCollection allAccounts = _personAbsenceAccountProvider.Find(_absenceRequest.Person);
-                    foreach (IPersonAbsenceAccount personAbsenceAccount in allAccounts)
-                    {
-                        undoRedoContainer.SaveState(personAbsenceAccount);
-                    }
+		            IPersonAccountCollection allAccounts = _personAbsenceAccountProvider.Find(_absenceRequest.Person);
+		            foreach (IPersonAbsenceAccount personAbsenceAccount in allAccounts)
+		            {
+			            undoRedoContainer.SaveState(personAbsenceAccount);
+		            }
 
-                    personAccount = allAccounts.Find(_absenceRequest.Absence); //Find for all later periods
-                    if (personAccount == null)
-                    {
-                        if (_absenceRequest.Absence.Tracker != null)
-                        {
-                            if (Logger.IsDebugEnabled)
-                            {
-                                Logger.DebugFormat(CultureInfo.CurrentCulture,
-                                                  "No person account defined for {0}, {1} (PersonId = {2}) with absence {4} for {5}. (Request Id = {3})",
-                                                  _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name,
-                                                  _absenceRequest.Person.Id, message.PersonRequestId,
-                                                  _absenceRequest.Absence.Description,
-                                                  dateOnlyPeriod.StartDate);
-                            }
-                        }
-                        personAccountBalanceCalculator = new EmptyPersonAccountBalanceCalculator(_absenceRequest.Absence);
-                    }
-                    else
-                    {
-                        TrackAccounts(personAccount, dateOnlyPeriod);
-                        var affectedAccounts =
-                            personAccount.Find(new DateOnlyPeriod(dateOnlyPeriod.StartDate, DateOnly.MaxValue));
-                        //We must have the current and all after...
-                        personAccountBalanceCalculator = new PersonAccountBalanceCalculator(affectedAccounts);
-                    }
+		            personAccount = allAccounts.Find(_absenceRequest.Absence); //Find for all later periods
+		            if (personAccount == null)
+		            {
+			            if (_absenceRequest.Absence.Tracker != null)
+			            {
+				            if (Logger.IsDebugEnabled)
+				            {
+					            Logger.DebugFormat(CultureInfo.CurrentCulture,
+						            "No person account defined for {0}, {1} (PersonId = {2}) with absence {4} for {5}. (Request Id = {3})",
+						            _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name,
+						            _absenceRequest.Person.Id, message.PersonRequestId,
+						            _absenceRequest.Absence.Description,
+						            dateOnlyPeriod.StartDate);
+				            }
+			            }
+			            personAccountBalanceCalculator = new EmptyPersonAccountBalanceCalculator(_absenceRequest.Absence);
+		            }
+		            else
+		            {
+			            TrackAccounts(personAccount, dateOnlyPeriod);
+			            var affectedAccounts =
+				            personAccount.Find(new DateOnlyPeriod(dateOnlyPeriod.StartDate, DateOnly.MaxValue));
+			            //We must have the current and all after...
+			            personAccountBalanceCalculator = new PersonAccountBalanceCalculator(affectedAccounts);
+		            }
 
-                    var alreadyAbsent = personAlreadyAbsentDuringRequestPeriod();
-                    var allNewRules = NewBusinessRuleCollection.Minimum();
-                    requestApprovalServiceScheduler = _factory.GetRequestApprovalService(allNewRules,
-                                                                                         _scenarioRepository.
-                	                                                                         	Current());
-                    var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(_absenceRequest.Absence,
-                                                                                             _absenceRequest.Period,
-                                                                                             _absenceRequest.Person);
-                    if (Logger.IsDebugEnabled)
-                    {
-                        foreach (var brokenBusinessRule in brokenBusinessRules)
-                        {
-                            Logger.DebugFormat("A rule was broken: {0}", brokenBusinessRule.Message);
-                        }
+		            var alreadyAbsent = personAlreadyAbsentDuringRequestPeriod();
+		            var allNewRules = NewBusinessRuleCollection.Minimum();
+		            requestApprovalServiceScheduler = _factory.GetRequestApprovalService(allNewRules,
+			            _scenarioRepository.
+				            Current());
+		            var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(_absenceRequest.Absence,
+			            _absenceRequest.Period,
+			            _absenceRequest.Person);
+		            if (Logger.IsDebugEnabled)
+		            {
+			            foreach (var brokenBusinessRule in brokenBusinessRules)
+			            {
+				            Logger.DebugFormat("A rule was broken: {0}", brokenBusinessRule.Message);
+			            }
 
-                        Logger.Debug("Simulated approving absence successfully");
-                    }
-                    
-                    if (_process.GetType() == typeof (GrantAbsenceRequest) && alreadyAbsent)
-                    {
-						denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonAlreadyAbsent", _absenceRequest.Person.PermissionInformation.Culture()));
+			            Logger.Debug("Simulated approving absence successfully");
+		            }
 
-                        if (Logger.IsDebugEnabled)
-                        {
-                            Logger.DebugFormat(CultureInfo.CurrentCulture,
-                                              "The person is already absent during the absence request period. {0}, {1} (PersonId = {2}). The request with Id = {3} will be denied.",
-                                              _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name,
-                                              _absenceRequest.Person.Id,
-                                              message.PersonRequestId);
-                        }
-                    }
+		            if (_process.GetType() == typeof (GrantAbsenceRequest) && alreadyAbsent)
+		            {
+			            denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonAlreadyAbsent",
+				            _absenceRequest.Person.PermissionInformation.Culture()));
 
-                    HandleInvalidSchedule();
-                }
+			            if (Logger.IsDebugEnabled)
+			            {
+				            Logger.DebugFormat(CultureInfo.CurrentCulture,
+					            "The person is already absent during the absence request period. {0}, {1} (PersonId = {2}). The request with Id = {3} will be denied.",
+					            _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name,
+					            _absenceRequest.Person.Id,
+					            message.PersonRequestId);
+			            }
+		            }
 
-                //Will issue a rollback for simulated schedule data
-                if (Logger.IsInfoEnabled)
-                {
-                    Logger.InfoFormat("The following process will be used for request {0}: {1}", message.PersonRequestId,
-                                      _process.GetType());
-                }
-	            
-                _process.Process(null, _absenceRequest,
-                                 new RequiredForProcessingAbsenceRequest(undoRedoContainer,
-                                                                         requestApprovalServiceScheduler, _authorization, ()
-                                                                                                                          =>
-	                                                                         {
-		                                                                         if (personAccount != null)
-			                                                                         TrackAccounts(personAccount, dateOnlyPeriod);
-	                                                                         }),
-                                 new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,
-                                                                       personAccountBalanceCalculator,
-                                                                       _resourceOptimizationHelper,
-                                                                       _budgetGroupAllowanceSpecification,
-                                                                       _budgetGroupHeadCountSpecification),
-                                 validatorList);
+		            HandleInvalidSchedule();
+	            }
 
-                if (_personRequest.IsApproved)
-                {
-                    try
-                    {
-											PersistScheduleChanges(_absenceRequest.Person);
-                    }
-                    catch (ValidationException validationException)
-                    {
-                        Logger.Error("A validation error occurred. Review the error log. Processing cannot continue.",
-                                     validationException);
-                        ClearStateHolder();
-                        return;
-                    }
+	            //Will issue a rollback for simulated schedule data
+	            if (Logger.IsInfoEnabled)
+	            {
+		            Logger.InfoFormat("The following process will be used for request {0}: {1}", message.PersonRequestId,
+			            _process.GetType());
+	            }
 
-                    //Ugly fix to get the number updated for person account. Don't try this at home!
-                    if (personAccount != null)
-                    {
-						TrackAccounts(personAccount, dateOnlyPeriod);
-						unitOfWork.Merge(personAccount);
-                    }
-                }
-                using (new MessageBrokerSendEnabler())
-                {
-                    unitOfWork.PersistAll();
+	            _process.Process(null, _absenceRequest,
+		            new RequiredForProcessingAbsenceRequest(undoRedoContainer,
+			            requestApprovalServiceScheduler, _authorization, ()
+				            =>
+			            {
+				            if (personAccount != null)
+					            TrackAccounts(personAccount, dateOnlyPeriod);
+			            }),
+		            new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,
+			            personAccountBalanceCalculator,
+			            _resourceOptimizationHelper,
+			            _budgetGroupAllowanceSpecification,
+			            _budgetGroupHeadCountSpecification),
+		            validatorList);
 
-                	updateScheduleReadModelsIfRequestWasApproved(unitOfWork, dateOnlyPeriod);
-                }
+	            if (_personRequest.IsApproved)
+	            {
+		            try
+		            {
+			            PersistScheduleChanges(_absenceRequest.Person);
+		            }
+		            catch (ValidationException validationException)
+		            {
+			            Logger.Error("A validation error occurred. Review the error log. Processing cannot continue.",
+				            validationException);
+			            ClearStateHolder();
+			            return;
+		            }
+
+		            //Ugly fix to get the number updated for person account. Don't try this at home!
+		            if (personAccount != null)
+		            {
+			            TrackAccounts(personAccount, dateOnlyPeriod);
+			            unitOfWork.Merge(personAccount);
+		            }
+	            }
+	            unitOfWork.PersistAll();
+
+	            updateScheduleReadModelsIfRequestWasApproved(unitOfWork, dateOnlyPeriod);
             }
-            ClearStateHolder();
+	        ClearStateHolder();
         }
 
     	private void updateScheduleReadModelsIfRequestWasApproved(IUnitOfWork unitOfWork, DateOnlyPeriod dateOnlyPeriod)

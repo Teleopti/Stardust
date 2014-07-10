@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -290,13 +289,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 
         private static void save(IUnitOfWork unitOfWork)
         {
-            using (new MessageBrokerSendEnabler())
-            {
-                unitOfWork.PersistAll();
-            }
+	        unitOfWork.PersistAll();
         }
 
-        private void loadSchedules(DateTimePeriod period, IEnumerable<IPerson> persons)
+	    private void loadSchedules(DateTimePeriod period, IEnumerable<IPerson> persons)
         {
             _loadSchedulingDataForRequestWithoutResourceCalculation.Execute(_defaultScenario, period, persons.ToList());
         }

@@ -46,36 +46,33 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			AppDomain.CurrentDomain.AssemblyResolve += _domainAssemblyResolver.Resolve;
             using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
-                var payrollExport = _payrollExportRepository.Get(message.PayrollExportId);
-                var payrollResult = _payrollResultRepository.Get(message.PayrollResultId);
+	            var payrollExport = _payrollExportRepository.Get(message.PayrollExportId);
+	            var payrollResult = _payrollResultRepository.Get(message.PayrollResultId);
 
-                _serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
-                _serviceBusPayrollExportFeedback.ReportProgress(1,"Payroll export initiated.");
+	            _serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
+	            _serviceBusPayrollExportFeedback.ReportProgress(1, "Payroll export initiated.");
 
-                var people = _payrollPeopleLoader.GetPeopleForExport(message, message.ExportPeriod, unitOfWork);
-                var personDtos = _personBusAssembler.CreatePersonDto(people);
-                try
-                {
-                    payrollResult.XmlResult.AddResult(_payrollDataExtractor.Extract(payrollExport, message, personDtos, _serviceBusPayrollExportFeedback));
-                }
-                catch (Exception exception)
-                {
-                    Logger.Error("An error occurred while running the payroll export.",exception);
-                    _serviceBusPayrollExportFeedback.Error(@"An error occurred while running the payroll export.", exception);
-                	IsRunning = false;
-                }
-                
-                using (new MessageBrokerSendEnabler())
-                {
-                    unitOfWork.PersistAll();
-                }
-     
-                _serviceBusPayrollExportFeedback.ReportProgress(100, "Payroll export finished.");
-                _serviceBusPayrollExportFeedback.Dispose();
-                _serviceBusPayrollExportFeedback = null;
-            	IsRunning = false;
+	            var people = _payrollPeopleLoader.GetPeopleForExport(message, message.ExportPeriod, unitOfWork);
+	            var personDtos = _personBusAssembler.CreatePersonDto(people);
+	            try
+	            {
+		            payrollResult.XmlResult.AddResult(_payrollDataExtractor.Extract(payrollExport, message, personDtos,
+			            _serviceBusPayrollExportFeedback));
+	            }
+	            catch (Exception exception)
+	            {
+		            Logger.Error("An error occurred while running the payroll export.", exception);
+		            _serviceBusPayrollExportFeedback.Error(@"An error occurred while running the payroll export.", exception);
+		            IsRunning = false;
+	            }
+	            unitOfWork.PersistAll();
+
+	            _serviceBusPayrollExportFeedback.ReportProgress(100, "Payroll export finished.");
+	            _serviceBusPayrollExportFeedback.Dispose();
+	            _serviceBusPayrollExportFeedback = null;
+	            IsRunning = false;
             }
-			AppDomain.CurrentDomain.AssemblyResolve -= _domainAssemblyResolver.Resolve;
+	        AppDomain.CurrentDomain.AssemblyResolve -= _domainAssemblyResolver.Resolve;
         }
     
         private static bool MessageIsNull(RunPayrollExport message)
