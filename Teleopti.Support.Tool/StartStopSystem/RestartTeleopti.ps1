@@ -183,40 +183,73 @@ function EventlogSource-Create {
 ##===========
 ## Main
 ##===========
-function main {
+# Get the ID and security principal of the current user account
+$myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()
+$myWindowsPrincipal=new-object System.Security.Principal.WindowsPrincipal($myWindowsID)
+ 
+# Get the security principal for the Administrator role
+$adminRole=[System.Security.Principal.WindowsBuiltInRole]::Administrator
+ 
+# Check to see if we are currently running "as Administrator"
+if ($myWindowsPrincipal.IsInRole($adminRole))
+   {
+   # We are running "as Administrator" - so change the title and background color to indicate this
+   $Host.UI.RawUI.WindowTitle = $myInvocation.MyCommand.Definition + "(Elevated)"
+   $Host.UI.RawUI.BackgroundColor = "DarkBlue"
+   clear-host
+   }
+else
+   {
+   # We are not running "as Administrator" - so relaunch as administrator
+   
+   # Create a new process object that starts PowerShell
+   $newProcess = new-object System.Diagnostics.ProcessStartInfo "PowerShell";
+   
+   # Specify the current script path and name as a parameter
+   $newProcess.Arguments = $myInvocation.MyCommand.Definition;
+   
+   # Indicate that the process should be elevated
+   $newProcess.Verb = "runas";
+   
+   # Start the new process, in elevated mode
+   [System.Diagnostics.Process]::Start($newProcess);
+   
+   # Exit from the current, non elevated process
+   exit
+   }
+ 
 [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.Web.Administration")
 [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
 $JOB = "Teleopti.Ccc.RestartSystem"
 
-    Try
-    {
-	    ##test if admin
-	    If (!(Test-Administrator($myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()))) {
-		    throw "User is not Admin!"
-	    }
+Try
+{
+	##test if admin
+	If (!(Test-Administrator($myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()))) {
+		throw "User is not Admin!"
+	}
 
-    	import-module WebAdministration
+	import-module WebAdministration
 
-        EventlogSource-Create "$JOB"
+	EventlogSource-Create "$JOB"
 
-        $isAzure = fnIsAzure
-        $BaseUrl = BaseUrl-get $isAzure
-	    TeleoptiWindowsServices-Stop $isAzure
-        IIS-Restart
-        write-host "sleep 5 seconds for IIS to restart ..."
-        Start-Sleep -Seconds 5       
-        TeleoptiWebSites-HttpGet $BaseUrl
-        TeleoptiWindowsServices-Start $isAzure
-    }
+	$isAzure = fnIsAzure
+	$BaseUrl = BaseUrl-get $isAzure
+	TeleoptiWindowsServices-Stop $isAzure
+	IIS-Restart
+	write-host "sleep 5 seconds for IIS to restart ..."
+	Start-Sleep -Seconds 5       
+	TeleoptiWebSites-HttpGet $BaseUrl
+	TeleoptiWindowsServices-Start $isAzure
+}
 
-    Catch [Exception]
-    {
-        $ErrorMessage = $_.Exception.Message
-        Write-EventLog -LogName Application -Source $JOB -EventID 1 -EntryType Error -Message "$ErrorMessage"
-	    Throw "Script failed, Check Windows event log for details"
-    }
-    Finally
-    {
-        Write-Host "done"
-    }
+Catch [Exception]
+{
+	$ErrorMessage = $_.Exception.Message
+	Write-EventLog -LogName Application -Source $JOB -EventID 1 -EntryType Error -Message "$ErrorMessage"
+	Throw "Script failed, Check Windows event log for details"
+}
+Finally
+{
+	Write-Host "done"
 }

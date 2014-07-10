@@ -43,8 +43,8 @@ call StartSystem.bat
 
 if %major% GEQ 6 (
 powershell set-executionpolicy unrestricted
-ECHO powershell ". .\RestartTeleopti.ps1; main"
-powershell ". .\RestartTeleopti.ps1; main"
+ECHO powershell . .\RestartTeleopti.ps1
+powershell . .\RestartTeleopti.ps1
 )
 
 exit /b
