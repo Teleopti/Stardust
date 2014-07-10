@@ -44,14 +44,14 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			Syncfusion.Windows.Forms.Chart.ChartSeries chartSeries2 = new Syncfusion.Windows.Forms.Chart.ChartSeries();
-			Syncfusion.Windows.Forms.Chart.ChartCustomShapeInfo chartCustomShapeInfo2 = new Syncfusion.Windows.Forms.Chart.ChartCustomShapeInfo();
-			Syncfusion.Windows.Forms.Chart.ChartLineInfo chartLineInfo2 = new Syncfusion.Windows.Forms.Chart.ChartLineInfo();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle5 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle6 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle7 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle8 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle2 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			Syncfusion.Windows.Forms.Chart.ChartSeries chartSeries1 = new Syncfusion.Windows.Forms.Chart.ChartSeries();
+			Syncfusion.Windows.Forms.Chart.ChartCustomShapeInfo chartCustomShapeInfo1 = new Syncfusion.Windows.Forms.Chart.ChartCustomShapeInfo();
+			Syncfusion.Windows.Forms.Chart.ChartLineInfo chartLineInfo1 = new Syncfusion.Windows.Forms.Chart.ChartLineInfo();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle1 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle2 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle1 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			this.lessIntellegentSplitContainerAdvMain = new Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
 			this.lessIntellegentSplitContainerAdvResultGraph = new Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
 			this.chartControlSkillData = new Syncfusion.Windows.Forms.Chart.ChartControl();
@@ -82,18 +82,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvMain)).BeginInit();
 			this.lessIntellegentSplitContainerAdvMain.Panel1.SuspendLayout();
 			this.lessIntellegentSplitContainerAdvMain.Panel2.SuspendLayout();
+			this.lessIntellegentSplitContainerAdvMain.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvResultGraph)).BeginInit();
 			this.lessIntellegentSplitContainerAdvResultGraph.Panel1.SuspendLayout();
 			this.lessIntellegentSplitContainerAdvResultGraph.Panel2.SuspendLayout();
+			this.lessIntellegentSplitContainerAdvResultGraph.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.tabSkillData)).BeginInit();
 			this.tabSkillData.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.teleoptiLessIntelligentSplitContainerLessIntelligent1)).BeginInit();
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel1.SuspendLayout();
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2.SuspendLayout();
+			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.teleoptiLessIntellegentSplitContainerView)).BeginInit();
 			this.teleoptiLessIntellegentSplitContainerView.Panel1.SuspendLayout();
 			this.teleoptiLessIntellegentSplitContainerView.Panel2.SuspendLayout();
+			this.teleoptiLessIntellegentSplitContainerView.SuspendLayout();
 			this.tableLayoutPanelRestrictionSummery.SuspendLayout();
 			this.tableLayoutPanelRestrictionButtons.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chbAvailability)).BeginInit();
@@ -109,6 +113,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvMainContainer)).BeginInit();
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel1.SuspendLayout();
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel2.SuspendLayout();
+			this.lessIntellegentSplitContainerAdvMainContainer.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// lessIntellegentSplitContainerAdvMain
@@ -122,13 +127,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.lessIntellegentSplitContainerAdvMain.Name = "lessIntellegentSplitContainerAdvMain";
 			this.lessIntellegentSplitContainerAdvMain.Orientation = System.Windows.Forms.Orientation.Vertical;
 			// 
-			// 
+			// lessIntellegentSplitContainerAdvMain.Panel1
 			// 
 			this.lessIntellegentSplitContainerAdvMain.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.lessIntellegentSplitContainerAdvMain.Panel1.Controls.Add(this.lessIntellegentSplitContainerAdvResultGraph);
 			this.lessIntellegentSplitContainerAdvMain.Panel1MinSize = 32;
 			// 
-			// 
+			// lessIntellegentSplitContainerAdvMain.Panel2
 			// 
 			this.lessIntellegentSplitContainerAdvMain.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.lessIntellegentSplitContainerAdvMain.Panel2.Controls.Add(this.teleoptiLessIntelligentSplitContainerLessIntelligent1);
@@ -151,13 +156,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.lessIntellegentSplitContainerAdvResultGraph.Name = "lessIntellegentSplitContainerAdvResultGraph";
 			this.lessIntellegentSplitContainerAdvResultGraph.Orientation = System.Windows.Forms.Orientation.Vertical;
 			// 
-			// 
+			// lessIntellegentSplitContainerAdvResultGraph.Panel1
 			// 
 			this.lessIntellegentSplitContainerAdvResultGraph.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.lessIntellegentSplitContainerAdvResultGraph.Panel1.Controls.Add(this.chartControlSkillData);
 			this.lessIntellegentSplitContainerAdvResultGraph.Panel1MinSize = 0;
 			// 
-			// 
+			// lessIntellegentSplitContainerAdvResultGraph.Panel2
 			// 
 			this.lessIntellegentSplitContainerAdvResultGraph.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.lessIntellegentSplitContainerAdvResultGraph.Panel2.Controls.Add(this.tabSkillData);
@@ -189,32 +194,32 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.chartControlSkillData.PrimaryYAxis.Crossing = double.NaN;
 			this.chartControlSkillData.PrimaryYAxis.ForceZero = true;
 			this.chartControlSkillData.PrimaryYAxis.Margin = true;
-			chartSeries2.FancyToolTip.ResizeInsideSymbol = true;
-			chartSeries2.Name = "Default";
-			chartSeries2.Points.Add(0D, ((double)(54D)), ((double)(319D)), ((double)(249D)), ((double)(127D)));
-			chartSeries2.Points.Add(1D, ((double)(68D)), ((double)(305D)), ((double)(159D)), ((double)(222D)));
-			chartSeries2.Points.Add(2D, ((double)(94D)), ((double)(194D)), ((double)(138D)), ((double)(128D)));
-			chartSeries2.Points.Add(3D, ((double)(60D)), ((double)(113D)), ((double)(82D)), ((double)(110D)));
-			chartSeries2.Points.Add(4D, ((double)(85D)), ((double)(94D)), ((double)(86D)), ((double)(88D)));
-			chartSeries2.Resolution = 0D;
-			chartSeries2.StackingGroup = "Default Group";
-			chartSeries2.Style.AltTagFormat = "";
-			chartSeries2.Style.Border.Width = 2F;
-			chartSeries2.Style.DisplayShadow = true;
-			chartSeries2.Style.DrawTextShape = false;
-			chartSeries2.Style.Font.Facename = "Microsoft Sans Serif";
-			chartLineInfo2.Alignment = System.Drawing.Drawing2D.PenAlignment.Center;
-			chartLineInfo2.Color = System.Drawing.SystemColors.ControlText;
-			chartLineInfo2.DashPattern = null;
-			chartLineInfo2.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
-			chartLineInfo2.Width = 1F;
-			chartCustomShapeInfo2.Border = chartLineInfo2;
-			chartCustomShapeInfo2.Color = System.Drawing.SystemColors.HighlightText;
-			chartCustomShapeInfo2.Type = Syncfusion.Windows.Forms.Chart.ChartCustomShape.Square;
-			chartSeries2.Style.TextShape = chartCustomShapeInfo2;
-			chartSeries2.Text = "Default";
-			chartSeries2.Type = Syncfusion.Windows.Forms.Chart.ChartSeriesType.Line;
-			this.chartControlSkillData.Series.Add(chartSeries2);
+			chartSeries1.FancyToolTip.ResizeInsideSymbol = true;
+			chartSeries1.Name = "Default";
+			chartSeries1.Points.Add(0D, ((double)(54D)), ((double)(319D)), ((double)(249D)), ((double)(127D)));
+			chartSeries1.Points.Add(1D, ((double)(68D)), ((double)(305D)), ((double)(159D)), ((double)(222D)));
+			chartSeries1.Points.Add(2D, ((double)(94D)), ((double)(194D)), ((double)(138D)), ((double)(128D)));
+			chartSeries1.Points.Add(3D, ((double)(60D)), ((double)(113D)), ((double)(82D)), ((double)(110D)));
+			chartSeries1.Points.Add(4D, ((double)(85D)), ((double)(94D)), ((double)(86D)), ((double)(88D)));
+			chartSeries1.Resolution = 0D;
+			chartSeries1.StackingGroup = "Default Group";
+			chartSeries1.Style.AltTagFormat = "";
+			chartSeries1.Style.Border.Width = 2F;
+			chartSeries1.Style.DisplayShadow = true;
+			chartSeries1.Style.DrawTextShape = false;
+			chartSeries1.Style.Font.Facename = "Microsoft Sans Serif";
+			chartLineInfo1.Alignment = System.Drawing.Drawing2D.PenAlignment.Center;
+			chartLineInfo1.Color = System.Drawing.SystemColors.ControlText;
+			chartLineInfo1.DashPattern = null;
+			chartLineInfo1.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+			chartLineInfo1.Width = 1F;
+			chartCustomShapeInfo1.Border = chartLineInfo1;
+			chartCustomShapeInfo1.Color = System.Drawing.SystemColors.HighlightText;
+			chartCustomShapeInfo1.Type = Syncfusion.Windows.Forms.Chart.ChartCustomShape.Square;
+			chartSeries1.Style.TextShape = chartCustomShapeInfo1;
+			chartSeries1.Text = "Default";
+			chartSeries1.Type = Syncfusion.Windows.Forms.Chart.ChartSeriesType.Line;
+			this.chartControlSkillData.Series.Add(chartSeries1);
 			this.chartControlSkillData.Size = new System.Drawing.Size(335, 127);
 			this.chartControlSkillData.TabIndex = 1;
 			this.chartControlSkillData.Text = "Skill";
@@ -280,13 +285,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Name = "teleoptiLessIntelligentSplitContainerLessIntelligent1";
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Orientation = System.Windows.Forms.Orientation.Vertical;
 			// 
-			// 
+			// teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel1
 			// 
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel1.BackColor = System.Drawing.SystemColors.Control;
-			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel1.Controls.Add(this.teleoptiLessIntellegentSplitContainerView);
 			// 
-			// 
+			// teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2
 			// 
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2.Controls.Add(this.elementHost1);
@@ -310,14 +315,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.teleoptiLessIntellegentSplitContainerView.Name = "teleoptiLessIntellegentSplitContainerView";
 			this.teleoptiLessIntellegentSplitContainerView.Orientation = System.Windows.Forms.Orientation.Vertical;
 			// 
-			// 
+			// teleoptiLessIntellegentSplitContainerView.Panel1
 			// 
 			this.teleoptiLessIntellegentSplitContainerView.Panel1.BackColor = System.Drawing.SystemColors.Control;
 			this.teleoptiLessIntellegentSplitContainerView.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.teleoptiLessIntellegentSplitContainerView.Panel1.Controls.Add(this.tableLayoutPanelRestrictionSummery);
 			this.teleoptiLessIntellegentSplitContainerView.Panel1MinSize = 0;
 			// 
-			// 
+			// teleoptiLessIntellegentSplitContainerView.Panel2
 			// 
 			this.teleoptiLessIntellegentSplitContainerView.Panel2.BackColor = System.Drawing.SystemColors.Control;
 			this.teleoptiLessIntellegentSplitContainerView.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
@@ -472,32 +477,32 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// grid
 			// 
-			gridBaseStyle5.Name = "Header";
-			gridBaseStyle5.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.CellType = "Header";
-			gridBaseStyle5.StyleInfo.Font.Bold = true;
-			gridBaseStyle5.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle5.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
-			gridBaseStyle6.Name = "Standard";
-			gridBaseStyle6.StyleInfo.Font.Facename = "Tahoma";
-			gridBaseStyle6.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-			gridBaseStyle6.StyleInfo.TextAlign = Syncfusion.Windows.Forms.Grid.GridTextAlign.Default;
-			gridBaseStyle7.Name = "Column Header";
-			gridBaseStyle7.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle7.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
-			gridBaseStyle7.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle8.Name = "Row Header";
-			gridBaseStyle8.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle8.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-			gridBaseStyle8.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle1.Name = "Header";
+			gridBaseStyle1.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle1.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle1.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle1.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle1.StyleInfo.CellType = "Header";
+			gridBaseStyle1.StyleInfo.Font.Bold = true;
+			gridBaseStyle1.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle1.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
+			gridBaseStyle2.Name = "Standard";
+			gridBaseStyle2.StyleInfo.Font.Facename = "Tahoma";
+			gridBaseStyle2.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
+			gridBaseStyle2.StyleInfo.TextAlign = Syncfusion.Windows.Forms.Grid.GridTextAlign.Default;
+			gridBaseStyle3.Name = "Column Header";
+			gridBaseStyle3.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+			gridBaseStyle3.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle4.Name = "Row Header";
+			gridBaseStyle4.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
+			gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.grid.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle5,
-            gridBaseStyle6,
-            gridBaseStyle7,
-            gridBaseStyle8});
+            gridBaseStyle1,
+            gridBaseStyle2,
+            gridBaseStyle3,
+            gridBaseStyle4});
 			this.grid.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
 			this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -510,10 +515,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.grid.Name = "grid";
 			this.grid.NumberedColHeaders = false;
 			this.grid.NumberedRowHeaders = false;
-			gridRangeStyle2.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cells(1, 1, 10, 2);
-			gridRangeStyle2.StyleInfo.BaseStyle = "Standard";
+			gridRangeStyle1.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cells(1, 1, 10, 2);
+			gridRangeStyle1.StyleInfo.BaseStyle = "Standard";
 			this.grid.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
-            gridRangeStyle2});
+            gridRangeStyle1});
 			this.grid.ReadOnly = true;
 			this.grid.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.grid.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
@@ -551,13 +556,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// tabInfoPanels
 			// 
-			this.tabInfoPanels.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.tabInfoPanels.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
 			this.tabInfoPanels.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
 			this.tabInfoPanels.BeforeTouchSize = new System.Drawing.Size(436, 672);
+			this.tabInfoPanels.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabInfoPanels.Controls.Add(this.tabPageAdvAgentInfo);
 			this.tabInfoPanels.Controls.Add(this.tabPageAdvShiftCategoryDistribution);
 			this.tabInfoPanels.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tabInfoPanels.FixedSingleBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.tabInfoPanels.FixedSingleBorderColor = System.Drawing.Color.White;
 			this.tabInfoPanels.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabInfoPanels.InactiveTabColor = System.Drawing.Color.White;
 			this.tabInfoPanels.KeepSelectedTabInFrontRow = false;
@@ -572,10 +578,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.tabPageAdvAgentInfo.Image = null;
 			this.tabPageAdvAgentInfo.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageAdvAgentInfo.Location = new System.Drawing.Point(1, 22);
+			this.tabPageAdvAgentInfo.Location = new System.Drawing.Point(0, 21);
 			this.tabPageAdvAgentInfo.Name = "tabPageAdvAgentInfo";
 			this.tabPageAdvAgentInfo.ShowCloseButton = true;
-			this.tabPageAdvAgentInfo.Size = new System.Drawing.Size(433, 648);
+			this.tabPageAdvAgentInfo.Size = new System.Drawing.Size(436, 651);
 			this.tabPageAdvAgentInfo.TabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.tabPageAdvAgentInfo.TabIndex = 11;
 			this.tabPageAdvAgentInfo.Text = "xxAgentInfo";
@@ -586,10 +592,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tabPageAdvShiftCategoryDistribution.Controls.Add(this.shiftCategoryDistributionControl1);
 			this.tabPageAdvShiftCategoryDistribution.Image = null;
 			this.tabPageAdvShiftCategoryDistribution.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageAdvShiftCategoryDistribution.Location = new System.Drawing.Point(1, 22);
+			this.tabPageAdvShiftCategoryDistribution.Location = new System.Drawing.Point(0, 21);
 			this.tabPageAdvShiftCategoryDistribution.Name = "tabPageAdvShiftCategoryDistribution";
 			this.tabPageAdvShiftCategoryDistribution.ShowCloseButton = true;
-			this.tabPageAdvShiftCategoryDistribution.Size = new System.Drawing.Size(433, 648);
+			this.tabPageAdvShiftCategoryDistribution.Size = new System.Drawing.Size(436, 651);
 			this.tabPageAdvShiftCategoryDistribution.TabIndex = 12;
 			this.tabPageAdvShiftCategoryDistribution.Text = "xxShiftCategoryDistribution";
 			this.tabPageAdvShiftCategoryDistribution.ThemesEnabled = false;
@@ -600,7 +606,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.shiftCategoryDistributionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.shiftCategoryDistributionControl1.Location = new System.Drawing.Point(0, 0);
 			this.shiftCategoryDistributionControl1.Name = "shiftCategoryDistributionControl1";
-			this.shiftCategoryDistributionControl1.Size = new System.Drawing.Size(433, 648);
+			this.shiftCategoryDistributionControl1.Size = new System.Drawing.Size(436, 651);
 			this.shiftCategoryDistributionControl1.TabIndex = 0;
 			// 
 			// lessIntellegentSplitContainerAdvMainContainer
@@ -614,13 +620,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.lessIntellegentSplitContainerAdvMainContainer.Location = new System.Drawing.Point(0, 0);
 			this.lessIntellegentSplitContainerAdvMainContainer.Name = "lessIntellegentSplitContainerAdvMainContainer";
 			// 
-			// 
+			// lessIntellegentSplitContainerAdvMainContainer.Panel1
 			// 
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel1.Controls.Add(this.lessIntellegentSplitContainerAdvMain);
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel1MinSize = 32;
 			// 
-			// 
+			// lessIntellegentSplitContainerAdvMainContainer.Panel2
 			// 
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel2.Controls.Add(this.tabInfoPanels);
@@ -643,9 +649,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.lessIntellegentSplitContainerAdvMain.Panel1.ResumeLayout(false);
 			this.lessIntellegentSplitContainerAdvMain.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvMain)).EndInit();
+			this.lessIntellegentSplitContainerAdvMain.ResumeLayout(false);
 			this.lessIntellegentSplitContainerAdvResultGraph.Panel1.ResumeLayout(false);
 			this.lessIntellegentSplitContainerAdvResultGraph.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvResultGraph)).EndInit();
+			this.lessIntellegentSplitContainerAdvResultGraph.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.tabSkillData)).EndInit();
 			this.tabSkillData.ResumeLayout(false);
 			this.contextMenuStrip1.ResumeLayout(false);
@@ -653,9 +661,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2.ResumeLayout(false);
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.teleoptiLessIntelligentSplitContainerLessIntelligent1)).EndInit();
+			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.ResumeLayout(false);
 			this.teleoptiLessIntellegentSplitContainerView.Panel1.ResumeLayout(false);
 			this.teleoptiLessIntellegentSplitContainerView.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.teleoptiLessIntellegentSplitContainerView)).EndInit();
+			this.teleoptiLessIntellegentSplitContainerView.ResumeLayout(false);
 			this.tableLayoutPanelRestrictionSummery.ResumeLayout(false);
 			this.tableLayoutPanelRestrictionSummery.PerformLayout();
 			this.tableLayoutPanelRestrictionButtons.ResumeLayout(false);
@@ -672,6 +682,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel1.ResumeLayout(false);
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvMainContainer)).EndInit();
+			this.lessIntellegentSplitContainerAdvMainContainer.ResumeLayout(false);
 			this.ResumeLayout(false);
 
         }
