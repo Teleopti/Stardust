@@ -146,9 +146,8 @@ define([
 			self.ScheduleDate(moment(options.date, 'YYYYMMDD'));
 			self.PersonId(options.personid || options.id);
 			self.GroupId(options.groupid);
-			if (options.minutes)
-				self.SelectedStartMinutes(Number(options.minutes));
-
+			self.SelectedStartMinutes(Number(options.minutes));
+            self.initMoveActivityForm();
 		};
 
 		this.UpdateData = function (data) {
@@ -209,10 +208,10 @@ define([
 		};
 
 		this.SelectedLayer = function() {
-			if (!self.SelectedStartMinutes()) return null;
+		    if (!self.MoveActivityForm.SelectedStartMinutes()) return null;
 
 			var selectedLayers = layers().filter(function (layer) {
-				if (layer.StartMinutes() === self.SelectedStartMinutes())
+			    if (layer.StartMinutes() === self.MoveActivityForm.SelectedStartMinutes())
 				return layer;
 			});
 			var activeLayer = selectedLayers.first();
@@ -232,14 +231,13 @@ define([
 			return Math.round(pixels);
 		};
 
-		this.setTimelineWidth = function(width) {
-			self.TimeLine.WidthPixels(width);
-		}
+	    this.setTimelineWidth = function(width) {
+	        self.TimeLine.WidthPixels(width);
+	    };
 
-		this.InitMoveActivityForm = function () {
-		    var date = self.ScheduleDate();
-		    var time = self.SelectedStartMinutes();
-			self.MoveActivityForm.StartTime(moment(new Date(date.year(), date.month(), date.date(), time/60, time%60, 0)));
-		}
+        this.initMoveActivityForm = function() {
+            self.MoveActivityForm.SelectedStartMinutes(self.SelectedStartMinutes());
+            self.MoveActivityForm.ScheduleDate(self.ScheduleDate());
+        }
 	};
 });

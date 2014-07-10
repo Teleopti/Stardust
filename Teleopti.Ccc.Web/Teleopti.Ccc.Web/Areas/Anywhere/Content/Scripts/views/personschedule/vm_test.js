@@ -93,7 +93,8 @@
 					var vm = new viewModel();
 					vm.SetViewOptions({
 						id: 1,
-						date: '20131118'
+						date: '20131118',
+						minutes: 840
 					});
 					var data = [
 						{
@@ -107,7 +108,6 @@
 						}
 					];
 					vm.UpdateSchedules(data);
-					vm.SelectedStartMinutes(840);
 
 					assert.equals(vm.SelectedLayer().StartMinutes(), vm.SelectedStartMinutes());
 				},
@@ -118,7 +118,8 @@
 					vm.SetViewOptions({
 						id: 1,
 						date: '20131118',
-						groupid: 2
+						groupid: 2,
+						minutes: 840
 					});
 					var data = [
 						{
@@ -133,7 +134,6 @@
 						}
 					];
 					vm.MovingActivity(true);
-					vm.SelectedStartMinutes(840);
 					vm.UpdateData({ PersonId: 1 });
 					vm.UpdateSchedules(data);
 
@@ -150,7 +150,8 @@
 					vm.SetViewOptions({
 						id: 1,
 						date: '20131118',
-						groupid: 2
+						groupid: 2,
+						minutes: 840
 					});
 					var data = [
 						{
@@ -168,7 +169,6 @@
 						}
 					];
 				    vm.MovingActivity(true);
-					vm.SelectedStartMinutes(840);
 					vm.UpdateData({ PersonId: 1, Date: moment('20131118', 'YYYYMMDD') });
 					vm.UpdateSchedules(data);
 
@@ -183,7 +183,8 @@
 					vm.SetViewOptions({
 						id: 1,
 						date: '20131118',
-						groupid: 2
+						groupid: 2,
+						minutes: 840
 					});
 					var data = [
 						{
@@ -195,7 +196,6 @@
 							]
 						}
 					];
-					vm.SelectedStartMinutes(840);
 					vm.UpdateData({ PersonId: 1 });
 					vm.UpdateSchedules(data);
 
@@ -211,7 +211,8 @@
 					vm.SetViewOptions({
 						id: 1,
 						date: '20131118',
-						groupid: 2
+						groupid: 2,
+						minutes: 340
 					});
 					var data = [
 						{
@@ -226,7 +227,6 @@
 						}
 					];
 
-					vm.SelectedStartMinutes(340);
 					vm.UpdateData({ PersonId: 1 });
 					vm.UpdateSchedules(data);
 
@@ -239,7 +239,8 @@
 					vm.SetViewOptions({
 						id: 1,
 						date: '20131118',
-						groupid: 2
+						groupid: 2,
+						minutes: 840
 					});
 					var data = [
 						{
@@ -259,7 +260,6 @@
 						}
 					];
 					vm.MovingActivity(true);
-					vm.SelectedStartMinutes(840);
 					vm.UpdateData({ PersonId: 1 });
 					vm.UpdateSchedules(data);
 
@@ -320,7 +320,8 @@
 					vm.SetViewOptions({
 						id: 1,
 						date: '20131118',
-						groupid: 2
+						groupid: 2,
+						minutes: 840
 					});
 					var data = [
 						{
@@ -334,13 +335,11 @@
 						}
 					];
 					vm.MovingActivity(true);
-					vm.SelectedStartMinutes(840);
 					vm.UpdateData({ PersonId: 1 });
 					vm.UpdateSchedules(data);
 
 					var momentInput = moment('13:00', 'HH:mm');
 					var expected = '14:00';
-					var momentExpected = moment(expected, 'HH:mm');
 					vm.MoveActivityForm.DisplayedStartTime(momentInput);
 					assert.equals(vm.MoveActivityForm.DisplayedStartTime(), expected);
 
@@ -367,7 +366,48 @@
 					vm.UpdateSchedules(data);
 
 					assert.equals(3, vm.SortedPersons().length);
-				}
+				},
+
+
+				"should not move layer which makes the shift to another day in move activity form": function () {
+				    var vm = new viewModel();
+				    vm.SetViewOptions({
+				        id: 1,
+				        date: '20131118',
+				        groupid: 2,
+				        minutes: 1380
+				    });
+				    var data = [
+						{
+						    PersonId: 1,
+						    Projection: [
+								{
+								    Start: '2013-11-18 23:00',
+								    Minutes: 60
+								},
+                                {
+                                    Start: '2013-11-19 00:00',
+                                    Minutes: 60
+                                }
+						    ]
+						}
+				    ];
+				    vm.MovingActivity(true);
+				    vm.UpdateData({ PersonId: 1 });
+				    vm.UpdateSchedules(data);
+
+				    var momentInput = moment('23:30', 'HH:mm');
+				    vm.MoveActivityForm.DisplayedStartTime(momentInput);
+				    var result = vm.MoveActivityForm.isMovingToAnotherDay();
+				    assert.equals(result, false);
+
+				    momentInput = moment('00:00', 'HH:mm');
+				    vm.MoveActivityForm.DisplayedStartTime(momentInput);
+				    result = vm.MoveActivityForm.isMovingToAnotherDay();
+				    assert.equals(result, true);
+
+				},
+
 			});
 		}
 	}

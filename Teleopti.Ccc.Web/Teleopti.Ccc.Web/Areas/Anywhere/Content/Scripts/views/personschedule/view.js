@@ -81,13 +81,15 @@ define([
 									var maxEndPixel = (workingShift.OriginalShiftEndMinutes - viewModel.TimeLine.StartMinutes()) * viewModel.TimeLine.PixelsPerMinute();
 									if (ui.position.left + ui.helper[0].offsetWidth <= maxEndPixel && 
 										ui.position.left >= minStartPixel) {
-										var pixelsChanged = ui.position.left - ui.originalPosition.left;
-										viewModel.updateStartTime(pixelsChanged);
+									    var pixelsChanged = ui.position.left - ui.originalPosition.left;
+                                        viewModel.updateStartTime(pixelsChanged);
+										if (viewModel.MoveActivityForm.isMovingToAnotherDay()) 
+										    viewModel.MoveActivityForm.reset();
 									}
 								}
 							});
 						}
-						viewModel.InitMoveActivityForm();
+						viewModel.MoveActivityForm.reset();
 					}
 			});
 		},

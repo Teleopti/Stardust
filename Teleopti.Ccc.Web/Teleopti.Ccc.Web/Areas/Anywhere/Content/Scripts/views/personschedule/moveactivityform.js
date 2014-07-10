@@ -25,6 +25,7 @@
 		self.Activities = ko.observableArray();
 		self.WorkingShift = ko.observable();
 		self.layer = ko.observable();
+	    self.SelectedStartMinutes = ko.observable();
 
 		this.SetData = function (data) {
 			self.PersonId(data.PersonId);
@@ -39,6 +40,7 @@
 				return self.StartTime().format(resources.TimeFormatForMoment);
 			},
 			write: function (option) {
+			    if (!self.layer()) return;
 				var inputTime = getMomentFromInput(option);
 				if (!isLayerWithinShift(inputTime)) {
 					self.StartTime(self.getStartTimeFromMinutes(self.OldStartMinutes()));
@@ -55,7 +57,7 @@
 			var shiftEndMinutes = self.WorkingShift().OriginalShiftEndMinutes;
 			var inputMinutes = self.getMinutesFromTime(startTime);
 		    if (inputMinutes < shiftStartMinutes && shiftOverMidnight())
-		        inputMinutes += 24 * 60;
+		        inputMinutes += 1440;
 			if (inputMinutes >= shiftStartMinutes && inputMinutes + self.layer().LengthMinutes() <= shiftEndMinutes)
 				return true;
 			return false;
@@ -96,7 +98,7 @@
 				AgentId: self.PersonId(),
 				ScheduleDate: self.ScheduleDate().format(),
 				NewStartTime: self.StartTime().format(),
-				OldStartTime: moment(self.ScheduleDate()).add('minutes', self.OldStartMinutes()).format(),
+				OldStartTime: moment(self.getStartTimeFromMinutes(self.OldStartMinutes())).format(),
 				ActivityId: activity.Id,
 				OldProjectionLayerLength: self.ProjectionLength()
 			});
@@ -134,7 +136,7 @@
 		};
 
 	    var shiftOverMidnight = function() {
-	        return self.WorkingShift().OriginalShiftEndMinutes > 24 * 60;
+	        return self.WorkingShift().OriginalShiftEndMinutes > 1440;
 	    };
 
 	    var beforeMidnight = function (momentInput) {
@@ -142,5 +144,14 @@
 	        return momentInput <= moment("23:59", resources.TimeFormatForMoment) && momentInput >= moment(shiftStartTime, resources.TimeFormatForMoment);
 	    };
 
+	    this.isMovingToAnotherDay = function() {
+	        return self.WorkingShift().OriginalShiftStartMinutes < 1440 && self.WorkingShift().Layers()[0].StartMinutes() >= 1440;
+	    };
+        
+	    this.reset = function() {
+	        var date = self.ScheduleDate();
+	        var time = self.SelectedStartMinutes();
+	        self.StartTime(moment([date.year(), date.month(), date.date(), time / 60, time % 60]));
+	    };
 	};
 });
