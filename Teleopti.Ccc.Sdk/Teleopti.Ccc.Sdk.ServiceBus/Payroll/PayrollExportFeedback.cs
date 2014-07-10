@@ -29,37 +29,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
         
         public void ReportProgress(int percentage, string information)
         {
-            var payrollExportProgress = new JobResultProgress
-                                            {
-                                                Message = information,
-                                                Percentage = percentage,
-                                                JobResultId = _payrollResult.Id.GetValueOrDefault()
-                                            };
-            var binaryData =
-                _payrollResultProgressEncoder.Encode(payrollExportProgress);
-            using (new MessageBrokerSendEnabler())
-            {
-                if (MessageBrokerIsRunning())
-                {
-                	_messageBroker.SendEventMessage(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name,
-                	                                ((IBelongsToBusinessUnit) _payrollResult).BusinessUnit.Id.
-                	                                	GetValueOrDefault(), DateTime.UtcNow, DateTime.UtcNow, Guid.Empty,
-                	                                Guid.Empty, typeof (IJobResultProgress), DomainUpdateType.NotApplicable,
-                	                                binaryData);
-                }
-                else
-                {
-                    Logger.Warn("Payroll export progress could not be sent because the message broker is unavailable.");
-                }
-            }
+	        var payrollExportProgress = new JobResultProgress
+	        {
+		        Message = information,
+		        Percentage = percentage,
+		        JobResultId = _payrollResult.Id.GetValueOrDefault()
+	        };
+	        var binaryData =
+		        _payrollResultProgressEncoder.Encode(payrollExportProgress);
+	        
+			_messageBroker.SendEventMessage(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name,
+		        ((IBelongsToBusinessUnit) _payrollResult).BusinessUnit.Id.
+			        GetValueOrDefault(), DateTime.UtcNow, DateTime.UtcNow, Guid.Empty,
+		        Guid.Empty, typeof (IJobResultProgress), DomainUpdateType.NotApplicable,
+		        binaryData);
         }
 
-        private bool MessageBrokerIsRunning()
-        {
-            return _messageBroker != null && _messageBroker.IsConnected;
-        }
-
-        public void Error(string message)
+	    public void Error(string message)
         {
             Error(message,null);
         }

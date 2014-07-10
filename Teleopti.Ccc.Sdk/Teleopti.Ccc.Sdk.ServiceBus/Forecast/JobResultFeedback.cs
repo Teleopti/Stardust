@@ -61,25 +61,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
         private void sendMessage(byte[] binaryData)
         {
-            using (new MessageBrokerSendEnabler())
-            {
-                if (MessageBrokerIsRunning())
-                {
-                	_messageBroker.SendEventMessage(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name,
-                	                                ((IBelongsToBusinessUnit) _jobResult).BusinessUnit.Id.GetValueOrDefault
-                	                                	(), DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
-                	                                typeof (IJobResultProgress), DomainUpdateType.NotApplicable, binaryData);
-                }
-                else
-                {
-                    Logger.Warn("Job progress could not be sent because the message broker is unavailable.");
-                }
-            }
-        }
-
-        private bool MessageBrokerIsRunning()
-        {
-            return _messageBroker != null && _messageBroker.IsConnected;
+	        _messageBroker.SendEventMessage(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name,
+		        ((IBelongsToBusinessUnit) _jobResult).BusinessUnit.Id.GetValueOrDefault
+			        (), DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
+		        typeof (IJobResultProgress), DomainUpdateType.NotApplicable, binaryData);
         }
 
         public void Error(string message)

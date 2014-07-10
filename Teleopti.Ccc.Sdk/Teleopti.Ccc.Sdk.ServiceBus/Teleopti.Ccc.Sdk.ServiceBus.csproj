@@ -255,7 +255,6 @@
     <Compile Include="RequestFactory.cs" />
     <Compile Include="BusBootStrapper.cs" />
     <Compile Include="DataSourceFactory.cs" />
-    <Compile Include="MessageBrokerSendEnabler.cs" />
     <Compile Include="RaptorDomainMessageModule.cs" />
     <Compile Include="BasicState.cs" />
     <Compile Include="NewAbsenceRequestConsumer.cs" />
