@@ -14,7 +14,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\..\..\Resources\Common.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <cvt:ColorConverterSoft x:Key="ColorConverter"/>
+            <cvt:ColorConverter x:Key="ColorConverter"/>
             <DateTimeConverter:DateTimeToLocalStringConverter x:Key="startDateTimeToLocalStringConverter"/>
             <DateTimeConverter:DateTimeToLocalStringConverter x:Key="endDateTimeToLocalStringConverter"/>
             <DateTimeConverter:DateTimeParseMode x:Key="TimeMode">Time</DateTimeConverter:DateTimeParseMode>
@@ -26,7 +26,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Border BorderThickness="0" CornerRadius="0" Padding="3" Margin="1" Background="{Binding Path=Layer.DisplayColor, Converter={StaticResource colorConverter}, TargetNullValue=White, FallbackValue=White}">
+	<Border BorderThickness="0" CornerRadius="0" Padding="3" Margin="1" Background="{Binding Path=Layer.DisplayColor, Converter={StaticResource ColorConverter}, TargetNullValue=White, FallbackValue=White}">
         <Grid Commands:CreateCommandBinding.CommandModel="{Binding Path=UpdateLayerCommand}">
             <Grid.RowDefinitions>
                 <RowDefinition />
@@ -41,10 +41,7 @@
             <Grid  Commands:CreateCommandBinding.Target="{Binding Path=Period}" >
                 <Grid.Resources>
                     <Style TargetType="RepeatButton" BasedOn="{StaticResource BaseButtonStyle}" >
-                        <Style.Setters>
-                            <Setter Property="Opacity" Value="0.4"/>
-                            <Setter Property="Background" Value="Transparent"/>
-                        </Style.Setters>
+                      
                     </Style>
                 </Grid.Resources>
                 
@@ -68,11 +65,12 @@
                         <ColumnDefinition MinWidth="75"/>
                         <ColumnDefinition MinWidth="45"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-					<RepeatButton Content="--" Width="30" Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalEarlier}" Grid.Column="0"  />
+					<RepeatButton  Width="30" Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalEarlier}" Grid.Column="0"  />
 
-					<RepeatButton Content="-"  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalEarlier}"  Grid.Column="1" />
+					<RepeatButton   Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalEarlier}"  Grid.Column="1" />
                     
                     <TextBox MaxHeight="22" Keyboard.KeyDown="TextBox_KeyDown" Grid.Column="2">
                         <TextBox.Text>
@@ -95,20 +93,21 @@
                             </MultiBinding>
                         </TextBox.Text>
                     </TextBox>
-                    <RepeatButton Content="+" Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalLater}" Grid.Column="4"/>
+                    <RepeatButton  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalLater}" Grid.Column="4" HorizontalAlignment="Left"/>
                 </Grid>
 
                 <!--EndDateTime-->
                 <Grid Grid.Column="2" Margin="3,0,3,0" >
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition MinWidth="75"/>
                         <ColumnDefinition MinWidth="45"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-					<RepeatButton Content="-" Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalEarlier}" />
-                    <TextBox MaxHeight="22" Keyboard.KeyDown="TextBox_KeyDown" Grid.Column="1"  Margin="12,0,0,0">
+					<RepeatButton  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalEarlier}" HorizontalAlignment="Right" Grid.Column="1" />
+                    <TextBox MaxHeight="22" Keyboard.KeyDown="TextBox_KeyDown" Grid.Column="2"  Margin="12,0,0,0">
                         <TextBox.Text>
                             <MultiBinding Converter="{StaticResource endDateTimeToLocalStringConverter}" ConverterParameter="{StaticResource DateMode}" Mode="TwoWay">
                                 <MultiBinding.Bindings>
@@ -119,7 +118,7 @@
                         </TextBox.Text>
                     </TextBox>
 
-                    <TextBox MaxHeight="22" Keyboard.KeyDown="TextBox_KeyDown" Grid.Column="2">
+                    <TextBox MaxHeight="22" Keyboard.KeyDown="TextBox_KeyDown" Grid.Column="3">
                         <TextBox.Text>
                             <MultiBinding Converter="{StaticResource endDateTimeToLocalStringConverter}" ConverterParameter="{StaticResource TimeMode}" Mode="TwoWay">
                                 <MultiBinding.Bindings>
@@ -130,8 +129,8 @@
                         </TextBox.Text>
                     </TextBox>
 
-					<RepeatButton Content="+" Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalLater}" Grid.Column="3" />
-					<RepeatButton Content="++" Width="30" Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalLater}" Grid.Column="4" />
+					<RepeatButton  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalLater}" Grid.Column="4" />
+					<RepeatButton  Width="30" Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalLater}" Grid.Column="5" />
                 </Grid>
 
                 <ComboBox ItemsSource="{Binding Path=SelectablePayloads}"  

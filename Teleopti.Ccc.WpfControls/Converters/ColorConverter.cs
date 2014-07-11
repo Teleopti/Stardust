@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WpfControls.Converters
                 System.Drawing.Color colorToConvert = (System.Drawing.Color)value;
 
                 Color baseColor = Color.FromRgb(colorToConvert.R, colorToConvert.G, colorToConvert.B);
-                return new LinearGradientBrush(Colors.White, baseColor, new Point(0, 0), new Point(0, 0.4));
+                return new LinearGradientBrush(Colors.White, baseColor, new Point(0, 0), new Point(0, 0.1));
 
 
             }
