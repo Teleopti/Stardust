@@ -1164,7 +1164,7 @@
     <value>Istunto päättynyt</value>
   </data>
   <data name="SessionExpiredText" xml:space="preserve">
-    <value>Sinun istuntosi on päättynyt, koska et ole ollut aktiivisena. Sinut ohjataan sisäänkirjautumissivulle. </value>
+    <value>Sinun istuntosi on päättynyt, koska et ole ollut aktiivisena. Ole hyvä ja kirjaudu sisään uudelleen. </value>
   </data>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
     <value>Työvuorolistan noudattaminen / Agentti</value>
@@ -1185,7 +1185,7 @@
     <value>Käytettävyys aika</value>
   </data>
   <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
-    <value>Yhteys tietokantaan katkennut, yritä rajoittaa hakua.</value>
+    <value>Yhteys tietokantaan katkennut. Tee haku uudelleen.</value>
   </data>
   <data name="RepViewerCurrentPage" xml:space="preserve">
     <value>Nykyinen sivu</value>
@@ -1200,7 +1200,7 @@
     <value>Päivään (työvuoro alkaa):</value>
   </data>
   <data name="RepViewerExport" xml:space="preserve">
-    <value>Tallenna</value>
+    <value>Vie</value>
   </data>
   <data name="RepViewerFind" xml:space="preserve">
     <value>Etsi</value>
@@ -1227,7 +1227,7 @@
     <value>Viimeinen sivu</value>
   </data>
   <data name="ResMustHaves" xml:space="preserve">
-    <value>"Pakolliset toiveet"</value>
+    <value>"Must Have" -toiveet</value>
   </data>
   <data name="RepViewerNext" xml:space="preserve">
     <value>Seuraava</value>
@@ -1239,7 +1239,7 @@
     <value>Muita osumia ei löytynyt.</value>
   </data>
   <data name="RepViewerOf" xml:space="preserve">
-    <value>pois päältä</value>
+    <value>/</value>
   </data>
   <data name="ResOnlyActiveSkill" xml:space="preserve">
     <value>Vain aktiiviset taidot</value>
@@ -1260,7 +1260,7 @@
     <value>Tulosta</value>
   </data>
   <data name="RepViewerPrinLayout" xml:space="preserve">
-    <value>Tulostuksen asetukset</value>
+    <value>Tulostus asetukset</value>
   </data>
   <data name="RepViewerRefresh" xml:space="preserve">
     <value>Päivitä</value>
@@ -1284,7 +1284,7 @@
     <value>Kaikki sivut</value>
   </data>
   <data name="ResTotals" xml:space="preserve">
-    <value>Kaikki</value>
+    <value>Yhteensä</value>
   </data>
   <data name="ResUnfulfilled" xml:space="preserve">
     <value>Ei toteutunut</value>
