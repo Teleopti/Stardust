@@ -73,13 +73,21 @@
 			// ribbonControlAdv1
 			// 
 			resources.ApplyResources(this.ribbonControlAdv1, "ribbonControlAdv1");
-			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Tahoma", 8.25F);
+			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.Header.AddMainItem(toolStripTabItem1);
+			this.ribbonControlAdv1.HideMenuButtonToolTip = false;
+			this.ribbonControlAdv1.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
+			this.ribbonControlAdv1.MenuButtonEnabled = true;
+			this.ribbonControlAdv1.MenuButtonFont = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.MenuButtonImage = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Menu;
 			this.ribbonControlAdv1.MenuButtonText = "";
+			this.ribbonControlAdv1.MenuButtonWidth = 56;
+			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
 			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
+			this.ribbonControlAdv1.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
+			this.ribbonControlAdv1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
 			// 
 			// ribbonControlAdv1.OfficeMenu
 			// 
@@ -89,12 +97,14 @@
             this.toolStripButtonClose});
 			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
 			resources.ApplyResources(this.ribbonControlAdv1.OfficeMenu, "ribbonControlAdv1.OfficeMenu");
+			this.ribbonControlAdv1.OverFlowButtonToolTip = "Show DropDown";
+			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.ribbonControlAdv1.QuickPanelVisible = false;
+			this.ribbonControlAdv1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
+			this.ribbonControlAdv1.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
 			this.ribbonControlAdv1.SelectedTab = this.toolStripTabItem1;
-			this.ribbonControlAdv1.ShowCaption = false;
-			this.ribbonControlAdv1.ShowContextMenu = false;
-			this.ribbonControlAdv1.ShowLauncher = false;
-			this.ribbonControlAdv1.ShowQuickItemsDropDownButton = false;
+			this.ribbonControlAdv1.Show2010CustomizeQuickItemDialog = false;
+			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = true;
 			this.ribbonControlAdv1.SystemText.QuickAccessAddItemText = "";
 			this.ribbonControlAdv1.SystemText.QuickAccessCustomizeCaptionText = "";
 			this.ribbonControlAdv1.SystemText.QuickAccessCustomizeMenuText = "";
@@ -109,6 +119,8 @@
 			this.ribbonControlAdv1.SystemText.QuickAccessPlaceAboveText = "";
 			this.ribbonControlAdv1.SystemText.QuickAccessPlaceBelowText = "";
 			this.ribbonControlAdv1.SystemText.QuickAccessRemoveItemText = "";
+			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
+			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			// 
 			// toolStripTabItem1
 			// 
@@ -132,7 +144,7 @@
 			// toolStripExEdit
 			// 
 			resources.ApplyResources(this.toolStripExEdit, "toolStripExEdit");
-			this.toolStripExEdit.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripExEdit.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripExEdit.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExEdit.Image = null;
 			this.toolStripExEdit.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -140,6 +152,7 @@
             this.toolStripButtonOpen,
             this.toolStripButtonDelete});
 			this.toolStripExEdit.Name = "toolStripExEdit";
+			this.toolStripExEdit.Office12Mode = false;
 			this.toolStripExEdit.ShowLauncher = false;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExEdit, false);
 			// 
@@ -172,7 +185,7 @@
 			// toolStripExClipboard
 			// 
 			resources.ApplyResources(this.toolStripExClipboard, "toolStripExClipboard");
-			this.toolStripExClipboard.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripExClipboard.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripExClipboard.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExClipboard.Image = null;
 			this.toolStripExClipboard.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -180,6 +193,7 @@
             this.toolStripButtonCopy,
             this.toolStripButtonPaste});
 			this.toolStripExClipboard.Name = "toolStripExClipboard";
+			this.toolStripExClipboard.Office12Mode = false;
 			this.toolStripExClipboard.ShowLauncher = false;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExClipboard, false);
 			// 
@@ -213,12 +227,13 @@
 			// toolStripExScenario
 			// 
 			resources.ApplyResources(this.toolStripExScenario, "toolStripExScenario");
-			this.toolStripExScenario.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripExScenario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripExScenario.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExScenario.Image = null;
 			this.toolStripExScenario.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboBoxScenario});
 			this.toolStripExScenario.Name = "toolStripExScenario";
+			this.toolStripExScenario.Office12Mode = false;
 			this.toolStripExScenario.ShowLauncher = false;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExScenario, false);
 			// 
@@ -232,7 +247,7 @@
 			// toolStripExFilter
 			// 
 			resources.ApplyResources(this.toolStripExFilter, "toolStripExFilter");
-			this.toolStripExFilter.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripExFilter.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripExFilter.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExFilter.Image = null;
 			this.toolStripExFilter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -240,6 +255,7 @@
             this.toolStripButtonFetchForUser,
             this.toolStripPanelItem1});
 			this.toolStripExFilter.Name = "toolStripExFilter";
+			this.toolStripExFilter.Office12Mode = false;
 			this.toolStripExFilter.ShowLauncher = false;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExFilter, false);
 			// 
@@ -402,6 +418,8 @@
 			// 
 			resources.ApplyResources(this, "$this");
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Borders = new System.Windows.Forms.Padding(0);
+			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.Controls.Add(this.scheduleControl1);
 			this.Controls.Add(this.ribbonControlAdv1);
 			this.Name = "MeetingOverviewView";

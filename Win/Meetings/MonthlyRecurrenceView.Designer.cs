@@ -84,6 +84,7 @@
 			// 
 			this.comboDropDownFrequency.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboDropDownFrequency.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboDropDownFrequency.BeforeTouchSize = new System.Drawing.Size(59, 21);
 			this.comboDropDownFrequency.Location = new System.Drawing.Point(69, 57);
 			this.comboDropDownFrequency.Name = "comboDropDownFrequency";
 			this.comboDropDownFrequency.Size = new System.Drawing.Size(59, 21);
@@ -103,9 +104,11 @@
 			// radioButtonAdvMonthlyByDay
 			// 
 			this.radioButtonAdvMonthlyByDay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.radioButtonAdvMonthlyByDay.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.radioButtonAdvMonthlyByDay.CheckedInt = 2;
 			this.radioButtonAdvMonthlyByDay.Location = new System.Drawing.Point(0, 12);
 			this.radioButtonAdvMonthlyByDay.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+			this.radioButtonAdvMonthlyByDay.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonAdvMonthlyByDay.Name = "radioButtonAdvMonthlyByDay";
 			this.radioButtonAdvMonthlyByDay.Size = new System.Drawing.Size(63, 21);
 			this.radioButtonAdvMonthlyByDay.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Office2007;
@@ -117,9 +120,11 @@
 			// radioButtonAdvMonthlyByWeek
 			// 
 			this.radioButtonAdvMonthlyByWeek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.radioButtonAdvMonthlyByWeek.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.radioButtonAdvMonthlyByWeek.CheckedInt = 3;
 			this.radioButtonAdvMonthlyByWeek.Location = new System.Drawing.Point(0, 57);
 			this.radioButtonAdvMonthlyByWeek.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+			this.radioButtonAdvMonthlyByWeek.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonAdvMonthlyByWeek.Name = "radioButtonAdvMonthlyByWeek";
 			this.radioButtonAdvMonthlyByWeek.Size = new System.Drawing.Size(63, 21);
 			this.radioButtonAdvMonthlyByWeek.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Office2007;
@@ -141,6 +146,7 @@
 			// 
 			this.comboDropDownDayOfRecurrence.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboDropDownDayOfRecurrence.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboDropDownDayOfRecurrence.BeforeTouchSize = new System.Drawing.Size(64, 21);
 			this.comboDropDownDayOfRecurrence.Location = new System.Drawing.Point(199, 57);
 			this.comboDropDownDayOfRecurrence.Name = "comboDropDownDayOfRecurrence";
 			this.comboDropDownDayOfRecurrence.Size = new System.Drawing.Size(64, 21);
@@ -152,14 +158,17 @@
 			// 
 			this.integerTextBoxDayOfMonth.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.integerTextBoxDayOfMonth.BackGroundColor = System.Drawing.SystemColors.Window;
+			this.integerTextBoxDayOfMonth.BeforeTouchSize = new System.Drawing.Size(34, 20);
 			this.integerTextBoxDayOfMonth.IntegerValue = ((long)(1));
 			this.integerTextBoxDayOfMonth.Location = new System.Drawing.Point(69, 12);
 			this.integerTextBoxDayOfMonth.MaxValue = ((long)(31));
+			this.integerTextBoxDayOfMonth.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.integerTextBoxDayOfMonth.MinValue = ((long)(1));
 			this.integerTextBoxDayOfMonth.Name = "integerTextBoxDayOfMonth";
 			this.integerTextBoxDayOfMonth.NullString = "0";
 			this.integerTextBoxDayOfMonth.OverflowIndicatorToolTipText = null;
 			this.integerTextBoxDayOfMonth.Size = new System.Drawing.Size(59, 20);
+			this.integerTextBoxDayOfMonth.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.integerTextBoxDayOfMonth.TabIndex = 16;
 			this.integerTextBoxDayOfMonth.Text = "1";
 			this.integerTextBoxDayOfMonth.IntegerValueChanged += new System.EventHandler(this.integerTextBoxDayOfMonth_IntegerValueChanged);
@@ -177,14 +186,17 @@
 			// 
 			this.integerTextBoxEveryMonths2.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.integerTextBoxEveryMonths2.BackGroundColor = System.Drawing.SystemColors.Window;
+			this.integerTextBoxEveryMonths2.BeforeTouchSize = new System.Drawing.Size(34, 20);
 			this.integerTextBoxEveryMonths2.IntegerValue = ((long)(1));
 			this.integerTextBoxEveryMonths2.Location = new System.Drawing.Point(269, 57);
 			this.integerTextBoxEveryMonths2.MaxValue = ((long)(24));
+			this.integerTextBoxEveryMonths2.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.integerTextBoxEveryMonths2.MinValue = ((long)(1));
 			this.integerTextBoxEveryMonths2.Name = "integerTextBoxEveryMonths2";
 			this.integerTextBoxEveryMonths2.NullString = "0";
 			this.integerTextBoxEveryMonths2.OverflowIndicatorToolTipText = null;
 			this.integerTextBoxEveryMonths2.Size = new System.Drawing.Size(28, 20);
+			this.integerTextBoxEveryMonths2.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.integerTextBoxEveryMonths2.TabIndex = 17;
 			this.integerTextBoxEveryMonths2.Text = "1";
 			this.integerTextBoxEveryMonths2.IntegerValueChanged += new System.EventHandler(this.integerTextBoxEveryMonths2_IntegerValueChanged);
@@ -193,14 +205,17 @@
 			// 
 			this.integerTextBoxEveryMonths1.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.integerTextBoxEveryMonths1.BackGroundColor = System.Drawing.SystemColors.Window;
+			this.integerTextBoxEveryMonths1.BeforeTouchSize = new System.Drawing.Size(34, 20);
 			this.integerTextBoxEveryMonths1.IntegerValue = ((long)(1));
 			this.integerTextBoxEveryMonths1.Location = new System.Drawing.Point(199, 12);
 			this.integerTextBoxEveryMonths1.MaxValue = ((long)(24));
+			this.integerTextBoxEveryMonths1.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.integerTextBoxEveryMonths1.MinValue = ((long)(1));
 			this.integerTextBoxEveryMonths1.Name = "integerTextBoxEveryMonths1";
 			this.integerTextBoxEveryMonths1.NullString = "0";
 			this.integerTextBoxEveryMonths1.OverflowIndicatorToolTipText = null;
 			this.integerTextBoxEveryMonths1.Size = new System.Drawing.Size(28, 20);
+			this.integerTextBoxEveryMonths1.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.integerTextBoxEveryMonths1.TabIndex = 17;
 			this.integerTextBoxEveryMonths1.Text = "1";
 			this.integerTextBoxEveryMonths1.IntegerValueChanged += new System.EventHandler(this.integerTextBoxEveryMonths1_IntegerValueChanged);
