@@ -13,20 +13,20 @@
 				<ResourceDictionary Source="..\..\..\Resources\Common.xaml"/>
 				<ResourceDictionary Source="..\..\..\Resources\CommonStyles.xaml"/>
 			</ResourceDictionary.MergedDictionaries>-->
-			<cvt:ColorConverterSoft x:Key="colorConverter"/>
+			<cvt:ColorConverter x:Key="colorConverter"/>
 		<DateTimeConverter:DateTimeToLocalStringConverter x:Key="startDateTimeToLocalStringConverter"/>
 		<DateTimeConverter:DateTimeToLocalStringConverter x:Key="endDateTimeToLocalStringConverter"/>
 		<DateTimeConverter:DateTimeParseMode x:Key="TimeMode">Time</DateTimeConverter:DateTimeParseMode>
 		<DateTimeConverter:DateTimeParseMode x:Key="DateMode">Date</DateTimeConverter:DateTimeParseMode>
 
-            <Style TargetType="ComboBox" x:Key="BasicComboBox">
+			<Style TargetType="ComboBox" x:Key="BasicComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
                 <Setter Property="ItemContainerStyle">
-                    <Setter.Value>
+                    <!--<Setter.Value>
                         <Style TargetType="ComboBoxItem">
                             <Setter Property="HorizontalContentAlignment" Value="Left"/>
                             <Setter Property="VerticalContentAlignment" Value="Center"/>
                         </Style>
-                    </Setter.Value>
+                    </Setter.Value>-->
                 </Setter>
             </Style>
         </ResourceDictionary>
@@ -64,12 +64,15 @@
 	</ComboBox>
 
 		<!--StartDateTime-->
-		<GroupBox Grid.Row="1" 
+		<!--<GroupBox Grid.Row="1" 
 				  Grid.ColumnSpan="2" 
 				  Header="xxStart"
-				  BorderThickness="0">
+				  BorderThickness="0">-->
 		
-		<Grid>
+		
+				
+		
+		<Grid Grid.Row="1" Grid.ColumnSpan="2">
 				
 					<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
@@ -97,15 +100,15 @@
                     </TextBox.Text>
                 </TextBox>
             </Grid>
-		</GroupBox>
+		<!--</GroupBox>-->
 		
 		<!--EndDateTime-->
-		<GroupBox Grid.Row="2" 
+		<!--<GroupBox Grid.Row="2" 
 				  Grid.ColumnSpan="2" 
 				  Header="xxEnd"
-				  BorderThickness="0">
+				  BorderThickness="0">-->
 
-			<Grid>
+			<Grid Grid.Row="2" Grid.ColumnSpan="2">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="45"/>
@@ -132,7 +135,7 @@
                     </TextBox.Text>
                 </TextBox>
             </Grid>
-		</GroupBox>
+		<!--</GroupBox>-->
 
 		<Button Command="{Binding Path=UpdateLayerCommand.Command}" 
 				Grid.Row="3" 
