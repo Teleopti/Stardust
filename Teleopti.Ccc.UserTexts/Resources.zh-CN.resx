@@ -5642,9 +5642,9 @@ Periods</comment>
   </data>
   <data name="LicenseApplicationSuccess" xml:space="preserve">
     <value>授权证书应用成功。
-恭喜！现在你是这个屡获殊荣的人力资源管理系统的授权用户了。
+恭喜！现在您是这个屡获殊荣的人力资源管理系统的授权用户了。
 本程序即将退出。
-你可以重新启动本程序，也可以重新启动My Time来进入到新的授权许可选项。</value>
+您需要在开始菜单中运行“RestartTeleopti WFM”,以便获得到新的授权许可选项。</value>
   </data>
   <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>您的授权许可已经过期，请使用新的授权许可。</value>
