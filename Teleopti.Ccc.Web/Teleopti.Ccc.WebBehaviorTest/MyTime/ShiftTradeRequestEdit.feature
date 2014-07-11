@@ -360,7 +360,7 @@ Scenario: Do not show resend and cancelbuttons to sender when shifttrade is not 
 	Then I should not see resend shifttrade button for the request
 	And I should not see cancel shifttrade button for the request
 
-@ignore
+@OnlyRunIfEnabled('Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341')
 Scenario:  Should input comment when seeing a shift trade request from other agent in pending status
 	Given I have the role 'Full access to mytime'
 	And I have received a shift trade request

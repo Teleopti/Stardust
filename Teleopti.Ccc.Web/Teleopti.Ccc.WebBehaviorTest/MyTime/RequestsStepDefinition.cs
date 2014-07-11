@@ -226,5 +226,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".request-edit");
 		}
+
+		[Then(@"I could edit message for the reason why I approve or deny this request")]
+		public void ThenICouldEditMessageForTheReasonWhyIApproveOrDenyThisRequest()
+		{
+			Browser.Interactions.AssertExists("#Request-detailed-shift-trade-message-input");
+		}
+
 	}
 }
