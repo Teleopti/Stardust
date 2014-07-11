@@ -359,3 +359,27 @@ Scenario: Do not show resend and cancelbuttons to sender when shifttrade is not 
 	When I click on the existing request in the list
 	Then I should not see resend shifttrade button for the request
 	And I should not see cancel shifttrade button for the request
+
+@ignore
+Scenario:  Should input comment when seeing a shift trade request from other agent in pending status
+	Given I have the role 'Full access to mytime'
+	And I have received a shift trade request
+	| Field   | Value  |
+	| From    | Ashley |
+	| Pending | True   |
+	And I am viewing requests
+	When I click on the existing request in the list
+	Then I could edit message for the reason why I approve or deny this request
+
+@ignore
+Scenario:  Should see the updated comment after approved or denied
+	Given I have the role 'Full access to mytime'
+	And I have received a shift trade request
+	| Field   | Value  |
+	| From    | Ashley |
+	| Pending | True   |
+	And I am viewing requests
+	When I click on the existing request in the list
+	And I input 'Sorry, not this time' as comment
+	And I click the Deny button on the shift request
+	Then I should see 'Sorry, not this time' in message area
