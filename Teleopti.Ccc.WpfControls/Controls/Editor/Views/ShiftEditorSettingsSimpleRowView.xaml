@@ -13,16 +13,16 @@
 		</ResourceDictionary>
 
 	</UserControl.Resources>
-    <Border BorderBrush="#FF8B8787" BorderThickness="0.3" CornerRadius="3" Padding="3" Margin="4,1,1,1">
+    <Border  BorderThickness="0" CornerRadius="0" Padding="3" Margin="4,1,1,1">
         <StackPanel Orientation="Horizontal" Background="Transparent">
             <TextBlock Text="{x:Static UserTexts:Resources.SnapToIntervalColon}" VerticalAlignment="Center" Margin="3,0,3,0"/>
-            <Border Background="{StaticResource RaptorStandardLightGradientBrush}" BorderThickness="1" 
-                    BorderBrush="{StaticResource RaptorStandardCellBorderBrush}" CornerRadius="3" Margin="2">
+            <Border Background="Transparent" BorderThickness="0" 
+                    BorderBrush="{StaticResource RaptorStandardCellBorderBrush}" CornerRadius="0" Margin="2">
             <Slider Value="{Binding Path=Interval,Mode=Twoway,Converter={StaticResource timeSpanConverter}}" 
                     Grid.Column="1"
 					Grid.Row="1"
 				    Width="100"
-                    MaxHeight="12"
+                    MaxHeight="14"
 				    Minimum="1"
 				    Maximum="60"
 				    TickFrequency="1"

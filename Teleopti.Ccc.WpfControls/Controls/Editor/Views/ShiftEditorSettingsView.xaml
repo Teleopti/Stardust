@@ -13,7 +13,7 @@
 
 	</UserControl.Resources>
 
-	<GroupBox HorizontalAlignment="Stretch" Header="xxSettings" >
+	
 		<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto"/>
@@ -59,8 +59,7 @@
 			
 		</Grid>
 
-	</GroupBox>
-
+	
 
 
 

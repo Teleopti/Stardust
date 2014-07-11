@@ -9,14 +9,14 @@
                 <ResourceDictionary Source="..\..\..\Resources\Common.xaml"/>
                 <ResourceDictionary Source="..\..\..\Resources\Icons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <cvt:ColorConverterSoft x:Key="colorConverter"/>
+            <cvt:ColorConverter x:Key="colorConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
         <Border BorderBrush="{StaticResource RaptorBlack}"
-                BorderThickness="0.8"
-                Padding="1"
-                CornerRadius="3" 
+                BorderThickness="0"
+                Padding="2"
+                CornerRadius="0" 
                 Background="{Binding Path=DisplayColor, Converter={StaticResource colorConverter}, FallbackValue=White}"
                 MinWidth="28">
 
