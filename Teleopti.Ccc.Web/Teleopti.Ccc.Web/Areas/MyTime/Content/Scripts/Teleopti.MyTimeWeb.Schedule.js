@@ -431,7 +431,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 			return null;
 		});
-		self.timeSpan = ko.observable(layer.TimeSpan);
+		self.timeSpan = ko.computed(function () {
+			var originalTimespan = layer.TimeSpan;
+			// Remove extra space for extreme long timespan (For example: "10:00 PM - 12:00 AM +1")
+			var realTimespan = originalTimespan.length >= 22 ? originalTimespan.replace(" - ", "-").replace(" +1", "+1") : originalTimespan;
+			return realTimespan;
+		});
 		self.color = ko.observable('rgb(' + layer.Color + ')');
 		self.textColor = ko.computed(function () {
 			if (layer.Color != null && layer.Color != 'undefined') {
