@@ -117,6 +117,35 @@ function IIS-Restart {
     fnServiceStart -ServiceName "W3SVC"
 }
 
+function AppPools-Start {
+    param([bool]$IsAzure)
+    if (!$IsAzure) {
+
+        $AppPoolArray = @(
+                "Teleopti ASP.NET v4.0",
+                "Teleopti ASP.NET v4.0 Web",
+                "Teleopti ASP.NET v4.0 Broker",
+                "Teleopti ASP.NET v4.0 SDK",
+                "Teleopti ASP.NET v4.0 RTA"
+                )
+
+        for ($i=0; $i -lt $AppPoolArray.length; $i++) {
+            try
+            {
+                Start-WebAppPool -Name $AppPoolArray[$i]
+                $path = "IIS:\AppPools\"+ $AppPoolArray[$i]
+                $pool = Get-Item $path
+                $pool.autoStart  = 'True'
+                $pool | Set-Item
+            }
+            Catch {
+                $err=$Error[0]
+                Write-host "$err"
+            }
+        }
+	}
+}
+
 function TeleoptiWebSites-HttpGet([string]$BaseUrl)
 {
     $AuthenticationBridge = "AuthenticationBridge"
@@ -199,7 +228,6 @@ if ($myWindowsPrincipal.IsInRole($adminRole))
    {
    # We are running "as Administrator" - so change the title and background color to indicate this
    $Host.UI.RawUI.WindowTitle = $myInvocation.MyCommand.Definition + "(Elevated)"
-   $Host.UI.RawUI.BackgroundColor = "DarkBlue"
    clear-host
    }
 else
@@ -243,6 +271,7 @@ Try
 	IIS-Restart
 	write-host "sleep 5 seconds for IIS to restart ..."
 	Start-Sleep -Seconds 5       
+	AppPools-Start $isAzure
 	TeleoptiWebSites-HttpGet $BaseUrl
 	TeleoptiWindowsServices-Start $isAzure
 }
