@@ -11,7 +11,12 @@
     Height="Auto" Width="Auto">
 
     <UserControl.Resources>
-        <Style TargetType="ComboBox" x:Key="BasicComboBox">
+
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\..\Resources\Common.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<Style TargetType="ComboBox" x:Key="BasicComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
             <Setter Property="ItemContainerStyle">
                 <Setter.Value>
                     <Style TargetType="ComboBoxItem">
@@ -24,7 +29,9 @@
         <DataTemplate DataType="{x:Type Scheduling:Absence}">
             <Views:AbsenceShortView />
         </DataTemplate>
-    </UserControl.Resources>
+		</ResourceDictionary>
+
+	</UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="34"></RowDefinition>
@@ -40,7 +47,7 @@
         <Label Content="{x:Static UserTexts:Resources.AbsencesColon}" Margin="1,2,0,4" HorizontalAlignment="Left" Width="62.467" />
         <Label Grid.Row="1" Content="{x:Static UserTexts:Resources.FromColon}" Margin="1,2,1,4" />
         <Label Grid.Row="2" Content="{x:Static UserTexts:Resources.ToColon}" Margin="1,2,1,4" />
-        <ComboBox Height="22" 
+        <ComboBox Height="28" 
                   Width="182" 
                   HorizontalAlignment="Left"  
                   Grid.Column="1" 

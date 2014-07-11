@@ -16,15 +16,18 @@
         
     </syncfusion:ChromelessWindow.Resources>
     <Grid Background="{StaticResource RaptorStandardLightGradientBrush}">
+		<Grid.Resources>
+			<ResourceDictionary Source="../Resources/Common.xaml"></ResourceDictionary>
+		</Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         
-    <Border Padding="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+    <Border Padding="0" VerticalAlignment="Center" HorizontalAlignment="Center">
             <ContentControl Content="{Binding}"/>
     </Border>
-    <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="Silver" Margin="0" Background="{StaticResource RaptorStandardGradientBrush}">
+    <Border Grid.Row="1" BorderThickness="0" BorderBrush="Silver" Margin="0" >
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="60"></ColumnDefinition>
@@ -32,7 +35,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Todo, refact to use commandmodels (or IsCancel,IsOk) instead-->
-            <Button Width="60" 
+            <Button Width="90" 
                     Grid.Column="0" 
                     Margin="6,6,0,6" 
                     Content="{x:Static UserTexts:Resources.Ok}" Click="OKButton_Click" 
@@ -47,12 +50,13 @@
                 </Button>
 
                 <Button 
-                    Width="60" 
+                    Width="90" 
+					Margin="6,6,0,6"
                     Grid.Column="1" 
                     Content="{x:Static UserTexts:Resources.Cancel}" 
                     Click="CancelButton_Click" 
                     HorizontalAlignment="Right" 
-                    Height="22" VerticalAlignment="Top" Margin="6,6,12,6" />
+                    VerticalAlignment="Top"  />
 
         </Grid>
     </Border>

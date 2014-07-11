@@ -40,6 +40,6 @@
             <Label Content="{Binding Path=SelectedPeriod.LocalDateString}" Margin="1,2,1,4" />
          </StackPanel>
         <Label Grid.Row="2" Content="{x:Static UserTexts:Resources.PeriodColon}" Margin="1,2,1,4" />
-        <ComboBox Style="{StaticResource BasicComboBox}" Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=Payloads}" Grid.Column="1" IsSynchronizedWithCurrentItem="True" x:Name="Payloads"/>
+        <ComboBox Style="{StaticResource BasicComboBox}" Height="28" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=Payloads}" Grid.Column="1" IsSynchronizedWithCurrentItem="True" x:Name="Payloads"/>
     </Grid>
 </UserControl>

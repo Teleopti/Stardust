@@ -12,7 +12,7 @@
             <cvt:ColorConverter x:Key="colorConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="2">
         <Border BorderBrush="{StaticResource RaptorBlack}"
                 BorderThickness="0"
                 Padding="2"
@@ -23,6 +23,7 @@
             <TextBlock Text="{Binding Path=Description.ShortName}" 
                        HorizontalAlignment="Center" 
                        VerticalAlignment="Center"
+					  
                      />
 
         </Border>

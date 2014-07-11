@@ -24,10 +24,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="25"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{x:Static UserTexts:Resources.ShiftCategoryColon}" 
-                       Margin="3,0,0,0" 
-                       VerticalAlignment="Center"
-                       Grid.Column="0"/>
+        
             
             <ContentPresenter Content="{Binding Path=Category}" 
                               ContentTemplate="{StaticResource ShiftCategoryTemplate}"
@@ -37,7 +34,7 @@
                       SelectedValue="{Binding Path=Category}"
                       IsEnabled="{Binding Path=Enabled}"
                       Background="{StaticResource RaptorStandardGradientBrush}"
-                      MaxHeight="22"
+                      MaxHeight="26"
                       Margin="3,0,0,0"
 					  Grid.Row="1"
                       IsSynchronizedWithCurrentItem="True" 

@@ -47,10 +47,10 @@
         <Label Content="{x:Static UserTexts:Resources.MultiplicatorDefinitionSetColon}" Margin="1,2,0,4" HorizontalAlignment="Left" Grid.Row="1" />
         <Label Grid.Row="2" Content="{x:Static UserTexts:Resources.FromColon}" Margin="1,2,1,4" />
         <Label Grid.Row="3" Content="{x:Static UserTexts:Resources.ToColon}" Margin="1,2,1,4" />
-        <ComboBox Style="{StaticResource BasicComboBox}" Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=Payloads}" Grid.Column="1" IsSynchronizedWithCurrentItem="True" x:Name="Payloads"/>
+        <ComboBox Style="{StaticResource BasicComboBox}" Height="28" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=Payloads}" Grid.Column="1" IsSynchronizedWithCurrentItem="True" x:Name="Payloads"/>
 
 
-        <ComboBox Style="{StaticResource BasicComboBox}" Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=MultiplicatorDefinitionSet}" Grid.Column="1" Grid.Row="1" IsSynchronizedWithCurrentItem="True"/>
+        <ComboBox Style="{StaticResource BasicComboBox}" Height="28" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=MultiplicatorDefinitionSet}" Grid.Column="1" Grid.Row="1" IsSynchronizedWithCurrentItem="True"/>
        
         
         <DateTimePeriodControl:EditableDateTimePeriodView Grid.RowSpan="2" DataContext="{Binding Path=PeriodViewModel}" Grid.Row="2" Grid.Column="1">
