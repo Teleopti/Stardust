@@ -12,7 +12,7 @@
 		<ResourceDictionary Source="FlatSlider.xaml"></ResourceDictionary>
 		<ResourceDictionary Source="FlatListView.xaml"></ResourceDictionary>
 		<ResourceDictionary Source="FlatRadio.xaml"></ResourceDictionary>
-		<ResourceDictionary Source="FlatScroll.xaml"></ResourceDictionary>
+		<!--<ResourceDictionary Source="FlatScroll.xaml"></ResourceDictionary>-->
 		<ResourceDictionary Source="FlatColors.xaml"></ResourceDictionary>
 		<ResourceDictionary Source="FlatMenu.xaml"></ResourceDictionary>
 	</ResourceDictionary.MergedDictionaries>
