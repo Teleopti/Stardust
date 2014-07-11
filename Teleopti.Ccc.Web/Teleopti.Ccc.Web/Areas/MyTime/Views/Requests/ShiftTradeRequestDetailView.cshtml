@@ -20,6 +20,7 @@
 	<!-- ko if: !showInfo() -->
 	<!-- ko foreach: DetailedDays-->
 	<div class="trade-day-detail">
+		<div id="tooltipContainer" class="detailTooltipContainer"></div>
 		<div class="trade-date" data-bind="text: TradeDate, visible: $parent.DetailedDays().length > 1"></div>
 		<div>
 			<div class="shift-trade-swap-detail-timeline" data-bind="foreach: hours, visible: !$parent.showInfo()">
@@ -30,12 +31,12 @@
 
 			<div class="shift-trade-swap-detail-schedule-row">
 				<div class="shift-trade-swap-detail-schedule" data-bind="foreach: mySchedule().layers, hoverToggle: 'hoverBorder', hoverTarget: '#sender-info'">
-					<span class="shift-trade-layer edit my" data-bind="style: styleJson, tooltip: { title: title }, attr: {'scheduleinfo' : title()}, css:{ dayoff : $parent.mySchedule().showDayOffStyle() }">
+					<span class="shift-trade-layer edit my" data-bind="style: styleJson, tooltip: { title: title, html: true, container: '.detailTooltipContainer' }, attr: {'scheduleinfo' : title()}, css:{ dayoff : $parent.mySchedule().showDayOffStyle() }">
 						<span class="shift-trade-dayoff-name" data-bind="text: $parent.mySchedule().dayOffText"></span>
 					</span>
 				</div>
 				<div class="shift-trade-swap-detail-schedule-to" data-bind="foreach: otherSchedule().layers, hoverToggle: 'hoverBorder', hoverTarget: '#reciever-info'">
-					<span class="shift-trade-layer edit other" data-bind="style: styleJson, tooltip: { title: title }, attr: { 'scheduleinfo': title() }, css: { dayoff: $parent.otherSchedule().showDayOffStyle() }">
+					<span class="shift-trade-layer edit other" data-bind="style: styleJson, tooltip: { title: title, html: true, container: '.detailTooltipContainer' }, attr: { 'scheduleinfo': title() }, css: { dayoff: $parent.otherSchedule().showDayOffStyle() }">
 						<span class="shift-trade-dayoff-name" data-bind="text: $parent.otherSchedule().dayOffText"></span>
 					</span>
 				</div>

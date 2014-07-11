@@ -208,7 +208,7 @@ Teleopti.MyTimeWeb.Request.LayerEditShiftTradeViewModel = function (layer, minut
 		return layer.LengthInMinutes * self.pixelPerMinute() + 'px';
 	});
 	self.title = ko.computed(function () {
-	    return self.payload ? layer.TitleTime + ' ' + self.payload : '';
+		return self.payload ? "<div>{0}</div>{1}".format(self.payload, layer.TitleTime) : '';
 	});
 	var isRtl = Teleopti.MyTimeWeb.Common.IsRtl();
 	self.styleJson = ko.computed(function () {
