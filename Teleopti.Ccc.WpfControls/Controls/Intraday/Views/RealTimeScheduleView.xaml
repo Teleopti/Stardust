@@ -22,9 +22,9 @@
 			<converters:CustomSorterBlankAlwaysLast x:Key="NextActivityDescriptionComparer" PropertyPath="NextActivityDescription"/>
 			<converters:CustomSorterBlankAlwaysLast x:Key="CurrentActivityDescriptionComparer" PropertyPath="CurrentActivityDescription"/>
 			<converters:CustomSorterBlankAlwaysLast x:Key="EnteredCurrentStateComparer" PropertyPath="TimeInCurrentState"/>
-			
-			
-			
+
+			<wpfConverters:ColorConverter x:Key="colorConverter"/>
+
 			<wpfConverters:DateTimeToLocalAndNotMinValueConverter x:Key="DateTimeToLocalAndNotMinValueConverter"/>
 			<converters:SimpleConverter x:Key="SimpleConverter"/>
 			<converters:ElapsedTimeConverter x:Key="ElapsedTimeConverter" />
@@ -98,7 +98,9 @@
                                              CanUserSort="True"
                                              SortMemberPath="CommonNameDescription"
                                              CanUserReorder="False"
-                                             Binding="{Binding Path=CommonNameDescription,Mode=OneWay, FallbackValue=''}" />
+                                             Binding="{Binding Path=CommonNameDescription,Mode=OneWay, FallbackValue=''}" >
+				
+				</DataGridTextColumn>
 
 				<!--AgentGroup Column-->
 				<DataGridTextColumn HeaderStyle="{StaticResource HeaderWithHand}"
@@ -116,7 +118,13 @@
                                              CanUserSort="True"
                                              SortMemberPath="CurrentStateDescription"
                                          CanUserReorder="False"
-                                             Binding="{Binding Path=CurrentStateDescription,Mode=OneWay, FallbackValue=''}"/>
+                                             Binding="{Binding Path=CurrentStateDescription,Mode=OneWay, FallbackValue=''}">
+					<DataGridTextColumn.ElementStyle>
+						<Style TargetType="{x:Type TextBlock}">
+							<Setter Property="Background" Value="{Binding Color, Converter={StaticResource colorConverter}}"/>
+						</Style>
+					</DataGridTextColumn.ElementStyle>
+				</DataGridTextColumn>
 
 				<!-- Current Activity Column-->
 				<DataGridTextColumn HeaderStyle="{StaticResource HeaderWithHand}"

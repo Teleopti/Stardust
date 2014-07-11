@@ -77,9 +77,9 @@
     <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource RowStyle}" x:Key="RtaScheduleRowStyle">
 		<Setter Property="Height" Value="22"></Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding Path=Color, Converter={StaticResource isNullConverter}}" Value="False">
+            <!--<DataTrigger Binding="{Binding Path=Color, Converter={StaticResource isNullConverter}}" Value="False">
                 <Setter Property="Background" Value="{Binding Path=Color, Converter={StaticResource colorConverter}}"/>
-			</DataTrigger>
+			</DataTrigger>-->
 			<Trigger Property="IsSelected" Value="True">
 				<Setter Property="FontWeight" Value="Bold"/>
 			</Trigger>
