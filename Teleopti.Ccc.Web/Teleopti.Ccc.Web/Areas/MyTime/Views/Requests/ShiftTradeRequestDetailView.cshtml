@@ -4,14 +4,17 @@
 }
 
 <div>
-        <div>
-            <div id="sender-info">
-                <span class="request-caption">@Resources.From: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-sender" data-bind="text: personFrom" ></span>
-            </div>
-            <div id="reciever-info">
-                <span class="request-caption">@Resources.To: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-reciever" data-bind="text: personTo" ></span>
-            </div>
-            </div>
+	<!-- ko if: IsEditMessageEnabled -->
+	<textarea id="Request-detailed-shift-trade-message-input" class="form-control input-block-level" data-bind="visible: !IsTradeCreatedByMe()" rows="4" placeholder="@Resources.Message" />
+	<!-- /ko -->
+	<div>
+		<div id="sender-info">
+			<span class="request-caption">@Resources.From: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-sender" data-bind="text: personFrom" ></span>
+		</div>
+		<div id="reciever-info">
+			<span class="request-caption">@Resources.To: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-reciever" data-bind="text: personTo" ></span>
+		</div>
+	</div>
 	
 	<!-- todo, Henke remove all these br ifs!!!! but everything is hardcoded px-->
 	<br />

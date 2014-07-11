@@ -36,7 +36,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
         };
         
         self.createShiftTradeRequestViewModel = function () {
-            self.requestViewModel(new Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel(ajax));
+        	var shiftTradeRequestDetailViewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel(ajax);
+        	shiftTradeRequestDetailViewModel.loadIsEditMessageEnabled();
+	        self.requestViewModel(shiftTradeRequestDetailViewModel);
         };
 
         self.CancelAddingNewRequest = function () {
