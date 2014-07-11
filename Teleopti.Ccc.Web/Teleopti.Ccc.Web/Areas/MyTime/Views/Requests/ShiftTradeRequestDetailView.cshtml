@@ -53,13 +53,13 @@
 <br  data-bind="visible: !IsTradeCreatedByMe()"/>
 
 <div  class="floatright" data-bind="visible: !IsTradeCreatedByMe() && !isReferred()" >
-	<button id="Approve-shift-trade" data-bind="click: Approve, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-primary">@Resources.Approve</button>
 	<button id="Deny-shift-trade" data-bind="click: Deny, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-danger">@Resources.Deny</button>
+	<button id="Approve-shift-trade" data-bind="click: Approve, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-primary">@Resources.Approve</button>
 </div>
 
 <div class="shift-trade-swap-detail-send-again"  data-bind="if: isReferred">
+	<button class="btn cancel-shift-trade" data-bind="click: cancelReferred, clickBubble: false">@Resources.Cancel</button>
 	<button class="btn btn-primary resend-shift-trade" data-bind="click: reSend, clickBubble: false">@Resources.SendAgain</button>
-	<button class="btn btn-danger cancel-shift-trade"  data-bind="click: cancelReferred, clickBubble: false">@Resources.Cancel</button>
 </div>
 
 <br  data-bind="visible: !IsTradeCreatedByMe()"/>
