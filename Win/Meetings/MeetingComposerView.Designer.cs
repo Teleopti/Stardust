@@ -189,6 +189,7 @@
 			this.ribbonControlAdv1.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.MenuButtonImage = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Menu;
 			this.ribbonControlAdv1.MenuButtonText = "";
+			this.ribbonControlAdv1.MenuButtonVisible = false;
 			this.ribbonControlAdv1.MenuButtonWidth = 56;
 			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
 			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";

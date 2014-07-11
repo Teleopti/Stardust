@@ -122,11 +122,11 @@
     <value>True</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="ribbonControlAdv1.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Tahoma, 8.25pt</value>
-  </data>
   <data name="ribbonControlAdv1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1, 0</value>
+    <value>1, 1</value>
+  </data>
+  <data name="ribbonControlAdv1.MenuButtonVisible" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="toolStripButtonExport.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
@@ -258,10 +258,10 @@
     <value>Fill</value>
   </data>
   <data name="scheduleControl1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 134</value>
+    <value>1, 134</value>
   </data>
   <data name="scheduleControl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1090, 511</value>
+    <value>1100, 517</value>
   </data>
   <data name="scheduleControl1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -270,7 +270,7 @@
     <value>scheduleControl1</value>
   </data>
   <data name="&gt;&gt;scheduleControl1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Schedule.ScheduleControl, Syncfusion.Schedule.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Schedule.ScheduleControl, Syncfusion.Schedule.Windows, Version=12.1400.0.44, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;scheduleControl1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -373,6 +373,9 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 </value>
   </data>
+  <data name="$this.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 0, 1, 0</value>
+  </data>
   <data name="$this.Text" xml:space="preserve">
     <value>xxMeetingOverview</value>
   </data>
@@ -380,7 +383,7 @@
     <value>toolStripTabItem1</value>
   </data>
   <data name="&gt;&gt;toolStripTabItem1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripTabItem, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripTabItem, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;toolStripButtonAdd.Name" xml:space="preserve">
     <value>toolStripButtonAdd</value>
@@ -440,7 +443,7 @@
     <value>toolStripPanelItem1</value>
   </data>
   <data name="&gt;&gt;toolStripPanelItem1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripPanelItem, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripPanelItem, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;toolStripComboBoxResolution.Name" xml:space="preserve">
     <value>toolStripComboBoxResolution</value>
@@ -548,7 +551,7 @@
     <value>ribbonControlAdv1.OfficeMenu</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.OfficeMenu.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <metadata name="toolStripTabItem1.TabGroup" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value />
@@ -607,7 +610,7 @@
     <value>Fuchsia</value>
   </data>
   <data name="toolStripButtonAdd.Size" type="System.Drawing.Size, System.Drawing">
-    <value>43, 51</value>
+    <value>43, 59</value>
   </data>
   <data name="toolStripButtonAdd.Text" xml:space="preserve">
     <value>xxAdd</value>
@@ -622,7 +625,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonOpen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 51</value>
+    <value>50, 59</value>
   </data>
   <data name="toolStripButtonOpen.Text" xml:space="preserve">
     <value>xxOpen</value>
@@ -637,7 +640,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonDelete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 51</value>
+    <value>54, 59</value>
   </data>
   <data name="toolStripButtonDelete.Text" xml:space="preserve">
     <value>xxDelete</value>
@@ -649,7 +652,7 @@
     <value>0, 1</value>
   </data>
   <data name="toolStripExEdit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 71</value>
+    <value>154, 75</value>
   </data>
   <data name="toolStripExEdit.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -661,7 +664,7 @@
     <value>toolStripExEdit</value>
   </data>
   <data name="&gt;&gt;toolStripExEdit.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;toolStripExEdit.Parent" xml:space="preserve">
     <value>ribbonControlAdv1.ribbonPanel1</value>
@@ -682,7 +685,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonCut.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 51</value>
+    <value>40, 59</value>
   </data>
   <data name="toolStripButtonCut.Text" xml:space="preserve">
     <value>xxCut</value>
@@ -697,7 +700,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonCopy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>49, 51</value>
+    <value>49, 59</value>
   </data>
   <data name="toolStripButtonCopy.Text" xml:space="preserve">
     <value>xxCopy</value>
@@ -712,7 +715,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonPaste.Size" type="System.Drawing.Size, System.Drawing">
-    <value>49, 51</value>
+    <value>49, 59</value>
   </data>
   <data name="toolStripButtonPaste.Text" xml:space="preserve">
     <value>xxPaste</value>
@@ -724,7 +727,7 @@
     <value>156, 1</value>
   </data>
   <data name="toolStripExClipboard.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 71</value>
+    <value>145, 75</value>
   </data>
   <data name="toolStripExClipboard.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
@@ -736,7 +739,7 @@
     <value>toolStripExClipboard</value>
   </data>
   <data name="&gt;&gt;toolStripExClipboard.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;toolStripExClipboard.Parent" xml:space="preserve">
     <value>ribbonControlAdv1.ribbonPanel1</value>
@@ -751,25 +754,25 @@
     <value>None</value>
   </data>
   <data name="toolStripComboBoxScenario.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 54</value>
+    <value>121, 62</value>
   </data>
   <data name="toolStripExScenario.Location" type="System.Drawing.Point, System.Drawing">
     <value>303, 1</value>
   </data>
   <data name="toolStripExScenario.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 71</value>
+    <value>163, 75</value>
   </data>
   <data name="toolStripExScenario.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
   </data>
   <data name="toolStripExScenario.Text" xml:space="preserve">
-    <value>XXScenario</value>
+    <value>xxScenario</value>
   </data>
   <data name="&gt;&gt;toolStripExScenario.Name" xml:space="preserve">
     <value>toolStripExScenario</value>
   </data>
   <data name="&gt;&gt;toolStripExScenario.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;toolStripExScenario.Parent" xml:space="preserve">
     <value>ribbonControlAdv1.ribbonPanel1</value>
@@ -790,7 +793,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 51</value>
+    <value>83, 59</value>
   </data>
   <data name="toolStripButtonFilter.Text" xml:space="preserve">
     <value>xxParticipants</value>
@@ -805,7 +808,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonFetchForUser.Size" type="System.Drawing.Size, System.Drawing">
-    <value>141, 54</value>
+    <value>141, 62</value>
   </data>
   <data name="toolStripButtonFetchForUser.Text" xml:space="preserve">
     <value>xxMeetingsCreatedByMe</value>
@@ -826,16 +829,16 @@
     <value>xxResolutionMin</value>
   </data>
   <data name="toolStripPanelItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>127, 54</value>
+    <value>127, 62</value>
   </data>
   <data name="toolStripPanelItem1.Text" xml:space="preserve">
     <value>toolStripPanelItem1</value>
   </data>
   <data name="toolStripExFilter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>435, 1</value>
+    <value>468, 1</value>
   </data>
   <data name="toolStripExFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>391, 71</value>
+    <value>360, 75</value>
   </data>
   <data name="toolStripExFilter.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
@@ -847,7 +850,7 @@
     <value>toolStripExFilter</value>
   </data>
   <data name="&gt;&gt;toolStripExFilter.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;toolStripExFilter.Parent" xml:space="preserve">
     <value>ribbonControlAdv1.ribbonPanel1</value>
@@ -865,7 +868,7 @@
     <value>ribbonControlAdv1.ribbonPanel1</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.RibbonPanel, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.RibbonPanel, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Parent" xml:space="preserve">
     <value>ribbonControlAdv1</value>
@@ -874,13 +877,13 @@
     <value>1</value>
   </data>
   <data name="toolStripTabItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 19</value>
+    <value>80, 25</value>
   </data>
   <data name="toolStripTabItem1.Text" xml:space="preserve">
     <value>xxMeetings</value>
   </data>
   <data name="ribbonControlAdv1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1100, 133</value>
+    <value>1104, 134</value>
   </data>
   <data name="ribbonControlAdv1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -892,7 +895,7 @@
     <value>ribbonControlAdv1</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.RibbonControlAdv, Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.RibbonControlAdv, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.Parent" xml:space="preserve">
     <value>$this</value>
