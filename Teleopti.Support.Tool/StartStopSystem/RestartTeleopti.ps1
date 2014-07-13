@@ -132,11 +132,9 @@ function AppPools-Start {
         for ($i=0; $i -lt $AppPoolArray.length; $i++) {
             try
             {
-                Start-WebAppPool -Name $AppPoolArray[$i]
-                $path = "IIS:\AppPools\"+ $AppPoolArray[$i]
-                $pool = Get-Item $path
-                $pool.autoStart  = 'True'
-                $pool | Set-Item
+				$AppPoolName = $AppPoolArray[$i]
+				&"$env:windir\system32\inetsrv\AppCmd.exe" Start AppPool "$AppPoolName"
+				&"$env:windir\system32\inetsrv\AppCmd.exe" Set Apppool "$AppPoolName" /autoStart:true
             }
             Catch {
                 $err=$Error[0]
