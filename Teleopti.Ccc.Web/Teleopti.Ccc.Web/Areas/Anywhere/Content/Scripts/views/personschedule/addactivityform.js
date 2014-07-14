@@ -51,8 +51,8 @@ define([
 					url: 'PersonScheduleCommand/AddActivity',
 					type: 'POST',
 					data: requestData,
-					success: function(data, textStatus, jqXHR) {
-						navigation.GotoPersonScheduleWithoutHistory(groupId, personId, self.ScheduleDate());
+					success: function (data, textStatus, jqXHR) {
+						navigation.GoToTeamSchedule(groupId, self.ScheduleDate());
 					}
 				}
 			);

@@ -107,7 +107,7 @@
 				type: 'POST',
 				data: requestData,
 				success: function (data, textStatus, jqXHR) {
-					navigation.GotoPersonScheduleWithoutHistory(self.GroupId(), self.PersonId(), self.ScheduleDate());
+					navigation.GoToTeamSchedule(self.GroupId(), self.ScheduleDate());
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 				    errorview.display(resources.FunctionNotAvailable);

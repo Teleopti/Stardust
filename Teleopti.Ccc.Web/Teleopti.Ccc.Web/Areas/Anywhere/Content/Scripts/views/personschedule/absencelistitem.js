@@ -36,7 +36,10 @@ define([
                         type: 'POST',
                         data: JSON.stringify({
                             PersonAbsenceId: data.Id
-                        })
+                        }),
+                        success: function (responseData, textStatus, jqXHR) {
+                        	navigation.GoToTeamSchedule(data.GroupId, data.Date);
+                        }
                     }
                 );
             };

@@ -61,8 +61,8 @@ define([
                         url: 'PersonScheduleCommand/AddFullDayAbsence',
                         type: 'POST',
                         data: data,
-                        success: function(data, textStatus, jqXHR) {
-                        	navigation.GotoPersonScheduleWithoutHistory(groupId, personId, self.StartDate());
+                        success: function (data, textStatus, jqXHR) {
+                        	navigation.GoToTeamSchedule(groupId, self.StartDate());
                         }
                     }
                 );

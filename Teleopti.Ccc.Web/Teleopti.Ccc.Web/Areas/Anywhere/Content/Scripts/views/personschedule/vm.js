@@ -160,6 +160,7 @@ define([
 			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
 				a.PersonId = self.PersonId();
 				a.Date = self.ScheduleDate();
+				a.GroupId = self.GroupId();
 				return new absenceListItemViewModel(a);
 			});
 			self.Absences.push.apply(self.Absences, absences);
