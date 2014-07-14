@@ -128,12 +128,12 @@
 			// 
 			// checkBoxTeamSameDaysOff
 			// 
-			this.checkBoxTeamSameDaysOff.BeforeTouchSize = new System.Drawing.Size(104, 17);
+			this.checkBoxTeamSameDaysOff.BeforeTouchSize = new System.Drawing.Size(104, 22);
 			this.checkBoxTeamSameDaysOff.DrawFocusRectangle = false;
 			this.checkBoxTeamSameDaysOff.Location = new System.Drawing.Point(33, 269);
 			this.checkBoxTeamSameDaysOff.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxTeamSameDaysOff.Name = "checkBoxTeamSameDaysOff";
-			this.checkBoxTeamSameDaysOff.Size = new System.Drawing.Size(104, 17);
+			this.checkBoxTeamSameDaysOff.Size = new System.Drawing.Size(104, 22);
 			this.checkBoxTeamSameDaysOff.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxTeamSameDaysOff.TabIndex = 7;
 			this.checkBoxTeamSameDaysOff.Text = "xxSameDaysOff";
@@ -141,12 +141,12 @@
 			// 
 			// checkBoxTeamSameActivity
 			// 
-			this.checkBoxTeamSameActivity.BeforeTouchSize = new System.Drawing.Size(99, 17);
+			this.checkBoxTeamSameActivity.BeforeTouchSize = new System.Drawing.Size(99, 20);
 			this.checkBoxTeamSameActivity.DrawFocusRectangle = false;
 			this.checkBoxTeamSameActivity.Location = new System.Drawing.Point(33, 243);
 			this.checkBoxTeamSameActivity.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxTeamSameActivity.Name = "checkBoxTeamSameActivity";
-			this.checkBoxTeamSameActivity.Size = new System.Drawing.Size(99, 17);
+			this.checkBoxTeamSameActivity.Size = new System.Drawing.Size(99, 20);
 			this.checkBoxTeamSameActivity.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxTeamSameActivity.TabIndex = 40;
 			this.checkBoxTeamSameActivity.Text = "xxSameActivity";
@@ -182,12 +182,12 @@
 			// 
 			// checkBoxTeamSameStartTime
 			// 
-			this.checkBoxTeamSameStartTime.BeforeTouchSize = new System.Drawing.Size(110, 17);
+			this.checkBoxTeamSameStartTime.BeforeTouchSize = new System.Drawing.Size(110, 21);
 			this.checkBoxTeamSameStartTime.DrawFocusRectangle = false;
 			this.checkBoxTeamSameStartTime.Location = new System.Drawing.Point(33, 191);
 			this.checkBoxTeamSameStartTime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxTeamSameStartTime.Name = "checkBoxTeamSameStartTime";
-			this.checkBoxTeamSameStartTime.Size = new System.Drawing.Size(110, 17);
+			this.checkBoxTeamSameStartTime.Size = new System.Drawing.Size(110, 21);
 			this.checkBoxTeamSameStartTime.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxTeamSameStartTime.TabIndex = 6;
 			this.checkBoxTeamSameStartTime.Text = "xxSameStartTime";
@@ -196,12 +196,12 @@
 			// 
 			// checkBoxTeamSameShiftCategory
 			// 
-			this.checkBoxTeamSameShiftCategory.BeforeTouchSize = new System.Drawing.Size(133, 17);
+			this.checkBoxTeamSameShiftCategory.BeforeTouchSize = new System.Drawing.Size(133, 21);
 			this.checkBoxTeamSameShiftCategory.DrawFocusRectangle = false;
 			this.checkBoxTeamSameShiftCategory.Location = new System.Drawing.Point(33, 164);
 			this.checkBoxTeamSameShiftCategory.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxTeamSameShiftCategory.Name = "checkBoxTeamSameShiftCategory";
-			this.checkBoxTeamSameShiftCategory.Size = new System.Drawing.Size(133, 17);
+			this.checkBoxTeamSameShiftCategory.Size = new System.Drawing.Size(133, 21);
 			this.checkBoxTeamSameShiftCategory.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxTeamSameShiftCategory.TabIndex = 6;
 			this.checkBoxTeamSameShiftCategory.Text = "xxSameShiftCategory";
@@ -223,13 +223,13 @@
 			// 
 			// checkBoxBlockSameShiftCategory
 			// 
-			this.checkBoxBlockSameShiftCategory.BeforeTouchSize = new System.Drawing.Size(133, 17);
+			this.checkBoxBlockSameShiftCategory.BeforeTouchSize = new System.Drawing.Size(133, 21);
 			this.checkBoxBlockSameShiftCategory.DrawFocusRectangle = false;
 			this.checkBoxBlockSameShiftCategory.Enabled = false;
 			this.checkBoxBlockSameShiftCategory.Location = new System.Drawing.Point(33, 28);
 			this.checkBoxBlockSameShiftCategory.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxBlockSameShiftCategory.Name = "checkBoxBlockSameShiftCategory";
-			this.checkBoxBlockSameShiftCategory.Size = new System.Drawing.Size(133, 17);
+			this.checkBoxBlockSameShiftCategory.Size = new System.Drawing.Size(133, 21);
 			this.checkBoxBlockSameShiftCategory.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxBlockSameShiftCategory.TabIndex = 48;
 			this.checkBoxBlockSameShiftCategory.Text = "xxSameShiftCategory";
@@ -238,13 +238,13 @@
 			// 
 			// checkBoxBlockSameStartTime
 			// 
-			this.checkBoxBlockSameStartTime.BeforeTouchSize = new System.Drawing.Size(110, 17);
+			this.checkBoxBlockSameStartTime.BeforeTouchSize = new System.Drawing.Size(110, 21);
 			this.checkBoxBlockSameStartTime.DrawFocusRectangle = false;
 			this.checkBoxBlockSameStartTime.Enabled = false;
 			this.checkBoxBlockSameStartTime.Location = new System.Drawing.Point(33, 55);
 			this.checkBoxBlockSameStartTime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxBlockSameStartTime.Name = "checkBoxBlockSameStartTime";
-			this.checkBoxBlockSameStartTime.Size = new System.Drawing.Size(110, 17);
+			this.checkBoxBlockSameStartTime.Size = new System.Drawing.Size(110, 21);
 			this.checkBoxBlockSameStartTime.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxBlockSameStartTime.TabIndex = 49;
 			this.checkBoxBlockSameStartTime.Text = "xxSameStartTime";
@@ -267,13 +267,13 @@
 			// 
 			// checkBoxBlockSameShift
 			// 
-			this.checkBoxBlockSameShift.BeforeTouchSize = new System.Drawing.Size(87, 17);
+			this.checkBoxBlockSameShift.BeforeTouchSize = new System.Drawing.Size(87, 21);
 			this.checkBoxBlockSameShift.DrawFocusRectangle = false;
 			this.checkBoxBlockSameShift.Enabled = false;
 			this.checkBoxBlockSameShift.Location = new System.Drawing.Point(33, 82);
 			this.checkBoxBlockSameShift.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxBlockSameShift.Name = "checkBoxBlockSameShift";
-			this.checkBoxBlockSameShift.Size = new System.Drawing.Size(87, 17);
+			this.checkBoxBlockSameShift.Size = new System.Drawing.Size(87, 21);
 			this.checkBoxBlockSameShift.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxBlockSameShift.TabIndex = 51;
 			this.checkBoxBlockSameShift.Text = "xxSameShift";
