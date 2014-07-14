@@ -407,6 +407,42 @@
 				    assert.equals(result, true);
 
 				},
+				"should select layer starts at midnight in move activity form": function () {
+				    var vm = new viewModel();
+				    vm.SetViewOptions({
+				        id: 1,
+				        date: '20131118',
+				        groupid: 2,
+				        minutes: 0
+				    });
+				    var data = [
+						{
+						    PersonId: 1,
+						    Projection: [
+								{
+								    Start: '2013-11-18 23:00',
+								    Minutes: 60
+								},
+                                {
+                                    Start: '2013-11-19 00:00',
+                                    Minutes: 60
+                                },
+                                {
+                                    Start: '2013-11-19 01:00',
+                                    Minutes: 60
+                                }
+						    ]
+						}
+				    ];
+				    vm.MovingActivity(true);
+				    vm.UpdateData({ PersonId: 1 });
+				    vm.UpdateSchedules(data);
+
+				    var selectedLayer = vm.SelectedLayer();
+				    var momentExpected = moment('2013-11-19 00:00', 'YYYY-MM-DD HH:mm');
+
+				    assert.equals(selectedLayer.StartTime(), momentExpected.format('HH:mm'));
+				},
 
 			});
 		}

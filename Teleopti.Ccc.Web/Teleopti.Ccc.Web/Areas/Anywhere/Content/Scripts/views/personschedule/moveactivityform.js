@@ -56,7 +56,7 @@
 			var shiftStartMinutes = self.WorkingShift().OriginalShiftStartMinutes;
 			var shiftEndMinutes = self.WorkingShift().OriginalShiftEndMinutes;
 			var inputMinutes = self.getMinutesFromTime(startTime);
-		    if (inputMinutes < shiftStartMinutes && shiftOverMidnight())
+		    if (inputMinutes < shiftStartMinutes && self.shiftOverMidnight())
 		        inputMinutes += 1440;
 			if (inputMinutes >= shiftStartMinutes && inputMinutes + self.layer().LengthMinutes() <= shiftEndMinutes)
 				return true;
@@ -130,12 +130,12 @@
 		var getMomentFromInput = function (input) {
 		    var momentInput = moment(input, resources.TimeFormatForMoment);
 		    var date = self.ScheduleDate();
-		    if (!beforeMidnight(momentInput) && shiftOverMidnight())
+		    if (!beforeMidnight(momentInput) && self.shiftOverMidnight())
 		        return moment([date.year(), date.month(), date.date(), momentInput.hour(), momentInput.minute()]).add(1, 'day');
 			return moment([date.year(), date.month(), date.date(), momentInput.hour(), momentInput.minute()]);
 		};
 
-	    var shiftOverMidnight = function() {
+	    this.shiftOverMidnight = function() {
 	        return self.WorkingShift().OriginalShiftEndMinutes > 1440;
 	    };
 

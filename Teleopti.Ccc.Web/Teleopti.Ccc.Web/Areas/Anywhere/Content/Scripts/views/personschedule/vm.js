@@ -199,19 +199,23 @@ define([
 			self.AddIntradayAbsenceForm.WorkingShift(self.WorkingShift());
 			self.AddActivityForm.WorkingShift(self.WorkingShift());
 
-            if (self.MovingActivity()) {
-                var selectedLayer = self.SelectedLayer();
+			if (self.MovingActivity()) {
+			    self.MoveActivityForm.ScheduleDate(self.ScheduleDate());
                 self.MoveActivityForm.WorkingShift(self.WorkingShift());
-                self.MoveActivityForm.ScheduleDate(self.ScheduleDate());
+                var selectedLayer = self.SelectedLayer();
                 self.MoveActivityForm.update(selectedLayer);
             }
 		};
 
 		this.SelectedLayer = function() {
-		    if (!self.MoveActivityForm.SelectedStartMinutes()) return null;
+		    if (typeof self.MoveActivityForm.SelectedStartMinutes() === 'undefined') return null;
 
-			var selectedLayers = layers().filter(function (layer) {
-			    if (layer.StartMinutes() === self.MoveActivityForm.SelectedStartMinutes())
+		    var selectedLayers = layers().filter(function (layer) {
+		        var selectedMinutes = self.MoveActivityForm.SelectedStartMinutes();
+		        var shiftStartMinutes = self.WorkingShift().OriginalShiftStartMinutes;
+		        if (selectedMinutes < shiftStartMinutes && self.MoveActivityForm.shiftOverMidnight())
+		            selectedMinutes += 1440;
+		        if (layer.StartMinutes() === selectedMinutes)
 				return layer;
 			});
 			var activeLayer = selectedLayers.first();
