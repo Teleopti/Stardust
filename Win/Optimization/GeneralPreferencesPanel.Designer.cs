@@ -172,8 +172,8 @@
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 4;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 188F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 216F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 203F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 201F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(420, 451);
@@ -203,18 +203,18 @@
 			this.tableLayoutPanel8.Controls.Add(this.label4, 2, 4);
 			this.tableLayoutPanel8.Controls.Add(this.label5, 2, 5);
 			this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 221);
+			this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 236);
 			this.tableLayoutPanel8.Name = "tableLayoutPanel8";
 			this.tableLayoutPanel8.RowCount = 8;
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel8.Size = new System.Drawing.Size(414, 210);
+			this.tableLayoutPanel8.Size = new System.Drawing.Size(414, 195);
 			this.tableLayoutPanel8.TabIndex = 23;
 			// 
 			// numericUpDownPreferences
@@ -228,7 +228,7 @@
             0,
             0,
             0});
-			this.numericUpDownPreferences.Location = new System.Drawing.Point(263, 26);
+			this.numericUpDownPreferences.Location = new System.Drawing.Point(263, 28);
 			this.numericUpDownPreferences.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownPreferences.Name = "numericUpDownPreferences";
 			this.numericUpDownPreferences.Size = new System.Drawing.Size(43, 22);
@@ -243,12 +243,12 @@
 			// 
 			// checkBoxShiftCategoryLimitations
 			// 
-			this.checkBoxShiftCategoryLimitations.BeforeTouchSize = new System.Drawing.Size(162, 17);
+			this.checkBoxShiftCategoryLimitations.BeforeTouchSize = new System.Drawing.Size(162, 21);
 			this.checkBoxShiftCategoryLimitations.DrawFocusRectangle = false;
-			this.checkBoxShiftCategoryLimitations.Location = new System.Drawing.Point(3, 141);
+			this.checkBoxShiftCategoryLimitations.Location = new System.Drawing.Point(3, 153);
 			this.checkBoxShiftCategoryLimitations.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxShiftCategoryLimitations.Name = "checkBoxShiftCategoryLimitations";
-			this.checkBoxShiftCategoryLimitations.Size = new System.Drawing.Size(162, 17);
+			this.checkBoxShiftCategoryLimitations.Size = new System.Drawing.Size(162, 21);
 			this.checkBoxShiftCategoryLimitations.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxShiftCategoryLimitations.TabIndex = 12;
 			this.checkBoxShiftCategoryLimitations.Text = "xxShiftCategoryLimitations";
@@ -258,7 +258,7 @@
 			// 
 			this.checkBoxStudentAvailabilities.BeforeTouchSize = new System.Drawing.Size(141, 17);
 			this.checkBoxStudentAvailabilities.DrawFocusRectangle = false;
-			this.checkBoxStudentAvailabilities.Location = new System.Drawing.Point(3, 118);
+			this.checkBoxStudentAvailabilities.Location = new System.Drawing.Point(3, 128);
 			this.checkBoxStudentAvailabilities.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxStudentAvailabilities.Name = "checkBoxStudentAvailabilities";
 			this.checkBoxStudentAvailabilities.Size = new System.Drawing.Size(141, 17);
@@ -272,7 +272,7 @@
 			// 
 			this.checkBoxAvailabilities.BeforeTouchSize = new System.Drawing.Size(100, 17);
 			this.checkBoxAvailabilities.DrawFocusRectangle = false;
-			this.checkBoxAvailabilities.Location = new System.Drawing.Point(3, 95);
+			this.checkBoxAvailabilities.Location = new System.Drawing.Point(3, 103);
 			this.checkBoxAvailabilities.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAvailabilities.Name = "checkBoxAvailabilities";
 			this.checkBoxAvailabilities.Size = new System.Drawing.Size(100, 17);
@@ -286,7 +286,7 @@
 			// 
 			this.checkBoxRotations.BeforeTouchSize = new System.Drawing.Size(86, 17);
 			this.checkBoxRotations.DrawFocusRectangle = false;
-			this.checkBoxRotations.Location = new System.Drawing.Point(3, 72);
+			this.checkBoxRotations.Location = new System.Drawing.Point(3, 78);
 			this.checkBoxRotations.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxRotations.Name = "checkBoxRotations";
 			this.checkBoxRotations.Size = new System.Drawing.Size(86, 17);
@@ -298,12 +298,12 @@
 			// 
 			// checkBoxMustHaves
 			// 
-			this.checkBoxMustHaves.BeforeTouchSize = new System.Drawing.Size(92, 17);
+			this.checkBoxMustHaves.BeforeTouchSize = new System.Drawing.Size(92, 19);
 			this.checkBoxMustHaves.DrawFocusRectangle = false;
-			this.checkBoxMustHaves.Location = new System.Drawing.Point(3, 49);
+			this.checkBoxMustHaves.Location = new System.Drawing.Point(3, 53);
 			this.checkBoxMustHaves.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxMustHaves.Name = "checkBoxMustHaves";
-			this.checkBoxMustHaves.Size = new System.Drawing.Size(92, 17);
+			this.checkBoxMustHaves.Size = new System.Drawing.Size(92, 19);
 			this.checkBoxMustHaves.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxMustHaves.TabIndex = 7;
 			this.checkBoxMustHaves.Text = "xxMustHaves";
@@ -312,12 +312,12 @@
 			// 
 			// checkBoxPreferences
 			// 
-			this.checkBoxPreferences.BeforeTouchSize = new System.Drawing.Size(95, 17);
+			this.checkBoxPreferences.BeforeTouchSize = new System.Drawing.Size(95, 19);
 			this.checkBoxPreferences.DrawFocusRectangle = false;
-			this.checkBoxPreferences.Location = new System.Drawing.Point(3, 26);
+			this.checkBoxPreferences.Location = new System.Drawing.Point(3, 28);
 			this.checkBoxPreferences.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxPreferences.Name = "checkBoxPreferences";
-			this.checkBoxPreferences.Size = new System.Drawing.Size(95, 17);
+			this.checkBoxPreferences.Size = new System.Drawing.Size(95, 19);
 			this.checkBoxPreferences.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxPreferences.TabIndex = 5;
 			this.checkBoxPreferences.Text = "xxPreferences";
@@ -339,7 +339,7 @@
 			// 
 			this.label0.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label0.AutoSize = true;
-			this.label0.Location = new System.Drawing.Point(313, 28);
+			this.label0.Location = new System.Drawing.Point(313, 31);
 			this.label0.Name = "label0";
 			this.label0.Size = new System.Drawing.Size(16, 13);
 			this.label0.TabIndex = 14;
@@ -356,7 +356,7 @@
             0,
             0,
             0});
-			this.numericUpDownMustHaves.Location = new System.Drawing.Point(263, 49);
+			this.numericUpDownMustHaves.Location = new System.Drawing.Point(263, 53);
 			this.numericUpDownMustHaves.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownMustHaves.Name = "numericUpDownMustHaves";
 			this.numericUpDownMustHaves.Size = new System.Drawing.Size(43, 22);
@@ -380,7 +380,7 @@
             0,
             0,
             0});
-			this.numericUpDownRotations.Location = new System.Drawing.Point(263, 72);
+			this.numericUpDownRotations.Location = new System.Drawing.Point(263, 78);
 			this.numericUpDownRotations.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownRotations.Name = "numericUpDownRotations";
 			this.numericUpDownRotations.Size = new System.Drawing.Size(43, 22);
@@ -404,7 +404,7 @@
             0,
             0,
             0});
-			this.numericUpDownAvailabilities.Location = new System.Drawing.Point(263, 95);
+			this.numericUpDownAvailabilities.Location = new System.Drawing.Point(263, 103);
 			this.numericUpDownAvailabilities.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownAvailabilities.Name = "numericUpDownAvailabilities";
 			this.numericUpDownAvailabilities.Size = new System.Drawing.Size(43, 22);
@@ -428,7 +428,7 @@
             0,
             0,
             0});
-			this.numericUpDownStudentAvailabilities.Location = new System.Drawing.Point(263, 118);
+			this.numericUpDownStudentAvailabilities.Location = new System.Drawing.Point(263, 128);
 			this.numericUpDownStudentAvailabilities.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownStudentAvailabilities.Name = "numericUpDownStudentAvailabilities";
 			this.numericUpDownStudentAvailabilities.Size = new System.Drawing.Size(43, 22);
@@ -445,7 +445,7 @@
 			// 
 			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(313, 51);
+			this.label1.Location = new System.Drawing.Point(313, 56);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(16, 13);
 			this.label1.TabIndex = 19;
@@ -455,7 +455,7 @@
 			// 
 			this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(313, 74);
+			this.label2.Location = new System.Drawing.Point(313, 81);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(16, 13);
 			this.label2.TabIndex = 20;
@@ -465,7 +465,7 @@
 			// 
 			this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(313, 97);
+			this.label4.Location = new System.Drawing.Point(313, 106);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(16, 13);
 			this.label4.TabIndex = 21;
@@ -475,7 +475,7 @@
 			// 
 			this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(313, 120);
+			this.label5.Location = new System.Drawing.Point(313, 131);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(16, 13);
 			this.label5.TabIndex = 22;
@@ -485,7 +485,6 @@
 			// 
 			this.tableLayoutPanel6.ColumnCount = 1;
 			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxFairness, 0, 6);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxShiftsWithinDay, 0, 5);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxDaysOffFromFlexibleWorkTime, 0, 4);
@@ -497,25 +496,25 @@
 			this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 33);
 			this.tableLayoutPanel6.Name = "tableLayoutPanel6";
 			this.tableLayoutPanel6.RowCount = 8;
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel6.Size = new System.Drawing.Size(414, 182);
+			this.tableLayoutPanel6.Size = new System.Drawing.Size(414, 197);
 			this.tableLayoutPanel6.TabIndex = 22;
 			// 
 			// checkBoxFairness
 			// 
-			this.checkBoxFairness.BeforeTouchSize = new System.Drawing.Size(78, 17);
+			this.checkBoxFairness.BeforeTouchSize = new System.Drawing.Size(78, 21);
 			this.checkBoxFairness.DrawFocusRectangle = false;
-			this.checkBoxFairness.Location = new System.Drawing.Point(3, 141);
+			this.checkBoxFairness.Location = new System.Drawing.Point(3, 153);
 			this.checkBoxFairness.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxFairness.Name = "checkBoxFairness";
-			this.checkBoxFairness.Size = new System.Drawing.Size(78, 17);
+			this.checkBoxFairness.Size = new System.Drawing.Size(78, 21);
 			this.checkBoxFairness.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxFairness.TabIndex = 12;
 			this.checkBoxFairness.Text = "xxFairness";
@@ -523,12 +522,12 @@
 			// 
 			// checkBoxShiftsWithinDay
 			// 
-			this.checkBoxShiftsWithinDay.BeforeTouchSize = new System.Drawing.Size(119, 17);
+			this.checkBoxShiftsWithinDay.BeforeTouchSize = new System.Drawing.Size(119, 19);
 			this.checkBoxShiftsWithinDay.DrawFocusRectangle = false;
-			this.checkBoxShiftsWithinDay.Location = new System.Drawing.Point(3, 118);
+			this.checkBoxShiftsWithinDay.Location = new System.Drawing.Point(3, 128);
 			this.checkBoxShiftsWithinDay.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxShiftsWithinDay.Name = "checkBoxShiftsWithinDay";
-			this.checkBoxShiftsWithinDay.Size = new System.Drawing.Size(119, 17);
+			this.checkBoxShiftsWithinDay.Size = new System.Drawing.Size(119, 19);
 			this.checkBoxShiftsWithinDay.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxShiftsWithinDay.TabIndex = 11;
 			this.checkBoxShiftsWithinDay.Text = "xxShiftsWithinDay";
@@ -536,12 +535,12 @@
 			// 
 			// checkBoxDaysOffFromFlexibleWorkTime
 			// 
-			this.checkBoxDaysOffFromFlexibleWorkTime.BeforeTouchSize = new System.Drawing.Size(193, 17);
+			this.checkBoxDaysOffFromFlexibleWorkTime.BeforeTouchSize = new System.Drawing.Size(193, 19);
 			this.checkBoxDaysOffFromFlexibleWorkTime.DrawFocusRectangle = false;
-			this.checkBoxDaysOffFromFlexibleWorkTime.Location = new System.Drawing.Point(3, 95);
+			this.checkBoxDaysOffFromFlexibleWorkTime.Location = new System.Drawing.Point(3, 103);
 			this.checkBoxDaysOffFromFlexibleWorkTime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxDaysOffFromFlexibleWorkTime.Name = "checkBoxDaysOffFromFlexibleWorkTime";
-			this.checkBoxDaysOffFromFlexibleWorkTime.Size = new System.Drawing.Size(193, 17);
+			this.checkBoxDaysOffFromFlexibleWorkTime.Size = new System.Drawing.Size(193, 19);
 			this.checkBoxDaysOffFromFlexibleWorkTime.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxDaysOffFromFlexibleWorkTime.TabIndex = 10;
 			this.checkBoxDaysOffFromFlexibleWorkTime.Text = "xxDaysOffFromFlexibleWorkTime";
@@ -549,12 +548,12 @@
 			// 
 			// checkBoxShiftsForFlexibleWorkTime
 			// 
-			this.checkBoxShiftsForFlexibleWorkTime.BeforeTouchSize = new System.Drawing.Size(172, 17);
+			this.checkBoxShiftsForFlexibleWorkTime.BeforeTouchSize = new System.Drawing.Size(172, 19);
 			this.checkBoxShiftsForFlexibleWorkTime.DrawFocusRectangle = false;
-			this.checkBoxShiftsForFlexibleWorkTime.Location = new System.Drawing.Point(3, 72);
+			this.checkBoxShiftsForFlexibleWorkTime.Location = new System.Drawing.Point(3, 78);
 			this.checkBoxShiftsForFlexibleWorkTime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxShiftsForFlexibleWorkTime.Name = "checkBoxShiftsForFlexibleWorkTime";
-			this.checkBoxShiftsForFlexibleWorkTime.Size = new System.Drawing.Size(172, 17);
+			this.checkBoxShiftsForFlexibleWorkTime.Size = new System.Drawing.Size(172, 19);
 			this.checkBoxShiftsForFlexibleWorkTime.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxShiftsForFlexibleWorkTime.TabIndex = 9;
 			this.checkBoxShiftsForFlexibleWorkTime.Text = "xxShiftsForFlexibleWorkTime";
@@ -562,12 +561,12 @@
 			// 
 			// checkBoxTimeBetweenDays
 			// 
-			this.checkBoxTimeBetweenDays.BeforeTouchSize = new System.Drawing.Size(128, 17);
+			this.checkBoxTimeBetweenDays.BeforeTouchSize = new System.Drawing.Size(128, 19);
 			this.checkBoxTimeBetweenDays.DrawFocusRectangle = false;
-			this.checkBoxTimeBetweenDays.Location = new System.Drawing.Point(3, 49);
+			this.checkBoxTimeBetweenDays.Location = new System.Drawing.Point(3, 53);
 			this.checkBoxTimeBetweenDays.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxTimeBetweenDays.Name = "checkBoxTimeBetweenDays";
-			this.checkBoxTimeBetweenDays.Size = new System.Drawing.Size(128, 17);
+			this.checkBoxTimeBetweenDays.Size = new System.Drawing.Size(128, 19);
 			this.checkBoxTimeBetweenDays.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxTimeBetweenDays.TabIndex = 7;
 			this.checkBoxTimeBetweenDays.Text = "xxTimeBetweenDays";
@@ -575,12 +574,12 @@
 			// 
 			// checkBoxDaysOff
 			// 
-			this.checkBoxDaysOff.BeforeTouchSize = new System.Drawing.Size(77, 17);
+			this.checkBoxDaysOff.BeforeTouchSize = new System.Drawing.Size(77, 19);
 			this.checkBoxDaysOff.DrawFocusRectangle = false;
-			this.checkBoxDaysOff.Location = new System.Drawing.Point(3, 26);
+			this.checkBoxDaysOff.Location = new System.Drawing.Point(3, 28);
 			this.checkBoxDaysOff.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxDaysOff.Name = "checkBoxDaysOff";
-			this.checkBoxDaysOff.Size = new System.Drawing.Size(77, 17);
+			this.checkBoxDaysOff.Size = new System.Drawing.Size(77, 19);
 			this.checkBoxDaysOff.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxDaysOff.TabIndex = 5;
 			this.checkBoxDaysOff.Text = "xxDaysOff";

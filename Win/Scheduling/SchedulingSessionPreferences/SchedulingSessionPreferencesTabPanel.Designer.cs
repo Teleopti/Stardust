@@ -191,8 +191,8 @@
 			this.tableLayoutPanel1.RowCount = 5;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 61.77967F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.22033F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 66.01942F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.98058F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(438, 499);
 			this.tableLayoutPanel1.TabIndex = 0;
@@ -229,27 +229,28 @@
 			this.tableLayoutPanelRestrictions.Location = new System.Drawing.Point(3, 60);
 			this.tableLayoutPanelRestrictions.Name = "tableLayoutPanelRestrictions";
 			this.tableLayoutPanelRestrictions.RowCount = 9;
-			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanelRestrictions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-			this.tableLayoutPanelRestrictions.Size = new System.Drawing.Size(432, 249);
+			this.tableLayoutPanelRestrictions.Size = new System.Drawing.Size(432, 266);
 			this.tableLayoutPanelRestrictions.TabIndex = 23;
 			// 
 			// checkBoxUseShiftCategoryRestrictions
 			// 
-			this.checkBoxUseShiftCategoryRestrictions.BeforeTouchSize = new System.Drawing.Size(164, 19);
+			this.checkBoxUseShiftCategoryRestrictions.BeforeTouchSize = new System.Drawing.Size(426, 19);
 			this.tableLayoutPanelRestrictions.SetColumnSpan(this.checkBoxUseShiftCategoryRestrictions, 2);
+			this.checkBoxUseShiftCategoryRestrictions.Dock = System.Windows.Forms.DockStyle.Top;
 			this.checkBoxUseShiftCategoryRestrictions.DrawFocusRectangle = false;
-			this.checkBoxUseShiftCategoryRestrictions.Location = new System.Drawing.Point(3, 194);
+			this.checkBoxUseShiftCategoryRestrictions.Location = new System.Drawing.Point(3, 208);
 			this.checkBoxUseShiftCategoryRestrictions.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseShiftCategoryRestrictions.Name = "checkBoxUseShiftCategoryRestrictions";
-			this.checkBoxUseShiftCategoryRestrictions.Size = new System.Drawing.Size(164, 19);
+			this.checkBoxUseShiftCategoryRestrictions.Size = new System.Drawing.Size(426, 19);
 			this.checkBoxUseShiftCategoryRestrictions.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseShiftCategoryRestrictions.TabIndex = 20;
 			this.checkBoxUseShiftCategoryRestrictions.Text = "xxShiftCategoryLimitations";
@@ -258,12 +259,13 @@
 			// 
 			// checkBoxOnlyPreferenceDays
 			// 
-			this.checkBoxOnlyPreferenceDays.BeforeTouchSize = new System.Drawing.Size(187, 17);
+			this.checkBoxOnlyPreferenceDays.BeforeTouchSize = new System.Drawing.Size(396, 19);
+			this.checkBoxOnlyPreferenceDays.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxOnlyPreferenceDays.DrawFocusRectangle = false;
-			this.checkBoxOnlyPreferenceDays.Location = new System.Drawing.Point(33, 26);
+			this.checkBoxOnlyPreferenceDays.Location = new System.Drawing.Point(33, 28);
 			this.checkBoxOnlyPreferenceDays.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxOnlyPreferenceDays.Name = "checkBoxOnlyPreferenceDays";
-			this.checkBoxOnlyPreferenceDays.Size = new System.Drawing.Size(187, 17);
+			this.checkBoxOnlyPreferenceDays.Size = new System.Drawing.Size(396, 19);
 			this.checkBoxOnlyPreferenceDays.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxOnlyPreferenceDays.TabIndex = 13;
 			this.checkBoxOnlyPreferenceDays.Text = "xxScheduleOnlyPreferenceDays";
@@ -272,13 +274,14 @@
 			// 
 			// checkBoxUsePreferences
 			// 
-			this.checkBoxUsePreferences.BeforeTouchSize = new System.Drawing.Size(94, 17);
+			this.checkBoxUsePreferences.BeforeTouchSize = new System.Drawing.Size(426, 19);
 			this.tableLayoutPanelRestrictions.SetColumnSpan(this.checkBoxUsePreferences, 2);
+			this.checkBoxUsePreferences.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxUsePreferences.DrawFocusRectangle = false;
 			this.checkBoxUsePreferences.Location = new System.Drawing.Point(3, 3);
 			this.checkBoxUsePreferences.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUsePreferences.Name = "checkBoxUsePreferences";
-			this.checkBoxUsePreferences.Size = new System.Drawing.Size(94, 17);
+			this.checkBoxUsePreferences.Size = new System.Drawing.Size(426, 19);
 			this.checkBoxUsePreferences.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUsePreferences.TabIndex = 12;
 			this.checkBoxUsePreferences.Text = "xxPreferences";
@@ -287,13 +290,14 @@
 			// 
 			// checkBoxUseStudentAvailability
 			// 
-			this.checkBoxUseStudentAvailability.BeforeTouchSize = new System.Drawing.Size(132, 19);
+			this.checkBoxUseStudentAvailability.BeforeTouchSize = new System.Drawing.Size(426, 19);
 			this.tableLayoutPanelRestrictions.SetColumnSpan(this.checkBoxUseStudentAvailability, 2);
+			this.checkBoxUseStudentAvailability.Dock = System.Windows.Forms.DockStyle.Top;
 			this.checkBoxUseStudentAvailability.DrawFocusRectangle = false;
-			this.checkBoxUseStudentAvailability.Location = new System.Drawing.Point(3, 164);
+			this.checkBoxUseStudentAvailability.Location = new System.Drawing.Point(3, 178);
 			this.checkBoxUseStudentAvailability.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseStudentAvailability.Name = "checkBoxUseStudentAvailability";
-			this.checkBoxUseStudentAvailability.Size = new System.Drawing.Size(132, 19);
+			this.checkBoxUseStudentAvailability.Size = new System.Drawing.Size(426, 19);
 			this.checkBoxUseStudentAvailability.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseStudentAvailability.TabIndex = 19;
 			this.checkBoxUseStudentAvailability.Text = "xxStudentAvailability";
@@ -302,12 +306,13 @@
 			// 
 			// checkBoxOnlyAvailabilityDays
 			// 
-			this.checkBoxOnlyAvailabilityDays.BeforeTouchSize = new System.Drawing.Size(189, 17);
+			this.checkBoxOnlyAvailabilityDays.BeforeTouchSize = new System.Drawing.Size(396, 19);
+			this.checkBoxOnlyAvailabilityDays.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxOnlyAvailabilityDays.DrawFocusRectangle = false;
-			this.checkBoxOnlyAvailabilityDays.Location = new System.Drawing.Point(33, 141);
+			this.checkBoxOnlyAvailabilityDays.Location = new System.Drawing.Point(33, 153);
 			this.checkBoxOnlyAvailabilityDays.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxOnlyAvailabilityDays.Name = "checkBoxOnlyAvailabilityDays";
-			this.checkBoxOnlyAvailabilityDays.Size = new System.Drawing.Size(189, 17);
+			this.checkBoxOnlyAvailabilityDays.Size = new System.Drawing.Size(396, 19);
 			this.checkBoxOnlyAvailabilityDays.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxOnlyAvailabilityDays.TabIndex = 18;
 			this.checkBoxOnlyAvailabilityDays.Text = "xxScheduleOnlyAvailabilityDays";
@@ -316,13 +321,14 @@
 			// 
 			// checkBoxUseAvailability
 			// 
-			this.checkBoxUseAvailability.BeforeTouchSize = new System.Drawing.Size(91, 17);
+			this.checkBoxUseAvailability.BeforeTouchSize = new System.Drawing.Size(426, 19);
 			this.tableLayoutPanelRestrictions.SetColumnSpan(this.checkBoxUseAvailability, 2);
+			this.checkBoxUseAvailability.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxUseAvailability.DrawFocusRectangle = false;
-			this.checkBoxUseAvailability.Location = new System.Drawing.Point(3, 118);
+			this.checkBoxUseAvailability.Location = new System.Drawing.Point(3, 128);
 			this.checkBoxUseAvailability.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseAvailability.Name = "checkBoxUseAvailability";
-			this.checkBoxUseAvailability.Size = new System.Drawing.Size(91, 17);
+			this.checkBoxUseAvailability.Size = new System.Drawing.Size(426, 19);
 			this.checkBoxUseAvailability.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseAvailability.TabIndex = 17;
 			this.checkBoxUseAvailability.Text = "xxAvailability";
@@ -331,13 +337,14 @@
 			// 
 			// checkBoxUseRotations
 			// 
-			this.checkBoxUseRotations.BeforeTouchSize = new System.Drawing.Size(83, 17);
+			this.checkBoxUseRotations.BeforeTouchSize = new System.Drawing.Size(426, 19);
 			this.tableLayoutPanelRestrictions.SetColumnSpan(this.checkBoxUseRotations, 2);
+			this.checkBoxUseRotations.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxUseRotations.DrawFocusRectangle = false;
-			this.checkBoxUseRotations.Location = new System.Drawing.Point(3, 72);
+			this.checkBoxUseRotations.Location = new System.Drawing.Point(3, 78);
 			this.checkBoxUseRotations.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseRotations.Name = "checkBoxUseRotations";
-			this.checkBoxUseRotations.Size = new System.Drawing.Size(83, 17);
+			this.checkBoxUseRotations.Size = new System.Drawing.Size(426, 19);
 			this.checkBoxUseRotations.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseRotations.TabIndex = 15;
 			this.checkBoxUseRotations.Text = "xxRotations";
@@ -346,12 +353,13 @@
 			// 
 			// checkBoxOnlyRotationDays
 			// 
-			this.checkBoxOnlyRotationDays.BeforeTouchSize = new System.Drawing.Size(176, 17);
+			this.checkBoxOnlyRotationDays.BeforeTouchSize = new System.Drawing.Size(396, 19);
+			this.checkBoxOnlyRotationDays.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxOnlyRotationDays.DrawFocusRectangle = false;
-			this.checkBoxOnlyRotationDays.Location = new System.Drawing.Point(33, 95);
+			this.checkBoxOnlyRotationDays.Location = new System.Drawing.Point(33, 103);
 			this.checkBoxOnlyRotationDays.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxOnlyRotationDays.Name = "checkBoxOnlyRotationDays";
-			this.checkBoxOnlyRotationDays.Size = new System.Drawing.Size(176, 17);
+			this.checkBoxOnlyRotationDays.Size = new System.Drawing.Size(396, 19);
 			this.checkBoxOnlyRotationDays.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxOnlyRotationDays.TabIndex = 16;
 			this.checkBoxOnlyRotationDays.Text = "xxScheduleOnlyRotationDays";
@@ -360,13 +368,13 @@
 			// 
 			// checkBoxMustHaves
 			// 
-			this.checkBoxMustHaves.BeforeTouchSize = new System.Drawing.Size(396, 17);
+			this.checkBoxMustHaves.BeforeTouchSize = new System.Drawing.Size(396, 19);
 			this.checkBoxMustHaves.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxMustHaves.DrawFocusRectangle = false;
-			this.checkBoxMustHaves.Location = new System.Drawing.Point(33, 49);
+			this.checkBoxMustHaves.Location = new System.Drawing.Point(33, 53);
 			this.checkBoxMustHaves.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxMustHaves.Name = "checkBoxMustHaves";
-			this.checkBoxMustHaves.Size = new System.Drawing.Size(396, 17);
+			this.checkBoxMustHaves.Size = new System.Drawing.Size(396, 19);
 			this.checkBoxMustHaves.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxMustHaves.TabIndex = 14;
 			this.checkBoxMustHaves.Text = "xxScheduleOnlyPreferenceMustHave";
@@ -843,20 +851,21 @@
 			this.tableLayoutPanel7.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel7.Name = "tableLayoutPanel7";
 			this.tableLayoutPanel7.RowCount = 2;
-			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.88312F));
-			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 83.11688F));
+			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17.80118F));
+			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 82.19882F));
 			this.tableLayoutPanel7.Size = new System.Drawing.Size(438, 155);
 			this.tableLayoutPanel7.TabIndex = 18;
 			// 
 			// checkBoxUseShiftCategory
 			// 
-			this.checkBoxUseShiftCategory.BeforeTouchSize = new System.Drawing.Size(124, 19);
+			this.checkBoxUseShiftCategory.BeforeTouchSize = new System.Drawing.Size(432, 21);
 			this.tableLayoutPanel7.SetColumnSpan(this.checkBoxUseShiftCategory, 2);
+			this.checkBoxUseShiftCategory.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxUseShiftCategory.DrawFocusRectangle = false;
 			this.checkBoxUseShiftCategory.Location = new System.Drawing.Point(3, 3);
 			this.checkBoxUseShiftCategory.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseShiftCategory.Name = "checkBoxUseShiftCategory";
-			this.checkBoxUseShiftCategory.Size = new System.Drawing.Size(124, 19);
+			this.checkBoxUseShiftCategory.Size = new System.Drawing.Size(432, 21);
 			this.checkBoxUseShiftCategory.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseShiftCategory.TabIndex = 55;
 			this.checkBoxUseShiftCategory.Text = "xxUseShiftCategory";
@@ -869,7 +878,7 @@
 			this.comboBoxAdvShiftCategory.BeforeTouchSize = new System.Drawing.Size(173, 21);
 			this.comboBoxAdvShiftCategory.Dock = System.Windows.Forms.DockStyle.Left;
 			this.comboBoxAdvShiftCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(28, 29);
+			this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(28, 30);
 			this.comboBoxAdvShiftCategory.MaxDropDownItems = 16;
 			this.comboBoxAdvShiftCategory.Name = "comboBoxAdvShiftCategory";
 			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 21);
@@ -1012,13 +1021,14 @@
 			// 
 			// checkBoxUseMaxSeats
 			// 
-			this.checkBoxUseMaxSeats.BeforeTouchSize = new System.Drawing.Size(101, 19);
+			this.checkBoxUseMaxSeats.BeforeTouchSize = new System.Drawing.Size(432, 19);
 			this.tableLayoutPanel6.SetColumnSpan(this.checkBoxUseMaxSeats, 2);
+			this.checkBoxUseMaxSeats.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxUseMaxSeats.DrawFocusRectangle = false;
 			this.checkBoxUseMaxSeats.Location = new System.Drawing.Point(3, 53);
 			this.checkBoxUseMaxSeats.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseMaxSeats.Name = "checkBoxUseMaxSeats";
-			this.checkBoxUseMaxSeats.Size = new System.Drawing.Size(101, 19);
+			this.checkBoxUseMaxSeats.Size = new System.Drawing.Size(432, 19);
 			this.checkBoxUseMaxSeats.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseMaxSeats.TabIndex = 53;
 			this.checkBoxUseMaxSeats.Text = "xxUseMaxSeats";
@@ -1027,13 +1037,14 @@
 			// 
 			// checkBoxUseMaximumPersons
 			// 
-			this.checkBoxUseMaximumPersons.BeforeTouchSize = new System.Drawing.Size(115, 19);
+			this.checkBoxUseMaximumPersons.BeforeTouchSize = new System.Drawing.Size(432, 19);
 			this.tableLayoutPanel6.SetColumnSpan(this.checkBoxUseMaximumPersons, 2);
+			this.checkBoxUseMaximumPersons.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxUseMaximumPersons.DrawFocusRectangle = false;
 			this.checkBoxUseMaximumPersons.Location = new System.Drawing.Point(3, 28);
 			this.checkBoxUseMaximumPersons.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseMaximumPersons.Name = "checkBoxUseMaximumPersons";
-			this.checkBoxUseMaximumPersons.Size = new System.Drawing.Size(115, 19);
+			this.checkBoxUseMaximumPersons.Size = new System.Drawing.Size(432, 19);
 			this.checkBoxUseMaximumPersons.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseMaximumPersons.TabIndex = 52;
 			this.checkBoxUseMaximumPersons.Text = "xxUseMaxStaffing";
@@ -1041,13 +1052,14 @@
 			// 
 			// checkBoxUseMinimumPersons
 			// 
-			this.checkBoxUseMinimumPersons.BeforeTouchSize = new System.Drawing.Size(114, 19);
+			this.checkBoxUseMinimumPersons.BeforeTouchSize = new System.Drawing.Size(432, 19);
 			this.tableLayoutPanel6.SetColumnSpan(this.checkBoxUseMinimumPersons, 2);
+			this.checkBoxUseMinimumPersons.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxUseMinimumPersons.DrawFocusRectangle = false;
 			this.checkBoxUseMinimumPersons.Location = new System.Drawing.Point(3, 3);
 			this.checkBoxUseMinimumPersons.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseMinimumPersons.Name = "checkBoxUseMinimumPersons";
-			this.checkBoxUseMinimumPersons.Size = new System.Drawing.Size(114, 19);
+			this.checkBoxUseMinimumPersons.Size = new System.Drawing.Size(432, 19);
 			this.checkBoxUseMinimumPersons.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseMinimumPersons.TabIndex = 51;
 			this.checkBoxUseMinimumPersons.Text = "xxUseMinStaffing";
@@ -1055,12 +1067,13 @@
 			// 
 			// checkBoxDoNotBreakMaxSeats
 			// 
-			this.checkBoxDoNotBreakMaxSeats.BeforeTouchSize = new System.Drawing.Size(146, 19);
+			this.checkBoxDoNotBreakMaxSeats.BeforeTouchSize = new System.Drawing.Size(407, 19);
+			this.checkBoxDoNotBreakMaxSeats.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxDoNotBreakMaxSeats.DrawFocusRectangle = false;
 			this.checkBoxDoNotBreakMaxSeats.Location = new System.Drawing.Point(28, 78);
 			this.checkBoxDoNotBreakMaxSeats.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxDoNotBreakMaxSeats.Name = "checkBoxDoNotBreakMaxSeats";
-			this.checkBoxDoNotBreakMaxSeats.Size = new System.Drawing.Size(146, 19);
+			this.checkBoxDoNotBreakMaxSeats.Size = new System.Drawing.Size(407, 19);
 			this.checkBoxDoNotBreakMaxSeats.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxDoNotBreakMaxSeats.TabIndex = 54;
 			this.checkBoxDoNotBreakMaxSeats.Text = "xxDoNotBreakMaxSeats";
@@ -1068,13 +1081,14 @@
 			// 
 			// checkBoxUseAverageShiftLengths
 			// 
-			this.checkBoxUseAverageShiftLengths.BeforeTouchSize = new System.Drawing.Size(161, 19);
+			this.checkBoxUseAverageShiftLengths.BeforeTouchSize = new System.Drawing.Size(432, 19);
 			this.tableLayoutPanel6.SetColumnSpan(this.checkBoxUseAverageShiftLengths, 2);
+			this.checkBoxUseAverageShiftLengths.Dock = System.Windows.Forms.DockStyle.Top;
 			this.checkBoxUseAverageShiftLengths.DrawFocusRectangle = false;
 			this.checkBoxUseAverageShiftLengths.Location = new System.Drawing.Point(3, 103);
 			this.checkBoxUseAverageShiftLengths.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseAverageShiftLengths.Name = "checkBoxUseAverageShiftLengths";
-			this.checkBoxUseAverageShiftLengths.Size = new System.Drawing.Size(161, 19);
+			this.checkBoxUseAverageShiftLengths.Size = new System.Drawing.Size(432, 19);
 			this.checkBoxUseAverageShiftLengths.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseAverageShiftLengths.TabIndex = 55;
 			this.checkBoxUseAverageShiftLengths.Text = "xxUseAverageShiftLengths";
