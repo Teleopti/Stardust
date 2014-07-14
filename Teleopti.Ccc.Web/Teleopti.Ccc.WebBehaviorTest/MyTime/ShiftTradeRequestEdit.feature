@@ -382,6 +382,7 @@ Scenario:  Should see the updated comment after approved
 	When I click on the existing request in the list
 	And I entered 'OK, you owe me a dinner' as comment
 	And I click the Approve button on the shift request
+	And I click on the existing request in the list
 	Then I should see 'OK, you owe me a dinner' in message area
 	
 @ignore
