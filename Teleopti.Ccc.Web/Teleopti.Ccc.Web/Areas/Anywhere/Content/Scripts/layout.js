@@ -87,7 +87,7 @@ define([
 		var actionRegex = '[a-z]+';
 		var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
 		var dateRegex = '\\d{8}';
-		var timeRegex = '\\d*';
+		var timeRegex = '[-]*\\d*';
 
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
