@@ -51,7 +51,8 @@ Scenario: Add on empty day
 	| Start time | 08:00 |
 	| End time   | 16:00 |
 	| Color      | Red   |
-	And I should see an absence in the absence list with
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-04-08'
+	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
 	| Start time | 2013-04-08 00:00 |
@@ -76,7 +77,8 @@ Scenario: Add on shift
 	| Start time | 08:00 |
 	| End time   | 17:00 |
 	| Color      | Red   |
-	And I should see an absence in the absence list with
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-04-08'
+	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
 	| Start time | 2013-04-08 08:00 |
@@ -96,6 +98,7 @@ Scenario: Add on empty day first day
 	| Absence  | Vacation   |
 	| End date | 2013-04-09 |
 	And I click 'apply'
+	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-04-08'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
@@ -116,6 +119,7 @@ Scenario: Add on empty day last day
 	| Absence  | Vacation   |
 	| End date | 2013-04-09 |
 	And I click 'apply'
+	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-04-08'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
@@ -142,6 +146,7 @@ Scenario: Add on shifts in sequence
 	| Absence  | Vacation   |
 	| End date | 2013-04-09 |
 	And I click 'apply'
+	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-04-08'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
@@ -167,7 +172,8 @@ Scenario: Add on shift ending tomorrow
 	| Start time | 22:00 |
 	| End time   | 07:00 |
 	| Color      | Red   |
-	And I should see an absence in the absence list with
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-23'
+	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
 	| Start time | 2013-05-23 22:00 |
@@ -187,6 +193,7 @@ Scenario: Add absence on a day with a night shift starting yesterday
 	| Absence  | Vacation   |
 	| End date | 2013-05-23 |
 	And I click 'apply'
+	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-23'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
@@ -211,18 +218,10 @@ Scenario: Invalid dates
 
 Scenario: Back to viewing schedule after adding a full day absence
 	Given I have the role 'Anywhere Team Green'
-	When I view schedules for 'Team green' on '2013-04-08'
-	And I click person name 'Pierre Baldi'
-	And I click 'add full day absence' in schedule menu
+	When I view person schedules add full day absence form for 'Pierre Baldi' in 'Team green' on '2013-04-08'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
 	| End date | 2013-04-08 |
 	And I click 'apply'
-	Then I should see an absence in the absence list with
-	| Field      | Value            |
-	| Name       | Vacation         |
-	| Start time | 2013-04-08 00:00 |
-	| End time   | 2013-04-08 23:59 |
-	When I press back in the web browser
 	Then I should be viewing schedules for '2013-04-08'	

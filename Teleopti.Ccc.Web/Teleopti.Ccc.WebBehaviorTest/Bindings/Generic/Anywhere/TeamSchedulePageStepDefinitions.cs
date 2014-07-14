@@ -136,6 +136,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should be viewing schedules for '(.*)'")]
 		public void ThenIShouldSeePersonScheduleForPersonOnDate(string date)
 		{
+			Browser.Interactions.AssertUrlContains("teamschedule");
 			Browser.Interactions.AssertUrlContains(date.Replace("-", ""));
 		}
 

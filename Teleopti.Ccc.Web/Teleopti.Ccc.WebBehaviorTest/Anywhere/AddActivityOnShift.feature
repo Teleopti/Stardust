@@ -148,4 +148,14 @@ Scenario: Add to day
 	| End time   | 12:00 |
 	| Color      | Green |
 
+Scenario: Back to viewing schedule after adding an activity
+	Given I have the role 'Anywhere Team Green'
+	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-04-08'
+	And I input these add activity values
+	| Field      | Value |
+	| Activity   | Phone |
+	| Start time | 11:00 |
+	| End time   | 12:00 |
+	And I initiate 'apply'
+	Then I should be viewing schedules for '2013-04-08'	
 

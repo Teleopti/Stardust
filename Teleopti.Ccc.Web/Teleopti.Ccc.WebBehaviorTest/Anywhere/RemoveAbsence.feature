@@ -84,6 +84,7 @@ Scenario: Remove absence with confirmation
 	Then I should see 1 absences in the absence list
 	And I should see a shift
 	When I click 'confirm removal' on absence named 'Vacation'
+	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
 	Then I should see 0 absences in the absence list
 	And I should not see any shift
 	
@@ -112,6 +113,7 @@ Scenario: Remove one of two absences
 	| Color      | Gray  |
 	When I click 'remove' on absence named 'Illness'
 	And I click 'confirm removal' on absence named 'Illness'
+	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
@@ -144,9 +146,21 @@ Scenario: Remove absence starting from day 2 on night shift
 	| Color      | Red   |
 	When I click 'remove' on absence named 'Vacation'
 	And I click 'confirm removal' on absence named 'Vacation'
+	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-12-06'
 	Then I should see 0 absences in the absence list
 	And I should not see a scheduled activity with
 	| Field      | Value |
 	| Start time | 02:00 |
 	| End time   | 03:00 |
 	| Color      | Red   |
+
+Scenario: Back to viewing schedule after removing an absence
+	Given I have the role 'Anywhere Team Green'
+	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-04-08'
+	And I input these intraday absence values
+	| Field      | Value   |
+	| Absence    | Illness |
+	| Start time | 17:00   |
+	| End time   | 18:00   |
+	And I initiate 'apply'
+	Then I should be viewing schedules for '2013-04-08'	
