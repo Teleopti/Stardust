@@ -26,6 +26,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.IsSelected = ko.observable(false);
 	self.IsEditable = ko.observable();
 	self.IsNewInProgress = ko.observable(false);
+	self.PersonFromAdded = false;
 	self.ToggleSelected = function () {
 	    self.IsSelected(!self.IsSelected());
 	};
@@ -40,13 +41,25 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			}
 		});
 	};
+	self.UpdatedMessage = ko.observable();
 	self.Approve = function () {
 		self.CanApproveAndDeny(false);
+		if (!self.PersonFromAdded) {
+			self.Message(self.personFrom() + ": " + self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
+			self.PersonFromAdded = true;
+		} else {
+			self.Message(self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
+		}
+		
 		self.ajax.Ajax({
-			url: "Requests/ApproveShiftTrade/" + self.EntityId(),
+			url: "Requests/ApproveShiftTrade/",
 			dataType: "json",
-			cache: false,
+			contentType: 'application/json; charset=utf-8',
 			type: "POST",
+			data: JSON.stringify({
+				ID: self.EntityId(),
+				Message: self.Message()
+			}),
 			success: function (data) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data, true);
 				self.CanApproveAndDeny(true);

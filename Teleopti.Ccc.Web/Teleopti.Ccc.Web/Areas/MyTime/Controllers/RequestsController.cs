@@ -107,9 +107,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public JsonResult ApproveShiftTrade(Guid id)
+		public JsonResult ApproveShiftTrade(ShiftTradeRequestReplyForm form)
 		{
-			var model = _respondToShiftTrade.OkByMe(id);
+			var model = _respondToShiftTrade.OkByMe(form.ID, form.Message);
 			model.Status = Resources.WaitingThreeDots;
 			return Json(model);
 		}

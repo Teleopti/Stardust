@@ -36,14 +36,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_shiftTradeRequestSetChecksum = shiftTradeRequestSetChecksum;
 		}
 
-		public RequestViewModel OkByMe(Guid requestId)
+		public RequestViewModel OkByMe(Guid requestId, string message)
 		{
 			var personRequest = _personRequestRepository.Find(requestId);
 			if (personRequest == null)
 			{
 				return new RequestViewModel();
 			}
-
+			personRequest.TrySetMessage(message);
 			persistWithBus(personRequest);
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);

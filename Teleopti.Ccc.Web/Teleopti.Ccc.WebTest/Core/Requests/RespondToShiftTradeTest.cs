@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			mapper.Expect(m => m.Map<IPersonRequest, RequestViewModel>(personRequest)).Return(requestViewModel);
 
 			//execute
-			var result = target.OkByMe(shiftTradeId);
+			var result = target.OkByMe(shiftTradeId, "");
 
 			//verify expectation:
 			shiftTrade.AssertWasCalled(s => s.Accept(loggedOnPerson, shiftTradeRequestCheckSum, personRequestCheckAuthorization));
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			mapper.Expect(m => m.Map<IPersonRequest, RequestViewModel>(personRequest)).Return(requestViewModel);
 
 			//execute
-			target.OkByMe(shiftTradeId);
+			target.OkByMe(shiftTradeId, "");
 
 			//verify expectation:
 			busSender.AssertWasCalled(s => s.Publish(null), o => o.IgnoreArguments());
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			personRequestRepository.Expect(p => p.Find(id)).Return(null);
 			var target = new RespondToShiftTrade(personRequestRepository, null, null, null, null, null, null);
-			Assert.That(target.OkByMe(id),Is.Not.Null);
+			Assert.That(target.OkByMe(id, ""),Is.Not.Null);
 		}
 
 		[Test]

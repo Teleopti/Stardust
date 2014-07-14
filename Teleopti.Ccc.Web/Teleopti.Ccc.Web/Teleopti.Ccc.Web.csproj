@@ -368,6 +368,7 @@
     <Compile Include="Areas\MyTime\Models\Requests\AbsenceAccountViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditPersonScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditScheduleLayerViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestReplyForm.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\OvertimeAvailabilityInput.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\OvertimeAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGenerator.cs" />
