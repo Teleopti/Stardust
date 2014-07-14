@@ -62,7 +62,7 @@ WHERE userid=@userid
 
 --reverted back to previous .bak files
 --#29068 - keep Intraday settings for Demo installs
-delete from dbo.PersonalSettingData
+delete from TeleoptiCCC7_Demo.dbo.PersonalSettingData
 where [key] not in (
 	'IntradaySettings'
 	)
