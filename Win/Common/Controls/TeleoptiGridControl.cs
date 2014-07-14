@@ -102,6 +102,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 				GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
 				GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
 				MetroScrollBars = true;
+				Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
             ClipboardPaste += TeleoptiGridControl_ClipboardPaste;
             KeyDown += TeleoptiGridControl_KeyDown;
         }

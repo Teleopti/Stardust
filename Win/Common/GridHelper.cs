@@ -824,8 +824,6 @@ namespace Teleopti.Ccc.Win.Common
             gridControl.ActivateCurrentCellBehavior = GridCellActivateAction.DblClickOnCell;
             gridControl.ExcelLikeSelectionFrame = true;
             gridControl.ExcelLikeCurrentCell = true;
-            gridControl.Office2007ScrollBars = true;
-            gridControl.Office2007ScrollBarsColorScheme = Office2007ColorScheme.Managed;
             gridControl.SerializeCellsBehavior = GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
             gridControl.ThemesEnabled = true;
             gridControl.UseRightToLeftCompatibleTextBox = true;
