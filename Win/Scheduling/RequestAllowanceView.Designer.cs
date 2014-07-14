@@ -58,17 +58,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// ribbonControlAdv1
 			// 
+			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.HideMenuButtonToolTip = false;
-			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+			this.ribbonControlAdv1.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
+			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 1);
 			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
 			this.ribbonControlAdv1.MenuButtonEnabled = true;
 			this.ribbonControlAdv1.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.MenuButtonText = "";
 			this.ribbonControlAdv1.MenuButtonVisible = false;
+			this.ribbonControlAdv1.MenuButtonWidth = 56;
 			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
 			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
 			this.ribbonControlAdv1.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
+			this.ribbonControlAdv1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
 			// 
 			// ribbonControlAdv1.OfficeMenu
 			// 
@@ -78,13 +82,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.ribbonControlAdv1.QuickPanelVisible = false;
 			this.ribbonControlAdv1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
+			this.ribbonControlAdv1.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
 			this.ribbonControlAdv1.SelectedTab = null;
 			this.ribbonControlAdv1.Show2010CustomizeQuickItemDialog = false;
-			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = true;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(615, 33);
+			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = false;
+			this.ribbonControlAdv1.Size = new System.Drawing.Size(619, 33);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Startmenu";
 			this.ribbonControlAdv1.TabIndex = 1;
 			this.ribbonControlAdv1.Text = "xxViewAllowance";
+			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.Black;
 			// 
 			// gradientPanelBackground
@@ -94,9 +100,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.gradientPanelBackground.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanelBackground.Controls.Add(this.tableLayoutPanel);
 			this.gradientPanelBackground.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.gradientPanelBackground.Location = new System.Drawing.Point(6, 34);
+			this.gradientPanelBackground.Location = new System.Drawing.Point(1, 33);
 			this.gradientPanelBackground.Name = "gradientPanelBackground";
-			this.gradientPanelBackground.Size = new System.Drawing.Size(605, 220);
+			this.gradientPanelBackground.Size = new System.Drawing.Size(615, 227);
 			this.gradientPanelBackground.TabIndex = 4;
 			// 
 			// tableLayoutPanel
@@ -124,7 +130,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 160F));
-			this.tableLayoutPanel.Size = new System.Drawing.Size(605, 220);
+			this.tableLayoutPanel.Size = new System.Drawing.Size(615, 227);
 			this.tableLayoutPanel.TabIndex = 0;
 			// 
 			// buttonRefresh
@@ -220,22 +226,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// requestAllowanceGridControl
 			// 
 			this.requestAllowanceGridControl.ActivateCurrentCellBehavior = Syncfusion.Windows.Forms.Grid.GridCellActivateAction.DblClickOnCell;
+			this.requestAllowanceGridControl.AlphaBlendSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(94)))), ((int)(((byte)(171)))), ((int)(((byte)(222)))));
 			this.requestAllowanceGridControl.BackColor = System.Drawing.Color.White;
 			this.requestAllowanceGridControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tableLayoutPanel.SetColumnSpan(this.requestAllowanceGridControl, 5);
+			this.requestAllowanceGridControl.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
+			this.requestAllowanceGridControl.DefaultRowHeight = 20;
 			this.requestAllowanceGridControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.requestAllowanceGridControl.ExcelLikeCurrentCell = true;
 			this.requestAllowanceGridControl.ExcelLikeSelectionFrame = true;
-			this.requestAllowanceGridControl.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
-			this.requestAllowanceGridControl.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
+			this.requestAllowanceGridControl.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
+			this.requestAllowanceGridControl.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
 			this.requestAllowanceGridControl.HorizontalThumbTrack = true;
 			this.requestAllowanceGridControl.Location = new System.Drawing.Point(3, 58);
+			this.requestAllowanceGridControl.MetroScrollBars = true;
 			this.requestAllowanceGridControl.Name = "requestAllowanceGridControl";
 			this.requestAllowanceGridControl.Office2007ScrollBars = true;
 			this.requestAllowanceGridControl.Office2007ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2007ColorScheme.Managed;
 			this.requestAllowanceGridControl.Properties.BackgroundColor = System.Drawing.Color.White;
 			this.requestAllowanceGridControl.Properties.ForceImmediateRepaint = false;
-			this.requestAllowanceGridControl.Properties.GridLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+			this.requestAllowanceGridControl.Properties.GridLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(212)))));
 			this.requestAllowanceGridControl.Properties.MarkColHeader = false;
 			this.requestAllowanceGridControl.Properties.MarkRowHeader = false;
 			gridRangeStyle1.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cell(0, 1);
@@ -249,10 +259,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             gridRangeStyle2});
 			this.requestAllowanceGridControl.ResizeRowsBehavior = Syncfusion.Windows.Forms.Grid.GridResizeCellsBehavior.None;
 			this.requestAllowanceGridControl.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
-            new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
+            new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.requestAllowanceGridControl.SelectCellsMouseButtonsMask = System.Windows.Forms.MouseButtons.Left;
 			this.requestAllowanceGridControl.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.requestAllowanceGridControl.Size = new System.Drawing.Size(617, 159);
+			this.requestAllowanceGridControl.Size = new System.Drawing.Size(617, 166);
 			this.requestAllowanceGridControl.SmartSizeBox = false;
 			this.requestAllowanceGridControl.TabIndex = 3;
 			this.requestAllowanceGridControl.ThemesEnabled = true;
@@ -263,11 +273,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Borders = new System.Windows.Forms.Padding(0);
 			this.ClientSize = new System.Drawing.Size(617, 260);
+			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.Controls.Add(this.gradientPanelBackground);
 			this.Controls.Add(this.ribbonControlAdv1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(225, 38);
 			this.Name = "RequestAllowanceView";
+			this.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "xxViewAllowance";
 			this.Load += new System.EventHandler(this.requestAllowanceViewLoad);
