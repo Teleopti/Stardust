@@ -56,6 +56,10 @@ UPDATE TeleoptiAnalytics_Demo.dbo.aspnet_Users
 SET UserName=system_user,LoweredUserName=system_user
 WHERE userid=@userid
 
+--remove all personal settings
+--#28892 - Mattias, please fix correct delete here instead of truncate
+truncate table dbo.PersonalSettingData
+
 ----------------
 --Add agent statistics from Agg 4 week data
 ----------------
