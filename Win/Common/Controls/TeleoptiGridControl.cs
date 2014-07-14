@@ -103,6 +103,15 @@ namespace Teleopti.Ccc.Win.Common.Controls
 				GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
 				MetroScrollBars = true;
 				Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+
+			BaseStylesMap.Header.StyleInfo.Font.Bold = true;
+			BaseStylesMap.Header.StyleInfo.Font.Facename = "Segoe UI";
+			BaseStylesMap.Header.StyleInfo.Font.Italic = false;
+			BaseStylesMap.Header.StyleInfo.Font.Size = 8F;
+			BaseStylesMap.Header.StyleInfo.Font.Strikeout = false;
+			BaseStylesMap.Header.StyleInfo.Font.Underline = false;
+			BaseStylesMap.Header.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+
             ClipboardPaste += TeleoptiGridControl_ClipboardPaste;
             KeyDown += TeleoptiGridControl_KeyDown;
         }
