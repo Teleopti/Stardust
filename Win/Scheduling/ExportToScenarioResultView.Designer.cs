@@ -31,6 +31,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle1 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle2 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
@@ -63,7 +64,11 @@
 			// 
 			// btnOk
 			// 
-			this.btnOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.btnOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.btnOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.btnOk.BeforeTouchSize = new System.Drawing.Size(85, 24);
+			this.btnOk.ForeColor = System.Drawing.Color.White;
+			this.btnOk.IsBackStageButton = false;
 			this.btnOk.Location = new System.Drawing.Point(617, 534);
 			this.btnOk.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.btnOk.Name = "btnOk";
@@ -76,7 +81,11 @@
 			// 
 			// btnCancel
 			// 
-			this.btnCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.btnCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.btnCancel.BeforeTouchSize = new System.Drawing.Size(85, 24);
+			this.btnCancel.ForeColor = System.Drawing.Color.White;
+			this.btnCancel.IsBackStageButton = false;
 			this.btnCancel.Location = new System.Drawing.Point(717, 534);
 			this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.btnCancel.Name = "btnCancel";
@@ -237,6 +246,9 @@
 			this.gridControl1.Properties.ColHeaders = false;
 			this.gridControl1.Properties.DisplayHorzLines = false;
 			this.gridControl1.Properties.DisplayVertLines = false;
+			this.gridControl1.Properties.ForceImmediateRepaint = false;
+			this.gridControl1.Properties.MarkColHeader = false;
+			this.gridControl1.Properties.MarkRowHeader = false;
 			this.gridControl1.Properties.RowHeaders = false;
 			gridRangeStyle1.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
 			gridRangeStyle1.StyleInfo.Font.Bold = false;
@@ -335,6 +347,7 @@
 			// spinningProgressControl1
 			// 
 			this.spinningProgressControl1.AutoIncrementFrequency = 100D;
+			this.spinningProgressControl1.BehindTransitionSegmentIsActive = false;
 			this.spinningProgressControl1.Location = new System.Drawing.Point(8, 532);
 			this.spinningProgressControl1.MinimumSize = new System.Drawing.Size(20, 20);
 			this.spinningProgressControl1.Name = "spinningProgressControl1";
