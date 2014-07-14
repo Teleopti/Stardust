@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2.Controls.Add(this.elementHost1);
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2MinSize = 100;
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Size = new System.Drawing.Size(335, 417);
-			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.SplitterDistance = 316;
+			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.SplitterDistance = 310;
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.SplitterWidth = 3;
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.TabIndex = 2;
@@ -331,8 +331,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.teleoptiLessIntellegentSplitContainerView.Panel2.Controls.Add(this.elementHostRequests);
 			this.teleoptiLessIntellegentSplitContainerView.Panel2.MinimumSize = new System.Drawing.Size(30, 0);
 			this.teleoptiLessIntellegentSplitContainerView.Panel2MinSize = 0;
-			this.teleoptiLessIntellegentSplitContainerView.Size = new System.Drawing.Size(335, 316);
-			this.teleoptiLessIntellegentSplitContainerView.SplitterDistance = 45;
+			this.teleoptiLessIntellegentSplitContainerView.Size = new System.Drawing.Size(335, 310);
+			this.teleoptiLessIntellegentSplitContainerView.SplitterDistance = 44;
 			this.teleoptiLessIntellegentSplitContainerView.SplitterWidth = 3;
 			this.teleoptiLessIntellegentSplitContainerView.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
 			this.teleoptiLessIntellegentSplitContainerView.TabIndex = 0;
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tableLayoutPanelRestrictionSummery.Name = "tableLayoutPanelRestrictionSummery";
 			this.tableLayoutPanelRestrictionSummery.RowCount = 1;
 			this.tableLayoutPanelRestrictionSummery.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelRestrictionSummery.Size = new System.Drawing.Size(335, 45);
+			this.tableLayoutPanelRestrictionSummery.Size = new System.Drawing.Size(335, 44);
 			this.tableLayoutPanelRestrictionSummery.TabIndex = 1;
 			// 
 			// tableLayoutPanelRestrictionButtons
@@ -527,7 +527,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.grid.SelectCellsMouseButtonsMask = System.Windows.Forms.MouseButtons.Left;
 			this.grid.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
 			this.grid.ShowCurrentCellBorderBehavior = Syncfusion.Windows.Forms.Grid.GridShowCurrentCellBorder.AlwaysVisible;
-			this.grid.Size = new System.Drawing.Size(335, 268);
+			this.grid.Size = new System.Drawing.Size(335, 263);
 			this.grid.SmartSizeBox = false;
 			this.grid.TabIndex = 3;
 			this.grid.Text = "xxPeriodViewPROTOTYPE";
@@ -539,7 +539,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.elementHostRequests.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.elementHostRequests.Location = new System.Drawing.Point(0, 0);
 			this.elementHostRequests.Name = "elementHostRequests";
-			this.elementHostRequests.Size = new System.Drawing.Size(335, 268);
+			this.elementHostRequests.Size = new System.Drawing.Size(335, 263);
 			this.elementHostRequests.TabIndex = 5;
 			this.elementHostRequests.Child = this.handlePersonRequestView1;
 			// 
@@ -550,7 +550,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.elementHost1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.elementHost1.Location = new System.Drawing.Point(0, 0);
 			this.elementHost1.Name = "elementHost1";
-			this.elementHost1.Size = new System.Drawing.Size(335, 98);
+			this.elementHost1.Size = new System.Drawing.Size(335, 104);
 			this.elementHost1.TabIndex = 1;
 			this.elementHost1.Text = "elementHost1";
 			this.elementHost1.Child = this.multipleHostControl1;

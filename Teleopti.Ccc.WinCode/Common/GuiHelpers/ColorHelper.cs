@@ -551,11 +551,6 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
             get { return Color.DarkRed; }
         }
 
-        public static GridVisualStyles GridVisualStyle
-        {
-            get { return GridVisualStyles.Metro ; }
-        }
-
         public static Color ScheduleControlClickedItemBorder
         {
             get { return Color.DarkRed; }

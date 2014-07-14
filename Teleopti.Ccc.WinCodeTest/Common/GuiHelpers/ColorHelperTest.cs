@@ -90,7 +90,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.GuiHelpers
             Assert.IsNotNull(ColorHelper.OptionsDialogHeaderForeColor());
             Assert.IsNotNull(ColorHelper.GridControlSortingArrow);
             Assert.IsNotNull(ColorHelper.IntradayGridTimelineColor);
-            Assert.IsNotNull(ColorHelper.GridVisualStyle);
             Assert.IsNotNull(ColorHelper.ScheduleControlClickedItemBorder);
             Assert.IsNotNull(ColorHelper.AgentPortalScheduleCtrlVisualStyle);
             Font font = new Font("Arial", 10, FontStyle.Italic);

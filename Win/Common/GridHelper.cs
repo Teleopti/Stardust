@@ -820,7 +820,6 @@ namespace Teleopti.Ccc.Win.Common
 
         public static void GridStyle(GridControl gridControl)
         {
-            gridControl.GridVisualStyles = ColorHelper.GridVisualStyle;
             gridControl.ActivateCurrentCellBehavior = GridCellActivateAction.DblClickOnCell;
             gridControl.ExcelLikeSelectionFrame = true;
             gridControl.ExcelLikeCurrentCell = true;
@@ -835,6 +834,27 @@ namespace Teleopti.Ccc.Win.Common
             gridControl.Properties.MarkRowHeader = false;
             gridControl.Properties.MarkColHeader = false;
 	        gridControl.Properties.BackgroundColor = SystemColors.Window;
+
+			gridControl.GridOfficeScrollBars = OfficeScrollBars.Metro;
+			gridControl.GridVisualStyles = GridVisualStyles.Metro;
+			gridControl.MetroScrollBars = true;
+			gridControl.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+
+			gridControl.BaseStylesMap.Header.StyleInfo.Font.Bold = true;
+			gridControl.BaseStylesMap.Header.StyleInfo.Font.Facename = "Segoe UI";
+			gridControl.BaseStylesMap.Header.StyleInfo.Font.Italic = false;
+			gridControl.BaseStylesMap.Header.StyleInfo.Font.Size = 8F;
+			gridControl.BaseStylesMap.Header.StyleInfo.Font.Strikeout = false;
+			gridControl.BaseStylesMap.Header.StyleInfo.Font.Underline = false;
+			gridControl.BaseStylesMap.Header.StyleInfo.Font.Unit = GraphicsUnit.Point;
+
+			gridControl.BaseStylesMap.Standard.StyleInfo.Font.Bold = false;
+			gridControl.BaseStylesMap.Standard.StyleInfo.Font.Facename = "Segoe UI";
+			gridControl.BaseStylesMap.Standard.StyleInfo.Font.Italic = false;
+			gridControl.BaseStylesMap.Standard.StyleInfo.Font.Size = 8F;
+			gridControl.BaseStylesMap.Standard.StyleInfo.Font.Strikeout = false;
+			gridControl.BaseStylesMap.Standard.StyleInfo.Font.Underline = false;
+			gridControl.BaseStylesMap.Standard.StyleInfo.Font.Unit = GraphicsUnit.Point;
         }
 
         #endregion
