@@ -44,13 +44,15 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.UpdatedMessage = ko.observable();
 	self.Approve = function () {
 		self.CanApproveAndDeny(false);
-		if (!self.PersonFromAdded) {
-			self.Message(self.personFrom() + ": " + self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
-			self.PersonFromAdded = true;
-		} else {
-			self.Message(self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
+		if (self.UpdatedMessage() != undefined) {
+			if (!self.PersonFromAdded) {
+				self.Message(self.personFrom() + ": " + self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
+				self.PersonFromAdded = true;
+			} else {
+				self.Message(self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
+			}
 		}
-		
+
 		self.ajax.Ajax({
 			url: "Requests/ApproveShiftTrade/",
 			dataType: "json",
@@ -70,11 +72,13 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.Deny = function () {
 		self.CanApproveAndDeny(false);
 
-		if (!self.PersonFromAdded) {
-			self.Message(self.personFrom() + ": " + self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
-			self.PersonFromAdded = true;
-		} else {
-			self.Message(self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
+		if (self.UpdatedMessage() != undefined) {
+			if (!self.PersonFromAdded) {
+				self.Message(self.personFrom() + ": " + self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
+				self.PersonFromAdded = true;
+			} else {
+				self.Message(self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
+			}
 		}
 
 		self.ajax.Ajax({
