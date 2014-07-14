@@ -383,10 +383,10 @@ Scenario:  Should see the updated comment after approved
 	When I click on the existing request in the list
 	And I entered 'OK, you owe me a dinner' as comment
 	And I click the Approve button on the shift request
-	And I click on the existing request in the list
+	And I am viewing requests
 	Then I should see 'OK, you owe me a dinner' in message area
 	
-@ignore
+@OnlyRunIfEnabled('Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341')
 Scenario:  Should see the updated comment after denied
 	Given I have the role 'Full access to mytime'
 	And I have received a shift trade request
@@ -397,4 +397,5 @@ Scenario:  Should see the updated comment after denied
 	When I click on the existing request in the list
 	And I entered 'Sorry, not this time' as comment
 	And I click the Deny button on the shift request
+	And I am viewing requests
 	Then I should see 'Sorry, not this time' in message area

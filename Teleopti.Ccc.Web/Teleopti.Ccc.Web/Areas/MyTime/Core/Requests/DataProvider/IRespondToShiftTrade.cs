@@ -22,8 +22,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		/// Rejects the shifttrade request
 		/// </summary>
 		/// <param name="requestId">The id of the request</param>
+		/// <param name="message"></param>
 		/// <returns>An updated view model</returns>
-		RequestViewModel Deny(Guid requestId);
+		RequestViewModel Deny(Guid requestId, string message);
 
 		/// <summary>
 		/// Resends the shifttrade that has been referred

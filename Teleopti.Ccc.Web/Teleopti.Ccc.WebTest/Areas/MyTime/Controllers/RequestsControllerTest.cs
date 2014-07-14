@@ -300,11 +300,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var id = Guid.NewGuid();
 			var resultData = new RequestViewModel();
 			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();
-			shiftTradePersister.Expect(a => a.Deny(id)).Return(resultData);
+			shiftTradePersister.Expect(a => a.Deny(id, "")).Return(resultData);
 
 			using (var target = new RequestsController(null, null, null, null, shiftTradePersister, new FakePermissionProvider()))
 			{
-				var result = target.DenyShiftTrade(id);
+				var result = target.DenyShiftTrade(new ShiftTradeRequestReplyForm(){ID = id, Message = ""});
 				var data = result.Data as RequestViewModel;
 				data.Should().Be.SameInstanceAs(resultData);
 			}

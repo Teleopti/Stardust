@@ -49,14 +49,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
 
-		public RequestViewModel Deny(Guid requestId)
+		public RequestViewModel Deny(Guid requestId, string message)
 		{
 			var personRequest = _personRequestRepository.Find(requestId);
 			if (personRequest == null)
 			{
 				return new RequestViewModel();
 			}
-			personRequest.TrySetMessage(personRequest.GetMessage(new NoFormatting()));
+			personRequest.TrySetMessage(message);
 			personRequest.Deny(_loggedOnUser.CurrentUser(), "RequestDenyReasonOtherPart", _personRequestCheckAuthorization);
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);

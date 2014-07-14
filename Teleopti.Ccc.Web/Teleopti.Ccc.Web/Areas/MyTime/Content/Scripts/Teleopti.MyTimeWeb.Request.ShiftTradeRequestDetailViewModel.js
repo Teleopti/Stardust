@@ -69,10 +69,23 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 
 	self.Deny = function () {
 		self.CanApproveAndDeny(false);
+
+		if (!self.PersonFromAdded) {
+			self.Message(self.personFrom() + ": " + self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
+			self.PersonFromAdded = true;
+		} else {
+			self.Message(self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
+		}
+
 		self.ajax.Ajax({
-			url: "Requests/DenyShiftTrade/" + self.EntityId(),
+			url: "Requests/DenyShiftTrade/",
 			dataType: "json",
+			contentType: 'application/json; charset=utf-8',
 			type: "POST",
+			data: JSON.stringify({
+				ID: self.EntityId(),
+				Message: self.Message()
+			}),
 			success: function (data) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data,false);
 				self.CanApproveAndDeny(false);

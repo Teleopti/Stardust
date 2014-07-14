@@ -117,9 +117,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public JsonResult DenyShiftTrade(Guid id)
+		public JsonResult DenyShiftTrade(ShiftTradeRequestReplyForm form)
 		{
-			return Json(_respondToShiftTrade.Deny(id));
+			return Json(_respondToShiftTrade.Deny(form.ID, form.Message));
 		}
 
 		[UnitOfWorkAction]

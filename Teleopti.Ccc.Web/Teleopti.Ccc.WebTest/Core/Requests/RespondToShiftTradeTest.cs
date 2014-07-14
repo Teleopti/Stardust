@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			personRequest.Expect(p => p.TrySetMessage("message"));
 			mapper.Expect(m => m.Map<IPersonRequest, RequestViewModel>(personRequest)).Return(requestViewModel);
 
-			var result = target.Deny(shiftTradeId);
+			var result = target.Deny(shiftTradeId, "");
 
 			personRequest.AssertWasCalled(s => s.Deny(loggedOnPerson, "RequestDenyReasonOtherPart", personRequestCheckAuthorization));
 			result.Should().Be.SameInstanceAs(requestViewModel);
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			personRequestRepository.Expect(p => p.Find(id)).Return(null);
 			var target = new RespondToShiftTrade(personRequestRepository, null, null, null, null, null, null);
-			Assert.That(target.Deny(id), Is.Not.Null);
+			Assert.That(target.Deny(id, ""), Is.Not.Null);
 		}
 	}
 }

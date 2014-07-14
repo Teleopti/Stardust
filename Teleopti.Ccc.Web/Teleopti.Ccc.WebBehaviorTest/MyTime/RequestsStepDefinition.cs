@@ -242,6 +242,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see '(.*)' in message area")]
 		public void ThenIShouldSeeInMessageArea(string message)
 		{
+			Browser.Interactions.Click(".request-data-message");
 			Browser.Interactions.AssertAnyContains(".request-text", message);
 		}
 	}
