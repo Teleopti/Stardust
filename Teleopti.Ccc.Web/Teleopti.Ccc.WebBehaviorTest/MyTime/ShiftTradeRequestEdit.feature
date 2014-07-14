@@ -371,8 +371,8 @@ Scenario:  Should input comment when seeing a shift trade request from other age
 	When I click on the existing request in the list
 	Then I could edit message for the reason why I approve or deny this request
 
-@ignore
-Scenario:  Should see the updated comment after approved or denied
+@OnlyRunIfEnabled('Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341')
+Scenario:  Should see the updated comment after approved
 	Given I have the role 'Full access to mytime'
 	And I have received a shift trade request
 	| Field   | Value  |
@@ -380,6 +380,19 @@ Scenario:  Should see the updated comment after approved or denied
 	| Pending | True   |
 	And I am viewing requests
 	When I click on the existing request in the list
-	And I input 'Sorry, not this time' as comment
+	And I entered 'OK, you owe me a dinner' as comment
+	And I click the Approve button on the shift request
+	Then I should see 'OK, you owe me a dinner' in message area
+	
+@ignore
+Scenario:  Should see the updated comment after denied
+	Given I have the role 'Full access to mytime'
+	And I have received a shift trade request
+	| Field   | Value  |
+	| From    | Ashley |
+	| Pending | True   |
+	And I am viewing requests
+	When I click on the existing request in the list
+	And I entered 'Sorry, not this time' as comment
 	And I click the Deny button on the shift request
 	Then I should see 'Sorry, not this time' in message area

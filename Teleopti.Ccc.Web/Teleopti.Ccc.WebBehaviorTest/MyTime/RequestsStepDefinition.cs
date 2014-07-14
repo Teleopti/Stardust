@@ -233,5 +233,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists("#Request-detailed-shift-trade-message-input");
 		}
 
+		[When(@"I entered '(.*)' as comment")]
+		public void WhenIEnteredAsComment(string message)
+		{
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detailed-shift-trade-message-input", message);
+		}
+
+		[Then(@"I should see '(.*)' in message area")]
+		public void ThenIShouldSeeInMessageArea(string message)
+		{
+			Browser.Interactions.AssertAnyContains(".request-text", message);
+		}
 	}
 }
