@@ -57,8 +57,16 @@ SET UserName=system_user,LoweredUserName=system_user
 WHERE userid=@userid
 
 --remove all personal settings
---#28892 - Mattias, please fix correct delete here instead of truncate
-truncate table dbo.PersonalSettingData
+--#28892 - Mattias, please fix a correct delete here instead of truncate
+--truncate table dbo.PersonalSettingData
+
+--reverted back to previous .bak files
+--#29068 - keep Intraday settings for Demo installs
+delete from dbo.PersonalSettingData
+where [key] not in (
+	'IntradaySettings'
+	)
+
 
 ----------------
 --Add agent statistics from Agg 4 week data
