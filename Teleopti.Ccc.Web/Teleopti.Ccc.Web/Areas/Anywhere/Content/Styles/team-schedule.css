@@ -200,3 +200,6 @@ sh
 	vertical-align: middle !important;
 }
 
+#date-picker {
+    width: 360px;
+}
