@@ -26,7 +26,15 @@ SET UserName=system_user,LoweredUserName=system_user
 WHERE userid=@userid
 
 --flush old RTA AcutalAgentState, else report can't handle seconds more than 24 hours
-TRUNCATE TABLE TeleoptiAnalytics_Demo.rta.ActualAgentState  
+TRUNCATE TABLE TeleoptiAnalytics_Demo.rta.ActualAgentState
+
+--reverted back to previous .bak files
+--#29068 - keep Intraday settings for Demo installs
+delete from TeleoptiApp_Demo.dbo.PersonalSettingData
+where [key] not in (
+	'IntradaySettings'
+	)
+
 
 ----------------
 --Add agent statistics from Agg 4 week data
