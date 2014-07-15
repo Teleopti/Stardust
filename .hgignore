@@ -74,4 +74,5 @@ nunit*.xml
 Teleopti.Support.Code/settings.txt
 ccnet/InfraTest.ini
 Teleopti.Support.Code/ConfigFiles/BuildServerConfigFiles.txt
+Cube/Xmla/CreateDatabase.xmla
 [lL]icense.xml

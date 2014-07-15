@@ -187,6 +187,7 @@ Try
     Add-Content "$fullPathsettingsFile" "`$(AS_SERVER_NAME)|NotImplemented"
 	Add-Content "$fullPathsettingsFile" "`$(DATASOURCE_NAME)|$DataSourceName"
     Add-Content "$fullPathsettingsFile" "`$(LOCAL_WIKI)|http://wiki.teleopti.com/TeleoptiCCC/Special:MyLanguage/"
+    Add-Content "$fullPathsettingsFile" "`$(ETLPM_BINDING_NAME)|Etl_Pm_Https_Binding"	
 	Add-Content "$fullPathsettingsFile" "`$(Url)|https://$DataSourceName.teleopticloud.com/Web/"
     Add-Content "$fullPathsettingsFile" "`$(DEFAULT_IDENTITY_PROVIDER)|Teleopti"
     Add-Content "$fullPathsettingsFile" "`$(WindowsClaimProvider)|"
