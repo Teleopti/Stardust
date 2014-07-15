@@ -392,7 +392,22 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function (chooseHistory, can
 	self.selectedDate = ko.observable(chooseHistory.date);
 	self.timeLineStartTime = ko.observable();
 	self.timeLineLengthInMinutes = ko.observable();
-	self.canvasPixelWidth = ko.observable(canvasPixelWidth);
+	self.pixelWidth = ko.observable(canvasPixelWidth);
+	self.canvasPixelWidth = ko.computed({
+		read:function() {
+			return self.pixelWidth();
+		},
+		write: function(width) {
+			var canvasWidth;
+			if (width != null) {
+				canvasWidth = width;
+			} else 
+			{
+				canvasWidth = $("td.the-other-agent-schedule").width();
+			}
+			self.pixelWidth(canvasWidth);
+		}
+	});
 
 
 	self.setTimeLineLengthInMinutes = function (firstHour, lastHour) {
