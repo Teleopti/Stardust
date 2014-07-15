@@ -241,6 +241,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			self.chooseAgent(null);
 			self.chooseHistorys.removeAll();
 			self.selectedInternal(false);
+			if (self.subject() != undefined) {
+				self.subject("");
+			}
+			if (self.message() != undefined) {
+				self.message("");
+			}
 		};
 
 		self._createTimeLine = function (hours) {
@@ -549,11 +555,17 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				vm.featureCheck();
 				ko.applyBindings(vm, elementToBind);
 			}
+			if (vm.subject() != undefined) {
+				vm.subject("");
+			}
+			if (vm.message() != undefined) {
+				vm.message("");
+			}
 			vm.chooseAgent(null);
 			_setWeekStart(vm);
 		}
 
-		$(window).resize(function () {
+		$(window).resize(function() {
 			_redrawLayers();
 		});
 	}
