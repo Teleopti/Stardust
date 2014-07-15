@@ -43,9 +43,16 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 		public event Action Closed;
 		public event Action Reconnected;
 		public event Action<Exception> Error;
+
 		public IHubProxyWrapper CreateHubProxy(string hubName)
 		{
 			return _proxy;
+		}
+
+		public void DummyToKeepBuildsHappy()
+		{
+			Reconnected();
+			Error(new Exception());
 		}
 	}
 }
