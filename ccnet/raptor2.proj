@@ -4,7 +4,7 @@
 
 	<PropertyGroup>
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
-		<MSBuildCommunityTasksPath>$(CCNetWorkingDirectory)\.nuget\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
+		<MSBuildCommunityTasksPath>$(CCNetWorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
 		<DBNamePrefix>$(CCNetProject)</DBNamePrefix>
 		<AzureDBNamePrefix>$(Computername)_$(CCNetProject)</AzureDBNamePrefix>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
