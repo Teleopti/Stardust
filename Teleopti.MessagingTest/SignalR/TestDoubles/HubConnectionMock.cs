@@ -19,7 +19,7 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 		public ConnectionState State { get { return ConnectionState.Connected; } }
 		public ICredentials Credentials { get; set; }
 
-		public int NumberOfTimesStartWasCalled { get; set; }
+		public int NumberOfTimesStartWithTransportWasCalled { get; set; }
 		public Task Start()
 		{
 			return TaskHelper.MakeDoneTask();
@@ -27,7 +27,7 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 
 		public Task Start(IClientTransport transport)
 		{
-			NumberOfTimesStartWasCalled++;
+			NumberOfTimesStartWithTransportWasCalled++;
 			return TaskHelper.MakeDoneTask();
 		}
 

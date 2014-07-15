@@ -1,5 +1,6 @@
 using System;
 using log4net;
+using Microsoft.AspNet.SignalR.Client.Transports;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Messaging.SignalR
@@ -39,7 +40,17 @@ namespace Teleopti.Messaging.SignalR
 				{	
 					Logger.Warn("Ping not responding, recreating connection...");
 					recreateConnection();
-					stateAccessor.WithConnection(c => c.Start());
+					stateAccessor.WithConnection(c =>
+					{
+						if (useLongPolling)
+						{
+							c.Start(new LongPollingTransport());
+						}
+						else
+						{
+							c.Start();
+						}
+					});
 					initializePing(stateAccessor);
 					_nextPingTime = _time.UtcDateTime().Add(_pingInterval);
 					Logger.Warn("Connection recreated");

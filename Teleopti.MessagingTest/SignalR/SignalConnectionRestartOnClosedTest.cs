@@ -102,7 +102,7 @@ namespace Teleopti.MessagingTest.SignalR
 			hubConnection.RaiseClosedEvent();
 			time.Passes(TimeSpan.FromMinutes(5));
 
-			hubConnection.NumberOfTimesStartWasCalled.Should().Be.EqualTo(2);
+			hubConnection.NumberOfTimesStartWithTransportWasCalled.Should().Be.EqualTo(2);
 		}
 
 	}
