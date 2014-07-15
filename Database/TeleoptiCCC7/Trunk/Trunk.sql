@@ -221,16 +221,16 @@ GO
 --Desc: Add new table for agent badges
 ----------------  
 
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AgentBadges]') AND type in (N'U'))
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AgentBadge]') AND type in (N'U'))
 
-CREATE TABLE [dbo].[AgentBadges](
-	[PeronId] [uniqueidentifier] NOT NULL,
-	[BronzeBadges] [int] NOT NULL,
-	[SilverBadges] [int] NOT NULL,
-	[GoldenBadges] [int] NOT NULL,
- CONSTRAINT [PK_AgentBadges] PRIMARY KEY CLUSTERED 
+CREATE TABLE [dbo].[AgentBadge](
+	[PersonId] [uniqueidentifier] NOT NULL,
+	[BronzeBadge] [int] NOT NULL,
+	[SilverBadge] [int] NOT NULL,
+	[GoldenBadge] [int] NOT NULL,
+ CONSTRAINT [PK_AgentBadge] PRIMARY KEY CLUSTERED 
 (
-	[PeronId] ASC
+	[PersonId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 

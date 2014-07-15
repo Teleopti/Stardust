@@ -260,7 +260,6 @@
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\AgentBadge.cs" />
-    <Compile Include="Common\BadgeType.cs" />
     <Compile Include="Common\PersonAccountUpdater.cs" />
     <Compile Include="Common\PersonAccountUpdaterDummy.cs" />
     <Compile Include="Common\CurrentBusinessUnit.cs" />
@@ -2032,6 +2031,7 @@
     <Folder Include="Analyzer\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Common\AgentBadge.hbm.xml" />
     <Content Include="FeatureFlags\toggles.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
