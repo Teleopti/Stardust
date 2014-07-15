@@ -587,7 +587,7 @@ select.time-input
 .rtl header .floatright{float: right;}
 
 /*** Views ***/
-.rtl .weekdays{padding-left: 0; padding-right: 40px;}
+.rtl .weekdays{padding-left: 0;}
 .rtl .body-calendarview{background: url("../Images/view_repeater_wide_bg.png") repeat-y scroll -966px bottom #F8F8F8;}
 
 .rtl .body-calendarview-inner{background: url("../Images/view_top_wide_bg.png") no-repeat scroll -966px 0px transparent;}

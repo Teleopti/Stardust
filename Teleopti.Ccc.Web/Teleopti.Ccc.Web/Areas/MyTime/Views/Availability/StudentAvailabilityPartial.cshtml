@@ -99,10 +99,9 @@
 			@foreach (var week in Model.Weeks)
    {
 				<ul class="calendarview-week" onselectstart="return false;">
-					<li>
+					<li style="height: 0">
 						<div>
-							<span>@week.Summary.MinWorkTime</span>
-							<span>@week.Summary.MaxWorkTime</span>
+							
 						</div>
 					</li>
 					@foreach (var day in week.Days)
