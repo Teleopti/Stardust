@@ -71,41 +71,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			// 
 			// perShiftCategoryChart1
 			// 
-			this.perShiftCategoryChart1.BackInterior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(237)))), ((int)(((byte)(254))))), System.Drawing.Color.FromArgb(((int)(((byte)(177)))), ((int)(((byte)(204)))), ((int)(((byte)(234))))));
-			this.perShiftCategoryChart1.ChartArea.BackInterior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.Transparent, System.Drawing.Color.Transparent);
-			this.perShiftCategoryChart1.ChartArea.CursorLocation = new System.Drawing.Point(0, 0);
-			this.perShiftCategoryChart1.ChartArea.CursorReDraw = false;
-			this.perShiftCategoryChart1.ChartAreaMargins = new Syncfusion.Windows.Forms.Chart.ChartMargins(5, 5, 5, 5);
-			this.perShiftCategoryChart1.ChartInterior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(194)))), ((int)(((byte)(229))))), System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(236)))), ((int)(((byte)(250))))));
-			this.perShiftCategoryChart1.DataSourceName = "";
-			this.perShiftCategoryChart1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.perShiftCategoryChart1.ElementsSpacing = 1;
-			this.perShiftCategoryChart1.IsWindowLess = false;
-			// 
-			// 
-			// 
-			this.perShiftCategoryChart1.Legend.Location = new System.Drawing.Point(166, 43);
-			this.perShiftCategoryChart1.Localize = null;
-			this.perShiftCategoryChart1.Location = new System.Drawing.Point(3, 63);
-			this.perShiftCategoryChart1.Name = "perShiftCategoryChart1";
-			this.perShiftCategoryChart1.PrimaryXAxis.Crossing = double.NaN;
-			this.perShiftCategoryChart1.PrimaryXAxis.DrawGrid = false;
-			this.perShiftCategoryChart1.PrimaryXAxis.ForceZero = true;
-			this.perShiftCategoryChart1.PrimaryXAxis.LabelIntersectAction = Syncfusion.Windows.Forms.Chart.ChartLabelIntersectAction.Rotate;
-			this.perShiftCategoryChart1.PrimaryXAxis.Margin = true;
-			this.perShiftCategoryChart1.PrimaryXAxis.RangePaddingType = Syncfusion.Windows.Forms.Chart.ChartAxisRangePaddingType.None;
-			this.perShiftCategoryChart1.PrimaryYAxis.Crossing = double.NaN;
-			this.perShiftCategoryChart1.PrimaryYAxis.ForceZero = true;
-			this.perShiftCategoryChart1.PrimaryYAxis.Margin = true;
-			this.perShiftCategoryChart1.Size = new System.Drawing.Size(252, 201);
-			this.perShiftCategoryChart1.TabIndex = 16;
-			this.perShiftCategoryChart1.Text = "xxDistribution";
-			this.perShiftCategoryChart1.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-			// 
-			// 
-			// 
-			this.perShiftCategoryChart1.Title.Name = "Default";
-			this.perShiftCategoryChart1.Titles.Add(this.perShiftCategoryChart1.Title);
+
 			// 
 			// label1
 			// 

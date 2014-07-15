@@ -160,7 +160,7 @@
 			// 
 			// tabControlTopLevel
 			// 
-			this.tabControlTopLevel.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+	        this.tabControlTopLevel.ActiveTabColor = System.Drawing.Color.DarkGray;
 			this.tabControlTopLevel.BeforeTouchSize = new System.Drawing.Size(440, 484);
 			this.tabControlTopLevel.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlTopLevel.Controls.Add(this.tabPageGeneral);

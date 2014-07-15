@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			// 
 			// tabControlShiftCategoryDistribution
 			// 
-			this.tabControlShiftCategoryDistribution.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+			this.tabControlShiftCategoryDistribution.ActiveTabColor = System.Drawing.Color.DarkGray;
 			this.tabControlShiftCategoryDistribution.BeforeTouchSize = new System.Drawing.Size(352, 530);
 			this.tabControlShiftCategoryDistribution.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlShiftCategoryDistribution.Controls.Add(this.tabPagePerDate);

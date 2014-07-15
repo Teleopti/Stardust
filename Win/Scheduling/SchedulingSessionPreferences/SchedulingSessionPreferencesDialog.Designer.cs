@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			// 
 			// tabControlTopLevel
 			// 
-			this.tabControlTopLevel.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+			this.tabControlTopLevel.ActiveTabColor = System.Drawing.Color.DarkGray;
 			this.tabControlTopLevel.BeforeTouchSize = new System.Drawing.Size(451, 514);
 			this.tabControlTopLevel.Controls.Add(this.tabPageSchedulingOptions);
 			this.tabControlTopLevel.Controls.Add(this.tabPageDayOffPlanningOptions);
@@ -211,11 +211,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			this.tabPageDayOffPlanningOptions.Image = null;
 			this.tabPageDayOffPlanningOptions.ImageIndex = 1;
 			this.tabPageDayOffPlanningOptions.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageDayOffPlanningOptions.Location = new System.Drawing.Point(1, 25);
+			this.tabPageDayOffPlanningOptions.Location = new System.Drawing.Point(1, 22);
 			this.tabPageDayOffPlanningOptions.Name = "tabPageDayOffPlanningOptions";
 			this.tabPageDayOffPlanningOptions.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageDayOffPlanningOptions.ShowCloseButton = true;
-			this.tabPageDayOffPlanningOptions.Size = new System.Drawing.Size(448, 487);
+			this.tabPageDayOffPlanningOptions.Size = new System.Drawing.Size(448, 490);
 			this.tabPageDayOffPlanningOptions.TabIndex = 1;
 			this.tabPageDayOffPlanningOptions.Text = "xxDayOffPlannerOptions";
 			this.tabPageDayOffPlanningOptions.ThemesEnabled = false;
@@ -223,12 +223,13 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			// dayOffPreferencesPanel1
 			// 
 			this.dayOffPreferencesPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dayOffPreferencesPanel1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;
 			this.dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
 			this.dayOffPreferencesPanel1.Location = new System.Drawing.Point(3, 3);
 			this.dayOffPreferencesPanel1.Margin = new System.Windows.Forms.Padding(4);
 			this.dayOffPreferencesPanel1.Name = "dayOffPreferencesPanel1";
-			this.dayOffPreferencesPanel1.Size = new System.Drawing.Size(442, 481);
+			this.dayOffPreferencesPanel1.Size = new System.Drawing.Size(442, 484);
 			this.dayOffPreferencesPanel1.TabIndex = 5;
 			this.dayOffPreferencesPanel1.StatusChanged += new System.EventHandler<System.EventArgs>(this.dayOffPreferencesPanel1_StatusChanged);
 			// 

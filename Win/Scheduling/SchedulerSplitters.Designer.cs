@@ -226,6 +226,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			chartSeries1.Type = Syncfusion.Windows.Forms.Chart.ChartSeriesType.Line;
 			this.chartControlSkillData.Series.Add(chartSeries1);
 			this.chartControlSkillData.Size = new System.Drawing.Size(335, 127);
+			this.chartControlSkillData.Skins = Syncfusion.Windows.Forms.Chart.Skins.Metro;
 			this.chartControlSkillData.TabIndex = 1;
 			this.chartControlSkillData.Text = "Skill";
 			// 
@@ -628,7 +629,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// tabInfoPanels
 			// 
-			this.tabInfoPanels.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+			this.tabInfoPanels.ActiveTabColor = System.Drawing.Color.DarkGray;
 			this.tabInfoPanels.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabInfoPanels.BeforeTouchSize = new System.Drawing.Size(434, 672);
 			this.tabInfoPanels.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -648,6 +649,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// tabPageAdvAgentInfo
 			// 
+			this.tabPageAdvAgentInfo.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.tabPageAdvAgentInfo.Image = null;
 			this.tabPageAdvAgentInfo.ImageSize = new System.Drawing.Size(16, 16);
 			this.tabPageAdvAgentInfo.Location = new System.Drawing.Point(0, 21);

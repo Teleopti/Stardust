@@ -12,16 +12,16 @@
       <Value Profile="(Default)">216, 228, 246</Value>
     </Setting>
     <Setting Name="ChartInteriorBackColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">223, 236, 250</Value>
+      <Value Profile="(Default)">255, 192, 192</Value>
     </Setting>
     <Setting Name="ChartInteriorForeColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">165, 194, 229</Value>
+      <Value Profile="(Default)">255, 224, 192</Value>
     </Setting>
     <Setting Name="ChartControlBackInteriorForeColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">223, 237, 254</Value>
+      <Value Profile="(Default)">White</Value>
     </Setting>
     <Setting Name="ChartControlBackInteriorBackColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">177, 204, 234</Value>
+      <Value Profile="(Default)">White</Value>
     </Setting>
     <Setting Name="ChartAreaBackInteriorForeColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Transparent</Value>
@@ -30,13 +30,13 @@
       <Value Profile="(Default)">Transparent</Value>
     </Setting>
     <Setting Name="ChartControlChartInteriorForeColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">165, 194, 229</Value>
+      <Value Profile="(Default)">White</Value>
     </Setting>
     <Setting Name="ChartControlChartInteriorBackColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">223, 236, 250</Value>
+      <Value Profile="(Default)">White</Value>
     </Setting>
     <Setting Name="ChartControlBackColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">177, 204, 234</Value>
+      <Value Profile="(Default)">White</Value>
     </Setting>
     <Setting Name="RibbonContextTabColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">180, 226, 255</Value>
