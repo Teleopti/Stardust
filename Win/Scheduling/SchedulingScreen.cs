@@ -833,7 +833,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Application.DoEvents();
 			loadQuickAccessState();
 			disableAllExceptCancelInRibbon();
-			toolStripStatusLabelStatus.Text = Resources.LoadingThreeDots;
+			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXLoadingThreeDots");
 
 			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
 			{
@@ -1158,7 +1158,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		// have to use Application.DoEvents(); here. Else the loop will continue for ever
 		private void cancelAllBackgroundWorkers()
 		{
-			toolStripStatusLabelStatus.Text = Resources.CancellingThreeDots;
+			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXCancellingThreeDots");
 
 			cancelBackgroundWorker(_backgroundWorkerValidatePersons);
 			cancelBackgroundWorker(_backgroundWorkerResourceCalculator);
@@ -1322,10 +1322,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
 			var setTagCommand = new SetTagCommand(_undoRedo, gridSchedulesExtractor, _scheduleView.Presenter, _scheduleView, scheduleTag, LockManager);
 			_backgroundWorkerRunning = true;
-			toolStripStatusLabelStatus.Text = Resources.ScheduleTags;
+			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXScheduleTags");
 			statusStrip1.Refresh();
 			setTagCommand.Execute();
-			toolStripStatusLabelStatus.Text = Resources.Ready;
+			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReady");
 			statusStrip1.Refresh();
 			_backgroundWorkerRunning = false;
 			updateSelectionInfo(gridSchedulesExtractor.ExtractSelected());
@@ -1906,7 +1906,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripProgressBar1.Value = 0;
 
 			toolStripProgressBar1.Visible = true;
-			toolStripStatusLabelStatus.Text = Resources.CalculatingResourcesDotDotDot;
+			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot");
 
 			_backgroundWorkerResourceCalculator.WorkerReportsProgress = true;
 			_backgroundWorkerRunning = true;
@@ -1928,11 +1928,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripProgressBar1.Visible = false;
 			if (e.Cancelled)
 			{
-				toolStripStatusLabelStatus.Text = Resources.Cancel;
+				toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXCancel");
 				releaseUserInterface(e.Cancelled);
 				return;
 			}
-			toolStripStatusLabelStatus.Text = Resources.Ready;
+			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReady");
 
 			if (_personsToValidate.IsEmpty())
 			{
@@ -1968,7 +1968,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_backgroundWorkerRunning) return;
 			disableAllExceptCancelInRibbon();
-			toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, Resources.ValidatingPersons, _personsToValidate.Count);
+			toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, LanguageResourceHelper.Translate("XXValidatingPersons"), _personsToValidate.Count);
 			_backgroundWorkerRunning = true;
 			_backgroundWorkerValidatePersons.RunWorkerAsync();
 			Application.DoEvents();
@@ -2232,7 +2232,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (schedulerSplitters1.PinnedPage != null)
 				schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
-			toolStripStatusLabelStatus.Text = Resources.ReadyThreeDots;
+			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReadyThreeDots");
 
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
 			{
@@ -2515,7 +2515,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_grid.Refresh();
 			if (e.Cancelled)
 			{
-				toolStripStatusLabelStatus.Text = Resources.Cancel;
+				toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXCancel");
 				releaseUserInterface(e.Cancelled);
 				return;
 			}
@@ -2544,7 +2544,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var list = _scheduleView.DeleteList(clipHandler, deleteOption);
                 IGridlockRemoverForDelete gridlockRemoverForDelete = new GridlockRemoverForDelete(_gridLockManager);
                 list = gridlockRemoverForDelete.RemoveLocked(list);
-                toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, Resources.DeletingSchedules, list.Count);
+                toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, LanguageResourceHelper.Translate("XXDeletingSchedules"), list.Count);
 
                 Cursor = Cursors.WaitCursor;
                 _backgroundWorkerDelete.WorkerReportsProgress = true;
@@ -2743,7 +2743,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_selectedPeriod = new DateTimePeriod(DateTime.MinValue, DateTime.MaxValue);
 			}
 
-			toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingDays, selectedScheduleCount);
+			toolStripStatusLabelStatus.Text = string.Format(CultureInfo.CurrentCulture, LanguageResourceHelper.Translate("XXSchedulingDays"), selectedScheduleCount);
 			Cursor = Cursors.WaitCursor;
 			disableAllExceptCancelInRibbon();
 			if (showProgressBar)
@@ -2892,7 +2892,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (_totalScheduled > toolStripProgressBar1.Maximum) _totalScheduled = toolStripProgressBar1.Maximum;
 			}
 
-			string statusText = string.Format(CultureInfo.CurrentCulture, Resources.SchedulingProgress, _totalScheduled, toolStripProgressBar1.Maximum);
+			string statusText = string.Format(CultureInfo.CurrentCulture, LanguageResourceHelper.Translate("XXSchedulingProgress"), _totalScheduled, toolStripProgressBar1.Maximum);
 			toolStripStatusLabelStatus.Text = statusText;
 			_grid.Invalidate();
 			refreshSummarySkillIfActive();
@@ -2975,10 +2975,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = false;
 				if (canceled)
 				{
-					toolStripStatusLabelStatus.Text = Resources.Cancel;
+					toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXCancel");
 					return;
 				}
-				toolStripStatusLabelStatus.Text = Resources.Ready;
+				toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReady");
 				if (_schedulerState.SchedulingResultState.SkipResourceCalculation)
 					statusStrip1.BackColor = Color.Salmon;
 				ResumeLayout(true);

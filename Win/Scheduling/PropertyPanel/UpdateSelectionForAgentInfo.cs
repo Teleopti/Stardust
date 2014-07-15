@@ -72,19 +72,19 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                     switch (scheduleTimeType)
                     {
                         case ScheduleTimeType.ContractTime:
-                            label = Resources.ContractScheduledTime;
+                            label = LanguageResourceHelper.Translate("XXContractScheduledTime");
                             break;
 
                         case ScheduleTimeType.WorkTime:
-                            label = Resources.WorkTime;
+                            label = LanguageResourceHelper.Translate("XXWorkTime");
                             break;
 
                         case ScheduleTimeType.PaidTime:
-                            label = Resources.PaidTime;
+                            label = LanguageResourceHelper.Translate("XXPaidTime");
                             break;
 
                         case ScheduleTimeType.OverTime:
-                            label = Resources.Overtime;
+                            label = LanguageResourceHelper.Translate("XXOvertime");
                             break;
                     }
                     _statusLabelTime.Text = string.Concat(label, ": ", DateHelper.HourMinutesString(totalTime.TotalMinutes));
@@ -106,7 +106,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                         if (counter != selectedTags.Count) selectedTagsText = string.Concat(selectedTagsText, ", ");
                     }
 
-                    _statusLabelTag.Text = string.Concat(Resources.ScheduleTagColon, " ", selectedTagsText);
+					var tagLabel = LanguageResourceHelper.Translate("XXScheduleTagColon");
+					_statusLabelTag.Text = string.Concat(tagLabel, " ", selectedTagsText);
 
                 }
             }
