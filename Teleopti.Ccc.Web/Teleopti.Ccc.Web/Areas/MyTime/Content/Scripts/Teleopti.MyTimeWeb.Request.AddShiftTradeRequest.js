@@ -96,7 +96,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			};
 			var scheduleStartTime;
 			var tradedScheduleModel;
-
+			if (self.selectedInternal()) {
+				return;
+			}
 			$.each(self.possibleTradeSchedules(), function (index, schedule) {
 				if (self.agentChoosed().agentName == schedule.agentName) {
 					if (self.mySchedule().isDayOff && !schedule.isDayOff) {
@@ -223,6 +225,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			}
 			self.agentChoosed(agent);
 			self.errorMessage('');
+			if (self.isTradeForMultiDaysEnabled() && agent != null) {
+				self.add();
+			}
 		};
 
 		self.sendRequest = function () {
