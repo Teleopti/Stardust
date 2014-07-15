@@ -214,3 +214,24 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
+
+
+--Name: Xinfeng, Erik
+--Date: 2014-07-15  
+--Desc: Add new table for agent badges
+----------------  
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AgentBadges]') AND type in (N'U'))
+
+CREATE TABLE [dbo].[AgentBadges](
+	[PeronId] [uniqueidentifier] NOT NULL,
+	[BronzeBadges] [int] NOT NULL,
+	[SilverBadges] [int] NOT NULL,
+	[GoldenBadges] [int] NOT NULL,
+ CONSTRAINT [PK_AgentBadges] PRIMARY KEY CLUSTERED 
+(
+	[PeronId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO

@@ -147,6 +147,12 @@
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
+    <Compile Include="MyTime\AgentBadge.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AgentBadge.feature</DependentUpon>
+    </Compile>
+    <Compile Include="MyTime\AgentBageStepDefinition.cs" />
     <Compile Include="MyTime\PreferenceAlertWhenBrokenMinOrMaxHoursStepDefinition.cs" />
     <Compile Include="MyTime\MyReportAgentQueueMetrics.feature.cs">
       <AutoGen>True</AutoGen>
@@ -799,6 +805,10 @@
     <None Include="Anywhere\ViewDaysOff.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewDaysOff.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\AgentBadge.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AgentBadge.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\MyReportAgentQueueMetrics.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
