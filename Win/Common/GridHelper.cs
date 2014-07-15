@@ -847,6 +847,7 @@ namespace Teleopti.Ccc.Win.Common
 			gridControl.BaseStylesMap.Header.StyleInfo.Font.Strikeout = false;
 			gridControl.BaseStylesMap.Header.StyleInfo.Font.Underline = false;
 			gridControl.BaseStylesMap.Header.StyleInfo.Font.Unit = GraphicsUnit.Point;
+			gridControl.BaseStylesMap.Header.StyleInfo.TextColor = Color.Black;
 
 			gridControl.BaseStylesMap.Standard.StyleInfo.Font.Bold = false;
 			gridControl.BaseStylesMap.Standard.StyleInfo.Font.Facename = "Segoe UI";
@@ -855,6 +856,7 @@ namespace Teleopti.Ccc.Win.Common
 			gridControl.BaseStylesMap.Standard.StyleInfo.Font.Strikeout = false;
 			gridControl.BaseStylesMap.Standard.StyleInfo.Font.Underline = false;
 			gridControl.BaseStylesMap.Standard.StyleInfo.Font.Unit = GraphicsUnit.Point;
+			gridControl.BaseStylesMap.Standard.StyleInfo.TextColor = Color.Black;
         }
 
         #endregion

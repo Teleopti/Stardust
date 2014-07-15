@@ -110,7 +110,10 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			BaseStylesMap.Header.StyleInfo.Font.Size = 8F;
 			BaseStylesMap.Header.StyleInfo.Font.Strikeout = false;
 			BaseStylesMap.Header.StyleInfo.Font.Underline = false;
-			BaseStylesMap.Header.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			BaseStylesMap.Header.StyleInfo.Font.Unit = GraphicsUnit.Point;
+	        BaseStylesMap.Header.StyleInfo.TextColor = Color.Black;
+
+			BaseStylesMap.Standard.StyleInfo.TextColor = Color.Black;
 
             ClipboardPaste += TeleoptiGridControl_ClipboardPaste;
             KeyDown += TeleoptiGridControl_KeyDown;
