@@ -372,7 +372,6 @@ Scenario:  Should input comment when seeing a shift trade request from other age
 	Then I could edit message for the reason why I approve or deny this request
 
 #@OnlyRunIfEnabled('Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341')
-@ignore
 Scenario:  Should see the updated comment after approved
 	Given I have the role 'Full access to mytime'
 	And I have received a shift trade request
