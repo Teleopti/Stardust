@@ -17,56 +17,6 @@ using IContainer = System.ComponentModel.IContainer;
 
 namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 {
-	public class AgentDisplayRowEventArgs : EventArgs
-	{
-		private readonly AgentRestrictionsDisplayRow _agentDisplayRow;
-		private readonly bool _moveToDate;
-		private readonly bool _updateShiftEditor;
-
-		public AgentDisplayRowEventArgs(AgentRestrictionsDisplayRow agentRestrictionsDisplayRow, bool moveToDate, bool updateShiftEditor)
-		{
-			_agentDisplayRow = agentRestrictionsDisplayRow;
-			_moveToDate = moveToDate;
-			_updateShiftEditor = updateShiftEditor;
-		}
-
-		public AgentRestrictionsDisplayRow AgentRestrictionsDisplayRow
-		{
-			get { return _agentDisplayRow; }
-		}
-
-		public bool MoveToDate
-		{
-			get { return _moveToDate; }
-		}
-
-		public bool UpdateShiftEditor
-		{
-			get { return _updateShiftEditor; }
-		}
-	}
-
-	internal class PersonsToLoad
-	{
-		private readonly ICollection<IPerson> _personsToLoad;
-
-		public PersonsToLoad()
-		{
-			_personsToLoad = new Collection<IPerson>();	
-		}
-		
-		public void AddPerson(IPerson person)
-		{
-			_personsToLoad.Add(person);	
-		}
-
-		public bool Contains(IPerson person)
-		{
-			return _personsToLoad.Contains(person);
-		}
-	}
-
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public partial class AgentRestrictionGrid : GridControl, IAgentRestrictionsView, IHelpContext
 	{
 		private AgentRestrictionsPresenter _presenter;
@@ -444,4 +394,54 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			get { return (AgentRestrictionsDisplayRow)_currentDisplayRow; }
 		}
 	}
+
+	public class AgentDisplayRowEventArgs : EventArgs
+	{
+		private readonly AgentRestrictionsDisplayRow _agentDisplayRow;
+		private readonly bool _moveToDate;
+		private readonly bool _updateShiftEditor;
+
+		public AgentDisplayRowEventArgs(AgentRestrictionsDisplayRow agentRestrictionsDisplayRow, bool moveToDate, bool updateShiftEditor)
+		{
+			_agentDisplayRow = agentRestrictionsDisplayRow;
+			_moveToDate = moveToDate;
+			_updateShiftEditor = updateShiftEditor;
+		}
+
+		public AgentRestrictionsDisplayRow AgentRestrictionsDisplayRow
+		{
+			get { return _agentDisplayRow; }
+		}
+
+		public bool MoveToDate
+		{
+			get { return _moveToDate; }
+		}
+
+		public bool UpdateShiftEditor
+		{
+			get { return _updateShiftEditor; }
+		}
+	}
+
+	internal class PersonsToLoad
+	{
+		private readonly ICollection<IPerson> _personsToLoad;
+
+		public PersonsToLoad()
+		{
+			_personsToLoad = new Collection<IPerson>();
+		}
+
+		public void AddPerson(IPerson person)
+		{
+			_personsToLoad.Add(person);
+		}
+
+		public bool Contains(IPerson person)
+		{
+			return _personsToLoad.Contains(person);
+		}
+	}
+
 }
