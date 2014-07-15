@@ -66,7 +66,7 @@ namespace Teleopti.Messaging.SignalR
 			createConnectionAndProxy();
 
 			foreach (var strategy in _connectionKeepAliveStrategy)
-				strategy.OnStart(this, _time, createConnectionAndProxy);
+				strategy.OnStart(this, _time, createConnectionAndProxy, useLongPolling);
 
 			try
 			{

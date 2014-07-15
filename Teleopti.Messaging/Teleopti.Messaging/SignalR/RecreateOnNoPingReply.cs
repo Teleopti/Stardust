@@ -28,7 +28,7 @@ namespace Teleopti.Messaging.SignalR
 		{
 		}
 
-		public void OnStart(IStateAccessor stateAccessor, ITime time, Action recreateConnection)
+		public void OnStart(IStateAccessor stateAccessor, ITime time, Action recreateConnection, bool useLongPolling)
 		{
 			_time = time;
 			initializePing(stateAccessor);
