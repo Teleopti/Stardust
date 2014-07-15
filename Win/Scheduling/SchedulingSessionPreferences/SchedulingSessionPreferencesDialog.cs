@@ -220,11 +220,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
             if(panel.StatusIsOn())
             {
-                tabPageDayOffPlanningOptions.ImageKey = "on"; 
+                tabPageDayOffPlanningOptions.ImageIndex  = 1; 
             }
             else
             {
-                tabPageDayOffPlanningOptions.ImageKey = "off";
+					tabPageDayOffPlanningOptions.ImageIndex = 0;
             }
         }
     }
