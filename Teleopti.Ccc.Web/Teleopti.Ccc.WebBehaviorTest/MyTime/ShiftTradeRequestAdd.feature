@@ -225,7 +225,6 @@ Scenario: Sending shift trade request closes the Add Shift Trade Request view
 	And the current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	And I click agent 'OtherAgent'
-	And I add 'OtherAgent' to my shift trade list
 	And I enter subject 'A nice subject'
 	And I enter message 'A cute little message'
 	And I click send shifttrade button
@@ -488,7 +487,6 @@ Scenario: Should be able to add a day to a shift trade
 	And the current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	And I choose 'OtherAgent' to make a shift trade
-	And I add 'OtherAgent' to my shift trade list
 	Then I should see 'OtherAgent' in my shift trade list for date '2030-01-01'
 
 @OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
@@ -509,7 +507,6 @@ Scenario: Should be able to remove a day from a shift trade
 	And the current time is '2029-12-27'
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I choose 'OtherAgent' to make a shift trade
-	And I add 'OtherAgent' to my shift trade list
 	When I remove the selected day from the shift trade list
 	Then I should not see schedule on date '2030-01-01' in my shift trade list with 'OtherAgent'
 
@@ -541,7 +538,6 @@ Scenario: Should navigate to next day for the agent I am going to trade with
 	And the current time is '2029-12-27'
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I choose 'OtherAgent' to make a shift trade
-	And I add 'OtherAgent' to my shift trade list
 	When I click on the next date
 	Then I should see 'OtherAgent' in my shift trade list for date '2030-01-01'
 	And I should see 'OtherAgent' can be added for date '2030-01-02'
@@ -574,7 +570,6 @@ Scenario: Should navigate to previous day for the agent I am going to trade with
 	And the current time is '2029-12-27'
 	And I view Add Shift Trade Request for date '2030-01-02'
 	And I choose 'OtherAgent' to make a shift trade
-	And I add 'OtherAgent' to my shift trade list
 	When I click on the previous date
 	Then I should see 'OtherAgent' in my shift trade list for date '2030-01-02'
 	And I should see 'OtherAgent' can be added for date '2030-01-01'
@@ -607,7 +602,6 @@ Scenario: Should be able to choose a date in calender and show the shift for the
 	And the current time is '2029-12-27'
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I choose 'OtherAgent' to make a shift trade
-	And I add 'OtherAgent' to my shift trade list
 	When I select date '2030-01-05' by calender
 	Then I should see 'OtherAgent' in my shift trade list for date '2030-01-01'
 	And I should see 'OtherAgent' can be added for date '2030-01-05'
@@ -661,7 +655,6 @@ Scenario: The added days should be sorted by date
 	And the current time is '2030-01-01'
 	And I view Add Shift Trade Request for date '2030-01-05'
 	And I choose 'OtherAgent' to make a shift trade
-	And I add 'OtherAgent' to my shift trade list
 	When I select date '2030-01-03' by calender
 	And I add 'OtherAgent' to my shift trade list
 	Then I should see 'OtherAgent' for date '2030-01-03' at top of my shift trade list
@@ -690,9 +683,8 @@ Scenario: Should cancel the current shift trade when switch to another team to t
 	And the current time is '2029-12-27'
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I choose 'OtherAgent' to make a shift trade
-	And I add 'OtherAgent' to my shift trade list
 	When I select the 'Other team'
 	Then I should see 'OtherAgentNotInMyTeam' last in the list
 	And I choose 'OtherAgentNotInMyTeam' to make a shift trade
 	And I should not see schedule on date '2030-01-01' in my shift trade list with 'OtherAgent'
-	And I should see 'OtherAgentNotInMyTeam' can be added for date '2030-01-01'
+	And I should see 'OtherAgentNotInMyTeam' in my shift trade list for date '2030-01-01'
