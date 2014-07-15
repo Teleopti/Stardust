@@ -1,5 +1,6 @@
 ﻿using System;
 using log4net;
+using Microsoft.AspNet.SignalR.Client.Transports;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.SignalR.Wrappers;
 
@@ -36,7 +37,7 @@ namespace Teleopti.Messaging.SignalR
 			});
 		}
 
-		public void OnStart(IStateAccessor stateAccessor, ITime time, Action recreateConnection)
+		public void OnStart(IStateAccessor stateAccessor, ITime time, Action recreateConnection, bool useLongPolling)
 		{
 			_time = time;
 			_timer = time.StartTimer(o =>
@@ -51,7 +52,14 @@ namespace Teleopti.Messaging.SignalR
 						if (c == _connectionToRestart)
 						{
 							Logger.Warn("Restarting connection.");
-							c.Start();
+							if (useLongPolling)
+							{
+								c.Start(new LongPollingTransport());
+							}
+							else
+							{
+								c.Start();
+							}
 						}
 					});
 					_restartAt = null;

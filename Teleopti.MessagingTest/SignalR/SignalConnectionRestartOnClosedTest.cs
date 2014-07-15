@@ -2,6 +2,7 @@ using System;
 using Microsoft.AspNet.SignalR.Client;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Messaging.SignalR;
 using Teleopti.Messaging.SignalR.Wrappers;
@@ -87,6 +88,21 @@ namespace Teleopti.MessagingTest.SignalR
 			hubConnection.Stub(x => x.Start()).Return(TaskHelper.MakeFailedTask(new Exception())).Repeat.Once();
 
 			hubConnection.AssertWasCalled(x => x.Start());
+		}
+
+		[Test]
+		public void ShouldUseLongPollingWhenReconnectingIfStartedWithLongPolling()
+		{
+			var time = new FakeTime();
+			var hubProxy = new HubProxyFake();
+			var hubConnection = new HubConnectionMock(hubProxy);
+			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
+			target.StartBrokerService(useLongPolling: true);
+
+			hubConnection.RaiseClosedEvent();
+			time.Passes(TimeSpan.FromMinutes(5));
+
+			hubConnection.NumberOfTimesStartWithTransportWasCalled.Should().Be.EqualTo(2);
 		}
 
 	}

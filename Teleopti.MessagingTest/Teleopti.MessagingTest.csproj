@@ -40,6 +40,8 @@
     <Compile Include="SignalR\TestDoubles\MultiConnectionSignalBrokerForTest.cs" />
     <Compile Include="SignalR\TestDoubles\MultiConnectionSignalSenderForTest.cs" />
     <Compile Include="SignalR\TestDoubles\SignalBrokerForTest.cs" />
+    <Compile Include="SignalR\TestDoubles\HubConnectionMock.cs" />
+    <Compile Include="SignalR\TestDoubles\SignalBrokerForTest.cs" />
     <Compile Include="SignalR\SignalBrokerTest.cs" />
     <Compile Include="SignalR\SignalConnectionRestartOnClosedTest.cs" />
     <Compile Include="SignalR\SignalConnectionPingTest.cs" />
