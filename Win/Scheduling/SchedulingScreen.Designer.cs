@@ -382,16 +382,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// toolStripSpinningProgressControl1
 			// 
-			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(146)))), ((int)(((byte)(33)))));
+			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.White;
 			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
-			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.Silver;
+			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.FromArgb(22,165,220);
 			this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
 			this.toolStripSpinningProgressControl1.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 1;
-			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
+			this.toolStripSpinningProgressControl1.TransitionSegment = 2;
+			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
 			// toolStripStatusLabelStatus
