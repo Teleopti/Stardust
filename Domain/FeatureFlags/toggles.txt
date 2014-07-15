@@ -20,6 +20,7 @@
 #
 
 Scheduler_WeeklyRestRuleSolver_27108 = true
+Scheduler_Seniority_11111 = true
 RTA_RtaLastStatesOverview_27789 = true
 RTA_DrilldownToAllAgentsInOneTeam_25234 = true
 Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = RC
