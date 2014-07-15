@@ -1899,8 +1899,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			disableAllExceptCancelInRibbon();
 
-			if (toolStripProgressBar1.ProgressBar == null) //Somone knows why this is null in some cases?
-				toolStripProgressBar1 = new ToolStripProgressBar();
+			if (toolStripProgressBar1.CustomLabelControl == null) //Somone knows why this is null in some cases?
+				toolStripProgressBar1 = new MetroToolStripProgressBar();
 
 			toolStripProgressBar1.Maximum = numberOfDaysToRecalculate;
 			toolStripProgressBar1.Value = 0;

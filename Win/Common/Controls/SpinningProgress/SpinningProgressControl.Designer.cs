@@ -33,15 +33,16 @@ namespace Teleopti.Ccc.Win.Common.Controls.SpinningProgress
         [ System.Diagnostics.DebuggerStepThrough() ]
         private void InitializeComponent() 
         { 
-            this.SuspendLayout(); 
-            // 
-            // SpinningProgress
-            // 
-            this.Name = "SpinningProgress"; 
-            this.MinimumSize = new Size(20, 20);
-            this.Size = new System.Drawing.Size( 20, 20 ); 
-            this.ResumeLayout( false ); 
-            
+			this.SuspendLayout();
+			// 
+			// SpinningProgressControl
+			// 
+			this.Margin = new System.Windows.Forms.Padding(0);
+			this.MinimumSize = new System.Drawing.Size(20, 20);
+			this.Name = "SpinningProgressControl";
+			this.Size = new System.Drawing.Size(20, 20);
+			this.ResumeLayout(false);
+
         } 
         
         

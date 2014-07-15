@@ -421,6 +421,9 @@
     <Compile Include="Common\Controls\Columns\SelectedItemChangeBaseEventArgs.cs" />
     <Compile Include="Common\Controls\Columns\SelectedItemChangeEventArgs.cs" />
     <Compile Include="Common\Controls\Columns\TypeChangeEventArgs.cs" />
+    <Compile Include="Common\Controls\MetroToolStripProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Common\GridStyleInfoExtensions.cs" />
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarInfo.cs" />
     <Compile Include="Common\Controls\FromToTimeDurationPicker.cs">
