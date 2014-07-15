@@ -145,7 +145,7 @@
 			// 
 			// tabControl1
 			// 
-			this.tabControl1.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+			this.tabControl1.ActiveTabColor = System.Drawing.Color.DarkGray;
 			this.tabControl1.BeforeTouchSize = new System.Drawing.Size(446, 528);
 			this.tabControl1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControl1.Controls.Add(this.tabPageGeneral);
@@ -549,12 +549,12 @@
 			// comboBoxGroupingFairness
 			// 
 			this.comboBoxGroupingFairness.BackColor = System.Drawing.Color.White;
-			this.comboBoxGroupingFairness.BeforeTouchSize = new System.Drawing.Size(184, 21);
+			this.comboBoxGroupingFairness.BeforeTouchSize = new System.Drawing.Size(184, 19);
 			this.comboBoxGroupingFairness.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxGroupingFairness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxGroupingFairness.Location = new System.Drawing.Point(225, 93);
 			this.comboBoxGroupingFairness.Name = "comboBoxGroupingFairness";
-			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(184, 21);
+			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(184, 19);
 			this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxGroupingFairness.TabIndex = 40;
 			// 
@@ -623,13 +623,13 @@
 			// comboBoxTeamActivity
 			// 
 			this.comboBoxTeamActivity.BackColor = System.Drawing.Color.White;
-			this.comboBoxTeamActivity.BeforeTouchSize = new System.Drawing.Size(184, 21);
+			this.comboBoxTeamActivity.BeforeTouchSize = new System.Drawing.Size(184, 19);
 			this.comboBoxTeamActivity.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamActivity.Enabled = false;
 			this.comboBoxTeamActivity.Location = new System.Drawing.Point(225, 220);
 			this.comboBoxTeamActivity.Name = "comboBoxTeamActivity";
-			this.comboBoxTeamActivity.Size = new System.Drawing.Size(184, 21);
+			this.comboBoxTeamActivity.Size = new System.Drawing.Size(184, 19);
 			this.comboBoxTeamActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxTeamActivity.TabIndex = 40;
 			// 
@@ -687,13 +687,13 @@
 			// comboBoxTeamGroupPage
 			// 
 			this.comboBoxTeamGroupPage.BackColor = System.Drawing.Color.White;
-			this.comboBoxTeamGroupPage.BeforeTouchSize = new System.Drawing.Size(184, 21);
+			this.comboBoxTeamGroupPage.BeforeTouchSize = new System.Drawing.Size(184, 19);
 			this.comboBoxTeamGroupPage.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamGroupPage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamGroupPage.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
 			this.comboBoxTeamGroupPage.Location = new System.Drawing.Point(225, 114);
 			this.comboBoxTeamGroupPage.Name = "comboBoxTeamGroupPage";
-			this.comboBoxTeamGroupPage.Size = new System.Drawing.Size(184, 21);
+			this.comboBoxTeamGroupPage.Size = new System.Drawing.Size(184, 19);
 			this.comboBoxTeamGroupPage.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxTeamGroupPage.TabIndex = 35;
 			this.comboBoxTeamGroupPage.SelectedIndexChanged += new System.EventHandler(this.comboBoxTeamGroupPageSelectedIndexChanged);
@@ -701,13 +701,13 @@
 			// comboBoxBlockType
 			// 
 			this.comboBoxBlockType.BackColor = System.Drawing.Color.White;
-			this.comboBoxBlockType.BeforeTouchSize = new System.Drawing.Size(184, 21);
+			this.comboBoxBlockType.BeforeTouchSize = new System.Drawing.Size(184, 19);
 			this.comboBoxBlockType.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxBlockType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxBlockType.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
 			this.comboBoxBlockType.Location = new System.Drawing.Point(225, 3);
 			this.comboBoxBlockType.Name = "comboBoxBlockType";
-			this.comboBoxBlockType.Size = new System.Drawing.Size(184, 21);
+			this.comboBoxBlockType.Size = new System.Drawing.Size(184, 19);
 			this.comboBoxBlockType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxBlockType.TabIndex = 47;
 			this.comboBoxBlockType.SelectedValueChanged += new System.EventHandler(this.comboBoxBlockType_SelectedValueChanged);
@@ -875,13 +875,13 @@
 			// comboBoxAdvShiftCategory
 			// 
 			this.comboBoxAdvShiftCategory.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvShiftCategory.BeforeTouchSize = new System.Drawing.Size(173, 21);
+			this.comboBoxAdvShiftCategory.BeforeTouchSize = new System.Drawing.Size(173, 19);
 			this.comboBoxAdvShiftCategory.Dock = System.Windows.Forms.DockStyle.Left;
 			this.comboBoxAdvShiftCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(28, 30);
 			this.comboBoxAdvShiftCategory.MaxDropDownItems = 16;
 			this.comboBoxAdvShiftCategory.Name = "comboBoxAdvShiftCategory";
-			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 21);
+			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(173, 19);
 			this.comboBoxAdvShiftCategory.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvShiftCategory.SuppressDropDownEvent = true;
 			this.comboBoxAdvShiftCategory.TabIndex = 56;

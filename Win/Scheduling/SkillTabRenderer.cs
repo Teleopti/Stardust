@@ -7,7 +7,7 @@ using Syncfusion.Windows.Forms.Tools;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public class SkillTabRenderer : TabRendererOffice2007
+	public class SkillTabRenderer : TabRendererMetro
 	{
 		static readonly SkillTabPanelProperty TabPropertyExtender;
 		public static new SkillTabPanelProperty TabPanelPropertyExtender
@@ -30,37 +30,40 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public SkillTabRenderer(ITabControl parent, ITabPanelRenderer panelRenderer)
 			: base(parent, panelRenderer)
 		{
+			((TabControlAdv)TabControl).TabPanelBackColor = Color.White;
+			((TabControlAdv)TabControl).Font = new Font("Segoe UI", 8.25F,FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         protected override void DrawBackground(DrawTabEventArgs drawItemInfo)
 		{
 			
-			Graphics g = drawItemInfo.Graphics;
-
 			var tab = ((TabControlAdv)TabControl).TabPages[drawItemInfo.Index];
-			var bgColor = Color.FromArgb(199,216,237);
-			if ((drawItemInfo.State & DrawItemState.Selected) > 0)
-				bgColor = Color.FromArgb(228, 237, 248);
-			if (tab.Name == "Pinned")
-			{
-				bgColor = Color.FromArgb(110, 202, 171);
-				if ((drawItemInfo.State & DrawItemState.Selected) > 0)
-					bgColor = Color.FromArgb(210, 238, 229);
-			}
-
-			var curBounds = new RectangleF(drawItemInfo.Bounds.Left,
-				drawItemInfo.Bounds.Top, drawItemInfo.Bounds.Width, drawItemInfo.Bounds.Height);
-
+			Brush bgSelectedTab = new SolidBrush(Color.DarkGray);
+			Brush bgInactiveTab = new SolidBrush(Color.White);
+	        if (tab.Name == "Pinned")
+	        {
+		        var bgColor = Color.FromArgb(110, 202, 171);
+		        if ((drawItemInfo.State & DrawItemState.Selected) > 0)
+			        bgColor = Color.FromArgb(145, 238, 180);
+		        Brush pinnedBrush = new SolidBrush(bgColor);
+		        drawItemInfo.Graphics.FillRectangle(pinnedBrush, drawItemInfo.Bounds);
+		        pinnedBrush.Dispose();
+	        }
+	        else
+	        {
+				  if ((drawItemInfo.State & DrawItemState.Selected) > 0)
+				  {
+					  drawItemInfo.Graphics.FillRectangle(bgSelectedTab, drawItemInfo.Bounds);
+					  bgSelectedTab.Dispose();
+				  }
+				  else
+				  {
+					  drawItemInfo.Graphics.FillRectangle(bgInactiveTab, drawItemInfo.Bounds);
+					  bgInactiveTab.Dispose();
+				  }
+	        }
 			
-			GraphicsPath path = GetBorderPathFromBounds(curBounds);
-
-			var brush = new SolidBrush(bgColor);
-            try
-            {
-                g.FillPath(brush, path);
-            }
-            finally { brush.Dispose(); }
 		}
 	}
 

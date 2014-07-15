@@ -31,9 +31,6 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AgentInfoControl));
-			System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
-            "Hej : hej",
-            ""}, -1);
 			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "Hej : hej",
             ""}, -1);
@@ -41,6 +38,9 @@
             "Hej : hej",
             ""}, -1);
 			System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
+            "Hej : hej",
+            ""}, -1);
+			System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
             "Hej : hej",
             ""}, -1);
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
@@ -108,7 +108,7 @@
 			// 
 			// tabControlAgentInfo
 			// 
-			this.tabControlAgentInfo.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+			this.tabControlAgentInfo.ActiveTabColor = System.Drawing.Color.DarkGray;
 			this.tabControlAgentInfo.BackColor = System.Drawing.Color.White;
 			this.tabControlAgentInfo.BeforeTouchSize = new System.Drawing.Size(453, 462);
 			this.tabControlAgentInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -179,9 +179,9 @@
             this.columnHeader2});
 			this.listViewSchedulePeriod.FullRowSelect = true;
 			this.listViewSchedulePeriod.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			listViewItem5.IndentCount = 25;
+			listViewItem1.IndentCount = 25;
 			this.listViewSchedulePeriod.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem5});
+            listViewItem1});
 			this.listViewSchedulePeriod.Location = new System.Drawing.Point(0, 0);
 			this.listViewSchedulePeriod.Name = "listViewSchedulePeriod";
 			this.listViewSchedulePeriod.Size = new System.Drawing.Size(451, 439);
@@ -222,9 +222,9 @@
 			this.listViewRestrictions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewRestrictions.FullRowSelect = true;
 			this.listViewRestrictions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			listViewItem1.IndentCount = 25;
+			listViewItem2.IndentCount = 25;
 			this.listViewRestrictions.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
+            listViewItem2});
 			this.listViewRestrictions.Location = new System.Drawing.Point(0, 0);
 			this.listViewRestrictions.Name = "listViewRestrictions";
 			this.listViewRestrictions.Size = new System.Drawing.Size(451, 439);
@@ -264,9 +264,9 @@
 			this.listViewPersonPeriod.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewPersonPeriod.FullRowSelect = true;
 			this.listViewPersonPeriod.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			listViewItem2.IndentCount = 25;
+			listViewItem3.IndentCount = 25;
 			this.listViewPersonPeriod.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2});
+            listViewItem3});
 			this.listViewPersonPeriod.Location = new System.Drawing.Point(0, 0);
 			this.listViewPersonPeriod.Name = "listViewPersonPeriod";
 			this.listViewPersonPeriod.Size = new System.Drawing.Size(451, 439);
@@ -306,9 +306,9 @@
 			this.listViewPerson.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewPerson.FullRowSelect = true;
 			this.listViewPerson.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			listViewItem3.IndentCount = 25;
+			listViewItem4.IndentCount = 25;
 			this.listViewPerson.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem3});
+            listViewItem4});
 			this.listViewPerson.Location = new System.Drawing.Point(0, 0);
 			this.listViewPerson.Name = "listViewPerson";
 			this.listViewPerson.Size = new System.Drawing.Size(451, 439);
