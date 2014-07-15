@@ -193,6 +193,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         {
             if(!PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications)) return;
+			if(e.RowIndex == -1)
+				return;
+
             IShiftCategory category = _presenter.OnQueryShiftCategoryCellInfo(e.RowIndex);
 
 			ShiftCategoryLimitationCombination combination = _presenter.CombinedLimitations[category];
