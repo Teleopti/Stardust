@@ -250,6 +250,10 @@ item: Set Variable
   Variable=SDK_SSL_MEX_BINDING_TMP
   Value=mexHttpsBinding
 end
+item: Set Variable
+  Variable=ETLPM_BINDING_NAME
+  Value=Etl_Pm_Https_Binding
+end
 item: Else Statement
 end
 item: Set Variable
@@ -267,6 +271,10 @@ end
 item: Set Variable
   Variable=SDK_SSL_MEX_BINDING_TMP
   Value=mexHttpBinding
+end
+item: Set Variable
+  Variable=ETLPM_BINDING_NAME
+  Value=Etl_Pm_Http_Binding
 end
 item: End Block
 end
@@ -460,6 +468,11 @@ end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(DATASOURCE_NAME)|Teleopti CCC
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(ETLPM_BINDING_NAME)|%ETLPM_BINDING_NAME%
   Line Number=0
 end
 item: Remark
