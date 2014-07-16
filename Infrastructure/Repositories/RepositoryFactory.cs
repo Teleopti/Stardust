@@ -396,9 +396,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new PersonalSettingDataRepository(unitOfWork);
 	    }
 
-	    public AgentBadgeRepository CreateAgentBadgeRepository(IUnitOfWork uow)
-	    {
-		    return new AgentBadgeRepository(uow);
-    }
 }
 }

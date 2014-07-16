@@ -957,6 +957,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			
 		}
 
+		[Test]
+		public void ShouldLoadAgentBadge()
+		{
+			var person = PersonFactory.CreatePerson("_");
+			person.AddBadge(new AgentBadge()
+			{
+				BronzeBadge = 1
+			});
+
+			PersistAndRemoveFromUnitOfWork(person);
+
+			target.Load(person.Id.Value);
+			person.Badges.BronzeBadge.Should().Be.EqualTo(1);
+		}
+
 		private void SetupPersonsInOrganizationWithContract()
 		{
 			IPerson okPerson = PersonFactory.CreatePerson("hejhej");

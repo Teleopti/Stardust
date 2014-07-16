@@ -225,28 +225,20 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AgentBadge]') AND type in (N'U'))
 BEGIN
  CREATE TABLE [dbo].[AgentBadge](
-	[Id] [uniqueidentifier] NOT NULL,
- 	[PersonId] [uniqueidentifier] NOT NULL,
+ 	[Id] [uniqueidentifier] NOT NULL,
+ 	[Parent] [uniqueidentifier] NOT NULL,
  	[BronzeBadge] [int] NOT NULL,
  	[SilverBadge] [int] NOT NULL,
- 	[GoldenBadge] [int] NOT NULL,
-	[UpdatedBy] [uniqueidentifier] NOT NULL,
-	[UpdatedOn] [datetime] NOT NULL,
+ 	[GoldenBadge] [int] NOT NULL
   CONSTRAINT [PK_AgentBadge] PRIMARY KEY CLUSTERED 
  (
-	[Id] ASC
+	[Parent] ASC
  )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY];
 
-/*
-ALTER TABLE [dbo].[AgentBadge]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadge_Person_PersonId] FOREIGN KEY([PersonId])
+
+ALTER TABLE [dbo].[AgentBadge]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadge_Person_Parent] FOREIGN KEY([Parent])
 REFERENCES [dbo].[Person] ([Id]);
 
-ALTER TABLE [dbo].[AgentBadge] CHECK CONSTRAINT [FK_AgentBadge_Person_PersonId];
---*/
-
-ALTER TABLE [dbo].[AgentBadge]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadge_Person_UpdatedBy] FOREIGN KEY([UpdatedBy])
-REFERENCES [dbo].[Person] ([Id]);
-
-ALTER TABLE [dbo].[AgentBadge] CHECK CONSTRAINT [FK_AgentBadge_Person_UpdatedBy];
+ALTER TABLE [dbo].[AgentBadge] CHECK CONSTRAINT [FK_AgentBadge_Person_Parent];
 END

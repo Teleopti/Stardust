@@ -1,20 +1,14 @@
 using System;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class AgentBadge:AggregateRoot
+	public class AgentBadge : AggregateEntity, IAgentBadge
 	{
-		private Guid _personId;
 		private int _bronzeBadge;
 		private int _silverBadge;
 		private int _goldenBadge;
-
-		public virtual Guid PersonId
-		{
-			get { return _personId; }
-			set { _personId = value; }
-		}
 
 		public virtual int BronzeBadge
 		{
