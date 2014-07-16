@@ -9,6 +9,7 @@ cls
 SET DefaultDB=%1
 SET configuration=%2
 SET /A Sikuli=%3
+SET Branch=%4
 
 IF "%Sikuli%"=="" SET /A Sikuli=0
 IF NOT "%DefaultDB%"=="" SET IFFLOW=y
@@ -48,7 +49,7 @@ set /p Tfiles=<"%DbBaseline%"
 ::Get current Branch
 CD "%ROOTDIR%\.."
 SET HgFolder=%CD%
-CALL :BRANCH "%CD%"
+IF "%Branch%"=="" CALL :BRANCH "%CD%"
 ECHO Current branch is: "%BRANCH%"
 ECHO.
 
@@ -312,7 +313,6 @@ ECHO Running: CrossDatabaseViewUpdate
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 IF %Sikuli% equ 1 (
-CALL "%ROOTDIR%\SikulitestConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics" %configuration%
 SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\LicenseFiles\Teleopti_RD.xml"
 GOTO Finish
 )
