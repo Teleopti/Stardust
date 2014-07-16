@@ -422,7 +422,7 @@
     <comment>Change your password</comment>
   </data>
   <data name="Chart" xml:space="preserve">
-    <value>CHART</value>
+    <value>Chart</value>
     <comment>Chart</comment>
   </data>
   <data name="ChartSettings" xml:space="preserve">
@@ -919,7 +919,7 @@ Date</value>
     <comment>Holiday</comment>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>HOME</value>
+    <value>Home</value>
     <comment>Home</comment>
   </data>
   <data name="IndexACW" xml:space="preserve">
@@ -12130,7 +12130,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Compact View</comment>
   </data>
   <data name="RequestsMenu" xml:space="preserve">
-    <value>REQUESTS</value>
+    <value>Requests</value>
     <comment>Request menu</comment>
   </data>
 </root>

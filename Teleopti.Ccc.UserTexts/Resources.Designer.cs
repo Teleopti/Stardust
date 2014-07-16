@@ -4129,7 +4129,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CHART.
+        ///   Looks up a localized string similar to Chart.
         /// </summary>
         public static string Chart {
             get {
@@ -9977,7 +9977,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to HOME.
+        ///   Looks up a localized string similar to Home.
         /// </summary>
         public static string Home {
             get {
@@ -11409,7 +11409,7 @@ namespace Teleopti.Ccc.UserTexts {
         ///   Looks up a localized string similar to License key successfully applied.
         ///Congratulations! You are now a licensed user of this award winning solution for workforce management.
         ///The application will now exit.
-        ///You may then restart it. You may also have to restart MyTime to get access to newly licensed options..
+        ///In order to get all services and web applications to fully function and to get access to newly licensed options, please run &quot;Restart Teleopti WFM&quot; from the Teleopti folder in the Start Menu..
         /// </summary>
         public static string LicenseApplicationSuccess {
             get {
@@ -19154,7 +19154,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to REQUESTS.
+        ///   Looks up a localized string similar to Requests.
         /// </summary>
         public static string RequestsMenu {
             get {
