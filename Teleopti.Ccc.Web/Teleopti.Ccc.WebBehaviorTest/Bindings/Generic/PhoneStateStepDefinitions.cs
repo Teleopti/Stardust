@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)' on datasource (.*)")]
 		public void WhenSetsHisPhoneStateToOnDatasource(string personName, string stateCode, int datasource)
 		{
-			var uri = new Uri(TestSiteConfigurationSetup.Url, "Rta/Service/SaveExternalUserState");
+			var uri = new Uri(TestSiteConfigurationSetup.URL, "Rta/Service/SaveExternalUserState");
 
 			var data = JsonConvert.SerializeObject(new AjaxUserState
 			{

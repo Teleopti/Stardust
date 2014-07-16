@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData.nhib.xml");
 
 		public static int Port = 52858;
-		public static Uri Url;
+		public static Uri URL;
 		public static int PortAuthenticationBridge = 52857;
 		public static Uri UrlAuthenticationBridge;
 		public static int PortWindowsIdentityProvider = 52859;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var originalWindowsIdentityProviderPort = PortWindowsIdentityProvider;
 
 			Port = new Random().Next(57000, 57999);
-			Url = new Uri(string.Format("http://localhost:{0}/", Port));
+			URL = new Uri(string.Format("http://localhost:{0}/", Port));
 			PortAuthenticationBridge = Port - new Random().Next(1, 100);
 			UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
 			PortWindowsIdentityProvider = Port + new Random().Next(1, 100);
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			return new GenericDisposable(() =>
 			{
 				Port = originalPort;
-				Url = new Uri(string.Format("http://localhost:{0}/", originalPort));
+				URL = new Uri(string.Format("http://localhost:{0}/", originalPort));
 				PortAuthenticationBridge = originalAuthenticationBridgePort;
 				UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
 				PortWindowsIdentityProvider = originalWindowsIdentityProviderPort;

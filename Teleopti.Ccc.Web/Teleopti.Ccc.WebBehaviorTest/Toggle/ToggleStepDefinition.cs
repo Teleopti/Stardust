@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 		[When(@"I query toggle service for '(.*)'")]
 		public void WhenIQueryOutofprocessToggleServiceFor(string flag)
 		{
-			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.Url.ToString());
+			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
 			reply = toggleQuerier.IsEnabled((Toggles)Enum.Parse(typeof(Toggles), flag));
 		}
 
 		[When(@"I query toggle service for '(.*)' by loading them all")]
 		public void WhenIQueryOutofprocessToggleServiceForByLoadingThemAll(string flag)
 		{
-			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.Url.ToString());
+			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
 			toggleQuerier.FillAllToggles();
 			reply = toggleQuerier.IsEnabled((Toggles)Enum.Parse(typeof(Toggles), flag));
 		}
