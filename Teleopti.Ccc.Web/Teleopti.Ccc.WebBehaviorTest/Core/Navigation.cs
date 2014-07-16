@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GoToWaitForUrlAssert(string pageUrl, string assertUrlContains, params IGoToInterceptor[] interceptors)
 		{
-			InnerGoto(new Uri(TestSiteConfigurationSetup.Url, pageUrl),
+			InnerGoto(new Uri(TestSiteConfigurationSetup.URL, pageUrl),
 				s => Browser.Interactions.GoToWaitForUrlAssert(s, assertUrlContains),
 				interceptors);
 		}
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		/// <param name="uri"></param>
 		public static void GoToWaitForCompleted(string pageUrl, params IGoToInterceptor[] interceptors)
 		{
-			InnerGoto(new Uri(TestSiteConfigurationSetup.Url, pageUrl), Browser.Interactions.GoToWaitForCompleted, interceptors);
+			InnerGoto(new Uri(TestSiteConfigurationSetup.URL, pageUrl), Browser.Interactions.GoToWaitForCompleted, interceptors);
 		}
 
 		public static void GotoRaw(string url, params IGoToInterceptor[] interceptors)

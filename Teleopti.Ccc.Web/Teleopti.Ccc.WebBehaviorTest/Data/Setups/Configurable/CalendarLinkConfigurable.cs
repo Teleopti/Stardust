@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			var personalSettingDataRepository = new PersonalSettingDataRepository(uow);
 			var setting = personalSettingDataRepository.FindValueByKey("CalendarLinkSettings", new CalendarLinkSettings());
 			setting.IsActive = IsActive;
-			SharingUrl = TestSiteConfigurationSetup.Url + "MyTime/Share?id=" +
+			SharingUrl = TestSiteConfigurationSetup.URL + "MyTime/Share?id=" +
 								  HttpServerUtility.UrlTokenEncode(
 									  Encryption.EncryptStringToBytes("TestData" + "/" + user.Id.Value, EncryptionConstants.Image1, EncryptionConstants.Image2)) + "&type=text/plain";
 

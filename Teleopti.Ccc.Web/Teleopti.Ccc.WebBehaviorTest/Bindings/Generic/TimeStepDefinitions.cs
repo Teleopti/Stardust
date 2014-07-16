@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			Browser.Interactions.Javascript(setJsDate);
 			//need to set on js date object on popup as well
-			var popupConstraint = Find.ByUrl(new Uri(TestSiteConfigurationSetup.Url, "MyTime/Asm"));
+			var popupConstraint = Find.ByUrl(new Uri(TestSiteConfigurationSetup.URL, "MyTime/Asm"));
 			if (WatiN.Core.Browser.Exists<IE>(popupConstraint))
 			{
 				WatiN.Core.Browser.AttachTo<IE>(popupConstraint).Eval(setJsDate);

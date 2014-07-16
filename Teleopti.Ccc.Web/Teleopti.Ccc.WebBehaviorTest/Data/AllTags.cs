@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("DB_CCC7", IniFileInfo.DB_CCC7);
 			Add("AnalyticsDb", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
 			Add("AnalyticsDatabase", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
-			Add("Url", TestSiteConfigurationSetup.Url.ToString());
+			Add("URL", TestSiteConfigurationSetup.URL.ToString());
 			Add("Port", TestSiteConfigurationSetup.Port.ToString());
 
 			Add("UrlAuthenticationBridge", TestSiteConfigurationSetup.UrlAuthenticationBridge.ToString());
@@ -28,12 +28,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			Add("PortWindowsIdentityProvider", TestSiteConfigurationSetup.PortWindowsIdentityProvider.ToString());
 
-			Add("AgentPortalWebURL", TestSiteConfigurationSetup.Url.ToString());
+			Add("AgentPortalWebURL", TestSiteConfigurationSetup.URL.ToString());
 			Add("SitePath", Paths.WebPath());
 			Add("SitePathAuthenticationBridge", Paths.WebAuthenticationBridgePath());
 			Add("SitePathWindowsIdentityProvider", Paths.WebWindowsIdentityProviderPath());
 			Add("ConfigPath", Paths.WebBinPath());
-			Add("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.Url.ToString());
+			Add("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.URL.ToString());
 			Add("DEFAULT_IDENTITY_PROVIDER", "Teleopti");
 			Add("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
 			Add("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
