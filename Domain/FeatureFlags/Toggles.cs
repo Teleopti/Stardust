@@ -15,6 +15,7 @@
 		MyReport_AgentQueueMetrics_22254,
 		Request_ShiftTradeRequestForMoreDays_20918,
 		Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341,
+		Request_SeePossibleShiftTradesFromAllTeams_28770,
 
 		RTA_RtaLastStatesOverview_27789,
 		RTA_DrilldownToAllAgentsInOneTeam_25234,
