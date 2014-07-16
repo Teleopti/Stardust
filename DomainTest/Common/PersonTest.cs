@@ -827,5 +827,20 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 
 		}
+
+	    [Test]
+	    public void ShouldAddBadge()
+	    {
+		    var target = PersonFactory.CreatePerson("_");
+			target.AddBadge(new AgentBadge
+			{
+				BronzeBadge = 1
+			});
+			target.AddBadge(new AgentBadge
+			{
+				BronzeBadge = 1
+			});
+		    target.Badges.BronzeBadge.Should().Be.EqualTo(2);
+	    }
     }
 }

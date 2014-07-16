@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
@@ -209,7 +210,16 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual void AddBadge(IAgentBadge agentBadge)
 	    {
-		    Badges = agentBadge;
+		    if (Badges == null)
+		    {
+			    Badges = agentBadge;
+		    }
+		    else
+		    {
+			    Badges.BronzeBadge += agentBadge.BronzeBadge;
+			    Badges.SilverBadge += agentBadge.SilverBadge;
+			    Badges.GoldenBadge += agentBadge.GoldenBadge;
+		    }
 	    }
 
 	    // adding this event so servicebus and rta do a check if person should be monitored in rta
