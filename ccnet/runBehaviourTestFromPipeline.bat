@@ -76,7 +76,7 @@ ECHO $(AGENTPORTALWEB_nhibConfPath)^|%AGENTPORTALWEB_nhibConfPath%>>"%MySettings
 ECHO $(DB_CCC7)^|%DB_CCC7%>>"%MySettings%"
 ECHO $(DB_ANALYTICS)^|%DB_ANALYTICS%>>"%MySettings%"
 ECHO $(AS_DATABASE)^|%AS_DATABASE%>>"%MySettings%"
-ECHO $(Url)^|%Url%>>"%MySettings%"
+ECHO $(URL)^|%Url%>>"%MySettings%"
 ECHO $(SQL_SERVER_NAME)^|%SQL_SERVER_NAME%>>"%MySettings%"
 
 
