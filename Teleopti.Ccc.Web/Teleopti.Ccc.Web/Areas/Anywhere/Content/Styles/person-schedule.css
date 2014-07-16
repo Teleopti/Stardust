@@ -167,17 +167,15 @@ sh
 }
 
 .person-schedule .full-day-absence-form {
-	width: 223px;
+	width: 228px;
 }
 
 	.person-schedule .full-day-absence-form .start-date
 	{
-		/*width: 180px;*/
 		text-align: left;
 	}
 
 	.person-schedule .full-day-absence-form .end-date {
-		/*width: 155px;*/
 		background-color: #FFFFFF;
 		cursor: pointer;
 		text-align: left;
