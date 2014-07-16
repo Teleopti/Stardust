@@ -17,6 +17,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 
 		public int TimeLineLengthInMinutes { get; set; }
 
+		public int PageCount { get; set; }
+		public int PageIndex { get; set; }
+
 		public bool IsLastPage { get; set; }
 	}
 }

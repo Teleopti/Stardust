@@ -155,10 +155,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult ShiftTradeRequestSchedule(DateOnly selectedDate, string teamId, Paging paging)
+		public JsonResult ShiftTradeRequestSchedule(DateOnly selectedDate, string teamId, Paging paging, int pageIndex = 1)
 		{
 			//var calendarDate = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, CultureInfo.CurrentCulture.Calendar);
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, PageIndex = pageIndex};
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 

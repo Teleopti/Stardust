@@ -11,5 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public Guid TeamId { get; set; }
 
 		public Paging Paging { get; set; }
+
+		public int PageIndex { get; set; }
 	}
 }

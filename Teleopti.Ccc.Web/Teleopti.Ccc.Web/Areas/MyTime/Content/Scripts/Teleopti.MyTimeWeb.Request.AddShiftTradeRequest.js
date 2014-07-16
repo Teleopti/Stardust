@@ -55,6 +55,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	    self.selectedTeamInternal = ko.observable();
 	    self.missingMyTeam = ko.observable();
 	    self.myTeamId = ko.observable();
+	    self.selectedPageIndex = ko.observable(1);
+		self.pageCount = ko.observable(1);
+
 		self.isDetailVisible = ko.computed(function () {
 			if (self.agentChoosed() === null) {
 				return false;
@@ -346,7 +349,27 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			self.selectedInternal(isAddAvaiable);
 		}
 
-        self.loadMyTeamId = function () {
+		self.nextPage = function() {
+			self.selectedPageIndex(self.selectedPageIndex() + 1);
+			self.loadSchedule();
+		}
+		self.previousPage = function() {
+			if (self.selectedPageIndex() > 1) {
+				self.selectedPageIndex(self.selectedPageIndex() - 1);
+				self.loadSchedule();
+			}
+		}
+		self.goToFirstPage = function() {
+			self.selectedPageIndex(1);
+			self.loadSchedule();
+		}
+		self.goToLastPage = function() {
+			self.selectedPageIndex(self.pageCount());
+			self.loadSchedule();
+		}
+
+
+		self.loadMyTeamId = function () {
             ajax.Ajax({
                 url: "Requests/ShiftTradeRequestMyTeam",
                 dataType: "json",
@@ -436,9 +459,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.loadSchedule = function () {
 			if (self.IsLoading()) return;
-			var skip = self.possibleTradeSchedulesRaw.length;
-			var take = 50;
-			if (self.IsLastPage) return;
+			//var skip = self.possibleTradeSchedulesRaw.length;
+			var take = 2;
+			var skip = (self.selectedPageIndex() -1) * take;
+			
+			//if (self.IsLastPage) return;
 			ajax.Ajax({
 				url: "Requests/ShiftTradeRequestSchedule",
 				dataType: "json",
@@ -448,17 +473,21 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					selectedDate: self.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase()),
 				    teamId: self.selectedTeamInternal(),
 				    Take: take,
-				    Skip: skip
+				    Skip: skip,
+				    PageIndex: self.selectedPageIndex()
 				},
 				beforeSend: function () {
 					self.IsLoading(true);
 				},
 				success: function (data, textStatus, jqXHR) {
 
-
+					self.pageCount(data.PageCount);
 				    self._createTimeLine(data.TimeLineHours);
 				    self._createMySchedule(data.MySchedule);
-					self.IsLastPage = data.IsLastPage;
+				    self.IsLastPage = data.IsLastPage;
+				    if (self.possibleTradeSchedulesRaw.length > 0) {
+					    self.possibleTradeSchedulesRaw = [];
+				    }
 				    $.each(data.PossibleTradeSchedules, function (i, item) {
 				    	self.possibleTradeSchedulesRaw.push(item);
 				    });
