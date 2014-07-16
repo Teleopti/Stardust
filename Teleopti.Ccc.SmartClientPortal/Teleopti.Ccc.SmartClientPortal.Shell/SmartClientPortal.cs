@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		void Form_KeyDown(object sender, KeyEventArgs e)
 		{
+			// test comment
 			if (e.Modifiers == Keys.Control)
 			{
 				if (e.KeyCode == Keys.D1 || e.KeyCode == Keys.NumPad1)
