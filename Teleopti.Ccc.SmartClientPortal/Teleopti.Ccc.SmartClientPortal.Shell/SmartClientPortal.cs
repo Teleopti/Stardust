@@ -71,6 +71,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		void Form_KeyDown(object sender, KeyEventArgs e)
 		{
+			if (e.Modifiers == Keys.Control)
+			{
+				if (e.KeyCode == Keys.D1 || e.KeyCode == Keys.NumPad1)
+					startModule(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
+				else if (e.KeyCode == Keys.D2 || e.KeyCode == Keys.NumPad2)
+					startModule(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage);
+				else if (e.KeyCode == Keys.D3 || e.KeyCode == Keys.NumPad3)
+					startModule(DefinedRaptorApplicationFunctionPaths.Shifts);
+				else if (e.KeyCode == Keys.D4 || e.KeyCode == Keys.NumPad4)
+					startModule(DefinedRaptorApplicationFunctionPaths.OpenSchedulePage);
+				else if (e.KeyCode == Keys.D5 || e.KeyCode == Keys.NumPad5)
+					startModule(DefinedRaptorApplicationFunctionPaths.OpenIntradayPage);
+				else if (e.KeyCode == Keys.D6 || e.KeyCode == Keys.NumPad6)
+					startModule(DefinedRaptorApplicationFunctionPaths.AccessToReports);
+				else if (e.KeyCode == Keys.D7 || e.KeyCode == Keys.NumPad7)
+					startModule(DefinedRaptorApplicationFunctionPaths.OpenBudgets);
+				else if (e.KeyCode == Keys.D8 || e.KeyCode == Keys.NumPad8)
+					startModule(DefinedRaptorApplicationFunctionPaths.AccessToPerformanceManager);
+				else if (e.KeyCode == Keys.D9 || e.KeyCode == Keys.NumPad9)
+					startModule(DefinedRaptorApplicationFunctionPaths.PayrollIntegration);
+			}
+
 			if (e.KeyValue.Equals(32))
 			{
 				e.Handled = true;
@@ -79,7 +101,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		void Form_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			if (e.KeyChar.Equals((Char)Keys.Space))
+
+
+            if (e.KeyChar.Equals((Char)Keys.Space))
 			{
 				e.Handled = true;
 			}
@@ -610,6 +634,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			outlookBarWorkSpace1.SetHeader(e.SelectedItem);
 			ModuleSelected(e.SelectedItem);
 		}
+
+       
 
     }
 }
