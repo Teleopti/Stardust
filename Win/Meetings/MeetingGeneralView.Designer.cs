@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			// dateTimePickerAdvStartDate
 			// 
 			this.dateTimePickerAdvStartDate.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-			this.dateTimePickerAdvStartDate.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.dateTimePickerAdvStartDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			// 
 			// 
 			// 
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			// dateTimePickerAdvEndDate
 			// 
 			this.dateTimePickerAdvEndDate.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-			this.dateTimePickerAdvEndDate.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.dateTimePickerAdvEndDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			// 
 			// 
 			// 
@@ -466,7 +466,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.textBoxExtLocation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtLocation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtLocation.Cursor = System.Windows.Forms.Cursors.IBeam;
-			this.textBoxExtLocation.ForeColor = System.Drawing.SystemColors.Window;
+			this.textBoxExtLocation.ForeColor = System.Drawing.SystemColors.WindowText;
 			this.textBoxExtLocation.Location = new System.Drawing.Point(101, 60);
 			this.textBoxExtLocation.MaxLength = 80;
 			this.textBoxExtLocation.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
