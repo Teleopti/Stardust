@@ -6,12 +6,25 @@
 
 	<class name="AgentBadge">
 		<cache usage ="read-write"/>
-		<id name="PersonId"
-						type="guid"
-						access="nosetter.camelcase-underscore"
-						unsaved-value="null">
+		<!--IEntity-->
+		<id name="Id"
+				type="guid"
+				access="nosetter.camelcase-underscore"
+				unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
+		<many-to-one name="UpdatedBy"
+								 class="Teleopti.Ccc.Domain.Common.Person"
+								 not-null="true"
+								 foreign-key="FK_AgentBadge_Person_UpdatedBy"/>
+		<property name="UpdatedOn"
+							type="UtcDateTime"
+							not-null="true"/>
+		<!--IEntity-->
+
+		<property name="PersonId"
+							type="guid"
+							not-null="true" />
 
 		<property name="BronzeBadge"
 							type="int"
@@ -24,5 +37,22 @@
 		<property name="GoldenBadge"
 							type="int"
 							not-null="true" />
+		<!--
+		<id name="PersonId"
+						type="guid"
+						access="nosetter.camelcase-underscore"
+						unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+		
+		<many-to-one name="UpdatedBy"
+								 class="Teleopti.Ccc.Domain.Common.Person"
+								 not-null="true"
+								 foreign-key="FK_AgentBadge_Person_PersonId"/>
+		
+		<property name="UpdatedOn"
+							type="UtcDateTime"
+							not-null="true"/>
+		-->
 	</class>
 </hibernate-mapping>

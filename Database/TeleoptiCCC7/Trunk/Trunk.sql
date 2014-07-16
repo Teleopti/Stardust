@@ -212,26 +212,41 @@ VALUES (newid(),1, @SuperUserId, getdate(), @ParentId, @FunctionCode, @FunctionD
 SELECT @FunctionId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
 UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentId WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')
 
-SET NOCOUNT OFF
-GO
-
-
 --Name: Xinfeng, Erik
 --Date: 2014-07-15  
 --Desc: Add new table for agent badges
 ----------------  
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AgentBadge]') AND type in (N'U'))
-
-CREATE TABLE [dbo].[AgentBadge](
-	[PersonId] [uniqueidentifier] NOT NULL,
-	[BronzeBadge] [int] NOT NULL,
-	[SilverBadge] [int] NOT NULL,
-	[GoldenBadge] [int] NOT NULL,
- CONSTRAINT [PK_AgentBadge] PRIMARY KEY CLUSTERED 
-(
-	[PersonId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-
+/****** Object:  Table [dbo].[AgentBadge]    Script Date: 7/15/2014 9:55:13 AM ******/
+SET ANSI_NULLS ON
 GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AgentBadge]') AND type in (N'U'))
+BEGIN
+ CREATE TABLE [dbo].[AgentBadge](
+	[Id] [uniqueidentifier] NOT NULL,
+ 	[PersonId] [uniqueidentifier] NOT NULL,
+ 	[BronzeBadge] [int] NOT NULL,
+ 	[SilverBadge] [int] NOT NULL,
+ 	[GoldenBadge] [int] NOT NULL,
+	[UpdatedBy] [uniqueidentifier] NOT NULL,
+	[UpdatedOn] [datetime] NOT NULL,
+  CONSTRAINT [PK_AgentBadge] PRIMARY KEY CLUSTERED 
+ (
+	[Id] ASC
+ )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY];
+
+/*
+ALTER TABLE [dbo].[AgentBadge]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadge_Person_PersonId] FOREIGN KEY([PersonId])
+REFERENCES [dbo].[Person] ([Id]);
+
+ALTER TABLE [dbo].[AgentBadge] CHECK CONSTRAINT [FK_AgentBadge_Person_PersonId];
+--*/
+
+ALTER TABLE [dbo].[AgentBadge]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadge_Person_UpdatedBy] FOREIGN KEY([UpdatedBy])
+REFERENCES [dbo].[Person] ([Id]);
+
+ALTER TABLE [dbo].[AgentBadge] CHECK CONSTRAINT [FK_AgentBadge_Person_UpdatedBy];
+END
