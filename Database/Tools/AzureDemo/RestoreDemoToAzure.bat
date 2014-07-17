@@ -9,6 +9,7 @@ set /A ERRORLEV=0
 set SOURCEUSER=bcpUser
 set SOURCEPWD=abc123456
 set PREVIOUSBUILD=\\hebe\Installation\PreviousBuilds
+set DEPENDENCY=\\A380\T-Files\RnD\MSI_Dependencies
 set DESTUSER=TeleoptiDemoUser
 set DESTPWD=TeleoptiDemoPwd2
 set SRCANALYTICS=TeleoptiAnalytics_Demo
@@ -45,15 +46,13 @@ For /F "tokens=1* delims=." %%A IN ("%DESTSERVER%") DO (
 
 IF NOT EXIST "%PREVIOUSBUILD%\%version%" SET ERRORLEV=33 & GOTO :error
 
-
-set DESTANALYTICS=TeleoptiAnalytics_Baseline_%version%
-set DESTCCC7=TeleoptiCCC7_Baseline_%version%
+set DESTANALYTICS=Baseline_TeleoptiAnalytics
+set DESTCCC=Baseline_TeleoptiApp
 
 ::--------
 ::Get source files for this version
 ::--------
-if exist "%workingdir%" RMDIR "%workingdir%" /S /Q
-mkdir "%workingdir%"
+if not exist "%workingdir%" mkdir "%workingdir%"
 
 ::stop any local running Demo installation (might messup data)
 net stop TeleoptiETLService
@@ -61,9 +60,9 @@ net stop TeleoptiBrokerService
 net stop TeleoptiServiceBus
 
 ::Get files needed
-ROBOCOPY "\\hebe\Installation\Dependencies\ccc7_server\DemoDatabase" "%workingdir%\DatabaseInstaller\DemoDatabase" *.bak
-ROBOCOPY "%PREVIOUSBUILD%\%version%\DemoDatabase" "%workingdir%\DatabaseInstaller\DemoDatabase" /E
-ROBOCOPY "%PREVIOUSBUILD%\%version%\Database" "%workingdir%\DatabaseInstaller" /E
+ROBOCOPY "%PREVIOUSBUILD%\%version%\Database" "%workingdir%\DatabaseInstaller" /MIR /XD DemoDatabase
+ROBOCOPY "%PREVIOUSBUILD%\%version%\DemoDatabase" "%workingdir%\DatabaseInstaller\DemoDatabase" /MIR /XF *.bak
+ROBOCOPY "%DEPENDENCY%\ccc7_server\DemoDatabase" "%workingdir%\DatabaseInstaller\DemoDatabase" *.bak
 
 ::--------
 ::Local database
@@ -100,7 +99,7 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
 ::CCC7
 SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR%\DropCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=13 & GOTO :error
-SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR%\GenerateBCPStatements.sql" -v DESTDB = "%DESTCCC7%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%AZUREADMINUSER%@%DESTSERVERPREFIX%" DESTPWD = "%AZUREADMINPWD%"
+SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR%\GenerateBCPStatements.sql" -v DESTDB = "%DESTCCC%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%AZUREADMINUSER%@%DESTSERVERPREFIX%" DESTPWD = "%AZUREADMINPWD%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=14 & GOTO :error
 SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR%\CreateCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=15 & GOTO :error
@@ -119,27 +118,27 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=18 & GOTO :error
 ::--------
 ::Drop current Demo in Azure
 echo dropping Azure Dbs...
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -dmaster -Q"DROP DATABASE %DESTANALYTICS%"
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -dmaster -Q"DROP DATABASE %DESTCCC7%"
+SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -dmaster -Q"DROP DATABASE [%DESTANALYTICS%]"
+SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -dmaster -Q"DROP DATABASE [%DESTCCC%]"
 echo dropping Azure. Done!
 
 ::Create Azure Demo
 "%workingdir%\DatabaseInstaller\DBManager.exe" -S%DESTSERVER% -D%DESTANALYTICS% -OTeleoptiAnalytics -U%AZUREADMINUSER% -P%AZUREADMINPWD% -C -L%DESTUSER%:%DESTPWD% -T
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=21 & GOTO :error
-"%workingdir%\DatabaseInstaller\DBManager.exe" -S%DESTSERVER% -D%DESTCCC7% -OTeleoptiCCC7 -U%AZUREADMINUSER% -P%AZUREADMINPWD% -C -L%DESTUSER%:%DESTPWD% -T
+"%workingdir%\DatabaseInstaller\DBManager.exe" -S%DESTSERVER% -D%DESTCCC% -OTeleoptiCCC7 -U%AZUREADMINUSER% -P%AZUREADMINPWD% -C -L%DESTUSER%:%DESTPWD% -T
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=22 & GOTO :error
 
 ::Prepare Azure DB = totally clean in out!
 ECHO Dropping Circular FKs, Delete All Azure data. Working ...
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC7% -i"%ROOTDIR%\DropCircularFKs.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC% -i"%ROOTDIR%\DropCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=23 & GOTO :error
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC7% -Q"DROP VIEW [dbo].[v_ExternalLogon]"
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC7% -i"%ROOTDIR%\DeleteAllData.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC% -Q"DROP VIEW [dbo].[v_ExternalLogon]"
+SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC% -i"%ROOTDIR%\DeleteAllData.sql"
 
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC7% -i"%workingdir%\DatabaseInstaller\TeleoptiCCC7\Programmability\01Views\dbo.v_ExternalLogon.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC% -i"%workingdir%\DatabaseInstaller\TeleoptiCCC7\Programmability\01Views\dbo.v_ExternalLogon.sql"
 
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=24 & GOTO :error
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC7% -i"%ROOTDIR%\CreateCircularFKs.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC% -i"%ROOTDIR%\CreateCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=25 & GOTO :error
 SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR%\DeleteAllData.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=26 & GOTO :error
