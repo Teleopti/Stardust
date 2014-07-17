@@ -117,9 +117,10 @@
 	        </table>
 	        <div style="float:right">
 		        <a data-bind="click: goToFirstPage"><i class="glyphicon glyphicon-fast-backward"></i></a>
-		        <a data-bind="click: previousPage"><i class="glyphicon glyphicon-backward"></i></a>
-				<a data-bind="text: selectedPageIndex()"></a>
-		        <a data-bind="click: nextPage"><i class="glyphicon glyphicon-forward"></i></a>
+		        <!-- ko foreach: displayedPages() -->
+				  <a data-bind="text: $data.index(), click: $parent.selectPage, css: {'page-selected': $data.isSelected()}"></a>
+				  <!-- /ko -->
+		        <a data-bind="click: updateDisplayedPages, visible: isMore()">...</a>
 		        <a data-bind="click: goToLastPage"><i class="glyphicon glyphicon-fast-forward"></i></a>
 	        </div>
             <div id="tooltipContainer" class="tooltipContainer"></div>

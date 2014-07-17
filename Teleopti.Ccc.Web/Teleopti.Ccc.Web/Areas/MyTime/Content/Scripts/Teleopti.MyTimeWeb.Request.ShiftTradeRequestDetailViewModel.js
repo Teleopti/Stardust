@@ -384,7 +384,7 @@ ShiftTradeRequestDetailedDayViewModel = function(data) {
 	self.createOtherSchedule(data.To);
 }
 
-Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function (chooseHistory, canvasPixelWidth) {
+Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canvasPixelWidth) {
 	var self = this;
 	self.agentName = chooseHistory.tradedSchedule.agentName;
 	var dateFormat = $("#Request-detail-datepicker-format").val().toUpperCase();
@@ -394,15 +394,14 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function (chooseHistory, can
 	self.timeLineLengthInMinutes = ko.observable();
 	self.pixelWidth = ko.observable(canvasPixelWidth);
 	self.canvasPixelWidth = ko.computed({
-		read:function() {
+		read: function() {
 			return self.pixelWidth();
 		},
 		write: function(width) {
 			var canvasWidth;
 			if (width != null) {
 				canvasWidth = width;
-			} else 
-			{
+			} else {
 				canvasWidth = $("td.the-other-agent-schedule").width();
 			}
 			self.pixelWidth(canvasWidth);
@@ -410,7 +409,7 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function (chooseHistory, can
 	});
 
 
-	self.setTimeLineLengthInMinutes = function (firstHour, lastHour) {
+	self.setTimeLineLengthInMinutes = function(firstHour, lastHour) {
 		self.timeLineStartTime(firstHour);
 		self.timeLineLengthInMinutes(lastHour.diff(firstHour, 'minutes'));
 	};
@@ -420,7 +419,7 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function (chooseHistory, can
 		return self.canvasPixelWidth() / self.timeLineLengthInMinutes();
 	});
 
-	self.hours = ko.computed(function () {
+	self.hours = ko.computed(function() {
 		var allHours = chooseHistory.hours;
 
 		if (chooseHistory.mySchedule != undefined && chooseHistory.tradedSchedule != undefined) {
@@ -445,7 +444,7 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function (chooseHistory, can
 			self.setTimeLineLengthInMinutes(scheduleStartTime, scheduleEndTime);
 
 			var truncatedHours = [];
-			$.each(allHours, function (index, hour) {
+			$.each(allHours, function(index, hour) {
 				if ((hour.startTime >= scheduleStartTime) && (hour.startTime <= scheduleEndTime)) {
 					var newHour = new Teleopti.MyTimeWeb.Request.CloneTimeLineHourAddShiftTradeViewModel(hour, scheduleStartTime, self.pixelPerMinute());
 					truncatedHours.push(newHour);
@@ -463,17 +462,23 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function (chooseHistory, can
 	});
 
 
-	self.mySchedule = ko.computed(function () {
-		$.each(chooseHistory.mySchedule.layers, function (index, vmScheduleAddShiftTrade) {
+	self.mySchedule = ko.computed(function() {
+		$.each(chooseHistory.mySchedule.layers, function(index, vmScheduleAddShiftTrade) {
 			vmScheduleAddShiftTrade.pixelPerMinute(self.pixelPerMinute());
 		});
 		return chooseHistory.mySchedule;
 	});
 
-	self.selectedSchedule = ko.computed(function () {
-		$.each(chooseHistory.tradedSchedule.layers, function (index, vmScheduleAddShiftTrade) {
+	self.selectedSchedule = ko.computed(function() {
+		$.each(chooseHistory.tradedSchedule.layers, function(index, vmScheduleAddShiftTrade) {
 			vmScheduleAddShiftTrade.pixelPerMinute(self.pixelPerMinute());
 		});
 		return chooseHistory.tradedSchedule;
 	});
+};
+
+Teleopti.MyTimeWeb.Request.PageView = function(pageIndex) {
+	var self = this;
+	self.index = ko.observable(pageIndex);
+	self.isSelected = ko.observable(false);
 }
