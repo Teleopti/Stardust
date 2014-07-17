@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             {
                 if (personsProvider.DoLoadByPerson)
                 {
-                    loadScheduleByPersons(scenario, scheduleDictionary, longPeriod, longDateOnlyPeriod, personsInOrganization);
+					loadScheduleByPersons(scenario, scheduleDictionary, longPeriod, longDateOnlyPeriod, personsInOrganization, scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
                     
                     if(scheduleDictionaryLoadOptions.LoadNotes)
                     {
@@ -315,15 +315,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         private void loadScheduleForAll(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod dateOnlyPeriod)
         {
             addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(longPeriod, scenario));
-						addPersonAssignments(scheduleDictionary, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(dateOnlyPeriod, scenario));
+			addPersonAssignments(scheduleDictionary, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(dateOnlyPeriod, scenario));
             addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(longPeriod, scenario),false,new List<IPerson>());
         }
 
-        private void loadScheduleByPersons(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> persons)
+        private void loadScheduleByPersons(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> persons, bool loadDaysAfterLeft)
         {
-            addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(persons, longPeriod, scenario));
-						addPersonAssignments(scheduleDictionary, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(persons, longDateOnlyPeriod, scenario));
-            addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(persons, longDateOnlyPeriod, scenario),true,persons);
+			addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(persons, longPeriod, scenario), loadDaysAfterLeft);
+			addPersonAssignments(scheduleDictionary, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(persons, longDateOnlyPeriod, scenario), loadDaysAfterLeft);
+			addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(persons, longDateOnlyPeriod, scenario), true, persons, loadDaysAfterLeft);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ScheduleDictionary")]
@@ -401,7 +401,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        private static void addPersonMeetings(IScheduleDictionary retDic, IEnumerable<IMeeting> meetings, bool onlyAddPersonsInList, IEnumerable<IPerson> addForThesePersons)
+		private static void addPersonMeetings(IScheduleDictionary retDic, IEnumerable<IMeeting> meetings, bool onlyAddPersonsInList, IEnumerable<IPerson> addForThesePersons, bool loadDaysAfterLeft = false)
         {
             foreach (IMeeting meeting in meetings)
             {
@@ -413,7 +413,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
                     foreach (IPersonMeeting personMeeting in personMeetings)
                     {
-                        ((ScheduleRange)retDic[meetingPerson.Person]).Add(personMeeting);
+	                    if (loadDaysAfterLeft || !checkIfPersonLeft(meetingPerson.Person, personMeeting.Period))
+		                    ((ScheduleRange) retDic[meetingPerson.Person]).Add(personMeeting);
                     }
                 }
             }
@@ -443,7 +444,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        private static void addPersonAssignments(IScheduleDictionary retDic, IEnumerable<IPersonAssignment> personAssignments)
+		private static void addPersonAssignments(IScheduleDictionary retDic, IEnumerable<IPersonAssignment> personAssignments, bool loadDaysAfterLeft = false)
         {
             IDictionary<IPerson, IList<IPersonAssignment>> dic = new Dictionary<IPerson, IList<IPersonAssignment>>();
             foreach (IPersonAssignment personAssignment in personAssignments)
@@ -451,20 +452,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 IPerson per = personAssignment.Person;
                 if (!dic.ContainsKey(per))
                     dic[per] = new List<IPersonAssignment>();
-                dic[per].Add(personAssignment);
+	            if (loadDaysAfterLeft || !checkIfPersonLeft(per, personAssignment.Period))
+		            dic[per].Add(personAssignment);
             }
             foreach (IPerson person in dic.Keys)
             {
-                ((ScheduleRange)retDic[person]).AddRange(dic[person]);
+				((ScheduleRange)retDic[person]).AddRange(dic[person]);
             }
         }
 
-        private static void addPersonAbsences(IScheduleDictionary retDic, IEnumerable<IPersonAbsence> personAbsences)
+        private static void addPersonAbsences(IScheduleDictionary retDic, IEnumerable<IPersonAbsence> personAbsences, bool loadDaysAfterLeft = false)
         {
             foreach (IPersonAbsence personAbsence in personAbsences)
             {
-                ((ScheduleRange)retDic[personAbsence.Person]).Add(personAbsence);
+				if (loadDaysAfterLeft || !checkIfPersonLeft(personAbsence.Person, personAbsence.Period))
+		            ((ScheduleRange) retDic[personAbsence.Person]).Add(personAbsence);
             }
         }
+
+	    private static bool checkIfPersonLeft(IPerson person, DateTimePeriod period)
+	    {
+		    return person.TerminalDate.HasValue && person.TerminalDate.Value.AddDays(1) < period.EndDateTime;
+	    }
     }    
 }

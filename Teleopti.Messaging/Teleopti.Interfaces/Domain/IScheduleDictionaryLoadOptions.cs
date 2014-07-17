@@ -15,5 +15,7 @@
         bool LoadNotes { get; set; }
 
 		bool LoadOnlyPreferensesAndHourlyAvailability { get; set; }
+
+	    bool LoadDaysAfterLeft { get; set; }
     }
 }
