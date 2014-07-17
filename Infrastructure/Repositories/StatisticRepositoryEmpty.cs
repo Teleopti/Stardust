@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -137,7 +138,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-		public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)
+	    public IEnumerable<Tuple<Guid, int>> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow)
+	    {
+		    return new List<Tuple<Guid, int>>();
+	    }
+
+	    public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)
         {
             return new List<Guid>();
         }

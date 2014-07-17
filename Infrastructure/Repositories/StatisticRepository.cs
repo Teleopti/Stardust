@@ -332,7 +332,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IEnumerable<Tuple<Guid, int>> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow)
+	    {
+			throw new NotImplementedException();
+	    }
+
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void AddOrUpdateActualAgentState(IActualAgentState actualAgentState)
         {
             using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())

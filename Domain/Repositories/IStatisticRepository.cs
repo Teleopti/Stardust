@@ -5,6 +5,7 @@ using System.Data;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
@@ -130,5 +131,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         IActualAgentState LoadOneActualAgentState(Guid value);
 
         void AddOrUpdateActualAgentState(IActualAgentState actualAgentState);
+
+	    IEnumerable<Tuple<Guid, int>> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow);
     }
 }
