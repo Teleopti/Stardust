@@ -85,6 +85,8 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.fi.resx" />
+    <EmbeddedResource Include="Properties\Resources.fr.resx" />
     <EmbeddedResource Include="Properties\Resources.sv.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.sv.Designer.cs</LastGenOutput>
