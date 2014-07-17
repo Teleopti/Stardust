@@ -134,3 +134,7 @@ padding-left: 20px;
 button.close {
 	color: #333333;
 }
+
+.label {
+	font-size: 80%;
+}
