@@ -89,33 +89,34 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             if (forecastMinutes == 0)
                 return 0;
-            double scheduledMinutes = skillStaffPeriod.CalculatedResource * skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
-            double minStaffBoosted = calculateMinimumStaffBoosted(skillStaffPeriod, scheduledMinutes);
-            double maxStaffBoosted = calculateMaximumStaffBoosted(skillStaffPeriod, scheduledMinutes);
+            double scheduledMinutes = skillStaffPeriod.CalculatedResource    * skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
+				double scheduledHeadMinutes = skillStaffPeriod.CalculatedLoggedOn  * skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
+				double minStaffBoosted = calculateMinimumStaffBoosted(skillStaffPeriod, scheduledHeadMinutes);
+				double maxStaffBoosted = calculateMaximumStaffBoosted(skillStaffPeriod, scheduledHeadMinutes);
             double boostedAbsoluteDifference = scheduledMinutes - forecastMinutes + minStaffBoosted + maxStaffBoosted;
             double tweakedAbsoluteDifference = calculateTweakedDifference(skill, boostedAbsoluteDifference);
             return tweakedAbsoluteDifference;
         }
 
-        private static double calculateMinimumStaffBoosted(ISkillStaffPeriod skillStaffPeriod, double scheduledMinutes)
+		  private static double calculateMinimumStaffBoosted(ISkillStaffPeriod skillStaffPeriod, double scheduledHeadMinutes)
         {
             if (skillStaffPeriod.Payload.SkillPersonData.MinimumPersons > 0)
             {
                 double minimumMinutes = skillStaffPeriod.Payload.SkillPersonData.MinimumPersons * skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
-                if (scheduledMinutes < minimumMinutes)
-                    return 1000 * (scheduledMinutes - minimumMinutes);
+					 if (scheduledHeadMinutes < minimumMinutes)
+						 return 1000 * (scheduledHeadMinutes - minimumMinutes);
                 return 0;
             }
             return 0;
         }
 
-        private static double calculateMaximumStaffBoosted(ISkillStaffPeriod skillStaffPeriod, double scheduledMinutes)
+		  private static double calculateMaximumStaffBoosted(ISkillStaffPeriod skillStaffPeriod, double scheduledHeadMinutes)
         {
             if (skillStaffPeriod.Payload.SkillPersonData.MaximumPersons > 0)
             {
                 double maximumMinutes = skillStaffPeriod.Payload.SkillPersonData.MaximumPersons * skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
-                if (scheduledMinutes > maximumMinutes)
-                    return 1000 * (scheduledMinutes - maximumMinutes);
+					 if (scheduledHeadMinutes > maximumMinutes)
+						 return 1000 * (scheduledHeadMinutes - maximumMinutes);
                 return 0;
             }
             return 0;

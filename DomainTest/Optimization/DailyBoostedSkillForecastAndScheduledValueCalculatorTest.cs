@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_stateHolder.SkillStaffPeriodHolder).Return(_skillStaffPeriodHolder);
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, dtPeriod)).Return(_skillStaffPeriods);
                 Expect.Call(_skillStaffPeriod1.FStaffTime()).Return(TimeSpan.FromMinutes(skillStaffPeriod1FStaffMinutes));
+                Expect.Call(_skillStaffPeriod1.CalculatedLoggedOn ).Return(1);
                 Expect.Call(_skillStaffPeriod1.CalculatedResource).Return(1);
                 Expect.Call(_skillStaffPeriod1.Period).Return(schedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_skillStaffPeriod1.Payload).Return(_skillStaff).Repeat.AtLeastOnce();
@@ -118,7 +119,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, dtPeriod)).Return(_skillStaffPeriods);
                 Expect.Call(_skillStaffPeriod1.FStaffTime()).Return(TimeSpan.FromMinutes(skillStaffPeriod1FStaffMinutes));
                 Expect.Call(_skillStaffPeriod2.FStaffTime()).Return(TimeSpan.FromMinutes(skillStaffPeriod2FStaffMinutes));
+                Expect.Call(_skillStaffPeriod1.CalculatedLoggedOn ).Return(1); // 1 is just to keep the value
                 Expect.Call(_skillStaffPeriod1.CalculatedResource).Return(1); // 1 is just to keep the value
+                Expect.Call(_skillStaffPeriod2.CalculatedLoggedOn ).Return(1); // 1 is just to keep the value
                 Expect.Call(_skillStaffPeriod2.CalculatedResource).Return(1); // 1 is just to keep the value
                 Expect.Call(_skillStaffPeriod1.Period).Return(schedulePeriod1).Repeat.AtLeastOnce();
                 Expect.Call(_skillStaffPeriod2.Period).Return(schedulePeriod2).Repeat.AtLeastOnce();
@@ -149,6 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mock.Record())
             {
                 Expect.Call(_skillStaffPeriod1.FStaffTime()).Return(TimeSpan.FromMinutes(skillStaffPeriod1FStaffMinutes));
+                Expect.Call(_skillStaffPeriod1.CalculatedLoggedOn ).Return(1);
                 Expect.Call(_skillStaffPeriod1.CalculatedResource).Return(1);
                 Expect.Call(_skillStaffPeriod1.Period).Return(schedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_skillStaffPeriod1.Payload).Return(_skillStaff).Repeat.AtLeastOnce();
@@ -181,6 +185,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_stateHolder.SkillStaffPeriodHolder).Return(_skillStaffPeriodHolder);
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, schedulePeriod1)).Return(_skillStaffPeriods);
                 Expect.Call(_skillStaffPeriod1.FStaffTime()).Return(TimeSpan.FromMinutes(skillStaffPeriod1FStaffMinutes)).Repeat.AtLeastOnce();
+                Expect.Call(_skillStaffPeriod1.CalculatedLoggedOn ).Return(1).Repeat.AtLeastOnce(); // 1 is just to keep the value
                 Expect.Call(_skillStaffPeriod1.CalculatedResource).Return(1).Repeat.AtLeastOnce(); // 1 is just to keep the value
                 Expect.Call(_skillStaffPeriod1.Period).Return(schedulePeriod1).Repeat.AtLeastOnce();
                 Expect.Call(_skillStaffPeriod1.Payload).Return(_skillStaff).Repeat.AtLeastOnce();
@@ -197,5 +202,86 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
             Assert.AreEqual(-500 * 100, ret);
         }
+
+		  [Test]
+		  public void VerifyAdjustedDifferenceCalculatedCorrectlyWithinMinMax()
+		  {
+			  _skillStaffPeriods = new List<ISkillStaffPeriod> { _skillStaffPeriod1 };
+
+			  const int skillStaffPeriod1FStaffMinutes = 10;
+			  const int skillStaffPeriod1PeriodMinutes = 20;
+
+			  DateTimePeriod schedulePeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 0, skillStaffPeriod1PeriodMinutes, 0, DateTimeKind.Utc));
+
+			  using (_mock.Record())
+			  {
+				  Expect.Call(_skillStaffPeriod1.FStaffTime()).Return(TimeSpan.FromMinutes(skillStaffPeriod1FStaffMinutes));
+				  Expect.Call(_skillStaffPeriod1.CalculatedLoggedOn ).Return(2.5);
+				  Expect.Call(_skillStaffPeriod1.CalculatedResource).Return(1);
+				  Expect.Call(_skillStaffPeriod1.Period).Return(schedulePeriod).Repeat.AtLeastOnce();
+				  Expect.Call(_skillStaffPeriod1.Payload).Return(_skillStaff).Repeat.AtLeastOnce();
+				  Expect.Call(_skillStaff.SkillPersonData).Return(new SkillPersonData(2, 3)).Repeat.AtLeastOnce();
+			  }
+			  double ret;
+			  using (_mock.Playback())
+			  {
+				  ret = _target.CalculateSkillStaffPeriod(_skill1, _skillStaffPeriod1);
+			  }
+			  Assert.AreEqual(50, ret);
+		  }
+
+		  [Test]
+		  public void VerifyAdjustedDifferenceCalculatedCorrectlyVoilatingMin()
+		  {
+			  _skillStaffPeriods = new List<ISkillStaffPeriod> { _skillStaffPeriod1 };
+
+			  const int skillStaffPeriod1FStaffMinutes = 10;
+			  const int skillStaffPeriod1PeriodMinutes = 20;
+
+			  DateTimePeriod schedulePeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 0, skillStaffPeriod1PeriodMinutes, 0, DateTimeKind.Utc));
+
+			  using (_mock.Record())
+			  {
+				  Expect.Call(_skillStaffPeriod1.FStaffTime()).Return(TimeSpan.FromMinutes(skillStaffPeriod1FStaffMinutes));
+				  Expect.Call(_skillStaffPeriod1.CalculatedLoggedOn).Return(2.5);
+				  Expect.Call(_skillStaffPeriod1.CalculatedResource).Return(1);
+				  Expect.Call(_skillStaffPeriod1.Period).Return(schedulePeriod).Repeat.AtLeastOnce();
+				  Expect.Call(_skillStaffPeriod1.Payload).Return(_skillStaff).Repeat.AtLeastOnce();
+				  Expect.Call(_skillStaff.SkillPersonData).Return(new SkillPersonData(3, 4)).Repeat.AtLeastOnce();
+			  }
+			  double ret;
+			  using (_mock.Playback())
+			  {
+				  ret = _target.CalculateSkillStaffPeriod(_skill1, _skillStaffPeriod1);
+			  }
+			  Assert.AreEqual(-49950, ret);
+		  }
+
+		  [Test]
+		  public void VerifyAdjustedDifferenceCalculatedCorrectlyVoilatingMax()
+		  {
+			  _skillStaffPeriods = new List<ISkillStaffPeriod> { _skillStaffPeriod1 };
+
+			  const int skillStaffPeriod1FStaffMinutes = 10;
+			  const int skillStaffPeriod1PeriodMinutes = 20;
+
+			  DateTimePeriod schedulePeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 0, skillStaffPeriod1PeriodMinutes, 0, DateTimeKind.Utc));
+
+			  using (_mock.Record())
+			  {
+				  Expect.Call(_skillStaffPeriod1.FStaffTime()).Return(TimeSpan.FromMinutes(skillStaffPeriod1FStaffMinutes));
+				  Expect.Call(_skillStaffPeriod1.CalculatedLoggedOn).Return(2.5);
+				  Expect.Call(_skillStaffPeriod1.CalculatedResource).Return(1);
+				  Expect.Call(_skillStaffPeriod1.Period).Return(schedulePeriod).Repeat.AtLeastOnce();
+				  Expect.Call(_skillStaffPeriod1.Payload).Return(_skillStaff).Repeat.AtLeastOnce();
+				  Expect.Call(_skillStaff.SkillPersonData).Return(new SkillPersonData(1, 2)).Repeat.AtLeastOnce();
+			  }
+			  double ret;
+			  using (_mock.Playback())
+			  {
+				  ret = _target.CalculateSkillStaffPeriod(_skill1, _skillStaffPeriod1);
+			  }
+			  Assert.AreEqual(50050, ret);
+		  }
     }
 }
