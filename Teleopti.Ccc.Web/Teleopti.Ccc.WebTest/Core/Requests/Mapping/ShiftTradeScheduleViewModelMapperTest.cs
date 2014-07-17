@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapMyScheduleFromReadModel()
 		{
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid() };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid(), Paging = new Paging(){Take=1}};
 			var readModel = new PersonScheduleDayReadModel();
 			var mySchedule = new ShiftTradeAddPersonScheduleViewModel();
 			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new List<IPerson>() };
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapPossibleTradesFromReadModel()
 		{
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid(), Paging = new Paging() };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid(), Paging = new Paging() { Take = 1 } };
 			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new[] { new Person() } };
 			var possibleTradeScheduleViewModels = new List<ShiftTradeAddPersonScheduleViewModel>();
 			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapNoPossibleScheduleFromPersonAndDate()
 		{
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid() };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid(), Paging = new Paging() { Take = 1 } };
 			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new List<IPerson>() };
 
 			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
@@ -99,11 +99,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
-		public void ShouldMapIsLastPageFromReadModel()
+		public void ShouldMapPageCount()
 		{
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid(), Paging = new Paging() };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid(), Paging = new Paging(){Skip = 0, Take = 1} };
 			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new[] { new Person() } };
-			var possibleTradeScheduleViewModels = new List<ShiftTradeAddPersonScheduleViewModel>{new ShiftTradeAddPersonScheduleViewModel{IsLastPage = false}};
+			var possibleTradeScheduleViewModels = new List<ShiftTradeAddPersonScheduleViewModel>{new ShiftTradeAddPersonScheduleViewModel()};
 			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
 
 			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = _target.Map(data);
 
-			result.IsLastPage.Should().Be.False();
+			result.PageCount.Should().Be.EqualTo(1);
 		}
 	}
 }

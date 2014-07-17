@@ -108,7 +108,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = target.Map(readModel);
 
-			result.IsLastPage.Should().Be.False();
 			result.MinStart.Should().Be.EqualTo(new DateTime(2013, 11, 28, 7, 0, 0));
 		}
 	}

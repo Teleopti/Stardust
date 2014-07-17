@@ -393,24 +393,6 @@ Scenario: Show possible shift trades from my team
 	Then I should see a possible schedule trade with 'OtherAgent'
 	And I should not see a possible schedule trade with 'OtherAgentNotInMyTeam'
 
-@ignore
-Scenario: Paging possible shifts
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I have possible shift trades with
-	| Field                              | Value                                     |
-	| Date                               | 2030-01-01                                |
-	| Possible trade count               | 60                                        |
-	| Workflow control set     | Trade from tomorrow until 30 days forward |
-	| Person period start date | 2012-06-18                                |
-	| Shift category            | Day                                       |
-	| Team                      | My team                                   |
-	And the current time is '2029-12-27'
-	And I view Add Shift Trade Request for date '2030-01-01'
-	And I can see '50' possible shift trades
-	When I scroll down to the bottom of the shift trade section
-	Then I can see '60' possible shift trades
-
 Scenario: Sort possible shift trades by starttime
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'

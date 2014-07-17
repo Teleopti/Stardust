@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				Name = string.Format(CultureInfo.InvariantCulture, "{0} {1}", shiftReadModel.FirstName, shiftReadModel.LastName),
 				ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection),
 				MinStart = scheduleReadModel.MinStart,
-						IsLastPage = scheduleReadModel.IsLastPage,
 						IsDayOff = false
 			};
 		}
@@ -57,7 +56,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					Name = string.Format(CultureInfo.InvariantCulture, "{0} {1}", shiftReadModel.FirstName, shiftReadModel.LastName),
 					ScheduleLayers = _layerMapper.Map(dayOffProjection),
 					MinStart = scheduleReadModel.MinStart,
-					IsLastPage = scheduleReadModel.IsLastPage,
 					IsDayOff = true
 				};
 			}

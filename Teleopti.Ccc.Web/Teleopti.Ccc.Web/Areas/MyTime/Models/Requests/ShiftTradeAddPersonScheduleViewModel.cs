@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public DateTime StartTimeUtc { get; set; }
 		public Guid PersonId { get; set; }
 		public DateTime? MinStart { get; set; }
-		public bool IsLastPage { get; set; }
 		public bool IsDayOff { get; set; }
 	}
 }

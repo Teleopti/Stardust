@@ -399,8 +399,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				}
 			});
 
-			var currentLastPageNumber = self.displayedPages()[self.displayedPages().length - 1].index();
-			if (currentLastPageNumber < pageCount) self.isMore(true);
+			var currentLastPageNumber = self.displayedPages().length > 0 ? self.displayedPages()[self.displayedPages().length - 1].index(): 0;
+			if (currentLastPageNumber != 0 && currentLastPageNumber < pageCount) self.isMore(true);
 		};
 
 		self.updateDisplayedPages = function() {
@@ -578,16 +578,16 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		    self.changeRequestedDate(-1);
 		};
 
-		self.featureCheck = function () {
+		self.featureCheck = function() {
 			ajax.Ajax({
 				url: "../ToggleHandler/IsEnabled?toggle=Request_ShiftTradeRequestForMoreDays_20918",
-				success: function (data) {
+				success: function(data) {
 					if (data.IsEnabled) {
 						self.isTradeForMultiDaysEnabled(true);
 					}
 				}
 			});
-		}
+		};
 	}
 
 	function _redrawLayers() {
