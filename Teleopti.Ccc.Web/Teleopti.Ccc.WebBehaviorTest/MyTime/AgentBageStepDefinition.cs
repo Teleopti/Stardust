@@ -23,8 +23,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var badgeRepository = new RepositoryFactory().CreateAgentBadgeRepository(uow);
-
 		}
 	}
 }

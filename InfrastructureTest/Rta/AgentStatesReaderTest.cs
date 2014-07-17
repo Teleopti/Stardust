@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
@@ -221,6 +222,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			}
 
 			public void AddOrUpdateActualAgentState(IActualAgentState actualAgentState)
+			{
+				throw new NotImplementedException();
+			}
+
+			public IEnumerable<Tuple<Guid, int>> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow)
 			{
 				throw new NotImplementedException();
 			}
