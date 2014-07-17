@@ -52,11 +52,13 @@ body {
     background: #fbfdfd url(../Images/body_bg.jpg) top center fixed no-repeat !important;
 }
 .app-title{
-    font-size: 36px;
+    font-size: 40px;
     width:300px ;
     margin:20px auto;
     color: #003366; 
     font-family: Calibri;
+	text-align: center;
+	margin-top: 40px;
 }
 /*.yahoo { background: url("/Content/images/yahoo.gif") no-repeat scroll center center rgb(255, 255, 255);}
 .google { background: url("/Content/images/google.png") no-repeat scroll center center rgb(255, 255, 255);}
