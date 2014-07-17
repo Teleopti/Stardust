@@ -12137,4 +12137,8 @@ Reduce the complexity to use these shifts.</value>
     <value>All Teams</value>
     <comment>All Permitted Teams To Make Shift Trade With</comment>
   </data>
+  <data name="AgentBadgeThresholdSetting" xml:space="preserve">
+    <value>Agent badge threshold</value>
+    <comment>Treeview node for agent badge threshold setting</comment>
+  </data>
 </root>

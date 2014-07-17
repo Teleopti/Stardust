@@ -408,6 +408,12 @@
     </Compile>
     <Compile Include="Common\Configuration\Columns\ColumnCollectionExtensions.cs" />
     <Compile Include="Common\Configuration\Columns\ActivityUpdatedReadOnlyTextColumn.cs" />
+    <Compile Include="Common\Configuration\BadgeThresholdSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Configuration\BadgeThresholdSettings.Designer.cs">
+      <DependentUpon>BadgeThresholdSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\Configuration\SmsSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2500,6 +2506,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\AuditingPage.resx">
       <DependentUpon>AuditingPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Configuration\BadgeThresholdSettings.resx">
+      <DependentUpon>BadgeThresholdSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\SmsSettingsControl.resx">
       <DependentUpon>SmsSettingsControl.cs</DependentUpon>

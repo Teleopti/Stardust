@@ -259,6 +259,7 @@
     <Compile Include="Collection\IdenticalLayersSpecification.cs" />
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
+    <Compile Include="Common\AgentBadgeThresholdSettings.cs" />
     <Compile Include="Common\AgentBadge.cs" />
     <Compile Include="Common\PersonAccountUpdater.cs" />
     <Compile Include="Common\PersonAccountUpdaterDummy.cs" />
@@ -2031,6 +2032,7 @@
     <Folder Include="Analyzer\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Common\AgentBadgeThresholdSettings.hbm.xml" />
     <EmbeddedResource Include="Common\AgentBadge.hbm.xml" />
     <Content Include="FeatureFlags\toggles.txt" />
   </ItemGroup>

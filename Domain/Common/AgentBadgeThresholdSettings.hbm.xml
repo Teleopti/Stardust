@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+									 assembly="Teleopti.Ccc.Domain"
+									 namespace="Teleopti.Ccc.Domain.Common"
+									 default-access="field.camelcase-underscore">
+
+	<class name="AgentBadgeThresholdSettings">
+		<cache usage ="read-write"/>
+		<id name="Id"
+				type="guid"
+				access="nosetter.camelcase-underscore"
+				unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+		
+		<version name="Version"
+             unsaved-value ="null"/>
+
+		<many-to-one name="BusinessUnit"
+      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+      access="nosetter.camelcase-underscore"
+      not-null="true"
+      foreign-key="FK_AgentBadgeThreshold_BusinessUnit"/>
+
+		<many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 foreign-key="FK_AgentBadgeThreshold_Person"/>
+
+		<property name="UpdatedOn"
+              type="UtcDateTime"
+              not-null="true"/>
+
+		<property name="AnsweredCallsThreshold"
+							type="int"
+							not-null="true" />
+
+		<property name="AHTThreshold"
+							type="TimeSpan"
+							not-null="true" />
+		
+		<component name="AdherenceThreshold"
+               class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+			<property name="Value" not-null="true" type="double" column="AdherenceThreshold" />
+		</component>
+
+		<property name="SilverBadgeDaysThreshold"
+							type="int"
+							not-null="true" />
+
+		<property name="GoldBadgeDaysThreshold"
+							type="int"
+							not-null="true" />
+		
+		<filter name="businessUnitFilter"
+            condition=":businessUnitParameter = BusinessUnit" />
+	</class>
+</hibernate-mapping>

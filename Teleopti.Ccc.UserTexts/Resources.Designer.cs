@@ -1385,6 +1385,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agent badge threshold.
+        /// </summary>
+        public static string AgentBadgeThresholdSetting {
+            get {
+                return ResourceManager.GetString("AgentBadgeThresholdSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agent:.
         /// </summary>
         public static string AgentColon {

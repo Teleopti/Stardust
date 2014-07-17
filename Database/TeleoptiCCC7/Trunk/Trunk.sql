@@ -217,11 +217,6 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 --Desc: Add new table for agent badges
 ----------------  
 /****** Object:  Table [dbo].[AgentBadge]    Script Date: 7/15/2014 9:55:13 AM ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AgentBadge]') AND type in (N'U'))
 BEGIN
  CREATE TABLE [dbo].[AgentBadge](
@@ -242,3 +237,39 @@ REFERENCES [dbo].[Person] ([Id]);
 
 ALTER TABLE [dbo].[AgentBadge] CHECK CONSTRAINT [FK_AgentBadge_Person_Parent];
 END
+
+--Name: Xinfeng, Erik
+--Date: 2014-07-17
+--Desc: Add new table for agent badge threshold setting
+----------------  
+/****** Object:  Table [dbo].[AgentBadgeThresholdSetting]    Script Date: 7/17/2014 4:09:11 AM ******/
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AgentBadgeThresholdSettings]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[AgentBadgeThresholdSettings](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Version] [int] NOT NULL,
+	[BusinessUnit] [uniqueidentifier] NOT NULL,
+	[AnsweredCallsThreshold] [int] NOT NULL,
+	[AHTThreshold] [bigint] NOT NULL,
+	[AdherenceThreshold] [float] NOT NULL,
+	[SilverBadgeDaysThreshold] [int] NOT NULL,
+	[GoldBadgeDaysThreshold] [int] NOT NULL,
+	[UpdatedBy] [uniqueidentifier] NOT NULL,
+	[UpdatedOn] [datetime] NOT NULL,
+ CONSTRAINT [PK_AgentBadgeThreshold] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY];
+
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadgeThreshold_BusinessUnit] FOREIGN KEY([BusinessUnit])
+REFERENCES [dbo].[BusinessUnit] ([Id]);
+
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings] CHECK CONSTRAINT [FK_AgentBadgeThreshold_BusinessUnit];
+
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadgeThreshold_Person] FOREIGN KEY([UpdatedBy])
+REFERENCES [dbo].[Person] ([Id]);
+
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings] CHECK CONSTRAINT [FK_AgentBadgeThreshold_Person];
+END
+
