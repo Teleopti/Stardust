@@ -12138,7 +12138,27 @@ Reduce the complexity to use these shifts.</value>
     <comment>All Permitted Teams To Make Shift Trade With</comment>
   </data>
   <data name="AgentBadgeThresholdSetting" xml:space="preserve">
-    <value>Agent badge threshold</value>
+    <value>Agent Badge Threshold</value>
     <comment>Treeview node for agent badge threshold setting</comment>
+  </data>
+  <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Answered Calls Threshold:</value>
+    <comment>Label for Badge Threshold for Answered Calls setting</comment>
+  </data>
+  <data name="SetBadgeThresholdForAHT" xml:space="preserve">
+    <value>Average Handle Time Threshold: </value>
+    <comment>Label for Badge Threshold for AHT setting</comment>
+  </data>
+  <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
+    <value>Adherence Threshold: </value>
+    <comment>Label for Badge Threshold for Adherence setting</comment>
+  </data>
+  <data name="SetSilverBadgeDaysThreshold" xml:space="preserve">
+    <value>Silver Badge Days Threshold: </value>
+    <comment>Label for Silver Badge Days Threshold setting</comment>
+  </data>
+  <data name="SetGoldBadgeDaysThreshold" xml:space="preserve">
+    <value>Gold Badge Days Threshold: </value>
+    <comment>Label for Gold Badge Days Threshold setting</comment>
   </data>
 </root>

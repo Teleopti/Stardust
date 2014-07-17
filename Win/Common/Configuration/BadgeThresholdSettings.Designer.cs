@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.Common.Configuration
+﻿using Syncfusion.Windows.Forms.Tools;
+
+namespace Teleopti.Ccc.Win.Common.Configuration
 {
 	partial class BadgeThresholdSettings
     {
@@ -15,8 +17,6 @@
         {
             if (disposing)
             {
-                if (_columnGridHelper!=null) 
-                    _columnGridHelper.Dispose();
                 if(components!=null) 
                     components.Dispose();
             }
@@ -36,13 +36,13 @@
 			this.labelSetThresholdForAnsweredCalls = new System.Windows.Forms.Label();
 			this.labelSetThresholdForAHT = new System.Windows.Forms.Label();
 			this.labelSetThresholdForAdherence = new System.Windows.Forms.Label();
-			this.textBoxThresholdForAHT = new System.Windows.Forms.TextBox();
-			this.textBoxThresholdForAdherence = new System.Windows.Forms.TextBox();
-			this.textBoxThresholdForAnsweredCalls = new System.Windows.Forms.TextBox();
+			this.doubleTextBoxThresholdForAdherence = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
 			this.labelSetGoldenBadgeDaysThreshold = new System.Windows.Forms.Label();
-			this.textBoxSetSilverBadgeDaysThreshold = new System.Windows.Forms.TextBox();
-			this.textBoxSetGoldenBadgeDaysThreshold = new System.Windows.Forms.TextBox();
 			this.labelSetSilverBadgeDaysThreshold = new System.Windows.Forms.Label();
+			this.numericUpDownGoldenBadgeDaysThreshold = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDownSilverBadgeDaysThreshold = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDownThresholdForAnsweredCalls = new System.Windows.Forms.NumericUpDown();
+			this.timeSpanTextBoxThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
@@ -50,6 +50,10 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.buttonDeleteContract = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanelBody.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxThresholdForAdherence)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldenBadgeDaysThreshold)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownSilverBadgeDaysThreshold)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdForAnsweredCalls)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
 			this.tableLayoutPanelHeader.SuspendLayout();
@@ -61,39 +65,39 @@
 			this.tableLayoutPanelBody.ColumnCount = 2;
 			this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 225F));
 			this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelBody.Controls.Add(this.labelSetThresholdForAnsweredCalls, 0, 1);
-			this.tableLayoutPanelBody.Controls.Add(this.labelSetThresholdForAHT, 0, 2);
-			this.tableLayoutPanelBody.Controls.Add(this.labelSetThresholdForAdherence, 0, 3);
-			this.tableLayoutPanelBody.Controls.Add(this.textBoxThresholdForAHT, 1, 2);
-			this.tableLayoutPanelBody.Controls.Add(this.textBoxThresholdForAdherence, 1, 3);
-			this.tableLayoutPanelBody.Controls.Add(this.textBoxThresholdForAnsweredCalls, 1, 1);
-			this.tableLayoutPanelBody.Controls.Add(this.labelSetGoldenBadgeDaysThreshold, 0, 6);
-			this.tableLayoutPanelBody.Controls.Add(this.textBoxSetSilverBadgeDaysThreshold, 1, 5);
-			this.tableLayoutPanelBody.Controls.Add(this.textBoxSetGoldenBadgeDaysThreshold, 1, 6);
-			this.tableLayoutPanelBody.Controls.Add(this.labelSetSilverBadgeDaysThreshold, 0, 5);
+			this.tableLayoutPanelBody.Controls.Add(this.labelSetThresholdForAnsweredCalls, 0, 0);
+			this.tableLayoutPanelBody.Controls.Add(this.labelSetThresholdForAHT, 0, 1);
+			this.tableLayoutPanelBody.Controls.Add(this.labelSetThresholdForAdherence, 0, 2);
+			this.tableLayoutPanelBody.Controls.Add(this.doubleTextBoxThresholdForAdherence, 1, 2);
+			this.tableLayoutPanelBody.Controls.Add(this.labelSetGoldenBadgeDaysThreshold, 0, 5);
+			this.tableLayoutPanelBody.Controls.Add(this.labelSetSilverBadgeDaysThreshold, 0, 4);
+			this.tableLayoutPanelBody.Controls.Add(this.numericUpDownGoldenBadgeDaysThreshold, 1, 5);
+			this.tableLayoutPanelBody.Controls.Add(this.numericUpDownSilverBadgeDaysThreshold, 1, 4);
+			this.tableLayoutPanelBody.Controls.Add(this.numericUpDownThresholdForAnsweredCalls, 1, 0);
+			this.tableLayoutPanelBody.Controls.Add(this.timeSpanTextBoxThresholdForAHT, 1, 1);
 			this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 54);
 			this.tableLayoutPanelBody.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
 			this.tableLayoutPanelBody.Padding = new System.Windows.Forms.Padding(3);
-			this.tableLayoutPanelBody.RowCount = 8;
-			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+			this.tableLayoutPanelBody.RowCount = 7;
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 3F));
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanelBody.Size = new System.Drawing.Size(522, 458);
 			this.tableLayoutPanelBody.TabIndex = 3;
 			// 
 			// labelSetThresholdForAnsweredCalls
 			// 
 			this.labelSetThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetThresholdForAnsweredCalls.Location = new System.Drawing.Point(6, 31);
+			this.labelSetThresholdForAnsweredCalls.Location = new System.Drawing.Point(6, 6);
 			this.labelSetThresholdForAnsweredCalls.Name = "labelSetThresholdForAnsweredCalls";
-			this.labelSetThresholdForAnsweredCalls.Size = new System.Drawing.Size(169, 20);
+			this.labelSetThresholdForAnsweredCalls.Size = new System.Drawing.Size(169, 17);
 			this.labelSetThresholdForAnsweredCalls.TabIndex = 0;
 			this.labelSetThresholdForAnsweredCalls.Text = "xxSetBadgeThresholdForAnsweredCalls";
 			this.labelSetThresholdForAnsweredCalls.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -101,7 +105,7 @@
 			// labelSetThresholdForAHT
 			// 
 			this.labelSetThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetThresholdForAHT.Location = new System.Drawing.Point(6, 55);
+			this.labelSetThresholdForAHT.Location = new System.Drawing.Point(6, 29);
 			this.labelSetThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
 			this.labelSetThresholdForAHT.Name = "labelSetThresholdForAHT";
 			this.labelSetThresholdForAHT.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -113,7 +117,7 @@
 			// labelSetThresholdForAdherence
 			// 
 			this.labelSetThresholdForAdherence.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetThresholdForAdherence.Location = new System.Drawing.Point(6, 79);
+			this.labelSetThresholdForAdherence.Location = new System.Drawing.Point(6, 53);
 			this.labelSetThresholdForAdherence.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
 			this.labelSetThresholdForAdherence.Name = "labelSetThresholdForAdherence";
 			this.labelSetThresholdForAdherence.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -122,62 +126,80 @@
 			this.labelSetThresholdForAdherence.Text = "xxSetBadgeThresholdForAdherence";
 			this.labelSetThresholdForAdherence.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// textBoxThresholdForAHT
+			// doubleTextBoxThresholdForAdherence
 			// 
-			this.textBoxThresholdForAHT.Location = new System.Drawing.Point(231, 56);
-			this.textBoxThresholdForAHT.Name = "textBoxThresholdForAHT";
-			this.textBoxThresholdForAHT.Size = new System.Drawing.Size(150, 20);
-			this.textBoxThresholdForAHT.TabIndex = 5;
-			// 
-			// textBoxThresholdForAdherence
-			// 
-			this.textBoxThresholdForAdherence.Location = new System.Drawing.Point(231, 80);
-			this.textBoxThresholdForAdherence.Name = "textBoxThresholdForAdherence";
-			this.textBoxThresholdForAdherence.Size = new System.Drawing.Size(150, 20);
-			this.textBoxThresholdForAdherence.TabIndex = 6;
-			// 
-			// textBoxThresholdForAnsweredCalls
-			// 
-			this.textBoxThresholdForAnsweredCalls.Location = new System.Drawing.Point(231, 32);
-			this.textBoxThresholdForAnsweredCalls.Name = "textBoxThresholdForAnsweredCalls";
-			this.textBoxThresholdForAnsweredCalls.Size = new System.Drawing.Size(150, 20);
-			this.textBoxThresholdForAnsweredCalls.TabIndex = 4;
+			this.doubleTextBoxThresholdForAdherence.BackGroundColor = System.Drawing.SystemColors.Window;
+			this.doubleTextBoxThresholdForAdherence.BeforeTouchSize = new System.Drawing.Size(150, 20);
+			this.doubleTextBoxThresholdForAdherence.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.doubleTextBoxThresholdForAdherence.DoubleValue = 0D;
+			this.doubleTextBoxThresholdForAdherence.Location = new System.Drawing.Point(231, 54);
+			this.doubleTextBoxThresholdForAdherence.MaxValue = 100D;
+			this.doubleTextBoxThresholdForAdherence.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+			this.doubleTextBoxThresholdForAdherence.MinValue = 0D;
+			this.doubleTextBoxThresholdForAdherence.Name = "doubleTextBoxThresholdForAdherence";
+			this.doubleTextBoxThresholdForAdherence.NullString = "";
+			this.doubleTextBoxThresholdForAdherence.Size = new System.Drawing.Size(150, 20);
+			this.doubleTextBoxThresholdForAdherence.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
+			this.doubleTextBoxThresholdForAdherence.TabIndex = 6;
+			this.doubleTextBoxThresholdForAdherence.Text = "0.00";
 			// 
 			// labelSetGoldenBadgeDaysThreshold
 			// 
 			this.labelSetGoldenBadgeDaysThreshold.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelSetGoldenBadgeDaysThreshold.AutoSize = true;
-			this.labelSetGoldenBadgeDaysThreshold.Location = new System.Drawing.Point(6, 132);
+			this.labelSetGoldenBadgeDaysThreshold.Location = new System.Drawing.Point(6, 108);
 			this.labelSetGoldenBadgeDaysThreshold.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
 			this.labelSetGoldenBadgeDaysThreshold.Name = "labelSetGoldenBadgeDaysThreshold";
 			this.labelSetGoldenBadgeDaysThreshold.Size = new System.Drawing.Size(161, 13);
 			this.labelSetGoldenBadgeDaysThreshold.TabIndex = 8;
 			this.labelSetGoldenBadgeDaysThreshold.Text = "xxSetSilverBadgeDaysThreshold";
 			// 
-			// textBoxSetSilverBadgeDaysThreshold
-			// 
-			this.textBoxSetSilverBadgeDaysThreshold.Location = new System.Drawing.Point(231, 107);
-			this.textBoxSetSilverBadgeDaysThreshold.Name = "textBoxSetSilverBadgeDaysThreshold";
-			this.textBoxSetSilverBadgeDaysThreshold.Size = new System.Drawing.Size(150, 20);
-			this.textBoxSetSilverBadgeDaysThreshold.TabIndex = 9;
-			// 
-			// textBoxSetGoldenBadgeDaysThreshold
-			// 
-			this.textBoxSetGoldenBadgeDaysThreshold.Location = new System.Drawing.Point(231, 131);
-			this.textBoxSetGoldenBadgeDaysThreshold.Name = "textBoxSetGoldenBadgeDaysThreshold";
-			this.textBoxSetGoldenBadgeDaysThreshold.Size = new System.Drawing.Size(150, 20);
-			this.textBoxSetGoldenBadgeDaysThreshold.TabIndex = 10;
-			// 
 			// labelSetSilverBadgeDaysThreshold
 			// 
 			this.labelSetSilverBadgeDaysThreshold.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelSetSilverBadgeDaysThreshold.AutoSize = true;
-			this.labelSetSilverBadgeDaysThreshold.Location = new System.Drawing.Point(6, 108);
+			this.labelSetSilverBadgeDaysThreshold.Location = new System.Drawing.Point(6, 84);
 			this.labelSetSilverBadgeDaysThreshold.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
 			this.labelSetSilverBadgeDaysThreshold.Name = "labelSetSilverBadgeDaysThreshold";
 			this.labelSetSilverBadgeDaysThreshold.Size = new System.Drawing.Size(161, 13);
 			this.labelSetSilverBadgeDaysThreshold.TabIndex = 7;
 			this.labelSetSilverBadgeDaysThreshold.Text = "xxSetSilverBadgeDaysThreshold";
+			// 
+			// numericUpDownGoldenBadgeDaysThreshold
+			// 
+			this.numericUpDownGoldenBadgeDaysThreshold.Location = new System.Drawing.Point(231, 107);
+			this.numericUpDownGoldenBadgeDaysThreshold.Name = "numericUpDownGoldenBadgeDaysThreshold";
+			this.numericUpDownGoldenBadgeDaysThreshold.Size = new System.Drawing.Size(150, 20);
+			this.numericUpDownGoldenBadgeDaysThreshold.TabIndex = 11;
+			// 
+			// numericUpDownSilverBadgeDaysThreshold
+			// 
+			this.numericUpDownSilverBadgeDaysThreshold.Location = new System.Drawing.Point(231, 83);
+			this.numericUpDownSilverBadgeDaysThreshold.Name = "numericUpDownSilverBadgeDaysThreshold";
+			this.numericUpDownSilverBadgeDaysThreshold.Size = new System.Drawing.Size(150, 20);
+			this.numericUpDownSilverBadgeDaysThreshold.TabIndex = 12;
+			// 
+			// numericUpDownThresholdForAnsweredCalls
+			// 
+			this.numericUpDownThresholdForAnsweredCalls.Location = new System.Drawing.Point(231, 6);
+			this.numericUpDownThresholdForAnsweredCalls.Name = "numericUpDownThresholdForAnsweredCalls";
+			this.numericUpDownThresholdForAnsweredCalls.Size = new System.Drawing.Size(150, 20);
+			this.numericUpDownThresholdForAnsweredCalls.TabIndex = 13;
+			// 
+			// timeSpanTextBoxThresholdForAHT
+			// 
+			this.timeSpanTextBoxThresholdForAHT.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
+			this.timeSpanTextBoxThresholdForAHT.AllowNegativeValues = true;
+			this.timeSpanTextBoxThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.timeSpanTextBoxThresholdForAHT.DefaultInterpretAsMinutes = true;
+			this.timeSpanTextBoxThresholdForAHT.Location = new System.Drawing.Point(232, 28);
+			this.timeSpanTextBoxThresholdForAHT.Margin = new System.Windows.Forms.Padding(4, 0, 0, 0);
+			this.timeSpanTextBoxThresholdForAHT.MaximumValue = System.TimeSpan.Parse("1.00:00:00");
+			this.timeSpanTextBoxThresholdForAHT.Name = "timeSpanTextBoxThresholdForAHT";
+			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(153, 22);
+			this.timeSpanTextBoxThresholdForAHT.TabIndex = 14;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 20;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 150;
 			// 
 			// gradientPanelHeader
 			// 
@@ -281,6 +303,10 @@
 			this.Size = new System.Drawing.Size(522, 512);
 			this.tableLayoutPanelBody.ResumeLayout(false);
 			this.tableLayoutPanelBody.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxThresholdForAdherence)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldenBadgeDaysThreshold)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownSilverBadgeDaysThreshold)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdForAnsweredCalls)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
 			this.gradientPanelHeader.ResumeLayout(false);
 			this.tableLayoutPanelHeader.ResumeLayout(false);
@@ -303,12 +329,12 @@
         private Syncfusion.Windows.Forms.ButtonAdv buttonDeleteContract;
 		private System.Windows.Forms.Label labelSetThresholdForAHT;
 		private System.Windows.Forms.Label labelSetThresholdForAdherence;
-		private System.Windows.Forms.TextBox textBoxThresholdForAHT;
-		private System.Windows.Forms.TextBox textBoxThresholdForAdherence;
-		private System.Windows.Forms.TextBox textBoxThresholdForAnsweredCalls;
 		private System.Windows.Forms.Label labelSetSilverBadgeDaysThreshold;
 		private System.Windows.Forms.Label labelSetGoldenBadgeDaysThreshold;
-		private System.Windows.Forms.TextBox textBoxSetSilverBadgeDaysThreshold;
-		private System.Windows.Forms.TextBox textBoxSetGoldenBadgeDaysThreshold;
+		private System.Windows.Forms.NumericUpDown numericUpDownGoldenBadgeDaysThreshold;
+		private System.Windows.Forms.NumericUpDown numericUpDownSilverBadgeDaysThreshold;
+		private System.Windows.Forms.NumericUpDown numericUpDownThresholdForAnsweredCalls;
+		private Controls.TimeSpanTextBox timeSpanTextBoxThresholdForAHT;
+		private Syncfusion.Windows.Forms.Tools.DoubleTextBox doubleTextBoxThresholdForAdherence;
     }
 }

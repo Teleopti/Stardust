@@ -180,7 +180,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 											new DefinitionSetSettings(),
 											new WorkflowControlSetView(_toggleManager),
 											new AuditingPage(),
-											new ScheduleTagControl()
+											new ScheduleTagControl(),
+											new BadgeThresholdSettings()
 										};
 
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))

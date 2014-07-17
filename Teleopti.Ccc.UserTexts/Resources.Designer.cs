@@ -1385,7 +1385,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agent badge threshold.
+        ///   Looks up a localized string similar to Agent Badge Threshold.
         /// </summary>
         public static string AgentBadgeThresholdSetting {
             get {
@@ -21753,6 +21753,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Badge Threshold for Adherence.
+        /// </summary>
+        public static string SetBadgeThresholdForAdherence {
+            get {
+                return ResourceManager.GetString("SetBadgeThresholdForAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Badge Threshold for AHT.
+        /// </summary>
+        public static string SetBadgeThresholdForAHT {
+            get {
+                return ResourceManager.GetString("SetBadgeThresholdForAHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Badge Threshold for Answered Calls.
+        /// </summary>
+        public static string SetBadgeThresholdForAnsweredCalls {
+            get {
+                return ResourceManager.GetString("SetBadgeThresholdForAnsweredCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set Balance Out.
         /// </summary>
         public static string SetBalanceOut {
@@ -21767,6 +21794,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SetCulture {
             get {
                 return ResourceManager.GetString("SetCulture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gold Badge Days Threshold.
+        /// </summary>
+        public static string SetGoldBadgeDaysThreshold {
+            get {
+                return ResourceManager.GetString("SetGoldBadgeDaysThreshold", resourceCulture);
             }
         }
         
@@ -21821,6 +21857,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SetScorecards {
             get {
                 return ResourceManager.GetString("SetScorecards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Silver Badge Days Threshold.
+        /// </summary>
+        public static string SetSilverBadgeDaysThreshold {
+            get {
+                return ResourceManager.GetString("SetSilverBadgeDaysThreshold", resourceCulture);
             }
         }
         
