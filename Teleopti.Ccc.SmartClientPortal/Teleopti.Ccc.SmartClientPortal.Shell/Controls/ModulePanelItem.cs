@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 			set
 			{
 				_itemText = value;
+				toolTip1.SetToolTip(panelImage, _itemText);
 				if (!_compact)
 					labelModuleText.Text = _itemText;
 			}
@@ -79,6 +80,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 		{
 			_compact = compact;
 			labelModuleText.Text = _compact ? string.Empty : _itemText;
+			toolTip1.Active = _compact;
 			setDefaultColors();
 		}
 

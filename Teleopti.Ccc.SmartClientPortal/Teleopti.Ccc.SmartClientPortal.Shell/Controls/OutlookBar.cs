@@ -15,9 +15,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 		public OutlookBar()
 		{
 			InitializeComponent();
-			_menuLauncher.ModulePanelMenuClick += menuLauncherModulePanelMenuClick;
-			if (!DesignMode)
-				contextMenuStripEx1.Items[0].Text = Resources.CompactView;
+			_menuLauncher.ModulePanelMenuClick += menuLauncherModulePanelMenuClick;	
 		}
 
 		public event EventHandler<SelectedItemChangedEventArgs> SelectedItemChanged;
@@ -105,6 +103,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 		void menuLauncherModulePanelMenuClick(object sender, EventArgs e)
 		{
 			_menuLauncher.ContextMenuStrip = contextMenuStripEx1;
+			contextMenuStripEx1.Items[0].Text = Resources.CompactView;
 			contextMenuStripEx1.Show(_menuLauncher, new Point(_menuLauncher.Width/2, _menuLauncher.Height/2));
 			_menuLauncher.ContextMenuStrip = null;
 		}

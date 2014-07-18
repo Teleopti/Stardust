@@ -28,9 +28,11 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.panelImage = new System.Windows.Forms.Panel();
 			this.labelModuleText = new System.Windows.Forms.Label();
+			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -47,7 +49,7 @@
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(181, 32);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(146, 32);
 			this.tableLayoutPanel1.TabIndex = 0;
 			this.tableLayoutPanel1.Click += new System.EventHandler(this.onClick);
 			this.tableLayoutPanel1.MouseEnter += new System.EventHandler(this.onMouseEnter);
@@ -74,13 +76,17 @@
 			this.labelModuleText.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelModuleText.Location = new System.Drawing.Point(35, 0);
 			this.labelModuleText.Name = "labelModuleText";
-			this.labelModuleText.Size = new System.Drawing.Size(143, 32);
+			this.labelModuleText.Size = new System.Drawing.Size(108, 32);
 			this.labelModuleText.TabIndex = 1;
 			this.labelModuleText.Text = "ItemText";
 			this.labelModuleText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.labelModuleText.Click += new System.EventHandler(this.onClick);
 			this.labelModuleText.MouseEnter += new System.EventHandler(this.onMouseEnter);
 			this.labelModuleText.MouseLeave += new System.EventHandler(this.onMouseLeave);
+			// 
+			// toolTip1
+			// 
+			this.toolTip1.Active = false;
 			// 
 			// ModulePanelItem
 			// 
@@ -91,7 +97,7 @@
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Margin = new System.Windows.Forms.Padding(2);
 			this.Name = "ModulePanelItem";
-			this.Size = new System.Drawing.Size(181, 32);
+			this.Size = new System.Drawing.Size(146, 32);
 			this.Click += new System.EventHandler(this.onClick);
 			this.MouseEnter += new System.EventHandler(this.onMouseEnter);
 			this.MouseLeave += new System.EventHandler(this.onMouseLeave);
@@ -107,5 +113,6 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Panel panelImage;
 		private System.Windows.Forms.Label labelModuleText;
+		private System.Windows.Forms.ToolTip toolTip1;
 	}
 }
