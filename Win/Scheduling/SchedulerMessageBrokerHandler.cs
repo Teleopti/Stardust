@@ -273,6 +273,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 				return _owner.SchedulerState.Schedules.UpdateFromBroker(new NoteRepository(unitOfWorkFactory), eventMessage.DomainObjectId);
 				}
+			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPublicNote)))
+				{
+				return _owner.SchedulerState.Schedules.UpdateFromBroker(new PublicNoteRepository(unitOfWorkFactory), eventMessage.DomainObjectId);
+				}
             if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IStudentAvailabilityDay)))
             {
                 return _owner.SchedulerState.Schedules.UpdateFromBroker(new StudentAvailabilityDayRepository(unitOfWorkFactory), eventMessage.DomainObjectId);

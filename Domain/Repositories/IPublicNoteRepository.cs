@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-	public interface IPublicNoteRepository : IRepository<IPublicNote>, ILoadAggregateById<IPublicNote>
+    public interface IPublicNoteRepository : IRepository<IPublicNote>, ILoadAggregateById<IPublicNote>, ILoadAggregateFromBroker<IPublicNote>
     {
         /// <summary>
         /// Finds all public notes for the specified period and scenario.
