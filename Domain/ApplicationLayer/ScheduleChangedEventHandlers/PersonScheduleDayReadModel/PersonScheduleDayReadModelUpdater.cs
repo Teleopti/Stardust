@@ -7,7 +7,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 {
 	public class PersonScheduleDayReadModelUpdater :
 		IHandleEvent<ProjectionChangedEvent>, 
-		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>
+		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>,
+		IHandleEvent<PersonTerminatedEvent>
 	{
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IPersonScheduleDayReadModelPersister _scheduleDayReadModelRepository;
@@ -30,6 +31,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public void Handle(ProjectionChangedEventForPersonScheduleDay @event)
 		{
 			createReadModel(@event);
+		}
+
+		public void Handle(PersonTerminatedEvent @event)
+		{
+			_scheduleDayReadModelRepository.UpdateReadModels(new DateOnlyPeriod(new DateOnly(@event.TerminationDate), DateOnly.MaxValue), @event.PersonId, @event.BusinessUnitId, null, false);
 		}
 
 		private void createReadModel(ProjectionChangedEventBase message)
