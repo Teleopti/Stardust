@@ -762,7 +762,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	return {
 		Init: function () {
 			vm = '';
-			initScrollPaging();
 		},
 		SetShiftTradeRequestDate: function (date) {
 			return setShiftTradeRequestDate(date);
@@ -782,24 +781,4 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			_cleanUp();
 		}
 	};
-
-	function initScrollPaging() {
-		$(window).scroll(loadAPageIfRequired);
-	}
-	
-	function loadAPageIfRequired() {
-
-	    if ($('#Request-add-shift-trade').filter(':visible').length == 0)
-	    	return;
-		
-	    $('#tooltipContainer').each(function (i, el) {
-			// Is this element visible onscreen?
-			// LoadMore
-			var elem = $(el);
-			if (elem.visible(true)) {
-				vm.loadSchedule();
-			}	
-		});
-	}
-	
 })(jQuery);
