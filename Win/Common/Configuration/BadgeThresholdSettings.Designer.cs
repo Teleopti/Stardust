@@ -192,12 +192,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxThresholdForAHT.AllowNegativeValues = true;
 			this.timeSpanTextBoxThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.timeSpanTextBoxThresholdForAHT.DefaultInterpretAsMinutes = true;
-			this.timeSpanTextBoxThresholdForAHT.Location = new System.Drawing.Point(232, 28);
-			this.timeSpanTextBoxThresholdForAHT.Margin = new System.Windows.Forms.Padding(4, 0, 0, 0);
+			this.timeSpanTextBoxThresholdForAHT.Location = new System.Drawing.Point(231, 29);
+			this.timeSpanTextBoxThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
 			this.timeSpanTextBoxThresholdForAHT.MaximumValue = System.TimeSpan.Parse("1.00:00:00");
 			this.timeSpanTextBoxThresholdForAHT.Name = "timeSpanTextBoxThresholdForAHT";
 			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(153, 22);
 			this.timeSpanTextBoxThresholdForAHT.TabIndex = 14;
+			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 20;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 150;
 			// 
