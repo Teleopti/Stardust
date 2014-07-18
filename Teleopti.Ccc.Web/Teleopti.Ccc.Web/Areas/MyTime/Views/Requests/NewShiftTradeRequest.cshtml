@@ -115,7 +115,7 @@
 			        </tr>
 		        </tbody>
 	        </table>
-	        <div style="float:right">
+	        <div style="float:right" data-bind="visible: !isDetailVisible()">
 		        <a data-bind="click: goToFirstPage, visible: isPageEdgeVisible()"><i class="glyphicon glyphicon-fast-backward"></i></a>
 		        <!-- ko foreach: displayedPages() -->
 				  <a data-bind="text: $data.index(), click: $parent.selectPage, css: {'page-selected': $data.isSelected()}"></a>
