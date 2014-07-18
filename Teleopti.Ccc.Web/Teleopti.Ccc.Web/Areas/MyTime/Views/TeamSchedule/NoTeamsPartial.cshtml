@@ -21,8 +21,7 @@
 
 	$(function () {
 		var vm = new EmptyTeamScheduleViewModel();
-
-		vm.selectedDate(moment('@Model', "yyyyMMdd"));
+		vm.selectedDate(moment('@Model', "YYYYMMDD"));
 
 		vm.selectedDate.subscribe(function () {
 			Teleopti.MyTimeWeb.Portal.NavigateTo("TeamSchedule/Index", vm.selectedDate().format('YYYY-MM-DD'), null);
