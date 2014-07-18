@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Syncfusion.Drawing;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Scheduling;
+﻿using Teleopti.Ccc.Win.Common;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.Win
 {
 	public partial class TestAdditionalInfoView : BaseRibbonForm
 	{
@@ -16,6 +10,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			InitializeComponent();
 			if (!DesignMode)
 				SetTexts();
+		}
+
+		public TestAdditionalInfoView(string header)
+			: this(header, string.Empty)
+		{}
+
+
+		public TestAdditionalInfoView(string header, string text) : this()
+		{
+			labelTestInfoHeader.Text = header;
+			textBoxTestInfoText.Text = text;
 		}
 
 		public void CloseForm()

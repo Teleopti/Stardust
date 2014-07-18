@@ -2269,6 +2269,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ResumeLayout(true);
 
 			Cursor = Cursors.Default;
+
+			if (StateHolderReader.Instance.StateReader.SessionScopeData.TestMode)
+			{
+				var testView = new TestAdditionalInfoView("Loaded");
+				testView.ShowDialog();
+			}
 		}
 
 		private void setupRequestViewButtonStates()
