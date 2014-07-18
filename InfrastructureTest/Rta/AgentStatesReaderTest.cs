@@ -230,6 +230,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			{
 				throw new NotImplementedException();
 			}
+
+			public IEnumerable<Tuple<Guid, int>> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow)
+			{
+				throw new NotImplementedException();
+			}
+
+			public IEnumerable<Tuple<Guid, int>> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow)
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 		private static IPerson createPersonInTeam(ITeam team)

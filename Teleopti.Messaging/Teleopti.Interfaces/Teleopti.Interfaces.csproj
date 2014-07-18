@@ -783,6 +783,7 @@
     <Compile Include="Messages\Denormalize\InitialLoadScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\PersonPeriodChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\ProcessDenormalizeQueue.cs" />
+    <Compile Include="Messages\General\AgentBadgeCalculateMessage.cs" />
     <Compile Include="Messages\General\ChildSkillSelection.cs" />
     <Compile Include="Messages\General\QuickForecastWorkloadsMessage.cs" />
     <Compile Include="Messages\General\QuickForecastWorkloadMessage.cs" />

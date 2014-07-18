@@ -1,6 +1,7 @@
 using Autofac;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
+using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
