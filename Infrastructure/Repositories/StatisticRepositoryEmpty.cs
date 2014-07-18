@@ -138,19 +138,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-		public IEnumerable<Tuple<Guid, int>> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow)
-	    {
-		    return new List<Tuple<Guid, int>>();
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow)
+		{
+			return new List<Guid>();
 		}
 
-		public IEnumerable<Tuple<Guid, int>> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow)
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow)
 		{
-			return new List<Tuple<Guid, int>>();
+			return new List<Guid>();
 		}
 
-		public IEnumerable<Tuple<Guid, int>> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow)
+		public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow)
 		{
-			return new List<Tuple<Guid, int>>();
+			return new List<Guid>();
 		}
 
 		public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)

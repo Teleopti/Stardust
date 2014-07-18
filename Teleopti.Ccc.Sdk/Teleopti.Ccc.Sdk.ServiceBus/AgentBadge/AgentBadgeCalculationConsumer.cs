@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	{
 		private readonly IServiceBus _serviceBus;
 		private readonly IRepositoryFactory _repositoryFactory;
-		private readonly IEnumerable<IAgentBadgeCalculator> _calculators;
+		private readonly IAgentBadgeCalculator _calculator;
 
 		public AgentBadgeCalculationConsumer(IServiceBus serviceBus, IRepositoryFactory repositoryFactory)
 		{
@@ -20,12 +20,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_repositoryFactory = repositoryFactory;
 			if (_repositoryFactory != null)
 			{
-				_calculators = new IAgentBadgeCalculator[]
-				{
-					new AgentBadgeAnsweredCallsCalculator(_repositoryFactory.CreateStatisticRepository()),
-					new AgentBadgeAdherenceCalculator(_repositoryFactory.CreateStatisticRepository()),
-					new AgentBadgeAHTCalculator(_repositoryFactory.CreateStatisticRepository()),
-				};
+				_calculator = new AgentBadgeCalculator(_repositoryFactory.CreateStatisticRepository());
 			}
 		}
 
@@ -40,10 +35,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				}
 				using (var uow = dataSource.Statistic.CurrentUnitOfWork())
 				{
-					foreach (var calculator in _calculators)
-					{
-						calculator.Calculate(uow, allAgents);
-					}
+					_calculator.Calculate(uow, allAgents);
 				}
 			}
 

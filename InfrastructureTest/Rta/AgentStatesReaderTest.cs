@@ -226,17 +226,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				throw new NotImplementedException();
 			}
 
-			public IEnumerable<Tuple<Guid, int>> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow)
+			public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow)
 			{
 				throw new NotImplementedException();
 			}
 
-			public IEnumerable<Tuple<Guid, int>> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow)
+			public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow)
 			{
 				throw new NotImplementedException();
 			}
 
-			public IEnumerable<Tuple<Guid, int>> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow)
+			public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow)
 			{
 				throw new NotImplementedException();
 			}

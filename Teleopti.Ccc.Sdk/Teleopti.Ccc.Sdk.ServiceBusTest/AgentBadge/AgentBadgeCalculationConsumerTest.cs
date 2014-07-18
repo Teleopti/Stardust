@@ -18,6 +18,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 {
 	public class AgentBadgeCalculationConsumerTest
 	{
+		private IDataSource _dataSource;
+		private IUnitOfWorkFactory _uowFactory;
+		private IRepositoryFactory _repositoryFactory;
+		private IStatisticRepository _statisticsRepository;
+		private IPersonRepository _personRepository;
+		private IUnitOfWork _uow;
+
 		[Test]
 		public void ShouldSendNextCalculateMessageOneDayAfter()
 		{
@@ -33,33 +40,35 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			serviceBus.DelaySentMessage[0].Should().Be.EqualTo(message);
 		}
 
+		[SetUp]
+		public void Setup()
+		{
+			_dataSource = MockRepository.GenerateStub<IDataSource>();
+			_uowFactory = MockRepository.GenerateStub<IUnitOfWorkFactory>();
+			_dataSource.Stub(x => x.Statistic).Return(_uowFactory);
+			_dataSource.Stub(x => x.Application).Return(_uowFactory);
+
+			_repositoryFactory = MockRepository.GenerateStub<IRepositoryFactory>();
+			_statisticsRepository = MockRepository.GenerateStub<IStatisticRepository>();
+			_personRepository = MockRepository.GenerateStub<IPersonRepository>();
+
+			_uow = MockRepository.GenerateStub<IUnitOfWork>();
+			_uowFactory.Stub(x => x.CurrentUnitOfWork()).Return(_uow);
+		}
 
 		[Test]
-		public void ShouldGiveAgentBronzeForAnsweredCalls()
+		public void ShouldAwardBronzeForAnsweredCalls()
 		{
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
 
+			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
+			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
 
-			var dataSource = MockRepository.GenerateStub<IDataSource>();
-			var uowFactory = MockRepository.GenerateStub<IUnitOfWorkFactory>();
-			dataSource.Stub(x => x.Statistic).Return(uowFactory);
-			dataSource.Stub(x => x.Application).Return(uowFactory);
-			var uow = MockRepository.GenerateStub<IUnitOfWork>();
-			uowFactory.Stub(x => x.CurrentUnitOfWork()).Return(uow);
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow)).Return(new List<Guid>{person.Id.Value});
+			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson> { person });
 
-			var repositoryFactory = MockRepository.GenerateStub<IRepositoryFactory>();
-			var statisticsRepository = MockRepository.GenerateStub<IStatisticRepository>();
-			var personRepository = MockRepository.GenerateStub<IPersonRepository>();
-			repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(statisticsRepository);
-			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
-
-			statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(uow)).Return(new List<Tuple<Guid, int>> { new Tuple<Guid, int>(person.Id.Value, 50) });
-			personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { person });
-
-			var target = new AgentBadgeCalculationConsumerForTest(null, repositoryFactory, dataSource);
-
-
+			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage());
 
 			person.Badges.BronzeBadge.Should().Be.EqualTo(1);
@@ -71,23 +80,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
 
-			var dataSource = MockRepository.GenerateStub<IDataSource>();
-			var uowFactory = MockRepository.GenerateStub<IUnitOfWorkFactory>();
-			dataSource.Stub(x => x.Statistic).Return(uowFactory);
-			dataSource.Stub(x => x.Application).Return(uowFactory);
-			var uow = MockRepository.GenerateStub<IUnitOfWork>();
-			uowFactory.Stub(x => x.CurrentUnitOfWork()).Return(uow);
+			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
+			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
 
-			var repositoryFactory = MockRepository.GenerateStub<IRepositoryFactory>();
-			var statisticsRepository = MockRepository.GenerateStub<IStatisticRepository>();
-			var personRepository = MockRepository.GenerateStub<IPersonRepository>();
-			repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(statisticsRepository);
-			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow)).Return(new List<Guid>{person.Id.Value});
+			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { person });
 
-			statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(uow)).Return(new List<Tuple<Guid, int>> { new Tuple<Guid, int>(person.Id.Value, 50) });
-			personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { person });
-
-			var target = new AgentBadgeCalculationConsumerForTest(null, repositoryFactory, dataSource);
+			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 
 			target.Consume(new AgentBadgeCalculateMessage());
 
@@ -100,27 +99,37 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
 
-			var dataSource = MockRepository.GenerateStub<IDataSource>();
-			var uowFactory = MockRepository.GenerateStub<IUnitOfWorkFactory>();
-			dataSource.Stub(x => x.Statistic).Return(uowFactory);
-			dataSource.Stub(x => x.Application).Return(uowFactory);
-			var uow = MockRepository.GenerateStub<IUnitOfWork>();
-			uowFactory.Stub(x => x.CurrentUnitOfWork()).Return(uow);
+			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
+			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
 
-			var repositoryFactory = MockRepository.GenerateStub<IRepositoryFactory>();
-			var statisticsRepository = MockRepository.GenerateStub<IStatisticRepository>();
-			var personRepository = MockRepository.GenerateStub<IPersonRepository>();
-			repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(statisticsRepository);
-			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
+			_statisticsRepository.Stub(x => x.LoadAgentsUnderThresholdForAHT(_uow)).Return(new List<Guid>{person.Id.Value});
+			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson> { person });
 
-			statisticsRepository.Stub(x => x.LoadAgentsUnderThresholdForAHT(uow)).Return(new List<Tuple<Guid, int>> { new Tuple<Guid, int>(person.Id.Value, 50) });
-			personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { person });
-
-			var target = new AgentBadgeCalculationConsumerForTest(null, repositoryFactory, dataSource);
+			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 
 			target.Consume(new AgentBadgeCalculateMessage());
 
 			person.Badges.BronzeBadge.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldAwardBronzeForBothAdherenceAndAnsweredCalls()
+		{
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+
+			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
+			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
+
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow)).Return(new List<Guid>{person.Id.Value});
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow)).Return(new List<Guid>{person.Id.Value});
+			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { person });
+
+			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
+
+			target.Consume(new AgentBadgeCalculateMessage());
+
+			person.Badges.BronzeBadge.Should().Be.EqualTo(2);
 		}
 	}
 

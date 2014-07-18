@@ -168,8 +168,6 @@
       <Link>Rta\ITeleoptiRtaService.cs</Link>
     </Compile>
     <Compile Include="AgentBadgeBusBootStrapper.cs" />
-    <Compile Include="AgentBadge\AgentBadgeAdherenceCalculator.cs" />
-    <Compile Include="AgentBadge\AgentBadgeAnsweredCallsCalculator.cs" />
     <Compile Include="AgentBadge\AgentBadgeCalculationConsumer.cs" />
     <Compile Include="AgentBadge\AgentBadgeCalculator.cs" />
     <Compile Include="AgentBadge\IAgentBadgeCalculator.cs" />

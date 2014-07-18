@@ -332,20 +332,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-		public IEnumerable<Tuple<Guid, int>> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow)
-	    {
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow)
+		{
 			throw new NotImplementedException();
-	    }
+		}
 
-	    public IEnumerable<Tuple<Guid, int>> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow)
-	    {
-		    throw new NotImplementedException();
-	    }
+	    public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow)
+		{
+			throw new NotImplementedException();
+		}
 
-	    public IEnumerable<Tuple<Guid, int>> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow)
-	    {
-		    throw new NotImplementedException();
-	    }
+	    public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow)
+		{
+			throw new NotImplementedException();
+		}
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void AddOrUpdateActualAgentState(IActualAgentState actualAgentState)
