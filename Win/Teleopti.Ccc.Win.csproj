@@ -675,6 +675,12 @@
       <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
+    <Compile Include="TestAdditionalInfoView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestAdditionalInfoView.Designer.cs">
+      <DependentUpon>TestAdditionalInfoView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2759,6 +2765,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Permissions\PermissionViewer.resx">
       <DependentUpon>PermissionViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestAdditionalInfoView.resx">
+      <DependentUpon>TestAdditionalInfoView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporting\ReportUserSelectorAuditingView.resx">
       <DependentUpon>ReportUserSelectorAuditingView.cs</DependentUpon>
