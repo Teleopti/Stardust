@@ -233,6 +233,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			if (self.isTradeForMultiDaysEnabled() && agent != null) {
 				self.add();
 			}
+			if (agent == null) {
+				self.selectedInternal(false);
+			}
 		};
 
 		self.sendRequest = function () {
