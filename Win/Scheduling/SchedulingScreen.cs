@@ -836,7 +836,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_splitContainerAdvMain.Visible = false;
 			_clipboardControl.SetButtonState(ClipboardAction.Paste, true);
 			_clipboardControlRestrictions.SetButtonState(ClipboardAction.Paste, true);
-			toolStripLabelAutoTag.Visible = false;
+
 			Show();
 			Application.DoEvents();
 			loadQuickAccessState();
@@ -2241,7 +2241,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (schedulerSplitters1.PinnedPage != null)
 				schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
 
-			toolStripLabelAutoTag.Visible = true;
+			toolStripStatusLabelScheduleTag.Visible = true;
 			
 
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
@@ -2282,7 +2282,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (StateHolderReader.Instance.StateReader.SessionScopeData.TestMode)
 			{
-				var testView = new TestAdditionalInfoView("Loaded");
+				var testView = new TestAdditionalInfoView{Header ="Loaded"};
 				testView.ShowDialog();
 			}
 		}
@@ -5957,7 +5957,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemViewPointTimeZone.Visible = show;
 			toolStripMenuItemSwitchToViewPointOfSelectedAgent.Visible = show;
 			toolStripStatusLabelTimeZone.Visible = show;
-			toolStripStatusLabelTimeZone.Text = string.Concat(Resources.ViewPointTimeZone, Resources.Colon,
+			toolStripStatusLabelTimeZone.Text = string.Concat(LanguageResourceHelper.Translate("XXViewPointTimeZone"), Resources.Colon,
 																_schedulerState.TimeZoneInfo.StandardName);
 		}
 

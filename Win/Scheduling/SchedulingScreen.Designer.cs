@@ -383,14 +383,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// toolStripSpinningProgressControl1
 			// 
 			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
-			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
+			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = false;
 			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.White;
 			this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
 			this.toolStripSpinningProgressControl1.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 11;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 9;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -401,7 +401,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripStatusLabelStatus.Name = "toolStripStatusLabelStatus";
 			this.toolStripStatusLabelStatus.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.SetShortcut(this.toolStripStatusLabelStatus, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(1082, 21);
+			this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(1128, 21);
 			this.toolStripStatusLabelStatus.Spring = true;
 			this.toolStripStatusLabelStatus.Text = "READY";
 			this.toolStripStatusLabelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -413,7 +413,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripProgressBar1.Maximum = 100;
 			this.toolStripProgressBar1.Name = "toolStripProgressBar1";
 			this.SetShortcut(this.toolStripProgressBar1, System.Windows.Forms.Keys.None);
-			this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 24);
+			this.toolStripProgressBar1.Size = new System.Drawing.Size(75, 24);
 			this.toolStripProgressBar1.Step = 1;
 			this.toolStripProgressBar1.Value = 0;
 			// 
@@ -422,11 +422,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripStatusLabelTimeZone.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
 			this.toolStripStatusLabelTimeZone.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
 			this.toolStripStatusLabelTimeZone.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripStatusLabelTimeZone.Image = ((System.Drawing.Image)(resources.GetObject("toolStripStatusLabelTimeZone.Image")));
+			this.toolStripStatusLabelTimeZone.ForeColor = System.Drawing.Color.White;
 			this.toolStripStatusLabelTimeZone.Name = "toolStripStatusLabelTimeZone";
 			this.SetShortcut(this.toolStripStatusLabelTimeZone, System.Windows.Forms.Keys.None);
 			this.toolStripStatusLabelTimeZone.Size = new System.Drawing.Size(4, 21);
-			this.toolStripStatusLabelTimeZone.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.toolStripStatusLabelTimeZone.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabelTimeZone.Visible = false;
 			// 
 			// toolStripStatusLabelScheduleTag
@@ -440,6 +440,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripStatusLabelScheduleTag.Size = new System.Drawing.Size(20, 21);
 			this.toolStripStatusLabelScheduleTag.Text = "...";
 			this.toolStripStatusLabelScheduleTag.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripStatusLabelScheduleTag.Visible = false;
 			// 
 			// toolStripStatusLabelContractTime
 			// 
@@ -1541,7 +1542,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripTabItemHome.Panel.Text = "XXHome";
 			this.toolStripTabItemHome.Position = 0;
 			this.SetShortcut(this.toolStripTabItemHome, System.Windows.Forms.Keys.None);
-			this.toolStripTabItemHome.Size = new System.Drawing.Size(65, 25);
+			this.toolStripTabItemHome.Size = new System.Drawing.Size(69, 25);
 			this.toolStripTabItemHome.Text = "XXHome";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripTabItemHome, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripTabItemHome, false);
@@ -2615,7 +2616,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripTabItemChart.Panel.Text = "XXChart";
 			this.toolStripTabItemChart.Position = 1;
 			this.SetShortcut(this.toolStripTabItemChart, System.Windows.Forms.Keys.None);
-			this.toolStripTabItemChart.Size = new System.Drawing.Size(62, 25);
+			this.toolStripTabItemChart.Size = new System.Drawing.Size(66, 25);
 			this.toolStripTabItemChart.Text = "XXChart";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripTabItemChart, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripTabItemChart, false);
@@ -2771,7 +2772,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripTabItem1.Panel.Text = "XXRequestsMenu";
 			this.toolStripTabItem1.Position = 2;
 			this.SetShortcut(this.toolStripTabItem1, System.Windows.Forms.Keys.None);
-			this.toolStripTabItem1.Size = new System.Drawing.Size(109, 25);
+			this.toolStripTabItem1.Size = new System.Drawing.Size(113, 25);
 			this.toolStripTabItem1.Text = "XXRequestsMenu";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripTabItem1, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripTabItem1, false);
@@ -3374,9 +3375,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// schedulerSplitters1
 			// 
+			this.schedulerSplitters1.BackColor = System.Drawing.Color.White;
 			this.schedulerSplitters1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.schedulerSplitters1.Location = new System.Drawing.Point(3, 160);
 			this.schedulerSplitters1.Name = "schedulerSplitters1";
+			this.schedulerSplitters1.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.schedulerSplitters1.Size = new System.Drawing.Size(1267, 325);
 			this.schedulerSplitters1.TabIndex = 6;
 			// 

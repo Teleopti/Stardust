@@ -353,6 +353,10 @@
     <None Include="Resources\WFM-Reports.png" />
     <None Include="Resources\WFM-Schedules.png" />
     <None Include="Resources\WFM-Shifts.png" />
+    <None Include="Resources\WFM-Circle-1.ico" />
+    <None Include="Resources\WFMIcon.ico" />
+    <None Include="Resources\WFMIconVarning.ico" />
+    <None Include="Resources\WFMIconWarning1.ico" />
     <Content Include="TeleoptiCCCv7.ico" />
   </ItemGroup>
   <ItemGroup>

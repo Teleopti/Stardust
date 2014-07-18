@@ -11,14 +11,10 @@ namespace Teleopti.Ccc.Win
 			InitializeComponent();
 		}
 
-		public TestAdditionalInfoView(string header) : this()
+		public string Header
 		{
-			labelTestInfoHeader.Text = header;
-		}
-
-		public void CloseForm()
-		{
-			Close();
+			get { return labelTestInfoHeader.Text; }
+			set { labelTestInfoHeader.Text = value; }
 		}
 	}
 }

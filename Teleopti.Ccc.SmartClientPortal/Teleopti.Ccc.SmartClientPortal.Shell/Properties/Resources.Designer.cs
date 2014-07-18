@@ -446,5 +446,35 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon WFMIcon {
+            get {
+                object obj = ResourceManager.GetObject("WFMIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon WFMIconVarning {
+            get {
+                object obj = ResourceManager.GetObject("WFMIconVarning", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon WFMIconWarning1 {
+            get {
+                object obj = ResourceManager.GetObject("WFMIconWarning1", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

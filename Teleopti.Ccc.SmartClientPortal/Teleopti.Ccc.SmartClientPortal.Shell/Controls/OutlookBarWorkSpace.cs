@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 			panel1.Controls.Clear();
 			panel1.Controls.Add(navigatorControl);
 			navigatorControl.Dock = DockStyle.Fill;
+			navigatorControl.Focus();
 		}
 	}
 }

@@ -539,7 +539,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         {
             if (isOk)
             {
-                notifyIcon.Icon =  Resources.NotifyIconOk;
+                notifyIcon.Icon =  Resources.WFMIcon;
                 notifyIcon.Text = UserTexts.Resources.CheckSystemOk;
                 notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
                 notifyIcon.BalloonTipTitle = UserTexts.Resources.CheckSystemOk;
@@ -547,7 +547,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             }
             else
             {
-                notifyIcon.Icon = Resources.NotifyIconWarning;
+                notifyIcon.Icon = Resources.WFMIcon;
                 notifyIcon.Text = UserTexts.Resources.CheckSystemWarning;
                 notifyIcon.BalloonTipIcon = ToolTipIcon.Warning;
                 notifyIcon.BalloonTipTitle = UserTexts.Resources.CheckSystemWarning;
@@ -605,11 +605,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			
 			var navigator = uc as AbstractNavigator;
 			if (navigator != null)
+			{
 				navigator.RefreshNavigator();
+			}
 
-			//var shifts = uc as Win.Shifts.ShiftsNavigationPanel;
-			//if (shifts != null && !startup)
-			//	shifts.OpenShifts();
+		    //var shifts = uc as Win.Shifts.ShiftsNavigationPanel;
+		    //if (shifts != null && !startup)
+		    //	shifts.OpenShifts();
 	    }
 
         private void toolStripButtonCustomerWeb_Click(object sender, EventArgs e)
