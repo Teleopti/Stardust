@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.TestCommon
 		public FakeLoggedOnUser()
 		{
 			_person = new Person();
+			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 		}
 
 		public IPerson CurrentUser()
