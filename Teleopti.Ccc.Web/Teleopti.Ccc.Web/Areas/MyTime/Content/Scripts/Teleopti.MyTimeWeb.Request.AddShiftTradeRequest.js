@@ -57,7 +57,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	    self.selectedPageIndex = ko.observable(1);
 	    self.pageCount = ko.observable(1);
 	    self.displayedPages = ko.observableArray();
-		self.isMore = ko.observable(false);
+	    self.isMore = ko.observable(false);
+	    self.isPageEdgeVisible = ko.observable(true);
 
 		self.isDetailVisible = ko.computed(function () {
 			if (self.agentChoosed() === null) {
@@ -532,9 +533,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self.IsLoading(true);
 				},
 				success: function (data, textStatus, jqXHR) {
-
 					self.pageCount(data.PageCount);
-					
+					if (self.pageCount() == 0) {
+						self.isPageEdgeVisible(false);
+					}
 					if (self.displayedPages().length == 0) {
 						self.createDisplayedPages(data.PageCount);
 					}

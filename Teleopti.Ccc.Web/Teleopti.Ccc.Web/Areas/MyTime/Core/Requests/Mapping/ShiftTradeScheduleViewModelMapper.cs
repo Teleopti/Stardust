@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				return new ShiftTradeScheduleViewModel();
 			}
-			
+			var pageCount = personNum % data.Paging.Take != 0 ? personNum / data.Paging.Take + 1 : personNum / data.Paging.Take;
 
 			ShiftTradeAddPersonScheduleViewModel mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel);
 			var possibleTradeSchedule = getPossibleTradeSchedules(possibleTradePersons, data.Paging).ToList();
@@ -42,18 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			IEnumerable<ShiftTradeTimeLineHoursViewModel> timeLineHours = _shiftTradeTimeLineHoursViewModelMapper.Map(
 				mySchedule, possibleTradeSchedule, data.ShiftTradeDate);
 
-			var pageCount = 0;
-			if (mySchedule != null)
-			{
-				if (personNum == 0)
-				{
-					pageCount = 1;
-				}
-				else
-				{
-					pageCount = personNum % data.Paging.Take != 0 ? personNum / data.Paging.Take + 1 : personNum / data.Paging.Take;
-				}
-			}
+					
 			return new ShiftTradeScheduleViewModel
 			{
 				MySchedule = mySchedule,
