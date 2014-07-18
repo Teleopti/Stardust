@@ -1,26 +1,19 @@
-﻿using Teleopti.Ccc.Win.Common;
+﻿using System.Windows.Forms;
+using Teleopti.Ccc.Win.Common;
 
 namespace Teleopti.Ccc.Win
 {
-	public partial class TestAdditionalInfoView : BaseRibbonForm
+	public partial class TestAdditionalInfoView : Form
 	{
 
-		private TestAdditionalInfoView()
+		public TestAdditionalInfoView()
 		{
 			InitializeComponent();
-			if (!DesignMode)
-				SetTexts();
 		}
 
-		public TestAdditionalInfoView(string header)
-			: this(header, string.Empty)
-		{}
-
-
-		public TestAdditionalInfoView(string header, string text) : this()
+		public TestAdditionalInfoView(string header) : this()
 		{
 			labelTestInfoHeader.Text = header;
-			textBoxTestInfoText.Text = text;
 		}
 
 		public void CloseForm()

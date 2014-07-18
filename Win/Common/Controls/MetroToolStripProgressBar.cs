@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			Rectangle rec = new Rectangle();
 			rec.Width = (int)(e.ClipRectangle.Width * ((double)_value / Maximum));
 			rec.Height = e.ClipRectangle.Height - 9;
-			e.Graphics.FillRectangle(Brushes.White, rec.Width, 4, e.ClipRectangle.Width, rec.Height);
+			e.Graphics.FillRectangle(Brushes.White, rec.Width, 4, e.ClipRectangle.Width, 4);
 		}
 	}
 

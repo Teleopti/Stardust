@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var period = new DateOnlyPeriod(_stateHolder.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-10), _stateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(2));
             var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
 			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules, period.ToDateTimePeriod(_stateHolder.TimeZoneInfo));
+			backgroundWorker.ReportProgress(1);
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
 				resourceCalculateDays(backgroundWorker, useOccupancyAdjustment, _stateHolder.ConsiderShortBreaks,

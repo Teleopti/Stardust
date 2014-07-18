@@ -826,14 +826,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			Cursor = Cursors.WaitCursor;
 			Application.DoEvents();
+
+			//leave this at the top of this method
+			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXLoadingThreeDots");
+			toolStripProgressBar1.Value = 0;
+			toolStripProgressBar1.Maximum = _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection().Count + 19;
+			toolStripProgressBar1.Visible = true;
+
 			_splitContainerAdvMain.Visible = false;
 			_clipboardControl.SetButtonState(ClipboardAction.Paste, true);
 			_clipboardControlRestrictions.SetButtonState(ClipboardAction.Paste, true);
+			toolStripLabelAutoTag.Visible = false;
 			Show();
 			Application.DoEvents();
 			loadQuickAccessState();
 			disableAllExceptCancelInRibbon();
-			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXLoadingThreeDots");
+			
 
 			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
 			{
@@ -845,8 +853,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			backgroundWorkerLoadData.DoWork += backgroundWorkerLoadData_DoWork;
 			backgroundWorkerLoadData.RunWorkerCompleted += backgroundWorkerLoadData_RunWorkerCompleted;
 			backgroundWorkerLoadData.ProgressChanged += backgroundWorkerLoadData_ProgressChanged;
-			toolStripProgressBar1.Value = 0;
-			toolStripProgressBar1.Maximum = _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection().Count + 19;
+			
 
 			var authorization = PrincipalAuthorization.Instance();
 			toolStripMenuItemMeetingOrganizer.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings);
@@ -2182,6 +2189,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (Disposing)
 				return;
 			toolStripProgressBar1.PerformStep();
+			statusStrip1.Refresh();
 			var status = e.UserState as string;
 			if (status != null)
 				toolStripStatusLabelStatus.Text = status;
@@ -2232,7 +2240,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (schedulerSplitters1.PinnedPage != null)
 				schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
-			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReadyThreeDots");
+
+			toolStripLabelAutoTag.Visible = true;
+			
 
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
 			{
@@ -2267,7 +2277,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setupRequestViewButtonStates();
 			releaseUserInterface(e.Cancelled);
 			ResumeLayout(true);
-
+			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReadyThreeDots");
 			Cursor = Cursors.Default;
 
 			if (StateHolderReader.Instance.StateReader.SessionScopeData.TestMode)
@@ -3140,15 +3150,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					decider = new PeopleAndSkillLoaderDecider(new PersonRepository(uow));
 				}
-				methods.Add(new LoaderMethod(loadCommonStateHolder, Resources.LoadingDataTreeDots));
+				methods.Add(new LoaderMethod(loadCommonStateHolder, LanguageResourceHelper.Translate("XXLoadingDataTreeDots")));
 				methods.Add(new LoaderMethod(loadSkills, null));
 				methods.Add(new LoaderMethod(loadSettings, null));
 				methods.Add(new LoaderMethod(loadAuditingSettings, null));
-				methods.Add(new LoaderMethod(loadPeople, Resources.LoadingPeopleTreeDots));
+				methods.Add(new LoaderMethod(loadPeople, LanguageResourceHelper.Translate("XXLoadingPeopleTreeDots")));
 				methods.Add(new LoaderMethod(filteringPeopleAndSkills, null));
-				methods.Add(new LoaderMethod(loadSchedules, Resources.LoadingSchedulesTreeDots));
+				methods.Add(new LoaderMethod(loadSchedules, LanguageResourceHelper.Translate("XXLoadingSchedulesTreeDots")));
 				methods.Add(new LoaderMethod(loadRequests, null));
-				methods.Add(new LoaderMethod(loadSkillDays, Resources.LoadingSkillDataTreeDots));
+				methods.Add(new LoaderMethod(loadSkillDays, LanguageResourceHelper.Translate("XXLoadingSkillDataTreeDots")));
 				methods.Add(new LoaderMethod(loadDefinitionSets, null));
 				methods.Add(new LoaderMethod(loadContractSchedule, null));
 				methods.Add(new LoaderMethod(loadAccounts, null));
@@ -3178,7 +3188,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, toggleManager);
 		
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation)
-				backgroundWorkerLoadData.ReportProgress(1, Resources.CalculatingResourcesDotDotDot);
+				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot"));
 
 			var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
 			optimizationHelperWin.ResourceCalculateAllDays(backgroundWorkerLoadData, true);
@@ -3191,12 +3201,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_validation)
 				validation();
 
+			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXValidations"));
 			////TODO move into the else clause above
 			foreach (IPerson permittedPerson in SchedulerState.AllPermittedPersons)
 			{
 				validatePersonAccounts(permittedPerson);
 			}
 			SchedulerState.SchedulingResultState.Schedules.ModifiedPersonAccounts.Clear();
+			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXLoadingFormThreeDots"));
+			backgroundWorkerLoadData.ReportProgress(1);
+			backgroundWorkerLoadData.ReportProgress(1);
 
 			foreach (var tag in _schedulerState.CommonStateHolder.ActiveScheduleTags)
 			{
@@ -3206,6 +3220,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			_lastSaved = DateTime.Now;
+			
 		}
 
 		private void createMaxSeatSkills(ISkillDayRepository skillDayRepository)
@@ -3249,7 +3264,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void validation()
 		{
-			backgroundWorkerLoadData.ReportProgress(1, string.Format(CultureInfo.CurrentCulture, Resources.ValidatingPersons, SchedulerState.AllPermittedPersons.Count));
+			backgroundWorkerLoadData.ReportProgress(1, string.Format(CultureInfo.CurrentCulture, LanguageResourceHelper.Translate("XXValidatingPersons"), SchedulerState.AllPermittedPersons.Count));
 			_personsToValidate.Clear();
 			foreach (IPerson permittedPerson in SchedulerState.AllPermittedPersons)
 			{
