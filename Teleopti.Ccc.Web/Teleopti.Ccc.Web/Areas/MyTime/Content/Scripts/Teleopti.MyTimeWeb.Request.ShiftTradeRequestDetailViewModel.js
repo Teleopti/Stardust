@@ -26,7 +26,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.IsSelected = ko.observable(false);
 	self.IsEditable = ko.observable();
 	self.IsNewInProgress = ko.observable(false);
-	self.PersonFromAdded = false;
 	self.ToggleSelected = function () {
 	    self.IsSelected(!self.IsSelected());
 	};
@@ -45,9 +44,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.Approve = function () {
 		self.CanApproveAndDeny(false);
 		if (self.UpdatedMessage() != undefined) {
-			if (!self.PersonFromAdded) {
+			if (self.Message().search(self.personFrom()) != 0) {
 				self.Message(self.personFrom() + ": " + self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
-				self.PersonFromAdded = true;
 			} else {
 				self.Message(self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
 			}
@@ -73,9 +71,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 		self.CanApproveAndDeny(false);
 
 		if (self.UpdatedMessage() != undefined) {
-			if (!self.PersonFromAdded) {
+			if (self.Message().search(self.personFrom()) != 0) {
 				self.Message(self.personFrom() + ": " + self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
-				self.PersonFromAdded = true;
 			} else {
 				self.Message(self.Message() + "<br/>" + self.personTo() + ": " + self.UpdatedMessage());
 			}

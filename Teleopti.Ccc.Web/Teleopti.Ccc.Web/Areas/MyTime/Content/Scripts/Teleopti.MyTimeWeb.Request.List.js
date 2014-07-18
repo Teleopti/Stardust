@@ -24,7 +24,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         self.Status = ko.observable();
         self.Dates = ko.observable();
         self.UpdatedOn = ko.observable();
-        self.Text = ko.observable();
+	    self.TextSegments = ko.observableArray();
         self.DenyReason = ko.observable();
         self.ListText = ko.observable();
         self.Link = ko.observable();
@@ -231,7 +231,13 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
     };
     
     ko.utils.extend(RequestItemViewModel.prototype, {
-        Initialize: function (data, isProcessing) {
+    	Initialize: function (data, isProcessing) {
+    		var textSegs = data.Text.split("<br/>");
+		    var textNoBr = "";
+		    $.each(textSegs, function(index, text) {
+			    textNoBr = textNoBr + text + " ";
+		    });
+
         	var self = this;
 	        self.isProcessing(isProcessing);
             self.Subject(data.Subject == null ? '' : data.Subject);
@@ -239,9 +245,9 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             self.Status(data.Status);
             self.Dates(data.Dates);
             self.UpdatedOn(data.UpdatedOn);
-            self.Text(data.Text);
+            self.TextSegments(textSegs);
+            self.ListText(textNoBr.length > 50 ? textNoBr.substring(0, 50) + '...' : textNoBr);
             self.DenyReason(data.DenyReason);
-            self.ListText(data.Text.length > 50 ? data.Text.substring(0, 50) + '...' : data.Text);
             self.Link(data.Link.href);
             self.Id(data.Id);
             self.StatusClass(_classFromStatus(data));

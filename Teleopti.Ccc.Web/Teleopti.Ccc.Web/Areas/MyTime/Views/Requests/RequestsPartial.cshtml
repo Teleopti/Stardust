@@ -134,8 +134,16 @@
 									<span class="request-caption">@Resources.Date: </span><span class="request-data-date" data-bind="text: Dates"></span>
 									<span class="request-caption">@Resources.UpdatedOn: </span><span data-bind="text: UpdatedOn"></span>
 								</div>
-								<div class="request-data-message request-text" data-bind="html:IsSelected() ? Text : ListText">
+								<!-- ko if: !IsSelected() -->
+								<div class="request-data-message request-text" data-bind="text: ListText()">
 								</div>
+								<!-- /ko -->
+								<!-- ko if: IsSelected() -->
+								<!-- ko foreach:TextSegments-->
+								<div class="request-data-message request-text" data-bind="text:$data">
+								</div>
+								<!-- /ko -->
+								<!-- /ko -->
 							</div>
 							<div class="request-edit" data-bind="visible: IsSelected, with: DetailItem">
 								<div class="request-denyreason alert alert-warning" data-bind="html: DenyReason, visible: DenyReason() != ''"></div>
