@@ -26,10 +26,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			_schedulePersonProvider = schedulePersonProvider;
 		}
 
-		public IEnumerable<GroupScheduleShiftViewModel> CreateViewModel(Guid groupId, DateTime dateTimeInUtc)
+		public IEnumerable<GroupScheduleShiftViewModel> CreateViewModel(Guid groupId, DateTime dateInUserTimeZone)
 		{
+			var dateTimeInUtc= TimeZoneInfo.ConvertTime(dateInUserTimeZone, _user.CurrentUser().PermissionInformation.DefaultTimeZone(), TimeZoneInfo.Utc);
 			var dateTimePeriod = new DateTimePeriod(dateTimeInUtc, dateTimeInUtc.AddHours(25));
-			var people = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(dateTimeInUtc), groupId,
+			var people = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(dateInUserTimeZone), groupId,
 			                                                                 DefinedRaptorApplicationFunctionPaths.
 																				 MyTeamSchedules).ToArray();
 			var emptyReadModel = new PersonScheduleDayReadModel[] {};
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					CanSeeUnpublishedSchedules =
 						_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules),
 					CanSeeConfidentialAbsencesFor =
-						_schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(dateTimeInUtc), groupId,
+						_schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(dateInUserTimeZone), groupId,
 						                                                    DefinedRaptorApplicationFunctionPaths.ViewConfidential),
 					CanSeePersons = people
 				};
