@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -2036,6 +2037,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 						, Resources.SchedulingResult);
 			}
 			_scheduleOptimizerHelper.ResetWorkShiftFinderResults();
+
+			if (StateHolderReader.Instance.StateReader.SessionScopeData.TestMode)
+			{
+				var testView = new TestAdditionalInfoView("Task Done");
+				testView.ShowDialog();
+			}
 		}
 
 		private void disableScheduleButtonsOnNonCoherentSelection(IEnumerable<IScheduleDay> selectedSchedules)
@@ -2272,7 +2279,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (StateHolderReader.Instance.StateReader.SessionScopeData.TestMode)
 			{
-				var testView = new TestAdditionalInfoView("Loaded");
+				var testView = new TestAdditionalInfoView("Loading Done");
 				testView.ShowDialog();
 			}
 		}
@@ -2775,7 +2782,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//Next line will start work on another background thread.
 			//No code after next line please.
 			RecalculateResources();
-			//afterBackgroundWorkersCompleted(false);
 		}
 
 		private void _backgroundWorkerScheduling_ProgressChanged(object sender, ProgressChangedEventArgs e)
