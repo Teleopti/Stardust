@@ -24,6 +24,7 @@ using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using Teleopti.Ccc.WinCode.Intraday;
+using Teleopti.Ccc.WpfControls.Controls.Notes;
 using Teleopti.Interfaces.Domain;
 using Cursors = System.Windows.Forms.Cursors;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
@@ -473,6 +474,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
         public void UpdateFromEditor()
         {
+            NotesEditor.RemoveFocus();
             _intradayViewContent.UpdateFromEditor();
         }
 
