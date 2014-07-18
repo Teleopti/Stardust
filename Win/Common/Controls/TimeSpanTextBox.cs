@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         TimeSpan _initResolution;
         private TimeSpan _maximumValue = new TimeSpan(24, 0, 0);
         private bool _defaultInterpretAsMinutes;
+		private TimeFormatsType _timeFormat = TimeFormatsType.HoursMinutes;
 
         public TimeSpanTextBox()
         {
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         private void parse(string text)
         {
             TimeSpan timeValue;
-			if (TimeHelper.TryParseLongHourStringDefaultInterpretation(text, _maximumValue, out timeValue, TimeFormatsType.HoursMinutes, _defaultInterpretAsMinutes))
+			if (TimeHelper.TryParseLongHourStringDefaultInterpretation(text, _maximumValue, out timeValue, _timeFormat, _defaultInterpretAsMinutes))
             {
                 if (timeValue > _maximumValue)
                 {
@@ -68,17 +69,22 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
         private void formatText()
         {
-            var ci = CultureInfo.CurrentCulture;
             if (!AllowNegativeValues && _lastCorrectTime < TimeSpan.Zero)
             {
                 _lastCorrectTime = TimeSpan.Zero;
-                TimeSpanBox.Text = TimeHelper.GetLongHourMinuteTimeString(TimeSpan.Zero, ci);
-                return;
             }
-            TimeSpanBox.Text = TimeHelper.GetLongHourMinuteTimeString(_lastCorrectTime, ci);
+            TimeSpanBox.Text = formatTimeSpan(_lastCorrectTime);
         }
 
-        public override bool HasHelp
+	    private string formatTimeSpan(TimeSpan span)
+		{
+			var ci = CultureInfo.CurrentCulture;
+		    return _timeFormat == TimeFormatsType.HoursMinutes
+			    ? TimeHelper.GetLongHourMinuteTimeString(span, ci)
+			    : TimeHelper.GetLongHourMinuteSecondTimeString(span, ci);
+		}
+
+	    public override bool HasHelp
         {
             get
             {
@@ -130,6 +136,13 @@ namespace Teleopti.Ccc.Win.Common.Controls
             get { return TimeSpanBox.TextAlign; }
             set { TimeSpanBox.TextAlign = value; }
         }
+
+		[Browsable(true)]
+		public TimeFormatsType TimeFormat
+		{
+			get { return _timeFormat; }
+			set { _timeFormat = value; }
+		}
 
         protected override void OnLeave(EventArgs e)
         {
