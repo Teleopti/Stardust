@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -28,6 +29,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         }
 
         public bool MickeMode { get; set; }
+
+		[DefaultValue(false)]
+		public bool TestMode { get; set; }
 
         public object Clip { get; set; }
 

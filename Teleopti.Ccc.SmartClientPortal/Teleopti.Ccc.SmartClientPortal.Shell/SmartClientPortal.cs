@@ -171,6 +171,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             {
                 StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode = true;
             }
+			if (e.KeyCode == Keys.T && e.Shift && e.Alt)
+			{
+				StateHolderReader.Instance.StateReader.SessionScopeData.TestMode = true;
+			}
             base.OnKeyDown(e);
         }
 
