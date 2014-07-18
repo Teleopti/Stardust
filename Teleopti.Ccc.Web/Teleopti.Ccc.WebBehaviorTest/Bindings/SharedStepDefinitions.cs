@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I click the next day button")]
 		public void WhenIClickNextVirtualSchedulePeriodButton()
 		{
-			Browser.Interactions.ClickUsingJQuery(".input-group button.done:has(i.glyphicon-chevron-right)");
+			Browser.Interactions.ClickUsingJQuery(".input-group button.done:has(i.glyphicon-chevron-right):visible");
 		}
 
 		[When(@"I click previous virtual schedule period button")]

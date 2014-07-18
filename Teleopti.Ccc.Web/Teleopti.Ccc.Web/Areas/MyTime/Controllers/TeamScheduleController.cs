@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			{
 				var defaultTeam = _defaultTeamProvider.DefaultTeam(date.Value);
 				if (defaultTeam == null)
-					return View("NoTeamsPartial", date.Value);
+					return View("NoTeamsPartial", date.Value.Date.ToString("yyyyMMdd"));
 
 				id = defaultTeam.Id;
 			}
