@@ -22,16 +22,16 @@
 	$(function () {
 		var vm = new EmptyTeamScheduleViewModel();
 
-		vm.selectedDate(moment('@Model'));
-		
-		vm.selectedDate.subscribe(function () {
-			Teleopti.MyTimeWeb.Portal.NavigateTo("TeamSchedule/Index", vm.selectedDate().format('YYYY-MM-DD'), null);
-		});
-
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 			vm.weekStart(data.WeekStart);
 			vm.dateFormat(data.DateFormatForMoment);
 			ko.applyBindings(vm);
+
+			vm.selectedDate(moment('@Model', data.DateFormatForMoment));
+
+			vm.selectedDate.subscribe(function () {
+				Teleopti.MyTimeWeb.Portal.NavigateTo("TeamSchedule/Index", vm.selectedDate().format('YYYY-MM-DD'), null);
+			});
 		});
 	});
 </script>

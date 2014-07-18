@@ -112,6 +112,9 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 						vm.selectedTeam(teamId);
 					else if (vm.showTeamPicker())
 						_navigateTo(_getNavigateToDate());
+					else {
+						_navigateTo(vm.selectedDate().format('YYYY-MM-DD'), null);
+					}
 				}
 
 				var navigate = function() {
