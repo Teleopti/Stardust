@@ -110,6 +110,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_localEventAggregator.GetEvent<SelectedNodesChanged>().Publish("");
 
 				SetTexts();
+				view.Focus();
 			}))
 			{
 				SelectorPresenter = null;

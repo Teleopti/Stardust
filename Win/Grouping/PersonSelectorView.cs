@@ -84,6 +84,7 @@ namespace Teleopti.Ccc.Win.Grouping
             tab.Tag = mainTabLoadCommand;
             tabControlAdv.SelectedIndex = 0;
             reLoadTree();
+	        tabControlAdv.Focus();
         }
 
         public DateOnly SelectedDate
