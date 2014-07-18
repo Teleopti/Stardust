@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Win
 	public partial class TestAdditionalInfoView : BaseRibbonForm
 	{
 
-		public TestAdditionalInfoView()
+		private TestAdditionalInfoView()
 		{
 			InitializeComponent();
 			if (!DesignMode)

@@ -33,10 +33,10 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestAdditionalInfoView));
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.buttonOk = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.labelTestInfoHeader = new System.Windows.Forms.Label();
 			this.textBoxTestInfoText = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.buttonOk = new Syncfusion.Windows.Forms.ButtonAdv();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -87,8 +87,46 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(329, 209);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(329, 141);
 			this.tableLayoutPanel1.TabIndex = 30;
+			// 
+			// labelTestInfoHeader
+			// 
+			this.labelTestInfoHeader.AutoSize = true;
+			this.labelTestInfoHeader.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.labelTestInfoHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTestInfoHeader.Location = new System.Drawing.Point(3, 0);
+			this.labelTestInfoHeader.Name = "labelTestInfoHeader";
+			this.labelTestInfoHeader.Size = new System.Drawing.Size(323, 35);
+			this.labelTestInfoHeader.TabIndex = 0;
+			this.labelTestInfoHeader.Text = "Label text";
+			this.labelTestInfoHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// textBoxTestInfoText
+			// 
+			this.textBoxTestInfoText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBoxTestInfoText.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBoxTestInfoText.Location = new System.Drawing.Point(3, 38);
+			this.textBoxTestInfoText.Multiline = true;
+			this.textBoxTestInfoText.Name = "textBoxTestInfoText";
+			this.textBoxTestInfoText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBoxTestInfoText.Size = new System.Drawing.Size(323, 64);
+			this.textBoxTestInfoText.TabIndex = 1;
+			// 
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.ColumnCount = 3;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 82F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.Controls.Add(this.buttonOk, 1, 0);
+			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 108);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 1;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(323, 30);
+			this.tableLayoutPanel2.TabIndex = 32;
 			// 
 			// buttonOk
 			// 
@@ -107,48 +145,12 @@
 			this.buttonOk.Text = "xxOk";
 			this.buttonOk.UseVisualStyle = true;
 			// 
-			// labelTestInfoHeader
-			// 
-			this.labelTestInfoHeader.AutoSize = true;
-			this.labelTestInfoHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.labelTestInfoHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTestInfoHeader.Location = new System.Drawing.Point(3, 0);
-			this.labelTestInfoHeader.Name = "labelTestInfoHeader";
-			this.labelTestInfoHeader.Size = new System.Drawing.Size(323, 35);
-			this.labelTestInfoHeader.TabIndex = 0;
-			this.labelTestInfoHeader.Text = "Label text";
-			this.labelTestInfoHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// textBoxTestInfoText
-			// 
-			this.textBoxTestInfoText.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBoxTestInfoText.Location = new System.Drawing.Point(3, 38);
-			this.textBoxTestInfoText.Multiline = true;
-			this.textBoxTestInfoText.Name = "textBoxTestInfoText";
-			this.textBoxTestInfoText.Size = new System.Drawing.Size(323, 132);
-			this.textBoxTestInfoText.TabIndex = 1;
-			// 
-			// tableLayoutPanel2
-			// 
-			this.tableLayoutPanel2.ColumnCount = 3;
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 82F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.Controls.Add(this.buttonOk, 1, 0);
-			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 176);
-			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 1;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(323, 30);
-			this.tableLayoutPanel2.TabIndex = 32;
-			// 
 			// TestAdditionalInfoView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
-			this.ClientSize = new System.Drawing.Size(341, 249);
+			this.ClientSize = new System.Drawing.Size(341, 181);
 			this.ControlBox = false;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Controls.Add(this.ribbonControlAdv1);
