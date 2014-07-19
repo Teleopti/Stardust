@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
+			Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvMainTabPage;
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PersonSelectorView));
 			this.treeViewAdvMainTabTree = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
 			this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -56,10 +57,10 @@
 			tabPageAdvMainTabPage.Controls.Add(this.xdtpDate);
 			tabPageAdvMainTabPage.Image = null;
 			tabPageAdvMainTabPage.ImageSize = new System.Drawing.Size(16, 16);
-			tabPageAdvMainTabPage.Location = new System.Drawing.Point(2, 34);
+			tabPageAdvMainTabPage.Location = new System.Drawing.Point(0, 23);
 			tabPageAdvMainTabPage.Name = "tabPageAdvMainTabPage";
 			tabPageAdvMainTabPage.ShowCloseButton = true;
-			tabPageAdvMainTabPage.Size = new System.Drawing.Size(322, 394);
+			tabPageAdvMainTabPage.Size = new System.Drawing.Size(326, 407);
 			tabPageAdvMainTabPage.TabIndex = 1;
 			tabPageAdvMainTabPage.Text = "xxMain";
 			tabPageAdvMainTabPage.ThemesEnabled = false;
@@ -67,8 +68,10 @@
 			// treeViewAdvMainTabTree
 			// 
 			this.treeViewAdvMainTabTree.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.White);
+			this.treeViewAdvMainTabTree.BeforeTouchSize = new System.Drawing.Size(326, 387);
 			this.treeViewAdvMainTabTree.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(193)))), ((int)(((byte)(222)))));
 			this.treeViewAdvMainTabTree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.treeViewAdvMainTabTree.CanSelectDisabledNode = false;
 			this.treeViewAdvMainTabTree.ContextMenuStrip = this.contextMenuStrip;
 			this.treeViewAdvMainTabTree.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeViewAdvMainTabTree.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
@@ -86,12 +89,14 @@
 			this.treeViewAdvMainTabTree.LeftImageList = this.ImageList;
 			this.treeViewAdvMainTabTree.Location = new System.Drawing.Point(0, 20);
 			this.treeViewAdvMainTabTree.Margin = new System.Windows.Forms.Padding(0);
+			this.treeViewAdvMainTabTree.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.treeViewAdvMainTabTree.Name = "treeViewAdvMainTabTree";
 			this.treeViewAdvMainTabTree.Office2007ScrollBars = true;
 			this.treeViewAdvMainTabTree.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectAll;
 			this.treeViewAdvMainTabTree.ShowFocusRect = true;
-			this.treeViewAdvMainTabTree.Size = new System.Drawing.Size(322, 374);
+			this.treeViewAdvMainTabTree.Size = new System.Drawing.Size(326, 387);
 			this.treeViewAdvMainTabTree.SortWithChildNodes = true;
+			this.treeViewAdvMainTabTree.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Default;
 			this.treeViewAdvMainTabTree.TabIndex = 7;
 			this.treeViewAdvMainTabTree.Text = "treeViewAdv1";
 			// 
@@ -171,16 +176,13 @@
 			// 
 			// 
 			this.xdtpDate.Calendar.AllowMultipleSelection = false;
+			this.xdtpDate.Calendar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.xdtpDate.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.xdtpDate.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
 			this.xdtpDate.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.xdtpDate.Calendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.xdtpDate.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.xdtpDate.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
-			this.xdtpDate.Calendar.HeaderEndColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255)))));
-			this.xdtpDate.Calendar.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.xdtpDate.Calendar.HeaderHeight = 20;
-			this.xdtpDate.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.xdtpDate.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
 			this.xdtpDate.Calendar.HeadGradient = true;
 			this.xdtpDate.Calendar.Iso8601CalenderFormat = false;
@@ -189,7 +191,7 @@
 			this.xdtpDate.Calendar.Name = "monthCalendar";
 			this.xdtpDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.xdtpDate.Calendar.SelectedDates = new System.DateTime[0];
-			this.xdtpDate.Calendar.Size = new System.Drawing.Size(198, 174);
+			this.xdtpDate.Calendar.Size = new System.Drawing.Size(185, 174);
 			this.xdtpDate.Calendar.SizeToFit = true;
 			this.xdtpDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.xdtpDate.Calendar.TabIndex = 0;
@@ -200,7 +202,10 @@
 			// 
 			// 
 			this.xdtpDate.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.xdtpDate.Calendar.NoneButton.Location = new System.Drawing.Point(126, 0);
+			this.xdtpDate.Calendar.NoneButton.BackColor = System.Drawing.SystemColors.Window;
+			this.xdtpDate.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.xdtpDate.Calendar.NoneButton.IsBackStageButton = false;
+			this.xdtpDate.Calendar.NoneButton.Location = new System.Drawing.Point(113, 0);
 			this.xdtpDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
 			this.xdtpDate.Calendar.NoneButton.Text = "None";
 			this.xdtpDate.Calendar.NoneButton.UseVisualStyle = true;
@@ -208,22 +213,28 @@
 			// 
 			// 
 			this.xdtpDate.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.xdtpDate.Calendar.TodayButton.BackColor = System.Drawing.SystemColors.Window;
+			this.xdtpDate.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.xdtpDate.Calendar.TodayButton.IsBackStageButton = false;
 			this.xdtpDate.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.xdtpDate.Calendar.TodayButton.Size = new System.Drawing.Size(126, 20);
+			this.xdtpDate.Calendar.TodayButton.Size = new System.Drawing.Size(113, 20);
 			this.xdtpDate.Calendar.TodayButton.Text = "Today";
 			this.xdtpDate.Calendar.TodayButton.UseVisualStyle = true;
-			this.xdtpDate.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
+			this.xdtpDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.xdtpDate.CalendarSize = new System.Drawing.Size(189, 176);
 			this.xdtpDate.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
 			this.xdtpDate.Dock = System.Windows.Forms.DockStyle.Top;
 			this.xdtpDate.DropDownImage = null;
+			this.xdtpDate.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(181)))), ((int)(((byte)(203)))), ((int)(((byte)(232)))));
 			this.xdtpDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
 			this.xdtpDate.Location = new System.Drawing.Point(0, 0);
 			this.xdtpDate.Margin = new System.Windows.Forms.Padding(0);
+			this.xdtpDate.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.xdtpDate.MinValue = new System.DateTime(1990, 12, 31, 23, 59, 0, 0);
 			this.xdtpDate.Name = "xdtpDate";
 			this.xdtpDate.NoneButtonVisible = false;
 			this.xdtpDate.ShowCheckBox = false;
-			this.xdtpDate.Size = new System.Drawing.Size(322, 20);
+			this.xdtpDate.Size = new System.Drawing.Size(326, 20);
 			this.xdtpDate.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.xdtpDate.TabIndex = 6;
 			this.xdtpDate.ThemedChildControls = true;
@@ -235,12 +246,13 @@
 			// tabControlAdv
 			// 
 			this.tabControlAdv.ActiveTabFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tabControlAdv.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabControlAdv.BackColor = System.Drawing.Color.White;
+			this.tabControlAdv.BeforeTouchSize = new System.Drawing.Size(326, 430);
 			this.tabControlAdv.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlAdv.BorderWidth = 0;
-			this.tabControlAdv.Controls.Add(this.tabPageAdvMainTabPage);
+			this.tabControlAdv.Controls.Add(tabPageAdvMainTabPage);
 			this.tabControlAdv.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControlAdv.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabControlAdv.Location = new System.Drawing.Point(0, 0);
 			this.tabControlAdv.Name = "tabControlAdv";
 			this.tabControlAdv.ShowCloseButtonForActiveTabOnly = true;
@@ -256,6 +268,8 @@
 			this.tabControlAdv.TabPrimitivesHost.Visible = true;
 			this.tabControlAdv.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			this.tabControlAdv.SelectedIndexChanged += new System.EventHandler(this.tabControlAdvSelectedIndexChanged);
+			this.tabControlAdv.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tabControlAdvKeyDown);
+			this.tabControlAdv.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tabControlAdvKeyPressed);
 			// 
 			// PersonSelectorView
 			// 
@@ -277,8 +291,7 @@
 
         #endregion
 
-        private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlAdv;
-		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvMainTabPage;
+		private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlAdv;
         private Syncfusion.Windows.Forms.Tools.TreeViewAdv treeViewAdvMainTabTree;
         private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv xdtpDate;
         private System.Windows.Forms.ImageList ImageList;

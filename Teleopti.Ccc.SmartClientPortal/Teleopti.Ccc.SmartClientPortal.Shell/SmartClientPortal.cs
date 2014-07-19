@@ -244,6 +244,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			//var uri = new Uri("http://www.teleopti.com/wfmv8/landingpage/iframe");
 			//webBrowser1.Navigate(uri);
 			//webBrowser1.Visible = true;
+		
+		
 		}
 
         private void showMem()

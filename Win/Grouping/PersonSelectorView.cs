@@ -341,6 +341,8 @@ namespace Teleopti.Ccc.Win.Grouping
             tabControlAdv.SelectedTab.Controls.Add(xdtpDate);
             xdtpDate.Value = date;
             reLoadTree();
+	        treeViewAdvMainTabTree.HideSelection = false;
+	        treeViewAdvMainTabTree.SelectedNode = treeViewAdvMainTabTree.Nodes[0];
             _eventAggregator.GetEvent<SelectedNodesChanged>().Publish("");
         }
 
@@ -420,7 +422,51 @@ namespace Teleopti.Ccc.Win.Grouping
         {
             _eventAggregator.GetEvent<RefreshGroupPageClicked>().Publish("");
         }
-        
+
+		private void tabControlAdvKeyPressed(object sender, KeyPressEventArgs e)
+		{
+			int currentIndex = tabControlAdv.SelectedIndex;
+			int maxIndex = tabControlAdv.TabCount-1;
+			bool tabFound = false;
+			string pressedKey = e.KeyChar.ToString(CultureInfo.InvariantCulture);
+			if (currentIndex < maxIndex)
+			{
+				for (int i = currentIndex + 1; i < maxIndex; i++)
+				{
+					tabFound = matchingTab(i, pressedKey);
+					if (tabFound)
+						break;
+				}
+			}
+			if (currentIndex > 0 && !tabFound)
+			{
+				for (int i = 0; i < currentIndex-1; i++)
+				{
+					tabFound = matchingTab(i, pressedKey);
+					if (tabFound)
+						break;
+				}
+			}
+		}
+
+	    private bool matchingTab(int i, string pressedKey)
+	    {
+		    bool tabFound = false;
+		    if (tabControlAdv.TabPages[i].Text.StartsWith(pressedKey, StringComparison.InvariantCultureIgnoreCase))
+		    {
+			    tabControlAdv.SelectedIndex = i;
+			    tabFound = true;
+		    }
+		    return tabFound;
+	    }
+
+		private void tabControlAdvKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				treeViewAdvMainTabTreeKeyDown(this, e);
+			}
+		}
     }
 
 }
