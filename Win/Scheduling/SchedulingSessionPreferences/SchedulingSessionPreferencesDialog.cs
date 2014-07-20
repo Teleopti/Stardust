@@ -163,6 +163,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 _schedulingOptions.TeamSameShiftCategory = false;
                 schedulingSessionPreferencesTabPanel1.HideTeamAndBlockSchedulingOptions();
             }
+
+	        ActiveControl = schedulingSessionPreferencesTabPanel1;
         }
 
         private void addToHelpContext()

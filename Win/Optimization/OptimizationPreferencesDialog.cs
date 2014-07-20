@@ -83,8 +83,8 @@ namespace Teleopti.Ccc.Win.Optimization
 			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
 			panels = new List<IDataExchange> { generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1 };
 
-			AddToHelpContext();
 			SetColor();
+			ActiveControl = tabControlTopLevel;
 		}
 
 
@@ -234,12 +234,18 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		private void tabControlTopLevel_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			this.SelectNextControl(this.ActiveControl, true, true, true, true);
+			setupHelpContext(tabControlTopLevel.SelectedTab.Controls[0]);
 		}
 
 		private void OptimizationPreferencesDialog_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			if (generalPreferencesPanel1 != null) generalPreferencesPanel1.UnsubscribeEvents();
+		}
+
+		private void setupHelpContext(Control control)
+		{
+			RemoveControlHelpContext(control);
+			AddControlHelpContext(control);
 		}
 	}
 }
