@@ -6,6 +6,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -2047,7 +2048,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (StateHolderReader.Instance.StateReader.SessionScopeData.TestMode)
 			{
-				var testView = new TestAdditionalInfoView("Task Done");
+				var testView = new TestAdditionalInfoView{Header = "Task Done"};
 				testView.ShowDialog();
 			}
 		}
