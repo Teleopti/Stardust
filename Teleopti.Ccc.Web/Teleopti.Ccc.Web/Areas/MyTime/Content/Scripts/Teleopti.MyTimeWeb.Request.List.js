@@ -232,7 +232,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
     
     ko.utils.extend(RequestItemViewModel.prototype, {
     	Initialize: function (data, isProcessing) {
-    		var textSegs = data.Text.split("  ");
+    		var textSegs = data.Text.split("\n");
 		    var textNoBr = "";
 		    $.each(textSegs, function(index, text) {
 			    textNoBr = textNoBr + text + " ";

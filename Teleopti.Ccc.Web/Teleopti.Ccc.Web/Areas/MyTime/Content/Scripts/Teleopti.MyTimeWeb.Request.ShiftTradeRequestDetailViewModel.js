@@ -45,9 +45,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 		self.CanApproveAndDeny(false);
 		if (self.UpdatedMessage() != undefined) {
 			if (self.Message().search(self.personFrom()) != 0) {
-				self.Message(self.personFrom() + ": " + self.Message() + "  " + self.personTo() + ": " + self.UpdatedMessage());
+				self.Message(self.personFrom() + ": " + self.Message() + "\n" + self.personTo() + ": " + self.UpdatedMessage());
 			} else {
-				self.Message(self.Message() + "  " + self.personTo() + ": " + self.UpdatedMessage());
+				self.Message(self.Message() + "\n" + self.personTo() + ": " + self.UpdatedMessage());
 			}
 		}
 
@@ -73,9 +73,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 
 		if (self.UpdatedMessage() != undefined) {
 			if (self.Message().search(self.personFrom()) != 0) {
-				self.Message(self.personFrom() + ": " + self.Message() + "  " + self.personTo() + ": " + self.UpdatedMessage());
+				self.Message(self.personFrom() + ": " + self.Message() + "\n" + self.personTo() + ": " + self.UpdatedMessage());
 			} else {
-				self.Message(self.Message() + "  " + self.personTo() + ": " + self.UpdatedMessage());
+				self.Message(self.Message() + "\n" + self.personTo() + ": " + self.UpdatedMessage());
 			}
 		}
 
