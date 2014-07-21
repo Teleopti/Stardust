@@ -87,7 +87,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	});
 
 	this.PreferenceTimeIsOutOfRange = ko.computed(function () {
-		return self.PossibleResultContractTimeMinutesLower() < self.TargetContractTimeLowerMinutes() || self.TargetContractTimeUpperMinutes() < self.PossibleResultContractTimeMinutesLower();
+		return self.PossibleResultContractTimeMinutesUpper() < self.TargetContractTimeLowerMinutes() || self.TargetContractTimeUpperMinutes() < self.PossibleResultContractTimeMinutesLower();
 	});
 
 	this.PreferenceDaysOffIsOutOfRange = ko.computed(function () {
