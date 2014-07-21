@@ -671,7 +671,6 @@ Scenario: Should cancel the current shift trade when switch to another team to t
 	And I should not see schedule on date '2030-01-01' in my shift trade list with 'OtherAgent'
 	And I should see 'OtherAgentNotInMyTeam' in my shift trade list for date '2030-01-01'
 
-@ignore
 @OnlyRunIfEnabled('Request_SeePossibleShiftTradesFromAllTeams_28770')
 Scenario: Show possible shift trades from All
 	Given I have the role 'Full access to mytime'

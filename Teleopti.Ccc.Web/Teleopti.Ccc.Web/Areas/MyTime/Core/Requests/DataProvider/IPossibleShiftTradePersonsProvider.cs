@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	public interface IPossibleShiftTradePersonsProvider
 	{
 		DatePersons RetrievePersons(ShiftTradeScheduleViewModelData shiftTradeArguments);
+		DatePersons RetrievePersonsForAllTeams(ShiftTradeScheduleViewModelDataForAllTeams shiftTradeArguments);
 	}
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -160,6 +162,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			//var calendarDate = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, CultureInfo.CurrentCulture.Calendar);
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging };
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult ShiftTradeRequestScheduleForAllTeams(DateOnly selectedDate, string teamIds, Paging paging)
+		{
+			var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
+			var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = selectedDate,TeamIds = allTeamIds, Paging = paging };
+			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModelForAllTeams(data), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]
