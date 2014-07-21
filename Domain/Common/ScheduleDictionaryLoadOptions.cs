@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.Common
         public bool LoadRestrictions { get; set; }
         public bool LoadNotes { get; set; }
         public bool LoadOnlyPreferensesAndHourlyAvailability { get; set; }
+	    public bool LoadDaysAfterLeft { get; set; }
 
         public ScheduleDictionaryLoadOptions(bool loadRestrictions, bool loadNotes):this(loadRestrictions,loadNotes, false)
         {}

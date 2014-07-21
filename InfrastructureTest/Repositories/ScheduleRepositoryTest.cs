@@ -231,9 +231,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPersonProvider personsProvider = new PersonsInOrganizationProvider(peopleInOrganization) {DoLoadByPerson = true};
             IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
-            var pAss1 = AddPersonAssignment(person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			person3.TerminatePerson(new DateOnly(2000, 1, 8), new PersonAccountUpdaterDummy());
+			var pAss1 = AddPersonAssignment(person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
             var pAss2 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
-            var pAbs = AddAbsence(person1);
+			var pAss3 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 9, 2000, 1, 10));
+			var pAbs = AddAbsence(person1);
 
             AddMeeting(person1);
             AddPreference(person1);
@@ -255,11 +257,66 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(retDic[person1].Contains(_prefDays[0]));
             Assert.IsTrue(retDic[person1].Contains(_notes[0]));
             Assert.IsTrue(retDic[person3].Contains(pAss2));
+            Assert.IsFalse(retDic[person3].Contains(pAss3));
             Assert.IsTrue(retDic[person1].Contains(_agentDayScheduleTags[0]));
 
             Assert.IsNotNull(((ScheduleRange)retDic[person1]).Snapshot);
             Assert.IsTrue(retDic[person1].ScheduledDay(new DateOnly(2000, 6, 1)).PersonMeetingCollection().Count == 1);
         }
+
+		[Test]
+		public void VerifyCanLoadBasedOnPersonsAndPeriodAndScenarioEvenAgentLeft()
+		{
+			IList<IPerson> visiblePeople = new List<IPerson>();
+			IList<IPerson> peopleInOrganization = new List<IPerson>();
+			IScheduleDictionary retDic;
+
+			//setup fake objects
+			IPerson person1 = PersonFactory.CreatePerson("sdvfbvv");
+			visiblePeople.Add(person1);
+			IPerson person2 = PersonFactory.CreatePerson("yyyyyy");
+			IPerson person3 = PersonFactory.CreatePerson("xxxxxx");
+			peopleInOrganization.Add(person1);
+			peopleInOrganization.Add(person2);
+			peopleInOrganization.Add(person3);
+			IPersonProvider personsProvider = new PersonsInOrganizationProvider(peopleInOrganization) { DoLoadByPerson = true };
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true)
+			{
+				LoadDaysAfterLeft = true
+			};
+
+			person3.TerminatePerson(new DateOnly(2000,1,8), new PersonAccountUpdaterDummy());
+			var pAss1 = AddPersonAssignment(person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			var pAss2 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
+			var pAss3 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 9, 2000, 1, 10));
+			var pAbs = AddAbsence(person1);
+
+			AddMeeting(person1);
+			AddPreference(person1);
+			AddNote(person1);
+			AddPublicNote(person1);
+			AddAgentDayScheduleTag(person1);
+
+			using (_mocks.Record())
+			{
+				ExpectScheduleLoadByPerson(visiblePeople, peopleInOrganization);
+			}
+			using (_mocks.Playback())
+			{
+				retDic = _target.FindSchedulesForPersons(_schedPeriod, _scenario, personsProvider, scheduleDictionaryLoadOptions, visiblePeople);
+			}
+			Assert.AreEqual(3, retDic.Count);
+			Assert.IsTrue(retDic[person1].Contains(pAss1));
+			Assert.IsTrue(retDic[person1].Contains(pAbs));
+			Assert.IsTrue(retDic[person1].Contains(_prefDays[0]));
+			Assert.IsTrue(retDic[person1].Contains(_notes[0]));
+			Assert.IsTrue(retDic[person3].Contains(pAss2));
+			Assert.IsTrue(retDic[person3].Contains(pAss3));
+			Assert.IsTrue(retDic[person1].Contains(_agentDayScheduleTags[0]));
+
+			Assert.IsNotNull(((ScheduleRange)retDic[person1]).Snapshot);
+			Assert.IsTrue(retDic[person1].ScheduledDay(new DateOnly(2000, 6, 1)).PersonMeetingCollection().Count == 1);
+		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private void ExpectScheduleLoadByPerson(IEnumerable<IPerson> visiblePeople, IEnumerable<IPerson> peopleInOrganization)

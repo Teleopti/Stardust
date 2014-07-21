@@ -3368,7 +3368,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				// so that a criteria for that is used later when loading schedules.
 				var loaderSpecification = new LoadScheduleByPersonSpecification();
 				personsInOrganizationProvider.DoLoadByPerson = loaderSpecification.IsSatisfiedBy(decider);
-				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true)
+				{
+					LoadDaysAfterLeft = true
+				};
 				stateHolder.LoadSchedules(new ScheduleRepository(uow), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
 				_schedulerState.Schedules.SetUndoRedoContainer(_undoRedo);
 			}
