@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 
 	public class TargetContractTimeViewModel
 	{
-		public string Lower { get; set; }
-		public string Upper { get; set; }
+		public double LowerMinutes { get; set; }
+		public double UpperMinutes { get; set; }
 	}
 
 	public class TargetDaysOffViewModel

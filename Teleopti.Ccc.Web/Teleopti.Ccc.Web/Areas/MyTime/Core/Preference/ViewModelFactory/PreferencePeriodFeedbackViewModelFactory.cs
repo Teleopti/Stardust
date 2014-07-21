@@ -7,12 +7,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 	public class PreferencePeriodFeedbackViewModelFactory : IPreferencePeriodFeedbackViewModelFactory
 	{
 		private readonly IPreferencePeriodFeedbackProvider _preferencePeriodFeedbackProvider;
-		private readonly ITimeFormatter _timeFormatter;
 
-		public PreferencePeriodFeedbackViewModelFactory(IPreferencePeriodFeedbackProvider preferencePeriodFeedbackProvider, ITimeFormatter timeFormatter)
+		public PreferencePeriodFeedbackViewModelFactory(IPreferencePeriodFeedbackProvider preferencePeriodFeedbackProvider)
 		{
 			_preferencePeriodFeedbackProvider = preferencePeriodFeedbackProvider;
-			_timeFormatter = timeFormatter;
 		}
 
 		public PreferencePeriodFeedbackViewModel CreatePeriodFeedbackViewModel(DateOnly date)
@@ -28,8 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 						},
 					TargetContractTime = new TargetContractTimeViewModel
 						{
-							Lower = _timeFormatter.GetLongHourMinuteTimeString(feedback.TargetTime.Minimum),
-							Upper = _timeFormatter.GetLongHourMinuteTimeString(feedback.TargetTime.Maximum)
+							LowerMinutes = feedback.TargetTime.Minimum.TotalMinutes,
+							UpperMinutes = feedback.TargetTime.Maximum.TotalMinutes
 						},
 				};
 		}
