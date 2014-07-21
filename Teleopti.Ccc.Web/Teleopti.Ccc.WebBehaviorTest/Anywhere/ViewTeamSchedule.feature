@@ -34,6 +34,10 @@ Background:
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2012-12-01 |
+	And 'John King' has a person period with
+	| Field      | Value      |
+	| Team       | Team green |
+	| Start date | 2012-12-01 |
 	And there are shift categories
 	| Name  |
 	| Day   |
@@ -99,6 +103,28 @@ Scenario: View team schedule
 	| End time             | 2012-12-02 17:00 |
 	When I view schedules for 'Team green' on '2012-12-02'
 	Then I should see schedule for 'Pierre Baldi'
+
+Scenario: Cannot see schedule for left agent
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' is a user with
+	| Field         | Value      |
+	| Terminal Date | 2012-12-02 |
+	And 'John King' has a shift with
+	| Field                | Value            |
+	| Shift category       | Day              |
+	| Activity             | Phone            |
+	| Start time           | 2012-12-03 08:00 |
+	| End time             | 2012-12-03 17:00 |
+	And 'Pierre Baldi' has a shift with
+	| Field                | Value            |
+	| Shift category       | Day              |
+	| Activity             | Phone            |
+	| Start time           | 2012-12-03 08:00 |
+	| End time             | 2012-12-03 17:00 |
+	When I view schedules for 'Team green' on '2012-12-03'
+	Then I should see 'John King' with schedule
+	And I should not see person 'Pierre Baldi'
+
 
 Scenario: View team schedule in my time zone
 	Given I have the role 'Anywhere Team Green'
