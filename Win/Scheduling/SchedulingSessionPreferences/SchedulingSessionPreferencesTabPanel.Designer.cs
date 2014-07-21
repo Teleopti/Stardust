@@ -202,11 +202,13 @@
 			this.checkBoxShowTroubleShot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBoxShowTroubleShot.BeforeTouchSize = new System.Drawing.Size(228, 19);
 			this.tableLayoutPanel1.SetColumnSpan(this.checkBoxShowTroubleShot, 2);
+			this.checkBoxShowTroubleShot.DrawFocusRectangle = false;
 			this.checkBoxShowTroubleShot.Location = new System.Drawing.Point(3, 477);
 			this.checkBoxShowTroubleShot.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxShowTroubleShot.Name = "checkBoxShowTroubleShot";
 			this.checkBoxShowTroubleShot.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.checkBoxShowTroubleShot.Size = new System.Drawing.Size(228, 19);
+			this.checkBoxShowTroubleShot.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxShowTroubleShot.TabIndex = 24;
 			this.checkBoxShowTroubleShot.Text = "xxIncludeTroubleshootingInformation";
 			this.checkBoxShowTroubleShot.ThemesEnabled = false;
