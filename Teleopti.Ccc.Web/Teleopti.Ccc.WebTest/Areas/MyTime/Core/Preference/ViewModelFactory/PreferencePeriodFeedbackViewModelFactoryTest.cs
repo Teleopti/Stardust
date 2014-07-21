@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		{
 			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
 			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today)).Return(new PeriodFeedback {PossibleResultDaysOff = 8});
-			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider, MockRepository.GenerateMock<ITimeFormatter>());
+			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider);
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
 
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		{
 			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
 			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today)).Return(new PeriodFeedback {TargetDaysOff = new MinMax<int>(3, 4)});
-			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider, MockRepository.GenerateMock<ITimeFormatter>());
+			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider);
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		{
 			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
 			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today)).Return(new PeriodFeedback {TargetDaysOff = new MinMax<int>(3, 4)});
-			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider, MockRepository.GenerateMock<ITimeFormatter>());
+			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider);
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
 
@@ -49,33 +49,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldGetViewModelWithTargetContractTimeLower()
+		public void ShouldGetViewModelWithTargetContractTimeLowerMinutes()
 		{
 			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
 			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today))
-				.Return(new PeriodFeedback {TargetTime = new MinMax<TimeSpan>(TimeSpan.FromDays(2), TimeSpan.FromDays(5))});
-			var timeFormatter = MockRepository.GenerateMock<ITimeFormatter>();
-			timeFormatter.Stub(x => x.GetLongHourMinuteTimeString(TimeSpan.FromDays(2))).Return("48:00");
-			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider, timeFormatter);
+				.Return(new PeriodFeedback { TargetTime = new MinMax<TimeSpan>(TimeSpan.FromDays(2), TimeSpan.FromDays(5)) });
+			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider);
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
 
-			result.TargetContractTime.Lower.Should().Be.EqualTo("48:00");
+			result.TargetContractTime.LowerMinutes.Should().Be.EqualTo(2880);
 		}
 
 		[Test]
-		public void ShouldGetViewModelWithTargetContractTimeUpper()
+		public void ShouldGetViewModelWithTargetContractTimeUpperMinutes()
 		{
 			var preferencePeriodFeedbackProvider = MockRepository.GenerateMock<IPreferencePeriodFeedbackProvider>();
 			preferencePeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today))
-				.Return(new PeriodFeedback {TargetTime = new MinMax<TimeSpan>(TimeSpan.FromDays(2), TimeSpan.FromDays(5))});
-			var timeFormatter = MockRepository.GenerateMock<ITimeFormatter>();
-			timeFormatter.Stub(x => x.GetLongHourMinuteTimeString(TimeSpan.FromDays(5))).Return("60:00");
-			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider, timeFormatter);
+				.Return(new PeriodFeedback { TargetTime = new MinMax<TimeSpan>(TimeSpan.FromDays(2), TimeSpan.FromDays(5)) });
+			var target = new PreferencePeriodFeedbackViewModelFactory(preferencePeriodFeedbackProvider);
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
 
-			result.TargetContractTime.Upper.Should().Be.EqualTo("60:00");
+			result.TargetContractTime.UpperMinutes.Should().Be.EqualTo(7200);
 		}
 	}
 }

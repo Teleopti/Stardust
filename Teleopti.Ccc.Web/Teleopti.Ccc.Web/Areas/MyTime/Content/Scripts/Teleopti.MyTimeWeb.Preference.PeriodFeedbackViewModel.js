@@ -31,8 +31,8 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 				self.TargetDaysOffLower(data.TargetDaysOff.Lower);
 				self.TargetDaysOffUpper(data.TargetDaysOff.Upper);
 				self.PossibleResultDaysOff(data.PossibleResultDaysOff);
-				self.TargetContractTimeLower(data.TargetContractTime.Lower);
-				self.TargetContractTimeUpper(data.TargetContractTime.Upper);
+				self.TargetContractTimeLowerMinutes(data.TargetContractTime.LowerMinutes);
+				self.TargetContractTimeUpperMinutes(data.TargetContractTime.UpperMinutes);
 			}
 		});
 	};
@@ -41,8 +41,14 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	this.TargetDaysOffUpper = ko.observable();
 	this.PossibleResultDaysOff = ko.observable();
 
-	this.TargetContractTimeLower = ko.observable();
-	this.TargetContractTimeUpper = ko.observable();
+	this.TargetContractTimeLowerMinutes = ko.observable();
+	this.TargetContractTimeUpperMinutes = ko.observable();
+	this.TargetContractTimeLower = ko.computed(function () {
+		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.TargetContractTimeLowerMinutes());
+	});
+	this.TargetContractTimeUpper = ko.computed(function () {
+		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.TargetContractTimeUpperMinutes());
+	});
 
 	this.PossibleResultContractTimeMinutesLower = ko.computed(function () {
 		var sum = 0;
@@ -81,7 +87,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	});
 
 	this.PreferenceTimeIsOutOfRange = ko.computed(function () {
-	    return self.PossibleResultContractTimeUpper() < self.TargetContractTimeLower() || self.TargetContractTimeUpper() < self.PossibleResultContractTimeLower();
+		return self.PossibleResultContractTimeMinutesLower() < self.TargetContractTimeLowerMinutes() || self.TargetContractTimeUpperMinutes() < self.PossibleResultContractTimeMinutesLower();
 	});
 
 	this.PreferenceDaysOffIsOutOfRange = ko.computed(function () {
@@ -90,7 +96,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 
 	this.PreferenceFeedbackClass = ko.computed(function () {
 	    return self.PreferenceDaysOffIsOutOfRange() || self.PreferenceTimeIsOutOfRange() ? 'alert-danger' : 'alert-info';
-	});
+	}).extend({ throttle: 1 });
 
 };
 
