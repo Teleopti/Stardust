@@ -431,7 +431,7 @@ namespace Teleopti.Ccc.Win.Grouping
 			string pressedKey = e.KeyChar.ToString(CultureInfo.InvariantCulture);
 			if (currentIndex < maxIndex)
 			{
-				for (int i = currentIndex + 1; i < maxIndex; i++)
+				for (int i = currentIndex + 1; i <= maxIndex; i++)
 				{
 					tabFound = matchingTab(i, pressedKey);
 					if (tabFound)
@@ -440,7 +440,7 @@ namespace Teleopti.Ccc.Win.Grouping
 			}
 			if (currentIndex > 0 && !tabFound)
 			{
-				for (int i = 0; i < currentIndex-1; i++)
+				for (int i = 0; i < currentIndex; i++)
 				{
 					tabFound = matchingTab(i, pressedKey);
 					if (tabFound)
