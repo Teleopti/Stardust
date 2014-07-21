@@ -5,7 +5,7 @@
 
 <div>
 	<!-- ko if: IsEditMessageEnabled -->
-	<textarea id="Request-detailed-shift-trade-message-input" class="form-control input-block-level" data-bind="visible: !IsTradeCreatedByMe() && IsPending(), value:UpdatedMessage, valueUpdate: 'afterkeydown'" rows="4" placeholder="@Resources.Message" />
+	<textarea id="Request-detailed-shift-trade-message-input" class="form-control input-block-level" data-bind="visible: !IsTradeCreatedByMe() && IsPending() && CanApproveAndDeny, value: UpdatedMessage, valueUpdate: 'afterkeydown'" rows="4" placeholder="@Resources.Message" />
 	<!-- /ko -->
 	<div>
 		<div id="sender-info">
