@@ -40,8 +40,8 @@ $(document).ready(function () {
 					},
 					PossibleResultDaysOff: 1,
 					TargetContractTime: {
-						Lower: "35:00",
-						Upper: "45:00"
+						LowerMinutes: 2100,
+						UpperMinutes: 2700
 					}
 				});
 			}
