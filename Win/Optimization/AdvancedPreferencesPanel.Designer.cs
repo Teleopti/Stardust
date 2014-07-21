@@ -200,7 +200,7 @@
 			// 
 			// numericUpDownRefreshRate
 			// 
-			this.numericUpDownRefreshRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.numericUpDownRefreshRate.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.numericUpDownRefreshRate.Location = new System.Drawing.Point(263, 3);
 			this.numericUpDownRefreshRate.Maximum = new decimal(new int[] {
             999,
@@ -224,10 +224,10 @@
 			// 
 			// labelRefreshScreenEveryColon
 			// 
-			this.labelRefreshScreenEveryColon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.labelRefreshScreenEveryColon.Location = new System.Drawing.Point(3, 3);
+			this.labelRefreshScreenEveryColon.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.labelRefreshScreenEveryColon.Location = new System.Drawing.Point(3, 0);
 			this.labelRefreshScreenEveryColon.Name = "labelRefreshScreenEveryColon";
-			this.labelRefreshScreenEveryColon.Size = new System.Drawing.Size(98, 20);
+			this.labelRefreshScreenEveryColon.Size = new System.Drawing.Size(254, 23);
 			this.labelRefreshScreenEveryColon.TabIndex = 17;
 			this.labelRefreshScreenEveryColon.Text = "xxRefreshScreenEveryColon";
 			this.labelRefreshScreenEveryColon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -258,13 +258,14 @@
 			// 
 			// checkBoxMaximumSeats
 			// 
-			this.checkBoxMaximumSeats.BeforeTouchSize = new System.Drawing.Size(112, 17);
+			this.checkBoxMaximumSeats.BeforeTouchSize = new System.Drawing.Size(408, 19);
 			this.tableLayoutPanel8.SetColumnSpan(this.checkBoxMaximumSeats, 2);
+			this.checkBoxMaximumSeats.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxMaximumSeats.DrawFocusRectangle = false;
 			this.checkBoxMaximumSeats.Location = new System.Drawing.Point(3, 78);
 			this.checkBoxMaximumSeats.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxMaximumSeats.Name = "checkBoxMaximumSeats";
-			this.checkBoxMaximumSeats.Size = new System.Drawing.Size(112, 17);
+			this.checkBoxMaximumSeats.Size = new System.Drawing.Size(408, 19);
 			this.checkBoxMaximumSeats.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxMaximumSeats.TabIndex = 9;
 			this.checkBoxMaximumSeats.Text = "xxMaximumSeats";
@@ -273,13 +274,14 @@
 			// 
 			// checkBoxMaximumStaffing
 			// 
-			this.checkBoxMaximumStaffing.BeforeTouchSize = new System.Drawing.Size(126, 19);
+			this.checkBoxMaximumStaffing.BeforeTouchSize = new System.Drawing.Size(408, 19);
 			this.tableLayoutPanel8.SetColumnSpan(this.checkBoxMaximumStaffing, 2);
+			this.checkBoxMaximumStaffing.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxMaximumStaffing.DrawFocusRectangle = false;
 			this.checkBoxMaximumStaffing.Location = new System.Drawing.Point(3, 53);
 			this.checkBoxMaximumStaffing.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxMaximumStaffing.Name = "checkBoxMaximumStaffing";
-			this.checkBoxMaximumStaffing.Size = new System.Drawing.Size(126, 19);
+			this.checkBoxMaximumStaffing.Size = new System.Drawing.Size(408, 19);
 			this.checkBoxMaximumStaffing.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxMaximumStaffing.TabIndex = 7;
 			this.checkBoxMaximumStaffing.Text = "xxMaximumStaffing";
@@ -287,13 +289,14 @@
 			// 
 			// checkBoxMinimumStaffing
 			// 
-			this.checkBoxMinimumStaffing.BeforeTouchSize = new System.Drawing.Size(125, 19);
+			this.checkBoxMinimumStaffing.BeforeTouchSize = new System.Drawing.Size(408, 19);
 			this.tableLayoutPanel8.SetColumnSpan(this.checkBoxMinimumStaffing, 2);
+			this.checkBoxMinimumStaffing.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxMinimumStaffing.DrawFocusRectangle = false;
 			this.checkBoxMinimumStaffing.Location = new System.Drawing.Point(3, 28);
 			this.checkBoxMinimumStaffing.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxMinimumStaffing.Name = "checkBoxMinimumStaffing";
-			this.checkBoxMinimumStaffing.Size = new System.Drawing.Size(125, 19);
+			this.checkBoxMinimumStaffing.Size = new System.Drawing.Size(408, 19);
 			this.checkBoxMinimumStaffing.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxMinimumStaffing.TabIndex = 5;
 			this.checkBoxMinimumStaffing.Text = "xxMinimumStaffing";
@@ -303,22 +306,24 @@
 			// 
 			this.labelShiftSelection.AutoSize = true;
 			this.tableLayoutPanel8.SetColumnSpan(this.labelShiftSelection, 2);
+			this.labelShiftSelection.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.labelShiftSelection.Location = new System.Drawing.Point(3, 3);
 			this.labelShiftSelection.Margin = new System.Windows.Forms.Padding(3);
 			this.labelShiftSelection.Name = "labelShiftSelection";
-			this.labelShiftSelection.Size = new System.Drawing.Size(88, 13);
+			this.labelShiftSelection.Size = new System.Drawing.Size(408, 19);
 			this.labelShiftSelection.TabIndex = 8;
 			this.labelShiftSelection.Text = "xxShiftSelection";
 			this.labelShiftSelection.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// checkBoxDoNotBreakMaximumSeats
 			// 
-			this.checkBoxDoNotBreakMaximumSeats.BeforeTouchSize = new System.Drawing.Size(175, 17);
+			this.checkBoxDoNotBreakMaximumSeats.BeforeTouchSize = new System.Drawing.Size(388, 19);
+			this.checkBoxDoNotBreakMaximumSeats.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxDoNotBreakMaximumSeats.DrawFocusRectangle = false;
 			this.checkBoxDoNotBreakMaximumSeats.Location = new System.Drawing.Point(23, 103);
 			this.checkBoxDoNotBreakMaximumSeats.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxDoNotBreakMaximumSeats.Name = "checkBoxDoNotBreakMaximumSeats";
-			this.checkBoxDoNotBreakMaximumSeats.Size = new System.Drawing.Size(175, 17);
+			this.checkBoxDoNotBreakMaximumSeats.Size = new System.Drawing.Size(388, 19);
 			this.checkBoxDoNotBreakMaximumSeats.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxDoNotBreakMaximumSeats.TabIndex = 10;
 			this.checkBoxDoNotBreakMaximumSeats.Text = "xxDoNotBreakMaximumSeats";
@@ -326,13 +331,14 @@
 			// 
 			// checkBoxUseAverageShiftLengths
 			// 
-			this.checkBoxUseAverageShiftLengths.BeforeTouchSize = new System.Drawing.Size(161, 23);
+			this.checkBoxUseAverageShiftLengths.BeforeTouchSize = new System.Drawing.Size(408, 23);
 			this.tableLayoutPanel8.SetColumnSpan(this.checkBoxUseAverageShiftLengths, 2);
+			this.checkBoxUseAverageShiftLengths.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxUseAverageShiftLengths.DrawFocusRectangle = false;
 			this.checkBoxUseAverageShiftLengths.Location = new System.Drawing.Point(3, 128);
 			this.checkBoxUseAverageShiftLengths.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseAverageShiftLengths.Name = "checkBoxUseAverageShiftLengths";
-			this.checkBoxUseAverageShiftLengths.Size = new System.Drawing.Size(161, 23);
+			this.checkBoxUseAverageShiftLengths.Size = new System.Drawing.Size(408, 23);
 			this.checkBoxUseAverageShiftLengths.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseAverageShiftLengths.TabIndex = 11;
 			this.checkBoxUseAverageShiftLengths.Text = "xxUseAverageShiftLengths";
@@ -364,12 +370,13 @@
 			// 
 			// radioButtonStandardDeviation
 			// 
-			this.radioButtonStandardDeviation.BeforeTouchSize = new System.Drawing.Size(131, 19);
+			this.radioButtonStandardDeviation.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.radioButtonStandardDeviation.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.radioButtonStandardDeviation.DrawFocusRectangle = false;
 			this.radioButtonStandardDeviation.Location = new System.Drawing.Point(3, 28);
 			this.radioButtonStandardDeviation.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonStandardDeviation.Name = "radioButtonStandardDeviation";
-			this.radioButtonStandardDeviation.Size = new System.Drawing.Size(131, 19);
+			this.radioButtonStandardDeviation.Size = new System.Drawing.Size(408, 19);
 			this.radioButtonStandardDeviation.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Metro;
 			this.radioButtonStandardDeviation.TabIndex = 12;
 			this.radioButtonStandardDeviation.Text = "xxStandardDeviation";
@@ -377,12 +384,13 @@
 			// 
 			// checkBoxUseTweakedValues
 			// 
-			this.checkBoxUseTweakedValues.BeforeTouchSize = new System.Drawing.Size(134, 19);
+			this.checkBoxUseTweakedValues.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.checkBoxUseTweakedValues.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxUseTweakedValues.DrawFocusRectangle = false;
 			this.checkBoxUseTweakedValues.Location = new System.Drawing.Point(3, 130);
 			this.checkBoxUseTweakedValues.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseTweakedValues.Name = "checkBoxUseTweakedValues";
-			this.checkBoxUseTweakedValues.Size = new System.Drawing.Size(134, 19);
+			this.checkBoxUseTweakedValues.Size = new System.Drawing.Size(408, 19);
 			this.checkBoxUseTweakedValues.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseTweakedValues.TabIndex = 11;
 			this.checkBoxUseTweakedValues.Text = "xxUseTweakedValues";
@@ -390,12 +398,13 @@
 			// 
 			// checkBoxUseIntraIntervalDeviation
 			// 
-			this.checkBoxUseIntraIntervalDeviation.BeforeTouchSize = new System.Drawing.Size(111, 17);
+			this.checkBoxUseIntraIntervalDeviation.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.checkBoxUseIntraIntervalDeviation.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxUseIntraIntervalDeviation.DrawFocusRectangle = false;
 			this.checkBoxUseIntraIntervalDeviation.Location = new System.Drawing.Point(3, 105);
 			this.checkBoxUseIntraIntervalDeviation.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseIntraIntervalDeviation.Name = "checkBoxUseIntraIntervalDeviation";
-			this.checkBoxUseIntraIntervalDeviation.Size = new System.Drawing.Size(111, 17);
+			this.checkBoxUseIntraIntervalDeviation.Size = new System.Drawing.Size(408, 19);
 			this.checkBoxUseIntraIntervalDeviation.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseIntraIntervalDeviation.TabIndex = 10;
 			this.checkBoxUseIntraIntervalDeviation.Text = "xxUseMaxStddev";
@@ -414,12 +423,13 @@
 			// 
 			// radioButtonRootMeanSquare
 			// 
-			this.radioButtonRootMeanSquare.BeforeTouchSize = new System.Drawing.Size(58, 17);
+			this.radioButtonRootMeanSquare.BeforeTouchSize = new System.Drawing.Size(408, 21);
+			this.radioButtonRootMeanSquare.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.radioButtonRootMeanSquare.DrawFocusRectangle = false;
 			this.radioButtonRootMeanSquare.Location = new System.Drawing.Point(3, 53);
 			this.radioButtonRootMeanSquare.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonRootMeanSquare.Name = "radioButtonRootMeanSquare";
-			this.radioButtonRootMeanSquare.Size = new System.Drawing.Size(58, 17);
+			this.radioButtonRootMeanSquare.Size = new System.Drawing.Size(408, 21);
 			this.radioButtonRootMeanSquare.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Metro;
 			this.radioButtonRootMeanSquare.TabIndex = 13;
 			this.radioButtonRootMeanSquare.Text = "xxRMS";
@@ -427,12 +437,13 @@
 			// 
 			// radioButtonTeleopti
 			// 
-			this.radioButtonTeleopti.BeforeTouchSize = new System.Drawing.Size(76, 19);
+			this.radioButtonTeleopti.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.radioButtonTeleopti.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.radioButtonTeleopti.DrawFocusRectangle = false;
 			this.radioButtonTeleopti.Location = new System.Drawing.Point(3, 80);
 			this.radioButtonTeleopti.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonTeleopti.Name = "radioButtonTeleopti";
-			this.radioButtonTeleopti.Size = new System.Drawing.Size(76, 19);
+			this.radioButtonTeleopti.Size = new System.Drawing.Size(408, 19);
 			this.radioButtonTeleopti.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Metro;
 			this.radioButtonTeleopti.TabIndex = 14;
 			this.radioButtonTeleopti.Text = "xxTeleopti";

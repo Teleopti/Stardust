@@ -261,12 +261,13 @@
 			// 
 			// checkBoxBetween
 			// 
-			this.checkBoxBetween.BeforeTouchSize = new System.Drawing.Size(99, 17);
+			this.checkBoxBetween.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkBoxBetween.BeforeTouchSize = new System.Drawing.Size(128, 24);
 			this.checkBoxBetween.DrawFocusRectangle = false;
 			this.checkBoxBetween.Location = new System.Drawing.Point(6, 15);
 			this.checkBoxBetween.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxBetween.Name = "checkBoxBetween";
-			this.checkBoxBetween.Size = new System.Drawing.Size(99, 17);
+			this.checkBoxBetween.Size = new System.Drawing.Size(128, 24);
 			this.checkBoxBetween.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxBetween.TabIndex = 5;
 			this.checkBoxBetween.Text = "xxAlterBetween";

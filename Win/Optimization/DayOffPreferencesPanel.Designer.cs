@@ -137,13 +137,13 @@
 			// 
 			// checkBoxConsiderWeekBefore
 			// 
-			this.checkBoxConsiderWeekBefore.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkBoxConsiderWeekBefore.BeforeTouchSize = new System.Drawing.Size(145, 17);
+			this.checkBoxConsiderWeekBefore.BeforeTouchSize = new System.Drawing.Size(408, 17);
+			this.checkBoxConsiderWeekBefore.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxConsiderWeekBefore.DrawFocusRectangle = false;
 			this.checkBoxConsiderWeekBefore.Location = new System.Drawing.Point(3, 3);
 			this.checkBoxConsiderWeekBefore.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxConsiderWeekBefore.Name = "checkBoxConsiderWeekBefore";
-			this.checkBoxConsiderWeekBefore.Size = new System.Drawing.Size(145, 17);
+			this.checkBoxConsiderWeekBefore.Size = new System.Drawing.Size(408, 17);
 			this.checkBoxConsiderWeekBefore.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxConsiderWeekBefore.TabIndex = 21;
 			this.checkBoxConsiderWeekBefore.Text = "xxConsiderWeekBefore";
@@ -151,13 +151,13 @@
 			// 
 			// checkBoxConsiderWeekAfter
 			// 
-			this.checkBoxConsiderWeekAfter.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkBoxConsiderWeekAfter.BeforeTouchSize = new System.Drawing.Size(136, 17);
+			this.checkBoxConsiderWeekAfter.BeforeTouchSize = new System.Drawing.Size(408, 17);
+			this.checkBoxConsiderWeekAfter.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxConsiderWeekAfter.DrawFocusRectangle = false;
 			this.checkBoxConsiderWeekAfter.Location = new System.Drawing.Point(3, 26);
 			this.checkBoxConsiderWeekAfter.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxConsiderWeekAfter.Name = "checkBoxConsiderWeekAfter";
-			this.checkBoxConsiderWeekAfter.Size = new System.Drawing.Size(136, 17);
+			this.checkBoxConsiderWeekAfter.Size = new System.Drawing.Size(408, 17);
 			this.checkBoxConsiderWeekAfter.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxConsiderWeekAfter.TabIndex = 22;
 			this.checkBoxConsiderWeekAfter.Text = "xxConsiderWeekAfter";
@@ -212,13 +212,13 @@
 			// 
 			// checkBoxDaysOffPerWeek
 			// 
-			this.checkBoxDaysOffPerWeek.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkBoxDaysOffPerWeek.BeforeTouchSize = new System.Drawing.Size(122, 17);
+			this.checkBoxDaysOffPerWeek.BeforeTouchSize = new System.Drawing.Size(204, 19);
+			this.checkBoxDaysOffPerWeek.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxDaysOffPerWeek.DrawFocusRectangle = false;
-			this.checkBoxDaysOffPerWeek.Location = new System.Drawing.Point(3, 4);
+			this.checkBoxDaysOffPerWeek.Location = new System.Drawing.Point(3, 3);
 			this.checkBoxDaysOffPerWeek.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxDaysOffPerWeek.Name = "checkBoxDaysOffPerWeek";
-			this.checkBoxDaysOffPerWeek.Size = new System.Drawing.Size(122, 17);
+			this.checkBoxDaysOffPerWeek.Size = new System.Drawing.Size(204, 19);
 			this.checkBoxDaysOffPerWeek.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxDaysOffPerWeek.TabIndex = 1;
 			this.checkBoxDaysOffPerWeek.Text = "xxDaysOffPerWeek";
@@ -277,13 +277,13 @@
 			// 
 			// checkBoxConsecutiveDaysOff
 			// 
-			this.checkBoxConsecutiveDaysOff.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkBoxConsecutiveDaysOff.BeforeTouchSize = new System.Drawing.Size(139, 19);
+			this.checkBoxConsecutiveDaysOff.BeforeTouchSize = new System.Drawing.Size(204, 19);
+			this.checkBoxConsecutiveDaysOff.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxConsecutiveDaysOff.DrawFocusRectangle = false;
 			this.checkBoxConsecutiveDaysOff.Location = new System.Drawing.Point(3, 28);
 			this.checkBoxConsecutiveDaysOff.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxConsecutiveDaysOff.Name = "checkBoxConsecutiveDaysOff";
-			this.checkBoxConsecutiveDaysOff.Size = new System.Drawing.Size(139, 19);
+			this.checkBoxConsecutiveDaysOff.Size = new System.Drawing.Size(204, 19);
 			this.checkBoxConsecutiveDaysOff.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxConsecutiveDaysOff.TabIndex = 6;
 			this.checkBoxConsecutiveDaysOff.Text = "xxConsecutiveDaysOff";
@@ -342,13 +342,13 @@
 			// 
 			// checkBoxConsecutiveWorkDays
 			// 
-			this.checkBoxConsecutiveWorkDays.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkBoxConsecutiveWorkDays.BeforeTouchSize = new System.Drawing.Size(150, 19);
+			this.checkBoxConsecutiveWorkDays.BeforeTouchSize = new System.Drawing.Size(204, 19);
+			this.checkBoxConsecutiveWorkDays.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxConsecutiveWorkDays.DrawFocusRectangle = false;
 			this.checkBoxConsecutiveWorkDays.Location = new System.Drawing.Point(3, 53);
 			this.checkBoxConsecutiveWorkDays.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxConsecutiveWorkDays.Name = "checkBoxConsecutiveWorkDays";
-			this.checkBoxConsecutiveWorkDays.Size = new System.Drawing.Size(150, 19);
+			this.checkBoxConsecutiveWorkDays.Size = new System.Drawing.Size(204, 19);
 			this.checkBoxConsecutiveWorkDays.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxConsecutiveWorkDays.TabIndex = 11;
 			this.checkBoxConsecutiveWorkDays.Text = "xxConsecutiveWorkDays";
@@ -407,13 +407,13 @@
 			// 
 			// checkBoxFullWeekEndsOff
 			// 
-			this.checkBoxFullWeekEndsOff.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkBoxFullWeekEndsOff.BeforeTouchSize = new System.Drawing.Size(126, 19);
+			this.checkBoxFullWeekEndsOff.BeforeTouchSize = new System.Drawing.Size(204, 19);
+			this.checkBoxFullWeekEndsOff.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxFullWeekEndsOff.DrawFocusRectangle = false;
 			this.checkBoxFullWeekEndsOff.Location = new System.Drawing.Point(3, 78);
 			this.checkBoxFullWeekEndsOff.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxFullWeekEndsOff.Name = "checkBoxFullWeekEndsOff";
-			this.checkBoxFullWeekEndsOff.Size = new System.Drawing.Size(126, 19);
+			this.checkBoxFullWeekEndsOff.Size = new System.Drawing.Size(204, 19);
 			this.checkBoxFullWeekEndsOff.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxFullWeekEndsOff.TabIndex = 16;
 			this.checkBoxFullWeekEndsOff.Text = "xxFullWeekEndsOff";
@@ -472,13 +472,13 @@
 			// 
 			// checkBoxWeekEndDaysOff
 			// 
-			this.checkBoxWeekEndDaysOff.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkBoxWeekEndDaysOff.BeforeTouchSize = new System.Drawing.Size(145, 18);
+			this.checkBoxWeekEndDaysOff.BeforeTouchSize = new System.Drawing.Size(204, 19);
+			this.checkBoxWeekEndDaysOff.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxWeekEndDaysOff.DrawFocusRectangle = false;
 			this.checkBoxWeekEndDaysOff.Location = new System.Drawing.Point(3, 103);
 			this.checkBoxWeekEndDaysOff.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxWeekEndDaysOff.Name = "checkBoxWeekEndDaysOff";
-			this.checkBoxWeekEndDaysOff.Size = new System.Drawing.Size(145, 18);
+			this.checkBoxWeekEndDaysOff.Size = new System.Drawing.Size(204, 19);
 			this.checkBoxWeekEndDaysOff.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxWeekEndDaysOff.TabIndex = 21;
 			this.checkBoxWeekEndDaysOff.Text = "xxFullWeekEndDaysOff";
