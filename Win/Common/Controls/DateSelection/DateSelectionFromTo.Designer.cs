@@ -88,7 +88,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// dateTimePickerAdvWorkAStartDate
 			// 
 			this.dateTimePickerAdvWorkAStartDate.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-			this.dateTimePickerAdvWorkAStartDate.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(193)))), ((int)(((byte)(222)))));
 			this.dateTimePickerAdvWorkAStartDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			// 
 			// 
@@ -98,17 +97,16 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.dateTimePickerAdvWorkAStartDate.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.dateTimePickerAdvWorkAStartDate.Calendar.DayNamesColor = System.Drawing.Color.Empty;
+			this.dateTimePickerAdvWorkAStartDate.Calendar.DayNamesColor = System.Drawing.Color.Black;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
 			this.dateTimePickerAdvWorkAStartDate.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
-			this.dateTimePickerAdvWorkAStartDate.Calendar.DaysHeaderInterior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
 			this.dateTimePickerAdvWorkAStartDate.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.dateTimePickerAdvWorkAStartDate.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.HeaderEndColor = System.Drawing.Color.White;
-			this.dateTimePickerAdvWorkAStartDate.Calendar.HeaderHeight = 34;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.HeaderStartColor = System.Drawing.Color.White;
+			this.dateTimePickerAdvWorkAStartDate.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.HighlightColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.Iso8601CalenderFormat = false;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.Location = new System.Drawing.Point(0, 0);
@@ -118,7 +116,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.dateTimePickerAdvWorkAStartDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvWorkAStartDate.Calendar.SelectedDates = new System.DateTime[0];
 			this.dateTimePickerAdvWorkAStartDate.Calendar.ShowWeekNumbers = true;
-			this.dateTimePickerAdvWorkAStartDate.Calendar.Size = new System.Drawing.Size(207, 174);
+			this.dateTimePickerAdvWorkAStartDate.Calendar.Size = new System.Drawing.Size(150, 174);
 			this.dateTimePickerAdvWorkAStartDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.TabIndex = 0;
@@ -128,32 +126,35 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// 
 			// 
 			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.IsBackStageButton = false;
-			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.Location = new System.Drawing.Point(134, 1);
-			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 21);
+			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.Location = new System.Drawing.Point(78, 0);
+			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 25);
 			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.Text = "xxNone";
 			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.UseVisualStyle = true;
 			// 
 			// 
 			// 
 			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.IsBackStageButton = false;
-			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.Location = new System.Drawing.Point(2, 1);
-			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.Size = new System.Drawing.Size(132, 21);
+			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
+			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.Size = new System.Drawing.Size(78, 25);
 			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.Text = "xxToday";
 			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvWorkAStartDate.CalendarFont = new System.Drawing.Font("Tahoma", 8F);
 			this.dateTimePickerAdvWorkAStartDate.CalendarSize = new System.Drawing.Size(189, 176);
-			this.dateTimePickerAdvWorkAStartDate.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvWorkAStartDate.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvWorkAStartDate.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateTimePickerAdvWorkAStartDate.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateTimePickerAdvWorkAStartDate.DropDownImage = null;
-			this.dateTimePickerAdvWorkAStartDate.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdvWorkAStartDate.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvWorkAStartDate.DropDownPressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvWorkAStartDate.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(191)))), ((int)(((byte)(237)))));
 			this.dateTimePickerAdvWorkAStartDate.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvWorkAStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
 			this.dateTimePickerAdvWorkAStartDate.Location = new System.Drawing.Point(3, 28);
@@ -171,7 +172,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// dateTimePickerAdvWorkEndPeriod
 			// 
 			this.dateTimePickerAdvWorkEndPeriod.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-			this.dateTimePickerAdvWorkEndPeriod.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(193)))), ((int)(((byte)(222)))));
 			this.dateTimePickerAdvWorkEndPeriod.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			// 
 			// 
@@ -181,17 +181,16 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.dateTimePickerAdvWorkEndPeriod.Calendar.DayNamesColor = System.Drawing.Color.Empty;
+			this.dateTimePickerAdvWorkEndPeriod.Calendar.DayNamesColor = System.Drawing.Color.Black;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
-			this.dateTimePickerAdvWorkEndPeriod.Calendar.DaysHeaderInterior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.HeaderEndColor = System.Drawing.Color.White;
-			this.dateTimePickerAdvWorkEndPeriod.Calendar.HeaderHeight = 34;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.HeaderStartColor = System.Drawing.Color.White;
+			this.dateTimePickerAdvWorkEndPeriod.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.HighlightColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.Iso8601CalenderFormat = false;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.Location = new System.Drawing.Point(0, 0);
@@ -201,7 +200,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.SelectedDates = new System.DateTime[0];
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.ShowWeekNumbers = true;
-			this.dateTimePickerAdvWorkEndPeriod.Calendar.Size = new System.Drawing.Size(207, 174);
+			this.dateTimePickerAdvWorkEndPeriod.Calendar.Size = new System.Drawing.Size(150, 174);
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.TabIndex = 0;
@@ -211,32 +210,35 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// 
 			// 
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.dateTimePickerAdvWorkEndPeriod.Calendar.NoneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.NoneButton.IsBackStageButton = false;
-			this.dateTimePickerAdvWorkEndPeriod.Calendar.NoneButton.Location = new System.Drawing.Point(134, 1);
-			this.dateTimePickerAdvWorkEndPeriod.Calendar.NoneButton.Size = new System.Drawing.Size(72, 21);
+			this.dateTimePickerAdvWorkEndPeriod.Calendar.NoneButton.Location = new System.Drawing.Point(78, 0);
+			this.dateTimePickerAdvWorkEndPeriod.Calendar.NoneButton.Size = new System.Drawing.Size(72, 25);
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.NoneButton.Text = "xxNone";
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.NoneButton.UseVisualStyle = true;
 			// 
 			// 
 			// 
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.dateTimePickerAdvWorkEndPeriod.Calendar.TodayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.TodayButton.IsBackStageButton = false;
-			this.dateTimePickerAdvWorkEndPeriod.Calendar.TodayButton.Location = new System.Drawing.Point(2, 1);
-			this.dateTimePickerAdvWorkEndPeriod.Calendar.TodayButton.Size = new System.Drawing.Size(132, 21);
+			this.dateTimePickerAdvWorkEndPeriod.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
+			this.dateTimePickerAdvWorkEndPeriod.Calendar.TodayButton.Size = new System.Drawing.Size(78, 25);
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.TodayButton.Text = "xxToday";
 			this.dateTimePickerAdvWorkEndPeriod.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvWorkEndPeriod.CalendarFont = new System.Drawing.Font("Tahoma", 8F);
 			this.dateTimePickerAdvWorkEndPeriod.CalendarSize = new System.Drawing.Size(189, 176);
-			this.dateTimePickerAdvWorkEndPeriod.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvWorkEndPeriod.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvWorkEndPeriod.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateTimePickerAdvWorkEndPeriod.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateTimePickerAdvWorkEndPeriod.DropDownImage = null;
-			this.dateTimePickerAdvWorkEndPeriod.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdvWorkEndPeriod.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvWorkEndPeriod.DropDownPressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvWorkEndPeriod.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(191)))), ((int)(((byte)(237)))));
 			this.dateTimePickerAdvWorkEndPeriod.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvWorkEndPeriod.Format = System.Windows.Forms.DateTimePickerFormat.Short;
 			this.dateTimePickerAdvWorkEndPeriod.Location = new System.Drawing.Point(3, 78);
