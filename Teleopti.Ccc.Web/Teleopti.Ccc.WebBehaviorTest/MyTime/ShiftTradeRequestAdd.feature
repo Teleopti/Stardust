@@ -11,11 +11,6 @@ Background:
 	| Field        | Value                 |
 	| Name         | Full access to mytime |
 	| AccessToTeam | Other team            |
-	@ignore
-	And there is a role with
-	| Field        | Value                              |
-	| Name         | Full access to mytime and team all |
-	| AccessToTeam | Other team, Team all               |
 	And there is a workflow control set with
 	| Field                            | Value                                     |
 	| Name                             | Trade from tomorrow until 30 days forward |
@@ -678,8 +673,8 @@ Scenario: Should cancel the current shift trade when switch to another team to t
 
 @ignore
 @OnlyRunIfEnabled('Request_SeePossibleShiftTradesFromAllTeams_28770')
-Scenario: Show possible shift trades from team all
-	Given I have the role 'Full access to mytime and team all'
+Scenario: Show possible shift trades from All
+	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -700,6 +695,6 @@ Scenario: Show possible shift trades from team all
 	| Shift category		| Day	           |
 	And the current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
-	And I select the 'Team all'
+	And I select the 'All'
 	Then I should see a possible schedule trade with 'OtherAgent'
 	And I should see a possible schedule trade with 'OtherAgentNotInMyTeam' 
