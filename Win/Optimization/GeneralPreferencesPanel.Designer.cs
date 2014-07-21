@@ -243,12 +243,13 @@
 			// 
 			// checkBoxShiftCategoryLimitations
 			// 
-			this.checkBoxShiftCategoryLimitations.BeforeTouchSize = new System.Drawing.Size(162, 21);
+			this.checkBoxShiftCategoryLimitations.BeforeTouchSize = new System.Drawing.Size(254, 23);
+			this.checkBoxShiftCategoryLimitations.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxShiftCategoryLimitations.DrawFocusRectangle = false;
 			this.checkBoxShiftCategoryLimitations.Location = new System.Drawing.Point(3, 153);
 			this.checkBoxShiftCategoryLimitations.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxShiftCategoryLimitations.Name = "checkBoxShiftCategoryLimitations";
-			this.checkBoxShiftCategoryLimitations.Size = new System.Drawing.Size(162, 21);
+			this.checkBoxShiftCategoryLimitations.Size = new System.Drawing.Size(254, 23);
 			this.checkBoxShiftCategoryLimitations.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxShiftCategoryLimitations.TabIndex = 12;
 			this.checkBoxShiftCategoryLimitations.Text = "xxShiftCategoryLimitations";
@@ -256,12 +257,13 @@
 			// 
 			// checkBoxStudentAvailabilities
 			// 
-			this.checkBoxStudentAvailabilities.BeforeTouchSize = new System.Drawing.Size(141, 17);
+			this.checkBoxStudentAvailabilities.BeforeTouchSize = new System.Drawing.Size(254, 19);
+			this.checkBoxStudentAvailabilities.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxStudentAvailabilities.DrawFocusRectangle = false;
 			this.checkBoxStudentAvailabilities.Location = new System.Drawing.Point(3, 128);
 			this.checkBoxStudentAvailabilities.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxStudentAvailabilities.Name = "checkBoxStudentAvailabilities";
-			this.checkBoxStudentAvailabilities.Size = new System.Drawing.Size(141, 17);
+			this.checkBoxStudentAvailabilities.Size = new System.Drawing.Size(254, 19);
 			this.checkBoxStudentAvailabilities.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxStudentAvailabilities.TabIndex = 11;
 			this.checkBoxStudentAvailabilities.Text = "xxStudentAvailabilities";
@@ -270,12 +272,13 @@
 			// 
 			// checkBoxAvailabilities
 			// 
-			this.checkBoxAvailabilities.BeforeTouchSize = new System.Drawing.Size(100, 17);
+			this.checkBoxAvailabilities.BeforeTouchSize = new System.Drawing.Size(254, 19);
+			this.checkBoxAvailabilities.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxAvailabilities.DrawFocusRectangle = false;
 			this.checkBoxAvailabilities.Location = new System.Drawing.Point(3, 103);
 			this.checkBoxAvailabilities.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAvailabilities.Name = "checkBoxAvailabilities";
-			this.checkBoxAvailabilities.Size = new System.Drawing.Size(100, 17);
+			this.checkBoxAvailabilities.Size = new System.Drawing.Size(254, 19);
 			this.checkBoxAvailabilities.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAvailabilities.TabIndex = 10;
 			this.checkBoxAvailabilities.Text = "xxAvailabilities";
@@ -284,12 +287,13 @@
 			// 
 			// checkBoxRotations
 			// 
-			this.checkBoxRotations.BeforeTouchSize = new System.Drawing.Size(86, 17);
+			this.checkBoxRotations.BeforeTouchSize = new System.Drawing.Size(254, 19);
+			this.checkBoxRotations.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxRotations.DrawFocusRectangle = false;
 			this.checkBoxRotations.Location = new System.Drawing.Point(3, 78);
 			this.checkBoxRotations.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxRotations.Name = "checkBoxRotations";
-			this.checkBoxRotations.Size = new System.Drawing.Size(86, 17);
+			this.checkBoxRotations.Size = new System.Drawing.Size(254, 19);
 			this.checkBoxRotations.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxRotations.TabIndex = 9;
 			this.checkBoxRotations.Text = "xxRotations";
@@ -298,12 +302,13 @@
 			// 
 			// checkBoxMustHaves
 			// 
-			this.checkBoxMustHaves.BeforeTouchSize = new System.Drawing.Size(92, 19);
+			this.checkBoxMustHaves.BeforeTouchSize = new System.Drawing.Size(254, 19);
+			this.checkBoxMustHaves.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxMustHaves.DrawFocusRectangle = false;
 			this.checkBoxMustHaves.Location = new System.Drawing.Point(3, 53);
 			this.checkBoxMustHaves.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxMustHaves.Name = "checkBoxMustHaves";
-			this.checkBoxMustHaves.Size = new System.Drawing.Size(92, 19);
+			this.checkBoxMustHaves.Size = new System.Drawing.Size(254, 19);
 			this.checkBoxMustHaves.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxMustHaves.TabIndex = 7;
 			this.checkBoxMustHaves.Text = "xxMustHaves";
@@ -312,12 +317,13 @@
 			// 
 			// checkBoxPreferences
 			// 
-			this.checkBoxPreferences.BeforeTouchSize = new System.Drawing.Size(95, 19);
+			this.checkBoxPreferences.BeforeTouchSize = new System.Drawing.Size(254, 19);
+			this.checkBoxPreferences.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxPreferences.DrawFocusRectangle = false;
 			this.checkBoxPreferences.Location = new System.Drawing.Point(3, 28);
 			this.checkBoxPreferences.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxPreferences.Name = "checkBoxPreferences";
-			this.checkBoxPreferences.Size = new System.Drawing.Size(95, 19);
+			this.checkBoxPreferences.Size = new System.Drawing.Size(254, 19);
 			this.checkBoxPreferences.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxPreferences.TabIndex = 5;
 			this.checkBoxPreferences.Text = "xxPreferences";
@@ -326,8 +332,9 @@
 			// 
 			// labelFulfillRestrictions
 			// 
+			this.labelFulfillRestrictions.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelFulfillRestrictions.AutoSize = true;
-			this.labelFulfillRestrictions.Location = new System.Drawing.Point(3, 3);
+			this.labelFulfillRestrictions.Location = new System.Drawing.Point(3, 6);
 			this.labelFulfillRestrictions.Margin = new System.Windows.Forms.Padding(3);
 			this.labelFulfillRestrictions.Name = "labelFulfillRestrictions";
 			this.labelFulfillRestrictions.Size = new System.Drawing.Size(106, 13);
@@ -509,12 +516,13 @@
 			// 
 			// checkBoxFairness
 			// 
-			this.checkBoxFairness.BeforeTouchSize = new System.Drawing.Size(78, 21);
+			this.checkBoxFairness.BeforeTouchSize = new System.Drawing.Size(408, 21);
+			this.checkBoxFairness.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxFairness.DrawFocusRectangle = false;
 			this.checkBoxFairness.Location = new System.Drawing.Point(3, 153);
 			this.checkBoxFairness.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxFairness.Name = "checkBoxFairness";
-			this.checkBoxFairness.Size = new System.Drawing.Size(78, 21);
+			this.checkBoxFairness.Size = new System.Drawing.Size(408, 21);
 			this.checkBoxFairness.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxFairness.TabIndex = 12;
 			this.checkBoxFairness.Text = "xxFairness";
@@ -522,12 +530,13 @@
 			// 
 			// checkBoxShiftsWithinDay
 			// 
-			this.checkBoxShiftsWithinDay.BeforeTouchSize = new System.Drawing.Size(119, 19);
+			this.checkBoxShiftsWithinDay.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.checkBoxShiftsWithinDay.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxShiftsWithinDay.DrawFocusRectangle = false;
 			this.checkBoxShiftsWithinDay.Location = new System.Drawing.Point(3, 128);
 			this.checkBoxShiftsWithinDay.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxShiftsWithinDay.Name = "checkBoxShiftsWithinDay";
-			this.checkBoxShiftsWithinDay.Size = new System.Drawing.Size(119, 19);
+			this.checkBoxShiftsWithinDay.Size = new System.Drawing.Size(408, 19);
 			this.checkBoxShiftsWithinDay.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxShiftsWithinDay.TabIndex = 11;
 			this.checkBoxShiftsWithinDay.Text = "xxShiftsWithinDay";
@@ -535,12 +544,13 @@
 			// 
 			// checkBoxDaysOffFromFlexibleWorkTime
 			// 
-			this.checkBoxDaysOffFromFlexibleWorkTime.BeforeTouchSize = new System.Drawing.Size(193, 19);
+			this.checkBoxDaysOffFromFlexibleWorkTime.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.checkBoxDaysOffFromFlexibleWorkTime.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxDaysOffFromFlexibleWorkTime.DrawFocusRectangle = false;
 			this.checkBoxDaysOffFromFlexibleWorkTime.Location = new System.Drawing.Point(3, 103);
 			this.checkBoxDaysOffFromFlexibleWorkTime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxDaysOffFromFlexibleWorkTime.Name = "checkBoxDaysOffFromFlexibleWorkTime";
-			this.checkBoxDaysOffFromFlexibleWorkTime.Size = new System.Drawing.Size(193, 19);
+			this.checkBoxDaysOffFromFlexibleWorkTime.Size = new System.Drawing.Size(408, 19);
 			this.checkBoxDaysOffFromFlexibleWorkTime.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxDaysOffFromFlexibleWorkTime.TabIndex = 10;
 			this.checkBoxDaysOffFromFlexibleWorkTime.Text = "xxDaysOffFromFlexibleWorkTime";
@@ -548,12 +558,13 @@
 			// 
 			// checkBoxShiftsForFlexibleWorkTime
 			// 
-			this.checkBoxShiftsForFlexibleWorkTime.BeforeTouchSize = new System.Drawing.Size(172, 19);
+			this.checkBoxShiftsForFlexibleWorkTime.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.checkBoxShiftsForFlexibleWorkTime.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxShiftsForFlexibleWorkTime.DrawFocusRectangle = false;
 			this.checkBoxShiftsForFlexibleWorkTime.Location = new System.Drawing.Point(3, 78);
 			this.checkBoxShiftsForFlexibleWorkTime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxShiftsForFlexibleWorkTime.Name = "checkBoxShiftsForFlexibleWorkTime";
-			this.checkBoxShiftsForFlexibleWorkTime.Size = new System.Drawing.Size(172, 19);
+			this.checkBoxShiftsForFlexibleWorkTime.Size = new System.Drawing.Size(408, 19);
 			this.checkBoxShiftsForFlexibleWorkTime.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxShiftsForFlexibleWorkTime.TabIndex = 9;
 			this.checkBoxShiftsForFlexibleWorkTime.Text = "xxShiftsForFlexibleWorkTime";
@@ -561,12 +572,13 @@
 			// 
 			// checkBoxTimeBetweenDays
 			// 
-			this.checkBoxTimeBetweenDays.BeforeTouchSize = new System.Drawing.Size(128, 19);
+			this.checkBoxTimeBetweenDays.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.checkBoxTimeBetweenDays.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxTimeBetweenDays.DrawFocusRectangle = false;
 			this.checkBoxTimeBetweenDays.Location = new System.Drawing.Point(3, 53);
 			this.checkBoxTimeBetweenDays.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxTimeBetweenDays.Name = "checkBoxTimeBetweenDays";
-			this.checkBoxTimeBetweenDays.Size = new System.Drawing.Size(128, 19);
+			this.checkBoxTimeBetweenDays.Size = new System.Drawing.Size(408, 19);
 			this.checkBoxTimeBetweenDays.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxTimeBetweenDays.TabIndex = 7;
 			this.checkBoxTimeBetweenDays.Text = "xxTimeBetweenDays";
@@ -574,12 +586,13 @@
 			// 
 			// checkBoxDaysOff
 			// 
-			this.checkBoxDaysOff.BeforeTouchSize = new System.Drawing.Size(77, 19);
+			this.checkBoxDaysOff.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.checkBoxDaysOff.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxDaysOff.DrawFocusRectangle = false;
 			this.checkBoxDaysOff.Location = new System.Drawing.Point(3, 28);
 			this.checkBoxDaysOff.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxDaysOff.Name = "checkBoxDaysOff";
-			this.checkBoxDaysOff.Size = new System.Drawing.Size(77, 19);
+			this.checkBoxDaysOff.Size = new System.Drawing.Size(408, 19);
 			this.checkBoxDaysOff.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxDaysOff.TabIndex = 5;
 			this.checkBoxDaysOff.Text = "xxDaysOff";
@@ -587,8 +600,9 @@
 			// 
 			// labelOptimizationSteps
 			// 
+			this.labelOptimizationSteps.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelOptimizationSteps.AutoSize = true;
-			this.labelOptimizationSteps.Location = new System.Drawing.Point(3, 3);
+			this.labelOptimizationSteps.Location = new System.Drawing.Point(3, 6);
 			this.labelOptimizationSteps.Margin = new System.Windows.Forms.Padding(3);
 			this.labelOptimizationSteps.Name = "labelOptimizationSteps";
 			this.labelOptimizationSteps.Size = new System.Drawing.Size(112, 13);

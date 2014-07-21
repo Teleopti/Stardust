@@ -128,12 +128,13 @@
 			// 
 			// checkBoxTeamSameDaysOff
 			// 
-			this.checkBoxTeamSameDaysOff.BeforeTouchSize = new System.Drawing.Size(104, 22);
+			this.checkBoxTeamSameDaysOff.BeforeTouchSize = new System.Drawing.Size(177, 22);
+			this.checkBoxTeamSameDaysOff.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxTeamSameDaysOff.DrawFocusRectangle = false;
 			this.checkBoxTeamSameDaysOff.Location = new System.Drawing.Point(33, 269);
 			this.checkBoxTeamSameDaysOff.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxTeamSameDaysOff.Name = "checkBoxTeamSameDaysOff";
-			this.checkBoxTeamSameDaysOff.Size = new System.Drawing.Size(104, 22);
+			this.checkBoxTeamSameDaysOff.Size = new System.Drawing.Size(177, 22);
 			this.checkBoxTeamSameDaysOff.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxTeamSameDaysOff.TabIndex = 7;
 			this.checkBoxTeamSameDaysOff.Text = "xxSameDaysOff";
@@ -141,12 +142,13 @@
 			// 
 			// checkBoxTeamSameActivity
 			// 
-			this.checkBoxTeamSameActivity.BeforeTouchSize = new System.Drawing.Size(99, 20);
+			this.checkBoxTeamSameActivity.BeforeTouchSize = new System.Drawing.Size(177, 20);
+			this.checkBoxTeamSameActivity.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxTeamSameActivity.DrawFocusRectangle = false;
 			this.checkBoxTeamSameActivity.Location = new System.Drawing.Point(33, 243);
 			this.checkBoxTeamSameActivity.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxTeamSameActivity.Name = "checkBoxTeamSameActivity";
-			this.checkBoxTeamSameActivity.Size = new System.Drawing.Size(99, 20);
+			this.checkBoxTeamSameActivity.Size = new System.Drawing.Size(177, 20);
 			this.checkBoxTeamSameActivity.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxTeamSameActivity.TabIndex = 40;
 			this.checkBoxTeamSameActivity.Text = "xxSameActivity";
@@ -168,12 +170,13 @@
 			// 
 			// checkBoxTeamSameEndTime
 			// 
-			this.checkBoxTeamSameEndTime.BeforeTouchSize = new System.Drawing.Size(106, 17);
+			this.checkBoxTeamSameEndTime.BeforeTouchSize = new System.Drawing.Size(177, 19);
+			this.checkBoxTeamSameEndTime.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxTeamSameEndTime.DrawFocusRectangle = false;
 			this.checkBoxTeamSameEndTime.Location = new System.Drawing.Point(33, 218);
 			this.checkBoxTeamSameEndTime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxTeamSameEndTime.Name = "checkBoxTeamSameEndTime";
-			this.checkBoxTeamSameEndTime.Size = new System.Drawing.Size(106, 17);
+			this.checkBoxTeamSameEndTime.Size = new System.Drawing.Size(177, 19);
 			this.checkBoxTeamSameEndTime.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxTeamSameEndTime.TabIndex = 6;
 			this.checkBoxTeamSameEndTime.Text = "xxSameEndTime";
@@ -182,12 +185,13 @@
 			// 
 			// checkBoxTeamSameStartTime
 			// 
-			this.checkBoxTeamSameStartTime.BeforeTouchSize = new System.Drawing.Size(110, 21);
+			this.checkBoxTeamSameStartTime.BeforeTouchSize = new System.Drawing.Size(177, 21);
+			this.checkBoxTeamSameStartTime.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxTeamSameStartTime.DrawFocusRectangle = false;
 			this.checkBoxTeamSameStartTime.Location = new System.Drawing.Point(33, 191);
 			this.checkBoxTeamSameStartTime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxTeamSameStartTime.Name = "checkBoxTeamSameStartTime";
-			this.checkBoxTeamSameStartTime.Size = new System.Drawing.Size(110, 21);
+			this.checkBoxTeamSameStartTime.Size = new System.Drawing.Size(177, 21);
 			this.checkBoxTeamSameStartTime.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxTeamSameStartTime.TabIndex = 6;
 			this.checkBoxTeamSameStartTime.Text = "xxSameStartTime";
@@ -196,12 +200,13 @@
 			// 
 			// checkBoxTeamSameShiftCategory
 			// 
-			this.checkBoxTeamSameShiftCategory.BeforeTouchSize = new System.Drawing.Size(133, 21);
+			this.checkBoxTeamSameShiftCategory.BeforeTouchSize = new System.Drawing.Size(177, 21);
+			this.checkBoxTeamSameShiftCategory.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxTeamSameShiftCategory.DrawFocusRectangle = false;
 			this.checkBoxTeamSameShiftCategory.Location = new System.Drawing.Point(33, 164);
 			this.checkBoxTeamSameShiftCategory.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxTeamSameShiftCategory.Name = "checkBoxTeamSameShiftCategory";
-			this.checkBoxTeamSameShiftCategory.Size = new System.Drawing.Size(133, 21);
+			this.checkBoxTeamSameShiftCategory.Size = new System.Drawing.Size(177, 21);
 			this.checkBoxTeamSameShiftCategory.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxTeamSameShiftCategory.TabIndex = 6;
 			this.checkBoxTeamSameShiftCategory.Text = "xxSameShiftCategory";

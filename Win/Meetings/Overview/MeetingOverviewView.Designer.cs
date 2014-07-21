@@ -60,6 +60,8 @@
 			this.toolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemPaste = new System.Windows.Forms.ToolStripMenuItem();
 			this.scheduleControl1 = new Syncfusion.Windows.Forms.Schedule.ScheduleControl();
+			this.toolStripEx1 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
+			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			this.ribbonControlAdv1.SuspendLayout();
 			this.toolStripTabItem1.Panel.SuspendLayout();
@@ -68,6 +70,7 @@
 			this.toolStripExScenario.SuspendLayout();
 			this.toolStripExFilter.SuspendLayout();
 			this.contextMenuStripSchedule.SuspendLayout();
+			this.toolStripEx1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// ribbonControlAdv1
@@ -132,6 +135,7 @@
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExClipboard);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExScenario);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExFilter);
+			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripEx1);
 			this.toolStripTabItem1.Panel.Name = "ribbonPanel1";
 			this.toolStripTabItem1.Panel.ScrollPosition = 0;
 			this.toolStripTabItem1.Panel.ShowCaption = true;
@@ -414,6 +418,24 @@
 			this.scheduleControl1.SetupContextMenu += new System.ComponentModel.CancelEventHandler(this.scheduleControl1SetupContextMenu);
 			this.scheduleControl1.ScheduleAppointmentClick += new Syncfusion.Windows.Forms.Schedule.ScheduleAppointmentClickEventHandler(this.scheduleControl1ScheduleAppointmentClick);
 			// 
+			// toolStripEx1
+			// 
+			resources.ApplyResources(this.toolStripEx1, "toolStripEx1");
+			this.toolStripEx1.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripEx1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.toolStripEx1.Image = null;
+			this.toolStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton1});
+			this.toolStripEx1.Name = "toolStripEx1";
+			this.toolStripEx1.Office12Mode = false;
+			// 
+			// toolStripButton1
+			// 
+			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			resources.ApplyResources(this.toolStripButton1, "toolStripButton1");
+			this.toolStripButton1.Name = "toolStripButton1";
+			this.SetShortcut(this.toolStripButton1, System.Windows.Forms.Keys.None);
+			// 
 			// MeetingOverviewView
 			// 
 			resources.ApplyResources(this, "$this");
@@ -439,6 +461,8 @@
 			this.toolStripExFilter.ResumeLayout(false);
 			this.toolStripExFilter.PerformLayout();
 			this.contextMenuStripSchedule.ResumeLayout(false);
+			this.toolStripEx1.ResumeLayout(false);
+			this.toolStripEx1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -476,6 +500,8 @@
 		private Syncfusion.Windows.Forms.Tools.ToolStripPanelItem toolStripPanelItem1;
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBoxResolution;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx1;
+		private System.Windows.Forms.ToolStripButton toolStripButton1;
 
        
     }
