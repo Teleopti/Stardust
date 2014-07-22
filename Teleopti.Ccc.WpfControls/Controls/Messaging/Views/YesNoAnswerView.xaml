@@ -23,12 +23,11 @@
 				</GroupBox.Header>
 			
 
-					<Button 
-									Background="Transparent"
+					<Button
 									HorizontalAlignment="Center"
 									VerticalAlignment="Center"
 									Height="40"
-									Width="40"
+									Width="68"
 									Commands:CreateCommandBinding.CommandModel="{Binding SendMessageCommand}" 
 									Command="{Binding SendMessageCommand.Command}" />
 
