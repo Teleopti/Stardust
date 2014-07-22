@@ -622,8 +622,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				var take = 20;
 				var skip = (self.selectedPageIndex() - 1) * take;
 
-				console.log(self.availableAllTeamIds());
-
 				ajax.Ajax({
 					url: "Requests/ShiftTradeRequestScheduleForAllTeams",
 					dataType: "json",
