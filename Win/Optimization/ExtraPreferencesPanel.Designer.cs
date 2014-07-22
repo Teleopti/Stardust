@@ -162,6 +162,7 @@
 			this.comboBoxTeamActivity.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTeamActivity.Enabled = false;
+			this.comboBoxTeamActivity.Font = new System.Drawing.Font("Segoe UI", 8.5F);
 			this.comboBoxTeamActivity.Location = new System.Drawing.Point(216, 243);
 			this.comboBoxTeamActivity.Name = "comboBoxTeamActivity";
 			this.comboBoxTeamActivity.Size = new System.Drawing.Size(179, 21);
@@ -219,6 +220,7 @@
 			this.comboBoxTeamGroupPage.BeforeTouchSize = new System.Drawing.Size(179, 21);
 			this.comboBoxTeamGroupPage.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxTeamGroupPage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxTeamGroupPage.Font = new System.Drawing.Font("Segoe UI", 8.5F);
 			this.comboBoxTeamGroupPage.Location = new System.Drawing.Point(216, 137);
 			this.comboBoxTeamGroupPage.Name = "comboBoxTeamGroupPage";
 			this.comboBoxTeamGroupPage.Size = new System.Drawing.Size(179, 21);
@@ -263,6 +265,7 @@
 			this.comboBoxBlockType.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxBlockType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxBlockType.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
+			this.comboBoxBlockType.Font = new System.Drawing.Font("Segoe UI", 8.5F);
 			this.comboBoxBlockType.Location = new System.Drawing.Point(216, 3);
 			this.comboBoxBlockType.Name = "comboBoxBlockType";
 			this.comboBoxBlockType.Size = new System.Drawing.Size(179, 21);
