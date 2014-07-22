@@ -500,7 +500,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
         };
 
 		self.createAllTeams = function(teams) {
-			var text = "All Teams";
+			var text = $("#Request-all-permitted-teams").val();
 			$.each(teams, function(index, team) {
 				self.availableAllTeamIds.push(team.id);
 			});
@@ -526,7 +526,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                     self.selectedTeam(null);
                     self.availableTeams(data);
 	                self.createAllTeams(data);
-	                console.log(self.availableTeams());
                     self.selectedTeam(teamToSelect);
                     
                 },

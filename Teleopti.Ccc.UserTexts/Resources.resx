@@ -12133,4 +12133,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Requests</value>
     <comment>Request menu</comment>
   </data>
+  <data name="AllPermittedTeamsToMakeShiftTradeWith" xml:space="preserve">
+    <value>All Teams</value>
+    <comment>All Permitted Teams To Make Shift Trade With</comment>
+  </data>
 </root>
