@@ -47,5 +47,6 @@ namespace Teleopti.Interfaces.Domain
 
 		DateTime? MinStart { get; set; }
 		bool IsLastPage { get; set; }
+		int Total { get; set; }
 	}
 }

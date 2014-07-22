@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			{
 				PersonId = Guid.NewGuid(),
 				Start = DateTime.Now,
-				Model = JsonConvert.SerializeObject(model)
+				Model = JsonConvert.SerializeObject(model),
+				Total = 2
 			};
 			var layerViewModels = new List<ShiftTradeAddScheduleLayerViewModel>();
 			var layerMapper = MockRepository.GenerateMock<IShiftTradeAddScheduleLayerViewModelMapper>();
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper);
 			var result = target.Map(new[] { readModel, readModel });
 
-			result.Count.Should().Be.EqualTo(2);
+			result.Count.Should().Be.EqualTo(readModel.Total);
 		}
 
 		[Test]
