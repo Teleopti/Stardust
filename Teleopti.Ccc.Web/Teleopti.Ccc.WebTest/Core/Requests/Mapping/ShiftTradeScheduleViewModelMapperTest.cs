@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid(), Paging = new Paging(){Skip = 0, Take = 1} };
 			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new[] { new Person() } };
-			var possibleTradeScheduleViewModels = new List<ShiftTradeAddPersonScheduleViewModel>{new ShiftTradeAddPersonScheduleViewModel()};
+			var possibleTradeScheduleViewModels = new List<ShiftTradeAddPersonScheduleViewModel>{new ShiftTradeAddPersonScheduleViewModel(){Total = 1}};
 			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
 
 			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
