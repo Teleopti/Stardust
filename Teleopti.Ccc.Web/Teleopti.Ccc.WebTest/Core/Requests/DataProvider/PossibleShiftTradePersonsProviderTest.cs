@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
-		public void ShouldReturnPossiblePersonsToTradeShiftWith()
+		public void ShouldReturnPossiblePersonsToTradeShiftWithForOneTeam()
 		{
 			var personInMyTeam = new Person();
 			personInMyTeam.SetId(Guid.NewGuid());
@@ -94,6 +94,34 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 							   .Return(new ShiftTradeRequestValidationResult(true));
 			
 			var result = target.RetrievePersons(data);
+
+			result.Persons.First().Should().Be.SameInstanceAs(personInMyTeam);
+		}
+
+		[Test]
+		public void ShouldReturnPossiblePersonsToTradeShiftWithForAllTeams()
+		{
+			var personInMyTeam = new Person();
+			personInMyTeam.SetId(Guid.NewGuid());
+			var personInMyTeamGuids = new PersonSelectorShiftTrade { PersonId = personInMyTeam.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
+			var date = DateOnly.Today;
+			var teamIds = new List<Guid>();
+			teamIds.Add(myTeam.Id.Value);
+			var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = date, TeamIds = teamIds};
+
+			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, myTeam.Id.Value))
+											.Return(new List<IAuthorizeOrganisationDetail> { personInMyTeamGuids });
+			permissionProvider.Expect(
+				perm =>
+				perm.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, data.ShiftTradeDate,
+				                                     personInMyTeamGuids)).Return(true);
+			personRepository.Expect(rep => rep.FindPeople(new[] { personInMyTeamGuids.PersonId }))
+							.Return(new Collection<IPerson>(new List<IPerson> { personInMyTeam }));
+			shiftTradeValidator.Expect(
+				val => val.Validate(new ShiftTradeAvailableCheckItem(data.ShiftTradeDate, currentUser, personInMyTeam)))
+							   .Return(new ShiftTradeRequestValidationResult(true));
+			
+			var result = target.RetrievePersonsForAllTeams(data);
 
 			result.Persons.First().Should().Be.SameInstanceAs(personInMyTeam);
 		}
