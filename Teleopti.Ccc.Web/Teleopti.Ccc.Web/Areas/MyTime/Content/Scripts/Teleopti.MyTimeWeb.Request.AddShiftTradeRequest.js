@@ -325,7 +325,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.prepareLoad = function() {
 			self.possibleTradeSchedulesRaw = [];
-			if (self.agentChoosed() != null) {
+			if (self.agentChoosed() != null && self.isTradeForMultiDaysEnabled()) {
 				self.keepSelectedAgentVisible();
 			} else
 				self.chooseAgent(null);
