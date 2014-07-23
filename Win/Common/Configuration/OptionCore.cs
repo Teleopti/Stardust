@@ -180,9 +180,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 											new DefinitionSetSettings(),
 											new WorkflowControlSetView(_toggleManager),
 											new AuditingPage(),
-											new ScheduleTagControl(),
-											new BadgeThresholdSettings()
+											new ScheduleTagControl()
 										};
+
+			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913))
+			{
+				allSupportedPages.Add(new BadgeThresholdSettings());
+			}
 
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 				allSupportedPages.Add(new MultiplicatorControlView());
