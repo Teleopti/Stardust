@@ -59,7 +59,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.displayedPages = ko.observableArray();
 		self.isMore = ko.observable(false);
 		self.isPreviousMore = ko.observable(false);
-		self.isPageEdgeVisible = ko.observable(true);
+		self.isPageVisible = ko.observable(true);
 
 		self.isDetailVisible = ko.computed(function() {
 			if (self.agentChoosed() === null) {
@@ -328,6 +328,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.prepareLoad = function() {
 			self.possibleTradeSchedulesRaw = [];
 			self.selectedPageIndex(1);
+			self.displayedPages.removeAll();
+			self.isPreviousMore(false);
 			if (self.agentChoosed() != null && self.isTradeForMultiDaysEnabled()) {
 				self.keepSelectedAgentVisible();
 			} else
@@ -588,7 +590,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				success: function (data, textStatus, jqXHR) {
 					self.pageCount(data.PageCount);
 					if (self.pageCount() == 0) {
-						self.isPageEdgeVisible(false);
+						self.isPageVisible(false);
+					} else {
+						self.isPageVisible(true);
 					}
 					if (self.displayedPages().length == 0) {
 						self.initDisplayedPages(data.PageCount);
@@ -654,7 +658,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				success: function (data, textStatus, jqXHR) {
 					self.pageCount(data.PageCount);
 					if (self.pageCount() == 0) {
-						self.isPageEdgeVisible(false);
+						self.isPageVisible(false);
+					} else {
+						self.isPageVisible(true);
 					}
 					if (self.displayedPages().length == 0) {
 						self.createDisplayedPages(data.PageCount);
