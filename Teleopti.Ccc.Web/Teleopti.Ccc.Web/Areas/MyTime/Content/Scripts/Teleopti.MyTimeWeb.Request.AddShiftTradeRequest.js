@@ -663,7 +663,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 						self.isPageVisible(true);
 					}
 					if (self.displayedPages().length == 0) {
-						self.createDisplayedPages(data.PageCount);
+						self.initDisplayedPages(data.PageCount);
 					}
 					
 				    self._createTimeLine(data.TimeLineHours);
