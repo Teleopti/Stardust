@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Filters
 		{
 			if (filterContext.RequestContext.HttpContext.Request.IsAjaxRequest())
 			{
-				filterContext.Result = new HttpStatusCodeResult(403);
+				base.HandleUnauthorizedRequest(filterContext);
 				return;
 			}
 
