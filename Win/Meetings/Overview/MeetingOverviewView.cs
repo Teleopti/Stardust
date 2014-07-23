@@ -597,5 +597,11 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			public int PerHour { get; set; }
 			public int Resolution { get; set; }
 		}
+
+        private void scheduleControl1SizeChanged(object sender, EventArgs e)
+        {
+            _dataProvider.ResetLoadedPeriod();
+            selectWholeWeekInCalendar(scheduleControl1.Calendar.DateValue);
+        }
     }
 }

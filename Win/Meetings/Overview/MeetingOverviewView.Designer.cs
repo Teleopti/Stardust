@@ -417,6 +417,7 @@
             this.scheduleControl1.ItemChanging += new Syncfusion.Schedule.ScheduleAppointmentChangingEventHandler(this.scheduleControl1ItemChanging);
             this.scheduleControl1.SetupContextMenu += new System.ComponentModel.CancelEventHandler(this.scheduleControl1SetupContextMenu);
             this.scheduleControl1.ScheduleAppointmentClick += new Syncfusion.Windows.Forms.Schedule.ScheduleAppointmentClickEventHandler(this.scheduleControl1ScheduleAppointmentClick);
+            this.scheduleControl1.SizeChanged += new System.EventHandler(this.scheduleControl1SizeChanged);
             // 
             // MeetingOverviewView
             // 
