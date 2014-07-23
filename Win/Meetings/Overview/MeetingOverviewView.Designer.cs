@@ -404,11 +404,11 @@
             // 
             // scheduleControl1
             // 
+            resources.ApplyResources(this.scheduleControl1, "scheduleControl1");
             this.scheduleControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(201)))), ((int)(((byte)(219)))));
             this.scheduleControl1.ContextMenuStrip = this.contextMenuStripSchedule;
             this.scheduleControl1.Culture = new System.Globalization.CultureInfo("");
             this.scheduleControl1.DataSource = null;
-            resources.ApplyResources(this.scheduleControl1, "scheduleControl1");
             this.scheduleControl1.ISO8601CalenderFormat = false;
             this.scheduleControl1.Name = "scheduleControl1";
             this.scheduleControl1.NavigationPanelPosition = Syncfusion.Schedule.CalendarNavigationPanelPosition.Left;

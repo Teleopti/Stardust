@@ -144,6 +144,9 @@
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>1102, 651</value>
   </data>
+  <data name="scheduleControl1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
   <metadata name="contextMenuStripSchedule.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>153, 13</value>
   </metadata>
@@ -254,14 +257,11 @@
   <data name="&gt;&gt;contextMenuStripSchedule.Type" xml:space="preserve">
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="scheduleControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
   <data name="scheduleControl1.Location" type="System.Drawing.Point, System.Drawing">
     <value>1, 134</value>
   </data>
   <data name="scheduleControl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1100, 517</value>
+    <value>1100, 514</value>
   </data>
   <data name="scheduleControl1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
