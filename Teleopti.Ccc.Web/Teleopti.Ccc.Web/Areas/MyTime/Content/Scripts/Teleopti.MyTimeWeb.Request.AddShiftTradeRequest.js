@@ -665,9 +665,22 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				    if (self.possibleTradeSchedulesRaw.length > 0) {
 					    self.possibleTradeSchedulesRaw = [];
 				    }
+					var findTradedAgent = false;
 				    $.each(data.PossibleTradeSchedules, function (i, item) {
 				    	self.possibleTradeSchedulesRaw.push(item);
+				    	if (self.agentChoosed() && self.isTradeForMultiDaysEnabled()) {
+				    		if (item.Name == self.agentChoosed().agentName) {
+				    			findTradedAgent = true;
+				    		}
+				    	}
 				    });
+					if (self.agentChoosed() && self.isTradeForMultiDaysEnabled()) {
+						if (!findTradedAgent && (self.selectedPageIndex() < data.PageCount)) {
+							self.selectedPageIndex(self.selectedPageIndex() + 1);
+							self.IsLoading(false);
+							self.loadSchedule();
+						}
+					}
 				    self.updateSelectedPage();
 				    self._createPossibleTradeSchedules(self.possibleTradeSchedulesRaw);
 					self.keepSelectedAgentVisible();
