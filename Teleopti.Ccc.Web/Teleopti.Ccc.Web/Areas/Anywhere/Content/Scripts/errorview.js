@@ -39,10 +39,10 @@ define(
         }
 
         return {
-            display: function(message) {
-                _displayError(message);
-            },
-            remove: _removeError
+        	display: function (message) {
+        		_displayError(message);
+        	},
+        	remove: _removeError
         };
         
     });
