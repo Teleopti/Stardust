@@ -26,11 +26,10 @@
 			</GroupBox.Header>
 
 			<Button Grid.Column="0"
-									Background="Transparent"
 									HorizontalAlignment="Center"
 									VerticalAlignment="Center"
 									Height="40"
-									Width="40"
+									Width="68"
 									Commands:CreateCommandBinding.CommandModel="{Binding SendMessageCommand}" 
 									Command="{Binding SendMessageCommand.Command}" />
 
@@ -62,8 +61,7 @@
 							Command="{Binding Path=RemoveReplyOptionCommand.Command}"
 							Grid.Row="0" 
 							Grid.Column="0"
-							Margin="5"
-							Background="{StaticResource RaptorStandardGradientBrush}"/>
+							Margin="5"/>
 
 				<ListBox Grid.Row="0" Grid.ColumnSpan="3"
 								Grid.Column="1"
@@ -98,7 +96,6 @@
 											Margin="5,5,5,5"
 											Commands:CreateCommandBinding.CommandModel="{Binding Path=AddReplyOptionCommand.EditCommandModel}" 
 											Command="{Binding Path=AddReplyOptionCommand.EditCommandModel.Command}"
-											Background="{StaticResource RaptorStandardGradientBrush}"
 											HorizontalAlignment="Stretch"
 											Visibility="{Binding Path=AddReplyOptionCommand.EditMode, 
 											Converter={StaticResource reversedVisibilityConverter},
@@ -121,7 +118,6 @@
 						Margin="5,5,5,5"
 						Commands:CreateCommandBinding.CommandModel="{Binding Path=AddReplyOptionCommand}" 
 						Command="{Binding Path=AddReplyOptionCommand.Command}"
-						Background="{StaticResource RaptorStandardGradientBrush}"
 						/>
 						
 						
@@ -129,7 +125,6 @@
 						Margin="5,5,5,5"
 						Commands:CreateCommandBinding.CommandModel="{Binding Path=AddReplyOptionCommand.CancelEditCommandModel}" 
 						Command="{Binding Path=AddReplyOptionCommand.CancelEditCommandModel.Command}"
-						Background="{StaticResource RaptorStandardGradientBrush}"
 						/>
 					
 				</StackPanel>
@@ -141,17 +136,13 @@
 							MinWidth="150"
 							HorizontalAlignment="Stretch" />-->
 
-				<CheckBox IsChecked="{Binding Path=AllowDialogueReply, Mode=Twoway}" 
+                <CheckBox IsChecked="{Binding Path=AllowDialogueReply, Mode=Twoway}" 
 									  Margin="5,10,0,5"
 									  Grid.Column="0"
 									 Grid.ColumnSpan="3"
 									  Grid.Row="2"
 									  HorizontalAlignment="Center" 
-									  VerticalAlignment="Center">
-					<CheckBox.Content>
-						<TextBlock Text="xxAllowTextReply" />
-					</CheckBox.Content>
-				</CheckBox>
+									  VerticalAlignment="Center" Content="xxAllowTextReply"/>
 			</Grid>
 		</GroupBox>
 

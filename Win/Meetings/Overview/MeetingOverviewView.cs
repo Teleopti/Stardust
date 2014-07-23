@@ -597,6 +597,5 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			public int PerHour { get; set; }
 			public int Resolution { get; set; }
 		}
-
     }
 }

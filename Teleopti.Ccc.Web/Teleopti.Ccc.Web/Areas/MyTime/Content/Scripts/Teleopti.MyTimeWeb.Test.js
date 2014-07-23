@@ -64,7 +64,7 @@ Teleopti.MyTimeWeb.Test = (function ($) {
 			        async: false,
 			        success: function () { },
 			        error: function (r) {
-			            if (r.status == 403) //forbidden = not logged in
+			            if (r.status == 401) //401 = not logged in
 			                _testMessage(message);
 			        }
 			    });

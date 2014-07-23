@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetScheduleModel()
+		public void ShouldGetScheduleModelForOneTeam()
 		{
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var model = new ShiftTradeScheduleViewModel();
@@ -273,6 +273,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider());
 
 			var result = target.ShiftTradeRequestSchedule(DateOnly.Today, Guid.NewGuid().ToString(), new Paging());
+			result.Data.Should().Be.SameInstanceAs(model);
+		}
+
+		[Test]
+		public void ShouldGetScheduleModelForAllTeam()
+		{
+			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var model = new ShiftTradeScheduleViewModel();
+
+			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModelForAllTeams(Arg<ShiftTradeScheduleViewModelDataForAllTeams>.Is.Anything))
+			            .Return(model);
+
+			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider());
+
+			var result = target.ShiftTradeRequestScheduleForAllTeams(DateOnly.Today, Guid.NewGuid().ToString(), new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 		

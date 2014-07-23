@@ -114,6 +114,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			return _shiftTradeScheduleViewModelMapper.Map(data);
 		}
 
+		public ShiftTradeScheduleViewModel CreateShiftTradeScheduleViewModelForAllTeams(ShiftTradeScheduleViewModelDataForAllTeams data)
+		{
+			return _shiftTradeScheduleViewModelMapper.Map(data);
+		}
+
 		public IList<ShiftTradeSwapDetailsViewModel> CreateShiftTradeRequestSwapDetails(Guid id)
 		{
 			var shiftTradeSwapDetailsList = new List<ShiftTradeSwapDetailsViewModel>();

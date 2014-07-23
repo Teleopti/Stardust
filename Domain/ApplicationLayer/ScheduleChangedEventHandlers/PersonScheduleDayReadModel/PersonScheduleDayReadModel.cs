@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public string Model { get; set; }
 		public DateTime? MinStart { get; set; }
 		public bool IsLastPage { get; set; }
+		public int Total { get; set; }
 	}
 
 	public class Model

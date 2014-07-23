@@ -670,3 +670,30 @@ Scenario: Should cancel the current shift trade when switch to another team to t
 	And I choose 'OtherAgentNotInMyTeam' to make a shift trade
 	And I should not see schedule on date '2030-01-01' in my shift trade list with 'OtherAgent'
 	And I should see 'OtherAgentNotInMyTeam' in my shift trade list for date '2030-01-01'
+
+@OnlyRunIfEnabled('Request_SeePossibleShiftTradesFromAllTeams_28770')
+Scenario: Show possible shift trades from All
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 10:00 |
+	| EndTime               | 2030-01-01 20:00 |
+	| Shift category		| Late	           |
+	And OtherAgentNotInMyTeam has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And the current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	And I select the 'All'
+	Then I should see a possible schedule trade with 'OtherAgent'
+	And I should see a possible schedule trade with 'OtherAgentNotInMyTeam' 

@@ -23,12 +23,11 @@
 				</GroupBox.Header>
 			
 
-					<Button 
-									Background="Transparent"
+					<Button
 									HorizontalAlignment="Center"
 									VerticalAlignment="Center"
 									Height="40"
-									Width="40"
+									Width="68"
 									Commands:CreateCommandBinding.CommandModel="{Binding SendMessageCommand}" 
 									Command="{Binding SendMessageCommand.Command}" />
 
@@ -66,16 +65,12 @@
 						</ItemsControl.ItemsPanel>
 					</ItemsControl>
 
-					<CheckBox IsChecked="{Binding Path=AllowDialogueReply, Mode=Twoway}" 
+                    <CheckBox IsChecked="{Binding Path=AllowDialogueReply, Mode=Twoway}" 
 									  Margin="5,10,0,5"
 									  Grid.Column="0"
 									  Grid.Row="2"
 									  HorizontalAlignment="Center" 
-									  VerticalAlignment="Center">
-						<CheckBox.Content>
-							<TextBlock Text="xxAllowTextReply" />
-						</CheckBox.Content>
-					</CheckBox>
+									  VerticalAlignment="Center" Content="xxAllowTextReply"/>
 				</Grid>
 			</GroupBox>
 

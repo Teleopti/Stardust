@@ -59,7 +59,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.displayedPages = ko.observableArray();
 		self.isMore = ko.observable(false);
 		self.isPreviousMore = ko.observable(false);
-		self.isPageEdgeVisible = ko.observable(true);
+		self.isPageVisible = ko.observable(true);
 
 		self.isDetailVisible = ko.computed(function() {
 			if (self.agentChoosed() === null) {
@@ -77,6 +77,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				});
 			}
 		};
+		self.isPossibleSchedulesForAllEnabled = ko.observable(false);
+		self.availableAllTeamIds = ko.observableArray();
 		self.isTradeForMultiDaysEnabled = ko.observable(false);
 		self.chooseHistorys = ko.observableArray();
 		self.requestedDates = ko.computed(function() {
@@ -243,6 +245,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			sendRequestCallback(self);
 			self.chooseAgent(null);
 			self.chooseHistorys.removeAll();
+			self.goToFirstPage();
 		};
 
 		self.cancelRequest = function() {
@@ -255,6 +258,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			if (self.message() != undefined) {
 				self.message("");
 			}
+			self.goToFirstPage();
 		};
 
 		self._createTimeLine = function(hours) {
@@ -305,7 +309,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				self.selectedTeamInternal(value);
 				if (value == null) return;
 				self.prepareLoad();
-				self.loadSchedule();
+				if (value != "allTeams") {
+					self.loadSchedule();
+				} else {
+					self.loadScheduleForAllTeams();
+				}
 			}
 		});
 
@@ -319,7 +327,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.prepareLoad = function() {
 			self.possibleTradeSchedulesRaw = [];
-			if (self.agentChoosed() != null) {
+			self.selectedPageIndex(1);
+			self.displayedPages.removeAll();
+			self.isPreviousMore(false);
+			if (self.agentChoosed() != null && self.isTradeForMultiDaysEnabled()) {
 				self.keepSelectedAgentVisible();
 			} else
 				self.chooseAgent(null);
@@ -366,7 +377,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			self.isPreviousMore(false);
 			self.displayedPages.removeAll();
 			self.initDisplayedPages(self.pageCount());
-			self.loadSchedule();
+			if (self.selectedTeamInternal() != "allTeams") {
+				self.loadSchedule();
+			} else {
+				self.loadScheduleForAllTeams();
+			}
 		};
 		self.goToLastPage = function() {
 			self.isMore(false);
@@ -415,12 +430,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self.displayedPages.remove(item);
 				}
 			});
-			
+
 			if (self.displayedPages()[0].index() > 5) self.isPreviousMore(true);
 
 			self.setSelectPage(self.displayedPages()[0].index());
 		};
-
+		
 		self.goPreviousPages = function() {
 			$.each(self.displayedPages(), function(index, item) {
 				if (index + 1 <= self.displayedPages().length) {
@@ -448,8 +463,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.setSelectPage = function(pageIdx) {
 			self.selectedPageIndex(pageIdx);
-			self.updateSelectedPage();
-			self.loadSchedule();
+			if (self.selectedTeamInternal() != "allTeams") {
+				self.loadSchedule();
+			} else {
+				self.loadScheduleForAllTeams();
+			}
 		};
 		
 		self.loadMyTeamId = function () {
@@ -484,7 +502,16 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                 }
             });
         };
-	    
+
+		self.createAllTeams = function(teams) {
+			var text = $("#Request-all-permitted-teams").val();
+			$.each(teams, function(index, team) {
+				self.availableAllTeamIds.push(team.id);
+			});
+			if (self.isPossibleSchedulesForAllEnabled()) {
+				self.availableTeams.push({ id: "allTeams", text: text });
+			};
+		};
         self.loadTeams = function () {
             var teamToSelect = self.selectedTeamInternal() ? self.selectedTeamInternal() : self.myTeamId();
 
@@ -502,6 +529,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                 success: function (data, textStatus, jqXHR) {
                     self.selectedTeam(null);
                     self.availableTeams(data);
+	                self.createAllTeams(data);
                     self.selectedTeam(teamToSelect);
                     
                 },
@@ -562,7 +590,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				success: function (data, textStatus, jqXHR) {
 					self.pageCount(data.PageCount);
 					if (self.pageCount() == 0) {
-						self.isPageEdgeVisible(false);
+						self.isPageVisible(false);
+					} else {
+						self.isPageVisible(true);
 					}
 					if (self.displayedPages().length == 0) {
 						self.initDisplayedPages(data.PageCount);
@@ -573,10 +603,91 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				    if (self.possibleTradeSchedulesRaw.length > 0) {
 					    self.possibleTradeSchedulesRaw = [];
 				    }
+					var findTradedAgent = false;
 				    $.each(data.PossibleTradeSchedules, function (i, item) {
 				    	self.possibleTradeSchedulesRaw.push(item);
+				    	if (self.agentChoosed() && self.isTradeForMultiDaysEnabled()) {
+						    if (item.Name == self.agentChoosed().agentName) {
+							    findTradedAgent = true;
+						    }
+					    }
 				    });
+				    if (self.agentChoosed() && self.isTradeForMultiDaysEnabled()) {
+						if (!findTradedAgent && (self.selectedPageIndex() < data.PageCount)) {
+							self.selectedPageIndex(self.selectedPageIndex() + 1);
+							self.IsLoading(false);
+							self.loadSchedule();
+						} 
+				    }
+				    self.updateSelectedPage();
+				    self._createPossibleTradeSchedules(self.possibleTradeSchedulesRaw);
+					self.keepSelectedAgentVisible();
+					self.isReadyLoaded(true);
+
+					// Redraw layers after data loaded
+					_redrawLayers();
+				},
+				error: function(e) {
+				    //console.log(e);
+				},
+				complete: function() {
+					self.IsLoading(false);
+				}
+			});
+		};
+
+		self.loadScheduleForAllTeams = function() {
+				if (self.IsLoading()) return;
+				var take = 20;
+				var skip = (self.selectedPageIndex() - 1) * take;
+
+				ajax.Ajax({
+					url: "Requests/ShiftTradeRequestScheduleForAllTeams",
+					dataType: "json",
+					type: 'GET',
+					contentType: 'application/json; charset=utf-8',
+					data: {
+						selectedDate: self.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase()),
+						teamIds: self.availableAllTeamIds().join(","),
+				    Take: take,
+				    Skip: skip
+				},
+				beforeSend: function () {
+					self.IsLoading(true);
+				},
+				success: function (data, textStatus, jqXHR) {
+					self.pageCount(data.PageCount);
+					if (self.pageCount() == 0) {
+						self.isPageVisible(false);
+					} else {
+						self.isPageVisible(true);
+					}
+					if (self.displayedPages().length == 0) {
+						self.initDisplayedPages(data.PageCount);
+					}
 					
+				    self._createTimeLine(data.TimeLineHours);
+				    self._createMySchedule(data.MySchedule);
+				    if (self.possibleTradeSchedulesRaw.length > 0) {
+					    self.possibleTradeSchedulesRaw = [];
+				    }
+					var findTradedAgent = false;
+				    $.each(data.PossibleTradeSchedules, function (i, item) {
+				    	self.possibleTradeSchedulesRaw.push(item);
+				    	if (self.agentChoosed() && self.isTradeForMultiDaysEnabled()) {
+				    		if (item.Name == self.agentChoosed().agentName) {
+				    			findTradedAgent = true;
+				    		}
+				    	}
+				    });
+					if (self.agentChoosed() && self.isTradeForMultiDaysEnabled()) {
+						if (!findTradedAgent && (self.selectedPageIndex() < data.PageCount)) {
+							self.selectedPageIndex(self.selectedPageIndex() + 1);
+							self.IsLoading(false);
+							self.loadSchedule();
+						}
+					}
+				    self.updateSelectedPage();
 				    self._createPossibleTradeSchedules(self.possibleTradeSchedulesRaw);
 					self.keepSelectedAgentVisible();
 					self.isReadyLoaded(true);
@@ -595,8 +706,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.changeRequestedDate = function (movement) {
 			var date = moment(self.requestedDateInternal()).add('days', movement);
-	      if (self.isRequestedDateValid(date))
+			if (self.isRequestedDateValid(date)) {
 	      	self.requestedDate(date);
+			}
 		};
 
 		self.nextDate = function () {
@@ -613,6 +725,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				success: function(data) {
 					if (data.IsEnabled) {
 						self.isTradeForMultiDaysEnabled(true);
+					}
+				}
+			});
+
+			ajax.Ajax({
+				url: "../ToggleHandler/IsEnabled?toggle=Request_SeePossibleShiftTradesFromAllTeams_28770",
+				success: function(data) {
+					if (data.IsEnabled) {
+						self.isPossibleSchedulesForAllEnabled(true);
 					}
 				}
 			});
