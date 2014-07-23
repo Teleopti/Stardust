@@ -33,9 +33,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWorkAction]
 		public ActionResult Index(DateOnly? dateParam)
 		{
+			var date = dateParam.HasValue ? dateParam.Value : _virtualSchedulePeriodProvider.CalculateStudentAvailabilityDefaultDate();
+
+            if (_virtualSchedulePeriodProvider.MissingPersonPeriod(date))
+                return View("NoPersonPeriodPartial");
 			if (_virtualSchedulePeriodProvider.MissingSchedulePeriod())
 				return View("NoSchedulePeriodPartial");
-			var date = dateParam.HasValue ? dateParam.Value : _virtualSchedulePeriodProvider.CalculateStudentAvailabilityDefaultDate();
+
 			var studentAvailabilityViewModel = _viewModelFactory.CreateViewModel(date);
 			return View("StudentAvailabilityPartial", studentAvailabilityViewModel);
 		}
