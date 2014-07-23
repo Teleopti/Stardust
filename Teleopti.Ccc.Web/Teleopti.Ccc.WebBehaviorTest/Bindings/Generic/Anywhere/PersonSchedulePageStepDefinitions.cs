@@ -260,6 +260,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 
+		[Given(@"'(.*)' has a common agent description like '(.*)'")]
+		public void GivenHasACommonAgentDescriptionLike(string p0, string p1)
+		{
+				// TODO
+		}
+
+		[Then(@"the displayed name should be '(.*)'")]
+		public void ThenTheDisplayedNameShouldBe(string displayedName)
+		{
+				Browser.Interactions.AssertExistsUsingJQuery(
+						".person:contains('{0}') ",
+						displayedName);
+		}
+
+
 		private static void assertScheduledActivity(string personName, ScheduledActivityInfo layer)
 		{
 			if (layer.StartTime.Equals("00:00"))
