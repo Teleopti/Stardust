@@ -195,6 +195,13 @@ namespace Teleopti.Ccc.Win.Scheduling
         public void ToggelPropertyPanel(bool value)
         {
             lessIntellegentSplitContainerAdvMainContainer.Panel2Collapsed = value;
+	        if (!value)
+	        {
+		        if (lessIntellegentSplitContainerAdvMainContainer.SplitterDistance >
+		            lessIntellegentSplitContainerAdvMainContainer.Width - 300)
+			        lessIntellegentSplitContainerAdvMainContainer.SplitterDistance =
+				        lessIntellegentSplitContainerAdvMainContainer.Width - 300;
+	        }
         }
 
 	    public void InsertAgentInfoControl(AgentInfoControl agentInfoControl, ISchedulerStateHolder schedulerState,
