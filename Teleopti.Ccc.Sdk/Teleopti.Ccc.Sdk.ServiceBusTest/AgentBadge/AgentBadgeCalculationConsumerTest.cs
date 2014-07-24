@@ -225,6 +225,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 		public Endpoint Endpoint { get; private set; }
 		public CurrentMessageInformation CurrentMessageInformation { get; private set; }
+
+		// Ignore compile warning "The event 'Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge.ServiceBusMock.ReroutedEndpoint' is never used".
+		// This warning will be treated as error and cause build on server failed.
+#pragma warning disable 0067
 		public event Action<Reroute> ReroutedEndpoint;
+#pragma warning restore 0067
 	}
 }
