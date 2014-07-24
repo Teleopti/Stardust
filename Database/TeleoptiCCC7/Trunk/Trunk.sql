@@ -256,20 +256,20 @@ CREATE TABLE [dbo].[AgentBadgeThresholdSettings](
 	[GoldBadgeDaysThreshold] [int] NOT NULL,
 	[UpdatedBy] [uniqueidentifier] NOT NULL,
 	[UpdatedOn] [datetime] NOT NULL,
- CONSTRAINT [PK_AgentBadgeThreshold] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_AgentBadgeThresholdSettings] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY];
 
-ALTER TABLE [dbo].[AgentBadgeThresholdSettings]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadgeThreshold_BusinessUnit] FOREIGN KEY([BusinessUnit])
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadgeThresholdSettings_BusinessUnit] FOREIGN KEY([BusinessUnit])
 REFERENCES [dbo].[BusinessUnit] ([Id]);
 
-ALTER TABLE [dbo].[AgentBadgeThresholdSettings] CHECK CONSTRAINT [FK_AgentBadgeThreshold_BusinessUnit];
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings] CHECK CONSTRAINT [FK_AgentBadgeThresholdSettings_BusinessUnit];
 
-ALTER TABLE [dbo].[AgentBadgeThresholdSettings]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadgeThreshold_Person] FOREIGN KEY([UpdatedBy])
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadgeThresholdSettings_Person] FOREIGN KEY([UpdatedBy])
 REFERENCES [dbo].[Person] ([Id]);
 
-ALTER TABLE [dbo].[AgentBadgeThresholdSettings] CHECK CONSTRAINT [FK_AgentBadgeThreshold_Person];
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings] CHECK CONSTRAINT [FK_AgentBadgeThresholdSettings_Person];
 END
 
