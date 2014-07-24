@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Newtonsoft.Json;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Interfaces.Domain;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var timeZone = TimeZoneInfoFactory.HelsinkiTimeZoneInfo();
 			var data = new GroupScheduleData
 			{
+				CommonAgentNameSetting = new CommonNameDescriptionSetting(),
 				UserTimeZone = timeZone,
 				CanSeePersons = new[] { person },
 				Schedules = new[]
@@ -63,6 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var data = new GroupScheduleData
 			{
+				CommonAgentNameSetting = new CommonNameDescriptionSetting(),
 				UserTimeZone = userTimeZone,
 				CanSeePersons = new[] { person },
 				Schedules = new[]
@@ -100,6 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var data = new GroupScheduleData
 			{
+				CommonAgentNameSetting = new CommonNameDescriptionSetting(),
 				UserTimeZone = userTimeZone,
 				CanSeePersons = new[] { person },
 				Schedules = new[]
@@ -132,6 +136,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var data = new GroupScheduleData
 			{
+				CommonAgentNameSetting = new CommonNameDescriptionSetting(),
 				UserTimeZone = userTimeZone,
 				CanSeePersons = new[] { person },
 				Schedules = new[]
@@ -162,6 +167,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var data = new GroupScheduleData
 			{
+				CommonAgentNameSetting = new  CommonNameDescriptionSetting(),
 				UserTimeZone = userTimeZone,
 				CanSeePersons = new[] { personPermitted },
 				Schedules = new[]
@@ -190,6 +196,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var data = new GroupScheduleData
 			{
+				CommonAgentNameSetting = new CommonNameDescriptionSetting(),
 				UserTimeZone = userTimeZone,
 				CanSeePersons = new[] { person },
 				Schedules = new PersonScheduleDayReadModel[] { }
@@ -208,6 +215,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var data = new GroupScheduleData
 			{
+				CommonAgentNameSetting = new CommonNameDescriptionSetting(),
 				UserTimeZone = userTimeZone,
 				CanSeeUnpublishedSchedules = false,
 				CanSeePersons = new[] { person },
@@ -235,6 +243,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var data = new GroupScheduleData
 			{
+				CommonAgentNameSetting = new CommonNameDescriptionSetting(),
 				UserTimeZone = userTimeZone,
 					CanSeePersons = new[] {person},
 					Schedules = new PersonScheduleDayReadModel[]
