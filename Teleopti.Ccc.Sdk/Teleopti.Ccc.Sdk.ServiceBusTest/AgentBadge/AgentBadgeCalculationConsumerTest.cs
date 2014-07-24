@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IPersonRepository _personRepository;
 		private IUnitOfWork _uow;
 		private IGlobalSettingDataRepository _globalSettingDataRepository;
+		private IPerson _person;
+		private AdherenceReportSetting _adherenceReportSetting;
 
 		[Test]
 		public void ShouldSendNextCalculateMessageOneDayAfter()
@@ -57,104 +59,65 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			_uow = MockRepository.GenerateStub<IUnitOfWork>();
 			_uowFactory.Stub(x => x.CurrentUnitOfWork()).Return(_uow);
-		}
 
-		[Test]
-		public void ShouldAwardBronzeForAnsweredCalls()
-		{
-			var person = PersonFactory.CreatePerson();
-			person.SetId(Guid.NewGuid());
-			var adherenceReportSetting = new AdherenceReportSetting();
+			_person = PersonFactory.CreatePerson();
+			_person.SetId(Guid.NewGuid());
+			_adherenceReportSetting = new AdherenceReportSetting();
 
 			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
 			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
 
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow)).Return(new List<Guid>{person.Id.Value});
-			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson> { person });
 			_globalSettingDataRepository.Stub(
 				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting())).IgnoreArguments()
-				.Return(adherenceReportSetting);
+				.Return(_adherenceReportSetting);
+			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { _person });
+		}
+
+		[Test]
+		public void ShouldAwardBronzeForAnsweredCalls()
+		{
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow)).Return(new List<Guid>{_person.Id.Value});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage());
 
-			person.Badges.BronzeBadge.Should().Be.EqualTo(1);
+			_person.Badges.BronzeBadge.Should().Be.EqualTo(1);
 		}
 
 	
 		[Test]
 		public void ShouldAwardBronzeForAdherence()
 		{
-			var person = PersonFactory.CreatePerson();
-			person.SetId(Guid.NewGuid());
-			var adherenceReportSetting = new AdherenceReportSetting();
-
-			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
-			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
-			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
-
-			_globalSettingDataRepository.Stub(
-				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting())).IgnoreArguments()
-				.Return(adherenceReportSetting);
-			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { person });
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, adherenceReportSetting.CalculationMethod)).Return(new List<Guid> { person.Id.Value });
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod)).Return(new List<Guid> { _person.Id.Value });
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
-
 			target.Consume(new AgentBadgeCalculateMessage());
 
-			person.Badges.BronzeBadge.Should().Be.EqualTo(1);
+			_person.Badges.BronzeBadge.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldAwardBronzeForAHT()
 		{
-			var person = PersonFactory.CreatePerson();
-			person.SetId(Guid.NewGuid());
-			var adherenceReportSetting = new AdherenceReportSetting();
-
-			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
-			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
-			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
-
-			_statisticsRepository.Stub(x => x.LoadAgentsUnderThresholdForAHT(_uow)).Return(new List<Guid>{person.Id.Value});
-			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson> { person });
-			_globalSettingDataRepository.Stub(
-				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting())).IgnoreArguments()
-				.Return(adherenceReportSetting);
-
+			_statisticsRepository.Stub(x => x.LoadAgentsUnderThresholdForAHT(_uow)).Return(new List<Guid>{_person.Id.Value});
+			
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
-
 			target.Consume(new AgentBadgeCalculateMessage());
 
-			person.Badges.BronzeBadge.Should().Be.EqualTo(1);
+			_person.Badges.BronzeBadge.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldAwardBronzeForBothAdherenceAndAnsweredCalls()
 		{
-			var person = PersonFactory.CreatePerson();
-			person.SetId(Guid.NewGuid());
-			var adherenceReportSetting = new AdherenceReportSetting();
-
-			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
-			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
-			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
-
-			_globalSettingDataRepository.Stub(
-				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting())).IgnoreArguments()
-				.Return(adherenceReportSetting);
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, adherenceReportSetting.CalculationMethod)).Return(new List<Guid> { person.Id.Value });
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow)).Return(new List<Guid>{person.Id.Value});
-			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { person });
-			
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod)).Return(new List<Guid> { _person.Id.Value });
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow)).Return(new List<Guid>{_person.Id.Value});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
-
 			target.Consume(new AgentBadgeCalculateMessage());
 
-			person.Badges.BronzeBadge.Should().Be.EqualTo(2);
+			_person.Badges.BronzeBadge.Should().Be.EqualTo(2);
 		}
 	}
 
