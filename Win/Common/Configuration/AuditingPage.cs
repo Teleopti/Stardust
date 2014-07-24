@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -47,6 +48,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void LoadControl()
 		{
 			loadAuditSetting();
+			SetColors();
+		}
+
+		private void SetColors()
+		{
+			BackColor = ColorHelper.WizardBackgroundColor();
+			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
+
+			gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
+			labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
+
+			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+		   autoLabelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+		   autoLabelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+
 		}
 
 		private void loadAuditSetting()
@@ -146,6 +162,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				setStatusPanelBackColor(Color.FromArgb(255, 224, 128));
 			}
+		}
+
+		private void checkBoxAdvIsRunning_CheckStateChanged(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

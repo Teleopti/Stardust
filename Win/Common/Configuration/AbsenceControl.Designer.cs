@@ -34,15 +34,6 @@
             Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle2 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
             Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
             Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
-            this.labelTimeDirectives = new System.Windows.Forms.Label();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.buttonAdvDelete = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.buttonNew = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.autoLabel4 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
             this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
             this.gridControlAbsences = new Syncfusion.Windows.Forms.Grid.GridControl();
             this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -55,10 +46,6 @@
             this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
             this.labelHeader = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.tableLayoutPanel1.SuspendLayout();
-            this.tableLayoutPanel7.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
-            this.tableLayoutPanel5.SuspendLayout();
             this.tableLayoutPanelBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridControlAbsences)).BeginInit();
             this.contextMenuStrip2.SuspendLayout();
@@ -67,140 +54,6 @@
             this.gradientPanelHeader.SuspendLayout();
             this.tableLayoutPanelHeader.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel7, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(200, 100);
-            this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // tableLayoutPanel7
-            // 
-            this.tableLayoutPanel7.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.tableLayoutPanel7.ColumnCount = 1;
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Controls.Add(this.labelTimeDirectives, 0, 0);
-            this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(3, 43);
-            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
-            this.tableLayoutPanel7.RowCount = 1;
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(194, 14);
-            this.tableLayoutPanel7.TabIndex = 3;
-            this.tableLayoutPanel7.Visible = false;
-            // 
-            // labelTimeDirectives
-            // 
-            this.labelTimeDirectives.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelTimeDirectives.AutoSize = true;
-            this.labelTimeDirectives.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.labelTimeDirectives.ForeColor = System.Drawing.Color.GhostWhite;
-            this.labelTimeDirectives.Location = new System.Drawing.Point(3, 0);
-            this.labelTimeDirectives.Name = "labelTimeDirectives";
-            this.labelTimeDirectives.Size = new System.Drawing.Size(152, 14);
-            this.labelTimeDirectives.TabIndex = 0;
-            this.labelTimeDirectives.Text = "xxSchedule your contract weekly";
-            this.labelTimeDirectives.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.tableLayoutPanel2.ColumnCount = 3;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.Controls.Add(this.buttonAdvDelete, 2, 0);
-            this.tableLayoutPanel2.Controls.Add(this.buttonNew, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(194, 14);
-            this.tableLayoutPanel2.TabIndex = 1;
-            this.tableLayoutPanel2.Visible = false;
-            // 
-            // buttonAdvDelete
-            // 
-            this.buttonAdvDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAdvDelete.BeforeTouchSize = new System.Drawing.Size(24, 24);
-            this.buttonAdvDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
-            this.buttonAdvDelete.IsBackStageButton = false;
-            this.buttonAdvDelete.Location = new System.Drawing.Point(170, 3);
-            this.buttonAdvDelete.Margin = new System.Windows.Forms.Padding(3, 3, 0, 1);
-            this.buttonAdvDelete.Name = "buttonAdvDelete";
-            this.buttonAdvDelete.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this.buttonAdvDelete.Size = new System.Drawing.Size(24, 24);
-            this.buttonAdvDelete.TabIndex = 7;
-            this.buttonAdvDelete.TabStop = false;
-            // 
-            // buttonNew
-            // 
-            this.buttonNew.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonNew.BackColor = System.Drawing.Color.White;
-            this.buttonNew.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
-            this.buttonNew.Location = new System.Drawing.Point(143, 3);
-            this.buttonNew.Margin = new System.Windows.Forms.Padding(3, 3, 0, 1);
-            this.buttonNew.Name = "buttonNew";
-            this.buttonNew.Size = new System.Drawing.Size(24, 24);
-            this.buttonNew.TabIndex = 6;
-            this.buttonNew.UseVisualStyleBackColor = false;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.label1.ForeColor = System.Drawing.Color.GhostWhite;
-            this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(115, 28);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "xxPersonalize your schedule";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tableLayoutPanel5
-            // 
-            this.tableLayoutPanel5.ColumnCount = 1;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Controls.Add(this.autoLabel4, 0, 0);
-            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 2;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(200, 100);
-            this.tableLayoutPanel5.TabIndex = 0;
-            // 
-            // autoLabel4
-            // 
-            this.autoLabel4.AutoSize = false;
-            this.autoLabel4.Location = new System.Drawing.Point(3, 0);
-            this.autoLabel4.Name = "autoLabel4";
-            this.autoLabel4.Size = new System.Drawing.Size(160, 20);
-            this.autoLabel4.TabIndex = 34;
-            this.autoLabel4.Text = "xxMy Weekly Contract Schedule";
-            this.autoLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tableLayoutPanelBody
             // 
@@ -364,7 +217,7 @@
             // 
             this.tableLayoutPanelHeader.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanelHeader.ColumnCount = 1;
-            this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 601F));
+            this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 673F));
             this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelHeader.Controls.Add(this.labelHeader, 1, 0);
             this.tableLayoutPanelHeader.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -375,6 +228,7 @@
             this.tableLayoutPanelHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelHeader.Size = new System.Drawing.Size(673, 38);
             this.tableLayoutPanelHeader.TabIndex = 0;
+            this.tableLayoutPanelHeader.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanelHeader_Paint);
             // 
             // labelHeader
             // 
@@ -400,12 +254,6 @@
             this.Name = "AbsenceControl";
             this.Size = new System.Drawing.Size(697, 565);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.AbsenceControlLayout);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel7.ResumeLayout(false);
-            this.tableLayoutPanel7.PerformLayout();
-            this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel2.PerformLayout();
-            this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanelBody.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControlAbsences)).EndInit();
             this.contextMenuStrip2.ResumeLayout(false);
@@ -424,15 +272,6 @@
         private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelHeader;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelHeader;
         private System.Windows.Forms.Label labelHeader;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
-        private System.Windows.Forms.Label labelTimeDirectives;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvDelete;
-        private System.Windows.Forms.Button buttonNew;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelBody;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader2;
         private System.Windows.Forms.Label labelSubHeader2;

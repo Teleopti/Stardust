@@ -112,15 +112,44 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="buttonAdvDeleteWeek.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAANbY1E9YMgAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAG8SURBVDhPpZLL
+        S0JREMYvSJgGhuCmTYtWEWEUCGlcaiNIm6LAlYgQtIm2hZaHblHRKooe0DsIIih60xMfmfgiIRD6c75m
+        Lnq5ei2IFr/DnHl858wwEoB/oRnpyUkRD4WEPliPt/FxcS3LWp56vPj94mNsDIVAAPde748iuXBYZIaG
+        cOdwYEOS1Dw1cN7VpSTcbpRkGYneXlz09BhECtGoyI6OIt/cjCMqW5Ikhf1awm5Dg3Jjs6HY2opYdzce
+        Bgc1kXwkIrIjI8g1NmKXSqLlYkYTYOhbypXZjE+nE5nhYXC/7xMT6rdzTU3YofSwrpipEmD2LRbltbMT
+        Xz4f8iSSHhhAwW5Xv61/uULVpQLNQEm5XCi1t6NoteKM0hbrFDMGB3Pd1yeeW1qQpXCcOCaWy1OvxeCI
+        BQLipaMDCQodEtz3ZdleqyNSdeFleuvvR4rcW0SEvj1DbJL9SHAr2zUimhEPBkWS9iBNLi6e1vU8T/YB
+        +WLEKbGuE1GPK49HPLW1IUlXfm2qzsBoBsoexW4JbmtFv4k7JpNyQiYX61+uZYFiNAesEnPlPC3Iqzn7
+        S3EF3gWeS+VuSPgbkL4BOJVqzjV9f3wAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="buttonAdvDeleteContractSchedule.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAANbY1E9YMgAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAG8SURBVDhPpZLL
+        S0JREMYvSJgGhuCmTYtWEWEUCGlcaiNIm6LAlYgQtIm2hZaHblHRKooe0DsIIih60xMfmfgiIRD6c75m
+        Lnq5ei2IFr/DnHl858wwEoB/oRnpyUkRD4WEPliPt/FxcS3LWp56vPj94mNsDIVAAPde748iuXBYZIaG
+        cOdwYEOS1Dw1cN7VpSTcbpRkGYneXlz09BhECtGoyI6OIt/cjCMqW5Ikhf1awm5Dg3Jjs6HY2opYdzce
+        Bgc1kXwkIrIjI8g1NmKXSqLlYkYTYOhbypXZjE+nE5nhYXC/7xMT6rdzTU3YofSwrpipEmD2LRbltbMT
+        Xz4f8iSSHhhAwW5Xv61/uULVpQLNQEm5XCi1t6NoteKM0hbrFDMGB3Pd1yeeW1qQpXCcOCaWy1OvxeCI
+        BQLipaMDCQodEtz3ZdleqyNSdeFleuvvR4rcW0SEvj1DbJL9SHAr2zUimhEPBkWS9iBNLi6e1vU8T/YB
+        +WLEKbGuE1GPK49HPLW1IUlXfm2qzsBoBsoexW4JbmtFv4k7JpNyQiYX61+uZYFiNAesEnPlPC3Iqzn7
+        S3EF3gWeS+VuSPgbkL4BOJVqzjV9f3wAAAAASUVORK5CYII=
+</value>
+  </data>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="contextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="contextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>109, 17</value>
   </metadata>
 </root>

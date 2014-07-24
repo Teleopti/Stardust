@@ -106,8 +106,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 			gridColumns.Add(new ActivityUpdatedReadOnlyTextColumn<IActivity>("UpdatedBy", Resources.UpdatedBy));
 			gridColumns.Add(new ActivityUpdatedReadOnlyTextColumn<IActivity>("UpdatedTimeInUserPerspective", Resources.UpdatedOn));
-
+			gridControlActivities.Font = Font;
 			return new ReadOnlyCollection<SFGridColumnBase<IActivity>>(gridColumns);
+			
 		}
 
 		private List<ReportLevelDetailAdapter> ReportLevelDetails()
@@ -267,8 +268,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_sourceList.Clear();
 			var activityRepository = new ActivityRepository(uow);
 			_sourceList.Add(GridType.Activity, activityRepository.LoadAllWithUpdatedBy());
-             
-            //gridControlActivities.Refresh();
+			 
+			//gridControlActivities.Refresh();
 		}
 
 		private List<T> GetSource<T>(GridType gridType)
@@ -322,7 +323,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			BackColor = ColorHelper.WizardBackgroundColor();
 			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
 
-            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
+			gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
 			labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 
 			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
@@ -363,11 +364,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				var activityRepository = new ActivityRepository(uow);
 
-                foreach (var activity in (IList<IActivity>)_sourceList[GridType.Activity])
-                {
-                    var a = uow.Merge(activity);
-                    LazyLoadingManager.Initialize(a.UpdatedBy);
-                }			
+				foreach (var activity in (IList<IActivity>)_sourceList[GridType.Activity])
+				{
+					var a = uow.Merge(activity);
+					LazyLoadingManager.Initialize(a.UpdatedBy);
+				}			
 				foreach (var activity in _activitiesToBeDeleted)
 				{
 					activityRepository.Remove(activity);
@@ -380,7 +381,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				_activitiesToBeDeleted.Clear();
 				_activitiesToAdd.Clear();
 				LoadSourceList(uow);
-                _gridColumnHelper.SetSourceList(GetSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList());
+				_gridColumnHelper.SetSourceList(GetSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList());
 			}
 			
 		}
@@ -443,9 +444,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			gridControlActivities.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
 		}
 
-		private void gridControlActivities_CellClick(object sender, GridCellClickEventArgs e)
+		private void gridControlActivities_FontChanged(object sender, EventArgs e)
 		{
-			var col = e.ColIndex;
+			var d =gridControlActivities.Font;
 		}
 	}
 }

@@ -10,54 +10,54 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Common.Configuration
 {
-    /// <summary>
-    /// Change your password control
-    /// </summary>
+	/// <summary>
+	/// Change your password control
+	/// </summary>
 	public partial class ChangePasswordControl : BaseUserControl, ISettingPage, IChangePasswordView, ICheckBeforeClosing
-    {
-        private ChangePasswordPresenter _presenter;
-        private bool _canClose;
+	{
+		private ChangePasswordPresenter _presenter;
+		private bool _canClose;
 
-        /// <summary>
-        /// Manually initialze control components. Calls when OptionDialog contructor.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Aruna Priyankara Wickrama
-        /// Created date: 2008-04-07
-        /// </remarks>
-        public void InitializeDialogControl()
-        {
-            setColors();
-            SetTexts();
-        }
+		/// <summary>
+		/// Manually initialze control components. Calls when OptionDialog contructor.
+		/// </summary>
+		/// <remarks>
+		/// Created by: Aruna Priyankara Wickrama
+		/// Created date: 2008-04-07
+		/// </remarks>
+		public void InitializeDialogControl()
+		{
+			setColors();
+			SetTexts();
+		}
 
-        public void Unload()
-        {
-        }
+		public void Unload()
+		{
+		}
 
-        /// <summary>
-        /// Binds the control with data from repository
-        /// </summary>
-        public void LoadControl()
-        {
-            _presenter = new ChangePasswordPresenter(this,
-                                                     new PasswordPolicy(
-                                                         StateHolderReader.Instance.StateReader.ApplicationScopeData.
-                                                             LoadPasswordPolicyService),
-                                                     UnitOfWorkFactory.Current,
-                                                     new RepositoryFactory(), new OneWayEncryption());
-            _presenter.Initialize();
-            labelSubHeader2.Text = string.Concat(labelSubHeader2.Text, " ",
-                                                 ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Name);
-        }
+		/// <summary>
+		/// Binds the control with data from repository
+		/// </summary>
+		public void LoadControl()
+		{
+			_presenter = new ChangePasswordPresenter(this,
+													 new PasswordPolicy(
+														 StateHolderReader.Instance.StateReader.ApplicationScopeData.
+															 LoadPasswordPolicyService),
+													 UnitOfWorkFactory.Current,
+													 new RepositoryFactory(), new OneWayEncryption());
+			_presenter.Initialize();
+			labelSubHeader2.Text = string.Concat(labelSubHeader2.Text, " ",
+												 ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Name);
+		}
 
-        /// <summary>
-        /// Saves the changes to the repository
-        /// </summary>
-        public void  SaveChanges()
-        {
-            _presenter.Save();
-        }
+		/// <summary>
+		/// Saves the changes to the repository
+		/// </summary>
+		public void  SaveChanges()
+		{
+			_presenter.Save();
+		}
 
 		/// <summary>
 		/// Initializes the contract control.
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public ChangePasswordControl()
 		{
 			InitializeComponent();
-        }
+		}
 
 		/// <summary>
 		/// Sets the unit of work
@@ -99,85 +99,85 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return UserTexts.Resources.ChangeYourPassword;
 		}
 
-    	public void OnShow()
-    	{
-    	}
+		public void OnShow()
+		{
+		}
 
-    	/// <summary>
+		/// <summary>
 		/// Sets colors for the control.
 		/// </summary>
 		private void setColors()
 		{
-            BackColor = ColorHelper.WizardBackgroundColor();
-            tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
+			BackColor = ColorHelper.WizardBackgroundColor();
+			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
 
-            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
-            labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
+			gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
+			labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 
-            tableLayoutPanelSubHeader2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
-            labelSubHeader2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
-            labelSubHeader2.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
-        }
+			tableLayoutPanelSubHeader2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			labelSubHeader2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			labelSubHeader2.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+		}
 
-        public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
-        {
-            throw new NotImplementedException();
-        }
+		public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
+		{
+			throw new NotImplementedException();
+		}
 
-        public ViewType ViewType
-        {
-            get { return ViewType.ChangeYourPassword; }
-        }
+		public ViewType ViewType
+		{
+			get { return ViewType.ChangeYourPassword; }
+		}
 
-        public void SetInputFocus()
-        {
-            textBoxExtPassword.Focus();
-        }
+		public void SetInputFocus()
+		{
+			textBoxExtPassword.Focus();
+		}
 
-        public void SetOldPasswordValid(bool valid)
-        {
-            autoLabelValidationPassword.Visible = !valid;
-        }
+		public void SetOldPasswordValid(bool valid)
+		{
+			autoLabelValidationPassword.Visible = !valid;
+		}
 
-        public void SetConfirmPasswordValid(bool valid)
-        {
-            autoLabelValidationConfirmNewPassword.Visible = !valid;
-        }
+		public void SetConfirmPasswordValid(bool valid)
+		{
+			autoLabelValidationConfirmNewPassword.Visible = !valid;
+		}
 
-        public void SetNewPasswordValid(bool valid)
-        {
-            autoLabelValidationNewPassword.Visible = !valid;
-        }
+		public void SetNewPasswordValid(bool valid)
+		{
+			autoLabelValidationNewPassword.Visible = !valid;
+		}
 
-        public void Close()
-        {
-            _canClose = true;
-        }
+		public void Close()
+		{
+			_canClose = true;
+		}
 
-        public void ShowValidationError()
-        {
-            _canClose = false;
-            ViewBase.ShowErrorMessage(UserTexts.Resources.ChangePasswordValidationError,UserTexts.Resources.ValidationError);
-        }
+		public void ShowValidationError()
+		{
+			_canClose = false;
+			ViewBase.ShowErrorMessage(UserTexts.Resources.ChangePasswordValidationError,UserTexts.Resources.ValidationError);
+		}
 
-        public bool CanClose()
-        {
-            return _canClose;
-        }
+		public bool CanClose()
+		{
+			return _canClose;
+		}
 
-        private void TextBoxExtPasswordTextChanged(object sender, EventArgs e)
-        {
-            _presenter.SetOldPassword(textBoxExtPassword.Text);
-        }
+		private void TextBoxExtPasswordTextChanged(object sender, EventArgs e)
+		{
+			_presenter.SetOldPassword(textBoxExtPassword.Text);
+		}
 
-        private void TextBoxExtNewPasswordTextChanged(object sender, EventArgs e)
-        {
-            _presenter.SetNewPassword(textBoxExtNewPassword.Text);
-        }
+		private void TextBoxExtNewPasswordTextChanged(object sender, EventArgs e)
+		{
+			_presenter.SetNewPassword(textBoxExtNewPassword.Text);
+		}
 
-        private void TextBoxExtConfirmPasswordTextChanged(object sender, EventArgs e)
-        {
-            _presenter.SetConfirmNewPassword(textBoxExtConfirmPassword.Text);
-        }
+		private void TextBoxExtConfirmPasswordTextChanged(object sender, EventArgs e)
+		{
+			_presenter.SetConfirmNewPassword(textBoxExtConfirmPassword.Text);
+		}
 	}
 }

@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 {
 	public partial class AvailabilityPage : BaseUserControl, ISettingPage
 	{
-		private const short InvalidItemIndex = -1;                  // Index of combo when none selected.
-		private const short FirstItemIndex = 0;                     // Index of the 1st item of the combo.
-		private const short ItemDiffernce = 1;                      // Represents items different.
+		private const short invalidItemIndex = -1;                  // Index of combo when none selected.
+		private const short firstItemIndex = 0;                     // Index of the 1st item of the combo.
+		private const short itemDifference = 1;                      // Represents items different.
 
 		private IList<IAvailabilityRotation> _availabilityList;
 		private List<AvailabilityRestrictionView> _restrictionViewList = new List<AvailabilityRestrictionView>();
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private int LastItemIndex
 		{
-			get { return comboBoxAdvAvailabilities.Items.Count - ItemDiffernce; }
+			get { return comboBoxAdvAvailabilities.Items.Count - itemDifference; }
 		}
 
 		public IAvailabilityRotation SelectedAvailability
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void InitializeDialogControl()
 		{
-			SetColors();
+			setColors();
 			SetTexts();
 
 			// Set HourMinutes to CellModels.
@@ -76,12 +76,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				);
 
 			InitGrid();
-			CreateColumns();
+			createColumns();
 		}
 
 		public void LoadControl()
 		{
-			LoadAvailabilities();
+			loadAvailabilities();
 		}
 
 		public void SaveChanges()
@@ -106,9 +106,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void Unload()
 		{
 			// Disposes or flag anything possible.
-			textBoxDescription.Validated -= TextBoxDescriptionValidated;
-			textBoxDescription.Validating -= TextBoxDescriptionValidating;
-			numericUpDownWeek.ValueChanged -= NumericUpDownWeekValueChanged;
+			textBoxDescription.Validated -= textBoxDescriptionValidated;
+			textBoxDescription.Validating -= textBoxDescriptionValidating;
+			numericUpDownWeek.ValueChanged -= numericUpDownWeekValueChanged;
 
 			Repository = null;
 			 _availabilityList = null;
@@ -150,20 +150,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			InitializeComponent();
 
 			// Bind events.
-			comboBoxAdvAvailabilities.SelectedIndexChanging += ComboBoxAdvAvailabilitiesSelectedIndexChanging;
-			comboBoxAdvAvailabilities.SelectedIndexChanged += ComboBoxAdvAvailabilitiesSelectedIndexChanged;
-			textBoxDescription.Validating += TextBoxDescriptionValidating;
-			textBoxDescription.Validated += TextBoxDescriptionValidated;
-			buttonNew.Click += ButtonNewClick;
-			buttonDelete.Click += ButtonDeleteClick;
+			comboBoxAdvAvailabilities.SelectedIndexChanging += comboBoxAdvAvailabilitiesSelectedIndexChanging;
+			comboBoxAdvAvailabilities.SelectedIndexChanged += comboBoxAdvAvailabilitiesSelectedIndexChanged;
+			textBoxDescription.Validating += textBoxDescriptionValidating;
+			textBoxDescription.Validated += textBoxDescriptionValidated;
+			buttonNew.Click += buttonNewClick;
+			buttonDelete.Click += buttonDeleteClick;
 			//
 			// numericUpDownWeek
 			//
-			numericUpDownWeek.Minimum = FirstItemIndex + ItemDiffernce;
-			numericUpDownWeek.ValueChanged += NumericUpDownWeekValueChanged;
+			numericUpDownWeek.Minimum = firstItemIndex + itemDifference;
+			numericUpDownWeek.ValueChanged += numericUpDownWeekValueChanged;
 		}
 
-		private void ChangedInfo()
+		private void changedInfo()
 		{
 			autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
 			autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			autoLabelInfoAboutChanges.Text = changed;
 		}
 
-		private void ChangeToOverMidnight()
+		private void changeToOverMidnight()
 		{
 			bool lateEndSelected = _gridHelper.HasColumnSelected(_lateEndTimeColumn);
 			if (lateEndSelected)
@@ -180,32 +180,32 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				
 				foreach (AvailabilityRestrictionView view in selectedList)
 				{
-				    if (lateEndTimeWillBeValid(view))
-				        view.LateEndTime = view.LateEndTime.Value.Add(TimeSpan.FromDays(1));
+					if (lateEndTimeWillBeValid(view))
+						view.LateEndTime = view.LateEndTime.Value.Add(TimeSpan.FromDays(1));
 				}
 			}
 			// Refreshes the Grid.
-			RefreshRange();
+			refreshRange();
 		}
 
-	    private static bool lateEndTimeWillBeValid(AvailabilityRestrictionView view)
-	    {
-	        return view.LateEndTime.HasValue && view.LateEndTime.Value < TimeSpan.FromDays(1);
-	    }
+		private static bool lateEndTimeWillBeValid(AvailabilityRestrictionView view)
+		{
+			return view.LateEndTime.HasValue && view.LateEndTime.Value < TimeSpan.FromDays(1);
+		}
 
-	    private void RefreshRange()
+		private void refreshRange()
 		{
 			int colIndex = _gridColumns.IndexOf(_lateEndTimeColumn);
 
 			gridControlAvailability.RefreshRange(GridRangeInfo.Col(colIndex));
 		}
 
-		private void SelectAvailability()
+		private void selectAvailability()
 		{
-			numericUpDownWeek.Value = ScheduleRestrictionBaseView.GetWeek(SelectedAvailability.AvailabilityDays.Count - ItemDiffernce);
+			numericUpDownWeek.Value = ScheduleRestrictionBaseView.GetWeek(SelectedAvailability.AvailabilityDays.Count - itemDifference);
 			textBoxDescription.Text = SelectedAvailability.Name;
 			SaveChanges();
-			PrepareGridView();
+			prepareGridView();
 		}
 
 		private void InitGrid()
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			_gridColumns = null;
 
-			gridControlAvailability.SaveCellInfo += gridControlAvailability_SaveCellInfo;
+			gridControlAvailability.SaveCellInfo += gridControlAvailabilitySaveCellInfo;
 			gridControlAvailability.PrepareViewStyleInfo += gridControlAvailabilityPrepareViewStyleInfo;
 			gridControlAvailability.MouseUp += gridControlAvailabilityMouseUp;
 			gridControlAvailability.KeyUp += gridControlAvailabilityKeyUp;
@@ -236,12 +236,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			gridControlAvailability.Invalidate();
 		}
-		void gridControlAvailability_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
+		void gridControlAvailabilitySaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
 		{
 			gridControlAvailability.Invalidate();
 		}
 
-		private void CreateColumns()
+		private void createColumns()
 		{
 			IList<SFGridColumnBase<AvailabilityRestrictionView>> columnList =
 				new List<SFGridColumnBase<AvailabilityRestrictionView>>
@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private void PrepareGridView()
+		private void prepareGridView()
 		{
 			_restrictionViewList.Clear();
 
@@ -291,12 +291,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			// HACK: Handles event to get rid of fxcop.
 			_gridHelper.NewSourceEntityWanted += gridHelper_NewSourceEntityWanted;
-			_gridHelper.PasteFromClipboardFinished += GridHelperPasteFromClipboardFinished;
+			_gridHelper.PasteFromClipboardFinished += gridHelperPasteFromClipboardFinished;
 		}
 
-		private void ChangeAvailabilityDays()
+		private void changeAvailabilityDays()
 		{
-			int weekCount = ScheduleRestrictionBaseView.GetWeek(SelectedAvailability.DaysCount - ItemDiffernce);
+			int weekCount = ScheduleRestrictionBaseView.GetWeek(SelectedAvailability.DaysCount - itemDifference);
 			decimal value = numericUpDownWeek.Value;
 
 			SaveChanges();
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				int daysToAdd = ((int)value - weekCount) * (int)ScheduleRestrictionBaseView.DaysPerWeek;
 				SelectedAvailability.AddDays(daysToAdd);
 
-				PrepareGridView();
+				prepareGridView();
 			}
 			else if (value < weekCount)
 			{
@@ -315,22 +315,22 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				int daysToRemove = (weekCount - (int)value) * (int)ScheduleRestrictionBaseView.DaysPerWeek;
 				SelectedAvailability.RemoveDays(daysToRemove);
 
-				PrepareGridView();
+				prepareGridView();
 			}
 		}
 
-		private void AddNewAvailability()
+		private void addNewAvailability()
 		{
 			SaveChanges();
 			IAvailabilityRotation newAvailability = CreateAvailability();
 			_availabilityList.Add(newAvailability);
 
-			LoadAvailabilities();
+			loadAvailabilities();
 
 			comboBoxAdvAvailabilities.SelectedIndex = LastItemIndex;
 		}
 
-		private void DeleteAvailability()
+		private void deleteAvailability()
 		{
 			if (SelectedAvailability == null) return;
 			// Marks for remove.
@@ -338,10 +338,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// Removes from list.
 			_availabilityList.Remove(SelectedAvailability);
 
-			LoadAvailabilities();
+			loadAvailabilities();
 		}
 
-		private bool ValidateAvailabilityDescription()
+		private bool validateAvailabilityDescription()
 		{
 			bool failed = string.IsNullOrEmpty(textBoxDescription.Text);
 			if (failed)
@@ -352,19 +352,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return !failed;
 		}
 
-		private void ChangeAvailabilityDescription()
+		private void changeAvailabilityDescription()
 		{
 			SelectedAvailability.Name = textBoxDescription.Text;
 			SaveChanges();
-			LoadAvailabilities();
+			loadAvailabilities();
 		}
 
-		private void SetColors()
+		private void setColors()
 		{
 			BackColor = ColorHelper.WizardBackgroundColor();
 			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
 
-            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
+			gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
 			labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 
 			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
@@ -379,7 +379,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			gridControlAvailability.Properties.BackgroundColor = ColorHelper.WizardBackgroundColor();
 		}
 
-		private void LoadAvailabilities()
+		private void loadAvailabilities()
 		{
 			if (Disposing) return;
 			if (_availabilityList == null)
@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// Removes binding from comboBoxAdvAvailabilities.
 			int selected = comboBoxAdvAvailabilities.SelectedIndex;
 			var selectedAvailability = comboBoxAdvAvailabilities.SelectedItem as IAvailabilityRotation;
-			if (!IsWithinRange(selected)) selected = FirstItemIndex;
+			if (!isWithinRange(selected)) selected = firstItemIndex;
 
 			// Rebinds list to comboBoxAdvAvailabilities.
 			comboBoxAdvAvailabilities.DataSource = null;
@@ -415,9 +415,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				comboBoxAdvAvailabilities.SelectedIndex = selected;
 		}
 
-	   private bool IsWithinRange(int index)
+	   private bool isWithinRange(int index)
 		{
-			return index > InvalidItemIndex && index < _availabilityList.Count && comboBoxAdvAvailabilities.DataSource != null;
+			return index > invalidItemIndex && index < _availabilityList.Count && comboBoxAdvAvailabilities.DataSource != null;
 		}
 
 		private IAvailabilityRotation CreateAvailability()
@@ -431,33 +431,33 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return newAvailability;
 		}
 
-		private void TextBoxDescriptionValidating(object sender, System.ComponentModel.CancelEventArgs e)
+		private void textBoxDescriptionValidating(object sender, System.ComponentModel.CancelEventArgs e)
 		{
 			if (SelectedAvailability != null)
 			{
-				e.Cancel = !ValidateAvailabilityDescription();
+				e.Cancel = !validateAvailabilityDescription();
 			}
 		}
 
-		private void TextBoxDescriptionValidated(object sender, EventArgs e)
+		private void textBoxDescriptionValidated(object sender, EventArgs e)
 		{
 			if (SelectedAvailability != null)
 			{
-				ChangeAvailabilityDescription();
+				changeAvailabilityDescription();
 			}
 		}
 
-		private void ComboBoxAdvAvailabilitiesSelectedIndexChanging(object sender, SelectedIndexChangingArgs e)
+		private void comboBoxAdvAvailabilitiesSelectedIndexChanging(object sender, SelectedIndexChangingArgs e)
 		{
-			e.Cancel = !IsWithinRange(e.NewIndex);
+			e.Cancel = !isWithinRange(e.NewIndex);
 		}
 
-		private void ComboBoxAdvAvailabilitiesSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxAdvAvailabilitiesSelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (SelectedAvailability == null) return;
 			Cursor.Current = Cursors.WaitCursor;
-			SelectAvailability();
-			ChangedInfo();
+			selectAvailability();
+			changedInfo();
 			Cursor.Current = Cursors.Default;
 		}
 
@@ -465,32 +465,32 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 		}
 
-	   private void GridHelperPasteFromClipboardFinished(object sender, EventArgs e)
+	   private void gridHelperPasteFromClipboardFinished(object sender, EventArgs e)
 		{
 			bool columnSelected = _gridHelper.HasColumnSelected(_earlyStartTimeColumn);
 			if (columnSelected)
 			{
-				RefreshRange();
+				refreshRange();
 			}
 		}
 
-	   private void NumericUpDownWeekValueChanged(object sender, EventArgs e)
+	   private void numericUpDownWeekValueChanged(object sender, EventArgs e)
 		{
 		if (SelectedAvailability == null) return;
 		Cursor.Current = Cursors.WaitCursor;
-		ChangeAvailabilityDays();
+		changeAvailabilityDays();
 		Cursor.Current = Cursors.Default;
 		}
 
-		private void ButtonNewClick(object sender, EventArgs e)
+		private void buttonNewClick(object sender, EventArgs e)
 		{
 			if (SelectedAvailability == null) return;
 			Cursor.Current = Cursors.WaitCursor;
-			AddNewAvailability();
+			addNewAvailability();
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void ButtonDeleteClick(object sender, EventArgs e)
+		private void buttonDeleteClick(object sender, EventArgs e)
 		{
 			if (SelectedAvailability == null) return;
 			string text = string.Format(
@@ -501,15 +501,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			DialogResult response = ViewBase.ShowYesNoMessage(text,UserTexts.Resources.ConfirmDelete);
 			if (response != DialogResult.Yes) return;
 			Cursor.Current = Cursors.WaitCursor;
-			DeleteAvailability();
+			deleteAvailability();
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void ButtonAdvOvernightClick(object sender, EventArgs e)
+		private void buttonAdvOvernightClick(object sender, EventArgs e)
 		{
 			if (SelectedAvailability == null) return;
 			Cursor.Current = Cursors.WaitCursor;
-			ChangeToOverMidnight();
+			changeToOverMidnight();
 			Cursor.Current = Cursors.Default;
 		}
 
