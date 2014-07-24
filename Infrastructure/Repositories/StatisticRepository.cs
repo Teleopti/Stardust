@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
@@ -334,17 +335,62 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow)
 		{
-			throw new NotImplementedException();
+			const string sql =
+				"exec [mart].[raptor_number_of_calls_per_agent_by_date] @threshold=:threshold, @local_date=:date";
+
+			var thresholdSettings = new AgentBadgeSettingsRepository(AppUnitOfWorkFactory()).LoadAll().FirstOrDefault();
+			if (thresholdSettings == null)
+			{
+				return new List<Guid>();
+			}
+			var threshold = thresholdSettings.AnsweredCallsThreshold;
+
+			return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
+				.SetReadOnly(true)
+				.SetInt32("threshold", threshold)
+				.SetDateTime("date", DateTime.Now.AddDays(-1).Date)
+				.Enumerable<Guid>();
 		}
 
-	    public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow)
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
 		{
-			throw new NotImplementedException();
+			const string sql =
+				"exec [mart].[raptor_adherence_per_agent_by_date] @threshold=:threshold, @local_date=:date, @adherence_id=:adherenceId, "
+				+ "@time_zone_id=:timezone, @business_unit_code=:businessUnit";
+			
+			var thresholdSettings = new AgentBadgeSettingsRepository(AppUnitOfWorkFactory()).LoadAll().FirstOrDefault();
+			if (thresholdSettings == null)
+			{
+				return new List<Guid>();
+			}
+			var threshold = thresholdSettings.AdherenceThreshold;
+
+			return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
+				.SetReadOnly(true)
+				.SetDouble("threshold", threshold.Value)
+				.SetDateTime("date", DateTime.Now.AddDays(-1).Date)
+				.SetInt32("adherenceId", (int)adherenceCalculationMethod)
+				.SetGuid("businessUnit", Guid.NewGuid()) // TODO: Pass a real BU id
+				.Enumerable<Guid>();
 		}
 
 	    public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow)
 		{
-			throw new NotImplementedException();
+			const string sql =
+				"exec [mart].[raptor_AHT_per_agent_by_date] @threshold=:threshold, @local_date=:date";
+
+			var thresholdSettings = new AgentBadgeSettingsRepository(AppUnitOfWorkFactory()).LoadAll().FirstOrDefault();
+			if (thresholdSettings == null)
+			{
+				return new List<Guid>();
+			}
+			var threshold = thresholdSettings.AHTThreshold;
+
+			return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
+				.SetReadOnly(true)
+				.SetDouble("threshold", threshold.TotalSeconds)
+				.SetDateTime("date", DateTime.Now.AddDays(-1).Date)
+				.Enumerable<Guid>();
 		}
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -387,7 +433,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return identity.DataSource.Statistic;
         }
 
+		private IUnitOfWorkFactory AppUnitOfWorkFactory()
+		{
+			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+			return identity.DataSource.Application;
+		}
     }
-
-
 }

@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         void AddOrUpdateActualAgentState(IActualAgentState actualAgentState);
 
 	    IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow);
-	    IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow);
+		IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod);
 	    IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow);
     }
 }

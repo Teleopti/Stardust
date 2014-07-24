@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -34,10 +35,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return personsThatGotABadge;
 		}
 
-		public IEnumerable<IPerson> Calculate(IUnitOfWork unitOfWork, IEnumerable<IPerson> allPersons)
+		public IEnumerable<IPerson> Calculate(IUnitOfWork unitOfWork, IEnumerable<IPerson> allPersons, AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
 		{
 			var agentsThatShouldGetBadge = new List<Guid>();
-			var agents = _statisticRepository.LoadAgentsOverThresholdForAdherence(unitOfWork);
+			var agents = _statisticRepository.LoadAgentsOverThresholdForAdherence(unitOfWork, adherenceCalculationMethod);
 			if (agents != null)
 			{
 				agentsThatShouldGetBadge.AddRange(agents);

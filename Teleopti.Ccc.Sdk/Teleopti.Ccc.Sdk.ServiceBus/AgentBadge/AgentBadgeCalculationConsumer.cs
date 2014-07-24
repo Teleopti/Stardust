@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
@@ -28,14 +30,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			foreach (var dataSource in GetRegisteredDataSourceCollection().Where(dataSource => dataSource.Statistic != null && dataSource.Application != null))
 			{
+				AdherenceReportSettingCalculationMethod adherenceCalculationMethod;
 				IList<IPerson> allAgents;
 				using (var uow = dataSource.Application.CurrentUnitOfWork())
 				{
+					adherenceCalculationMethod = new GlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()).CalculationMethod;
 					allAgents = _repositoryFactory.CreatePersonRepository(uow).LoadAll();
 				}
 				using (var uow = dataSource.Statistic.CurrentUnitOfWork())
 				{
-					_calculator.Calculate(uow, allAgents);
+					_calculator.Calculate(uow, allAgents, adherenceCalculationMethod);
 				}
 			}
 
