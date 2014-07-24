@@ -15,7 +15,7 @@
 
 <span class="form-inline clearfix">
     <span>
-        <button class="preference-toggle-save-template btn btn-xs" data-bind="click: IsSaveAsNewTemplateToggle" title="@Resources.SaveAsTemplate">
+        <button class="preference-toggle-save-template btn" data-bind="click: IsSaveAsNewTemplateToggle" title="@Resources.SaveAsTemplate">
             <i class="glyphicon glyphicon-plus-sign" data-bind="css: IsSaveAsNewTemplateClass"></i>
         </button>
         <span data-bind="if: IsSaveAsNewTemplate()">
@@ -29,11 +29,11 @@
         <select class="preference-template-list form-control" data-bind="foreach: AvailableTemplates, value: SelectedTemplateId" title="@Resources.ExtendedPreferencesTemplate">
             <option data-bind="text: Text, value: Value"></option>
         </select>
-        <button class="preference-template-delete btn btn-xs" data-bind="click: DeleteTemplate, enable: DeleteTemplateEnabled" title="@Resources.Delete">
+        <button class="preference-template-delete btn" data-bind="click: DeleteTemplate, enable: DeleteTemplateEnabled" title="@Resources.Delete">
             <i class="glyphicon glyphicon-remove-sign"></i>
         </button>
     </span>
-    <button class="btn btn-xs pull-right" data-bind="click: IsPreferenceInputVisibleToggle">
+    <button class="btn pull-right" data-bind="click: IsPreferenceInputVisibleToggle">
         <i class="glyphicon glyphicon-circle-arrow-up" data-bind="css: IsPreferenceInputVisibleToggleCss"></i>
     </button>
 </span>
@@ -167,7 +167,7 @@
 			</table>
 		</td>
 		<td></td>
-		<td class="td-vertical-divider" data-bind="visible: IsPreferenceInputVisible"></td>
+		<td class="td-vertical-divider" data-bind="visible: IsPreferenceInputVisible() && IsTimeInputVisible()"></td>
 		<td></td>
 		<td style="vertical-align: top;" data-bind="if: IsTimeInputVisible">
 			<table class="preference-activity-section table-condensed" data-bind="visible: IsPreferenceInputVisible">

@@ -164,28 +164,13 @@
 	cursor: pointer;
 }
 
-.musthave-current {
-    
-}
-
-.musthave-max {
-    
-}
-
-.add-musthave {
-	
-}
-
 #Template-name-section {
 	padding-bottom: 0;
 }
-#Template-name-section input 
-{
-	vertical-align: baseline;
-}
+
 #Preference-add-extended-form {
 	min-width: 268px;
-	padding-bottom: 0px;
+	padding-bottom: 0;
 }
 
 .ie9 .preference-ui-tooltip {
