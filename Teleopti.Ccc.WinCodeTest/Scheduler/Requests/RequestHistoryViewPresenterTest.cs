@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.Common;

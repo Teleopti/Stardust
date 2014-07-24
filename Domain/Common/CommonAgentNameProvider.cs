@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Common
+namespace Teleopti.Ccc.Domain.Common
 {
     public interface ICommonAgentNameProvider
     {
