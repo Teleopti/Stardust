@@ -157,16 +157,3 @@ Scenario: View schedule in my time zone
 	| Start time | 07:00 |
 	| End time   | 15:00 |
 	| Color      | Green |
-
-@Ignore
-	Scenario: Agent name should be displayed according to the common agent description
-	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' has a shift with
-	| Field          | Value            |
-	| Shift category | Day            |
-	| Activity       | Phone            |
-	| Start time     | 2012-12-02 20:00 |
-	| End time       | 2012-12-03 04:00 |
-	And 'Pierre Baldi' has a common agent description like '{lastname} {firstname}'
-	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2012-12-02'
-	Then the displayed name should be 'Baldi Pierre'

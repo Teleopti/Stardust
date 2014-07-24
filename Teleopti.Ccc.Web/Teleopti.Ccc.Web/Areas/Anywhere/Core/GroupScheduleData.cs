@@ -18,5 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public bool CanSeeUnpublishedSchedules { get; set; }
 		public IEnumerable<IPerson> CanSeeConfidentialAbsencesFor { get; set; }
 		public IEnumerable<IPerson> CanSeePersons { get; set; }
+		public ICommonNameDescriptionSetting CommonAgentNameSetting { get; set; }
 	}
 }

@@ -52,11 +52,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				let shift = model.Shift ?? new Shift()
 				let canSeeConfidentialAbsence = canSeeConfidentialAbsencesFor.Any(x => schedule != null && x.Id == schedule.PersonId)
 				let layers = mapLayers(data.UserTimeZone, shift, canSeeConfidentialAbsence)
-				select makeViewModel(item.person, schedule, model, shift, layers, data.UserTimeZone))
+				select makeViewModel(item.person, schedule, model, shift, layers, data.UserTimeZone, data.CommonAgentNameSetting))
 				.ToArray();
 		}
 
-		private static GroupScheduleShiftViewModel makeViewModel(IPerson person, PersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<GroupScheduleLayerViewModel> layers, TimeZoneInfo userTimeZone)
+		private static GroupScheduleShiftViewModel makeViewModel(IPerson person, PersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<GroupScheduleLayerViewModel> layers, TimeZoneInfo userTimeZone, ICommonNameDescriptionSetting commonNameDescriptionSetting)
 		{
 			GroupScheduleDayOffViewModel dayOff = null;
 			if (model.DayOff != null)
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				ContractTimeMinutes = shift.ContractTimeMinutes,
 				PersonId = person.Id.ToString(),
 				Date = readModel == null ? "" : readModel.Date.ToFixedDateFormat(),
-				Name = person.Name.ToString(),
+				Name = commonNameDescriptionSetting.BuildCommonNameDescription(person),
 				Projection = layers,
 				IsFullDayAbsence = model.Shift != null && model.Shift.IsFullDayAbsence,
 				DayOff = dayOff

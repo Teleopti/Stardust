@@ -192,6 +192,7 @@
     <Compile Include="Collection\CachedShiftCategoryDistributionTest.cs" />
     <Compile Include="Collection\IdenticalLayersSpecificationTest.cs" />
     <Compile Include="Collection\TeamCollectionTest.cs" />
+    <Compile Include="Common\CommonAgentNameProviderTest.cs" />
     <Compile Include="Common\PeriodExtensionsTest.cs" />
     <Compile Include="Common\LayersExtensionsProjectionTest.cs" />
     <Compile Include="Common\ListAggregatorTest.cs" />

@@ -261,6 +261,7 @@
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\AgentBadgeThresholdSettings.cs" />
     <Compile Include="Common\AgentBadge.cs" />
+    <Compile Include="Common\CommonAgentNameProvider.cs" />
     <Compile Include="Common\PersonAccountUpdater.cs" />
     <Compile Include="Common\PersonAccountUpdaterDummy.cs" />
     <Compile Include="Common\CurrentBusinessUnit.cs" />

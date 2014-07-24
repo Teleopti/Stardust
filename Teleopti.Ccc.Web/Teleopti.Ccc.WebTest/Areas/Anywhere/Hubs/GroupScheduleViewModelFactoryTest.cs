@@ -7,14 +7,19 @@ using Newtonsoft.Json;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 {
@@ -22,11 +27,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 	public class GroupScheduleViewModelFactoryTest
 	{
 		private DateTime _scheduleDate;
+		private CommonAgentNameProvider _commonAgentNameProvider;
 
 		[SetUp]
 		public void Setup()
 		{
 			_scheduleDate = new DateTime(2013, 3, 4, 0, 0, 0, DateTimeKind.Utc);
+			var globalSettingRepository = MockRepository.GenerateMock<IGlobalSettingDataRepository>();
+			globalSettingRepository.Stub(x => x.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting()))
+				.IgnoreArguments()
+				.Return(new CommonNameDescriptionSetting());
+			_commonAgentNameProvider = new CommonAgentNameProvider(globalSettingRepository);
 		}
 
 		private static string MakeJsonModel(SimpleLayer layer)
@@ -52,11 +63,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var readModels = new[] { new PersonScheduleDayReadModel { PersonId = person.Id.Value } };
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			personScheduleDayReadModelRepository.Stub(x => x.ForPeople(period, new[] { person.Id.Value })).Return(readModels);
-			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, new FakePermissionProvider(), new FakeSchedulePersonProvider(new[] { person }));
+			
+			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository,
+				new FakePermissionProvider(), new FakeSchedulePersonProvider(new[] { person }), _commonAgentNameProvider);
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 
 			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value.ToString());
+			result.Single().Name.Should().Be.EqualTo(_commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person));
 		}
 
 		[Test]
@@ -78,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				.Return(new[] { person });
 			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForGroup(new DateOnly(_scheduleDate), Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				.Return(new IPerson[] { });
-			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IPermissionProvider>(), schedulePersonProvider);
+			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IPermissionProvider>(), schedulePersonProvider, _commonAgentNameProvider);
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 			result.Single().Projection.Single().Description.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
@@ -109,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				.Return(new[] { person });
 			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForGroup(new DateOnly(_scheduleDate), Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				 .Return(new List<IPerson>());
-			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IPermissionProvider>(), schedulePersonProvider);
+			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IPermissionProvider>(), schedulePersonProvider, _commonAgentNameProvider);
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 
@@ -142,7 +156,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				.Return(new[] { person });
 			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForGroup(new DateOnly(_scheduleDate), Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				 .Return(new[] { person });
-			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IPermissionProvider>(), schedulePersonProvider);
+			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IPermissionProvider>(), schedulePersonProvider, _commonAgentNameProvider);
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 
