@@ -26,10 +26,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IPersonRepository _personRepository;
 		private IUnitOfWork _uow;
 
+		void serviceBus_ReroutedEndpoint(Reroute obj)
+		{
+			return;
+		}
+
 		[Test]
 		public void ShouldSendNextCalculateMessageOneDayAfter()
 		{
 			var serviceBus = new ServiceBusMock();
+			serviceBus.ReroutedEndpoint += serviceBus_ReroutedEndpoint;
 			var target = new AgentBadgeCalculationConsumer(serviceBus, null);
 			var message = new AgentBadgeCalculateMessage();
 
