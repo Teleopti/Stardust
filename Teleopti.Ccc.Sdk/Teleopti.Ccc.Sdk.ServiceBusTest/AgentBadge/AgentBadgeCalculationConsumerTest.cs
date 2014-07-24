@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_uowFactory.Stub(x => x.CurrentUnitOfWork()).Return(_uow);
 		}
 
+		[Ignore]
 		[Test]
 		public void ShouldAwardBronzeForAnsweredCalls()
 		{
@@ -75,6 +76,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			person.Badges.BronzeBadge.Should().Be.EqualTo(1);
 		}
 
+		[Ignore]
 		[Test]
 		public void ShouldAwardBronzeForAdherence()
 		{
@@ -94,6 +96,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			person.Badges.BronzeBadge.Should().Be.EqualTo(1);
 		}
 
+		[Ignore]
 		[Test]
 		public void ShouldAwardBronzeForAHT()
 		{
@@ -113,6 +116,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			person.Badges.BronzeBadge.Should().Be.EqualTo(1);
 		}
 
+		[Ignore]
 		[Test]
 		public void ShouldAwardBronzeForBothAdherenceAndAnsweredCalls()
 		{
