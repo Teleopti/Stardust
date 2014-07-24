@@ -70,15 +70,15 @@
             this.gradientPanelHeader.ForeColor = System.Drawing.Color.White;
             this.gradientPanelHeader.Location = new System.Drawing.Point(0, 0);
             this.gradientPanelHeader.Name = "gradientPanelHeader";
-            this.gradientPanelHeader.Padding = new System.Windows.Forms.Padding(12, 12, 12, 12);
-            this.gradientPanelHeader.Size = new System.Drawing.Size(700, 62);
+            this.gradientPanelHeader.Padding = new System.Windows.Forms.Padding(12);
+            this.gradientPanelHeader.Size = new System.Drawing.Size(716, 62);
             this.gradientPanelHeader.TabIndex = 4;
             // 
             // tableLayoutPanelHeader
             // 
             this.tableLayoutPanelHeader.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanelHeader.ColumnCount = 1;
-            this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 677F));
+            this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 692F));
             this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelHeader.Controls.Add(this.labelHeader, 1, 0);
             this.tableLayoutPanelHeader.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -87,7 +87,7 @@
             this.tableLayoutPanelHeader.Name = "tableLayoutPanelHeader";
             this.tableLayoutPanelHeader.RowCount = 1;
             this.tableLayoutPanelHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelHeader.Size = new System.Drawing.Size(676, 38);
+            this.tableLayoutPanelHeader.Size = new System.Drawing.Size(692, 38);
             this.tableLayoutPanelHeader.TabIndex = 0;
             // 
             // labelHeader
@@ -108,10 +108,10 @@
             this.tableLayoutPanelBody.SetColumnSpan(this.labelSubHeader3, 2);
             this.labelSubHeader3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelSubHeader3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-            this.labelSubHeader3.Location = new System.Drawing.Point(3, 218);
+            this.labelSubHeader3.Location = new System.Drawing.Point(3, 205);
             this.labelSubHeader3.Margin = new System.Windows.Forms.Padding(3);
             this.labelSubHeader3.Name = "labelSubHeader3";
-            this.labelSubHeader3.Size = new System.Drawing.Size(694, 29);
+            this.labelSubHeader3.Size = new System.Drawing.Size(710, 29);
             this.labelSubHeader3.TabIndex = 8;
             this.labelSubHeader3.Text = "xxKPIsIncludedInScorecardColon";
             this.labelSubHeader3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -122,30 +122,29 @@
             this.tableLayoutPanelBody.ColumnCount = 2;
             this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 204F));
             this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader2, 0, 4);
+            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader2, 0, 3);
             this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader1, 0, 0);
-            this.tableLayoutPanelBody.Controls.Add(this.checkedListBoxKpi, 0, 8);
-            this.tableLayoutPanelBody.Controls.Add(this.labelSubHeader3, 0, 7);
+            this.tableLayoutPanelBody.Controls.Add(this.checkedListBoxKpi, 0, 7);
+            this.tableLayoutPanelBody.Controls.Add(this.labelSubHeader3, 0, 6);
             this.tableLayoutPanelBody.Controls.Add(this.labelName, 0, 2);
             this.tableLayoutPanelBody.Controls.Add(this.textBoxScorecardName, 1, 2);
             this.tableLayoutPanelBody.Controls.Add(this.comboBoxAdvScorecard, 1, 1);
-            this.tableLayoutPanelBody.Controls.Add(this.comboBoxAdvType, 1, 5);
-            this.tableLayoutPanelBody.Controls.Add(this.labelMeasurePeriod, 0, 5);
+            this.tableLayoutPanelBody.Controls.Add(this.comboBoxAdvType, 1, 4);
+            this.tableLayoutPanelBody.Controls.Add(this.labelMeasurePeriod, 0, 4);
             this.tableLayoutPanelBody.Controls.Add(this.labelSelectScorecard, 0, 1);
             this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 62);
             this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
-            this.tableLayoutPanelBody.RowCount = 9;
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.tableLayoutPanelBody.RowCount = 8;
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelBody.Size = new System.Drawing.Size(700, 502);
+            this.tableLayoutPanelBody.Size = new System.Drawing.Size(716, 502);
             this.tableLayoutPanelBody.TabIndex = 0;
             // 
             // tableLayoutPanelSubHeader2
@@ -158,12 +157,12 @@
             this.tableLayoutPanelSubHeader2.Controls.Add(this.labelSubHeader2, 0, 0);
             this.tableLayoutPanelSubHeader2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelSubHeader2.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.tableLayoutPanelSubHeader2.Location = new System.Drawing.Point(3, 128);
+            this.tableLayoutPanelSubHeader2.Location = new System.Drawing.Point(3, 113);
             this.tableLayoutPanelSubHeader2.Name = "tableLayoutPanelSubHeader2";
             this.tableLayoutPanelSubHeader2.RowCount = 1;
             this.tableLayoutPanelSubHeader2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelSubHeader2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.tableLayoutPanelSubHeader2.Size = new System.Drawing.Size(694, 32);
+            this.tableLayoutPanelSubHeader2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tableLayoutPanelSubHeader2.Size = new System.Drawing.Size(710, 34);
             this.tableLayoutPanelSubHeader2.TabIndex = 19;
             // 
             // labelSubHeader2
@@ -172,7 +171,7 @@
             this.labelSubHeader2.AutoSize = true;
             this.labelSubHeader2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.labelSubHeader2.ForeColor = System.Drawing.Color.GhostWhite;
-            this.labelSubHeader2.Location = new System.Drawing.Point(0, 7);
+            this.labelSubHeader2.Location = new System.Drawing.Point(0, 8);
             this.labelSubHeader2.Margin = new System.Windows.Forms.Padding(0);
             this.labelSubHeader2.Name = "labelSubHeader2";
             this.labelSubHeader2.Size = new System.Drawing.Size(209, 17);
@@ -181,12 +180,12 @@
             // 
             // tableLayoutPanelSubHeader1
             // 
-            this.tableLayoutPanelSubHeader1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(51)))), ((int)(((byte)(102)))));
+            this.tableLayoutPanelSubHeader1.BackColor = System.Drawing.Color.DimGray;
             this.tableLayoutPanelSubHeader1.ColumnCount = 3;
             this.tableLayoutPanelBody.SetColumnSpan(this.tableLayoutPanelSubHeader1, 2);
             this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelSubHeader1.Controls.Add(this.buttonNew, 0, 0);
             this.tableLayoutPanelSubHeader1.Controls.Add(this.buttonAdvDeleteScorecard, 2, 0);
             this.tableLayoutPanelSubHeader1.Controls.Add(this.labelSubHeader1, 0, 0);
@@ -195,7 +194,7 @@
             this.tableLayoutPanelSubHeader1.Name = "tableLayoutPanelSubHeader1";
             this.tableLayoutPanelSubHeader1.RowCount = 1;
             this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelSubHeader1.Size = new System.Drawing.Size(694, 32);
+            this.tableLayoutPanelSubHeader1.Size = new System.Drawing.Size(710, 34);
             this.tableLayoutPanelSubHeader1.TabIndex = 18;
             // 
             // buttonNew
@@ -207,7 +206,7 @@
             this.buttonNew.ForeColor = System.Drawing.Color.White;
             this.buttonNew.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
             this.buttonNew.IsBackStageButton = false;
-            this.buttonNew.Location = new System.Drawing.Point(632, 2);
+            this.buttonNew.Location = new System.Drawing.Point(640, 3);
             this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 3, 0);
             this.buttonNew.Name = "buttonNew";
             this.buttonNew.Size = new System.Drawing.Size(28, 28);
@@ -227,7 +226,7 @@
             this.buttonAdvDeleteScorecard.ForeColor = System.Drawing.Color.White;
             this.buttonAdvDeleteScorecard.Image = ((System.Drawing.Image)(resources.GetObject("buttonAdvDeleteScorecard.Image")));
             this.buttonAdvDeleteScorecard.IsBackStageButton = false;
-            this.buttonAdvDeleteScorecard.Location = new System.Drawing.Point(663, 2);
+            this.buttonAdvDeleteScorecard.Location = new System.Drawing.Point(675, 3);
             this.buttonAdvDeleteScorecard.Margin = new System.Windows.Forms.Padding(0, 1, 3, 0);
             this.buttonAdvDeleteScorecard.Name = "buttonAdvDeleteScorecard";
             this.buttonAdvDeleteScorecard.Size = new System.Drawing.Size(28, 28);
@@ -244,7 +243,7 @@
             this.labelSubHeader1.AutoSize = true;
             this.labelSubHeader1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSubHeader1.ForeColor = System.Drawing.Color.GhostWhite;
-            this.labelSubHeader1.Location = new System.Drawing.Point(3, 7);
+            this.labelSubHeader1.Location = new System.Drawing.Point(3, 8);
             this.labelSubHeader1.Name = "labelSubHeader1";
             this.labelSubHeader1.Size = new System.Drawing.Size(165, 17);
             this.labelSubHeader1.TabIndex = 17;
@@ -257,16 +256,18 @@
             this.checkedListBoxKpi.CheckOnClick = true;
             this.tableLayoutPanelBody.SetColumnSpan(this.checkedListBoxKpi, 2);
             this.checkedListBoxKpi.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkedListBoxKpi.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkedListBoxKpi.FormattingEnabled = true;
-            this.checkedListBoxKpi.Location = new System.Drawing.Point(3, 253);
+            this.checkedListBoxKpi.Location = new System.Drawing.Point(10, 247);
+            this.checkedListBoxKpi.Margin = new System.Windows.Forms.Padding(10);
             this.checkedListBoxKpi.Name = "checkedListBoxKpi";
-            this.checkedListBoxKpi.Size = new System.Drawing.Size(694, 246);
+            this.checkedListBoxKpi.Size = new System.Drawing.Size(696, 245);
             this.checkedListBoxKpi.TabIndex = 9;
             // 
             // labelName
             // 
             this.labelName.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelName.Location = new System.Drawing.Point(3, 78);
+            this.labelName.Location = new System.Drawing.Point(3, 80);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(169, 24);
             this.labelName.TabIndex = 6;
@@ -277,7 +278,7 @@
             // 
             this.textBoxScorecardName.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.textBoxScorecardName.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.textBoxScorecardName.Location = new System.Drawing.Point(207, 80);
+            this.textBoxScorecardName.Location = new System.Drawing.Point(207, 82);
             this.textBoxScorecardName.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.textBoxScorecardName.MaxLength = 100;
             this.textBoxScorecardName.Name = "textBoxScorecardName";
@@ -291,7 +292,7 @@
             this.comboBoxAdvScorecard.BeforeTouchSize = new System.Drawing.Size(252, 23);
             this.comboBoxAdvScorecard.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
             this.comboBoxAdvScorecard.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxAdvScorecard.Location = new System.Drawing.Point(207, 45);
+            this.comboBoxAdvScorecard.Location = new System.Drawing.Point(207, 47);
             this.comboBoxAdvScorecard.Name = "comboBoxAdvScorecard";
             this.comboBoxAdvScorecard.Size = new System.Drawing.Size(252, 23);
             this.comboBoxAdvScorecard.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -315,7 +316,7 @@
             this.comboBoxAdvType.ItemsImageIndexes.Add(new Syncfusion.Windows.Forms.Tools.ComboBoxAdv.ImageIndexItem(this.comboBoxAdvType, "xxMånad"));
             this.comboBoxAdvType.ItemsImageIndexes.Add(new Syncfusion.Windows.Forms.Tools.ComboBoxAdv.ImageIndexItem(this.comboBoxAdvType, "xxKvartal"));
             this.comboBoxAdvType.ItemsImageIndexes.Add(new Syncfusion.Windows.Forms.Tools.ComboBoxAdv.ImageIndexItem(this.comboBoxAdvType, "xxÅr"));
-            this.comboBoxAdvType.Location = new System.Drawing.Point(207, 170);
+            this.comboBoxAdvType.Location = new System.Drawing.Point(207, 157);
             this.comboBoxAdvType.Name = "comboBoxAdvType";
             this.comboBoxAdvType.Size = new System.Drawing.Size(252, 23);
             this.comboBoxAdvType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -325,7 +326,7 @@
             // labelMeasurePeriod
             // 
             this.labelMeasurePeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelMeasurePeriod.Location = new System.Drawing.Point(3, 168);
+            this.labelMeasurePeriod.Location = new System.Drawing.Point(3, 155);
             this.labelMeasurePeriod.Name = "labelMeasurePeriod";
             this.labelMeasurePeriod.Size = new System.Drawing.Size(169, 24);
             this.labelMeasurePeriod.TabIndex = 6;
@@ -335,7 +336,7 @@
             // labelSelectScorecard
             // 
             this.labelSelectScorecard.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelSelectScorecard.Location = new System.Drawing.Point(3, 43);
+            this.labelSelectScorecard.Location = new System.Drawing.Point(3, 45);
             this.labelSelectScorecard.Name = "labelSelectScorecard";
             this.labelSelectScorecard.Size = new System.Drawing.Size(169, 24);
             this.labelSelectScorecard.TabIndex = 0;
@@ -350,7 +351,7 @@
             this.Controls.Add(this.gradientPanelHeader);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ScorecardSettings";
-            this.Size = new System.Drawing.Size(700, 564);
+            this.Size = new System.Drawing.Size(716, 564);
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
             this.gradientPanelHeader.ResumeLayout(false);
             this.tableLayoutPanelHeader.ResumeLayout(false);

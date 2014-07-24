@@ -387,7 +387,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             BackColor = ColorHelper.WizardBackgroundColor();
             tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
 
-            gradientPanelHeader.BackgroundColor = ColorHelper.OptionsDialogHeaderGradientBrush();
+            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
             labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 
             tableLayoutPanelSubHeader2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
@@ -516,6 +516,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private void AbsenceControlLayout(object sender, LayoutEventArgs e)
         {
             gridControlAbsences.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
-		}
+        }
     }
 }

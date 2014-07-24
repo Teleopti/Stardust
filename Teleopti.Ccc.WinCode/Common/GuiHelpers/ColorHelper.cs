@@ -518,13 +518,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
             return Color.LightSteelBlue;
 
         }
-
-        public static BrushInfo OptionsDialogHeaderGradientBrush()
-        {
-            return new BrushInfo(GradientStyle.Vertical, OptionsDialogSubHeaderBackColor(), Color.White);
-
-
-        }
+        
         public static Color OptionsDialogHeaderBackColor()
         {
             return Color.FromArgb(0, 153, 255);

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
+using System.Windows.Navigation;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -312,10 +314,18 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             AddControlHelpContext(control);
         }
 
-        private void treeViewOptions_AfterSelect(object sender, TreeViewEventArgs e)
+        private void settingsScreenSizeChanged(object sender, EventArgs e)
         {
-
+            // this is because syncfusion seems to fuck up the size when you set dock.fill so I handle it myself
+            // otherwise the controls will come outside the form and you can't grab the border of the form and resize it
+             if(WindowState == FormWindowState.Minimized) return;
+            var offset = 3;
+            if (WindowState == FormWindowState.Maximized)
+                offset = 6;
+            tableLayoutPanel1.Height = Height - (ribbonControlAdv1.Height + offset +3);
+            tableLayoutPanel1.Top = ribbonControlAdv1.Height +offset;
+            tableLayoutPanel1.Left = 3;
+            tableLayoutPanel1.Width = Width - 6;
         }
-
     }
 }

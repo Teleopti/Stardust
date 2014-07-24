@@ -94,7 +94,7 @@
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
             this.gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.gridControl1.Location = new System.Drawing.Point(0, 131);
+            this.gridControl1.Location = new System.Drawing.Point(0, 115);
             this.gridControl1.Margin = new System.Windows.Forms.Padding(0);
             this.gridControl1.Name = "gridControl1";
             this.gridControl1.NumberedRowHeaders = false;
@@ -106,7 +106,7 @@
             this.gridControl1.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
             this.gridControl1.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-            this.gridControl1.Size = new System.Drawing.Size(700, 410);
+            this.gridControl1.Size = new System.Drawing.Size(700, 414);
             this.gridControl1.SmartSizeBox = false;
             this.gridControl1.TabIndex = 17;
             this.gridControl1.UseRightToLeftCompatibleTextBox = true;
@@ -116,21 +116,21 @@
             this.tableLayoutPanelBody.ColumnCount = 2;
             this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 204F));
             this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader2, 0, 3);
+            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader2, 0, 2);
             this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader1, 0, 0);
-            this.tableLayoutPanelBody.Controls.Add(this.gridControl1, 0, 5);
+            this.tableLayoutPanelBody.Controls.Add(this.gridControl1, 0, 3);
             this.tableLayoutPanelBody.Controls.Add(this.comboBoxSite, 1, 1);
             this.tableLayoutPanelBody.Controls.Add(this.labelChooseSite, 0, 1);
             this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 62);
             this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
-            this.tableLayoutPanelBody.RowCount = 6;
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.tableLayoutPanelBody.RowCount = 4;
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 3F));
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanelBody.Size = new System.Drawing.Size(700, 529);
             this.tableLayoutPanelBody.TabIndex = 3;
             // 
@@ -144,12 +144,12 @@
             this.tableLayoutPanelSubHeader2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
             this.tableLayoutPanelSubHeader2.Controls.Add(this.labelSubHeader2, 0, 0);
             this.tableLayoutPanelSubHeader2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelSubHeader2.Location = new System.Drawing.Point(3, 93);
+            this.tableLayoutPanelSubHeader2.Location = new System.Drawing.Point(3, 78);
             this.tableLayoutPanelSubHeader2.Name = "tableLayoutPanelSubHeader2";
             this.tableLayoutPanelSubHeader2.RowCount = 1;
             this.tableLayoutPanelSubHeader2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelSubHeader2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutPanelSubHeader2.Size = new System.Drawing.Size(694, 32);
+            this.tableLayoutPanelSubHeader2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tableLayoutPanelSubHeader2.Size = new System.Drawing.Size(694, 34);
             this.tableLayoutPanelSubHeader2.TabIndex = 19;
             // 
             // labelSubHeader2
@@ -158,7 +158,7 @@
             this.labelSubHeader2.AutoSize = true;
             this.labelSubHeader2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.labelSubHeader2.ForeColor = System.Drawing.Color.GhostWhite;
-            this.labelSubHeader2.Location = new System.Drawing.Point(3, 7);
+            this.labelSubHeader2.Location = new System.Drawing.Point(3, 8);
             this.labelSubHeader2.Name = "labelSubHeader2";
             this.labelSubHeader2.Size = new System.Drawing.Size(176, 17);
             this.labelSubHeader2.TabIndex = 16;
@@ -166,7 +166,7 @@
             // 
             // tableLayoutPanelSubHeader1
             // 
-            this.tableLayoutPanelSubHeader1.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.tableLayoutPanelSubHeader1.BackColor = System.Drawing.Color.DimGray;
             this.tableLayoutPanelSubHeader1.ColumnCount = 1;
             this.tableLayoutPanelBody.SetColumnSpan(this.tableLayoutPanelSubHeader1, 2);
             this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -178,8 +178,8 @@
             this.tableLayoutPanelSubHeader1.Name = "tableLayoutPanelSubHeader1";
             this.tableLayoutPanelSubHeader1.RowCount = 1;
             this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutPanelSubHeader1.Size = new System.Drawing.Size(694, 32);
+            this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tableLayoutPanelSubHeader1.Size = new System.Drawing.Size(694, 34);
             this.tableLayoutPanelSubHeader1.TabIndex = 18;
             // 
             // labelSubHeader1
@@ -188,7 +188,7 @@
             this.labelSubHeader1.AutoSize = true;
             this.labelSubHeader1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.labelSubHeader1.ForeColor = System.Drawing.Color.GhostWhite;
-            this.labelSubHeader1.Location = new System.Drawing.Point(3, 7);
+            this.labelSubHeader1.Location = new System.Drawing.Point(3, 8);
             this.labelSubHeader1.Name = "labelSubHeader1";
             this.labelSubHeader1.Size = new System.Drawing.Size(54, 17);
             this.labelSubHeader1.TabIndex = 16;
@@ -202,7 +202,7 @@
             this.comboBoxSite.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
             this.comboBoxSite.DisplayMember = "Name";
             this.comboBoxSite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxSite.Location = new System.Drawing.Point(207, 45);
+            this.comboBoxSite.Location = new System.Drawing.Point(207, 47);
             this.comboBoxSite.Name = "comboBoxSite";
             this.comboBoxSite.Size = new System.Drawing.Size(252, 23);
             this.comboBoxSite.Sorted = true;
@@ -213,10 +213,8 @@
             // labelChooseSite
             // 
             this.labelChooseSite.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelChooseSite.Location = new System.Drawing.Point(3, 44);
-            this.labelChooseSite.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.labelChooseSite.Location = new System.Drawing.Point(3, 47);
             this.labelChooseSite.Name = "labelChooseSite";
-            this.labelChooseSite.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.labelChooseSite.Size = new System.Drawing.Size(197, 20);
             this.labelChooseSite.TabIndex = 3;
             this.labelChooseSite.Text = "xxSelectSiteColon";

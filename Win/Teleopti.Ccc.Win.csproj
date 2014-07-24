@@ -3773,6 +3773,7 @@
     <None Include="Resources\ccc_Template_6_32x32.png" />
     <None Include="Resources\ccc_Template_7_32x32.png" />
     <None Include="Resources\ccc_tree_Site.png" />
+    <None Include="Resources\ccc_temp_DeleteGroup.png" />
     <Content Include="Resources\ccc_Undo.png" />
     <None Include="Resources\EndTime.PNG" />
     <None Include="Resources\editor.png" />

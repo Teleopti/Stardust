@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             BackColor = ColorHelper.WizardBackgroundColor();
             tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
 
-            gradientPanelHeader.BackgroundColor = ColorHelper.OptionsDialogHeaderGradientBrush();
+            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
             labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 
             tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();

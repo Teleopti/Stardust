@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             BackColor = ColorHelper.WizardBackgroundColor();
             tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
 
-            gradientPanelHeader.BackgroundColor = ColorHelper.OptionsDialogHeaderGradientBrush();
+            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
             labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 
             tableLayoutPanelSubHeader2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();

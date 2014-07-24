@@ -38,10 +38,8 @@
             Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
             this.gridControl1 = new Syncfusion.Windows.Forms.Grid.GridControl();
             this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
-            this.gradientPanel3 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
             this.tableLayoutPanelSubHeader2 = new System.Windows.Forms.TableLayoutPanel();
             this.labelSubHeader2 = new System.Windows.Forms.Label();
-            this.gradientPanel2 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
             this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
             this.labelSubHeader1 = new System.Windows.Forms.Label();
             this.comboBoxSite = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
@@ -55,11 +53,7 @@
             this.buttonDeleteContract = new Syncfusion.Windows.Forms.ButtonAdv();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).BeginInit();
             this.tableLayoutPanelBody.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gradientPanel3)).BeginInit();
-            this.gradientPanel3.SuspendLayout();
             this.tableLayoutPanelSubHeader2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gradientPanel2)).BeginInit();
-            this.gradientPanel2.SuspendLayout();
             this.tableLayoutPanelSubHeader1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxSite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxKpi)).BeginInit();
@@ -99,7 +93,7 @@
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
             this.gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridControl1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.gridControl1.Location = new System.Drawing.Point(3, 157);
+            this.gridControl1.Location = new System.Drawing.Point(0, 150);
             this.gridControl1.Margin = new System.Windows.Forms.Padding(0);
             this.gridControl1.Name = "gridControl1";
             this.gridControl1.NumberedRowHeaders = false;
@@ -111,7 +105,7 @@
             this.gridControl1.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
             this.gridControl1.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-            this.gridControl1.Size = new System.Drawing.Size(603, 387);
+            this.gridControl1.Size = new System.Drawing.Size(725, 387);
             this.gridControl1.SmartSizeBox = false;
             this.gridControl1.TabIndex = 17;
             this.gridControl1.UseRightToLeftCompatibleTextBox = true;
@@ -121,61 +115,41 @@
             this.tableLayoutPanelBody.ColumnCount = 2;
             this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 204F));
             this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelBody.Controls.Add(this.gridControl1, 0, 6);
-            this.tableLayoutPanelBody.Controls.Add(this.gradientPanel3, 0, 4);
-            this.tableLayoutPanelBody.Controls.Add(this.gradientPanel2, 0, 0);
+            this.tableLayoutPanelBody.Controls.Add(this.gridControl1, 0, 4);
             this.tableLayoutPanelBody.Controls.Add(this.comboBoxSite, 1, 2);
             this.tableLayoutPanelBody.Controls.Add(this.comboBoxKpi, 1, 1);
             this.tableLayoutPanelBody.Controls.Add(this.labelChooseKpi, 0, 1);
             this.tableLayoutPanelBody.Controls.Add(this.labelChooseSite, 0, 2);
+            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader1, 0, 0);
+            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader2, 0, 3);
             this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 62);
-            this.tableLayoutPanelBody.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
-            this.tableLayoutPanelBody.Padding = new System.Windows.Forms.Padding(3);
-            this.tableLayoutPanelBody.RowCount = 7;
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tableLayoutPanelBody.RowCount = 5;
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 3F));
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelBody.Size = new System.Drawing.Size(609, 529);
+            this.tableLayoutPanelBody.Size = new System.Drawing.Size(725, 529);
             this.tableLayoutPanelBody.TabIndex = 3;
-            // 
-            // gradientPanel3
-            // 
-            this.gradientPanel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-            this.gradientPanel3.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-            this.gradientPanel3.BorderColor = System.Drawing.Color.Transparent;
-            this.gradientPanel3.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
-            this.gradientPanel3.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tableLayoutPanelBody.SetColumnSpan(this.gradientPanel3, 3);
-            this.gradientPanel3.Controls.Add(this.tableLayoutPanelSubHeader2);
-            this.gradientPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gradientPanel3.Location = new System.Drawing.Point(3, 122);
-            this.gradientPanel3.Margin = new System.Windows.Forms.Padding(0);
-            this.gradientPanel3.Name = "gradientPanel3";
-            this.gradientPanel3.Size = new System.Drawing.Size(603, 32);
-            this.gradientPanel3.TabIndex = 17;
             // 
             // tableLayoutPanelSubHeader2
             // 
-            this.tableLayoutPanelSubHeader2.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanelSubHeader2.BackColor = System.Drawing.Color.DimGray;
             this.tableLayoutPanelSubHeader2.ColumnCount = 1;
+            this.tableLayoutPanelBody.SetColumnSpan(this.tableLayoutPanelSubHeader2, 2);
             this.tableLayoutPanelSubHeader2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelSubHeader2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
             this.tableLayoutPanelSubHeader2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
             this.tableLayoutPanelSubHeader2.Controls.Add(this.labelSubHeader2, 0, 0);
             this.tableLayoutPanelSubHeader2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelSubHeader2.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanelSubHeader2.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanelSubHeader2.Location = new System.Drawing.Point(3, 113);
             this.tableLayoutPanelSubHeader2.Name = "tableLayoutPanelSubHeader2";
             this.tableLayoutPanelSubHeader2.RowCount = 1;
             this.tableLayoutPanelSubHeader2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelSubHeader2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutPanelSubHeader2.Size = new System.Drawing.Size(603, 32);
+            this.tableLayoutPanelSubHeader2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tableLayoutPanelSubHeader2.Size = new System.Drawing.Size(719, 34);
             this.tableLayoutPanelSubHeader2.TabIndex = 16;
             // 
             // labelSubHeader2
@@ -184,44 +158,29 @@
             this.labelSubHeader2.AutoSize = true;
             this.labelSubHeader2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.labelSubHeader2.ForeColor = System.Drawing.Color.GhostWhite;
-            this.labelSubHeader2.Location = new System.Drawing.Point(3, 7);
+            this.labelSubHeader2.Location = new System.Drawing.Point(3, 8);
             this.labelSubHeader2.Name = "labelSubHeader2";
             this.labelSubHeader2.Size = new System.Drawing.Size(214, 17);
             this.labelSubHeader2.TabIndex = 16;
             this.labelSubHeader2.Text = "xxEnterTargetValuesForEachTeam";
             // 
-            // gradientPanel2
-            // 
-            this.gradientPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-            this.gradientPanel2.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-            this.gradientPanel2.BorderColor = System.Drawing.Color.Transparent;
-            this.gradientPanel2.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
-            this.gradientPanel2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tableLayoutPanelBody.SetColumnSpan(this.gradientPanel2, 3);
-            this.gradientPanel2.Controls.Add(this.tableLayoutPanelSubHeader1);
-            this.gradientPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gradientPanel2.Location = new System.Drawing.Point(3, 3);
-            this.gradientPanel2.Margin = new System.Windows.Forms.Padding(0);
-            this.gradientPanel2.Name = "gradientPanel2";
-            this.gradientPanel2.Size = new System.Drawing.Size(603, 32);
-            this.gradientPanel2.TabIndex = 15;
-            // 
             // tableLayoutPanelSubHeader1
             // 
-            this.tableLayoutPanelSubHeader1.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanelSubHeader1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanelSubHeader1.BackColor = System.Drawing.Color.Silver;
             this.tableLayoutPanelSubHeader1.ColumnCount = 1;
+            this.tableLayoutPanelBody.SetColumnSpan(this.tableLayoutPanelSubHeader1, 2);
             this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
             this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
             this.tableLayoutPanelSubHeader1.Controls.Add(this.labelSubHeader1, 0, 0);
             this.tableLayoutPanelSubHeader1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelSubHeader1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanelSubHeader1.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanelSubHeader1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanelSubHeader1.Name = "tableLayoutPanelSubHeader1";
             this.tableLayoutPanelSubHeader1.RowCount = 1;
             this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutPanelSubHeader1.Size = new System.Drawing.Size(603, 32);
+            this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tableLayoutPanelSubHeader1.Size = new System.Drawing.Size(719, 34);
             this.tableLayoutPanelSubHeader1.TabIndex = 15;
             // 
             // labelSubHeader1
@@ -230,7 +189,7 @@
             this.labelSubHeader1.AutoSize = true;
             this.labelSubHeader1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSubHeader1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.labelSubHeader1.Location = new System.Drawing.Point(3, 7);
+            this.labelSubHeader1.Location = new System.Drawing.Point(3, 8);
             this.labelSubHeader1.Name = "labelSubHeader1";
             this.labelSubHeader1.Size = new System.Drawing.Size(80, 17);
             this.labelSubHeader1.TabIndex = 16;
@@ -244,7 +203,7 @@
             this.comboBoxSite.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
             this.comboBoxSite.DisplayMember = "Name";
             this.comboBoxSite.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxSite.Location = new System.Drawing.Point(210, 77);
+            this.comboBoxSite.Location = new System.Drawing.Point(207, 82);
             this.comboBoxSite.Name = "comboBoxSite";
             this.comboBoxSite.Size = new System.Drawing.Size(252, 23);
             this.comboBoxSite.Sorted = true;
@@ -260,7 +219,7 @@
             this.comboBoxKpi.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
             this.comboBoxKpi.DisplayMember = "Name";
             this.comboBoxKpi.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxKpi.Location = new System.Drawing.Point(210, 43);
+            this.comboBoxKpi.Location = new System.Drawing.Point(207, 48);
             this.comboBoxKpi.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.comboBoxKpi.Name = "comboBoxKpi";
             this.comboBoxKpi.Size = new System.Drawing.Size(252, 23);
@@ -272,7 +231,7 @@
             // labelChooseKpi
             // 
             this.labelChooseKpi.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelChooseKpi.Location = new System.Drawing.Point(6, 41);
+            this.labelChooseKpi.Location = new System.Drawing.Point(3, 46);
             this.labelChooseKpi.Name = "labelChooseKpi";
             this.labelChooseKpi.Size = new System.Drawing.Size(197, 23);
             this.labelChooseKpi.TabIndex = 0;
@@ -282,7 +241,7 @@
             // labelChooseSite
             // 
             this.labelChooseSite.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelChooseSite.Location = new System.Drawing.Point(6, 76);
+            this.labelChooseSite.Location = new System.Drawing.Point(3, 81);
             this.labelChooseSite.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.labelChooseSite.Name = "labelChooseSite";
             this.labelChooseSite.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -293,8 +252,7 @@
             // 
             // gradientPanelHeader
             // 
-            this.gradientPanelHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.gradientPanelHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(51)))), ((int)(((byte)(102)))));
+            this.gradientPanelHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.gradientPanelHeader.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
             this.gradientPanelHeader.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gradientPanelHeader.Controls.Add(this.tableLayoutPanelHeader);
@@ -303,14 +261,14 @@
             this.gradientPanelHeader.Location = new System.Drawing.Point(0, 0);
             this.gradientPanelHeader.Name = "gradientPanelHeader";
             this.gradientPanelHeader.Padding = new System.Windows.Forms.Padding(12);
-            this.gradientPanelHeader.Size = new System.Drawing.Size(609, 62);
+            this.gradientPanelHeader.Size = new System.Drawing.Size(725, 62);
             this.gradientPanelHeader.TabIndex = 0;
             // 
             // tableLayoutPanelHeader
             // 
             this.tableLayoutPanelHeader.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanelHeader.ColumnCount = 1;
-            this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 673F));
+            this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 701F));
             this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelHeader.Controls.Add(this.labelHeader, 1, 0);
             this.tableLayoutPanelHeader.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -319,7 +277,7 @@
             this.tableLayoutPanelHeader.Name = "tableLayoutPanelHeader";
             this.tableLayoutPanelHeader.RowCount = 1;
             this.tableLayoutPanelHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelHeader.Size = new System.Drawing.Size(585, 38);
+            this.tableLayoutPanelHeader.Size = new System.Drawing.Size(701, 38);
             this.tableLayoutPanelHeader.TabIndex = 0;
             // 
             // labelHeader
@@ -376,16 +334,12 @@
             this.Controls.Add(this.gradientPanelHeader);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "KpiSettings";
-            this.Size = new System.Drawing.Size(609, 591);
+            this.Size = new System.Drawing.Size(725, 591);
             this.Load += new System.EventHandler(this.KPISettings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
             this.tableLayoutPanelBody.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.gradientPanel3)).EndInit();
-            this.gradientPanel3.ResumeLayout(false);
             this.tableLayoutPanelSubHeader2.ResumeLayout(false);
             this.tableLayoutPanelSubHeader2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gradientPanel2)).EndInit();
-            this.gradientPanel2.ResumeLayout(false);
             this.tableLayoutPanelSubHeader1.ResumeLayout(false);
             this.tableLayoutPanelSubHeader1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxSite)).EndInit();
@@ -411,9 +365,7 @@
         private System.Windows.Forms.Label label1;
         private Syncfusion.Windows.Forms.ButtonAdv buttonDeleteContract;
         private System.Windows.Forms.Label labelChooseSite;
-        private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader1;
-        private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader2;
         private System.Windows.Forms.Label labelSubHeader2;
         private System.Windows.Forms.Label labelSubHeader1;

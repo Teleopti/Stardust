@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         private void SetColors()
         {
             BackColor = ColorHelper.WizardBackgroundColor();
-            gradientPanelHeader.BackgroundColor = ColorHelper.OptionsDialogHeaderGradientBrush();
+            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
             labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
             splitContainerMain.BackColor = ColorHelper.GridControlGridInteriorColor();
             splitContainerMain.Panel1.BackColor = ColorHelper.WizardBackgroundColor();

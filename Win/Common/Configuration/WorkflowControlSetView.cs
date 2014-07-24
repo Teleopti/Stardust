@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	    private void setColors()
         {
             BackColor = ColorHelper.WizardBackgroundColor();
-            gradientPanelHeader.BackgroundColor = ColorHelper.OptionsDialogHeaderGradientBrush();
+            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
             labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
             autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
             autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
