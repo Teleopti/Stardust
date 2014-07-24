@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
@@ -702,11 +703,32 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void ShiftTrade_SendChangeOverMessageBroker_DeniedByOther_ReturnFalse()
         {
-            setupShiftTrade();
+            var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
+				{
+					new ShiftTradeSwapDetail(new Person(), new Person(), new DateOnly(2013,08,26), new DateOnly(2013,08,27))
+				});
+            shiftTradeRequest.SetShiftTradeStatus(ShiftTradeStatus.OkByMe, _authorization);
+            _target.Request = shiftTradeRequest;
             _target.Pending();
             _target.Persisted();
             _target.Deny(null, null, _authorization);
             _target.SendChangeOverMessageBroker().Should().Be.EqualTo(false);
+        }
+
+
+        [Test]
+        public void ShiftTrade_SendChangeOverMessageBroker_DeniedByOtherAfterAproval_ReturnTrue()
+        {
+            var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
+				{
+					new ShiftTradeSwapDetail(new Person(), new Person(), new DateOnly(2013,08,26), new DateOnly(2013,08,27))
+				});
+            shiftTradeRequest.SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, _authorization);
+            _target.Request = shiftTradeRequest;
+            _target.Pending();
+            _target.Deny(null, null, _authorization);
+            _target.Persisted();
+            _target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
         }
 
         [Test]
@@ -730,5 +752,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_target.Approve(approvalService, _authorization, true);
 			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(false);
 	    }
+		
     }
 }

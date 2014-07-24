@@ -714,14 +714,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         {
             if (_persistedState == null)
                 return false;
-            if (Request is ShiftTradeRequest)
+            var shiftTradeRequest = Request as ShiftTradeRequest;
+            if (shiftTradeRequest != null)
             {
+                var shiftTradeStatus = shiftTradeRequest.GetShiftTradeStatus(new EmptyShiftTradeRequestChecker());
                 if (_persistedState.IsNew && _requestState.IsNew)
                     return false;
                 if (_persistedState.IsNew && _requestState.IsPending)
                     return false;
-                if (_persistedState.IsPending && _requestState.IsDenied)
+                if (_persistedState.IsPending && _requestState.IsDenied && shiftTradeStatus == ShiftTradeStatus.OkByMe)
                     return false;
+                if (_persistedState.IsPending && _requestState.IsDenied)
+                    return true;
                 if (_persistedState.IsDenied && _requestState.IsDenied)
                     return true;
 	            if (_persistedState.IsPending && _requestState.IsAutoApproved)
