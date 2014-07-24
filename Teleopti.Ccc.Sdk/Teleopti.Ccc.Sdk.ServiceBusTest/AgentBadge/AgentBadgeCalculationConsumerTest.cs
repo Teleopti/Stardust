@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldAwardBronzeForAnsweredCalls()
 		{
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow)).Return(new List<Guid>{_person.Id.Value});
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, DateTime.Now)).Return(new List<Guid>{_person.Id.Value});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage());
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldAwardBronzeForAdherence()
 		{
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod)).Return(new List<Guid> { _person.Id.Value });
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod, DateTime.Now)).Return(new List<Guid> { _person.Id.Value });
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage());
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldAwardBronzeForAHT()
 		{
-			_statisticsRepository.Stub(x => x.LoadAgentsUnderThresholdForAHT(_uow)).Return(new List<Guid>{_person.Id.Value});
+			_statisticsRepository.Stub(x => x.LoadAgentsUnderThresholdForAHT(_uow, DateTime.Now)).Return(new List<Guid> { _person.Id.Value });
 			
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage());
@@ -111,8 +111,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldAwardBronzeForBothAdherenceAndAnsweredCalls()
 		{
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod)).Return(new List<Guid> { _person.Id.Value });
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow)).Return(new List<Guid>{_person.Id.Value});
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod, DateTime.Now)).Return(new List<Guid> { _person.Id.Value });
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, DateTime.Now)).Return(new List<Guid> { _person.Id.Value });
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage());

@@ -333,7 +333,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow)
+	    public IEnumerable<Tuple<int, string, int>> LoadAllTimeZones(IUnitOfWork uow)
+	    {
+		    return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+			    "SELECT time_zone_id, time_zone_name, utc_conversion_dst FROM [mart].[dim_time_zone] WHERE to_be_deleted = 0")
+			    .List<Tuple<int, string, int>>();
+	    }
+
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow, DateTime date)
 		{
 			const string sql =
 				"exec [mart].[raptor_number_of_calls_per_agent_by_date] @threshold=:threshold, @local_date=:date";
@@ -348,11 +355,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
 				.SetReadOnly(true)
 				.SetInt32("threshold", threshold)
-				.SetDateTime("date", DateTime.Now.AddDays(-1).Date)
+				.SetDateTime("date", date)
 				.Enumerable<Guid>();
 		}
 
-		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, DateTime date)
 		{
 			const string sql =
 				"exec [mart].[raptor_adherence_per_agent_by_date] @threshold=:threshold, @local_date=:date, @adherence_id=:adherenceId, "
@@ -368,13 +375,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
 				.SetReadOnly(true)
 				.SetDouble("threshold", threshold.Value)
-				.SetDateTime("date", DateTime.Now.AddDays(-1).Date)
+				.SetDateTime("date", date)
 				.SetInt32("adherenceId", (int)adherenceCalculationMethod)
 				.SetGuid("businessUnit", Guid.NewGuid()) // TODO: Pass a real BU id
 				.Enumerable<Guid>();
 		}
 
-	    public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow)
+	    public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow, DateTime date)
 		{
 			const string sql =
 				"exec [mart].[raptor_AHT_per_agent_by_date] @threshold=:threshold, @local_date=:date";
@@ -389,7 +396,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
 				.SetReadOnly(true)
 				.SetDouble("threshold", threshold.TotalSeconds)
-				.SetDateTime("date", DateTime.Now.AddDays(-1).Date)
+				.SetDateTime("date", date)
 				.Enumerable<Guid>();
 		}
 

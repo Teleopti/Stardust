@@ -227,18 +227,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				throw new NotImplementedException();
 			}
 
-			public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow)
+			public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow, DateTime date)
 			{
 				throw new NotImplementedException();
 			}
 
-			public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow,
-				AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
+			public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, DateTime date)
 			{
 				throw new NotImplementedException();
 			}
 
-			public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow)
+			public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow, DateTime date)
+			{
+				throw new NotImplementedException();
+			}
+
+			public IEnumerable<Tuple<int, string, int>> LoadAllTimeZones(IUnitOfWork uow)
 			{
 				throw new NotImplementedException();
 			}

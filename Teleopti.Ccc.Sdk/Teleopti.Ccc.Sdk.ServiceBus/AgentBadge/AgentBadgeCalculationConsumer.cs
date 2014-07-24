@@ -34,13 +34,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				IList<IPerson> allAgents;
 				using (var uow = dataSource.Application.CurrentUnitOfWork())
 				{
-
 					adherenceReportSetting = _repositoryFactory.CreateGlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 					allAgents = _repositoryFactory.CreatePersonRepository(uow).LoadAll();
 				}
 				using (var uow = dataSource.Statistic.CurrentUnitOfWork())
 				{
-					_calculator.Calculate(uow, allAgents, adherenceReportSetting.CalculationMethod);
+					var timeZoneList = _repositoryFactory.CreateStatisticRepository().LoadAllTimeZones(uow);
+					foreach (var timeZone in timeZoneList)
+					{
+						_calculator.Calculate(uow, allAgents,timeZone, adherenceReportSetting.CalculationMethod);
+					}
 				}
 			}
 
