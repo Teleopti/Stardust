@@ -30,15 +30,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			foreach (var dataSource in GetRegisteredDataSourceCollection().Where(dataSource => dataSource.Statistic != null && dataSource.Application != null))
 			{
-				AdherenceReportSettingCalculationMethod adherenceCalculationMethod;
+				AdherenceReportSetting adherenceReportSetting;
 				IList<IPerson> allAgents;
 				using (var uow = dataSource.Application.CurrentUnitOfWork())
 				{
-					adherenceCalculationMethod = new GlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()).CalculationMethod;
+
+					adherenceReportSetting = _repositoryFactory.CreateGlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 					allAgents = _repositoryFactory.CreatePersonRepository(uow).LoadAll();
 				}
 				using (var uow = dataSource.Statistic.CurrentUnitOfWork())
 				{
+					var adherenceCalculationMethod = adherenceReportSetting != null
+						? adherenceReportSetting.CalculationMethod
+						: AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledTime;
 					_calculator.Calculate(uow, allAgents, adherenceCalculationMethod);
 				}
 			}

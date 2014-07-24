@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IStatisticRepository _statisticsRepository;
 		private IPersonRepository _personRepository;
 		private IUnitOfWork _uow;
+		private IGlobalSettingDataRepository _globalSettingDataRepository;
 
 		[Test]
 		public void ShouldSendNextCalculateMessageOneDayAfter()
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_repositoryFactory = MockRepository.GenerateStub<IRepositoryFactory>();
 			_statisticsRepository = MockRepository.GenerateStub<IStatisticRepository>();
 			_personRepository = MockRepository.GenerateStub<IPersonRepository>();
+			_globalSettingDataRepository = MockRepository.GenerateStub<IGlobalSettingDataRepository>();
 
 			_uow = MockRepository.GenerateStub<IUnitOfWork>();
 			_uowFactory.Stub(x => x.CurrentUnitOfWork()).Return(_uow);
@@ -63,12 +65,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
+			var adherenceReportSetting = new AdherenceReportSetting();
 
 			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
+			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
 
 			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow)).Return(new List<Guid>{person.Id.Value});
 			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson> { person });
+			_globalSettingDataRepository.Stub(
+				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()))
+				.Return(adherenceReportSetting);
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage());
@@ -82,12 +89,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
+			var adherenceReportSetting = new AdherenceReportSetting();
 
 			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
+			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
 
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledReadyTime)).Return(new List<Guid>{person.Id.Value});
+			_globalSettingDataRepository.Stub(
+				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()))
+				.Return(adherenceReportSetting);
 			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { person });
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, adherenceReportSetting.CalculationMethod)).Return(new List<Guid>{person.Id.Value});
+			
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 
@@ -102,12 +115,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
+			var adherenceReportSetting = new AdherenceReportSetting();
 
 			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
+			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
 
 			_statisticsRepository.Stub(x => x.LoadAgentsUnderThresholdForAHT(_uow)).Return(new List<Guid>{person.Id.Value});
 			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson> { person });
+			_globalSettingDataRepository.Stub(
+				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()))
+				.Return(adherenceReportSetting);
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 
@@ -122,13 +140,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
+			var adherenceReportSetting = new AdherenceReportSetting();
 
 			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
+			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
 
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledReadyTime)).Return(new List<Guid>{person.Id.Value});
+			_globalSettingDataRepository.Stub(
+				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()))
+				.Return(adherenceReportSetting);
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, adherenceReportSetting.CalculationMethod)).Return(new List<Guid>{person.Id.Value});
 			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow)).Return(new List<Guid>{person.Id.Value});
 			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { person });
+			
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 
