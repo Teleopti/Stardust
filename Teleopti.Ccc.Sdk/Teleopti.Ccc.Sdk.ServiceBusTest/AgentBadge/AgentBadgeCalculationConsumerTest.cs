@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IPersonRepository _personRepository;
 		private IUnitOfWork _uow;
 
-		[Ignore("There is a warning cause build failed (\"The event 'ServiceBusMock.ReroutedEndpoint' is never used\")")]
 		[Test]
 		public void ShouldSendNextCalculateMessageOneDayAfter()
 		{
