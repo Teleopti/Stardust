@@ -8,6 +8,7 @@ using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Messages;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
 
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow)).Return(new List<Guid>{person.Id.Value});
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledReadyTime)).Return(new List<Guid>{person.Id.Value});
 			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { person });
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
@@ -121,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
 
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow)).Return(new List<Guid>{person.Id.Value});
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledReadyTime)).Return(new List<Guid>{person.Id.Value});
 			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow)).Return(new List<Guid>{person.Id.Value});
 			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { person });
 

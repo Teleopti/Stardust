@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using NHibernate.Mapping;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -143,7 +145,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new List<Guid>();
 		}
 
-		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow)
+	    public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow,
+		    AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
+	    {
+		    return new List<Guid>();
+	    }
+
+	    public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow)
 		{
 			return new List<Guid>();
 		}

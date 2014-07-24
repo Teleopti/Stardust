@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -231,7 +232,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				throw new NotImplementedException();
 			}
 
-			public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow)
+			public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow,
+				AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
 			{
 				throw new NotImplementedException();
 			}
