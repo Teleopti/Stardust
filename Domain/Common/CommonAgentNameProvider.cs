@@ -1,42 +1,33 @@
-using Teleopti.Ccc.Domain.Repositories;
+﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    public interface ICommonAgentNameProvider
-    {
-        ICommonNameDescriptionSetting CommonAgentNameSettings { get; }
-    }
+	public interface ICommonAgentNameProvider
+	{
+		ICommonNameDescriptionSetting CommonAgentNameSettings { get; }
+	}
+	public class CommonAgentNameProvider : ICommonAgentNameProvider
+	{
+		private readonly IGlobalSettingDataRepository _settingDataRepository;
+		private ICommonNameDescriptionSetting _commonNameDescription;
 
-    public class CommonAgentNameProvider : ICommonAgentNameProvider
-    {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IRepositoryFactory _repositoryFactory;
-        private CommonNameDescriptionSetting _commonNameDescription;
+		public CommonAgentNameProvider(IGlobalSettingDataRepository settingDataRepository)
+		{
+			_settingDataRepository = settingDataRepository;
+		}
 
-        public CommonAgentNameProvider(IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
-        {
-            _unitOfWorkFactory = unitOfWorkFactory;
-            _repositoryFactory = repositoryFactory;
-        }
-        public ICommonNameDescriptionSetting CommonAgentNameSettings
-        {
-            get
-            {
-                if (_commonNameDescription == null)
-                {
-                    using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-                    {
-                        ISettingDataRepository settingDataRepository = _repositoryFactory.CreateGlobalSettingDataRepository(uow);
-
-                        _commonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
-                    }
-                }
-                return _commonNameDescription;
-            }
-
-        }
-    }
+		public ICommonNameDescriptionSetting CommonAgentNameSettings
+		{
+			get
+			{
+				if (_commonNameDescription == null)
+				{
+					_commonNameDescription = _settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
+				}
+				return _commonNameDescription;
+			}
+		}
+	}
 }

@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -32,8 +33,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void Setup()
 		{
 			_scheduleDate = new DateTime(2013, 3, 4, 0, 0, 0, DateTimeKind.Utc);
-			_commonAgentNameProvider = new CommonAgentNameProvider(MockRepository.GenerateMock<IUnitOfWorkFactory>(),
-				MockRepository.GenerateMock<IRepositoryFactory>());
+			var globalSettingRepository = MockRepository.GenerateMock<IGlobalSettingDataRepository>();
+			globalSettingRepository.Stub(x => x.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting()))
+				.IgnoreArguments()
+				.Return(new CommonNameDescriptionSetting());
+			_commonAgentNameProvider = new CommonAgentNameProvider(globalSettingRepository);
 		}
 
 		private static string MakeJsonModel(SimpleLayer layer)

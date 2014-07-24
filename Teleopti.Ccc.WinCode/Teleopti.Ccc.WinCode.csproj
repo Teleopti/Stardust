@@ -299,6 +299,7 @@
     <Compile Include="Common\Commands\CommandBehaviors\CommandExecutionStrategy.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\IExecutionStrategy.cs" />
     <Compile Include="Common\Commands\CommonRoutedCommands.cs" />
+    <Compile Include="Common\CommonAgentNameProvider.cs" />
     <Compile Include="Common\Configuration\AbsenceRequestPeriodModel.cs" />
     <Compile Include="Common\Configuration\AbsenceRequestPeriodTypeModel.cs" />
     <Compile Include="Common\Configuration\ChangePasswordModel.cs" />

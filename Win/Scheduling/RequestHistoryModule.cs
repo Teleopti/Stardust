@@ -1,5 +1,4 @@
 using Autofac;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 
