@@ -312,5 +312,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             AddControlHelpContext(control);
         }
 
+        private void treeViewOptions_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+        }
+
     }
 }

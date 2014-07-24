@@ -41,8 +41,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             comboBoxAdvScorecard.SelectedIndexChanged += ComboBoxAdvScorecardSelectedIndexChanged;
             checkedListBoxKpi.ItemCheck += CheckedListBoxKpiItemCheck;
             textBoxScorecardName.Leave += TextBoxScorecardNameLeave;
-            buttonNew.Click += ButtonNewClick;
-            buttonAdvDeleteScorecard.Click += ButtonAdvDeleteScorecardClick;
             comboBoxAdvType.SelectedIndexChanged += ComboBoxAdvTypeSelectedIndexChanged;
         }
 
@@ -129,8 +127,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             BackColor = ColorHelper.WizardBackgroundColor();
             tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
-            
-            gradientPanelHeader.BackgroundColor = ColorHelper.OptionsDialogHeaderGradientBrush();
+
+            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
             labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 
             tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();

@@ -525,20 +525,25 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 
 
         }
+        public static Color OptionsDialogHeaderBackColor()
+        {
+            return Color.FromArgb(0, 153, 255);
+        }
 
+        
         public static Color OptionsDialogSubHeaderBackColor()
         {
-            return Color.LightSteelBlue;
+            return Color.FromArgb(128,191,234);
         }
 
         public static Color OptionsDialogSubHeaderForeColor()
         {
-            return Color.GhostWhite;
+            return Color.FromArgb(64, 64, 64);
         }
 
         public static Color OptionsDialogHeaderForeColor()
         {
-            return Color.MidnightBlue;
+            return Color.White;
         }
 
         public static Color GridControlSortingArrow
