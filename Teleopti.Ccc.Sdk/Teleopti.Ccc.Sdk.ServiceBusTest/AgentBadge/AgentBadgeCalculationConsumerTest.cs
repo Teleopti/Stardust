@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow)).Return(new List<Guid>{person.Id.Value});
 			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson> { person });
 			_globalSettingDataRepository.Stub(
-				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()))
+				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting())).IgnoreArguments()
 				.Return(adherenceReportSetting);
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			person.Badges.BronzeBadge.Should().Be.EqualTo(1);
 		}
 
-		[Ignore]
+	
 		[Test]
 		public void ShouldAwardBronzeForAdherence()
 		{
@@ -95,11 +95,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
 
 			_globalSettingDataRepository.Stub(
-				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()))
+				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting())).IgnoreArguments()
 				.Return(adherenceReportSetting);
 			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { person });
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, adherenceReportSetting.CalculationMethod)).Return(new List<Guid>{person.Id.Value});
-			
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, adherenceReportSetting.CalculationMethod)).Return(new List<Guid> { person.Id.Value });
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 
@@ -122,7 +121,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_statisticsRepository.Stub(x => x.LoadAgentsUnderThresholdForAHT(_uow)).Return(new List<Guid>{person.Id.Value});
 			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson> { person });
 			_globalSettingDataRepository.Stub(
-				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()))
+				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting())).IgnoreArguments()
 				.Return(adherenceReportSetting);
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
@@ -132,7 +131,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			person.Badges.BronzeBadge.Should().Be.EqualTo(1);
 		}
 
-		[Ignore]
 		[Test]
 		public void ShouldAwardBronzeForBothAdherenceAndAnsweredCalls()
 		{
@@ -145,9 +143,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
 
 			_globalSettingDataRepository.Stub(
-				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()))
+				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting())).IgnoreArguments()
 				.Return(adherenceReportSetting);
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, adherenceReportSetting.CalculationMethod)).Return(new List<Guid>{person.Id.Value});
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, adherenceReportSetting.CalculationMethod)).Return(new List<Guid> { person.Id.Value });
 			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow)).Return(new List<Guid>{person.Id.Value});
 			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { person });
 			

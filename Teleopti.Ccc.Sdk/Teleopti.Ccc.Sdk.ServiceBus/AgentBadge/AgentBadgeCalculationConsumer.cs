@@ -40,10 +40,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				}
 				using (var uow = dataSource.Statistic.CurrentUnitOfWork())
 				{
-					var adherenceCalculationMethod = adherenceReportSetting != null
-						? adherenceReportSetting.CalculationMethod
-						: AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledTime;
-					_calculator.Calculate(uow, allAgents, adherenceCalculationMethod);
+					_calculator.Calculate(uow, allAgents, adherenceReportSetting.CalculationMethod);
 				}
 			}
 
