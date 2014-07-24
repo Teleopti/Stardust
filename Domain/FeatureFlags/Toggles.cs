@@ -23,6 +23,8 @@
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,
         Scheduler_ShowIntadayESLWithShrinkage_21874,
-		RTA_ViewAgentsForMultipleTeams_28967
+		RTA_ViewAgentsForMultipleTeams_28967,
+
+		MyTimeWeb_AgentBadge_28913
 	}
 }

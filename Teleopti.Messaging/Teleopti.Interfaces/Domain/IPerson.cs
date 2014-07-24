@@ -264,7 +264,9 @@ namespace Teleopti.Interfaces.Domain
 		/// <returns></returns>
 		ReadOnlyCollection<IOptionalColumnValue> OptionalColumnValueCollection { get; }
 
-    	/// <summary>
+	    IAgentBadge Badges { get; set; }
+
+	    /// <summary>
     	/// 
     	/// </summary>
     	/// <param name="value"></param>
@@ -322,5 +324,6 @@ namespace Teleopti.Interfaces.Domain
 		 void AddExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod);
 		 void ResetExternalLogOn(IPersonPeriod personPeriod);
 		 void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod);
+	    void AddBadge(IAgentBadge agentBadge);
     }
 }

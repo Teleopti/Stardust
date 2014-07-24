@@ -1273,6 +1273,7 @@
     <Content Include="Areas\MyTime\Views\Schedule\MobileWeekPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\MyReport\DailyQueueMetricsPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Availability\NoPersonPeriodPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Settings\BadgePartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

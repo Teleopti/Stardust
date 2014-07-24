@@ -138,11 +138,23 @@
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>48</value>
+  </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>1102, 651</value>
+  </data>
+  <data name="scheduleControl1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="scheduleControl1.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="scheduleControl1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <metadata name="contextMenuStripSchedule.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>153, 13</value>
@@ -254,14 +266,14 @@
   <data name="&gt;&gt;contextMenuStripSchedule.Type" xml:space="preserve">
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="scheduleControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="scheduleControl1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 8.25pt</value>
   </data>
   <data name="scheduleControl1.Location" type="System.Drawing.Point, System.Drawing">
     <value>1, 134</value>
   </data>
   <data name="scheduleControl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1100, 517</value>
+    <value>1100, 514</value>
   </data>
   <data name="scheduleControl1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -277,6 +289,9 @@
   </data>
   <data name="&gt;&gt;scheduleControl1.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -518,13 +533,13 @@
     <value>Teleopti.Ccc.Win.Common.BaseRibbonForm, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="toolStripButtonClose.Size" type="System.Drawing.Size, System.Drawing">
-    <value>86, 36</value>
+    <value>82, 36</value>
   </data>
   <data name="toolStripButtonClose.Text" xml:space="preserve">
     <value>xxClose</value>
   </data>
   <data name="ribbonControlAdv1.OfficeMenu.Size" type="System.Drawing.Size, System.Drawing">
-    <value>98, 125</value>
+    <value>94, 84</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdv1.OfficeMenu.Name" xml:space="preserve">
     <value>ribbonControlAdv1.OfficeMenu</value>
@@ -862,7 +877,7 @@
     <value>797, 1</value>
   </data>
   <data name="toolStripTools.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 75</value>
+    <value>61, 75</value>
   </data>
   <data name="toolStripTools.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>

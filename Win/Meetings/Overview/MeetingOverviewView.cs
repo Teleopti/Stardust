@@ -129,7 +129,9 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             {
                 scheduleControl1.AllowAdjustAppointmentsWithMouse = false;
             }
-
+            //using a lot of cpu and memory, don't know why
+            // don't use it for now
+            //scheduleControl1.GetScheduleHost().Schedule.Appearance.VisualStyle = GridVisualStyles.Metro;
             
            scheduleControl1.Calendar.Visible = false;
             _calendarAndTextPanel.BringToFront();
@@ -597,5 +599,11 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			public int PerHour { get; set; }
 			public int Resolution { get; set; }
 		}
+
+        private void scheduleControl1SizeChanged(object sender, EventArgs e)
+        {
+            _dataProvider.ResetLoadedPeriod();
+            selectWholeWeekInCalendar(scheduleControl1.Calendar.DateValue);
+        }
     }
 }

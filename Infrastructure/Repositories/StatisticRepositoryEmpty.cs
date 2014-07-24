@@ -2,10 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using NHibernate.Mapping;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -136,6 +139,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public void AddOrUpdateActualAgentState(IActualAgentState actualAgentState)
         {
         }
+
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow)
+		{
+			return new List<Guid>();
+		}
+
+	    public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow,
+		    AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
+	    {
+		    return new List<Guid>();
+	    }
+
+	    public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow)
+		{
+			return new List<Guid>();
+		}
+
+		public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow)
+		{
+			return new List<Guid>();
+		}
 
 		public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)
         {

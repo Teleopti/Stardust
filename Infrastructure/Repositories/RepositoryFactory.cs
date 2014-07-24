@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using NHibernate.Properties;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -393,5 +395,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 			return new PersonalSettingDataRepository(unitOfWork);
 	    }
-    }
+
+}
 }

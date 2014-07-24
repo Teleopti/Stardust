@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
@@ -207,7 +208,21 @@ namespace Teleopti.Ccc.Domain.Common
 		   addPersonActivityStartingEvent();
 	   }
 
-		// adding this event so servicebus and rta do a check if person should be monitored in rta
+	    public virtual void AddBadge(IAgentBadge agentBadge)
+	    {
+		    if (Badges == null)
+		    {
+			    Badges = agentBadge;
+		    }
+		    else
+		    {
+			    Badges.BronzeBadge += agentBadge.BronzeBadge;
+			    Badges.SilverBadge += agentBadge.SilverBadge;
+			    Badges.GoldenBadge += agentBadge.GoldenBadge;
+		    }
+	    }
+
+	    // adding this event so servicebus and rta do a check if person should be monitored in rta
 		private void addPersonActivityStartingEvent()
 		{
 			AddEvent(new PersonActivityStarting
@@ -929,7 +944,9 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+	    public virtual IAgentBadge Badges { get; set; }
+
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public virtual void AddOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)
 		{
 			InParameter.NotNull("value", value);
