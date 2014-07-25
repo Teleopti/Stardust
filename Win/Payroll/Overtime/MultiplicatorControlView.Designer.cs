@@ -38,22 +38,22 @@
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.labelTimeDirectives = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.buttonAdvDelete = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.buttonNew = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.autoLabel4 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
             this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
-            this.buttonAdvDeleteMultiplicator = new Syncfusion.Windows.Forms.ButtonAdv();
             this.labelSubHeader1 = new System.Windows.Forms.Label();
-            this.buttonAdvAddMultiplicator = new Syncfusion.Windows.Forms.ButtonAdv();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
             this.gridMultiplicator = new Syncfusion.Windows.Forms.Grid.GridControl();
             this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
             this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
             this.labelHeader = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonAdvDeleteMultiplicator = new Syncfusion.Windows.Forms.ButtonAdv();
+            this.buttonAdvAddMultiplicator = new Syncfusion.Windows.Forms.ButtonAdv();
+            this.buttonAdvDelete = new Syncfusion.Windows.Forms.ButtonAdv();
+            this.buttonNew = new Syncfusion.Windows.Forms.ButtonAdv();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -132,39 +132,10 @@
             this.tableLayoutPanel2.TabIndex = 1;
             this.tableLayoutPanel2.Visible = false;
             // 
-            // buttonAdvDelete
-            // 
-            this.buttonAdvDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAdvDelete.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Classic;
-            this.buttonAdvDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
-            this.buttonAdvDelete.Location = new System.Drawing.Point(170, 3);
-            this.buttonAdvDelete.Margin = new System.Windows.Forms.Padding(3, 3, 0, 1);
-            this.buttonAdvDelete.Name = "buttonAdvDelete";
-            this.buttonAdvDelete.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this.buttonAdvDelete.Size = new System.Drawing.Size(24, 24);
-            this.buttonAdvDelete.TabIndex = 7;
-            this.buttonAdvDelete.TabStop = false;
-            // 
-            // buttonNew
-            // 
-            this.buttonNew.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonNew.BackColor = System.Drawing.Color.White;
-            this.buttonNew.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
-            this.buttonNew.Location = new System.Drawing.Point(143, 3);
-            this.buttonNew.Margin = new System.Windows.Forms.Padding(3, 3, 0, 1);
-            this.buttonNew.Name = "buttonNew";
-            this.buttonNew.Size = new System.Drawing.Size(24, 24);
-            this.buttonNew.TabIndex = 6;
-            this.buttonNew.UseVisualStyleBackColor = false;
-            // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.label1.ForeColor = System.Drawing.Color.GhostWhite;
@@ -193,8 +164,6 @@
             // autoLabel4
             // 
             this.autoLabel4.AutoSize = false;
-            this.autoLabel4.DX = 0;
-            this.autoLabel4.DY = 0;
             this.autoLabel4.Location = new System.Drawing.Point(3, 0);
             this.autoLabel4.Name = "autoLabel4";
             this.autoLabel4.Size = new System.Drawing.Size(160, 20);
@@ -206,17 +175,17 @@
             // 
             this.tableLayoutPanelBody.ColumnCount = 1;
             this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader1, 0, 2);
-            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanel10, 0, 3);
+            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader1, 0, 0);
+            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanel10, 0, 1);
             this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 55);
+            this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 62);
             this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
-            this.tableLayoutPanelBody.RowCount = 4;
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
+            this.tableLayoutPanelBody.RowCount = 2;
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelBody.Size = new System.Drawing.Size(495, 258);
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelBody.Size = new System.Drawing.Size(577, 299);
             this.tableLayoutPanelBody.TabIndex = 56;
             // 
             // tableLayoutPanelSubHeader1
@@ -224,8 +193,8 @@
             this.tableLayoutPanelSubHeader1.BackColor = System.Drawing.Color.LightSteelBlue;
             this.tableLayoutPanelSubHeader1.ColumnCount = 3;
             this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+            this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelSubHeader1.Controls.Add(this.buttonAdvDeleteMultiplicator, 2, 0);
             this.tableLayoutPanelSubHeader1.Controls.Add(this.labelSubHeader1, 0, 0);
             this.tableLayoutPanelSubHeader1.Controls.Add(this.buttonAdvAddMultiplicator, 1, 0);
@@ -234,52 +203,23 @@
             this.tableLayoutPanelSubHeader1.Name = "tableLayoutPanelSubHeader1";
             this.tableLayoutPanelSubHeader1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 3);
             this.tableLayoutPanelSubHeader1.RowCount = 2;
-            this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanelSubHeader1.Size = new System.Drawing.Size(489, 27);
+            this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+            this.tableLayoutPanelSubHeader1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+            this.tableLayoutPanelSubHeader1.Size = new System.Drawing.Size(571, 34);
             this.tableLayoutPanelSubHeader1.TabIndex = 3;
-            // 
-            // buttonAdvDeleteMultiplicator
-            // 
-            this.buttonAdvDeleteMultiplicator.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonAdvDeleteMultiplicator.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Classic;
-            this.buttonAdvDeleteMultiplicator.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
-            this.buttonAdvDeleteMultiplicator.Location = new System.Drawing.Point(465, 3);
-            this.buttonAdvDeleteMultiplicator.Margin = new System.Windows.Forms.Padding(3, 1, 0, 1);
-            this.buttonAdvDeleteMultiplicator.Name = "buttonAdvDeleteMultiplicator";
-            this.buttonAdvDeleteMultiplicator.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this.buttonAdvDeleteMultiplicator.Size = new System.Drawing.Size(24, 23);
-            this.buttonAdvDeleteMultiplicator.TabIndex = 8;
-            this.buttonAdvDeleteMultiplicator.TabStop = false;
-            this.buttonAdvDeleteMultiplicator.Click += new System.EventHandler(this.buttonAdvDeleteMultipplicator_Click);
             // 
             // labelSubHeader1
             // 
             this.labelSubHeader1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelSubHeader1.AutoSize = true;
-            this.labelSubHeader1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
+            this.labelSubHeader1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSubHeader1.ForeColor = System.Drawing.Color.GhostWhite;
             this.labelSubHeader1.Location = new System.Drawing.Point(3, 8);
             this.labelSubHeader1.Name = "labelSubHeader1";
-            this.labelSubHeader1.Size = new System.Drawing.Size(233, 13);
+            this.labelSubHeader1.Size = new System.Drawing.Size(253, 17);
             this.labelSubHeader1.TabIndex = 0;
             this.labelSubHeader1.Text = "xxEnterPropertyValuesForMultiplicators";
             this.labelSubHeader1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // buttonAdvAddMultiplicator
-            // 
-            this.buttonAdvAddMultiplicator.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonAdvAddMultiplicator.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.WindowsXP;
-            this.buttonAdvAddMultiplicator.AutoSize = true;
-            this.buttonAdvAddMultiplicator.BackColor = System.Drawing.Color.White;
-            this.buttonAdvAddMultiplicator.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
-            this.buttonAdvAddMultiplicator.Location = new System.Drawing.Point(438, 3);
-            this.buttonAdvAddMultiplicator.Margin = new System.Windows.Forms.Padding(3, 1, 0, 2);
-            this.buttonAdvAddMultiplicator.Name = "buttonAdvAddMultiplicator";
-            this.buttonAdvAddMultiplicator.Size = new System.Drawing.Size(24, 22);
-            this.buttonAdvAddMultiplicator.TabIndex = 9;
-            this.buttonAdvAddMultiplicator.UseVisualStyleBackColor = false;
-            this.buttonAdvAddMultiplicator.Click += new System.EventHandler(this.buttonAddAdvMultipplicator_Click);
             // 
             // tableLayoutPanel10
             // 
@@ -288,35 +228,35 @@
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel10.Controls.Add(this.gridMultiplicator, 0, 0);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(3, 36);
+            this.tableLayoutPanel10.Location = new System.Drawing.Point(3, 43);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
             this.tableLayoutPanel10.RowCount = 1;
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 219F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(489, 219);
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 253F));
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(571, 253);
             this.tableLayoutPanel10.TabIndex = 4;
             // 
             // gridMultiplicator
             // 
-            gridBaseStyle1.Name = "Row Header";
-            gridBaseStyle1.StyleInfo.BaseStyle = "Header";
-            gridBaseStyle1.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-            gridBaseStyle1.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-            gridBaseStyle2.Name = "Column Header";
-            gridBaseStyle2.StyleInfo.BaseStyle = "Header";
-            gridBaseStyle2.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
-            gridBaseStyle3.Name = "Standard";
-            gridBaseStyle3.StyleInfo.Font.Facename = "Tahoma";
-            gridBaseStyle3.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-            gridBaseStyle4.Name = "Header";
-            gridBaseStyle4.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-            gridBaseStyle4.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-            gridBaseStyle4.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-            gridBaseStyle4.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-            gridBaseStyle4.StyleInfo.CellType = "Header";
-            gridBaseStyle4.StyleInfo.Font.Bold = true;
-            gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-            gridBaseStyle4.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
+            gridBaseStyle1.Name = "Header";
+            gridBaseStyle1.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+            gridBaseStyle1.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+            gridBaseStyle1.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+            gridBaseStyle1.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+            gridBaseStyle1.StyleInfo.CellType = "Header";
+            gridBaseStyle1.StyleInfo.Font.Bold = true;
+            gridBaseStyle1.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+            gridBaseStyle1.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
+            gridBaseStyle2.Name = "Standard";
+            gridBaseStyle2.StyleInfo.Font.Facename = "Tahoma";
+            gridBaseStyle2.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
+            gridBaseStyle3.Name = "Column Header";
+            gridBaseStyle3.StyleInfo.BaseStyle = "Header";
+            gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+            gridBaseStyle4.Name = "Row Header";
+            gridBaseStyle4.StyleInfo.BaseStyle = "Header";
+            gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
+            gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
             this.gridMultiplicator.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
             gridBaseStyle1,
             gridBaseStyle2,
@@ -326,13 +266,17 @@
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
             this.gridMultiplicator.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridMultiplicator.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.gridMultiplicator.Location = new System.Drawing.Point(3, 3);
+            this.gridMultiplicator.Location = new System.Drawing.Point(0, 0);
+            this.gridMultiplicator.Margin = new System.Windows.Forms.Padding(0);
             this.gridMultiplicator.Name = "gridMultiplicator";
             this.gridMultiplicator.Properties.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.gridMultiplicator.Properties.ForceImmediateRepaint = false;
+            this.gridMultiplicator.Properties.MarkColHeader = false;
+            this.gridMultiplicator.Properties.MarkRowHeader = false;
             this.gridMultiplicator.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
             this.gridMultiplicator.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-            this.gridMultiplicator.Size = new System.Drawing.Size(483, 213);
+            this.gridMultiplicator.Size = new System.Drawing.Size(571, 253);
             this.gridMultiplicator.SmartSizeBox = false;
             this.gridMultiplicator.TabIndex = 0;
             this.gridMultiplicator.UseRightToLeftCompatibleTextBox = true;
@@ -341,57 +285,124 @@
             // 
             this.gradientPanelHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.gradientPanelHeader.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.gradientPanelHeader.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.LightSteelBlue, System.Drawing.Color.White);
-            this.gradientPanelHeader.BorderColor = System.Drawing.Color.Black;
             this.gradientPanelHeader.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
             this.gradientPanelHeader.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gradientPanelHeader.Controls.Add(this.tableLayoutPanelHeader);
             this.gradientPanelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.gradientPanelHeader.Location = new System.Drawing.Point(0, 0);
             this.gradientPanelHeader.Name = "gradientPanelHeader";
-            this.gradientPanelHeader.Padding = new System.Windows.Forms.Padding(10);
-            this.gradientPanelHeader.Size = new System.Drawing.Size(495, 55);
+            this.gradientPanelHeader.Padding = new System.Windows.Forms.Padding(12);
+            this.gradientPanelHeader.Size = new System.Drawing.Size(577, 62);
             this.gradientPanelHeader.TabIndex = 55;
             // 
             // tableLayoutPanelHeader
             // 
             this.tableLayoutPanelHeader.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanelHeader.ColumnCount = 1;
-            this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 515F));
+            this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 601F));
             this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelHeader.Controls.Add(this.labelHeader, 1, 0);
             this.tableLayoutPanelHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelHeader.Location = new System.Drawing.Point(10, 10);
+            this.tableLayoutPanelHeader.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanelHeader.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanelHeader.Name = "tableLayoutPanelHeader";
             this.tableLayoutPanelHeader.RowCount = 1;
             this.tableLayoutPanelHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelHeader.Size = new System.Drawing.Size(475, 35);
+            this.tableLayoutPanelHeader.Size = new System.Drawing.Size(553, 38);
             this.tableLayoutPanelHeader.TabIndex = 0;
             // 
             // labelHeader
             // 
             this.labelHeader.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelHeader.AutoSize = true;
-            this.labelHeader.Font = new System.Drawing.Font("Tahoma", 11.25F);
+            this.labelHeader.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelHeader.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.labelHeader.Location = new System.Drawing.Point(3, 8);
+            this.labelHeader.Location = new System.Drawing.Point(3, 6);
             this.labelHeader.Name = "labelHeader";
-            this.labelHeader.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.labelHeader.Size = new System.Drawing.Size(155, 18);
+            this.labelHeader.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.labelHeader.Size = new System.Drawing.Size(227, 25);
             this.labelHeader.TabIndex = 0;
             this.labelHeader.Text = "xxManageMultiplicator";
             // 
+            // buttonAdvDeleteMultiplicator
+            // 
+            this.buttonAdvDeleteMultiplicator.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.buttonAdvDeleteMultiplicator.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+            this.buttonAdvDeleteMultiplicator.BackColor = System.Drawing.Color.White;
+            this.buttonAdvDeleteMultiplicator.BeforeTouchSize = new System.Drawing.Size(28, 28);
+            this.buttonAdvDeleteMultiplicator.ForeColor = System.Drawing.Color.White;
+            this.buttonAdvDeleteMultiplicator.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_temp_DeleteGroup7;
+            this.buttonAdvDeleteMultiplicator.IsBackStageButton = false;
+            this.buttonAdvDeleteMultiplicator.Location = new System.Drawing.Point(536, 3);
+            this.buttonAdvDeleteMultiplicator.Margin = new System.Windows.Forms.Padding(0, 1, 3, 0);
+            this.buttonAdvDeleteMultiplicator.Name = "buttonAdvDeleteMultiplicator";
+            this.buttonAdvDeleteMultiplicator.Size = new System.Drawing.Size(28, 28);
+            this.buttonAdvDeleteMultiplicator.TabIndex = 8;
+            this.buttonAdvDeleteMultiplicator.TabStop = false;
+            this.buttonAdvDeleteMultiplicator.UseVisualStyle = true;
+            this.buttonAdvDeleteMultiplicator.Click += new System.EventHandler(this.buttonAdvDeleteMultipplicator_Click);
+            // 
+            // buttonAdvAddMultiplicator
+            // 
+            this.buttonAdvAddMultiplicator.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.buttonAdvAddMultiplicator.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+            this.buttonAdvAddMultiplicator.AutoSize = true;
+            this.buttonAdvAddMultiplicator.BackColor = System.Drawing.Color.White;
+            this.buttonAdvAddMultiplicator.BeforeTouchSize = new System.Drawing.Size(28, 28);
+            this.buttonAdvAddMultiplicator.ForeColor = System.Drawing.Color.White;
+            this.buttonAdvAddMultiplicator.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
+            this.buttonAdvAddMultiplicator.IsBackStageButton = false;
+            this.buttonAdvAddMultiplicator.Location = new System.Drawing.Point(501, 3);
+            this.buttonAdvAddMultiplicator.Margin = new System.Windows.Forms.Padding(0, 1, 3, 0);
+            this.buttonAdvAddMultiplicator.Name = "buttonAdvAddMultiplicator";
+            this.buttonAdvAddMultiplicator.Size = new System.Drawing.Size(28, 28);
+            this.buttonAdvAddMultiplicator.TabIndex = 9;
+            this.buttonAdvAddMultiplicator.UseVisualStyle = true;
+            this.buttonAdvAddMultiplicator.UseVisualStyleBackColor = false;
+            this.buttonAdvAddMultiplicator.Click += new System.EventHandler(this.buttonAddAdvMultipplicator_Click);
+            // 
+            // buttonAdvDelete
+            // 
+            this.buttonAdvDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonAdvDelete.BeforeTouchSize = new System.Drawing.Size(24, 24);
+            this.buttonAdvDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
+            this.buttonAdvDelete.IsBackStageButton = false;
+            this.buttonAdvDelete.Location = new System.Drawing.Point(170, 3);
+            this.buttonAdvDelete.Margin = new System.Windows.Forms.Padding(3, 3, 0, 1);
+            this.buttonAdvDelete.Name = "buttonAdvDelete";
+            this.buttonAdvDelete.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
+            this.buttonAdvDelete.Size = new System.Drawing.Size(24, 24);
+            this.buttonAdvDelete.TabIndex = 7;
+            this.buttonAdvDelete.TabStop = false;
+            // 
+            // buttonNew
+            // 
+            this.buttonNew.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonNew.BackColor = System.Drawing.Color.White;
+            this.buttonNew.BeforeTouchSize = new System.Drawing.Size(24, 24);
+            this.buttonNew.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
+            this.buttonNew.IsBackStageButton = false;
+            this.buttonNew.Location = new System.Drawing.Point(143, 3);
+            this.buttonNew.Margin = new System.Windows.Forms.Padding(3, 3, 0, 1);
+            this.buttonNew.Name = "buttonNew";
+            this.buttonNew.Size = new System.Drawing.Size(24, 24);
+            this.buttonNew.TabIndex = 6;
+            this.buttonNew.UseVisualStyleBackColor = false;
+            // 
             // MultiplicatorControlView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.tableLayoutPanelBody);
             this.Controls.Add(this.gradientPanelHeader);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MultiplicatorControlView";
-            this.Size = new System.Drawing.Size(495, 313);
+            this.Size = new System.Drawing.Size(577, 361);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel7.ResumeLayout(false);
             this.tableLayoutPanel7.PerformLayout();
@@ -421,7 +432,7 @@
         private System.Windows.Forms.Label labelTimeDirectives;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvDelete;
-        private System.Windows.Forms.Button buttonNew;
+        private Syncfusion.Windows.Forms.ButtonAdv buttonNew;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel4;

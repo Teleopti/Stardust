@@ -15,32 +15,32 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 
         public event EventHandler<CustomEventArgs<DateOnly>> SelectedDateChanged;
         
-        private void ForwardDayButtonClicked(object sender, EventArgs e)
+        private void forwardDayButtonClicked(object sender, EventArgs e)
         {
             dateTimePickerAdv1.Value = dateTimePickerAdv1.Value.AddDays(1d);
         }
 
-        private void BackDayButtonClick(object sender, EventArgs e)
+        private void backDayButtonClick(object sender, EventArgs e)
         {
             dateTimePickerAdv1.Value = dateTimePickerAdv1.Value.AddDays(-1d);
         }
 
-        private void ForwardWeekButtonClick(object sender,EventArgs e)
+        private void forwardWeekButtonClick(object sender,EventArgs e)
         {
             dateTimePickerAdv1.Value = dateTimePickerAdv1.Value.AddDays(7d);
         }
 
-        private void BackwardWeekButtonClick(object sender, EventArgs e)
+        private void backwardWeekButtonClick(object sender, EventArgs e)
         {
             dateTimePickerAdv1.Value = dateTimePickerAdv1.Value.AddDays(-7d);
         }
 
-        private void DropDownDateSelected(object sender, EventArgs e)
+        private void dropDownDateSelected(object sender, EventArgs e)
         {
-            InvokeDateChanged();
+            invokeDateChanged();
         }
 
-        private void InvokeDateChanged()
+        private void invokeDateChanged()
         {
         	var handler = SelectedDateChanged;
             if (handler!=null)
@@ -51,11 +51,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 
         public void SetSelectedDate(DateOnly dateTime )
         {
-            dateTimePickerAdv1.ValueChanged -= DropDownDateSelected;
+            dateTimePickerAdv1.ValueChanged -= dropDownDateSelected;
             dateTimePickerAdv1.Value = dateTime.Date;
-            dateTimePickerAdv1.ValueChanged += DropDownDateSelected;
+            dateTimePickerAdv1.ValueChanged += dropDownDateSelected;
 
-            InvokeDateChanged();
+            invokeDateChanged();
         }
 
         public override bool HasHelp

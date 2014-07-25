@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtPassword.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
             this.textBoxExtPassword.TabIndex = 1;
             this.textBoxExtPassword.UseSystemPasswordChar = true;
-            this.textBoxExtPassword.TextChanged += new System.EventHandler(this.TextBoxExtPasswordTextChanged);
+            this.textBoxExtPassword.TextChanged += new System.EventHandler(this.textBoxExtPasswordTextChanged);
             // 
             // textBoxExtNewPassword
             // 
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtNewPassword.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
             this.textBoxExtNewPassword.TabIndex = 1;
             this.textBoxExtNewPassword.UseSystemPasswordChar = true;
-            this.textBoxExtNewPassword.TextChanged += new System.EventHandler(this.TextBoxExtNewPasswordTextChanged);
+            this.textBoxExtNewPassword.TextChanged += new System.EventHandler(this.textBoxExtNewPasswordTextChanged);
             // 
             // textBoxExtConfirmPassword
             // 
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtConfirmPassword.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
             this.textBoxExtConfirmPassword.TabIndex = 1;
             this.textBoxExtConfirmPassword.UseSystemPasswordChar = true;
-            this.textBoxExtConfirmPassword.TextChanged += new System.EventHandler(this.TextBoxExtConfirmPasswordTextChanged);
+            this.textBoxExtConfirmPassword.TextChanged += new System.EventHandler(this.textBoxExtConfirmPasswordTextChanged);
             // 
             // autoLabelValidationPassword
             // 

@@ -128,7 +128,7 @@
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(136, 22);
             this.toolStripMenuItem3.Text = "xxPasteNew";
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3Click);
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3Click);
             // 
             // tableLayoutPanelSubHeader2
             // 
@@ -164,7 +164,7 @@
             this.buttonAdvDeleteAbsence.TabIndex = 8;
             this.buttonAdvDeleteAbsence.TabStop = false;
             this.buttonAdvDeleteAbsence.UseVisualStyle = true;
-            this.buttonAdvDeleteAbsence.Click += new System.EventHandler(this.ButtonAdvDeleteAbsenceClick);
+            this.buttonAdvDeleteAbsence.Click += new System.EventHandler(this.buttonAdvDeleteAbsenceClick);
             // 
             // labelSubHeader2
             // 
@@ -197,7 +197,7 @@
             this.buttonAdvAddAbsence.TabIndex = 9;
             this.buttonAdvAddAbsence.UseVisualStyle = true;
             this.buttonAdvAddAbsence.UseVisualStyleBackColor = false;
-            this.buttonAdvAddAbsence.Click += new System.EventHandler(this.ButtonAddAdvAbsenceClick);
+            this.buttonAdvAddAbsence.Click += new System.EventHandler(this.buttonAddAdvAbsenceClick);
             // 
             // gradientPanelHeader
             // 
@@ -228,7 +228,6 @@
             this.tableLayoutPanelHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelHeader.Size = new System.Drawing.Size(673, 38);
             this.tableLayoutPanelHeader.TabIndex = 0;
-            this.tableLayoutPanelHeader.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanelHeader_Paint);
             // 
             // labelHeader
             // 
@@ -253,7 +252,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "AbsenceControl";
             this.Size = new System.Drawing.Size(697, 565);
-            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.AbsenceControlLayout);
+            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.absenceControlLayout);
             this.tableLayoutPanelBody.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridControlAbsences)).EndInit();
             this.contextMenuStrip2.ResumeLayout(false);

@@ -27,28 +27,28 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			InitializeComponent();
 
-			gridControl1.KeyUp += GridControl1KeyUp;
+			gridControl1.KeyUp += gridControl1KeyUp;
 			gridControl1.DefaultRowHeight = 18;
 			gridControl1.MinResizeRowSize = 18;
 		}
 
-		private void ComboBoxSiteSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxSiteSelectedIndexChanged(object sender, EventArgs e)
 		{
 			_presenter.SelectSite((ISite) comboBoxSite.SelectedItem);
 		}
 
-		private void GridControl1KeyUp(object sender, KeyEventArgs e)
+		private void gridControl1KeyUp(object sender, KeyEventArgs e)
 		{
 			gridControl1.Refresh();
 		}
 
 		public void InitializeDialogControl()
 		{
-			SetColors();
+			setColors();
 			SetTexts();
 		}
 
-		private void SetColors()
+		private void setColors()
 		{
 			BackColor = ColorHelper.WizardBackgroundColor();
 			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
@@ -126,14 +126,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 																			  _scorecards, "Name",
 																			  typeof(IScorecard));
 			gridColumns.Add(scorecardColumn);
-			scorecardColumn.QueryComboItems += ScorecardColumnQueryComboItems;
+			scorecardColumn.QueryComboItems += scorecardColumnQueryComboItems;
 			
 			gridControl1.RowCount = gridRowCount();
 			gridControl1.ColCount = gridColumns.Count - 1;  //col index starts on 0
 			return new ReadOnlyCollection<SFGridColumnBase<ITeamScorecardModel>>(gridColumns);
 		}
 
-		private void ScorecardColumnQueryComboItems(object sender, GridQueryCellInfoEventArgs e)
+		private void scorecardColumnQueryComboItems(object sender, GridQueryCellInfoEventArgs e)
 		{
 			e.Style.DataSource = _scorecards;
 		}
@@ -152,14 +152,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			get { return ViewType.SetScorecard; }
 		}
 
-		private void SetScorecardLayout(object sender, LayoutEventArgs e)
+		private void setScorecardLayout(object sender, LayoutEventArgs e)
 		{
 			gridControl1.ColWidths.ResizeToFit(GridRangeInfo.Cols(1, 2), GridResizeToFitOptions.IncludeHeaders);
 		}
 
 		public void SetSites(IEnumerable<ISite> sites)
 		{
-			comboBoxSite.SelectedIndexChanged -= ComboBoxSiteSelectedIndexChanged;
+			comboBoxSite.SelectedIndexChanged -= comboBoxSiteSelectedIndexChanged;
 
 			comboBoxSite.Items.Clear();
 			comboBoxSite.Sorted = false;
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				comboBoxSite.Items.Add(item);
 			}
 
-			comboBoxSite.SelectedIndexChanged += ComboBoxSiteSelectedIndexChanged;
+			comboBoxSite.SelectedIndexChanged += comboBoxSiteSelectedIndexChanged;
 		}
 
 		public void SetScorecards(IEnumerable<IScorecard> scorecards)
@@ -181,9 +181,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void SetSelectedSite(ISite site)
 		{
-			comboBoxSite.SelectedIndexChanged -= ComboBoxSiteSelectedIndexChanged;
+			comboBoxSite.SelectedIndexChanged -= comboBoxSiteSelectedIndexChanged;
 			comboBoxSite.SelectedIndex = -1;
-			comboBoxSite.SelectedIndexChanged += ComboBoxSiteSelectedIndexChanged;
+			comboBoxSite.SelectedIndexChanged += comboBoxSiteSelectedIndexChanged;
 			comboBoxSite.SelectedItem = site;
 		}
 

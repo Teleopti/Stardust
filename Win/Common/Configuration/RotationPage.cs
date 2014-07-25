@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 {
 	public partial class RotationPage : BaseUserControl, ISettingPage
 	{
-		private const short FirstItemIndex = 0; // Index of the 1st item of the combo.
-		private const short InvalidItemIndex = -1; // Index of combo when none selected.
-		private const short ItemDiffernce = 1; // Represents items different.
+		private const short firstItemIndex = 0; // Index of the 1st item of the combo.
+		private const short invalidItemIndex = -1; // Index of combo when none selected.
+		private const short itemDiffernce = 1; // Represents items different.
 
 		private readonly List<IDayOffTemplate> _dayOffList = new List<IDayOffTemplate>();
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private int LastItemIndex
 		{
-			get { return comboBoxAdvRotations.Items.Count - ItemDiffernce; }
+			get { return comboBoxAdvRotations.Items.Count - itemDiffernce; }
 		}
 
 		public IRotation SelectedRotation
@@ -81,30 +81,30 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void InitializeDialogControl()
 		{
-			SetColors();
+			setColors();
 			SetTexts();
 
-			InitMessageBroker();
+			initMessageBroker();
 
 			// Set HourMinutes to CellModels.
-		    gridControlRotation.CellModels.Add(
-		        "HourMinutesEmpty",
-		        new TimeSpanDurationCellModel(gridControlRotation.Model) {AllowEmptyCell = true});
+			gridControlRotation.CellModels.Add(
+				"HourMinutesEmpty",
+				new TimeSpanDurationCellModel(gridControlRotation.Model) {AllowEmptyCell = true});
 
-		    gridControlRotation.CellModels.Add(
-		        "TimeOfDayCell",
-		        new TimeSpanTimeOfDayCellModel(gridControlRotation.Model) {AllowEmptyCell = true});
+			gridControlRotation.CellModels.Add(
+				"TimeOfDayCell",
+				new TimeSpanTimeOfDayCellModel(gridControlRotation.Model) {AllowEmptyCell = true});
 
-			InitGrid();
-			CreateColumns();
-			CreateGridRanges();
+			initGrid();
+			createColumns();
+			createGridRanges();
 		}
 
 		public void LoadControl()
 		{
-			LoadShiftCategories();
-			LoadDayOffs();
-			LoadRotations();
+			loadShiftCategories();
+			loadDayOffs();
+			loadRotations();
 		}
 
 		public void SaveChanges()
@@ -128,15 +128,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void Unload()
 		{
-			UnregisterMessageBrooker();
+			unregisterMessageBrooker();
 			// Disposes or flag anything possible.
-			comboBoxAdvRotations.SelectedIndexChanging -= ComboBoxAdvRotationsSelectedIndexChanging;
-			comboBoxAdvRotations.SelectedIndexChanged -= ComboBoxAdvRotationsSelectedIndexChanged;
-			textBoxDescription.Validating -= TextBoxDescriptionValidating;
-			textBoxDescription.Validated -= TextBoxDescriptionValidated;
-			buttonNew.Click -= ButtonNewClick;
-			buttonDelete.Click -= ButtonDeleteClick;
-			numericUpDownWeek.ValueChanged -= NumericUpDownWeekValueChanged;
+			comboBoxAdvRotations.SelectedIndexChanging -= comboBoxAdvRotationsSelectedIndexChanging;
+			comboBoxAdvRotations.SelectedIndexChanged -= comboBoxAdvRotationsSelectedIndexChanged;
+			textBoxDescription.Validating -= textBoxDescriptionValidating;
+			textBoxDescription.Validated -= textBoxDescriptionValidated;
+			buttonNew.Click -= buttonNewClick;
+			buttonDelete.Click -= buttonDeleteClick;
+			numericUpDownWeek.ValueChanged -= numericUpDownWeekValueChanged;
 
 			_rotationList = null;
 			_restrictionViewList = null;
@@ -144,11 +144,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_gridHelper = null;
 		}
 
-		private void UnregisterMessageBrooker()
+		private void unregisterMessageBrooker()
 		{
 			if (_messageBroker == null) return;
-			_messageBroker.UnregisterEventSubscription(MessageBrokerDayOffMessage);
-			_messageBroker.UnregisterEventSubscription(MessageBrokerShiftCategoryMessage);
+			_messageBroker.UnregisterEventSubscription(messageBrokerDayOffMessage);
+			_messageBroker.UnregisterEventSubscription(messageBrokerShiftCategoryMessage);
 			_messageBroker = null;
 		}
 
@@ -179,43 +179,43 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 		}
 
-		private void InitMessageBroker()
+		private void initMessageBroker()
 		{
 			_messageBroker = StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging;
-			_messageBroker.RegisterEventSubscription(MessageBrokerDayOffMessage, typeof (IDayOffTemplate));
-			_messageBroker.RegisterEventSubscription(MessageBrokerShiftCategoryMessage, typeof (IShiftCategory));
+			_messageBroker.RegisterEventSubscription(messageBrokerDayOffMessage, typeof (IDayOffTemplate));
+			_messageBroker.RegisterEventSubscription(messageBrokerShiftCategoryMessage, typeof (IShiftCategory));
 		}
 
-		private void MessageBrokerDayOffMessage(object sender, EventMessageArgs e)
+		private void messageBrokerDayOffMessage(object sender, EventMessageArgs e)
 		{
 			if (InvokeRequired)
 			{
-				Invoke(new EventHandler<EventMessageArgs>(MessageBrokerDayOffMessage), sender, e);
+				Invoke(new EventHandler<EventMessageArgs>(messageBrokerDayOffMessage), sender, e);
 			}
 			else
 			{
-				HandleDayOffMessage(e.Message);
+				handleDayOffMessage(e.Message);
 				if (e.Message.DomainUpdateType != DomainUpdateType.NotApplicable)
 				{
-					RefreshRange(RangeCategory.DayOffs);
+					refreshRange(RangeCategory.DayOffs);
 				}
 			}
 		}
 
-		private void HandleDayOffMessage(IEventMessage message)
+		private void handleDayOffMessage(IEventMessage message)
 		{
 			switch (message.DomainUpdateType)
 			{
 				case DomainUpdateType.Insert:
-					AddDayOff(message);
+					addDayOff(message);
 					break;
 
 				case DomainUpdateType.Update:
-					UpdateDayOff(message);
+					updateDayOff(message);
 					break;
 
 				case DomainUpdateType.Delete:
-					FindAndRemoveDayOff(message);
+					findAndRemoveDayOff(message);
 					break;
 
 				case DomainUpdateType.NotApplicable:
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private IDayOffTemplate FindAndRemoveDayOff(IEventMessage message)
+		private IDayOffTemplate findAndRemoveDayOff(IEventMessage message)
 		{
 			var instance = _dayOffList.FirstOrDefault(d => d.Id == message.DomainObjectId);
 			if (instance != null)
@@ -235,53 +235,53 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return instance;
 		}
 
-		private void AddDayOff(IEventMessage message)
+		private void addDayOff(IEventMessage message)
 		{
 			var instance = new DayOffTemplateRepository(UnitOfWork)
 				.Get(message.DomainObjectId);
 			_dayOffList.Add(instance);
 		}
 
-		private void UpdateDayOff(IEventMessage message)
+		private void updateDayOff(IEventMessage message)
 		{
-			var instance = FindAndRemoveDayOff(message);
+			var instance = findAndRemoveDayOff(message);
 			if (UnitOfWork.Contains(instance))
 			{
 				UnitOfWork.Remove(instance);
 			}
-			AddDayOff(message);
+			addDayOff(message);
 		}
 
-		private void MessageBrokerShiftCategoryMessage(object sender, EventMessageArgs e)
+		private void messageBrokerShiftCategoryMessage(object sender, EventMessageArgs e)
 		{
 			if (InvokeRequired)
 			{
-				Invoke(new EventHandler<EventMessageArgs>(MessageBrokerShiftCategoryMessage), sender, e);
+				Invoke(new EventHandler<EventMessageArgs>(messageBrokerShiftCategoryMessage), sender, e);
 			}
 			else
 			{
-				HandleShiftCategoryMessage(e.Message);
+				handleShiftCategoryMessage(e.Message);
 				if (e.Message.DomainUpdateType != DomainUpdateType.NotApplicable)
 				{
-					RefreshRange(RangeCategory.ShiftCategories);
+					refreshRange(RangeCategory.ShiftCategories);
 				}
 			}
 		}
 
-		private void HandleShiftCategoryMessage(IEventMessage message)
+		private void handleShiftCategoryMessage(IEventMessage message)
 		{
 			switch (message.DomainUpdateType)
 			{
 				case DomainUpdateType.Insert:
-					AddShiftCategory(message);
+					addShiftCategory(message);
 					break;
 
 				case DomainUpdateType.Update:
-					UpdateShiftCateogry(message);
+					updateShiftCateogry(message);
 					break;
 
 				case DomainUpdateType.Delete:
-					FindAndRemoveShiftCategory(message);
+					findAndRemoveShiftCategory(message);
 					break;
 
 				case DomainUpdateType.NotApplicable:
@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private IShiftCategory FindAndRemoveShiftCategory(IEventMessage message)
+		private IShiftCategory findAndRemoveShiftCategory(IEventMessage message)
 		{
 			var instance = _shiftCategoryList.FirstOrDefault(d => d.Id == message.DomainObjectId);
 			if (instance != null)
@@ -301,22 +301,22 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return instance;
 		}
 
-		private void AddShiftCategory(IEventMessage message)
+		private void addShiftCategory(IEventMessage message)
 		{
 			var instance = new ShiftCategoryRepository(UnitOfWork)
 				.Get(message.DomainObjectId);
 			_shiftCategoryList.Add(instance);
 		}
 
-		private void UpdateShiftCateogry(IEventMessage message)
+		private void updateShiftCateogry(IEventMessage message)
 		{
-			var instance = FindAndRemoveShiftCategory(message);
+			var instance = findAndRemoveShiftCategory(message);
 			if (UnitOfWork.Contains(instance))
 			{
 				UnitOfWork.Remove(instance);
 			}
 
-			AddShiftCategory(message);
+			addShiftCategory(message);
 		}
 
 		public RotationPage()
@@ -324,20 +324,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			InitializeComponent();
 
 			// Binds events.
-			comboBoxAdvRotations.SelectedIndexChanging += ComboBoxAdvRotationsSelectedIndexChanging;
-			comboBoxAdvRotations.SelectedIndexChanged += ComboBoxAdvRotationsSelectedIndexChanged;
-			textBoxDescription.Validating += TextBoxDescriptionValidating;
-			textBoxDescription.Validated += TextBoxDescriptionValidated;
-			buttonNew.Click += ButtonNewClick;
-			buttonDelete.Click += ButtonDeleteClick;
+			comboBoxAdvRotations.SelectedIndexChanging += comboBoxAdvRotationsSelectedIndexChanging;
+			comboBoxAdvRotations.SelectedIndexChanged += comboBoxAdvRotationsSelectedIndexChanged;
+			textBoxDescription.Validating += textBoxDescriptionValidating;
+			textBoxDescription.Validated += textBoxDescriptionValidated;
+			buttonNew.Click += buttonNewClick;
+			buttonDelete.Click += buttonDeleteClick;
 			//
 			// numericUpDownWeek
 			//
-			numericUpDownWeek.Minimum = FirstItemIndex + ItemDiffernce;
-			numericUpDownWeek.ValueChanged += NumericUpDownWeekValueChanged;
+			numericUpDownWeek.Minimum = firstItemIndex + itemDiffernce;
+			numericUpDownWeek.ValueChanged += numericUpDownWeekValueChanged;
 		}
 
-		private void ChangedInfo()
+		private void changedInfo()
 		{
 			autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
 			autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
@@ -345,7 +345,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			autoLabelInfoAboutChanges.Text = changed;
 		}
 
-		private void ChangeToOverMidnight()
+		private void changeToOverMidnight()
 		{
 			var earlyEndSelected = _gridHelper.HasColumnSelected(_earlyEndTimeColumn);
 			var lateEndSelected = _gridHelper.HasColumnSelected(_lateEndTimeColumn);
@@ -354,33 +354,33 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			ICollection<RotationRestrictionView> selectedList = _gridHelper.FindSelectedItems();
 			foreach (var view in selectedList)
 			{
-			    if (lateEndSelected)
-			    {
-			        if (lateEndTimeWillBeValid(view))
-			            view.LateEndTime = view.LateEndTime.Value.Add(TimeSpan.FromDays(1));
-			    }
-			    if (earlyEndSelected)
+				if (lateEndSelected)
 				{
-                    if (earlyStartTimeWillBeValid(view))
-                        view.EarlyEndTime = view.EarlyEndTime.Value.Add(TimeSpan.FromDays(1));
+					if (lateEndTimeWillBeValid(view))
+						view.LateEndTime = view.LateEndTime.Value.Add(TimeSpan.FromDays(1));
+				}
+				if (earlyEndSelected)
+				{
+					if (earlyStartTimeWillBeValid(view))
+						view.EarlyEndTime = view.EarlyEndTime.Value.Add(TimeSpan.FromDays(1));
 
 				}
 			}
 			// Refreshes the Grid.
-			RefreshRange(RangeCategory.TimeColumns);
+			refreshRange(RangeCategory.TimeColumns);
 		}
 
-	    private static bool lateEndTimeWillBeValid(RotationRestrictionView view)
-	    {
-	        return view.LateEndTime.HasValue && view.LateEndTime.Value < TimeSpan.FromDays(1);
-	    }
+		private static bool lateEndTimeWillBeValid(RotationRestrictionView view)
+		{
+			return view.LateEndTime.HasValue && view.LateEndTime.Value < TimeSpan.FromDays(1);
+		}
 
-	    private static bool earlyStartTimeWillBeValid(RotationRestrictionView view)
-	    {
-	        return view.EarlyEndTime.HasValue && view.EarlyEndTime.Value<TimeSpan.FromDays(1) && view.EarlyEndTime.Value.Add(TimeSpan.FromDays(1)) <= view.LateEndTime.GetValueOrDefault(TimeSpan.FromDays(2));
-	    }
+		private static bool earlyStartTimeWillBeValid(RotationRestrictionView view)
+		{
+			return view.EarlyEndTime.HasValue && view.EarlyEndTime.Value<TimeSpan.FromDays(1) && view.EarlyEndTime.Value.Add(TimeSpan.FromDays(1)) <= view.LateEndTime.GetValueOrDefault(TimeSpan.FromDays(2));
+		}
 
-	    private void RefreshRange(RangeCategory category)
+		private void refreshRange(RangeCategory category)
 		{
 			var gridRange = _gridRangeDictionary[category];
 			foreach (var range in gridRange)
@@ -389,17 +389,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private void SelectRotation()
+		private void selectRotation()
 		{
 			if (SelectedRotation == null) return;
 			numericUpDownWeek.Value =
-				ScheduleRestrictionBaseView.GetWeek(SelectedRotation.RotationDays.Count - ItemDiffernce);
+				ScheduleRestrictionBaseView.GetWeek(SelectedRotation.RotationDays.Count - itemDiffernce);
 			textBoxDescription.Text = SelectedRotation.Name;
 			SaveChanges();
-			PrepareGridView();
+			prepareGridView();
 		}
 
-		private void InitGrid()
+		private void initGrid()
 		{
 			gridControlRotation.Rows.HeaderCount = 0;
 			gridControlRotation.Cols.HeaderCount = 0;
@@ -434,7 +434,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			gridControlRotation.Invalidate();
 		}
 
-		private void CreateColumns()
+		private void createColumns()
 		{
 			_gridColumns = new List<SFGridColumnBase<RotationRestrictionView>>
 							{
@@ -471,28 +471,28 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 																										typeof (
 																											ShiftCategory
 																											));
-			_shiftCategoriesColumn.QueryComboItems += ShiftCategoriesColumnQueryComboItems;
+			_shiftCategoriesColumn.QueryComboItems += shiftCategoriesColumnQueryComboItems;
 			_gridColumns.Add(_shiftCategoriesColumn);
 			_dayOffsColumn = new SFGridDropDownColumn<RotationRestrictionView, IDayOffTemplate>("DayOffTemplate",
 																								UserTexts.Resources.DayOff,
 																								_dayOffList,
 																								"Description", 
 																								typeof (DayOffTemplate));
-			_dayOffsColumn.QueryComboItems += DayOffsColumnQueryComboItems;
+			_dayOffsColumn.QueryComboItems += dayOffsColumnQueryComboItems;
 			_gridColumns.Add(_dayOffsColumn);
 		}
 
-		private void DayOffsColumnQueryComboItems(object sender, GridQueryCellInfoEventArgs e)
+		private void dayOffsColumnQueryComboItems(object sender, GridQueryCellInfoEventArgs e)
 		{
 			e.Style.DataSource = _dayOffList;
 		}
 
-		private void ShiftCategoriesColumnQueryComboItems(object sender, GridQueryCellInfoEventArgs e)
+		private void shiftCategoriesColumnQueryComboItems(object sender, GridQueryCellInfoEventArgs e)
 		{
 			e.Style.DataSource = _shiftCategoryList;
 		}
 
-		private void CreateGridRanges()
+		private void createGridRanges()
 		{
 			ICollection<GridRangeInfo> timeColumnsRange = new List<GridRangeInfo>();
 			int colIndex = _gridColumns.IndexOf(_earlyStartTimeColumn);
@@ -516,7 +516,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private void PrepareGridView()
+		private void prepareGridView()
 		{
 			_restrictionViewList.Clear();
 
@@ -532,12 +532,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				_restrictionViewList
 				) {AllowExtendedCopyPaste = true};
 
-			_gridHelper.PasteFromClipboardFinished += GridHelperPasteFromClipboardFinished;
+			_gridHelper.PasteFromClipboardFinished += gridHelperPasteFromClipboardFinished;
 		}
 
-		private void ChangeRotationDays()
+		private void changeRotationDays()
 		{
-			var weekCount = ScheduleRestrictionBaseView.GetWeek(SelectedRotation.DaysCount - ItemDiffernce);
+			var weekCount = ScheduleRestrictionBaseView.GetWeek(SelectedRotation.DaysCount - itemDiffernce);
 			var value = numericUpDownWeek.Value;
 
 			SaveChanges();
@@ -548,7 +548,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				var daysToAdd = ((int) value - weekCount)*(int) ScheduleRestrictionBaseView.DaysPerWeek;
 				SelectedRotation.AddDays(daysToAdd);
 
-				PrepareGridView();
+				prepareGridView();
 			}
 			else if (value < weekCount)
 			{
@@ -556,19 +556,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				var daysToRemove = (weekCount - (int) value)*(int) ScheduleRestrictionBaseView.DaysPerWeek;
 				SelectedRotation.RemoveDays(daysToRemove);
 
-				PrepareGridView();
+				prepareGridView();
 			}
 		}
 
-		private void AddNewRotation()
+		private void addNewRotation()
 		{
 			SaveChanges();
-			_rotationList.Add(CreateRotation());
-			LoadRotations();
+			_rotationList.Add(createRotation());
+			loadRotations();
 			comboBoxAdvRotations.SelectedIndex = LastItemIndex;
 		}
 
-		private void DeleteRotation()
+		private void deleteRotation()
 		{
 			if (SelectedRotation == null) return;
 			if (ShowMyErrorMessage(string.Format(CultureInfo.CurrentUICulture, UserTexts.Resources.AreYouSureYouWantToDeleteRotation,
@@ -579,10 +579,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// Removes from list.
 			_rotationList.Remove(SelectedRotation);
 
-			LoadRotations();
+			loadRotations();
 		}
 
-		private bool ValidateRotationDescription()
+		private bool validateRotationDescription()
 		{
 			var failed = string.IsNullOrEmpty(textBoxDescription.Text);
 			if (failed)
@@ -593,11 +593,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return !failed;
 		}
 
-		private void ChangeRotationDescription()
+		private void changeRotationDescription()
 		{
 			SelectedRotation.Name = textBoxDescription.Text;
 			SaveChanges();
-			LoadRotations();
+			loadRotations();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
@@ -606,12 +606,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return ViewBase.ShowYesNoMessage(message, caption);
 		}
 
-		private void SetColors()
+		private void setColors()
 		{
 			BackColor = ColorHelper.WizardBackgroundColor();
 			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
 
-            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
+			gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
 			labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 
 			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
@@ -626,7 +626,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			gridControlRotation.Properties.BackgroundColor = ColorHelper.WizardBackgroundColor();
 		}
 
-		private void LoadShiftCategories()
+		private void loadShiftCategories()
 		{
 			if (!_shiftCategoryList.IsEmpty()) return;
 			// Loads default category.
@@ -643,7 +643,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_shiftCategoryList.AddRange(sortedList);
 		}
 
-		private void LoadDayOffs()
+		private void loadDayOffs()
 		{
 			if (!_dayOffList.IsEmpty()) return;
 			// Loads default category.
@@ -660,7 +660,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_dayOffList.AddRange(sortedList);
 		}
 
-		private void LoadRotations()
+		private void loadRotations()
 		{
 			if (Disposing) return;
 			if (_rotationList == null)
@@ -677,13 +677,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 			if (_rotationList.IsEmpty())
 			{
-				_rotationList.Add(CreateRotation());
+				_rotationList.Add(createRotation());
 			}
 
 			// Removes binding from comboBoxAdvRotations.
 			int selected = comboBoxAdvRotations.SelectedIndex;
 			var selectedRotation = comboBoxAdvRotations.SelectedItem as IRotation;
-			if (!IsWithinRange(selected)) selected = FirstItemIndex;
+			if (!isWithinRange(selected)) selected = firstItemIndex;
 
 			// Rebinds list to comboBoxAdvRotations.
 			comboBoxAdvRotations.DataSource = null;
@@ -698,12 +698,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				comboBoxAdvRotations.SelectedIndex = selected;
 		}
 
-		private bool IsWithinRange(int index)
+		private bool isWithinRange(int index)
 		{
-			return index > InvalidItemIndex && index < _rotationList.Count && comboBoxAdvRotations.DataSource != null;
+			return index > invalidItemIndex && index < _rotationList.Count && comboBoxAdvRotations.DataSource != null;
 		}
 
-		private IRotation CreateRotation()
+		private IRotation createRotation()
 		{
 			// Formats the name.
 			var description = PageHelper.CreateNewName(_rotationList, "Name", UserTexts.Resources.NewRotation);
@@ -715,37 +715,37 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return newRotation;
 		}
 
-		private void TextBoxDescriptionValidating(object sender, CancelEventArgs e)
+		private void textBoxDescriptionValidating(object sender, CancelEventArgs e)
 		{
 			if (SelectedRotation != null)
 			{
-				e.Cancel = !ValidateRotationDescription();
+				e.Cancel = !validateRotationDescription();
 			}
 		}
 
-		private void TextBoxDescriptionValidated(object sender, EventArgs e)
+		private void textBoxDescriptionValidated(object sender, EventArgs e)
 		{
 			if (SelectedRotation != null)
 			{
-				ChangeRotationDescription();
+				changeRotationDescription();
 			}
 		}
 
-		private void ComboBoxAdvRotationsSelectedIndexChanging(object sender, SelectedIndexChangingArgs e)
+		private void comboBoxAdvRotationsSelectedIndexChanging(object sender, SelectedIndexChangingArgs e)
 		{
-			e.Cancel = !IsWithinRange(e.NewIndex);
+			e.Cancel = !isWithinRange(e.NewIndex);
 		}
 
-		private void ComboBoxAdvRotationsSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxAdvRotationsSelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (SelectedRotation == null) return;
 			Cursor.Current = Cursors.WaitCursor;
-			SelectRotation();
-			ChangedInfo();
+			selectRotation();
+			changedInfo();
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void GridHelperPasteFromClipboardFinished(object sender, EventArgs e)
+		private void gridHelperPasteFromClipboardFinished(object sender, EventArgs e)
 		{
 			var columnSelected =
 				_gridHelper.HasColumnSelected(_lateStartTimeColumn)
@@ -754,39 +754,39 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			if (columnSelected)
 			{
-				RefreshRange(RangeCategory.TimeColumns);
+				refreshRange(RangeCategory.TimeColumns);
 			}
 		}
 
-		private void NumericUpDownWeekValueChanged(object sender, EventArgs e)
+		private void numericUpDownWeekValueChanged(object sender, EventArgs e)
 		{
 			if (SelectedRotation == null) return;
 			Cursor.Current = Cursors.WaitCursor;
-			ChangeRotationDays();
+			changeRotationDays();
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void ButtonNewClick(object sender, EventArgs e)
+		private void buttonNewClick(object sender, EventArgs e)
 		{
 			if (SelectedRotation == null) return;
 			Cursor.Current = Cursors.WaitCursor;
-			AddNewRotation();
+			addNewRotation();
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void ButtonDeleteClick(object sender, EventArgs e)
+		private void buttonDeleteClick(object sender, EventArgs e)
 		{
 			if (SelectedRotation == null) return;
 			Cursor.Current = Cursors.WaitCursor;
-			DeleteRotation();
+			deleteRotation();
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void ButtonAdvOvernightClick(object sender, EventArgs e)
+		private void buttonAdvOvernightClick(object sender, EventArgs e)
 		{
 			if (SelectedRotation == null) return;
 			Cursor.Current = Cursors.WaitCursor;
-			ChangeToOverMidnight();
+			changeToOverMidnight();
 			Cursor.Current = Cursors.Default;
 		}
 

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
                 if (comboBoxAdvMultiplicatorDefinitionSets.SelectedIndex < 0)
                 {
                     comboBoxAdvMultiplicatorDefinitionSets.SelectedIndex = 0;
-                    LoadControls();
+                    loadControls();
                 }
             }
             else
@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// </summary>
         public override void AddNew()
         {
-            using (ManageDefinitionSetForm editForm = new ManageDefinitionSetForm(ExplorerView.ExplorerPresenter.DefinitionSetPresenter))
+            using (var editForm = new ManageDefinitionSetForm(ExplorerView.ExplorerPresenter.DefinitionSetPresenter))
             {
-                editForm.DefinitionSetAdded += EditForm_AfterDefinitionSetAdded;
+                editForm.DefinitionSetAdded += editFormAfterDefinitionSetAdded;
                 editForm.ShowDialog(this);
             }
         }
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
                                             SelectedDefinitionSet.Name
                                             );
 
-                if (ShowMyErrorMessage(text, "Message") == DialogResult.Yes)
+                if (showMyErrorMessage(text, "Message") == DialogResult.Yes)
                 {
                     ExplorerView.ExplorerPresenter.DefinitionSetPresenter.RemoveDefinitionSet(SelectedDefinitionSet.DomainEntity);
                     LoadDefinitionSets();
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// <param name="message">The message.</param>
         /// <param name="caption">The caption.</param>
         /// <returns></returns>
-        private static DialogResult ShowMyErrorMessage(string message, string caption)
+        private static DialogResult showMyErrorMessage(string message, string caption)
         {
             return ViewBase.ShowYesNoMessage(message, caption);
         }
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// <summary>
         /// Loads the controls.
         /// </summary>
-        private void LoadControls()
+        private void loadControls()
         {
             if(SelectedDefinitionSet != null)
             {
@@ -142,9 +142,9 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void comboBoxAdvMultiplicatorDefinitionSets_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxAdvMultiplicatorDefinitionSetsSelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadControls();
+            loadControls();
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void textBoxDefinitionSetName_Leave(object sender, EventArgs e)
+        private void textBoxDefinitionSetNameLeave(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(textBoxDefinitionSetName.Text) && SelectedDefinitionSet != null)
             {
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void EditForm_AfterDefinitionSetAdded(object sender, DefinitionSetAddedEventArgs e)
+        private void editFormAfterDefinitionSetAdded(object sender, DefinitionSetAddedEventArgs e)
         {
             LoadDefinitionSets();
             comboBoxAdvMultiplicatorDefinitionSets.SelectedIndex =

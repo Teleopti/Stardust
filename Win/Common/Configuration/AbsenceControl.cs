@@ -35,18 +35,18 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private readonly string _newEntityeName = Resources.NewAbsence;
 		private readonly IList<AbsenceView> _absenceViewsToBeDeleted;
 
-		private const string NewAbsenceNameFormat = "<{0} {1}>";
-		private const string LessThanChar = "<";
-		private const string GreaterThanChar = ">";
-		private const string SpaceChar = " ";
-		private const int DefaultColumnIndex = 1;
-		private const int RowIndexMappingVelue = 1;
-		private const int EmptySourceCount = 0;
-		private const int ColumnListCountMappingValue = 1;
-		private const int EmptyHeaderCount = 0;
-		private const int ItemIdMappingIndex = 1;
-		private const int DefaultCellColumnIndex = 0;
-		private const int DefaultCellRowIndex = 0;
+		private const string newAbsenceNameFormat = "<{0} {1}>";
+		private const string lessThanChar = "<";
+		private const string greaterThanChar = ">";
+		private const string spaceChar = " ";
+		private const int defaultColumnIndex = 1;
+		private const int rowIndexMappingVelue = 1;
+		private const int emptySourceCount = 0;
+		private const int columnListCountMappingValue = 1;
+		private const int emptyHeaderCount = 0;
+		private const int itemIdMappingIndex = 1;
+		private const int defaultCellColumnIndex = 0;
+		private const int defaultCellRowIndex = 0;
 
 		public AbsenceControl()
 		{
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			loadTrackerCollection();
 		}
 
-		private void ButtonAddAdvAbsenceClick(object sender, EventArgs e)
+		private void buttonAddAdvAbsenceClick(object sender, EventArgs e)
 		{
 			Cursor.Current = Cursors.WaitCursor;
 
@@ -70,17 +70,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void ButtonAdvDeleteAbsenceClick(object sender, EventArgs e)
+		private void buttonAdvDeleteAbsenceClick(object sender, EventArgs e)
 		{
 			Cursor.Current = Cursors.WaitCursor;
 			deleteSelectedAbsence();
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void ToolStripMenuItem3Click(object sender, EventArgs e)
+		private void toolStripMenuItem3Click(object sender, EventArgs e)
 		{
 			var clipHandler = GridHelper.ConvertClipboardToClipHandler();
-			using (var s = new GridRangeStyle(gridControlAbsences.RowCount + RowIndexMappingVelue, DefaultColumnIndex))
+			using (var s = new GridRangeStyle(gridControlAbsences.RowCount + rowIndexMappingVelue, defaultColumnIndex))
 			{
 				var dif = clipHandler.RowSpan();
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private int GetNextAbsenceId()
+		private int getNextAbsenceId()
 		{
 			var absenceList = _sourceList;
 			int parsedValue; 
@@ -106,10 +106,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 								   ((from p in absenceList
 									 where p.Description.Name.Contains(_newEntityeName)
 									 select p.Description.Name
-										 .Replace(LessThanChar, string.Empty)
-										 .Replace(GreaterThanChar, string.Empty)
+										 .Replace(lessThanChar, string.Empty)
+										 .Replace(greaterThanChar, string.Empty)
 										 .Replace(_newEntityeName, string.Empty)
-										 .Replace(SpaceChar, string.Empty)).ToList())
+										 .Replace(spaceChar, string.Empty)).ToList())
 
 							   where string.IsNullOrEmpty(q) == false && Int32.TryParse(q, NumberStyles.Integer,CultureInfo.CurrentCulture, out parsedValue)
 							   select Int32.Parse(q, CultureInfo.CurrentCulture)).ToArray();
@@ -120,14 +120,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private AbsenceView createAbsence()
 		{
 			// Formats the name.
-			var nextCount = GetNextAbsenceId();
+			var nextCount = getNextAbsenceId();
 			var name = getNewEntityName(_newEntityeName, nextCount);
 
 			var newAbsence = new Absence
 									 {
 										 Description = new Description(name),
 										 DisplayColor = Color.DodgerBlue,
-										 Tracker = defaultTracker.Tracker,
+										 Tracker = DefaultTracker.Tracker,
 										 PayrollCode = string.Empty
 									 };
 
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private static bool isDataAvailable(ICollection<AbsenceView> source)
 		{
-			return (source != null) && (source.Count > EmptySourceCount);
+			return (source != null) && (source.Count > emptySourceCount);
 		}
 
 		private ReadOnlyCollection<SFGridColumnBase<AbsenceView>> configureGrid()
@@ -188,14 +188,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// Adds the cell models to the grid control
 			addCellmodels(gridControlAbsences);
 			// Set the header count for the grid control
-			gridControlAbsences.Rows.HeaderCount = EmptyHeaderCount;
+			gridControlAbsences.Rows.HeaderCount = emptyHeaderCount;
 			// Adds the header column for the grid control
 			gridColumns.Add(new SFGridRowHeaderColumn<AbsenceView>(string.Empty));
 
 			createColumnsForAbsenceGrid(gridColumns);
 
 			gridControlAbsences.RowCount = gridRowCount();
-			gridControlAbsences.ColCount = (gridColumns.Count - ColumnListCountMappingValue);
+			gridControlAbsences.ColCount = (gridColumns.Count - columnListCountMappingValue);
 
 			return new ReadOnlyCollection<SFGridColumnBase<AbsenceView>>(gridColumns);
 		}
@@ -270,9 +270,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				// Get those absences that are used by person account trackers.
 				var absencesUsedByPersonAccount = getAbsencesUsedByPersonAccount(myUow);
 
-				foreach (Absence absence in absenceCollection)
+				foreach (var absence1 in absenceCollection)
 				{
-					LazyLoadingManager.Initialize(absence.UpdatedBy);
+				    var absence = (Absence) absence1;
+				    LazyLoadingManager.Initialize(absence.UpdatedBy);
 
 					// Instantiates the absence view relevant for the 
 					// givenabsence and add it to the collection.
@@ -292,14 +293,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private static int getNextId(int[] array)
 		{
-			var nextId = ItemIdMappingIndex;
+			var nextId = itemIdMappingIndex;
 
 			if (!array.IsEmpty())
 			{
 				Array.Sort(array);
 
 				// Adds 1 to last number.
-				nextId = array[(array.Length - ItemIdMappingIndex)] + ItemIdMappingIndex;
+				nextId = array[(array.Length - itemIdMappingIndex)] + itemIdMappingIndex;
 			}
 
 			return nextId;
@@ -310,8 +311,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_trackerCollection.Clear();
 
 			// Adds the default tracker to the adapter collection
-			defaultTracker = new TrackerView(TrackerView.DefaultTracker);
-			_trackerAdopterCollection.Add(defaultTracker);
+			DefaultTracker = new TrackerView(TrackerView.DefaultTracker);
+			_trackerAdopterCollection.Add(DefaultTracker);
 
 			var trackers = Tracker.AllTrackers();
 
@@ -321,17 +322,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				_trackerCollection.Add(tracker);
 			}
 		}
-		private TrackerView defaultTracker { get; set; }
+		private TrackerView DefaultTracker { get; set; }
 
 		private static string getNewEntityName(string name, int itemIndex)
 		{
-			return string.Format(CultureInfo.InvariantCulture, NewAbsenceNameFormat, name, itemIndex);
+			return string.Format(CultureInfo.InvariantCulture, newAbsenceNameFormat, name, itemIndex);
 		}
 
 		private void setSelectedCellWhenNoSourceAvailable()
 		{
 			if (isDataAvailable(_sourceList)) return;
-			gridControlAbsences.CurrentCell.MoveTo(DefaultCellRowIndex, DefaultCellColumnIndex);
+			gridControlAbsences.CurrentCell.MoveTo(defaultCellRowIndex, defaultCellColumnIndex);
 		}
 
 		private void handlePaste(ClipHandler clipHandler, GridRangeInfo range, int cellRangeIndex, int row)
@@ -513,14 +514,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				MessageDialogs.ShowInformation(this, Resources.AbsenceSaveWasInvalid, Resources.Message);
 		}
 
-		private void AbsenceControlLayout(object sender, LayoutEventArgs e)
+		private void absenceControlLayout(object sender, LayoutEventArgs e)
 		{
 			gridControlAbsences.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
-		}
-
-		private void tableLayoutPanelHeader_Paint(object sender, PaintEventArgs e)
-		{
-
 		}
 	}
 }

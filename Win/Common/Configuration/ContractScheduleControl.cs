@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private readonly List<ContractScheduleWeekAdapter> _contractScheduleWeekList = new List<ContractScheduleWeekAdapter>();
         private ReadOnlyCollection<SFGridColumnBase<ContractScheduleWeekAdapter>> _contractScheduleWeekCols;
         private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
-        private const short InvalidItemIndex = -1;
-        private const short FirstItemIndex = 0;
-        private const int WeekColumnWidth = 55;
-        private const int CheckBoxColumnWidth = 60;
+        private const short invalidItemIndex = -1;
+        private const short firstItemIndex = 0;
+        private const int weekColumnWidth = 55;
+        private const int checkBoxColumnWidth = 60;
 
         private ContractScheduleRepository ContractSchRepository
         {
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             InitializeComponent();
         }
 
-        private void ComboBoxAdvScheduleCollectionSelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxAdvScheduleCollectionSelectedIndexChanged(object sender, EventArgs e)
         {
             handleDataSourceToControlTransfer();
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             prepareGrid();
         }
 
-        private void ButtonAdvAddNewContractScheduleWeekClick(object sender, EventArgs e)
+        private void buttonAdvAddNewContractScheduleWeekClick(object sender, EventArgs e)
         {
             if (SelectedContractSchedule != null)
             {
@@ -80,13 +80,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             }
         }
 
-        private void ButtonNewContractScheduleClick(object sender, EventArgs e)
+        private void buttonNewContractScheduleClick(object sender, EventArgs e)
         {
             _isDirty = true;
             addNewContractSchedule();
         }
 
-        private void ButtonAdvDeleteContractScheduleClick(object sender, EventArgs e)
+        private void buttonAdvDeleteContractScheduleClick(object sender, EventArgs e)
         {
             if (SelectedContractSchedule == null)
             {
@@ -123,19 +123,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         }
 
-        private void TextBoxExtDescriptionTextChanged(object sender, EventArgs e)
+        private void textBoxExtDescriptionTextChanged(object sender, EventArgs e)
         {
             _isDirty = true;
         }
 
-        private void TextBoxExtDescriptionValidating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void textBoxExtDescriptionValidating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (ValidateData()) return;
             textBoxExtDescription.Text = SelectedContractSchedule.Description.Name;
             e.Cancel = false;
         }
 
-        private void TextBoxExtDescriptionValidated(object sender, EventArgs e)
+        private void textBoxExtDescriptionValidated(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(textBoxExtDescription.Text))
             {
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             }
         }
 
-        private void TextBoxExtDescriptionLeave(object sender, EventArgs e)
+        private void textBoxExtDescriptionLeave(object sender, EventArgs e)
         {
             if (SelectedContractSchedule == null)
             {
@@ -161,12 +161,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             comboBoxAdvScheduleCollection.SelectedIndex = _contractScheduleList.IndexOf(itemToBeSelected);
         }
 
-        private void ContractScheduleGridSelectionChanged(object sender, EventArgs e)
+        private void contractScheduleGridSelectionChanged(object sender, EventArgs e)
         {
             _isDirty = true;
         }
 
-        private void ButtonAdvDeleteWeekClick(object sender, EventArgs e)
+        private void buttonAdvDeleteWeekClick(object sender, EventArgs e)
         {
             IList<int> selectedList = getSelectedRowsToBeDeleted();
 
@@ -182,14 +182,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             if (response != DialogResult.Yes) return;
             Cursor.Current = Cursors.WaitCursor;
 
-            DeleteWeek(selectedList);
+            deleteWeek(selectedList);
 
             Cursor.Current = Cursors.Default;
 
 
         }
 
-        private void DeleteWeek(IList<int> selectedList)
+        private void deleteWeek(IList<int> selectedList)
         {
             IList<ContractScheduleWeekAdapter> source = _contractScheduleWeekList;
             IList<ContractScheduleWeekAdapter> toBeDeleted = new List<ContractScheduleWeekAdapter>();
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             gridControlContractSchedule.Invalidate();
         }
 
-        private void ContractScheduleGridKeyUp(object sender, KeyEventArgs e)
+        private void contractScheduleGridKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.V)
             {
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             loadContractSchedules();
 
-            ComboBoxAdvScheduleCollectionSelectedIndexChanged(this, new EventArgs());
+            comboBoxAdvScheduleCollectionSelectedIndexChanged(this, new EventArgs());
             prepareGrid();
         }
 
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             //Selected the added Scorecard
             comboBoxAdvScheduleCollection.SelectedIndex = _contractScheduleList.IndexOf(newContractSchedule);
-            ComboBoxAdvScheduleCollectionSelectedIndexChanged(this, new EventArgs());
+            comboBoxAdvScheduleCollectionSelectedIndexChanged(this, new EventArgs());
 
             buttonAdvAddWeek.PerformClick();
         }
@@ -431,9 +431,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             // Stores already selected index. 1st item, if none selected.
             int selected = comboBoxAdvScheduleCollection.SelectedIndex;
-            if (selected == InvalidItemIndex) selected = FirstItemIndex;
+            if (selected == invalidItemIndex) selected = firstItemIndex;
 
-            comboBoxAdvScheduleCollection.SelectedIndexChanged -= ComboBoxAdvScheduleCollectionSelectedIndexChanged;
+            comboBoxAdvScheduleCollection.SelectedIndexChanged -= comboBoxAdvScheduleCollectionSelectedIndexChanged;
 
             // Binds list to comboBoxAdvScenarioCollection.
             comboBoxAdvScheduleCollection.DataSource = null;
@@ -443,7 +443,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             if (selected >= comboBoxAdvScheduleCollection.Items.Count)
                 selected = comboBoxAdvScheduleCollection.Items.Count - 1;
 
-            comboBoxAdvScheduleCollection.SelectedIndexChanged += ComboBoxAdvScheduleCollectionSelectedIndexChanged;
+            comboBoxAdvScheduleCollection.SelectedIndexChanged += comboBoxAdvScheduleCollectionSelectedIndexChanged;
 
             comboBoxAdvScheduleCollection.SelectedIndex = selected;
 
@@ -472,9 +472,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             textBoxExtDescription.Text = string.Empty;
 
-            comboBoxAdvScheduleCollection.SelectedIndexChanged -= ComboBoxAdvScheduleCollectionSelectedIndexChanged;
+            comboBoxAdvScheduleCollection.SelectedIndexChanged -= comboBoxAdvScheduleCollectionSelectedIndexChanged;
             comboBoxAdvScheduleCollection.DataSource = null;
-            comboBoxAdvScheduleCollection.SelectedIndexChanged += ComboBoxAdvScheduleCollectionSelectedIndexChanged;
+            comboBoxAdvScheduleCollection.SelectedIndexChanged += comboBoxAdvScheduleCollectionSelectedIndexChanged;
 
             gridControlContractSchedule.RowCount = 0;
             gridControlContractSchedule.Invalidate();
@@ -494,14 +494,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                                             _contractScheduleWeekList);
             }
 
-            gridControlContractSchedule.ColWidths[0] = WeekColumnWidth;
+            gridControlContractSchedule.ColWidths[0] = weekColumnWidth;
             gridControlContractSchedule.Invalidate();
         }
 
         private static ReadOnlyCollection<SFGridColumnBase<ContractScheduleWeekAdapter>> configureGrid()
         {
             IList<SFGridColumnBase<ContractScheduleWeekAdapter>> gridColumns =
-               new List<SFGridColumnBase<ContractScheduleWeekAdapter>> { new SFGridRowHeaderColumn<ContractScheduleWeekAdapter>(Resources.Week, WeekColumnWidth) };
+               new List<SFGridColumnBase<ContractScheduleWeekAdapter>> { new SFGridRowHeaderColumn<ContractScheduleWeekAdapter>(Resources.Week, weekColumnWidth) };
 
             IList<DayOfWeek> days =
                 DateHelper.GetDaysOfWeek(
@@ -509,7 +509,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             foreach (var dayOfWeek in days)
             {
-                gridColumns.Add(new SFGridCheckBoxColumn<ContractScheduleWeekAdapter>(dayOfWeek.ToString(), getDayNameShort(dayOfWeek), CheckBoxColumnWidth));
+                gridColumns.Add(new SFGridCheckBoxColumn<ContractScheduleWeekAdapter>(dayOfWeek.ToString(), getDayNameShort(dayOfWeek), checkBoxColumnWidth));
             }
 
             return new ReadOnlyCollection<SFGridColumnBase<ContractScheduleWeekAdapter>>(gridColumns);

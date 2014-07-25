@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
-            this.treeViewOptions = new System.Windows.Forms.TreeView();
+            this.treeViewOptions = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
             this.PanelContent = new Syncfusion.Windows.Forms.Tools.GradientPanel();
             this.buttonAdvOK = new Syncfusion.Windows.Forms.ButtonAdv();
             this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.treeViewOptions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PanelContent)).BeginInit();
             this.SuspendLayout();
             // 
@@ -116,6 +117,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             // splitContainer
             // 
+            this.splitContainer.BackColor = System.Drawing.Color.White;
             this.splitContainer.BeforeTouchSize = 7;
             this.tableLayoutPanel1.SetColumnSpan(this.splitContainer, 4);
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -125,6 +127,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             // splitContainer.Panel1
             // 
+            this.splitContainer.Panel1.BackColor = System.Drawing.Color.White;
             this.splitContainer.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
             this.splitContainer.Panel1.Controls.Add(this.treeViewOptions);
             // 
@@ -140,20 +143,41 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // treeViewOptions
             // 
             this.treeViewOptions.BackColor = System.Drawing.Color.White;
-            this.treeViewOptions.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.treeViewOptions.BeforeTouchSize = new System.Drawing.Size(198, 609);
+            this.treeViewOptions.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
+            this.treeViewOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.treeViewOptions.CanSelectDisabledNode = false;
             this.treeViewOptions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewOptions.EnableTouchMode = true;
             this.treeViewOptions.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.treeViewOptions.FullRowSelect = true;
+            // 
+            // 
+            // 
+            this.treeViewOptions.HelpTextControl.Location = new System.Drawing.Point(0, 0);
+            this.treeViewOptions.HelpTextControl.Name = "helpText";
+            this.treeViewOptions.HelpTextControl.TabIndex = 0;
             this.treeViewOptions.HideSelection = false;
             this.treeViewOptions.Indent = 15;
-            this.treeViewOptions.ItemHeight = 30;
+            this.treeViewOptions.ItemHeight = 32;
             this.treeViewOptions.LineColor = System.Drawing.Color.SkyBlue;
             this.treeViewOptions.Location = new System.Drawing.Point(0, 0);
             this.treeViewOptions.Margin = new System.Windows.Forms.Padding(10, 10, 3, 3);
+            this.treeViewOptions.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            this.treeViewOptions.MetroScrollBars = true;
             this.treeViewOptions.Name = "treeViewOptions";
+            this.treeViewOptions.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255))))));
+            this.treeViewOptions.ShowFocusRect = false;
             this.treeViewOptions.ShowLines = false;
             this.treeViewOptions.Size = new System.Drawing.Size(198, 609);
+            this.treeViewOptions.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
             this.treeViewOptions.TabIndex = 1;
+            this.treeViewOptions.ThemesEnabled = false;
+            // 
+            // 
+            // 
+            this.treeViewOptions.ToolTipControl.Location = new System.Drawing.Point(0, 0);
+            this.treeViewOptions.ToolTipControl.Name = "toolTip";
+            this.treeViewOptions.ToolTipControl.TabIndex = 1;
             // 
             // PanelContent
             // 
@@ -184,7 +208,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.buttonAdvOK.TabIndex = 0;
             this.buttonAdvOK.Text = "xxOk";
             this.buttonAdvOK.UseVisualStyle = true;
-            this.buttonAdvOK.Click += new System.EventHandler(this.ButtonOkClick);
+            this.buttonAdvOK.Click += new System.EventHandler(this.buttonOkClick);
             // 
             // buttonAdvCancel
             // 
@@ -203,7 +227,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.buttonAdvCancel.TabIndex = 1;
             this.buttonAdvCancel.Text = "xxCancel";
             this.buttonAdvCancel.UseVisualStyle = true;
-            this.buttonAdvCancel.Click += new System.EventHandler(this.ButtonCancelClick);
+            this.buttonAdvCancel.Click += new System.EventHandler(this.buttonCancelClick);
             // 
             // buttonAdvApply
             // 
@@ -221,14 +245,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.buttonAdvApply.TabIndex = 2;
             this.buttonAdvApply.Text = "xxApply";
             this.buttonAdvApply.UseVisualStyle = true;
-            this.buttonAdvApply.Click += new System.EventHandler(this.ButtonApplyClick);
+            this.buttonAdvApply.Click += new System.EventHandler(this.buttonApplyClick);
             // 
             // SettingsScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
-            this.BackColor = System.Drawing.SystemColors.Control;
+            this.BackColor = System.Drawing.Color.White;
             this.Borders = new System.Windows.Forms.Padding(0);
             this.CancelButton = this.buttonAdvCancel;
             this.ClientSize = new System.Drawing.Size(1000, 700);
@@ -251,6 +275,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.treeViewOptions)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PanelContent)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -262,7 +287,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainer;
-        private System.Windows.Forms.TreeView treeViewOptions;
+        private Syncfusion.Windows.Forms.Tools.TreeViewAdv treeViewOptions;
         private Syncfusion.Windows.Forms.Tools.GradientPanel PanelContent;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOK;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;

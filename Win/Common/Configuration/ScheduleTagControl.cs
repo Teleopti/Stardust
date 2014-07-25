@@ -17,35 +17,35 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Common.Configuration
 {
-    public partial class ScheduleTagControl : BaseUserControl, ISettingPage
-    {
-        private List<IScheduleTag> _scheduleTags;
-        private const short itemDifference = 1;
-        private const short invalidItemIndex = -1;
-        private const short firstItemIndex = 0;
-        public ScheduleTagRepository Repository { get; private set; }
-        public IUnitOfWork UnitOfWork { get; private set; }
-        private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
+	public partial class ScheduleTagControl : BaseUserControl, ISettingPage
+	{
+		private List<IScheduleTag> _scheduleTags;
+		private const short itemDifference = 1;
+		private const short invalidItemIndex = -1;
+		private const short firstItemIndex = 0;
+		public ScheduleTagRepository Repository { get; private set; }
+		public IUnitOfWork UnitOfWork { get; private set; }
+		private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
 
 		public int LastItemIndex
-        {
-            get { return comboBoxTags.Items.Count - itemDifference; }
-        }
+		{
+			get { return comboBoxTags.Items.Count - itemDifference; }
+		}
 
-        public IScheduleTag SelectedTag
-        {
-            get { return comboBoxTags.SelectedItem as IScheduleTag; }
-        }
+		public IScheduleTag SelectedTag
+		{
+			get { return comboBoxTags.SelectedItem as IScheduleTag; }
+		}
 
-        public ScheduleTagControl()
-        {
+		public ScheduleTagControl()
+		{
 			InitializeComponent();
-        }
+		}
 
-        void textBoxNameTextChanged(object sender, EventArgs e)
-        {
-            changeTagName();
-        }
+		void textBoxNameTextChanged(object sender, EventArgs e)
+		{
+			changeTagName();
+		}
 
 		private void comboBoxTagsSelectedIndexChanging(object sender, SelectedIndexChangingArgs e)
 		{
@@ -55,12 +55,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void comboBoxTagsSelectedIndexChanged(object sender, EventArgs e)
 		{
 			Cursor.Current = Cursors.WaitCursor;
-            textBoxName.TextChanged -= textBoxNameTextChanged;
+			textBoxName.TextChanged -= textBoxNameTextChanged;
 			selectTag();
-            if (SelectedTag != null)
-		        changedInfo();
+			if (SelectedTag != null)
+				changedInfo();
 			Cursor.Current = Cursors.Default;
-            textBoxName.TextChanged += textBoxNameTextChanged;
+			textBoxName.TextChanged += textBoxNameTextChanged;
 		}        
 
 		private void buttonNewClick(object sender, EventArgs e)
@@ -76,12 +76,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void buttonDeleteClick(object sender, EventArgs e)
 		{
 			if (SelectedTag == null) return;
-            var culture = TeleoptiPrincipal.Current.Regional.Culture;
-		    string text = string.Format(
-		        culture,
-		        Resources.AreYouSureYouWantToDeleteItem,
-		        SelectedTag.Description
-		        );
+			var culture = TeleoptiPrincipal.Current.Regional.Culture;
+			string text = string.Format(
+				culture,
+				Resources.AreYouSureYouWantToDeleteItem,
+				SelectedTag.Description
+				);
 
 			var caption = string.Format(CurrentCulture, Resources.ConfirmDelete);
 
@@ -110,169 +110,169 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void setColors()
 		{
-            BackColor = ColorHelper.WizardBackgroundColor();
-            tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
+			BackColor = ColorHelper.WizardBackgroundColor();
+			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
 
-            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
-            labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
+			gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
+			labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 
-            tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
-            labelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
-            labelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
-        }
+			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			labelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			labelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+		}
 
-        private IScheduleTag createTag()
-        {
-            var description = PageHelper.CreateNewName(_scheduleTags, "Description", Resources.NewTagExample);
-            var len = description.Name.Length > 15 ? 15 : description.Name.Length;
-            var newTag = new ScheduleTag { Description = description.Name.Substring(0,len) };
+		private IScheduleTag createTag()
+		{
+			var description = PageHelper.CreateNewName(_scheduleTags, "Description", Resources.NewTagExample);
+			var len = description.Name.Length > 15 ? 15 : description.Name.Length;
+			var newTag = new ScheduleTag { Description = description.Name.Substring(0,len) };
 			Repository.Add(newTag);
 
 			return newTag;
-        }
+		}
 
-        private void addNewTag()
-        {
-            _scheduleTags.Add(createTag());
+		private void addNewTag()
+		{
+			_scheduleTags.Add(createTag());
 			loadTags();
 			comboBoxTags.SelectedIndex = LastItemIndex;
-            textBoxName.Focus();
-            textBoxName.SelectAll();
-        }
+			textBoxName.Focus();
+			textBoxName.SelectAll();
+		}
 
-        private void deleteTag()
-        {
-        	if (SelectedTag == null) return;
-        	Repository.Remove(SelectedTag);
-        	_scheduleTags.Remove(SelectedTag);
+		private void deleteTag()
+		{
+			if (SelectedTag == null) return;
+			Repository.Remove(SelectedTag);
+			_scheduleTags.Remove(SelectedTag);
 
-        	loadTags();
-        }
+			loadTags();
+		}
 
-        private void loadTags()
-        {
-        	if (Disposing) return;
-        	if (_scheduleTags == null)
-        	{
-                _scheduleTags = new List<IScheduleTag>();
-                _scheduleTags.AddRange(Repository.LoadAll());
-        	}
+		private void loadTags()
+		{
+			if (Disposing) return;
+			if (_scheduleTags == null)
+			{
+				_scheduleTags = new List<IScheduleTag>();
+				_scheduleTags.AddRange(Repository.LoadAll());
+			}
 
-        	if (_scheduleTags.IsEmpty())
-        	{
-        		_scheduleTags.Add(createTag());
-        	}
+			if (_scheduleTags.IsEmpty())
+			{
+				_scheduleTags.Add(createTag());
+			}
 
-        	var selected = comboBoxTags.SelectedIndex;
-        	if (!isWithinRange(selected))
-        	{
-        		selected = firstItemIndex;
-        	}
+			var selected = comboBoxTags.SelectedIndex;
+			if (!isWithinRange(selected))
+			{
+				selected = firstItemIndex;
+			}
 
-        	comboBoxTags.DataSource = null;
-        	comboBoxTags.DisplayMember = "Description";
-        	comboBoxTags.DataSource = _scheduleTags;
+			comboBoxTags.DataSource = null;
+			comboBoxTags.DisplayMember = "Description";
+			comboBoxTags.DataSource = _scheduleTags;
 
-        	comboBoxTags.SelectedIndex = selected;
-        }
+			comboBoxTags.SelectedIndex = selected;
+		}
 
-        private void selectTag()
-        {
-            if (SelectedTag != null)
-            {
-                textBoxName.Text = SelectedTag.Description;
-            }
-        }
+		private void selectTag()
+		{
+			if (SelectedTag != null)
+			{
+				textBoxName.Text = SelectedTag.Description;
+			}
+		}
 
-        private void changeTagName()
-        {
-        	if (SelectedTag == null) return;
-        	SelectedTag.Description = textBoxName.Text;
-        	comboBoxTags.Invalidate();
-        	loadTags();
-        }
+		private void changeTagName()
+		{
+			if (SelectedTag == null) return;
+			SelectedTag.Description = textBoxName.Text;
+			comboBoxTags.Invalidate();
+			loadTags();
+		}
 
-        private bool validateTag()
-        {
-            var failed = string.IsNullOrEmpty(textBoxName.Text);
-            if (failed)
-            {
-                textBoxName.Text = SelectedTag.Description;
-            }
+		private bool validateTag()
+		{
+			var failed = string.IsNullOrEmpty(textBoxName.Text);
+			if (failed)
+			{
+				textBoxName.Text = SelectedTag.Description;
+			}
 
-            return !failed;
-        }
+			return !failed;
+		}
 
-        private bool isWithinRange(int index)
-        {
+		private bool isWithinRange(int index)
+		{
 			return index > invalidItemIndex && index < _scheduleTags.Count && comboBoxTags.DataSource != null;
-        }
+		}
 
-        protected override void SetCommonTexts()
-        {
-            base.SetCommonTexts();
-            toolTip1.SetToolTip(buttonDelete, Resources.DeleteTag);
-            toolTip1.SetToolTip(buttonNew, Resources.NewTag);
-        }
+		protected override void SetCommonTexts()
+		{
+			base.SetCommonTexts();
+			toolTip1.SetToolTip(buttonDelete, Resources.DeleteTag);
+			toolTip1.SetToolTip(buttonNew, Resources.NewTag);
+		}
 
-        public void InitializeDialogControl()
-        {
-            setColors();
-            SetTexts();
-        }
+		public void InitializeDialogControl()
+		{
+			setColors();
+			SetTexts();
+		}
 
-        public void LoadControl()
-        {
-            loadTags();
-        }
+		public void LoadControl()
+		{
+			loadTags();
+		}
 
-        public void SaveChanges()
-        {}
+		public void SaveChanges()
+		{}
 
-        public void Unload()
-        {
-            _scheduleTags = null;
-        }
+		public void Unload()
+		{
+			_scheduleTags = null;
+		}
 
-        public TreeFamily TreeFamily()
-        {
-            return new TreeFamily(Resources.Scheduling);
-        }
+		public TreeFamily TreeFamily()
+		{
+			return new TreeFamily(Resources.Scheduling);
+		}
 
-        public string TreeNode()
-        {
-            return Resources.ScheduleTags;
-        }
+		public string TreeNode()
+		{
+			return Resources.ScheduleTags;
+		}
 
-    	public void OnShow()
-    	{
-    	}
+		public void OnShow()
+		{
+		}
 
-        public void SetUnitOfWork(IUnitOfWork value)
-        {
-            UnitOfWork = value;
-            Repository = new ScheduleTagRepository(UnitOfWork);
-        }
+		public void SetUnitOfWork(IUnitOfWork value)
+		{
+			UnitOfWork = value;
+			Repository = new ScheduleTagRepository(UnitOfWork);
+		}
 
-        public void Persist()
-        {}
+		public void Persist()
+		{}
 
-        private void changedInfo()
-        {
-            autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
-            autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
-            var changed = _localizer.UpdatedByText(SelectedTag, Resources.UpdatedByColon);
-            autoLabelInfoAboutChanges.Text = changed;
-        }
+		private void changedInfo()
+		{
+			autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
+			autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
+			var changed = _localizer.UpdatedByText(SelectedTag, Resources.UpdatedByColon);
+			autoLabelInfoAboutChanges.Text = changed;
+		}
 
-        public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
-        {
-            throw new NotImplementedException();
-        }
+		public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
+		{
+			throw new NotImplementedException();
+		}
 
-        public ViewType ViewType
-        {
-            get { return ViewType.ScheduleTag; }
-        }
-    }
+		public ViewType ViewType
+		{
+			get { return ViewType.ScheduleTag; }
+		}
+	}
 }

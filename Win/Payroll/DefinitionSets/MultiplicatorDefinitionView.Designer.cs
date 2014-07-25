@@ -45,21 +45,25 @@
             this.gridControlMultiplicatorDefinition.Location = new System.Drawing.Point(0, 0);
             this.gridControlMultiplicatorDefinition.Name = "gridControlMultiplicatorDefinition";
             this.gridControlMultiplicatorDefinition.Properties.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.gridControlMultiplicatorDefinition.Properties.ForceImmediateRepaint = false;
+            this.gridControlMultiplicatorDefinition.Properties.MarkColHeader = false;
+            this.gridControlMultiplicatorDefinition.Properties.MarkRowHeader = false;
             this.gridControlMultiplicatorDefinition.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-            this.gridControlMultiplicatorDefinition.Size = new System.Drawing.Size(772, 281);
+            this.gridControlMultiplicatorDefinition.Size = new System.Drawing.Size(901, 324);
             this.gridControlMultiplicatorDefinition.SmartSizeBox = false;
             this.gridControlMultiplicatorDefinition.TabIndex = 3;
             this.gridControlMultiplicatorDefinition.Text = "gridControl1";
             this.gridControlMultiplicatorDefinition.UseRightToLeftCompatibleTextBox = true;
-            this.gridControlMultiplicatorDefinition.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridControlMultiplicatorDefinition_KeyDown);
+            this.gridControlMultiplicatorDefinition.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridControlMultiplicatorDefinitionKeyDown);
             // 
             // MultiplicatorDefinitionView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.gridControlMultiplicatorDefinition);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MultiplicatorDefinitionView";
-            this.Size = new System.Drawing.Size(772, 281);
+            this.Size = new System.Drawing.Size(901, 324);
             ((System.ComponentModel.ISupportInitialize)(this.gridControlMultiplicatorDefinition)).EndInit();
             this.ResumeLayout(false);
 

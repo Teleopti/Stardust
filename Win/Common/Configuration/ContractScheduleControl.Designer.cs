@@ -153,8 +153,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.gridControlContractSchedule.TabIndex = 37;
             this.gridControlContractSchedule.ThemesEnabled = true;
             this.gridControlContractSchedule.UseRightToLeftCompatibleTextBox = true;
-            this.gridControlContractSchedule.CurrentCellChanged += new System.EventHandler(this.ContractScheduleGridSelectionChanged);
-            this.gridControlContractSchedule.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ContractScheduleGridKeyUp);
+            this.gridControlContractSchedule.CurrentCellChanged += new System.EventHandler(this.contractScheduleGridSelectionChanged);
+            this.gridControlContractSchedule.KeyUp += new System.Windows.Forms.KeyEventHandler(this.contractScheduleGridKeyUp);
             // 
             // textBoxExtDescription
             // 
@@ -170,10 +170,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtDescription.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
             this.textBoxExtDescription.TabIndex = 35;
             this.textBoxExtDescription.WordWrap = false;
-            this.textBoxExtDescription.TextChanged += new System.EventHandler(this.TextBoxExtDescriptionTextChanged);
-            this.textBoxExtDescription.Leave += new System.EventHandler(this.TextBoxExtDescriptionLeave);
-            this.textBoxExtDescription.Validating += new System.ComponentModel.CancelEventHandler(this.TextBoxExtDescriptionValidating);
-            this.textBoxExtDescription.Validated += new System.EventHandler(this.TextBoxExtDescriptionValidated);
+            this.textBoxExtDescription.TextChanged += new System.EventHandler(this.textBoxExtDescriptionTextChanged);
+            this.textBoxExtDescription.Leave += new System.EventHandler(this.textBoxExtDescriptionLeave);
+            this.textBoxExtDescription.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxExtDescriptionValidating);
+            this.textBoxExtDescription.Validated += new System.EventHandler(this.textBoxExtDescriptionValidated);
             // 
             // autoLabel2
             // 
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.comboBoxAdvScheduleCollection.Size = new System.Drawing.Size(252, 23);
             this.comboBoxAdvScheduleCollection.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
             this.comboBoxAdvScheduleCollection.TabIndex = 33;
-            this.comboBoxAdvScheduleCollection.SelectedIndexChanged += new System.EventHandler(this.ComboBoxAdvScheduleCollectionSelectedIndexChanged);
+            this.comboBoxAdvScheduleCollection.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvScheduleCollectionSelectedIndexChanged);
             // 
             // tableLayoutPanelBody
             // 
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.buttonAdvDeleteWeek.TabIndex = 8;
             this.buttonAdvDeleteWeek.TabStop = false;
             this.buttonAdvDeleteWeek.UseVisualStyle = true;
-            this.buttonAdvDeleteWeek.Click += new System.EventHandler(this.ButtonAdvDeleteWeekClick);
+            this.buttonAdvDeleteWeek.Click += new System.EventHandler(this.buttonAdvDeleteWeekClick);
             // 
             // buttonAdvAddWeek
             // 
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.buttonAdvAddWeek.TabIndex = 7;
             this.buttonAdvAddWeek.UseVisualStyle = true;
             this.buttonAdvAddWeek.UseVisualStyleBackColor = false;
-            this.buttonAdvAddWeek.Click += new System.EventHandler(this.ButtonAdvAddNewContractScheduleWeekClick);
+            this.buttonAdvAddWeek.Click += new System.EventHandler(this.buttonAdvAddNewContractScheduleWeekClick);
             // 
             // labelSubHeader2
             // 
@@ -316,7 +316,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.buttonAdvDeleteContractSchedule.TabIndex = 7;
             this.buttonAdvDeleteContractSchedule.TabStop = false;
             this.buttonAdvDeleteContractSchedule.UseVisualStyle = true;
-            this.buttonAdvDeleteContractSchedule.Click += new System.EventHandler(this.ButtonAdvDeleteContractScheduleClick);
+            this.buttonAdvDeleteContractSchedule.Click += new System.EventHandler(this.buttonAdvDeleteContractScheduleClick);
             // 
             // buttonAddNewContractSchedule
             // 
@@ -333,7 +333,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.buttonAddNewContractSchedule.TabIndex = 6;
             this.buttonAddNewContractSchedule.UseVisualStyle = true;
             this.buttonAddNewContractSchedule.UseVisualStyleBackColor = false;
-            this.buttonAddNewContractSchedule.Click += new System.EventHandler(this.ButtonNewContractScheduleClick);
+            this.buttonAddNewContractSchedule.Click += new System.EventHandler(this.buttonNewContractScheduleClick);
             // 
             // labelSubHeader1
             // 
@@ -380,7 +380,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 40);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 3;
+            this.tableLayoutPanel3.RowCount = 4;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -400,23 +401,26 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             // autoLabelChangeInfo
             // 
+            this.autoLabelChangeInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.autoLabelChangeInfo.AutoSize = false;
             this.autoLabelChangeInfo.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.autoLabelChangeInfo.Location = new System.Drawing.Point(3, 70);
+            this.autoLabelChangeInfo.Location = new System.Drawing.Point(3, 75);
+            this.autoLabelChangeInfo.Margin = new System.Windows.Forms.Padding(3);
             this.autoLabelChangeInfo.Name = "autoLabelChangeInfo";
-            this.autoLabelChangeInfo.Size = new System.Drawing.Size(197, 37);
+            this.autoLabelChangeInfo.Size = new System.Drawing.Size(139, 24);
             this.autoLabelChangeInfo.TabIndex = 37;
             this.autoLabelChangeInfo.Text = "xxChangeInfoColon";
             this.autoLabelChangeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // autoLabelInfoAboutChanges
             // 
+            this.autoLabelInfoAboutChanges.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.autoLabelInfoAboutChanges.AutoSize = false;
             this.autoLabelInfoAboutChanges.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.autoLabelInfoAboutChanges.Location = new System.Drawing.Point(204, 70);
-            this.autoLabelInfoAboutChanges.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.autoLabelInfoAboutChanges.Location = new System.Drawing.Point(207, 73);
+            this.autoLabelInfoAboutChanges.Margin = new System.Windows.Forms.Padding(3);
             this.autoLabelInfoAboutChanges.Name = "autoLabelInfoAboutChanges";
-            this.autoLabelInfoAboutChanges.Size = new System.Drawing.Size(741, 37);
+            this.autoLabelInfoAboutChanges.Size = new System.Drawing.Size(741, 29);
             this.autoLabelInfoAboutChanges.TabIndex = 38;
             this.autoLabelInfoAboutChanges.Text = "xxInfoAboutChanges";
             this.autoLabelInfoAboutChanges.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -478,7 +482,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Visible = false;
-            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.ButtonAdvDeleteWeekClick);
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.buttonAdvDeleteWeekClick);
             // 
             // ContractScheduleControl
             // 

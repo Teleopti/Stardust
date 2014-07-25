@@ -38,19 +38,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public ScorecardSettings()
 		{
 			InitializeComponent();
-			comboBoxAdvScorecard.SelectedIndexChanged += ComboBoxAdvScorecardSelectedIndexChanged;
-			checkedListBoxKpi.ItemCheck += CheckedListBoxKpiItemCheck;
-			textBoxScorecardName.Leave += TextBoxScorecardNameLeave;
-			comboBoxAdvType.SelectedIndexChanged += ComboBoxAdvTypeSelectedIndexChanged;
+			comboBoxAdvScorecard.SelectedIndexChanged += comboBoxAdvScorecardSelectedIndexChanged;
+			checkedListBoxKpi.ItemCheck += checkedListBoxKpiItemCheck;
+			textBoxScorecardName.Leave += textBoxScorecardNameLeave;
+			comboBoxAdvType.SelectedIndexChanged += comboBoxAdvTypeSelectedIndexChanged;
 		}
 
-		private void ComboBoxAdvTypeSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxAdvTypeSelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (SelectedScorecard == null) return;
 			SelectedScorecard.Period = (IScorecardPeriod)comboBoxAdvType.SelectedItem;
 		}
 
-		private void TextBoxScorecardNameLeave(object sender, EventArgs e)
+		private void textBoxScorecardNameLeave(object sender, EventArgs e)
 		{
 			if (SelectedScorecard == null)
 			{
@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				return;
 			}
 			SelectedScorecard.Name = textBoxScorecardName.Text;
-			BindScorecard(); // update the name field in the scorecard combo
+			bindScorecard(); // update the name field in the scorecard combo
 		}
 
-		private void CheckedListBoxKpiItemCheck(object sender, ItemCheckEventArgs e)
+		private void checkedListBoxKpiItemCheck(object sender, ItemCheckEventArgs e)
 		{
 			if (SelectedScorecard == null) return;
 			if (_resetting) return;
@@ -81,24 +81,24 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private void ComboBoxAdvScorecardSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxAdvScorecardSelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (SelectedScorecard == null) return;
-			SetCorrectKpiChecked();
+			setCorrectKpiChecked();
 			textBoxScorecardName.Text = SelectedScorecard.Name;
 
 			comboBoxAdvType.SelectedValue = SelectedScorecard.Period.Id;
 		}
 
-		private void ButtonNewClick(object sender, EventArgs e)
+		private void buttonNewClick(object sender, EventArgs e)
 		{
-			IScorecard newScorecard = NewScorecard();
+			IScorecard newScorecard = this.newScorecard();
 			_scorecardList.Add(newScorecard);
 
 			comboBoxAdvScorecard.SelectedItem = newScorecard;
 		}
 
-		private void ButtonAdvDeleteScorecardClick(object sender, EventArgs e)
+		private void buttonAdvDeleteScorecardClick(object sender, EventArgs e)
 		{
 			if (SelectedScorecard == null) return;
 			string text = string.Format(
@@ -112,18 +112,18 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (response != DialogResult.Yes) return;
 			Cursor.Current = Cursors.WaitCursor;
 
-			DeleteScorecard();
+			deleteScorecard();
 
 			Cursor.Current = Cursors.Default;
 		}
 
 		public void InitializeDialogControl()
 		{
-			SetColors();
+			setColors();
 			SetTexts();
 		}
 
-		private void SetColors()
+		private void setColors()
 		{
 			BackColor = ColorHelper.WizardBackgroundColor();
 			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
@@ -145,14 +145,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void LoadControl()
 		{
-			LoadPeriods();
-			LoadKpi();
+			loadPeriods();
+			loadKpi();
 
-			BindScorecard();
-			LoadScorecards();
+			bindScorecard();
+			loadScorecards();
 		}
 
-		private void BindScorecard()
+		private void bindScorecard()
 		{
 			comboBoxAdvScorecard.DataSource = null;
 			comboBoxAdvScorecard.ValueMember = "";
@@ -198,12 +198,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public bool ValidateData()
 		{
-			string saveErrorCaption = UserTexts.Resources.SaveError;
-			string blankDescriptionMessage = UserTexts.Resources.YouCannotHaveABlankDescription;
+			string saveErrorCaption = Resources.SaveError;
+			string blankDescriptionMessage = Resources.YouCannotHaveABlankDescription;
 
 			if (string.IsNullOrEmpty(textBoxScorecardName.Text))
 			{
-				ShowMyErrorMessage(blankDescriptionMessage, saveErrorCaption);
+				showMyErrorMessage(blankDescriptionMessage, saveErrorCaption);
 				return false;
 			}
 			return true;
@@ -212,11 +212,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		protected override void SetCommonTexts()
 		{
 			base.SetCommonTexts();
-			toolTip1.SetToolTip(buttonAdvDeleteScorecard, UserTexts.Resources.Delete);
-			toolTip1.SetToolTip(buttonNew, UserTexts.Resources.AddNewScorecard);
+			toolTip1.SetToolTip(buttonAdvDeleteScorecard, Resources.Delete);
+			toolTip1.SetToolTip(buttonNew, Resources.AddNewScorecard);
 		}
 
-		private void DeleteScorecard()
+		private void deleteScorecard()
 		{
 			//Make sure that teams with this scorecard gets disconnected, otherwise there will be a FK error!
 			var teamRepository = new TeamRepository(_unitOfWork);
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private void LoadPeriods()
+		private void loadPeriods()
 		{
 			if (comboBoxAdvType.DataSource != null) return;
 
@@ -262,32 +262,32 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			comboBoxAdvType.DataSource = ScorecardPeriodService.ScorecardPeriodList().ToList();
 		}
 
-		private void LoadScorecards()
+		private void loadScorecards()
 		{
 				var scoreRep = new ScorecardRepository(_unitOfWork);
 				_scorecardList.Clear();
 				_scorecardList.AddRange(scoreRep.LoadAll().OrderBy(p => p.Name).ToList());
 		   
 			if (_scorecardList.Count == 0)
-				_scorecardList.Add(NewScorecard());
+				_scorecardList.Add(newScorecard());
 
 				comboBoxAdvScorecard.SelectedIndex = -1;
 				comboBoxAdvScorecard.SelectedIndex = 0;				
 
-			SetCorrectKpiChecked();
+			setCorrectKpiChecked();
 		}
 
-		private IScorecard NewScorecard()
+		private IScorecard newScorecard()
 		{
 			var ret = new Scorecard();
-			Description description = PageHelper.CreateNewName(_scorecardList, "Name", UserTexts.Resources.NewScorecard);
+			var description = PageHelper.CreateNewName(_scorecardList, "Name", Resources.NewScorecard);
 			ret.Name = description.Name;
 			var scoreRep = new ScorecardRepository(_unitOfWork);
 			scoreRep.Add(ret);
 			return ret;
 		}
 
-		private void LoadKpi()
+		private void loadKpi()
 		{
 			if (_kpiList != null) return;
 			var kpiRep = new KpiRepository(_unitOfWork);
@@ -300,11 +300,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private void SetCorrectKpiChecked()
+		private void setCorrectKpiChecked()
 		{
 			_resetting = true;
 			checkedListBoxKpi.ClearSelected();
-			for (int i = 0; i < checkedListBoxKpi.Items.Count; i++)
+			for (var i = 0; i < checkedListBoxKpi.Items.Count; i++)
 			{
 				checkedListBoxKpi.SetItemChecked(i, false);
 			}
@@ -329,18 +329,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_resetting = false;
 		}
 
-
-		/// <summary>
-		/// Shows Error message.
-		/// </summary>
-		/// <param name="message">The message.</param>
-		/// <param name="caption">The caption.</param>
-		/// <remarks>
-		/// Created by: Aruna Priyankara Wickrama
-		/// Created date: 2008-04-08
-		/// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
-		private static void ShowMyErrorMessage(string message, string caption)
+		private static void showMyErrorMessage(string message, string caption)
 		{
 			ViewBase.ShowErrorMessage(message, caption);
 		}

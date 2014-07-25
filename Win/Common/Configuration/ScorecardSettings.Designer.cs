@@ -215,7 +215,7 @@
             this.toolTip1.SetToolTip(this.buttonNew, "xxDelete the selected Scorecard.");
             this.buttonNew.UseVisualStyle = true;
             this.buttonNew.UseVisualStyleBackColor = false;
-            this.buttonNew.Click += new System.EventHandler(this.ButtonNewClick);
+            this.buttonNew.Click += new System.EventHandler(this.buttonNewClick);
             // 
             // buttonAdvDeleteScorecard
             // 
@@ -235,7 +235,7 @@
             this.toolTip1.SetToolTip(this.buttonAdvDeleteScorecard, "xxDelete the selected Scorecard.");
             this.buttonAdvDeleteScorecard.UseVisualStyle = true;
             this.buttonAdvDeleteScorecard.UseVisualStyleBackColor = false;
-            this.buttonAdvDeleteScorecard.Click += new System.EventHandler(this.ButtonAdvDeleteScorecardClick);
+            this.buttonAdvDeleteScorecard.Click += new System.EventHandler(this.buttonAdvDeleteScorecardClick);
             // 
             // labelSubHeader1
             // 

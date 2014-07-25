@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
 			IMasterActivityViewModel model = new MasterActivityViewModel(new ActivityRepository(value), new MasterActivityRepository(value));
-            _presenter = new MasterActivityPresenter(this, model);
+			_presenter = new MasterActivityPresenter(this, model);
 		}
 
 		public void Persist()
@@ -41,17 +41,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 		public void InitializeDialogControl()
-		{}
+		{
+			setColors();
+			SetTexts();
+		}
 
 		public void LoadControl()
 		{
-			SetTexts();
-            autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
-            autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
+			autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
+			autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
 			ColorButton.SelectedAsBackcolor = true;
 			_presenter.LoadAllMasterActivities();
 			_presenter.OnMasterActivitySelected((IMasterActivityModel)comboBoxMasterActivities.SelectedItem);
-			HookEvents();
+			hookEvents();
 		}
 
 		public void SaveChanges()
@@ -59,7 +61,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void Unload()
 		{
-			UnHookEvents();
+			unHookEvents();
 		}
 
 		public TreeFamily TreeFamily()
@@ -76,52 +78,52 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 		}
 
-		private void HookEvents()
+		private void hookEvents()
 		{
-			comboBoxMasterActivities.SelectedIndexChanged += ComboBoxMasterActivitiesSelectedIndexChanged;
-			textBoxName.Leave += MasterChanged;
-			twoListSelector1.SelectedAdded += MasterChanged;
-			twoListSelector1.SelectedRemoved += MasterChanged;
-			ColorButton.BackColorChanged += MasterChanged;
+			comboBoxMasterActivities.SelectedIndexChanged += comboBoxMasterActivitiesSelectedIndexChanged;
+			textBoxName.Leave += masterChanged;
+			twoListSelector1.SelectedAdded += masterChanged;
+			twoListSelector1.SelectedRemoved += masterChanged;
+			ColorButton.BackColorChanged += masterChanged;
 		}
 
-		private void UnHookEvents()
+		private void unHookEvents()
 		{
 			if (comboBoxMasterActivities == null)
 				return;
-			comboBoxMasterActivities.SelectedIndexChanged -= ComboBoxMasterActivitiesSelectedIndexChanged;
-			textBoxName.Leave -= MasterChanged;
-			twoListSelector1.SelectedAdded -= MasterChanged;
-			twoListSelector1.SelectedRemoved -= MasterChanged;
+			comboBoxMasterActivities.SelectedIndexChanged -= comboBoxMasterActivitiesSelectedIndexChanged;
+			textBoxName.Leave -= masterChanged;
+			twoListSelector1.SelectedAdded -= masterChanged;
+			twoListSelector1.SelectedRemoved -= masterChanged;
 			
-			ColorButton.BackColorChanged -= MasterChanged;
+			ColorButton.BackColorChanged -= masterChanged;
 		}
 
-		void MasterChanged(object sender, EventArgs e)
+		void masterChanged(object sender, EventArgs e)
 		{
 			if (_selecting) return;
 
-			_presenter.OnMasterActivityPropertyChanged(GetSelected());
+			_presenter.OnMasterActivityPropertyChanged(getSelected());
 		}
 
-		void ComboBoxMasterActivitiesSelectedIndexChanged(object sender, EventArgs e)
+		void comboBoxMasterActivitiesSelectedIndexChanged(object sender, EventArgs e)
 		{
 			_selecting = true;
-			_presenter.OnMasterActivitySelected(GetSelected());
+			_presenter.OnMasterActivitySelected(getSelected());
 			_selecting = false;
 		}
 
-		private IMasterActivityModel GetSelected()
+		private IMasterActivityModel getSelected()
 		{
 			return (IMasterActivityModel)comboBoxMasterActivities.SelectedItem;
 		}
 
-	    public void SetUpdateInfo(string infoText)
-	    {
-	        autoLabelInfoAboutChanges.Text = infoText;
-	    }
+		public void SetUpdateInfo(string infoText)
+		{
+			autoLabelInfoAboutChanges.Text = infoText;
+		}
 
-	    public void SelectMaster(IMasterActivityModel masterActivityModel)
+		public void SelectMaster(IMasterActivityModel masterActivityModel)
 		{
 			if (masterActivityModel == null) return;
 			comboBoxMasterActivities.SelectedValue = masterActivityModel.Name;
@@ -129,11 +131,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public bool ConfirmDelete()
 		{
-			if (GetSelected() == null) return false;
+			if (getSelected() == null) return false;
 			var text = string.Format(
 					CurrentCulture,
 					Resources.AreYouSureYouWantToDeleteMasterActivity,
-					GetSelected().Name
+					getSelected().Name
 					);
 
 				var caption = string.Format(CurrentCulture, Resources.ConfirmDelete);
@@ -173,24 +175,39 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 
-		private void ButtonAddClick(object sender, EventArgs e)
+		private void buttonAddClick(object sender, EventArgs e)
 		{
-			UnHookEvents();
+			unHookEvents();
 			_presenter.OnAddNew();
-			HookEvents();
+			hookEvents();
 		}
 
-		private void ButtonDeleteClick(object sender, EventArgs e)
+		private void buttonDeleteClick(object sender, EventArgs e)
 		{
-			_presenter.OnDeleteMasterActivity(GetSelected());
+			_presenter.OnDeleteMasterActivity(getSelected());
 		}
 
-		private void Button1Click(object sender, EventArgs e)
+		private void button1Click(object sender, EventArgs e)
 		{
 			ColorButton.PerformClick();
 		}
 
+		private void setColors()
+		{
+			BackColor = ColorHelper.WizardBackgroundColor();
+			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
 
+			gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
+			labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
+
+			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			labelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			labelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+
+            tableLayoutPanel.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+            labelSubHeader2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+            labelSubHeader2.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+		}
 
 	}
 }

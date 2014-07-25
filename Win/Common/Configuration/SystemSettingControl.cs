@@ -36,10 +36,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			BackColor = ColorHelper.WizardBackgroundColor();
 			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
 
-            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
+			gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
 			labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 
-			autoLabelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			autoLabelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 		}
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				comboBoxAdvAdherencReportCalculation.SelectedValue = pair.Key;
 
 
-			comboBoxAdvAdherencReportCalculation.SelectedIndexChanged += ComboBoxAdvAdherencReportCalculationSelectedIndexChanged;
+			comboBoxAdvAdherencReportCalculation.SelectedIndexChanged += comboBoxAdvAdherencReportCalculationSelectedIndexChanged;
 			textBoxSuportEmail.Text = _supportEmailSetting.StringValue;
 			initIntervalLengthComboBox(_defaultSegmentSetting.SegmentLength);
 			numericUpDownAsmSetting.Value = _asmAlertTime.SecondsBeforeChange;
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				_defaultSegmentSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_defaultSegmentSetting).GetValue(new DefaultSegment());
 				_adherenceReportSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_adherenceReportSetting).GetValue(new AdherenceReportSetting());
-				SupportEmailToSetting();
+				supportEmailToSetting();
 				_supportEmailSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_supportEmailSetting).GetValue(new StringSetting());
 				_asmAlertTime.SecondsBeforeChange = (int)numericUpDownAsmSetting.Value;
 				_asmAlertTime = new GlobalSettingDataRepository(uow).PersistSettingValue(_asmAlertTime).GetValue(new AsmAlertTime());
@@ -135,23 +135,22 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			get { return ViewType.SystemSetting; }
 		}
 
-		private void ComboBoxAdvIntervalLengthSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxAdvIntervalLengthSelectedIndexChanged(object sender, EventArgs e)
 		{
 			var selectedIntervalLengthItem = (IntervalLengthItem)comboBoxAdvIntervalLength.SelectedItem;
 			_defaultSegmentSetting.SegmentLength = selectedIntervalLengthItem.Minutes;
 		}
 
-		private void ComboBoxAdvAdherencReportCalculationSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxAdvAdherencReportCalculationSelectedIndexChanged(object sender, EventArgs e)
 		{
 			var selected = (KeyValuePair<AdherenceReportSettingCalculationMethod, string>)
 					comboBoxAdvAdherencReportCalculation.SelectedItem;
 			_adherenceReportSetting.CalculationMethod = selected.Key;
 		}
 
-		private void SupportEmailToSetting()
+		private void supportEmailToSetting()
 		{
 			_supportEmailSetting.StringValue = textBoxSuportEmail.Text;
 		}
-
 	}
 }

@@ -165,17 +165,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return _canClose;
 		}
 
-		private void TextBoxExtPasswordTextChanged(object sender, EventArgs e)
+		private void textBoxExtPasswordTextChanged(object sender, EventArgs e)
 		{
 			_presenter.SetOldPassword(textBoxExtPassword.Text);
 		}
 
-		private void TextBoxExtNewPasswordTextChanged(object sender, EventArgs e)
+		private void textBoxExtNewPasswordTextChanged(object sender, EventArgs e)
 		{
 			_presenter.SetNewPassword(textBoxExtNewPassword.Text);
 		}
 
-		private void TextBoxExtConfirmPasswordTextChanged(object sender, EventArgs e)
+		private void textBoxExtConfirmPasswordTextChanged(object sender, EventArgs e)
 		{
 			_presenter.SetConfirmNewPassword(textBoxExtConfirmPassword.Text);
 		}

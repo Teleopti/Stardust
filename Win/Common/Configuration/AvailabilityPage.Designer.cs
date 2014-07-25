@@ -71,9 +71,11 @@
             // 
             // autoLabelWeeks
             // 
+            this.autoLabelWeeks.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.autoLabelWeeks.AutoSize = false;
             this.autoLabelWeeks.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.autoLabelWeeks.Location = new System.Drawing.Point(3, 70);
+            this.autoLabelWeeks.Location = new System.Drawing.Point(3, 75);
+            this.autoLabelWeeks.Margin = new System.Windows.Forms.Padding(3);
             this.autoLabelWeeks.Name = "autoLabelWeeks";
             this.autoLabelWeeks.Size = new System.Drawing.Size(121, 24);
             this.autoLabelWeeks.TabIndex = 4;
@@ -155,7 +157,7 @@
             this.tableLayoutPanelControlContainer.ColumnCount = 3;
             this.tableLayoutPanelControlContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 146F));
             this.tableLayoutPanelControlContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 301F));
-            this.tableLayoutPanelControlContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 423F));
+            this.tableLayoutPanelControlContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 429F));
             this.tableLayoutPanelControlContainer.Controls.Add(this.autoLabelChangeInfo, 0, 3);
             this.tableLayoutPanelControlContainer.Controls.Add(this.autoLabelInfoAboutChanges, 0, 3);
             this.tableLayoutPanelControlContainer.Controls.Add(this.autoLabelWeeks, 0, 2);
@@ -165,21 +167,25 @@
             this.tableLayoutPanelControlContainer.Controls.Add(this.autoLabelDescription, 0, 1);
             this.tableLayoutPanelControlContainer.Controls.Add(this.numericUpDownWeek, 1, 2);
             this.tableLayoutPanelControlContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelControlContainer.Location = new System.Drawing.Point(3, 43);
+            this.tableLayoutPanelControlContainer.Location = new System.Drawing.Point(0, 40);
+            this.tableLayoutPanelControlContainer.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanelControlContainer.Name = "tableLayoutPanelControlContainer";
-            this.tableLayoutPanelControlContainer.RowCount = 4;
+            this.tableLayoutPanelControlContainer.RowCount = 5;
             this.tableLayoutPanelControlContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelControlContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelControlContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelControlContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanelControlContainer.Size = new System.Drawing.Size(870, 144);
+            this.tableLayoutPanelControlContainer.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelControlContainer.Size = new System.Drawing.Size(876, 150);
             this.tableLayoutPanelControlContainer.TabIndex = 3;
             // 
             // autoLabelChangeInfo
             // 
+            this.autoLabelChangeInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.autoLabelChangeInfo.AutoSize = false;
             this.autoLabelChangeInfo.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.autoLabelChangeInfo.Location = new System.Drawing.Point(3, 105);
+            this.autoLabelChangeInfo.Location = new System.Drawing.Point(3, 110);
+            this.autoLabelChangeInfo.Margin = new System.Windows.Forms.Padding(3);
             this.autoLabelChangeInfo.Name = "autoLabelChangeInfo";
             this.autoLabelChangeInfo.Size = new System.Drawing.Size(121, 24);
             this.autoLabelChangeInfo.TabIndex = 7;
@@ -188,11 +194,12 @@
             // 
             // autoLabelInfoAboutChanges
             // 
+            this.autoLabelInfoAboutChanges.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.autoLabelInfoAboutChanges.AutoSize = false;
             this.tableLayoutPanelControlContainer.SetColumnSpan(this.autoLabelInfoAboutChanges, 2);
             this.autoLabelInfoAboutChanges.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.autoLabelInfoAboutChanges.Location = new System.Drawing.Point(146, 105);
-            this.autoLabelInfoAboutChanges.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.autoLabelInfoAboutChanges.Location = new System.Drawing.Point(149, 110);
+            this.autoLabelInfoAboutChanges.Margin = new System.Windows.Forms.Padding(3);
             this.autoLabelInfoAboutChanges.Name = "autoLabelInfoAboutChanges";
             this.autoLabelInfoAboutChanges.Size = new System.Drawing.Size(720, 24);
             this.autoLabelInfoAboutChanges.TabIndex = 6;
@@ -201,9 +208,11 @@
             // 
             // autoLabelRotation
             // 
+            this.autoLabelRotation.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.autoLabelRotation.AutoSize = false;
             this.autoLabelRotation.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.autoLabelRotation.Location = new System.Drawing.Point(3, 0);
+            this.autoLabelRotation.Location = new System.Drawing.Point(3, 5);
+            this.autoLabelRotation.Margin = new System.Windows.Forms.Padding(3);
             this.autoLabelRotation.Name = "autoLabelRotation";
             this.autoLabelRotation.Size = new System.Drawing.Size(139, 24);
             this.autoLabelRotation.TabIndex = 0;
@@ -212,11 +221,12 @@
             // 
             // comboBoxAdvAvailabilities
             // 
+            this.comboBoxAdvAvailabilities.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.comboBoxAdvAvailabilities.BackColor = System.Drawing.Color.White;
             this.comboBoxAdvAvailabilities.BeforeTouchSize = new System.Drawing.Size(289, 23);
             this.comboBoxAdvAvailabilities.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAdvAvailabilities.ItemsImageIndexes.Add(new Syncfusion.Windows.Forms.Tools.ComboBoxAdv.ImageIndexItem(this.comboBoxAdvAvailabilities, "New Availability"));
-            this.comboBoxAdvAvailabilities.Location = new System.Drawing.Point(149, 3);
+            this.comboBoxAdvAvailabilities.Location = new System.Drawing.Point(149, 7);
             this.comboBoxAdvAvailabilities.Name = "comboBoxAdvAvailabilities";
             this.comboBoxAdvAvailabilities.Size = new System.Drawing.Size(289, 23);
             this.comboBoxAdvAvailabilities.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -224,9 +234,10 @@
             // 
             // textBoxDescription
             // 
+            this.textBoxDescription.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.textBoxDescription.BeforeTouchSize = new System.Drawing.Size(289, 23);
             this.textBoxDescription.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.textBoxDescription.Location = new System.Drawing.Point(149, 38);
+            this.textBoxDescription.Location = new System.Drawing.Point(149, 41);
             this.textBoxDescription.MaxLength = 50;
             this.textBoxDescription.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
             this.textBoxDescription.Name = "textBoxDescription";
@@ -238,9 +249,11 @@
             // 
             // autoLabelDescription
             // 
+            this.autoLabelDescription.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.autoLabelDescription.AutoSize = false;
             this.autoLabelDescription.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.autoLabelDescription.Location = new System.Drawing.Point(3, 35);
+            this.autoLabelDescription.Location = new System.Drawing.Point(3, 40);
+            this.autoLabelDescription.Margin = new System.Windows.Forms.Padding(3);
             this.autoLabelDescription.Name = "autoLabelDescription";
             this.autoLabelDescription.Size = new System.Drawing.Size(121, 24);
             this.autoLabelDescription.TabIndex = 2;
@@ -249,11 +262,12 @@
             // 
             // numericUpDownWeek
             // 
+            this.numericUpDownWeek.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.numericUpDownWeek.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
             this.numericUpDownWeek.BeforeTouchSize = new System.Drawing.Size(66, 23);
             this.numericUpDownWeek.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
             this.numericUpDownWeek.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.numericUpDownWeek.Location = new System.Drawing.Point(149, 73);
+            this.numericUpDownWeek.Location = new System.Drawing.Point(149, 76);
             this.numericUpDownWeek.Maximum = new decimal(new int[] {
             48,
             0,

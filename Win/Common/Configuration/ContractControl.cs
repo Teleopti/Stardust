@@ -23,11 +23,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 		private readonly List<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
 		private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
-		private const short InvalidItemIndex = -1;
-		private const short FirstItemIndex = 0;
-		private const int MaxHoursPerDay = 24;
-		private const int MaxHoursPerWeek = 168;
-		private const short ItemDiffernce = 1;                      
+		private const short invalidItemIndex = -1;
+		private const short firstItemIndex = 0;
+		private const int maxHoursPerDay = 24;
+	    private const short itemDiffernce = 1;                      
 		private List<IContract> _contractList;
 		private readonly IDictionary<EmploymentType, string> _employmentTypeList = new Dictionary<EmploymentType, string>();
 		private readonly IMessageBroker _messageBroker = StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging;
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private int LastItemIndex
 		{
-			get { return comboBoxAdvContracts.Items.Count - ItemDiffernce; }
+			get { return comboBoxAdvContracts.Items.Count - itemDiffernce; }
 		}
 
 		public IContract SelectedContract
@@ -72,8 +71,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			// Disposes or flag anything possible.
 			_messageBroker.UnregisterEventSubscription(refreshMultiplicatorDefinitionSet);
-			timeSpanTextBoxPlanningMin.Validated -= TimeSpanTextBoxPlanningMinValidated;
-			timeSpanTextBoxPlanningMax.Validated -= TimeSpanTextBoxPlanningMaxValidated;
+			timeSpanTextBoxPlanningMin.Validated -= timeSpanTextBoxPlanningMinValidated;
+			timeSpanTextBoxPlanningMax.Validated -= timeSpanTextBoxPlanningMaxValidated;
 			_contractList = null;
 		}
 
@@ -152,81 +151,81 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			comboBoxAdvContracts.SelectedIndexChanging += comboBoxAdvContractsSelectedIndexChanging;
 			comboBoxAdvContracts.SelectedIndexChanged += comboBoxAdvContractsSelectedIndexChanged;
-			comboBoxAdvEmpTypes.SelectedIndexChanged += ComboBoxAdvEmpTypesSelectedIndexChanged;
-			textBoxDescription.Validating += TextBoxDescriptionValidating;
-			textBoxDescription.Validated += TextBoxDescriptionValidated;
-			textBoxExtAvgWorkTimePerDay.Validating += TextBoxExtAvgWorkTimePerDayValidating;
-			textBoxExtAvgWorkTimePerDay.Validated += TextBoxExtAvgWorkTimePerDayValidated;
-			textBoxExtMaxTimePerWeek.Validating += TextBoxExtMaxTimePerWeekValidating;
-			textBoxExtMaxTimePerWeek.Validated += TextBoxExtMaxTimePerWeekValidated;
-			textBoxExtNightlyRestTime.Validating += TextBoxExtNightlyRestTimeValidating;
-			textBoxExtNightlyRestTime.Validated += TextBoxExtNightlyRestTimeValidated;
-			textBoxExtWeeklyRestTime.Validating += TextBoxExtWeeklyRestTimeValidating;
-			textBoxExtWeeklyRestTime.Validated += TextBoxExtWeeklyRestTimeValidated;
-			timeSpanTextBoxNegativeTolerance.Validated += TimeSpanTextBoxNegativeToleranceValidated;
-			timeSpanTextBoxPositiveTolerance.Validated += TimeSpanTextBoxPositiveToleranceValidated;
-			buttonNew.Click += ButtonNewClick;
-			buttonDeleteContract.Click += ButtonDeleteContractClick;
-			textBoxExMinTimeSchedulePeriod.Validated += TextBoxExMinTimeSchedulePeriodValidated;
-			textBoxExMinTimeSchedulePeriod.Validating += TextBoxExMinTimeSchedulePeriodValidating;
+			comboBoxAdvEmpTypes.SelectedIndexChanged += comboBoxAdvEmpTypesSelectedIndexChanged;
+			textBoxDescription.Validating += textBoxDescriptionValidating;
+			textBoxDescription.Validated += textBoxDescriptionValidated;
+			textBoxExtAvgWorkTimePerDay.Validating += textBoxExtAvgWorkTimePerDayValidating;
+			textBoxExtAvgWorkTimePerDay.Validated += textBoxExtAvgWorkTimePerDayValidated;
+			textBoxExtMaxTimePerWeek.Validating += textBoxExtMaxTimePerWeekValidating;
+			textBoxExtMaxTimePerWeek.Validated += textBoxExtMaxTimePerWeekValidated;
+			textBoxExtNightlyRestTime.Validating += textBoxExtNightlyRestTimeValidating;
+			textBoxExtNightlyRestTime.Validated += textBoxExtNightlyRestTimeValidated;
+			textBoxExtWeeklyRestTime.Validating += textBoxExtWeeklyRestTimeValidating;
+			textBoxExtWeeklyRestTime.Validated += textBoxExtWeeklyRestTimeValidated;
+			timeSpanTextBoxNegativeTolerance.Validated += timeSpanTextBoxNegativeToleranceValidated;
+			timeSpanTextBoxPositiveTolerance.Validated += timeSpanTextBoxPositiveToleranceValidated;
+			buttonNew.Click += buttonNewClick;
+			buttonDeleteContract.Click += buttonDeleteContractClick;
+			textBoxExMinTimeSchedulePeriod.Validated += textBoxExMinTimeSchedulePeriodValidated;
+			textBoxExMinTimeSchedulePeriod.Validating += textBoxExMinTimeSchedulePeriodValidating;
 
-			timeSpanTextBoxPlanningMin.Validated += TimeSpanTextBoxPlanningMinValidated;
-			timeSpanTextBoxPlanningMax.Validated += TimeSpanTextBoxPlanningMaxValidated;
+			timeSpanTextBoxPlanningMin.Validated += timeSpanTextBoxPlanningMinValidated;
+			timeSpanTextBoxPlanningMax.Validated += timeSpanTextBoxPlanningMaxValidated;
 		}
 
-		void TimeSpanTextBoxPlanningMaxValidated(object sender, EventArgs e)
+		void timeSpanTextBoxPlanningMaxValidated(object sender, EventArgs e)
 		{
 			SelectedContract.PlanningTimeBankMax = timeSpanTextBoxPlanningMax.Value;
 		}
 
-		void TimeSpanTextBoxPlanningMinValidated(object sender, EventArgs e)
+		void timeSpanTextBoxPlanningMinValidated(object sender, EventArgs e)
 		{
 			if (timeSpanTextBoxPlanningMin.Value <= TimeSpan.FromHours(-100))
 				timeSpanTextBoxPlanningMin.SetInitialResolution(TimeSpan.FromHours(-100).Add(TimeSpan.FromMinutes(1)));
 			SelectedContract.PlanningTimeBankMin = timeSpanTextBoxPlanningMin.Value;
 		}
 
-		void TimeSpanTextBoxPositiveToleranceValidated(object sender, EventArgs e)
+		void timeSpanTextBoxPositiveToleranceValidated(object sender, EventArgs e)
 		{
 			SelectedContract.PositivePeriodWorkTimeTolerance = timeSpanTextBoxPositiveTolerance.Value;
 		}
 
-		void TimeSpanTextBoxNegativeToleranceValidated(object sender, EventArgs e)
+		void timeSpanTextBoxNegativeToleranceValidated(object sender, EventArgs e)
 		{
 			SelectedContract.NegativePeriodWorkTimeTolerance = timeSpanTextBoxNegativeTolerance.Value;
 		}
 
-		private void TextBoxExtWeeklyRestTimeValidated(object sender, EventArgs e)
+		private void textBoxExtWeeklyRestTimeValidated(object sender, EventArgs e)
 		{
 			SelectedContract.WorkTimeDirective = getWorkTimeDirective();
 		}
 
-		private void TextBoxExMinTimeSchedulePeriodValidated(object sender, EventArgs e)
+		private void textBoxExMinTimeSchedulePeriodValidated(object sender, EventArgs e)
 		{
 			SelectedContract.MinTimeSchedulePeriod = textBoxExMinTimeSchedulePeriod.Value;
 		}
 
-		private void TextBoxExtNightlyRestTimeValidated(object sender, EventArgs e)
+		private void textBoxExtNightlyRestTimeValidated(object sender, EventArgs e)
 		{
 			SelectedContract.WorkTimeDirective = getWorkTimeDirective();
 		}
 
-		private void TextBoxExtMaxTimePerWeekValidated(object sender, EventArgs e)
+		private void textBoxExtMaxTimePerWeekValidated(object sender, EventArgs e)
 		{
 			SelectedContract.WorkTimeDirective = getWorkTimeDirective();
 		}
 
-		private void TextBoxExtAvgWorkTimePerDayValidated(object sender, EventArgs e)
+		private void textBoxExtAvgWorkTimePerDayValidated(object sender, EventArgs e)
 		{
 			SelectedContract.WorkTime = new WorkTime(textBoxExtAvgWorkTimePerDay.Value);
 		}
 
-		private void TextBoxDescriptionValidated(object sender, EventArgs e)
+		private void textBoxDescriptionValidated(object sender, EventArgs e)
 		{
 			changeContractDescription();
 		}
 
-		private void TextBoxDescriptionValidating(object sender, CancelEventArgs e)
+		private void textBoxDescriptionValidating(object sender, CancelEventArgs e)
 		{
 			if (SelectedContract != null)
 			{
@@ -234,14 +233,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private void TextBoxExMinTimeSchedulePeriodValidating(object sender, CancelEventArgs e)
+		private void textBoxExMinTimeSchedulePeriodValidating(object sender, CancelEventArgs e)
 		{
 			if (SelectedContract == null) return;
 			if (SelectedContract.EmploymentType != EmploymentType.HourlyStaff)
 				textBoxExMinTimeSchedulePeriod.SetInitialResolution(TimeSpan.Zero);
 		}
 
-		private void TextBoxExtMaxTimePerWeekValidating(object sender, CancelEventArgs e)
+		private void textBoxExtMaxTimePerWeekValidating(object sender, CancelEventArgs e)
 		{
 			if (SelectedContract != null)
 			{
@@ -264,7 +263,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return cancel;
 		}
 
-		private void TextBoxExtNightlyRestTimeValidating(object sender, CancelEventArgs e)
+		private void textBoxExtNightlyRestTimeValidating(object sender, CancelEventArgs e)
 		{
 			if (SelectedContract != null)
 			{
@@ -272,7 +271,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private void TextBoxExtWeeklyRestTimeValidating(object sender, CancelEventArgs e)
+		private void textBoxExtWeeklyRestTimeValidating(object sender, CancelEventArgs e)
 		{
 			if (SelectedContract != null)
 			{
@@ -280,7 +279,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private void TextBoxExtAvgWorkTimePerDayValidating(object sender, CancelEventArgs e)
+		private void textBoxExtAvgWorkTimePerDayValidating(object sender, CancelEventArgs e)
 		{
 			if (SelectedContract != null)
 			{
@@ -288,7 +287,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private void ButtonNewClick(object sender, EventArgs e)
+		private void buttonNewClick(object sender, EventArgs e)
 		{
 			//addNewContract();
 			if (SelectedContract == null) return;
@@ -297,7 +296,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void ButtonDeleteContractClick(object sender, EventArgs e)
+		private void buttonDeleteContractClick(object sender, EventArgs e)
 		{
 			if (SelectedContract == null) return;
 			string text = string.Format(
@@ -366,7 +365,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			bool cancel = false;
 
-			if (!validateMaxHours(textBoxExtAvgWorkTimePerDay.Value, MaxHoursPerDay))
+			if (!validateMaxHours(textBoxExtAvgWorkTimePerDay.Value, maxHoursPerDay))
 			{
 				ViewBase.ShowErrorMessage(Resources.AverageWorkTimeCannotBeMoreThan24Hours,
 									   Resources.TimeError);
@@ -381,7 +380,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			bool cancel = false;
 
 			TimeSpan nightlyRestTime = textBoxExtNightlyRestTime.Value;
-			if (!validateMaxHours(nightlyRestTime, MaxHoursPerDay))
+			if (!validateMaxHours(nightlyRestTime, maxHoursPerDay))
 			{
 				ViewBase.ShowErrorMessage(Resources.NightlyRestTimeCannotBeMoreThan24Hours,
 								   Resources.TimeError);
@@ -501,7 +500,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			switch (maxHours)
 			{
-				case MaxHoursPerDay:
+				case maxHoursPerDay:
 					if (timeSpan.Days > 0 || timeSpan.Hours > maxHours)
 					{
 						isValid = false;
@@ -558,7 +557,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			int selected = comboBoxAdvContracts.SelectedIndex;
 			if (!isWithinRange(selected))
 			{
-				selected = FirstItemIndex;
+				selected = firstItemIndex;
 			}
 
 			// Rebinds list to comboBoxContract.
@@ -600,7 +599,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private bool isWithinRange(int index)
 		{
-			return index > InvalidItemIndex && index < _contractList.Count && comboBoxAdvContracts.DataSource != null;
+			return index > invalidItemIndex && index < _contractList.Count && comboBoxAdvContracts.DataSource != null;
 		}
 
 		public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
@@ -613,7 +612,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			get { return ViewType.Contract; }
 		}
 
-		private void CheckedListBoxMultiplicatorDefenitionSetsItemCheck(object sender, ItemCheckEventArgs e)
+		private void checkedListBoxMultiplicatorDefenitionSetsItemCheck(object sender, ItemCheckEventArgs e)
 		{
 			var definitionSet = ((CheckedListBox) sender).SelectedItem as IMultiplicatorDefinitionSet;
 			if (definitionSet == null) return;
@@ -623,7 +622,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				SelectedContract.RemoveMultiplicatorDefinitionSetCollection(definitionSet);
 		}
 
-		private void ComboBoxAdvEmpTypesSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxAdvEmpTypesSelectedIndexChanged(object sender, EventArgs e)
 		{
 			var kvp = ((KeyValuePair<EmploymentType, string>)((ComboBoxAdv)sender).SelectedItem);
 
@@ -652,27 +651,27 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private void checkBoxAdjustTimeBankWithSeasonality_CheckStateChanged(object sender, EventArgs e)
+		private void checkBoxAdjustTimeBankWithSeasonalityCheckStateChanged(object sender, EventArgs e)
 		{
 			SelectedContract.AdjustTimeBankWithSeasonality = checkBoxAdjustTimeBankWithSeasonality.Checked;
 		}
 
-		private void checkBoxAdjustTimeBankWithPartTimePercentage_CheckStateChanged(object sender, EventArgs e)
+		private void checkBoxAdjustTimeBankWithPartTimePercentageCheckStateChanged(object sender, EventArgs e)
 		{
 			SelectedContract.AdjustTimeBankWithPartTimePercentage = checkBoxAdjustTimeBankWithPartTimePercentage.Checked;
 		}
 
-		private void numericUpDownPositiveDayOff_ValueChanged(object sender, EventArgs e)
+		private void numericUpDownPositiveDayOffValueChanged(object sender, EventArgs e)
 		{
 			SelectedContract.PositiveDayOffTolerance = (int) numericUpDownPositiveDayOff.Value;
 		}
 
-		private void numericUpDownNegativeDayOff_ValueChanged(object sender, EventArgs e)
+		private void numericUpDownNegativeDayOffValueChanged(object sender, EventArgs e)
 		{
 			SelectedContract.NegativeDayOffTolerance = (int)numericUpDownNegativeDayOff.Value;
 		}
 
-		private void radioButtonFromContract_CheckedChanged(object sender, EventArgs e)
+		private void radioButtonFromContractCheckedChanged(object sender, EventArgs e)
 		{
 			if (radioButtonFromContract.Checked)
 			{
@@ -680,7 +679,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private void radioButtonFromSchedule_CheckedChanged(object sender, EventArgs e)
+		private void radioButtonFromScheduleCheckedChanged(object sender, EventArgs e)
 		{
 			if (radioButtonFromSchedule.Checked)
 			{

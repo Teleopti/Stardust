@@ -66,41 +66,41 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			InitializeComponent();
 
-			comboBoxKpi.SelectedIndexChanged += ComboBoxKpiSelectedIndexChanged;
-			comboBoxSite.SelectedIndexChanged += ComboBoxSiteSelectedIndexChanged;
+			comboBoxKpi.SelectedIndexChanged += comboBoxKpiSelectedIndexChanged;
+			comboBoxSite.SelectedIndexChanged += comboBoxSiteSelectedIndexChanged;
 
-			gridControl1.KeyUp += GridControl1KeyUp;
+			gridControl1.KeyUp += gridControl1KeyUp;
 			gridControl1.DefaultRowHeight = 18;
 			gridControl1.MinResizeRowSize = 18;
 		}
 
-		private void ComboBoxSiteSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxSiteSelectedIndexChanged(object sender, EventArgs e)
 		{
-			LoadTeam();
+			loadTeam();
 		}
 
-		private void GridControl1KeyUp(object sender, KeyEventArgs e)
+		private void gridControl1KeyUp(object sender, KeyEventArgs e)
 		{
 			gridControl1.Refresh();
 		}
 
-		private void KPISettings_Load(object sender, EventArgs e)
+		private void kpiSettingsLoad(object sender, EventArgs e)
 		{
 			addCellModels();
 		}
 
-		private void ComboBoxKpiSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxKpiSelectedIndexChanged(object sender, EventArgs e)
 		{
-			HandleSelectKpi();
+			handleSelectKpi();
 		}
 
 		public void InitializeDialogControl()
 		{
-			SetColors();
+			setColors();
 			SetTexts();
 		}
 
-		private void SetColors()
+		private void setColors()
 		{
 			BackColor = ColorHelper.WizardBackgroundColor();
 			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void LoadControl()
 		{
-			LoadSites();
-			LoadKpi();
+			loadSites();
+			loadKpi();
 		}
 
 		public void SaveChanges()
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void Persist()
 		{}
 
-		private void HandleSelectKpi()
+		private void handleSelectKpi()
 		{
 			if (comboBoxKpi.SelectedValue == null)
 			{
@@ -164,10 +164,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			var kpiRep = new KpiRepository(_unitOfWork);
 			_selectedKpi = kpiRep.Load((Guid)comboBoxKpi.SelectedValue);
 
-			LoadTeam();
+			loadTeam();
 		}
 
-		private void LoadKpi()
+		private void loadKpi()
 		{
 			if (comboBoxKpi.Items.Count > 0) return;
 
@@ -182,12 +182,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private void LoadTeam()
+		private void loadTeam()
 		{
 			foreach (ITeam item in Teams)
 			{
 				// Creates a new target if it doesn´t exists
-				FindCorrectTarget(item);
+				findCorrectTarget(item);
 			}
 
 			// Filter on correct Key Performance Indicator
@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return _source.Count + gridControl1.Rows.HeaderCount;
 		}
 
-		private void LoadSites()
+		private void loadSites()
 		{
 			var repSite = new SiteRepository(_unitOfWork);
 			IList<ISite> lst = repSite.LoadAll();
@@ -277,25 +277,26 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				comboBoxSite.Items.Add(item);
 			}
-			var itmAll = new AllSites(UserTexts.Resources.AllSelection);
+			var itmAll = new allSites(UserTexts.Resources.AllSelection);
 
 			comboBoxSite.Items.Insert(0, itmAll);
 			comboBoxSite.SelectedItem = itmAll;
 		}
 
-		private void FindCorrectTarget(ITeam team)
+		private void findCorrectTarget(ITeam team)
 		{
 			if (SelectedKpi == null) return;
 
 			var rep = new KpiTargetRepository(_unitOfWork);
-			foreach (KpiTarget item in KpiTargets)
+			foreach (var kpiTarget in KpiTargets)
 			{
-				if (team.Equals(item.Team) && SelectedKpi.Equals(item.KeyPerformanceIndicator))
+			    var item = (KpiTarget) kpiTarget;
+			    if (team.Equals(item.Team) && SelectedKpi.Equals(item.KeyPerformanceIndicator))
 				{
 					return;
 				}
 			}
-			var newTarget = new KpiTarget
+		    var newTarget = new KpiTarget
 								{
 									KeyPerformanceIndicator = SelectedKpi,
 									Team = team,
@@ -308,12 +309,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 								};
 			rep.Add(newTarget);
 			KpiTargets.Add(newTarget);
-			return;
 		}
 
-		private class AllSites
+		private class allSites
 		{
-			public AllSites(string name)
+			public allSites(string name)
 			{
 				Id = Guid.NewGuid();
 				Description = name;

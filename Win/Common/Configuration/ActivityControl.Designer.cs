@@ -65,7 +65,7 @@
             this.toolStripMenuItemAddFromClipboard.Name = "toolStripMenuItemAddFromClipboard";
             this.toolStripMenuItemAddFromClipboard.Size = new System.Drawing.Size(144, 22);
             this.toolStripMenuItemAddFromClipboard.Text = "xxPasteNew";
-            this.toolStripMenuItemAddFromClipboard.Click += new System.EventHandler(this.ToolStripMenuItemAddFromClipboardClick);
+            this.toolStripMenuItemAddFromClipboard.Click += new System.EventHandler(this.toolStripMenuItemAddFromClipboardClick);
             // 
             // tableLayoutPanelBody
             // 
@@ -167,7 +167,7 @@
             this.buttonAdvDeleteActivity.TabIndex = 7;
             this.buttonAdvDeleteActivity.TabStop = false;
             this.buttonAdvDeleteActivity.UseVisualStyle = true;
-            this.buttonAdvDeleteActivity.Click += new System.EventHandler(this.ButtonAdvDeleteActivityClick);
+            this.buttonAdvDeleteActivity.Click += new System.EventHandler(this.buttonAdvDeleteActivityClick);
             // 
             // buttonNewActivity
             // 
@@ -185,7 +185,7 @@
             this.buttonNewActivity.TabIndex = 6;
             this.buttonNewActivity.UseVisualStyle = true;
             this.buttonNewActivity.UseVisualStyleBackColor = false;
-            this.buttonNewActivity.Click += new System.EventHandler(this.ButtonNewActivityClick);
+            this.buttonNewActivity.Click += new System.EventHandler(this.buttonNewActivityClick);
             // 
             // gridControlActivities
             // 
@@ -232,7 +232,7 @@
             this.gridControlActivities.SmartSizeBox = false;
             this.gridControlActivities.TabIndex = 60;
             this.gridControlActivities.UseRightToLeftCompatibleTextBox = true;
-            this.gridControlActivities.FontChanged += new System.EventHandler(this.gridControlActivities_FontChanged);
+            this.gridControlActivities.FontChanged += new System.EventHandler(this.gridControlActivitiesFontChanged);
             // 
             // contextMenuStrip2
             // 
@@ -246,7 +246,7 @@
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(136, 22);
             this.toolStripMenuItem3.Text = "xxPasteNew";
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItemAddFromClipboardClick);
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItemAddFromClipboardClick);
             // 
             // label2
             // 
@@ -317,7 +317,7 @@
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "ActivityControl";
             this.Size = new System.Drawing.Size(591, 637);
-            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.ActivityControlLayout);
+            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.activityControlLayout);
             this.tableLayoutPanelBody.ResumeLayout(false);
             this.tableLayoutPanelSubHeader1.ResumeLayout(false);
             this.tableLayoutPanelSubHeader1.PerformLayout();

@@ -335,7 +335,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "KpiSettings";
             this.Size = new System.Drawing.Size(725, 591);
-            this.Load += new System.EventHandler(this.KPISettings_Load);
+            this.Load += new System.EventHandler(this.kpiSettingsLoad);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
             this.tableLayoutPanelBody.ResumeLayout(false);
             this.tableLayoutPanelSubHeader2.ResumeLayout(false);

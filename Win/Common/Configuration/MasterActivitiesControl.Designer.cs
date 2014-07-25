@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MasterActivitiesControl));
             this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -41,10 +42,10 @@
             this.textBoxName = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
             this.autoLabelDescription = new Syncfusion.Windows.Forms.Tools.AutoLabel();
             this.ColorButton = new Syncfusion.Windows.Forms.ColorPickerButton();
-            this.button1 = new System.Windows.Forms.Button();
+            this.button1 = new Syncfusion.Windows.Forms.ButtonAdv();
             this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonDelete = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.buttonAdd = new System.Windows.Forms.Button();
+            this.buttonAdd = new Syncfusion.Windows.Forms.ButtonAdv();
             this.labelSubHeader1 = new System.Windows.Forms.Label();
             this.twoListSelector1 = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
             this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
@@ -121,22 +122,27 @@
             // 
             // comboBoxMasterActivities
             // 
-            this.comboBoxMasterActivities.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            resources.ApplyResources(this.comboBoxMasterActivities, "comboBoxMasterActivities");
+            this.comboBoxMasterActivities.BackColor = System.Drawing.Color.White;
+            this.comboBoxMasterActivities.BeforeTouchSize = new System.Drawing.Size(252, 23);
             this.tableLayoutPanelControlContainer.SetColumnSpan(this.comboBoxMasterActivities, 2);
             this.comboBoxMasterActivities.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMasterActivities.Items.AddRange(new object[] {
             resources.GetString("comboBoxMasterActivities.Items")});
             this.comboBoxMasterActivities.ItemsImageIndexes.Add(new Syncfusion.Windows.Forms.Tools.ComboBoxAdv.ImageIndexItem(this.comboBoxMasterActivities, "NewMaster"));
-            resources.ApplyResources(this.comboBoxMasterActivities, "comboBoxMasterActivities");
             this.comboBoxMasterActivities.Name = "comboBoxMasterActivities";
-            this.comboBoxMasterActivities.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.comboBoxMasterActivities.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
             // 
             // textBoxName
             // 
-            this.tableLayoutPanelControlContainer.SetColumnSpan(this.textBoxName, 2);
             resources.ApplyResources(this.textBoxName, "textBoxName");
+            this.textBoxName.BeforeTouchSize = new System.Drawing.Size(251, 23);
+            this.tableLayoutPanelControlContainer.SetColumnSpan(this.textBoxName, 2);
+            this.textBoxName.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.textBoxName.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.OverflowIndicatorToolTipText = null;
+            this.textBoxName.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
             // 
             // autoLabelDescription
             // 
@@ -145,17 +151,25 @@
             // 
             // ColorButton
             // 
-            this.ColorButton.ColorUISize = new System.Drawing.Size(208, 230);
             resources.ApplyResources(this.ColorButton, "ColorButton");
+            this.ColorButton.BeforeTouchSize = new System.Drawing.Size(197, 24);
+            this.ColorButton.ColorUISize = new System.Drawing.Size(208, 230);
+            this.ColorButton.IsBackStageButton = false;
             this.ColorButton.Name = "ColorButton";
             this.ColorButton.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
             resources.ApplyResources(this.button1, "button1");
+            this.button1.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            this.button1.BeforeTouchSize = new System.Drawing.Size(36, 25);
+            this.button1.ForeColor = System.Drawing.Color.White;
+            this.button1.IsBackStageButton = false;
             this.button1.Name = "button1";
+            this.button1.UseVisualStyle = true;
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1Click);
+            this.button1.Click += new System.EventHandler(this.button1Click);
             // 
             // tableLayoutPanelSubHeader1
             // 
@@ -169,19 +183,30 @@
             // buttonDelete
             // 
             resources.ApplyResources(this.buttonDelete, "buttonDelete");
-            this.buttonDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
+            this.buttonDelete.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+            this.buttonDelete.BackColor = System.Drawing.Color.White;
+            this.buttonDelete.BeforeTouchSize = new System.Drawing.Size(28, 28);
+            this.buttonDelete.ForeColor = System.Drawing.Color.White;
+            this.buttonDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_temp_DeleteGroup9;
+            this.buttonDelete.IsBackStageButton = false;
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.TabStop = false;
-            this.buttonDelete.Click += new System.EventHandler(this.ButtonDeleteClick);
+            this.buttonDelete.UseVisualStyle = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDeleteClick);
             // 
             // buttonAdd
             // 
             resources.ApplyResources(this.buttonAdd, "buttonAdd");
+            this.buttonAdd.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
             this.buttonAdd.BackColor = System.Drawing.Color.White;
+            this.buttonAdd.BeforeTouchSize = new System.Drawing.Size(28, 28);
+            this.buttonAdd.ForeColor = System.Drawing.Color.White;
             this.buttonAdd.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
+            this.buttonAdd.IsBackStageButton = false;
             this.buttonAdd.Name = "buttonAdd";
+            this.buttonAdd.UseVisualStyle = true;
             this.buttonAdd.UseVisualStyleBackColor = false;
-            this.buttonAdd.Click += new System.EventHandler(this.ButtonAddClick);
+            this.buttonAdd.Click += new System.EventHandler(this.buttonAddClick);
             // 
             // labelSubHeader1
             // 
@@ -200,7 +225,6 @@
             // 
             resources.ApplyResources(this.gradientPanelHeader, "gradientPanelHeader");
             this.gradientPanelHeader.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.gradientPanelHeader.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.LightSteelBlue, System.Drawing.Color.White);
             this.gradientPanelHeader.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
             this.gradientPanelHeader.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gradientPanelHeader.Controls.Add(this.tableLayoutPanelHeader);
@@ -252,7 +276,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelBody;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader1;
         private Syncfusion.Windows.Forms.ButtonAdv buttonDelete;
-        private System.Windows.Forms.Button buttonAdd;
+        private Syncfusion.Windows.Forms.ButtonAdv buttonAdd;
         private System.Windows.Forms.Label labelSubHeader1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelControlContainer;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelScenario;
@@ -264,7 +288,7 @@
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelColor;
         private Controls.TwoListSelector twoListSelector1;
         private Syncfusion.Windows.Forms.ColorPickerButton ColorButton;
-        private System.Windows.Forms.Button button1;
+        private Syncfusion.Windows.Forms.ButtonAdv button1;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelChangeInfo;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelInfoAboutChanges;
     }

@@ -1,33 +1,33 @@
 ﻿namespace Teleopti.Ccc.Win.Common.Configuration
 {
-    partial class ScenarioPage
-    {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class ScenarioPage
+	{
+		/// <summary> 
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary> 
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Component Designer generated code
+		#region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary> 
+		/// Required method for Designer support - do not modify 
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScenarioPage));
             this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
@@ -43,7 +43,7 @@
             this.autoLabelInfoAboutChanges = new Syncfusion.Windows.Forms.Tools.AutoLabel();
             this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonDelete = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.buttonNew = new System.Windows.Forms.Button();
+            this.buttonNew = new Syncfusion.Windows.Forms.ButtonAdv();
             this.labelSubHeader1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.autoLabelEnableReporting = new Syncfusion.Windows.Forms.Tools.AutoLabel();
@@ -121,21 +121,25 @@
             // 
             // comboBoxAdvScenarioCollection
             // 
-            this.comboBoxAdvScenarioCollection.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            resources.ApplyResources(this.comboBoxAdvScenarioCollection, "comboBoxAdvScenarioCollection");
+            this.comboBoxAdvScenarioCollection.BackColor = System.Drawing.Color.White;
+            this.comboBoxAdvScenarioCollection.BeforeTouchSize = new System.Drawing.Size(252, 23);
             this.comboBoxAdvScenarioCollection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAdvScenarioCollection.Items.AddRange(new object[] {
             resources.GetString("comboBoxAdvScenarioCollection.Items")});
             this.comboBoxAdvScenarioCollection.ItemsImageIndexes.Add(new Syncfusion.Windows.Forms.Tools.ComboBoxAdv.ImageIndexItem(this.comboBoxAdvScenarioCollection, "New Scenario"));
-            resources.ApplyResources(this.comboBoxAdvScenarioCollection, "comboBoxAdvScenarioCollection");
             this.comboBoxAdvScenarioCollection.Name = "comboBoxAdvScenarioCollection";
-            this.comboBoxAdvScenarioCollection.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.comboBoxAdvScenarioCollection.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
             // 
             // textBoxExtDescription
             // 
-            this.textBoxExtDescription.Cursor = System.Windows.Forms.Cursors.IBeam;
             resources.ApplyResources(this.textBoxExtDescription, "textBoxExtDescription");
+            this.textBoxExtDescription.BeforeTouchSize = new System.Drawing.Size(251, 23);
+            this.textBoxExtDescription.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.textBoxExtDescription.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
             this.textBoxExtDescription.Name = "textBoxExtDescription";
             this.textBoxExtDescription.OverflowIndicatorToolTipText = null;
+            this.textBoxExtDescription.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
             // 
             // autoLabelDescription
             // 
@@ -160,16 +164,27 @@
             // buttonDelete
             // 
             resources.ApplyResources(this.buttonDelete, "buttonDelete");
-            this.buttonDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
+            this.buttonDelete.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+            this.buttonDelete.BackColor = System.Drawing.Color.White;
+            this.buttonDelete.BeforeTouchSize = new System.Drawing.Size(28, 28);
+            this.buttonDelete.ForeColor = System.Drawing.Color.White;
+            this.buttonDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_temp_DeleteGroup10;
+            this.buttonDelete.IsBackStageButton = false;
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.TabStop = false;
+            this.buttonDelete.UseVisualStyle = true;
             // 
             // buttonNew
             // 
             resources.ApplyResources(this.buttonNew, "buttonNew");
+            this.buttonNew.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
             this.buttonNew.BackColor = System.Drawing.Color.White;
+            this.buttonNew.BeforeTouchSize = new System.Drawing.Size(28, 28);
+            this.buttonNew.ForeColor = System.Drawing.Color.White;
             this.buttonNew.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
+            this.buttonNew.IsBackStageButton = false;
             this.buttonNew.Name = "buttonNew";
+            this.buttonNew.UseVisualStyle = true;
             this.buttonNew.UseVisualStyleBackColor = false;
             // 
             // labelSubHeader1
@@ -198,7 +213,11 @@
             // checkBoxAdvEnableReporting
             // 
             resources.ApplyResources(this.checkBoxAdvEnableReporting, "checkBoxAdvEnableReporting");
+            this.checkBoxAdvEnableReporting.BeforeTouchSize = new System.Drawing.Size(20, 24);
+            this.checkBoxAdvEnableReporting.DrawFocusRectangle = false;
+            this.checkBoxAdvEnableReporting.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
             this.checkBoxAdvEnableReporting.Name = "checkBoxAdvEnableReporting";
+            this.checkBoxAdvEnableReporting.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
             this.checkBoxAdvEnableReporting.ThemesEnabled = false;
             // 
             // autoLabelMax5Scenarios
@@ -215,14 +234,17 @@
             // checkBoxAdvRestricted
             // 
             resources.ApplyResources(this.checkBoxAdvRestricted, "checkBoxAdvRestricted");
+            this.checkBoxAdvRestricted.BeforeTouchSize = new System.Drawing.Size(20, 24);
+            this.checkBoxAdvRestricted.DrawFocusRectangle = false;
+            this.checkBoxAdvRestricted.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
             this.checkBoxAdvRestricted.Name = "checkBoxAdvRestricted";
+            this.checkBoxAdvRestricted.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
             this.checkBoxAdvRestricted.ThemesEnabled = false;
             // 
             // gradientPanelHeader
             // 
             resources.ApplyResources(this.gradientPanelHeader, "gradientPanelHeader");
             this.gradientPanelHeader.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.gradientPanelHeader.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.LightSteelBlue, System.Drawing.Color.White);
             this.gradientPanelHeader.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
             this.gradientPanelHeader.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gradientPanelHeader.Controls.Add(this.tableLayoutPanelHeader);
@@ -267,34 +289,34 @@
             this.tableLayoutPanelHeader.PerformLayout();
             this.ResumeLayout(false);
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelHeader;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelHeader;
-        private System.Windows.Forms.Label labelHeader;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelBody;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader1;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonDelete;
-        private System.Windows.Forms.Button buttonNew;
-        private System.Windows.Forms.Label labelSubHeader1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelControlContainer;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelScenario;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvScenarioCollection;
-        private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxExtDescription;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelDescription;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader2;
-        private System.Windows.Forms.Label labelSubHeader2;
-        private System.Windows.Forms.ToolTip toolTip1;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelChangeInfo;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelInfoAboutChanges;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelEnableReporting;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvEnableReporting;
+		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelHeader;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelHeader;
+		private System.Windows.Forms.Label labelHeader;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelBody;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader1;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonDelete;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonNew;
+		private System.Windows.Forms.Label labelSubHeader1;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelControlContainer;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelScenario;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvScenarioCollection;
+		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxExtDescription;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelDescription;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader2;
+		private System.Windows.Forms.Label labelSubHeader2;
+		private System.Windows.Forms.ToolTip toolTip1;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelChangeInfo;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelInfoAboutChanges;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelEnableReporting;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvEnableReporting;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelRestricted;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvRestricted;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelDefaultScenario;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelMax5Scenarios;
-    }
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelDefaultScenario;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelMax5Scenarios;
+	}
 }

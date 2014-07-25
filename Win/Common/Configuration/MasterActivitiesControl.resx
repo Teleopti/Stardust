@@ -112,28 +112,28 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="tableLayoutPanelBody.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="tableLayoutPanel.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="labelSubHeader2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Left</value>
   </data>
   <data name="labelSubHeader2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="labelSubHeader2.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Tahoma, 8.25pt, style=Bold</value>
+    <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
   <data name="labelSubHeader2.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -142,10 +142,10 @@
     <value>NoControl</value>
   </data>
   <data name="labelSubHeader2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 6</value>
+    <value>3, 8</value>
   </data>
   <data name="labelSubHeader2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>210, 13</value>
+    <value>222, 17</value>
   </data>
   <data name="labelSubHeader2.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -160,7 +160,7 @@
     <value>labelSubHeader2</value>
   </data>
   <data name="&gt;&gt;labelSubHeader2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelSubHeader2.Parent" xml:space="preserve">
     <value>tableLayoutPanel</value>
@@ -172,13 +172,13 @@
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 155</value>
+    <value>3, 188</value>
   </data>
   <data name="tableLayoutPanel.RowCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="tableLayoutPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>594, 26</value>
+    <value>694, 34</value>
   </data>
   <data name="tableLayoutPanel.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -187,7 +187,7 @@
     <value>tableLayoutPanel</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel.Parent" xml:space="preserve">
     <value>tableLayoutPanelBody</value>
@@ -201,23 +201,23 @@
   <data name="tableLayoutPanelControlContainer.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
+  <data name="autoLabelInfoAboutChanges.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
   <data name="autoLabelInfoAboutChanges.AutoSize" type="System.Boolean, mscorlib">
     <value>False</value>
-  </data>
-  <data name="autoLabelInfoAboutChanges.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
   </data>
   <data name="autoLabelInfoAboutChanges.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="autoLabelInfoAboutChanges.Location" type="System.Drawing.Point, System.Drawing">
-    <value>175, 81</value>
+    <value>207, 109</value>
   </data>
   <data name="autoLabelInfoAboutChanges.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="autoLabelInfoAboutChanges.Size" type="System.Drawing.Size, System.Drawing">
-    <value>416, 33</value>
+    <value>481, 27</value>
   </data>
   <data name="autoLabelInfoAboutChanges.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -232,7 +232,7 @@
     <value>autoLabelInfoAboutChanges</value>
   </data>
   <data name="&gt;&gt;autoLabelInfoAboutChanges.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;autoLabelInfoAboutChanges.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -250,10 +250,13 @@
     <value>NoControl</value>
   </data>
   <data name="autoLabelChangeInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 87</value>
+    <value>3, 110</value>
+  </data>
+  <data name="autoLabelChangeInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="autoLabelChangeInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 21</value>
+    <value>121, 24</value>
   </data>
   <data name="autoLabelChangeInfo.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -268,7 +271,7 @@
     <value>autoLabelChangeInfo</value>
   </data>
   <data name="&gt;&gt;autoLabelChangeInfo.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;autoLabelChangeInfo.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -286,10 +289,13 @@
     <value>NoControl</value>
   </data>
   <data name="autoLabelColor.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 57</value>
+    <value>3, 75</value>
+  </data>
+  <data name="autoLabelColor.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="autoLabelColor.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 21</value>
+    <value>192, 24</value>
   </data>
   <data name="autoLabelColor.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -304,7 +310,7 @@
     <value>autoLabelColor</value>
   </data>
   <data name="&gt;&gt;autoLabelColor.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;autoLabelColor.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -322,10 +328,13 @@
     <value>NoControl</value>
   </data>
   <data name="autoLabelScenario.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
+    <value>3, 5</value>
+  </data>
+  <data name="autoLabelScenario.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="autoLabelScenario.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 21</value>
+    <value>192, 24</value>
   </data>
   <data name="autoLabelScenario.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -340,7 +349,7 @@
     <value>autoLabelScenario</value>
   </data>
   <data name="&gt;&gt;autoLabelScenario.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;autoLabelScenario.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -348,14 +357,17 @@
   <data name="&gt;&gt;autoLabelScenario.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
+  <data name="comboBoxMasterActivities.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
   <data name="comboBoxMasterActivities.Items" xml:space="preserve">
     <value>NewMaster</value>
   </data>
   <data name="comboBoxMasterActivities.Location" type="System.Drawing.Point, System.Drawing">
-    <value>178, 3</value>
+    <value>207, 7</value>
   </data>
   <data name="comboBoxMasterActivities.Size" type="System.Drawing.Size, System.Drawing">
-    <value>216, 21</value>
+    <value>252, 23</value>
   </data>
   <data name="comboBoxMasterActivities.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -367,7 +379,7 @@
     <value>comboBoxMasterActivities</value>
   </data>
   <data name="&gt;&gt;comboBoxMasterActivities.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ComboBoxAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.ComboBoxAdv, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;comboBoxMasterActivities.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -375,14 +387,17 @@
   <data name="&gt;&gt;comboBoxMasterActivities.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
+  <data name="textBoxName.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
   <data name="textBoxName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>178, 30</value>
+    <value>207, 41</value>
   </data>
   <data name="textBoxName.MaxLength" type="System.Int32, mscorlib">
     <value>50</value>
   </data>
   <data name="textBoxName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>216, 21</value>
+    <value>251, 23</value>
   </data>
   <data name="textBoxName.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -394,7 +409,7 @@
     <value>textBoxName</value>
   </data>
   <data name="&gt;&gt;textBoxName.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;textBoxName.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -412,10 +427,13 @@
     <value>NoControl</value>
   </data>
   <data name="autoLabelDescription.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 30</value>
+    <value>3, 40</value>
+  </data>
+  <data name="autoLabelDescription.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="autoLabelDescription.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 21</value>
+    <value>192, 24</value>
   </data>
   <data name="autoLabelDescription.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -430,7 +448,7 @@
     <value>autoLabelDescription</value>
   </data>
   <data name="&gt;&gt;autoLabelDescription.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.AutoLabel, Syncfusion.Shared.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;autoLabelDescription.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -438,14 +456,20 @@
   <data name="&gt;&gt;autoLabelDescription.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
+  <data name="ColorButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
   <data name="ColorButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Popup</value>
   </data>
+  <data name="ColorButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="ColorButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>178, 57</value>
+    <value>207, 75</value>
   </data>
   <data name="ColorButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 21</value>
+    <value>197, 24</value>
   </data>
   <data name="ColorButton.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -454,7 +478,7 @@
     <value>ColorButton</value>
   </data>
   <data name="&gt;&gt;ColorButton.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.ColorPickerButton, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.ColorPickerButton, Syncfusion.Shared.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;ColorButton.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -462,11 +486,17 @@
   <data name="&gt;&gt;ColorButton.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
+  <data name="button1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="button1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="button1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>353, 57</value>
+    <value>411, 75</value>
   </data>
   <data name="button1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>31, 21</value>
+    <value>36, 25</value>
   </data>
   <data name="button1.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -478,7 +508,7 @@
     <value>button1</value>
   </data>
   <data name="&gt;&gt;button1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>Syncfusion.Windows.Forms.ButtonAdv, Syncfusion.Shared.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;button1.Parent" xml:space="preserve">
     <value>tableLayoutPanelControlContainer</value>
@@ -490,13 +520,16 @@
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanelControlContainer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 35</value>
+    <value>0, 40</value>
+  </data>
+  <data name="tableLayoutPanelControlContainer.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="tableLayoutPanelControlContainer.RowCount" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="tableLayoutPanelControlContainer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>594, 114</value>
+    <value>700, 145</value>
   </data>
   <data name="tableLayoutPanelControlContainer.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -505,7 +538,7 @@
     <value>tableLayoutPanelControlContainer</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelControlContainer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelControlContainer.Parent" xml:space="preserve">
     <value>tableLayoutPanelBody</value>
@@ -514,7 +547,7 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanelControlContainer.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="autoLabelInfoAboutChanges" Row="3" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="autoLabelChangeInfo" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelColor" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelScenario" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="comboBoxMasterActivities" Row="0" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="textBoxName" Row="1" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="autoLabelDescription" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="ColorButton" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="button1" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,175,Absolute,175,AutoSize,0" /&gt;&lt;Rows Styles="Absolute,27,Absolute,27,Absolute,27,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="autoLabelInfoAboutChanges" Row="3" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="autoLabelChangeInfo" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelColor" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="autoLabelScenario" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="comboBoxMasterActivities" Row="0" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="textBoxName" Row="1" RowSpan="1" Column="1" ColumnSpan="2" /&gt;&lt;Control Name="autoLabelDescription" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="ColorButton" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="button1" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,204,Absolute,204,AutoSize,0" /&gt;&lt;Rows Styles="Absolute,35,Absolute,35,Absolute,35,Absolute,35,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tableLayoutPanelSubHeader1.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
@@ -526,13 +559,13 @@
     <value>NoControl</value>
   </data>
   <data name="buttonDelete.Location" type="System.Drawing.Point, System.Drawing">
-    <value>570, 1</value>
+    <value>659, 3</value>
   </data>
   <data name="buttonDelete.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 1, 0, 3</value>
+    <value>0, 1, 3, 0</value>
   </data>
   <data name="buttonDelete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>24, 24</value>
+    <value>28, 28</value>
   </data>
   <data name="buttonDelete.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -541,7 +574,7 @@
     <value>buttonDelete</value>
   </data>
   <data name="&gt;&gt;buttonDelete.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.ButtonAdv, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.ButtonAdv, Syncfusion.Shared.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;buttonDelete.Parent" xml:space="preserve">
     <value>tableLayoutPanelSubHeader1</value>
@@ -556,13 +589,13 @@
     <value>NoControl</value>
   </data>
   <data name="buttonAdd.Location" type="System.Drawing.Point, System.Drawing">
-    <value>543, 1</value>
+    <value>624, 3</value>
   </data>
   <data name="buttonAdd.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 1, 0, 3</value>
+    <value>0, 1, 3, 0</value>
   </data>
   <data name="buttonAdd.Size" type="System.Drawing.Size, System.Drawing">
-    <value>24, 24</value>
+    <value>28, 28</value>
   </data>
   <data name="buttonAdd.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -571,7 +604,7 @@
     <value>buttonAdd</value>
   </data>
   <data name="&gt;&gt;buttonAdd.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>Syncfusion.Windows.Forms.ButtonAdv, Syncfusion.Shared.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;buttonAdd.Parent" xml:space="preserve">
     <value>tableLayoutPanelSubHeader1</value>
@@ -586,16 +619,16 @@
     <value>True</value>
   </data>
   <data name="labelSubHeader1.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Tahoma, 8.25pt, style=Bold</value>
+    <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
   <data name="labelSubHeader1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="labelSubHeader1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 7</value>
+    <value>3, 8</value>
   </data>
   <data name="labelSubHeader1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>204, 13</value>
+    <value>216, 17</value>
   </data>
   <data name="labelSubHeader1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -610,7 +643,7 @@
     <value>labelSubHeader1</value>
   </data>
   <data name="&gt;&gt;labelSubHeader1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelSubHeader1.Parent" xml:space="preserve">
     <value>tableLayoutPanelSubHeader1</value>
@@ -628,7 +661,7 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanelSubHeader1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>594, 26</value>
+    <value>694, 34</value>
   </data>
   <data name="tableLayoutPanelSubHeader1.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -637,7 +670,7 @@
     <value>tableLayoutPanelSubHeader1</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelSubHeader1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelSubHeader1.Parent" xml:space="preserve">
     <value>tableLayoutPanelBody</value>
@@ -646,19 +679,22 @@
     <value>2</value>
   </data>
   <data name="tableLayoutPanelSubHeader1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="buttonDelete" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="buttonAdd" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="labelSubHeader1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,AutoSize,0,AutoSize,0" /&gt;&lt;Rows Styles="AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="buttonDelete" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="buttonAdd" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="labelSubHeader1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,35,Absolute,35" /&gt;&lt;Rows Styles="AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="twoListSelector1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
+  <data name="twoListSelector1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9.75pt</value>
+  </data>
   <data name="twoListSelector1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 187</value>
+    <value>3, 228</value>
   </data>
   <data name="twoListSelector1.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
     <value>No</value>
   </data>
   <data name="twoListSelector1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>594, 173</value>
+    <value>694, 281</value>
   </data>
   <data name="twoListSelector1.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -679,13 +715,13 @@
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanelBody.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 55</value>
+    <value>0, 62</value>
   </data>
   <data name="tableLayoutPanelBody.RowCount" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
   <data name="tableLayoutPanelBody.Size" type="System.Drawing.Size, System.Drawing">
-    <value>600, 363</value>
+    <value>700, 512</value>
   </data>
   <data name="tableLayoutPanelBody.TabIndex" type="System.Int32, mscorlib">
     <value>57</value>
@@ -694,7 +730,7 @@
     <value>tableLayoutPanelBody</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelBody.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelBody.Parent" xml:space="preserve">
     <value>$this</value>
@@ -703,7 +739,7 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanelBody.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tableLayoutPanel" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanelControlContainer" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanelSubHeader1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="twoListSelector1" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,32,Absolute,120,Absolute,32,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tableLayoutPanel" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanelControlContainer" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanelSubHeader1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="twoListSelector1" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,40,Absolute,145,Absolute,40,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gradientPanelHeader.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
     <value>GrowAndShrink</value>
@@ -718,19 +754,19 @@
     <value>True</value>
   </data>
   <data name="labelHeader.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Tahoma, 11.25pt</value>
+    <value>Segoe UI, 14.25pt, style=Bold</value>
   </data>
   <data name="labelHeader.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="labelHeader.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 8</value>
+    <value>3, 6</value>
   </data>
   <data name="labelHeader.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 0, 0, 0</value>
+    <value>6, 0, 0, 0</value>
   </data>
   <data name="labelHeader.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 18</value>
+    <value>252, 25</value>
   </data>
   <data name="labelHeader.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -742,7 +778,7 @@
     <value>labelHeader</value>
   </data>
   <data name="&gt;&gt;labelHeader.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;labelHeader.Parent" xml:space="preserve">
     <value>tableLayoutPanelHeader</value>
@@ -754,7 +790,7 @@
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanelHeader.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 10</value>
+    <value>12, 12</value>
   </data>
   <data name="tableLayoutPanelHeader.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -763,7 +799,7 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanelHeader.Size" type="System.Drawing.Size, System.Drawing">
-    <value>580, 35</value>
+    <value>676, 38</value>
   </data>
   <data name="tableLayoutPanelHeader.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -772,7 +808,7 @@
     <value>tableLayoutPanelHeader</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelHeader.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanelHeader.Parent" xml:space="preserve">
     <value>gradientPanelHeader</value>
@@ -781,7 +817,7 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanelHeader.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="labelHeader" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,580,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="labelHeader" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,677,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gradientPanelHeader.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
@@ -790,10 +826,10 @@
     <value>0, 0</value>
   </data>
   <data name="gradientPanelHeader.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>10, 10, 10, 10</value>
+    <value>12, 12, 12, 12</value>
   </data>
   <data name="gradientPanelHeader.Size" type="System.Drawing.Size, System.Drawing">
-    <value>600, 55</value>
+    <value>700, 62</value>
   </data>
   <data name="gradientPanelHeader.TabIndex" type="System.Int32, mscorlib">
     <value>56</value>
@@ -802,7 +838,7 @@
     <value>gradientPanelHeader</value>
   </data>
   <data name="&gt;&gt;gradientPanelHeader.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.GradientPanel, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.GradientPanel, Syncfusion.Shared.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;gradientPanelHeader.Parent" xml:space="preserve">
     <value>$this</value>
@@ -810,20 +846,20 @@
   <data name="&gt;&gt;gradientPanelHeader.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>27</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
+    <value>7, 15</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Tahoma, 8.25pt</value>
+    <value>Segoe UI, 9pt</value>
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>600, 418</value>
+    <value>700, 574</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MasterActivitiesControl</value>

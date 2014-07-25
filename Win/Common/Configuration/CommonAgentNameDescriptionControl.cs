@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			readFomatTextsFromResources();
 		}
 
-		private void TextBoxFormatTextChanged(object sender, EventArgs e)
+		private void textBoxFormatTextChanged(object sender, EventArgs e)
 		{
 			string textFomat = textBoxFormat.Text;
 
@@ -61,17 +61,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
   
 		}
 
-		private void TextBoxFormatMouseUp(object sender, MouseEventArgs e)
+		private void textBoxFormatMouseUp(object sender, MouseEventArgs e)
 		{
 			handleSelections();
 		}
 
-		private void TextBoxFormatKeyUp(object sender, KeyEventArgs e)
+		private void textBoxFormatKeyUp(object sender, KeyEventArgs e)
 		{
 			handleSelections();
 		}
 
-		private void TextBoxFormatPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+		private void textBoxFormatPreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
 		{
 			if (e.KeyCode == Keys.Left)
 			{
@@ -87,21 +87,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			textBoxFormat.SelectionLength = 0;
 		}
 
-		private void ButtonAdvFirstNameClick(object sender, EventArgs e)
+		private void buttonAdvFirstNameClick(object sender, EventArgs e)
 		{
 			Cursor.Current = Cursors.WaitCursor;
 			handleFomatAndSample(getStatus(sender), _firstName);
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void ButtonAdvLastNameClick(object sender, EventArgs e)
+		private void buttonAdvLastNameClick(object sender, EventArgs e)
 		{
 			Cursor.Current = Cursors.WaitCursor;
 			handleFomatAndSample(getStatus(sender), _lastName);
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void ButtonAdvEmployeeNumberClick(object sender, EventArgs e)
+		private void buttonAdvEmployeeNumberClick(object sender, EventArgs e)
 		{
 			Cursor.Current = Cursors.WaitCursor;
 			handleFomatAndSample(getStatus(sender), _emplyeeNumber);

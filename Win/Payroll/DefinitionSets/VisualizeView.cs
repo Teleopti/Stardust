@@ -10,6 +10,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Payroll;
 using Teleopti.Ccc.WinCode.Payroll.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -20,33 +21,34 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
     {
         private float _pixelSize;
         private float _widthPerHour;
-        private const int TotalHoursToDraw = 36;
+        private const int totalHoursToDraw = 36;
         private readonly ToolTip _visualizeToolTip = new ToolTip();
-        private StringFormat _format = new StringFormat();
+        private readonly StringFormat _format = new StringFormat();
         private Point _mousePointlocation;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VisualizeView"/> class.
-        /// </summary>
-        /// <param name="explorerView">The explorer view.</param>
+        public VisualizeView()
+        {
+            InitializeComponent();
+            
+        }
+
         public VisualizeView(IExplorerView explorerView)
             : base(explorerView)
         {
             InitializeComponent();
             SetTexts();
-            CreateGridView();
+            createGridView();
 
             dateNavigateControlThinLayout1.SetSelectedDate(DateOnly.Today);
-            dateNavigateControlThinLayout1.SelectedDateChanged += DateNavigateControl_SelectedDateChanged;
+            dateNavigateControlThinLayout1.SelectedDateChanged += dateNavigateControlSelectedDateChanged;
+            tableLayoutPanel4.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+            labelMultiplicatorVisualizer.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 
         }
 
-        /// <summary>
-        /// Refreshes the view.
-        /// </summary>
         public override void RefreshView()
         {
-            SetVisualizeColumnWidth();
+            setVisualizeColumnWidth();
             if (ExplorerView.ExplorerPresenter.Model.IsRightToLeft)
             {
                 //Commented by shirng:is there any special processing has to happen in here?
@@ -64,21 +66,15 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             gcProjection[1, 0].CellValue = Resources.Final;
         }
 
-        /// <summary>
-        /// Reloads this instance.
-        /// </summary>
         public override void Reload()
         {
             RefreshView();
         }
 
-        /// <summary>
-        /// Creates the grid view.
-        /// </summary>
-        private void CreateGridView()
+        private void createGridView()
         {
             GridHelper.GridStyle(gcProjection);
-            ReadOnlyCollection<SFGridColumnBase<VisualPayloadInfo>> columns = ConfigureGridColumns<VisualPayloadInfo>();
+            ReadOnlyCollection<SFGridColumnBase<VisualPayloadInfo>> columns = configureGridColumns<VisualPayloadInfo>();
 
             var helper = new SFGridColumnGridHelper<VisualPayloadInfo>(gcProjection, columns,
                                                                        ExplorerView.ExplorerPresenter.VisualizePresenter
@@ -88,12 +84,12 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             gcProjection.Model.ColWidths.ResizeToFit(GridRangeInfo.Cols(0, gcProjection.ColCount));
         }
 
-        private ReadOnlyCollection<SFGridColumnBase<T>> ConfigureGridColumns<T>()
+        private ReadOnlyCollection<SFGridColumnBase<T>> configureGridColumns<T>()
         {
             IList<SFGridColumnBase<T>> columns = new List<SFGridColumnBase<T>>();
             gcProjection.Rows.HeaderCount = 0;
-            CreateColumns(columns);
-            gcProjection.RowCount = GridRowCount();
+            createColumns(columns);
+            gcProjection.RowCount = gridRowCount();
             gcProjection.ColCount = (columns.Count - 1);
             gcProjection.RowCount = 1;
             gcProjection.Cols.HeaderCount = 0;
@@ -102,41 +98,27 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             gcProjection.RowHeights[0] = 40;
             gcProjection.ColWidths[0] = 100;
             gcProjection.DefaultRowHeight = 30;
-            gcProjection.CellDrawn += gcProjection_CellDrawn;
-            gcProjection.CellMouseHover += gcProjection_CellMouseHover;
+            gcProjection.CellDrawn += gcProjectionCellDrawn;
+            gcProjection.CellMouseHover += gcProjectionCellMouseHover;
             return new ReadOnlyCollection<SFGridColumnBase<T>>(columns);
         }
 
-        /// <summary>
-        /// Handles the CellMouseHover event of the gcProjection control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridCellMouseEventArgs"/> instance containing the event data.</param>
-        void gcProjection_CellMouseHover(object sender, GridCellMouseEventArgs e)
+        void gcProjectionCellMouseHover(object sender, GridCellMouseEventArgs e)
         {
-            ShowToolTip(e);
+            showToolTip(e);
         }
 
-        /// <summary>
-        /// Handles the CellDrawn event of the gcProjection control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridDrawCellEventArgs"/> instance containing the event data.</param>
-        private void gcProjection_CellDrawn(object sender, GridDrawCellEventArgs e)
+        private void gcProjectionCellDrawn(object sender, GridDrawCellEventArgs e)
         {
             if (ExplorerView.ExplorerPresenter.Model.SelectedDate.HasValue)
             {
-                DrawProjection(e);
-                DrawTimeLine(e);
+                drawProjection(e);
+                drawTimeLine(e);
             }
         }
 
-        /// <summary>
-        /// Draws the time line.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridDrawCellEventArgs"/> instance containing the event data.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Int32.ToString(System.IFormatProvider)")]
-        private void DrawTimeLine(GridDrawCellEventArgs e)
+        private void drawTimeLine(GridDrawCellEventArgs e)
         {
             if (e.ColIndex == 1 && (e.RowIndex == 0 || e.RowIndex == 1))
             {
@@ -154,12 +136,12 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
 
                 float remainWidth = e.Bounds.X;
                 
-                for (int i = 0; i <= (TotalHoursToDraw - 1); i++)
+                for (int i = 0; i <= (totalHoursToDraw - 1); i++)
                 {
                     float width = widthToReduce + (_widthPerHour * i);
 
                     int height = 10;
-                    int textHeight = 28;
+                    const int textHeight = 28;
 
                     int lineX = 17;
 
@@ -204,12 +186,12 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
                    
                     float f = (width + (_widthPerHour/2)) - (hourSize.Width/2)+1;
                     e.Graphics.DrawString(hour, new Font("Arial", 7), Brushes.Black, new PointF(f, textHeight));
-                    using (Pen pen = new Pen(Brushes.Black))
+                    using (var pen = new Pen(Brushes.Black))
                     {
                         int totalHeight = height + lineX;
-                        DrawLine(e.Graphics, width, lineX, width, totalHeight, pen);
-                        DrawLine(e.Graphics, width + (_widthPerHour / 2), 22, width + (_widthPerHour / 2), 17, pen);
-                        DrawLine(e.Graphics, e.Bounds.Left, 17, e.Bounds.Right, 17, pen);
+                        drawLine(e.Graphics, width, lineX, width, totalHeight, pen);
+                        drawLine(e.Graphics, width + (_widthPerHour / 2), 22, width + (_widthPerHour / 2), 17, pen);
+                        drawLine(e.Graphics, e.Bounds.Left, 17, e.Bounds.Right, 17, pen);
                     }
                     if (!ExplorerView.ExplorerPresenter.Model.IsRightToLeft)
                         startDate = startDate.AddHours(1);
@@ -221,12 +203,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             
         }
 
-        /// <summary>
-        /// Gets the layers.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns></returns>
-        private IList<VisualPayloadInfo> GetLayers()
+        private IList<VisualPayloadInfo> getLayers()
         {
             IList<VisualPayloadInfo> projectionLayer = new List<VisualPayloadInfo>();
             for (int i = 1; i < ExplorerView.ExplorerPresenter.VisualizePresenter.ModelCollection.Count; i++)
@@ -236,11 +213,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             return projectionLayer;
         }
 
-        /// <summary>
-        /// Draws the projection.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridDrawCellEventArgs"/> instance containing the event data.</param>
-        private void DrawProjection(GridDrawCellEventArgs e)
+        private void drawProjection(GridDrawCellEventArgs e)
         {
             if (e.ColIndex == 1 && e.RowIndex > 0)
             {
@@ -256,7 +229,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
                     left = prevDate.Date.AddHours(6);
                 }
 
-                IList<VisualPayloadInfo> layers = GetLayers();
+                IList<VisualPayloadInfo> layers = getLayers();
                 int count = layers.Count;
                 for (int i = 0; i <= (count - 1); i++)
                 {
@@ -321,11 +294,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             }
         }
 
-        /// <summary>
-        /// Shows the tool tip.
-        /// </summary>
-        /// <param name="e">The <see cref="Syncfusion.Windows.Forms.Grid.GridCellMouseEventArgs"/> instance containing the event data.</param>
-        private void ShowToolTip(GridCellMouseEventArgs e)
+        private void showToolTip(GridCellMouseEventArgs e)
         {
             if (_mousePointlocation == e.MouseEventArgs.Location)
                 return;
@@ -345,39 +314,21 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             }
         }
 
-        /// <summary>
-        /// Creates the columns.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="gridColumns">The grid columns.</param>
-        private static void CreateColumns<T>(ICollection<SFGridColumnBase<T>> gridColumns)
+        private static void createColumns<T>(ICollection<SFGridColumnBase<T>> gridColumns)
         {
             gridColumns.Add(new SFGridReadOnlyTextColumn<T>("Name", 150, "Name"));
             gridColumns.Add(new SFGridVisualizeColumn<T>(string.Empty, " "));
 
         }
 
-        /// <summary>
-        /// Draws the line.
-        /// </summary>
-        /// <param name="graphics">The graphics.</param>
-        /// <param name="pX">The p X.</param>
-        /// <param name="pY">The p Y.</param>
-        /// <param name="qX">The q X.</param>
-        /// <param name="qY">The q Y.</param>
-        /// <param name="pen">The pen.</param>
-        private static void DrawLine(Graphics graphics, float pX, float pY, float qX, float qY, Pen pen)
+        private static void drawLine(Graphics graphics, float pX, float pY, float qX, float qY, Pen pen)
         {
-            PointF pointX = new PointF(pX, pY);
-            PointF pointY = new PointF(qX, qY);
+            var pointX = new PointF(pX, pY);
+            var pointY = new PointF(qX, qY);
             graphics.DrawLine(pen, pointX, pointY);
         }
 
-        /// <summary>
-        /// Calculates and returns the grid row count
-        /// </summary>
-        /// <returns>Row count</returns>
-        private int GridRowCount()
+        private int gridRowCount()
         {
             //we need a extra projection layer..+1 if for that.
             int sourceListCount = ExplorerView.ExplorerPresenter.VisualizePresenter.ModelCollection.Count;
@@ -385,28 +336,23 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             return (sourceListCount + gridHeaderCount);
         }
 
-        private void SetVisualizeColumnWidth()
+        private void setVisualizeColumnWidth()
         {
             gcProjection.ColWidths[0] = 150;
             int widthToAdd = gcProjection.ColWidths[0];
             float panelWidth = ExplorerView.GetWidthOfVisualizeControlContainer();
-            float columnCount = 36;
+            const float columnCount = 36;
 
             _widthPerHour = (panelWidth - widthToAdd) / columnCount;
             _pixelSize = _widthPerHour / 60;
 
             double width = columnCount * _pixelSize * 60;
-            int newWidth = (int)width;
+            var newWidth = (int)width;
 
             gcProjection.ColWidths[1] = newWidth;
         }
 
-        /// <summary>
-        /// Handles the SelectedDateChanged event of the DateNavigateControl control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="DateTime"/> instance containing the event data.</param>
-        private void DateNavigateControl_SelectedDateChanged(object sender, Domain.Common.CustomEventArgs<DateOnly> e)
+        private void dateNavigateControlSelectedDateChanged(object sender, Domain.Common.CustomEventArgs<DateOnly> e)
         {
             ExplorerView.ExplorerPresenter.Model.SetSelectedDate(e.Value);
             RefreshView();

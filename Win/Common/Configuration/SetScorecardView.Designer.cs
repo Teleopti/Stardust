@@ -320,7 +320,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "SetScorecardView";
             this.Size = new System.Drawing.Size(700, 591);
-            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.SetScorecardLayout);
+            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.setScorecardLayout);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
             this.tableLayoutPanelBody.ResumeLayout(false);
             this.tableLayoutPanelSubHeader2.ResumeLayout(false);

@@ -2,6 +2,7 @@
 
 using System;
 using System.Windows.Forms;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Payroll.Interfaces;
 
 #endregion
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
 {
     public partial class PayrollControlContainer : UserControl, IContainedControl
     {
-        private UserControl _control;
+        private readonly UserControl _control;
 
         public PayrollControlContainer(UserControl userControl , string headerText)
         {
@@ -18,14 +19,17 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
 
             _control = userControl;
 
-            SetUserControl();
+            setUserControl();
 
             labelDefinitionTypeText.Text = headerText;
 
-            ICommonBehavior commonBehavior = _control as ICommonBehavior;
-            ToolTip t = new ToolTip();
+            var commonBehavior = _control as ICommonBehavior;
+            var t = new ToolTip();
             t.SetToolTip(buttonAddNew, commonBehavior.ToolTipAddNew);
             t.SetToolTip(buttonDelete, commonBehavior.ToolTipDelete);
+
+            tableLayoutPanel4.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+            labelDefinitionTypeText.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
         }
 
         /// <summary>
@@ -51,11 +55,11 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void buttonNew_Click(object sender, EventArgs e)
+        private void buttonNewClick(object sender, EventArgs e)
         {
             if (_control != null)
             {
-                ICommonBehavior commonBehavior = _control as ICommonBehavior;
+                var commonBehavior = _control as ICommonBehavior;
                 if (commonBehavior != null)
                 {
                     commonBehavior.AddNew();
@@ -68,11 +72,11 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void buttonAdvDelete_Click(object sender, EventArgs e)
+        private void buttonAdvDeleteClick(object sender, EventArgs e)
         {
             if (_control != null)
             {
-                ICommonBehavior commonBehavior = _control as ICommonBehavior;
+                var commonBehavior = _control as ICommonBehavior;
                 if (commonBehavior != null)
                 {
                     commonBehavior.DeleteSelected();
@@ -83,7 +87,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// <summary>
         /// Sets the user control.
         /// </summary>
-        private void SetUserControl()
+        private void setUserControl()
         {
             tableLayoutPanel1.Controls.Add(_control, 0, 1);
             _control.Show();

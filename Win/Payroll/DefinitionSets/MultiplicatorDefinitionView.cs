@@ -84,40 +84,40 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             _gridHelper.UnbindClipboardPasteEvent();
 
             _gridHelper.AllowExtendedCopyPaste = true;
-            gridControlMultiplicatorDefinition.CellsChanged += (gridControlDateView_GridCellChanged);
-            gridControlMultiplicatorDefinition.CurrentCellCloseDropDown += (gridControlMultiplicatorDefinition_CurrentCellCloseDropDown);
-            gridControlMultiplicatorDefinition.MouseDown += (gridControlMultiplicatorDefinition_MouseDown);
-            gridControlMultiplicatorDefinition.ClipboardPaste += (gridControlMultiplicatorDefinition_ClipboardPaste);
-            gridControlMultiplicatorDefinition.ClipboardCut += (GridControlMultiplicatorDefinitionClipboardCut);
-            gridControlMultiplicatorDefinition.ClipboardCopy += (GridControlMultiplicatorDefinitionClipboardCopy);
+            gridControlMultiplicatorDefinition.CellsChanged += (gridControlDateViewGridCellChanged);
+            gridControlMultiplicatorDefinition.CurrentCellCloseDropDown += (gridControlMultiplicatorDefinitionCurrentCellCloseDropDown);
+            gridControlMultiplicatorDefinition.MouseDown += (gridControlMultiplicatorDefinitionMouseDown);
+            gridControlMultiplicatorDefinition.ClipboardPaste += (gridControlMultiplicatorDefinitionClipboardPaste);
+            gridControlMultiplicatorDefinition.ClipboardCut += (gridControlMultiplicatorDefinitionClipboardCut);
+            gridControlMultiplicatorDefinition.ClipboardCopy += (gridControlMultiplicatorDefinitionClipboardCopy);
             gridControlMultiplicatorDefinition.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
             gridControlMultiplicatorDefinition.Model.Options.ExcelLikeCurrentCell = true;
         }
 
-        void GridControlMultiplicatorDefinitionClipboardCopy(object sender, GridCutPasteEventArgs e)
+        void gridControlMultiplicatorDefinitionClipboardCopy(object sender, GridCutPasteEventArgs e)
         {
             _inMemoryViewModelCollection = _gridHelper.FindSelectedItems();
         }
 
-        void toolStripCut_Click(object sender, EventArgs e)
+        void toolStripCutClick(object sender, EventArgs e)
         {
             GridRangeInfoList gridRangeInfoList = gridControlMultiplicatorDefinition.Selections.Ranges;
-            GridControlMultiplicatorDefinitionClipboardCut(gridControlMultiplicatorDefinition, new GridCutPasteEventArgs(true,false,0,gridRangeInfoList));
+            gridControlMultiplicatorDefinitionClipboardCut(gridControlMultiplicatorDefinition, new GridCutPasteEventArgs(true,false,0,gridRangeInfoList));
         }
 
-        void toolStripPaste_Click(object sender, EventArgs e)
+        void toolStripPasteClick(object sender, EventArgs e)
         {
             GridRangeInfoList gridRangeInfoList = gridControlMultiplicatorDefinition.Selections.Ranges;
-            gridControlMultiplicatorDefinition_ClipboardPaste(gridControlMultiplicatorDefinition, new GridCutPasteEventArgs(true, false, 0, gridRangeInfoList));
+            gridControlMultiplicatorDefinitionClipboardPaste(gridControlMultiplicatorDefinition, new GridCutPasteEventArgs(true, false, 0, gridRangeInfoList));
         }
 
-        void toolStripCopy_Click(object sender, EventArgs e)
+        void toolStripCopyClick(object sender, EventArgs e)
         {
             GridRangeInfoList gridRangeInfoList = gridControlMultiplicatorDefinition.Selections.Ranges;
-            GridControlMultiplicatorDefinitionClipboardCopy(gridControlMultiplicatorDefinition, new GridCutPasteEventArgs(true, false, 0, gridRangeInfoList));
+            gridControlMultiplicatorDefinitionClipboardCopy(gridControlMultiplicatorDefinition, new GridCutPasteEventArgs(true, false, 0, gridRangeInfoList));
         }
 
-        void GridControlMultiplicatorDefinitionClipboardCut(object sender, GridCutPasteEventArgs e)
+        void gridControlMultiplicatorDefinitionClipboardCut(object sender, GridCutPasteEventArgs e)
         {
             if(!isHeader(e))
                 return;
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             return true;
         }
         
-        private void gridControlMultiplicatorDefinition_ClipboardPaste(object sender, GridCutPasteEventArgs e)
+        private void gridControlMultiplicatorDefinitionClipboardPaste(object sender, GridCutPasteEventArgs e)
         {
             handleRowPaste();
             e.Handled = true;
@@ -225,12 +225,12 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             return rowsToPasteCount;
         }
 
-        private void gridControlDateView_GridCellChanged(object sender, GridCellsChangedEventArgs e)
+        private void gridControlDateViewGridCellChanged(object sender, GridCellsChangedEventArgs e)
         {
             invokeGridDataChanged();
         }
 
-        void gridControlMultiplicatorDefinition_MouseDown(object sender, MouseEventArgs e)
+        void gridControlMultiplicatorDefinitionMouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -263,14 +263,14 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             gridControlMultiplicatorDefinition.ContextMenuStrip.Items[8].Enabled = value;
             gridControlMultiplicatorDefinition.ContextMenuStrip.Items[9].Enabled = value;
         }
-        void gridControlMultiplicatorDefinition_CurrentCellCloseDropDown(object sender, Syncfusion.Windows.Forms.PopupClosedEventArgs e)
+        void gridControlMultiplicatorDefinitionCurrentCellCloseDropDown(object sender, Syncfusion.Windows.Forms.PopupClosedEventArgs e)
         {
             var gridBase = (GridControl)sender;
             if (gridBase != null)
             {
                 if (gridBase.CurrentCell.RowIndex > gridBase.CurrentCell.Model.Grid.Rows.HeaderCount && gridBase.CurrentCell.ColIndex == 1)
                 {
-                    MultiplicatorDefinitionAdapter chosenMultiplicatorDefinitionAdapter = (MultiplicatorDefinitionAdapter)gridBase.CurrentCellInfo.CellView.ControlValue;
+                    var chosenMultiplicatorDefinitionAdapter = (MultiplicatorDefinitionAdapter)gridBase.CurrentCellInfo.CellView.ControlValue;
 
                     // Gets the current item.
                     int offset = gridBase.CurrentCell.RowIndex - (gridBase.CurrentCell.Model.Grid.Rows.HeaderCount + 1);
@@ -317,9 +317,11 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
 
         private void loadMultiplicatorDefinitionTypeCollection()
         {
-            _multiplicatorDefinitionTypeCollection = new List<IMultiplicatorDefinitionAdapter>();
-            _multiplicatorDefinitionTypeCollection.Add(new MultiplicatorDefinitionAdapter(typeof(DateTimeMultiplicatorDefinition), Resources.FromTo));
-            _multiplicatorDefinitionTypeCollection.Add(new MultiplicatorDefinitionAdapter(typeof(DayOfWeekMultiplicatorDefinition), Resources.DayOfWeekCapital));
+            _multiplicatorDefinitionTypeCollection = new List<IMultiplicatorDefinitionAdapter>
+            {
+                new MultiplicatorDefinitionAdapter(typeof (DateTimeMultiplicatorDefinition), Resources.FromTo),
+                new MultiplicatorDefinitionAdapter(typeof (DayOfWeekMultiplicatorDefinition), Resources.DayOfWeekCapital)
+            };
         }
 
         private void loadDayOfWeekAdapterCollection()
@@ -329,7 +331,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             
             foreach (DayOfWeek dayOfWeek in dayOfWeekCollection)
             {
-                DayOfWeekAdapter multiplicatorTypeView = new DayOfWeekAdapter(dayOfWeek);
+                var multiplicatorTypeView = new DayOfWeekAdapter(dayOfWeek);
                 _dayOfWeekAdapterCollection.Add(multiplicatorTypeView);
             }
         }
@@ -364,40 +366,40 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         {
             gridControlMultiplicatorDefinition.ContextMenuStrip = new ContextMenuStrip();
 
-            ToolStripMenuItem toolStripAddDateTime = new ToolStripMenuItem(Resources.AddDateTime);
+            var toolStripAddDateTime = new ToolStripMenuItem(Resources.AddDateTime);
             toolStripAddDateTime.Click += delegate { addNewDateTime(); };
             gridControlMultiplicatorDefinition.ContextMenuStrip.Items.Add(toolStripAddDateTime);
 
-            ToolStripMenuItem toolStripAddDayOfWeek = new ToolStripMenuItem(Resources.AddDayOfWeek);
+            var toolStripAddDayOfWeek = new ToolStripMenuItem(Resources.AddDayOfWeek);
             toolStripAddDayOfWeek.Click += delegate { addNewDayOfWeek(); };
             gridControlMultiplicatorDefinition.ContextMenuStrip.Items.Add(toolStripAddDayOfWeek);
 
             gridControlMultiplicatorDefinition.ContextMenuStrip.Items.Add(new ToolStripSeparator());
 
-            ToolStripMenuItem toolStripDelete = new ToolStripMenuItem(Resources.Delete);
+            var toolStripDelete = new ToolStripMenuItem(Resources.Delete);
             toolStripDelete.Click += delegate { DeleteSelected(); };
             gridControlMultiplicatorDefinition.ContextMenuStrip.Items.Add(toolStripDelete);
 
-            ToolStripMenuItem toolStripMoveUp = new ToolStripMenuItem(Resources.MoveUp);
+            var toolStripMoveUp = new ToolStripMenuItem(Resources.MoveUp);
             toolStripMoveUp.Click += delegate { MoveUp(); };
             gridControlMultiplicatorDefinition.ContextMenuStrip.Items.Add(toolStripMoveUp);
 
-            ToolStripMenuItem toolStripMoveDown = new ToolStripMenuItem(Resources.MoveDown);
+            var toolStripMoveDown = new ToolStripMenuItem(Resources.MoveDown);
             toolStripMoveDown.Click += delegate { MoveDown(); };
             gridControlMultiplicatorDefinition.ContextMenuStrip.Items.Add(toolStripMoveDown);
 
             gridControlMultiplicatorDefinition.ContextMenuStrip.Items.Add(new ToolStripSeparator());
 
-            ToolStripMenuItem toolStripCut = new ToolStripMenuItem(Resources.Cut);
-            toolStripCut.Click += (toolStripCut_Click);
+            var toolStripCut = new ToolStripMenuItem(Resources.Cut);
+            toolStripCut.Click += (toolStripCutClick);
             gridControlMultiplicatorDefinition.ContextMenuStrip.Items.Add(toolStripCut);
 
-            ToolStripMenuItem toolStripCopy = new ToolStripMenuItem(Resources.Copy);
-            toolStripCopy.Click += (toolStripCopy_Click);
+            var toolStripCopy = new ToolStripMenuItem(Resources.Copy);
+            toolStripCopy.Click += (toolStripCopyClick);
             gridControlMultiplicatorDefinition.ContextMenuStrip.Items.Add(toolStripCopy);
 
-            ToolStripMenuItem toolStripPaste = new ToolStripMenuItem(Resources.Paste);
-            toolStripPaste.Click += (toolStripPaste_Click);
+            var toolStripPaste = new ToolStripMenuItem(Resources.Paste);
+            toolStripPaste.Click += (toolStripPasteClick);
             gridControlMultiplicatorDefinition.ContextMenuStrip.Items.Add(toolStripPaste);
 
         }
@@ -520,7 +522,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             addNewDayOfWeek();
         }
 
-        private void gridControlMultiplicatorDefinition_KeyDown(object sender, KeyEventArgs e)
+        private void gridControlMultiplicatorDefinitionKeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode==Keys.Delete)
             {

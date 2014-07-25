@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			InitializeComponent();
 		}
 
-		private  void SetColors()
+		private  void setColors()
 		{
 			BackColor = ColorHelper.WizardBackgroundColor();
 			gridControlAlarmTypes.BackColor = ColorHelper.GridControlGridInteriorColor();
@@ -40,42 +40,42 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			labelTitle.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 		}
 
-		private void ShowGrid()
+		private void showGrid()
 		{
 			var backgroundWorkerLoadData = new BackgroundWorker();
-			backgroundWorkerLoadData.RunWorkerCompleted += SetupAlarmGrid;
+			backgroundWorkerLoadData.RunWorkerCompleted += setupAlarmGrid;
 			backgroundWorkerLoadData.RunWorkerAsync();
 		}
 
-		void SetupAlarmGrid(object sender, RunWorkerCompletedEventArgs e)
+		void setupAlarmGrid(object sender, RunWorkerCompletedEventArgs e)
 		{
 			_view = new AlarmControlView(gridControlAlarmTypes);
 			_view.Presenter = new AlarmControlPresenter(_alarmTypes, _view);
-			_view.PresentThisItem += ViewPresentThisItem;
-			_view.WarnOfThis += ViewWarnOfThis;
+			_view.PresentThisItem += viewPresentThisItem;
+			_view.WarnOfThis += viewWarnOfThis;
 			_view.LoadGrid();
 		}
 
-		void ViewWarnOfThis(object sender, CustomEventArgs<string> e)
+		void viewWarnOfThis(object sender, CustomEventArgs<string> e)
 		{
-		   Warn(e.Value );
+		   warn(e.Value );
 			gridControlAlarmTypes.Focus();
 		}
 
-		void ViewPresentThisItem(object sender, CustomEventArgs<int> e)
+		void viewPresentThisItem(object sender, CustomEventArgs<int> e)
 		{
 			if (e.Value < 0) return;
 			_selectedItem = e.Value;
 		}
 
-		private void ButtonNewClick(object sender, EventArgs e)
+		private void buttonNewClick(object sender, EventArgs e)
 		{
 			var atype = new AlarmType(new Description(Resources.GiveAlarmAName), Color.Red, new TimeSpan(0, 0, 0), AlarmTypeMode.UserDefined, 0.0);
 			_alarmTypes.Add(atype);
 			_view.LoadGrid();
 		}
 
-		private void ButtonAdvDeleteClick(object sender, EventArgs e)
+		private void buttonAdvDeleteClick(object sender, EventArgs e)
 		{
 			if (_selectedItem != -1)
 			{
@@ -98,26 +98,26 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			foreach (var type in _alarmTypes.Where(type => type.Id == null))
 			{
-				if(!AlarmTypeValuesAreOk(type)) return;
+				if(!alarmTypeValuesAreOk(type)) return;
 				_alarmTypeRepository.Add(type);
 			}
 		}
 
-		private bool AlarmTypeValuesAreOk(IAlarmType type)
+		private bool alarmTypeValuesAreOk(IAlarmType type)
 		{
 			if (String.IsNullOrEmpty(type.Description.Name ))
 			{
-				Warn(Resources.GiveAlarmAName);
+				warn(Resources.GiveAlarmAName);
 				return false;
 			}
 		   if (type.DisplayColor  == Color.Empty )
 			{
-				Warn(Resources.SelectSuitableColor);
+				warn(Resources.SelectSuitableColor);
 				return false;
 			}   
 			if (type.ThresholdTime < TimeSpan.Zero)
 			{
-				Warn(Resources.SetTresholdTime);
+				warn(Resources.SetTresholdTime);
 				return false;
 			}
 			return true;
@@ -138,16 +138,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void InitializeDialogControl()
 		{
-			SetColors();     
+			setColors();     
 			SetTexts();
 		}
 
 		public void LoadControl()
 		{
-			LoadAlarmTypes();
+			loadAlarmTypes();
 		}
 
-		private void LoadAlarmTypes()
+		private void loadAlarmTypes()
 		{
 			_alarmTypeRepository = new AlarmTypeRepository(_uow);
 			_alarmTypes.Clear();
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
-			ShowGrid();
+			showGrid();
 		}
 
 		public TreeFamily TreeFamily()
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 		}
 
-		private void Warn(string s)
+		private void warn(string s)
 		{
 			var dialog = new TimedWarningDialog(1,s,gridControlAlarmTypes );
 			dialog.Show();

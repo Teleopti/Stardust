@@ -72,7 +72,7 @@
             this.buttonAdvEmployeeNumber.TabIndex = 6;
             this.buttonAdvEmployeeNumber.Text = "xxAmpersandEmployeeNumber";
             this.buttonAdvEmployeeNumber.UseVisualStyle = true;
-            this.buttonAdvEmployeeNumber.Click += new System.EventHandler(this.ButtonAdvEmployeeNumberClick);
+            this.buttonAdvEmployeeNumber.Click += new System.EventHandler(this.buttonAdvEmployeeNumberClick);
             // 
             // buttonAdvLastName
             // 
@@ -88,7 +88,7 @@
             this.buttonAdvLastName.TabIndex = 5;
             this.buttonAdvLastName.Text = "xxAmpersandLastName";
             this.buttonAdvLastName.UseVisualStyle = true;
-            this.buttonAdvLastName.Click += new System.EventHandler(this.ButtonAdvLastNameClick);
+            this.buttonAdvLastName.Click += new System.EventHandler(this.buttonAdvLastNameClick);
             // 
             // buttonAdvFirstName
             // 
@@ -104,7 +104,7 @@
             this.buttonAdvFirstName.TabIndex = 4;
             this.buttonAdvFirstName.Text = "xxAmpersandFirstName";
             this.buttonAdvFirstName.UseVisualStyle = true;
-            this.buttonAdvFirstName.Click += new System.EventHandler(this.ButtonAdvFirstNameClick);
+            this.buttonAdvFirstName.Click += new System.EventHandler(this.buttonAdvFirstNameClick);
             // 
             // textBoxExample
             // 
@@ -135,10 +135,10 @@
             this.textBoxFormat.Name = "textBoxFormat";
             this.textBoxFormat.Size = new System.Drawing.Size(484, 23);
             this.textBoxFormat.TabIndex = 1;
-            this.textBoxFormat.TextChanged += new System.EventHandler(this.TextBoxFormatTextChanged);
-            this.textBoxFormat.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxFormatKeyUp);
-            this.textBoxFormat.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TextBoxFormatMouseUp);
-            this.textBoxFormat.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.TextBoxFormatPreviewKeyDown);
+            this.textBoxFormat.TextChanged += new System.EventHandler(this.textBoxFormatTextChanged);
+            this.textBoxFormat.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFormatKeyUp);
+            this.textBoxFormat.MouseUp += new System.Windows.Forms.MouseEventHandler(this.textBoxFormatMouseUp);
+            this.textBoxFormat.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textBoxFormatPreviewKeyDown);
             // 
             // labelFormat
             // 

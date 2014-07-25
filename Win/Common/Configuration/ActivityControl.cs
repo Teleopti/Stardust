@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -31,10 +30,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private readonly IDictionary<GridType, object> _sourceList;
 	   // private IUnitOfWork _unitOfWork;
 		private readonly string _newActivityName = string.Empty;
-		private const string NewActivityNameFormat = "<{0} {1}>";
-		private const string LessThanChar = "<";
-		private const string GreaterThanChar = ">";
-		private const string SpaceChar = " ";
+		private const string newActivityNameFormat = "<{0} {1}>";
+		private const string lessThanChar = "<";
+		private const string greaterThanChar = ">";
+		private const string spaceChar = " ";
 		private readonly List<ReportLevelDetailAdapter> _reportLevelDetailAdapters;
 		private readonly IList<IActivity> _activitiesToBeDeleted;
 		private readonly IList<IActivity> _activitiesToAdd;
@@ -49,12 +48,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_activitiesToAdd = new List<IActivity>();
 		}
 
-		private void ButtonNewActivityClick(object sender, EventArgs e)
+		private void buttonNewActivityClick(object sender, EventArgs e)
 		{
 			Cursor.Current = Cursors.WaitCursor;
 
 			// Sets the row index to 0 when there's no data available in the source
-			SetSelectedCellWhenNoSourceAvailable<IActivity>(GridType.Activity);
+			setSelectedCellWhenNoSourceAvailable<IActivity>(GridType.Activity);
 
 			// Adds tehe new source entity to repository
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -68,17 +67,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void ButtonAdvDeleteActivityClick(object sender, EventArgs e)
+		private void buttonAdvDeleteActivityClick(object sender, EventArgs e)
 		{
 			Cursor.Current = Cursors.WaitCursor;
 
 			// Deletes the selected activities
-			DeleteSelectedActivities();
+			deleteSelectedActivities();
 
 			Cursor.Current = Cursors.Default;
 		}
 
-		private ReadOnlyCollection<SFGridColumnBase<IActivity>> ConfigureActivityGrid()
+		private ReadOnlyCollection<SFGridColumnBase<IActivity>> configureActivityGrid()
 		{
 			IList<SFGridColumnBase<IActivity>> gridColumns = new List<SFGridColumnBase<IActivity>>();
 
@@ -98,7 +97,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("InReadyTime", Resources.InReadyTime));
 			gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("AllowOverwrite",Resources.AllowMeetings ));
 
-			gridColumns.Add(new SFGridDropDownEnumColumn<IActivity, ReportLevelDetailAdapter, ReportLevelDetail>("ReportLevelDetail", Resources.ReportLevel, ReportLevelDetails(), "DisplayName", "ReportLevelDetail"));
+			gridColumns.Add(new SFGridDropDownEnumColumn<IActivity, ReportLevelDetailAdapter, ReportLevelDetail>("ReportLevelDetail", Resources.ReportLevel, reportLevelDetails(), "DisplayName", "ReportLevelDetail"));
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 			{
 				var payrollColumn = new SFGridEditableTextColumn<IActivity>("PayrollCode", 20, Resources.PayrollCode) { AllowEmptyValue = true };
@@ -111,7 +110,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			
 		}
 
-		private List<ReportLevelDetailAdapter> ReportLevelDetails()
+		private List<ReportLevelDetailAdapter> reportLevelDetails()
 		{
 			if (_reportLevelDetailAdapters.Count == 0)
 			{
@@ -125,26 +124,26 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return _reportLevelDetailAdapters;
 		}
 
-		private IActivity CreateActivity()
+		private IActivity createActivity()
 		{
-			int nextCount = GetNextActivityId();
+			int nextCount = getNextActivityId();
 
 			// Formats the name.
-			var name = string.Format(CultureInfo.InvariantCulture, NewActivityNameFormat, _newActivityName, nextCount);
+			var name = string.Format(CultureInfo.InvariantCulture, newActivityNameFormat, _newActivityName, nextCount);
 
 			IActivity newActivity = new Activity(name) {DisplayColor = Color.DodgerBlue, PayrollCode = string.Empty};
 			_activitiesToAdd.Add(newActivity );
 			return newActivity;
 		}
 
-		private void DeleteSelectedActivities()
+		private void deleteSelectedActivities()
 		{
 			// Gets the source data collection and grid type
 			const GridType gridType = GridType.Activity;
-			IList<IActivity> source = GetSource<IActivity>(gridType);
+			IList<IActivity> source = getSource<IActivity>(gridType);
 			IList<IActivity> itemsToDelete = _gridColumnHelper.FindSelectedItems();
 
-			if (!IsReadyToDelete(source)) return;
+			if (!isReadyToDelete(source)) return;
 			
 			//--var activityRepository = new ActivityRepository(_unitOfWork);
 
@@ -155,13 +154,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				_activitiesToBeDeleted.Add(activity );
 			}
 
-			_gridColumnHelper.SetSourceList(GetSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList());
+			_gridColumnHelper.SetSourceList(getSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList());
 
-			InvalidateGrid<IActivity>(gridType);
+			invalidateGrid<IActivity>(gridType);
 		}
 
 
-		private int GetNextActivityId()
+		private int getNextActivityId()
 		{
 			var activities = (IList<IActivity>)_sourceList[GridType.Activity];
 			int parsedValue;
@@ -169,22 +168,22 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 									 ((from p in activities
 									   where p.Description.Name.Contains(_newActivityName)
 									   select p.Description.Name
-									   .Replace(LessThanChar, string.Empty)
-									   .Replace(GreaterThanChar, string.Empty)
+									   .Replace(lessThanChar, string.Empty)
+									   .Replace(greaterThanChar, string.Empty)
 									   .Replace(_newActivityName, string.Empty)
-									   .Replace(SpaceChar, string.Empty)).ToList())
+									   .Replace(spaceChar, string.Empty)).ToList())
 							   where string.IsNullOrEmpty(q) == false && Int32.TryParse(q, NumberStyles.Integer, CultureInfo.CurrentCulture, out parsedValue)
 								 select Int32.Parse(q, CultureInfo.CurrentCulture)).ToArray();
 
-			return GetNextId(sortedArray);
+			return getNextId(sortedArray);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.Configuration.ActivityControl.ShowMyErrorMessage(System.String,System.String)")]
-		private bool IsReadyToDelete<T>(ICollection<T> source)
+		private bool isReadyToDelete<T>(ICollection<T> source)
 		{
 			bool isReady = false;
 
-			if (IsDataAvailable(source))
+			if (isDataAvailable(source))
 			{
 				if (MessageDialogs.ShowQuestion(this, Resources.DeleteSelectedRowsQuestionmark, Resources.Message) == DialogResult.Yes)
 				{
@@ -216,38 +215,33 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		//    return false;
 		//}
 
-		private static bool IsDataAvailable<T>(ICollection<T> source)
+		private static bool isDataAvailable<T>(ICollection<T> source)
 		{
-			bool isDataExists = false;
-
-			if ((source != null) && (source.Count > 0))
-			{
-				isDataExists = true;
-			}
+			bool isDataExists = (source != null) && (source.Count > 0);
 
 			return isDataExists;
 		}
 
-		private void InvalidateGrid<T>(GridType gridType)
+		private void invalidateGrid<T>(GridType gridType)
 		{
 			// Gets the data source
-			IList<T> source = GetSource<T>(gridType);
+			IList<T> source = getSource<T>(gridType);
 
 			if (source == null) return;
-			GridControl grid = GetGridControl(gridType);
+			GridControl grid = getGridControl(gridType);
 
 			grid.RowCount = source.Count;
 			grid.Invalidate();
 		}
 
-		private GridControl GetGridControl(GridType gridType)
+		private GridControl getGridControl(GridType gridType)
 		{
 			var grid =  gridControlActivities;
 
 			return grid;
 		}
 
-		private static int GetNextId(int[] array)
+		private static int getNextId(int[] array)
 		{
 
 			int nextId = 1;
@@ -263,7 +257,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return nextId;
 		}
 
-		private void LoadSourceList(IUnitOfWork uow)
+		private void loadSourceList(IUnitOfWork uow)
 		{
 			_sourceList.Clear();
 			var activityRepository = new ActivityRepository(uow);
@@ -272,34 +266,34 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			//gridControlActivities.Refresh();
 		}
 
-		private List<T> GetSource<T>(GridType gridType)
+		private List<T> getSource<T>(GridType gridType)
 		{
 			var source = (List<T>)_sourceList[gridType];
 			return source;
 		}
 
-		private int GridRowCount(GridType gridType)
-		{
-			int sourceListCount = 0;
-			int gridHeaderCount = 0;
-			switch (gridType)
-			{
-				case GridType.Activity:
-					gridHeaderCount = gridControlActivities.Rows.HeaderCount;
-					var activityList = (IList<IActivity>)_sourceList[GridType.Activity];
-					sourceListCount = activityList.Count;
-					break;
-			}
-			return (sourceListCount + gridHeaderCount);
-		}
+		//private int GridRowCount(GridType gridType)
+		//{
+		//    int sourceListCount = 0;
+		//    int gridHeaderCount = 0;
+		//    switch (gridType)
+		//    {
+		//        case GridType.Activity:
+		//            gridHeaderCount = gridControlActivities.Rows.HeaderCount;
+		//            var activityList = (IList<IActivity>)_sourceList[GridType.Activity];
+		//            sourceListCount = activityList.Count;
+		//            break;
+		//    }
+		//    return (sourceListCount + gridHeaderCount);
+		//}
 
-		private void SetSelectedCellWhenNoSourceAvailable<T>(GridType gridType)
+		private void setSelectedCellWhenNoSourceAvailable<T>(GridType gridType)
 		{
 			// Gets the source
-			IList<T> source = GetSource<T>(gridType);
+			IList<T> source = getSource<T>(gridType);
 
-			if (IsDataAvailable(source)) return;
-			GridControl grid = GetGridControl(gridType);
+			if (isDataAvailable(source)) return;
+			GridControl grid = getGridControl(gridType);
 			grid.CurrentCell.MoveTo(0, 0);
 		}
 
@@ -314,11 +308,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void InitializeDialogControl()
 		{
-			SetColors();
+			setColors();
 			SetTexts();
 		}
 
-		private void SetColors()
+		private void setColors()
 		{
 			BackColor = ColorHelper.WizardBackgroundColor();
 			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
@@ -343,14 +337,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				LoadSourceList(uow);
+				loadSourceList(uow);
 			}
-			ReadOnlyCollection<SFGridColumnBase<IActivity>> activityColumns = ConfigureActivityGrid();
+			ReadOnlyCollection<SFGridColumnBase<IActivity>> activityColumns = configureActivityGrid();
 			_gridColumnHelper = new SFGridColumnGridHelper<IActivity>(gridControlActivities,
 								activityColumns,
-								GetSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList()) {AllowExtendedCopyPaste = true};
+								getSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList()) {AllowExtendedCopyPaste = true};
 
-			_gridColumnHelper.NewSourceEntityWanted += ColumnGridHelperNewSourceEntityWanted;
+			_gridColumnHelper.NewSourceEntityWanted += columnGridHelperNewSourceEntityWanted;
 
 		}
 
@@ -380,8 +374,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				uow.PersistAll();
 				_activitiesToBeDeleted.Clear();
 				_activitiesToAdd.Clear();
-				LoadSourceList(uow);
-				_gridColumnHelper.SetSourceList(GetSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList());
+				loadSourceList(uow);
+				_gridColumnHelper.SetSourceList(getSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList());
 			}
 			
 		}
@@ -410,9 +404,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		
 
-		void ColumnGridHelperNewSourceEntityWanted(object sender, SFGridColumnGridHelperEventArgs<IActivity> e)
+		void columnGridHelperNewSourceEntityWanted(object sender, SFGridColumnGridHelperEventArgs<IActivity> e)
 		{
-			e.SourceEntity = CreateActivity();
+			e.SourceEntity = createActivity();
 		}
 
 		enum GridType
@@ -420,7 +414,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			Activity,
 		}
 
-		private void ToolStripMenuItemAddFromClipboardClick(object sender, EventArgs e)
+		private void toolStripMenuItemAddFromClipboardClick(object sender, EventArgs e)
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -439,12 +433,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			get { return ViewType.Activity; }
 		}
 
-		private void ActivityControlLayout(object sender, LayoutEventArgs e)
+		private void activityControlLayout(object sender, LayoutEventArgs e)
 		{
 			gridControlActivities.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
 		}
 
-		private void gridControlActivities_FontChanged(object sender, EventArgs e)
+		private void gridControlActivitiesFontChanged(object sender, EventArgs e)
 		{
 			var d =gridControlActivities.Font;
 		}

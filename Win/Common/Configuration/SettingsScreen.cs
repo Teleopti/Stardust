@@ -1,46 +1,75 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using System.Windows.Navigation;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
+using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 
 namespace Teleopti.Ccc.Win.Common.Configuration
 {
-    public partial class SettingsScreen : BaseRibbonFormWithUnitOfWork
-    {
-        private readonly OptionCore _core;
-        private Timer _timer = new Timer();
+	public partial class SettingsScreen : BaseRibbonFormWithUnitOfWork
+	{
+		private readonly OptionCore _core;
+		private readonly Timer _timer = new Timer();
 
-        protected SettingsScreen()
-        {
-            // Initializes the settings screen components
-            InitializeComponent();
-            if (!DesignMode)
-            {
-                SetTexts();
-            }
-            if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
-                Icon = Properties.Resources.options;
-            // Sets colors for form & controls.
-            SetColors();
+		protected SettingsScreen()
+		{
+			// Initializes the settings screen components
+			InitializeComponent();
+			if (!DesignMode)
+			{
+				SetTexts();
+			}
+			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+				Icon = Properties.Resources.options;
+			// Sets colors for form & controls.
+			SetColors();
 
-            // ReSharper disable DoNotCallOverridableMethodsInConstructor
-            treeViewOptions.RightToLeftLayout = RightToLeftLayout;
-            // ReSharper restore DoNotCallOverridableMethodsInConstructor
-            treeViewOptions.AfterSelect += TreeViewOptionsAfterSelect;
-            Resize += SettingsScreenResize;
-        	KeyPreview = true;
-			KeyDown += Form_KeyDown;
-			KeyPress += Form_KeyPress;
+			// ReSharper disable DoNotCallOverridableMethodsInConstructor
+			//treeViewOptions.RightToLeft = RightToLeftLayout;
+			// ReSharper restore DoNotCallOverridableMethodsInConstructor
+			treeViewOptions.AfterSelect += treeViewOptionsAfterSelect;
+			Resize += settingsScreenResize;
+			KeyPreview = true;
+			KeyDown += formKeyDown;
+			KeyPress += formKeyPress;
 		}
 
-		void Form_KeyDown(object sender, KeyEventArgs e)
+		void treeViewOptionsAfterSelect(object sender, EventArgs e)
+		{
+			Cursor.Current = Cursors.WaitCursor;
+
+			try
+			{
+				PanelContent.Controls.Clear();
+				var item = (ISettingPage)treeViewOptions.SelectedNode.Tag;
+				_core.MarkAsSelected(item, null);
+
+				var userControl = item as Control;
+				if (userControl != null)
+				{
+					userControl.Dock = DockStyle.Fill;
+					PanelContent.Controls.Add(userControl);
+					ActiveControl = userControl;
+					setupHelpContext(userControl);
+					item.OnShow();
+				}
+			}
+			catch (DataSourceException ex)
+			{
+				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+				formKillWithLatency();
+			}
+
+			Cursor.Current = Cursors.Default;
+		}
+
+		void formKeyDown(object sender, KeyEventArgs e)
 		{
 			if(ActiveControl != treeViewOptions) return;
 			
@@ -50,7 +79,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		void Form_KeyPress(object sender, KeyPressEventArgs e)
+		void formKeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (ActiveControl != treeViewOptions) return;
 
@@ -60,100 +89,68 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-        public SettingsScreen(OptionCore optionCore)
-            : this()
-        {
-            // Loads tree values.
-            _core = optionCore;
-            _core.SetUnitOfWork(UnitOfWork);
-            LoadTree(-1);
-        }
+		public SettingsScreen(OptionCore optionCore)
+			: this()
+		{
+			// Loads tree values.
+			_core = optionCore;
+			_core.SetUnitOfWork(UnitOfWork);
+			loadTree(-1);
+		}
 
-        public SettingsScreen(OptionCore optionCore,SelectedEntity<IAggregateRoot> selectedEntity):this()
-        {
-            _core = optionCore;
-            _core.SetUnitOfWork(UnitOfWork);
-            TreeNode selectedTreeNode = LoadTree(selectedEntity);
+		public SettingsScreen(OptionCore optionCore,SelectedEntity<IAggregateRoot> selectedEntity):this()
+		{
+			_core = optionCore;
+			_core.SetUnitOfWork(UnitOfWork);
+			TreeNodeAdv selectedTreeNode = loadTree(selectedEntity);
 
-            Cursor.Current = Cursors.WaitCursor;
-            PanelContent.Controls.Clear();
+			Cursor.Current = Cursors.WaitCursor;
+			PanelContent.Controls.Clear();
 
-            var item = (ISettingPage)selectedTreeNode.Tag;
-            _core.MarkAsSelected(item, selectedEntity);
+			var item = (ISettingPage)selectedTreeNode.Tag;
+			_core.MarkAsSelected(item, selectedEntity);
 
-            var userControl = item as Control;
-            if (userControl != null)
-            {
-                userControl.Dock = DockStyle.Fill;
-                PanelContent.Controls.Add(userControl);
-                SetupHelpContext(userControl);
-                ActiveControl = userControl;
-            }
+			var userControl = item as Control;
+			if (userControl != null)
+			{
+				userControl.Dock = DockStyle.Fill;
+				PanelContent.Controls.Add(userControl);
+				setupHelpContext(userControl);
+				ActiveControl = userControl;
+			}
 
-            Cursor.Current = Cursors.Default;
-        }
+			Cursor.Current = Cursors.Default;
+		}
 
-        /// <summary>
-        /// Sets the colors.
-        /// </summary>
-        protected void SetColors()
-        {
-            BackColor = ColorHelper.FormBackgroundColor();
-        }
+		protected void SetColors()
+		{
+			BackColor = ColorHelper.FormBackgroundColor();
+		}
 
-        void SettingsScreenResize(object sender, EventArgs e)
-        {
-            // When using Syncfusions form a control with Anchor Top, Bottom, Left, Right
-            // will not be resized correct
+		void settingsScreenResize(object sender, EventArgs e)
+		{
+			// When using Syncfusions form a control with Anchor Top, Bottom, Left, Right
+			// will not be resized correct
 
-        	if (PanelContent == null) return;
-        	PanelContent.Width = Width - 215;
-        	PanelContent.Height = Height - 100;
-        }
+			if (PanelContent == null) return;
+			PanelContent.Width = Width - 215;
+			PanelContent.Height = Height - 100;
+		}
 
-        void TreeViewOptionsAfterSelect(object sender, TreeViewEventArgs e)
-        {
-            Cursor.Current = Cursors.WaitCursor;
+		private void formKillWithLatency()
+		{            
+			_timer.Interval = 1000;
+			_timer.Tick += timerTick;
+			_timer.Start();
+		}
 
-            try
-            {
-                PanelContent.Controls.Clear();
-                var item = (ISettingPage)e.Node.Tag;
-                _core.MarkAsSelected(item, null);
+		private void timerTick(object sender, EventArgs e)
+		{
+			FormKill();
+		}
 
-                var userControl = item as Control;
-                if (userControl != null)
-                {
-                    userControl.Dock = DockStyle.Fill;
-                    PanelContent.Controls.Add(userControl);
-                    ActiveControl = userControl;
-                    SetupHelpContext(userControl);
-                    item.OnShow();
-                }
-            }
-            catch (DataSourceException ex)
-            {
-                DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-                FormKillWithLatency();
-            }
-
-            Cursor.Current = Cursors.Default;
-        }
-
-        private void FormKillWithLatency()
-        {            
-            _timer.Interval = 1000;
-            _timer.Tick += timer_Tick;
-            _timer.Start();
-        }
-
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            FormKill();
-        }
-
-        private bool SaveChanges()
-        {
+		private bool saveChanges()
+		{
 			try
 			{
 				_core.SaveChanges();
@@ -168,7 +165,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				ShowWarningMessage(UserTexts.Resources.OptimisticLockText, UserTexts.Resources.OptimisticLockHeader);
 				DialogResult = DialogResult.None;
-				CloseForm();
+				closeForm();
 			}
 			catch (ForeignKeyException)
 			{
@@ -177,7 +174,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 				ShowWarningMessage(UserTexts.Resources.DataHasBeenDeleted, UserTexts.Resources.OpenTeleoptiCCC);
 				DialogResult = DialogResult.None;
-				CloseForm();
+				closeForm();
 			}
 			catch (DataSourceException ex)
 			{
@@ -186,146 +183,142 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 			catch (Exception exception)
 			{
-				if (exception.InnerException != null && exception.InnerException is SqlException)
-					if (exception.InnerException.Message.Contains("IX_KpiTarget"))
-					{
-						ShowWarningMessage(UserTexts.Resources.OptimisticLockText, UserTexts.Resources.OptimisticLockHeader);
-						DialogResult = DialogResult.None;
-						CloseForm();
-						return false;
-					}
+				if (!(exception.InnerException is SqlException)) throw;
+				if (exception.InnerException.Message.Contains("IX_KpiTarget"))
+				{
+					ShowWarningMessage(UserTexts.Resources.OptimisticLockText, UserTexts.Resources.OptimisticLockHeader);
+					DialogResult = DialogResult.None;
+					closeForm();
+					return false;
+				}
 				throw;
 			}
-            return true;
-        }
+			return true;
+		}
 
-        private void CloseForm()
-        {
-            _core.UnloadPages();
-			KeyDown -= Form_KeyDown;
-			KeyPress -= Form_KeyPress;
-            Close();
-            Dispose();
-        }
+		private void closeForm()
+		{
+			_core.UnloadPages();
+			KeyDown -= formKeyDown;
+			KeyPress -= formKeyPress;
+			Close();
+			Dispose();
+		}
 
-        private void ButtonApplyClick(object sender, EventArgs e)
-        {
-            Cursor.Current = Cursors.WaitCursor;
-            SaveChanges();
-            
-            DialogResult = DialogResult.None;
-            Cursor.Current = Cursors.Default;
-        }
+		private void buttonApplyClick(object sender, EventArgs e)
+		{
+			Cursor.Current = Cursors.WaitCursor;
+			saveChanges();
+			
+			DialogResult = DialogResult.None;
+			Cursor.Current = Cursors.Default;
+		}
 
-        private void ButtonOkClick(object sender, EventArgs e)
-        {
-            Cursor.Current = Cursors.WaitCursor;
+		private void buttonOkClick(object sender, EventArgs e)
+		{
+			Cursor.Current = Cursors.WaitCursor;
 
-            if (SaveChanges())
-            {
-                CloseForm();
-                DialogResult = DialogResult.OK;
-            }
+			if (saveChanges())
+			{
+				closeForm();
+				DialogResult = DialogResult.OK;
+			}
 
-            Cursor.Current = Cursors.Default;
-        }
+			Cursor.Current = Cursors.Default;
+		}
 
-        private void ButtonCancelClick(object sender, EventArgs e)
-        {
-            CloseForm();
-            DialogResult = DialogResult.Cancel;
-        }
+		private void buttonCancelClick(object sender, EventArgs e)
+		{
+			closeForm();
+			DialogResult = DialogResult.Cancel;
+		}
 
-        private void LoadTree(int nodeToSelect)
-        {
-            BuildTree();
+		private void loadTree(int nodeToSelect)
+		{
+			buildTree();
 
-            if (nodeToSelect > 0)
-                treeViewOptions.SelectedNode = treeViewOptions.Nodes[5];
-            else
-            {
-                if (treeViewOptions.Nodes.Count >0)
-                    treeViewOptions.SelectedNode = treeViewOptions.Nodes[0];
-            }
-        }
+			if (nodeToSelect > 0)
+				treeViewOptions.SelectedNode = treeViewOptions.Nodes[5];
+			else
+			{
+				if (treeViewOptions.Nodes.Count >0)
+					treeViewOptions.SelectedNode = treeViewOptions.Nodes[0];
+			}
+		}
 
-        private TreeNode LoadTree(SelectedEntity<IAggregateRoot> selectedEntity)
-        {
-            BuildTree();
+		private TreeNodeAdv loadTree(SelectedEntity<IAggregateRoot> selectedEntity)
+		{
+			buildTree();
 
-            TreeNode selected = GetSelectedNode(selectedEntity);
-            
-            treeViewOptions.SelectedNode = selected ?? treeViewOptions.Nodes[0];
+			TreeNodeAdv selected = getSelectedNode(selectedEntity);
+			
+			treeViewOptions.SelectedNode = selected ?? treeViewOptions.Nodes[0];
 
-            return treeViewOptions.SelectedNode;
-        }
+			return treeViewOptions.SelectedNode;
+		}
 
-        private void BuildTree()
-        {
-            foreach (ISettingPage item in _core.AllSupportedPages)
-            {
-                TreeFamily treeFamily = item.TreeFamily();
+		private void buildTree()
+		{
+			foreach (ISettingPage item in _core.AllSupportedPages)
+			{
+				TreeFamily treeFamily = item.TreeFamily();
 
-                //Check for application permission
-                if (!treeFamily.CheckPermission()) continue;
+				//Check for application permission
+				if (!treeFamily.CheckPermission()) continue;
 
-                TreeNode parent = GetTreeNode(treeFamily.UserText);
-                if (parent == null)
-                {
-                    parent = treeViewOptions.Nodes.Add(treeFamily.UserText);
-                    parent.Tag = item;
-                }
-                TreeNode node = parent.Nodes.Add(item.TreeNode());
-                node.Tag = item;
-            }
-        }
+				var parent = getTreeNode(treeFamily.UserText);
+				if (parent == null)
+				{
+					parent = new TreeNodeAdv(treeFamily.UserText) { Tag = item };
+					treeViewOptions.Nodes.Add(parent);
+				}
+				var node = new TreeNodeAdv(item.TreeNode()) {Tag = item};
+				parent.Nodes.Add(node);
+				
+			}
+		}
 
-        private TreeNode GetSelectedNode(SelectedEntity<IAggregateRoot> entity)
-        {
-            foreach (TreeNode node in treeViewOptions.Nodes)
-            {
-                foreach (TreeNode childNodes in node.Nodes)
-                {
-                    var control = childNodes.Tag as ISettingPage;
+		private TreeNodeAdv getSelectedNode(SelectedEntity<IAggregateRoot> entity)
+		{
+			foreach (TreeNodeAdv node in treeViewOptions.Nodes)
+			{
+				foreach (TreeNodeAdv childNodes in node.Nodes)
+				{
+					var control = childNodes.Tag as ISettingPage;
 
-                    if (control != null && control.ViewType == entity.ViewType)
-                    {
-                        return childNodes;
-                    }
-                }
-            }
+					if (control != null && control.ViewType == entity.ViewType)
+					{
+						return childNodes;
+					}
+				}
+			}
 
-            return null;
-        }
+			return null;
+		}
 
-        private TreeNode GetTreeNode(string nodeName)
-        {
-            foreach (TreeNode item in treeViewOptions.Nodes)
-            {
-                if (item.Text == nodeName && item.Parent == null)
-                    return item;
-            }
-            return null;
-        }
+		private TreeNodeAdv getTreeNode(string nodeName)
+		{
+			return treeViewOptions.Nodes.Cast<TreeNodeAdv>().FirstOrDefault(item => item.Text == nodeName && item.Parent.Text == "root");
+		}
 
-        private void SetupHelpContext(Control control)
-        {
-            RemoveControlHelpContext(control);
-            AddControlHelpContext(control);
-        }
+		private void setupHelpContext(Control control)
+		{
+			RemoveControlHelpContext(control);
+			AddControlHelpContext(control);
+		}
 
-        private void settingsScreenSizeChanged(object sender, EventArgs e)
-        {
-            // this is because syncfusion seems to fuck up the size when you set dock.fill so I handle it myself
-            // otherwise the controls will come outside the form and you can't grab the border of the form and resize it
-             if(WindowState == FormWindowState.Minimized) return;
-            var offset = 3;
-            if (WindowState == FormWindowState.Maximized)
-                offset = 6;
-            tableLayoutPanel1.Height = Height - (ribbonControlAdv1.Height + offset +3);
-            tableLayoutPanel1.Top = ribbonControlAdv1.Height +offset;
-            tableLayoutPanel1.Left = 3;
-            tableLayoutPanel1.Width = Width - 6;
-        }
-    }
+		private void settingsScreenSizeChanged(object sender, EventArgs e)
+		{
+			// this is because syncfusion seems to fuck up the size when you set dock.fill so I handle it myself
+			// otherwise the controls will come outside the form and you can't grab the border of the form and resize it
+			 if(WindowState == FormWindowState.Minimized) return;
+			var offset = 3;
+			if (WindowState == FormWindowState.Maximized)
+				offset = 6;
+			tableLayoutPanel1.Height = Height - (ribbonControlAdv1.Height + offset +3);
+			tableLayoutPanel1.Top = ribbonControlAdv1.Height +offset;
+			tableLayoutPanel1.Left = 3;
+			tableLayoutPanel1.Width = Width - 6;
+		}
+	}
 }

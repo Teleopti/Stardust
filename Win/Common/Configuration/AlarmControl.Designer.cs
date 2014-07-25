@@ -174,7 +174,7 @@
             this.buttonAdvDelete.TabIndex = 7;
             this.buttonAdvDelete.TabStop = false;
             this.buttonAdvDelete.UseVisualStyle = true;
-            this.buttonAdvDelete.Click += new System.EventHandler(this.ButtonAdvDeleteClick);
+            this.buttonAdvDelete.Click += new System.EventHandler(this.buttonAdvDeleteClick);
             // 
             // buttonNew
             // 
@@ -193,7 +193,7 @@
             this.buttonNew.TabIndex = 6;
             this.buttonNew.UseVisualStyle = true;
             this.buttonNew.UseVisualStyleBackColor = false;
-            this.buttonNew.Click += new System.EventHandler(this.ButtonNewClick);
+            this.buttonNew.Click += new System.EventHandler(this.buttonNewClick);
             // 
             // gradientPanel1
             // 

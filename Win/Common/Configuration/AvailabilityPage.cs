@@ -156,9 +156,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			textBoxDescription.Validated += textBoxDescriptionValidated;
 			buttonNew.Click += buttonNewClick;
 			buttonDelete.Click += buttonDeleteClick;
-			//
-			// numericUpDownWeek
-			//
+
 			numericUpDownWeek.Minimum = firstItemIndex + itemDifference;
 			numericUpDownWeek.ValueChanged += numericUpDownWeekValueChanged;
 		}

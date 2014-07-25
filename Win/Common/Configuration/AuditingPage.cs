@@ -48,10 +48,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void LoadControl()
 		{
 			loadAuditSetting();
-			SetColors();
+			setColors();
 		}
 
-		private void SetColors()
+		private void setColors()
 		{
 			BackColor = ColorHelper.WizardBackgroundColor();
 			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();

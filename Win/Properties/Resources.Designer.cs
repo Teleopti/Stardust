@@ -1503,6 +1503,16 @@ namespace Teleopti.Ccc.Win.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ccc_temp_DeleteGroup10 {
+            get {
+                object obj = ResourceManager.GetObject("ccc_temp_DeleteGroup10", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ccc_temp_DeleteGroup2 {
             get {
                 object obj = ResourceManager.GetObject("ccc_temp_DeleteGroup2", resourceCulture);
@@ -1536,6 +1546,46 @@ namespace Teleopti.Ccc.Win.Properties {
         internal static System.Drawing.Bitmap ccc_temp_DeleteGroup5 {
             get {
                 object obj = ResourceManager.GetObject("ccc_temp_DeleteGroup5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ccc_temp_DeleteGroup6 {
+            get {
+                object obj = ResourceManager.GetObject("ccc_temp_DeleteGroup6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ccc_temp_DeleteGroup7 {
+            get {
+                object obj = ResourceManager.GetObject("ccc_temp_DeleteGroup7", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ccc_temp_DeleteGroup8 {
+            get {
+                object obj = ResourceManager.GetObject("ccc_temp_DeleteGroup8", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ccc_temp_DeleteGroup9 {
+            get {
+                object obj = ResourceManager.GetObject("ccc_temp_DeleteGroup9", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
