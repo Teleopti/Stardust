@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
@@ -28,6 +29,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IGlobalSettingDataRepository _globalSettingDataRepository;
 		private IPerson _person;
 		private AdherenceReportSetting _adherenceReportSetting;
+		private IEnumerable<Tuple<int, string, int>> _allTimezones;
+		private DateTime _calculationDate;
 
 		[Test]
 		public void ShouldSendNextCalculateMessageOneDayAfter()
@@ -63,10 +66,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
 			_adherenceReportSetting = new AdherenceReportSetting();
+			_allTimezones = new List<Tuple<int, string, int>> {new Tuple<int, string, int>(1, "UTC", 0)};
+
+			_calculationDate = DateTime.UtcNow.AddMinutes(_allTimezones.First().Item3).Date.AddDays(-1);
 
 			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
 			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
+
+			_statisticsRepository.Stub(x => x.LoadAllTimeZones(_uow)).IgnoreArguments().Return(_allTimezones);
 
 			_globalSettingDataRepository.Stub(
 				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting())).IgnoreArguments()
@@ -77,7 +85,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldAwardBronzeForAnsweredCalls()
 		{
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, DateTime.Now)).Return(new List<Guid>{_person.Id.Value});
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, _calculationDate))
+				.Return(new List<Guid> {_person.Id.Value});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage());
@@ -89,7 +98,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldAwardBronzeForAdherence()
 		{
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod, DateTime.Now)).Return(new List<Guid> { _person.Id.Value });
+			_statisticsRepository.Stub(
+				x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod, _calculationDate))
+				.Return(new List<Guid> {_person.Id.Value});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage());
@@ -100,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldAwardBronzeForAHT()
 		{
-			_statisticsRepository.Stub(x => x.LoadAgentsUnderThresholdForAHT(_uow, DateTime.Now)).Return(new List<Guid> { _person.Id.Value });
+			_statisticsRepository.Stub(x => x.LoadAgentsUnderThresholdForAHT(_uow, _calculationDate)).Return(new List<Guid> { _person.Id.Value });
 			
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage());
@@ -111,8 +122,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldAwardBronzeForBothAdherenceAndAnsweredCalls()
 		{
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod, DateTime.Now)).Return(new List<Guid> { _person.Id.Value });
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, DateTime.Now)).Return(new List<Guid> { _person.Id.Value });
+			_statisticsRepository.Stub(
+				x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod, _calculationDate))
+				.Return(new List<Guid> {_person.Id.Value});
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, _calculationDate))
+				.Return(new List<Guid> {_person.Id.Value});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage());
