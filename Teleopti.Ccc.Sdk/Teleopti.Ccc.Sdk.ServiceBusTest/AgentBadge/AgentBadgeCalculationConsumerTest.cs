@@ -31,21 +31,31 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private AdherenceReportSetting _adherenceReportSetting;
 		private IEnumerable<Tuple<int, string, int>> _allTimezones;
 		private DateTime _calculationDate;
+		private Tuple<int, string, int> timezone;
 		private int timezoneId;
 
 		[Test]
 		public void ShouldSendNextCalculateMessageOneDayAfter()
 		{
 			var serviceBus = new ServiceBusMock();
-			var target = new AgentBadgeCalculationConsumer(serviceBus, null);
-			var message = new AgentBadgeCalculateMessage();
+			var target = new AgentBadgeCalculationConsumerForTest(serviceBus, _repositoryFactory, _dataSource);
+			var message = new AgentBadgeCalculateMessage
+			{
+				IsInitialization = false,
+				TimezoneId = timezone.Item1
+			};
 
 			target.Consume(message);
 
 			var totalSecondsOfSentTime = (int)(serviceBus.DelaySentTime - DateTime.Now.Date).TotalSeconds;
-			var totalSecondsOfNow = (int)(DateTime.Now.AddDays(1) - DateTime.Now.Date).TotalSeconds;
+
+			var tomorrowForTimezone = DateTime.UtcNow.AddMinutes(timezone.Item3).Date.AddDays(1);
+			var totalSecondsOfNow = (int)(tomorrowForTimezone - DateTime.Now.Date).TotalSeconds;
 			totalSecondsOfSentTime.Should().Be.EqualTo(totalSecondsOfNow);
-			serviceBus.DelaySentMessage[0].Should().Be.EqualTo(message);
+
+			var delaySendMessage = (AgentBadgeCalculateMessage)serviceBus.DelaySentMessage[0];
+			delaySendMessage.IsInitialization.Should().Be.EqualTo(message.IsInitialization);
+			delaySendMessage.TimezoneId.Should().Be.EqualTo(message.TimezoneId);
 		}
 
 		[SetUp]
@@ -67,8 +77,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
 			_adherenceReportSetting = new AdherenceReportSetting();
-			_allTimezones = new List<Tuple<int, string, int>> { new Tuple<int, string, int>(timezoneId, "UTC", 0) };
-			timezoneId = _allTimezones.First().Item1;
+			_allTimezones = new List<Tuple<int, string, int>> { new Tuple<int, string, int>(1, "UTC", 0) };
+			timezone = _allTimezones.First();
+			timezoneId = timezone.Item1;
 
 			_calculationDate = DateTime.UtcNow.AddMinutes(_allTimezones.First().Item3).Date.AddDays(-1);
 
@@ -76,12 +87,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
 			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
 
-			_statisticsRepository.Stub(x => x.LoadAllTimeZones(_uow)).IgnoreArguments().Return(_allTimezones);
+			_statisticsRepository.Stub(x => x.LoadAllTimeZones(_uow)).Return(_allTimezones);
 
 			_globalSettingDataRepository.Stub(
 				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting())).IgnoreArguments()
 				.Return(_adherenceReportSetting);
-			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson>() { _person });
+			_personRepository.Stub(x => x.LoadAll()).Return(new List<IPerson> { _person });
 		}
 
 		[Test]
@@ -91,7 +102,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.Return(new List<Guid> {_person.Id.Value});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
-			target.Consume(new AgentBadgeCalculateMessage());
+			target.Consume(new AgentBadgeCalculateMessage
+			{
+				IsInitialization = false,
+				TimezoneId = timezoneId
+			});
 
 			_person.Badges.BronzeBadge.Should().Be.EqualTo(1);
 		}
@@ -105,7 +120,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.Return(new List<Guid> {_person.Id.Value});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
-			target.Consume(new AgentBadgeCalculateMessage());
+			target.Consume(new AgentBadgeCalculateMessage
+			{
+				IsInitialization = false,
+				TimezoneId = timezoneId
+			});
 
 			_person.Badges.BronzeBadge.Should().Be.EqualTo(1);
 		}
@@ -116,7 +135,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_statisticsRepository.Stub(x => x.LoadAgentsUnderThresholdForAHT(_uow, timezoneId, _calculationDate)).Return(new List<Guid> { _person.Id.Value });
 			
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
-			target.Consume(new AgentBadgeCalculateMessage());
+			target.Consume(new AgentBadgeCalculateMessage
+			{
+				IsInitialization = false,
+				TimezoneId = timezoneId
+			});
 
 			_person.Badges.BronzeBadge.Should().Be.EqualTo(1);
 		}
@@ -131,7 +154,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.Return(new List<Guid> {_person.Id.Value});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
-			target.Consume(new AgentBadgeCalculateMessage());
+			target.Consume(new AgentBadgeCalculateMessage
+			{
+				IsInitialization = false,
+				TimezoneId = timezoneId
+			});
 
 			_person.Badges.BronzeBadge.Should().Be.EqualTo(2);
 		}
