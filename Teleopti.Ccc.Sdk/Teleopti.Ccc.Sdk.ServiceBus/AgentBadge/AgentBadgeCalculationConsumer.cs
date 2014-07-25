@@ -40,16 +40,45 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				using (var uow = dataSource.Statistic.CurrentUnitOfWork())
 				{
 					var timeZoneList = _repositoryFactory.CreateStatisticRepository().LoadAllTimeZones(uow);
-					foreach (var timeZone in timeZoneList)
+					if (message.IsInitialization)
 					{
-						_calculator.Calculate(uow, allAgents,timeZone, adherenceReportSetting.CalculationMethod);
+						foreach (var timezone in timeZoneList)
+						{
+							var todayForTimezone = DateTime.UtcNow.AddMinutes(timezone.Item3).Date;
+							var yesterdayForTimezone = todayForTimezone.AddDays(-1);
+							var tomorrowForTimezone = todayForTimezone.AddDays(1);
+
+							_calculator.Calculate(uow, allAgents, timezone.Item1, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
+							if (_serviceBus != null)
+							{
+								_serviceBus.DelaySend(tomorrowForTimezone, new AgentBadgeCalculateMessage
+								{
+									IsInitialization = false,
+									TimezoneId = timezone.Item1
+								});
+							}
+						}
+					}
+					else
+					{
+						var timezone = timeZoneList.First(tz => tz.Item1 == message.TimezoneId);
+						if (timezone == null) continue;
+
+						var todayForTimezone = DateTime.UtcNow.AddMinutes(timezone.Item3).Date;
+						var yesterdayForTimezone = todayForTimezone.AddDays(-1);
+						var tomorrowForTimezone = todayForTimezone.AddDays(1);
+
+						_calculator.Calculate(uow, allAgents, timezone.Item1, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
+						if (_serviceBus != null)
+						{
+							_serviceBus.DelaySend(tomorrowForTimezone, new AgentBadgeCalculateMessage
+							{
+								IsInitialization = false,
+								TimezoneId = message.TimezoneId
+							});
+						}
 					}
 				}
-			}
-
-			if (_serviceBus != null)
-			{
-				_serviceBus.DelaySend(DateTime.Now.AddDays(1), message);
 			}
 		}
 

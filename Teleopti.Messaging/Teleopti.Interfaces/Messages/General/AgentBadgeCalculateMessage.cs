@@ -9,5 +9,8 @@ namespace Teleopti.Interfaces.Messages.General
 		{
 			get { return Guid.NewGuid(); }
 		}
+
+		public bool IsInitialization { get; set; }
+		public int TimezoneId { get; set; }
 	}
 }

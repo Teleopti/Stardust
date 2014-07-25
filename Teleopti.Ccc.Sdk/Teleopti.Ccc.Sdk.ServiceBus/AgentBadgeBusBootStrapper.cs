@@ -10,7 +10,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		protected override void OnEndStart()
 		{
 			var bus = Container.Resolve<IServiceBus>();
-			bus.Send(new AgentBadgeCalculateMessage());
+			bus.Send(new AgentBadgeCalculateMessage()
+			{
+				IsInitialization = true
+			});
 		}
 	}
 }
