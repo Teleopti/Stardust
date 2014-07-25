@@ -55,6 +55,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanelSelectWorkloadControlSet = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
             this.labelSubHeader1 = new System.Windows.Forms.Label();
+            this.buttonDelete = new Syncfusion.Windows.Forms.ButtonAdv();
+            this.buttonNew = new Syncfusion.Windows.Forms.ButtonAdv();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.autoLabelChangeInfo = new Syncfusion.Windows.Forms.Tools.AutoLabel();
             this.autoLabel5 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
@@ -75,6 +77,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.dateSelectionFromToIsOpenStudentAvailability = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionFromTo();
             this.twoListSelectorCategories = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
             this.panelVisualizationButtons = new System.Windows.Forms.Panel();
+            this.buttonZoomOut = new Syncfusion.Windows.Forms.ButtonAdv();
+            this.buttonZoomIn = new Syncfusion.Windows.Forms.ButtonAdv();
             this.buttonPanLeft = new Syncfusion.Windows.Forms.ButtonAdv();
             this.buttonPanRight = new Syncfusion.Windows.Forms.ButtonAdv();
             this.twoListSelectorDayOffs = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
@@ -112,6 +116,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tableLayoutPanelAbsenceRequestPeriods = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelOpenForAbsenceRequests = new System.Windows.Forms.TableLayoutPanel();
             this.labelOpenForAbsenceRequests = new System.Windows.Forms.Label();
+            this.buttonDeleteAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
+            this.buttonAddAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
             this.gridControlAbsenceRequestOpenPeriods = new Syncfusion.Windows.Forms.Grid.GridControl();
             this.contextMenuStripOpenPeriodsGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemFromToPeriod = new System.Windows.Forms.ToolStripMenuItem();
@@ -146,12 +152,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.checkBoxAdvAutoGrant = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonDelete = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.buttonNew = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.buttonZoomOut = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.buttonZoomIn = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.buttonDeleteAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.buttonAddAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
             this.gradientPanelHeader.SuspendLayout();
@@ -315,6 +315,42 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.labelSubHeader1.TabIndex = 0;
             this.labelSubHeader1.Text = "xxChooseWorkflowControlSetToEdit";
             this.labelSubHeader1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // buttonDelete
+            // 
+            this.buttonDelete.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.buttonDelete.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+            this.buttonDelete.BackColor = System.Drawing.Color.White;
+            this.buttonDelete.BeforeTouchSize = new System.Drawing.Size(28, 28);
+            this.buttonDelete.ForeColor = System.Drawing.Color.White;
+            this.buttonDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_temp_DeleteGroup10;
+            this.buttonDelete.IsBackStageButton = false;
+            this.buttonDelete.Location = new System.Drawing.Point(933, 3);
+            this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 3, 0);
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(28, 28);
+            this.buttonDelete.TabIndex = 2;
+            this.buttonDelete.UseVisualStyle = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            // 
+            // buttonNew
+            // 
+            this.buttonNew.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.buttonNew.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+            this.buttonNew.BackColor = System.Drawing.Color.White;
+            this.buttonNew.BeforeTouchSize = new System.Drawing.Size(28, 28);
+            this.buttonNew.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.buttonNew.ForeColor = System.Drawing.Color.White;
+            this.buttonNew.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
+            this.buttonNew.IsBackStageButton = false;
+            this.buttonNew.Location = new System.Drawing.Point(898, 3);
+            this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 3, 0);
+            this.buttonNew.Name = "buttonNew";
+            this.buttonNew.Size = new System.Drawing.Size(28, 28);
+            this.buttonNew.TabIndex = 1;
+            this.buttonNew.UseVisualStyle = true;
+            this.buttonNew.UseVisualStyleBackColor = false;
+            this.buttonNew.Click += new System.EventHandler(this.buttonNew_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -642,6 +678,36 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.panelVisualizationButtons.Size = new System.Drawing.Size(965, 35);
             this.panelVisualizationButtons.TabIndex = 11;
             // 
+            // buttonZoomOut
+            // 
+            this.buttonZoomOut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonZoomOut.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+            this.buttonZoomOut.BeforeTouchSize = new System.Drawing.Size(36, 27);
+            this.buttonZoomOut.Image = global::Teleopti.Ccc.Win.Properties.Resources.Magifier_zoom_out;
+            this.buttonZoomOut.IsBackStageButton = false;
+            this.buttonZoomOut.Location = new System.Drawing.Point(766, 3);
+            this.buttonZoomOut.Name = "buttonZoomOut";
+            this.buttonZoomOut.Size = new System.Drawing.Size(36, 27);
+            this.buttonZoomOut.TabIndex = 3;
+            this.buttonZoomOut.UseVisualStyle = true;
+            this.buttonZoomOut.Click += new System.EventHandler(this.buttonZoomOut_Click);
+            // 
+            // buttonZoomIn
+            // 
+            this.buttonZoomIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonZoomIn.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+            this.buttonZoomIn.BeforeTouchSize = new System.Drawing.Size(36, 27);
+            this.buttonZoomIn.Image = global::Teleopti.Ccc.Win.Properties.Resources.Magnifier_zoom_in;
+            this.buttonZoomIn.IsBackStageButton = false;
+            this.buttonZoomIn.Location = new System.Drawing.Point(809, 3);
+            this.buttonZoomIn.Name = "buttonZoomIn";
+            this.buttonZoomIn.Size = new System.Drawing.Size(36, 27);
+            this.buttonZoomIn.TabIndex = 2;
+            this.buttonZoomIn.UseVisualStyle = true;
+            this.buttonZoomIn.Click += new System.EventHandler(this.buttonZoomIn_Click);
+            // 
             // buttonPanLeft
             // 
             this.buttonPanLeft.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -780,11 +846,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // comboBoxAdvAllowedPreferenceActivity
             // 
             this.comboBoxAdvAllowedPreferenceActivity.BackColor = System.Drawing.Color.White;
-            this.comboBoxAdvAllowedPreferenceActivity.BeforeTouchSize = new System.Drawing.Size(199, 23);
+            this.comboBoxAdvAllowedPreferenceActivity.BeforeTouchSize = new System.Drawing.Size(199, 19);
             this.comboBoxAdvAllowedPreferenceActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAdvAllowedPreferenceActivity.Location = new System.Drawing.Point(3, 1414);
             this.comboBoxAdvAllowedPreferenceActivity.Name = "comboBoxAdvAllowedPreferenceActivity";
-            this.comboBoxAdvAllowedPreferenceActivity.Size = new System.Drawing.Size(199, 23);
+            this.comboBoxAdvAllowedPreferenceActivity.Size = new System.Drawing.Size(199, 19);
             this.comboBoxAdvAllowedPreferenceActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
             this.comboBoxAdvAllowedPreferenceActivity.TabIndex = 15;
             this.comboBoxAdvAllowedPreferenceActivity.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvAllowedPreferenceActivity_SelectedIndexChanged);
@@ -891,7 +957,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.dateTimePickerAdvPublishedTo.Calendar.Name = "monthCalendar";
             this.dateTimePickerAdvPublishedTo.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
             this.dateTimePickerAdvPublishedTo.Calendar.SelectedDates = new System.DateTime[0];
-            this.dateTimePickerAdvPublishedTo.Calendar.Size = new System.Drawing.Size(187, 174);
+            this.dateTimePickerAdvPublishedTo.Calendar.Size = new System.Drawing.Size(185, 174);
             this.dateTimePickerAdvPublishedTo.Calendar.SizeToFit = true;
             this.dateTimePickerAdvPublishedTo.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.dateTimePickerAdvPublishedTo.Calendar.TabIndex = 0;
@@ -905,7 +971,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.BackColor = System.Drawing.SystemColors.Window;
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.IsBackStageButton = false;
-            this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Location = new System.Drawing.Point(103, 0);
+            this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Location = new System.Drawing.Point(101, 0);
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Size = new System.Drawing.Size(84, 23);
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Text = "None";
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.UseVisualStyle = true;
@@ -917,7 +983,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
             this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.IsBackStageButton = false;
             this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-            this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Size = new System.Drawing.Size(103, 23);
+            this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Size = new System.Drawing.Size(101, 23);
             this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Text = "Today";
             this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.UseVisualStyle = true;
             this.dateTimePickerAdvPublishedTo.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -974,7 +1040,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtMinTimePerWeek.Size = new System.Drawing.Size(86, 26);
             this.textBoxExtMinTimePerWeek.TabIndex = 11;
             this.textBoxExtMinTimePerWeek.TimeSpanBoxHeight = 23;
-            this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 44;
+            this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 51;
             this.textBoxExtMinTimePerWeek.Leave += new System.EventHandler(this.textBoxExtMinTimePerWeek_Validated);
             // 
             // labelMinimumTimePerWeek
@@ -1215,6 +1281,36 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.labelOpenForAbsenceRequests.Text = "xxOpenForAbsenceRequests";
             this.labelOpenForAbsenceRequests.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // buttonDeleteAbsenceRequestPeriod
+            // 
+            this.buttonDeleteAbsenceRequestPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.buttonDeleteAbsenceRequestPeriod.BeforeTouchSize = new System.Drawing.Size(28, 28);
+            this.buttonDeleteAbsenceRequestPeriod.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
+            this.buttonDeleteAbsenceRequestPeriod.IsBackStageButton = false;
+            this.buttonDeleteAbsenceRequestPeriod.Location = new System.Drawing.Point(931, 0);
+            this.buttonDeleteAbsenceRequestPeriod.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonDeleteAbsenceRequestPeriod.Name = "buttonDeleteAbsenceRequestPeriod";
+            this.buttonDeleteAbsenceRequestPeriod.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
+            this.buttonDeleteAbsenceRequestPeriod.Size = new System.Drawing.Size(28, 28);
+            this.buttonDeleteAbsenceRequestPeriod.TabIndex = 25;
+            this.buttonDeleteAbsenceRequestPeriod.Click += new System.EventHandler(this.buttonAdvDeleteAbsenceRequestPeriod_Click);
+            // 
+            // buttonAddAbsenceRequestPeriod
+            // 
+            this.buttonAddAbsenceRequestPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.buttonAddAbsenceRequestPeriod.BackColor = System.Drawing.Color.White;
+            this.buttonAddAbsenceRequestPeriod.BeforeTouchSize = new System.Drawing.Size(28, 28);
+            this.buttonAddAbsenceRequestPeriod.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.buttonAddAbsenceRequestPeriod.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
+            this.buttonAddAbsenceRequestPeriod.IsBackStageButton = false;
+            this.buttonAddAbsenceRequestPeriod.Location = new System.Drawing.Point(903, 0);
+            this.buttonAddAbsenceRequestPeriod.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonAddAbsenceRequestPeriod.Name = "buttonAddAbsenceRequestPeriod";
+            this.buttonAddAbsenceRequestPeriod.Size = new System.Drawing.Size(28, 28);
+            this.buttonAddAbsenceRequestPeriod.TabIndex = 24;
+            this.buttonAddAbsenceRequestPeriod.UseVisualStyleBackColor = false;
+            this.buttonAddAbsenceRequestPeriod.Click += new System.EventHandler(this.buttonAddAbsenceRequestPeriod_Click);
+            // 
             // gridControlAbsenceRequestOpenPeriods
             // 
             gridBaseStyle1.Name = "Header";
@@ -1359,7 +1455,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.dateTimePickerAdvViewpoint.Calendar.Name = "monthCalendar";
             this.dateTimePickerAdvViewpoint.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
             this.dateTimePickerAdvViewpoint.Calendar.SelectedDates = new System.DateTime[0];
-            this.dateTimePickerAdvViewpoint.Calendar.Size = new System.Drawing.Size(187, 174);
+            this.dateTimePickerAdvViewpoint.Calendar.Size = new System.Drawing.Size(185, 174);
             this.dateTimePickerAdvViewpoint.Calendar.SizeToFit = true;
             this.dateTimePickerAdvViewpoint.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.dateTimePickerAdvViewpoint.Calendar.TabIndex = 0;
@@ -1372,7 +1468,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.BackColor = System.Drawing.SystemColors.Window;
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.IsBackStageButton = false;
-            this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Location = new System.Drawing.Point(128, 0);
+            this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Location = new System.Drawing.Point(99, 0);
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Size = new System.Drawing.Size(84, 23);
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Text = "None";
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.UseVisualStyle = true;
@@ -1385,7 +1481,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.dateTimePickerAdvViewpoint.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
             this.dateTimePickerAdvViewpoint.Calendar.TodayButton.IsBackStageButton = false;
             this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-            this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Size = new System.Drawing.Size(187, 23);
+            this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Size = new System.Drawing.Size(185, 23);
             this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Text = "Today";
             this.dateTimePickerAdvViewpoint.Calendar.TodayButton.UseVisualStyle = true;
             this.dateTimePickerAdvViewpoint.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1716,7 +1812,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.timeSpanTextBox1.Size = new System.Drawing.Size(82, 28);
             this.timeSpanTextBox1.TabIndex = 9;
             this.timeSpanTextBox1.TimeSpanBoxHeight = 23;
-            this.timeSpanTextBox1.TimeSpanBoxWidth = 86;
+            this.timeSpanTextBox1.TimeSpanBoxWidth = 100;
             this.timeSpanTextBox1.Leave += new System.EventHandler(this.timeSpanTextBox1_Leave);
             // 
             // labelTolerancePosNeg
@@ -1756,102 +1852,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(154, 6);
-            // 
-            // buttonDelete
-            // 
-            this.buttonDelete.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonDelete.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-            this.buttonDelete.BackColor = System.Drawing.Color.White;
-            this.buttonDelete.BeforeTouchSize = new System.Drawing.Size(28, 28);
-            this.buttonDelete.ForeColor = System.Drawing.Color.White;
-            this.buttonDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_temp_DeleteGroup10;
-            this.buttonDelete.IsBackStageButton = false;
-            this.buttonDelete.Location = new System.Drawing.Point(933, 3);
-            this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 3, 0);
-            this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(28, 28);
-            this.buttonDelete.TabIndex = 2;
-            this.buttonDelete.UseVisualStyle = true;
-            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
-            // 
-            // buttonNew
-            // 
-            this.buttonNew.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonNew.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-            this.buttonNew.BackColor = System.Drawing.Color.White;
-            this.buttonNew.BeforeTouchSize = new System.Drawing.Size(28, 28);
-            this.buttonNew.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.buttonNew.ForeColor = System.Drawing.Color.White;
-            this.buttonNew.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
-            this.buttonNew.IsBackStageButton = false;
-            this.buttonNew.Location = new System.Drawing.Point(898, 3);
-            this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 3, 0);
-            this.buttonNew.Name = "buttonNew";
-            this.buttonNew.Size = new System.Drawing.Size(28, 28);
-            this.buttonNew.TabIndex = 1;
-            this.buttonNew.UseVisualStyle = true;
-            this.buttonNew.UseVisualStyleBackColor = false;
-            this.buttonNew.Click += new System.EventHandler(this.buttonNew_Click);
-            // 
-            // buttonZoomOut
-            // 
-            this.buttonZoomOut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonZoomOut.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.buttonZoomOut.BeforeTouchSize = new System.Drawing.Size(36, 27);
-            this.buttonZoomOut.Image = global::Teleopti.Ccc.Win.Properties.Resources.Magifier_zoom_out;
-            this.buttonZoomOut.IsBackStageButton = false;
-            this.buttonZoomOut.Location = new System.Drawing.Point(766, 3);
-            this.buttonZoomOut.Name = "buttonZoomOut";
-            this.buttonZoomOut.Size = new System.Drawing.Size(36, 27);
-            this.buttonZoomOut.TabIndex = 3;
-            this.buttonZoomOut.UseVisualStyle = true;
-            this.buttonZoomOut.Click += new System.EventHandler(this.buttonZoomOut_Click);
-            // 
-            // buttonZoomIn
-            // 
-            this.buttonZoomIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonZoomIn.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.buttonZoomIn.BeforeTouchSize = new System.Drawing.Size(36, 27);
-            this.buttonZoomIn.Image = global::Teleopti.Ccc.Win.Properties.Resources.Magnifier_zoom_in;
-            this.buttonZoomIn.IsBackStageButton = false;
-            this.buttonZoomIn.Location = new System.Drawing.Point(809, 3);
-            this.buttonZoomIn.Name = "buttonZoomIn";
-            this.buttonZoomIn.Size = new System.Drawing.Size(36, 27);
-            this.buttonZoomIn.TabIndex = 2;
-            this.buttonZoomIn.UseVisualStyle = true;
-            this.buttonZoomIn.Click += new System.EventHandler(this.buttonZoomIn_Click);
-            // 
-            // buttonDeleteAbsenceRequestPeriod
-            // 
-            this.buttonDeleteAbsenceRequestPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonDeleteAbsenceRequestPeriod.BeforeTouchSize = new System.Drawing.Size(28, 28);
-            this.buttonDeleteAbsenceRequestPeriod.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
-            this.buttonDeleteAbsenceRequestPeriod.IsBackStageButton = false;
-            this.buttonDeleteAbsenceRequestPeriod.Location = new System.Drawing.Point(931, 0);
-            this.buttonDeleteAbsenceRequestPeriod.Margin = new System.Windows.Forms.Padding(0);
-            this.buttonDeleteAbsenceRequestPeriod.Name = "buttonDeleteAbsenceRequestPeriod";
-            this.buttonDeleteAbsenceRequestPeriod.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this.buttonDeleteAbsenceRequestPeriod.Size = new System.Drawing.Size(28, 28);
-            this.buttonDeleteAbsenceRequestPeriod.TabIndex = 25;
-            this.buttonDeleteAbsenceRequestPeriod.Click += new System.EventHandler(this.buttonAdvDeleteAbsenceRequestPeriod_Click);
-            // 
-            // buttonAddAbsenceRequestPeriod
-            // 
-            this.buttonAddAbsenceRequestPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.buttonAddAbsenceRequestPeriod.BackColor = System.Drawing.Color.White;
-            this.buttonAddAbsenceRequestPeriod.BeforeTouchSize = new System.Drawing.Size(28, 28);
-            this.buttonAddAbsenceRequestPeriod.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.buttonAddAbsenceRequestPeriod.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
-            this.buttonAddAbsenceRequestPeriod.IsBackStageButton = false;
-            this.buttonAddAbsenceRequestPeriod.Location = new System.Drawing.Point(903, 0);
-            this.buttonAddAbsenceRequestPeriod.Margin = new System.Windows.Forms.Padding(0);
-            this.buttonAddAbsenceRequestPeriod.Name = "buttonAddAbsenceRequestPeriod";
-            this.buttonAddAbsenceRequestPeriod.Size = new System.Drawing.Size(28, 28);
-            this.buttonAddAbsenceRequestPeriod.TabIndex = 24;
-            this.buttonAddAbsenceRequestPeriod.UseVisualStyleBackColor = false;
-            this.buttonAddAbsenceRequestPeriod.Click += new System.EventHandler(this.buttonAddAbsenceRequestPeriod_Click);
             // 
             // errorProvider1
             // 

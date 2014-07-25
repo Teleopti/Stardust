@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             BackColor = ColorHelper.WizardBackgroundColor();
             tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
 
-            gradientPanelHeader.BackgroundColor = ColorHelper.OptionsDialogHeaderGradientBrush();
+            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
             labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
         }
 
@@ -102,6 +102,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			throw new NotImplementedException();
 		}
 
-		public ViewType ViewType { get; private set; }
+        public ViewType ViewType { get; private set; }
     }
 }
