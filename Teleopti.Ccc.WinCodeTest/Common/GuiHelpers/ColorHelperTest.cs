@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.GuiHelpers
             Assert.IsNotNull(ColorHelper.SelectedTreeViewNodeBackColor());
             Assert.IsNotNull(ColorHelper.SelectedTreeViewNodeForeColor());
             Assert.IsNotNull(ColorHelper.DialogControlHeader());
-            Assert.IsNotNull(ColorHelper.OptionsDialogHeaderGradientBrush());
+            Assert.IsNotNull(ColorHelper.OptionsDialogHeaderBackColor());
             Assert.IsNotNull(ColorHelper.OptionsDialogSubHeaderBackColor());
             Assert.IsNotNull(ColorHelper.OptionsDialogHeaderForeColor());
             Assert.IsNotNull(ColorHelper.GridControlSortingArrow);
