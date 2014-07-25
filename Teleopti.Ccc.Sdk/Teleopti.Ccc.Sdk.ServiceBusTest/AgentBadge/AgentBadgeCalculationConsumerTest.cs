@@ -42,14 +42,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var message = new AgentBadgeCalculateMessage
 			{
 				IsInitialization = false,
-				TimezoneId = timezone.Item1
+				TimezoneId = timezoneId
 			};
 
 			target.Consume(message);
 
 			var totalSecondsOfSentTime = (int)(serviceBus.DelaySentTime - DateTime.Now.Date).TotalSeconds;
+			var tomorrowForTimezone = DateTime.UtcNow.Date.AddDays(1).AddMinutes(-timezone.Item3).ToLocalTime();
 
-			var tomorrowForTimezone = DateTime.UtcNow.AddMinutes(timezone.Item3).Date.AddDays(1);
 			var totalSecondsOfNow = (int)(tomorrowForTimezone - DateTime.Now.Date).TotalSeconds;
 			totalSecondsOfSentTime.Should().Be.EqualTo(totalSecondsOfNow);
 
@@ -77,7 +77,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
 			_adherenceReportSetting = new AdherenceReportSetting();
-			_allTimezones = new List<Tuple<int, string, int>> { new Tuple<int, string, int>(1, "UTC", 0) };
+			_allTimezones = new List<Tuple<int, string, int>> {
+				new Tuple<int, string, int>(-1, "UTC", -60),
+				new Tuple<int, string, int>(0, "UTC", 0),
+				new Tuple<int, string, int>(1, "UTC+1", 60),
+				new Tuple<int, string, int>(8, "China", 480),
+				new Tuple<int, string, int>(10, "UTC+10", 600)
+			};
 			timezone = _allTimezones.First();
 			timezoneId = timezone.Item1;
 

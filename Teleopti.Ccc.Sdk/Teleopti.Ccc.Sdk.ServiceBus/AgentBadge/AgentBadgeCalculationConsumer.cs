@@ -4,7 +4,6 @@ using System.Linq;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
@@ -44,14 +43,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					{
 						foreach (var timezone in timeZoneList)
 						{
-							var todayForTimezone = DateTime.UtcNow.AddMinutes(timezone.Item3).Date;
+							var todayForTimezone = DateTime.UtcNow.Date;
 							var yesterdayForTimezone = todayForTimezone.AddDays(-1);
-							var tomorrowForTimezone = todayForTimezone.AddDays(1);
+							var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Item3);
 
 							_calculator.Calculate(uow, allAgents, timezone.Item1, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
 							if (_serviceBus != null)
 							{
-								_serviceBus.DelaySend(tomorrowForTimezone, new AgentBadgeCalculateMessage
+								_serviceBus.DelaySend(tomorrowForTimezone.ToLocalTime(), new AgentBadgeCalculateMessage
 								{
 									IsInitialization = false,
 									TimezoneId = timezone.Item1
@@ -64,14 +63,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						var timezone = timeZoneList.First(tz => tz.Item1 == message.TimezoneId);
 						if (timezone == null) continue;
 
-						var todayForTimezone = DateTime.UtcNow.AddMinutes(timezone.Item3).Date;
+						var todayForTimezone = DateTime.UtcNow.Date;
 						var yesterdayForTimezone = todayForTimezone.AddDays(-1);
-						var tomorrowForTimezone = todayForTimezone.AddDays(1);
+						var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Item3);
 
 						_calculator.Calculate(uow, allAgents, timezone.Item1, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
 						if (_serviceBus != null)
 						{
-							_serviceBus.DelaySend(tomorrowForTimezone, new AgentBadgeCalculateMessage
+							_serviceBus.DelaySend(tomorrowForTimezone.ToLocalTime(), new AgentBadgeCalculateMessage
 							{
 								IsInitialization = false,
 								TimezoneId = message.TimezoneId
