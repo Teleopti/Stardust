@@ -37,21 +37,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 		public IEnumerable<IPerson> Calculate(IUnitOfWork unitOfWork, IEnumerable<IPerson> allPersons, Tuple<int, string, int> timeZone, AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
 		{
+			var timezoneId = timeZone.Item1;
 			var agentsThatShouldGetBadge = new List<Guid>();
 			var date = DateTime.UtcNow.AddMinutes(timeZone.Item3).Date.AddDays(-1);
-			var agents = _statisticRepository.LoadAgentsOverThresholdForAdherence(unitOfWork, adherenceCalculationMethod,date);
+			var agents = _statisticRepository.LoadAgentsOverThresholdForAdherence(unitOfWork, adherenceCalculationMethod, timezoneId, date);
 			if (agents != null)
 			{
 				agentsThatShouldGetBadge.AddRange(agents);
 			}
 
-			agents = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(unitOfWork, date);
+			agents = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(unitOfWork, timezoneId, date);
 			if (agents != null)
 			{
 				agentsThatShouldGetBadge.AddRange(agents);
 			}
 
-			agents = _statisticRepository.LoadAgentsUnderThresholdForAHT(unitOfWork, date);
+			agents = _statisticRepository.LoadAgentsUnderThresholdForAHT(unitOfWork, timezoneId, date);
 			if (agents != null)
 			{
 				agentsThatShouldGetBadge.AddRange(agents);

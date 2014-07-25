@@ -37,6 +37,7 @@ GO
 --EXEC [mart].[raptor_number_of_calls_per_agent_by_date] @threshold=10,@local_date='2014-07-10'
 CREATE PROCEDURE [mart].[raptor_number_of_calls_per_agent_by_date] 
 @threshold int,
+@time_zone_id int,
 @local_date smalldatetime
 	
 AS
@@ -56,6 +57,7 @@ inner join mart.bridge_time_zone tz
 inner join mart.dim_date d
 	on tz.local_date_id = d.date_id
 where d.date_date = @local_date
+  and p.time_zone_id = @time_zone_id
 group by
 	p.person_code,
 	d.date_date
@@ -75,6 +77,7 @@ GO
 
 CREATE PROCEDURE [mart].[raptor_AHT_per_agent_by_date] 
 @threshold int,
+@time_zone_id int,
 @local_date smalldatetime
 AS
 Begin
@@ -93,6 +96,7 @@ select convert(decimal(18,2),((sum(talk_time_s + after_call_work_time_s))/case w
  inner join mart.dim_date d
     on tz.local_date_id = d.date_id
  where d.date_date = @local_date
+   and p.time_zone_id = @time_zone_id
  group by p.person_code,
        d.date_date
 having convert(decimal(18,2),((sum(talk_time_s + after_call_work_time_s))/case when sum(answered_calls)= 0 THEN 1 ELSE sum(answered_calls) END)) < @threshold
@@ -115,12 +119,10 @@ EXEC [mart].[raptor_adherence_per_agent_by_date]
      @threshold=0.58, -- 58%
      @local_date='2014-05-29',
      @adherence_id=2,
-     @time_zone_id=1,
-     @business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA';
+     @time_zone_id=1;
 */
 
 CREATE PROCEDURE [mart].[raptor_adherence_per_agent_by_date]
-@business_unit_code uniqueidentifier,
 @local_date smalldatetime,
 @threshold decimal(3, 2),
 @adherence_id int, --1,2 or 3 from adherence_calculation table
@@ -299,7 +301,6 @@ DECLARE @intervals_length_s INT
 DECLARE @hide_time_zone bit
 DECLARE @selected_adherence_type nvarchar(100)
 DECLARE @date TABLE (date_from_id INT, date_to_id INT)
-DECLARE @scenario_id int
 DECLARE @nowutcDateOnly smalldatetime
 DECLARE @nowutcInterval smalldatetime
 DECLARE @nowLocalDateId int
@@ -315,9 +316,6 @@ SELECT @nowutcInterval = DATEADD(minute,DATEPART(minute, GETUTCDATE()),DATEADD(h
 ------------
 SELECT @selected_adherence_type= adherence_name FROM mart.adherence_calculation WHERE adherence_id=@adherence_id
 SELECT @intervals_per_day = COUNT(interval_id) FROM mart.dim_interval
-
--- Get default scenario for given business unit
-SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE default_scenario = 1 AND business_unit_code = @business_unit_code
 
 --handle empty Analytics
 IF @intervals_per_day = 0 SET @intervals_per_day=96
@@ -378,8 +376,8 @@ select distinct
     on tz.time_zone_id = p.time_zone_id
  inner join mart.dim_date d
     on tz.local_date_id = d.date_id
- where p.business_unit_code = @business_unit_code
-   and d.date_date = @local_date;
+ where d.date_date = @local_date
+   and p.time_zone_id = @time_zone_id;
 
 --Create UTC table from: mart.fact_schedule_deviation
 INSERT INTO #fact_schedule_deviation_raw(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
@@ -439,10 +437,15 @@ FROM
 --INNER JOIN #person_id a
 --	ON fs.person_id = a.person_id
 INNER JOIN #bridge_time_zone b
-	ON	fs.shift_startinterval_id= b.interval_id
-	AND fs.shift_startdate_id = b.date_id
-WHERE fs.scenario_id=@scenario_id
-AND fs.person_id in(SELECT person_id FROM  #person_id)
+   ON fs.shift_startinterval_id= b.interval_id
+  AND fs.shift_startdate_id = b.date_id
+INNER JOIN mart.dim_business_unit bu
+   ON fs.business_unit_id = bu.business_unit_id
+INNER JOIN mart.dim_scenario sc
+   ON sc.business_unit_id = bu.business_unit_id
+  AND fs.scenario_id = sc.scenario_id
+  AND sc.default_scenario = 1
+WHERE fs.person_id in(SELECT person_id FROM #person_id)
 
 INSERT #fact_schedule(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,scheduled_time_s,scheduled_ready_time_s,count_activity_per_interval)
 SELECT

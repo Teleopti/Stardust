@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private AdherenceReportSetting _adherenceReportSetting;
 		private IEnumerable<Tuple<int, string, int>> _allTimezones;
 		private DateTime _calculationDate;
+		private int timezoneId;
 
 		[Test]
 		public void ShouldSendNextCalculateMessageOneDayAfter()
@@ -66,7 +67,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
 			_adherenceReportSetting = new AdherenceReportSetting();
-			_allTimezones = new List<Tuple<int, string, int>> {new Tuple<int, string, int>(1, "UTC", 0)};
+			_allTimezones = new List<Tuple<int, string, int>> { new Tuple<int, string, int>(timezoneId, "UTC", 0) };
+			timezoneId = _allTimezones.First().Item1;
 
 			_calculationDate = DateTime.UtcNow.AddMinutes(_allTimezones.First().Item3).Date.AddDays(-1);
 
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldAwardBronzeForAnsweredCalls()
 		{
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, _calculationDate))
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, timezoneId, _calculationDate))
 				.Return(new List<Guid> {_person.Id.Value});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
@@ -99,7 +101,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		public void ShouldAwardBronzeForAdherence()
 		{
 			_statisticsRepository.Stub(
-				x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod, _calculationDate))
+				x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod, timezoneId, _calculationDate))
 				.Return(new List<Guid> {_person.Id.Value});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
@@ -111,7 +113,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldAwardBronzeForAHT()
 		{
-			_statisticsRepository.Stub(x => x.LoadAgentsUnderThresholdForAHT(_uow, _calculationDate)).Return(new List<Guid> { _person.Id.Value });
+			_statisticsRepository.Stub(x => x.LoadAgentsUnderThresholdForAHT(_uow, timezoneId, _calculationDate)).Return(new List<Guid> { _person.Id.Value });
 			
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage());
@@ -123,9 +125,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		public void ShouldAwardBronzeForBothAdherenceAndAnsweredCalls()
 		{
 			_statisticsRepository.Stub(
-				x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod, _calculationDate))
+				x => x.LoadAgentsOverThresholdForAdherence(_uow, _adherenceReportSetting.CalculationMethod, timezoneId, _calculationDate))
 				.Return(new List<Guid> {_person.Id.Value});
-			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, _calculationDate))
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, timezoneId, _calculationDate))
 				.Return(new List<Guid> {_person.Id.Value});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);

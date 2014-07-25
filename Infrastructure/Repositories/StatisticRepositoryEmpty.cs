@@ -140,22 +140,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow, DateTime date)
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow, int timezoneId, DateTime date)
 		{
 			return new List<Guid>();
 		}
 
-	    public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, DateTime date)
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int timezoneId, DateTime date)
 	    {
 		    return new List<Guid>();
 	    }
 
-	    public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow)
-		{
-			return new List<Guid>();
-		}
-
-		public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow, DateTime date)
+		public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow, int timezoneId, DateTime date)
 		{
 			return new List<Guid>();
 		}

@@ -340,10 +340,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			    .List<Tuple<int, string, int>>();
 	    }
 
-		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow, DateTime date)
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow, int timezoneId, DateTime date)
 		{
 			const string sql =
-				"exec [mart].[raptor_number_of_calls_per_agent_by_date] @threshold=:threshold, @local_date=:date";
+				"exec [mart].[raptor_number_of_calls_per_agent_by_date] @threshold=:threshold, @time_zone_id=:timezoneId, @local_date=:date";
 
 			var thresholdSettings = new AgentBadgeSettingsRepository(AppUnitOfWorkFactory()).LoadAll().FirstOrDefault();
 			if (thresholdSettings == null)
@@ -355,14 +355,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
 				.SetReadOnly(true)
 				.SetInt32("threshold", threshold)
+				.SetInt32("timezoneId", timezoneId)
 				.SetDateTime("date", date)
 				.Enumerable<Guid>();
 		}
 
-		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, DateTime date)
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int timezoneId, DateTime date)
 		{
 			const string sql =
-				"exec [mart].[raptor_adherence_per_agent_by_date] @threshold=:threshold, @local_date=:date, @adherence_id=:adherenceId, "
+				"exec [mart].[raptor_adherence_per_agent_by_date] @threshold=:threshold, @time_zone_id=:timezoneId, @local_date=:date, @adherence_id=:adherenceId, "
 				+ "@time_zone_id=:timezone, @business_unit_code=:businessUnit";
 			
 			var thresholdSettings = new AgentBadgeSettingsRepository(AppUnitOfWorkFactory()).LoadAll().FirstOrDefault();
@@ -375,16 +376,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
 				.SetReadOnly(true)
 				.SetDouble("threshold", threshold.Value)
+				.SetInt32("timezoneId", timezoneId)
 				.SetDateTime("date", date)
 				.SetInt32("adherenceId", (int)adherenceCalculationMethod)
 				.SetGuid("businessUnit", Guid.NewGuid()) // TODO: Pass a real BU id
 				.Enumerable<Guid>();
 		}
 
-	    public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow, DateTime date)
+	    public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow, int timezoneId, DateTime date)
 		{
 			const string sql =
-				"exec [mart].[raptor_AHT_per_agent_by_date] @threshold=:threshold, @local_date=:date";
+				"exec [mart].[raptor_AHT_per_agent_by_date] @threshold=:threshold, @time_zone_id=:timezoneId, @local_date=:date";
 
 			var thresholdSettings = new AgentBadgeSettingsRepository(AppUnitOfWorkFactory()).LoadAll().FirstOrDefault();
 			if (thresholdSettings == null)
@@ -396,6 +398,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
 				.SetReadOnly(true)
 				.SetDouble("threshold", threshold.TotalSeconds)
+				.SetInt32("timezoneId", timezoneId)
 				.SetDateTime("date", date)
 				.Enumerable<Guid>();
 		}
