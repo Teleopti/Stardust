@@ -503,14 +503,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
             });
         };
 
-		self.createAllTeams = function(teams) {
+		self.createAllTeams = function (teams) {
+			self.availableAllTeamIds.removeAll();
+
 			var text = $("#Request-all-permitted-teams").val();
 			$.each(teams, function(index, team) {
 				self.availableAllTeamIds.push(team.id);
 			});
-			if (self.isPossibleSchedulesForAllEnabled()) {
-				self.availableTeams.push({ id: "allTeams", text: text });
-			};
+
+			self.availableTeams.push({ id: "allTeams", text: text });
 		};
         self.loadTeams = function () {
             var teamToSelect = self.selectedTeamInternal() ? self.selectedTeamInternal() : self.myTeamId();
@@ -529,7 +530,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                 success: function (data, textStatus, jqXHR) {
                     self.selectedTeam(null);
                     self.availableTeams(data);
-	                self.createAllTeams(data);
+                    if (self.isPossibleSchedulesForAllEnabled()) {
+                    	self.createAllTeams(data);
+                    }
                     self.selectedTeam(teamToSelect);
                     
                 },
