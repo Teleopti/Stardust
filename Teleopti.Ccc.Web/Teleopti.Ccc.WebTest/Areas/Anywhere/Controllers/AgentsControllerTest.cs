@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 						team)).Return(false);
 			teamRepository.Stub(x => x.Get(teamId)).Return(team);
 
-			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(permissionProvider, teamRepository, null, date,null,null))
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(permissionProvider, teamRepository, null, date,null,null,null))
 			{
 				target.GetStates(teamId);
 				target.Response.StatusCode.Should().Be(403);
@@ -53,11 +54,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var personId = Guid.NewGuid();
 			var person = new Person();
 			person.SetId(personId);
-			person.Name = new Name(" "," ");
+			person.Name = new Name("a","b");
 
 			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			var hawaiiTimeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 			userTimeZone.Stub(x => x.TimeZone()).Return(hawaiiTimeZoneInfo);
+           
+		    var commonAgentNameProvider = MockRepository.GenerateMock<ICommonAgentNameProvider>();
+		    var commonAgentNameSettings = new CommonNameDescriptionSetting();
+		    commonAgentNameProvider.Stub(x => x.CommonAgentNameSettings).Return(commonAgentNameSettings);
 			
 			var stateInfo = new AgentAdherenceStateInfo()
 			{
@@ -74,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var expected = new AgentViewModel
 			{
 				PersonId = stateInfo.PersonId,
-				Name = person.Name.ToString(),
+				Name = commonAgentNameSettings.BuildCommonNameDescription(person),
 				State = stateInfo.State,
 				StateStart = stateInfo.StateStart,
 				Activity =stateInfo.Activity,
@@ -92,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(personId)).Return(person);
-			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), MockRepository.GenerateStub<ITeamRepository>(), personRepository, new Now(), dataReader, userTimeZone))
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), MockRepository.GenerateStub<ITeamRepository>(), personRepository, new Now(), dataReader, userTimeZone, commonAgentNameProvider))
 			{
 			
 				var result = target.GetStates(teamId).Data as IEnumerable<AgentViewModel>;
@@ -133,16 +138,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var today = new Now();
 			var period = new DateOnlyPeriod(today.LocalDateOnly(), today.LocalDateOnly());
 			personRepository.Stub(x => x.FindPeopleBelongTeam(team, period)).Return(new List<IPerson> { person });
-			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+            personRepository.Stub(x => x.Get(personId)).Return(person);
+            var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			var hawaiiTimeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 			userTimeZone.Stub(x => x.TimeZone()).Return(hawaiiTimeZoneInfo);
+            var commonAgentNameProvider = MockRepository.GenerateMock<ICommonAgentNameProvider>();
+            var commonAgentNameSettings = new CommonNameDescriptionSetting();
+            commonAgentNameProvider.Stub(x => x.CommonAgentNameSettings).Return(commonAgentNameSettings);
+			
 
-			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), teamRepository, personRepository, new Now(), null, userTimeZone))
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), teamRepository, personRepository, new Now(), null, userTimeZone, commonAgentNameProvider))
 			{
 				var expected = new AgentViewModel
 				{
 					PersonId = personId,
-					Name = person.Name.ToString(),
+					Name = commonAgentNameSettings.BuildCommonNameDescription(person),
 					SiteId = siteId.ToString(),
 					SiteName = site.Description.Name,
 					TeamId = teamId.ToString(),

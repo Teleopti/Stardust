@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -20,8 +21,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly INow _date;
 		private readonly IAgentStateReader _agentStateReader;
 		private readonly IUserTimeZone _userTimeZone;
+	    private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 
-		public AgentsController(IPermissionProvider permissionProvider, ITeamRepository teamRepository, IPersonRepository personRepository, INow date, IAgentStateReader agentStateReader, IUserTimeZone userTimeZone)
+	    public AgentsController(IPermissionProvider permissionProvider, ITeamRepository teamRepository, IPersonRepository personRepository, INow date, IAgentStateReader agentStateReader, IUserTimeZone userTimeZone, ICommonAgentNameProvider commonAgentNameProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_teamRepository = teamRepository;
@@ -29,6 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_date = date;
 			_agentStateReader = agentStateReader;
 			_userTimeZone = userTimeZone;
+		    _commonAgentNameProvider = commonAgentNameProvider;
 		}
 
 		[UnitOfWorkAction, HttpGet]
@@ -47,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Json(_agentStateReader.GetLatestStatesForTeam(teamId).Select(x => new AgentViewModel
 			{
 				PersonId = x.PersonId,
-				Name = _personRepository.Get(x.PersonId).Name.ToString(),
+				Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription( _personRepository.Get(x.PersonId)),
 				State = x.State,
 				StateStart = DateTime.SpecifyKind(x.StateStart, DateTimeKind.Utc),
 				Activity = x.Activity,
@@ -79,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 							new AgentViewModel
 							{
 								PersonId = x.Id.GetValueOrDefault(),
-								Name = x.Name.ToString(),
+                                Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(x.Id.GetValueOrDefault())),
 								SiteId = team.Site.Id.ToString(),
 								SiteName = team.Site.Description.Name,
 								TeamId = team.Id.ToString(),
