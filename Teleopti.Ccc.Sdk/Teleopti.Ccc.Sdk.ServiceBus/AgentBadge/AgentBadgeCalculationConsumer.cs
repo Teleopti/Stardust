@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			if (_repositoryFactory != null)
 			{
 				_calculator = new AgentBadgeCalculator(_repositoryFactory.CreateStatisticRepository());
+				_calculator.LastCalculatedDates = new Dictionary<int, DateTime>();
 			}
 		}
 
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 							var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Item3);
 
 							_calculator.Calculate(uow, allAgents, timezone.Item1, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
+							_calculator.LastCalculatedDates.Add(timezone.Item1, yesterdayForTimezone);
 							if (_serviceBus != null)
 							{
 								_serviceBus.DelaySend(tomorrowForTimezone.ToLocalTime(), new AgentBadgeCalculateMessage
@@ -66,11 +68,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						var todayForTimezone = DateTime.UtcNow.Date;
 						var yesterdayForTimezone = todayForTimezone.AddDays(-1);
 						var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Item3);
-
-						_calculator.Calculate(uow, allAgents, timezone.Item1, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
+						DateTime nextCalculateDate;
+						if (!_calculator.LastCalculatedDates.ContainsKey(timezone.Item1))
+						{
+							_calculator.LastCalculatedDates.Add(timezone.Item1, tomorrowForTimezone.AddDays(-1).ToLocalTime());
+						}
+						if (_calculator.LastCalculatedDates[timezone.Item1] == tomorrowForTimezone.ToLocalTime())
+						{
+							nextCalculateDate = tomorrowForTimezone.AddDays(1).ToLocalTime();
+						}
+						else
+						{
+							nextCalculateDate = tomorrowForTimezone.ToLocalTime();
+							_calculator.LastCalculatedDates[timezone.Item1] = nextCalculateDate;
+							_calculator.Calculate(uow, allAgents, timezone.Item1, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
+						}
+						
 						if (_serviceBus != null)
 						{
-							_serviceBus.DelaySend(tomorrowForTimezone.ToLocalTime(), new AgentBadgeCalculateMessage
+							_serviceBus.DelaySend(nextCalculateDate, new AgentBadgeCalculateMessage
 							{
 								IsInitialization = false,
 								TimezoneId = message.TimezoneId

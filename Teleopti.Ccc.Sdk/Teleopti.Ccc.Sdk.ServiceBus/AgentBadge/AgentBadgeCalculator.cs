@@ -59,5 +59,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			var personsThatGotABadge = addBadge(allPersons, agentsThatShouldGetBadge);
 			return personsThatGotABadge;
 		}
+
+		public IDictionary<int, DateTime> LastCalculatedDates { get; set; }
 	}
 }
