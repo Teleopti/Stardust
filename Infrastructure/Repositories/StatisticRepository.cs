@@ -364,7 +364,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			const string sql =
 				"exec [mart].[raptor_adherence_per_agent_by_date] @threshold=:threshold, @time_zone_id=:timezoneId, @local_date=:date, @adherence_id=:adherenceId, "
-				+ "@time_zone_id=:timezone, @business_unit_code=:businessUnit";
+				+ "@time_zone_id=:timezone";
 			
 			var thresholdSettings = new AgentBadgeSettingsRepository(AppUnitOfWorkFactory()).LoadAll().FirstOrDefault();
 			if (thresholdSettings == null)
@@ -379,7 +379,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetInt32("timezoneId", timezoneId)
 				.SetDateTime("date", date)
 				.SetInt32("adherenceId", (int)adherenceCalculationMethod)
-				.SetGuid("businessUnit", Guid.NewGuid()) // TODO: Pass a real BU id
 				.Enumerable<Guid>();
 		}
 
