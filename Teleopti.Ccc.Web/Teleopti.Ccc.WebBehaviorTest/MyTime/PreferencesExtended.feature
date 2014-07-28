@@ -17,6 +17,9 @@ Background:
 	And there is a shift category with
 	| Field | Value |
 	| Name  | Late  |
+	And there is a shift category with
+	| Field | Value |
+	| Name  | Early |
 	And there is an activity with
 	| Field | Value |
 	| Name  | Lunch |
@@ -95,15 +98,15 @@ Scenario: Add extended preference
 	| Start time maximum          | 11:00 |
 	| End time minimum            | 19:00 |
 	| End time maximum            | 20:30 |
-	| Work time minimum           | 8:00 |
-	| Work time maximum           | 8:30 |
+	| Work time minimum           | 8:00  |
+	| Work time maximum           | 8:30  |
 	| Activity                    | Lunch |
 	| Activity Start time minimum | 11:30 |
 	| Activity Start time maximum | 11:45 |
 	| Activity End time minimum   | 12:00 |
 	| Activity End time maximum   | 12:15 |
-	| Activity time minimum       | 0:30 |
-	| Activity time maximum       | 1:00 |
+	| Activity time minimum       | 0:30  |
+	| Activity time maximum       | 1:00  |
 	And I click the apply extended preferences button
 	And I click the extended preference indication on '2012-06-20'
 	Then I should see extended preference with
@@ -140,8 +143,8 @@ Scenario: Add extended preference when span to next day
 	Then I should see extended preference with
 	| Field            | Value      |
 	| Date             | 2012-09-05 |
-	| End time minimum | 02:00 +1  |
-	| End time maximum | 02:30 +1  |
+	| End time minimum | 02:00 +1   |
+	| End time maximum | 02:30 +1   |
 
 Scenario: View available preference list when adding extended preference 
 	Given I have the role 'Access to extended preferences'
@@ -169,7 +172,7 @@ Scenario: Replace extended preference
 	| Field          | Value      |
 	| Date           | 2012-09-05 |
 	| IsExtended     | true       |
-	| Shift Category | Late       |
+	| Shift Category | Early      |
 	And I am viewing preferences for date '2012-09-05'
 	When I select day '2012-09-05'
 	And I click the add extended preference button
@@ -180,17 +183,18 @@ Scenario: Replace extended preference
 	| Start time maximum          | 11:00 |
 	| End time minimum            | 19:00 |
 	| End time maximum            | 20:30 |
-	| Work time minimum           | 8:00 |
-	| Work time maximum           | 8:30 |
+	| Work time minimum           | 8:00  |
+	| Work time maximum           | 8:30  |
 	| Activity                    | Lunch |
 	| Activity Start time minimum | 12:00 |
 	| Activity Start time maximum | 12:15 |
 	| Activity End time minimum   | 12:30 |
 	| Activity End time maximum   | 12:45 |
-	| Activity time minimum       | 0:30 |
-	| Activity time maximum       | 1:00 |
+	| Activity time minimum       | 0:30  |
+	| Activity time maximum       | 1:00  |
 	And I click the apply extended preferences button
-	And I click the extended preference indication on '2012-09-05'
+	Then I should see the preference Late on '2012-09-05'
+	When I click the extended preference indication on '2012-09-05'
 	Then I should see extended preference with
 	| Field                       | Value      |
 	| Date                        | 2012-09-05 |
