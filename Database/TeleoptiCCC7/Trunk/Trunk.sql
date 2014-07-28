@@ -224,19 +224,27 @@ BEGIN
  	[Parent] [uniqueidentifier] NOT NULL,
  	[BronzeBadge] [int] NOT NULL,
  	[SilverBadge] [int] NOT NULL,
- 	[GoldenBadge] [int] NOT NULL
+ 	[GoldenBadge] [int] NOT NULL,
+	[BadgeType] [int] NOT NULL
   CONSTRAINT [PK_AgentBadge] PRIMARY KEY CLUSTERED 
  (
 	[Parent] ASC
  )
 ) ON [PRIMARY];
 
-
 ALTER TABLE [dbo].[AgentBadge]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadge_Person_Parent] FOREIGN KEY([Parent])
 REFERENCES [dbo].[Person] ([Id]);
 
 ALTER TABLE [dbo].[AgentBadge] CHECK CONSTRAINT [FK_AgentBadge_Person_Parent];
 END
+
+/****** Object:  Index [IX_AgentBadge]    Script Date: 7/28/2014 11:27:01 AM ******/
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AgentBadge] ON [dbo].[AgentBadge]
+(
+	[Parent] ASC,
+	[BadgeType] ASC
+)
+GO
 
 --Name: Xinfeng, Erik
 --Date: 2014-07-17

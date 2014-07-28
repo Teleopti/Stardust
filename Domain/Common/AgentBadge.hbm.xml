@@ -28,5 +28,9 @@
 		<property name="GoldenBadge"
 							type="int"
 							not-null="true" />
+
+		<property name="BadgeType"
+							type="int"
+							not-null="true" />
 	</class>
 </hibernate-mapping>

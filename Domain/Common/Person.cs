@@ -212,13 +212,21 @@ namespace Teleopti.Ccc.Domain.Common
 	    {
 		    if (Badges == null)
 		    {
-			    Badges = agentBadge;
+			    Badges = new List<IAgentBadge>{agentBadge};
 		    }
 		    else
 		    {
-			    Badges.BronzeBadge += agentBadge.BronzeBadge;
-			    Badges.SilverBadge += agentBadge.SilverBadge;
-			    Badges.GoldenBadge += agentBadge.GoldenBadge;
+			    if (Badges.Any(x => x.BadgeType == agentBadge.BadgeType))
+			    {
+				    var existedBadge = Badges.Single(x => x.BadgeType == agentBadge.BadgeType);
+					existedBadge.BronzeBadge += agentBadge.BronzeBadge;
+					existedBadge.SilverBadge += agentBadge.SilverBadge;
+					existedBadge.GoldenBadge += agentBadge.GoldenBadge;
+			    }
+			    else
+			    {
+					Badges.Add(agentBadge);
+			    }
 		    }
 	    }
 
@@ -944,7 +952,7 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
-	    public virtual IAgentBadge Badges { get; set; }
+	    public virtual IList<IAgentBadge> Badges { get; set; }
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public virtual void AddOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)

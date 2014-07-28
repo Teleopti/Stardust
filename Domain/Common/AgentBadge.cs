@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private int _bronzeBadge;
 		private int _silverBadge;
 		private int _goldenBadge;
+		private BadgeType _badgeType;
 
 		public virtual int BronzeBadge
 		{
@@ -26,6 +27,12 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get { return _goldenBadge; }
 			set { _goldenBadge = value; }
+		}
+
+		public virtual BadgeType BadgeType
+		{
+			get { return _badgeType; }
+			set { _badgeType = value; }
 		}
 	}
 }

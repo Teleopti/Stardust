@@ -111,6 +111,7 @@
     <Compile Include="Domain\ActualAgentState.cs" />
     <Compile Include="Domain\AlarmTypeMode.cs" />
     <Compile Include="Domain\AxisLocation.cs" />
+    <Compile Include="Domain\BadgeType.cs" />
     <Compile Include="Domain\BlockFinderType.cs" />
     <Compile Include="Domain\BlockSchedulingServiceEventArgs.cs" />
     <Compile Include="Domain\BudgetCalculationResult.cs" />

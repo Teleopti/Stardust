@@ -264,7 +264,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <returns></returns>
 		ReadOnlyCollection<IOptionalColumnValue> OptionalColumnValueCollection { get; }
 
-	    IAgentBadge Badges { get; set; }
+	    IList<IAgentBadge> Badges { get; set; }
 
 	    /// <summary>
     	/// 

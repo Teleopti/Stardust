@@ -963,13 +963,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var person = PersonFactory.CreatePerson("_");
 			person.AddBadge(new AgentBadge()
 			{
-				BronzeBadge = 1
+				BronzeBadge = 1,
+				BadgeType = BadgeType.AnsweredCalls
 			});
 
 			PersistAndRemoveFromUnitOfWork(person);
 
 			target.Load(person.Id.Value);
-			person.Badges.BronzeBadge.Should().Be.EqualTo(1);
+			person.Badges.Count.Should().Be.EqualTo(1);
+			person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).BronzeBadge.Should().Be.EqualTo(1));
 		}
 
 		private void SetupPersonsInOrganizationWithContract()

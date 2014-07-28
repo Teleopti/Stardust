@@ -8,6 +8,7 @@ using Rhino.ServiceBus.Impl;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Messages;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				TimezoneId = timezoneId
 			});
 
-			_person.Badges.BronzeBadge.Should().Be.EqualTo(1);
+			_person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).BronzeBadge.Should().Be.EqualTo(1);
 		}
 
 	
@@ -132,7 +133,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				TimezoneId = timezoneId
 			});
 
-			_person.Badges.BronzeBadge.Should().Be.EqualTo(1);
+			_person.Badges.Single(x => x.BadgeType == BadgeType.Adherence).BronzeBadge.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -147,7 +148,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				TimezoneId = timezoneId
 			});
 
-			_person.Badges.BronzeBadge.Should().Be.EqualTo(1);
+			_person.Badges.Single(x => x.BadgeType == BadgeType.AverageHandlingTime).BronzeBadge.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -166,7 +167,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				TimezoneId = timezoneId
 			});
 
-			_person.Badges.BronzeBadge.Should().Be.EqualTo(2);
+			_person.Badges.Single(x => x.BadgeType == BadgeType.Adherence).BronzeBadge.Should().Be.EqualTo(1);
+			_person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).BronzeBadge.Should().Be.EqualTo(1);
 		}
 	}
 
