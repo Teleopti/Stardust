@@ -834,13 +834,15 @@ namespace Teleopti.Ccc.DomainTest.Common
 		    var target = PersonFactory.CreatePerson("_");
 			target.AddBadge(new AgentBadge
 			{
+				BadgeType = BadgeType.AnsweredCalls,
 				BronzeBadge = 1
 			});
 			target.AddBadge(new AgentBadge
 			{
+				BadgeType = BadgeType.AnsweredCalls,
 				BronzeBadge = 1
 			});
-		    target.Badges.BronzeBadge.Should().Be.EqualTo(2);
+		    target.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).BronzeBadge.Should().Be.EqualTo(2);
 	    }
     }
 }

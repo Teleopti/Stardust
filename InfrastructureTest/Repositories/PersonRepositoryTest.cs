@@ -971,7 +971,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			target.Load(person.Id.Value);
 			person.Badges.Count.Should().Be.EqualTo(1);
-			person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).BronzeBadge.Should().Be.EqualTo(1));
+			person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).BronzeBadge.Should().Be.EqualTo(1);
 		}
 
 		private void SetupPersonsInOrganizationWithContract()
