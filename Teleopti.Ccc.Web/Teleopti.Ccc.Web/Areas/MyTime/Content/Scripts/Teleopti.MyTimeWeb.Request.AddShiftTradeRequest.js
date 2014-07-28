@@ -80,6 +80,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.isPossibleSchedulesForAllEnabled = ko.observable(false);
 		self.availableAllTeamIds = ko.observableArray();
 		self.isTradeForMultiDaysEnabled = ko.observable(false);
+		self.isFilterByTimeEnabled = ko.observable(false);
 		self.chooseHistorys = ko.observableArray();
 		self.requestedDates = ko.computed(function() {
 			var dates = [];
@@ -737,6 +738,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				success: function(data) {
 					if (data.IsEnabled) {
 						self.isPossibleSchedulesForAllEnabled(true);
+					}
+				}
+			});
+			
+			ajax.Ajax({
+				url: "../ToggleHandler/IsEnabled?toggle=Request_FilterPossibleShiftTradeByTime_24560",
+				success: function (data) {
+					if (data.IsEnabled) {
+						self.isFilterByTimeEnabled(true);
 					}
 				}
 			});
