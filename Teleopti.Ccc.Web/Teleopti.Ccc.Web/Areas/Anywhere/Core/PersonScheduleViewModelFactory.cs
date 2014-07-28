@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -19,8 +20,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly IJsonDeserializer _deserializer;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 
-		public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer deserializer, IPermissionProvider permissionProvider)
+		public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer deserializer, IPermissionProvider permissionProvider, ICommonAgentNameProvider commonAgentNameProvider)
 		{
 			_personRepository = personRepository;
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
@@ -30,6 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			_personAbsenceRepository = personAbsenceRepository;
 			_deserializer = deserializer;
 			_permissionProvider = permissionProvider;
+			_commonAgentNameProvider = commonAgentNameProvider;
 		}
 
 		public PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date)
@@ -42,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			{
 				Person = person,
 				Date = date,
+				CommonAgentNameSetting = _commonAgentNameProvider.CommonAgentNameSettings,
 				Absences = _absenceRepository.LoadAllSortByName(),
 				Activities = _activityRepository.LoadAllSortByName(),
 				HasViewConfidentialPermission = hasViewConfidentialPermission

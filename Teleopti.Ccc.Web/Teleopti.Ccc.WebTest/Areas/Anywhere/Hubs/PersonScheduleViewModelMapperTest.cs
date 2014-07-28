@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Interfaces.Domain;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		private IUserTimeZone _userTimeZone;
 		private INow _now;
 		private TimeZoneInfo _hawaiiTimeZoneInfo;
+		private CommonNameDescriptionSetting _commonNameDescriptionSetting;
 
 		[SetUp]
 		public void Setup()
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			_userTimeZone.Stub(x => x.TimeZone()).Return(_hawaiiTimeZoneInfo);
 			_now = MockRepository.GenerateMock<INow>();
 			_now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow);
+			_commonNameDescriptionSetting = MockRepository.GenerateMock<CommonNameDescriptionSetting>();
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile(_userTimeZone, _now)));
 		}
@@ -47,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new PersonScheduleViewModelMapper();
 			var person = new Person {Name = new Name("Pierra", "B")};
 
-			var result = target.Map(new PersonScheduleData {Person = person});
+			var result = target.Map(new PersonScheduleData { Person = person, CommonAgentNameSetting = new CommonNameDescriptionSetting() });
 
 			result.Name.Should().Be("Pierra B");
 		}
@@ -60,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var expectedStartTime = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2013, 3, 4, 13, 20, 0, DateTimeKind.Utc), _hawaiiTimeZoneInfo);
 			var shift = new Shift { Projection = new[] { new SimpleLayer { Start = startTime } } };
 
-			var result = target.Map(new PersonScheduleData { Model = new Model { Shift = shift }});
+			var result = target.Map(new PersonScheduleData { Model = new Model { Shift = shift }, CommonAgentNameSetting = _commonNameDescriptionSetting});
 
 			result.DefaultIntradayAbsenceData.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(expectedStartTime.TimeOfDay, CultureInfo.CurrentCulture));
 			result.DefaultIntradayAbsenceData.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(expectedStartTime.AddHours(1).TimeOfDay, CultureInfo.CurrentCulture));
@@ -82,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var expectedEndTime = TimeZoneInfo.ConvertTimeFromUtc(endTime, _hawaiiTimeZoneInfo);
 			var shift = new Shift { Projection = new[] { new SimpleLayer { Start = startTime, End = endTime} } };
 
-			var result = target.Map(new PersonScheduleData { Model = new Model { Shift = shift } });
+			var result = target.Map(new PersonScheduleData { Model = new Model { Shift = shift }, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.DefaultIntradayAbsenceData.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(expectedStartTime.TimeOfDay, CultureInfo.CurrentCulture));
 			result.DefaultIntradayAbsenceData.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(expectedEndTime.TimeOfDay, CultureInfo.CurrentCulture));
@@ -94,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new PersonScheduleViewModelMapper();
 			var activities = new[] { new Activity("test1"), new Activity("test2") };
 
-			var result = target.Map(new PersonScheduleData { Activities = activities });
+			var result = target.Map(new PersonScheduleData { Activities = activities, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.Activities.Should().Have.Count.EqualTo(2);
 		}
@@ -105,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new PersonScheduleViewModelMapper();
 			var activities = new[] { new Activity("test1")};
 
-			var result = target.Map(new PersonScheduleData { Activities = activities });
+			var result = target.Map(new PersonScheduleData { Activities = activities, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.Activities.Single().Name.Should().Be("test1");
 		}
@@ -118,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			activity.SetId(Guid.NewGuid());
 			var activities = new[] { activity };
 
-			var result = target.Map(new PersonScheduleData { Activities = activities });
+			var result = target.Map(new PersonScheduleData { Activities = activities, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.Activities.Single().Id.Should().Be(activity.Id.Value.ToString());
 		}
@@ -129,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new PersonScheduleViewModelMapper();
 			var absences = new[] {new Absence(), new Absence()};
 
-			var result = target.Map(new PersonScheduleData { Absences = absences });
+			var result = target.Map(new PersonScheduleData { Absences = absences, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.Absences.Should().Have.Count.EqualTo(2);
 		}
@@ -140,7 +143,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new PersonScheduleViewModelMapper();
 			var absences = new[] { new Absence { Description = new Description("A Name") } };
 
-			var result = target.Map(new PersonScheduleData { Absences = absences });
+			var result = target.Map(new PersonScheduleData { Absences = absences, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.Absences.Single().Name.Should().Be("A Name");
 		}
@@ -152,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var absence = new Absence { Description = new Description(" ") };
 			absence.SetId(Guid.NewGuid());
 
-			var result = target.Map(new PersonScheduleData {Absences = new[] {absence}});
+			var result = target.Map(new PersonScheduleData { Absences = new[] { absence }, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.Absences.Single().Id.Should().Be(absence.Id.Value.ToString());
 		}
@@ -165,8 +168,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
 			var personAbsence = new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer);
 			var personAbsences = new[] { personAbsence };
-		
-			var result = target.Map(new PersonScheduleData {PersonAbsences = personAbsences});
+
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, CommonAgentNameSetting = _commonNameDescriptionSetting });
 			
 			result.PersonAbsences.Count().Should().Be.EqualTo(1);
 		}
@@ -181,7 +184,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var personAbsences = new[] {new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer)};
 
-			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.PersonAbsences.Single().Color.Should().Be.EqualTo("Red");
 		}
@@ -196,7 +199,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var personAbsences = new[] { new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer) };
 
-			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.PersonAbsences.Single().Color.Should().Be.EqualTo(ConfidentialPayloadValues.DisplayColorHex);
 		}
@@ -211,7 +214,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var personAbsences = new[] { new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer) };
 
-			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, HasViewConfidentialPermission = true});
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, HasViewConfidentialPermission = true, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.PersonAbsences.Single().Color.Should().Be.EqualTo("Red");
 		}
@@ -225,7 +228,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
 			var personAbsences = new[] { new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer) };
 
-			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.PersonAbsences.Single().Name.Should().Be.EqualTo("Vacation");
 		}
@@ -239,7 +242,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
 			var personAbsences = new[] { new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer) };
 
-			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.PersonAbsences.Single().Name.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
 		}
@@ -252,7 +255,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
 			var personAbsences = new[] { new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer) };
 
-			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, HasViewConfidentialPermission = true});
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, HasViewConfidentialPermission = true, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.PersonAbsences.Single().Name.Should().Be.EqualTo("Vacation");
 		}
@@ -269,7 +272,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var person = new Person();
 			var personAbsences = new[] {new PersonAbsence(person, MockRepository.GenerateMock<IScenario>(), absenceLayer)};
 
-			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, _hawaiiTimeZoneInfo).ToFixedDateTimeFormat();
 
@@ -288,8 +291,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var person = new Person();
 
 			var personAbsences = new[] { new PersonAbsence(person, MockRepository.GenerateMock<IScenario>(), absenceLayer) };
-			
-			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			var personEndTime = TimeZoneInfo.ConvertTimeFromUtc(endTime, _hawaiiTimeZoneInfo).ToFixedDateTimeFormat();
 
@@ -306,7 +309,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			personAbsence.SetId(Guid.NewGuid());
 			var personAbsences = new[] { personAbsence };
 
-			var result = target.Map(new PersonScheduleData {PersonAbsences = personAbsences});
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, CommonAgentNameSetting = _commonNameDescriptionSetting });
 
 			result.PersonAbsences.Single().Id.Should().Be(personAbsence.Id.Value.ToString());
 		}

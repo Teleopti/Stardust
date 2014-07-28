@@ -14,9 +14,8 @@ define([
 
 	return function (data) {
 		var self = this;
-
 		this.Id = data.Id;
-		this.Name = ko.observable(data.FirstName ? data.FirstName + " " + data.LastName : "");
+		this.Name = ko.observable(data.Name ? data.Name : "");
 
 		this.WorkTimeMinutes = ko.observable(0);
 		this.ContractTimeMinutes = ko.observable(0);
@@ -42,7 +41,7 @@ define([
 		};
 		
 		this.AddData = function (data, timeline) {
-			
+
 			if (data.Name)
 				self.Name(data.Name);
 

@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public IEnumerable<IAbsence> Absences { get; set; }
 		public IEnumerable<IPersonAbsence> PersonAbsences { get; set; }
 		public bool HasViewConfidentialPermission { get; set; }
+		public ICommonNameDescriptionSetting CommonAgentNameSetting { get; set; }
 	}
 }

@@ -6,7 +6,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		public PersonScheduleViewModel Map(PersonScheduleData data)
 		{
-			return Mapper.Map<PersonScheduleData, PersonScheduleViewModel>(data);
+			var map = Mapper.Map<PersonScheduleData, PersonScheduleViewModel>(data);
+			map.Name = data.CommonAgentNameSetting.BuildCommonNameDescription(data.Person);
+			return map;
 		}
 	}
 }
