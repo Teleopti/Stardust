@@ -118,6 +118,42 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).BronzeBadge.Should().Be.EqualTo(1);
 		}
 
+		[Test]
+		public void ShouldAwardSilverForAnsweredCalls()
+		{
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, timezoneId, _calculationDate))
+				.Return(new List<Guid> {_person.Id.Value});
+			_person.Badges = new List<IAgentBadge>(){new Domain.Common.AgentBadge(){BadgeType = BadgeType.AnsweredCalls, BronzeBadge = 4}};
+
+			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
+			target.Consume(new AgentBadgeCalculateMessage
+			{
+				IsInitialization = false,
+				TimezoneId = timezoneId
+			});
+
+			_person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).BronzeBadge.Should().Be.EqualTo(0);
+			_person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).SilverBadge.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldAwardGoldForAnsweredCalls()
+		{
+			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, timezoneId, _calculationDate))
+				.Return(new List<Guid> {_person.Id.Value});
+			_person.Badges = new List<IAgentBadge>(){new Domain.Common.AgentBadge(){BadgeType = BadgeType.AnsweredCalls, BronzeBadge = 4, SilverBadge = 1}};
+
+			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
+			target.Consume(new AgentBadgeCalculateMessage
+			{
+				IsInitialization = false,
+				TimezoneId = timezoneId
+			});
+
+			_person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).BronzeBadge.Should().Be.EqualTo(0);
+			_person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).SilverBadge.Should().Be.EqualTo(0);
+			_person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).GoldenBadge.Should().Be.EqualTo(1);
+		}
 	
 		[Test]
 		public void ShouldAwardBronzeForAdherence()
