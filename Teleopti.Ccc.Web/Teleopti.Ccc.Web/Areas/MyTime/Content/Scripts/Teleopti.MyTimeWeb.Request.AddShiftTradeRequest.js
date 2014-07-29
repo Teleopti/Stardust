@@ -688,7 +688,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 						if (!findTradedAgent && (self.selectedPageIndex() < data.PageCount)) {
 							self.selectedPageIndex(self.selectedPageIndex() + 1);
 							self.IsLoading(false);
-							self.loadSchedule();
+							self.loadScheduleForAllTeams();
 						}
 					}
 				    self.updateSelectedPage();
