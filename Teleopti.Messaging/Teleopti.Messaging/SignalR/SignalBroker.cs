@@ -178,6 +178,12 @@ namespace Teleopti.Messaging.SignalR
 				_signalBrokerCommands.NotifyClients(notificationList);
 		}
 
+		public void SendNotification(Notification notification)
+		{
+			if (_connection != null)
+				_signalBrokerCommands.NotifyClients(notification);
+		}
+
 		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
 		{
 			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, null, domainObjectType, Consts.MinDate, Consts.MaxDate);

@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Messaging.SignalR
@@ -14,6 +15,10 @@ namespace Teleopti.Messaging.SignalR
 		}
 
 		public void SendEventMessages(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
+		{
+		}
+
+		public void SendNotification(Notification notification)
 		{
 		}
 	}

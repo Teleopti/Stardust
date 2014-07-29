@@ -3,6 +3,7 @@ define([
 		'text!templates/layout.html',
 		'text!templates/menu.html',
 		'text!templates/error.html',
+		'text!templates/notification.html',
 		'crossroads',
 		'hasher',
 		'knockout',
@@ -12,11 +13,14 @@ define([
 		'subscriptions',
 		'ajax',
 		'errorview',
-		'resources'
+		'resources',
+		'subscriptions.trackingmessages',
+		'notificationview'
 ], function (
 		layoutTemplate,
 		menuTemplate,
 		errorTemplate,
+		notificationTemplate,
 		crossroads,
 		hasher,
 		ko,
@@ -26,7 +30,9 @@ define([
 		subscriptions,
 		ajax,
 		errorview,
-		resources) {
+		resources,
+		trackingmessages,
+		notificationview) {
 
 	var currentView;
 	var defaultView = 'teamschedule';
@@ -228,4 +234,9 @@ define([
 		_initMomentLanguageWithFallback();
 
 		_bindMenu();
+
+	trackingmessages.subscribeTrackingMessage(function(notification) {
+		notificationview.display(notification);
+	}, function() {
+	});
 });

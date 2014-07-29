@@ -58,5 +58,7 @@ namespace Teleopti.Interfaces.MessageBroker.Events
 		/// <param name="businessUnitId"></param>
 		/// <param name="dataSource"></param>
 		void SendEventMessages(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages);
+
+		void SendNotification(Notification notification);
 	}
 }

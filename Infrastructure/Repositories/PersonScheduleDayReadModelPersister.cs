@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using log4net;
+using Newtonsoft.Json;
 using NHibernate;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
@@ -8,10 +9,38 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
+	public class EventTracker : IEventTracker
+	{
+		private readonly IMessageBrokerSender _messageBroker;
+
+		public EventTracker(IMessageBrokerSender messageBroker)
+		{
+			_messageBroker = messageBroker;
+		}
+
+		public void SendTrackingMessage(Guid personId, Guid businessUnitId, Guid trackId)
+		{
+			_messageBroker.SendNotification(new Notification
+			{
+				BinaryData = JsonConvert.SerializeObject(new TrackingMessage {TrackId = trackId}),
+				BusinessUnitId = businessUnitId.ToString(),
+				DomainId = trackId.ToString(),
+				DomainType = "TrackingMessage"
+			});
+		}
+	}
+
+	public class TrackingMessage
+	{
+		public Guid TrackId { get; set; }
+	}
+
+
 	public class PersonScheduleDayReadModelPersister : IPersonScheduleDayReadModelPersister
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
