@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.ribbonControlAdv1.Text = "ribbonControlAdv1";
             this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
             this.ribbonControlAdv1.TitleColor = System.Drawing.Color.Black;
-            this.ribbonControlAdv1.TitleFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ribbonControlAdv1.TitleFont = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
             // 
             // tableLayoutPanel1
             // 
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // treeViewOptions
             // 
             this.treeViewOptions.BackColor = System.Drawing.Color.White;
-            this.treeViewOptions.BeforeTouchSize = new System.Drawing.Size(198, 609);
+            this.treeViewOptions.BeforeTouchSize = new System.Drawing.Size(312, 368);
             this.treeViewOptions.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
             this.treeViewOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.treeViewOptions.CanSelectDisabledNode = false;
