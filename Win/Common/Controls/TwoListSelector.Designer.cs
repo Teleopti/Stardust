@@ -67,9 +67,9 @@
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(482, 397);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(550, 272);
             this.tableLayoutPanel1.TabIndex = 9;
             // 
             // tableLayoutPanel2
@@ -80,13 +80,13 @@
             this.tableLayoutPanel2.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.label3, 0, 2);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(199, 28);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(233, 31);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 3;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 138F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 160F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(83, 366);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(83, 238);
             this.tableLayoutPanel2.TabIndex = 13;
             // 
             // panel1
@@ -96,9 +96,9 @@
             this.panel1.Controls.Add(this.buttonAdvSelectOne);
             this.panel1.Controls.Add(this.buttonAdvSelectAll);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 94);
+            this.panel1.Location = new System.Drawing.Point(3, 34);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(77, 132);
+            this.panel1.Size = new System.Drawing.Size(77, 154);
             this.panel1.TabIndex = 11;
             // 
             // buttonAdvDeselectAll
@@ -107,12 +107,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonAdvDeselectAll.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
             this.buttonAdvDeselectAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-            this.buttonAdvDeselectAll.BeforeTouchSize = new System.Drawing.Size(68, 27);
+            this.buttonAdvDeselectAll.BeforeTouchSize = new System.Drawing.Size(68, 25);
             this.buttonAdvDeselectAll.ForeColor = System.Drawing.Color.White;
             this.buttonAdvDeselectAll.IsBackStageButton = false;
-            this.buttonAdvDeselectAll.Location = new System.Drawing.Point(3, 104);
+            this.buttonAdvDeselectAll.Location = new System.Drawing.Point(3, 118);
             this.buttonAdvDeselectAll.Name = "buttonAdvDeselectAll";
-            this.buttonAdvDeselectAll.Size = new System.Drawing.Size(68, 27);
+            this.buttonAdvDeselectAll.Size = new System.Drawing.Size(68, 25);
             this.buttonAdvDeselectAll.TabIndex = 12;
             this.buttonAdvDeselectAll.Text = "<<";
             this.buttonAdvDeselectAll.UseVisualStyle = true;
@@ -124,12 +124,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonAdvDeselectOne.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
             this.buttonAdvDeselectOne.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-            this.buttonAdvDeselectOne.BeforeTouchSize = new System.Drawing.Size(68, 27);
+            this.buttonAdvDeselectOne.BeforeTouchSize = new System.Drawing.Size(68, 25);
             this.buttonAdvDeselectOne.ForeColor = System.Drawing.Color.White;
             this.buttonAdvDeselectOne.IsBackStageButton = false;
-            this.buttonAdvDeselectOne.Location = new System.Drawing.Point(3, 70);
+            this.buttonAdvDeselectOne.Location = new System.Drawing.Point(3, 79);
             this.buttonAdvDeselectOne.Name = "buttonAdvDeselectOne";
-            this.buttonAdvDeselectOne.Size = new System.Drawing.Size(68, 27);
+            this.buttonAdvDeselectOne.Size = new System.Drawing.Size(68, 25);
             this.buttonAdvDeselectOne.TabIndex = 11;
             this.buttonAdvDeselectOne.Text = "<";
             this.buttonAdvDeselectOne.UseVisualStyle = true;
@@ -141,12 +141,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonAdvSelectOne.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
             this.buttonAdvSelectOne.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-            this.buttonAdvSelectOne.BeforeTouchSize = new System.Drawing.Size(68, 27);
+            this.buttonAdvSelectOne.BeforeTouchSize = new System.Drawing.Size(68, 25);
             this.buttonAdvSelectOne.ForeColor = System.Drawing.Color.White;
             this.buttonAdvSelectOne.IsBackStageButton = false;
-            this.buttonAdvSelectOne.Location = new System.Drawing.Point(3, 37);
+            this.buttonAdvSelectOne.Location = new System.Drawing.Point(3, 42);
             this.buttonAdvSelectOne.Name = "buttonAdvSelectOne";
-            this.buttonAdvSelectOne.Size = new System.Drawing.Size(68, 27);
+            this.buttonAdvSelectOne.Size = new System.Drawing.Size(68, 25);
             this.buttonAdvSelectOne.TabIndex = 10;
             this.buttonAdvSelectOne.Text = ">";
             this.buttonAdvSelectOne.UseVisualStyle = true;
@@ -158,12 +158,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonAdvSelectAll.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
             this.buttonAdvSelectAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-            this.buttonAdvSelectAll.BeforeTouchSize = new System.Drawing.Size(68, 27);
+            this.buttonAdvSelectAll.BeforeTouchSize = new System.Drawing.Size(68, 25);
             this.buttonAdvSelectAll.ForeColor = System.Drawing.Color.White;
             this.buttonAdvSelectAll.IsBackStageButton = false;
             this.buttonAdvSelectAll.Location = new System.Drawing.Point(3, 3);
             this.buttonAdvSelectAll.Name = "buttonAdvSelectAll";
-            this.buttonAdvSelectAll.Size = new System.Drawing.Size(68, 27);
+            this.buttonAdvSelectAll.Size = new System.Drawing.Size(68, 25);
             this.buttonAdvSelectAll.TabIndex = 9;
             this.buttonAdvSelectAll.Text = ">>";
             this.buttonAdvSelectAll.UseVisualStyle = true;
@@ -174,15 +174,15 @@
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Location = new System.Drawing.Point(3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(77, 91);
+            this.label2.Size = new System.Drawing.Size(77, 31);
             this.label2.TabIndex = 12;
             // 
             // label3
             // 
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(3, 229);
+            this.label3.Location = new System.Drawing.Point(3, 191);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(77, 137);
+            this.label3.Size = new System.Drawing.Size(77, 47);
             this.label3.TabIndex = 13;
             // 
             // listBox2
@@ -190,11 +190,11 @@
             this.listBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBox2.FormattingEnabled = true;
-            this.listBox2.ItemHeight = 15;
-            this.listBox2.Location = new System.Drawing.Point(288, 28);
+            this.listBox2.ItemHeight = 17;
+            this.listBox2.Location = new System.Drawing.Point(322, 31);
             this.listBox2.Name = "listBox2";
             this.listBox2.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox2.Size = new System.Drawing.Size(191, 366);
+            this.listBox2.Size = new System.Drawing.Size(225, 238);
             this.listBox2.Sorted = true;
             this.listBox2.TabIndex = 12;
             this.listBox2.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox2_DrawItem);
@@ -205,11 +205,11 @@
             this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 15;
-            this.listBox1.Location = new System.Drawing.Point(3, 28);
+            this.listBox1.ItemHeight = 17;
+            this.listBox1.Location = new System.Drawing.Point(3, 31);
             this.listBox1.Name = "listBox1";
             this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox1.Size = new System.Drawing.Size(190, 366);
+            this.listBox1.Size = new System.Drawing.Size(224, 238);
             this.listBox1.Sorted = true;
             this.listBox1.TabIndex = 1;
             this.listBox1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
@@ -219,7 +219,7 @@
             this.availableLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.availableLabel.Location = new System.Drawing.Point(3, 0);
             this.availableLabel.Name = "availableLabel";
-            this.availableLabel.Size = new System.Drawing.Size(190, 25);
+            this.availableLabel.Size = new System.Drawing.Size(224, 28);
             this.availableLabel.TabIndex = 0;
             this.availableLabel.Text = "gradientLabel1";
             this.availableLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -228,31 +228,31 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(199, 0);
+            this.label1.Location = new System.Drawing.Point(233, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(83, 25);
+            this.label1.Size = new System.Drawing.Size(83, 28);
             this.label1.TabIndex = 13;
             // 
             // selectedLabel
             // 
             this.selectedLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.selectedLabel.Location = new System.Drawing.Point(288, 0);
+            this.selectedLabel.Location = new System.Drawing.Point(322, 0);
             this.selectedLabel.Name = "selectedLabel";
-            this.selectedLabel.Size = new System.Drawing.Size(191, 25);
+            this.selectedLabel.Size = new System.Drawing.Size(225, 28);
             this.selectedLabel.TabIndex = 14;
             this.selectedLabel.Text = "gradientLabel2";
             this.selectedLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // TwoListSelector
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.Name = "TwoListSelector";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Size = new System.Drawing.Size(482, 397);
+            this.Size = new System.Drawing.Size(550, 272);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);

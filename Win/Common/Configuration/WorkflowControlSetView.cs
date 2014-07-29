@@ -30,14 +30,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public partial class WorkflowControlSetView : BaseUserControl, ISettingPage, IWorkflowControlSetView
 	{
-		private readonly IToggleManager _toggleManager;
 		private readonly WorkflowControlSetPresenter _presenter;
 		private SFGridColumnGridHelper<AbsenceRequestPeriodModel> _gridHelper;
 		private IDictionary<IAbsence, MonthlyProjectionVisualiser> _projectionCache =
 			new Dictionary<IAbsence, MonthlyProjectionVisualiser>();
 		private Point _gridPoint;
-		private const int MaxHoursPerDay = 24;
-		private const int MaxHoursPerWeek = 168;
+		private const int maxHoursPerDay = 24;
+		private const int maxHoursPerWeek = 168;
 
 		public WorkflowControlSetView()
 		{
@@ -45,9 +44,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		 }
 		public WorkflowControlSetView(IToggleManager toggleManager):this()
 		{
-			_toggleManager = toggleManager;
-
-			  if (!_toggleManager.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635))
+			if (!toggleManager.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635))
 			  {
 				  labelMinimumTimePerWeek.Hide();
 				  textBoxExtMinTimePerWeek.Hide();
@@ -143,21 +140,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			twoListSelectorCategories.SelectedAdded += twoListSelectorCategories_SelectedAdded;
 			twoListSelectorCategories.SelectedRemoved += twoListSelectorCategories_SelectedRemoved;
 
-			twoListSelectorAbsences.SelectedAdded += twoListSelectorAbsences_SelectedAdded;
-			twoListSelectorAbsences.SelectedRemoved += twoListSelectorAbsences_SelectedRemoved;
+			twoListSelectorAbsences.SelectedAdded += twoListSelectorAbsencesSelectedAdded;
+			twoListSelectorAbsences.SelectedRemoved += twoListSelectorAbsencesSelectedRemoved;
 
 			twoListSelectorMatchingSkills.SelectedAdded += twoListSelectorMatchingSkills_SelectedAdded;
 			twoListSelectorMatchingSkills.SelectedRemoved += twoListSelectorMatchingSkills_SelectedRemoved;
 		}
 
-		void twoListSelectorAbsences_SelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
+		void twoListSelectorAbsencesSelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
 		{
 			var item = e.MovedItem as IAbsence;
 			if (item != null)
 				_presenter.RemoveAllowedPreferenceAbsence(item);
 		}
 
-		void twoListSelectorAbsences_SelectedAdded(object sender, Controls.SelectedChangedEventArgs e)
+		void twoListSelectorAbsencesSelectedAdded(object sender, Controls.SelectedChangedEventArgs e)
 		{
 			var item = e.MovedItem as IAbsence;
 			if (item != null)
@@ -172,8 +169,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			twoListSelectorCategories.SelectedAdded -= twoListSelectorCategories_SelectedAdded;
 			twoListSelectorCategories.SelectedRemoved -= twoListSelectorCategories_SelectedRemoved;
 
-			twoListSelectorAbsences.SelectedAdded -= twoListSelectorAbsences_SelectedAdded;
-			twoListSelectorAbsences.SelectedRemoved -= twoListSelectorAbsences_SelectedRemoved;
+			twoListSelectorAbsences.SelectedAdded -= twoListSelectorAbsencesSelectedAdded;
+			twoListSelectorAbsences.SelectedRemoved -= twoListSelectorAbsencesSelectedRemoved;
 
 			twoListSelectorMatchingSkills.SelectedAdded -= twoListSelectorMatchingSkills_SelectedAdded;
 			twoListSelectorMatchingSkills.SelectedRemoved -= twoListSelectorMatchingSkills_SelectedRemoved;
@@ -312,6 +309,40 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 			autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
 			autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
+
+			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panelBasic.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panel1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panel2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panel3.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panel4.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panel5.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panel6.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panel7.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panel8.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panelMatchingSkills.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panelOpenForShiftTrade.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panelOpenPreference.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			tableLayoutPanelOpenForAbsenceRequests.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panelTolerance.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+
+			labelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelBasic.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelOpenStudentAvailability.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelOpenPreference.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelDaysOffAvailableForExtendedPreferences.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelShiftCategoriesAvailableForExtendedPreference.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelAbsencesAvailableForExtendedPreference.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelAllowedPreferenceActivity.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			label4.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelAbsenceRequestsVisualisation.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelOpenForAbsenceRequests.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelOpenForShiftTrade.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelTolerance.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			labelMatchingSkills.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			label3.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+
 		}
 
 		protected override void SetCommonTexts()
@@ -1001,7 +1032,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			var cancel = false;
 
 			var hoursPerWeek = textBoxExtMinTimePerWeek.Value;
-			if (!validateMaxHours(hoursPerWeek, MaxHoursPerWeek))
+			if (!validateMaxHours(hoursPerWeek, maxHoursPerWeek))
 			{
 				ViewBase.ShowErrorMessage(Resources.MaximumHoursPerWeekCannotBeMoreThan168Hours,
 								   Resources.TimeError);
@@ -1033,13 +1064,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			switch (maxHours)
 			{
-				case MaxHoursPerDay:
+				case maxHoursPerDay:
 					if (timeSpan.Days > 0 || timeSpan.Hours > maxHours)
 					{
 						isValid = false;
 					}
 					break;
-				case MaxHoursPerWeek:
+				case maxHoursPerWeek:
 					if (timeSpan.Days * 24 + timeSpan.Hours > maxHours)
 					{
 						isValid = false;
@@ -1051,6 +1082,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 
 			return isValid;
+		}
+
+        private void twoListSelectorDayOffs_Load(object sender, EventArgs e)
+        {
+
         }
 	}
 }

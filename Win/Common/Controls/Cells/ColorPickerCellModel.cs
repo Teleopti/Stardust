@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                                     color = (Color)base.ControlValue;
                                 else
                                     color = (Color)e.Style.CellValue;
-                                using (Brush brush = new LinearGradientBrush(rect, Color.White, color, 90, false))
+                                using (Brush brush = new LinearGradientBrush(rect, color, color, 90, false))
                                 {
                                     g.FillRectangle(brush, textRectangle);
                                 }

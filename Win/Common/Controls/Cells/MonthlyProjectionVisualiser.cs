@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                 : this()
             {
                 _layer = layer;
-                BackgroundColor = new BrushInfo(GradientStyle.Vertical, Color.White, _layer.DisplayColor);
+                BackgroundColor = new BrushInfo(GradientStyle.Vertical, _layer.DisplayColor, _layer.DisplayColor);
                 BorderStyle = BorderStyle.None;
             }
 

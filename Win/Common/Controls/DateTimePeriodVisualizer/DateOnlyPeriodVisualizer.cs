@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer
             for (int i = 0; i < _dateOnlyPeriodVisualizerRow.Periods.Count; i++)
             {
                 GradientLabel label = new GradientLabel();
-                label.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, Color.FromArgb(237, 240, 247), _dateOnlyPeriodVisualizerRow.DisplayColor);
+                label.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, _dateOnlyPeriodVisualizerRow.DisplayColor, _dateOnlyPeriodVisualizerRow.DisplayColor);
                 label.BorderAppearance = BorderStyle.None;
                 label.Location = new Point(1, 1);
                 label.Name = "periodLabel" + i;

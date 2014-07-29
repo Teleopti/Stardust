@@ -114,15 +114,18 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer
 
         private GradientLabel newLabelTextFromTemplate()
         {
-            GradientLabel label = new GradientLabel();
-            label.BackgroundColor = gradientLabelTextTemplate.BackgroundColor;
-            label.BorderSides = gradientLabelTextTemplate.BorderSides;
-            label.Dock = DockStyle.Fill;
-            label.Location = new Point(1, 1);
-            label.Margin = new Padding(0);
-            label.Size = new Size(140, 20);
-            label.TabIndex = 0;
-            label.TextAlign = ContentAlignment.MiddleLeft;
+            var label = new GradientLabel
+            {
+                BackgroundColor = gradientLabelTextTemplate.BackgroundColor,
+                BorderSides = gradientLabelTextTemplate.BorderSides,
+                BorderAppearance = gradientLabelTextTemplate.BorderAppearance,
+                Dock = DockStyle.Fill,
+                Location = new Point(1, 1),
+                Margin = new Padding(0),
+                Size = new Size(140, 20),
+                TabIndex = 0,
+                TextAlign = ContentAlignment.MiddleLeft
+            };
 
             return label;
         }

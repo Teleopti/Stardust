@@ -333,14 +333,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (fomat.Contains(getDisplayString(fomatKey)))
 			{
 				button.Tag = true;
-				button.ForeColor = Color.Black;
+				button.BackColor = Color.FromArgb(255, 153, 51);
 				button.State = ButtonAdvState.Pressed;
 			}
 			else
 			{
 				button.Tag = false;
-				button.ForeColor = Color.Black;
 				button.State = ButtonAdvState.Default;
+				button.BackColor = Color.FromArgb(128, 191, 234);
 			}
 			button.Refresh();
 		}

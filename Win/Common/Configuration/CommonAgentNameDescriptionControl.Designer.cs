@@ -29,16 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.buttonAdvEmployeeNumber = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.buttonAdvLastName = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.buttonAdvFirstName = new Syncfusion.Windows.Forms.ButtonAdv();
-            this.textBoxExample = new System.Windows.Forms.TextBox();
-            this.labelExample = new System.Windows.Forms.Label();
-            this.textBoxFormat = new System.Windows.Forms.TextBox();
-            this.labelFormat = new System.Windows.Forms.Label();
-            this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
-            this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
-            this.labelHeader = new System.Windows.Forms.Label();
             this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
             this.labelSubHeader1 = new System.Windows.Forms.Label();
@@ -47,153 +37,26 @@
             this.autoLabelChangeInfo = new Syncfusion.Windows.Forms.Tools.AutoLabel();
             this.gradientPanel2 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            ((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
-            this.gradientPanelHeader.SuspendLayout();
-            this.tableLayoutPanelHeader.SuspendLayout();
+            this.buttonAdvEmployeeNumber = new Syncfusion.Windows.Forms.ButtonAdv();
+            this.buttonAdvLastName = new Syncfusion.Windows.Forms.ButtonAdv();
+            this.buttonAdvFirstName = new Syncfusion.Windows.Forms.ButtonAdv();
+            this.textBoxExample = new System.Windows.Forms.TextBox();
+            this.textBoxFormat = new System.Windows.Forms.TextBox();
+            this.labelExample = new System.Windows.Forms.Label();
+            this.labelFormat = new System.Windows.Forms.Label();
+            this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
+            this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
+            this.labelHeader = new System.Windows.Forms.Label();
             this.tableLayoutPanelBody.SuspendLayout();
             this.tableLayoutPanelSubHeader1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanel2)).BeginInit();
             this.gradientPanel2.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
+            this.gradientPanelHeader.SuspendLayout();
+            this.tableLayoutPanelHeader.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // buttonAdvEmployeeNumber
-            // 
-            this.buttonAdvEmployeeNumber.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.buttonAdvEmployeeNumber.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.buttonAdvEmployeeNumber.BeforeTouchSize = new System.Drawing.Size(140, 24);
-            this.buttonAdvEmployeeNumber.CausesValidation = false;
-            this.buttonAdvEmployeeNumber.IsBackStageButton = false;
-            this.buttonAdvEmployeeNumber.Location = new System.Drawing.Point(382, 19);
-            this.buttonAdvEmployeeNumber.Name = "buttonAdvEmployeeNumber";
-            this.buttonAdvEmployeeNumber.PushButton = true;
-            this.buttonAdvEmployeeNumber.Size = new System.Drawing.Size(140, 24);
-            this.buttonAdvEmployeeNumber.TabIndex = 6;
-            this.buttonAdvEmployeeNumber.Text = "xxAmpersandEmployeeNumber";
-            this.buttonAdvEmployeeNumber.UseVisualStyle = true;
-            this.buttonAdvEmployeeNumber.Click += new System.EventHandler(this.buttonAdvEmployeeNumberClick);
-            // 
-            // buttonAdvLastName
-            // 
-            this.buttonAdvLastName.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.buttonAdvLastName.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.buttonAdvLastName.BeforeTouchSize = new System.Drawing.Size(140, 24);
-            this.buttonAdvLastName.CausesValidation = false;
-            this.buttonAdvLastName.IsBackStageButton = false;
-            this.buttonAdvLastName.Location = new System.Drawing.Point(236, 19);
-            this.buttonAdvLastName.Name = "buttonAdvLastName";
-            this.buttonAdvLastName.PushButton = true;
-            this.buttonAdvLastName.Size = new System.Drawing.Size(140, 24);
-            this.buttonAdvLastName.TabIndex = 5;
-            this.buttonAdvLastName.Text = "xxAmpersandLastName";
-            this.buttonAdvLastName.UseVisualStyle = true;
-            this.buttonAdvLastName.Click += new System.EventHandler(this.buttonAdvLastNameClick);
-            // 
-            // buttonAdvFirstName
-            // 
-            this.buttonAdvFirstName.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.buttonAdvFirstName.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.buttonAdvFirstName.BeforeTouchSize = new System.Drawing.Size(140, 24);
-            this.buttonAdvFirstName.CausesValidation = false;
-            this.buttonAdvFirstName.IsBackStageButton = false;
-            this.buttonAdvFirstName.Location = new System.Drawing.Point(90, 19);
-            this.buttonAdvFirstName.Name = "buttonAdvFirstName";
-            this.buttonAdvFirstName.PushButton = true;
-            this.buttonAdvFirstName.Size = new System.Drawing.Size(140, 24);
-            this.buttonAdvFirstName.TabIndex = 4;
-            this.buttonAdvFirstName.Text = "xxAmpersandFirstName";
-            this.buttonAdvFirstName.UseVisualStyle = true;
-            this.buttonAdvFirstName.Click += new System.EventHandler(this.buttonAdvFirstNameClick);
-            // 
-            // textBoxExample
-            // 
-            this.textBoxExample.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxExample.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(238)))), ((int)(((byte)(238)))));
-            this.textBoxExample.Enabled = false;
-            this.textBoxExample.Location = new System.Drawing.Point(90, 90);
-            this.textBoxExample.Name = "textBoxExample";
-            this.textBoxExample.Size = new System.Drawing.Size(484, 23);
-            this.textBoxExample.TabIndex = 3;
-            // 
-            // labelExample
-            // 
-            this.labelExample.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelExample.AutoSize = true;
-            this.labelExample.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.labelExample.Location = new System.Drawing.Point(3, 86);
-            this.labelExample.Name = "labelExample";
-            this.labelExample.Size = new System.Drawing.Size(79, 30);
-            this.labelExample.TabIndex = 2;
-            this.labelExample.Text = "xxExampleColon";
-            // 
-            // textBoxFormat
-            // 
-            this.textBoxFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxFormat.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.textBoxFormat.Location = new System.Drawing.Point(90, 53);
-            this.textBoxFormat.Name = "textBoxFormat";
-            this.textBoxFormat.Size = new System.Drawing.Size(484, 23);
-            this.textBoxFormat.TabIndex = 1;
-            this.textBoxFormat.TextChanged += new System.EventHandler(this.textBoxFormatTextChanged);
-            this.textBoxFormat.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFormatKeyUp);
-            this.textBoxFormat.MouseUp += new System.Windows.Forms.MouseEventHandler(this.textBoxFormatMouseUp);
-            this.textBoxFormat.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textBoxFormatPreviewKeyDown);
-            // 
-            // labelFormat
-            // 
-            this.labelFormat.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelFormat.AutoSize = true;
-            this.labelFormat.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.labelFormat.Location = new System.Drawing.Point(3, 49);
-            this.labelFormat.Name = "labelFormat";
-            this.labelFormat.Size = new System.Drawing.Size(80, 30);
-            this.labelFormat.TabIndex = 0;
-            this.labelFormat.Text = "xxFormatColon";
-            // 
-            // gradientPanelHeader
-            // 
-            this.gradientPanelHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.gradientPanelHeader.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.gradientPanelHeader.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
-            this.gradientPanelHeader.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.gradientPanelHeader.Controls.Add(this.tableLayoutPanelHeader);
-            this.gradientPanelHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gradientPanelHeader.Location = new System.Drawing.Point(0, 0);
-            this.gradientPanelHeader.Margin = new System.Windows.Forms.Padding(0);
-            this.gradientPanelHeader.Name = "gradientPanelHeader";
-            this.gradientPanelHeader.Padding = new System.Windows.Forms.Padding(12, 12, 12, 12);
-            this.gradientPanelHeader.Size = new System.Drawing.Size(583, 62);
-            this.gradientPanelHeader.TabIndex = 55;
-            // 
-            // tableLayoutPanelHeader
-            // 
-            this.tableLayoutPanelHeader.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanelHeader.ColumnCount = 1;
-            this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 601F));
-            this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelHeader.Controls.Add(this.labelHeader, 1, 0);
-            this.tableLayoutPanelHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelHeader.Location = new System.Drawing.Point(12, 12);
-            this.tableLayoutPanelHeader.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanelHeader.Name = "tableLayoutPanelHeader";
-            this.tableLayoutPanelHeader.RowCount = 1;
-            this.tableLayoutPanelHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelHeader.Size = new System.Drawing.Size(559, 38);
-            this.tableLayoutPanelHeader.TabIndex = 0;
-            // 
-            // labelHeader
-            // 
-            this.labelHeader.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labelHeader.AutoSize = true;
-            this.labelHeader.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelHeader.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.labelHeader.Location = new System.Drawing.Point(3, 6);
-            this.labelHeader.Name = "labelHeader";
-            this.labelHeader.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.labelHeader.Size = new System.Drawing.Size(278, 25);
-            this.labelHeader.TabIndex = 0;
-            this.labelHeader.Text = "xxCommonAgentDescription";
             // 
             // tableLayoutPanelBody
             // 
@@ -330,6 +193,149 @@
             this.tableLayoutPanel5.Size = new System.Drawing.Size(577, 46);
             this.tableLayoutPanel5.TabIndex = 15;
             // 
+            // buttonAdvEmployeeNumber
+            // 
+            this.buttonAdvEmployeeNumber.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.buttonAdvEmployeeNumber.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+            this.buttonAdvEmployeeNumber.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(191)))), ((int)(((byte)(234)))));
+            this.buttonAdvEmployeeNumber.BeforeTouchSize = new System.Drawing.Size(140, 24);
+            this.buttonAdvEmployeeNumber.CausesValidation = false;
+            this.buttonAdvEmployeeNumber.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.buttonAdvEmployeeNumber.IsBackStageButton = false;
+            this.buttonAdvEmployeeNumber.Location = new System.Drawing.Point(382, 19);
+            this.buttonAdvEmployeeNumber.Name = "buttonAdvEmployeeNumber";
+            this.buttonAdvEmployeeNumber.PushButton = true;
+            this.buttonAdvEmployeeNumber.Size = new System.Drawing.Size(140, 24);
+            this.buttonAdvEmployeeNumber.TabIndex = 6;
+            this.buttonAdvEmployeeNumber.Text = "xxAmpersandEmployeeNumber";
+            this.buttonAdvEmployeeNumber.UseVisualStyle = true;
+            this.buttonAdvEmployeeNumber.Click += new System.EventHandler(this.buttonAdvEmployeeNumberClick);
+            // 
+            // buttonAdvLastName
+            // 
+            this.buttonAdvLastName.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.buttonAdvLastName.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+            this.buttonAdvLastName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(191)))), ((int)(((byte)(234)))));
+            this.buttonAdvLastName.BeforeTouchSize = new System.Drawing.Size(140, 24);
+            this.buttonAdvLastName.CausesValidation = false;
+            this.buttonAdvLastName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.buttonAdvLastName.IsBackStageButton = false;
+            this.buttonAdvLastName.Location = new System.Drawing.Point(236, 19);
+            this.buttonAdvLastName.Name = "buttonAdvLastName";
+            this.buttonAdvLastName.PushButton = true;
+            this.buttonAdvLastName.Size = new System.Drawing.Size(140, 24);
+            this.buttonAdvLastName.TabIndex = 5;
+            this.buttonAdvLastName.Text = "xxAmpersandLastName";
+            this.buttonAdvLastName.UseVisualStyle = true;
+            this.buttonAdvLastName.Click += new System.EventHandler(this.buttonAdvLastNameClick);
+            // 
+            // buttonAdvFirstName
+            // 
+            this.buttonAdvFirstName.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.buttonAdvFirstName.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+            this.buttonAdvFirstName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(191)))), ((int)(((byte)(234)))));
+            this.buttonAdvFirstName.BeforeTouchSize = new System.Drawing.Size(140, 24);
+            this.buttonAdvFirstName.CausesValidation = false;
+            this.buttonAdvFirstName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.buttonAdvFirstName.IsBackStageButton = false;
+            this.buttonAdvFirstName.Location = new System.Drawing.Point(90, 19);
+            this.buttonAdvFirstName.Name = "buttonAdvFirstName";
+            this.buttonAdvFirstName.PushButton = true;
+            this.buttonAdvFirstName.Size = new System.Drawing.Size(140, 24);
+            this.buttonAdvFirstName.TabIndex = 4;
+            this.buttonAdvFirstName.Text = "xxAmpersandFirstName";
+            this.buttonAdvFirstName.UseVisualStyle = true;
+            this.buttonAdvFirstName.Click += new System.EventHandler(this.buttonAdvFirstNameClick);
+            // 
+            // textBoxExample
+            // 
+            this.textBoxExample.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxExample.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(238)))), ((int)(((byte)(238)))));
+            this.textBoxExample.Enabled = false;
+            this.textBoxExample.Location = new System.Drawing.Point(90, 90);
+            this.textBoxExample.Name = "textBoxExample";
+            this.textBoxExample.Size = new System.Drawing.Size(484, 23);
+            this.textBoxExample.TabIndex = 3;
+            // 
+            // textBoxFormat
+            // 
+            this.textBoxFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxFormat.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.textBoxFormat.Location = new System.Drawing.Point(90, 53);
+            this.textBoxFormat.Name = "textBoxFormat";
+            this.textBoxFormat.Size = new System.Drawing.Size(484, 23);
+            this.textBoxFormat.TabIndex = 1;
+            this.textBoxFormat.TextChanged += new System.EventHandler(this.textBoxFormatTextChanged);
+            this.textBoxFormat.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxFormatKeyUp);
+            this.textBoxFormat.MouseUp += new System.Windows.Forms.MouseEventHandler(this.textBoxFormatMouseUp);
+            this.textBoxFormat.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.textBoxFormatPreviewKeyDown);
+            // 
+            // labelExample
+            // 
+            this.labelExample.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelExample.AutoSize = true;
+            this.labelExample.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.labelExample.Location = new System.Drawing.Point(3, 86);
+            this.labelExample.Name = "labelExample";
+            this.labelExample.Size = new System.Drawing.Size(79, 30);
+            this.labelExample.TabIndex = 2;
+            this.labelExample.Text = "xxExampleColon";
+            // 
+            // labelFormat
+            // 
+            this.labelFormat.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelFormat.AutoSize = true;
+            this.labelFormat.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.labelFormat.Location = new System.Drawing.Point(3, 49);
+            this.labelFormat.Name = "labelFormat";
+            this.labelFormat.Size = new System.Drawing.Size(80, 30);
+            this.labelFormat.TabIndex = 0;
+            this.labelFormat.Text = "xxFormatColon";
+            // 
+            // gradientPanelHeader
+            // 
+            this.gradientPanelHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.gradientPanelHeader.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.gradientPanelHeader.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
+            this.gradientPanelHeader.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.gradientPanelHeader.Controls.Add(this.tableLayoutPanelHeader);
+            this.gradientPanelHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.gradientPanelHeader.Location = new System.Drawing.Point(0, 0);
+            this.gradientPanelHeader.Margin = new System.Windows.Forms.Padding(0);
+            this.gradientPanelHeader.Name = "gradientPanelHeader";
+            this.gradientPanelHeader.Padding = new System.Windows.Forms.Padding(12);
+            this.gradientPanelHeader.Size = new System.Drawing.Size(583, 62);
+            this.gradientPanelHeader.TabIndex = 55;
+            // 
+            // tableLayoutPanelHeader
+            // 
+            this.tableLayoutPanelHeader.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanelHeader.ColumnCount = 1;
+            this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 601F));
+            this.tableLayoutPanelHeader.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelHeader.Controls.Add(this.labelHeader, 1, 0);
+            this.tableLayoutPanelHeader.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelHeader.Location = new System.Drawing.Point(12, 12);
+            this.tableLayoutPanelHeader.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanelHeader.Name = "tableLayoutPanelHeader";
+            this.tableLayoutPanelHeader.RowCount = 1;
+            this.tableLayoutPanelHeader.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelHeader.Size = new System.Drawing.Size(559, 38);
+            this.tableLayoutPanelHeader.TabIndex = 0;
+            // 
+            // labelHeader
+            // 
+            this.labelHeader.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.labelHeader.AutoSize = true;
+            this.labelHeader.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelHeader.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.labelHeader.Location = new System.Drawing.Point(3, 6);
+            this.labelHeader.Name = "labelHeader";
+            this.labelHeader.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.labelHeader.Size = new System.Drawing.Size(278, 25);
+            this.labelHeader.TabIndex = 0;
+            this.labelHeader.Text = "xxCommonAgentDescription";
+            // 
             // CommonAgentNameDescriptionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -340,10 +346,6 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Name = "CommonAgentNameDescriptionControl";
             this.Size = new System.Drawing.Size(583, 344);
-            ((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
-            this.gradientPanelHeader.ResumeLayout(false);
-            this.tableLayoutPanelHeader.ResumeLayout(false);
-            this.tableLayoutPanelHeader.PerformLayout();
             this.tableLayoutPanelBody.ResumeLayout(false);
             this.tableLayoutPanelSubHeader1.ResumeLayout(false);
             this.tableLayoutPanelSubHeader1.PerformLayout();
@@ -352,6 +354,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanel2)).EndInit();
             this.gradientPanel2.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
+            this.gradientPanelHeader.ResumeLayout(false);
+            this.tableLayoutPanelHeader.ResumeLayout(false);
+            this.tableLayoutPanelHeader.PerformLayout();
             this.ResumeLayout(false);
 
         }
