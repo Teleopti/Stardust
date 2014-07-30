@@ -463,8 +463,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.timeSpanTextBoxPlanningMax.Name = "timeSpanTextBoxPlanningMax";
             this.timeSpanTextBoxPlanningMax.Size = new System.Drawing.Size(126, 25);
             this.timeSpanTextBoxPlanningMax.TabIndex = 11;
+            this.timeSpanTextBoxPlanningMax.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.timeSpanTextBoxPlanningMax.TimeSpanBoxHeight = 23;
-            this.timeSpanTextBoxPlanningMax.TimeSpanBoxWidth = 70;
+            this.timeSpanTextBoxPlanningMax.TimeSpanBoxWidth = 81;
             // 
             // timeSpanTextBoxPlanningMin
             // 
@@ -477,8 +478,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.timeSpanTextBoxPlanningMin.Name = "timeSpanTextBoxPlanningMin";
             this.timeSpanTextBoxPlanningMin.Size = new System.Drawing.Size(126, 25);
             this.timeSpanTextBoxPlanningMin.TabIndex = 10;
+            this.timeSpanTextBoxPlanningMin.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.timeSpanTextBoxPlanningMin.TimeSpanBoxHeight = 23;
-            this.timeSpanTextBoxPlanningMin.TimeSpanBoxWidth = 70;
+            this.timeSpanTextBoxPlanningMin.TimeSpanBoxWidth = 81;
             // 
             // labelTimeBankMax
             // 
@@ -625,8 +627,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtMaxTimePerWeek.Name = "textBoxExtMaxTimePerWeek";
             this.textBoxExtMaxTimePerWeek.Size = new System.Drawing.Size(126, 25);
             this.textBoxExtMaxTimePerWeek.TabIndex = 6;
+            this.textBoxExtMaxTimePerWeek.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.textBoxExtMaxTimePerWeek.TimeSpanBoxHeight = 23;
-            this.textBoxExtMaxTimePerWeek.TimeSpanBoxWidth = 70;
+            this.textBoxExtMaxTimePerWeek.TimeSpanBoxWidth = 81;
             // 
             // textBoxExtNightlyRestTime
             // 
@@ -639,8 +642,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtNightlyRestTime.Name = "textBoxExtNightlyRestTime";
             this.textBoxExtNightlyRestTime.Size = new System.Drawing.Size(126, 25);
             this.textBoxExtNightlyRestTime.TabIndex = 7;
+            this.textBoxExtNightlyRestTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.textBoxExtNightlyRestTime.TimeSpanBoxHeight = 23;
-            this.textBoxExtNightlyRestTime.TimeSpanBoxWidth = 70;
+            this.textBoxExtNightlyRestTime.TimeSpanBoxWidth = 81;
             // 
             // textBoxExtWeeklyRestTime
             // 
@@ -653,8 +657,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtWeeklyRestTime.Name = "textBoxExtWeeklyRestTime";
             this.textBoxExtWeeklyRestTime.Size = new System.Drawing.Size(126, 25);
             this.textBoxExtWeeklyRestTime.TabIndex = 8;
+            this.textBoxExtWeeklyRestTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.textBoxExtWeeklyRestTime.TimeSpanBoxHeight = 23;
-            this.textBoxExtWeeklyRestTime.TimeSpanBoxWidth = 70;
+            this.textBoxExtWeeklyRestTime.TimeSpanBoxWidth = 81;
             // 
             // textBoxExMinTimeSchedulePeriod
             // 
@@ -667,8 +672,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExMinTimeSchedulePeriod.Name = "textBoxExMinTimeSchedulePeriod";
             this.textBoxExMinTimeSchedulePeriod.Size = new System.Drawing.Size(126, 25);
             this.textBoxExMinTimeSchedulePeriod.TabIndex = 9;
+            this.textBoxExMinTimeSchedulePeriod.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.textBoxExMinTimeSchedulePeriod.TimeSpanBoxHeight = 23;
-            this.textBoxExMinTimeSchedulePeriod.TimeSpanBoxWidth = 70;
+            this.textBoxExMinTimeSchedulePeriod.TimeSpanBoxWidth = 81;
             // 
             // tableLayoutPanel1
             // 
@@ -701,8 +707,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.timeSpanTextBoxNegativeTolerance.Name = "timeSpanTextBoxNegativeTolerance";
             this.timeSpanTextBoxNegativeTolerance.Size = new System.Drawing.Size(126, 25);
             this.timeSpanTextBoxNegativeTolerance.TabIndex = 2;
+            this.timeSpanTextBoxNegativeTolerance.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.timeSpanTextBoxNegativeTolerance.TimeSpanBoxHeight = 23;
-            this.timeSpanTextBoxNegativeTolerance.TimeSpanBoxWidth = 70;
+            this.timeSpanTextBoxNegativeTolerance.TimeSpanBoxWidth = 81;
             // 
             // timeSpanTextBoxPositiveTolerance
             // 
@@ -716,8 +723,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.timeSpanTextBoxPositiveTolerance.Name = "timeSpanTextBoxPositiveTolerance";
             this.timeSpanTextBoxPositiveTolerance.Size = new System.Drawing.Size(131, 25);
             this.timeSpanTextBoxPositiveTolerance.TabIndex = 3;
+            this.timeSpanTextBoxPositiveTolerance.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.timeSpanTextBoxPositiveTolerance.TimeSpanBoxHeight = 23;
-            this.timeSpanTextBoxPositiveTolerance.TimeSpanBoxWidth = 70;
+            this.timeSpanTextBoxPositiveTolerance.TimeSpanBoxWidth = 81;
             // 
             // autoLabel9
             // 
@@ -819,8 +827,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtAvgWorkTimePerDay.Name = "textBoxExtAvgWorkTimePerDay";
             this.textBoxExtAvgWorkTimePerDay.Size = new System.Drawing.Size(126, 26);
             this.textBoxExtAvgWorkTimePerDay.TabIndex = 1;
+            this.textBoxExtAvgWorkTimePerDay.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.textBoxExtAvgWorkTimePerDay.TimeSpanBoxHeight = 23;
-            this.textBoxExtAvgWorkTimePerDay.TimeSpanBoxWidth = 70;
+            this.textBoxExtAvgWorkTimePerDay.TimeSpanBoxWidth = 81;
             // 
             // AutoLabelFullDayAbsence
             // 

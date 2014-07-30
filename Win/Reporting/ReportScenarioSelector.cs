@@ -6,8 +6,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
 namespace Teleopti.Ccc.Win.Reporting
 {
@@ -21,14 +19,6 @@ namespace Teleopti.Ccc.Win.Reporting
             if (!DesignMode) SetTexts();
         }
 
-        /// <summary>
-        /// Gets or sets the selected item.
-        /// </summary>
-        /// <value>The selected item.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-27
-        /// </remarks>
         public IScenario SelectedItem
         {
             get
@@ -38,11 +28,11 @@ namespace Teleopti.Ccc.Win.Reporting
             set
             {
                 _selectedScenario = value;
-                SetSelectedScenario();
+                setSelectedScenario();
             }
         }
 
-        private void SetSelectedScenario()
+        private void setSelectedScenario()
         {
             comboBoxAdvScenario.SelectedItem = _selectedScenario;
         }
@@ -55,7 +45,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                ScenarioRepository scenarioRepository = new ScenarioRepository(unitOfWork);
+                var scenarioRepository = new ScenarioRepository(unitOfWork);
                 IList<IScenario> scenarios = scenarioRepository.LoadAll();
 
                 comboBoxAdvScenario.DisplayMember = "Description";
@@ -75,7 +65,7 @@ namespace Teleopti.Ccc.Win.Reporting
                     }
                 }
 
-                SetSelectedScenario();
+                setSelectedScenario();
             }
         }
 

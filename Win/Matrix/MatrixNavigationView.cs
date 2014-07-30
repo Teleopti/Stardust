@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Win.Matrix
                                             Dock = DockStyle.Fill,
                                             LeftImageList = imageList1,
                                             BorderSingle = ButtonBorderStyle.None,
-                                            Border3DStyle = Border3DStyle.Flat
+                                            Border3DStyle = Border3DStyle.Flat,
+											Style = TreeStyle.Metro
                                         };
 
             treeView.KeyDown += treeViewKeyDown;

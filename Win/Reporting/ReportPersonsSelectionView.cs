@@ -10,45 +10,44 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Reporting
 {
-    public partial class ReportPersonsSelectionView : BaseRibbonForm, IReportPersonsSelectionView
-    {
-        private readonly IPersonSelectorPresenter _personSelectorPresenter;
-        private ReportPersonsSelectionView(){}
+	public partial class ReportPersonsSelectionView : BaseRibbonForm, IReportPersonsSelectionView
+	{
+		private readonly IPersonSelectorPresenter _personSelectorPresenter;
+		private ReportPersonsSelectionView(){}
 
 		public ReportPersonsSelectionView(DateOnlyPeriod dateOnlyPeriod, IEnumerable<Guid> selectedAgentGuids, IComponentContext componentContext, IApplicationFunction applicationFunction, string selectedGroupPage)
-        {
-            InitializeComponent();
+		{
+			InitializeComponent();
 
-            _personSelectorPresenter =
-                componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope().Resolve<IPersonSelectorPresenter>();
-            _personSelectorPresenter.ApplicationFunction = applicationFunction;
-            var view = (Control)_personSelectorPresenter.View;
-            panel1.Controls.Add(view);
-            view.Dock = DockStyle.Fill;
+			_personSelectorPresenter =
+				componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope().Resolve<IPersonSelectorPresenter>();
+			_personSelectorPresenter.ApplicationFunction = applicationFunction;
+			var view = (Control)_personSelectorPresenter.View;
+			panel1.Controls.Add(view);
+			view.Dock = DockStyle.Fill;
 
-            var selectorView = _personSelectorPresenter.View;
+			var selectorView = _personSelectorPresenter.View;
 			selectorView.SelectedPeriod = dateOnlyPeriod;
-            _personSelectorPresenter.ShowPersons = true;
-            _personSelectorPresenter.ShowUsers = false;
-            selectorView.PreselectedPersonIds = selectedAgentGuids;
-            selectorView.ShowCheckBoxes = true;
-            
-            selectorView.ShowDateSelection = false;
-            selectorView.HideMenu = true;
-            _personSelectorPresenter.LoadTabs();
-            _personSelectorPresenter.SetSelectedTab(selectedGroupPage);
-            SetTexts();
-            BackColor = ColorHelper.OfficeBlue;
-        }
+			_personSelectorPresenter.ShowPersons = true;
+			_personSelectorPresenter.ShowUsers = false;
+			selectorView.PreselectedPersonIds = selectedAgentGuids;
+			selectorView.ShowCheckBoxes = true;
+			
+			selectorView.ShowDateSelection = false;
+			selectorView.HideMenu = true;
+			_personSelectorPresenter.LoadTabs();
+			_personSelectorPresenter.SetSelectedTab(selectedGroupPage);
+			SetTexts();
+		}
 
-        public HashSet<Guid> SelectedAgentGuids()
-        {
-            return _personSelectorPresenter.CheckedPersonGuids;
-        }
+		public HashSet<Guid> SelectedAgentGuids()
+		{
+			return _personSelectorPresenter.CheckedPersonGuids;
+		}
 
-        public string SelectedGroupPageKey
-        {
-            get { return _personSelectorPresenter.SelectedGroupPageKey(); }
-        }
-    }
+		public string SelectedGroupPageKey
+		{
+			get { return _personSelectorPresenter.SelectedGroupPageKey(); }
+		}
+	}
 }

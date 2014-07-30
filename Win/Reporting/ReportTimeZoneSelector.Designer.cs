@@ -47,38 +47,40 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(400, 27);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(467, 31);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // comboBoxAdvTimeZone
             // 
             this.comboBoxAdvTimeZone.AllowNewText = false;
-            this.comboBoxAdvTimeZone.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            this.comboBoxAdvTimeZone.BackColor = System.Drawing.Color.White;
+            this.comboBoxAdvTimeZone.BeforeTouchSize = new System.Drawing.Size(226, 23);
             this.comboBoxAdvTimeZone.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxAdvTimeZone.Location = new System.Drawing.Point(203, 3);
+            this.comboBoxAdvTimeZone.Location = new System.Drawing.Point(236, 3);
             this.comboBoxAdvTimeZone.MaxLength = 150;
             this.comboBoxAdvTimeZone.Name = "comboBoxAdvTimeZone";
-            this.comboBoxAdvTimeZone.Size = new System.Drawing.Size(194, 21);
-            this.comboBoxAdvTimeZone.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.comboBoxAdvTimeZone.Size = new System.Drawing.Size(226, 23);
+            this.comboBoxAdvTimeZone.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
             this.comboBoxAdvTimeZone.TabIndex = 1;
             // 
             // autoLabelTimeZone
             // 
             this.autoLabelTimeZone.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.autoLabelTimeZone.Location = new System.Drawing.Point(3, 7);
+            this.autoLabelTimeZone.Location = new System.Drawing.Point(3, 8);
             this.autoLabelTimeZone.Name = "autoLabelTimeZone";
-            this.autoLabelTimeZone.Size = new System.Drawing.Size(92, 13);
+            this.autoLabelTimeZone.Size = new System.Drawing.Size(103, 15);
             this.autoLabelTimeZone.TabIndex = 2;
             this.autoLabelTimeZone.Text = "xxTimeZoneColon";
             this.autoLabelTimeZone.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ReportTimeZoneSelector
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ReportTimeZoneSelector";
-            this.Size = new System.Drawing.Size(400, 27);
+            this.Size = new System.Drawing.Size(467, 31);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvTimeZone)).EndInit();

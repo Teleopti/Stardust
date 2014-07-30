@@ -16,40 +16,40 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Reporting
 {
-    public partial class ReportAgentSelector : BaseUserControl
-    {
+	public partial class ReportAgentSelector : BaseUserControl
+	{
 		private HashSet<Guid> _selectedPersonGuids = new HashSet<Guid>();
-        private SchedulerStateHolder _stateHolder;
-    	private string _selectedGroupPageKey;
-        
-        public ReportAgentSelector()
-        {
-            InitializeComponent();
-        }
+		private SchedulerStateHolder _stateHolder;
+		private string _selectedGroupPageKey;
+		
+		public ReportAgentSelector()
+		{
+			InitializeComponent();
+		}
 
-        public event EventHandler<EventArgs> OpenDialog;
+		public event EventHandler<EventArgs> OpenDialog;
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-           
-            if (!DesignMode && StateHolderReader.IsInitialized)
-            {
-                comboBoxAdv1.PopupContainer.Popup += popupContainerPopup;
-                comboBoxAdv1.PopupContainer.CloseUp += popupContainerCloseUp;
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+		   
+			if (!DesignMode && StateHolderReader.IsInitialized)
+			{
+				comboBoxAdv1.PopupContainer.Popup += popupContainerPopup;
+				comboBoxAdv1.PopupContainer.CloseUp += popupContainerCloseUp;
 
 
-                SetTexts();
+				SetTexts();
 
-                UpdateComboWithSelectedAgents();
-            }     
-        }
+				UpdateComboWithSelectedAgents();
+			}     
+		}
 
-        void popupContainerCloseUp(object sender, Syncfusion.Windows.Forms.PopupClosedEventArgs e)
-        {
-        	var handler = OpenDialog;
-            if(handler != null)
-                handler(this, EventArgs.Empty);
+		void popupContainerCloseUp(object sender, Syncfusion.Windows.Forms.PopupClosedEventArgs e)
+		{
+			var handler = OpenDialog;
+			if(handler != null)
+				handler(this, EventArgs.Empty);
 
 			try
 			{
@@ -65,33 +65,33 @@ namespace Teleopti.Ccc.Win.Reporting
 					Cursor = Cursors.Default;
 				}
 			}
-        }
+		}
 
-        void popupContainerPopup(object sender, EventArgs e)
-        {
-            comboBoxAdv1.PopupContainer.HidePopup();
-        }
+		void popupContainerPopup(object sender, EventArgs e)
+		{
+			comboBoxAdv1.PopupContainer.HidePopup();
+		}
 
-        public void SetStateHolder(SchedulerStateHolder stateHolder)
-        {
-            _stateHolder = stateHolder;
-        }
+		public void SetStateHolder(SchedulerStateHolder stateHolder)
+		{
+			_stateHolder = stateHolder;
+		}
 
-        public HashSet<Guid> SelectedPersonGuids
-        {
-            get { return _selectedPersonGuids; }
-        }
+		public HashSet<Guid> SelectedPersonGuids
+		{
+			get { return _selectedPersonGuids; }
+		}
 
 		public void SetSelectedPersons(HashSet<Guid> persons)
 		{
 			_selectedPersonGuids = persons;
 		}
 
-    	public string SelectedGroupPageKey
-    	{
+		public string SelectedGroupPageKey
+		{
 			get { return _selectedGroupPageKey; }
 			set { _selectedGroupPageKey = value; }
-    	}
+		}
 
 		private void showFilterDialog()
 		{
@@ -116,33 +116,33 @@ namespace Teleopti.Ccc.Win.Reporting
 			}
 		}
 
-        public void UpdateComboWithSelectedAgents()
-        {
-            var currentCultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
+		public void UpdateComboWithSelectedAgents()
+		{
+			var currentCultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
 
-            var builder = new StringBuilder();
+			var builder = new StringBuilder();
 
-            builder.Append(_selectedPersonGuids.Count().ToString(currentCultureInfo));
-            builder.Append(":");
+			builder.Append(_selectedPersonGuids.Count().ToString(currentCultureInfo));
+			builder.Append(":");
 			_stateHolder.FilterPersons(_selectedPersonGuids);
-            foreach (var person in _stateHolder.FilteredPersonDictionary)
-            {
-                builder.Append(person.Value.Name);
-                builder.Append(", ");
-            }
+			foreach (var person in _stateHolder.FilteredPersonDictionary)
+			{
+				builder.Append(person.Value.Name);
+				builder.Append(", ");
+			}
 
-            comboBoxAdv1.Text = builder.ToString();
-        }
+			comboBoxAdv1.Text = builder.ToString();
+		}
 
-        public override bool HasHelp
-        {
-            get
-            {
-                return false;
-            }
-        }
+		public override bool HasHelp
+		{
+			get
+			{
+				return false;
+			}
+		}
 
-    	public IComponentContext ComponentContext { get; set; }
+		public IComponentContext ComponentContext { get; set; }
 		public IApplicationFunction ReportApplicationFunction { get; set; }
-    }
+	}
 }

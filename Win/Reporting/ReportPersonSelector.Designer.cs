@@ -48,7 +48,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(400, 25);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(467, 29);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // labelAgents
@@ -56,29 +56,31 @@
             this.labelAgents.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelAgents.AutoSize = true;
             this.labelAgents.BackColor = System.Drawing.Color.Transparent;
-            this.labelAgents.Location = new System.Drawing.Point(3, 6);
+            this.labelAgents.Location = new System.Drawing.Point(3, 7);
             this.labelAgents.Name = "labelAgents";
-            this.labelAgents.Size = new System.Drawing.Size(77, 13);
+            this.labelAgents.Size = new System.Drawing.Size(86, 15);
             this.labelAgents.TabIndex = 2;
             this.labelAgents.Text = "xxAgentsColon";
             // 
             // comboBoxAdv1
             // 
-            this.comboBoxAdv1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
-            this.comboBoxAdv1.Location = new System.Drawing.Point(203, 3);
+            this.comboBoxAdv1.BackColor = System.Drawing.Color.White;
+            this.comboBoxAdv1.BeforeTouchSize = new System.Drawing.Size(226, 23);
+            this.comboBoxAdv1.Location = new System.Drawing.Point(236, 3);
             this.comboBoxAdv1.Name = "comboBoxAdv1";
-            this.comboBoxAdv1.Size = new System.Drawing.Size(194, 21);
-            this.comboBoxAdv1.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.comboBoxAdv1.Size = new System.Drawing.Size(226, 23);
+            this.comboBoxAdv1.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
             this.comboBoxAdv1.TabIndex = 3;
             this.comboBoxAdv1.Text = "comboBoxAdv1";
             // 
             // ReportPersonSelector
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ReportPersonSelector";
-            this.Size = new System.Drawing.Size(400, 25);
+            this.Size = new System.Drawing.Size(467, 29);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdv1)).EndInit();

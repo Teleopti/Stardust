@@ -44,37 +44,39 @@
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(656, 598);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 63F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(765, 690);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // reportHeader1
             // 
-            this.reportHeader1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.reportHeader1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.reportHeader1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.reportHeader1.HeaderText = "autoLabel1";
-            this.reportHeader1.Location = new System.Drawing.Point(3, 3);
+            this.reportHeader1.Location = new System.Drawing.Point(0, 0);
+            this.reportHeader1.Margin = new System.Windows.Forms.Padding(0);
             this.reportHeader1.Name = "reportHeader1";
-            this.reportHeader1.Size = new System.Drawing.Size(650, 32);
+            this.reportHeader1.Size = new System.Drawing.Size(765, 63);
             this.reportHeader1.TabIndex = 10;
             // 
             // panelSettingsContainer
             // 
             this.panelSettingsContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelSettingsContainer.Location = new System.Drawing.Point(3, 41);
+            this.panelSettingsContainer.Location = new System.Drawing.Point(3, 66);
             this.panelSettingsContainer.Name = "panelSettingsContainer";
-            this.panelSettingsContainer.Size = new System.Drawing.Size(650, 554);
+            this.panelSettingsContainer.Size = new System.Drawing.Size(759, 621);
             this.panelSettingsContainer.TabIndex = 11;
             // 
             // ReportSettingsHostView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ReportSettingsHostView";
-            this.Size = new System.Drawing.Size(656, 598);
+            this.Size = new System.Drawing.Size(765, 690);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
