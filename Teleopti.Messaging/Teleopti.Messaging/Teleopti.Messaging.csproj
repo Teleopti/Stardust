@@ -153,7 +153,6 @@
     <Compile Include="SignalR\RestartOnClosed.cs" />
     <Compile Include="SignalR\SignalBrokerCommands.cs" />
     <Compile Include="SignalR\SignalConnection.cs" />
-    <Compile Include="SignalR\TrackingMessage.cs" />
     <Compile Include="SignalR\Wrappers\HubProxyWrapper.cs" />
     <Compile Include="SignalR\Wrappers\IHubProxyWrapper.cs" />
     <Compile Include="SignalR\Wrappers\HubConnectionWrapper.cs" />

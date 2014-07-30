@@ -15,7 +15,7 @@ define([
 		'errorview',
 		'resources',
 		'subscriptions.trackingmessages',
-		'notificationview'
+		'notifications'
 ], function (
 		layoutTemplate,
 		menuTemplate,
@@ -32,7 +32,7 @@ define([
 		errorview,
 		resources,
 		trackingmessages,
-		notificationview) {
+		notificationsViewModel) {
 
 	var currentView;
 	var defaultView = 'teamschedule';
@@ -181,6 +181,7 @@ define([
 		$('body').append(layoutTemplate);
 		contentPlaceHolder = $('#content-placeholder');
 		$('#menu-placeholder').replaceWith(menuTemplate);
+		$('#notification-placeholder').replaceWith(notificationTemplate);
 	}
 
 	function _fixBootstrapDropdownForMobileDevices() {
@@ -205,8 +206,15 @@ define([
 	}
 
 	function _initTrackingNotification(personId) {
+		ko.applyBindings(notificationsViewModel, $('#notification-container')[0]);
 		trackingmessages.subscribeTrackingMessage(personId, function (notification) {
-			notificationview.display(notification);
+			var data = JSON.parse(notification.BinaryData);
+			notificationsViewModel.UpdateNotification(notification.DomainId, data.Status);
+			if (data.Status === 0) {
+				setInterval(function() {
+					notificationsViewModel.RemoveNotification(notification.DomainId);
+				}, 2000);
+			}
 		}, function () {
 		});
 	}

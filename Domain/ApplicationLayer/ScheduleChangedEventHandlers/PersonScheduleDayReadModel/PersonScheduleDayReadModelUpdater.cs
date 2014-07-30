@@ -32,7 +32,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		{
 			createReadModel(@event);
 			if (_eventTracker != null && @event.TrackId != Guid.Empty)
-				_eventTracker.SendTrackingMessage(@event.InitiatorId, @event.BusinessUnitId, @event.TrackId);
+				_eventTracker.SendTrackingMessage(@event.InitiatorId, @event.BusinessUnitId, new TrackingMessage
+				{
+					TrackId = @event.TrackId,
+					Status = TrackingMessageStatus.Success
+				});
 		}
 
 		public void Handle(ProjectionChangedEventForPersonScheduleDay @event)

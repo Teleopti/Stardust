@@ -813,7 +813,7 @@
     <Content Include="Areas\Anywhere\Content\feature.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\guidgenerator.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\notificationview.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\notifications.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\helpers_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.justgagebinding.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\raphaelloader.js" />

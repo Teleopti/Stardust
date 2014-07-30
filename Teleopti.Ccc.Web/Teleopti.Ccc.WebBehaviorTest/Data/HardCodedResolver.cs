@@ -80,7 +80,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 							new PersonScheduleDayReadModelPersister(
 								CurrentUnitOfWork.Make(),
 								messageBroker(),
-								new CurrentDataSource(new CurrentIdentity()))
+								new CurrentDataSource(new CurrentIdentity())),
+								null
 							),
 						new ScheduledResourcesChangedHandler(
 							new PersonRepository(CurrentUnitOfWork.Make()),

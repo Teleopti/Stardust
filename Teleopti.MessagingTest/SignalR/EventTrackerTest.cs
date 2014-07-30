@@ -21,7 +21,10 @@ namespace Teleopti.MessagingTest.SignalR
 
 			var businessUnitId = Guid.NewGuid();
 			var initiatorId = Guid.NewGuid();
-			target.SendTrackingMessage(initiatorId, businessUnitId, Guid.NewGuid());
+			target.SendTrackingMessage(initiatorId, businessUnitId, new TrackingMessage
+			{
+				TrackId = Guid.NewGuid()
+			});
 
 			var arguments=messageBrokerSender.GetArgumentsForCallsMadeOn(x => x.SendNotification(null), a => a.IgnoreArguments());
 

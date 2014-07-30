@@ -776,6 +776,7 @@
     <Compile Include="MessageBroker\Events\IEventMessageFactory.cs" />
     <Compile Include="MessageBroker\Events\IMessageBrokerListener.cs" />
     <Compile Include="MessageBroker\Events\IMessageBrokerSender.cs" />
+    <Compile Include="MessageBroker\Events\TrackingMessage.cs" />
     <Compile Include="MessageBroker\Notification.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />
     <Compile Include="Messages\Denormalize\ScheduleChanged.cs" />

@@ -1,12 +1,11 @@
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-
-			<div class="alert alert-danger">
-				<strong>Notification</strong>
-				<span>Put a message here.</span>
+<div class="container" id="notification-container">
+	<div data-bind="foreach: Notifications">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="alert" data-bind="css: Css">
+					<span data-bind="text: Message"></span>
+				</div>
 			</div>
-
 		</div>
 	</div>
 </div>

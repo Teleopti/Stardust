@@ -1,9 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.DomainTest.Helper

@@ -14,13 +14,13 @@ namespace Teleopti.Messaging.SignalR
 			_messageBroker = messageBroker;
 		}
 
-		public void SendTrackingMessage(Guid initiatorId, Guid businessUnitId, Guid trackId)
+		public void SendTrackingMessage(Guid initiatorId, Guid businessUnitId, TrackingMessage message)
 		{
 			_messageBroker.SendNotification(new Notification
 			{
-				BinaryData = JsonConvert.SerializeObject(new TrackingMessage { TrackId = trackId }),
+				BinaryData = JsonConvert.SerializeObject(message),
 				BusinessUnitId = businessUnitId.ToString(),
-				DomainId = trackId.ToString(),
+				DomainId = message.TrackId.ToString(),
 				DomainType = "TrackingMessage",
 				DomainReferenceId = initiatorId.ToString()
 			});

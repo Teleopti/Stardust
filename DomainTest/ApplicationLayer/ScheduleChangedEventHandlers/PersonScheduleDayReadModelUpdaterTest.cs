@@ -158,7 +158,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				TrackId = trackId
 			});
 
-			eventTracker.AssertWasCalled(x => x.SendTrackingMessage(initiatorId, businessUnitId, trackId));
+			var arguments =
+				eventTracker.GetArgumentsForCallsMadeOn(x => x.SendTrackingMessage(initiatorId, businessUnitId, null), a => a.IgnoreArguments());
+
+			var firstCall = arguments.Single();
+			firstCall.First().Should().Be.EqualTo(initiatorId);
+			firstCall.ElementAt(1).Should().Be.EqualTo(businessUnitId);
+			(firstCall.ElementAt(2) as TrackingMessage).TrackId.Should().Be.EqualTo(trackId);
 		}
 
 	}
