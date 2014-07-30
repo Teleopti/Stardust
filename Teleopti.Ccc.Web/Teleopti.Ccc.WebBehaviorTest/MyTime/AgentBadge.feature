@@ -4,9 +4,11 @@ Feature: AgentBadge
 	by getting badges for my performance
 
 Background: 
-Given I am an agent
+Given there is a role with
+	| Field                    | Value                 |
+	| Name                     | Full access to mytime |
+  And I have the role 'Full access to mytime'
 
-@ignore
 Scenario: Show my badge
 Given I have badges with
 | Badge type     | Bronze | Silver | Gold |
@@ -16,13 +18,9 @@ Given I have badges with
  When I am viewing week schedule
  Then I should see I have 10 bronze badge, 2 silver badge and 3 gold badge
 
-@ignore
 Scenario: Show message when agent has no badge
 Given I have badges with
 | Badge type     | Bronze | Silver | Gold |
-| Answered calls | 0      | 0      | 0    |
-| AHT            | 0      | 0      | 0    |
-| Adherence      | 0      | 0      | 0    |
  When I am viewing week schedule
  Then I should see I have 0 bronze badge, 0 silver badge and 0 gold badge
 

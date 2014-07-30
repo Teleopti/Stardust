@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			BadgeType badgeType = Interfaces.Domain.BadgeType.AnsweredCalls;
+			var badgeType = Interfaces.Domain.BadgeType.AnsweredCalls;
 			if (BadgeType == "AnsweredCalls")
 			{
 				badgeType = Interfaces.Domain.BadgeType.AnsweredCalls;
