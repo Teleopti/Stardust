@@ -228,7 +228,7 @@ BEGIN
 	[BadgeType] [int] NOT NULL
   CONSTRAINT [PK_AgentBadge] PRIMARY KEY CLUSTERED 
  (
-	[Parent] ASC
+	[Id] ASC
  )
 ) ON [PRIMARY];
 
