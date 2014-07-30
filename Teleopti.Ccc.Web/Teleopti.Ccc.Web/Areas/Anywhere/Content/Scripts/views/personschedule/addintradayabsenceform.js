@@ -33,6 +33,7 @@ define([
 		
 		var groupId;
 		var personId;
+		var personName;
 		var startTimeAsMoment;
 		var endTimeAsMoment;
 
@@ -119,6 +120,7 @@ define([
 		this.SetData = function (data) {
 			groupId = data.GroupId;
 			personId = data.PersonId;
+			personName = data.PersonName;
 			groupId = data.GroupId;
 			self.Date(data.Date);
 
@@ -149,7 +151,7 @@ define([
 					}
 				}
 			);
-			notificationsViewModel.AddNotification(trackId, "Adding intraday absence");
+			notificationsViewModel.AddNotification(trackId, resources.AddingIntradayAbsenceFor + " " + personName + "... ");
 		};
 	};
 });

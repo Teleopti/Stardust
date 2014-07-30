@@ -166,6 +166,7 @@ define([
 			self.Absences.push.apply(self.Absences, absences);
 
 			data.PersonId = self.PersonId();
+			data.PersonName = self.Name();
 			data.Date = self.ScheduleDate();
 			data.GroupId = self.GroupId();
 			self.AddFullDayAbsenceForm.SetData(data);

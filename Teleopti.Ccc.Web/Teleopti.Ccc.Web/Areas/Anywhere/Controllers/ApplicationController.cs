@@ -102,6 +102,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.TimeInAlarm,
 					UserTexts.Resources.MoveActivity,
                     UserTexts.Resources.FunctionNotAvailable,
+                    UserTexts.Resources.AddingIntradayAbsenceFor,
+                    UserTexts.Resources.Success,
+                    UserTexts.Resources.Failed,
 
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,

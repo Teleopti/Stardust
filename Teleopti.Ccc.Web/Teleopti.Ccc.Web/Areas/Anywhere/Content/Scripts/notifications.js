@@ -1,8 +1,10 @@
 define(
 [
-	'knockout'
+	'knockout',
+	'resources'
 ], function (
-	ko
+	ko,
+	resources
 ) {
 	var self = this;
 
@@ -30,7 +32,7 @@ define(
 			});
 			if (!match)
 				return;
-			match.Message(match.Message() + " " + (status === 0 ? "Success" : "Failed"));
+			match.Message(match.Message() + " " + (status === 0 ? resources.Success : resources.Failed));
 			match.Css(status === 0 ? "alert alert-success" : "alert alert-danger");
 		}
 	};
