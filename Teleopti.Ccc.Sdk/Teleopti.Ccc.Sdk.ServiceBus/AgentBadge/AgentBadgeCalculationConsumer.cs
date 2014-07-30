@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			if (_repositoryFactory != null)
 			{
 				_calculator = new AgentBadgeCalculator(_repositoryFactory.CreateStatisticRepository());
-				_calculator.LastCalculatedDates = new Dictionary<int, DateTime>();
 			}
+			_calculator.LastCalculatedDates = new Dictionary<int, DateTime>();
 		}
 
 		public void Consume(AgentBadgeCalculateMessage message)

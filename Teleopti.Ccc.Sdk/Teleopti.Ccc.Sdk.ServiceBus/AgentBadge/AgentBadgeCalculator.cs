@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_statisticRepository = statisticRepository;
 		}
 
-		protected static IList<IPerson> addBadge(IEnumerable<IPerson> allPersons, IEnumerable<Guid> agentsThatShouldGetBadge, BadgeType badgeType)
+		protected IList<IPerson> addBadge(IEnumerable<IPerson> allPersons, IEnumerable<Guid> agentsThatShouldGetBadge, BadgeType badgeType)
 		{
 			var personsThatGotABadge = new List<IPerson>();
 			if (agentsThatShouldGetBadge != null)

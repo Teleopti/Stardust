@@ -12,33 +12,23 @@ Given I am an agent
 
 @ignore
 Scenario: Show my badge
-Given I have badges 
-| KpiName               | BadgeType | Count |
-| Answered calls        | Normal    | 5     |
-| Answered calls        | Silver    | 2     |
-| Answered calls        | Golden    | 1     |
-| Average handling time | Normal    | 10    |
-| Average handling time | Silver    | 1     |
-| Average handling time | Golden    | 0     |
-| Adherence             | Normal    | 4     |
-| Adherence             | Silver    | 0     |
-| Adherence             | Golden    | 0     |
+Given I am an agent
+And I have badges 
+| Badge type     | Bronze | Silver | Gold |
+| Answered calls | 4      | 1      | 2    |
+| AHT            | 2      | 1      | 1    |
+| Adherence      | 4      | 0      | 0    |
  When I am viewing week schedule
  Then I should see I have badge
 
 @ignore
 Scenario: Show message when agent has no badge
-Given I have badges
-| KpiName               | BadgeType | Count |
-| Answered calls        | Normal    | 0     |
-| Answered calls        | Silver    | 0     |
-| Answered calls        | Golden    | 0     |
-| Average handling time | Normal    | 0     |
-| Average handling time | Silver    | 0     |
-| Average handling time | Golden    | 0     |
-| Adherence             | Normal    | 0     |
-| Adherence             | Silver    | 0     |
-| Adherence             | Golden    | 0     |
+Given I am an agent
+ And I have badges
+| Badge type      | Bronze | Silver | Gold |
+| Answered calls | 0      | 0      | 0    |
+| AHT            | 0      | 0      | 0    |
+| Adherence      | 0      | 0      | 0    |
  When I am viewing week schedule
  Then I should see I have no badge
 

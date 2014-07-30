@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, timezoneId, _calculationDate))
 				.Return(new List<Guid> {_person.Id.Value});
-			_person.Badges = new List<IAgentBadge>(){new Domain.Common.AgentBadge(){BadgeType = BadgeType.AnsweredCalls, BronzeBadge = 4}};
+			_person.AddBadge(new Domain.Common.AgentBadge(){BadgeType = BadgeType.AnsweredCalls, BronzeBadge = 4});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			_statisticsRepository.Stub(x => x.LoadAgentsOverThresholdForAnsweredCalls(_uow, timezoneId, _calculationDate))
 				.Return(new List<Guid> {_person.Id.Value});
-			_person.Badges = new List<IAgentBadge>(){new Domain.Common.AgentBadge(){BadgeType = BadgeType.AnsweredCalls, BronzeBadge = 4, SilverBadge = 1}};
+			_person.AddBadge(new Domain.Common.AgentBadge(){BadgeType = BadgeType.AnsweredCalls, BronzeBadge = 4, SilverBadge = 1});
 
 			var target = new AgentBadgeCalculationConsumerForTest(null, _repositoryFactory, _dataSource);
 			target.Consume(new AgentBadgeCalculateMessage

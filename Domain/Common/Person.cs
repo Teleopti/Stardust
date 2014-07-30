@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.Domain.Common
         private DayOfWeek _firstDayOfWeek;
         private IApplicationAuthenticationInfo _applicationAuthenticationInfo;
 		private readonly IList<IOptionalColumnValue> _optionalColumnValueCollection = new List<IOptionalColumnValue>();
-	    private IAuthenticationInfo _authenticationInfo;
+		private IAuthenticationInfo _authenticationInfo;
+	    private ISet<IAgentBadge> _badges; 
 
 	    public Person()
         {
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Common
             _terminalDate = null;
             _personWriteProtection = new PersonWriteProtectionInfo(this);
             _firstDayOfWeek = DayOfWeek.Monday; //1
+			_badges = new HashSet<IAgentBadge>();
         }
 
         public virtual ITeam MyTeam(DateOnly theDate)
@@ -210,22 +212,38 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual void AddBadge(IAgentBadge agentBadge)
 	    {
-		    if (Badges == null)
+		    if (_badges == null)
 		    {
-			    Badges = new List<IAgentBadge>{agentBadge};
+			    var badge = new AgentBadge()
+			    {
+				    BadgeType = agentBadge.BadgeType,
+				    BronzeBadge = agentBadge.BronzeBadge,
+				    SilverBadge = agentBadge.SilverBadge,
+				    GoldenBadge = agentBadge.GoldenBadge
+			    };
+				badge.SetParent(this);
+				_badges = new HashSet<IAgentBadge> { badge };
 		    }
 		    else
 		    {
-			    if (Badges.Any(x => x.BadgeType == agentBadge.BadgeType))
+			    if (_badges.Any(x => x.BadgeType == agentBadge.BadgeType))
 			    {
-				    var existedBadge = Badges.Single(x => x.BadgeType == agentBadge.BadgeType);
+					var existedBadge = _badges.Single(x => x.BadgeType == agentBadge.BadgeType);
 					existedBadge.BronzeBadge += agentBadge.BronzeBadge;
 					existedBadge.SilverBadge += agentBadge.SilverBadge;
 					existedBadge.GoldenBadge += agentBadge.GoldenBadge;
 			    }
 			    else
 			    {
-					Badges.Add(agentBadge);
+					var badge = new AgentBadge()
+					{
+						BadgeType = agentBadge.BadgeType,
+						BronzeBadge = agentBadge.BronzeBadge,
+						SilverBadge = agentBadge.SilverBadge,
+						GoldenBadge = agentBadge.GoldenBadge
+					};
+					badge.SetParent(this);
+					_badges.Add(badge);
 			    }
 		    }
 	    }
@@ -952,7 +970,10 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
-	    public virtual IList<IAgentBadge> Badges { get; set; }
+	    public virtual ISet<IAgentBadge> Badges
+	    {
+			get { return _badges; }
+	    }
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public virtual void AddOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)

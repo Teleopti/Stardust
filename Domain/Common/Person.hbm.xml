@@ -107,6 +107,13 @@
 			<one-to-many class="Teleopti.Ccc.Domain.AgentInfo.PersonPeriod"/>
 		</map>
 
+		<set name="Badges"
+			 cascade="all-delete-orphan"
+			 inverse="true">
+			<key column="Parent" />
+			<one-to-many class="Teleopti.Ccc.Domain.Common.AgentBadge"/>
+		</set>
+
 		<map name="PersonSchedulePeriodCollection"
 			 cascade="all-delete-orphan"
        collection-type="sorted-list"

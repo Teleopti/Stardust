@@ -12,10 +12,9 @@
 				unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
-
-		<property name="Parent"
-							type="guid"
-							not-null="true" />
+	  <many-to-one class="Teleopti.Ccc.Domain.Common.Person"
+					name ="Parent"
+					not-null="true" foreign-key="FK_AgentBadge_Person_Parent"/>
 
 		<property name="BronzeBadge"
 							type="int"
