@@ -4,6 +4,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
 {
 	public interface IEventTracker
 	{
-		void SendTrackingMessage(Guid personId, Guid businessUnitId, Guid trackId);
+		void SendTrackingMessage(Guid initiatorId, Guid businessUnitId, Guid trackId);
 	}
 }

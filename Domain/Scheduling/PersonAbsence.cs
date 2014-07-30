@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				});
 		}
 
-		public virtual void IntradayAbsence(IPerson person, IAbsence absence, DateTime startDateTimeInUtc, DateTime endDateTimeInUtc)
+		public virtual void IntradayAbsence(IPerson person, IAbsence absence, DateTime startDateTimeInUtc, DateTime endDateTimeInUtc, TrackedCommandInfo trackedCommandInfo)
 		{
 			_person = person;
 			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTimeInUtc, endDateTimeInUtc));
@@ -72,7 +73,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				PersonId = person.Id.GetValueOrDefault(),
 				StartDateTime = startDateTimeInUtc,
 				EndDateTime = endDateTimeInUtc,
-				ScenarioId = _scenario.Id.GetValueOrDefault()
+				ScenarioId = _scenario.Id.GetValueOrDefault(),
+				InitiatorId = trackedCommandInfo.OperatedPersonId
 			});
 		}
 

@@ -1,12 +1,16 @@
 using System;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
@@ -17,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldDispatchAddFullDayAbsenceCommand()
 		{
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new PersonScheduleCommandController(commandDispatcher);
+			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>());
 
 			var command = new AddFullDayAbsenceCommand();
 
@@ -30,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldDispatchAddIntradayAbsenceCommand()
 		{
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new PersonScheduleCommandController(commandDispatcher);
+			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>());
 
 			var command = new AddIntradayAbsenceCommand();
 
@@ -40,11 +44,36 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		}
 
 		[Test]
+		public void ShouldTrackAddIntradayAbsenceCommand()
+		{
+			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var personWithId = PersonFactory.CreatePersonWithId();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(personWithId);
+			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser);
+
+			var command = new AddIntradayAbsenceCommand
+			{
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			target.AddIntradayAbsence(command);
+
+			var arguments=commandDispatcher.GetArgumentsForCallsMadeOn(x => x.Execute(null), a => a.IgnoreArguments());
+			var firstCall = arguments.Single();
+			var calledCommand = (AddIntradayAbsenceCommand)firstCall.Single();
+			calledCommand.TrackedCommandInfo.OperatedPersonId.Should().Be(personWithId.Id);
+		}
+
+		[Test]
 		public void ShouldNotDispatchInvalidAddIntradayAbsenceCommand()
 		{
 			var response = MockRepository.GenerateStub<FakeHttpResponse>();
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new PersonScheduleCommandController(commandDispatcher);
+			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>());
 			var context = new FakeHttpContext("/");
 			context.SetResponse(response);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
@@ -64,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldDispatchRemoveAbsenceCommand()
 		{
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new PersonScheduleCommandController(commandDispatcher);
+			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>());
 
 			var command = new RemovePersonAbsenceCommand();
 
@@ -77,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldDispatchAddActivity()
 		{
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new PersonScheduleCommandController(commandDispatcher);
+			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>());
 
 			var command = new AddActivityCommand();
 
@@ -90,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldDispatchMoveActivity()
 		{
 			var dispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new PersonScheduleCommandController(dispatcher);
+			var target = new PersonScheduleCommandController(dispatcher, MockRepository.GenerateMock<ILoggedOnUser>());
 			var command = new MoveActivityCommand();
 			target.MoveActivity(command);
 			dispatcher.AssertWasCalled(x=>x.Execute(command));

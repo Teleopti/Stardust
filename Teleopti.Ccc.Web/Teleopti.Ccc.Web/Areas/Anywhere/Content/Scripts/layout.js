@@ -204,6 +204,13 @@ define([
 		}
 	}
 
+	function _initTrackingNotification(personId) {
+		trackingmessages.subscribeTrackingMessage(personId, function (notification) {
+			notificationview.display(notification);
+		}, function () {
+		});
+	}
+
 	function _bindMenu() {
 		ajax.ajax({
 			url: "Anywhere/Application/NavigationContent",
@@ -211,6 +218,7 @@ define([
 				menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
 				menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
 				menu.UserName(responseData.UserName);
+				_initTrackingNotification(responseData.PersonId);
 			}
 		});
 		ko.applyBindings(menu, $('nav')[0]);
@@ -234,9 +242,4 @@ define([
 		_initMomentLanguageWithFallback();
 
 		_bindMenu();
-
-	trackingmessages.subscribeTrackingMessage(function(notification) {
-		notificationview.display(notification);
-	}, function() {
-	});
 });

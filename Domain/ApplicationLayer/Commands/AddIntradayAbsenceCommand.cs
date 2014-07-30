@@ -4,12 +4,14 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public class AddIntradayAbsenceCommand
+	public class AddIntradayAbsenceCommand : ITrackedCommand
 	{
 		public Guid PersonId { get; set; }
 		public Guid AbsenceId { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
+
+		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 
 		public IList<string> ValidationResult { get; set; }
 

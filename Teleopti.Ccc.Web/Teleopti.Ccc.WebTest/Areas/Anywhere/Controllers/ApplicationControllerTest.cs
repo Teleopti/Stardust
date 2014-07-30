@@ -6,8 +6,11 @@ using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
@@ -17,13 +20,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		private ApplicationController target;
 		private IPrincipalAuthorization authorization;
 		private ICurrentTeleoptiPrincipal currentTeleoptiPrincipal;
+		private IPersonRepository _personRepository;
 
 		[SetUp]
 		public void Setup()
 		{
 			authorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			target = new ApplicationController(authorization, currentTeleoptiPrincipal);
+			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			target = new ApplicationController(authorization, currentTeleoptiPrincipal, _personRepository);
 		}
 
 		[TearDown]
@@ -42,14 +47,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldReturnBasicNavigation()
 		{
-			ITeleoptiPrincipal principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
-			ITeleoptiIdentity identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
+			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
+			var identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
 
 			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
 			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)).Return(false);
 			currentTeleoptiPrincipal.Stub(x => x.Current()).Return(principal);
 			principal.Stub(x => x.Identity).Return(identity);
 			identity.Stub(x => x.Name).Return("fake");
+			var person = PersonFactory.CreatePersonWithId();
+			principal.Stub(x => x.GetPerson(_personRepository)).Return(person);
 
 			var result = target.NavigationContent();
 			dynamic content = result.Data;
@@ -57,6 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			((object) content.UserName).Should().Be.EqualTo("fake");
 			((object)content.IsMyTimeAvailable).Should().Be.EqualTo(true);
 			((object)content.IsRealTimeAdherenceAvailable).Should().Be.EqualTo(false);
+			((object)content.PersonId).Should().Be.EqualTo(person.Id);
 		}
 
 		[Test]

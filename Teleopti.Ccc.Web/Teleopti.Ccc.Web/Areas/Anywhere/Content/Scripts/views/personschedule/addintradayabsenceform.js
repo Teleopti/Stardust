@@ -132,7 +132,8 @@ define([
 				StartTime: startTimeAsMoment.format(),
 				EndTime: endTimeAsMoment.format(),
 				AbsenceId: self.Absence(),
-				PersonId: personId
+				PersonId: personId,
+				TrackedCommandInfo: { TrackId: "e6b86ea3-6479-48a2-b8d4-54bd6cbbdbc5" }
 			});
 			ajax.ajax({
 					url: 'PersonScheduleCommand/AddIntradayAbsence',

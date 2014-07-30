@@ -8,6 +8,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {

@@ -25,12 +25,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var target = new AddIntradayAbsenceCommandHandler(personRepository,
 			                                                  absenceRepository, personAbsenceRepository, currentScenario, new UtcTimeZone());
 
+			var operatedPersonId = Guid.NewGuid();
 			var command = new AddIntradayAbsenceCommand
 				{
 					AbsenceId = absenceRepository.Single().Id.Value,
 					PersonId = personRepository.Single().Id.Value,
 					StartTime = new DateTime(2013, 11, 27, 14, 00, 00, DateTimeKind.Utc),
-					EndTime = new DateTime(2013, 11, 27, 15, 00, 00, DateTimeKind.Utc)
+					EndTime = new DateTime(2013, 11, 27, 15, 00, 00, DateTimeKind.Utc),
+					TrackedCommandInfo = new TrackedCommandInfo
+					{
+						OperatedPersonId = operatedPersonId
+					}
 				};
 			target.Handle(command);
 
@@ -40,6 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.ScenarioId.Should().Be(currentScenario.Current().Id.Value);
 			@event.StartDateTime.Should().Be(command.StartTime);
 			@event.EndDateTime.Should().Be(command.EndTime);
+			@event.InitiatorId.Should().Be(operatedPersonId);
 		}
 
 		[Test]
@@ -56,7 +62,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					AbsenceId = absenceRepository.Single().Id.Value,
 					PersonId = personRepository.Single().Id.Value,
 					StartTime = new DateTime(2013, 11, 27, 14, 00, 00, DateTimeKind.Utc),
-					EndTime = new DateTime(2013, 11, 27, 15, 00, 00, DateTimeKind.Utc)
+					EndTime = new DateTime(2013, 11, 27, 15, 00, 00, DateTimeKind.Utc),
+					TrackedCommandInfo = new TrackedCommandInfo()
 				};
 			target.Handle(command);
 
@@ -84,7 +91,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					AbsenceId = absenceRepository.Single().Id.Value,
 					PersonId = personRepository.Single().Id.Value,
 					StartTime = new DateTime(2013, 11, 27, 14, 00, 00),
-					EndTime = new DateTime(2013, 11, 27, 15, 00, 00)
+					EndTime = new DateTime(2013, 11, 27, 15, 00, 00),
+					TrackedCommandInfo = new TrackedCommandInfo()
 				};
 			target.Handle(command);
 
