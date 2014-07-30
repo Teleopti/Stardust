@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.radioButtonAdvMonthlyRecurring.TabIndex = 1;
 			this.radioButtonAdvMonthlyRecurring.Text = "xxMonthly";
 			this.radioButtonAdvMonthlyRecurring.ThemesEnabled = false;
-			this.radioButtonAdvMonthlyRecurring.CheckChanged += new System.EventHandler(this.RadioButtonAdvRecurringTypeCheckChanged);
+			this.radioButtonAdvMonthlyRecurring.CheckChanged += new System.EventHandler(this.radioButtonAdvRecurringTypeCheckChanged);
 			// 
 			// radioButtonAdvDailyRecurring
 			// 
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.radioButtonAdvDailyRecurring.TabIndex = 3;
 			this.radioButtonAdvDailyRecurring.Text = "xxDaily";
 			this.radioButtonAdvDailyRecurring.ThemesEnabled = false;
-			this.radioButtonAdvDailyRecurring.CheckChanged += new System.EventHandler(this.RadioButtonAdvRecurringTypeCheckChanged);
+			this.radioButtonAdvDailyRecurring.CheckChanged += new System.EventHandler(this.radioButtonAdvRecurringTypeCheckChanged);
 			// 
 			// radioButtonAdvWeeklyRecurring
 			// 
@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.radioButtonAdvWeeklyRecurring.TabIndex = 2;
 			this.radioButtonAdvWeeklyRecurring.Text = "xxWeekly";
 			this.radioButtonAdvWeeklyRecurring.ThemesEnabled = false;
-			this.radioButtonAdvWeeklyRecurring.CheckChanged += new System.EventHandler(this.RadioButtonAdvRecurringTypeCheckChanged);
+			this.radioButtonAdvWeeklyRecurring.CheckChanged += new System.EventHandler(this.radioButtonAdvRecurringTypeCheckChanged);
 			// 
 			// groupBoxRangeOfRecurrence
 			// 
@@ -541,7 +541,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.buttonAdvRemove.TabIndex = 14;
 			this.buttonAdvRemove.Text = "xxRemoveRecurrence";
 			this.buttonAdvRemove.UseVisualStyle = true;
-			this.buttonAdvRemove.Click += new System.EventHandler(this.ButtonAdvRemoveClick);
+			this.buttonAdvRemove.Click += new System.EventHandler(this.buttonAdvRemoveClick);
 			// 
 			// buttonAdvCancel
 			// 
@@ -573,7 +573,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.buttonAdvOK.TabIndex = 12;
 			this.buttonAdvOK.Text = "xxOk";
 			this.buttonAdvOK.UseVisualStyle = true;
-			this.buttonAdvOK.Click += new System.EventHandler(this.ButtonAdvOkClick);
+			this.buttonAdvOK.Click += new System.EventHandler(this.buttonAdvOkClick);
 			// 
 			// MeetingRecurrenceView
 			// 

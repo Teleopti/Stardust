@@ -202,7 +202,6 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
 			this.CancelButton = this.btnCancel;
 			this.CaptionFont = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ClientSize = new System.Drawing.Size(328, 290);
-			this.ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Blue;
 			this.Controls.Add(this.textBoxShortName);
 			this.Controls.Add(this.colorPickerButton1);
 			this.Controls.Add(this.label4);
@@ -225,7 +224,6 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
 			this.ShowIcon = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "xxAddMultiplicator";
-			this.UseOffice2007SchemeBackColor = false;
 			((System.ComponentModel.ISupportInitialize)(this.textBoxName)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.cmbType)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxShortName)).EndInit();

@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PeopleInsertScreen));
-            this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -37,7 +37,6 @@
             this.gradientPanel1 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.labelTitle = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).BeginInit();
@@ -45,142 +44,130 @@
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // ribbonControlAdv1
-            // 
-            this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
-            this.ribbonControlAdv1.MenuButtonText = "";
-            this.ribbonControlAdv1.MenuButtonVisible = false;
-            this.ribbonControlAdv1.Name = "ribbonControlAdv1";
-            // 
-            // ribbonControlAdv1.OfficeMenu
-            // 
-            this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
-            this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
-            this.ribbonControlAdv1.QuickPanelVisible = false;
-            this.ribbonControlAdv1.SelectedTab = null;
-            this.ribbonControlAdv1.ShowMinimizeButton = false;
-            this.ribbonControlAdv1.Size = new System.Drawing.Size(525, 33);
-            this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "";
-            this.ribbonControlAdv1.TabIndex = 3;
-            this.ribbonControlAdv1.Text = "ribbonControlAdv1";
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.gradientPanel1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 34);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.36468F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 89.63531F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(515, 565);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(614, 698);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 92F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 107F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 99F));
             this.tableLayoutPanel3.Controls.Add(this.buttonAdvCancel, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.buttonAdvInsert, 1, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 528);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 655);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(509, 34);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(608, 40);
             this.tableLayoutPanel3.TabIndex = 5;
             // 
             // buttonAdvCancel
             // 
-            this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+            this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+            this.buttonAdvCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            this.buttonAdvCancel.BeforeTouchSize = new System.Drawing.Size(93, 34);
             this.buttonAdvCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonAdvCancel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonAdvCancel.Location = new System.Drawing.Point(427, 3);
+            this.buttonAdvCancel.ForeColor = System.Drawing.Color.White;
+            this.buttonAdvCancel.IsBackStageButton = false;
+            this.buttonAdvCancel.Location = new System.Drawing.Point(512, 3);
             this.buttonAdvCancel.Name = "buttonAdvCancel";
-            this.buttonAdvCancel.Size = new System.Drawing.Size(79, 28);
+            this.buttonAdvCancel.Size = new System.Drawing.Size(93, 34);
             this.buttonAdvCancel.TabIndex = 6;
             this.buttonAdvCancel.Text = "xxCancel";
             this.buttonAdvCancel.UseVisualStyle = true;
-            this.buttonAdvCancel.Click += new System.EventHandler(this.buttonAdvCancel_Click);
+            this.buttonAdvCancel.Click += new System.EventHandler(this.buttonAdvCancelClick);
             // 
             // buttonAdvInsert
             // 
-            this.buttonAdvInsert.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+            this.buttonAdvInsert.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+            this.buttonAdvInsert.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            this.buttonAdvInsert.BeforeTouchSize = new System.Drawing.Size(101, 34);
             this.buttonAdvInsert.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonAdvInsert.Location = new System.Drawing.Point(335, 3);
+            this.buttonAdvInsert.ForeColor = System.Drawing.Color.White;
+            this.buttonAdvInsert.IsBackStageButton = false;
+            this.buttonAdvInsert.Location = new System.Drawing.Point(405, 3);
             this.buttonAdvInsert.Name = "buttonAdvInsert";
-            this.buttonAdvInsert.Size = new System.Drawing.Size(86, 28);
+            this.buttonAdvInsert.Size = new System.Drawing.Size(101, 34);
             this.buttonAdvInsert.TabIndex = 6;
             this.buttonAdvInsert.Text = "xxInsert";
             this.buttonAdvInsert.UseVisualStyle = true;
-            this.buttonAdvInsert.Click += new System.EventHandler(this.buttonAdvInsert_Click);
+            this.buttonAdvInsert.Click += new System.EventHandler(this.buttonAdvInsertClick);
             // 
             // gradientPanel1
             // 
             this.gradientPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.gradientPanel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.gradientPanel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.LightSteelBlue, System.Drawing.Color.White);
             this.gradientPanel1.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
             this.gradientPanel1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gradientPanel1.Controls.Add(this.tableLayoutPanel2);
             this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gradientPanel1.Location = new System.Drawing.Point(3, 3);
             this.gradientPanel1.Name = "gradientPanel1";
-            this.gradientPanel1.Padding = new System.Windows.Forms.Padding(10);
-            this.gradientPanel1.Size = new System.Drawing.Size(509, 48);
+            this.gradientPanel1.Padding = new System.Windows.Forms.Padding(12);
+            this.gradientPanel1.Size = new System.Drawing.Size(608, 61);
             this.gradientPanel1.TabIndex = 56;
             // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanel2.ColumnCount = 1;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 997F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1163F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.labelTitle, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(10, 10);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(489, 28);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(584, 37);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // labelTitle
             // 
             this.labelTitle.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelTitle.AutoSize = true;
-            this.labelTitle.Font = new System.Drawing.Font("Tahoma", 11.25F);
+            this.labelTitle.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTitle.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.labelTitle.Location = new System.Drawing.Point(3, 5);
+            this.labelTitle.Location = new System.Drawing.Point(3, 6);
             this.labelTitle.Name = "labelTitle";
-            this.labelTitle.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
-            this.labelTitle.Size = new System.Drawing.Size(197, 18);
+            this.labelTitle.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.labelTitle.Size = new System.Drawing.Size(270, 25);
             this.labelTitle.TabIndex = 0;
             this.labelTitle.Text = "xxSelectPeopleToAddToRole";
             // 
             // PeopleInsertScreen
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(527, 605);
+            this.ClientSize = new System.Drawing.Size(614, 698);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.ribbonControlAdv1);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "PeopleInsertScreen";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "xxPeopleInsertScreen";
-            this.Load += new System.EventHandler(this.PeopleInsertScreen_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
+            this.Load += new System.EventHandler(this.peopleInsertScreenLoad);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).EndInit();
@@ -193,7 +180,6 @@
 
         #endregion
 
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel1;

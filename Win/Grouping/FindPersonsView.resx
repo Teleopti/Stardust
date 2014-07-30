@@ -112,25 +112,28 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="label1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Left</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="label1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 6</value>
+    <value>3, 7</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>90, 13</value>
+    <value>101, 15</value>
   </data>
   <data name="label1.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -142,7 +145,7 @@
     <value>label1</value>
   </data>
   <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label1.Parent" xml:space="preserve">
     <value>tableLayoutPanel2</value>
@@ -156,11 +159,14 @@
   <data name="label2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="label2.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
   <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 32</value>
+    <value>3, 37</value>
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 13</value>
+    <value>87, 15</value>
   </data>
   <data name="label2.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -172,7 +178,7 @@
     <value>label2</value>
   </data>
   <data name="&gt;&gt;label2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label2.Parent" xml:space="preserve">
     <value>tableLayoutPanel2</value>
@@ -196,25 +202,25 @@
     <value>0, 0</value>
   </data>
   <data name="dateTimePickerAdvTo.Calendar.NoneButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>134, 0</value>
+    <value>124, 1</value>
   </data>
   <data name="dateTimePickerAdvTo.Calendar.NoneButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 20</value>
+    <value>84, 21</value>
   </data>
   <data name="dateTimePickerAdvTo.Calendar.NoneButton.Text" xml:space="preserve">
     <value>None</value>
   </data>
   <data name="dateTimePickerAdvTo.Calendar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 174</value>
+    <value>209, 174</value>
   </data>
   <data name="dateTimePickerAdvTo.Calendar.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="dateTimePickerAdvTo.Calendar.TodayButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
+    <value>2, 1</value>
   </data>
   <data name="dateTimePickerAdvTo.Calendar.TodayButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>134, 20</value>
+    <value>122, 21</value>
   </data>
   <data name="dateTimePickerAdvTo.Calendar.TodayButton.Text" xml:space="preserve">
     <value>Today</value>
@@ -222,11 +228,14 @@
   <data name="dateTimePickerAdvTo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
+  <data name="dateTimePickerAdvTo.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9.75pt</value>
+  </data>
   <data name="dateTimePickerAdvTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>99, 29</value>
+    <value>110, 33</value>
   </data>
   <data name="dateTimePickerAdvTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 20</value>
+    <value>181, 24</value>
   </data>
   <data name="dateTimePickerAdvTo.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -235,7 +244,7 @@
     <value>dateTimePickerAdvTo</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvTo.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvTo.Parent" xml:space="preserve">
     <value>tableLayoutPanel2</value>
@@ -253,25 +262,25 @@
     <value>0, 0</value>
   </data>
   <data name="dateTimePickerAdvFrom.Calendar.NoneButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>134, 0</value>
+    <value>124, 1</value>
   </data>
   <data name="dateTimePickerAdvFrom.Calendar.NoneButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 20</value>
+    <value>84, 21</value>
   </data>
   <data name="dateTimePickerAdvFrom.Calendar.NoneButton.Text" xml:space="preserve">
     <value>None</value>
   </data>
   <data name="dateTimePickerAdvFrom.Calendar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 174</value>
+    <value>209, 174</value>
   </data>
   <data name="dateTimePickerAdvFrom.Calendar.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="dateTimePickerAdvFrom.Calendar.TodayButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
+    <value>2, 1</value>
   </data>
   <data name="dateTimePickerAdvFrom.Calendar.TodayButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>134, 20</value>
+    <value>122, 21</value>
   </data>
   <data name="dateTimePickerAdvFrom.Calendar.TodayButton.Text" xml:space="preserve">
     <value>Today</value>
@@ -279,11 +288,14 @@
   <data name="dateTimePickerAdvFrom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
+  <data name="dateTimePickerAdvFrom.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9.75pt</value>
+  </data>
   <data name="dateTimePickerAdvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>99, 3</value>
+    <value>110, 3</value>
   </data>
   <data name="dateTimePickerAdvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 20</value>
+    <value>181, 24</value>
   </data>
   <data name="dateTimePickerAdvFrom.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -292,7 +304,7 @@
     <value>dateTimePickerAdvFrom</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvFrom.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvFrom.Parent" xml:space="preserve">
     <value>tableLayoutPanel2</value>
@@ -304,13 +316,13 @@
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanel2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
+    <value>3, 19</value>
   </data>
   <data name="tableLayoutPanel2.RowCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>250, 59</value>
+    <value>294, 69</value>
   </data>
   <data name="tableLayoutPanel2.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -319,7 +331,7 @@
     <value>tableLayoutPanel2</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel2.Parent" xml:space="preserve">
     <value>groupBoxDateSelection</value>
@@ -328,7 +340,7 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanel2.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label2" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dateTimePickerAdvTo" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="dateTimePickerAdvFrom" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Absolute,26,Absolute,26,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label2" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dateTimePickerAdvTo" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="dateTimePickerAdvFrom" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Absolute,30,Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="groupBoxDateSelection.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -337,7 +349,7 @@
     <value>3, 3</value>
   </data>
   <data name="groupBoxDateSelection.Size" type="System.Drawing.Size, System.Drawing">
-    <value>256, 78</value>
+    <value>300, 91</value>
   </data>
   <data name="groupBoxDateSelection.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -349,7 +361,7 @@
     <value>groupBoxDateSelection</value>
   </data>
   <data name="&gt;&gt;groupBoxDateSelection.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;groupBoxDateSelection.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -361,10 +373,10 @@
     <value>Fill</value>
   </data>
   <data name="textBoxExtFind.Location" type="System.Drawing.Point, System.Drawing">
-    <value>68, 87</value>
+    <value>70, 100</value>
   </data>
   <data name="textBoxExtFind.Size" type="System.Drawing.Size, System.Drawing">
-    <value>191, 20</value>
+    <value>233, 23</value>
   </data>
   <data name="textBoxExtFind.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -373,7 +385,7 @@
     <value>textBoxExtFind</value>
   </data>
   <data name="&gt;&gt;textBoxExtFind.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;textBoxExtFind.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -388,10 +400,10 @@
     <value>True</value>
   </data>
   <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 90</value>
+    <value>3, 104</value>
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 13</value>
+    <value>61, 15</value>
   </data>
   <data name="label3.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -403,7 +415,7 @@
     <value>label3</value>
   </data>
   <data name="&gt;&gt;label3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label3.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -411,26 +423,23 @@
   <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <metadata name="contextMenuStripTreeActions.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="contextMenuStripTreeActions.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <data name="toolStripMenuItemCut.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
-  </data>
-  <data name="toolStripMenuItemCut.Text" xml:space="preserve">
-    <value>xxCut</value>
-  </data>
   <data name="contextMenuStripTreeActions.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 48</value>
+    <value>104, 26</value>
   </data>
   <data name="&gt;&gt;contextMenuStripTreeActions.Name" xml:space="preserve">
     <value>contextMenuStripTreeActions</value>
   </data>
   <data name="&gt;&gt;contextMenuStripTreeActions.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="treeViewAdvResult.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
+  </data>
+  <data name="treeViewAdvResult.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9.75pt</value>
   </data>
   <data name="treeViewAdvResult.HelpTextControl.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
@@ -444,7 +453,7 @@
   <data name="treeViewAdvResult.HelpTextControl.Text" xml:space="preserve">
     <value>help text</value>
   </data>
-  <metadata name="imageListTreeView.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="imageListTreeView.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>230, 17</value>
   </metadata>
   <data name="imageListTreeView.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
@@ -452,7 +461,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABG
-        CAAAAk1TRnQBSQFMAwEBAAFQAQABUAEAARABAAEQAQAE/wEJAQAI/wFCAU0BNgEEBgABNgEEAgABKAMA
+        CAAAAk1TRnQBSQFMAwEBAAFgAQABYAEAARABAAEQAQAE/wEJAQAI/wFCAU0BNgEEBgABNgEEAgABKAMA
         AUADAAEQAwABAQEAAQgGAAEEGAABgAIAAYADAAKAAQABgAMAAYABAAGAAQACgAIAA8ABAAHAAdwBwAEA
         AfABygGmAQABMwUAATMBAAEzAQABMwEAAjMCAAMWAQADHAEAAyIBAAMpAQADVQEAA00BAANCAQADOQEA
         AYABfAH/AQACUAH/AQABkwEAAdYBAAH/AewBzAEAAcYB1gHvAQAB1gLnAQABkAGpAa0CAAH/ATMDAAFm
@@ -491,10 +500,13 @@
 </value>
   </data>
   <data name="treeViewAdvResult.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 113</value>
+    <value>10, 129</value>
+  </data>
+  <data name="treeViewAdvResult.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>10, 3, 3, 3</value>
   </data>
   <data name="treeViewAdvResult.Size" type="System.Drawing.Size, System.Drawing">
-    <value>256, 369</value>
+    <value>293, 428</value>
   </data>
   <data name="treeViewAdvResult.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -518,7 +530,7 @@
     <value>treeViewAdvResult</value>
   </data>
   <data name="&gt;&gt;treeViewAdvResult.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.TreeViewAdv, Syncfusion.Tools.Windows, Version=8.203.0.18, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
+    <value>Syncfusion.Windows.Forms.Tools.TreeViewAdv, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;treeViewAdvResult.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -536,7 +548,7 @@
     <value>3</value>
   </data>
   <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>262, 485</value>
+    <value>306, 560</value>
   </data>
   <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -545,7 +557,7 @@
     <value>tableLayoutPanel1</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -554,33 +566,42 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="groupBoxDateSelection" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="textBoxExtFind" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label3" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="treeViewAdvResult" Row="2" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Absolute,84,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="groupBoxDateSelection" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="textBoxExtFind" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label3" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="treeViewAdvResult" Row="2" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Absolute,97,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <data name="toolStripMenuItemCut.Size" type="System.Drawing.Size, System.Drawing">
+    <value>103, 22</value>
+  </data>
+  <data name="toolStripMenuItemCut.Text" xml:space="preserve">
+    <value>xxCut</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
+    <value>7, 15</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>262, 485</value>
+    <value>306, 560</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemCut.Name" xml:space="preserve">
     <value>toolStripMenuItemCut</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemCut.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;imageListTreeView.Name" xml:space="preserve">
     <value>imageListTreeView</value>
   </data>
   <data name="&gt;&gt;imageListTreeView.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>FindPersonsView</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>Teleopti.Ccc.Win.Common.BaseUserControl, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
 </root>

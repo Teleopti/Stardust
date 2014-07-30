@@ -521,7 +521,8 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 		
 		public static Color OptionsDialogHeaderBackColor()
 		{
-			return Color.FromArgb(0, 153, 255);
+			//return Color.FromArgb(0, 153, 255);
+			return Color.White;
 		}
 
 		
@@ -537,7 +538,8 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 
 		public static Color OptionsDialogHeaderForeColor()
 		{
-			return Color.White;
+			//return Color.White;
+		    return Color.FromArgb(0, 153, 255);
 		}
 
 		public static Color GridControlSortingArrow

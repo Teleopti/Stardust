@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Windows.Forms;
 using Autofac;
+using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Permissions
 {
-    public partial class PeopleInsertScreen : BaseRibbonForm
+    public partial class PeopleInsertScreen : BaseDialogForm
     {
         private readonly PermissionsExplorer _permissionsExplorerInstance;
         private readonly IComponentContext _container;
@@ -31,10 +33,12 @@ namespace Teleopti.Ccc.Win.Permissions
             if (!DesignMode)
             {
                 SetTexts();
+                gradientPanel1.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
+                labelTitle.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
             }
         }
 
-        private void buttonAdvInsert_Click(object sender, EventArgs e)
+        private void buttonAdvInsertClick(object sender, EventArgs e)
         {
             // Load people who are selected by user.
             _permissionsExplorerInstance.SelectedPersonsToAddToRole = _personSelectorPresenter.SelectedPersonGuids;
@@ -49,14 +53,14 @@ namespace Teleopti.Ccc.Win.Permissions
             }
         }
 
-        private void buttonAdvCancel_Click(object sender, EventArgs e)
+        private void buttonAdvCancelClick(object sender, EventArgs e)
         {
             if (_permissionsExplorerInstance.SelectedPersonsToAddToRole != null)
                 _permissionsExplorerInstance.SelectedPersonsToAddToRole.Clear();
             DialogResult = DialogResult.Cancel;
         }
 
-        private void PeopleInsertScreen_Load(object sender, EventArgs e)
+        private void peopleInsertScreenLoad(object sender, EventArgs e)
         {
             _personSelectorPresenter = _container.Resolve<IPersonSelectorPresenter>();
             _personSelectorPresenter.ApplicationFunction = _myApplicationFunction;

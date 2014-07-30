@@ -753,14 +753,10 @@ namespace Teleopti.Ccc.Win.Permissions
             this.ExplorerRibbon.OfficeMenu.SystemPanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ExplorerRibbon.OverFlowButtonToolTip = "Show DropDown";
             this.ExplorerRibbon.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.ExplorerRibbon.QuickPanelVisible = false;
             this.ExplorerRibbon.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
             this.ExplorerRibbon.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
-            this.ExplorerRibbon.ScaleMenuButtonImage = false;
             this.ExplorerRibbon.SelectedTab = this.HomeTab;
             this.ExplorerRibbon.Show2010CustomizeQuickItemDialog = false;
-            this.ExplorerRibbon.ShowContextMenu = false;
-            this.ExplorerRibbon.ShowLauncher = false;
             this.ExplorerRibbon.ShowQuickItemsDropDownButton = false;
             this.ExplorerRibbon.ShowRibbonDisplayOptionButton = true;
             this.ExplorerRibbon.Size = new System.Drawing.Size(1066, 125);
@@ -795,7 +791,7 @@ namespace Teleopti.Ccc.Win.Permissions
             this.backStage1.Controls.Add(this.backStageButton4);
             this.backStage1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.backStage1.ItemSize = new System.Drawing.Size(138, 40);
-            this.backStage1.Location = new System.Drawing.Point(1, 51);
+            this.backStage1.Location = new System.Drawing.Point(0, 0);
             this.backStage1.Name = "backStage1";
             this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
             this.backStage1.Size = new System.Drawing.Size(1061, 652);
@@ -810,7 +806,7 @@ namespace Teleopti.Ccc.Win.Permissions
             this.backStageButton1.IsBackStageButton = false;
             this.backStageButton1.Location = new System.Drawing.Point(0, 16);
             this.backStageButton1.Name = "backStageButton1";
-            this.backStageButton1.Size = new System.Drawing.Size(137, 38);
+            this.backStageButton1.Size = new System.Drawing.Size(110, 25);
             this.backStageButton1.TabIndex = 3;
             this.backStageButton1.Text = "xxSave";
             this.backStageButton1.Click += new System.EventHandler(this.backStageButton1_Click);
@@ -818,7 +814,7 @@ namespace Teleopti.Ccc.Win.Permissions
             // backStageSeparator1
             // 
             this.backStageSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
-            this.backStageSeparator1.Location = new System.Drawing.Point(19, 60);
+            this.backStageSeparator1.Location = new System.Drawing.Point(15, 47);
             this.backStageSeparator1.Name = "backStageSeparator1";
             this.backStageSeparator1.Size = new System.Drawing.Size(100, 1);
             this.backStageSeparator1.TabIndex = 4;
@@ -830,9 +826,9 @@ namespace Teleopti.Ccc.Win.Permissions
             this.backStageButton2.BackColor = System.Drawing.Color.Transparent;
             this.backStageButton2.BeforeTouchSize = new System.Drawing.Size(75, 23);
             this.backStageButton2.IsBackStageButton = false;
-            this.backStageButton2.Location = new System.Drawing.Point(0, 66);
+            this.backStageButton2.Location = new System.Drawing.Point(0, 53);
             this.backStageButton2.Name = "backStageButton2";
-            this.backStageButton2.Size = new System.Drawing.Size(137, 38);
+            this.backStageButton2.Size = new System.Drawing.Size(110, 25);
             this.backStageButton2.TabIndex = 5;
             this.backStageButton2.Text = "xxClose";
             this.backStageButton2.Click += new System.EventHandler(this.backStageButton2_Click);
@@ -840,7 +836,7 @@ namespace Teleopti.Ccc.Win.Permissions
             // backStageSeparator2
             // 
             this.backStageSeparator2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
-            this.backStageSeparator2.Location = new System.Drawing.Point(19, 110);
+            this.backStageSeparator2.Location = new System.Drawing.Point(15, 84);
             this.backStageSeparator2.Name = "backStageSeparator2";
             this.backStageSeparator2.Size = new System.Drawing.Size(100, 1);
             this.backStageSeparator2.TabIndex = 6;
@@ -852,9 +848,9 @@ namespace Teleopti.Ccc.Win.Permissions
             this.backStageButton3.BackColor = System.Drawing.Color.Transparent;
             this.backStageButton3.BeforeTouchSize = new System.Drawing.Size(75, 23);
             this.backStageButton3.IsBackStageButton = false;
-            this.backStageButton3.Location = new System.Drawing.Point(0, 116);
+            this.backStageButton3.Location = new System.Drawing.Point(0, 90);
             this.backStageButton3.Name = "backStageButton3";
-            this.backStageButton3.Size = new System.Drawing.Size(137, 38);
+            this.backStageButton3.Size = new System.Drawing.Size(110, 25);
             this.backStageButton3.TabIndex = 7;
             this.backStageButton3.Text = "xxOptions";
             this.backStageButton3.Click += new System.EventHandler(this.backStageButton3_Click);
@@ -865,9 +861,9 @@ namespace Teleopti.Ccc.Win.Permissions
             this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
             this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
             this.backStageButton4.IsBackStageButton = false;
-            this.backStageButton4.Location = new System.Drawing.Point(0, 154);
+            this.backStageButton4.Location = new System.Drawing.Point(0, 115);
             this.backStageButton4.Name = "backStageButton4";
-            this.backStageButton4.Size = new System.Drawing.Size(137, 38);
+            this.backStageButton4.Size = new System.Drawing.Size(110, 25);
             this.backStageButton4.TabIndex = 8;
             this.backStageButton4.Text = "xxExitTELEOPTICCC";
             this.backStageButton4.Click += new System.EventHandler(this.backStageButton4_Click);

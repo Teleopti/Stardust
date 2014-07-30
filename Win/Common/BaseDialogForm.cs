@@ -6,23 +6,16 @@ using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.Win.Common
 {
-    public partial class BaseDialogForm : Office2007Form, ILocalized, IHelpForm
+    public partial class BaseDialogForm : MetroForm, ILocalized, IHelpForm
     {
         public BaseDialogForm()
         {
-            SetColorScheme(Office2007Theme.Blue);
             InitializeComponent();
             HelpButton = true;
             KeyPreview = true;
             
-            base.ForeColor = Color.Navy;
-            UseOffice2007SchemeBackColor = true;
+            base.ForeColor = Color.FromArgb(64,64,64);
         		
-        }
-
-        protected void SetColorScheme(Office2007Theme scheme)
-        {
-            Office2007Colors.ApplyManagedScheme(this, scheme);
         }
 
         public void SetTexts()

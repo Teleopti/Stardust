@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.Win.Grouping
 {
@@ -25,6 +26,8 @@ namespace Teleopti.Ccc.Win.Grouping
             if (!DesignMode)
             {
                 SetTexts();
+                gradientPanel1.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
+                labelTitle.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
             }
         }
 

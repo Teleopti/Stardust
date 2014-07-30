@@ -22,21 +22,22 @@ namespace Teleopti.Ccc.Win.Grouping
             if (!DesignMode)
             {
                 SetTexts();
-                dateTimePickerAdvFrom.SetCultureInfoSafe(System.Globalization.CultureInfo.CurrentCulture);
-                dateTimePickerAdvTo.SetCultureInfoSafe(System.Globalization.CultureInfo.CurrentCulture);
             }
         }
 
         public void Initialize(FindPersonsModel model, IApplicationFunction applicationFunction)
         {
-            dateTimePickerAdvFrom.ValueChanged -= dateTimePickerAdvFrom_ValueChanged;
-            dateTimePickerAdvTo.ValueChanged -= dateTimePickerAdvTo_ValueChanged;
+            dateTimePickerAdvFrom.SetCultureInfoSafe(System.Globalization.CultureInfo.CurrentCulture);
+            dateTimePickerAdvTo.SetCultureInfoSafe(System.Globalization.CultureInfo.CurrentCulture);
+
+            dateTimePickerAdvFrom.ValueChanged -= dateTimePickerAdvFromValueChanged;
+            dateTimePickerAdvTo.ValueChanged -= dateTimePickerAdvToValueChanged;
 
             _presenter = new FindPersonsPresenter(this, model, applicationFunction);
             _presenter.Initialize();
 
-            dateTimePickerAdvFrom.ValueChanged += dateTimePickerAdvFrom_ValueChanged;
-            dateTimePickerAdvTo.ValueChanged += dateTimePickerAdvTo_ValueChanged;
+            dateTimePickerAdvFrom.ValueChanged += dateTimePickerAdvFromValueChanged;
+            dateTimePickerAdvTo.ValueChanged += dateTimePickerAdvToValueChanged;
 
             dateTimePickerAdvFrom.ForeColor = Color.Black;
             dateTimePickerAdvTo.ForeColor = Color.Black;
@@ -78,12 +79,12 @@ namespace Teleopti.Ccc.Win.Grouping
             set { textBoxExtFind.Enabled = value; }
         }
 
-        private void textBoxExtFind_TextChanged(object sender, EventArgs e)
+        private void textBoxExtFindTextChanged(object sender, EventArgs e)
         {
             _presenter.RefreshResult();
         }
 
-        private void treeViewAdvPreviewTree_ItemDrag(object sender, ItemDragEventArgs e)
+        private void treeViewAdvPreviewTreeItemDrag(object sender, ItemDragEventArgs e)
         {
              var nodes = e.Item as TreeNodeAdv[];
 
@@ -93,22 +94,22 @@ namespace Teleopti.Ccc.Win.Grouping
              treeViewAdvResult.DoDragDrop(node, DragDropEffects.Move);
         }
 
-         private void dateTimePickerAdvFrom_ValueChanged(object sender, EventArgs e)
+         private void dateTimePickerAdvFromValueChanged(object sender, EventArgs e)
          {
              _presenter.FromDateChanged();
          }
 
-         private void dateTimePickerAdvTo_ValueChanged(object sender, EventArgs e)
+         private void dateTimePickerAdvToValueChanged(object sender, EventArgs e)
          {
              _presenter.ToDateChanged();
          }
 
-        private void contextMenuStripTreeActions_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void contextMenuStripTreeActionsOpening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             _selectedNodes = treeViewAdvResult.SelectedNodes;
         }
 
-        private void toolStripMenuItemCut_Click(object sender, EventArgs e)
+        private void toolStripMenuItemCutClick(object sender, EventArgs e)
         {
             CutNodes = _selectedNodes;
         }
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Win.Grouping
             CutNodes = null;
         }
 
-        private void treeViewAdvResult_KeyDown(object sender, KeyEventArgs e)
+        private void treeViewAdvResultKeyDown(object sender, KeyEventArgs e)
         {
              if (e.KeyCode == Keys.X && e.Modifiers == Keys.Control)
              {

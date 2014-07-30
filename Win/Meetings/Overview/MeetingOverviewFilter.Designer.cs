@@ -118,7 +118,6 @@
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(219)))), ((int)(((byte)(254)))));
 			this.CaptionForeColor = System.Drawing.Color.White;
 			this.ClientSize = new System.Drawing.Size(344, 474);
-			this.ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Black;
 			this.ControlBox = false;
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.ribbonControlAdv1);

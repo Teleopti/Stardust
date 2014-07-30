@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -26,13 +27,19 @@ namespace Teleopti.Ccc.Win.Grouping
 			InitializeComponent();
 		}
 
-        public GroupPageSettings(IGroupPageHelper groupPageHelper)
-            : this()
+		public GroupPageSettings(IGroupPageHelper groupPageHelper)
+			: this()
 		{
 			_groupPageHelper = groupPageHelper;
 			if (!DesignMode)
 			{
 				SetTexts();
+				gradientPanel1.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
+				tableLayoutPanel3.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+				tableLayoutPanel5.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+				labelTitle.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
+				label2.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+				label3.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			}
 		}
 
@@ -46,13 +53,13 @@ namespace Teleopti.Ccc.Win.Grouping
 			textBoxExtGroupPageName.Text = Resources.NewGroupPageName;
 			loadAndBindOptionalColumnCollection();
 			radioButtonOptionalColumn.CheckedChanged += radioButtonOptionalColumnCheckedChanged;
-			Height = 400;
+			//Height = 400;
 		}
 
 		private void buttonAdvOkClick(object sender, EventArgs e)
 		{
 			if(handleCreateGroupPage())
-			    DialogResult = DialogResult.OK;
+				DialogResult = DialogResult.OK;
 		}
 
 		private void buttonAdvCancelClick(object sender, EventArgs e)
@@ -87,7 +94,7 @@ namespace Teleopti.Ccc.Win.Grouping
 
 		private DynamicOptionType getGroupByOption()
 		{
-			DynamicOptionType result = DynamicOptionType.BusinessHierarchy;
+			var result = DynamicOptionType.BusinessHierarchy;
 
 			if (radioButtonDoNotGroup.Checked)
 				result = DynamicOptionType.DoNotGroup;
@@ -121,8 +128,8 @@ namespace Teleopti.Ccc.Win.Grouping
 				return false;
 			}
 
-            // create and save to db and load in the panel
-            _groupPageType = getGroupByOption();
+			// create and save to db and load in the panel
+			_groupPageType = getGroupByOption();
 
 			if (_groupPageType == DynamicOptionType.BusinessHierarchy)
 			{
@@ -130,7 +137,7 @@ namespace Teleopti.Ccc.Win.Grouping
 				return false;
 			}
 
-            updateOptionalColumnId();
+			updateOptionalColumnId();
 
 			if (_groupPageType == DynamicOptionType.OptionalPage && _optionalColumnId == null)
 			{
@@ -138,7 +145,7 @@ namespace Teleopti.Ccc.Win.Grouping
 				return false;
 			}
 
-		    return true;
+			return true;
 		}
 
 		private bool handleCreateGroupPage()
@@ -156,9 +163,9 @@ namespace Teleopti.Ccc.Win.Grouping
 				{
 					Changes = _groupPageHelper.AddOrUpdateGroupPage(_groupPage);
 				}
-			    return true;
+				return true;
 			}
-		    return false;
+			return false;
 		}
 
 		public IEnumerable<IRootChangeInfo> Changes { get; private set; }
@@ -168,7 +175,7 @@ namespace Teleopti.Ccc.Win.Grouping
 			_optionalColumnId = comboBoxAdvOptionalColumns.SelectedItem != null ? ((OptionalColumn)comboBoxAdvOptionalColumns.SelectedItem).Id : null;
 		}
 
-	    private void radioButtonOptionalColumnCheckedChanged(object sender, EventArgs e)
+		private void radioButtonOptionalColumnCheckedChanged(object sender, EventArgs e)
 		{
 			if (radioButtonOptionalColumn.Checked == false)
 			{

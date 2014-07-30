@@ -1078,11 +1078,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.textBoxExtMinTimePerWeek.Margin = new System.Windows.Forms.Padding(7, 35, 0, 0);
             this.textBoxExtMinTimePerWeek.MaximumValue = System.TimeSpan.Parse("3.12:00:00");
             this.textBoxExtMinTimePerWeek.Name = "textBoxExtMinTimePerWeek";
-            this.textBoxExtMinTimePerWeek.Size = new System.Drawing.Size(97, 26);
+            this.textBoxExtMinTimePerWeek.Size = new System.Drawing.Size(112, 26);
             this.textBoxExtMinTimePerWeek.TabIndex = 11;
             this.textBoxExtMinTimePerWeek.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.textBoxExtMinTimePerWeek.TimeSpanBoxHeight = 23;
-            this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 109;
+            this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 126;
             this.textBoxExtMinTimePerWeek.Leave += new System.EventHandler(this.textBoxExtMinTimePerWeek_Validated);
             // 
             // labelMinimumTimePerWeek
@@ -1901,7 +1901,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.timeSpanTextBox1.TabIndex = 9;
             this.timeSpanTextBox1.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.timeSpanTextBox1.TimeSpanBoxHeight = 23;
-            this.timeSpanTextBox1.TimeSpanBoxWidth = 77;
+            this.timeSpanTextBox1.TimeSpanBoxWidth = 89;
             this.timeSpanTextBox1.Leave += new System.EventHandler(this.timeSpanTextBox1_Leave);
             // 
             // labelTolerancePosNeg
