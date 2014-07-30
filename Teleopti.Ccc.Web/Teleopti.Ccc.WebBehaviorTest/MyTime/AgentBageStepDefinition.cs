@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -10,7 +9,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
@@ -18,26 +17,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class AgentBageStepDefinition
 	{
-		[Given(@"I have a silver badge for answered calls")]
-		public void GivenIHaveASilverBadgeForAnsweredCalls()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
-		[Given(@"I have badges")]
+		[Given(@"I have badges with")]
 		public void GivenIHaveBadges(Table table)
 		{
 			var agentBadges = table.CreateSet<BadgeConfigurable>();
 			agentBadges.ForEach(a => DataMaker.Data().Apply(a));
 		}
 
-		[Then(@"I should see I have badge")]
-		public void ThenIShouldSeeIHaveBadge()
+		[Then(@"I should see I have (\d*) bronze badge, (\d*) silver badge and (\d*) gold badge")]
+		public void ThenIShouldSeeIHaveBadge(int bronzeBadgeCount, int silverBadgeCount, int goldBadgeCount)
 		{
-			ScenarioContext.Current.Pending();
+			Browser.Interactions.AssertExists("#BadgePanel");
+			Browser.Interactions.AssertAnyContains("#BadgePanel .GoldBadge", goldBadgeCount.ToString(CultureInfo.InvariantCulture));
+			Browser.Interactions.AssertAnyContains("#BadgePanel .SilverBadge", silverBadgeCount.ToString(CultureInfo.InvariantCulture));
+			Browser.Interactions.AssertAnyContains("#BadgePanel .BronzeBadge", bronzeBadgeCount.ToString(CultureInfo.InvariantCulture));
 		}
-
-
 	}
 
 	public class BadgeConfigurable : IUserSetup
@@ -69,9 +63,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				BadgeType = badgeType,
 				BronzeBadge = Bronze,
 				SilverBadge = Silver,
-				GoldenBadge = Gold,
+				GoldBadge = Gold,
 			};
-			
+
 			var rep = new PersonRepository(uow);
 			var people = rep.LoadAll();
 			var person = people.First(p => p.Name == user.Name);

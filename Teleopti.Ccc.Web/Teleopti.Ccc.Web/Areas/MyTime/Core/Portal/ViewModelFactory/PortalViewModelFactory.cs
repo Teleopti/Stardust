@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using AutoMapper;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.UserTexts;
@@ -19,14 +21,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly IPushMessageProvider _pushMessageProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IReportsNavigationProvider _reportsNavigationProvider;
+		private readonly IBadgeProvider _badgeProvider;
+		private readonly IToggleManager _toggleManager;
 
-		public PortalViewModelFactory(IPermissionProvider permissionProvider, ILicenseActivatorProvider licenseActivatorProviderProvider, IPushMessageProvider pushMessageProvider, ILoggedOnUser loggedOnUser, IReportsNavigationProvider reportsNavigationProvider)
+		public PortalViewModelFactory(IPermissionProvider permissionProvider, ILicenseActivatorProvider licenseActivatorProviderProvider,
+			IPushMessageProvider pushMessageProvider, ILoggedOnUser loggedOnUser, IReportsNavigationProvider reportsNavigationProvider, IBadgeProvider badgeProvider,
+			IToggleManager toggleManager)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
 			_pushMessageProvider = pushMessageProvider;
 			_loggedOnUser = loggedOnUser;
 			_reportsNavigationProvider = reportsNavigationProvider;
+			_badgeProvider = badgeProvider;
+			_toggleManager = toggleManager;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -65,7 +73,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 			var licenseActivator = _licenseActivatorProvider.Current();
 			var customerName = licenseActivator == null ? string.Empty : licenseActivator.CustomerName;
-			
+
+			IEnumerable<IAgentBadge> badges = null;
+
+			var badgeFeatureEnabled = _toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913);
+			if (badgeFeatureEnabled)
+			{
+				badges = _badgeProvider.GetBadges();
+			}
+
 			return new PortalViewModel
 						{
 							ReportNavigationItems = reportsList,
@@ -74,7 +90,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 							ShowChangePassword = showChangePassword(),
 							HasAsmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
 							HasSignInAsAnotherUser = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.SignInAsAnotherUser),
-							ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t")
+							ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
+							Badges = badges == null ? null : badges.Select(x => new BadgeViewModel
+							{
+								BadgeType = x.BadgeType,
+								BronzeBadge = x.BronzeBadge,
+								SilverBadge = x.SilverBadge,
+								GoldBadge = x.GoldBadge
+							}),
+							IsBadgesToggleEnabled = badgeFeatureEnabled
 						};
 		}
 

@@ -323,6 +323,8 @@
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\ITeamViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\MyReportViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\BadgeProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\IBadgeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceWeeklyWorkTimeSettingProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceWeeklyWorkTimeSettingProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />

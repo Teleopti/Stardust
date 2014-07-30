@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.Domain.Common
 				    BadgeType = agentBadge.BadgeType,
 				    BronzeBadge = agentBadge.BronzeBadge,
 				    SilverBadge = agentBadge.SilverBadge,
-				    GoldenBadge = agentBadge.GoldenBadge
+				    GoldBadge = agentBadge.GoldBadge
 			    };
 				badge.SetParent(this);
 				_badges = new HashSet<IAgentBadge> { badge };
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Domain.Common
 					var existedBadge = _badges.Single(x => x.BadgeType == agentBadge.BadgeType);
 					existedBadge.BronzeBadge += agentBadge.BronzeBadge;
 					existedBadge.SilverBadge += agentBadge.SilverBadge;
-					existedBadge.GoldenBadge += agentBadge.GoldenBadge;
+					existedBadge.GoldBadge += agentBadge.GoldBadge;
 			    }
 			    else
 			    {
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Domain.Common
 						BadgeType = agentBadge.BadgeType,
 						BronzeBadge = agentBadge.BronzeBadge,
 						SilverBadge = agentBadge.SilverBadge,
-						GoldenBadge = agentBadge.GoldenBadge
+						GoldBadge = agentBadge.GoldBadge
 					};
 					badge.SetParent(this);
 					_badges.Add(badge);

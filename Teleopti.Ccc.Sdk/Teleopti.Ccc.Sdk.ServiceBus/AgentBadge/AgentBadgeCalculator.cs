@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					}
 					if (answeredCallsBadge.SilverBadge >= goldToSilverBadgeRate)
 					{
-						answeredCallsBadge.GoldenBadge = answeredCallsBadge.GoldenBadge + answeredCallsBadge.SilverBadge / goldToSilverBadgeRate;
+						answeredCallsBadge.GoldBadge = answeredCallsBadge.GoldBadge + answeredCallsBadge.SilverBadge / goldToSilverBadgeRate;
 						answeredCallsBadge.SilverBadge = answeredCallsBadge.SilverBadge % goldToSilverBadgeRate;
 					}
 				}
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					}
 					if (averageHandlingTimeBadge.SilverBadge > goldToSilverBadgeRate)
 					{
-						averageHandlingTimeBadge.GoldenBadge = averageHandlingTimeBadge.GoldenBadge + averageHandlingTimeBadge.SilverBadge / goldToSilverBadgeRate;
+						averageHandlingTimeBadge.GoldBadge = averageHandlingTimeBadge.GoldBadge + averageHandlingTimeBadge.SilverBadge / goldToSilverBadgeRate;
 						averageHandlingTimeBadge.SilverBadge = averageHandlingTimeBadge.SilverBadge % goldToSilverBadgeRate;
 					}
 				}
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					}
 					if (adherenceBadge.SilverBadge > goldToSilverBadgeRate)
 					{
-						adherenceBadge.GoldenBadge = adherenceBadge.GoldenBadge + adherenceBadge.SilverBadge / goldToSilverBadgeRate;
+						adherenceBadge.GoldBadge = adherenceBadge.GoldBadge + adherenceBadge.SilverBadge / goldToSilverBadgeRate;
 						adherenceBadge.SilverBadge = adherenceBadge.SilverBadge % goldToSilverBadgeRate;
 					}
 				}

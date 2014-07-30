@@ -4,7 +4,7 @@ namespace Teleopti.Interfaces.Domain
 	{
 		int BronzeBadge { get; set; }
 		int SilverBadge { get; set; }
-		int GoldenBadge { get; set; }
+		int GoldBadge { get; set; }
 		BadgeType BadgeType { get; set; }
 	}
 }

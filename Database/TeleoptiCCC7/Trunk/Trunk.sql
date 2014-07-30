@@ -224,7 +224,7 @@ BEGIN
  	[Parent] [uniqueidentifier] NOT NULL,
  	[BronzeBadge] [int] NOT NULL,
  	[SilverBadge] [int] NOT NULL,
- 	[GoldenBadge] [int] NOT NULL,
+ 	[GoldBadge] [int] NOT NULL,
 	[BadgeType] [int] NOT NULL
   CONSTRAINT [PK_AgentBadge] PRIMARY KEY CLUSTERED 
  (

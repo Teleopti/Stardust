@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 {
@@ -12,6 +13,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public bool HasAsmPermission { get; set; }
 		public bool HasSignInAsAnotherUser { get; set; }
 		public bool ShowMeridian { get; set; }
+		public IEnumerable<BadgeViewModel> Badges { get; set; }
+		public bool IsBadgesToggleEnabled { get; set; }
 	}
 
 	public class NavigationItem
@@ -101,5 +104,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	{
 		public string text { get; set; }
 		public string id { get; set; }
+	}
+
+	public class BadgeViewModel
+	{
+		public BadgeType BadgeType { get; set; }
+		public int BronzeBadge { get; set; }
+		public int SilverBadge { get; set; }
+		public int GoldBadge { get; set; }
 	}
 }

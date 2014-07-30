@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			_person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).BronzeBadge.Should().Be.EqualTo(0);
 			_person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).SilverBadge.Should().Be.EqualTo(0);
-			_person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).GoldenBadge.Should().Be.EqualTo(1);
+			_person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).GoldBadge.Should().Be.EqualTo(1);
 		}
 	
 		[Test]

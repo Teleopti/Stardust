@@ -24,7 +24,7 @@
 							type="int"
 							not-null="true" />
 
-		<property name="GoldenBadge"
+		<property name="GoldBadge"
 							type="int"
 							not-null="true" />
 
