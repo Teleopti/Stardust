@@ -5,7 +5,8 @@ define([
 	'ajax',
 	'resources',
 	'timepicker',
-	'lazy'
+	'lazy',
+	'guidgenerator'
 ], function (
 	ko,
 	moment,
@@ -13,7 +14,8 @@ define([
 	ajax,
 	resources,
 	timepicker,
-	lazy
+	lazy,
+	guidgenerator
 	) {
 
 	return function () {
@@ -133,7 +135,7 @@ define([
 				EndTime: endTimeAsMoment.format(),
 				AbsenceId: self.Absence(),
 				PersonId: personId,
-				TrackedCommandInfo: { TrackId: "e6b86ea3-6479-48a2-b8d4-54bd6cbbdbc5" }
+				TrackedCommandInfo: { TrackId: guidgenerator.newGuid() }
 			});
 			ajax.ajax({
 					url: 'PersonScheduleCommand/AddIntradayAbsence',

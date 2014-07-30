@@ -74,7 +74,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				StartDateTime = startDateTimeInUtc,
 				EndDateTime = endDateTimeInUtc,
 				ScenarioId = _scenario.Id.GetValueOrDefault(),
-				InitiatorId = trackedCommandInfo.OperatedPersonId
+				InitiatorId = trackedCommandInfo.OperatedPersonId,
+				TrackId = trackedCommandInfo.TrackId
 			});
 		}
 

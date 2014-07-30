@@ -144,7 +144,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 						Timestamp = DateTime.UtcNow,
 						ScenarioId = message.ScenarioId,
 						PersonId = message.PersonId,
-						ScheduleDays = scheduleDays
+						ScheduleDays = scheduleDays,
+						TrackId = message.TrackId
 					};
 			}
 		}

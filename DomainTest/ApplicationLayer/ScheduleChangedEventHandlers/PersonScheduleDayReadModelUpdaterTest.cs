@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
@@ -138,6 +139,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				x =>
 					x.UpdateReadModels(new DateOnlyPeriod(new DateOnly(terminationDate).AddDays(1), DateOnly.MaxValue), personId, businessUnitId,
 						null, false));
+		}
+
+		[Test]
+		public void ShouldSendTrackingMessage()
+		{
+			var repository = MockRepository.GenerateMock<IPersonScheduleDayReadModelPersister>();
+			var eventTracker = MockRepository.GenerateMock<IEventTracker>();
+			var target = new PersonScheduleDayReadModelUpdater(null, repository, eventTracker);
+
+			var initiatorId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
+			target.Handle(new ProjectionChangedEvent
+			{
+				InitiatorId = initiatorId,
+				BusinessUnitId = businessUnitId,
+				TrackId = trackId
+			});
+
+			eventTracker.AssertWasCalled(x => x.SendTrackingMessage(initiatorId, businessUnitId, trackId));
 		}
 
 	}
