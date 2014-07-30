@@ -3,15 +3,10 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
-	
-	public interface IEventTracker
-	{
-		void SendTrackingMessage(Guid personId, Guid businessUnitId, Guid trackId);
-	}
-
 	public class PersonScheduleDayReadModelUpdater :
 		IHandleEvent<ProjectionChangedEvent>, 
 		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>,
@@ -36,7 +31,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public void Handle(ProjectionChangedEvent @event)
 		{
 			createReadModel(@event);
-			_eventTracker.SendTrackingMessage(@event.PersonId, @event.BusinessUnitId, new Guid("e6b86ea3-6479-48a2-b8d4-54bd6cbbdbc5"));
+			if (_eventTracker != null)
+				_eventTracker.SendTrackingMessage(@event.PersonId, @event.BusinessUnitId,
+					new Guid("e6b86ea3-6479-48a2-b8d4-54bd6cbbdbc5"));
 		}
 
 		public void Handle(ProjectionChangedEventForPersonScheduleDay @event)
