@@ -11,7 +11,7 @@ define(
 	var notificationViewModel = function (trackId, message) {
 		this.TrackId = trackId;
 		this.Message = ko.observable(message);
-		this.Css = ko.observable("alert alert-info");
+		this.Css = ko.observable("alert alert-info alert-dismissible");
 	};
 
 	this.Notifications = ko.observableArray();
@@ -33,7 +33,7 @@ define(
 			if (!match)
 				return;
 			match.Message(match.Message() + " " + (status === 0 ? resources.Success : resources.Failed));
-			match.Css(status === 0 ? "alert alert-success" : "alert alert-danger");
+			match.Css(status === 0 ? "alert alert-success alert-dismissible" : "alert alert-danger alert-dismissible");
 		}
 	};
 });

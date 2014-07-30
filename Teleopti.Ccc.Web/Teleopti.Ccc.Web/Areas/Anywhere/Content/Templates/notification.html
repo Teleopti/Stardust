@@ -2,7 +2,8 @@
 	<div data-bind="foreach: Notifications">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="alert" data-bind="css: Css">
+				<div data-bind="css: Css" role="alert">
+					<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					<span data-bind="text: Message"></span>
 				</div>
 			</div>

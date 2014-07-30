@@ -213,7 +213,7 @@ define([
 			if (data.Status === 0) {
 				setInterval(function() {
 					notificationsViewModel.RemoveNotification(notification.DomainId);
-				}, 2000);
+				}, 8000);
 			}
 		}, function () {
 		});
