@@ -161,6 +161,7 @@ define([
 				a.PersonId = self.PersonId();
 				a.Date = self.ScheduleDate();
 				a.GroupId = self.GroupId();
+				a.PersonName = self.Name();
 				return new absenceListItemViewModel(a);
 			});
 			self.Absences.push.apply(self.Absences, absences);

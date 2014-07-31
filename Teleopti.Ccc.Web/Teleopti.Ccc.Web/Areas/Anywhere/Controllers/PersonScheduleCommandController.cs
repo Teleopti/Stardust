@@ -57,6 +57,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[RemoveAbsencePermission]
 		public JsonResult RemovePersonAbsence(RemovePersonAbsenceCommand command)
 		{
+			if (command.TrackedCommandInfo != null)
+				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
 			_commandDispatcher.Execute(command);
 			return Json(new object(), JsonRequestBehavior.DenyGet);
 		}

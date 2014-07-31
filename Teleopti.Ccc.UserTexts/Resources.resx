@@ -12181,4 +12181,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Moving activity for</value>
     <comment>Moving activity for {a person name}</comment>
   </data>
+  <data name="RemovingAbsenceFor" xml:space="preserve">
+    <value>Removing absence for</value>
+    <comment>Removing absence for {a person name}</comment>
+  </data>
 </root>

@@ -128,6 +128,31 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		}
 
 		[Test]
+		public void ShouldTrackRemoveAbsenceCommand()
+		{
+			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var personWithId = PersonFactory.CreatePersonWithId();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(personWithId);
+			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser);
+
+			var command = new RemovePersonAbsenceCommand
+			{
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			target.RemovePersonAbsence(command);
+
+			var arguments = commandDispatcher.GetArgumentsForCallsMadeOn(x => x.Execute(null), a => a.IgnoreArguments());
+			var firstCall = arguments.Single();
+			var calledCommand = (RemovePersonAbsenceCommand)firstCall.Single();
+			calledCommand.TrackedCommandInfo.OperatedPersonId.Should().Be(personWithId.Id);
+		}
+
+		[Test]
 		public void ShouldDispatchAddActivity()
 		{
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();

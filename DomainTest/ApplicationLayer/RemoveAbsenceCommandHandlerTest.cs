@@ -45,9 +45,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			var target = new RemovePersonAbsenceCommandHandler(personAbsenceRepository);
 
+			var operatedPersonId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
 			var command = new RemovePersonAbsenceCommand
 				{
-					PersonAbsenceId = personAbsence.Id.Value
+					PersonAbsenceId = personAbsence.Id.Value,
+					TrackedCommandInfo = new TrackedCommandInfo
+					{
+						OperatedPersonId = operatedPersonId,
+						TrackId = trackId
+					}
 				};
 
 			target.Handle(command);
@@ -56,6 +63,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.ScenarioId.Should().Be(personAbsence.Scenario.Id.Value);
 			@event.StartDateTime.Should().Be(personAbsence.Layer.Period.StartDateTime);
 			@event.EndDateTime.Should().Be(personAbsence.Layer.Period.EndDateTime);
+			@event.InitiatorId.Should().Be(operatedPersonId);
+			@event.TrackId.Should().Be(trackId);
 		}
 	}
 }

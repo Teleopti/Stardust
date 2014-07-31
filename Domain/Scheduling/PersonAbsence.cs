@@ -81,14 +81,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			});
 		}
 
-		public virtual void RemovePersonAbsence()
+		public virtual void RemovePersonAbsence(TrackedCommandInfo trackedCommandInfo)
 		{
 			AddEvent(new PersonAbsenceRemovedEvent
 			{
 				PersonId = Person.Id.GetValueOrDefault(),
 				ScenarioId = Scenario.Id.GetValueOrDefault(),
 				StartDateTime = Period.StartDateTime,
-				EndDateTime = Period.EndDateTime
+				EndDateTime = Period.EndDateTime,
+				InitiatorId = trackedCommandInfo.OperatedPersonId,
+				TrackId = trackedCommandInfo.TrackId
 			});
 		}
 

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			var personAbsence = (PersonAbsence)_personAbsenceRepository.LoadAggregate(command.PersonAbsenceId);
 
-			personAbsence.RemovePersonAbsence();
+			personAbsence.RemovePersonAbsence(command.TrackedCommandInfo);
 
 			_personAbsenceRepository.Remove(personAbsence);
 		}
