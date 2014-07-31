@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
 		private void setPermissionOnControls()
 		{
-            backStageButton3.Enabled = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+			backStageButton3.Enabled = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 		}
 
 		private void showPeopleHeader()
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			}
 		}
 
-		private void recursivelyAddChildNodes(TreeNodeAdv treeNode, IEnumerable<IApplicationFunction> functions)
+		private void recursivelyAddChildNodes(TreeNodeAdv treeNode, IList<IApplicationFunction> functions)
 		{
 			if (functions == null) return;
 			var parentApplicationFunction = treeNode.TagObject as IApplicationFunction;
@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			}
 		}
 
-		private void loadAllApplicationFunctions(IEnumerable<IApplicationFunction> functions)
+		private void loadAllApplicationFunctions(IList<IApplicationFunction> functions)
 		{
 			if (functions == null) return;
 			foreach (IApplicationFunction function in functions)
@@ -724,7 +724,7 @@ namespace Teleopti.Ccc.Win.Permissions
 				TreeNodeAdv currentNode = treeViewData.RowIndexToNode(index);
 
 				// Need to avoid AvailableDataRangeOption nodes
-				if (currentNode != null && !typeof(AvailableDataRangeOption).IsInstanceOfType(currentNode.TagObject))
+				if (currentNode != null && !(currentNode.TagObject is AvailableDataRangeOption))
 				{
 					if (currentNode.Nodes.Count > 0)
 					{
@@ -1053,9 +1053,7 @@ namespace Teleopti.Ccc.Win.Permissions
 		{
 			if (StateHolderReader.IsInitialized)
 			{
-				bool rightToLeft = (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay)
-						? true
-						: false;
+				bool rightToLeft = (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay);
 				listViewRoles.RightToLeftLayout = rightToLeft;
 				listViewPeople.RightToLeftLayout = rightToLeft;
 			}
@@ -1636,11 +1634,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
 					PermissionsExplorerStateHolder.SaveApplicationRole(applicationRole);
 
-					ICollection<IPersonInRole> sourcePersonCollection = new List<IPersonInRole>();
-					foreach (var person in PermissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(applicationRoleAdapter.ApplicationRole))
-					{
-						sourcePersonCollection.Add(person);
-					}
+					ICollection<IPersonInRole> sourcePersonCollection = PermissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(applicationRoleAdapter.ApplicationRole).ToList();
 
 					// Add roles for each person selected.
 					foreach (var person in sourcePersonCollection)
@@ -1705,7 +1699,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			PeopleBarItem.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			FunctionsBarItem.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			DataBarItem.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
-		    ExplorerRibbon.MenuButtonText = UserTexts.Resources.File;
+			ExplorerRibbon.MenuButtonText = UserTexts.Resources.File;
 			showRolesHeader();
 			showPeopleHeader();
 			showFunctionsHeader();
@@ -1922,7 +1916,6 @@ namespace Teleopti.Ccc.Win.Permissions
 								if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=> removeFunctionsFromSelectedRoles(functions)))
 								{
 									FormKill();
-									return;
 								}
 							}
 						}
@@ -1933,7 +1926,6 @@ namespace Teleopti.Ccc.Win.Permissions
 							if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=> removeFunctionFromSelectedRoles(function)))
 							{
 								FormKill();
-								return;
 							}
 						}
 					}
@@ -2002,16 +1994,6 @@ namespace Teleopti.Ccc.Win.Permissions
 			treeViewData.AfterCheck += treeViewDataAfterCheck;
 		}
 
-		private void toolStripButtonCloseExitClick(object sender, EventArgs e)
-		{
-			Close();
-		}
-
-		private void toolStripButtonExitSystemClick(object sender, EventArgs e)
-		{
-			
-		}
-
 		private void permissionsExplorerFormClosing(object sender, FormClosingEventArgs e)
 		{
 			// queue the people also 
@@ -2047,21 +2029,6 @@ namespace Teleopti.Ccc.Win.Permissions
 		private void toolStripButtonRenameRoleClick(object sender, EventArgs e)
 		{
 			handleRenameRole();
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability",
-			"CA2000:Dispose objects before losing scope")]
-		private void toolStripButtonSystemOptionsClick(object sender, EventArgs e)
-		{
-			
-		}
-
-		private void toolStripButtonNewClick(object sender, EventArgs e)
-		{
-			if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleAddNewRole))
-			{
-				FormKill();
-			}
 		}
 
 		private void copyToolStripMenuItemClick(object sender, EventArgs e)
@@ -2132,7 +2099,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			_availableDataCollection = PermissionsExplorerHelper.GetAllAvailableDataForOneBusinessUnit().ToList();
 		}
 
-		private IList<IEnumerable<IBusinessUnit>> loadAvailableData(ICollection<IAvailableData> dataCollection, out IList<IEnumerable<ISite>> siteAll, out IList<IEnumerable<ITeam>> teamAll, out IList<IEnumerable<AvailableDataRangeOption>> dataRangeOptionAll)
+		private IList<IEnumerable<IBusinessUnit>> loadAvailableData(IEnumerable<IAvailableData> dataCollection, out IList<IEnumerable<ISite>> siteAll, out IList<IEnumerable<ITeam>> teamAll, out IList<IEnumerable<AvailableDataRangeOption>> dataRangeOptionAll)
 		{
 			IList<IEnumerable<IBusinessUnit>> buAll = new List<IEnumerable<IBusinessUnit>>();
 			siteAll = new List<IEnumerable<ISite>>();
@@ -2310,7 +2277,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			_permissionsViewerPresenter.ShowViewer();
 		}
 
-		private void toolStripButtonAddRole_Click(object sender, EventArgs e)
+		private void toolStripButtonAddRoleClick(object sender, EventArgs e)
 		{
 			if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleAddNewRole))
 			{
@@ -2318,7 +2285,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			}
 		}
 
-		private void toolStripButtonDeleteRole_Click(object sender, EventArgs e)
+		private void toolStripButtonDeleteRoleClick(object sender, EventArgs e)
 		{
 			//set disabled instead?
 			if (_lastInFocus != listViewRoles) return;
@@ -2329,57 +2296,59 @@ namespace Teleopti.Ccc.Win.Permissions
 			
 		}
 
-		private void toolStripButtonAddPerson_Click(object sender, EventArgs e)
+		private void toolStripButtonAddPersonClick(object sender, EventArgs e)
 		{
 			_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleInsertPeople);
 		}
 
-		private void toolStripButtonRemovePerson_Click(object sender, EventArgs e)
+		private void toolStripButtonRemovePersonClick(object sender, EventArgs e)
 		{
 			if (_lastInFocus != listViewPeople) return;
 			handleRemovePeople();
 		}
 
-		private void backStageButton1_Click(object sender, EventArgs e)
+		private void backStageButton1Click(object sender, EventArgs e)
 		{
 			save();
 		}
 
-		private void backStageButton2_Click(object sender, EventArgs e)
+		private void backStageButton2Click(object sender, EventArgs e)
 		{
 			Close();
 		}
 
-        private void backStageButton3_Click(object sender, EventArgs e)
-        {
-            var toggleManager = _container.Resolve<IToggleManager>();
-            try
-            {
-                var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager)));
-                settings.Show();
-            }
-            catch (DataSourceException ex)
-            {
-                DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-            }
-        }
+		private void backStageButton3Click(object sender, EventArgs e)
+		{
+			var toggleManager = _container.Resolve<IToggleManager>();
+			try
+			{
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager)));
+				settings.Show();
+			}
+			catch (DataSourceException ex)
+			{
+				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+			}
+		}
 
-        private void backStageButton4_Click(object sender, EventArgs e)
-        {
-            if (!CloseAllOtherForms(this)) return;
+		private void backStageButton4Click(object sender, EventArgs e)
+		{
+			if (!CloseAllOtherForms(this)) return;
 
-            Close();
+			Close();
 
-            ////this canceled
-            if (Visible)
-                return;
-            Application.Exit();
-        }
+			////this canceled
+			if (Visible)
+				return;
+			Application.Exit();
+		}
 
-        private void PermissionsExplorer_ResizeEnd(object sender, EventArgs e)
-        {
-            var x = HorizontalSplitter.Location.X;
-        }
+		private void ribbonPanelVisibleChanged(object sender, EventArgs e)
+		{
+			var ribbon = sender as RibbonPanel;
+			if (ribbon != null && ribbon.Visible)
+				ExplorerRibbon.Height = 125;
+		}
 
 	}
 }
