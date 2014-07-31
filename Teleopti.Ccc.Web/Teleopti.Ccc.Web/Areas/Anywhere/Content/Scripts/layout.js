@@ -210,11 +210,6 @@ define([
 		trackingmessages.subscribeTrackingMessage(personId, function (notification) {
 			var data = JSON.parse(notification.BinaryData);
 			notificationsViewModel.UpdateNotification(notification.DomainId, data.Status);
-			if (data.Status === 1) {
-				setTimeout(function() {
-					notificationsViewModel.RemoveNotification(notification.DomainId);
-				}, 8000);
-			}
 		}, function () {
 		});
 	}

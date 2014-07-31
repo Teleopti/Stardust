@@ -18,6 +18,10 @@ define(
 
 	this.Notifications = ko.observableArray();
 
+	var removeNotification = function(trackId) {
+		self.Notifications.remove(function(item) { return item.TrackId === trackId; });
+	};
+
 	var updateNotification = function(trackId, status) {
 		var match = ko.utils.arrayFirst(self.Notifications(), function(item) {
 			return trackId === item.TrackId;
@@ -30,6 +34,9 @@ define(
 			msg = match.OriginalMessage + " " + resources.SuccessWithExclamation;
 			cssClazz = "alert alert-success alert-dismissible";
 			match.Succeed = true;
+			setTimeout(function() {
+				removeNotification(trackId);
+			}, 10000);
 		}
 		if (status === 2) {
 			msg = match.OriginalMessage + " " + resources.FailedWithExclamation + " " + "Failed on Service bus!";
@@ -65,8 +72,6 @@ define(
 			}, 10000);
 		},
 
-		RemoveNotification: function (trackId) {
-			self.Notifications.remove(function (item) { return item.TrackId === trackId; });
-		}
+		RemoveNotification: removeNotification
 	};
 });
