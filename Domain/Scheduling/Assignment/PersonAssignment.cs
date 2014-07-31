@@ -355,7 +355,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			target.Move(_shiftLayers, layer);
 		}
 
-		public virtual void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, DateTime newStartTime, TimeSpan length)
+		public virtual void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, DateTime newStartTime, TimeSpan length, TrackedCommandInfo trackedCommandInfo)
 		{
 			var anyLayerFound = false;
 
@@ -383,12 +383,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			var affectedPeriod = new DateTimePeriod(currentStartTime, currentStartTime.Add(length)).MaximumPeriod(newPeriod);
 			
-			AddEvent(()=> new ActivityMovedEvent
+			AddEvent(()=>
 			{
-				PersonId = Person.Id.Value,
-				StartDateTime = affectedPeriod.StartDateTime,
-				EndDateTime =affectedPeriod.EndDateTime,
-				ScenarioId = Scenario.Id.Value
+				var activityMovedEvent = new ActivityMovedEvent
+				{
+					PersonId = Person.Id.Value,
+					StartDateTime = affectedPeriod.StartDateTime,
+					EndDateTime =affectedPeriod.EndDateTime,
+					ScenarioId = Scenario.Id.Value
+				};
+				if (trackedCommandInfo != null)
+				{
+					activityMovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+					activityMovedEvent.TrackId = trackedCommandInfo.TrackId;
+				}
+				return activityMovedEvent;
 			});
 		}
 

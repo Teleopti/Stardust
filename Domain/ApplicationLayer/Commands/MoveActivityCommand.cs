@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public class MoveActivityCommand
+	public class MoveActivityCommand : ITrackedCommand
 	{
 		public Guid AgentId { get; set; }
 		public DateOnly ScheduleDate { get; set; }
@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public DateTime NewStartTime { get; set; }
 		public DateTime OldStartTime { get; set; }
 		public int OldProjectionLayerLength { get; set; }
+		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}
 }

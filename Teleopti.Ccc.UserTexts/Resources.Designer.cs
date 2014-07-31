@@ -13597,6 +13597,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Moving activity for.
+        /// </summary>
+        public static string MovingActivityFor {
+            get {
+                return ResourceManager.GetString("MovingActivityFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Much.
         /// </summary>
         public static string Much {

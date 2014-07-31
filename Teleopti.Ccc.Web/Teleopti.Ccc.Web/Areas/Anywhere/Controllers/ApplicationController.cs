@@ -105,6 +105,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
                     UserTexts.Resources.AddingIntradayAbsenceFor,
 					UserTexts.Resources.AddingFulldayAbsenceFor,
 					UserTexts.Resources.AddingActivityFor,
+					UserTexts.Resources.MovingActivityFor,
                     UserTexts.Resources.Success,
                     UserTexts.Resources.Failed,
 

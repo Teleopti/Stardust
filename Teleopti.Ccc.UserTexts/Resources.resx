@@ -12177,4 +12177,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Failed</value>
     <comment>Failed</comment>
   </data>
+  <data name="MovingActivityFor" xml:space="preserve">
+    <value>Moving activity for</value>
+    <comment>Moving activity for {a person name}</comment>
+  </data>
 </root>

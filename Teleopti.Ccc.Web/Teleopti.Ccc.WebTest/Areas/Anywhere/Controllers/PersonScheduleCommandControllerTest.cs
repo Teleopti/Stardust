@@ -174,6 +174,31 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			target.MoveActivity(command);
 			dispatcher.AssertWasCalled(x=>x.Execute(command));
 		}
+
+		[Test]
+		public void ShouldTrackMoveActivityCommand()
+		{
+			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var personWithId = PersonFactory.CreatePersonWithId();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(personWithId);
+			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser);
+
+			var command = new MoveActivityCommand
+			{
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			target.MoveActivity(command);
+
+			var arguments = commandDispatcher.GetArgumentsForCallsMadeOn(x => x.Execute(null), a => a.IgnoreArguments());
+			var firstCall = arguments.Single();
+			var calledCommand = (MoveActivityCommand)firstCall.Single();
+			calledCommand.TrackedCommandInfo.OperatedPersonId.Should().Be(personWithId.Id);
+		}
 	}
 
 }
