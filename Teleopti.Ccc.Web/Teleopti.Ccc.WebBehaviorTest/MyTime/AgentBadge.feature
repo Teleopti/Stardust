@@ -27,12 +27,3 @@ Given I have badges with
 | Badge type     | Bronze | Silver | Gold |
  When I am viewing week schedule
  Then I should see I have 0 bronze badge, 0 silver badge and 0 gold badge
-
-@ignore
-Scenario: Notify when agent get new badge
-Given Badge threshold value for "Answered calls" set to 50
-  And the current time is '2015-01-01 23:59:59'
-  And My "Answered calls" for '2015-01-01' is 51
- When current browser time has changed to '2015-01-02 00:00:00'
-  And I am viewing week schedule
- Then I should be notified I got a new badge
