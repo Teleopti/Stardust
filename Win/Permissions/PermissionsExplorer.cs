@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
 		private void setPermissionOnControls()
 		{
-            backStageButton3.Enabled = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+			backStageButton3.Enabled = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 		}
 
 		private void showPeopleHeader()
@@ -1705,7 +1705,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			PeopleBarItem.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			FunctionsBarItem.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			DataBarItem.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
-		    ExplorerRibbon.MenuButtonText = UserTexts.Resources.File;
+			ExplorerRibbon.MenuButtonText = UserTexts.Resources.File;
 			showRolesHeader();
 			showPeopleHeader();
 			showFunctionsHeader();
@@ -1877,11 +1877,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
 		private void listViewRolesSelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!isRoleSelected())
-			{
-				//Clear the controls
-				clearControls();
-			}
+
 		}
 
 		private void treeViewFunctionsAfterCheck(object sender, TreeNodeAdvEventArgs e)
@@ -2350,36 +2346,36 @@ namespace Teleopti.Ccc.Win.Permissions
 			Close();
 		}
 
-        private void backStageButton3_Click(object sender, EventArgs e)
-        {
-            var toggleManager = _container.Resolve<IToggleManager>();
-            try
-            {
-                var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager)));
-                settings.Show();
-            }
-            catch (DataSourceException ex)
-            {
-                DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-            }
-        }
+		private void backStageButton3_Click(object sender, EventArgs e)
+		{
+			var toggleManager = _container.Resolve<IToggleManager>();
+			try
+			{
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager)));
+				settings.Show();
+			}
+			catch (DataSourceException ex)
+			{
+				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+			}
+		}
 
-        private void backStageButton4_Click(object sender, EventArgs e)
-        {
-            if (!CloseAllOtherForms(this)) return;
+		private void backStageButton4_Click(object sender, EventArgs e)
+		{
+			if (!CloseAllOtherForms(this)) return;
 
-            Close();
+			Close();
 
-            ////this canceled
-            if (Visible)
-                return;
-            Application.Exit();
-        }
+			////this canceled
+			if (Visible)
+				return;
+			Application.Exit();
+		}
 
-        private void PermissionsExplorer_ResizeEnd(object sender, EventArgs e)
-        {
-            var x = HorizontalSplitter.Location.X;
-        }
+		private void PermissionsExplorer_ResizeEnd(object sender, EventArgs e)
+		{
+			var x = HorizontalSplitter.Location.X;
+		}
 
 	}
 }
