@@ -17,7 +17,7 @@ namespace Teleopti.MessagingTest.SignalR
 		{
 			var messageBrokerSender = MockRepository.GenerateMock<IMessageBrokerSender>();
 
-			var target = new EventTracker(messageBrokerSender);
+			var target = new TrackingMessageSender(messageBrokerSender);
 
 			var businessUnitId = Guid.NewGuid();
 			var initiatorId = Guid.NewGuid();

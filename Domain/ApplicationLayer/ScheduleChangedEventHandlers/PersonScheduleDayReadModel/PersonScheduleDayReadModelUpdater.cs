@@ -14,25 +14,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 	{
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IPersonScheduleDayReadModelPersister _scheduleDayReadModelRepository;
-		private readonly IEventTracker _eventTracker;
+		private readonly ITrackingMessageSender _trackingMessageSender;
 
 		private readonly static ILog Logger = LogManager.GetLogger(typeof(PersonScheduleDayReadModelUpdater));
 
 		public PersonScheduleDayReadModelUpdater(
 			IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
 			IPersonScheduleDayReadModelPersister scheduleDayReadModelRepository,
-			IEventTracker eventTracker)
+			ITrackingMessageSender trackingMessageSender)
 		{
 			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
-			_eventTracker = eventTracker;
+			_trackingMessageSender = trackingMessageSender;
 		}
 
 		public void Handle(ProjectionChangedEvent @event)
 		{
 			createReadModel(@event);
-			if (_eventTracker != null && @event.TrackId != Guid.Empty)
-				_eventTracker.SendTrackingMessage(@event.InitiatorId, @event.BusinessUnitId, new TrackingMessage
+			if (_trackingMessageSender != null && @event.TrackId != Guid.Empty)
+				_trackingMessageSender.SendTrackingMessage(@event.InitiatorId, @event.BusinessUnitId, new TrackingMessage
 				{
 					TrackId = @event.TrackId,
 					Status = TrackingMessageStatus.Success

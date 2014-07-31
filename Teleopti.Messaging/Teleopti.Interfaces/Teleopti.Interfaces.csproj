@@ -772,7 +772,7 @@
     <Compile Include="MessageBroker\Events\DomainUpdateType.cs" />
     <Compile Include="MessageBroker\Events\EventMessageArgs.cs" />
     <Compile Include="MessageBroker\Events\IEventMessage.cs" />
-    <Compile Include="MessageBroker\Events\IEventTracker.cs" />
+    <Compile Include="MessageBroker\Events\ITrackingMessageSender.cs" />
     <Compile Include="MessageBroker\Events\IMessageBroker.cs" />
     <Compile Include="MessageBroker\Events\IEventMessageFactory.cs" />
     <Compile Include="MessageBroker\Events\IMessageBrokerListener.cs" />

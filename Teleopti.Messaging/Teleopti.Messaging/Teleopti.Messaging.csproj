@@ -140,7 +140,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SignalR\EventTracker.cs" />
+    <Compile Include="SignalR\TrackingMessageSender.cs" />
     <Compile Include="SignalR\SiteAdherenceMessage.cs" />
     <Compile Include="SignalR\AgentsAdherenceMessage.cs" />
     <Compile Include="SignalR\TeamAdherenceMessage.cs" />

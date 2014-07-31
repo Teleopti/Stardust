@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldSendTrackingMessage()
 		{
 			var repository = MockRepository.GenerateMock<IPersonScheduleDayReadModelPersister>();
-			var eventTracker = MockRepository.GenerateMock<IEventTracker>();
+			var eventTracker = MockRepository.GenerateMock<ITrackingMessageSender>();
 			var target = new PersonScheduleDayReadModelUpdater(null, repository, eventTracker);
 
 			var initiatorId = Guid.NewGuid();

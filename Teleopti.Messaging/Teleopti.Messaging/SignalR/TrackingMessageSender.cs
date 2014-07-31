@@ -5,11 +5,11 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class EventTracker : IEventTracker
+	public class TrackingMessageSender : ITrackingMessageSender
 	{
 		private readonly IMessageBrokerSender _messageBroker;
 
-		public EventTracker(IMessageBrokerSender messageBroker)
+		public TrackingMessageSender(IMessageBrokerSender messageBroker)
 		{
 			_messageBroker = messageBroker;
 		}
