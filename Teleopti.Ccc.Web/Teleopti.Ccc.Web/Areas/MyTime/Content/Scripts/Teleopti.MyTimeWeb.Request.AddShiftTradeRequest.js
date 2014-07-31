@@ -166,7 +166,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.filterStartEndTimeClick = function() {
 			$('.dropdown-menu').on('click', function(e) {
-				if ($(this).hasClass('dropdown-menu-form')) {
+				if ($(this).hasClass('filter-time-dropdown-form')) {
 					e.stopPropagation();
 				}
 			});
