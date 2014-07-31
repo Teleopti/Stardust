@@ -9,6 +9,7 @@ Given there is a role with
 	| Name                     | Full access to mytime |
   And I have the role 'Full access to mytime'
 
+@ignore
 Scenario: Show my badge
 Given I have badges with
 | Badge type     | Bronze | Silver | Gold |
@@ -22,6 +23,7 @@ Given I have badges with
   And I should see I have 2 bronze badges, 1 silver badge and 1 gold badge for Average Handling Time
   And I should see I have 4 bronze badges, 0 silver badge and 0 gold badge for Adherence
 
+@ignore
 Scenario: Show zero badge when agent has no badge
 Given I have badges with
 | Badge type     | Bronze | Silver | Gold |
