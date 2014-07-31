@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.MessageBroker.Events
 
 	public enum TrackingMessageStatus
 	{
-		Success = 0,
-		Fail = 1
+		Success = 1,
+		Failed = 2
 	}
 }

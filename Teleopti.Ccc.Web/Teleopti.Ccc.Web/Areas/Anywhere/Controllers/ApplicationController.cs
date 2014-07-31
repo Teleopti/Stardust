@@ -107,8 +107,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.AddingActivityFor,
 					UserTexts.Resources.MovingActivityFor,
 					UserTexts.Resources.RemovingAbsenceFor,
-                    UserTexts.Resources.Success,
-                    UserTexts.Resources.Failed,
+					UserTexts.Resources.SuccessWithExclamation,
+                    UserTexts.Resources.FailedWithExclamation,
+					UserTexts.Resources.PleaseTryAgainWithExclamation,
+					UserTexts.Resources.PleaseRefreshThePageWithExclamation,
 
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,

@@ -12173,9 +12173,9 @@ Reduce the complexity to use these shifts.</value>
     <value>Adding intraday absence for</value>
     <comment>Adding intraday absence for {a person name}</comment>
   </data>
-  <data name="Failed" xml:space="preserve">
-    <value>Failed</value>
-    <comment>Failed</comment>
+  <data name="FailedWithExclamation" xml:space="preserve">
+    <value>Failed!</value>
+    <comment>Failed!</comment>
   </data>
   <data name="MovingActivityFor" xml:space="preserve">
     <value>Moving activity for</value>
@@ -12184,5 +12184,17 @@ Reduce the complexity to use these shifts.</value>
   <data name="RemovingAbsenceFor" xml:space="preserve">
     <value>Removing absence for</value>
     <comment>Removing absence for {a person name}</comment>
+  </data>
+  <data name="PleaseRefreshThePageWithExclamation" xml:space="preserve">
+    <value>Please refresh the page!</value>
+    <comment>Please refresh the page!</comment>
+  </data>
+  <data name="PleaseTryAgainWithExclamation" xml:space="preserve">
+    <value>Please try again!</value>
+    <comment>Please try again!</comment>
+  </data>
+  <data name="SuccessWithExclamation" xml:space="preserve">
+    <value>Success!</value>
+    <comment>Success!</comment>
   </data>
 </root>

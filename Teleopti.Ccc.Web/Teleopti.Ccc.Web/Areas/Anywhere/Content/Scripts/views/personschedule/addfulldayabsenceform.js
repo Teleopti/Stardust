@@ -66,13 +66,16 @@ define([
                     TrackedCommandInfo: { TrackId: trackId }
                 });
                 ajax.ajax({
-                        url: 'PersonScheduleCommand/AddFullDayAbsence',
-                        type: 'POST',
-                        data: data,
-                        success: function (data, textStatus, jqXHR) {
-                        	navigation.GoToTeamSchedule(groupId, self.StartDate());
-                        }
-                    }
+		                url: 'PersonScheduleCommand/AddFullDayAbsence',
+		                type: 'POST',
+		                data: data,
+		                success: function(data, textStatus, jqXHR) {
+			                navigation.GoToTeamSchedule(groupId, self.StartDate());
+		                },
+		                statusCode500: function (jqXHR, textStatus, errorThrown) {
+			                notificationsViewModel.UpdateNotification(trackId, 3);
+		                }
+	                }
                 );
                 notificationsViewModel.AddNotification(trackId, resources.AddingFulldayAbsenceFor + " " + personName + "... ");
             };

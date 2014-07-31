@@ -8464,11 +8464,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed.
+        ///   Looks up a localized string similar to Failed!.
         /// </summary>
-        public static string Failed {
+        public static string FailedWithExclamation {
             get {
-                return ResourceManager.GetString("Failed", resourceCulture);
+                return ResourceManager.GetString("FailedWithExclamation", resourceCulture);
             }
         }
         
@@ -17735,6 +17735,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please refresh the page!.
+        /// </summary>
+        public static string PleaseRefreshThePageWithExclamation {
+            get {
+                return ResourceManager.GetString("PleaseRefreshThePageWithExclamation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please save again when you have reviewed the applied changes!.
         /// </summary>
         public static string PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges {
@@ -17767,6 +17776,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PleaseTryAgainLater {
             get {
                 return ResourceManager.GetString("PleaseTryAgainLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please try again!.
+        /// </summary>
+        public static string PleaseTryAgainWithExclamation {
+            get {
+                return ResourceManager.GetString("PleaseTryAgainWithExclamation", resourceCulture);
             }
         }
         
@@ -23759,6 +23777,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SuccessfullyExportedMeetings {
             get {
                 return ResourceManager.GetString("SuccessfullyExportedMeetings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success!.
+        /// </summary>
+        public static string SuccessWithExclamation {
+            get {
+                return ResourceManager.GetString("SuccessWithExclamation", resourceCulture);
             }
         }
         
