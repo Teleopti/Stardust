@@ -307,6 +307,14 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			}
 		});
 
+		self.loadSchedule = function(value) {
+			if (value != "allTeams") {
+				self.loadOneTeamSchedule();
+			} else {
+				self.loadScheduleForAllTeams();
+			}
+		};
+		
 		self.selectedTeam = ko.computed({
 			read: function() {
 				return self.selectedTeamInternal();
@@ -319,11 +327,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				self.selectedTeamInternal(value);
 				if (value == null) return;
 				self.prepareLoad();
-				if (value != "allTeams") {
-					self.loadSchedule();
-				} else {
-					self.loadScheduleForAllTeams();
-				}
+				self.loadSchedule(value);
 			}
 		});
 
@@ -387,11 +391,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			self.isPreviousMore(false);
 			self.displayedPages.removeAll();
 			self.initDisplayedPages(self.pageCount());
-			if (self.selectedTeamInternal() != "allTeams") {
-				self.loadSchedule();
-			} else {
-				self.loadScheduleForAllTeams();
-			}
+			self.loadSchedule(self.selectedTeamInternal());
 		};
 		self.goToLastPage = function() {
 			self.isMore(false);
@@ -473,11 +473,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.setSelectPage = function(pageIdx) {
 			self.selectedPageIndex(pageIdx);
-			if (self.selectedTeamInternal() != "allTeams") {
-				self.loadSchedule();
-			} else {
-				self.loadScheduleForAllTeams();
-			}
+			self.loadSchedule(self.selectedTeamInternal());
 		};
 		
 		self.loadMyTeamId = function () {
@@ -581,7 +577,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		};
 
-		self.loadSchedule = function () {
+		self.loadOneTeamSchedule = function () {
 			if (self.IsLoading()) return;
 			var take = 20;
 			var skip = (self.selectedPageIndex() -1) * take;
@@ -629,7 +625,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 						if (!findTradedAgent && (self.selectedPageIndex() < data.PageCount)) {
 							self.selectedPageIndex(self.selectedPageIndex() + 1);
 							self.IsLoading(false);
-							self.loadSchedule();
+							self.loadOneTeamSchedule();
 						} 
 				    }
 				    self.updateSelectedPage();
