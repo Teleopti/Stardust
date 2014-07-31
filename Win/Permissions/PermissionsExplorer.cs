@@ -2343,12 +2343,16 @@ namespace Teleopti.Ccc.Win.Permissions
 			Application.Exit();
 		}
 
-		private void ribbonPanelVisibleChanged(object sender, EventArgs e)
-		{
-			var ribbon = sender as RibbonPanel;
-			if (ribbon != null && ribbon.Visible)
-				ExplorerRibbon.Height = 125;
-		}
+		//this fixes almost the thing about the size of the Ribbon
+		//private void ribbonPanelVisibleChanged(object sender, EventArgs e)
+		//{
+		//	var ribbon = sender as RibbonPanel;
+		//	if (ribbon != null)
+		//		if (ribbon.Visible)
+		//			ExplorerRibbon.Height = 125;
+		//		else
+		//			ExplorerRibbon.Height = 58;
+		//}
 
 	}
 }
