@@ -25,12 +25,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var target = new AddFullDayAbsenceCommandHandler(new FakePersonAssignmentReadScheduleRepository(), personRepository,
 			                                                 absenceRepository, personAbsenceRepository, currentScenario);
 
+			var operatedPersonId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
 			var command = new AddFullDayAbsenceCommand
 				{
 					AbsenceId = absenceRepository.Single().Id.Value,
 					PersonId = personRepository.Single().Id.Value,
 					StartDate = new DateTime(2013, 3, 25),
 					EndDate = new DateTime(2013, 3, 25),
+					TrackedCommandInfo = new TrackedCommandInfo()
+					{
+						OperatedPersonId = operatedPersonId,
+						TrackId = trackId
+					}
 				};
 			target.Handle(command);
 
@@ -40,6 +47,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.ScenarioId.Should().Be(currentScenario.Current().Id.Value);
 			@event.StartDateTime.Should().Be(command.StartDate);
 			@event.EndDateTime.Should().Be(command.EndDate.AddHours(24).AddMinutes(-1));
+			@event.InitiatorId.Should().Be(operatedPersonId);
+			@event.TrackId.Should().Be(trackId);
 		}
 
 		[Test]
