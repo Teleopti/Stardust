@@ -808,6 +808,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adding full day absence for.
+        /// </summary>
+        public static string AddingFulldayAbsenceFor {
+            get {
+                return ResourceManager.GetString("AddingFulldayAbsenceFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adding intraday absence for.
         /// </summary>
         public static string AddingIntradayAbsenceFor {

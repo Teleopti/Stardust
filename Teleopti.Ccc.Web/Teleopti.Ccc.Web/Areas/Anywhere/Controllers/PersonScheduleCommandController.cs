@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[AddFullDayAbsencePermission]
 		public JsonResult AddFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
+			if (command.TrackedCommandInfo != null)
+				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
 			_commandDispatcher.Execute(command);
 			return Json(new object(), JsonRequestBehavior.DenyGet);
 		}

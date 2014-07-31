@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var absenceTimePeriod = getDateTimePeriodForAbsence(scheduleDays.Except(new[] {previousDay}), previousDay);
 
 			var personAbsence = new PersonAbsence(_scenario.Current());
-			personAbsence.FullDayAbsence(person, absence, absenceTimePeriod.StartDateTime, absenceTimePeriod.EndDateTime);
+			personAbsence.FullDayAbsence(person, absence, absenceTimePeriod.StartDateTime, absenceTimePeriod.EndDateTime, command.TrackedCommandInfo);
 
 			_personAbsenceRepository.Add(personAbsence);
 		}
