@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(layerFirstStart, layerFirstEnd));
 			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(layerSecondStart, layerSecondEnd));
 
-			assignment.MoveActivityAndSetHighestPriority(activity, layerFirstStart,createDateTime(4), TimeSpan.FromHours(1));
+			assignment.MoveActivityAndSetHighestPriority(activity, layerFirstStart,createDateTime(4), TimeSpan.FromHours(1), null);
 
 			var projection = assignment.ProjectionService().CreateProjection();
 			projection.Count().Should().Be.EqualTo(3);
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(layerStart, layerEnd));
 			assignment.AddActivity(activity, new DateTimePeriod(layerStart, layerEnd));
 
-			assignment.MoveActivityAndSetHighestPriority(activity, layerStart, createDateTime(4), layerEnd-layerStart);
+			assignment.MoveActivityAndSetHighestPriority(activity, layerStart, createDateTime(4), layerEnd - layerStart, null);
 
 			var projection = assignment.ProjectionService().CreateProjection();
 			projection.Single().Period.StartDateTime.Should().Be.EqualTo(createDateTime(4));
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, new DateTimePeriod(layerFirstStart, layerFirstEnd));
 			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(layerSecondStart, layerSecondEnd));
 
-			assignment.MoveActivityAndSetHighestPriority(activity, layerSecondEnd, createDateTime(6), TimeSpan.FromHours(1));
+			assignment.MoveActivityAndSetHighestPriority(activity, layerSecondEnd, createDateTime(6), TimeSpan.FromHours(1), null);
 
 			var projection = assignment.ProjectionService().CreateProjection();
 			projection.Count().Should().Be.EqualTo(3);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void ShouldThrowExceptionIfLayerIsNotFound()
 		{
 			var personassignment = PersonAssignmentFactory.CreateAssignmentWithOvertimePersonalAndMainshiftLayers();
-			Assert.Throws<ArgumentException>(() => personassignment.MoveActivityAndSetHighestPriority(new Activity("_"), DateTime.Now, createDateTime(1), TimeSpan.FromHours(2)));
+			Assert.Throws<ArgumentException>(() => personassignment.MoveActivityAndSetHighestPriority(new Activity("_"), DateTime.Now, createDateTime(1), TimeSpan.FromHours(2), null));
 		}
 
 		[Test]
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent,new DateTimePeriod(orgStartActivity, orgEndActivity));
 			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(orgStartActivityNotBeMoved, orgEndActivityNotBeMoved));
 
-			assignment.MoveActivityAndSetHighestPriority(activity, orgStartActivity, createDateTime(4), TimeSpan.FromHours(2));
+			assignment.MoveActivityAndSetHighestPriority(activity, orgStartActivity, createDateTime(4), TimeSpan.FromHours(2), null);
 
 			var projection = assignment.ProjectionService().CreateProjection();
 			projection.Count().Should().Be.EqualTo(2);
@@ -117,8 +117,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				new DateTimePeriod(orgStartActivity, orgEndActivity));
 			assignment.AddActivity(activity, new DateTimePeriod(orgStartActivityNotBeMoved, orgEndActivityNotBeMoved));
 			var newStartTime = createDateTime(1);
-		
-			assignment.MoveActivityAndSetHighestPriority(activity, orgStartActivity, newStartTime, TimeSpan.FromHours(3));
+
+			assignment.MoveActivityAndSetHighestPriority(activity, orgStartActivity, newStartTime, TimeSpan.FromHours(3), null);
 
 			var projection = assignment.ProjectionService().CreateProjection();
 			projection.Count().Should().Be.EqualTo(2);
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var newStartTime = createDateTime(1);
 
-			assignment.MoveActivityAndSetHighestPriority(activity, orgStartActivity, newStartTime, orgEndActivity - orgStartActivity);
+			assignment.MoveActivityAndSetHighestPriority(activity, orgStartActivity, newStartTime, orgEndActivity - orgStartActivity, null);
 
 			var expectedStart = orgEndActivity.Subtract(orgStartActivity.Subtract(newStartTime));
 			var projection = assignment.ProjectionService().CreateProjection();
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			assignment.AddActivity(activityNotBeMoved, new DateTimePeriod(layer2start, layer2end));
 			assignment.AddActivity(activity, new DateTimePeriod(layer3start, layer3end));
 
-			assignment.MoveActivityAndSetHighestPriority(activity, layer3start, createDateTime(6), layer3end - layer3start);
+			assignment.MoveActivityAndSetHighestPriority(activity, layer3start, createDateTime(6), layer3end - layer3start, null);
 			var projection = assignment.ProjectionService().CreateProjection();
 			projection.Count().Should().Be.EqualTo(1);
 			projection.First().Period.StartDateTime.Should().Be.EqualTo(createDateTime(6));
@@ -182,7 +182,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var layerPeriod = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, agent, layerPeriod);
 
-			assignment.MoveActivityAndSetHighestPriority(activity, layerPeriod.StartDateTime, createDateTime(1), layerPeriod.ElapsedTime());
+			var operatedPersonId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
+			assignment.MoveActivityAndSetHighestPriority(activity, layerPeriod.StartDateTime, createDateTime(1), layerPeriod.ElapsedTime(), new TrackedCommandInfo
+			{
+				OperatedPersonId = operatedPersonId,
+				TrackId = trackId
+			}); 
 
 			var affectedPeriod = layerPeriod.MaximumPeriod(assignment.Period);
 			var theEvent = assignment.PopAllEvents().OfType<ActivityMovedEvent>().Single();
@@ -190,6 +196,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			theEvent.StartDateTime.Should().Be(affectedPeriod.StartDateTime);
 			theEvent.EndDateTime.Should().Be(affectedPeriod.EndDateTime);
 			theEvent.ScenarioId.Should().Be(assignment.Scenario.Id.Value);
+			theEvent.InitiatorId.Should().Be(operatedPersonId);
+			theEvent.TrackId.Should().Be(trackId);
 		}
 
 		[Test]
@@ -202,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			assignment.PopAllEvents();
 
-			assignment.MoveActivityAndSetHighestPriority(activity, layerPeriod.StartDateTime, createDateTime(1), layerPeriod.ElapsedTime());
+			assignment.MoveActivityAndSetHighestPriority(activity, layerPeriod.StartDateTime, createDateTime(1), layerPeriod.ElapsedTime(), null);
 
 			assignment.PopAllEvents().Count()
 				.Should().Be.EqualTo(1);

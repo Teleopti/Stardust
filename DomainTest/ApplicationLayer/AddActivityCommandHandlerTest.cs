@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario),
 								   activityRepository, personRepository, new UtcTimeZone(), null);
 
+			var operatedPersonId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
 			var command = new AddActivityCommand
 			{
 				PersonId = personRepository.Single().Id.Value,
@@ -42,6 +44,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				ActivityId = addedActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 14, 00, 00, DateTimeKind.Utc),
 				EndTime = new DateTime(2013, 11, 14, 15, 00, 00, DateTimeKind.Utc),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = operatedPersonId,
+					TrackId = trackId
+				}
 			};
 			target.Handle(command);
 
@@ -51,6 +58,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.StartDateTime.Should().Be(command.StartTime);
 			@event.EndDateTime.Should().Be(command.EndTime);
 			@event.ScenarioId.Should().Be(personAssignmentRepository.Single().Scenario.Id.Value);
+			@event.InitiatorId.Should().Be(operatedPersonId);
+			@event.TrackId.Should().Be(trackId);
 		}
 
 		[Test]

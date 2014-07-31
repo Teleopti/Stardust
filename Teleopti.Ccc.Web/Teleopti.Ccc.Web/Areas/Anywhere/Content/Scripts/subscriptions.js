@@ -5,7 +5,8 @@ define([
 		'subscriptions.staffingmetrics',
 		'subscriptions.adherenceteams',
 		'subscriptions.adherencesites',
-		'subscriptions.adherenceagents'
+		'subscriptions.adherenceagents',
+		'subscriptions.trackingmessages'
 	], function(
 		$,
 		groupschedule,
@@ -13,7 +14,8 @@ define([
 		staffingmetrics,
 		adherenceteams,
 		adherencesites,
-		adherenceagents
+		adherenceagents,
+		trackingmessages
 	) {
 
 		return {
@@ -24,7 +26,8 @@ define([
 					staffingmetrics.start(),
 					adherenceteams.start(),
 					adherencesites.start(),
-					adherenceagents.start()
+					adherenceagents.start(),
+					trackingmessages.start()
 				);
 			}
 		};

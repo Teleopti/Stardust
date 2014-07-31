@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.DomainTest.Helper
@@ -174,6 +175,18 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			{
 				DataSource = Guid.NewGuid().ToString(),
 				DomainType = typeof(AgentsAdherenceMessage).Name
+			};
+
+			target.Route().Should().Not.Contain(target.DataSource);
+		}
+
+		[Test]
+		public void ShouldExcludeDatasourceForTrackingMessage()
+		{
+			target = new Subscription
+			{
+				DataSource = Guid.NewGuid().ToString(),
+				DomainType = typeof(TrackingMessage).Name
 			};
 
 			target.Route().Should().Not.Contain(target.DataSource);

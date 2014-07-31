@@ -816,11 +816,14 @@
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\feature.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\guidgenerator.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\notifications.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\helpers_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.justgagebinding.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\raphaelloader.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherenceagents.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherenceteams.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.trackingmessages.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.staffingmetrics.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.personschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.groupschedule.js" />
@@ -883,6 +886,7 @@
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
     <Content Include="Areas\Anywhere\Content\Styles\realtimeadherence.css" />
     <Content Include="Areas\Anywhere\Content\Templates\diagnosis\view.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\notification.html" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceagents\view.html" />

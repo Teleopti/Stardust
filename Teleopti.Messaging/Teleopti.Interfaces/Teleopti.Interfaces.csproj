@@ -595,6 +595,7 @@
     <Compile Include="Domain\MultiplicatorType.cs" />
     <Compile Include="Domain\TimeOfDay.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
+    <Compile Include="Domain\TrackedCommandInfo.cs" />
     <Compile Include="Domain\ValidatedRequest.cs" />
     <Compile Include="Domain\DateScenarioPersonId.cs" />
     <Compile Include="Domain\VisualLayerCollectionExtensions.cs" />
@@ -772,10 +773,12 @@
     <Compile Include="MessageBroker\Events\DomainUpdateType.cs" />
     <Compile Include="MessageBroker\Events\EventMessageArgs.cs" />
     <Compile Include="MessageBroker\Events\IEventMessage.cs" />
+    <Compile Include="MessageBroker\Events\ITrackingMessageSender.cs" />
     <Compile Include="MessageBroker\Events\IMessageBroker.cs" />
     <Compile Include="MessageBroker\Events\IEventMessageFactory.cs" />
     <Compile Include="MessageBroker\Events\IMessageBrokerListener.cs" />
     <Compile Include="MessageBroker\Events\IMessageBrokerSender.cs" />
+    <Compile Include="MessageBroker\Events\TrackingMessage.cs" />
     <Compile Include="MessageBroker\Notification.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />
     <Compile Include="Messages\Denormalize\ScheduleChanged.cs" />

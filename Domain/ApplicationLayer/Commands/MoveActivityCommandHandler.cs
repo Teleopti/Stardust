@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var timeZone = _userTimezone.TimeZone();
 			var oldStartTimeUtc = TimeZoneHelper.ConvertToUtc(command.OldStartTime, timeZone);
 			var newStartTimeUtc = TimeZoneHelper.ConvertToUtc(command.NewStartTime, timeZone);
-			personAssignment.MoveActivityAndSetHighestPriority(activity, oldStartTimeUtc, newStartTimeUtc, TimeSpan.FromMinutes(command.OldProjectionLayerLength));
+			personAssignment.MoveActivityAndSetHighestPriority(activity, oldStartTimeUtc, newStartTimeUtc, TimeSpan.FromMinutes(command.OldProjectionLayerLength), command.TrackedCommandInfo);
 		}
 	}
 }

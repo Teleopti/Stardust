@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepository();
-			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository);
+			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
 
 			target.Handle(new ProjectionChangedEvent
 				{
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepository();
-			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository);
+			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
 
 			target.Handle(new ProjectionChangedEvent
 			{
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepository();
-			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository);
+			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
 
 			target.Handle(new ProjectionChangedEvent
 			{
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepository();
-			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository);
+			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
 
 			target.Handle(new ProjectionChangedEvent
 			{
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldUpdateIfPersonTerminated()
 		{
 			var repository = MockRepository.GenerateMock<IPersonScheduleDayReadModelPersister>();
-			var target = new PersonScheduleDayReadModelUpdater(null, repository);
+			var target = new PersonScheduleDayReadModelUpdater(null, repository, null);
 
 			var terminationDate = new DateTime(2000, 10, 31);
 			var personId = Guid.NewGuid();
@@ -138,6 +139,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				x =>
 					x.UpdateReadModels(new DateOnlyPeriod(new DateOnly(terminationDate).AddDays(1), DateOnly.MaxValue), personId, businessUnitId,
 						null, false));
+		}
+
+		[Test]
+		public void ShouldSendTrackingMessage()
+		{
+			var repository = MockRepository.GenerateMock<IPersonScheduleDayReadModelPersister>();
+			var eventTracker = MockRepository.GenerateMock<ITrackingMessageSender>();
+			var target = new PersonScheduleDayReadModelUpdater(null, repository, eventTracker);
+
+			var initiatorId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
+			target.Handle(new ProjectionChangedEvent
+			{
+				InitiatorId = initiatorId,
+				BusinessUnitId = businessUnitId,
+				TrackId = trackId
+			});
+
+			var arguments =
+				eventTracker.GetArgumentsForCallsMadeOn(x => x.SendTrackingMessage(initiatorId, businessUnitId, null), a => a.IgnoreArguments());
+
+			var firstCall = arguments.Single();
+			firstCall.First().Should().Be.EqualTo(initiatorId);
+			firstCall.ElementAt(1).Should().Be.EqualTo(businessUnitId);
+			(firstCall.ElementAt(2) as TrackingMessage).TrackId.Should().Be.EqualTo(trackId);
 		}
 
 	}

@@ -1,4 +1,3 @@
-using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var personAbsence = new PersonAbsence(_scenario.Current());
 			personAbsence.IntradayAbsence(person, absence,
 			                              absenceTimePeriod.StartDateTime,
-			                              absenceTimePeriod.EndDateTime);
+			                              absenceTimePeriod.EndDateTime, command.TrackedCommandInfo);
 			_personAbsenceRepository.Add(personAbsence);
 		}
 	}

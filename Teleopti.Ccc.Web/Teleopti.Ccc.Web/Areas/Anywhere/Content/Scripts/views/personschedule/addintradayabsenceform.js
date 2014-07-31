@@ -5,7 +5,9 @@ define([
 	'ajax',
 	'resources',
 	'timepicker',
-	'lazy'
+	'lazy',
+	'guidgenerator',
+	'notifications'
 ], function (
 	ko,
 	moment,
@@ -13,7 +15,9 @@ define([
 	ajax,
 	resources,
 	timepicker,
-	lazy
+	lazy,
+	guidgenerator,
+	notificationsViewModel
 	) {
 
 	return function () {
@@ -29,6 +33,7 @@ define([
 		
 		var groupId;
 		var personId;
+		var personName;
 		var startTimeAsMoment;
 		var endTimeAsMoment;
 
@@ -115,6 +120,7 @@ define([
 		this.SetData = function (data) {
 			groupId = data.GroupId;
 			personId = data.PersonId;
+			personName = data.PersonName;
 			groupId = data.GroupId;
 			self.Date(data.Date);
 
@@ -128,11 +134,13 @@ define([
 		};
 		
 		this.Apply = function() {
+			var trackId = guidgenerator.newGuid();
 			var requestData = JSON.stringify({
 				StartTime: startTimeAsMoment.format(),
 				EndTime: endTimeAsMoment.format(),
 				AbsenceId: self.Absence(),
-				PersonId: personId
+				PersonId: personId,
+				TrackedCommandInfo: { TrackId: trackId }
 			});
 			ajax.ajax({
 					url: 'PersonScheduleCommand/AddIntradayAbsence',
@@ -143,6 +151,7 @@ define([
 					}
 				}
 			);
+			notificationsViewModel.AddNotification(trackId, resources.AddingIntradayAbsenceFor + " " + personName + "... ");
 		};
 	};
 });

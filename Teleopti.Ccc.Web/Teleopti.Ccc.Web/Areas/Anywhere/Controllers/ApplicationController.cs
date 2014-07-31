@@ -1,9 +1,11 @@
 using System.Globalization;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
@@ -11,11 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	{
 		private readonly IPrincipalAuthorization _principalAuthorization;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
-		
-		public ApplicationController(IPrincipalAuthorization principalAuthorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
+		private readonly IPersonRepository _personRepository;
+
+		public ApplicationController(IPrincipalAuthorization principalAuthorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IPersonRepository personRepository)
 		{
 			_principalAuthorization = principalAuthorization;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
+			_personRepository = personRepository;
 		}
 
 		public ViewResult Index()
@@ -23,12 +27,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return new ViewResult();
 		}
 
-		[HttpGet,OutputCache(NoStore = true,Duration = 0)]
+		[UnitOfWorkAction, HttpGet, OutputCache(NoStore = true, Duration = 0)]
 		public JsonResult NavigationContent()
 		{
 			return Json(new
 			            	{
 			            		UserName = _currentTeleoptiPrincipal.Current().Identity.Name,
+								PersonId = _currentTeleoptiPrincipal.Current().GetPerson(_personRepository).Id,
 								IsMyTimeAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
 								IsRealTimeAdherenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview),
 			            	}, JsonRequestBehavior.AllowGet);
@@ -97,6 +102,15 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.TimeInAlarm,
 					UserTexts.Resources.MoveActivity,
                     UserTexts.Resources.FunctionNotAvailable,
+                    UserTexts.Resources.AddingIntradayAbsenceFor,
+					UserTexts.Resources.AddingFulldayAbsenceFor,
+					UserTexts.Resources.AddingActivityFor,
+					UserTexts.Resources.MovingActivityFor,
+					UserTexts.Resources.RemovingAbsenceFor,
+					UserTexts.Resources.SuccessWithExclamation,
+                    UserTexts.Resources.FailedWithExclamation,
+					UserTexts.Resources.PleaseTryAgainWithExclamation,
+					UserTexts.Resources.PleaseRefreshThePageWithExclamation,
 
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,

@@ -12165,4 +12165,40 @@ Reduce the complexity to use these shifts.</value>
     <value>Enable agent badge</value>
     <comment>Label for badge setting in admin client</comment>
   </data>
+  <data name="AddingActivityFor" xml:space="preserve">
+    <value>Adding activity for</value>
+    <comment>Adding activity for {a person name}</comment>
+  </data>
+  <data name="AddingFulldayAbsenceFor" xml:space="preserve">
+    <value>Adding full day absence for</value>
+    <comment>Adding fullday absence for {a person name}</comment>
+  </data>
+  <data name="AddingIntradayAbsenceFor" xml:space="preserve">
+    <value>Adding intraday absence for</value>
+    <comment>Adding intraday absence for {a person name}</comment>
+  </data>
+  <data name="FailedWithExclamation" xml:space="preserve">
+    <value>Failed!</value>
+    <comment>Failed!</comment>
+  </data>
+  <data name="MovingActivityFor" xml:space="preserve">
+    <value>Moving activity for</value>
+    <comment>Moving activity for {a person name}</comment>
+  </data>
+  <data name="RemovingAbsenceFor" xml:space="preserve">
+    <value>Removing absence for</value>
+    <comment>Removing absence for {a person name}</comment>
+  </data>
+  <data name="PleaseRefreshThePageWithExclamation" xml:space="preserve">
+    <value>Please refresh the page!</value>
+    <comment>Please refresh the page!</comment>
+  </data>
+  <data name="PleaseTryAgainWithExclamation" xml:space="preserve">
+    <value>Please try again!</value>
+    <comment>Please try again!</comment>
+  </data>
+  <data name="SuccessWithExclamation" xml:space="preserve">
+    <value>Success!</value>
+    <comment>Success!</comment>
+  </data>
 </root>

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var root = new PersonAbsence(new FakeCurrentScenario().Current());
 			var dateTimeperiod =
 				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
-			root.FullDayAbsence(PersonFactory.CreatePersonWithId(), AbsenceFactory.CreateAbsenceWithId(), dateTimeperiod.StartDateTime, dateTimeperiod.EndDateTime);
+			root.FullDayAbsence(PersonFactory.CreatePersonWithId(), AbsenceFactory.CreateAbsenceWithId(), dateTimeperiod.StartDateTime, dateTimeperiod.EndDateTime, new TrackedCommandInfo());
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 
 			target.Execute(roots);

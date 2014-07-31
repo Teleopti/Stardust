@@ -3,6 +3,7 @@ define([
 		'text!templates/layout.html',
 		'text!templates/menu.html',
 		'text!templates/error.html',
+		'text!templates/notification.html',
 		'crossroads',
 		'hasher',
 		'knockout',
@@ -12,11 +13,14 @@ define([
 		'subscriptions',
 		'ajax',
 		'errorview',
-		'resources'
+		'resources',
+		'subscriptions.trackingmessages',
+		'notifications'
 ], function (
 		layoutTemplate,
 		menuTemplate,
 		errorTemplate,
+		notificationTemplate,
 		crossroads,
 		hasher,
 		ko,
@@ -26,7 +30,9 @@ define([
 		subscriptions,
 		ajax,
 		errorview,
-		resources) {
+		resources,
+		trackingmessages,
+		notificationsViewModel) {
 
 	var currentView;
 	var defaultView = 'teamschedule';
@@ -175,6 +181,7 @@ define([
 		$('body').append(layoutTemplate);
 		contentPlaceHolder = $('#content-placeholder');
 		$('#menu-placeholder').replaceWith(menuTemplate);
+		$('#notification-placeholder').replaceWith(notificationTemplate);
 	}
 
 	function _fixBootstrapDropdownForMobileDevices() {
@@ -198,6 +205,20 @@ define([
 		}
 	}
 
+	function _initTrackingNotification(personId) {
+		ko.applyBindings(notificationsViewModel, $('#notification-container')[0]);
+		trackingmessages.subscribeTrackingMessage(personId, function (notification) {
+			var data = JSON.parse(notification.BinaryData);
+			notificationsViewModel.UpdateNotification(notification.DomainId, data.Status);
+			if (data.Status === 1) {
+				setTimeout(function() {
+					notificationsViewModel.RemoveNotification(notification.DomainId);
+				}, 8000);
+			}
+		}, function () {
+		});
+	}
+
 	function _bindMenu() {
 		ajax.ajax({
 			url: "Anywhere/Application/NavigationContent",
@@ -205,6 +226,7 @@ define([
 				menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
 				menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
 				menu.UserName(responseData.UserName);
+				_initTrackingNotification(responseData.PersonId);
 			}
 		});
 		ko.applyBindings(menu, $('nav')[0]);

@@ -161,11 +161,13 @@ define([
 				a.PersonId = self.PersonId();
 				a.Date = self.ScheduleDate();
 				a.GroupId = self.GroupId();
+				a.PersonName = self.Name();
 				return new absenceListItemViewModel(a);
 			});
 			self.Absences.push.apply(self.Absences, absences);
 
 			data.PersonId = self.PersonId();
+			data.PersonName = self.Name();
 			data.Date = self.ScheduleDate();
 			data.GroupId = self.GroupId();
 			self.AddFullDayAbsenceForm.SetData(data);

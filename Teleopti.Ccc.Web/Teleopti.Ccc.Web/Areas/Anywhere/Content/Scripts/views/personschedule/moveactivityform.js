@@ -4,17 +4,23 @@
 	'ajax',
 	'navigation',
     'errorview',
+	'guidgenerator',
+	'notifications'
 ], function (
 	ko,
 	resources,
 	ajax,
 	navigation,
-    errorview
+    errorview,
+	guidgenerator,
+	notificationsViewModel
     ) {
 
 	return function () {
 
 		var self = this;
+
+		var personName;
 
 		self.PersonId = ko.observable();
 		self.GroupId = ko.observable();
@@ -29,6 +35,7 @@
 
 		this.SetData = function (data) {
 			self.PersonId(data.PersonId);
+			personName = data.PersonName;
 			self.GroupId(data.GroupId);
 			self.ScheduleDate(data.Date);
 		    self.Activities(data.Activities);
@@ -94,27 +101,30 @@
 	            errorview.display(resources.FunctionNotAvailable);
 	            return;
 	        }
+	        var trackId = guidgenerator.newGuid();
 			var requestData = JSON.stringify({
 				AgentId: self.PersonId(),
 				ScheduleDate: self.ScheduleDate().format(),
 				NewStartTime: self.StartTime().format(),
 				OldStartTime: moment(self.getStartTimeFromMinutes(self.OldStartMinutes())).format(),
 				ActivityId: activity.Id,
-				OldProjectionLayerLength: self.ProjectionLength()
+				OldProjectionLayerLength: self.ProjectionLength(),
+				TrackedCommandInfo: { TrackId: trackId }
 			});
-			ajax.ajax({
-				url: 'PersonScheduleCommand/MoveActivity',
-				type: 'POST',
-				data: requestData,
-				success: function (data, textStatus, jqXHR) {
-					navigation.GoToTeamSchedule(self.GroupId(), self.ScheduleDate());
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-				    errorview.display(resources.FunctionNotAvailable);
-				},
-			}
-			);
-		};
+		    ajax.ajax({
+				    url: 'PersonScheduleCommand/MoveActivity',
+				    type: 'POST',
+				    data: requestData,
+				    success: function(data, textStatus, jqXHR) {
+					    navigation.GoToTeamSchedule(self.GroupId(), self.ScheduleDate());
+				    },
+				    error: function(jqXHR, textStatus, errorThrown) {
+					    errorview.display(resources.FunctionNotAvailable);
+				    },
+			    }
+		    );
+		    notificationsViewModel.AddNotification(trackId, resources.MovingActivityFor + " " + personName + "... ");
+	    };
 
 	    this.getActivity = function() {
 	        var activity = ko.utils.arrayFirst(self.Activities(), function (a) {

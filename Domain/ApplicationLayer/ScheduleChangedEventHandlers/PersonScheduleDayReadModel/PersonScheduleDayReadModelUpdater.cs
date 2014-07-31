@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
@@ -12,20 +14,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 	{
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IPersonScheduleDayReadModelPersister _scheduleDayReadModelRepository;
+		private readonly ITrackingMessageSender _trackingMessageSender;
 
 		private readonly static ILog Logger = LogManager.GetLogger(typeof(PersonScheduleDayReadModelUpdater));
 
 		public PersonScheduleDayReadModelUpdater(
 			IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
-			IPersonScheduleDayReadModelPersister scheduleDayReadModelRepository)
+			IPersonScheduleDayReadModelPersister scheduleDayReadModelRepository,
+			ITrackingMessageSender trackingMessageSender)
 		{
 			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
+			_trackingMessageSender = trackingMessageSender;
 		}
 
 		public void Handle(ProjectionChangedEvent @event)
 		{
 			createReadModel(@event);
+			if (_trackingMessageSender != null && @event.TrackId != Guid.Empty)
+				_trackingMessageSender.SendTrackingMessage(@event.InitiatorId, @event.BusinessUnitId, new TrackingMessage
+				{
+					TrackId = @event.TrackId,
+					Status = TrackingMessageStatus.Success
+				});
 		}
 
 		public void Handle(ProjectionChangedEventForPersonScheduleDay @event)

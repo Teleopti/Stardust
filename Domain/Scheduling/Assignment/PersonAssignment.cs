@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -276,8 +277,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void AddActivity(IActivity activity, DateTimePeriod period)
 		{
+			AddActivity(activity, period, null);
+		}
+
+		public virtual void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo)
+		{
 			addActivityInternal(activity, period);
-			AddEvent(() => new ActivityAddedEvent
+			AddEvent(() =>
+			{
+				var activityAddedEvent = new ActivityAddedEvent
 				{
 					Date = Date,
 					PersonId = Person.Id.Value,
@@ -285,7 +293,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					StartDateTime = period.StartDateTime,
 					EndDateTime = period.EndDateTime,
 					ScenarioId = Scenario.Id.Value
-				});
+				};
+				if (trackedCommandInfo != null)
+				{
+					activityAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+					activityAddedEvent.TrackId = trackedCommandInfo.TrackId;
+				}
+				return activityAddedEvent;
+			});
 		}
 
 		private void addActivityInternal(IActivity activity, DateTimePeriod period)
@@ -340,7 +355,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			target.Move(_shiftLayers, layer);
 		}
 
-		public virtual void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, DateTime newStartTime, TimeSpan length)
+		public virtual void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, DateTime newStartTime, TimeSpan length, TrackedCommandInfo trackedCommandInfo)
 		{
 			var anyLayerFound = false;
 
@@ -368,12 +383,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			var affectedPeriod = new DateTimePeriod(currentStartTime, currentStartTime.Add(length)).MaximumPeriod(newPeriod);
 			
-			AddEvent(()=> new ActivityMovedEvent
+			AddEvent(()=>
 			{
-				PersonId = Person.Id.Value,
-				StartDateTime = affectedPeriod.StartDateTime,
-				EndDateTime =affectedPeriod.EndDateTime,
-				ScenarioId = Scenario.Id.Value
+				var activityMovedEvent = new ActivityMovedEvent
+				{
+					PersonId = Person.Id.Value,
+					StartDateTime = affectedPeriod.StartDateTime,
+					EndDateTime =affectedPeriod.EndDateTime,
+					ScenarioId = Scenario.Id.Value
+				};
+				if (trackedCommandInfo != null)
+				{
+					activityMovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+					activityMovedEvent.TrackId = trackedCommandInfo.TrackId;
+				}
+				return activityMovedEvent;
 			});
 		}
 
@@ -458,6 +482,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 		#endregion
-
 	}
 }

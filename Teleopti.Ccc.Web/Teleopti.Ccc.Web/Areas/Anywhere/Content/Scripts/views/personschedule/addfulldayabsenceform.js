@@ -3,13 +3,17 @@ define([
         'moment',
         'navigation',
         'ajax',
-        'resources'
+        'resources',
+		'guidgenerator',
+		'notifications'
     ], function(
         ko,
         moment,
         navigation,
         ajax,
-        resources
+        resources,
+		guidgenerator,
+		notificationsViewModel
     ) {
 
         return function() {
@@ -22,11 +26,13 @@ define([
             this.EndDate = ko.observable(moment());
 
             var personId;
+            var personName;
             var groupId;
 	        
             this.SetData = function (data) {
             	groupId = data.GroupId;
             	personId = data.PersonId;
+            	personName = data.PersonName;
                 self.StartDate(data.Date);
                 self.EndDate(data.Date);
                 self.AbsenceTypes(data.Absences);
@@ -50,22 +56,28 @@ define([
                 return false;
             });
 
-            this.Apply = function() {
+            this.Apply = function () {
+            	var trackId = guidgenerator.newGuid();
                 var data = JSON.stringify({
                     StartDate: self.StartDate().format(),
                     EndDate: self.EndDate().format(),
                     AbsenceId: self.AbsenceType(),
-                    PersonId: personId
+                    PersonId: personId,
+                    TrackedCommandInfo: { TrackId: trackId }
                 });
                 ajax.ajax({
-                        url: 'PersonScheduleCommand/AddFullDayAbsence',
-                        type: 'POST',
-                        data: data,
-                        success: function (data, textStatus, jqXHR) {
-                        	navigation.GoToTeamSchedule(groupId, self.StartDate());
-                        }
-                    }
+		                url: 'PersonScheduleCommand/AddFullDayAbsence',
+		                type: 'POST',
+		                data: data,
+		                success: function(data, textStatus, jqXHR) {
+			                navigation.GoToTeamSchedule(groupId, self.StartDate());
+		                },
+		                statusCode500: function (jqXHR, textStatus, errorThrown) {
+			                notificationsViewModel.UpdateNotification(trackId, 3);
+		                }
+	                }
                 );
+                notificationsViewModel.AddNotification(trackId, resources.AddingFulldayAbsenceFor + " " + personName + "... ");
             };
 
         };

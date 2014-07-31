@@ -60,12 +60,13 @@ namespace Teleopti.Interfaces.Domain
 	    bool AssignedWithDayOff(IDayOffTemplate template);
 	    void FillWithDataFrom(IPersonAssignment newAss);
 	    void AddActivity(IActivity activity, DateTimePeriod period);
+		void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo);
 	    void SetShiftCategory(IShiftCategory shiftCategory);
 	    void SetActivitiesAndShiftCategoryFrom(IPersonAssignment assignment);
 	    void InsertActivity(IActivity activity, DateTimePeriod period, int index);
 	    void InsertOvertimeLayer(IActivity activity, DateTimePeriod period, int index, IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
 	    void InsertPersonalLayer(IActivity activity, DateTimePeriod period, int index);
 	    void MoveLayerVertical(IMoveLayerVertical target, IShiftLayer layer);
-		void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, DateTime newStartTime, TimeSpan length);
+		void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, DateTime newStartTime, TimeSpan length, TrackedCommandInfo trackedCommandInfo);
     }
 }

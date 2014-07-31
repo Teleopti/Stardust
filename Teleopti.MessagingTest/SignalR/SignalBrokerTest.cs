@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Transports;
 using Newtonsoft.Json;
@@ -63,6 +62,17 @@ namespace Teleopti.MessagingTest.SignalR
 									typeof(string), DomainUpdateType.Update, new byte[] { });
 
 			hubProxy.NotifyClientsMultipleInvokedWith.Should().Have.Count.GreaterThan(0);
+		}
+
+		[Test]
+		public void ShouldSendNotification()
+		{
+			var hubProxy = new HubProxyFake();
+			var target = makeTarget(hubProxy);
+
+			target.SendNotification(new Notification());
+
+			hubProxy.NotifyClientsInvokedWith.Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
