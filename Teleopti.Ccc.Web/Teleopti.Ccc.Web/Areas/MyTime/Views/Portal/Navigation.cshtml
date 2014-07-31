@@ -88,6 +88,8 @@
 									</span>
 								</div>
 							</a>
+							@if (Model.Badges != null && Model.Badges.Count() > 0)
+							{ 
 							<ul class="dropdown-menu">
 								@foreach (var badge in Model.Badges)
 								{
@@ -119,9 +121,9 @@
 											</span>
 										</div>
 									</li>
-									<!--<li class="divider"></li>-->
 								}
 							</ul>
+							}
 						</li>
 					}
 					<li class="dropdown" id="user-settings">
