@@ -60,6 +60,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.isMore = ko.observable(false);
 		self.isPreviousMore = ko.observable(false);
 		self.isPageVisible = ko.observable(true);
+		self.filterTimeList =ko.observableArray();
 
 		self.isDetailVisible = ko.computed(function() {
 			if (self.agentChoosed() === null) {
@@ -163,6 +164,14 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			return addVisible;
 		});
 
+		self.filterStartEndTimeClick = function() {
+			$('.dropdown-menu').on('click', function(e) {
+				if ($(this).hasClass('dropdown-menu-form')) {
+					e.stopPropagation();
+				}
+			});
+		};
+		
 		self.isShowList = ko.computed(function() {
 			var showList = false;
 			if (self.isDetailVisible() && self.chooseHistorys().length > 0) {
@@ -751,6 +760,16 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				}
 			});
 		};
+
+		self.loadFilterTimes = function() {
+			var rangStart = 6;
+			var isChecked = false;
+			for (var i = 0; i < 18; i += 2) {
+				var rangEnd = rangStart + 2;
+				self.filterTimeList.push({ time: rangStart + ":00 - " + rangEnd + ":00", isChecked: isChecked });
+				rangStart += 2;
+			}
+		};
 	}
 
 	function _redrawLayers() {
@@ -812,6 +831,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			vm.chooseAgent(null);
 			_setWeekStart(vm);
 			vm.goToFirstPage();
+			if(vm.isFilterByTimeEnabled) vm.loadFilterTimes();
 		}
 
 		$(window).resize(function() {

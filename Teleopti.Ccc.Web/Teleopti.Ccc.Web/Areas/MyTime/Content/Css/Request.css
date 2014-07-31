@@ -410,3 +410,9 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 .page-selected {
 	background-color:#b0b0b0;
 }
+
+.filter-time-dropdown-form {
+    padding: 5px 10px 0;
+    max-height: 300px;
+    overflow-y: scroll;
+}
