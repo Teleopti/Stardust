@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void ThenIShouldBeSignedInAsAnotherUser(string name)
 		{
 			Browser.Interactions.AssertExists("#regional-settings");
-			Browser.Interactions.AssertAnyContains(".user-name-link", name);
+			Browser.Interactions.AssertAnyContains(".user-name-link .user-name", name);
 		}
 
 
