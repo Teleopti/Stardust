@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -6,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -32,6 +34,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertAnyContains("#BadgePanel .SilverBadge", silverBadgeCount.ToString(CultureInfo.InvariantCulture));
 			Browser.Interactions.AssertAnyContains("#BadgePanel .BronzeBadge", bronzeBadgeCount.ToString(CultureInfo.InvariantCulture));
 		}
+
+		[When(@"I view badge details")]
+		public void WhenIViewBadgeDetails()
+		{
+			Browser.Interactions.Click("#BadgePanel");
+		}
+
+		[Then(@"I should see I have (.*) bronze badges, (.*) silver badge and (.*) gold badge for (.*)")]
+		public void ThenIShouldSeeIHaveBronzeBadgesSilverBadgeAndGoldBadgeForAnsweredCalls(int bronzeBadgeCount, int silverBadgeCount, int goldBadgeCount, string badgeType)
+		{
+			const string selectorTemplate = ".BadgeDetail:first-child:contains('{0}') .{1}:contains('{2}')";
+
+			var goldSelector = string.Format(selectorTemplate, badgeType, "GoldBadge", goldBadgeCount);
+			var silverSelector = string.Format(selectorTemplate, badgeType, "SilverBadge", silverBadgeCount);
+			var bronzeSelector = string.Format(selectorTemplate, badgeType, "BronzeBadge", bronzeBadgeCount);
+
+			Browser.Interactions.AssertExistsUsingJQuery(goldSelector);
+			Browser.Interactions.AssertExistsUsingJQuery(silverSelector);
+			Browser.Interactions.AssertExistsUsingJQuery(bronzeSelector);
+		}
+
 	}
 
 	public class BadgeConfigurable : IUserSetup

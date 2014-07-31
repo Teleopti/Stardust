@@ -17,6 +17,10 @@ Given I have badges with
 | Adherence      | 4      | 0      | 0    |
  When I am viewing week schedule
  Then I should see I have 10 bronze badge, 2 silver badge and 3 gold badge
+ When I view badge details
+ Then I should see I have 4 bronze badges, 1 silver badge and 2 gold badge for Answered Calls
+  And I should see I have 2 bronze badges, 1 silver badge and 1 gold badge for Average Handling Time
+  And I should see I have 4 bronze badges, 0 silver badge and 0 gold badge for Adherence
 
 Scenario: Show message when agent has no badge
 Given I have badges with
