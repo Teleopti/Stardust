@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 					Browser = _browserConfiguration
 				};
 			_browser = new BrowserSession(configuration);
-			_browser.ResizeTo(1200, 1000);	// an element must be in view to selenium to interact with it
+			_browser.ResizeTo(1300, 1000);	// an element must be in view to selenium to interact with it
 			_interactions = new CoypuBrowserInteractions(_browser, configuration);
 		}
 
