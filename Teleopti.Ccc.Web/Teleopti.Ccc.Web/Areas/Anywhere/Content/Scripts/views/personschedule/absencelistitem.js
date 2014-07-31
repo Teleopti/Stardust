@@ -47,6 +47,9 @@ define([
 						}),
 						success: function (responseData, textStatus, jqXHR) {
 							navigation.GoToTeamSchedule(data.GroupId, data.Date);
+						},
+						statusCode500: function (jqXHR, textStatus, errorThrown) {
+							notificationsViewModel.UpdateNotification(trackId, 3);
 						}
 					}
 				);

@@ -1,4 +1,7 @@
+using System;
 using System.Linq;
+using System.Reflection;
+using System.Web;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -81,7 +84,15 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
-			_commandDispatcher.Execute(command);
+			try
+			{
+				_commandDispatcher.Execute(command);
+			}
+			catch (TargetInvocationException e)
+			{
+				if (e.InnerException is ArgumentException)
+					throw new HttpException(501, e.InnerException.Message);
+			}
 			return Json(new object(), JsonRequestBehavior.DenyGet);
 		}
 	}

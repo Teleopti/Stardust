@@ -118,9 +118,13 @@
 				    success: function(data, textStatus, jqXHR) {
 					    navigation.GoToTeamSchedule(self.GroupId(), self.ScheduleDate());
 				    },
-				    error: function(jqXHR, textStatus, errorThrown) {
-					    errorview.display(resources.FunctionNotAvailable);
+				    statusCode501: function (jqXHR, textStatus, errorThrown) {
+				    	errorview.display(resources.FunctionNotAvailable);
+					    notificationsViewModel.RemoveNotification(trackId);
 				    },
+				    statusCode500: function (jqXHR, textStatus, errorThrown) {
+				    	notificationsViewModel.UpdateNotification(trackId, 3);
+				    }
 			    }
 		    );
 		    notificationsViewModel.AddNotification(trackId, resources.MovingActivityFor + " " + personName + "... ");

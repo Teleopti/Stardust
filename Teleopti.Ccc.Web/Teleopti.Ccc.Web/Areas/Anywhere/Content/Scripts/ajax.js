@@ -29,6 +29,11 @@ define(
                 		return;
                 	}
 
+                	if (options.statusCode501 && jqXHR && jqXHR.status == 501) {
+                		options.statusCode501(jqXHR, textStatus, errorThrown);
+                		return;
+                	}
+
                     var message = {
                         title: "Ajax error!",
                         message: {
