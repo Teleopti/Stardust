@@ -594,6 +594,7 @@
     <Compile Include="Domain\MultiplicatorType.cs" />
     <Compile Include="Domain\TimeOfDay.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
+    <Compile Include="Domain\TrackedCommandInfo.cs" />
     <Compile Include="Domain\ValidatedRequest.cs" />
     <Compile Include="Domain\DateScenarioPersonId.cs" />
     <Compile Include="Domain\VisualLayerCollectionExtensions.cs" />

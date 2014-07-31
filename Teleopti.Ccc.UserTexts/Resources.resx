@@ -12161,6 +12161,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Gold Badge Days Threshold: </value>
     <comment>Label for Gold Badge Days Threshold setting</comment>
   </data>
+  <data name="AddingActivityFor" xml:space="preserve">
+    <value>Adding activity for</value>
+    <comment>Adding activity for {a person name}</comment>
+  </data>
   <data name="AddingFulldayAbsenceFor" xml:space="preserve">
     <value>Adding full day absence for</value>
     <comment>Adding fullday absence for {a person name}</comment>

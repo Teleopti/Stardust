@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			if (personAssignment == null)
 			{
 				var newPersonAssignment = new PersonAssignment(person, scenario, command.Date);
-				newPersonAssignment.AddActivity(activity, period);
+				newPersonAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
 				var shiftCategories = _shiftCategoryRepository.FindAll().ToList();
 				shiftCategories.Sort(new ShiftCategorySorter());
 				var shiftCategory = shiftCategories.FirstOrDefault();
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			else
 			{
-				personAssignment.AddActivity(activity, period);
+				personAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
 			}
 		}
 	}

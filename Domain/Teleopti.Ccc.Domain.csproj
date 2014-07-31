@@ -135,7 +135,6 @@
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ITrackedCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommand.cs" />
-    <Compile Include="ApplicationLayer\Commands\TrackedCommandInfo.cs" />
     <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityMovedEvent.cs" />

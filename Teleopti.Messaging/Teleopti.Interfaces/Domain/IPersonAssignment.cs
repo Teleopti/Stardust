@@ -60,6 +60,7 @@ namespace Teleopti.Interfaces.Domain
 	    bool AssignedWithDayOff(IDayOffTemplate template);
 	    void FillWithDataFrom(IPersonAssignment newAss);
 	    void AddActivity(IActivity activity, DateTimePeriod period);
+		void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo);
 	    void SetShiftCategory(IShiftCategory shiftCategory);
 	    void SetActivitiesAndShiftCategoryFrom(IPersonAssignment assignment);
 	    void InsertActivity(IActivity activity, DateTimePeriod period, int index);

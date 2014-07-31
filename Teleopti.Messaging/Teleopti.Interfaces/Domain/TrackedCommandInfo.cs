@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
+namespace Teleopti.Interfaces.Domain
 {
 	public class TrackedCommandInfo
 	{

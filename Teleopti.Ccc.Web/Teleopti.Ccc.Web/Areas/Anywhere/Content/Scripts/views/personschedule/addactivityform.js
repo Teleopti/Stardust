@@ -5,7 +5,9 @@ define([
 	'ajax',
 	'resources',
 	'timepicker',
-	'lazy'
+	'lazy',
+	'guidgenerator',
+	'notifications'
 ], function (
 	ko,
 	moment,
@@ -13,7 +15,9 @@ define([
 	ajax,
 	resources,
 	timepicker,
-	lazy
+	lazy,
+	guidgenerator,
+	notificationsViewModel
     ) {
 
 	return function () {
@@ -28,6 +32,7 @@ define([
 		this.WorkingShift = ko.observable();
 		
 		var personId;
+		var personName;
 		var groupId;
 		var startTimeAsMoment;
 		var endTimeAsMoment;
@@ -35,17 +40,20 @@ define([
 		this.SetData = function (data) {
 			personId = data.PersonId;
 			groupId = data.GroupId;
+			personName = data.PersonName;
 			self.ScheduleDate(data.Date);
 			self.ActivityTypes(data.Activities);
 		};
 
 		this.Apply = function () {
+			var trackId = guidgenerator.newGuid();
 			var requestData = JSON.stringify({
 				Date: self.ScheduleDate().format(),
 				StartTime: startTimeAsMoment.format(),
 				EndTime: endTimeAsMoment.format(),
 				ActivityId: self.Activity(),
-				PersonId: personId
+				PersonId: personId,
+				TrackedCommandInfo: { TrackId: trackId }
 			});
 			ajax.ajax({
 					url: 'PersonScheduleCommand/AddActivity',
@@ -56,6 +64,7 @@ define([
 					}
 				}
 			);
+			notificationsViewModel.AddNotification(trackId, resources.AddingActivityFor + " " + personName + "... ");
 		};
 
 		this.visibleLayers = ko.computed(function () {
