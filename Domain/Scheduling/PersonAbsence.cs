@@ -51,16 +51,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTimeInUtc, endDateTimeInUtc));
 			_layer = absenceLayer;
 
-			AddEvent(new FullDayAbsenceAddedEvent
-				{
-					AbsenceId = absence.Id.GetValueOrDefault(),
-					PersonId = person.Id.GetValueOrDefault(),
-					StartDateTime = startDateTimeInUtc,
-					EndDateTime = endDateTimeInUtc,
-					ScenarioId = _scenario.Id.GetValueOrDefault(),
-					InitiatorId = trackedCommandInfo.OperatedPersonId,
-					TrackId = trackedCommandInfo.TrackId
-				});
+			var fullDayAbsenceAddedEvent = new FullDayAbsenceAddedEvent
+			{
+				AbsenceId = absence.Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault(),
+				StartDateTime = startDateTimeInUtc,
+				EndDateTime = endDateTimeInUtc,
+				ScenarioId = _scenario.Id.GetValueOrDefault(),
+				
+			};
+			if (trackedCommandInfo != null)
+			{
+				fullDayAbsenceAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+				fullDayAbsenceAddedEvent.TrackId = trackedCommandInfo.TrackId;
+			}
+			AddEvent(fullDayAbsenceAddedEvent);
 		}
 
 		public virtual void IntradayAbsence(IPerson person, IAbsence absence, DateTime startDateTimeInUtc, DateTime endDateTimeInUtc, TrackedCommandInfo trackedCommandInfo)
@@ -69,32 +74,40 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTimeInUtc, endDateTimeInUtc));
 			_layer = absenceLayer;
 
-			AddEvent(new PersonAbsenceAddedEvent
+			var personAbsenceAddedEvent = new PersonAbsenceAddedEvent
 			{
 				AbsenceId = absence.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
 				StartDateTime = startDateTimeInUtc,
 				EndDateTime = endDateTimeInUtc,
-				ScenarioId = _scenario.Id.GetValueOrDefault(),
-				InitiatorId = trackedCommandInfo.OperatedPersonId,
-				TrackId = trackedCommandInfo.TrackId
-			});
+				ScenarioId = _scenario.Id.GetValueOrDefault()
+			};
+			if (trackedCommandInfo != null)
+			{
+				personAbsenceAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+				personAbsenceAddedEvent.TrackId = trackedCommandInfo.TrackId;
+			}
+			AddEvent(personAbsenceAddedEvent);
 		}
 
 		public virtual void RemovePersonAbsence(TrackedCommandInfo trackedCommandInfo)
 		{
-			AddEvent(new PersonAbsenceRemovedEvent
+			var personAbsenceRemovedEvent = new PersonAbsenceRemovedEvent
 			{
 				PersonId = Person.Id.GetValueOrDefault(),
 				ScenarioId = Scenario.Id.GetValueOrDefault(),
 				StartDateTime = Period.StartDateTime,
-				EndDateTime = Period.EndDateTime,
-				InitiatorId = trackedCommandInfo.OperatedPersonId,
-				TrackId = trackedCommandInfo.TrackId
-			});
+				EndDateTime = Period.EndDateTime
+			};
+			if (trackedCommandInfo != null)
+			{
+				personAbsenceRemovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+				personAbsenceRemovedEvent.TrackId = trackedCommandInfo.TrackId;
+			}
+			AddEvent(personAbsenceRemovedEvent);
 		}
 
-		public virtual void AddExplicitAbsence(IPerson person, IAbsence absence, DateTime startDateTime, DateTime endDateTime)
+	    public virtual void AddExplicitAbsence(IPerson person, IAbsence absence, DateTime startDateTime, DateTime endDateTime)
 		{
 			startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(startDateTime, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
 			endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(endDateTime, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
