@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 						unitOfWork.PersistAll();
 					}
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 					if (_trackingMessageSender != null && message is ITrackableEvent && message is RaptorDomainEvent)
 					{
