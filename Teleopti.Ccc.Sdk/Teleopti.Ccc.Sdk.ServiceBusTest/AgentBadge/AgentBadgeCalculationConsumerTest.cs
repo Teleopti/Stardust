@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IUnitOfWork _uow;
 		private IStatelessUnitOfWork _statelessUow;
 		private IGlobalSettingDataRepository _globalSettingDataRepository;
+		private IAgentBadgeSettingsRepository _agentbadgeSettingsRepository;
 		private IPerson _person;
 		private AdherenceReportSetting _adherenceReportSetting;
 		private IEnumerable<ISimpleTimeZone> _allTimezones;
@@ -72,6 +73,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_statisticsRepository = MockRepository.GenerateStub<IStatisticRepository>();
 			_personRepository = MockRepository.GenerateStub<IPersonRepository>();
 			_globalSettingDataRepository = MockRepository.GenerateStub<IGlobalSettingDataRepository>();
+			_agentbadgeSettingsRepository = MockRepository.GenerateStub<IAgentBadgeSettingsRepository>();
 
 			_uow = MockRepository.GenerateStub<IUnitOfWork>();
 			_uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
@@ -96,8 +98,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(_statisticsRepository);
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
 			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
+			_repositoryFactory.Stub(x => x.CreateAgentBadgeSettingsRepository(_uow)).Return(_agentbadgeSettingsRepository);
 
 			_statisticsRepository.Stub(x => x.LoadAllTimeZones(_statelessUow)).Return(_allTimezones);
+			_agentbadgeSettingsRepository.Stub(x => x.LoadAll()).Return(new List<IAgentBadgeThresholdSettings>
+			{
+				new AgentBadgeThresholdSettings
+				{
+					EnableBadge = true
+				}
+			});
 
 			_globalSettingDataRepository.Stub(
 				x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting())).IgnoreArguments()

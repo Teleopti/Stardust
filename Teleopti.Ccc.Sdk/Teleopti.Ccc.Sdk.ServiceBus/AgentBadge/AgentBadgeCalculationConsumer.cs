@@ -34,6 +34,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				IList<IPerson> allAgents;
 				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
+					var agentBadgeSetting = _repositoryFactory.CreateAgentBadgeSettingsRepository(uow).LoadAll().FirstOrDefault();
+					if (agentBadgeSetting == null || !agentBadgeSetting.EnableBadge)
+					{
+						// Do nothing if no setting for agent badge or agent badge disabled
+						continue;
+					}
+
 					adherenceReportSetting = _repositoryFactory.CreateGlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 					allAgents = _repositoryFactory.CreatePersonRepository(uow).LoadAll();
 				}
