@@ -172,6 +172,40 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		};
 		
+		self.filterStartTimeArray = ko.observableArray();
+		self.filteredSchedules = ko.observableArray();
+		self.filterSchedule = function () {
+			self.filteredSchedules.removeAll();
+			$.each(self.possibleTradeSchedules(), function (i, schedule) {
+				$.each(self.filterStartTimeArray(), function (j, filterTime) {
+					var startHour = schedule.scheduleStartTime().hours();
+					if (!schedule.IsDayOff && startHour >= filterTime.start && startHour <= filterTime.end) {
+						self.filteredSchedules.push(schedule);
+					}
+				});
+			});
+			if (self.filteredSchedules().length < 20 && self.selectedPageIndex()<self.pageCount()) {
+				self.loadSchedule(self.selectedTeamInternal());
+				self.filterSchedule();
+			} else {
+				self.possibleTradeSchedules.removeAll();
+				$.each(self.filteredSchedules(), function(i, filteredSchedule) {
+					self.possibleTradeSchedules.push(filteredSchedule);
+				});
+			}
+		};
+		self.filterStartTime = ko.computed(function () {
+			ko.utils.arrayForEach(self.filterTimeList(), function(timeInFilter) {
+				if (timeInFilter.isChecked()) {
+					self.filterStartTimeArray.push(timeInFilter);
+					self.filterSchedule();
+				} else {
+					//todo: need search if already exist!!!
+					//self.filterStartTimeArray.remove(timeInFilter);
+					//self.filterSchedule();
+				}
+			});
+		});
 		self.isShowList = ko.computed(function() {
 			var showList = false;
 			if (self.isDetailVisible() && self.chooseHistorys().length > 0) {
@@ -759,10 +793,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.loadFilterTimes = function() {
 			var rangStart = 6;
-			var isChecked = false;
 			for (var i = 0; i < 18; i += 2) {
 				var rangEnd = rangStart + 2;
-				self.filterTimeList.push({ time: rangStart + ":00 - " + rangEnd + ":00", isChecked: isChecked });
+				var filterTime = new Teleopti.MyTimeWeb.Request.FilterTimeView(rangStart + ":00 - " + rangEnd + ":00", rangStart, rangEnd, false);
+				self.filterTimeList.push(filterTime);
 				rangStart += 2;
 			}
 		};
