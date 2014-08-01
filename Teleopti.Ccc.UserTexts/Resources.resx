@@ -12161,4 +12161,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Gold Badge Days Threshold: </value>
     <comment>Label for Gold Badge Days Threshold setting</comment>
   </data>
+  <data name="EnableBadge" xml:space="preserve">
+    <value>Enable agent badge</value>
+    <comment>Label for badge setting in admin client</comment>
+  </data>
 </root>

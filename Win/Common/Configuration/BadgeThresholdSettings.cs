@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Windows.Forms;
+using Microsoft.ReportingServices.Interfaces;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			settings = settings ?? new AgentBadgeThresholdSettings
 			{
+				EnableBadge = false,
 				AdherenceThreshold = new Percent(0.75),
 				AnsweredCallsThreshold = 100,
 				AHTThreshold = new TimeSpan(0, 5, 0),
@@ -62,16 +65,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				GoldBadgeDaysThreshold = 10
 			};
 
+			checkBoxEnableBadge.Checked = settings.EnableBadge;
 			doubleTextBoxThresholdForAdherence.DoubleValue = settings.AdherenceThreshold.Value;
 			timeSpanTextBoxThresholdForAHT.SetInitialResolution(settings.AHTThreshold);
 			numericUpDownThresholdForAnsweredCalls.Value = settings.AnsweredCallsThreshold;
 			numericUpDownGoldenBadgeDaysThreshold.Value = settings.GoldBadgeDaysThreshold;
 			numericUpDownSilverBadgeDaysThreshold.Value = settings.SilverBadgeDaysThreshold;
+
+			setControlsEnabled(settings.EnableBadge);
 		}
 
 		public void SaveChanges()
 		{
 			var settings = _repository.LoadAll().FirstOrDefault() ?? new AgentBadgeThresholdSettings();
+			settings.EnableBadge = checkBoxEnableBadge.Checked;
 			settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue);
 			settings.AHTThreshold = timeSpanTextBoxThresholdForAHT.Value;
 			settings.AnsweredCallsThreshold = (int)numericUpDownThresholdForAnsweredCalls.Value;
@@ -93,9 +100,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void Persist()
 		{
-			
 		}
-
 
 		public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
 		{
@@ -103,5 +108,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
         public ViewType ViewType { get; private set; }
+
+		private void checkBoxEnableBadge_CheckedChanged(object sender, EventArgs e)
+		{
+			var badgeEnabled = ((CheckBox) sender).Checked;
+			setControlsEnabled(badgeEnabled);
+		}
+
+		private void setControlsEnabled(bool enabled)
+		{
+			doubleTextBoxThresholdForAdherence.Enabled = enabled;
+			timeSpanTextBoxThresholdForAHT.Enabled = enabled;
+			numericUpDownThresholdForAnsweredCalls.Enabled = enabled;
+			numericUpDownGoldenBadgeDaysThreshold.Enabled = enabled;
+			numericUpDownSilverBadgeDaysThreshold.Enabled = enabled;
+		}
     }
 }

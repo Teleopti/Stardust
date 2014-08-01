@@ -7501,6 +7501,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable agent badge.
+        /// </summary>
+        public static string EnableBadge {
+            get {
+                return ResourceManager.GetString("EnableBadge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enabled.
         /// </summary>
         public static string Enabled {
@@ -21753,7 +21762,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Badge Threshold for Adherence.
+        ///   Looks up a localized string similar to Adherence Threshold: .
         /// </summary>
         public static string SetBadgeThresholdForAdherence {
             get {
@@ -21762,7 +21771,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Badge Threshold for AHT.
+        ///   Looks up a localized string similar to Average Handle Time Threshold: .
         /// </summary>
         public static string SetBadgeThresholdForAHT {
             get {
@@ -21771,7 +21780,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Badge Threshold for Answered Calls.
+        ///   Looks up a localized string similar to Answered Calls Threshold:.
         /// </summary>
         public static string SetBadgeThresholdForAnsweredCalls {
             get {
@@ -21798,7 +21807,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gold Badge Days Threshold.
+        ///   Looks up a localized string similar to Gold Badge Days Threshold: .
         /// </summary>
         public static string SetGoldBadgeDaysThreshold {
             get {
@@ -21861,7 +21870,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Silver Badge Days Threshold.
+        ///   Looks up a localized string similar to Silver Badge Days Threshold: .
         /// </summary>
         public static string SetSilverBadgeDaysThreshold {
             get {
