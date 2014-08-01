@@ -258,7 +258,7 @@
             // 
             // tabControlAdv
             // 
-            this.tabControlAdv.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            this.tabControlAdv.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
             this.tabControlAdv.ActiveTabFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControlAdv.BackColor = System.Drawing.Color.White;
             this.tabControlAdv.BeforeTouchSize = new System.Drawing.Size(380, 496);
@@ -267,7 +267,7 @@
             this.tabControlAdv.Controls.Add(tabPageAdvMainTabPage);
             this.tabControlAdv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlAdv.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.tabControlAdv.InactiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(191)))), ((int)(((byte)(234)))));
+            this.tabControlAdv.InactiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.tabControlAdv.Location = new System.Drawing.Point(0, 0);
             this.tabControlAdv.Name = "tabControlAdv";
             this.tabControlAdv.ShowCloseButtonForActiveTabOnly = true;
