@@ -140,24 +140,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow, int timezoneId, DateTime date)
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IStatelessUnitOfWork uow, int timezoneId, DateTime date)
 		{
 			return new List<Guid>();
 		}
 
-		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int timezoneId, DateTime date)
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IStatelessUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int timezoneId, DateTime date)
 	    {
 		    return new List<Guid>();
 	    }
 
-		public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow, int timezoneId, DateTime date)
+		public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IStatelessUnitOfWork uow, int timezoneId, DateTime date)
 		{
 			return new List<Guid>();
 		}
 
-	    public IEnumerable<Tuple<int, string, int>> LoadAllTimeZones(IUnitOfWork uow)
+		public IEnumerable<ISimpleTimeZone> LoadAllTimeZones(IStatelessUnitOfWork uow)
 	    {
-		    return new List<Tuple<int, string, int>>();
+			return new List<ISimpleTimeZone>();
 	    }
 
 	    public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)

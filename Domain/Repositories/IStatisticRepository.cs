@@ -132,9 +132,9 @@ namespace Teleopti.Ccc.Domain.Repositories
 
         void AddOrUpdateActualAgentState(IActualAgentState actualAgentState);
 
-		IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IUnitOfWork uow, int timezoneId, DateTime date);
-		IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int timezoneId, DateTime date);
-		IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IUnitOfWork uow, int timezoneId, DateTime date);
-	    IEnumerable<Tuple<int, string, int>> LoadAllTimeZones(IUnitOfWork uow);
+		IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IStatelessUnitOfWork uow, int timezoneId, DateTime date);
+		IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IStatelessUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int timezoneId, DateTime date);
+		IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IStatelessUnitOfWork uow, int timezoneId, DateTime date);
+		IEnumerable<ISimpleTimeZone> LoadAllTimeZones(IStatelessUnitOfWork uow);
     }
 }

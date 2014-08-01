@@ -32,12 +32,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			{
 				AdherenceReportSetting adherenceReportSetting;
 				IList<IPerson> allAgents;
-				using (var uow = dataSource.Application.CurrentUnitOfWork())
+				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
 					adherenceReportSetting = _repositoryFactory.CreateGlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 					allAgents = _repositoryFactory.CreatePersonRepository(uow).LoadAll();
 				}
-				using (var uow = dataSource.Statistic.CurrentUnitOfWork())
+				using (var uow = dataSource.Statistic.CreateAndOpenStatelessUnitOfWork())
 				{
 					var timeZoneList = _repositoryFactory.CreateStatisticRepository().LoadAllTimeZones(uow);
 					if (message.IsInitialization)
@@ -46,42 +46,42 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						{
 							var todayForTimezone = DateTime.UtcNow.Date;
 							var yesterdayForTimezone = todayForTimezone.AddDays(-1);
-							var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Item3);
+							var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Distance);
 
-							_calculator.Calculate(uow, allAgents, timezone.Item1, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
-							_calculator.LastCalculatedDates.Add(timezone.Item1, yesterdayForTimezone);
+							_calculator.Calculate(uow, allAgents, timezone.Id, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
+							_calculator.LastCalculatedDates.Add(timezone.Id, yesterdayForTimezone);
 							if (_serviceBus != null)
 							{
 								_serviceBus.DelaySend(tomorrowForTimezone.ToLocalTime(), new AgentBadgeCalculateMessage
 								{
 									IsInitialization = false,
-									TimezoneId = timezone.Item1
+									TimezoneId = timezone.Id
 								});
 							}
 						}
 					}
 					else
 					{
-						var timezone = timeZoneList.First(tz => tz.Item1 == message.TimezoneId);
+						var timezone = timeZoneList.First(tz => tz.Id == message.TimezoneId);
 						if (timezone == null) continue;
 
 						var todayForTimezone = DateTime.UtcNow.Date;
 						var yesterdayForTimezone = todayForTimezone.AddDays(-1);
-						var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Item3);
+						var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Distance);
 						DateTime nextCalculateDate;
-						if (!_calculator.LastCalculatedDates.ContainsKey(timezone.Item1))
+						if (!_calculator.LastCalculatedDates.ContainsKey(timezone.Id))
 						{
-							_calculator.LastCalculatedDates.Add(timezone.Item1, tomorrowForTimezone.AddDays(-1).ToLocalTime());
+							_calculator.LastCalculatedDates.Add(timezone.Id, tomorrowForTimezone.AddDays(-1).ToLocalTime());
 						}
-						if (_calculator.LastCalculatedDates[timezone.Item1] == tomorrowForTimezone.ToLocalTime())
+						if (_calculator.LastCalculatedDates[timezone.Id] == tomorrowForTimezone.ToLocalTime())
 						{
 							nextCalculateDate = tomorrowForTimezone.AddDays(1).ToLocalTime();
 						}
 						else
 						{
 							nextCalculateDate = tomorrowForTimezone.ToLocalTime();
-							_calculator.LastCalculatedDates[timezone.Item1] = nextCalculateDate;
-							_calculator.Calculate(uow, allAgents, timezone.Item1, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
+							_calculator.LastCalculatedDates[timezone.Id] = nextCalculateDate;
+							_calculator.Calculate(uow, allAgents, timezone.Id, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
 						}
 						
 						if (_serviceBus != null)

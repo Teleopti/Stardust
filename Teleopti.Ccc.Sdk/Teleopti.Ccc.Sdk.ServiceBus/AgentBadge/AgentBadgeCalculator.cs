@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return personsThatGotABadge;
 		}
 
-		public IEnumerable<IPerson> Calculate(IUnitOfWork unitOfWork, IEnumerable<IPerson> allPersons, int timezoneId, DateTime date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
+		public IEnumerable<IPerson> Calculate(IStatelessUnitOfWork unitOfWork, IEnumerable<IPerson> allPersons, int timezoneId, DateTime date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
 		{
 			var personsThatGotBadge = new List<IPerson>();
 			var agents = _statisticRepository.LoadAgentsOverThresholdForAdherence(unitOfWork, adherenceCalculationMethod, timezoneId, date);
