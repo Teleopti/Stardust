@@ -216,7 +216,8 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
         void Instance_ScheduleViewChanged(object sender, EventArgs e)
         {
-            var control = panelSchedule.Controls[0] as ScheduleControl;
+            if(panelSchedule.Controls.Count == 0) return;
+			var control = panelSchedule.Controls[0] as ScheduleControl;
             if (control == null) return;
             ToggleButtonEnabled("toolStripButtonExport", false);
             if (control.ScheduleType == ScheduleViewType.Month || (control.ScheduleType == ScheduleViewType.CustomWeek && control.ScheduleView.LoadedPeriod.DayCount() > 6))
