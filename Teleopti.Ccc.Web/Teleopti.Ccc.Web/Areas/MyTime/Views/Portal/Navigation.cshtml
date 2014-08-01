@@ -95,18 +95,22 @@
 								{
 									<li>
 										<div class="BadgeDetail">
-											@if (badge.BadgeType == BadgeType.AnsweredCalls)
-											{
-												<div class="BadgeType" style="font-size: 12px; font-weight: bold">Answered Calls</div>
+											@{
+												var badgeTypeName = string.Empty;
+												switch (badge.BadgeType)
+												{
+													case BadgeType.AnsweredCalls:
+														badgeTypeName = Resources.AnsweredCalls;
+														break;
+													case BadgeType.AverageHandlingTime:
+														badgeTypeName = Resources.AverageHandlingTime;
+														break;
+													case BadgeType.Adherence:
+														badgeTypeName = Resources.Adherence;
+														break;
+												}
 											}
-											else if (badge.BadgeType == BadgeType.AverageHandlingTime)
-											{
-												<div class="BadgeType" style="font-size: 12px; font-weight: bold">Average Handling Time</div>
-											}
-											else if (badge.BadgeType == BadgeType.Adherence)
-											{
-												<div class="BadgeType" style="font-size: 12px; font-weight: bold">Adherence</div>
-											}
+											<div class="BadgeType">@badgeTypeName</div>
 											<span class="GoldBadge">
 												<i class="glyphicon glyphicon-star" style="color: gold"></i>
 												@badge.GoldBadge
