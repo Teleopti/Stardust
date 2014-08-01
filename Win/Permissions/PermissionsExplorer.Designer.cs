@@ -117,8 +117,8 @@ namespace Teleopti.Ccc.Win.Permissions
 			// contextMenuStripClipboard
 			// 
 			this.contextMenuStripClipboard.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyToolStripMenuItem,
-            this.pasteToolStripMenuItem});
+			this.copyToolStripMenuItem,
+			this.pasteToolStripMenuItem});
 			this.contextMenuStripClipboard.Name = "contextMenuStripClipboard";
 			this.contextMenuStripClipboard.Size = new System.Drawing.Size(145, 48);
 			this.contextMenuStripClipboard.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripClipboardOpening);
@@ -165,9 +165,9 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.listViewPeople.BackColor = System.Drawing.Color.White;
 			this.listViewPeople.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.listViewPeople.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3});
+			this.columnHeader1,
+			this.columnHeader2,
+			this.columnHeader3});
 			this.listViewPeople.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewPeople.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.listViewPeople.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripExViewer.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExViewer.Image = null;
 			this.toolStripExViewer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonShowViewer});
+			this.toolStripButtonShowViewer});
 			this.toolStripExViewer.Location = new System.Drawing.Point(351, 1);
 			this.toolStripExViewer.Name = "toolStripExViewer";
 			this.toolStripExViewer.Office12Mode = false;
@@ -592,7 +592,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStage1.Controls.Add(this.backStageButton4);
 			this.backStage1.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.backStage1.ItemSize = new System.Drawing.Size(138, 40);
-			this.backStage1.Location = new System.Drawing.Point(1, 51);
+			this.backStage1.Location = new System.Drawing.Point(0, 0);
 			this.backStage1.Name = "backStage1";
 			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
 			this.backStage1.Size = new System.Drawing.Size(1061, 652);
@@ -605,12 +605,12 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton1.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton1.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton1.IsBackStageButton = false;
-			this.backStageButton1.Location = new System.Drawing.Point(0, 16);
+			this.backStageButton1.Location = new System.Drawing.Point(10, 10);
 			this.backStageButton1.Name = "backStageButton1";
-			this.backStageButton1.Size = new System.Drawing.Size(137, 38);
+			this.backStageButton1.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton1.TabIndex = 3;
 			this.backStageButton1.Text = "xxSave";
-			this.backStageButton1.Click += new System.EventHandler(this.backStageButton1_Click);
+			this.backStageButton1.Click += new System.EventHandler(this.backStageButton1Click);
 			// 
 			// backStageSeparator1
 			// 
@@ -627,12 +627,12 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton2.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton2.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton2.IsBackStageButton = false;
-			this.backStageButton2.Location = new System.Drawing.Point(0, 66);
+			this.backStageButton2.Location = new System.Drawing.Point(10, 35);
 			this.backStageButton2.Name = "backStageButton2";
-			this.backStageButton2.Size = new System.Drawing.Size(137, 38);
+			this.backStageButton2.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton2.TabIndex = 5;
 			this.backStageButton2.Text = "xxClose";
-			this.backStageButton2.Click += new System.EventHandler(this.backStageButton2_Click);
+			this.backStageButton2.Click += new System.EventHandler(this.backStageButton2Click);
 			// 
 			// backStageSeparator2
 			// 
@@ -649,12 +649,12 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton3.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton3.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton3.IsBackStageButton = false;
-			this.backStageButton3.Location = new System.Drawing.Point(0, 116);
+			this.backStageButton3.Location = new System.Drawing.Point(10, 60);
 			this.backStageButton3.Name = "backStageButton3";
-			this.backStageButton3.Size = new System.Drawing.Size(137, 38);
+			this.backStageButton3.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton3.TabIndex = 7;
 			this.backStageButton3.Text = "xxOptions";
-			this.backStageButton3.Click += new System.EventHandler(this.backStageButton3_Click);
+			this.backStageButton3.Click += new System.EventHandler(this.backStageButton3Click);
 			// 
 			// backStageButton4
 			// 
@@ -662,23 +662,23 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton4.IsBackStageButton = false;
-			this.backStageButton4.Location = new System.Drawing.Point(0, 154);
+			this.backStageButton4.Location = new System.Drawing.Point(10, 85);
 			this.backStageButton4.Name = "backStageButton4";
-			this.backStageButton4.Size = new System.Drawing.Size(137, 38);
+			this.backStageButton4.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton4.TabIndex = 8;
 			this.backStageButton4.Text = "xxExitTELEOPTICCC";
-			this.backStageButton4.Click += new System.EventHandler(this.backStageButton4_Click);
+			this.backStageButton4.Click += new System.EventHandler(this.backStageButton4Click);
 			// 
 			// toolStripButtonSave
 			// 
 			this.toolStripButtonSave.AutoToolTip = false;
-			this.toolStripButtonSave.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Save;
+			this.toolStripButtonSave.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_save_small;
 			this.toolStripButtonSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonSave.Name = "toolStripButtonSave";
 			this.toolStripButtonSave.Padding = new System.Windows.Forms.Padding(4);
-			this.SetShortcut(this.toolStripButtonSave, System.Windows.Forms.Keys.None);
+			this.SetShortcut(this.toolStripButtonSave, ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S))));
 			this.toolStripButtonSave.Size = new System.Drawing.Size(90, 44);
 			this.toolStripButtonSave.Text = "xxSave";
 			this.toolStripButtonSave.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -695,7 +695,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.ExplorerRibbon.Location = new System.Drawing.Point(1, 1);
 			this.ExplorerRibbon.MaximizeToolTip = "Maximize Ribbon";
 			this.ExplorerRibbon.MenuButtonEnabled = true;
-			this.ExplorerRibbon.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ExplorerRibbon.MenuButtonFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ExplorerRibbon.MenuButtonText = "xxFile";
 			this.ExplorerRibbon.MenuButtonWidth = 56;
 			this.ExplorerRibbon.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
@@ -711,15 +711,16 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.ExplorerRibbon.OfficeMenu.MainPanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ExplorerRibbon.OfficeMenu.Name = "OfficeMenu";
 			this.ExplorerRibbon.OfficeMenu.ShowItemToolTips = true;
-			this.ExplorerRibbon.OfficeMenu.Size = new System.Drawing.Size(12, 65);
+			this.ExplorerRibbon.OfficeMenu.Size = new System.Drawing.Size(212, 65);
 			this.ExplorerRibbon.OfficeMenu.SystemPanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ExplorerRibbon.OverFlowButtonToolTip = "Show DropDown";
 			this.ExplorerRibbon.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.ExplorerRibbon.QuickPanelVisible = false;
 			this.ExplorerRibbon.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.ExplorerRibbon.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
 			this.ExplorerRibbon.SelectedTab = this.toolStripTabItem1;
 			this.ExplorerRibbon.Show2010CustomizeQuickItemDialog = false;
+			this.ExplorerRibbon.ShowContextMenu = false;
+			this.ExplorerRibbon.ShowLauncher = false;
 			this.ExplorerRibbon.ShowQuickItemsDropDownButton = false;
 			this.ExplorerRibbon.ShowRibbonDisplayOptionButton = true;
 			this.ExplorerRibbon.Size = new System.Drawing.Size(1066, 132);
@@ -733,23 +734,24 @@ namespace Teleopti.Ccc.Win.Permissions
 			// toolStripTabItem1
 			// 
 			this.ExplorerRibbon.SetDescription(this.toolStripTabItem1, "");
-			this.toolStripTabItem1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.toolStripTabItem1.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.toolStripTabItem1.Name = "toolStripTabItem1";
 			// 
 			// ExplorerRibbon.ribbonPanel1
 			// 
+			this.toolStripTabItem1.Panel.CaptionFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExClipboard);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExRoles);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExPersons);
 			this.toolStripTabItem1.Panel.Margin = new System.Windows.Forms.Padding(0, 0, 4, 0);
 			this.toolStripTabItem1.Panel.Name = "ribbonPanel1";
-			this.toolStripTabItem1.Panel.Padding = new System.Windows.Forms.Padding(30, 1, 35, 0);
+			this.toolStripTabItem1.Panel.Padding = new System.Windows.Forms.Padding(3, 1, 35, 0);
 			this.toolStripTabItem1.Panel.ScrollPosition = 0;
 			this.toolStripTabItem1.Panel.TabIndex = 2;
 			this.toolStripTabItem1.Panel.Text = "XXHOME";
 			this.toolStripTabItem1.Position = 0;
 			this.SetShortcut(this.toolStripTabItem1, System.Windows.Forms.Keys.None);
-			this.toolStripTabItem1.Size = new System.Drawing.Size(72, 25);
+			this.toolStripTabItem1.Size = new System.Drawing.Size(76, 25);
 			this.toolStripTabItem1.Tag = "1";
 			this.toolStripTabItem1.Text = "XXHOME";
 			this.ExplorerRibbon.SetUseInCustomQuickAccessDialog(this.toolStripTabItem1, true);
@@ -764,7 +766,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripExClipboard.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripExClipboard.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExClipboard.Image = null;
-			this.toolStripExClipboard.Location = new System.Drawing.Point(30, 1);
+			this.toolStripExClipboard.Location = new System.Drawing.Point(3, 1);
 			this.toolStripExClipboard.Name = "toolStripExClipboard";
 			this.toolStripExClipboard.Office12Mode = false;
 			this.toolStripExClipboard.ShowItemToolTips = true;
@@ -784,10 +786,10 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripExRoles.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExRoles.Image = null;
 			this.toolStripExRoles.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripButton2,
-            this.toolStripButton3});
-			this.toolStripExRoles.Location = new System.Drawing.Point(143, 1);
+			this.toolStripButton1,
+			this.toolStripButton2,
+			this.toolStripButton3});
+			this.toolStripExRoles.Location = new System.Drawing.Point(116, 1);
 			this.toolStripExRoles.Name = "toolStripExRoles";
 			this.toolStripExRoles.Office12Mode = false;
 			this.toolStripExRoles.ShowLauncher = false;
@@ -806,12 +808,12 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton1.Name = "toolStripButton1";
 			this.SetShortcut(this.toolStripButton1, System.Windows.Forms.Keys.None);
-			this.toolStripButton1.Size = new System.Drawing.Size(45, 57);
+			this.toolStripButton1.Size = new System.Drawing.Size(45, 55);
 			this.toolStripButton1.Text = "xxNew";
 			this.toolStripButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ExplorerRibbon.SetUseInCustomQuickAccessDialog(this.toolStripButton1, true);
 			this.ExplorerRibbon.SetUseInQuickAccessMenu(this.toolStripButton1, false);
-			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButtonAddRole_Click);
+			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButtonAddRoleClick);
 			// 
 			// toolStripButton2
 			// 
@@ -822,12 +824,12 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton2.Name = "toolStripButton2";
 			this.SetShortcut(this.toolStripButton2, System.Windows.Forms.Keys.None);
-			this.toolStripButton2.Size = new System.Drawing.Size(54, 57);
+			this.toolStripButton2.Size = new System.Drawing.Size(54, 55);
 			this.toolStripButton2.Text = "xxDelete";
 			this.toolStripButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ExplorerRibbon.SetUseInCustomQuickAccessDialog(this.toolStripButton2, true);
 			this.ExplorerRibbon.SetUseInQuickAccessMenu(this.toolStripButton2, false);
-			this.toolStripButton2.Click += new System.EventHandler(this.toolStripButtonDeleteRole_Click);
+			this.toolStripButton2.Click += new System.EventHandler(this.toolStripButtonDeleteRoleClick);
 			// 
 			// toolStripButton3
 			// 
@@ -838,7 +840,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton3.Name = "toolStripButton3";
 			this.SetShortcut(this.toolStripButton3, System.Windows.Forms.Keys.None);
-			this.toolStripButton3.Size = new System.Drawing.Size(64, 57);
+			this.toolStripButton3.Size = new System.Drawing.Size(64, 55);
 			this.toolStripButton3.Text = "xxRename";
 			this.toolStripButton3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ExplorerRibbon.SetUseInCustomQuickAccessDialog(this.toolStripButton3, true);
@@ -854,9 +856,9 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripExPersons.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExPersons.Image = null;
 			this.toolStripExPersons.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonAddPerson,
-            this.toolStripButtonRemovePerson});
-			this.toolStripExPersons.Location = new System.Drawing.Point(315, 1);
+			this.toolStripButtonAddPerson,
+			this.toolStripButtonRemovePerson});
+			this.toolStripExPersons.Location = new System.Drawing.Point(288, 1);
 			this.toolStripExPersons.Name = "toolStripExPersons";
 			this.toolStripExPersons.Office12Mode = false;
 			this.toolStripExPersons.ShowLauncher = false;
@@ -875,12 +877,12 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripButtonAddPerson.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonAddPerson.Name = "toolStripButtonAddPerson";
 			this.SetShortcut(this.toolStripButtonAddPerson, System.Windows.Forms.Keys.None);
-			this.toolStripButtonAddPerson.Size = new System.Drawing.Size(43, 57);
+			this.toolStripButtonAddPerson.Size = new System.Drawing.Size(43, 55);
 			this.toolStripButtonAddPerson.Text = "xxAdd";
 			this.toolStripButtonAddPerson.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ExplorerRibbon.SetUseInCustomQuickAccessDialog(this.toolStripButtonAddPerson, true);
 			this.ExplorerRibbon.SetUseInQuickAccessMenu(this.toolStripButtonAddPerson, false);
-			this.toolStripButtonAddPerson.Click += new System.EventHandler(this.toolStripButtonAddPerson_Click);
+			this.toolStripButtonAddPerson.Click += new System.EventHandler(this.toolStripButtonAddPersonClick);
 			// 
 			// toolStripButtonRemovePerson
 			// 
@@ -891,12 +893,12 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripButtonRemovePerson.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonRemovePerson.Name = "toolStripButtonRemovePerson";
 			this.SetShortcut(this.toolStripButtonRemovePerson, System.Windows.Forms.Keys.None);
-			this.toolStripButtonRemovePerson.Size = new System.Drawing.Size(64, 57);
+			this.toolStripButtonRemovePerson.Size = new System.Drawing.Size(64, 55);
 			this.toolStripButtonRemovePerson.Text = "xxRemove";
 			this.toolStripButtonRemovePerson.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ExplorerRibbon.SetUseInCustomQuickAccessDialog(this.toolStripButtonRemovePerson, true);
 			this.ExplorerRibbon.SetUseInQuickAccessMenu(this.toolStripButtonRemovePerson, false);
-			this.toolStripButtonRemovePerson.Click += new System.EventHandler(this.toolStripButtonRemovePerson_Click);
+			this.toolStripButtonRemovePerson.Click += new System.EventHandler(this.toolStripButtonRemovePersonClick);
 			// 
 			// PermissionsExplorer
 			// 
@@ -919,7 +921,6 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.permissionsExplorerFormClosing);
 			this.Load += new System.EventHandler(this.permissionsExplorerLoad);
-			this.ResizeEnd += new System.EventHandler(this.PermissionsExplorer_ResizeEnd);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.permissionsExplorerKeyDown);
 			this.contextMenuStripClipboard.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.treeViewFunctions)).EndInit();

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Win.Permissions
 		private const string space = @" ";
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
 		private IPermissionViewerRolesPresenter _permissionsViewerPresenter;
-		private IToggleManager _toggleManager;
+		private readonly IToggleManager _toggleManager;
 
 		public PermissionsExplorer(IComponentContext container)
 		{
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			}
 		}
 
-		private void recursivelyAddChildNodes(TreeNodeAdv treeNode, IEnumerable<IApplicationFunction> functions)
+		private void recursivelyAddChildNodes(TreeNodeAdv treeNode, IList<IApplicationFunction> functions)
 		{
 			if (functions == null) return;
 			var parentApplicationFunction = treeNode.TagObject as IApplicationFunction;
@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			}
 		}
 
-		private void loadAllApplicationFunctions(IEnumerable<IApplicationFunction> functions)
+		private void loadAllApplicationFunctions(IList<IApplicationFunction> functions)
 		{
 			if (functions == null) return;
 			foreach (IApplicationFunction function in functions)
@@ -697,7 +697,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			}
 		}
 
-		private void removeFunctionsFromSelectedRoles(IEnumerable<IApplicationFunction> functions)
+		private void removeFunctionsFromSelectedRoles(IList<IApplicationFunction> functions)
 		{
 			foreach (ExtentListItem rItem in listViewRoles.SelectedItems)
 			{
@@ -1053,9 +1053,7 @@ namespace Teleopti.Ccc.Win.Permissions
 		{
 			if (StateHolderReader.IsInitialized)
 			{
-				bool rightToLeft = (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay)
-						? true
-						: false;
+				bool rightToLeft = (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay);
 				listViewRoles.RightToLeftLayout = rightToLeft;
 				listViewPeople.RightToLeftLayout = rightToLeft;
 			}
@@ -1758,6 +1756,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			initializePermissionsExplorer();
 			listViewRoles.Select();
 			Cursor.Current = Cursors.Default;
+			ExplorerRibbon.QuickPanelVisible = true;
 		}
 
 		private void listViewRolesAfterLabelEdit(object sender, LabelEditEventArgs e)
@@ -1953,7 +1952,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
 		private void treeViewDataBeforeCheck(object sender, TreeNodeAdvBeforeCheckEventArgs e)
 		{
-			if (typeof(AvailableDataRangeOption).IsInstanceOfType(e.Node.TagObject))
+			if (e.Node.TagObject is AvailableDataRangeOption)
 			{
 				CheckState before = _rangeOptionCheckBoxesCollection[e.Node.Index].CheckState;
 				if (before == CheckState.Checked) //going to (un)check the same option
@@ -1998,16 +1997,6 @@ namespace Teleopti.Ccc.Win.Permissions
 			treeViewData.AfterCheck += treeViewDataAfterCheck;
 		}
 
-		private void toolStripButtonCloseExitClick(object sender, EventArgs e)
-		{
-			Close();
-		}
-
-		private void toolStripButtonExitSystemClick(object sender, EventArgs e)
-		{
-			
-		}
-
 		private void permissionsExplorerFormClosing(object sender, FormClosingEventArgs e)
 		{
 			// queue the people also 
@@ -2043,21 +2032,6 @@ namespace Teleopti.Ccc.Win.Permissions
 		private void toolStripButtonRenameRoleClick(object sender, EventArgs e)
 		{
 			handleRenameRole();
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability",
-			"CA2000:Dispose objects before losing scope")]
-		private void toolStripButtonSystemOptionsClick(object sender, EventArgs e)
-		{
-			
-		}
-
-		private void toolStripButtonNewClick(object sender, EventArgs e)
-		{
-			if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleAddNewRole))
-			{
-				FormKill();
-			}
 		}
 
 		private void copyToolStripMenuItemClick(object sender, EventArgs e)
@@ -2306,7 +2280,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			_permissionsViewerPresenter.ShowViewer();
 		}
 
-		private void toolStripButtonAddRole_Click(object sender, EventArgs e)
+		private void toolStripButtonAddRoleClick(object sender, EventArgs e)
 		{
 			if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleAddNewRole))
 			{
@@ -2314,7 +2288,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			}
 		}
 
-		private void toolStripButtonDeleteRole_Click(object sender, EventArgs e)
+		private void toolStripButtonDeleteRoleClick(object sender, EventArgs e)
 		{
 			//set disabled instead?
 			if (_lastInFocus != listViewRoles) return;
@@ -2325,28 +2299,28 @@ namespace Teleopti.Ccc.Win.Permissions
 			
 		}
 
-		private void toolStripButtonAddPerson_Click(object sender, EventArgs e)
+		private void toolStripButtonAddPersonClick(object sender, EventArgs e)
 		{
 			_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(handleInsertPeople);
 		}
 
-		private void toolStripButtonRemovePerson_Click(object sender, EventArgs e)
+		private void toolStripButtonRemovePersonClick(object sender, EventArgs e)
 		{
 			if (_lastInFocus != listViewPeople) return;
 			handleRemovePeople();
 		}
 
-		private void backStageButton1_Click(object sender, EventArgs e)
+		private void backStageButton1Click(object sender, EventArgs e)
 		{
 			save();
 		}
 
-		private void backStageButton2_Click(object sender, EventArgs e)
+		private void backStageButton2Click(object sender, EventArgs e)
 		{
 			Close();
 		}
 
-		private void backStageButton3_Click(object sender, EventArgs e)
+		private void backStageButton3Click(object sender, EventArgs e)
 		{
 			var toggleManager = _container.Resolve<IToggleManager>();
 			try
@@ -2360,7 +2334,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			}
 		}
 
-		private void backStageButton4_Click(object sender, EventArgs e)
+		private void backStageButton4Click(object sender, EventArgs e)
 		{
 			if (!CloseAllOtherForms(this)) return;
 
@@ -2370,11 +2344,6 @@ namespace Teleopti.Ccc.Win.Permissions
 			if (Visible)
 				return;
 			Application.Exit();
-		}
-
-		private void PermissionsExplorer_ResizeEnd(object sender, EventArgs e)
-		{
-			var x = HorizontalSplitter.Location.X;
 		}
 
 	}
