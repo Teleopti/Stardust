@@ -1084,9 +1084,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return isValid;
 		}
 
-        private void twoListSelectorDayOffs_Load(object sender, EventArgs e)
-        {
+		private void twoListSelectorDayOffs_Load(object sender, EventArgs e)
+		{
 
-        }
+		}
 	}
 }
