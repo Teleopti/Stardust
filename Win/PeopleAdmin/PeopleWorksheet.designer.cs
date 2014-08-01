@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.externalFilteringLabel = new System.Windows.Forms.Label();
 			this.externalFilteringTextBox = new System.Windows.Forms.TextBox();
-			this.shiftCategoryLimitationView = new ShiftCategoryLimitationView();
+			this.shiftCategoryLimitationView = new Teleopti.Ccc.Win.PeopleAdmin.Views.ShiftCategoryLimitationView();
 			this.contextMenuStripGridView = new Syncfusion.Windows.Forms.Tools.ContextMenuStripEx();
 			this.statusStripEx1 = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
 			this.contextMenuStripExExternalLogOn = new Syncfusion.Windows.Forms.Tools.ContextMenuStripEx();
@@ -103,12 +103,17 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.ribbonControlWorksheet.Header.AddMainItem(toolStripTabItem1);
 			this.ribbonControlWorksheet.Header.AddMainItem(toolStripTabItem2);
 			this.ribbonControlWorksheet.Header.AddQuickItem(new Syncfusion.Windows.Forms.Tools.QuickButtonReflectable(toolStripButtonMainSave));
+			this.ribbonControlWorksheet.HideMenuButtonToolTip = false;
 			this.ribbonControlWorksheet.Location = new System.Drawing.Point(1, 0);
 			this.ribbonControlWorksheet.MaximizeToolTip = "Maximize Ribbon";
+			this.ribbonControlWorksheet.MenuButtonEnabled = true;
+			this.ribbonControlWorksheet.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlWorksheet.MenuButtonImage = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Menu;
 			this.ribbonControlWorksheet.MenuButtonText = "";
+			this.ribbonControlWorksheet.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
 			this.ribbonControlWorksheet.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlWorksheet.Name = "ribbonControlWorksheet";
+			this.ribbonControlWorksheet.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
 			// 
 			// ribbonControlWorksheet.OfficeMenu
 			// 
@@ -130,16 +135,23 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             this.toolStripButtonSystemExit,
             this.toolStripButtonSystemOptions});
 			this.ribbonControlWorksheet.OfficeMenu.SystemPanel.Text = "";
+			this.ribbonControlWorksheet.OverFlowButtonToolTip = "Show DropDown";
+			this.ribbonControlWorksheet.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.ribbonControlWorksheet.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.ribbonControlWorksheet.SelectedTab = this.toolStripTabItem1;
+			this.ribbonControlWorksheet.Show2010CustomizeQuickItemDialog = false;
+			this.ribbonControlWorksheet.ShowRibbonDisplayOptionButton = true;
 			this.ribbonControlWorksheet.Size = new System.Drawing.Size(1205, 150);
 			this.ribbonControlWorksheet.SystemText.QuickAccessDialogDropDownName = "Starting menu";
 			toolStripTabGroup1.Color = System.Drawing.Color.Empty;
+			toolStripTabGroup1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			toolStripTabGroup1.Name = "Period Options";
 			toolStripTabGroup1.Visible = true;
 			this.ribbonControlWorksheet.TabGroups.Add(toolStripTabGroup1);
 			this.ribbonControlWorksheet.TabIndex = 0;
 			this.ribbonControlWorksheet.Text = "ribbonControlAdv1";
 			this.ribbonControlWorksheet.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
+			this.ribbonControlWorksheet.TitleColor = System.Drawing.Color.Black;
 			// 
 			// toolStripTabItem1
 			// 
@@ -592,7 +604,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripButtonMainSave.ToolTipText = "xxSave";
 			this.ribbonControlWorksheet.SetUseInCustomQuickAccessDialog(this.toolStripButtonMainSave, true);
 			this.ribbonControlWorksheet.SetUseInQuickAccessMenu(this.toolStripButtonMainSave, false);
-			this.toolStripButtonMainSave.MouseUp += toolStripButtonMainSave_MouseUp;
 			// 
 			// toolStripButtonMainNew
 			// 
@@ -688,6 +699,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// 
 			// splitContainerWorksheet
 			// 
+			this.splitContainerWorksheet.BeforeTouchSize = 7;
 			this.splitContainerWorksheet.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainerWorksheet.FixedPanel = Syncfusion.Windows.Forms.Tools.Enums.FixedPanel.Panel2;
 			this.splitContainerWorksheet.Location = new System.Drawing.Point(6, 151);
@@ -713,6 +725,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// tabControlPeopleAdmin
 			// 
 			this.tabControlPeopleAdmin.ActiveTabFont = new System.Drawing.Font("Tahoma", 8.25F);
+			this.tabControlPeopleAdmin.BeforeTouchSize = new System.Drawing.Size(224, 368);
 			this.tabControlPeopleAdmin.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlPeopleAdmin.BorderWidth = 0;
 			this.tabControlPeopleAdmin.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -788,13 +801,17 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// 
 			// contextMenuStripGridView
 			// 
+			this.contextMenuStripGridView.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(236)))), ((int)(((byte)(249)))));
 			this.contextMenuStripGridView.Name = "contextMenuStripGridView";
 			this.contextMenuStripGridView.Size = new System.Drawing.Size(61, 4);
+			this.contextMenuStripGridView.Style = Syncfusion.Windows.Forms.Tools.ContextMenuStripEx.ContextMenuStyle.Default;
 			// 
 			// statusStripEx1
 			// 
+			this.statusStripEx1.BeforeTouchSize = new System.Drawing.Size(1195, 22);
 			this.statusStripEx1.Dock = Syncfusion.Windows.Forms.Tools.DockStyleEx.Bottom;
 			this.statusStripEx1.Location = new System.Drawing.Point(6, 519);
+			this.statusStripEx1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
 			this.statusStripEx1.Name = "statusStripEx1";
 			this.statusStripEx1.Size = new System.Drawing.Size(1195, 22);
 			this.statusStripEx1.TabIndex = 4;
@@ -804,8 +821,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// 
 			this.contextMenuStripExExternalLogOn.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.xxSearchThreeDotsToolStripMenuItem});
+			this.contextMenuStripExExternalLogOn.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(236)))), ((int)(((byte)(249)))));
 			this.contextMenuStripExExternalLogOn.Name = "contextMenuStripExExternalLogOn";
 			this.contextMenuStripExExternalLogOn.Size = new System.Drawing.Size(174, 26);
+			this.contextMenuStripExExternalLogOn.Style = Syncfusion.Windows.Forms.Tools.ContextMenuStripEx.ContextMenuStyle.Default;
 			// 
 			// xxSearchThreeDotsToolStripMenuItem
 			// 

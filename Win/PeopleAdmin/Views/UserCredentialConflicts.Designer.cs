@@ -45,7 +45,7 @@
 			this.listViewConflicts.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewConflicts.Location = new System.Drawing.Point(0, 0);
 			this.listViewConflicts.Name = "listViewConflicts";
-			this.listViewConflicts.Size = new System.Drawing.Size(963, 453);
+			this.listViewConflicts.Size = new System.Drawing.Size(1123, 522);
 			this.listViewConflicts.TabIndex = 0;
 			this.listViewConflicts.UseCompatibleStateImageBehavior = false;
 			this.listViewConflicts.View = System.Windows.Forms.View.Details;
@@ -72,13 +72,15 @@
 			// 
 			// UserCredentialConflicts
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(963, 453);
+			this.ClientSize = new System.Drawing.Size(1123, 522);
 			this.Controls.Add(this.listViewConflicts);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "UserCredentialConflicts";
+			this.ShowIcon = false;
 			this.Text = "xxErrorMsgCaptionDuplicateUserCredentials";
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.userCredentialConflictsKeyDown);
 			this.ResumeLayout(false);

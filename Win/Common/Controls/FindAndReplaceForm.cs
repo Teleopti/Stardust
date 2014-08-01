@@ -8,13 +8,6 @@ using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.Win.Common.Controls
 {
-	/// <summary>
-	/// Represents the Search Form.
-	/// </summary>
-	/// <remarks>
-	/// Created By: madhurangap
-	/// Created Date: 08-07-2008
-	/// </remarks>
 	public partial class FindAndReplaceForm : BaseDialogForm
 	{
 		private bool _isOptionsVisible;
@@ -201,8 +194,8 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			const int minWidth = 460;
 			const int minHeigth = 467;
 
-			var letWidth = Math.Max(minWidth, this.Width);
-			var letHeight = Math.Max(minHeigth, this.Height);
+			var letWidth = Math.Max(minWidth, Width);
+			var letHeight = Math.Max(minHeigth, Height);
 
 			Size = new Size(letWidth, letHeight);
 		}
@@ -406,9 +399,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
 				case FindAndReplaceFunctionality.ReplaceOnly:
 					tabPageAdvFind.TabVisible = false;
 					break;
-
-				default:
-					break;
 			}
 
 			switch (findOption)
@@ -435,9 +425,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
 					checkBoxAdvReplaceSearchInPersistance.Enabled = false;
 
 					break;
-
-				default:
-					break;
 			}
 
 		}
@@ -445,15 +432,11 @@ namespace Teleopti.Ccc.Win.Common.Controls
 		protected void SetColors()
 		{
 			BackColor = ColorHelper.FormBackgroundColor();
-			ColorHelper.SetTabControlTheme(tabControlAdvMain);
-			tabPageAdvMain.BackColor = ColorHelper.TabBackColor();
-			tabPageAdvFind.BackColor = ColorHelper.TabBackColor();
-			tabPageAdvReplace.BackColor = ColorHelper.TabBackColor();
 		}
 
 		private GridFindTextOptions getSearchOptions()
 		{
-			GridFindTextOptions option = GridFindTextOptions.WholeTable;
+			var option = GridFindTextOptions.WholeTable;
 
 			if (tabControlAdvMain.SelectedIndex == 0)
 			{
@@ -722,9 +705,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
 				case FindAndReplaceFunctionality.ReplaceOnly:
 					// Sets the find tab selected
 					tabControlAdvMain.SelectedIndex = 1;
-					break;
-
-				default:
 					break;
 			}
 		}

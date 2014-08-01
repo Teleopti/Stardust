@@ -263,6 +263,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             if (handler != null) handler(this, e);
         }
 
+		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
        
     }
 }

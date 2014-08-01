@@ -38,6 +38,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
 			this.ribbonControlAdvSearch = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
 			this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelTopMain = new System.Windows.Forms.TableLayoutPanel();
@@ -230,20 +231,31 @@
 			// 
 			// ribbonControlAdvSearch
 			// 
+			this.ribbonControlAdvSearch.HideMenuButtonToolTip = false;
 			this.ribbonControlAdvSearch.Location = new System.Drawing.Point(1, 0);
 			this.ribbonControlAdvSearch.MaximizeToolTip = "Maximize Ribbon";
+			this.ribbonControlAdvSearch.MenuButtonEnabled = true;
+			this.ribbonControlAdvSearch.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdvSearch.MenuButtonText = "";
 			this.ribbonControlAdvSearch.MenuButtonVisible = false;
+			this.ribbonControlAdvSearch.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
 			this.ribbonControlAdvSearch.MinimizeToolTip = "Minimize Ribbon";
+			this.ribbonControlAdvSearch.MinimumSize = new System.Drawing.Size(0, 31);
 			this.ribbonControlAdvSearch.Name = "ribbonControlAdvSearch";
+			this.ribbonControlAdvSearch.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
 			// 
 			// ribbonControlAdvSearch.OfficeMenu
 			// 
 			this.ribbonControlAdvSearch.OfficeMenu.Name = "OfficeMenu";
 			this.ribbonControlAdvSearch.OfficeMenu.Size = new System.Drawing.Size(12, 65);
+			this.ribbonControlAdvSearch.OverFlowButtonToolTip = "Show DropDown";
+			this.ribbonControlAdvSearch.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.ribbonControlAdvSearch.QuickPanelVisible = false;
+			this.ribbonControlAdvSearch.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.ribbonControlAdvSearch.SelectedTab = null;
-			this.ribbonControlAdvSearch.Size = new System.Drawing.Size(458, 33);
+			this.ribbonControlAdvSearch.Show2010CustomizeQuickItemDialog = false;
+			this.ribbonControlAdvSearch.ShowRibbonDisplayOptionButton = true;
+			this.ribbonControlAdvSearch.Size = new System.Drawing.Size(534, 38);
 			this.ribbonControlAdvSearch.SystemText.QuickAccessDialogDropDownName = "StartMenu";
 			this.ribbonControlAdvSearch.TabIndex = 18;
 			this.ribbonControlAdvSearch.Text = "yyribbonControlAdv1";
@@ -259,10 +271,10 @@
 			this.tableLayoutPanelMain.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
 			this.tableLayoutPanelMain.RowCount = 3;
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 281F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 324F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanelMain.Size = new System.Drawing.Size(574, 311);
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+			this.tableLayoutPanelMain.Size = new System.Drawing.Size(674, 358);
 			this.tableLayoutPanelMain.TabIndex = 21;
 			// 
 			// tableLayoutPanelTopMain
@@ -275,9 +287,9 @@
 			this.tableLayoutPanelTopMain.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanelTopMain.Name = "tableLayoutPanelTopMain";
 			this.tableLayoutPanelTopMain.RowCount = 2;
-			this.tableLayoutPanelTopMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 220F));
+			this.tableLayoutPanelTopMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 254F));
 			this.tableLayoutPanelTopMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelTopMain.Size = new System.Drawing.Size(568, 275);
+			this.tableLayoutPanelTopMain.Size = new System.Drawing.Size(668, 318);
 			this.tableLayoutPanelTopMain.TabIndex = 1;
 			// 
 			// panel1
@@ -288,17 +300,21 @@
 			this.panel1.Controls.Add(this.buttonAdvFindNext);
 			this.panel1.Controls.Add(this.buttonAdvClose);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-			this.panel1.Location = new System.Drawing.Point(25, 223);
+			this.panel1.Location = new System.Drawing.Point(35, 257);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(540, 52);
+			this.panel1.Size = new System.Drawing.Size(630, 60);
 			this.panel1.TabIndex = 0;
 			// 
 			// buttonAdvReplaceAll
 			// 
-			this.buttonAdvReplaceAll.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvReplaceAll.Location = new System.Drawing.Point(3, 15);
+			this.buttonAdvReplaceAll.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvReplaceAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvReplaceAll.BeforeTouchSize = new System.Drawing.Size(111, 27);
+			this.buttonAdvReplaceAll.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvReplaceAll.IsBackStageButton = false;
+			this.buttonAdvReplaceAll.Location = new System.Drawing.Point(3, 17);
 			this.buttonAdvReplaceAll.Name = "buttonAdvReplaceAll";
-			this.buttonAdvReplaceAll.Size = new System.Drawing.Size(95, 23);
+			this.buttonAdvReplaceAll.Size = new System.Drawing.Size(111, 27);
 			this.buttonAdvReplaceAll.TabIndex = 11;
 			this.buttonAdvReplaceAll.Text = "xxReplaceAmpersandAll";
 			this.buttonAdvReplaceAll.UseVisualStyle = true;
@@ -306,10 +322,14 @@
 			// 
 			// buttonAdvReplace
 			// 
-			this.buttonAdvReplace.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvReplace.Location = new System.Drawing.Point(108, 15);
+			this.buttonAdvReplace.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvReplace.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvReplace.BeforeTouchSize = new System.Drawing.Size(111, 27);
+			this.buttonAdvReplace.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvReplace.IsBackStageButton = false;
+			this.buttonAdvReplace.Location = new System.Drawing.Point(126, 17);
 			this.buttonAdvReplace.Name = "buttonAdvReplace";
-			this.buttonAdvReplace.Size = new System.Drawing.Size(95, 23);
+			this.buttonAdvReplace.Size = new System.Drawing.Size(111, 27);
 			this.buttonAdvReplace.TabIndex = 10;
 			this.buttonAdvReplace.Text = "xxAmpersandReplace";
 			this.buttonAdvReplace.UseVisualStyle = true;
@@ -317,10 +337,14 @@
 			// 
 			// buttonAdvFindAll
 			// 
-			this.buttonAdvFindAll.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvFindAll.Location = new System.Drawing.Point(223, 15);
+			this.buttonAdvFindAll.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvFindAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvFindAll.BeforeTouchSize = new System.Drawing.Size(111, 27);
+			this.buttonAdvFindAll.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvFindAll.IsBackStageButton = false;
+			this.buttonAdvFindAll.Location = new System.Drawing.Point(260, 17);
 			this.buttonAdvFindAll.Name = "buttonAdvFindAll";
-			this.buttonAdvFindAll.Size = new System.Drawing.Size(95, 23);
+			this.buttonAdvFindAll.Size = new System.Drawing.Size(111, 27);
 			this.buttonAdvFindAll.TabIndex = 9;
 			this.buttonAdvFindAll.Text = "xxFAmpersandindAll";
 			this.buttonAdvFindAll.UseVisualStyle = true;
@@ -328,10 +352,14 @@
 			// 
 			// buttonAdvFindNext
 			// 
-			this.buttonAdvFindNext.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvFindNext.Location = new System.Drawing.Point(324, 15);
+			this.buttonAdvFindNext.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvFindNext.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvFindNext.BeforeTouchSize = new System.Drawing.Size(111, 27);
+			this.buttonAdvFindNext.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvFindNext.IsBackStageButton = false;
+			this.buttonAdvFindNext.Location = new System.Drawing.Point(378, 17);
 			this.buttonAdvFindNext.Name = "buttonAdvFindNext";
-			this.buttonAdvFindNext.Size = new System.Drawing.Size(95, 23);
+			this.buttonAdvFindNext.Size = new System.Drawing.Size(111, 27);
 			this.buttonAdvFindNext.TabIndex = 8;
 			this.buttonAdvFindNext.Text = "xxAmpersandFindNext";
 			this.buttonAdvFindNext.UseVisualStyle = true;
@@ -339,10 +367,14 @@
 			// 
 			// buttonAdvClose
 			// 
-			this.buttonAdvClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvClose.Location = new System.Drawing.Point(438, 15);
+			this.buttonAdvClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvClose.BeforeTouchSize = new System.Drawing.Size(111, 27);
+			this.buttonAdvClose.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvClose.IsBackStageButton = false;
+			this.buttonAdvClose.Location = new System.Drawing.Point(511, 17);
 			this.buttonAdvClose.Name = "buttonAdvClose";
-			this.buttonAdvClose.Size = new System.Drawing.Size(95, 23);
+			this.buttonAdvClose.Size = new System.Drawing.Size(111, 27);
 			this.buttonAdvClose.TabIndex = 12;
 			this.buttonAdvClose.Text = "xxClose";
 			this.buttonAdvClose.UseVisualStyle = true;
@@ -350,25 +382,29 @@
 			// 
 			// tabControlAdvMain
 			// 
+			this.tabControlAdvMain.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.tabControlAdvMain.BeforeTouchSize = new System.Drawing.Size(650, 236);
 			this.tabControlAdvMain.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlAdvMain.BorderWidth = 0;
 			this.tabControlAdvMain.Controls.Add(this.tabPageAdvFind);
 			this.tabControlAdvMain.Controls.Add(this.tabPageAdvReplace);
 			this.tabControlAdvMain.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControlAdvMain.FixedSingleBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.tabControlAdvMain.FocusOnTabClick = false;
 			this.tabControlAdvMain.HotTrack = true;
 			this.tabControlAdvMain.ImageOffset = 10;
+			this.tabControlAdvMain.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlAdvMain.ItemSize = new System.Drawing.Size(79, 24);
 			this.tabControlAdvMain.LevelTextAndImage = true;
-			this.tabControlAdvMain.Location = new System.Drawing.Point(8, 8);
-			this.tabControlAdvMain.Margin = new System.Windows.Forms.Padding(8);
+			this.tabControlAdvMain.Location = new System.Drawing.Point(9, 9);
+			this.tabControlAdvMain.Margin = new System.Windows.Forms.Padding(9, 9, 9, 9);
 			this.tabControlAdvMain.Name = "tabControlAdvMain";
 			this.tabControlAdvMain.PersistTabState = true;
 			this.tabControlAdvMain.ShowToolTips = true;
-			this.tabControlAdvMain.Size = new System.Drawing.Size(552, 204);
+			this.tabControlAdvMain.Size = new System.Drawing.Size(650, 236);
 			this.tabControlAdvMain.TabIndex = 1;
-			this.tabControlAdvMain.TabPanelBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(224)))), ((int)(((byte)(250)))));
-			this.tabControlAdvMain.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererIE7);
+			this.tabControlAdvMain.TabPanelBackColor = System.Drawing.Color.White;
+			this.tabControlAdvMain.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			this.tabControlAdvMain.ThemesEnabled = true;
 			this.tabControlAdvMain.UserMoveTabs = true;
 			this.tabControlAdvMain.SelectedIndexChanging += new Syncfusion.Windows.Forms.Tools.SelectedIndexChangingEventHandler(this.tabControlAdvMainSelectedIndexChanging);
@@ -378,10 +414,10 @@
 			this.tabPageAdvFind.Controls.Add(this.tableLayoutPanelFindTabMain);
 			this.tabPageAdvFind.Image = null;
 			this.tabPageAdvFind.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageAdvFind.Location = new System.Drawing.Point(2, 34);
+			this.tabPageAdvFind.Location = new System.Drawing.Point(2, 25);
 			this.tabPageAdvFind.Name = "tabPageAdvFind";
 			this.tabPageAdvFind.ShowCloseButton = true;
-			this.tabPageAdvFind.Size = new System.Drawing.Size(548, 168);
+			this.tabPageAdvFind.Size = new System.Drawing.Size(646, 209);
 			this.tabPageAdvFind.TabIndex = 1;
 			this.tabPageAdvFind.Text = "xxFinAmpersandd";
 			this.tabPageAdvFind.ThemesEnabled = true;
@@ -396,42 +432,45 @@
 			this.tableLayoutPanelFindTabMain.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelFindTabMain.Name = "tableLayoutPanelFindTabMain";
 			this.tableLayoutPanelFindTabMain.RowCount = 2;
-			this.tableLayoutPanelFindTabMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
+			this.tableLayoutPanelFindTabMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 87F));
 			this.tableLayoutPanelFindTabMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelFindTabMain.Size = new System.Drawing.Size(548, 168);
+			this.tableLayoutPanelFindTabMain.Size = new System.Drawing.Size(646, 209);
 			this.tableLayoutPanelFindTabMain.TabIndex = 0;
 			// 
 			// tableLayoutPanelFindTabTop
 			// 
 			this.tableLayoutPanelFindTabTop.ColumnCount = 2;
-			this.tableLayoutPanelFindTabTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+			this.tableLayoutPanelFindTabTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 117F));
 			this.tableLayoutPanelFindTabTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelFindTabTop.Controls.Add(this.comboDropDownFindSearchText, 1, 0);
 			this.tableLayoutPanelFindTabTop.Controls.Add(this.autoLabel1, 0, 0);
 			this.tableLayoutPanelFindTabTop.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelFindTabTop.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanelFindTabTop.Name = "tableLayoutPanelFindTabTop";
-			this.tableLayoutPanelFindTabTop.Padding = new System.Windows.Forms.Padding(5);
+			this.tableLayoutPanelFindTabTop.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
 			this.tableLayoutPanelFindTabTop.RowCount = 2;
 			this.tableLayoutPanelFindTabTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanelFindTabTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanelFindTabTop.Size = new System.Drawing.Size(542, 69);
+			this.tableLayoutPanelFindTabTop.Size = new System.Drawing.Size(640, 81);
 			this.tableLayoutPanelFindTabTop.TabIndex = 0;
 			// 
 			// comboDropDownFindSearchText
 			// 
+			this.comboDropDownFindSearchText.BackColor = System.Drawing.Color.White;
+			this.comboDropDownFindSearchText.BeforeTouchSize = new System.Drawing.Size(505, 23);
 			this.comboDropDownFindSearchText.Dock = System.Windows.Forms.DockStyle.Top;
-			this.comboDropDownFindSearchText.Location = new System.Drawing.Point(108, 8);
+			this.comboDropDownFindSearchText.Location = new System.Drawing.Point(126, 9);
 			this.comboDropDownFindSearchText.Name = "comboDropDownFindSearchText";
-			this.comboDropDownFindSearchText.Size = new System.Drawing.Size(426, 21);
+			this.comboDropDownFindSearchText.Size = new System.Drawing.Size(505, 23);
+			this.comboDropDownFindSearchText.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboDropDownFindSearchText.TabIndex = 2;
 			// 
 			// autoLabel1
 			// 
 			this.autoLabel1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.autoLabel1.Location = new System.Drawing.Point(8, 6);
+			this.autoLabel1.Location = new System.Drawing.Point(9, 8);
 			this.autoLabel1.Name = "autoLabel1";
-			this.autoLabel1.Size = new System.Drawing.Size(90, 26);
+			this.autoLabel1.Size = new System.Drawing.Size(101, 30);
 			this.autoLabel1.TabIndex = 1;
 			this.autoLabel1.Text = "xxFiAmpersandndWhatColon";
 			// 
@@ -443,30 +482,34 @@
 			this.tableLayoutPanelFindTabBottom.Controls.Add(this.panel2, 1, 0);
 			this.tableLayoutPanelFindTabBottom.Controls.Add(this.panelFindOptions, 0, 0);
 			this.tableLayoutPanelFindTabBottom.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelFindTabBottom.Location = new System.Drawing.Point(3, 78);
+			this.tableLayoutPanelFindTabBottom.Location = new System.Drawing.Point(3, 90);
 			this.tableLayoutPanelFindTabBottom.Name = "tableLayoutPanelFindTabBottom";
 			this.tableLayoutPanelFindTabBottom.RowCount = 1;
 			this.tableLayoutPanelFindTabBottom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanelFindTabBottom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanelFindTabBottom.Size = new System.Drawing.Size(542, 106);
+			this.tableLayoutPanelFindTabBottom.Size = new System.Drawing.Size(640, 122);
 			this.tableLayoutPanelFindTabBottom.TabIndex = 1;
 			// 
 			// panel2
 			// 
 			this.panel2.Controls.Add(this.buttonAdvFindOptions);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-			this.panel2.Location = new System.Drawing.Point(462, 3);
+			this.panel2.Location = new System.Drawing.Point(547, 3);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(77, 100);
+			this.panel2.Size = new System.Drawing.Size(90, 116);
 			this.panel2.TabIndex = 4;
 			// 
 			// buttonAdvFindOptions
 			// 
-			this.buttonAdvFindOptions.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvFindOptions.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvFindOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvFindOptions.BeforeTouchSize = new System.Drawing.Size(90, 27);
 			this.buttonAdvFindOptions.Dock = System.Windows.Forms.DockStyle.Top;
+			this.buttonAdvFindOptions.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvFindOptions.IsBackStageButton = false;
 			this.buttonAdvFindOptions.Location = new System.Drawing.Point(0, 0);
 			this.buttonAdvFindOptions.Name = "buttonAdvFindOptions";
-			this.buttonAdvFindOptions.Size = new System.Drawing.Size(77, 23);
+			this.buttonAdvFindOptions.Size = new System.Drawing.Size(90, 27);
 			this.buttonAdvFindOptions.TabIndex = 4;
 			this.buttonAdvFindOptions.Text = "xxOpAmpersandtionsGreaterThanGreaterThan";
 			this.buttonAdvFindOptions.UseVisualStyle = true;
@@ -483,15 +526,17 @@
 			this.panelFindOptions.Dock = System.Windows.Forms.DockStyle.Left;
 			this.panelFindOptions.Location = new System.Drawing.Point(3, 3);
 			this.panelFindOptions.Name = "panelFindOptions";
-			this.panelFindOptions.Size = new System.Drawing.Size(326, 100);
+			this.panelFindOptions.Size = new System.Drawing.Size(380, 116);
 			this.panelFindOptions.TabIndex = 5;
 			// 
 			// checkBoxAdvFindSearchInPersistance
 			// 
+			this.checkBoxAdvFindSearchInPersistance.BeforeTouchSize = new System.Drawing.Size(191, 24);
 			this.checkBoxAdvFindSearchInPersistance.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.checkBoxAdvFindSearchInPersistance.Location = new System.Drawing.Point(8, 66);
+			this.checkBoxAdvFindSearchInPersistance.Location = new System.Drawing.Point(9, 76);
+			this.checkBoxAdvFindSearchInPersistance.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvFindSearchInPersistance.Name = "checkBoxAdvFindSearchInPersistance";
-			this.checkBoxAdvFindSearchInPersistance.Size = new System.Drawing.Size(164, 21);
+			this.checkBoxAdvFindSearchInPersistance.Size = new System.Drawing.Size(191, 24);
 			this.checkBoxAdvFindSearchInPersistance.TabIndex = 24;
 			this.checkBoxAdvFindSearchInPersistance.Text = "xxSearchAll";
 			this.checkBoxAdvFindSearchInPersistance.ThemesEnabled = true;
@@ -499,46 +544,55 @@
 			// 
 			// checkBoxAdvFindSearchUp
 			// 
+			this.checkBoxAdvFindSearchUp.BeforeTouchSize = new System.Drawing.Size(164, 24);
 			this.checkBoxAdvFindSearchUp.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.checkBoxAdvFindSearchUp.Location = new System.Drawing.Point(178, 66);
+			this.checkBoxAdvFindSearchUp.Location = new System.Drawing.Point(208, 76);
+			this.checkBoxAdvFindSearchUp.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvFindSearchUp.Name = "checkBoxAdvFindSearchUp";
-			this.checkBoxAdvFindSearchUp.Size = new System.Drawing.Size(141, 21);
+			this.checkBoxAdvFindSearchUp.Size = new System.Drawing.Size(164, 24);
 			this.checkBoxAdvFindSearchUp.TabIndex = 7;
 			this.checkBoxAdvFindSearchUp.Text = "xxSearchUp";
 			this.checkBoxAdvFindSearchUp.ThemesEnabled = true;
 			// 
 			// checkBoxAdvFindMatchWholeCell
 			// 
+			this.checkBoxAdvFindMatchWholeCell.BeforeTouchSize = new System.Drawing.Size(164, 24);
 			this.checkBoxAdvFindMatchWholeCell.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.checkBoxAdvFindMatchWholeCell.Location = new System.Drawing.Point(178, 39);
+			this.checkBoxAdvFindMatchWholeCell.Location = new System.Drawing.Point(208, 45);
+			this.checkBoxAdvFindMatchWholeCell.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvFindMatchWholeCell.Name = "checkBoxAdvFindMatchWholeCell";
-			this.checkBoxAdvFindMatchWholeCell.Size = new System.Drawing.Size(141, 21);
+			this.checkBoxAdvFindMatchWholeCell.Size = new System.Drawing.Size(164, 24);
 			this.checkBoxAdvFindMatchWholeCell.TabIndex = 6;
 			this.checkBoxAdvFindMatchWholeCell.Text = "xxMatchWholeCell";
 			this.checkBoxAdvFindMatchWholeCell.ThemesEnabled = true;
 			// 
 			// checkBoxAdvFindMatchCase
 			// 
+			this.checkBoxAdvFindMatchCase.BeforeTouchSize = new System.Drawing.Size(191, 24);
 			this.checkBoxAdvFindMatchCase.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.checkBoxAdvFindMatchCase.Location = new System.Drawing.Point(8, 39);
+			this.checkBoxAdvFindMatchCase.Location = new System.Drawing.Point(9, 45);
+			this.checkBoxAdvFindMatchCase.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvFindMatchCase.Name = "checkBoxAdvFindMatchCase";
-			this.checkBoxAdvFindMatchCase.Size = new System.Drawing.Size(164, 21);
+			this.checkBoxAdvFindMatchCase.Size = new System.Drawing.Size(191, 24);
 			this.checkBoxAdvFindMatchCase.TabIndex = 5;
 			this.checkBoxAdvFindMatchCase.Text = "xxMatchCase";
 			this.checkBoxAdvFindMatchCase.ThemesEnabled = true;
 			// 
 			// comboBoxAdvFindSearchWithin
 			// 
-			this.comboBoxAdvFindSearchWithin.Location = new System.Drawing.Point(74, 16);
+			this.comboBoxAdvFindSearchWithin.BackColor = System.Drawing.Color.White;
+			this.comboBoxAdvFindSearchWithin.BeforeTouchSize = new System.Drawing.Size(140, 23);
+			this.comboBoxAdvFindSearchWithin.Location = new System.Drawing.Point(86, 18);
 			this.comboBoxAdvFindSearchWithin.Name = "comboBoxAdvFindSearchWithin";
-			this.comboBoxAdvFindSearchWithin.Size = new System.Drawing.Size(121, 21);
+			this.comboBoxAdvFindSearchWithin.Size = new System.Drawing.Size(140, 23);
+			this.comboBoxAdvFindSearchWithin.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvFindSearchWithin.TabIndex = 3;
 			// 
 			// autoLabel7
 			// 
-			this.autoLabel7.Location = new System.Drawing.Point(5, 19);
+			this.autoLabel7.Location = new System.Drawing.Point(6, 22);
 			this.autoLabel7.Name = "autoLabel7";
-			this.autoLabel7.Size = new System.Drawing.Size(127, 13);
+			this.autoLabel7.Size = new System.Drawing.Size(145, 15);
 			this.autoLabel7.TabIndex = 23;
 			this.autoLabel7.Text = "xxWitAmpersandhinColon";
 			// 
@@ -548,11 +602,11 @@
 			this.tabPageAdvReplace.Controls.Add(this.tableLayoutPanelReplaceMain);
 			this.tabPageAdvReplace.Image = null;
 			this.tabPageAdvReplace.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageAdvReplace.Location = new System.Drawing.Point(2, 34);
+			this.tabPageAdvReplace.Location = new System.Drawing.Point(2, 25);
 			this.tabPageAdvReplace.Name = "tabPageAdvReplace";
 			this.tabPageAdvReplace.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.tabPageAdvReplace.ShowCloseButton = true;
-			this.tabPageAdvReplace.Size = new System.Drawing.Size(548, 168);
+			this.tabPageAdvReplace.Size = new System.Drawing.Size(646, 209);
 			this.tabPageAdvReplace.TabIndex = 1;
 			this.tabPageAdvReplace.Text = "xxReAmpersandplace";
 			this.tabPageAdvReplace.ThemesEnabled = true;
@@ -567,9 +621,9 @@
 			this.tableLayoutPanelReplaceMain.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelReplaceMain.Name = "tableLayoutPanelReplaceMain";
 			this.tableLayoutPanelReplaceMain.RowCount = 2;
-			this.tableLayoutPanelReplaceMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
+			this.tableLayoutPanelReplaceMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 87F));
 			this.tableLayoutPanelReplaceMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelReplaceMain.Size = new System.Drawing.Size(548, 168);
+			this.tableLayoutPanelReplaceMain.Size = new System.Drawing.Size(646, 209);
 			this.tableLayoutPanelReplaceMain.TabIndex = 0;
 			// 
 			// tableLayoutPanel1
@@ -580,30 +634,32 @@
 			this.tableLayoutPanel1.Controls.Add(this.panel13, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.panelReplaceOptions, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 78);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 90);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(542, 106);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(640, 122);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// panel13
 			// 
 			this.panel13.Controls.Add(this.buttonAdvReplaceOptions);
 			this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
-			this.panel13.Location = new System.Drawing.Point(462, 3);
+			this.panel13.Location = new System.Drawing.Point(547, 3);
 			this.panel13.Name = "panel13";
-			this.panel13.Size = new System.Drawing.Size(77, 100);
+			this.panel13.Size = new System.Drawing.Size(90, 116);
 			this.panel13.TabIndex = 4;
 			// 
 			// buttonAdvReplaceOptions
 			// 
 			this.buttonAdvReplaceOptions.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvReplaceOptions.BeforeTouchSize = new System.Drawing.Size(90, 27);
 			this.buttonAdvReplaceOptions.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.buttonAdvReplaceOptions.Location = new System.Drawing.Point(0, 77);
+			this.buttonAdvReplaceOptions.IsBackStageButton = false;
+			this.buttonAdvReplaceOptions.Location = new System.Drawing.Point(0, 89);
 			this.buttonAdvReplaceOptions.Name = "buttonAdvReplaceOptions";
-			this.buttonAdvReplaceOptions.Size = new System.Drawing.Size(77, 23);
+			this.buttonAdvReplaceOptions.Size = new System.Drawing.Size(90, 27);
 			this.buttonAdvReplaceOptions.TabIndex = 15;
 			this.buttonAdvReplaceOptions.Text = "xxOpAmpersandtionsGreaterThanGreaterThan";
 			this.buttonAdvReplaceOptions.UseVisualStyle = true;
@@ -620,14 +676,16 @@
 			this.panelReplaceOptions.Dock = System.Windows.Forms.DockStyle.Left;
 			this.panelReplaceOptions.Location = new System.Drawing.Point(3, 3);
 			this.panelReplaceOptions.Name = "panelReplaceOptions";
-			this.panelReplaceOptions.Size = new System.Drawing.Size(323, 100);
+			this.panelReplaceOptions.Size = new System.Drawing.Size(377, 116);
 			this.panelReplaceOptions.TabIndex = 5;
 			// 
 			// checkBoxAdvReplaceSearchInPersistance
 			// 
-			this.checkBoxAdvReplaceSearchInPersistance.Location = new System.Drawing.Point(36, 66);
+			this.checkBoxAdvReplaceSearchInPersistance.BeforeTouchSize = new System.Drawing.Size(159, 24);
+			this.checkBoxAdvReplaceSearchInPersistance.Location = new System.Drawing.Point(42, 76);
+			this.checkBoxAdvReplaceSearchInPersistance.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvReplaceSearchInPersistance.Name = "checkBoxAdvReplaceSearchInPersistance";
-			this.checkBoxAdvReplaceSearchInPersistance.Size = new System.Drawing.Size(136, 21);
+			this.checkBoxAdvReplaceSearchInPersistance.Size = new System.Drawing.Size(159, 24);
 			this.checkBoxAdvReplaceSearchInPersistance.TabIndex = 25;
 			this.checkBoxAdvReplaceSearchInPersistance.Text = "xxSearchAll";
 			this.checkBoxAdvReplaceSearchInPersistance.ThemesEnabled = true;
@@ -635,43 +693,50 @@
 			// 
 			// checkBoxAdvReplaceSearchUp
 			// 
-			this.checkBoxAdvReplaceSearchUp.Location = new System.Drawing.Point(192, 66);
+			this.checkBoxAdvReplaceSearchUp.BeforeTouchSize = new System.Drawing.Size(91, 24);
+			this.checkBoxAdvReplaceSearchUp.Location = new System.Drawing.Point(224, 76);
+			this.checkBoxAdvReplaceSearchUp.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvReplaceSearchUp.Name = "checkBoxAdvReplaceSearchUp";
-			this.checkBoxAdvReplaceSearchUp.Size = new System.Drawing.Size(78, 21);
+			this.checkBoxAdvReplaceSearchUp.Size = new System.Drawing.Size(91, 24);
 			this.checkBoxAdvReplaceSearchUp.TabIndex = 19;
 			this.checkBoxAdvReplaceSearchUp.Text = "xxSearchUp";
 			this.checkBoxAdvReplaceSearchUp.ThemesEnabled = true;
 			// 
 			// checkBoxAdvReplaceMatchWholeCell
 			// 
-			this.checkBoxAdvReplaceMatchWholeCell.Location = new System.Drawing.Point(192, 39);
+			this.checkBoxAdvReplaceMatchWholeCell.BeforeTouchSize = new System.Drawing.Size(135, 24);
+			this.checkBoxAdvReplaceMatchWholeCell.Location = new System.Drawing.Point(224, 45);
+			this.checkBoxAdvReplaceMatchWholeCell.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvReplaceMatchWholeCell.Name = "checkBoxAdvReplaceMatchWholeCell";
-			this.checkBoxAdvReplaceMatchWholeCell.Size = new System.Drawing.Size(116, 21);
+			this.checkBoxAdvReplaceMatchWholeCell.Size = new System.Drawing.Size(135, 24);
 			this.checkBoxAdvReplaceMatchWholeCell.TabIndex = 18;
 			this.checkBoxAdvReplaceMatchWholeCell.Text = "xxMatchWholeCell";
 			this.checkBoxAdvReplaceMatchWholeCell.ThemesEnabled = true;
 			// 
 			// checkBoxAdvReplaceMatchCase
 			// 
-			this.checkBoxAdvReplaceMatchCase.Location = new System.Drawing.Point(192, 12);
+			this.checkBoxAdvReplaceMatchCase.BeforeTouchSize = new System.Drawing.Size(110, 24);
+			this.checkBoxAdvReplaceMatchCase.Location = new System.Drawing.Point(224, 14);
+			this.checkBoxAdvReplaceMatchCase.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvReplaceMatchCase.Name = "checkBoxAdvReplaceMatchCase";
-			this.checkBoxAdvReplaceMatchCase.Size = new System.Drawing.Size(94, 21);
+			this.checkBoxAdvReplaceMatchCase.Size = new System.Drawing.Size(110, 24);
 			this.checkBoxAdvReplaceMatchCase.TabIndex = 17;
 			this.checkBoxAdvReplaceMatchCase.Text = "xxMatchCase";
 			this.checkBoxAdvReplaceMatchCase.ThemesEnabled = true;
 			// 
 			// comboBoxAdvReplaceSearchWithin
 			// 
-			this.comboBoxAdvReplaceSearchWithin.Location = new System.Drawing.Point(51, 12);
+			this.comboBoxAdvReplaceSearchWithin.BeforeTouchSize = new System.Drawing.Size(140, 21);
+			this.comboBoxAdvReplaceSearchWithin.Location = new System.Drawing.Point(59, 14);
 			this.comboBoxAdvReplaceSearchWithin.Name = "comboBoxAdvReplaceSearchWithin";
-			this.comboBoxAdvReplaceSearchWithin.Size = new System.Drawing.Size(121, 21);
+			this.comboBoxAdvReplaceSearchWithin.Size = new System.Drawing.Size(140, 21);
 			this.comboBoxAdvReplaceSearchWithin.TabIndex = 16;
 			// 
 			// autoLabel19
 			// 
-			this.autoLabel19.Location = new System.Drawing.Point(5, 16);
+			this.autoLabel19.Location = new System.Drawing.Point(6, 18);
 			this.autoLabel19.Name = "autoLabel19";
-			this.autoLabel19.Size = new System.Drawing.Size(127, 13);
+			this.autoLabel19.Size = new System.Drawing.Size(145, 15);
 			this.autoLabel19.TabIndex = 6;
 			this.autoLabel19.Text = "xxWitAmpersandhinColon";
 			this.autoLabel19.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -679,7 +744,7 @@
 			// tableLayoutPanel15
 			// 
 			this.tableLayoutPanel15.ColumnCount = 2;
-			this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+			this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 117F));
 			this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel15.Controls.Add(this.comboDropDownReplaceReplaceText, 1, 1);
 			this.tableLayoutPanel15.Controls.Add(this.comboDropDownReplaceSearchText, 1, 0);
@@ -688,43 +753,45 @@
 			this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel15.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel15.Name = "tableLayoutPanel15";
-			this.tableLayoutPanel15.Padding = new System.Windows.Forms.Padding(5);
+			this.tableLayoutPanel15.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
 			this.tableLayoutPanel15.RowCount = 2;
 			this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel15.Size = new System.Drawing.Size(542, 69);
+			this.tableLayoutPanel15.Size = new System.Drawing.Size(640, 81);
 			this.tableLayoutPanel15.TabIndex = 1;
 			// 
 			// comboDropDownReplaceReplaceText
 			// 
+			this.comboDropDownReplaceReplaceText.BeforeTouchSize = new System.Drawing.Size(505, 21);
 			this.comboDropDownReplaceReplaceText.Dock = System.Windows.Forms.DockStyle.Top;
-			this.comboDropDownReplaceReplaceText.Location = new System.Drawing.Point(108, 37);
+			this.comboDropDownReplaceReplaceText.Location = new System.Drawing.Point(126, 43);
 			this.comboDropDownReplaceReplaceText.Name = "comboDropDownReplaceReplaceText";
-			this.comboDropDownReplaceReplaceText.Size = new System.Drawing.Size(426, 21);
+			this.comboDropDownReplaceReplaceText.Size = new System.Drawing.Size(505, 21);
 			this.comboDropDownReplaceReplaceText.TabIndex = 14;
 			// 
 			// comboDropDownReplaceSearchText
 			// 
+			this.comboDropDownReplaceSearchText.BeforeTouchSize = new System.Drawing.Size(505, 21);
 			this.comboDropDownReplaceSearchText.Dock = System.Windows.Forms.DockStyle.Top;
-			this.comboDropDownReplaceSearchText.Location = new System.Drawing.Point(108, 8);
+			this.comboDropDownReplaceSearchText.Location = new System.Drawing.Point(126, 9);
 			this.comboDropDownReplaceSearchText.Name = "comboDropDownReplaceSearchText";
-			this.comboDropDownReplaceSearchText.Size = new System.Drawing.Size(426, 21);
+			this.comboDropDownReplaceSearchText.Size = new System.Drawing.Size(505, 21);
 			this.comboDropDownReplaceSearchText.TabIndex = 13;
 			// 
 			// autoLabel17
 			// 
 			this.autoLabel17.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.autoLabel17.Location = new System.Drawing.Point(8, 6);
+			this.autoLabel17.Location = new System.Drawing.Point(9, 8);
 			this.autoLabel17.Name = "autoLabel17";
-			this.autoLabel17.Size = new System.Drawing.Size(90, 26);
+			this.autoLabel17.Size = new System.Drawing.Size(101, 30);
 			this.autoLabel17.TabIndex = 1;
 			this.autoLabel17.Text = "xxFiAmpersandndWhatColon";
 			// 
 			// autoLabel18
 			// 
-			this.autoLabel18.Location = new System.Drawing.Point(8, 34);
+			this.autoLabel18.Location = new System.Drawing.Point(9, 40);
 			this.autoLabel18.Name = "autoLabel18";
-			this.autoLabel18.Size = new System.Drawing.Size(89, 26);
+			this.autoLabel18.Size = new System.Drawing.Size(109, 30);
 			this.autoLabel18.TabIndex = 3;
 			this.autoLabel18.Text = "xxRAmpesandeplaceWithColon";
 			// 
@@ -733,13 +800,13 @@
 			this.gridListControlSearchResults.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gridListControlSearchResults.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
 			this.gridListControlSearchResults.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
-			this.gridListControlSearchResults.Location = new System.Drawing.Point(8, 289);
-			this.gridListControlSearchResults.Margin = new System.Windows.Forms.Padding(8);
+			this.gridListControlSearchResults.Location = new System.Drawing.Point(9, 333);
+			this.gridListControlSearchResults.Margin = new System.Windows.Forms.Padding(9, 9, 9, 9);
 			this.gridListControlSearchResults.Name = "gridListControlSearchResults";
 			this.gridListControlSearchResults.Office2007ScrollBars = true;
 			this.gridListControlSearchResults.RowCount = 0;
 			this.gridListControlSearchResults.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridListControlSearchResults.Size = new System.Drawing.Size(558, 1);
+			this.gridListControlSearchResults.Size = new System.Drawing.Size(656, 1);
 			this.gridListControlSearchResults.SmartSizeBox = false;
 			this.gridListControlSearchResults.TabIndex = 2;
 			this.gridListControlSearchResults.Text = "gridControl1";
@@ -750,11 +817,15 @@
 			// 
 			// statusStripExFindReplace
 			// 
+			this.statusStripExFindReplace.BeforeTouchSize = new System.Drawing.Size(674, 23);
 			this.statusStripExFindReplace.Dock = Syncfusion.Windows.Forms.Tools.DockStyleEx.Fill;
-			this.statusStripExFindReplace.Location = new System.Drawing.Point(0, 291);
+			this.statusStripExFindReplace.Location = new System.Drawing.Point(0, 335);
+			this.statusStripExFindReplace.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
 			this.statusStripExFindReplace.Name = "statusStripExFindReplace";
-			this.statusStripExFindReplace.Size = new System.Drawing.Size(574, 20);
+			this.statusStripExFindReplace.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
+			this.statusStripExFindReplace.Size = new System.Drawing.Size(674, 23);
 			this.statusStripExFindReplace.TabIndex = 23;
+			this.statusStripExFindReplace.VisualStyle = Syncfusion.Windows.Forms.Tools.StatusStripExStyle.Metro;
 			// 
 			// tabPageAdvMain
 			// 
@@ -804,6 +875,7 @@
 			// comboBoxAdv1
 			// 
 			this.comboBoxAdv1.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv1.BeforeTouchSize = new System.Drawing.Size(301, 21);
 			this.comboBoxAdv1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboBoxAdv1.Location = new System.Drawing.Point(108, 10);
 			this.comboBoxAdv1.Name = "comboBoxAdv1";
@@ -813,6 +885,7 @@
 			// comboBoxAdv2
 			// 
 			this.comboBoxAdv2.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv2.BeforeTouchSize = new System.Drawing.Size(301, 21);
 			this.comboBoxAdv2.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboBoxAdv2.Location = new System.Drawing.Point(108, 8);
 			this.comboBoxAdv2.Name = "comboBoxAdv2";
@@ -863,7 +936,9 @@
 			// buttonAdv2
 			// 
 			this.buttonAdv2.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdv2.BeforeTouchSize = new System.Drawing.Size(77, 23);
 			this.buttonAdv2.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.buttonAdv2.IsBackStageButton = false;
 			this.buttonAdv2.Location = new System.Drawing.Point(0, 77);
 			this.buttonAdv2.Name = "buttonAdv2";
 			this.buttonAdv2.Size = new System.Drawing.Size(77, 23);
@@ -886,7 +961,9 @@
 			// 
 			// checkBoxAdv1
 			// 
+			this.checkBoxAdv1.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.checkBoxAdv1.Location = new System.Drawing.Point(192, 66);
+			this.checkBoxAdv1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdv1.Name = "checkBoxAdv1";
 			this.checkBoxAdv1.Size = new System.Drawing.Size(78, 21);
 			this.checkBoxAdv1.TabIndex = 31;
@@ -895,7 +972,9 @@
 			// 
 			// checkBoxAdv2
 			// 
+			this.checkBoxAdv2.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.checkBoxAdv2.Location = new System.Drawing.Point(192, 39);
+			this.checkBoxAdv2.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdv2.Name = "checkBoxAdv2";
 			this.checkBoxAdv2.Size = new System.Drawing.Size(116, 21);
 			this.checkBoxAdv2.TabIndex = 30;
@@ -904,7 +983,9 @@
 			// 
 			// checkBoxAdv3
 			// 
+			this.checkBoxAdv3.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.checkBoxAdv3.Location = new System.Drawing.Point(192, 12);
+			this.checkBoxAdv3.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdv3.Name = "checkBoxAdv3";
 			this.checkBoxAdv3.Size = new System.Drawing.Size(94, 21);
 			this.checkBoxAdv3.TabIndex = 29;
@@ -914,6 +995,7 @@
 			// comboBoxAdv3
 			// 
 			this.comboBoxAdv3.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv3.BeforeTouchSize = new System.Drawing.Size(121, 21);
 			this.comboBoxAdv3.Location = new System.Drawing.Point(51, 12);
 			this.comboBoxAdv3.Name = "comboBoxAdv3";
 			this.comboBoxAdv3.Size = new System.Drawing.Size(121, 21);
@@ -929,7 +1011,9 @@
 			// 
 			// checkBoxAdv4
 			// 
+			this.checkBoxAdv4.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.checkBoxAdv4.Location = new System.Drawing.Point(192, 66);
+			this.checkBoxAdv4.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdv4.Name = "checkBoxAdv4";
 			this.checkBoxAdv4.Size = new System.Drawing.Size(78, 21);
 			this.checkBoxAdv4.TabIndex = 31;
@@ -938,7 +1022,9 @@
 			// 
 			// checkBoxAdv5
 			// 
+			this.checkBoxAdv5.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.checkBoxAdv5.Location = new System.Drawing.Point(192, 39);
+			this.checkBoxAdv5.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdv5.Name = "checkBoxAdv5";
 			this.checkBoxAdv5.Size = new System.Drawing.Size(116, 21);
 			this.checkBoxAdv5.TabIndex = 30;
@@ -982,6 +1068,7 @@
 			// comboBoxAdv4
 			// 
 			this.comboBoxAdv4.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv4.BeforeTouchSize = new System.Drawing.Size(301, 21);
 			this.comboBoxAdv4.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboBoxAdv4.Location = new System.Drawing.Point(108, 37);
 			this.comboBoxAdv4.Name = "comboBoxAdv4";
@@ -991,6 +1078,7 @@
 			// comboBoxAdv5
 			// 
 			this.comboBoxAdv5.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv5.BeforeTouchSize = new System.Drawing.Size(301, 21);
 			this.comboBoxAdv5.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboBoxAdv5.Location = new System.Drawing.Point(108, 8);
 			this.comboBoxAdv5.Name = "comboBoxAdv5";
@@ -1041,7 +1129,9 @@
 			// buttonAdv3
 			// 
 			this.buttonAdv3.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdv3.BeforeTouchSize = new System.Drawing.Size(77, 23);
 			this.buttonAdv3.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.buttonAdv3.IsBackStageButton = false;
 			this.buttonAdv3.Location = new System.Drawing.Point(0, 77);
 			this.buttonAdv3.Name = "buttonAdv3";
 			this.buttonAdv3.Size = new System.Drawing.Size(77, 23);
@@ -1064,7 +1154,9 @@
 			// 
 			// checkBoxAdv6
 			// 
+			this.checkBoxAdv6.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.checkBoxAdv6.Location = new System.Drawing.Point(192, 12);
+			this.checkBoxAdv6.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdv6.Name = "checkBoxAdv6";
 			this.checkBoxAdv6.Size = new System.Drawing.Size(94, 21);
 			this.checkBoxAdv6.TabIndex = 29;
@@ -1074,6 +1166,7 @@
 			// comboBoxAdv6
 			// 
 			this.comboBoxAdv6.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv6.BeforeTouchSize = new System.Drawing.Size(121, 21);
 			this.comboBoxAdv6.Location = new System.Drawing.Point(51, 12);
 			this.comboBoxAdv6.Name = "comboBoxAdv6";
 			this.comboBoxAdv6.Size = new System.Drawing.Size(121, 21);
@@ -1089,7 +1182,9 @@
 			// 
 			// checkBoxAdv7
 			// 
+			this.checkBoxAdv7.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.checkBoxAdv7.Location = new System.Drawing.Point(192, 66);
+			this.checkBoxAdv7.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdv7.Name = "checkBoxAdv7";
 			this.checkBoxAdv7.Size = new System.Drawing.Size(78, 21);
 			this.checkBoxAdv7.TabIndex = 31;
@@ -1098,7 +1193,9 @@
 			// 
 			// checkBoxAdv8
 			// 
+			this.checkBoxAdv8.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.checkBoxAdv8.Location = new System.Drawing.Point(192, 39);
+			this.checkBoxAdv8.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdv8.Name = "checkBoxAdv8";
 			this.checkBoxAdv8.Size = new System.Drawing.Size(116, 21);
 			this.checkBoxAdv8.TabIndex = 30;
@@ -1142,6 +1239,7 @@
 			// comboBoxAdv7
 			// 
 			this.comboBoxAdv7.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv7.BeforeTouchSize = new System.Drawing.Size(301, 21);
 			this.comboBoxAdv7.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboBoxAdv7.Location = new System.Drawing.Point(108, 37);
 			this.comboBoxAdv7.Name = "comboBoxAdv7";
@@ -1151,6 +1249,7 @@
 			// comboBoxAdv8
 			// 
 			this.comboBoxAdv8.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv8.BeforeTouchSize = new System.Drawing.Size(301, 21);
 			this.comboBoxAdv8.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboBoxAdv8.Location = new System.Drawing.Point(108, 8);
 			this.comboBoxAdv8.Name = "comboBoxAdv8";
@@ -1201,7 +1300,9 @@
 			// buttonAdv4
 			// 
 			this.buttonAdv4.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdv4.BeforeTouchSize = new System.Drawing.Size(77, 23);
 			this.buttonAdv4.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.buttonAdv4.IsBackStageButton = false;
 			this.buttonAdv4.Location = new System.Drawing.Point(0, 77);
 			this.buttonAdv4.Name = "buttonAdv4";
 			this.buttonAdv4.Size = new System.Drawing.Size(77, 23);
@@ -1224,7 +1325,9 @@
 			// 
 			// checkBoxAdv9
 			// 
+			this.checkBoxAdv9.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.checkBoxAdv9.Location = new System.Drawing.Point(192, 12);
+			this.checkBoxAdv9.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdv9.Name = "checkBoxAdv9";
 			this.checkBoxAdv9.Size = new System.Drawing.Size(94, 21);
 			this.checkBoxAdv9.TabIndex = 29;
@@ -1234,6 +1337,7 @@
 			// comboBoxAdv9
 			// 
 			this.comboBoxAdv9.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv9.BeforeTouchSize = new System.Drawing.Size(121, 21);
 			this.comboBoxAdv9.Location = new System.Drawing.Point(51, 12);
 			this.comboBoxAdv9.Name = "comboBoxAdv9";
 			this.comboBoxAdv9.Size = new System.Drawing.Size(121, 21);
@@ -1284,6 +1388,7 @@
 			// comboBoxAdv10
 			// 
 			this.comboBoxAdv10.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv10.BeforeTouchSize = new System.Drawing.Size(301, 21);
 			this.comboBoxAdv10.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboBoxAdv10.Location = new System.Drawing.Point(108, 37);
 			this.comboBoxAdv10.Name = "comboBoxAdv10";
@@ -1293,6 +1398,7 @@
 			// comboBoxAdv11
 			// 
 			this.comboBoxAdv11.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv11.BeforeTouchSize = new System.Drawing.Size(301, 21);
 			this.comboBoxAdv11.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboBoxAdv11.Location = new System.Drawing.Point(108, 8);
 			this.comboBoxAdv11.Name = "comboBoxAdv11";
@@ -1343,7 +1449,9 @@
 			// buttonAdv5
 			// 
 			this.buttonAdv5.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdv5.BeforeTouchSize = new System.Drawing.Size(77, 23);
 			this.buttonAdv5.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.buttonAdv5.IsBackStageButton = false;
 			this.buttonAdv5.Location = new System.Drawing.Point(0, 77);
 			this.buttonAdv5.Name = "buttonAdv5";
 			this.buttonAdv5.Size = new System.Drawing.Size(77, 23);
@@ -1366,7 +1474,9 @@
 			// 
 			// checkBoxAdv10
 			// 
+			this.checkBoxAdv10.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.checkBoxAdv10.Location = new System.Drawing.Point(192, 66);
+			this.checkBoxAdv10.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdv10.Name = "checkBoxAdv10";
 			this.checkBoxAdv10.Size = new System.Drawing.Size(78, 21);
 			this.checkBoxAdv10.TabIndex = 31;
@@ -1375,7 +1485,9 @@
 			// 
 			// checkBoxAdv11
 			// 
+			this.checkBoxAdv11.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.checkBoxAdv11.Location = new System.Drawing.Point(192, 39);
+			this.checkBoxAdv11.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdv11.Name = "checkBoxAdv11";
 			this.checkBoxAdv11.Size = new System.Drawing.Size(116, 21);
 			this.checkBoxAdv11.TabIndex = 30;
@@ -1384,7 +1496,9 @@
 			// 
 			// checkBoxAdv12
 			// 
+			this.checkBoxAdv12.BeforeTouchSize = new System.Drawing.Size(150, 21);
 			this.checkBoxAdv12.Location = new System.Drawing.Point(192, 12);
+			this.checkBoxAdv12.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdv12.Name = "checkBoxAdv12";
 			this.checkBoxAdv12.Size = new System.Drawing.Size(94, 21);
 			this.checkBoxAdv12.TabIndex = 29;
@@ -1394,6 +1508,7 @@
 			// comboBoxAdv12
 			// 
 			this.comboBoxAdv12.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv12.BeforeTouchSize = new System.Drawing.Size(121, 21);
 			this.comboBoxAdv12.Location = new System.Drawing.Point(51, 12);
 			this.comboBoxAdv12.Name = "comboBoxAdv12";
 			this.comboBoxAdv12.Size = new System.Drawing.Size(121, 21);
@@ -1425,6 +1540,7 @@
 			// comboBoxAdv13
 			// 
 			this.comboBoxAdv13.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv13.BeforeTouchSize = new System.Drawing.Size(301, 21);
 			this.comboBoxAdv13.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboBoxAdv13.Location = new System.Drawing.Point(103, 23);
 			this.comboBoxAdv13.Name = "comboBoxAdv13";
@@ -1434,6 +1550,7 @@
 			// comboBoxAdv14
 			// 
 			this.comboBoxAdv14.BackColor = System.Drawing.SystemColors.Control;
+			this.comboBoxAdv14.BeforeTouchSize = new System.Drawing.Size(301, 21);
 			this.comboBoxAdv14.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboBoxAdv14.Location = new System.Drawing.Point(103, 3);
 			this.comboBoxAdv14.Name = "comboBoxAdv14";
@@ -1450,15 +1567,16 @@
 			// 
 			// FindAndReplaceForm
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(574, 311);
+			this.ClientSize = new System.Drawing.Size(674, 358);
 			this.Controls.Add(this.tableLayoutPanelMain);
 			this.Controls.Add(this.ribbonControlAdvSearch);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.HelpButton = false;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(590, 345);
+			this.MinimumSize = new System.Drawing.Size(686, 392);
 			this.Name = "FindAndReplaceForm";
 			this.ShowIcon = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

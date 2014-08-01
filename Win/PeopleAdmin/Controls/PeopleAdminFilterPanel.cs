@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             var view = (Control)_personSelectorPresenter.View;
             tableLayoutPanel1.Controls.Add(view);
             view.Dock = DockStyle.Fill;
-
+			view.Margin = new Padding(2, 2, 2, 0);
             var selectorView = _personSelectorPresenter.View;
             selectorView.HideMenu = true;
 	        selectorView.ShowCheckBoxes = true;
