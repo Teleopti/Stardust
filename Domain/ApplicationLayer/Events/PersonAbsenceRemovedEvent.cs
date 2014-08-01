@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class PersonAbsenceRemovedEvent : RaptorDomainEvent, ITrackedEvent
+	public class PersonAbsenceRemovedEvent : RaptorDomainEvent, ITrackableEvent
 	{
 		public Guid PersonId { get; set; }
 		public Guid ScenarioId { get; set; }

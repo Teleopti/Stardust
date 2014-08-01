@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public class MoveActivityCommand : ITrackedCommand
+	public class MoveActivityCommand : ITrackableCommand
 	{
 		public Guid AgentId { get; set; }
 		public DateOnly ScheduleDate { get; set; }

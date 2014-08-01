@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 	/// <summary>
 	/// Denormalized schedule message
 	/// </summary>
-	public class ProjectionChangedEventBase : RaptorDomainEvent, ITrackedEvent
+	public class ProjectionChangedEventBase : RaptorDomainEvent, ITrackableEvent
 	{
 		/// <summary>
 		/// creates a thingy

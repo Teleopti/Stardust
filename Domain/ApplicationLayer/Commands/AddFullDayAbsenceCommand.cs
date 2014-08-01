@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public class AddFullDayAbsenceCommand : ITrackedCommand
+	public class AddFullDayAbsenceCommand : ITrackableCommand
 	{
 		public Guid PersonId { get; set; }
 		public Guid AbsenceId { get; set; }

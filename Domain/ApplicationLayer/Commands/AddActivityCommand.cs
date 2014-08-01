@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public class AddActivityCommand : ITrackedCommand
+	public class AddActivityCommand : ITrackableCommand
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly Date { get; set; }

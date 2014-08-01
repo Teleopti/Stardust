@@ -59,9 +59,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 				}
 				catch (Exception e)
 				{
-					if (_trackingMessageSender != null && message is ITrackedEvent && message is RaptorDomainEvent)
+					if (_trackingMessageSender != null && message is ITrackableEvent && message is RaptorDomainEvent)
 					{
-						var msg1 = message as ITrackedEvent;
+						var msg1 = message as ITrackableEvent;
 						var msg2 = message as RaptorDomainEvent;
 						if (msg1.TrackId != Guid.Empty)
 							_trackingMessageSender.SendTrackingMessage(msg2.InitiatorId, msg2.BusinessUnitId, new TrackingMessage
