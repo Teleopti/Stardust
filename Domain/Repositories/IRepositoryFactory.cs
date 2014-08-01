@@ -439,8 +439,19 @@ namespace Teleopti.Ccc.Domain.Repositories
         ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork);
         ILicenseRepository CreateLicenseRepository(IUnitOfWork unitOfWork);
         IRequestHistoryReadOnlyRepository CreateRequestHistoryReadOnlyRepository(IStatelessUnitOfWork unitOfWork);
-	IPersonScheduleDayReadModelFinder CreatePersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork);
+		IPersonScheduleDayReadModelFinder CreatePersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork);
         IOvertimeAvailabilityRepository CreateOvertimeAvailabilityRepository(IUnitOfWork unitOfWork);
-	IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork);
+		IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork);
+
+		/// <summary>
+		/// Create agent badge setting repository
+		/// </summary>
+		/// <param name="unitOfWork"></param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: xinfeng
+		/// Created date: 2014-08-01
+		/// </remarks>
+		IAgentBadgeSettingsRepository CreateAgentBadgeSettingsRepository(IUnitOfWork unitOfWork);
     }
 }
