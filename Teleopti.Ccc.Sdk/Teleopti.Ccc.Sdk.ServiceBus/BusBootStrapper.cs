@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Autofac;
@@ -9,9 +11,13 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages.General;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -73,5 +79,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         {
         	return true;
         }
+		protected override void OnEndStart()
+		{
+			var bus = Container.Resolve<IServiceBus>();
+			foreach (var dataSource in StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.ToList())
+			{
+				IList<Guid> businessUnitCollection;
+				using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())
+				{
+					var businessUnitRepository = new BusinessUnitRepository(unitOfWork);
+					businessUnitCollection = businessUnitRepository.LoadAll().Select(b => b.Id.GetValueOrDefault()).ToList();
+				}
+
+				foreach (var businessUnitId in businessUnitCollection)
+				{
+					bus.Send(new AgentBadgeCalculateMessage { Datasource = dataSource.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow,IsInitialization = true });
+				}
+			}
+		}
     }
 }
