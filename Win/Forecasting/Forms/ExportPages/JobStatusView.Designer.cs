@@ -35,11 +35,12 @@
 			this.labelTitle = new System.Windows.Forms.Label();
 			this.labelDetail = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.progressBar1 = new System.Windows.Forms.ProgressBar();
+			this.progressBar1 = new Syncfusion.Windows.Forms.Tools.ProgressBarAdv();
 			this.buttonAdvClose = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.gradientPanel1 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.progressBar1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).BeginInit();
 			this.gradientPanel1.SuspendLayout();
 			this.SuspendLayout();
@@ -90,17 +91,41 @@
 			// 
 			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.progressBar1.BackColor = System.Drawing.SystemColors.Control;
+			this.progressBar1.BackColor = System.Drawing.Color.White;
+			this.progressBar1.BackGradientEndColor = System.Drawing.Color.White;
+			this.progressBar1.BackGradientStartColor = System.Drawing.Color.White;
+			this.progressBar1.BackMultipleColors = new System.Drawing.Color[0];
+			this.progressBar1.BackSegments = false;
+			this.progressBar1.BackTubeEndColor = System.Drawing.Color.White;
+			this.progressBar1.BackTubeStartColor = System.Drawing.Color.White;
+			this.progressBar1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.progressBar1.CustomText = null;
+			this.progressBar1.CustomWaitingRender = false;
+			this.progressBar1.FontColor = System.Drawing.Color.White;
+			this.progressBar1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.progressBar1.ForegroundImage = null;
+			this.progressBar1.GradientEndColor = System.Drawing.Color.Lime;
+			this.progressBar1.GradientStartColor = System.Drawing.Color.Red;
 			this.progressBar1.Location = new System.Drawing.Point(0, 131);
 			this.progressBar1.Margin = new System.Windows.Forms.Padding(0);
+			this.progressBar1.MultipleColors = new System.Drawing.Color[0];
 			this.progressBar1.Name = "progressBar1";
+			this.progressBar1.SegmentWidth = 12;
 			this.progressBar1.Size = new System.Drawing.Size(401, 27);
 			this.progressBar1.TabIndex = 0;
+			this.progressBar1.ThemesEnabled = false;
+			this.progressBar1.TubeEndColor = System.Drawing.Color.Black;
+			this.progressBar1.TubeStartColor = System.Drawing.Color.Red;
+			this.progressBar1.WaitingGradientWidth = 400;
 			// 
 			// buttonAdvClose
 			// 
-			this.buttonAdvClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvClose.BeforeTouchSize = new System.Drawing.Size(87, 23);
 			this.buttonAdvClose.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.buttonAdvClose.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvClose.IsBackStageButton = false;
 			this.buttonAdvClose.Location = new System.Drawing.Point(300, 166);
 			this.buttonAdvClose.Name = "buttonAdvClose";
 			this.buttonAdvClose.Size = new System.Drawing.Size(87, 23);
@@ -130,7 +155,7 @@
 			this.ControlBox = false;
 			this.Controls.Add(this.gradientPanel1);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.HelpButton = false;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
@@ -140,6 +165,7 @@
 			this.Text = "xxRunningBackgroundJob";
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.progressBar1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).EndInit();
 			this.gradientPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -153,7 +179,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvClose;
         private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel1;
-		private System.Windows.Forms.ProgressBar progressBar1;
+		  private Syncfusion.Windows.Forms.Tools.ProgressBarAdv progressBar1;
 		private System.Windows.Forms.ToolTip toolTip1;
 
 	}

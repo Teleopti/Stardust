@@ -112,9 +112,25 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="dateSelectionFromToTarget.WorkPeriodEnd" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFZUZWxlb3B0aS5JbnRlcmZhY2VzLCBWZXJzaW9uPTEuMC4wLjAs
+        IEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49OWU3OTMyY2RiYjM5YzQ1ZgUBAAAAI1RlbGVv
+        cHRpLkludGVyZmFjZXMuRG9tYWluLkRhdGVPbmx5AQAAABFfaW50ZXJuYWxEYXRlVGltZQANAgAAAABA
+        lycB0soICw==
+</value>
+  </data>
+  <data name="dateSelectionFromToTarget.WorkPeriodStart" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFZUZWxlb3B0aS5JbnRlcmZhY2VzLCBWZXJzaW9uPTEuMC4wLjAs
+        IEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49OWU3OTMyY2RiYjM5YzQ1ZgUBAAAAI1RlbGVv
+        cHRpLkludGVyZmFjZXMuRG9tYWluLkRhdGVPbmx5AQAAABFfaW50ZXJuYWxEYXRlVGltZQANAgAAAABA
+        lycB0soICw==
+</value>
+  </data>
 </root>
