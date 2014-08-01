@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -6,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
@@ -36,9 +38,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeIHaveBadge(int bronzeBadgeCount, int silverBadgeCount, int goldBadgeCount)
 		{
 			Browser.Interactions.AssertExists("#BadgePanel");
-			Browser.Interactions.AssertAnyContains("#BadgePanel .GoldBadge", goldBadgeCount.ToString(CultureInfo.InvariantCulture));
-			Browser.Interactions.AssertAnyContains("#BadgePanel .SilverBadge", silverBadgeCount.ToString(CultureInfo.InvariantCulture));
-			Browser.Interactions.AssertAnyContains("#BadgePanel .BronzeBadge", bronzeBadgeCount.ToString(CultureInfo.InvariantCulture));
+			Browser.Interactions.AssertAnyContains("#BadgePanel .gold-badge", goldBadgeCount.ToString(CultureInfo.InvariantCulture));
+			Browser.Interactions.AssertAnyContains("#BadgePanel .silver-badge", silverBadgeCount.ToString(CultureInfo.InvariantCulture));
+			Browser.Interactions.AssertAnyContains("#BadgePanel .bronze-badge", bronzeBadgeCount.ToString(CultureInfo.InvariantCulture));
 		}
 
 		[When(@"I view badge details")]
@@ -48,13 +50,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 		[Then(@"I should see I have (.*) bronze badges, (.*) silver badge and (.*) gold badge for (.*)")]
-		public void ThenIShouldSeeIHaveBronzeBadgesSilverBadgeAndGoldBadgeForAnsweredCalls(int bronzeBadgeCount, int silverBadgeCount, int goldBadgeCount, string badgeType)
+		public void ThenIShouldSeeIHaveBronzeBadgesSilverBadgeAndGoldBadgeForAnsweredCalls(int bronzeBadgeCount, int silverBadgeCount, int goldBadgeCount, BadgeType badgeType)
 		{
-			const string selectorTemplate = ".BadgeDetail:first-child:contains('{0}') .{1}:contains('{2}')";
+			const string selectorTemplate = ".badge-detail:first-child:contains('{0}') .{1}:contains('{2}')";
+			string badgeTypeName;
+			switch (badgeType)
+			{
+				case BadgeType.Adherence:
+					badgeTypeName = Resources.Adherence;
+					break;
+				case BadgeType.AnsweredCalls:
+					badgeTypeName = Resources.AnsweredCalls;
+					break;
+				case BadgeType.AverageHandlingTime:
+					badgeTypeName = Resources.AverageHandlingTime;
+					break;
+				default:
+					badgeTypeName = string.Empty;
+					break;
+			}
 
-			var goldSelector = string.Format(selectorTemplate, badgeType, "GoldBadge", goldBadgeCount);
-			var silverSelector = string.Format(selectorTemplate, badgeType, "SilverBadge", silverBadgeCount);
-			var bronzeSelector = string.Format(selectorTemplate, badgeType, "BronzeBadge", bronzeBadgeCount);
+			var goldSelector = string.Format(selectorTemplate, badgeTypeName, "gold-badge", goldBadgeCount);
+			var silverSelector = string.Format(selectorTemplate, badgeTypeName, "silver-badge", silverBadgeCount);
+			var bronzeSelector = string.Format(selectorTemplate, badgeTypeName, "bronze-badge", bronzeBadgeCount);
 
 			Browser.Interactions.AssertExistsUsingJQuery(goldSelector);
 			Browser.Interactions.AssertExistsUsingJQuery(silverSelector);
@@ -91,20 +109,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var badgeType = Interfaces.Domain.BadgeType.AnsweredCalls;
-			if (BadgeType == "AnsweredCalls")
+			BadgeType badgeType;
+			if (!Enum.TryParse(BadgeType, true, out badgeType))
 			{
-				badgeType = Interfaces.Domain.BadgeType.AnsweredCalls;
+				throw  new ArgumentException(@"BadgeType", string.Format("\"{0}\" is not a valid badge type.", BadgeType));
 			}
-			if (BadgeType == "AHT")
-			{
-				badgeType = Interfaces.Domain.BadgeType.AverageHandlingTime;
-			}
-			if (BadgeType == "Adherence")
-			{
-				badgeType = Interfaces.Domain.BadgeType.Adherence;
-			}
-			AgentBadge = new AgentBadge()
+
+			AgentBadge = new AgentBadge
 			{
 				BadgeType = badgeType,
 				BronzeBadge = Bronze,
