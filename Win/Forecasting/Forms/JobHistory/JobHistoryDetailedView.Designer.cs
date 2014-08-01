@@ -83,18 +83,19 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.Controls.Add(this.splitContainerJobHistoryView, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 152);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(1, 151);
 			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(1076, 587);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(1086, 594);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 
 			// splitContainerJobHistoryView
 			// 
 			this.splitContainerJobHistoryView.BackColor = System.Drawing.SystemColors.Window;
 			this.splitContainerJobHistoryView.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(235)))), ((int)(((byte)(240))))), System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(211)))), ((int)(((byte)(221))))));
+			this.splitContainerJobHistoryView.BeforeTouchSize = 7;
 			this.splitContainerJobHistoryView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainerJobHistoryView.HotBackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(240)))), ((int)(((byte)(171))))), System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(223)))), ((int)(((byte)(103))))));
 			this.splitContainerJobHistoryView.HotExpandLine = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(107)))), ((int)(((byte)(207)))));
@@ -113,8 +114,8 @@
 			this.splitContainerJobHistoryView.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(194)))), ((int)(((byte)(203))))), System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(227)))), ((int)(((byte)(231))))));
 			this.splitContainerJobHistoryView.Panel2.Controls.Add(this.tableLayoutPanel3);
 			this.splitContainerJobHistoryView.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
-			this.splitContainerJobHistoryView.Size = new System.Drawing.Size(1076, 587);
-			this.splitContainerJobHistoryView.SplitterDistance = 304;
+			this.splitContainerJobHistoryView.Size = new System.Drawing.Size(1086, 594);
+			this.splitContainerJobHistoryView.SplitterDistance = 307;
 			this.splitContainerJobHistoryView.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Silver;
 			this.splitContainerJobHistoryView.TabIndex = 0;
 			this.splitContainerJobHistoryView.ThemesEnabled = true;
@@ -138,7 +139,7 @@
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(1076, 304);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(1086, 307);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// gridControlJobHistory
@@ -152,7 +153,7 @@
 			gridBaseStyle1.StyleInfo.BaseStyle = "Header";
 			gridBaseStyle1.StyleInfo.CellType = "ColumnHeaderCell";
 			gridBaseStyle1.StyleInfo.Enabled = false;
-			gridBaseStyle1.StyleInfo.Font.Bold = false;
+			gridBaseStyle1.StyleInfo.Font.Bold = true;
 			gridBaseStyle1.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
 			gridBaseStyle2.Name = "Header";
 			gridBaseStyle2.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
@@ -186,20 +187,26 @@
             | Syncfusion.Windows.Forms.Grid.GridControllerOptions.ResizeCells) 
             | Syncfusion.Windows.Forms.Grid.GridControllerOptions.DragColumnHeader)));
 			this.gridControlJobHistory.DefaultColWidth = 80;
+			this.gridControlJobHistory.DefaultRowHeight = 20;
 			this.gridControlJobHistory.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gridControlJobHistory.EnableEdit = false;
 			this.gridControlJobHistory.Font = new System.Drawing.Font("Segoe UI", 8F);
-			this.gridControlJobHistory.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2010;
-			this.gridControlJobHistory.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
+			this.gridControlJobHistory.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
+			this.gridControlJobHistory.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
 			this.gridControlJobHistory.Location = new System.Drawing.Point(0, 0);
 			this.gridControlJobHistory.Margin = new System.Windows.Forms.Padding(0);
+			this.gridControlJobHistory.MetroScrollBars = true;
 			this.gridControlJobHistory.MinResizeColSize = 80;
 			this.gridControlJobHistory.Name = "gridControlJobHistory";
 			this.gridControlJobHistory.Office2007ScrollBars = true;
 			this.gridControlJobHistory.Office2007ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2007ColorScheme.Managed;
 			this.gridControlJobHistory.Office2010ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2010ColorScheme.Managed;
+			this.gridControlJobHistory.Properties.ForceImmediateRepaint = false;
+			this.gridControlJobHistory.Properties.GridLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
+			this.gridControlJobHistory.Properties.MarkColHeader = false;
+			this.gridControlJobHistory.Properties.MarkRowHeader = false;
 			this.gridControlJobHistory.ShowCurrentCellBorderBehavior = Syncfusion.Windows.Forms.Grid.GridShowCurrentCellBorder.GrayWhenLostFocus;
-			this.gridControlJobHistory.Size = new System.Drawing.Size(1076, 262);
+			this.gridControlJobHistory.Size = new System.Drawing.Size(1086, 265);
 			this.gridControlJobHistory.SmartSizeBox = false;
 			this.gridControlJobHistory.SortBehavior = Syncfusion.Windows.Forms.Grid.GridSortBehavior.SingleClick;
 			this.gridControlJobHistory.TabIndex = 0;
@@ -220,7 +227,7 @@
 			// autoLabelPageCount
 			// 
 			this.autoLabelPageCount.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.autoLabelPageCount.Location = new System.Drawing.Point(6, 275);
+			this.autoLabelPageCount.Location = new System.Drawing.Point(6, 278);
 			this.autoLabelPageCount.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
 			this.autoLabelPageCount.Name = "autoLabelPageCount";
 			this.autoLabelPageCount.Size = new System.Drawing.Size(121, 15);
@@ -233,7 +240,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabelNext.AutoSize = true;
-			this.linkLabelNext.Location = new System.Drawing.Point(976, 262);
+			this.linkLabelNext.Location = new System.Drawing.Point(986, 265);
 			this.linkLabelNext.Name = "linkLabelNext";
 			this.linkLabelNext.Size = new System.Drawing.Size(97, 42);
 			this.linkLabelNext.TabIndex = 2;
@@ -248,7 +255,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabelPrevious.AutoSize = true;
-			this.linkLabelPrevious.Location = new System.Drawing.Point(873, 262);
+			this.linkLabelPrevious.Location = new System.Drawing.Point(883, 265);
 			this.linkLabelPrevious.Name = "linkLabelPrevious";
 			this.linkLabelPrevious.Size = new System.Drawing.Size(97, 42);
 			this.linkLabelPrevious.TabIndex = 1;
@@ -269,7 +276,7 @@
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(1076, 276);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(1086, 280);
 			this.tableLayoutPanel3.TabIndex = 0;
 			// 
 			// gridControlDetailedJobHistory
@@ -277,11 +284,12 @@
 			this.gridControlDetailedJobHistory.ActivateCurrentCellBehavior = Syncfusion.Windows.Forms.Grid.GridCellActivateAction.None;
 			this.gridControlDetailedJobHistory.AllowDragSelectedCols = true;
 			this.gridControlDetailedJobHistory.AllowResizeToFit = false;
+			this.gridControlDetailedJobHistory.AlphaBlendSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(94)))), ((int)(((byte)(171)))), ((int)(((byte)(222)))));
 			gridBaseStyle5.Name = "Column Header";
 			gridBaseStyle5.StyleInfo.BaseStyle = "Header";
 			gridBaseStyle5.StyleInfo.CellType = "ColumnHeaderCell";
 			gridBaseStyle5.StyleInfo.Enabled = false;
-			gridBaseStyle5.StyleInfo.Font.Bold = false;
+			gridBaseStyle5.StyleInfo.Font.Bold = true;
 			gridBaseStyle5.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
 			gridBaseStyle6.Name = "Header";
 			gridBaseStyle6.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
@@ -312,22 +320,28 @@
             | Syncfusion.Windows.Forms.Grid.GridControllerOptions.ExcelLikeSelection) 
             | Syncfusion.Windows.Forms.Grid.GridControllerOptions.ResizeCells)));
 			this.gridControlDetailedJobHistory.DefaultColWidth = 80;
+			this.gridControlDetailedJobHistory.DefaultRowHeight = 20;
 			this.gridControlDetailedJobHistory.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gridControlDetailedJobHistory.EnableEdit = false;
 			this.gridControlDetailedJobHistory.Font = new System.Drawing.Font("Segoe UI", 8F);
 			this.gridControlDetailedJobHistory.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.gridControlDetailedJobHistory.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2010;
-			this.gridControlDetailedJobHistory.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
+			this.gridControlDetailedJobHistory.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
+			this.gridControlDetailedJobHistory.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
 			this.gridControlDetailedJobHistory.Location = new System.Drawing.Point(0, 0);
 			this.gridControlDetailedJobHistory.Margin = new System.Windows.Forms.Padding(0);
+			this.gridControlDetailedJobHistory.MetroScrollBars = true;
 			this.gridControlDetailedJobHistory.MinResizeColSize = 80;
 			this.gridControlDetailedJobHistory.Name = "gridControlDetailedJobHistory";
 			this.gridControlDetailedJobHistory.Office2007ScrollBars = true;
 			this.gridControlDetailedJobHistory.Office2007ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2007ColorScheme.Managed;
 			this.gridControlDetailedJobHistory.Office2010ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2010ColorScheme.Managed;
 			this.gridControlDetailedJobHistory.OptimizeInsertRemoveCells = true;
+			this.gridControlDetailedJobHistory.Properties.ForceImmediateRepaint = false;
+			this.gridControlDetailedJobHistory.Properties.GridLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(234)))), ((int)(((byte)(234)))));
+			this.gridControlDetailedJobHistory.Properties.MarkColHeader = false;
+			this.gridControlDetailedJobHistory.Properties.MarkRowHeader = false;
 			this.gridControlDetailedJobHistory.ShowCurrentCellBorderBehavior = Syncfusion.Windows.Forms.Grid.GridShowCurrentCellBorder.GrayWhenLostFocus;
-			this.gridControlDetailedJobHistory.Size = new System.Drawing.Size(1077, 276);
+			this.gridControlDetailedJobHistory.Size = new System.Drawing.Size(1086, 280);
 			this.gridControlDetailedJobHistory.SmartSizeBox = false;
 			this.gridControlDetailedJobHistory.SortBehavior = Syncfusion.Windows.Forms.Grid.GridSortBehavior.SingleClick;
 			this.gridControlDetailedJobHistory.TabIndex = 0;
@@ -345,30 +359,46 @@
 			// 
 			// ribbonControlAdv1
 			// 
-			this.ribbonControlAdv1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.Header.AddMainItem(toolStripTabItem1);
-			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+			this.ribbonControlAdv1.HideMenuButtonToolTip = false;
+			this.ribbonControlAdv1.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
+			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 1);
 			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
+			this.ribbonControlAdv1.MenuButtonEnabled = true;
+			this.ribbonControlAdv1.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.MenuButtonText = "";
 			this.ribbonControlAdv1.MenuButtonVisible = false;
+			this.ribbonControlAdv1.MenuButtonWidth = 56;
+			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
 			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdv1.MinimumSize = new System.Drawing.Size(0, 63);
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
+			this.ribbonControlAdv1.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
+			this.ribbonControlAdv1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
 			// 
 			// ribbonControlAdv1.OfficeMenu
 			// 
 			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
 			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
+			this.ribbonControlAdv1.OverFlowButtonToolTip = "Show DropDown";
+			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.ribbonControlAdv1.QuickPanelVisible = false;
+			this.ribbonControlAdv1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
+			this.ribbonControlAdv1.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
 			this.ribbonControlAdv1.SelectedTab = this.toolStripTabItem1;
+			this.ribbonControlAdv1.Show2010CustomizeQuickItemDialog = false;
 			this.ribbonControlAdv1.ShowCaption = false;
 			this.ribbonControlAdv1.ShowContextMenu = false;
 			this.ribbonControlAdv1.ShowLauncher = false;
 			this.ribbonControlAdv1.ShowQuickItemsDropDownButton = false;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(1086, 151);
+			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = false;
+			this.ribbonControlAdv1.Size = new System.Drawing.Size(1090, 151);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Start menu";
 			this.ribbonControlAdv1.TabIndex = 0;
 			this.ribbonControlAdv1.Text = "ribbonControlAdv1";
+			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
+			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.ribbonControlAdv1.BeforeContextMenuOpen += new Syncfusion.Windows.Forms.Tools.RibbonControlAdv.OnRightClick(this.ribbonControlAdv1BeforeContextMenuOpen);
 			// 
 			// toolStripTabItem1
@@ -390,22 +420,23 @@
 			this.toolStripTabItem1.Panel.Text = "xxHome";
 			this.toolStripTabItem1.Position = 0;
 			this.SetShortcut(this.toolStripTabItem1, System.Windows.Forms.Keys.None);
-			this.toolStripTabItem1.Size = new System.Drawing.Size(54, 19);
+			this.toolStripTabItem1.Size = new System.Drawing.Size(70, 25);
 			this.toolStripTabItem1.Text = "xxHome";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripTabItem1, false);
 			// 
 			// toolStripEx1
 			// 
 			this.toolStripEx1.Dock = System.Windows.Forms.DockStyle.None;
-			this.toolStripEx1.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripEx1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripEx1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripEx1.Image = null;
 			this.toolStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonReloadHistory});
 			this.toolStripEx1.Location = new System.Drawing.Point(0, 1);
 			this.toolStripEx1.Name = "toolStripEx1";
+			this.toolStripEx1.Office12Mode = false;
 			this.toolStripEx1.ShowCaption = false;
-			this.toolStripEx1.Size = new System.Drawing.Size(67, 89);
+			this.toolStripEx1.Size = new System.Drawing.Size(67, 93);
 			this.toolStripEx1.TabIndex = 0;
 			this.toolStripEx1.Tag = "0";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripEx1, false);
@@ -418,7 +449,7 @@
 			this.toolStripButtonReloadHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonReloadHistory.Name = "toolStripButtonReloadHistory";
 			this.SetShortcut(this.toolStripButtonReloadHistory, System.Windows.Forms.Keys.None);
-			this.toolStripButtonReloadHistory.Size = new System.Drawing.Size(60, 82);
+			this.toolStripButtonReloadHistory.Size = new System.Drawing.Size(60, 90);
 			this.toolStripButtonReloadHistory.Text = "xxRefresh";
 			this.toolStripButtonReloadHistory.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonReloadHistory, false);
@@ -427,15 +458,16 @@
 			// toolStripEx2
 			// 
 			this.toolStripEx2.Dock = System.Windows.Forms.DockStyle.None;
-			this.toolStripEx2.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripEx2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripEx2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripEx2.Image = null;
 			this.toolStripEx2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItem1});
 			this.toolStripEx2.Location = new System.Drawing.Point(69, 1);
 			this.toolStripEx2.Name = "toolStripEx2";
+			this.toolStripEx2.Office12Mode = false;
 			this.toolStripEx2.ShowCaption = true;
-			this.toolStripEx2.Size = new System.Drawing.Size(84, 89);
+			this.toolStripEx2.Size = new System.Drawing.Size(84, 93);
 			this.toolStripEx2.TabIndex = 3;
 			this.toolStripEx2.Text = "Detail level";
 			// 
@@ -449,7 +481,7 @@
             this.toolStripButtonErrors});
 			this.toolStripPanelItem1.Name = "toolStripPanelItem1";
 			this.SetShortcut(this.toolStripPanelItem1, System.Windows.Forms.Keys.None);
-			this.toolStripPanelItem1.Size = new System.Drawing.Size(75, 70);
+			this.toolStripPanelItem1.Size = new System.Drawing.Size(75, 80);
 			this.toolStripPanelItem1.Text = "toolStripPanelItem1";
 			this.toolStripPanelItem1.Transparent = true;
 			// 
@@ -520,13 +552,16 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
+			this.Borders = new System.Windows.Forms.Padding(0);
 			this.ClientSize = new System.Drawing.Size(1088, 745);
+			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Controls.Add(this.ribbonControlAdv1);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimumSize = new System.Drawing.Size(249, 173);
 			this.Name = "JobHistoryDetailedView";
+			this.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "xxJobHistoryView";
 			this.tableLayoutPanel1.ResumeLayout(false);
