@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -19,6 +18,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class AgentBageStepDefinition
 	{
+		[Given(@"There is a agent badge settings with")]
+		public void GivenThereIsAAgentBadgeSettingsWith(Table table)
+		{
+			var badgeSetting = table.CreateInstance<BadgeSettingsConfigurable>();
+			DataMaker.Data().Apply(badgeSetting);
+		}
+
 		[Given(@"I have badges with")]
 		public void GivenIHaveBadges(Table table)
 		{
@@ -54,7 +60,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExistsUsingJQuery(silverSelector);
 			Browser.Interactions.AssertExistsUsingJQuery(bronzeSelector);
 		}
+	}
 
+	public class BadgeSettingsConfigurable : IDataSetup
+	{
+		public bool BadgeEnabled { get; set; }
+
+		public IAgentBadgeThresholdSettings Settings;
+
+		public void Apply(IUnitOfWork uow)
+		{
+			Settings = new AgentBadgeThresholdSettings
+			{
+				EnableBadge = BadgeEnabled
+			};
+
+			var rep = new AgentBadgeSettingsRepository(uow);
+			rep.Add(Settings);
+		}
 	}
 
 	public class BadgeConfigurable : IUserSetup

@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<ReportsProvider>().As<IReportsProvider>();
 			builder.RegisterType<ReportsNavigationProvider>().As<IReportsNavigationProvider>();
 			builder.RegisterType<BadgeProvider>().As<IBadgeProvider>();
+			builder.RegisterType<BadgeSettingProvider>().As<IBadgeSettingProvider>();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)

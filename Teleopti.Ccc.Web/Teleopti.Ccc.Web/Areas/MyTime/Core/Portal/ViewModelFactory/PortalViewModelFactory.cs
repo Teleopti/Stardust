@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using AutoMapper;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -23,10 +22,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly IReportsNavigationProvider _reportsNavigationProvider;
 		private readonly IBadgeProvider _badgeProvider;
 		private readonly IToggleManager _toggleManager;
+		private readonly IBadgeSettingProvider _badgeSettingProvider;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider, ILicenseActivatorProvider licenseActivatorProviderProvider,
 			IPushMessageProvider pushMessageProvider, ILoggedOnUser loggedOnUser, IReportsNavigationProvider reportsNavigationProvider, IBadgeProvider badgeProvider,
-			IToggleManager toggleManager)
+			IBadgeSettingProvider badgeSettingProvider, IToggleManager toggleManager)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_reportsNavigationProvider = reportsNavigationProvider;
 			_badgeProvider = badgeProvider;
 			_toggleManager = toggleManager;
+			_badgeSettingProvider = badgeSettingProvider;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -76,12 +77,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 			IEnumerable<IAgentBadge> badges = null;
 
-			var badgeFeatureEnabled = _toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913);
-			if (badgeFeatureEnabled)
+			var badgeEnabled = false;
+			var badgeToggleEnabled = _toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913);
+			if (badgeToggleEnabled)
 			{
-				badges = _badgeProvider.GetBadges();
+				var badgeSettings = _badgeSettingProvider.GetBadgeSettings();
+				if (badgeSettings != null)
+				{
+					badgeEnabled = badgeSettings.EnableBadge;
+					badges = _badgeProvider.GetBadges();
+				}
 			}
-
+			
 			return new PortalViewModel
 						{
 							ReportNavigationItems = reportsList,
@@ -98,7 +105,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 								SilverBadge = x.SilverBadge,
 								GoldBadge = x.GoldBadge
 							}),
-							IsBadgesToggleEnabled = badgeFeatureEnabled
+							IsBadgesToggleEnabled = badgeToggleEnabled,
+							IsBadgeFeatureEnabled = badgeEnabled
 						};
 		}
 

@@ -15,6 +15,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public bool ShowMeridian { get; set; }
 		public IEnumerable<BadgeViewModel> Badges { get; set; }
 		public bool IsBadgesToggleEnabled { get; set; }
+
+		/// <summary>
+		/// Check if administrator enabled badge feature
+		/// </summary>
+		public bool IsBadgeFeatureEnabled { get; set; }
 	}
 
 	public class NavigationItem
