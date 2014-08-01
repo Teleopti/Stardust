@@ -22,8 +22,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public void ShouldNotHavePreferencesNavigationItemIfNotPermission()
 		{
 			var permissionProvider = NoPermissionToPreferences();
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>(), MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
+				MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>(),
+				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
+				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -34,8 +36,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public void ShouldHavePreferencesNavigationItemIfOnlyPermissionToExtendedPreferences()
 		{
 			var permissionProvider = NoPermissionToStandardPreferences();
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>(), MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
+				MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>(),
+				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
+				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -46,8 +50,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public void ShouldHavePreferencesNavigationItemIfOnlyPermissionToStandardPreferences()
 		{
 			var permissionProvider = NoPermissionToExtendedPreferences();
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>(), MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
+				MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>(),
+				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
+				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>());
 
 			var result = target.CreatePortalViewModel();
 

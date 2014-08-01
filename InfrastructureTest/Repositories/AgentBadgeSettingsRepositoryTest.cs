@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     ///</summary>
     [TestFixture]
     [Category("LongRunning")]
-	public class AgentBadgeSettingsRepository : RepositoryTest<AgentBadgeThresholdSettings>
+	public class AgentBadgeSettingsRepository : RepositoryTest<IAgentBadgeThresholdSettings>
     {
-	    protected override AgentBadgeThresholdSettings CreateAggregateWithCorrectBusinessUnit()
+	    protected override IAgentBadgeThresholdSettings CreateAggregateWithCorrectBusinessUnit()
 	    {
 		    return new AgentBadgeThresholdSettings
 		    {
@@ -27,11 +27,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    };
 	    }
 
-	    protected override void VerifyAggregateGraphProperties(AgentBadgeThresholdSettings loadedAggregateFromDatabase)
+	    protected override void VerifyAggregateGraphProperties(IAgentBadgeThresholdSettings loadedAggregateFromDatabase)
 	    {
 		    var settings = CreateAggregateWithCorrectBusinessUnit();
 			Assert.AreEqual(settings.EnableBadge, true);
-			Assert.AreEqual(settings.BusinessUnit, loadedAggregateFromDatabase.BusinessUnit);
 			Assert.AreEqual(settings.AdherenceThreshold, loadedAggregateFromDatabase.AdherenceThreshold);
 			Assert.AreEqual(settings.AnsweredCallsThreshold, loadedAggregateFromDatabase.AnsweredCallsThreshold);
 			Assert.AreEqual(settings.AHTThreshold, loadedAggregateFromDatabase.AHTThreshold);
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(settings.GoldBadgeDaysThreshold, loadedAggregateFromDatabase.GoldBadgeDaysThreshold);
 	    }
 
-	    protected override Repository<AgentBadgeThresholdSettings> TestRepository(IUnitOfWork unitOfWork)
+	    protected override Repository<IAgentBadgeThresholdSettings> TestRepository(IUnitOfWork unitOfWork)
 	    {
 		    return new Infrastructure.Repositories.AgentBadgeSettingsRepository(unitOfWork);
 	    }

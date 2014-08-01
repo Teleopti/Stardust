@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>(),
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>());
+				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>());
 
 			var result = target.CreatePortalViewModel();
 
