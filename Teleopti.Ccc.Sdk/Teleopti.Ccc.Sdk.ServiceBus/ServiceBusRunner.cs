@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			_generalBus = new ConfigFileDefaultHost();
 			_generalBus.UseFileBasedBusConfiguration("GeneralQueue.config");
-			_generalBus.Start<BusBootStrapper>();
+			_generalBus.Start<GeneralBusBootStrapper>();
 
 			_denormalizeBus = new ConfigFileDefaultHost();
 			_denormalizeBus.UseFileBasedBusConfiguration("DenormalizeQueue.config");
