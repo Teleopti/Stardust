@@ -78,6 +78,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExistsUsingJQuery(silverSelector);
 			Browser.Interactions.AssertExistsUsingJQuery(bronzeSelector);
 		}
+
+		[Then(@"There should display no badge information")]
+		public void ThenThereShouldDisplayNoBadgeInformation()
+		{
+			Browser.Interactions.AssertNotExists(".user-name-link", "#BadgePanel");
+		}
+
 	}
 
 	public class BadgeSettingsConfigurable : IDataSetup

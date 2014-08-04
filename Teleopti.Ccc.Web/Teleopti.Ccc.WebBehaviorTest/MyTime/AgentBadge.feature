@@ -1,6 +1,6 @@
 ﻿@OnlyRunIfEnabled('MyTimeWeb_AgentBadge_28913')
 Feature: AgentBadge
-	As an agent I want to get motivated 
+	As an agent I want to get motivated
 	by getting badges for my performance
 
 Background: 
@@ -8,16 +8,16 @@ Given there is a role with
 	| Field                    | Value                 |
 	| Name                     | Full access to mytime |
   And I have the role 'Full access to mytime'
-  And There is a agent badge settings with
-  | Field        | Value |
-  | BadgeEnabled | True  |
 
 Scenario: Show my badge
-Given I have badges with
-| Badge type          | Bronze | Silver | Gold |
-| AnsweredCalls       | 4      | 1      | 2    |
-| AverageHandlingTime | 2      | 1      | 1    |
-| Adherence           | 3      | 0      | 0    |
+Given There is a agent badge settings with
+  | Field        | Value |
+  | BadgeEnabled | True  | 
+  And I have badges with
+  | Badge type          | Bronze | Silver | Gold |
+  | AnsweredCalls       | 4      | 1      | 2    |
+  | AverageHandlingTime | 2      | 1      | 1    |
+  | Adherence           | 3      | 0      | 0    |
  When I am viewing week schedule
  Then I should see I have 9 bronze badge, 2 silver badge and 3 gold badge
  When I view badge details
@@ -26,7 +26,22 @@ Given I have badges with
   And I should see I have 3 bronze badges, 0 silver badge and 0 gold badge for Adherence
 
 Scenario: Show zero badge when agent has no badge
-Given I have badges with
-| Badge type     | Bronze | Silver | Gold |
+Given There is a agent badge settings with
+  | Field        | Value |
+  | BadgeEnabled | True  |
+  And I have badges with
+  | Badge type     | Bronze | Silver | Gold |
  When I am viewing week schedule
  Then I should see I have 0 bronze badge, 0 silver badge and 0 gold badge
+
+Scenario: Do not show badge when badge feature disabled
+Given There is a agent badge settings with
+  | Field        | Value |
+  | BadgeEnabled | False |
+  And I have badges with
+  | Badge type          | Bronze | Silver | Gold |
+  | AnsweredCalls       | 4      | 1      | 2    |
+  | AverageHandlingTime | 2      | 1      | 1    |
+  | Adherence           | 3      | 0      | 0    |
+ When I am viewing week schedule
+ Then There should display no badge information
