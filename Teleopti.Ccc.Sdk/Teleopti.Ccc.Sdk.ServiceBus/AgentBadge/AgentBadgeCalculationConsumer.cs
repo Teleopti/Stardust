@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
@@ -28,13 +30,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 		public void Consume(AgentBadgeCalculateMessage message)
 		{
-			foreach (var dataSource in GetRegisteredDataSourceCollection().Where(dataSource => dataSource.Statistic != null && dataSource.Application != null))
+			foreach (
+				var dataSource in
+					GetRegisteredDataSourceCollection()
+						.Where(dataSource => dataSource.Statistic != null && dataSource.Application != null))
 			{
 				AdherenceReportSetting adherenceReportSetting;
 				IList<IPerson> allAgents;
-				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
+				using (var appuow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
-					var agentBadgeSetting = _repositoryFactory.CreateAgentBadgeSettingsRepository(uow).LoadAll().FirstOrDefault();
+					var agentBadgeSetting = _repositoryFactory.CreateAgentBadgeSettingsRepository(appuow).LoadAll().FirstOrDefault();
 					if (agentBadgeSetting == null || !agentBadgeSetting.EnableBadge)
 					{
 						// If no setting for agent badge or agent badge disabled
@@ -52,67 +57,84 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						continue;
 					}
 
-					adherenceReportSetting = _repositoryFactory.CreateGlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
-					allAgents = _repositoryFactory.CreatePersonRepository(uow).LoadAll();
-				}
-				using (var uow = dataSource.Statistic.CreateAndOpenStatelessUnitOfWork())
-				{
-					var timeZoneList = _repositoryFactory.CreateStatisticRepository().LoadAllTimeZones(uow);
-					if (message.IsInitialization)
+					adherenceReportSetting =
+						_repositoryFactory.CreateGlobalSettingDataRepository(appuow)
+							.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
+					allAgents = _repositoryFactory.CreatePersonRepository(appuow).LoadAll();
+
+					using (var uow = dataSource.Statistic.CreateAndOpenStatelessUnitOfWork())
 					{
-						foreach (var timezone in timeZoneList)
+						var timeZoneList = _repositoryFactory.CreateStatisticRepository().LoadAllTimeZones(uow);
+						if (message.IsInitialization)
 						{
+							foreach (var timezone in timeZoneList)
+							{
+								var todayForTimezone = DateTime.UtcNow.Date;
+								var yesterdayForTimezone = todayForTimezone.AddDays(-1);
+								var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Distance);
+
+								var peopleGotABadge = _calculator.Calculate(uow, allAgents, timezone.Id, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
+								_calculator.LastCalculatedDates.Add(timezone.Id, yesterdayForTimezone);
+								foreach (var person in peopleGotABadge)
+								{
+									SendPushMessageService.CreateConversation("Congratulations!", "You get new badges!", false)
+									.To(person)
+									.SendConversation(_repositoryFactory.CreatePushMessageRepository(appuow));
+									appuow.PersistAll();
+								}
+								if (_serviceBus != null)
+								{
+									_serviceBus.DelaySend(tomorrowForTimezone.ToLocalTime(), new AgentBadgeCalculateMessage
+									{
+										IsInitialization = false,
+										TimezoneId = timezone.Id
+									});
+								}
+							}
+						}
+						else
+						{
+							var timezone = timeZoneList.First(tz => tz.Id == message.TimezoneId);
+							if (timezone == null) continue;
+
 							var todayForTimezone = DateTime.UtcNow.Date;
 							var yesterdayForTimezone = todayForTimezone.AddDays(-1);
 							var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Distance);
+							DateTime nextCalculateDate;
+							if (!_calculator.LastCalculatedDates.ContainsKey(timezone.Id))
+							{
+								_calculator.LastCalculatedDates.Add(timezone.Id, tomorrowForTimezone.AddDays(-1).ToLocalTime());
+							}
+							if (_calculator.LastCalculatedDates[timezone.Id] == tomorrowForTimezone.ToLocalTime())
+							{
+								nextCalculateDate = tomorrowForTimezone.AddDays(1).ToLocalTime();
+							}
+							else
+							{
+								nextCalculateDate = tomorrowForTimezone.ToLocalTime();
+								_calculator.LastCalculatedDates[timezone.Id] = nextCalculateDate;
+								var peopleGotABadge = _calculator.Calculate(uow, allAgents, timezone.Id, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
+								foreach (var person in peopleGotABadge)
+								{
+									SendPushMessageService.CreateConversation("Congratulations!", "You get new badges!", false)
+									.To(person)
+									.SendConversation(_repositoryFactory.CreatePushMessageRepository(appuow));
+									appuow.PersistAll();
+								}
+							}
 
-							_calculator.Calculate(uow, allAgents, timezone.Id, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
-							_calculator.LastCalculatedDates.Add(timezone.Id, yesterdayForTimezone);
 							if (_serviceBus != null)
 							{
-								_serviceBus.DelaySend(tomorrowForTimezone.ToLocalTime(), new AgentBadgeCalculateMessage
+								_serviceBus.DelaySend(nextCalculateDate, new AgentBadgeCalculateMessage
 								{
 									IsInitialization = false,
-									TimezoneId = timezone.Id
+									TimezoneId = message.TimezoneId
 								});
 							}
 						}
 					}
-					else
-					{
-						var timezone = timeZoneList.First(tz => tz.Id == message.TimezoneId);
-						if (timezone == null) continue;
-
-						var todayForTimezone = DateTime.UtcNow.Date;
-						var yesterdayForTimezone = todayForTimezone.AddDays(-1);
-						var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Distance);
-						DateTime nextCalculateDate;
-						if (!_calculator.LastCalculatedDates.ContainsKey(timezone.Id))
-						{
-							_calculator.LastCalculatedDates.Add(timezone.Id, tomorrowForTimezone.AddDays(-1).ToLocalTime());
-						}
-						if (_calculator.LastCalculatedDates[timezone.Id] == tomorrowForTimezone.ToLocalTime())
-						{
-							nextCalculateDate = tomorrowForTimezone.AddDays(1).ToLocalTime();
-						}
-						else
-						{
-							nextCalculateDate = tomorrowForTimezone.ToLocalTime();
-							_calculator.LastCalculatedDates[timezone.Id] = nextCalculateDate;
-							_calculator.Calculate(uow, allAgents, timezone.Id, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
-						}
-						
-						if (_serviceBus != null)
-						{
-							_serviceBus.DelaySend(nextCalculateDate, new AgentBadgeCalculateMessage
-							{
-								IsInitialization = false,
-								TimezoneId = message.TimezoneId
-							});
-						}
-					}
-				}
 			}
+		}
 		}
 
 		protected virtual IEnumerable<IDataSource> GetRegisteredDataSourceCollection()
