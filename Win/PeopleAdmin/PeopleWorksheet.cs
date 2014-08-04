@@ -146,9 +146,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 		private void setPermissionOnControls()
 		{
-			toolStripButtonSystemOptions.Enabled =
+			backStageButton3.Enabled =
 				PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
-			backStageButton3.Visible = toolStripButtonSystemOptions.Enabled;
+			//backStageButton3.Visible = backStageButton3.Enabled;
 		}
 
 		private void dateNavigatePeriodsSelectedDateChanged(object sender, CustomEventArgs<DateOnly> e)
@@ -793,31 +793,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 		private void toolStripMenuItemSortDescClick(object sender, EventArgs e)
 		{
 			sort(false);
-		}
-
-		private void toolStripButtonSystemOptionsClick(object sender, EventArgs e)
-		{
-			try
-			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
-				settings.Show();
-			}
-			catch (DataSourceException ex)
-			{
-				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-			}
-		}
-
-		private void toolStripButtonSystemExitClick(object sender, EventArgs e)
-		{
-			if (!CloseAllOtherForms(this))
-				return; // a form was canceled
-
-			Close();
-			////this canceled
-			if (Visible)
-				return;
-			Application.Exit();
 		}
 
 		private void loadTrackerDescriptions()

@@ -34,8 +34,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PeopleWorksheet));
-			this.toolStripButtonSystemExit = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonSystemOptions = new System.Windows.Forms.ToolStripButton();
 			this.backStageView1 = new Syncfusion.Windows.Forms.BackStageView(this.components);
 			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
 			this.backStageButton1 = new Syncfusion.Windows.Forms.BackStageButton();
@@ -106,29 +104,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.Quick_Access_Items.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// toolStripButtonSystemExit
-			// 
-			this.toolStripButtonSystemExit.AutoToolTip = false;
-			this.toolStripButtonSystemExit.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Exit;
-			this.toolStripButtonSystemExit.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripButtonSystemExit.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonSystemExit.Name = "toolStripButtonSystemExit";
-			this.SetShortcut(this.toolStripButtonSystemExit, System.Windows.Forms.Keys.None);
-			this.toolStripButtonSystemExit.Size = new System.Drawing.Size(130, 20);
-			this.toolStripButtonSystemExit.Text = "xxExitTELEOPTICCC";
-			this.toolStripButtonSystemExit.Click += new System.EventHandler(this.toolStripButtonSystemExitClick);
-			// 
-			// toolStripButtonSystemOptions
-			// 
-			this.toolStripButtonSystemOptions.AutoToolTip = false;
-			this.toolStripButtonSystemOptions.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Settings;
-			this.toolStripButtonSystemOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonSystemOptions.Name = "toolStripButtonSystemOptions";
-			this.SetShortcut(this.toolStripButtonSystemOptions, System.Windows.Forms.Keys.None);
-			this.toolStripButtonSystemOptions.Size = new System.Drawing.Size(79, 20);
-			this.toolStripButtonSystemOptions.Text = "xxOptions";
-			this.toolStripButtonSystemOptions.Click += new System.EventHandler(this.toolStripButtonSystemOptionsClick);
-			// 
 			// backStageView1
 			// 
 			this.backStageView1.BackStage = this.backStage1;
@@ -147,14 +122,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.backStage1.Controls.Add(this.backStageSeparator2);
 			this.backStage1.Controls.Add(this.backStageButton3);
 			this.backStage1.Controls.Add(this.backStageButton4);
-			this.backStage1.Font = new System.Drawing.Font("Segoe UI", 9F);
+			this.backStage1.Font = new System.Drawing.Font("Segoe UI", 8.25F);
 			this.backStage1.ItemSize = new System.Drawing.Size(138, 40);
 			this.backStage1.Location = new System.Drawing.Point(1, 51);
 			this.backStage1.Name = "backStage1";
 			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
 			this.backStage1.Size = new System.Drawing.Size(1402, 569);
 			this.backStage1.TabIndex = 6;
-			this.backStage1.Visible = false;
 			// 
 			// backStageButton1
 			// 
@@ -223,7 +197,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.backStageButton4.Name = "backStageButton4";
 			this.backStageButton4.Size = new System.Drawing.Size(137, 38);
 			this.backStageButton4.TabIndex = 8;
-			this.backStageButton4.Text = "Exit";
+			this.backStageButton4.Text = "xxExitTELEOPTICCC";
 			this.backStageButton4.Click += new System.EventHandler(this.backStageButton4Click);
 			// 
 			// splitContainerWorksheet
@@ -378,12 +352,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.peopleRibbon.Header.AddMainItem(toolStripTabItem6);
 			this.peopleRibbon.Header.AddQuickItem(new Syncfusion.Windows.Forms.Tools.QuickButtonReflectable(toolStripButtonMainSave));
 			this.peopleRibbon.HideMenuButtonToolTip = false;
-			this.peopleRibbon.Location = new System.Drawing.Point(1, 1);
+			this.peopleRibbon.Location = new System.Drawing.Point(1, -2);
 			this.peopleRibbon.MaximizeToolTip = "Maximize Ribbon";
 			this.peopleRibbon.MenuButtonEnabled = true;
-			this.peopleRibbon.MenuButtonFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.peopleRibbon.MenuButtonFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.peopleRibbon.MenuButtonText = "xxFile";
-			this.peopleRibbon.MenuButtonWidth = 100;
+			this.peopleRibbon.MenuButtonVisible = false;
+			this.peopleRibbon.MenuButtonWidth = 60;
 			this.peopleRibbon.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.peopleRibbon.MinimizeToolTip = "Minimize Ribbon";
 			this.peopleRibbon.Name = "peopleRibbon";
@@ -400,7 +375,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.peopleRibbon.QuickPanelVisible = false;
 			this.peopleRibbon.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.peopleRibbon.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
-			this.peopleRibbon.SelectedTab = this.toolStripTabItem1;
+			this.peopleRibbon.SelectedTab = null;
 			this.peopleRibbon.Show2010CustomizeQuickItemDialog = false;
 			this.peopleRibbon.ShowRibbonDisplayOptionButton = true;
 			this.peopleRibbon.Size = new System.Drawing.Size(1407, 146);
@@ -980,8 +955,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 		private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerWorksheet;
 		private Syncfusion.Windows.Forms.Tools.ContextMenuStripEx contextMenuStripGridView;
 		private Syncfusion.Windows.Forms.Tools.StatusStripEx statusStripEx1;
-		private System.Windows.Forms.ToolStripButton toolStripButtonSystemOptions;
-		private System.Windows.Forms.ToolStripButton toolStripButtonSystemExit;
 		private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlPeopleAdmin;
 		private ShiftCategoryLimitationView shiftCategoryLimitationView;
 		private Syncfusion.Windows.Forms.Tools.ContextMenuStripEx contextMenuStripExExternalLogOn;
