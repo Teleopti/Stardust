@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 			// Set colors, themes on controls.
 			SetColors();
-			SetPermissionOnControls();
+			setPermissionOnControls();
 			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
 				Icon = Resources.people;
 			_readOnly = !PrincipalAuthorization.Instance().IsPermitted(
@@ -98,17 +98,17 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 			DateNavigateControl dateNavigatePeriods = new DateNavigateControl();
 			dateNavigatePeriods.SetSelectedDate(_filteredPeopleHolder.SelectedDate);
-			dateNavigatePeriods.SelectedDateChanged += dateNavigatePeriods_SelectedDateChanged;
+			dateNavigatePeriods.SelectedDateChanged += dateNavigatePeriodsSelectedDateChanged;
 
 			var hostDatePicker = new ToolStripControlHost(dateNavigatePeriods);
 			toolStripDatePicker.Items.Add(hostDatePicker);
 
 			_stateHolder = state;
 
-			_gridConstructor.GridViewChanging += gridConstructor_GridViewChanging;
-			_gridConstructor.GridViewChanged += gridConstructor_GridViewChanged;
-			_panelConstructor.GridViewChanged += panelConstructor_GridViewChanged;
-			toolStripButtonMainNew.Click += toolStripButtonMainNew_Click;
+			_gridConstructor.GridViewChanging += gridConstructorGridViewChanging;
+			_gridConstructor.GridViewChanged += gridConstructorGridViewChanged;
+			_panelConstructor.GridViewChanged += panelConstructorGridViewChanged;
+			toolStripButtonMainNew.Click += toolStripButtonMainNewClick;
 
 			// Clear cache available.
 			_gridConstructor.FlushCache();
@@ -120,13 +120,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			//initialize filter popup
 			_peopleAdminFilterPanel = new PeopleAdminFilterPanel(_filteredPeopleHolder, this, _container) { Location = new Point(229, 130) };
 			_peopleAdminFilterPanel.BringToFront();
-			_peopleAdminFilterPanel.Leave += peopleAdminFilterPanel_Leave;
+			_peopleAdminFilterPanel.Leave += peopleAdminFilterPanelLeave;
 			Controls.Add(_peopleAdminFilterPanel);
 			_peopleAdminFilterPanel.Visible = false;
 
-			InstantiateEditControl();
-			InstantiateClipboardControl();
-			LoadTrackerDescriptions();
+			instantiateEditControl();
+			instantiateClipboardControl();
+			loadTrackerDescriptions();
 			toolStripComboBoxExTrackerDescription.Enabled = false;
 
 
@@ -136,35 +136,23 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 		private void unregisterEventsForFormKill()
 		{
-			_gridConstructor.GridViewChanging -= gridConstructor_GridViewChanging;
-			_gridConstructor.GridViewChanged -= gridConstructor_GridViewChanged;
-			_panelConstructor.GridViewChanged -= panelConstructor_GridViewChanged;
+			_gridConstructor.GridViewChanging -= gridConstructorGridViewChanging;
+			_gridConstructor.GridViewChanged -= gridConstructorGridViewChanged;
+			_panelConstructor.GridViewChanged -= panelConstructorGridViewChanged;
 		}
 
 		protected void SetColors()
 		{
-			//BackColor = ColorHelper.FormBackgroundColor();
-			//ColorHelper.SetTabControlTheme(tabControlPeopleAdmin);
-			//BrushInfo coloredBrush = ColorHelper.ControlGradientPanelBrush();
-			//splitContainerWorksheet.BackgroundColor = coloredBrush;
-			//splitContainerWorksheet.Panel1.BackgroundColor = coloredBrush;
-			//splitContainerWorksheet.Panel2.BackgroundColor = coloredBrush;
-			//Color ribbonContextTabColor = ColorHelper.RibbonContextTabColor();
-			//int tabGroupsCount = ribbonControlWorksheet.TabGroups.Count;
-			//for (int i = 0; i < tabGroupsCount; i++)
-			//{
-			//	ribbonControlWorksheet.TabGroups[i].Color = ribbonContextTabColor;
-			//}
 		}
 
-		private void SetPermissionOnControls()
+		private void setPermissionOnControls()
 		{
 			toolStripButtonSystemOptions.Enabled =
 				PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 			backStageButton3.Visible = toolStripButtonSystemOptions.Enabled;
 		}
 
-		private void dateNavigatePeriods_SelectedDateChanged(object sender, CustomEventArgs<DateOnly> e)
+		private void dateNavigatePeriodsSelectedDateChanged(object sender, CustomEventArgs<DateOnly> e)
 		{
 			if (_gridConstructor.View == null)
 				return;
@@ -172,7 +160,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_filteredPeopleHolder.SelectedDate = e.Value;
 			_gridConstructor.View.SelectedDateChange(sender, e);
 			_panelConstructor.View.Invalidate();
-			RefilterOnTracker();
+			refilterOnTracker();
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -185,11 +173,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				switch (keyData)
 				{
 					case Keys.Control | Keys.F:
-						ConfigureAndShowFindAndReplaceForm();
+						configureAndShowFindAndReplaceForm();
 						break;
 
 					case Keys.Control | Keys.S:
-						toolStripButtonMainSave_MouseUp(this, null);
+						toolStripButtonMainSaveMouseUp(this, null);
 						break;
 
 					case Keys.Control | Keys.N:
@@ -238,12 +226,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				if (theButton != null)
 				{
 					var theEvent = new ToolStripItemClickedEventArgs(theButton);
-					EditControl_NewSpecialClicked(theButton, theEvent);
+					editControlNewSpecialClicked(theButton, theEvent);
 				}
 			}
 		}
 
-		private void panelConstructor_GridViewChanged(object sender, EventArgs e)
+		private void panelConstructorGridViewChanged(object sender, EventArgs e)
 		{
 			InParameter.NotNull("sender", sender);
 
@@ -254,19 +242,19 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				view.Grid.ResetVolatileData();
 
 				// Bind events for the grid.
-				view.Grid.QueryCellInfo += gridPanel_QueryCellInfo;
-				view.Grid.SaveCellInfo += gridPanel_SaveCellInfo;
-				view.Grid.KeyDown += gridPanel_KeyDown;
+				view.Grid.QueryCellInfo += gridPanelQueryCellInfo;
+				view.Grid.SaveCellInfo += gridPanelSaveCellInfo;
+				view.Grid.KeyDown += gridPanelKeyDown;
 			}
 		}
 
-		private void gridPanel_QueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
+		private void gridPanelQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
 		{
 			_panelConstructor.View.QueryCellInfo(e);
 			e.Handled = true;
 		}
 
-		private void gridPanel_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
+		private void gridPanelSaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
 		{
 			if(_readOnly) return;
 			_panelConstructor.View.SaveCellInfo(sender, e);
@@ -277,41 +265,40 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			e.Handled = true;
 		}
 
-		private void gridPanel_KeyDown(object sender, KeyEventArgs e)
+		private void gridPanelKeyDown(object sender, KeyEventArgs e)
 		{
 			_panelConstructor.View.KeyDown(e);
 		}
 
-		private void gridConstructor_GridViewChanging(object sender, EventArgs e)
+		private void gridConstructorGridViewChanging(object sender, EventArgs e)
 		{
 			splitContainerWorksheet.Panel1.Controls.Clear();
 		}
 
-		private void gridConstructor_GridViewChanged(object sender, EventArgs e)
+		private void gridConstructorGridViewChanged(object sender, EventArgs e)
 		{
-
 			InParameter.NotNull("sender", sender);
 
-			GridViewBase view = (GridViewBase)sender;
+			var view = (GridViewBase)sender;
 
 			if (!_gridConstructor.IsCached)
 			{
 				view.Grid.ResetVolatileData();
 
 				// Bind events for the grid.
-				view.Grid.QueryCellInfo += gridWorksheet_QueryCellInfo;
-				view.Grid.SaveCellInfo += gridWorksheet_SaveCellInfo;
-				view.Grid.ClipboardPaste += gridWorksheet_ClipboardPaste;
-				view.Grid.SelectionChanged += gridWorksheet_SelectionChanged;
-				view.Grid.KeyDown += gridWorksheet_KeyDown;
+				view.Grid.QueryCellInfo += gridWorksheetQueryCellInfo;
+				view.Grid.SaveCellInfo += gridWorksheetSaveCellInfo;
+				view.Grid.ClipboardPaste += gridWorksheetClipboardPaste;
+				view.Grid.SelectionChanged += gridWorksheetSelectionChanged;
+				view.Grid.KeyDown += gridWorksheetKeyDown;
 
 				// Periods specific events.
-				view.Grid.CellButtonClicked += gridWorksheet_CellButtonClicked;
-				view.Grid.DrawCellButton += gridWorksheet_DrawCellButton;
-				view.Grid.CellClick += gridWorksheet_CellClick;
-				view.Grid.CellDoubleClick += gridWorksheet_CellDoubleClick;
-				view.Grid.ClipboardCanCopy += gridWorksheet_ClipboardCanCopy;
-				view.Grid.ClipboardCanPaste += Grid_ClipboardCanPaste;
+				view.Grid.CellButtonClicked += gridWorksheetCellButtonClicked;
+				view.Grid.DrawCellButton += gridWorksheetDrawCellButton;
+				view.Grid.CellClick += gridWorksheetCellClick;
+				view.Grid.CellDoubleClick += gridWorksheetCellDoubleClick;
+				view.Grid.ClipboardCanCopy += gridWorksheetClipboardCanCopy;
+				view.Grid.ClipboardCanPaste += gridClipboardCanPaste;
 			}
 
 			splitContainerWorksheet.Panel1.Controls.Add(view.Grid);
@@ -368,7 +355,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			return currentType;
 		}
 
-		private void RefreshAfterMessageBroker()
+		private void refreshAfterMessageBroker()
 		{
 			_gridConstructor.View.Grid.ResetVolatileData();
 			_gridConstructor.View.Grid.Invalidate();
@@ -378,7 +365,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_gridConstructor.View.RefreshChildGrids();
 		}
 
-		private void Grid_ClipboardCanPaste(object sender, GridCutPasteEventArgs e)
+		private void gridClipboardCanPaste(object sender, GridCutPasteEventArgs e)
 		{
 			_gridConstructor.View.ClipboardCanPaste(sender, e);
 			e.Handled = true;
@@ -390,13 +377,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 		}
 
 
-		private void gridWorksheet_KeyDown(object sender, KeyEventArgs e)
+		private void gridWorksheetKeyDown(object sender, KeyEventArgs e)
 		{
 			_gridConstructor.View.KeyDown(e);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		private void gridWorksheet_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
+		private void gridWorksheetSelectionChanged(object sender, GridSelectionChangedEventArgs e)
 		{
 			try
 			{
@@ -442,30 +429,30 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		private void gridWorksheet_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
+		private void gridWorksheetSaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
 		{
 			_gridConstructor.View.SaveCellInfo(sender, e);
 			e.Handled = true;
 		}
 
-		private void gridWorksheet_CellClick(object sender, GridCellClickEventArgs e)
+		private void gridWorksheetCellClick(object sender, GridCellClickEventArgs e)
 		{
 			_gridConstructor.View.CellClick(sender, e);
 		}
 
-		private void gridWorksheet_CellDoubleClick(object sender, GridCellClickEventArgs e)
+		private void gridWorksheetCellDoubleClick(object sender, GridCellClickEventArgs e)
 		{
 			_gridConstructor.View.CellDoubleClick(sender, e);
 		}
 
-		private void gridWorksheet_ClipboardPaste(object sender, GridCutPasteEventArgs e)
+		private void gridWorksheetClipboardPaste(object sender, GridCutPasteEventArgs e)
 		{
 			_gridConstructor.View.ClipboardPaste(e);
 			e.Handled = true;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		private void gridWorksheet_QueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
+		private void gridWorksheetQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
 		{
 			try
 			{
@@ -482,7 +469,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 			catch (Exception ex)
 			{
-				if (ex.InnerException != null && ex.InnerException is DataSourceException)
+				if (ex.InnerException is DataSourceException)
 				{
 					DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
 					FormKill();
@@ -490,34 +477,37 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-
-
-		private void gridWorksheet_ClipboardCanCopy(object sender, GridCutPasteEventArgs e)
+		private void gridWorksheetClipboardCanCopy(object sender, GridCutPasteEventArgs e)
 		{
 			if (_gridConstructor.View.Grid.CurrentCell != null)
 			{
 				var currentRow = _gridConstructor.View.Grid.CurrentCell.RowIndex;
 				var currentCol = _gridConstructor.View.Grid.CurrentCell.ColIndex;
-				RefreshCellFocus(currentRow, currentCol);
+				refreshCellFocus(currentRow, currentCol);
 			}
 			_gridConstructor.View.ClipboardCanCopy(sender, e);
 			e.Handled = true;
 		}
 
-		private void RefreshCellFocus(int currentRow, int currentCol)
+		private void refreshCellFocus(int currentRow, int currentCol)
 		{
 			_gridConstructor.View.Grid.CurrentCell.MoveTo(0, 0);
 			_gridConstructor.View.Grid.CurrentCell.MoveTo(currentRow, currentCol);
 		}
 
-		private void toolStripButtonMainSave_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+		private void toolStripButtonMainSaveMouseUp(object sender, MouseEventArgs e)
+		{
+			save();
+		}
+
+		private void save()
 		{
 			if (_readOnly) return;
-		
+
 			Cursor.Current = Cursors.WaitCursor;
 
 			//Set current cell out of focus to make changes reflect to the data.
-			SetCurrentCellOutOfFocus();
+			setCurrentCellOutOfFocus();
 			if (KillMode) return;
 			try
 			{
@@ -536,7 +526,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 					return;
 				}
 
-				Persist();
+				persist();
 			}
 			catch (DataSourceException ex)
 			{
@@ -560,7 +550,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 			Cursor.Current = Cursors.Default;
 		}
-
 		private void notifySaveChanges()
 		{
 			var handler = PeopleWorksheetSaved;
@@ -577,7 +566,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				handler(this, EventArgs.Empty);
 		}
 
-		private void Persist()
+		private void persist()
 		{
 			try
 			{
@@ -626,12 +615,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		private void gridWorksheet_CellButtonClicked(object sender, GridCellButtonClickedEventArgs e)
+		private void gridWorksheetCellButtonClicked(object sender, GridCellButtonClickedEventArgs e)
 		{
 			_gridConstructor.View.CellButtonClicked(e);
 		}
 
-		private void gridWorksheet_DrawCellButton(object sender, GridDrawCellButtonEventArgs e)
+		private void gridWorksheetDrawCellButton(object sender, GridDrawCellButtonEventArgs e)
 		{
 			_gridConstructor.View.DrawCellButton(e);
 		}
@@ -640,7 +629,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 		{
 			ViewBase.ShowHelp(this,false);
 		}
-		private void toolStripButtonContract_Click(object sender, EventArgs e)
+		private void toolStripButtonContractClick(object sender, EventArgs e)
 		{
 
 			try
@@ -667,7 +656,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		private void toolStripButtonContractSchedule_Click(object sender, EventArgs e)
+		private void toolStripButtonContractScheduleClick(object sender, EventArgs e)
 		{
 			try
 			{
@@ -693,7 +682,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		private void toolStripButtonPartTimePercentage_Click(object sender, EventArgs e)
+		private void toolStripButtonPartTimePercentageClick(object sender, EventArgs e)
 		{
 			try
 			{
@@ -725,8 +714,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			var viewType = _gridConstructor.View.Type;
 			var panelViewType = _panelConstructor.View.Type;
 
-			_gridConstructor.GridViewChanging -= gridConstructor_GridViewChanging;
-			_gridConstructor.GridViewChanged -= gridConstructor_GridViewChanged;
+			_gridConstructor.GridViewChanging -= gridConstructorGridViewChanging;
+			_gridConstructor.GridViewChanged -= gridConstructorGridViewChanged;
 
 			_gridConstructor.View.ClearView();
 			_gridConstructor.FlushCache();
@@ -735,14 +724,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 			_gridConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager);
 
-			_panelConstructor.GridViewChanged -= panelConstructor_GridViewChanged;
+			_panelConstructor.GridViewChanged -= panelConstructorGridViewChanged;
 			_panelConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager);
-			_panelConstructor.GridViewChanged += panelConstructor_GridViewChanged;
+			_panelConstructor.GridViewChanged += panelConstructorGridViewChanged;
 			_panelConstructor.BuildGridView(panelViewType);
 
 			_peopleAdminFilterPanel.Visible = false;
-			_gridConstructor.GridViewChanging += gridConstructor_GridViewChanging;
-			_gridConstructor.GridViewChanged += gridConstructor_GridViewChanged;
+			_gridConstructor.GridViewChanging += gridConstructorGridViewChanging;
+			_gridConstructor.GridViewChanged += gridConstructorGridViewChanged;
 
 			switch (viewType)
 			{
@@ -753,7 +742,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 					StateHolder.LoadRotationStateHolder(ViewType.PersonAvailabilityView, _filteredPeopleHolder);
 					break;
 				case ViewType.PeoplePeriodView:
-					LoadPeopleAdminReferences();
+					loadPeopleAdminReferences();
 					break;
 			}
 
@@ -767,7 +756,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 			shiftCategoryLimitationView.SetState(filteredPeopleHolder, _gridConstructor);
 
-			LoadTrackerDescriptions();
+			loadTrackerDescriptions();
 			_filteredPeopleHolder.ResetRolesViewAdapterCollection();
 			_filteredPeopleHolder.ResetPersonSkillAdapterCollection();
 			_filteredPeopleHolder.ResetExternalLogOnAdapterCollection();
@@ -777,13 +766,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_gridConstructor.View.SetSelectedPersons(_gridConstructor.View.GetSelectedPersons());
 		}
 
-		private void peopleAdminFilterPanel_Leave(object sender, EventArgs e)
+		private void peopleAdminFilterPanelLeave(object sender, EventArgs e)
 		{
 			_peopleAdminFilterPanel.Visible = false;
 		}
 
 		/// Handles the click event of the Find and replace menu item of the find and replace tool strip.
-		private void toolStripButtonFind_Click(object sender, EventArgs e)
+		private void toolStripButtonFindClick(object sender, EventArgs e)
 		{
 			// Sets the active tab
 			_findAndReplaceForm.SetActiveFunctionality(FindAndReplaceFunctionality.FindOnly);
@@ -796,18 +785,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_findAndReplaceForm.Focus();
 		}
 
-		private void toolStripMenuItemSortAsc_Click(object sender, EventArgs e)
+		private void toolStripMenuItemSortAscClick(object sender, EventArgs e)
 		{
-			Sort(true);
+			sort(true);
 		}
 
 
-		private void toolStripMenuItemSortDesc_Click(object sender, EventArgs e)
+		private void toolStripMenuItemSortDescClick(object sender, EventArgs e)
 		{
-			Sort(false);
+			sort(false);
 		}
 
-		private void toolStripButtonSystemOptions_Click(object sender, EventArgs e)
+		private void toolStripButtonSystemOptionsClick(object sender, EventArgs e)
 		{
 			try
 			{
@@ -820,7 +809,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		private void toolStripButtonSystemExit_Click(object sender, EventArgs e)
+		private void toolStripButtonSystemExitClick(object sender, EventArgs e)
 		{
 			if (!CloseAllOtherForms(this))
 				return; // a form was canceled
@@ -832,10 +821,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			Application.Exit();
 		}
 
-		/// <summary>
-		/// Loads the tracker descriptions combo box on the ribbon bar.
-		/// </summary>
-		private void LoadTrackerDescriptions()
+		private void loadTrackerDescriptions()
 		{
 			if (_filteredPeopleHolder.FilteredAbsenceCollection.Count > 0)
 			{
@@ -857,7 +843,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 		}
 
 
-		private void Sort(bool isAscending)
+		private void sort(bool isAscending)
 		{
 			Cursor.Current = Cursors.WaitCursor;
 
@@ -865,10 +851,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_gridConstructor.View.Sort(isAscending);
 			Cursor.Current = Cursors.Default;
 		}
-
-		#region Methods
-
-		#region Clipboard related ribbon controls
 
 		private enum ClipboardItem
 		{
@@ -882,14 +864,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			PasteNew
 		}
 
-		private void InstantiateEditControl()
+		private void instantiateEditControl()
 		{
 			_editControl = new EditControl();
-			ToolStripControlHost editControlHost = new ToolStripControlHost(_editControl);
+			var editControlHost = new ToolStripControlHost(_editControl);
 			toolStripExEdit.Items.Add(editControlHost);
 
 			//Create general toolstrip button seperately to set CTRL + N behaviour.
-			ToolStripButton generalToolStripButton = new ToolStripButton
+			var generalToolStripButton = new ToolStripButton
 			{
 				Text = UserTexts.Resources.NewPerson,
 				Tag = ClipboardItem.General.ToString()
@@ -923,10 +905,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				Tag = ClipboardItem.PersonAvailability.ToString()
 			});
 
-			_editControl.NewClicked += (EditControl_NewClicked);
-			_editControl.NewSpecialClicked += (EditControl_NewSpecialClicked);
+			_editControl.NewClicked += (editControlNewClicked);
+			_editControl.NewSpecialClicked += (editControlNewSpecialClicked);
 
-			_editControl.DeleteClicked += (EditControl_DeleteClicked);
+			_editControl.DeleteClicked += (editControlDeleteClicked);
 
 			//Set generalToolStripButton to add new person when press CTRL + N.
 			//SetShortcut(generalToolStripButton, ((Keys.Control | Keys.N)));
@@ -934,20 +916,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 					DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
 		}
 
-		private static ClipboardItem GetClipboarditem(ToolStripItemClickedEventArgs e)
+		private static ClipboardItem getClipboarditem(ToolStripItemClickedEventArgs e)
 		{
 			return (ClipboardItem)Enum.Parse(typeof(ClipboardItem), (string)e.ClickedItem.Tag);
 		}
 
-		private void InstantiateClipboardControl()
+		private void instantiateClipboardControl()
 		{
 			_clipboardControl = new ClipboardControl();
-			ToolStripControlHost clipboardhost = new ToolStripControlHost(_clipboardControl);
+			var clipboardhost = new ToolStripControlHost(_clipboardControl);
 			toolStripExClipboard.Items.Add(clipboardhost);
 
-			_clipboardControl.CutClicked += (ClipboardControl_CutClicked);
+			_clipboardControl.CutClicked += (clipboardControlCutClicked);
 
-			_clipboardControl.CopyClicked += (ClipboardControl_CopyClicked);
+			_clipboardControl.CopyClicked += (clipboardControlCopyClicked);
 
 			_clipboardControl.PasteSpecialItems.Add(new ToolStripButton
 			{
@@ -960,18 +942,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				Tag = ClipboardItem.PasteNew.ToString()
 			});
 
-			_clipboardControl.PasteSpecialClicked += (ClipboardControl_PasteSpecialClicked);
-			_clipboardControl.PasteClicked += (ClipboardControl_PasteClicked);
+			_clipboardControl.PasteSpecialClicked += (clipboardControlPasteSpecialClicked);
+			_clipboardControl.PasteClicked += (clipboardControlPasteClicked);
 			//_clipboardControl.SetButtonState(ClipboardAction.Paste, false);
 			toolStripExClipboard.Enabled = PrincipalAuthorization.Instance().IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
 		}
 
-		#endregion
-
-		#region Helper methods
-
-		private void SetToolStripsToPreferredSize()
+		private void setToolStripsToPreferredSize()
 		{
 			toolStripViews.Size = toolStripViews.PreferredSize;
 			toolStripExEdit.Size = toolStripExEdit.PreferredSize;
@@ -982,11 +960,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			toolStripExSettings.Size = toolStripExSettings.PreferredSize;
 		}
 
-		private void ValidatePersistance(CancelSave cancelSave)
+		private void validatePersistance(cancelSave cancelSave)
 		{
 			if (_readOnly) return;
 			//Set current cell out of focus to make changes reflect to the data.
-			SetCurrentCellOutOfFocus();
+			setCurrentCellOutOfFocus();
 
 			// Add Person rotations and Availability to Repository
 			_filteredPeopleHolder.AddRootsToRepository();
@@ -1008,7 +986,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 						}
 						notifyForceClose();
 						// Save changes and close.
-						Persist();
+						persist();
 						break;
 					default:
 						// Do not close the form.
@@ -1018,12 +996,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		private class CancelSave
+		private class cancelSave
 		{
 			public bool Cancel { get; set; }
 		}
 
-		private void SetCurrentCellOutOfFocus()
+		private void setCurrentCellOutOfFocus()
 		{
 			//------Temp solution to set out of focus from current cell.
 			_gridConstructor.View.Grid.Focus();
@@ -1035,7 +1013,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			//------
 		}
 
-		private void AddNew()
+		private void addNew()
 		{
 			_stateHolder.AddAndSavePerson(_filteredPeopleHolder.FilteredPersonCollection.Count, _filteredPeopleHolder);
 			int rowCount = _filteredPeopleHolder.FilteredPeopleGridData.Count;
@@ -1043,25 +1021,16 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_gridConstructor.View.Invalidate();
 		}
 
-		#endregion
-
-		#endregion
-
-		#region Events
-
 		public event EventHandler PeopleWorksheetSaved;
 		public event EventHandler PeopleWorksheetForceClose;
-
-
-		#region Ribbon bar button clicks
-
-		private void toolStripButtonFilterPeople_Click(object sender, EventArgs e)
+		
+		private void toolStripButtonFilterPeopleClick(object sender, EventArgs e)
 		{
-			var cancelSave = new CancelSave();
+			var cancelSave = new cancelSave();
 
 			try
 			{
-				ValidatePersistance(cancelSave);
+				validatePersistance(cancelSave);
 
 				if (cancelSave.Cancel)
 					return;
@@ -1072,34 +1041,33 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				_peopleAdminFilterPanel.Refresh();
 
 				//Set peopleAdminFilterPanel control cisibility
-				_peopleAdminFilterPanel.Visible = (_peopleAdminFilterPanel.Visible) ? false : true;
+				_peopleAdminFilterPanel.Visible = (!_peopleAdminFilterPanel.Visible);
 
 				//Check for constrains.
 				if (_peopleAdminFilterPanel.Visible)
 				{
-					DisposeAllChildGrids();
+					disposeAllChildGrids();
 				}
 			}
 			catch (DataSourceException ex)
 			{
 				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
 				FormKill();
-				return;
 			}
 		}
 
-		private void DisposeAllChildGrids()
+		private void disposeAllChildGrids()
 		{
 			//Disposes child grids of the all the views
-			DisposeChildGrids(_gridConstructor.FindGrid(ViewType.GeneralView));
-			DisposeChildGrids(_gridConstructor.FindGrid(ViewType.PeoplePeriodView));
-			DisposeChildGrids(_gridConstructor.FindGrid(ViewType.SchedulePeriodView));
-			DisposeChildGrids(_gridConstructor.FindGrid(ViewType.PersonRotationView));
-			DisposeChildGrids(_gridConstructor.FindGrid(ViewType.PersonAvailabilityView));
-			DisposeChildGrids(_gridConstructor.FindGrid(ViewType.PersonalAccountGridView));
+			disposeChildGrids(_gridConstructor.FindGrid(ViewType.GeneralView));
+			disposeChildGrids(_gridConstructor.FindGrid(ViewType.PeoplePeriodView));
+			disposeChildGrids(_gridConstructor.FindGrid(ViewType.SchedulePeriodView));
+			disposeChildGrids(_gridConstructor.FindGrid(ViewType.PersonRotationView));
+			disposeChildGrids(_gridConstructor.FindGrid(ViewType.PersonAvailabilityView));
+			disposeChildGrids(_gridConstructor.FindGrid(ViewType.PersonalAccountGridView));
 		}
 
-		private void toolStripButtonGeneral_Click(object sender, EventArgs e)
+		private void toolStripButtonGeneralClick(object sender, EventArgs e)
 		{
 			Cursor.Current = Cursors.WaitCursor;
 			IList<IPerson> selectedPersons = _gridConstructor.View.GetSelectedPersons();
@@ -1114,7 +1082,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				_gridConstructor.View.Grid.RowCount = _gridConstructor.View.RowCount;
 
 				//Setup for F1
-				SetupHelpContext(_gridConstructor.View.Grid);
+				setupHelpContext(_gridConstructor.View.Grid);
 
 				_gridConstructor.View.Invalidate();
 
@@ -1125,12 +1093,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 				if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword))
 				{
-					TogglePanelContent(false);
+					togglePanelContent(false);
 					splitContainerWorksheet.Panel2Collapsed = false;
 					splitContainerWorksheet.SplitterDistance = splitContainerWorksheet.Width - 300;
 
 					// Clears all tab pages and recreate.
-					tabControlPeopleAdmin.SelectedIndexChanged -= tabControlPeopleAdmin_SelectedIndexChanged;
+					tabControlPeopleAdmin.SelectedIndexChanged -= tabControlPeopleAdminSelectedIndexChanged;
 					tabControlPeopleAdmin.TabPages.Clear();
 
 					// Creates skills grid view.
@@ -1139,7 +1107,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 						GridConstructor.WrapWithTabPage(_panelConstructor.View.Grid, UserTexts.Resources.Roles);
 
 					//Setup for F1
-					SetupHelpContext(_panelConstructor.View.Grid);
+					setupHelpContext(_panelConstructor.View.Grid);
 
 					rolesTabPage.Dock = DockStyle.Fill;
 					tabControlPeopleAdmin.TabPages.Add(rolesTabPage);
@@ -1160,7 +1128,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		private void SetCorrectView(ViewType mainView, ViewType panelView, bool togglePanelContent, bool ensureRightPanelVisible, int rightPanelWidth)
+		private void setCorrectView(ViewType mainView, ViewType panelView, bool togglePanelContent, bool ensureRightPanelVisible, int rightPanelWidth)
 		{
 
 			if (_gridConstructor.View.Type != mainView)
@@ -1171,9 +1139,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				_gridConstructor.View.Grid.CurrentCell.MoveTo(_gridConstructor.View.Grid.CurrentCell.RowIndex, 0);
 				_gridConstructor.BuildGridView(mainView);
 				_gridConstructor.View.SetView(shiftCategoryLimitationView);
-				SetupHelpContext(_gridConstructor.View.Grid);
+				setupHelpContext(_gridConstructor.View.Grid);
 				_findAndReplaceForm.ConfigureSearchFunctionality(_gridConstructor.View.Grid, _domainFinder);
-				TogglePanelContent(togglePanelContent);
+				this.togglePanelContent(togglePanelContent);
 
 				splitContainerWorksheet.Panel2Collapsed = !ensureRightPanelVisible;
 				if (ensureRightPanelVisible)
@@ -1182,7 +1150,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				}
 
 				_panelConstructor.BuildGridView(panelView);
-				SetupHelpContext(_panelConstructor.View.Grid);
+				setupHelpContext(_panelConstructor.View.Grid);
 
 				_gridConstructor.View.RowCount = _filteredPeopleHolder.FilteredPeopleGridData.Count;
 				_gridConstructor.View.Grid.RowCount = _filteredPeopleHolder.FilteredPeopleGridData.Count;
@@ -1193,7 +1161,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 		}
 
-		private void toolStripButtonPeoplePeriods_Click(object sender, EventArgs e)
+		private void toolStripButtonPeoplePeriodsClick(object sender, EventArgs e)
 		{
 
 			if ((StateHolder.ContractCollection.Count == 0) || (StateHolder.PartTimePercentageCollection.Count == 0)
@@ -1208,10 +1176,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			{
 				_domainFinder = new PeoplePeriodDomainFinder(_filteredPeopleHolder);
 
-				SetCorrectView(ViewType.PeoplePeriodView, ViewType.SkillsView, false, true, 300);
+				setCorrectView(ViewType.PeoplePeriodView, ViewType.SkillsView, false, true, 300);
 
 				// Clears all tab pages and recreate.
-				tabControlPeopleAdmin.SelectedIndexChanged -= tabControlPeopleAdmin_SelectedIndexChanged;
+				tabControlPeopleAdmin.SelectedIndexChanged -= tabControlPeopleAdminSelectedIndexChanged;
 				tabControlPeopleAdmin.TabPages.Clear();
 
 				var skillsTabPage = GridConstructor.WrapWithTabPage(_panelConstructor.View.Grid, UserTexts.Resources.PersonSkill);
@@ -1221,11 +1189,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				// Creates external log on grid view.
 				var externalLogOnTabPage = new TabPageAdv(UserTexts.Resources.ExternalLogOn) { Dock = DockStyle.Fill };
 				tabControlPeopleAdmin.TabPages.Add(externalLogOnTabPage);
-				tabControlPeopleAdmin.SelectedIndexChanged += tabControlPeopleAdmin_SelectedIndexChanged;
+				tabControlPeopleAdmin.SelectedIndexChanged += tabControlPeopleAdminSelectedIndexChanged;
 			}
 		}
 
-		private void toolStripButtonSchedulePeriods_Click(object sender, EventArgs e)
+		private void toolStripButtonSchedulePeriodsClick(object sender, EventArgs e)
 		{
 			try
 			{
@@ -1233,12 +1201,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				{
 					_domainFinder = new PeopleSchedulePeriodDomainFinder(_filteredPeopleHolder);
 
-					SetCorrectView(ViewType.SchedulePeriodView, ViewType.EmptyView, true, true, shiftCategoryLimitationView.ViewWidth());
+					setCorrectView(ViewType.SchedulePeriodView, ViewType.EmptyView, true, true, shiftCategoryLimitationView.ViewWidth());
 
 					if (KillMode)
 						return;
 
-					tabControlPeopleAdmin.SelectedIndexChanged -= tabControlPeopleAdmin_SelectedIndexChanged;
+					tabControlPeopleAdmin.SelectedIndexChanged -= tabControlPeopleAdminSelectedIndexChanged;
 					tabControlPeopleAdmin.TabPages.Clear();
 				}
 			}
@@ -1249,7 +1217,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		private void TogglePanelContent(bool showShiftCategoryView)
+		private void togglePanelContent(bool showShiftCategoryView)
 		{
 			if (!showShiftCategoryView)
 				shiftCategoryLimitationView.SendToBack();
@@ -1257,7 +1225,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				shiftCategoryLimitationView.BringToFront();
 		}
 
-		private void toolStripButtonPersonRotation_Click(object sender, EventArgs e)
+		private void toolStripButtonPersonRotationClick(object sender, EventArgs e)
 		{
 			if (StateHolder.AllRotations.Count <= 0)
 			{
@@ -1267,10 +1235,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 			StateHolder.LoadRotationStateHolder(ViewType.PersonRotationView, _filteredPeopleHolder);
 			_domainFinder = new PersonRotationDomainFinder(_filteredPeopleHolder);
-			SetCorrectView(ViewType.PersonRotationView, ViewType.EmptyView, false, false, 0);
+			setCorrectView(ViewType.PersonRotationView, ViewType.EmptyView, false, false, 0);
 		}
 
-		private void toolStripButtonPersonAccounts_Click(object sender, EventArgs e)
+		private void toolStripButtonPersonAccountsClick(object sender, EventArgs e)
 		{
 			if (_filteredPeopleHolder.FilteredAbsenceCollection.Count <= 0)
 			{
@@ -1278,10 +1246,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				return;
 			}
 			_domainFinder = new PersonAccountDomainFinder(_filteredPeopleHolder);
-			SetCorrectView(ViewType.PersonalAccountGridView, ViewType.EmptyView, false, false, 0);
+			setCorrectView(ViewType.PersonalAccountGridView, ViewType.EmptyView, false, false, 0);
 		}
 
-		private void toolStripButtonPersonAvailability_Click(object sender, EventArgs e)
+		private void toolStripButtonPersonAvailabilityClick(object sender, EventArgs e)
 		{
 			if (StateHolder.AllAvailabilities.Count <= 0)
 			{
@@ -1291,7 +1259,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 			StateHolder.LoadRotationStateHolder(ViewType.PersonAvailabilityView, _filteredPeopleHolder);
 			_domainFinder = new PersonAvailabilityDomainFinder(_filteredPeopleHolder);
-			SetCorrectView(ViewType.PersonAvailabilityView, ViewType.EmptyView, false, false, 0);
+			setCorrectView(ViewType.PersonAvailabilityView, ViewType.EmptyView, false, false, 0);
 		}
 
 		private void toolStripButtonMainClose_Click(object sender, EventArgs e)
@@ -1299,17 +1267,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			Close();
 		}
 
-		#endregion
-
-		#region Clipboard handling ribbon events
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		private void EditControl_NewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
+		private void editControlNewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
 			try
 			{
 				//IList<IPerson> selectedPersons = gridConstructor.View.GetSelectedPersons();
-				switch (GetClipboarditem(e))
+				switch (getClipboarditem(e))
 				{
 					case ClipboardItem.General:
 						toolStripButtonGeneral.PerformClick();
@@ -1340,12 +1304,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		private void EditControl_NewClicked(object sender, EventArgs e)
+		private void editControlNewClicked(object sender, EventArgs e)
 		{
 			_gridConstructor.View.AddNewGridRow(sender, e);
 		}
 
-		private void EditControl_DeleteClicked(object sender, EventArgs e)
+		private void editControlDeleteClicked(object sender, EventArgs e)
 		{
 			if ((_gridConstructor.View.Grid.Model.SelectedRanges == null) ||
 				(_gridConstructor.View.Grid.Model.SelectedRanges.Count == 0))
@@ -1355,7 +1319,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_gridConstructor.View.DeleteSelectedGridRows(sender, e);
 		}
 
-		private void ClipboardControl_CutClicked(object sender, EventArgs e)
+		private void clipboardControlCutClicked(object sender, EventArgs e)
 		{
 			if ((_gridConstructor.View.CurrentGrid.Model.SelectedRanges == null) ||
 				(_gridConstructor.View.CurrentGrid.Model.SelectedRanges.Count == 0))
@@ -1367,15 +1331,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				_gridConstructor.View.Grid.CutPaste.Cut();
 		}
 
-		private void ClipboardControl_PasteClicked(object sender, EventArgs e)
+		private void clipboardControlPasteClicked(object sender, EventArgs e)
 		{
 			bool canPaste = _gridConstructor.View.CurrentGrid.CutPaste.CanPaste();
 			if (canPaste) _gridConstructor.View.CurrentGrid.CutPaste.Paste();
 		}
 
-		private void ClipboardControl_PasteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
+		private void clipboardControlPasteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
-			switch (GetClipboarditem(e))
+			switch (getClipboarditem(e))
 			{
 				case ClipboardItem.Paste:
 					bool canPaste = _gridConstructor.View.CurrentGrid.CutPaste.CanPaste();
@@ -1387,7 +1351,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		private void ClipboardControl_CopyClicked(object sender, EventArgs e)
+		private void clipboardControlCopyClicked(object sender, EventArgs e)
 		{
 			if ((_gridConstructor.View.CurrentGrid.Model.SelectedRanges == null) ||
 				(_gridConstructor.View.CurrentGrid.Model.SelectedRanges.Count == 0))
@@ -1398,11 +1362,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			if (canCopy) _gridConstructor.View.CurrentGrid.CutPaste.Copy();
 		}
 
-		#endregion
-
-		#region Tab Control events
-
-		private void tabControlPeopleAdmin_SelectedIndexChanged(object sender, EventArgs e)
+		private void tabControlPeopleAdminSelectedIndexChanged(object sender, EventArgs e)
 		{
 
 			//if tab control is collapsed then return. 
@@ -1416,7 +1376,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 					//GridConstructor.WrapWithTabPage(_panelConstructor.View.Grid, tabControlPeopleAdmin.SelectedTab);
 					GridConstructor.WrapWithTabPageExternal(_panelConstructor.View.Grid, tabControlPeopleAdmin.SelectedTab, tableLayoutPanel1);
 					//Setup for F1
-					SetupHelpContext(_panelConstructor.View.Grid);
+					setupHelpContext(_panelConstructor.View.Grid);
 				}
 				else
 				{
@@ -1424,7 +1384,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 					_panelConstructor.View.RowCount = _filteredPeopleHolder.ExternalLogOnViewAdapterCollection.Count;
 					_panelConstructor.View.Grid.RowCount = _panelConstructor.View.RowCount;
 					_panelConstructor.View.Invalidate();
-					SetupHelpContext(_panelConstructor.View.Grid);
+					setupHelpContext(_panelConstructor.View.Grid);
 				}
 
 				panel1.Visible = true;
@@ -1439,26 +1399,22 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		#endregion
-
-		#region Form close events
-
-		private void PeopleWorksheet_FormClosing(object sender, FormClosingEventArgs e)
+		private void peopleWorksheetFormClosing(object sender, FormClosingEventArgs e)
 		{
 			if (KillMode)
 				return;
 			if(_readOnly) return;
-			var cancelSave = new CancelSave();
-			ValidatePersistance(cancelSave);
+			var cancelSave = new cancelSave();
+			validatePersistance(cancelSave);
 			notifyForceClose();
 			e.Cancel = cancelSave.Cancel;
 		}
 
-		private void PeopleWorksheet_FormClosed(object sender, FormClosedEventArgs e)
+		private void peopleWorksheetFormClosed(object sender, FormClosedEventArgs e)
 		{
 			unregisterEventsForFormKill();
 
-			DisposeAllChildGrids();
+			disposeAllChildGrids();
 			if (_filteredPeopleHolder != null)
 			{
 				_filteredPeopleHolder.Dispose();
@@ -1471,21 +1427,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		#endregion
-
-		private void toolStripButtonMainNew_Click(object sender, EventArgs e)
+		private void toolStripButtonMainNewClick(object sender, EventArgs e)
 		{
-			AddNew();
+			addNew();
 		}
 
-		#endregion
-
-		#region Message broker related items
-
-		private void PeopleWorksheet_Shown(object sender, EventArgs e)
+		private void peopleWorksheetShown(object sender, EventArgs e)
 		{
 			//Set toolStrips to preferred Size.
-			SetToolStripsToPreferredSize();
+			setToolStripsToPreferredSize();
 
 			_peopleAdminFilterPanel.BringToFront();
 			
@@ -1495,13 +1445,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			
 			//Load all other views relavant references.
 			if (KillMode) return;
-			LoadPeopleAdminReferences();
+			loadPeopleAdminReferences();
 			_filteredPeopleHolder.LoadRuleSetBag();
 			_filteredPeopleHolder.LoadBudgetGroup();
-			
+			peopleRibbon.MenuButtonText = UserTexts.Resources.File;
+
 		}
 
-		private void LoadPeopleAdminReferences()
+		private void loadPeopleAdminReferences()
 		{
 			// Load all contract schedules (to show on the combo boxes).
 			StateHolder.LoadContractSchedules(_filteredPeopleHolder);
@@ -1513,12 +1464,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			StateHolder.LoadContracts(_filteredPeopleHolder);
 		}
 
-		private void toolStripComboBoxExTrackerDescription_SelectedIndexChanged(object sender, EventArgs e)
+		private void toolStripComboBoxExTrackerDescriptionSelectedIndexChanged(object sender, EventArgs e)
 		{
-			RefilterOnTracker();
+			refilterOnTracker();
 		}
 
-		private void RefilterOnTracker()
+		private void refilterOnTracker()
 		{
 			if (_gridConstructor.CurrentView == ViewType.PersonalAccountGridView)
 			{
@@ -1529,11 +1480,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		#endregion
-
-		#region Methods
-
-		private static void DisposeChildGrids(GridViewBase view)
+		private static void disposeChildGrids(GridViewBase view)
 		{
 			if (view != null)
 			{
@@ -1541,7 +1488,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		private void ConfigureAndShowFindAndReplaceForm()
+		private void configureAndShowFindAndReplaceForm()
 		{
 			if (_findAndReplaceForm == null)
 			{
@@ -1580,9 +1527,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 					_findAndReplaceForm.ConfigureSearchFunctionality(
 						_gridConstructor.View.Grid, new PersonAvailabilityDomainFinder(_filteredPeopleHolder));
 					break;
-
-				default:
-					break;
 			}
 
 
@@ -1591,16 +1535,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_findAndReplaceForm.Focus();
 		}
 
-		private void SetupHelpContext(GridControl grid)
+		private void setupHelpContext(GridControl grid)
 		{
 			RemoveControlHelpContext(grid);
 			AddControlHelpContext(grid);
 			grid.Focus();
 		}
 
-		#endregion
-
-		private void ExternalFilteringTextBoxTextChanged(object sender, EventArgs e)
+		private void externalFilteringTextBoxTextChanged(object sender, EventArgs e)
 		{
 			var externalPersonList = _filteredPeopleHolder.ExternalLogOnViewAdapterCollection;
 			var filterValue = externalFilteringTextBox.Text;
@@ -1619,7 +1561,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_panelConstructor.View.Invalidate();
 		}
 
-		private void ToolStripButtonClosePreviousPeriodClick(object sender, EventArgs e)
+		private void toolStripButtonClosePreviousPeriodClick(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
 
@@ -1640,7 +1582,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 					IPersonAccountCollection personAccountCollection = personAccountModel.Parent;
 					personAccountCloser.ClosePersonAccount(personAccountCollection, selectedAbsence, selectedDate);
 				}
-				RefreshAfterMessageBroker();
+				refreshAfterMessageBroker();
 			}
 
 			if (_gridConstructor.View.Type == ViewType.SchedulePeriodView)
@@ -1658,7 +1600,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 		private void backStageButton1Click(object sender, EventArgs e)
 		{
-			//Save();
+			save();
 		}
 
 		private void backStageButton2Click(object sender, EventArgs e)
@@ -1691,6 +1633,5 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				return;
 			Application.Exit();
 		}
-
 	}
 }

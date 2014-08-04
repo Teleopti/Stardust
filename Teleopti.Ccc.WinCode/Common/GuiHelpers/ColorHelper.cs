@@ -6,6 +6,7 @@ using System.Globalization;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Tools;
+using Syncfusion.Windows.Forms.Tools.Design;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
@@ -417,7 +418,8 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 
 		public static void SetTabControlTheme(TabControlAdv control)
 		{
-			control.ActiveTabFont = new Font("Tahoma", 8.25F);
+			control.ActiveTabFont = new Font("Segoe UI", 9F);
+			control.ActiveTabColor = Color.FromArgb(0, 153, 255);
 			control.BackColor = TabBackColor();
 			control.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			control.BorderWidth = 0;
@@ -430,8 +432,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 			control.LevelTextAndImage = true;
 			control.PersistTabState = true;
 			control.ShowToolTips = true;
-			control.TabPanelBackColor = FormBackgroundColor();
-			control.TabStyle = typeof(TabRendererOffice2007);
+			control.TabPanelBackColor = Color.White;
 			control.ThemesEnabled = true;
 			control.UserMoveTabs = true;
 		}
