@@ -993,6 +993,11 @@ namespace Teleopti.Ccc.Win.Permissions
 		private Syncfusion.Windows.Forms.BackStageView backStageView1;
 		private Syncfusion.Windows.Forms.BackStage backStage1;
 		private Syncfusion.Windows.Forms.BackStageButton backStageButton1;
+		private Syncfusion.Windows.Forms.BackStageSeparator backStageSeparator1;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButton2;
+		private Syncfusion.Windows.Forms.BackStageSeparator backStageSeparator2;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButton3;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButton4;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.Panel PeopleAssignedBarPanel;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel PeopleBarItem;
@@ -1002,11 +1007,6 @@ namespace Teleopti.Ccc.Win.Permissions
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 		private System.Windows.Forms.Panel panelData;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel DataBarItem;
-		private Syncfusion.Windows.Forms.BackStageSeparator backStageSeparator1;
-		private Syncfusion.Windows.Forms.BackStageButton backStageButton2;
-		private Syncfusion.Windows.Forms.BackStageSeparator backStageSeparator2;
-		private Syncfusion.Windows.Forms.BackStageButton backStageButton3;
-		private Syncfusion.Windows.Forms.BackStageButton backStageButton4;
 		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ExplorerRibbon;
 		private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItem1;
 		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExClipboard;
