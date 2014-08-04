@@ -108,7 +108,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_gridConstructor.GridViewChanging += gridConstructorGridViewChanging;
 			_gridConstructor.GridViewChanged += gridConstructorGridViewChanged;
 			_panelConstructor.GridViewChanged += panelConstructorGridViewChanged;
-			toolStripButtonMainNew.Click += toolStripButtonMainNewClick;
 
 			// Clear cache available.
 			_gridConstructor.FlushCache();
