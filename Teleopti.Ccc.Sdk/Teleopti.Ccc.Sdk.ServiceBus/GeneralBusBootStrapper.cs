@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
@@ -14,6 +15,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		protected override void OnEndStart()
 		{
 			var bus = Container.Resolve<IServiceBus>();
+			var toggleManager = Container.Resolve<IToggleManager>();
+			var isEnabled = toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913);
+			if (!isEnabled)
+				return;
 			foreach (var dataSource in StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.ToList())
 			{
 				IList<Guid> businessUnitCollection;
