@@ -162,6 +162,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			//var calendarDate = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, CultureInfo.CurrentCulture.Calendar);
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging };
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
+		}		
+		
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult ShiftTradeRequestScheduleForOneTeamFilteredTime(DateOnly selectedDate, string teamId, Paging paging, string filteredStartTimes)
+		{
+			var startTimes = filteredStartTimes.Split(',').Select(startTime => new TimePeriod(startTime)).ToList();
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, FilteredStartTimes = startTimes };
+			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]

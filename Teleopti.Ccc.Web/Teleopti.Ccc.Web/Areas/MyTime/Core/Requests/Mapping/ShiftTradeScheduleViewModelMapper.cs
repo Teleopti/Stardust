@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -35,7 +36,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			ShiftTradeAddPersonScheduleViewModel mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel);
-			var possibleTradeSchedule = getPossibleTradeSchedules(possibleTradePersons, data.Paging).ToList();
+			var possibleTradeSchedule = new List<ShiftTradeAddPersonScheduleViewModel>();
+			if (data.FilteredStartTimes == null || data.FilteredStartTimes.Count==0)
+			{
+				possibleTradeSchedule = getPossibleTradeSchedules(possibleTradePersons, data.Paging).ToList();
+			}
+			else
+			{
+				possibleTradeSchedule = getFilteredTimesPossibleTradeSchedules(possibleTradePersons, data.Paging, data.FilteredStartTimes).ToList();
+			}
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any() ? possibleTradeSchedule.First().Total : 0;
 			var pageCount = possibleTradeScheduleNum % data.Paging.Take != 0 ? possibleTradeScheduleNum / data.Paging.Take + 1 : possibleTradeScheduleNum / data.Paging.Take;
 
@@ -85,6 +94,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (datePersons.Persons.Any())
 			{
 				var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedules(datePersons.Date, datePersons.Persons, paging);
+				return _shiftTradePersonScheduleViewModelMapper.Map(schedules);
+			}
+
+			return new List<ShiftTradeAddPersonScheduleViewModel>();
+		}
+
+		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getFilteredTimesPossibleTradeSchedules(DatePersons datePersons, Paging paging, IEnumerable<TimePeriod> filteredStartTimes)
+		{
+			if (datePersons.Persons.Any())
+			{
+				var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedulesWithFilteredTimes(datePersons.Date, datePersons.Persons, paging, filteredStartTimes);
 				return _shiftTradePersonScheduleViewModelMapper.Map(schedules);
 			}
 
