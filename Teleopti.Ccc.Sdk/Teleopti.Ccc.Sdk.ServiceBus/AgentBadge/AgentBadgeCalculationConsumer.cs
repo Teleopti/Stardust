@@ -37,7 +37,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					var agentBadgeSetting = _repositoryFactory.CreateAgentBadgeSettingsRepository(uow).LoadAll().FirstOrDefault();
 					if (agentBadgeSetting == null || !agentBadgeSetting.EnableBadge)
 					{
-						// Do nothing if no setting for agent badge or agent badge disabled
+						// If no setting for agent badge or agent badge disabled
+						// Then send message for next day to enable badge calculation (if the badge feature is enabled in this period).
+						if (_serviceBus != null)
+						{
+							var nextCalculateDate = DateTime.Now.AddDays(1).Date;
+							_serviceBus.DelaySend(nextCalculateDate, new AgentBadgeCalculateMessage
+							{
+								IsInitialization = true
+							});
+						}
+
+						// Do nothing 
 						continue;
 					}
 
