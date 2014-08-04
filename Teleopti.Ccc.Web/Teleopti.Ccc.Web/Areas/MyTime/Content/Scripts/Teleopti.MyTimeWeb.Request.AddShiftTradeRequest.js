@@ -194,18 +194,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				});
 			}
 		};
-		self.filterStartTime = ko.computed(function () {
-			ko.utils.arrayForEach(self.filterTimeList(), function(timeInFilter) {
-				if (timeInFilter.isChecked()) {
-					self.filteredStartTimeArray.push(timeInFilter);
-					self.filterSchedule();
-				} else {
-					//todo: need search if already exist!!!
-					//self.filteredStartTimeArray.remove(timeInFilter);
-					//self.filterSchedule();
-				}
-			});
-		});
+		self.filteredStartTimesText = ko.observableArray();
+
 		self.isShowList = ko.computed(function() {
 			var showList = false;
 			if (self.isDetailVisible() && self.chooseHistorys().length > 0) {
@@ -343,7 +333,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.loadSchedule = function(value) {
 			if (value != "allTeams") {
-				self.loadOneTeamSchedule();
+				if (self.filteredStartTimesText().length == 0) {
+					self.loadOneTeamSchedule();
+				} else {
+					self.loadScheduleForOneTeamFilteredTime();
+				}
 			} else {
 				self.loadScheduleForAllTeams();
 			}
@@ -753,16 +747,16 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				var skip = (self.selectedPageIndex() - 1) * take;
 
 				ajax.Ajax({
-					url: "Requests/ShiftTradeRequestScheduleForOneTeamFilteredTime",
+					url: "Requests/ShiftTradeRequestScheduleByFilterTime",
 					dataType: "json",
 					type: 'GET',
 					contentType: 'application/json; charset=utf-8',
 					data: {
 						selectedDate: self.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase()),
-						teamIds: self.selectedTeamInternal(),
-						filteredStartTimes: self.filteredStartTimeArray(),
-				    Take: take,
-				    Skip: skip
+						teamId: self.selectedTeamInternal(),
+						filteredStartTimes: self.filteredStartTimesText().join(","),
+						Take: take,
+						Skip: skip
 				},
 				beforeSend: function () {
 					self.IsLoading(true);
@@ -808,6 +802,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					_redrawLayers();
 				},
 				error: function (e) {
+					//console.log(e);
 				},
 				complete: function () {
 					self.IsLoading(false);
@@ -815,6 +810,34 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		};
 
+		self.filterStartTime = ko.computed(function () {
+			var isGoLoad = true;
+			$.each(self.filterTimeList(), function (idx, timeInFilter) {
+				if (timeInFilter.isChecked()) {
+					var findThis = false;
+					$.each(self.filteredStartTimesText(), function(index, text) {
+						if (timeInFilter.text == text) {
+							findThis = true;
+							isGoLoad = false;
+							return false;
+						}
+					});
+					if (!findThis) self.filteredStartTimesText.push(timeInFilter.text);
+
+					//self.filteredStartTimeArray.push(timeInFilter);
+					//self.filterSchedule();
+				} else {
+					//todo: need search if already exist!!!
+					//self.filteredStartTimeArray.remove(timeInFilter);
+					//self.filterSchedule();
+				}
+			});
+			if (self.filteredStartTimesText().length != 0 && isGoLoad) {
+				self.prepareLoad();
+				self.loadSchedule(self.selectedTeamInternal());
+			}
+		});
+		
 		self.changeRequestedDate = function (movement) {
 			var date = moment(self.requestedDateInternal()).add('days', movement);
 			if (self.isRequestedDateValid(date)) {

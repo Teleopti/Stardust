@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult ShiftTradeRequestScheduleForOneTeamFilteredTime(DateOnly selectedDate, string teamId, Paging paging, string filteredStartTimes)
+		public JsonResult ShiftTradeRequestScheduleByFilterTime(DateOnly selectedDate, string teamId, string filteredStartTimes, Paging paging)
 		{
 			var startTimes = filteredStartTimes.Split(',').Select(startTime => new TimePeriod(startTime)).ToList();
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, FilteredStartTimes = startTimes };
