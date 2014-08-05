@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			};
 
 			checkBoxEnableBadge.Checked = settings.EnableBadge;
+			timeSpanTextBoxCalculationTime.SetInitialResolution(settings.CalculationTime);
 			doubleTextBoxThresholdForAdherence.DoubleValue = settings.AdherenceThreshold.Value;
 			timeSpanTextBoxThresholdForAHT.SetInitialResolution(settings.AHTThreshold);
 			numericUpDownThresholdForAnsweredCalls.Value = settings.AnsweredCallsThreshold;
@@ -79,6 +80,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			var settings = _repository.LoadAll().FirstOrDefault() ?? new AgentBadgeThresholdSettings();
 			settings.EnableBadge = checkBoxEnableBadge.Checked;
+			settings.CalculationTime = timeSpanTextBoxCalculationTime.Value;
 			settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue);
 			settings.AHTThreshold = timeSpanTextBoxThresholdForAHT.Value;
 			settings.AnsweredCallsThreshold = (int)numericUpDownThresholdForAnsweredCalls.Value;
@@ -117,6 +119,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void setControlsEnabled(bool enabled)
 		{
+			timeSpanTextBoxCalculationTime.Enabled = enabled;
 			doubleTextBoxThresholdForAdherence.Enabled = enabled;
 			timeSpanTextBoxThresholdForAHT.Enabled = enabled;
 			numericUpDownThresholdForAnsweredCalls.Enabled = enabled;

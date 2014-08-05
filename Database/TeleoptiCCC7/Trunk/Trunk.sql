@@ -250,6 +250,7 @@ CREATE TABLE [dbo].[AgentBadgeThresholdSettings](
 	[Version] [int] NOT NULL,
 	[BusinessUnit] [uniqueidentifier] NOT NULL,
 	[EnableBadge] [bit] NOT NULL,
+	[CalculationTime] [bigint] NOT NULL,
 	[AnsweredCallsThreshold] [int] NOT NULL,
 	[AHTThreshold] [bigint] NOT NULL,
 	[AdherenceThreshold] [float] NOT NULL,

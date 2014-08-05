@@ -12209,4 +12209,8 @@ Reduce the complexity to use these shifts.</value>
     <value>You got new badges!</value>
     <comment>Agent badge notification content</comment>
   </data>
+  <data name="CalculationTime" xml:space="preserve">
+    <value>Badge calculation time:</value>
+    <comment>Label in agent badge threshold setting</comment>
+  </data>
 </root>

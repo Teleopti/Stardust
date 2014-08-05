@@ -35,6 +35,10 @@
 							type="bool"
 							not-null="true" />
 
+		<property name="CalculationTime"
+							type="TimeSpan"
+							not-null="true" />
+
 		<property name="AnsweredCallsThreshold"
 							type="int"
 							not-null="true" />
