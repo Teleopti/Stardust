@@ -8,13 +8,14 @@
 		<cache usage ="read-write"/>
 		<id name="Id"
 				type="guid"
-			 access="nosetter.camelcase-underscore"
+				access="nosetter.camelcase-underscore"
 				unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
-	  <many-to-one class="Teleopti.Ccc.Domain.Common.Person"
+		<many-to-one class="Teleopti.Ccc.Domain.Common.Person"
 					name ="Parent"
-					not-null="true" foreign-key="FK_AgentBadge_Person_Parent"/>
+					column="Person"
+					not-null="true" foreign-key="FK_AgentBadge_Person_Person"/>
 
 		<property name="BronzeBadge"
 							type="int"

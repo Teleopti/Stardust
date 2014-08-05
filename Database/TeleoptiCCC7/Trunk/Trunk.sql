@@ -216,32 +216,27 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 --Date: 2014-07-15  
 --Desc: Add new table for agent badges
 ----------------  
-/****** Object:  Table [dbo].[AgentBadge]    Script Date: 7/15/2014 9:55:13 AM ******/
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AgentBadge]') AND type in (N'U'))
-BEGIN
- CREATE TABLE [dbo].[AgentBadge](
- 	[Id] [uniqueidentifier] NOT NULL,
- 	[Parent] [uniqueidentifier] NOT NULL,
- 	[BronzeBadge] [int] NOT NULL,
- 	[SilverBadge] [int] NOT NULL,
- 	[GoldBadge] [int] NOT NULL,
+CREATE TABLE [dbo].[AgentBadge](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Person] [uniqueidentifier] NOT NULL,
+	[BronzeBadge] [int] NOT NULL,
+	[SilverBadge] [int] NOT NULL,
+	[GoldBadge] [int] NOT NULL,
 	[BadgeType] [int] NOT NULL
-  CONSTRAINT [PK_AgentBadge] PRIMARY KEY CLUSTERED 
- (
+CONSTRAINT [PK_AgentBadge] PRIMARY KEY CLUSTERED 
+(
 	[Id] ASC
- )
-) ON [PRIMARY];
+)
+)
 
-ALTER TABLE [dbo].[AgentBadge]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadge_Person_Parent] FOREIGN KEY([Parent])
+ALTER TABLE [dbo].[AgentBadge]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadge_Person] FOREIGN KEY([Person])
 REFERENCES [dbo].[Person] ([Id]);
 
-ALTER TABLE [dbo].[AgentBadge] CHECK CONSTRAINT [FK_AgentBadge_Person_Parent];
-END
+ALTER TABLE [dbo].[AgentBadge] CHECK CONSTRAINT [FK_AgentBadge_Person];
 
-/****** Object:  Index [IX_AgentBadge]    Script Date: 7/28/2014 11:27:01 AM ******/
 CREATE UNIQUE NONCLUSTERED INDEX [IX_AgentBadge] ON [dbo].[AgentBadge]
 (
-	[Parent] ASC,
+	[Person] ASC,
 	[BadgeType] ASC
 )
 GO
@@ -250,9 +245,6 @@ GO
 --Date: 2014-07-17
 --Desc: Add new table for agent badge threshold setting
 ----------------  
-/****** Object:  Table [dbo].[AgentBadgeThresholdSetting]    Script Date: 7/17/2014 4:09:11 AM ******/
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AgentBadgeThresholdSettings]') AND type in (N'U'))
-BEGIN
 CREATE TABLE [dbo].[AgentBadgeThresholdSettings](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Version] [int] NOT NULL,
@@ -269,7 +261,7 @@ CREATE TABLE [dbo].[AgentBadgeThresholdSettings](
 (
 	[Id] ASC
 )
-) ON [PRIMARY];
+)
 
 ALTER TABLE [dbo].[AgentBadgeThresholdSettings]  WITH CHECK ADD  CONSTRAINT [FK_AgentBadgeThresholdSettings_BusinessUnit] FOREIGN KEY([BusinessUnit])
 REFERENCES [dbo].[BusinessUnit] ([Id]);
@@ -280,5 +272,3 @@ ALTER TABLE [dbo].[AgentBadgeThresholdSettings]  WITH CHECK ADD  CONSTRAINT [FK_
 REFERENCES [dbo].[Person] ([Id]);
 
 ALTER TABLE [dbo].[AgentBadgeThresholdSettings] CHECK CONSTRAINT [FK_AgentBadgeThresholdSettings_Person];
-END
-
