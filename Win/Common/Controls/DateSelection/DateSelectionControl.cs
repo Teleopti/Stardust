@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
@@ -16,43 +15,22 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
         private bool _showAddButtons = true;
         private bool _showTabArea= true;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DateSelectionControl"/> class.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-01-02
-        /// </remarks>
         public DateSelectionControl()
         {
             InitializeComponent();
             if (!DesignMode) SetTexts();
-            SetColors();
             _dateSelectionControls.Add(dateSelectionFromTo1);
             _dateSelectionControls.Add(dateSelectionRolling1);
             _dateSelectionControls.Add(dateSelectionCalendar1);
             dateSelectionFromTo1.SetCulture(CultureInfo.CurrentCulture);
-            dateSelectionFromTo1.ValueChanged += dateSelectionFromTo1_DateRangeValueChanged;
-        }
-
-        private void SetColors()
-        {
-            BackColor = ColorHelper.TabBackColor();
+            dateSelectionFromTo1.ValueChanged += dateSelectionFromTo1DateRangeValueChanged;
         }
 
         public void AllowValueChangedEvent(bool allow)
         {
-            if (!allow) dateSelectionFromTo1.ValueChanged -= dateSelectionFromTo1_DateRangeValueChanged;
+            if (!allow) dateSelectionFromTo1.ValueChanged -= dateSelectionFromTo1DateRangeValueChanged;
         }
 
-        /// <summary>
-        /// Gets or sets the color of the tab panel back.
-        /// </summary>
-        /// <value>The color of the tab panel back.</value>
-        /// <remarks>
-        /// Created by: henryg
-        /// Created date: 2009-02-26
-        /// </remarks>
         public Color TabPanelBackColor
         {
             get
@@ -65,14 +43,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             }
         }
 
-        /// <summary>
-        /// Gets or sets the tab panel border style.
-        /// </summary>
-        /// <value>The tab panel border style.</value>
-        /// <remarks>
-        /// Created by: henryg
-        /// Created date: 2009-02-26
-        /// </remarks>
         public BorderStyle TabPanelBorderStyle
         {
             get
@@ -85,14 +55,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             }
         }
 
-        /// <summary>
-        /// Gets the selected dates.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-02
-        /// </remarks>
         public IList<DateOnlyPeriod> GetCurrentlySelectedDates()
         {
             var dateSelection =
@@ -102,39 +64,32 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             return dateSelection.GetSelectedDates();
         }
 
-        /// <summary>
-        /// Occurs when [date range changed].
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-02
-        /// </remarks>
         public event EventHandler<DateRangeChangedEventArgs> DateRangeChanged;
 
-        private void dateSelectionCalendar1_DateRangeChanged(object sender, DateRangeChangedEventArgs e)
+        private void dateSelectionCalendar1DateRangeChanged(object sender, DateRangeChangedEventArgs e)
         {
-            OnDateRangeChanged(e.SelectedDates);
+            onDateRangeChanged(e.SelectedDates);
         }
 
-        private void dateSelectionFromTo1_DateRangeChanged(object sender, DateRangeChangedEventArgs e)
+        private void dateSelectionFromTo1DateRangeChanged(object sender, DateRangeChangedEventArgs e)
         {
-            OnDateRangeChanged(e.SelectedDates);
+            onDateRangeChanged(e.SelectedDates);
         }
 
-        private void dateSelectionFromTo1_DateRangeValueChanged(object sender, EventArgs e)
+        private void dateSelectionFromTo1DateRangeValueChanged(object sender, EventArgs e)
         {
             if (sender.GetType() != typeof (DateSelectionFromTo)) return;
             var dates = GetCurrentlySelectedDates();
             var dateCollection = new ReadOnlyCollection<DateOnlyPeriod>(dates);
-            OnDateRangeChanged(dateCollection);
+            onDateRangeChanged(dateCollection);
         }
 
-        private void dateSelectionRolling1_DateRangeChanged(object sender, DateRangeChangedEventArgs e)
+        private void dateSelectionRolling1DateRangeChanged(object sender, DateRangeChangedEventArgs e)
         {
-            OnDateRangeChanged(e.SelectedDates);
+            onDateRangeChanged(e.SelectedDates);
         }
 
-        private void OnDateRangeChanged(ReadOnlyCollection<DateOnlyPeriod> dates)
+        private void onDateRangeChanged(ReadOnlyCollection<DateOnlyPeriod> dates)
         {
         	var handler = DateRangeChanged;
             if (handler!= null)
@@ -143,16 +98,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [show date selection rolling].
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [show date selection rolling]; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-17
-        /// </remarks>
         [DefaultValue(true), Browsable(true), Category("Teleopti Appearance")]
         public bool ShowDateSelectionRolling
         {
@@ -160,16 +105,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             set { tabPageAdvRolling.TabVisible = value; }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [show date selection from to].
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [show date selection from to]; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-17
-        /// </remarks>
         [DefaultValue(true), Browsable(true), Category("Teleopti Appearance")]
         public bool ShowDateSelectionFromTo
         {
@@ -177,16 +112,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             set { tabPageAdvFromTo.TabVisible = value; }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [show date selection calendar].
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [show date selection calendar]; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-17
-        /// </remarks>
         [DefaultValue(true),Browsable(true),Category("Teleopti Appearance")]
         public bool ShowDateSelectionCalendar
         {
@@ -194,14 +119,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             set { tabPageAdvCalendar.TabVisible = value; }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [show add buttons].
-        /// </summary>
-        /// <value><c>true</c> if [show add buttons]; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-02
-        /// </remarks>
         [Browsable(true),Category("Teleopti Appearance")]
         public bool ShowAddButtons
         {
@@ -209,11 +126,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             set
             {
                 _showAddButtons = value;
-                SetApplyButtonsVisible();
+                setApplyButtonsVisible();
             }
         }
 
-        private void SetApplyButtonsVisible()
+        private void setApplyButtonsVisible()
         {
             foreach (var d in _dateSelectionControls)
             {
@@ -247,14 +164,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             dateSelectionCalendar1.SetCurrentDate(dateTime.StartDate);
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [use future].
-        /// </summary>
-        /// <value><c>true</c> if [use future]; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-02
-        /// </remarks>
         [DefaultValue(false), Browsable(true), Category("Teleopti Appearance")]
         public bool UseFuture
         {
@@ -262,16 +171,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             set { dateSelectionRolling1.Factor = (value) ? 1 : -1; }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance has help information.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance has help information; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-09-01
-        /// </remarks>
         public override bool HasHelp
         {
             get
