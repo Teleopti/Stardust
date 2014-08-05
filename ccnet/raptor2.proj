@@ -14,9 +14,11 @@
 		<RunWebBehaviorTests>true</RunWebBehaviorTests>
 		<AgentPortalWebSiteName>$(CCNetProject)-AgentPortalWeb</AgentPortalWebSiteName>
 	
-		<vs2010ide>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</vs2010ide>
+		<ASCompile>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</ASCompile>
+		<ASCompile Condition="'$(computername)' == 'Teleopti629'">C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe</ASCompile>
 		<AsDBDeploy>C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\ManagementStudio\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>
-
+		<AsDBDeploy Condition="'$(computername)' == 'Teleopti629'">C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\ManagementStudio\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>
+		
 		<AzureDeploy>false</AzureDeploy>
 		<SQL2005Deploy>false</SQL2005Deploy>
 		<AzureDeploy Condition="'$(CCNetProject)' == 'EtlAndAzure'">true</AzureDeploy>
@@ -104,10 +106,11 @@
 		<CallTarget Targets="MoveFilesToPipeLine" Condition="'$(CCNetProject)'=='CCC-Main'"/>
 	</Target>
 		
-    <Target Name="BuildSSASXmla" Condition="Exists('$(vs2010ide)') And Exists('$(AsDBDeploy)')">
+    <Target Name="BuildSSASXmla" Condition="Exists('$(ASCompile)') And Exists('$(AsDBDeploy)')">
 
-		<Message Text="Building dwproj-file ..." Importance="high" />
-		<Exec Command="&quot;$(vs2010ide)&quot; &quot;$(CCNetWorkingDirectory)\Cube\TeleoptiAnalytics\TeleoptiAnalytics.sln&quot; /rebuild CreateDatabase2005 /Log &quot;c:\Temp\devenv_log_$(CCNetProject)_$(CCNetLabel).txt&quot;" />
+		<Message Text="Building dwproj-file with $(ASCompile)..." Importance="high" />
+		
+		<Exec Command="&quot;$(ASCompile)&quot; &quot;$(CCNetWorkingDirectory)\Cube\TeleoptiAnalytics\TeleoptiAnalytics.sln&quot; /rebuild CreateDatabase2005 /Log &quot;c:\Temp\devenv_log_$(CCNetProject)_$(CCNetLabel).txt&quot;" />
 		<Message Text="Building dwproj-file. Done!" Importance="high" />
 
 		<Message Text="Creating XMLA ..." Importance="high" />
