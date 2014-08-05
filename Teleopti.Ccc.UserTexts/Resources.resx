@@ -12201,4 +12201,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Success!</value>
     <comment>Success!</comment>
   </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>Congratulations!</value>
+    <comment>Agent badge notification title</comment>
+  </data>
+  <data name="YouGotNewBadges" xml:space="preserve">
+    <value>You got new badges!</value>
+    <comment>Agent badge notification content</comment>
+  </data>
 </root>
