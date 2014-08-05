@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		protected override void Dispose(bool disposing)
 		{
-            base.Dispose(disposing);
+			base.Dispose(disposing);
 			if (disposing)
 			{
 				if (_addNewPersonMenuItem != null) _addNewPersonMenuItem.Dispose();
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private ColumnBase<PersonGeneralModel> _applicationPasswordColumn;
 		private ColumnBase<PersonGeneralModel> _roleColumn;
 		private ColumnBase<PersonGeneralModel> _workflowControlSetColumn;
-        private ColumnBase<PersonGeneralModel> _firstDayOfWeekColumn;
+		private ColumnBase<PersonGeneralModel> _firstDayOfWeekColumn;
 
 		private ToolStripMenuItem _addNewPersonMenuItem;
 		private ToolStripMenuItem _addNewPersonFromClipboardMenuItem;
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDropDownCellModel))
 				grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCellModel, new DropDownCellModel(grid.Model));
 		}
-		
+
 		public override void Sort(bool isAscending)
 		{
 			// Sorts the people data
@@ -134,18 +134,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		internal override void CreateHeaders()
 		{
-            _hasRights = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword);
+			_hasRights = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword);
 			_gridColumns.Add(new RowHeaderColumn<PersonGeneralModel>());
 
 			createUserInfoHeaders();
 			createPermissionInformationHeaders();
 			createLanguageInfoHeaders();
 
-            _firstDayOfWeekColumn = new DropDownColumn<PersonGeneralModel, DayOfWeekDisplay>("FirstDayOfWeek", Resources.WorkWeekStartsAt,
-                                    DayOfWeekDisplay.ListOfDayOfWeek, "DisplayName");
-            _firstDayOfWeekColumn.CellDisplayChanged += columnCellDisplayChanged;
-            _firstDayOfWeekColumn.CellChanged += columnCellChanged;
-            _gridColumns.Add(_firstDayOfWeekColumn);
+			_firstDayOfWeekColumn = new DropDownColumn<PersonGeneralModel, DayOfWeekDisplay>("FirstDayOfWeek", Resources.WorkWeekStartsAt,
+									DayOfWeekDisplay.ListOfDayOfWeek, "DisplayName");
+			_firstDayOfWeekColumn.CellDisplayChanged += columnCellDisplayChanged;
+			_firstDayOfWeekColumn.CellChanged += columnCellChanged;
+			_gridColumns.Add(_firstDayOfWeekColumn);
 
 			_workflowControlSetColumn = new DropDownColumn<PersonGeneralModel, IWorkflowControlSet>("WorkflowControlSet", Resources.WorkflowControlSet,
 									PeopleWorksheet.StateHolder.WorkflowControlSetCollection, "Name");
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_workflowControlSetColumn.ColumnComparer = new WorkflowControlSetComparer();
 			_gridColumns.Add(_workflowControlSetColumn);
 
-            //add optional columns.
+			//add optional columns.
 			populateOptionalColumns();
 
 			_terminationColumn = new NullableDateOnlyColumn<PersonGeneralModel>("TerminalDate", Resources.TerminalDate);
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private void createLanguageInfoHeaders()
 		{
 			_languageColumn = new DropDownCultureColumn<PersonGeneralModel, Culture>("LanguageInfo", Resources.Language,
-			                                                                          PeopleWorksheet.StateHolder.CultureCollection, "DisplayName");
+																					  PeopleWorksheet.StateHolder.CultureCollection, "DisplayName");
 			_languageColumn.CellDisplayChanged += columnCellDisplayChanged;
 			_languageColumn.CellChanged += columnCellChanged;
 			// Sets the comparer for the sorting
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_gridColumns.Add(_languageColumn);
 
 			_uiCultureColumn = new DropDownCultureColumn<PersonGeneralModel, Culture>("CultureInfo", Resources.Format,
-			                                                                           PeopleWorksheet.StateHolder.UICultureCollection, "DisplayName");
+																					   PeopleWorksheet.StateHolder.UICultureCollection, "DisplayName");
 			_uiCultureColumn.CellDisplayChanged += columnCellDisplayChanged;
 			_uiCultureColumn.CellChanged += columnCellChanged;
 			// Sets the comparer for the sorting
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private void createPermissionInformationHeaders()
 		{
 			if (_hasRights) 
-                _identityUserColumn = new EditableTextColumn<PersonGeneralModel>("LogOnName", 100, Resources.LogOn);
+				_identityUserColumn = new EditableTextColumn<PersonGeneralModel>("LogOnName", 100, Resources.LogOn);
 			else
 				_identityUserColumn = new ReadOnlyTextColumn<PersonGeneralModel>("LogOnName", Resources.LogOn);
 			_identityUserColumn.CellDisplayChanged += columnCellDisplayChanged;
@@ -205,9 +205,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_gridColumns.Add(_identityUserColumn);
 
 			if (_hasRights) 
-                _applicationUserColumn = new EditableTextColumn<PersonGeneralModel>("ApplicationLogOnName", 50, Resources.ApplicationLogInName);
+				_applicationUserColumn = new EditableTextColumn<PersonGeneralModel>("ApplicationLogOnName", 50, Resources.ApplicationLogInName);
 			else 
-                _applicationUserColumn = new ReadOnlyTextColumn<PersonGeneralModel>("ApplicationLogOnName", Resources.ApplicationLogInName);
+				_applicationUserColumn = new ReadOnlyTextColumn<PersonGeneralModel>("ApplicationLogOnName", Resources.ApplicationLogInName);
 			_applicationUserColumn.CellDisplayChanged += applicationUsercolumnCellDisplayChanged;
 			_applicationUserColumn.CellChanged += applicationLogOnNameColumnCellChanged;
 			_gridColumns.Add(_applicationUserColumn);
@@ -217,18 +217,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_applicationPasswordColumn.CellChanged += columnCellChanged;
 			_gridColumns.Add(_applicationPasswordColumn);
 
-            if (_hasRights)
-            {
-                var column = new ReadOnlyCollectionColumn<PersonGeneralModel>("Roles", Resources.Roles,200);
-			    _roleColumn = column;
+			if (_hasRights)
+			{
+				var column = new ReadOnlyCollectionColumn<PersonGeneralModel>("Roles", Resources.Roles,200);
+				_roleColumn = column;
 			}
-            else
-            {
-                var column = new ReadOnlyTextColumn<PersonGeneralModel>("Roles", Resources.Roles,200);
-                _roleColumn = column;
-            }
+			else
+			{
+				var column = new ReadOnlyTextColumn<PersonGeneralModel>("Roles", Resources.Roles,200);
+				_roleColumn = column;
+			}
 
-		    _roleColumn.ColumnComparer = new PeopleAdminApplicationRoleComparer();
+			_roleColumn.ColumnComparer = new PeopleAdminApplicationRoleComparer();
 			_roleColumn.CellDisplayChanged += columnCellDisplayChanged;
 			_roleColumn.CellChanged += columnCellChanged;
 			_gridColumns.Add(_roleColumn);
@@ -401,8 +401,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 			Grid.ColWidths.ResizeToFit(GridRangeInfo.Table() , GridResizeToFitOptions.IncludeHeaders);
 			//Set note filed width to PreferredWidth
-            Grid.ColWidths[0] = _gridColumns[0].PreferredWidth;
-            Grid.ColWidths[5] = _gridColumns[5].PreferredWidth + 10;
+			Grid.ColWidths[0] = _gridColumns[0].PreferredWidth;
+			Grid.ColWidths[5] = _gridColumns[5].PreferredWidth + 10;
 			Grid.ColWidths[13] = _gridColumns[13].PreferredWidth;
 
 			Grid.Name = "GeneralView";
@@ -547,9 +547,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				var result = ViewBase.ShowConfirmationMessage(Resources.AreYouSureYouWantToDelete, Resources.AreYouSureYouWantToDelete);
 				if (result == DialogResult.Yes)
 				{
-				    var gridRangeInfos = revertIfNecessary(Grid.Model.SelectedRanges);
+					var gridRangeInfos = revertIfNecessary(Grid.Model.SelectedRanges);
 
-                    foreach (var gridRangeInfo in gridRangeInfos)
+					foreach (var gridRangeInfo in gridRangeInfos)
 					{
 						if (gridRangeInfo.IsTable)
 						{
@@ -579,12 +579,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
-        private static IEnumerable<GridRangeInfo> revertIfNecessary(IEnumerable gridRangeInfoList)
-        {
-            var gridRangeInfos = gridRangeInfoList.Cast<GridRangeInfo>().ToList();
+		private static IEnumerable<GridRangeInfo> revertIfNecessary(IEnumerable gridRangeInfoList)
+		{
+			var gridRangeInfos = gridRangeInfoList.Cast<GridRangeInfo>().ToList();
 
-            return (from info in gridRangeInfos orderby info.Top descending select info).ToList();
-        }
+			return (from info in gridRangeInfos orderby info.Top descending select info).ToList();
+		}
 
 		internal override void AddNewGridRow<T>(object sender, T eventArgs)
 		{
@@ -626,7 +626,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				}
 			}
 
-            ranges.ForEach(Grid.Selections.Add);
+			ranges.ForEach(Grid.Selections.Add);
 		}
 
 		public void ConfigureGridForDynamicColumns()

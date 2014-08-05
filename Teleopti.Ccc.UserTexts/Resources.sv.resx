@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Dold redigeringsruta för text</value>
@@ -11595,5 +11595,9 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="RequestsMenu" xml:space="preserve">
     <value>FÖRFRÅGNINGAR</value>
+  </data>
+  <data name="FileProperCase" xml:space="preserve">
+    <value>Arkiv</value>
+    <comment>If not using stupid FILE style</comment>
   </data>
 </root>

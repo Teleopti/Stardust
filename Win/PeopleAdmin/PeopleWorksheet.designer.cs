@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.externalFilteringTextBox = new System.Windows.Forms.TextBox();
 			this.shiftCategoryLimitationView = new Teleopti.Ccc.Win.PeopleAdmin.Views.ShiftCategoryLimitationView();
 			this.contextMenuStripGridView = new Syncfusion.Windows.Forms.Tools.ContextMenuStripEx();
-			this.statusStripEx1 = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
 			this.contextMenuStripExExternalLogOn = new Syncfusion.Windows.Forms.Tools.ContextMenuStripEx();
 			this.xxSearchThreeDotsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.peopleRibbon = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
@@ -114,7 +113,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// 
 			this.backStage1.ActiveTabFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.backStage1.AllowDrop = true;
-			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1402, 569);
+			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1402, 579);
 			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.backStage1.Controls.Add(this.backStageButton1);
 			this.backStage1.Controls.Add(this.backStageSeparator1);
@@ -124,11 +123,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.backStage1.Controls.Add(this.backStageButton4);
 			this.backStage1.Font = new System.Drawing.Font("Segoe UI", 8.25F);
 			this.backStage1.ItemSize = new System.Drawing.Size(138, 40);
-			this.backStage1.Location = new System.Drawing.Point(1, 51);
+			this.backStage1.Location = new System.Drawing.Point(0, 0);
 			this.backStage1.Name = "backStage1";
 			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
-			this.backStage1.Size = new System.Drawing.Size(1402, 569);
+			this.backStage1.Size = new System.Drawing.Size(1402, 579);
 			this.backStage1.TabIndex = 6;
+			this.backStage1.Visible = false;
 			// 
 			// backStageButton1
 			// 
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.backStageButton1.IsBackStageButton = false;
 			this.backStageButton1.Location = new System.Drawing.Point(0, 16);
 			this.backStageButton1.Name = "backStageButton1";
-			this.backStageButton1.Size = new System.Drawing.Size(137, 38);
+			this.backStageButton1.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton1.TabIndex = 3;
 			this.backStageButton1.Text = "xxSave";
 			this.backStageButton1.Click += new System.EventHandler(this.backStageButton1Click);
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// backStageSeparator1
 			// 
 			this.backStageSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
-			this.backStageSeparator1.Location = new System.Drawing.Point(19, 60);
+			this.backStageSeparator1.Location = new System.Drawing.Point(15, 47);
 			this.backStageSeparator1.Name = "backStageSeparator1";
 			this.backStageSeparator1.Size = new System.Drawing.Size(100, 1);
 			this.backStageSeparator1.TabIndex = 4;
@@ -158,9 +158,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.backStageButton2.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton2.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton2.IsBackStageButton = false;
-			this.backStageButton2.Location = new System.Drawing.Point(0, 66);
+			this.backStageButton2.Location = new System.Drawing.Point(0, 53);
 			this.backStageButton2.Name = "backStageButton2";
-			this.backStageButton2.Size = new System.Drawing.Size(137, 38);
+			this.backStageButton2.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton2.TabIndex = 5;
 			this.backStageButton2.Text = "xxClose";
 			this.backStageButton2.Click += new System.EventHandler(this.backStageButton2Click);
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// backStageSeparator2
 			// 
 			this.backStageSeparator2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
-			this.backStageSeparator2.Location = new System.Drawing.Point(19, 110);
+			this.backStageSeparator2.Location = new System.Drawing.Point(15, 84);
 			this.backStageSeparator2.Name = "backStageSeparator2";
 			this.backStageSeparator2.Size = new System.Drawing.Size(100, 1);
 			this.backStageSeparator2.TabIndex = 6;
@@ -180,9 +180,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.backStageButton3.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton3.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton3.IsBackStageButton = false;
-			this.backStageButton3.Location = new System.Drawing.Point(0, 116);
+			this.backStageButton3.Location = new System.Drawing.Point(0, 90);
 			this.backStageButton3.Name = "backStageButton3";
-			this.backStageButton3.Size = new System.Drawing.Size(137, 38);
+			this.backStageButton3.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton3.TabIndex = 7;
 			this.backStageButton3.Text = "xxOptions";
 			this.backStageButton3.Click += new System.EventHandler(this.backStageButton3Click);
@@ -193,9 +193,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton4.IsBackStageButton = false;
-			this.backStageButton4.Location = new System.Drawing.Point(0, 154);
+			this.backStageButton4.Location = new System.Drawing.Point(0, 115);
 			this.backStageButton4.Name = "backStageButton4";
-			this.backStageButton4.Size = new System.Drawing.Size(137, 38);
+			this.backStageButton4.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton4.TabIndex = 8;
 			this.backStageButton4.Text = "xxExitTELEOPTICCC";
 			this.backStageButton4.Click += new System.EventHandler(this.backStageButton4Click);
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.splitContainerWorksheet.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainerWorksheet.FixedPanel = Syncfusion.Windows.Forms.Tools.Enums.FixedPanel.Panel2;
 			this.splitContainerWorksheet.HotExpandLine = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(49)))), ((int)(((byte)(99)))));
-			this.splitContainerWorksheet.Location = new System.Drawing.Point(1, 146);
+			this.splitContainerWorksheet.Location = new System.Drawing.Point(5, 149);
 			this.splitContainerWorksheet.Name = "splitContainerWorksheet";
 			// 
 			// splitContainerWorksheet.Panel1
@@ -220,8 +220,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.splitContainerWorksheet.Panel2.Controls.Add(this.tableLayoutPanel1);
 			this.splitContainerWorksheet.Panel2.Controls.Add(this.shiftCategoryLimitationView);
 			this.splitContainerWorksheet.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
-			this.splitContainerWorksheet.Size = new System.Drawing.Size(1403, 453);
-			this.splitContainerWorksheet.SplitterDistance = 1172;
+			this.splitContainerWorksheet.Size = new System.Drawing.Size(1395, 477);
+			this.splitContainerWorksheet.SplitterDistance = 1164;
 			this.splitContainerWorksheet.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Mozilla;
 			this.splitContainerWorksheet.TabIndex = 3;
 			this.splitContainerWorksheet.Text = "splitContainerAdv1";
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// 
 			this.tabControlPeopleAdmin.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
 			this.tabControlPeopleAdmin.ActiveTabFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-			this.tabControlPeopleAdmin.BeforeTouchSize = new System.Drawing.Size(224, 453);
+			this.tabControlPeopleAdmin.BeforeTouchSize = new System.Drawing.Size(224, 477);
 			this.tabControlPeopleAdmin.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlPeopleAdmin.BorderWidth = 0;
 			this.tabControlPeopleAdmin.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.tabControlPeopleAdmin.Name = "tabControlPeopleAdmin";
 			this.tabControlPeopleAdmin.PersistTabState = true;
 			this.tabControlPeopleAdmin.ShowToolTips = true;
-			this.tabControlPeopleAdmin.Size = new System.Drawing.Size(224, 453);
+			this.tabControlPeopleAdmin.Size = new System.Drawing.Size(224, 477);
 			this.tabControlPeopleAdmin.TabIndex = 11;
 			this.tabControlPeopleAdmin.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabControlPeopleAdmin.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 2F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(224, 453);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(224, 477);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// panel1
@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.shiftCategoryLimitationView.Location = new System.Drawing.Point(0, 0);
 			this.shiftCategoryLimitationView.Name = "shiftCategoryLimitationView";
 			this.shiftCategoryLimitationView.ShiftCategories = ((System.Collections.Generic.IList<Teleopti.Interfaces.Domain.IShiftCategory>)(resources.GetObject("shiftCategoryLimitationView.ShiftCategories")));
-			this.shiftCategoryLimitationView.Size = new System.Drawing.Size(224, 453);
+			this.shiftCategoryLimitationView.Size = new System.Drawing.Size(224, 477);
 			this.shiftCategoryLimitationView.TabIndex = 12;
 			// 
 			// contextMenuStripGridView
@@ -314,18 +314,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.contextMenuStripGridView.Name = "contextMenuStripGridView";
 			this.contextMenuStripGridView.Size = new System.Drawing.Size(61, 4);
 			this.contextMenuStripGridView.Style = Syncfusion.Windows.Forms.Tools.ContextMenuStripEx.ContextMenuStyle.Default;
-			// 
-			// statusStripEx1
-			// 
-			this.statusStripEx1.BeforeTouchSize = new System.Drawing.Size(1403, 22);
-			this.statusStripEx1.Dock = Syncfusion.Windows.Forms.Tools.DockStyleEx.Bottom;
-			this.statusStripEx1.Location = new System.Drawing.Point(1, 599);
-			this.statusStripEx1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
-			this.statusStripEx1.Name = "statusStripEx1";
-			this.statusStripEx1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
-			this.statusStripEx1.Size = new System.Drawing.Size(1403, 22);
-			this.statusStripEx1.TabIndex = 4;
-			this.statusStripEx1.Text = "statusStripEx1";
 			// 
 			// contextMenuStripExExternalLogOn
 			// 
@@ -352,12 +340,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.peopleRibbon.Header.AddMainItem(toolStripTabItem6);
 			this.peopleRibbon.Header.AddQuickItem(new Syncfusion.Windows.Forms.Tools.QuickButtonReflectable(toolStripButtonMainSave));
 			this.peopleRibbon.HideMenuButtonToolTip = false;
-			this.peopleRibbon.Location = new System.Drawing.Point(1, -2);
+			this.peopleRibbon.Location = new System.Drawing.Point(1, 1);
 			this.peopleRibbon.MaximizeToolTip = "Maximize Ribbon";
 			this.peopleRibbon.MenuButtonEnabled = true;
 			this.peopleRibbon.MenuButtonFont = new System.Drawing.Font("Segoe UI", 9F);
-			this.peopleRibbon.MenuButtonText = "xxFile";
-			this.peopleRibbon.MenuButtonVisible = false;
+			this.peopleRibbon.MenuButtonText = "File";
 			this.peopleRibbon.MenuButtonWidth = 60;
 			this.peopleRibbon.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.peopleRibbon.MinimizeToolTip = "Minimize Ribbon";
@@ -372,18 +359,19 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.peopleRibbon.OfficeMenu.Size = new System.Drawing.Size(12, 65);
 			this.peopleRibbon.OverFlowButtonToolTip = "Show DropDown";
 			this.peopleRibbon.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.peopleRibbon.QuickPanelVisible = false;
 			this.peopleRibbon.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.peopleRibbon.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
-			this.peopleRibbon.SelectedTab = null;
+			this.peopleRibbon.SelectedTab = this.toolStripTabItem1;
 			this.peopleRibbon.Show2010CustomizeQuickItemDialog = false;
-			this.peopleRibbon.ShowRibbonDisplayOptionButton = true;
+			this.peopleRibbon.ShowRibbonDisplayOptionButton = false;
 			this.peopleRibbon.Size = new System.Drawing.Size(1407, 146);
 			this.peopleRibbon.SystemText.QuickAccessDialogDropDownName = "Start menu";
 			this.peopleRibbon.TabIndex = 7;
 			this.peopleRibbon.Text = "ribbonControlAdvFixed1";
 			this.peopleRibbon.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			this.peopleRibbon.TitleColor = System.Drawing.Color.Black;
+			this.peopleRibbon.TitleFont = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+			this.peopleRibbon.Click += new System.EventHandler(this.peopleRibbon_Click);
 			// 
 			// toolStripTabItem1
 			// 
@@ -402,12 +390,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripTabItem1.Panel.Name = "ribbonPanel1";
 			this.toolStripTabItem1.Panel.ScrollPosition = 0;
 			this.toolStripTabItem1.Panel.TabIndex = 2;
-			this.toolStripTabItem1.Panel.Text = "XXHOME";
+			this.toolStripTabItem1.Panel.Text = "xxHome";
 			this.toolStripTabItem1.Position = 0;
 			this.SetShortcut(this.toolStripTabItem1, System.Windows.Forms.Keys.None);
-			this.toolStripTabItem1.Size = new System.Drawing.Size(76, 25);
+			this.toolStripTabItem1.Size = new System.Drawing.Size(70, 25);
 			this.toolStripTabItem1.Tag = "1";
-			this.toolStripTabItem1.Text = "XXHOME";
+			this.toolStripTabItem1.Text = "xxHome";
 			this.peopleRibbon.SetUseInCustomQuickAccessDialog(this.toolStripTabItem1, false);
 			this.peopleRibbon.SetUseInQuickAccessMenu(this.toolStripTabItem1, false);
 			// 
@@ -507,9 +495,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// 
 			this.peopleRibbon.SetDescription(this.toolStripDatePicker, "");
 			this.toolStripDatePicker.Dock = System.Windows.Forms.DockStyle.None;
+			this.toolStripDatePicker.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.toolStripDatePicker.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripDatePicker.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripDatePicker.Image = null;
+			this.toolStripDatePicker.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.toolStripDatePicker.Location = new System.Drawing.Point(487, 1);
 			this.toolStripDatePicker.Name = "toolStripDatePicker";
 			this.toolStripDatePicker.Office12Mode = false;
@@ -519,6 +509,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripDatePicker.Text = "xxPeriods";
 			this.peopleRibbon.SetUseInCustomQuickAccessDialog(this.toolStripDatePicker, true);
 			this.peopleRibbon.SetUseInQuickAccessMenu(this.toolStripDatePicker, false);
+			this.toolStripDatePicker.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
 			// 
 			// toolStripViews
 			// 
@@ -599,7 +590,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// toolStripButtonPersonRotation
 			// 
 			this.peopleRibbon.SetDescription(this.toolStripButtonPersonRotation, "");
-			this.toolStripButtonPersonRotation.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripButtonPersonRotation.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripButtonPersonRotation.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Rotations;
 			this.toolStripButtonPersonRotation.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButtonPersonRotation.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -616,7 +607,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// toolStripButtonPersonAccounts
 			// 
 			this.peopleRibbon.SetDescription(this.toolStripButtonPersonAccounts, "");
-			this.toolStripButtonPersonAccounts.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripButtonPersonAccounts.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripButtonPersonAccounts.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_PersonalAccount;
 			this.toolStripButtonPersonAccounts.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButtonPersonAccounts.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -640,6 +631,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.SetShortcut(this.toolStripButtonPersonAvailability, System.Windows.Forms.Keys.None);
 			this.toolStripButtonPersonAvailability.Size = new System.Drawing.Size(115, 71);
 			this.toolStripButtonPersonAvailability.Text = "xxPersonAvailability";
+			this.toolStripButtonPersonAvailability.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonPersonAvailability.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.peopleRibbon.SetUseInCustomQuickAccessDialog(this.toolStripButtonPersonAvailability, true);
 			this.peopleRibbon.SetUseInQuickAccessMenu(this.toolStripButtonPersonAvailability, false);
@@ -775,7 +767,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripExSettings.Name = "toolStripExSettings";
 			this.toolStripExSettings.Office12Mode = false;
 			this.toolStripExSettings.ShowLauncher = false;
-			this.toolStripExSettings.Size = new System.Drawing.Size(572, 87);
+			this.toolStripExSettings.Size = new System.Drawing.Size(572, 0);
 			this.toolStripExSettings.TabIndex = 2;
 			this.toolStripExSettings.Text = "xxOptions";
 			this.peopleRibbon.SetUseInCustomQuickAccessDialog(this.toolStripExSettings, true);
@@ -789,7 +781,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripButtonContract.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonContract.Name = "toolStripButtonContract";
 			this.SetShortcut(this.toolStripButtonContract, System.Windows.Forms.Keys.None);
-			this.toolStripButtonContract.Size = new System.Drawing.Size(67, 71);
+			this.toolStripButtonContract.Size = new System.Drawing.Size(67, 0);
 			this.toolStripButtonContract.Text = "xxContract";
 			this.toolStripButtonContract.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonContract.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -806,7 +798,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripButtonContractSchedule.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonContractSchedule.Name = "toolStripButtonContractSchedule";
 			this.SetShortcut(this.toolStripButtonContractSchedule, System.Windows.Forms.Keys.None);
-			this.toolStripButtonContractSchedule.Size = new System.Drawing.Size(115, 71);
+			this.toolStripButtonContractSchedule.Size = new System.Drawing.Size(115, 0);
 			this.toolStripButtonContractSchedule.Text = "xxContractSchedule";
 			this.toolStripButtonContractSchedule.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonContractSchedule.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -822,7 +814,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripButtonPartTimePercentage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonPartTimePercentage.Name = "toolStripButtonPartTimePercentage";
 			this.SetShortcut(this.toolStripButtonPartTimePercentage, System.Windows.Forms.Keys.None);
-			this.toolStripButtonPartTimePercentage.Size = new System.Drawing.Size(128, 71);
+			this.toolStripButtonPartTimePercentage.Size = new System.Drawing.Size(128, 0);
 			this.toolStripButtonPartTimePercentage.Text = "xxPartTimePercentage";
 			this.toolStripButtonPartTimePercentage.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonPartTimePercentage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -865,7 +857,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.Quick_Access_Items.Location = new System.Drawing.Point(0, 1);
 			this.Quick_Access_Items.Name = "Quick_Access_Items";
 			this.Quick_Access_Items.Office12Mode = false;
-			this.Quick_Access_Items.Size = new System.Drawing.Size(275, 91);
+			this.Quick_Access_Items.Size = new System.Drawing.Size(275, 0);
 			this.Quick_Access_Items.TabIndex = 1;
 			this.peopleRibbon.SetUseInCustomQuickAccessDialog(this.Quick_Access_Items, true);
 			this.peopleRibbon.SetUseInQuickAccessMenu(this.Quick_Access_Items, false);
@@ -881,7 +873,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripButtonMainSave.Name = "toolStripButtonMainSave";
 			this.toolStripButtonMainSave.Padding = new System.Windows.Forms.Padding(4);
 			this.SetShortcut(this.toolStripButtonMainSave, System.Windows.Forms.Keys.None);
-			this.toolStripButtonMainSave.Size = new System.Drawing.Size(85, 74);
+			this.toolStripButtonMainSave.Size = new System.Drawing.Size(85, 0);
 			this.toolStripButtonMainSave.Text = "xxSave";
 			this.toolStripButtonMainSave.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonMainSave.ToolTipText = "xxSave";
@@ -893,18 +885,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.White;
 			this.Borders = new System.Windows.Forms.Padding(0);
-			this.ClientSize = new System.Drawing.Size(1405, 621);
+			this.ClientSize = new System.Drawing.Size(1405, 631);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.Controls.Add(this.backStage1);
 			this.Controls.Add(this.peopleRibbon);
 			this.Controls.Add(this.splitContainerWorksheet);
-			this.Controls.Add(this.statusStripEx1);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimumSize = new System.Drawing.Size(393, 197);
 			this.Name = "PeopleWorksheet";
-			this.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
+			this.Padding = new System.Windows.Forms.Padding(5, 3, 5, 5);
 			this.Text = "xxTeleoptiRaptorColonPeople";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.peopleWorksheetFormClosing);
@@ -938,7 +930,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.Quick_Access_Items.ResumeLayout(false);
 			this.Quick_Access_Items.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -954,7 +945,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 		private Syncfusion.Windows.Forms.BackStageButton backStageButton4;
 		private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerWorksheet;
 		private Syncfusion.Windows.Forms.Tools.ContextMenuStripEx contextMenuStripGridView;
-		private Syncfusion.Windows.Forms.Tools.StatusStripEx statusStripEx1;
 		private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlPeopleAdmin;
 		private ShiftCategoryLimitationView shiftCategoryLimitationView;
 		private Syncfusion.Windows.Forms.Tools.ContextMenuStripEx contextMenuStripExExternalLogOn;

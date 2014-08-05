@@ -12213,4 +12213,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Badge calculation time:</value>
     <comment>Label in agent badge threshold setting</comment>
   </data>
+  <data name="FileProperCase" xml:space="preserve">
+    <value>File</value>
+    <comment>If not using stupid FILE style</comment>
+  </data>
 </root>

@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripTabItem5 = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.toolStripExViewer = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripButtonShowViewer = new System.Windows.Forms.ToolStripButton();
-			this.statusStripEx1 = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
 			this.HorizontalSplitter = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.panelRoles = new System.Windows.Forms.Panel();
@@ -117,8 +116,8 @@ namespace Teleopti.Ccc.Win.Permissions
 			// contextMenuStripClipboard
 			// 
 			this.contextMenuStripClipboard.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.copyToolStripMenuItem,
-			this.pasteToolStripMenuItem});
+            this.copyToolStripMenuItem,
+            this.pasteToolStripMenuItem});
 			this.contextMenuStripClipboard.Name = "contextMenuStripClipboard";
 			this.contextMenuStripClipboard.Size = new System.Drawing.Size(145, 48);
 			this.contextMenuStripClipboard.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripClipboardOpening);
@@ -154,7 +153,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.listViewRoles.LabelEdit = true;
 			this.listViewRoles.Location = new System.Drawing.Point(3, 43);
 			this.listViewRoles.Name = "listViewRoles";
-			this.listViewRoles.Size = new System.Drawing.Size(1056, 152);
+			this.listViewRoles.Size = new System.Drawing.Size(1052, 157);
 			this.listViewRoles.Sorting = System.Windows.Forms.SortOrder.Ascending;
 			this.listViewRoles.TabIndex = 0;
 			this.listViewRoles.UseCompatibleStateImageBehavior = false;
@@ -165,9 +164,9 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.listViewPeople.BackColor = System.Drawing.Color.White;
 			this.listViewPeople.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.listViewPeople.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-			this.columnHeader1,
-			this.columnHeader2,
-			this.columnHeader3});
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3});
 			this.listViewPeople.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewPeople.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.listViewPeople.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -177,7 +176,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.listViewPeople.Location = new System.Drawing.Point(3, 43);
 			this.listViewPeople.Name = "listViewPeople";
 			this.listViewPeople.ShowGroups = false;
-			this.listViewPeople.Size = new System.Drawing.Size(406, 299);
+			this.listViewPeople.Size = new System.Drawing.Size(404, 308);
 			this.listViewPeople.TabIndex = 0;
 			this.listViewPeople.UseCompatibleStateImageBehavior = false;
 			this.listViewPeople.View = System.Windows.Forms.View.Details;
@@ -203,7 +202,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			// 
 			this.treeViewFunctions.AccelerateScrolling = Syncfusion.Windows.Forms.AccelerateScrollingBehavior.Immediate;
 			this.treeViewFunctions.BackColor = System.Drawing.Color.White;
-			this.treeViewFunctions.BeforeTouchSize = new System.Drawing.Size(324, 299);
+			this.treeViewFunctions.BeforeTouchSize = new System.Drawing.Size(322, 308);
 			this.treeViewFunctions.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.treeViewFunctions.BorderColor = System.Drawing.Color.Transparent;
 			this.treeViewFunctions.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
@@ -229,7 +228,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewFunctions.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
 			this.treeViewFunctions.ShowCheckBoxes = true;
 			this.treeViewFunctions.ShowFocusRect = false;
-			this.treeViewFunctions.Size = new System.Drawing.Size(324, 299);
+			this.treeViewFunctions.Size = new System.Drawing.Size(322, 308);
 			this.treeViewFunctions.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
 			this.treeViewFunctions.TabIndex = 0;
 			// 
@@ -247,7 +246,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			// 
 			this.treeViewData.AccelerateScrolling = Syncfusion.Windows.Forms.AccelerateScrollingBehavior.Immediate;
 			this.treeViewData.BackColor = System.Drawing.Color.White;
-			this.treeViewData.BeforeTouchSize = new System.Drawing.Size(300, 299);
+			this.treeViewData.BeforeTouchSize = new System.Drawing.Size(300, 308);
 			this.treeViewData.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.treeViewData.BorderColor = System.Drawing.Color.Transparent;
 			this.treeViewData.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
@@ -274,7 +273,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewData.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
 			this.treeViewData.ShowCheckBoxes = true;
 			this.treeViewData.ShowFocusRect = false;
-			this.treeViewData.Size = new System.Drawing.Size(300, 299);
+			this.treeViewData.Size = new System.Drawing.Size(300, 308);
 			this.treeViewData.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
 			this.treeViewData.TabIndex = 0;
 			// 
@@ -310,7 +309,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripExViewer.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExViewer.Image = null;
 			this.toolStripExViewer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonShowViewer});
+            this.toolStripButtonShowViewer});
 			this.toolStripExViewer.Location = new System.Drawing.Point(351, 1);
 			this.toolStripExViewer.Name = "toolStripExViewer";
 			this.toolStripExViewer.Office12Mode = false;
@@ -330,25 +329,13 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripButtonShowViewer.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.toolStripButtonShowViewer.Click += new System.EventHandler(this.toolStripButtonShowViewerClick);
 			// 
-			// statusStripEx1
-			// 
-			this.statusStripEx1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.statusStripEx1.BeforeTouchSize = new System.Drawing.Size(1062, 22);
-			this.statusStripEx1.Location = new System.Drawing.Point(1, 681);
-			this.statusStripEx1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
-			this.statusStripEx1.Name = "statusStripEx1";
-			this.statusStripEx1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
-			this.statusStripEx1.Size = new System.Drawing.Size(1062, 22);
-			this.statusStripEx1.TabIndex = 5;
-			this.statusStripEx1.Text = "statusStripEx1";
-			// 
 			// HorizontalSplitter
 			// 
 			this.HorizontalSplitter.BackColor = System.Drawing.Color.White;
 			this.HorizontalSplitter.BeforeTouchSize = 7;
 			this.HorizontalSplitter.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.HorizontalSplitter.HotExpandLine = System.Drawing.Color.FromArgb(((int)(((byte)(49)))), ((int)(((byte)(49)))), ((int)(((byte)(99)))));
-			this.HorizontalSplitter.Location = new System.Drawing.Point(1, 132);
+			this.HorizontalSplitter.Location = new System.Drawing.Point(3, 135);
 			this.HorizontalSplitter.Name = "HorizontalSplitter";
 			this.HorizontalSplitter.Orientation = System.Windows.Forms.Orientation.Vertical;
 			// 
@@ -365,8 +352,8 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.HorizontalSplitter.Panel2.Controls.Add(this.VerticalLeftSplitter);
 			this.HorizontalSplitter.Panel2MinSize = 0;
 			this.HorizontalSplitter.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel1;
-			this.HorizontalSplitter.Size = new System.Drawing.Size(1062, 550);
-			this.HorizontalSplitter.SplitterDistance = 198;
+			this.HorizontalSplitter.Size = new System.Drawing.Size(1058, 564);
+			this.HorizontalSplitter.SplitterDistance = 203;
 			this.HorizontalSplitter.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Mozilla;
 			this.HorizontalSplitter.TabIndex = 1;
 			this.HorizontalSplitter.Text = "yysplitContainerAdv1";
@@ -384,7 +371,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(1062, 198);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(1058, 203);
 			this.tableLayoutPanel1.TabIndex = 3;
 			// 
 			// panelRoles
@@ -394,7 +381,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.panelRoles.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panelRoles.Location = new System.Drawing.Point(3, 3);
 			this.panelRoles.Name = "panelRoles";
-			this.panelRoles.Size = new System.Drawing.Size(1056, 34);
+			this.panelRoles.Size = new System.Drawing.Size(1052, 34);
 			this.panelRoles.TabIndex = 2;
 			// 
 			// RolesBarItem
@@ -429,8 +416,8 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.VerticalLeftSplitter.Panel2.Controls.Add(this.VerticalRightSplitter);
 			this.VerticalLeftSplitter.Panel2MinSize = 0;
 			this.VerticalLeftSplitter.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
-			this.VerticalLeftSplitter.Size = new System.Drawing.Size(1062, 345);
-			this.VerticalLeftSplitter.SplitterDistance = 412;
+			this.VerticalLeftSplitter.Size = new System.Drawing.Size(1058, 354);
+			this.VerticalLeftSplitter.SplitterDistance = 410;
 			this.VerticalLeftSplitter.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Mozilla;
 			this.VerticalLeftSplitter.TabIndex = 0;
 			this.VerticalLeftSplitter.Text = "yysplitContainerAdv3";
@@ -447,7 +434,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(412, 345);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(410, 354);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
 			// PeopleAssignedBarPanel
@@ -457,7 +444,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.PeopleAssignedBarPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.PeopleAssignedBarPanel.Location = new System.Drawing.Point(3, 3);
 			this.PeopleAssignedBarPanel.Name = "PeopleAssignedBarPanel";
-			this.PeopleAssignedBarPanel.Size = new System.Drawing.Size(406, 34);
+			this.PeopleAssignedBarPanel.Size = new System.Drawing.Size(404, 34);
 			this.PeopleAssignedBarPanel.TabIndex = 3;
 			// 
 			// PeopleBarItem
@@ -492,8 +479,8 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.VerticalRightSplitter.Panel2.Controls.Add(this.tableLayoutPanel4);
 			this.VerticalRightSplitter.Panel2MinSize = 0;
 			this.VerticalRightSplitter.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
-			this.VerticalRightSplitter.Size = new System.Drawing.Size(643, 345);
-			this.VerticalRightSplitter.SplitterDistance = 330;
+			this.VerticalRightSplitter.Size = new System.Drawing.Size(641, 354);
+			this.VerticalRightSplitter.SplitterDistance = 328;
 			this.VerticalRightSplitter.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Mozilla;
 			this.VerticalRightSplitter.TabIndex = 0;
 			this.VerticalRightSplitter.Text = "yysplitContainerAdv2";
@@ -510,7 +497,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(330, 345);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(328, 354);
 			this.tableLayoutPanel3.TabIndex = 1;
 			// 
 			// panelFunc
@@ -520,7 +507,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.panelFunc.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panelFunc.Location = new System.Drawing.Point(3, 3);
 			this.panelFunc.Name = "panelFunc";
-			this.panelFunc.Size = new System.Drawing.Size(324, 34);
+			this.panelFunc.Size = new System.Drawing.Size(322, 34);
 			this.panelFunc.TabIndex = 4;
 			// 
 			// FunctionsBarItem
@@ -547,7 +534,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.tableLayoutPanel4.RowCount = 2;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(306, 345);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(306, 354);
 			this.tableLayoutPanel4.TabIndex = 1;
 			// 
 			// panelData
@@ -605,7 +592,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton1.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton1.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton1.IsBackStageButton = false;
-			this.backStageButton1.Location = new System.Drawing.Point(10, 10);
+			this.backStageButton1.Location = new System.Drawing.Point(0, 16);
 			this.backStageButton1.Name = "backStageButton1";
 			this.backStageButton1.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton1.TabIndex = 3;
@@ -615,7 +602,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			// backStageSeparator1
 			// 
 			this.backStageSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
-			this.backStageSeparator1.Location = new System.Drawing.Point(19, 60);
+			this.backStageSeparator1.Location = new System.Drawing.Point(15, 47);
 			this.backStageSeparator1.Name = "backStageSeparator1";
 			this.backStageSeparator1.Size = new System.Drawing.Size(100, 1);
 			this.backStageSeparator1.TabIndex = 4;
@@ -627,7 +614,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton2.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton2.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton2.IsBackStageButton = false;
-			this.backStageButton2.Location = new System.Drawing.Point(10, 35);
+			this.backStageButton2.Location = new System.Drawing.Point(0, 53);
 			this.backStageButton2.Name = "backStageButton2";
 			this.backStageButton2.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton2.TabIndex = 5;
@@ -637,7 +624,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			// backStageSeparator2
 			// 
 			this.backStageSeparator2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
-			this.backStageSeparator2.Location = new System.Drawing.Point(19, 110);
+			this.backStageSeparator2.Location = new System.Drawing.Point(15, 84);
 			this.backStageSeparator2.Name = "backStageSeparator2";
 			this.backStageSeparator2.Size = new System.Drawing.Size(100, 1);
 			this.backStageSeparator2.TabIndex = 6;
@@ -649,7 +636,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton3.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton3.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton3.IsBackStageButton = false;
-			this.backStageButton3.Location = new System.Drawing.Point(10, 60);
+			this.backStageButton3.Location = new System.Drawing.Point(0, 90);
 			this.backStageButton3.Name = "backStageButton3";
 			this.backStageButton3.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton3.TabIndex = 7;
@@ -662,7 +649,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton4.IsBackStageButton = false;
-			this.backStageButton4.Location = new System.Drawing.Point(10, 85);
+			this.backStageButton4.Location = new System.Drawing.Point(0, 115);
 			this.backStageButton4.Name = "backStageButton4";
 			this.backStageButton4.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton4.TabIndex = 8;
@@ -722,7 +709,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.ExplorerRibbon.ShowContextMenu = false;
 			this.ExplorerRibbon.ShowLauncher = false;
 			this.ExplorerRibbon.ShowQuickItemsDropDownButton = false;
-			this.ExplorerRibbon.ShowRibbonDisplayOptionButton = true;
+			this.ExplorerRibbon.ShowRibbonDisplayOptionButton = false;
 			this.ExplorerRibbon.Size = new System.Drawing.Size(1066, 132);
 			this.ExplorerRibbon.SystemText.QuickAccessDialogDropDownName = "Start menu";
 			this.ExplorerRibbon.TabIndex = 7;
@@ -786,9 +773,9 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripExRoles.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExRoles.Image = null;
 			this.toolStripExRoles.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButton1,
-			this.toolStripButton2,
-			this.toolStripButton3});
+            this.toolStripButton1,
+            this.toolStripButton2,
+            this.toolStripButton3});
 			this.toolStripExRoles.Location = new System.Drawing.Point(116, 1);
 			this.toolStripExRoles.Name = "toolStripExRoles";
 			this.toolStripExRoles.Office12Mode = false;
@@ -856,8 +843,8 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripExPersons.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExPersons.Image = null;
 			this.toolStripExPersons.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonAddPerson,
-			this.toolStripButtonRemovePerson});
+            this.toolStripButtonAddPerson,
+            this.toolStripButtonRemovePerson});
 			this.toolStripExPersons.Location = new System.Drawing.Point(288, 1);
 			this.toolStripExPersons.Name = "toolStripExPersons";
 			this.toolStripExPersons.Office12Mode = false;
@@ -904,19 +891,19 @@ namespace Teleopti.Ccc.Win.Permissions
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.White;
 			this.Borders = new System.Windows.Forms.Padding(0);
 			this.ClientSize = new System.Drawing.Size(1064, 704);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.ContextMenuStrip = this.contextMenuStripClipboard;
 			this.Controls.Add(this.backStage1);
 			this.Controls.Add(this.ExplorerRibbon);
-			this.Controls.Add(this.statusStripEx1);
 			this.Controls.Add(this.HorizontalSplitter);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimumSize = new System.Drawing.Size(421, 173);
 			this.Name = "PermissionsExplorer";
-			this.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
+			this.Padding = new System.Windows.Forms.Padding(3, 3, 3, 5);
 			this.Text = "xxTeleoptiRaptorColonPermissions";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.permissionsExplorerFormClosing);
@@ -963,7 +950,6 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripExPersons.ResumeLayout(false);
 			this.toolStripExPersons.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -981,7 +967,6 @@ namespace Teleopti.Ccc.Win.Permissions
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.ToolStripButton toolStripButtonSave;
-		private Syncfusion.Windows.Forms.Tools.StatusStripEx statusStripEx1;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStripClipboard;
 		private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;

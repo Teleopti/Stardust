@@ -8653,6 +8653,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        public static string FileProperCase {
+            get {
+                return ResourceManager.GetString("FileProperCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select type of export file.
         /// </summary>
         public static string FileTypeSelection {

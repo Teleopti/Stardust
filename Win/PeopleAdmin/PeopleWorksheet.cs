@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_domainFinder = new PeopleDomainFinder(filteredPeopleHolder);
 			shiftCategoryLimitationView.SetState(filteredPeopleHolder, _gridConstructor);
 
-			DateNavigateControl dateNavigatePeriods = new DateNavigateControl();
+			var dateNavigatePeriods = new DateNavigateControl();
 			dateNavigatePeriods.SetSelectedDate(_filteredPeopleHolder.SelectedDate);
 			dateNavigatePeriods.SelectedDateChanged += dateNavigatePeriodsSelectedDateChanged;
 
@@ -1422,7 +1422,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			loadPeopleAdminReferences();
 			_filteredPeopleHolder.LoadRuleSetBag();
 			_filteredPeopleHolder.LoadBudgetGroup();
-			peopleRibbon.MenuButtonText = UserTexts.Resources.File;
+			peopleRibbon.MenuButtonText = UserTexts.Resources.FileProperCase;
 
 		}
 
@@ -1606,6 +1606,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			if (Visible)
 				return;
 			Application.Exit();
+		}
+
+		private void peopleRibbon_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
