@@ -337,6 +337,7 @@ namespace Teleopti.Ccc.Win.Grouping
 		{
 			var date = xdtpDate.Value;
 			tabControlAdv.SelectedTab.Controls.Clear();
+			treeViewAdvMainTabTree.RightToLeft = tabControlAdv.RightToLeft;
 			tabControlAdv.SelectedTab.Controls.Add(treeViewAdvMainTabTree);
 			tabControlAdv.SelectedTab.Controls.Add(xdtpDate);
 			xdtpDate.Value = date;
