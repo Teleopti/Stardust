@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 	{
 		private readonly IAbstractPropertyPages _propertyPages;
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
-		private TreeNode _rootNode;
+		private TreeNodeAdv _rootNode;
 
 		protected Wizard()
 		{
@@ -23,16 +24,15 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 
 		private void SetColor()
 		{
-			BackColor = ColorHelper.StandardPanelBackground();
-			treeViewPages.BackColor = ColorHelper.StandardTreeBackgroundColor();
-			splitContainerHorizontal.BackColor = ColorHelper.WizardPanelSeparator();
-			splitContainerPages.BackColor = ColorHelper.WizardPanelSeparator();
-			splitContainerHorizontal.Panel1.BackColor = ColorHelper.WizardPanelBackgroundColor();
-			splitContainerHorizontal.Panel2.BackColor = ColorHelper.WizardPanelButtonHolder();
-			splitContainerPages.Panel1.BackColor = ColorHelper.WizardPanelBackgroundColor();
-			splitContainerPages.Panel2.BackColor = ColorHelper.WizardPanelBackgroundColor();
-			gradientPanel1.BackgroundColor = ColorHelper.WizardHeaderBrush;
-
+			//BackColor = ColorHelper.StandardPanelBackground();
+			//treeViewPages.BackColor = ColorHelper.StandardTreeBackgroundColor();
+			//splitContainerHorizontal.BackColor = ColorHelper.WizardPanelSeparator();
+			//splitContainerPages.BackColor = ColorHelper.WizardPanelSeparator();
+			//splitContainerHorizontal.Panel1.BackColor = ColorHelper.WizardPanelBackgroundColor();
+			//splitContainerHorizontal.Panel2.BackColor = ColorHelper.WizardPanelButtonHolder();
+			//splitContainerPages.Panel1.BackColor = ColorHelper.WizardPanelBackgroundColor();
+			//splitContainerPages.Panel2.BackColor = ColorHelper.WizardPanelBackgroundColor();
+			labelHeading.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 		}
 
 		public Wizard(IAbstractPropertyPages propertyPages)
@@ -41,36 +41,36 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			Name = Name + "." + propertyPages.GetType().Name; // For TestComplete
 			_propertyPages = propertyPages;
 			_propertyPages.Owner = this;
-			_propertyPages.NameChanged += pp_NameChanged;
+			_propertyPages.NameChanged += ppNameChanged;
 			if (!_propertyPages.ModeCreateNew)
 			{
 				_propertyPages.LoadAggregateRootWorkingCopy();
 			}
-			SetWindowText();
+			setWindowText();
 		}
 
-		private void SetWindowText()
+		private void setWindowText()
 		{
 			Text = _propertyPages.WindowText;
 		}
 
-		private void buttonBack_Click(object sender, EventArgs e)
+		private void buttonBackClick(object sender, EventArgs e)
 		{
 			displayPage(_propertyPages.PreviousPage());
 		}
 
-		private void buttonNext_Click(object sender, EventArgs e)
+		private void buttonNextClick(object sender, EventArgs e)
 		{
 			displayPage(_propertyPages.NextPage());
 		}
 
-		private void buttonCancel_Click(object sender, EventArgs e)
+		private void buttonCancelClick(object sender, EventArgs e)
 		{
 			DialogResult = DialogResult.Cancel;
 			Close();
 		}
 
-		private void buttonFinish_Click(object sender, EventArgs e)
+		private void buttonFinishClick(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
 			var isSucceeded = new GracefulDataSourceExceptionHandler().AttemptDatabaseConnectionDependentAction(() =>
@@ -88,9 +88,9 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			Cursor = Cursors.Default;
 		}
 
-		private void PropertyPageWizard_Load(object sender, EventArgs e)
+		private void propertyPageWizardLoad(object sender, EventArgs e)
 		{
-			treeViewPages.RightToLeftLayout = RightToLeftLayout;
+			//treeViewPages.RightToLeftLayout = RightToLeftLayout;
 			if (_propertyPages != null)
 			{
 				buildTreeView();
@@ -102,11 +102,13 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			MinimumSize = _propertyPages.MinimumSize;
 			treeViewPages.BeginUpdate();
 			treeViewPages.Nodes.Clear();
-			_rootNode = treeViewPages.Nodes.Add(_propertyPages.Name);
+			_rootNode = new TreeNodeAdv(_propertyPages.Name);
+			treeViewPages.Nodes.Add(_rootNode);
 			string[] pageNames = _propertyPages.GetPageNames();
 			foreach (string pageName in pageNames)
 			{
-				_rootNode.Nodes.Add(pageName, pageName);
+				var tempNode = new TreeNodeAdv(pageName);
+				_rootNode.Nodes.Add(tempNode);
 			}
 			treeViewPages.ExpandAll();
 			treeViewPages.EndUpdate();
@@ -122,11 +124,12 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			var control = buildControlFromPropertyPage(pp);
 			setButtonState();
 			adjustFormSize(control);
-			foreach (TreeNode treeNode in _rootNode.Nodes)
+			treeViewPages.SelectedNodes.Clear();
+			foreach (TreeNodeAdv treeNode in _rootNode.Nodes)
 			{
-				treeNode.BackColor = Color.Empty;
+				if (treeNode.Text == _propertyPages.CurrentPage.PageName)
+					treeViewPages.SelectedNodes.Add(treeNode);
 			}
-			_rootNode.Nodes[_propertyPages.CurrentPage.PageName].BackColor = ColorHelper.StandardTreeSelectedItemColor();
 			splitContainerVertical.ResumeLayout();
 			ResumeLayout();
 
@@ -145,15 +148,15 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 
 		private void adjustFormSize(Control control)
 		{
-			var currentFormHeight = this.Height;
-			var currentFormWidth = this.Width;
+			var currentFormHeight = Height;
+			var currentFormWidth = Width;
 			var currentControlSize = getControlSize(control);
 			const int heightOffset = 50;
 			const int widthOffset = 180;
 			if (currentControlSize.Height + heightOffset > currentFormHeight)
-				this.Height = currentControlSize.Height + heightOffset;
+				Height = currentControlSize.Height + heightOffset;
 			if (currentControlSize.Width + widthOffset > currentFormWidth)
-				this.Width = currentControlSize.Width + widthOffset;
+				Width = currentControlSize.Width + widthOffset;
 		}
 
 		private Size getControlSize(Control control)
@@ -190,45 +193,29 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			}
 		}
 
-		private void pp_NameChanged(object sender, WizardNameChangedEventArgs e)
+		private void ppNameChanged(object sender, WizardNameChangedEventArgs e)
 		{
 			treeViewPages.Nodes[0].Text = e.NewName;
 		}
 
-		private void treeViewPages_BeforeSelect(object sender, TreeViewCancelEventArgs e)
-		{
-			e.Cancel = true;
-		}
-
-		private void treeViewPages_AfterSelect(object sender, TreeViewEventArgs e)
-		{
-			//e.Node.BackColor = Color.DodgerBlue;
-		}
-
-		private void treeViewPages_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
-		{
-			e.Cancel = true;
-		}
-
-		private void splitContainerPages_DoubleClick(object sender, EventArgs e)
+		private void splitContainerPagesDoubleClick(object sender, EventArgs e)
 		{
 			splitContainerPages.Panel1Collapsed = !splitContainerPages.Panel1Collapsed;
 		}
 
-
-		private void splitContainerPages_Paint(object sender, PaintEventArgs e)
+		private void splitContainerPagesPaint(object sender, PaintEventArgs e)
 		{
-			using (SolidBrush brush = new SolidBrush(Color.FromKnownColor(KnownColor.ActiveBorder)))
+			using (var brush = new SolidBrush(Color.FromKnownColor(KnownColor.ActiveBorder)))
 			{
 				e.Graphics.FillRectangle(brush, e.ClipRectangle);
 			}
 		}
 
-		private void Wizard_FormClosed(object sender, FormClosedEventArgs e)
+		private void wizardFormClosed(object sender, FormClosedEventArgs e)
 		{
 		}
 
-		private void Wizard_Shown(object sender, EventArgs e)
+		private void wizardShown(object sender, EventArgs e)
 		{
 			if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(displayFirstPage))
 			{
@@ -239,6 +226,16 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 		private void displayFirstPage()
 		{
 			displayPage(_propertyPages.ShowPage(_propertyPages.FirstPage));
+		}
+
+		private void treeViewPagesBeforeSelect(object sender, TreeViewAdvCancelableSelectionEventArgs args)
+		{
+			args.Cancel = true;
+		}
+
+		private void treeViewPagesBeforeCollapse(object sender, TreeViewAdvCancelableNodeEventArgs e)
+		{
+			e.Cancel = true;
 		}
 	}
 }

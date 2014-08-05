@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Interfaces.Infrastructure;
 using log4net;
@@ -61,13 +62,12 @@ namespace Teleopti.Ccc.Win.Budgeting
 			EventSubscription();
 			SetTexts();
 			SetUpClipboard();
-
+			ColorHelper.SetRibbonQuickAccessTexts(ribbonControlAdvFixed1);
 			var tabView = (Control)_budgetGroupTabView;
 			gradientPanelMain.Controls.Add(tabView);
 			tabView.Dock = DockStyle.Fill;
 			tabView.VisibleChanged += _budgetGroupTabView_VisibleChanged;
-			ribbonControlAdv1.Height = 160;
-            toolStripEx1.AutoSize = true;
+			
 		}
 
 		void _budgetGroupTabView_VisibleChanged(object sender, EventArgs e)
@@ -334,11 +334,11 @@ namespace Teleopti.Ccc.Win.Budgeting
 		protected override void SetCommonTexts()
 		{
 			base.SetCommonTexts();
-			foreach (var quickItem in ribbonControlAdv1.Header.QuickItems.OfType<QuickButtonReflectable>())
-			{
-				quickItem.Text = LanguageResourceHelper.Translate(quickItem.Text);
-				quickItem.ToolTipText = LanguageResourceHelper.Translate(quickItem.ToolTipText);
-			}
+			//foreach (var quickItem in ribbonControlAdv1.Header.QuickItems.OfType<QuickButtonReflectable>())
+			//{
+			//	quickItem.Text = LanguageResourceHelper.Translate(quickItem.Text);
+			//	quickItem.ToolTipText = LanguageResourceHelper.Translate(quickItem.ToolTipText);
+			//}
 		}
 
 		private void btnSave_click(object sender, EventArgs e)
@@ -547,5 +547,10 @@ namespace Teleopti.Ccc.Win.Budgeting
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
+		private void ribbonControlAdv1_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }

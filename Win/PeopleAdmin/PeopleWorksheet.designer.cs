@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.splitContainerWorksheet.Panel2.Controls.Add(this.tableLayoutPanel1);
 			this.splitContainerWorksheet.Panel2.Controls.Add(this.shiftCategoryLimitationView);
 			this.splitContainerWorksheet.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
-			this.splitContainerWorksheet.Size = new System.Drawing.Size(1395, 477);
+			this.splitContainerWorksheet.Size = new System.Drawing.Size(1395, 696);
 			this.splitContainerWorksheet.SplitterDistance = 1164;
 			this.splitContainerWorksheet.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Mozilla;
 			this.splitContainerWorksheet.TabIndex = 3;
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// 
 			this.tabControlPeopleAdmin.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
 			this.tabControlPeopleAdmin.ActiveTabFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-			this.tabControlPeopleAdmin.BeforeTouchSize = new System.Drawing.Size(224, 477);
+			this.tabControlPeopleAdmin.BeforeTouchSize = new System.Drawing.Size(224, 696);
 			this.tabControlPeopleAdmin.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlPeopleAdmin.BorderWidth = 0;
 			this.tabControlPeopleAdmin.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.tabControlPeopleAdmin.Name = "tabControlPeopleAdmin";
 			this.tabControlPeopleAdmin.PersistTabState = true;
 			this.tabControlPeopleAdmin.ShowToolTips = true;
-			this.tabControlPeopleAdmin.Size = new System.Drawing.Size(224, 477);
+			this.tabControlPeopleAdmin.Size = new System.Drawing.Size(224, 696);
 			this.tabControlPeopleAdmin.TabIndex = 11;
 			this.tabControlPeopleAdmin.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabControlPeopleAdmin.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 2F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(224, 477);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(224, 696);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// panel1
@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.shiftCategoryLimitationView.Location = new System.Drawing.Point(0, 0);
 			this.shiftCategoryLimitationView.Name = "shiftCategoryLimitationView";
 			this.shiftCategoryLimitationView.ShiftCategories = ((System.Collections.Generic.IList<Teleopti.Interfaces.Domain.IShiftCategory>)(resources.GetObject("shiftCategoryLimitationView.ShiftCategories")));
-			this.shiftCategoryLimitationView.Size = new System.Drawing.Size(224, 477);
+			this.shiftCategoryLimitationView.Size = new System.Drawing.Size(224, 696);
 			this.shiftCategoryLimitationView.TabIndex = 12;
 			// 
 			// contextMenuStripGridView
@@ -887,7 +887,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
 			this.Borders = new System.Windows.Forms.Padding(0);
-			this.ClientSize = new System.Drawing.Size(1405, 631);
+			this.ClientSize = new System.Drawing.Size(1405, 850);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.Controls.Add(this.backStage1);
 			this.Controls.Add(this.peopleRibbon);
