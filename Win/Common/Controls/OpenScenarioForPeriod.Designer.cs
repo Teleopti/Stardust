@@ -288,9 +288,10 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this.BackColor = System.Drawing.Color.White;
 			this.CancelButton = this.buttonCancel;
 			this.ClientSize = new System.Drawing.Size(520, 356);
+			this.HelpButton = false;
 			this.Controls.Add(this.tableLayoutPanel3);
 			this.tableLayoutPanel3.Controls.Add(this.dateSelectionControl1, 0, 0);
-			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
