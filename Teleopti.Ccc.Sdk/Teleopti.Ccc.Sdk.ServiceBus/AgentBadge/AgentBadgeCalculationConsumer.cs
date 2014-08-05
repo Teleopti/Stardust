@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					if (agentBadgeSetting == null || !agentBadgeSetting.EnableBadge)
 					{
 						// If no setting for agent badge or agent badge disabled
-						// Then send message for next day to enable badge calculation (if the badge feature is enabled in this period).
+						// Then send message for next day to enable badge calculation (the badge feature may be enabled in this period).
 						if (_serviceBus != null)
 						{
 							var nextCalculateDate = DateTime.Now.AddDays(1).Date;
@@ -55,9 +55,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						continue;
 					}
 
-					AdherenceReportSetting adherenceReportSetting = _repositoryFactory.CreateGlobalSettingDataRepository(appuow)
+					var adherenceReportSetting = _repositoryFactory.CreateGlobalSettingDataRepository(appuow)
 						.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
-					IList<IPerson> allAgents = _repositoryFactory.CreatePersonRepository(appuow).LoadAll();
+					var allAgents = _repositoryFactory.CreatePersonRepository(appuow).LoadAll();
 
 					using (var uow = dataSource.Statistic.CreateAndOpenStatelessUnitOfWork())
 					{
@@ -81,7 +81,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 								}
 								if (_serviceBus != null)
 								{
-									_serviceBus.DelaySend(tomorrowForTimezone.ToLocalTime(), new AgentBadgeCalculateMessage
+									var nextCalculateDate = tomorrowForTimezone.ToLocalTime().Add(agentBadgeSetting.CalculationTime);
+									_serviceBus.DelaySend(nextCalculateDate, new AgentBadgeCalculateMessage
 									{
 										IsInitialization = false,
 										TimezoneId = timezone.Id
@@ -122,6 +123,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 							if (_serviceBus != null)
 							{
+								nextCalculateDate = nextCalculateDate.Add(agentBadgeSetting.CalculationTime);
 								_serviceBus.DelaySend(nextCalculateDate, new AgentBadgeCalculateMessage
 								{
 									IsInitialization = false,
