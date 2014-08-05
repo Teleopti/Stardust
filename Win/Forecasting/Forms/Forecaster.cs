@@ -2506,6 +2506,44 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             reloadCurrentData();
             //throw new NotImplementedException();
         }
+
+		  private void backStageButtonSave_Click(object sender, EventArgs e)
+		  {
+			  if (ValidateForm())
+				  Save(null);
+		  }
+
+		  private void backStageButtonClose_Click(object sender, EventArgs e)
+		  {
+			  SaveDisplaySettings();
+			  Close();
+		  }
+
+		  private void backStageButtonOptions_Click(object sender, EventArgs e)
+		  {
+			  try
+			  {
+				  var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
+				  settings.Show();
+			  }
+			  catch (DataSourceException ex)
+			  {
+				  DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+			  }
+		  }
+
+		  private void backStageButton4_Click(object sender, EventArgs e)
+		  {
+			  SaveDisplaySettings();
+			  if (!CloseAllOtherForms(this))
+				  return; // a form was canceled
+
+			  Close();
+			  ////this canceled
+			  if (Visible)
+				  return;
+			  Application.Exit();
+		  }
     }
 
     public interface IFinishWorkload

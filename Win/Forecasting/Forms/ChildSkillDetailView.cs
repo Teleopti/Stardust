@@ -181,8 +181,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			// tabPageMonth
 			// 
+			this.tabPageMonth.BackColor = System.Drawing.Color.White;
 			this.tabPageMonth.Location = new System.Drawing.Point(3, 24);
 			this.tabPageMonth.Size = new System.Drawing.Size(462, 307);
+			this.tabPageMonth.ThemesEnabled = false;
 			// 
 			// tabPageWeek
 			// 

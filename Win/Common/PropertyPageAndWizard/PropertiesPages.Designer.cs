@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Wizard");
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PropertiesPages));
 			this.treeViewPages = new System.Windows.Forms.TreeView();
@@ -59,7 +60,7 @@
             treeNode1});
 			this.treeViewPages.ShowPlusMinus = false;
 			this.treeViewPages.ShowRootLines = false;
-			this.treeViewPages.Size = new System.Drawing.Size(146, 405);
+			this.treeViewPages.Size = new System.Drawing.Size(147, 411);
 			this.treeViewPages.TabIndex = 0;
 			this.treeViewPages.TabStop = false;
 			this.treeViewPages.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewPages_AfterSelect);
@@ -76,8 +77,8 @@
 			this.splitContainerPages.Panel1.Controls.Add(this.treeViewPages);
 			this.splitContainerPages.Panel1.Padding = new System.Windows.Forms.Padding(12);
 			this.splitContainerPages.Panel1MinSize = 120;
-			this.splitContainerPages.Size = new System.Drawing.Size(623, 429);
-			this.splitContainerPages.SplitterDistance = 170;
+			this.splitContainerPages.Size = new System.Drawing.Size(627, 435);
+			this.splitContainerPages.SplitterDistance = 171;
 			this.splitContainerPages.SplitterWidth = 1;
 			this.splitContainerPages.TabIndex = 6;
 			this.splitContainerPages.TabStop = false;
@@ -85,8 +86,12 @@
 			// buttonOK
 			// 
 			this.buttonOK.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.buttonOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonOK.Location = new System.Drawing.Point(408, 5);
+			this.buttonOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonOK.BeforeTouchSize = new System.Drawing.Size(99, 23);
+			this.buttonOK.ForeColor = System.Drawing.Color.White;
+			this.buttonOK.IsBackStageButton = false;
+			this.buttonOK.Location = new System.Drawing.Point(412, 3);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(99, 23);
 			this.buttonOK.TabIndex = 2;
@@ -111,8 +116,8 @@
 			// splitContainerHorizontal.Panel2
 			// 
 			this.splitContainerHorizontal.Panel2.Controls.Add(this.tableLayoutPanelButtonsRtl);
-			this.splitContainerHorizontal.Size = new System.Drawing.Size(623, 463);
-			this.splitContainerHorizontal.SplitterDistance = 429;
+			this.splitContainerHorizontal.Size = new System.Drawing.Size(627, 466);
+			this.splitContainerHorizontal.SplitterDistance = 435;
 			this.splitContainerHorizontal.SplitterWidth = 1;
 			this.splitContainerHorizontal.TabIndex = 8;
 			this.splitContainerHorizontal.TabStop = false;
@@ -129,15 +134,19 @@
 			this.tableLayoutPanelButtonsRtl.Name = "tableLayoutPanelButtonsRtl";
 			this.tableLayoutPanelButtonsRtl.RowCount = 1;
 			this.tableLayoutPanelButtonsRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(623, 33);
+			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(627, 30);
 			this.tableLayoutPanelButtonsRtl.TabIndex = 4;
 			// 
 			// buttonCancel
 			// 
 			this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.buttonCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonCancel.BeforeTouchSize = new System.Drawing.Size(99, 23);
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(521, 5);
+			this.buttonCancel.ForeColor = System.Drawing.Color.White;
+			this.buttonCancel.IsBackStageButton = false;
+			this.buttonCancel.Location = new System.Drawing.Point(525, 3);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(99, 23);
 			this.buttonCancel.TabIndex = 3;
@@ -150,7 +159,7 @@
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(623, 463);
+			this.ClientSize = new System.Drawing.Size(627, 466);
 			this.Controls.Add(this.splitContainerHorizontal);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
