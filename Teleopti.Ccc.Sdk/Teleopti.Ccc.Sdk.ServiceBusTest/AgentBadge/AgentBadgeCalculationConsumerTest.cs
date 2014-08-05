@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private DateTime _calculationDate;
 		private ISimpleTimeZone timezone;
 		private int timezoneId;
+		private IPushMessageRepository _pushMessageRepository;
 
 		[Test]
 		public void ShouldSendNextCalculateMessageOneDayAfter()
@@ -74,6 +75,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_personRepository = MockRepository.GenerateStub<IPersonRepository>();
 			_globalSettingDataRepository = MockRepository.GenerateStub<IGlobalSettingDataRepository>();
 			_agentbadgeSettingsRepository = MockRepository.GenerateStub<IAgentBadgeSettingsRepository>();
+			_pushMessageRepository = MockRepository.GenerateStub<IPushMessageRepository>();
 
 			_uow = MockRepository.GenerateStub<IUnitOfWork>();
 			_uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
@@ -99,6 +101,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
 			_repositoryFactory.Stub(x => x.CreateGlobalSettingDataRepository(_uow)).Return(_globalSettingDataRepository);
 			_repositoryFactory.Stub(x => x.CreateAgentBadgeSettingsRepository(_uow)).Return(_agentbadgeSettingsRepository);
+			_repositoryFactory.Stub(x => x.CreatePushMessageRepository(_uow)).Return(_pushMessageRepository);
 
 			_statisticsRepository.Stub(x => x.LoadAllTimeZones(_statelessUow)).Return(_allTimezones);
 			_agentbadgeSettingsRepository.Stub(x => x.LoadAll()).Return(new List<IAgentBadgeThresholdSettings>

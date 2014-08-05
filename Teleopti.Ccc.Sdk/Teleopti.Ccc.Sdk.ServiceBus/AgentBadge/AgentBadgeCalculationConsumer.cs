@@ -5,8 +5,8 @@ using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
@@ -35,8 +35,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					GetRegisteredDataSourceCollection()
 						.Where(dataSource => dataSource.Statistic != null && dataSource.Application != null))
 			{
-				AdherenceReportSetting adherenceReportSetting;
-				IList<IPerson> allAgents;
 				using (var appuow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
 					var agentBadgeSetting = _repositoryFactory.CreateAgentBadgeSettingsRepository(appuow).LoadAll().FirstOrDefault();
@@ -57,10 +55,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						continue;
 					}
 
-					adherenceReportSetting =
-						_repositoryFactory.CreateGlobalSettingDataRepository(appuow)
-							.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
-					allAgents = _repositoryFactory.CreatePersonRepository(appuow).LoadAll();
+					AdherenceReportSetting adherenceReportSetting = _repositoryFactory.CreateGlobalSettingDataRepository(appuow)
+						.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
+					IList<IPerson> allAgents = _repositoryFactory.CreatePersonRepository(appuow).LoadAll();
 
 					using (var uow = dataSource.Statistic.CreateAndOpenStatelessUnitOfWork())
 					{
@@ -77,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 								_calculator.LastCalculatedDates.Add(timezone.Id, yesterdayForTimezone);
 								foreach (var person in peopleGotABadge)
 								{
-									SendPushMessageService.CreateConversation("Congratulations!", "You get new badges!", false)
+									SendPushMessageService.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false)
 									.To(person)
 									.SendConversation(_repositoryFactory.CreatePushMessageRepository(appuow));
 									appuow.PersistAll();
@@ -116,7 +113,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 								var peopleGotABadge = _calculator.Calculate(uow, allAgents, timezone.Id, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
 								foreach (var person in peopleGotABadge)
 								{
-									SendPushMessageService.CreateConversation("Congratulations!", "You get new badges!", false)
+									SendPushMessageService.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false)
 									.To(person)
 									.SendConversation(_repositoryFactory.CreatePushMessageRepository(appuow));
 									appuow.PersistAll();
