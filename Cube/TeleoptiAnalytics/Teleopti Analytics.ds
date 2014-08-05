@@ -3,7 +3,7 @@
   <Name>Teleopti Analytics</Name>
   <CreatedTimestamp>0001-01-01T00:00:00Z</CreatedTimestamp>
   <LastSchemaUpdate>0001-01-01T00:00:00Z</LastSchemaUpdate>
-  <ConnectionString>Provider=SQLNCLI10.1;Data Source=.;Integrated Security=SSPI;Initial Catalog=TeleoptiAnalytics_Demo</ConnectionString>
+  <ConnectionString>Provider=SQLNCLI11.1;Data Source=.;Integrated Security=SSPI;Initial Catalog=TeleoptiAnalytics_Demo</ConnectionString>
   <ConnectionStringSecurity>Unchanged</ConnectionStringSecurity>
   <ImpersonationInfo>
     <ImpersonationMode>Default</ImpersonationMode>
