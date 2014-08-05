@@ -360,9 +360,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WFM_Budgets {
+        public static System.Drawing.Bitmap WFM_Budgets_old_32_32 {
             get {
-                object obj = ResourceManager.GetObject("WFM_Budgets", resourceCulture);
+                object obj = ResourceManager.GetObject("WFM_Budgets_old_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -370,9 +370,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WFM_Forecasts {
+        public static System.Drawing.Bitmap WFM_Forecasts_32_32 {
             get {
-                object obj = ResourceManager.GetObject("WFM_Forecasts", resourceCulture);
+                object obj = ResourceManager.GetObject("WFM_Forecasts_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -380,9 +380,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WFM_Intraday {
+        public static System.Drawing.Bitmap WFM_Intraday_32_32 {
             get {
-                object obj = ResourceManager.GetObject("WFM_Intraday", resourceCulture);
+                object obj = ResourceManager.GetObject("WFM_Intraday_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -390,9 +390,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WFM_Payroll_Integration {
+        public static System.Drawing.Bitmap WFM_Payroll_Integration_32_32 {
             get {
-                object obj = ResourceManager.GetObject("WFM_Payroll_Integration", resourceCulture);
+                object obj = ResourceManager.GetObject("WFM_Payroll_Integration_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -400,9 +400,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WFM_People {
+        public static System.Drawing.Bitmap WFM_People_32_32 {
             get {
-                object obj = ResourceManager.GetObject("WFM_People", resourceCulture);
+                object obj = ResourceManager.GetObject("WFM_People_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -410,9 +410,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WFM_Performance_Manager {
+        public static System.Drawing.Bitmap WFM_Performance_Manager_32_32 {
             get {
-                object obj = ResourceManager.GetObject("WFM_Performance_Manager", resourceCulture);
+                object obj = ResourceManager.GetObject("WFM_Performance_Manager_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -420,9 +420,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WFM_Reports {
+        public static System.Drawing.Bitmap WFM_Reports_32_32 {
             get {
-                object obj = ResourceManager.GetObject("WFM_Reports", resourceCulture);
+                object obj = ResourceManager.GetObject("WFM_Reports_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -430,9 +430,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WFM_Schedules {
+        public static System.Drawing.Bitmap WFM_Schedules_32_32 {
             get {
-                object obj = ResourceManager.GetObject("WFM_Schedules", resourceCulture);
+                object obj = ResourceManager.GetObject("WFM_Schedules_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -440,9 +440,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WFM_Shifts {
+        public static System.Drawing.Bitmap WFM_Shifts_32_32 {
             get {
-                object obj = ResourceManager.GetObject("WFM_Shifts", resourceCulture);
+                object obj = ResourceManager.GetObject("WFM_Shifts_32_32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

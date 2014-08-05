@@ -37,6 +37,7 @@
 			// 
 			// tableLayoutPanel1
 			// 
+			this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel1.ColumnCount = 3;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 147F));
@@ -56,6 +57,7 @@
 			// reportDateFromToSelector1
 			// 
 			this.reportDateFromToSelector1.EnableNullDates = true;
+			this.reportDateFromToSelector1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.reportDateFromToSelector1.Location = new System.Drawing.Point(3, 3);
 			this.reportDateFromToSelector1.Name = "reportDateFromToSelector1";
 			this.reportDateFromToSelector1.NullString = "xxNoDateIsSelected";

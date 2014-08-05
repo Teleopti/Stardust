@@ -62,13 +62,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			// percentTextBoxOverstaffing
 			// 
+			this.percentTextBoxOverstaffing.AllowNegativePercentage = true;
 			this.percentTextBoxOverstaffing.DefaultValue = 0D;
 			this.percentTextBoxOverstaffing.DoubleValue = 0D;
 			this.percentTextBoxOverstaffing.ForeColor = System.Drawing.Color.Black;
 			resources.ApplyResources(this.percentTextBoxOverstaffing, "percentTextBoxOverstaffing");
 			this.percentTextBoxOverstaffing.Maximum = 100D;
 			this.percentTextBoxOverstaffing.Minimum = -100D;
-			this.percentTextBoxOverstaffing.AllowNegativePercentage = true;
 			this.percentTextBoxOverstaffing.Name = "percentTextBoxOverstaffing";
 			// 
 			// labelOverstaffing
@@ -83,35 +83,35 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			// percentTextBoxSeriousUnderstaffing
 			// 
+			this.percentTextBoxSeriousUnderstaffing.AllowNegativePercentage = true;
 			this.percentTextBoxSeriousUnderstaffing.DefaultValue = 0D;
 			this.percentTextBoxSeriousUnderstaffing.DoubleValue = 0D;
 			this.percentTextBoxSeriousUnderstaffing.ForeColor = System.Drawing.Color.Black;
 			resources.ApplyResources(this.percentTextBoxSeriousUnderstaffing, "percentTextBoxSeriousUnderstaffing");
 			this.percentTextBoxSeriousUnderstaffing.Maximum = 100D;
 			this.percentTextBoxSeriousUnderstaffing.Minimum = -100D;
-            this.percentTextBoxSeriousUnderstaffing.AllowNegativePercentage = true;
 			this.percentTextBoxSeriousUnderstaffing.Name = "percentTextBoxSeriousUnderstaffing";
 			// 
 			// percentTextBoxUnderstaffing
 			// 
+			this.percentTextBoxUnderstaffing.AllowNegativePercentage = true;
 			this.percentTextBoxUnderstaffing.DefaultValue = 0D;
 			this.percentTextBoxUnderstaffing.DoubleValue = 0D;
 			this.percentTextBoxUnderstaffing.ForeColor = System.Drawing.Color.Black;
 			resources.ApplyResources(this.percentTextBoxUnderstaffing, "percentTextBoxUnderstaffing");
 			this.percentTextBoxUnderstaffing.Maximum = 100D;
 			this.percentTextBoxUnderstaffing.Minimum = -100D;
-			this.percentTextBoxUnderstaffing.AllowNegativePercentage = true;
 			this.percentTextBoxUnderstaffing.Name = "percentTextBoxUnderstaffing";
 			// 
 			// percentTextBoxUnderstaffingFor
 			// 
+			this.percentTextBoxUnderstaffingFor.AllowNegativePercentage = true;
 			this.percentTextBoxUnderstaffingFor.DefaultValue = 0D;
 			this.percentTextBoxUnderstaffingFor.DoubleValue = 1D;
 			this.percentTextBoxUnderstaffingFor.ForeColor = System.Drawing.Color.Black;
 			resources.ApplyResources(this.percentTextBoxUnderstaffingFor, "percentTextBoxUnderstaffingFor");
 			this.percentTextBoxUnderstaffingFor.Maximum = 100D;
 			this.percentTextBoxUnderstaffingFor.Minimum = -100D;
-			this.percentTextBoxUnderstaffingFor.AllowNegativePercentage = true;
 			this.percentTextBoxUnderstaffingFor.Name = "percentTextBoxUnderstaffingFor";
 			// 
 			// labelFor
@@ -123,6 +123,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			resources.ApplyResources(this, "$this");
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.tableLayoutPanelForRtl);
 			this.Name = "SkillThresholds";
 			this.tableLayoutPanelForRtl.ResumeLayout(false);

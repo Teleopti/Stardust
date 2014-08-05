@@ -136,7 +136,7 @@
 			// 
 			// gradientPanel1
 			// 
-			this.gradientPanel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+			this.gradientPanel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.White, System.Drawing.Color.White);
 			this.gradientPanel1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanel1.Controls.Add(this.tableLayoutPanel1);
 			this.gradientPanel1.Controls.Add(this.buttonAdvClose);

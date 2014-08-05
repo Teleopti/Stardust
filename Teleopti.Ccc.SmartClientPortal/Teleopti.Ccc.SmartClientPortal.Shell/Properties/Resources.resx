@@ -146,9 +146,6 @@
     <value>Failed to load module from assembly {0}. Error was:
 {1}</value>
   </data>
-  <data name="WFM_Budgets" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFM-Budgets - Copy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="LogModuleAdded" xml:space="preserve">
     <value>Module {0} added to the container.</value>
   </data>
@@ -224,28 +221,31 @@
   <data name="WFMIconWarning1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WFMIconWarning1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WFM_Forecasts" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFM-Forecasts.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="WFM_Budgets_old_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WFM-Budgets-old-32-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WFM_Intraday" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFM-Intraday.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="WFM_Forecasts_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WFM-Forecasts-32-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WFM_Payroll_Integration" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFM-Payroll-Integration.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="WFM_Intraday_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WFM-Intraday-32-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WFM_People" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFM-People.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="WFM_Payroll_Integration_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WFM-Payroll-Integration-32-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WFM_Performance_Manager" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFM-Performance-Manager.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="WFM_People_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WFM-People-32-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WFM_Reports" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFM-Reports.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="WFM_Performance_Manager_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WFM-Performance-Manager-32-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WFM_Schedules" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFM-Schedules.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="WFM_Reports_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WFM-Reports-32-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WFM_Shifts" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFM-Shifts.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="WFM_Schedules_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WFM-Schedules-32-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WFM_Shifts_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WFM-Shifts-32-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

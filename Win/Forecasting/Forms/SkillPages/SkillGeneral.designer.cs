@@ -30,31 +30,36 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			this.textBoxName = new System.Windows.Forms.TextBox();
+			this.textBoxName = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
 			this.labelName = new System.Windows.Forms.Label();
 			this.labelDescription = new System.Windows.Forms.Label();
-			this.textBoxDescription = new System.Windows.Forms.TextBox();
+			this.textBoxDescription = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
 			this.labelColor = new System.Windows.Forms.Label();
-			this.buttonChangeColor = new System.Windows.Forms.Button();
+			this.buttonChangeColor = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.labelSkillType = new System.Windows.Forms.Label();
-			this.comboBoxSkillType = new System.Windows.Forms.ComboBox();
+			this.comboBoxSkillType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.colorDialogSkillColor = new System.Windows.Forms.ColorDialog();
 			this.labelSkillActivity = new System.Windows.Forms.Label();
-			this.comboBoxSkillActivity = new System.Windows.Forms.ComboBox();
+			this.comboBoxSkillActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.pictureBoxDisplayColor = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanelForRtl = new System.Windows.Forms.TableLayoutPanel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.labelMidnightBreakOffset = new System.Windows.Forms.Label();
-			this.comboBoxTimeZones = new System.Windows.Forms.ComboBox();
+			this.comboBoxTimeZones = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.labelDefaultResolution = new System.Windows.Forms.Label();
 			this.labelTimeZone = new System.Windows.Forms.Label();
 			this.labelTotalOpeningHours = new System.Windows.Forms.Label();
 			this.office2007OutlookTimePickerMidnightOffsetBreak = new Teleopti.Ccc.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
 			this.comboBoxAdvIntervalLength = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.numericUpDownMaxParallel = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDownMaxParallel = new Syncfusion.Windows.Forms.Tools.NumericUpDownExt();
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+			((System.ComponentModel.ISupportInitialize)(this.textBoxName)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.textBoxDescription)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxSkillType)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxSkillActivity)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxDisplayColor)).BeginInit();
 			this.tableLayoutPanelForRtl.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxTimeZones)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.office2007OutlookTimePickerMidnightOffsetBreak)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvIntervalLength)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxParallel)).BeginInit();
@@ -64,10 +69,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// textBoxName
 			// 
 			this.textBoxName.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.textBoxName.BackColor = System.Drawing.Color.White;
+			this.textBoxName.BeforeTouchSize = new System.Drawing.Size(191, 22);
+			this.textBoxName.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+			this.textBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tableLayoutPanelForRtl.SetColumnSpan(this.textBoxName, 2);
+			this.textBoxName.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxName.Location = new System.Drawing.Point(141, 3);
+			this.textBoxName.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxName.Name = "textBoxName";
-			this.textBoxName.Size = new System.Drawing.Size(191, 20);
+			this.textBoxName.Size = new System.Drawing.Size(191, 22);
+			this.textBoxName.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Metro;
 			this.textBoxName.TabIndex = 1;
 			this.textBoxName.TextChanged += new System.EventHandler(this.textBoxName_TextChanged);
 			// 
@@ -78,7 +90,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.labelName.Location = new System.Drawing.Point(3, 5);
 			this.labelName.Name = "labelName";
 			this.labelName.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.labelName.Size = new System.Drawing.Size(72, 16);
+			this.labelName.Size = new System.Drawing.Size(77, 16);
 			this.labelName.TabIndex = 0;
 			this.labelName.Text = "xxNameColon";
 			// 
@@ -88,19 +100,26 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.labelDescription.Location = new System.Drawing.Point(3, 27);
 			this.labelDescription.Name = "labelDescription";
 			this.labelDescription.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.labelDescription.Size = new System.Drawing.Size(97, 16);
+			this.labelDescription.Size = new System.Drawing.Size(107, 16);
 			this.labelDescription.TabIndex = 2;
 			this.labelDescription.Text = "xxDescriptionColon";
 			// 
 			// textBoxDescription
 			// 
 			this.textBoxDescription.AcceptsReturn = true;
+			this.textBoxDescription.BackColor = System.Drawing.Color.White;
+			this.textBoxDescription.BeforeTouchSize = new System.Drawing.Size(191, 22);
+			this.textBoxDescription.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+			this.textBoxDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tableLayoutPanelForRtl.SetColumnSpan(this.textBoxDescription, 2);
+			this.textBoxDescription.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxDescription.Location = new System.Drawing.Point(141, 30);
 			this.textBoxDescription.MaxLength = 1023;
+			this.textBoxDescription.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxDescription.Multiline = true;
 			this.textBoxDescription.Name = "textBoxDescription";
 			this.textBoxDescription.Size = new System.Drawing.Size(191, 84);
+			this.textBoxDescription.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Metro;
 			this.textBoxDescription.TabIndex = 3;
 			this.textBoxDescription.Text = "Description\r\ntest";
 			// 
@@ -111,19 +130,25 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.labelColor.Location = new System.Drawing.Point(3, 203);
 			this.labelColor.Name = "labelColor";
 			this.labelColor.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.labelColor.Size = new System.Drawing.Size(68, 16);
+			this.labelColor.Size = new System.Drawing.Size(76, 16);
 			this.labelColor.TabIndex = 10;
 			this.labelColor.Text = "xxColorColon";
 			// 
 			// buttonChangeColor
 			// 
 			this.buttonChangeColor.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.buttonChangeColor.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonChangeColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonChangeColor.BeforeTouchSize = new System.Drawing.Size(26, 21);
+			this.buttonChangeColor.ForeColor = System.Drawing.Color.White;
+			this.buttonChangeColor.IsBackStageButton = false;
 			this.buttonChangeColor.Location = new System.Drawing.Point(220, 201);
 			this.buttonChangeColor.Name = "buttonChangeColor";
 			this.buttonChangeColor.Size = new System.Drawing.Size(26, 21);
 			this.buttonChangeColor.TabIndex = 11;
 			this.buttonChangeColor.Text = "...";
-			this.buttonChangeColor.UseVisualStyleBackColor = true;
+			this.buttonChangeColor.UseVisualStyle = true;
+			this.buttonChangeColor.UseVisualStyleBackColor = false;
 			this.buttonChangeColor.Click += new System.EventHandler(this.buttonChangeColor_Click);
 			// 
 			// labelSkillType
@@ -133,20 +158,21 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.labelSkillType.Location = new System.Drawing.Point(3, 149);
 			this.labelSkillType.Name = "labelSkillType";
 			this.labelSkillType.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.labelSkillType.Size = new System.Drawing.Size(121, 16);
+			this.labelSkillType.Size = new System.Drawing.Size(132, 16);
 			this.labelSkillType.TabIndex = 6;
 			this.labelSkillType.Text = "xxForecastMethodColon";
 			// 
 			// comboBoxSkillType
 			// 
 			this.comboBoxSkillType.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.comboBoxSkillType.BackColor = System.Drawing.Color.White;
+			this.comboBoxSkillType.BeforeTouchSize = new System.Drawing.Size(191, 21);
 			this.tableLayoutPanelForRtl.SetColumnSpan(this.comboBoxSkillType, 2);
 			this.comboBoxSkillType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxSkillType.FormattingEnabled = true;
-			this.comboBoxSkillType.ItemHeight = 13;
 			this.comboBoxSkillType.Location = new System.Drawing.Point(141, 147);
 			this.comboBoxSkillType.Name = "comboBoxSkillType";
 			this.comboBoxSkillType.Size = new System.Drawing.Size(191, 21);
+			this.comboBoxSkillType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxSkillType.TabIndex = 7;
 			// 
 			// labelSkillActivity
@@ -156,7 +182,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.labelSkillActivity.Location = new System.Drawing.Point(3, 176);
 			this.labelSkillActivity.Name = "labelSkillActivity";
 			this.labelSkillActivity.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.labelSkillActivity.Size = new System.Drawing.Size(78, 16);
+			this.labelSkillActivity.Size = new System.Drawing.Size(84, 16);
 			this.labelSkillActivity.TabIndex = 8;
 			this.labelSkillActivity.Text = "xxActivityColon";
 			this.labelSkillActivity.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -164,12 +190,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// comboBoxSkillActivity
 			// 
 			this.comboBoxSkillActivity.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.comboBoxSkillActivity.BackColor = System.Drawing.Color.White;
+			this.comboBoxSkillActivity.BeforeTouchSize = new System.Drawing.Size(191, 21);
 			this.tableLayoutPanelForRtl.SetColumnSpan(this.comboBoxSkillActivity, 2);
 			this.comboBoxSkillActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxSkillActivity.FormattingEnabled = true;
 			this.comboBoxSkillActivity.Location = new System.Drawing.Point(141, 174);
 			this.comboBoxSkillActivity.Name = "comboBoxSkillActivity";
 			this.comboBoxSkillActivity.Size = new System.Drawing.Size(191, 21);
+			this.comboBoxSkillActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxSkillActivity.TabIndex = 9;
 			this.comboBoxSkillActivity.SelectedIndexChanged += new System.EventHandler(this.comboBoxSkillActivity_SelectedIndexChanged);
 			// 
@@ -234,7 +262,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.label1.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
 			this.label1.Name = "label1";
 			this.label1.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.label1.Size = new System.Drawing.Size(100, 16);
+			this.label1.Size = new System.Drawing.Size(102, 16);
 			this.label1.TabIndex = 17;
 			this.label1.Text = "xxMaxParallelTasks";
 			// 
@@ -245,19 +273,21 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.labelMidnightBreakOffset.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
 			this.labelMidnightBreakOffset.Name = "labelMidnightBreakOffset";
 			this.labelMidnightBreakOffset.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.labelMidnightBreakOffset.Size = new System.Drawing.Size(128, 22);
+			this.labelMidnightBreakOffset.Size = new System.Drawing.Size(126, 22);
 			this.labelMidnightBreakOffset.TabIndex = 14;
 			this.labelMidnightBreakOffset.Text = "xxMidnightBreakOffsetColon";
 			// 
 			// comboBoxTimeZones
 			// 
 			this.comboBoxTimeZones.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.comboBoxTimeZones.BackColor = System.Drawing.Color.White;
+			this.comboBoxTimeZones.BeforeTouchSize = new System.Drawing.Size(191, 21);
 			this.tableLayoutPanelForRtl.SetColumnSpan(this.comboBoxTimeZones, 2);
 			this.comboBoxTimeZones.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxTimeZones.FormattingEnabled = true;
 			this.comboBoxTimeZones.Location = new System.Drawing.Point(141, 228);
 			this.comboBoxTimeZones.Name = "comboBoxTimeZones";
 			this.comboBoxTimeZones.Size = new System.Drawing.Size(191, 21);
+			this.comboBoxTimeZones.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxTimeZones.TabIndex = 13;
 			this.comboBoxTimeZones.DropDown += new System.EventHandler(this.AdjustWidthComboBox_DropDown);
 			// 
@@ -268,7 +298,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.labelDefaultResolution.Location = new System.Drawing.Point(3, 117);
 			this.labelDefaultResolution.Name = "labelDefaultResolution";
 			this.labelDefaultResolution.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.labelDefaultResolution.Size = new System.Drawing.Size(132, 27);
+			this.labelDefaultResolution.Size = new System.Drawing.Size(126, 27);
 			this.labelDefaultResolution.TabIndex = 4;
 			this.labelDefaultResolution.Text = "xxIntervalLengthHMMColon";
 			// 
@@ -279,7 +309,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.labelTimeZone.Location = new System.Drawing.Point(3, 230);
 			this.labelTimeZone.Name = "labelTimeZone";
 			this.labelTimeZone.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.labelTimeZone.Size = new System.Drawing.Size(92, 16);
+			this.labelTimeZone.Size = new System.Drawing.Size(97, 16);
 			this.labelTimeZone.TabIndex = 12;
 			this.labelTimeZone.Text = "xxTimeZoneColon";
 			// 
@@ -295,7 +325,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			// office2007OutlookTimePickerMidnightOffsetBreak
 			// 
-			this.office2007OutlookTimePickerMidnightOffsetBreak.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.office2007OutlookTimePickerMidnightOffsetBreak.BackColor = System.Drawing.Color.White;
+			this.office2007OutlookTimePickerMidnightOffsetBreak.BeforeTouchSize = new System.Drawing.Size(73, 21);
 			this.office2007OutlookTimePickerMidnightOffsetBreak.BindableTimeValue = System.TimeSpan.Parse("00:00:00");
 			this.office2007OutlookTimePickerMidnightOffsetBreak.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.office2007OutlookTimePickerMidnightOffsetBreak.Location = new System.Drawing.Point(141, 257);
@@ -305,39 +336,45 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.office2007OutlookTimePickerMidnightOffsetBreak.Name = "office2007OutlookTimePickerMidnightOffsetBreak";
 			this.office2007OutlookTimePickerMidnightOffsetBreak.Office2007ColorTheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.office2007OutlookTimePickerMidnightOffsetBreak.Size = new System.Drawing.Size(73, 21);
-			this.office2007OutlookTimePickerMidnightOffsetBreak.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+			this.office2007OutlookTimePickerMidnightOffsetBreak.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.office2007OutlookTimePickerMidnightOffsetBreak.TabIndex = 15;
 			this.office2007OutlookTimePickerMidnightOffsetBreak.SelectedValueChanged += new System.EventHandler(this.office2007OutlookTimePickerMidnightOffsetBreak_SelectedValueChanged);
 			// 
 			// comboBoxAdvIntervalLength
 			// 
 			this.comboBoxAdvIntervalLength.AllowNewText = false;
-			this.comboBoxAdvIntervalLength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxAdvIntervalLength.BackColor = System.Drawing.Color.White;
+			this.comboBoxAdvIntervalLength.BeforeTouchSize = new System.Drawing.Size(71, 21);
 			this.comboBoxAdvIntervalLength.Location = new System.Drawing.Point(141, 120);
 			this.comboBoxAdvIntervalLength.Name = "comboBoxAdvIntervalLength";
 			this.comboBoxAdvIntervalLength.NumberOnly = true;
 			this.comboBoxAdvIntervalLength.Size = new System.Drawing.Size(71, 21);
-			this.comboBoxAdvIntervalLength.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+			this.comboBoxAdvIntervalLength.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvIntervalLength.TabIndex = 5;
 			// 
 			// numericUpDownMaxParallel
 			// 
+			this.numericUpDownMaxParallel.BeforeTouchSize = new System.Drawing.Size(73, 22);
+			this.numericUpDownMaxParallel.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+			this.numericUpDownMaxParallel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.numericUpDownMaxParallel.Enabled = false;
 			this.numericUpDownMaxParallel.Location = new System.Drawing.Point(141, 284);
 			this.numericUpDownMaxParallel.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.numericUpDownMaxParallel.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownMaxParallel.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
 			this.numericUpDownMaxParallel.Name = "numericUpDownMaxParallel";
-			this.numericUpDownMaxParallel.Size = new System.Drawing.Size(73, 20);
+			this.numericUpDownMaxParallel.Size = new System.Drawing.Size(73, 22);
 			this.numericUpDownMaxParallel.TabIndex = 18;
 			this.numericUpDownMaxParallel.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
+			this.numericUpDownMaxParallel.VisualStyle = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			// 
 			// errorProvider1
 			// 
@@ -347,13 +384,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.tableLayoutPanelForRtl);
+			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "SkillGeneral";
 			this.Padding = new System.Windows.Forms.Padding(10);
 			this.Size = new System.Drawing.Size(366, 336);
+			((System.ComponentModel.ISupportInitialize)(this.textBoxName)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.textBoxDescription)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxSkillType)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxSkillActivity)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxDisplayColor)).EndInit();
 			this.tableLayoutPanelForRtl.ResumeLayout(false);
 			this.tableLayoutPanelForRtl.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxTimeZones)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.office2007OutlookTimePickerMidnightOffsetBreak)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvIntervalLength)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxParallel)).EndInit();
@@ -364,19 +408,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBoxName;
+        private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxName;
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.Label labelDescription;
-        private System.Windows.Forms.TextBox textBoxDescription;
+		  private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxDescription;
         private System.Windows.Forms.Label labelColor;
         private System.Windows.Forms.PictureBox pictureBoxDisplayColor;
-        private System.Windows.Forms.Button buttonChangeColor;
+		  private Syncfusion.Windows.Forms.ButtonAdv  buttonChangeColor;
         private System.Windows.Forms.Label labelSkillType;
-        private System.Windows.Forms.ComboBox comboBoxSkillType;
+		  private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxSkillType;
         private System.Windows.Forms.ColorDialog colorDialogSkillColor;
         private System.Windows.Forms.Label labelSkillActivity;
-        private System.Windows.Forms.ComboBox comboBoxSkillActivity;
-        private System.Windows.Forms.ComboBox comboBoxTimeZones;
+		  private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxSkillActivity;
+		  private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxTimeZones;
         private System.Windows.Forms.Label labelTimeZone;
         private System.Windows.Forms.Label labelDefaultResolution;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelForRtl;
@@ -386,7 +430,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvIntervalLength;
         private System.Windows.Forms.ErrorProvider errorProvider1;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.NumericUpDown numericUpDownMaxParallel;
+		private Syncfusion.Windows.Forms.Tools.NumericUpDownExt numericUpDownMaxParallel;
         //private Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker outlookTimePickerMidnightOffsetBreak;
     }
 }

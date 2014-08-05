@@ -33,7 +33,10 @@
 			this.panelImage = new System.Windows.Forms.Panel();
 			this.labelModuleText = new System.Windows.Forms.Label();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+			this.pictureBoxIcon = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.panelImage.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBoxIcon)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -59,6 +62,7 @@
 			// 
 			this.panelImage.BackgroundImage = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.help_32;
 			this.panelImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.panelImage.Controls.Add(this.pictureBoxIcon);
 			this.panelImage.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panelImage.Location = new System.Drawing.Point(0, 0);
 			this.panelImage.Margin = new System.Windows.Forms.Padding(0);
@@ -88,6 +92,15 @@
 			// 
 			this.toolTip1.Active = false;
 			// 
+			// pictureBoxIcon
+			// 
+			this.pictureBoxIcon.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pictureBoxIcon.Location = new System.Drawing.Point(0, 0);
+			this.pictureBoxIcon.Name = "pictureBoxIcon";
+			this.pictureBoxIcon.Size = new System.Drawing.Size(32, 32);
+			this.pictureBoxIcon.TabIndex = 1;
+			this.pictureBoxIcon.TabStop = false;
+			// 
 			// ModulePanelItem
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -103,6 +116,8 @@
 			this.MouseLeave += new System.EventHandler(this.onMouseLeave);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			this.panelImage.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.pictureBoxIcon)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -114,5 +129,6 @@
 		private System.Windows.Forms.Panel panelImage;
 		private System.Windows.Forms.Label labelModuleText;
 		private System.Windows.Forms.ToolTip toolTip1;
+		private System.Windows.Forms.PictureBox pictureBoxIcon;
 	}
 }

@@ -357,6 +357,15 @@
     <None Include="Resources\WFMIcon.ico" />
     <None Include="Resources\WFMIconVarning.ico" />
     <None Include="Resources\WFMIconWarning1.ico" />
+    <None Include="Resources\WFM-Forecasts-32-32.png" />
+    <None Include="Resources\WFM-Intraday-32-32.png" />
+    <None Include="Resources\WFM-Payroll-Integration-32-32.png" />
+    <None Include="Resources\WFM-People-32-32.png" />
+    <None Include="Resources\WFM-Performance-Manager-32-32.png" />
+    <None Include="Resources\WFM-Reports-32-32.png" />
+    <None Include="Resources\WFM-Schedules-32-32.png" />
+    <None Include="Resources\WFM-Shifts-32-32.png" />
+    <None Include="Resources\WFM-Budgets-old-32-32.png" />
     <Content Include="TeleoptiCCCv7.ico" />
   </ItemGroup>
   <ItemGroup>

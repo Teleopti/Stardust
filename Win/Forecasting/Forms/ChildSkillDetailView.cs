@@ -174,5 +174,39 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             if (grid == null) return;
             grid.RefreshGrid();
         }
+
+		  private void InitializeComponent()
+		  {
+			this.SuspendLayout();
+			// 
+			// tabPageMonth
+			// 
+			this.tabPageMonth.Location = new System.Drawing.Point(3, 24);
+			this.tabPageMonth.Size = new System.Drawing.Size(462, 307);
+			// 
+			// tabPageWeek
+			// 
+			this.tabPageWeek.Location = new System.Drawing.Point(3, 24);
+			this.tabPageWeek.Size = new System.Drawing.Size(462, 307);
+			// 
+			// tabPageDay
+			// 
+			this.tabPageDay.Location = new System.Drawing.Point(3, 24);
+			this.tabPageDay.Size = new System.Drawing.Size(462, 307);
+			// 
+			// tabPageIntraday
+			// 
+			this.tabPageIntraday.Location = new System.Drawing.Point(3, 24);
+			this.tabPageIntraday.Size = new System.Drawing.Size(462, 307);
+			// 
+			// ChildSkillDetailView
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.BackColor = System.Drawing.Color.White;
+			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Name = "ChildSkillDetailView";
+			this.ResumeLayout(false);
+
+		  }
     }
 }
