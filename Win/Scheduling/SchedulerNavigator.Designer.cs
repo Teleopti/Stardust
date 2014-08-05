@@ -90,7 +90,7 @@
 			this.toolStripPeople.CaptionFont = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.toolStripPeople.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripPeople.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-			this.toolStripPeople.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripPeople.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.toolStripPeople.Image = null;
 			this.toolStripPeople.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
