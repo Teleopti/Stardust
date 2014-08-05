@@ -44,6 +44,7 @@
 			// 
 			// tableLayoutPanel1
 			// 
+			this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 366F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -81,14 +82,14 @@
 			// txtFileName
 			// 
 			this.txtFileName.BackColor = System.Drawing.Color.White;
-			this.txtFileName.BeforeTouchSize = new System.Drawing.Size(360, 15);
+			this.txtFileName.BeforeTouchSize = new System.Drawing.Size(360, 22);
 			this.txtFileName.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
-			this.txtFileName.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.txtFileName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.txtFileName.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.txtFileName.Location = new System.Drawing.Point(3, 43);
 			this.txtFileName.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.txtFileName.Name = "txtFileName";
-			this.txtFileName.Size = new System.Drawing.Size(360, 15);
+			this.txtFileName.Size = new System.Drawing.Size(360, 22);
 			this.txtFileName.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Metro;
 			this.txtFileName.TabIndex = 0;
 			// 

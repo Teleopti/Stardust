@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
         /// </summary>
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
 			this.panelMain = new System.Windows.Forms.Panel();
 			this.buttonAdvRename = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.listBoxChildSkills = new System.Windows.Forms.ListBox();
@@ -40,9 +41,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			// panelMain
 			// 
-			this.panelMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.panelMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.panelMain.Controls.Add(this.buttonAdvRename);
 			this.panelMain.Controls.Add(this.listBoxChildSkills);
 			this.panelMain.Controls.Add(this.buttonAdvManageDayTemplates);
@@ -56,11 +57,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			// buttonAdvRename
 			// 
-			this.buttonAdvRename.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvRename.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvRename.AutoSize = true;
+			this.buttonAdvRename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvRename.BeforeTouchSize = new System.Drawing.Size(68, 23);
+			this.buttonAdvRename.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvRename.IsBackStageButton = false;
 			this.buttonAdvRename.Location = new System.Drawing.Point(165, 254);
 			this.buttonAdvRename.Name = "buttonAdvRename";
-			this.buttonAdvRename.Size = new System.Drawing.Size(67, 23);
+			this.buttonAdvRename.Size = new System.Drawing.Size(68, 23);
 			this.buttonAdvRename.TabIndex = 3;
 			this.buttonAdvRename.Text = "xxRename";
 			this.buttonAdvRename.UseVisualStyle = true;
@@ -77,11 +82,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			// buttonAdvManageDayTemplates
 			// 
-			this.buttonAdvManageDayTemplates.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvManageDayTemplates.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvManageDayTemplates.AutoSize = true;
+			this.buttonAdvManageDayTemplates.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvManageDayTemplates.BeforeTouchSize = new System.Drawing.Size(130, 23);
+			this.buttonAdvManageDayTemplates.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvManageDayTemplates.IsBackStageButton = false;
 			this.buttonAdvManageDayTemplates.Location = new System.Drawing.Point(238, 254);
 			this.buttonAdvManageDayTemplates.Name = "buttonAdvManageDayTemplates";
-			this.buttonAdvManageDayTemplates.Size = new System.Drawing.Size(126, 23);
+			this.buttonAdvManageDayTemplates.Size = new System.Drawing.Size(130, 23);
 			this.buttonAdvManageDayTemplates.TabIndex = 4;
 			this.buttonAdvManageDayTemplates.Text = "xxTemplatesThreeDots";
 			this.buttonAdvManageDayTemplates.UseVisualStyle = true;
@@ -89,8 +98,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			// buttonAdvRemove
 			// 
-			this.buttonAdvRemove.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvRemove.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvRemove.AutoSize = true;
+			this.buttonAdvRemove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvRemove.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonAdvRemove.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvRemove.IsBackStageButton = false;
 			this.buttonAdvRemove.Location = new System.Drawing.Point(84, 254);
 			this.buttonAdvRemove.Name = "buttonAdvRemove";
 			this.buttonAdvRemove.Size = new System.Drawing.Size(75, 23);
@@ -101,8 +114,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			// buttonAdvAdd
 			// 
-			this.buttonAdvAdd.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvAdd.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvAdd.AutoSize = true;
+			this.buttonAdvAdd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvAdd.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonAdvAdd.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvAdd.IsBackStageButton = false;
 			this.buttonAdvAdd.Location = new System.Drawing.Point(3, 254);
 			this.buttonAdvAdd.Name = "buttonAdvAdd";
 			this.buttonAdvAdd.Size = new System.Drawing.Size(75, 23);
@@ -115,7 +132,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.panelMain);
+			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "MultisiteChildSkills";
 			this.Padding = new System.Windows.Forms.Padding(10);
 			this.Size = new System.Drawing.Size(384, 300);

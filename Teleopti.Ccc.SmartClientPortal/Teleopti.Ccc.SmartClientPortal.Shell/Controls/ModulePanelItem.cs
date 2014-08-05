@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 
 		public Image ItemImage
 		{
-			get { return panelImage.BackgroundImage; }
-			set { panelImage.BackgroundImage = value; }
+			get { return pictureBoxIcon.Image ; }
+			set { pictureBoxIcon.Image  = value; }
 		}
 
 		public string ItemText
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 			set
 			{
 				_itemText = value;
-				toolTip1.SetToolTip(panelImage, _itemText);
+				toolTip1.SetToolTip(pictureBoxIcon, _itemText);
 				if (!_compact)
 					labelModuleText.Text = _itemText;
 			}
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 				return;
 
 			labelModuleText.ForeColor = _selected ? Color.FromArgb(0, 153, 255) : Color.Black;
-			panelImage.BackColor = _compact && _selected ? Color.SkyBlue : Color.FromKnownColor(KnownColor.Control);
+			pictureBoxIcon.BackColor = _compact && _selected ? Color.SkyBlue : Color.FromKnownColor(KnownColor.Control);
 		}
 
 		public void SetCompact(bool compact)
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 			
 			labelModuleText.ForeColor = Color.FromArgb(0, 153, 255);
 			if (_compact)
-				panelImage.BackColor = Color.SkyBlue;
+				pictureBoxIcon.BackColor = Color.SkyBlue;
 		}
 
 		private void onMouseLeave(object sender, EventArgs e)
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 
 			labelModuleText.ForeColor = Color.Black;
 			if (_compact)
-				panelImage.BackColor = Color.FromKnownColor(KnownColor.Control);
+				pictureBoxIcon.BackColor = Color.FromKnownColor(KnownColor.Control);
 		}
 
 		private void onClick(object sender, EventArgs e)

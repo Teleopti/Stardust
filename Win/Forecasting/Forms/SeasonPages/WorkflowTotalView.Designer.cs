@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			// splitContainerAdv1.Panel1
 			// 
 			this.splitContainerAdv1.Panel1.BackColor = System.Drawing.Color.White;
-			this.splitContainerAdv1.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.White);
+			this.splitContainerAdv1.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			// 
 			// splitContainerAdv1.Panel2
 			// 
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.scenarioSelectorControl.Location = new System.Drawing.Point(0, 0);
 			this.scenarioSelectorControl.Name = "scenarioSelectorControl";
 			this.scenarioSelectorControl.SelectedItem = null;
-			this.scenarioSelectorControl.Size = new System.Drawing.Size(170, 45);
+			this.scenarioSelectorControl.Size = new System.Drawing.Size(170, 49);
 			this.scenarioSelectorControl.TabIndex = 1;
 			// 
 			// dateSelectionFromToTarget
@@ -137,14 +137,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.dateSelectionFromToTarget.BackColor = System.Drawing.Color.Transparent;
 			this.dateSelectionFromToTarget.ButtonApplyText = "xxApply";
 			this.dateSelectionFromToTarget.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.dateSelectionFromToTarget.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.dateSelectionFromToTarget.HideNoneButtons = false;
 			this.dateSelectionFromToTarget.LabelDateSelectionText = "xxFrom";
 			this.dateSelectionFromToTarget.LabelDateSelectionToText = "xxTo";
-			this.dateSelectionFromToTarget.Location = new System.Drawing.Point(0, 55);
+			this.dateSelectionFromToTarget.Location = new System.Drawing.Point(0, 40);
 			this.dateSelectionFromToTarget.Name = "dateSelectionFromToTarget";
 			this.dateSelectionFromToTarget.NoneButtonText = "xxNone";
 			this.dateSelectionFromToTarget.NullString = "xxNoDateIsSelected";
-			this.dateSelectionFromToTarget.Size = new System.Drawing.Size(170, 135);
+			this.dateSelectionFromToTarget.Size = new System.Drawing.Size(170, 150);
 			this.dateSelectionFromToTarget.TabIndex = 0;
 			this.dateSelectionFromToTarget.TodayButtonText = "xxToday";
 			this.dateSelectionFromToTarget.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToTarget.WorkPeriodEnd")));

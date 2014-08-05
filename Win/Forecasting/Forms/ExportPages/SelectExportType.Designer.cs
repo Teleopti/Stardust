@@ -38,6 +38,7 @@
 			// 
 			// tableLayoutPanel1
 			// 
+			this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel1.ColumnCount = 3;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 161F));
@@ -90,7 +91,6 @@
 			this.Name = "SelectExportType";
 			this.Size = new System.Drawing.Size(489, 338);
 			this.tableLayoutPanel1.ResumeLayout(false);
-			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.rbtExportToFile)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.rbtExportToBU)).EndInit();
 			this.ResumeLayout(false);
