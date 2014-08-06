@@ -46,12 +46,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.checkBoxEnableBadge = new System.Windows.Forms.CheckBox();
 			this.labelCalculationTime = new System.Windows.Forms.Label();
 			this.timeSpanTextBoxCalculationTime = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+			this.labelSplitter1 = new System.Windows.Forms.Label();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.buttonDeleteContract = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.labelSplitter2 = new System.Windows.Forms.Label();
 			this.tableLayoutPanelBody.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxThresholdForAdherence)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldenBadgeDaysThreshold)).BeginInit();
@@ -82,6 +84,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBody.Controls.Add(this.checkBoxEnableBadge, 0, 0);
 			this.tableLayoutPanelBody.Controls.Add(this.labelCalculationTime, 0, 1);
 			this.tableLayoutPanelBody.Controls.Add(this.timeSpanTextBoxCalculationTime, 1, 1);
+			this.tableLayoutPanelBody.Controls.Add(this.labelSplitter1, 0, 2);
+			this.tableLayoutPanelBody.Controls.Add(this.labelSplitter2, 0, 6);
 			this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 62);
 			this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
 			this.tableLayoutPanelBody.Padding = new System.Windows.Forms.Padding(3);
@@ -147,7 +151,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.doubleTextBoxThresholdForAdherence.NullString = "";
 			this.doubleTextBoxThresholdForAdherence.Size = new System.Drawing.Size(174, 23);
 			this.doubleTextBoxThresholdForAdherence.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
-			this.doubleTextBoxThresholdForAdherence.TabIndex = 6;
+			this.doubleTextBoxThresholdForAdherence.TabIndex = 4;
 			this.doubleTextBoxThresholdForAdherence.Text = "0.00";
 			// 
 			// labelSetGoldBadgeDaysThreshold
@@ -177,21 +181,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.numericUpDownGoldenBadgeDaysThreshold.Location = new System.Drawing.Point(268, 237);
 			this.numericUpDownGoldenBadgeDaysThreshold.Name = "numericUpDownGoldenBadgeDaysThreshold";
 			this.numericUpDownGoldenBadgeDaysThreshold.Size = new System.Drawing.Size(175, 23);
-			this.numericUpDownGoldenBadgeDaysThreshold.TabIndex = 11;
+			this.numericUpDownGoldenBadgeDaysThreshold.TabIndex = 6;
 			// 
 			// numericUpDownSilverBadgeDaysThreshold
 			// 
 			this.numericUpDownSilverBadgeDaysThreshold.Location = new System.Drawing.Point(268, 202);
 			this.numericUpDownSilverBadgeDaysThreshold.Name = "numericUpDownSilverBadgeDaysThreshold";
 			this.numericUpDownSilverBadgeDaysThreshold.Size = new System.Drawing.Size(175, 23);
-			this.numericUpDownSilverBadgeDaysThreshold.TabIndex = 12;
+			this.numericUpDownSilverBadgeDaysThreshold.TabIndex = 5;
 			// 
 			// numericUpDownThresholdForAnsweredCalls
 			// 
 			this.numericUpDownThresholdForAnsweredCalls.Location = new System.Drawing.Point(268, 84);
 			this.numericUpDownThresholdForAnsweredCalls.Name = "numericUpDownThresholdForAnsweredCalls";
 			this.numericUpDownThresholdForAnsweredCalls.Size = new System.Drawing.Size(175, 23);
-			this.numericUpDownThresholdForAnsweredCalls.TabIndex = 13;
+			this.numericUpDownThresholdForAnsweredCalls.TabIndex = 2;
 			// 
 			// timeSpanTextBoxThresholdForAHT
 			// 
@@ -203,11 +207,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
 			this.timeSpanTextBoxThresholdForAHT.MaximumValue = System.TimeSpan.Parse("1.00:00:00");
 			this.timeSpanTextBoxThresholdForAHT.Name = "timeSpanTextBoxThresholdForAHT";
-			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(178, 25);
-			this.timeSpanTextBoxThresholdForAHT.TabIndex = 14;
+			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(237, 25);
+			this.timeSpanTextBoxThresholdForAHT.TabIndex = 3;
 			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 173;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 272;
 			// 
 			// checkBoxEnableBadge
 			// 
@@ -215,7 +219,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.checkBoxEnableBadge.Location = new System.Drawing.Point(6, 6);
 			this.checkBoxEnableBadge.Name = "checkBoxEnableBadge";
 			this.checkBoxEnableBadge.Size = new System.Drawing.Size(104, 19);
-			this.checkBoxEnableBadge.TabIndex = 15;
+			this.checkBoxEnableBadge.TabIndex = 0;
 			this.checkBoxEnableBadge.Text = "xxEnableBadge";
 			this.checkBoxEnableBadge.UseVisualStyleBackColor = true;
 			this.checkBoxEnableBadge.CheckedChanged += new System.EventHandler(this.checkBoxEnableBadge_CheckedChanged);
@@ -240,11 +244,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxCalculationTime.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
 			this.timeSpanTextBoxCalculationTime.MaximumValue = System.TimeSpan.Parse("23:59:00");
 			this.timeSpanTextBoxCalculationTime.Name = "timeSpanTextBoxCalculationTime";
-			this.timeSpanTextBoxCalculationTime.Size = new System.Drawing.Size(178, 29);
-			this.timeSpanTextBoxCalculationTime.TabIndex = 14;
+			this.timeSpanTextBoxCalculationTime.Size = new System.Drawing.Size(237, 29);
+			this.timeSpanTextBoxCalculationTime.TabIndex = 1;
 			this.timeSpanTextBoxCalculationTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxCalculationTime.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxCalculationTime.TimeSpanBoxWidth = 173;
+			this.timeSpanTextBoxCalculationTime.TimeSpanBoxWidth = 272;
+			// 
+			// labelSplitter1
+			// 
+			this.labelSplitter1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.tableLayoutPanelBody.SetColumnSpan(this.labelSplitter1, 2);
+			this.labelSplitter1.Location = new System.Drawing.Point(6, 73);
+			this.labelSplitter1.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+			this.labelSplitter1.Name = "labelSplitter1";
+			this.labelSplitter1.Size = new System.Drawing.Size(597, 2);
+			this.labelSplitter1.TabIndex = 16;
 			// 
 			// gradientPanelHeader
 			// 
@@ -336,6 +350,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.buttonDeleteContract.TabIndex = 7;
 			this.buttonDeleteContract.TabStop = false;
 			// 
+			// labelSplitter2
+			// 
+			this.labelSplitter2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelSplitter2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.tableLayoutPanelBody.SetColumnSpan(this.labelSplitter2, 2);
+			this.labelSplitter2.Location = new System.Drawing.Point(6, 194);
+			this.labelSplitter2.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+			this.labelSplitter2.Name = "labelSplitter2";
+			this.labelSplitter2.Size = new System.Drawing.Size(597, 2);
+			this.labelSplitter2.TabIndex = 17;
+			// 
 			// BadgeThresholdSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -384,5 +409,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private System.Windows.Forms.CheckBox checkBoxEnableBadge;
 		private System.Windows.Forms.Label labelCalculationTime;
 		private Controls.TimeSpanTextBox timeSpanTextBoxCalculationTime;
+		private System.Windows.Forms.Label labelSplitter1;
+		private System.Windows.Forms.Label labelSplitter2;
     }
 }
