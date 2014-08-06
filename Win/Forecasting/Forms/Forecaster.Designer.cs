@@ -47,6 +47,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.tabControlAdvMultisiteSkill = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageAdvMultisiteSkill = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.backStageView = new Syncfusion.Windows.Forms.BackStageView(this.components);
+			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
+			this.backStageButtonSave = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageTab1 = new Syncfusion.Windows.Forms.BackStageTab();
+			this.backStageButtonClose = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageButtonOptions = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageButton4 = new Syncfusion.Windows.Forms.BackStageButton();
 			this.toolStripTabItemHome = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.toolStripEx1 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripExDatePicker = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
@@ -100,13 +107,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.backgroundWorkerSave = new System.ComponentModel.BackgroundWorker();
 			this.backgroundWorkerApplyStandardTemplates = new System.ComponentModel.BackgroundWorker();
-			this.backStageView = new Syncfusion.Windows.Forms.BackStageView(this.components);
-			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
-			this.backStageButtonSave = new Syncfusion.Windows.Forms.BackStageButton();
-			this.backStageTab1 = new Syncfusion.Windows.Forms.BackStageTab();
-			this.backStageButtonClose = new Syncfusion.Windows.Forms.BackStageButton();
-			this.backStageButtonOptions = new Syncfusion.Windows.Forms.BackStageButton();
-			this.backStageButton4 = new Syncfusion.Windows.Forms.BackStageButton();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerWorkloadSkill)).BeginInit();
 			this.splitContainerWorkloadSkill.Panel1.SuspendLayout();
@@ -121,6 +121,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.tabControlAdvMultisiteSkill.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			this.ribbonControlAdv1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.backStage1)).BeginInit();
+			this.backStage1.SuspendLayout();
 			this.toolStripTabItemHome.Panel.SuspendLayout();
 			this.toolStripExWorkflow.SuspendLayout();
 			this.toolStripExNumber.SuspendLayout();
@@ -134,8 +136,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripTabItemMultisite.Panel.SuspendLayout();
 			this.teleoptiToolStripMultisiteSkill.SuspendLayout();
 			this.statusStripEx1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.backStage1)).BeginInit();
-			this.backStage1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// imageList1
@@ -379,6 +379,98 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.ribbonControlAdv1.Text = "yyRibbonControlAdv1";
 			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.Black;
+			// 
+			// backStageView
+			// 
+			this.backStageView.BackStage = this.backStage1;
+			this.backStageView.HostControl = null;
+			this.backStageView.HostForm = this;
+			// 
+			// backStage1
+			// 
+			this.backStage1.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
+			this.backStage1.AllowDrop = true;
+			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1271, 716);
+			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.backStage1.Controls.Add(this.backStageButtonSave);
+			this.backStage1.Controls.Add(this.backStageTab1);
+			this.backStage1.Controls.Add(this.backStageButtonClose);
+			this.backStage1.Controls.Add(this.backStageButtonOptions);
+			this.backStage1.Controls.Add(this.backStageButton4);
+			this.backStage1.ItemSize = new System.Drawing.Size(138, 40);
+			this.backStage1.Location = new System.Drawing.Point(0, 0);
+			this.backStage1.Name = "backStage1";
+			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
+			this.backStage1.Size = new System.Drawing.Size(1271, 716);
+			this.backStage1.TabIndex = 124;
+			this.backStage1.Visible = false;
+			// 
+			// backStageButtonSave
+			// 
+			this.backStageButtonSave.Accelerator = "";
+			this.backStageButtonSave.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButtonSave.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButtonSave.IsBackStageButton = false;
+			this.backStageButtonSave.Location = new System.Drawing.Point(0, 16);
+			this.backStageButtonSave.Name = "backStageButtonSave";
+			this.backStageButtonSave.Size = new System.Drawing.Size(110, 25);
+			this.backStageButtonSave.TabIndex = 3;
+			this.backStageButtonSave.Text = "xxSave";
+			this.backStageButtonSave.Click += new System.EventHandler(this.backStageButtonSave_Click);
+			// 
+			// backStageTab1
+			// 
+			this.backStageTab1.Accelerator = "";
+			this.backStageTab1.BackColor = System.Drawing.Color.White;
+			this.backStageTab1.Image = null;
+			this.backStageTab1.ImageSize = new System.Drawing.Size(16, 16);
+			this.backStageTab1.Location = new System.Drawing.Point(129, 0);
+			this.backStageTab1.Name = "backStageTab1";
+			this.backStageTab1.Position = new System.Drawing.Point(0, 0);
+			this.backStageTab1.ShowCloseButton = true;
+			this.backStageTab1.Size = new System.Drawing.Size(1142, 716);
+			this.backStageTab1.TabIndex = 4;
+			this.backStageTab1.Text = "xxExport";
+			this.backStageTab1.ThemesEnabled = false;
+			// 
+			// backStageButtonClose
+			// 
+			this.backStageButtonClose.Accelerator = "";
+			this.backStageButtonClose.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButtonClose.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButtonClose.IsBackStageButton = false;
+			this.backStageButtonClose.Location = new System.Drawing.Point(0, 78);
+			this.backStageButtonClose.Name = "backStageButtonClose";
+			this.backStageButtonClose.Size = new System.Drawing.Size(110, 25);
+			this.backStageButtonClose.TabIndex = 5;
+			this.backStageButtonClose.Text = "xxClose";
+			this.backStageButtonClose.Click += new System.EventHandler(this.backStageButtonClose_Click);
+			// 
+			// backStageButtonOptions
+			// 
+			this.backStageButtonOptions.Accelerator = "";
+			this.backStageButtonOptions.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButtonOptions.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButtonOptions.IsBackStageButton = false;
+			this.backStageButtonOptions.Location = new System.Drawing.Point(0, 103);
+			this.backStageButtonOptions.Name = "backStageButtonOptions";
+			this.backStageButtonOptions.Size = new System.Drawing.Size(110, 25);
+			this.backStageButtonOptions.TabIndex = 6;
+			this.backStageButtonOptions.Text = "xxOptions";
+			this.backStageButtonOptions.Click += new System.EventHandler(this.backStageButtonOptions_Click);
+			// 
+			// backStageButton4
+			// 
+			this.backStageButton4.Accelerator = "";
+			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButton4.IsBackStageButton = false;
+			this.backStageButton4.Location = new System.Drawing.Point(0, 128);
+			this.backStageButton4.Name = "backStageButton4";
+			this.backStageButton4.Size = new System.Drawing.Size(110, 25);
+			this.backStageButton4.TabIndex = 7;
+			this.backStageButton4.Text = "xxExitTELEOPTICCC";
+			this.backStageButton4.Click += new System.EventHandler(this.backStageButton4_Click);
 			// 
 			// toolStripTabItemHome
 			// 
@@ -635,7 +727,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripExChartViews.Name = "toolStripExChartViews";
 			this.toolStripExChartViews.Office12Mode = false;
 			this.toolStripExChartViews.ShowLauncher = false;
-			this.toolStripExChartViews.Size = new System.Drawing.Size(223, 105);
+			this.toolStripExChartViews.Size = new System.Drawing.Size(223, 0);
 			this.toolStripExChartViews.TabIndex = 4;
 			this.toolStripExChartViews.Text = "xxChartViews";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExChartViews, true);
@@ -653,7 +745,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripExGridRowInChartButtons.Name = "toolStripExGridRowInChartButtons";
 			this.toolStripExGridRowInChartButtons.Office12Mode = false;
 			this.toolStripExGridRowInChartButtons.ShowLauncher = false;
-			this.toolStripExGridRowInChartButtons.Size = new System.Drawing.Size(233, 105);
+			this.toolStripExGridRowInChartButtons.Size = new System.Drawing.Size(233, 0);
 			this.toolStripExGridRowInChartButtons.TabIndex = 7;
 			this.toolStripExGridRowInChartButtons.Text = "xxGridRowsInChart";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExGridRowInChartButtons, true);
@@ -674,7 +766,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripExOutput.Name = "toolStripExOutput";
 			this.toolStripExOutput.Office12Mode = false;
 			this.toolStripExOutput.ShowLauncher = false;
-			this.toolStripExOutput.Size = new System.Drawing.Size(147, 105);
+			this.toolStripExOutput.Size = new System.Drawing.Size(147, 0);
 			this.toolStripExOutput.TabIndex = 6;
 			this.toolStripExOutput.Text = "xxOutput";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExOutput, true);
@@ -688,7 +780,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonPrint.Name = "toolStripButtonPrint";
 			this.SetShortcut(this.toolStripButtonPrint, System.Windows.Forms.Keys.None);
-			this.toolStripButtonPrint.Size = new System.Drawing.Size(46, 89);
+			this.toolStripButtonPrint.Size = new System.Drawing.Size(46, 0);
 			this.toolStripButtonPrint.Text = "xxPrint";
 			this.toolStripButtonPrint.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonPrint, true);
@@ -703,7 +795,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonPrintPreview.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonPrintPreview.Name = "toolStripButtonPrintPreview";
 			this.SetShortcut(this.toolStripButtonPrintPreview, System.Windows.Forms.Keys.None);
-			this.toolStripButtonPrintPreview.Size = new System.Drawing.Size(87, 89);
+			this.toolStripButtonPrintPreview.Size = new System.Drawing.Size(87, 0);
 			this.toolStripButtonPrintPreview.Text = "xxPrintPreview";
 			this.toolStripButtonPrintPreview.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonPrintPreview, true);
@@ -749,7 +841,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.teleoptiToolStripSkill.Name = "teleoptiToolStripSkill";
 			this.teleoptiToolStripSkill.Office12Mode = false;
 			this.teleoptiToolStripSkill.ShowLauncher = false;
-			this.teleoptiToolStripSkill.Size = new System.Drawing.Size(785, 101);
+			this.teleoptiToolStripSkill.Size = new System.Drawing.Size(785, 0);
 			this.teleoptiToolStripSkill.TabIndex = 2;
 			this.teleoptiToolStripSkill.Text = "xxTemplates";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.teleoptiToolStripSkill, true);
@@ -782,7 +874,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
 			this.SetShortcut(this.toolStripSeparator2, System.Windows.Forms.Keys.None);
-			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 88);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 0);
 			// 
 			// toolStripBtnCreateSkillTemplate
 			// 
@@ -792,7 +884,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripBtnCreateSkillTemplate.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripBtnCreateSkillTemplate.Name = "toolStripBtnCreateSkillTemplate";
 			this.SetShortcut(this.toolStripBtnCreateSkillTemplate, System.Windows.Forms.Keys.None);
-			this.toolStripBtnCreateSkillTemplate.Size = new System.Drawing.Size(45, 85);
+			this.toolStripBtnCreateSkillTemplate.Size = new System.Drawing.Size(45, 0);
 			this.toolStripBtnCreateSkillTemplate.Text = "xxNew";
 			this.toolStripBtnCreateSkillTemplate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripBtnCreateSkillTemplate, true);
@@ -807,7 +899,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonResetSkillTemplates.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonResetSkillTemplates.Name = "toolStripButtonResetSkillTemplates";
 			this.SetShortcut(this.toolStripButtonResetSkillTemplates, System.Windows.Forms.Keys.None);
-			this.toolStripButtonResetSkillTemplates.Size = new System.Drawing.Size(99, 85);
+			this.toolStripButtonResetSkillTemplates.Size = new System.Drawing.Size(99, 0);
 			this.toolStripButtonResetSkillTemplates.Text = "xxApplyStandard";
 			this.toolStripButtonResetSkillTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonResetSkillTemplates, true);
@@ -823,7 +915,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonLongtermSkillTemplates.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonLongtermSkillTemplates.Name = "toolStripButtonLongtermSkillTemplates";
 			this.SetShortcut(this.toolStripButtonLongtermSkillTemplates, System.Windows.Forms.Keys.None);
-			this.toolStripButtonLongtermSkillTemplates.Size = new System.Drawing.Size(104, 85);
+			this.toolStripButtonLongtermSkillTemplates.Size = new System.Drawing.Size(104, 0);
 			this.toolStripButtonLongtermSkillTemplates.Text = "xxApplyLongterm";
 			this.toolStripButtonLongtermSkillTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonLongtermSkillTemplates, true);
@@ -868,7 +960,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.teleoptiToolStripWorkload.Name = "teleoptiToolStripWorkload";
 			this.teleoptiToolStripWorkload.Office12Mode = false;
 			this.teleoptiToolStripWorkload.ShowLauncher = false;
-			this.teleoptiToolStripWorkload.Size = new System.Drawing.Size(785, 101);
+			this.teleoptiToolStripWorkload.Size = new System.Drawing.Size(785, 0);
 			this.teleoptiToolStripWorkload.TabIndex = 3;
 			this.teleoptiToolStripWorkload.Text = "xxTemplates";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.teleoptiToolStripWorkload, true);
@@ -901,7 +993,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.SetShortcut(this.toolStripSeparator1, System.Windows.Forms.Keys.None);
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 88);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 0);
 			// 
 			// toolStripButtonCreateNewTemplate
 			// 
@@ -911,7 +1003,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonCreateNewTemplate.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonCreateNewTemplate.Name = "toolStripButtonCreateNewTemplate";
 			this.SetShortcut(this.toolStripButtonCreateNewTemplate, System.Windows.Forms.Keys.None);
-			this.toolStripButtonCreateNewTemplate.Size = new System.Drawing.Size(45, 85);
+			this.toolStripButtonCreateNewTemplate.Size = new System.Drawing.Size(45, 0);
 			this.toolStripButtonCreateNewTemplate.Text = "xxNew";
 			this.toolStripButtonCreateNewTemplate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonCreateNewTemplate, true);
@@ -926,7 +1018,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonResetWorkloadTemplates.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonResetWorkloadTemplates.Name = "toolStripButtonResetWorkloadTemplates";
 			this.SetShortcut(this.toolStripButtonResetWorkloadTemplates, System.Windows.Forms.Keys.None);
-			this.toolStripButtonResetWorkloadTemplates.Size = new System.Drawing.Size(99, 85);
+			this.toolStripButtonResetWorkloadTemplates.Size = new System.Drawing.Size(99, 0);
 			this.toolStripButtonResetWorkloadTemplates.Text = "xxApplyStandard";
 			this.toolStripButtonResetWorkloadTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonResetWorkloadTemplates, true);
@@ -941,7 +1033,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonLongtermWorkloadTemplates.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonLongtermWorkloadTemplates.Name = "toolStripButtonLongtermWorkloadTemplates";
 			this.SetShortcut(this.toolStripButtonLongtermWorkloadTemplates, System.Windows.Forms.Keys.None);
-			this.toolStripButtonLongtermWorkloadTemplates.Size = new System.Drawing.Size(104, 85);
+			this.toolStripButtonLongtermWorkloadTemplates.Size = new System.Drawing.Size(104, 0);
 			this.toolStripButtonLongtermWorkloadTemplates.Text = "xxApplyLongterm";
 			this.toolStripButtonLongtermWorkloadTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonLongtermWorkloadTemplates, true);
@@ -987,7 +1079,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.teleoptiToolStripMultisiteSkill.Name = "teleoptiToolStripMultisiteSkill";
 			this.teleoptiToolStripMultisiteSkill.Office12Mode = false;
 			this.teleoptiToolStripMultisiteSkill.ShowLauncher = false;
-			this.teleoptiToolStripMultisiteSkill.Size = new System.Drawing.Size(785, 105);
+			this.teleoptiToolStripMultisiteSkill.Size = new System.Drawing.Size(785, 0);
 			this.teleoptiToolStripMultisiteSkill.TabIndex = 4;
 			this.teleoptiToolStripMultisiteSkill.Text = "xxTemplates";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.teleoptiToolStripMultisiteSkill, true);
@@ -1020,7 +1112,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.toolStripSeparator4.Name = "toolStripSeparator4";
 			this.SetShortcut(this.toolStripSeparator4, System.Windows.Forms.Keys.None);
-			this.toolStripSeparator4.Size = new System.Drawing.Size(6, 92);
+			this.toolStripSeparator4.Size = new System.Drawing.Size(6, 0);
 			// 
 			// toolStripBtnCreateMultisiteTemplate
 			// 
@@ -1030,7 +1122,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripBtnCreateMultisiteTemplate.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripBtnCreateMultisiteTemplate.Name = "toolStripBtnCreateMultisiteTemplate";
 			this.SetShortcut(this.toolStripBtnCreateMultisiteTemplate, System.Windows.Forms.Keys.None);
-			this.toolStripBtnCreateMultisiteTemplate.Size = new System.Drawing.Size(45, 89);
+			this.toolStripBtnCreateMultisiteTemplate.Size = new System.Drawing.Size(45, 0);
 			this.toolStripBtnCreateMultisiteTemplate.Text = "xxNew";
 			this.toolStripBtnCreateMultisiteTemplate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripBtnCreateMultisiteTemplate, true);
@@ -1045,7 +1137,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonResetMultisiteSkillTemplates.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonResetMultisiteSkillTemplates.Name = "toolStripButtonResetMultisiteSkillTemplates";
 			this.SetShortcut(this.toolStripButtonResetMultisiteSkillTemplates, System.Windows.Forms.Keys.None);
-			this.toolStripButtonResetMultisiteSkillTemplates.Size = new System.Drawing.Size(99, 89);
+			this.toolStripButtonResetMultisiteSkillTemplates.Size = new System.Drawing.Size(99, 0);
 			this.toolStripButtonResetMultisiteSkillTemplates.Text = "xxApplyStandard";
 			this.toolStripButtonResetMultisiteSkillTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonResetMultisiteSkillTemplates, true);
@@ -1061,7 +1153,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonMultisiteSkillLongtermTemplates.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonMultisiteSkillLongtermTemplates.Name = "toolStripButtonMultisiteSkillLongtermTemplates";
 			this.SetShortcut(this.toolStripButtonMultisiteSkillLongtermTemplates, System.Windows.Forms.Keys.None);
-			this.toolStripButtonMultisiteSkillLongtermTemplates.Size = new System.Drawing.Size(104, 89);
+			this.toolStripButtonMultisiteSkillLongtermTemplates.Size = new System.Drawing.Size(104, 0);
 			this.toolStripButtonMultisiteSkillLongtermTemplates.Text = "xxApplyLongterm";
 			this.toolStripButtonMultisiteSkillLongtermTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonMultisiteSkillLongtermTemplates, true);
@@ -1221,98 +1313,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backgroundWorkerApplyStandardTemplates.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerApplyStandardTemplates_DoWork);
 			this.backgroundWorkerApplyStandardTemplates.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerApplyStandardTemplates_RunWorkerCompleted);
 			// 
-			// backStageView
-			// 
-			this.backStageView.BackStage = this.backStage1;
-			this.backStageView.HostControl = null;
-			this.backStageView.HostForm = this;
-			// 
-			// backStage1
-			// 
-			this.backStage1.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
-			this.backStage1.AllowDrop = true;
-			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1271, 716);
-			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.backStage1.Controls.Add(this.backStageButtonSave);
-			this.backStage1.Controls.Add(this.backStageTab1);
-			this.backStage1.Controls.Add(this.backStageButtonClose);
-			this.backStage1.Controls.Add(this.backStageButtonOptions);
-			this.backStage1.Controls.Add(this.backStageButton4);
-			this.backStage1.ItemSize = new System.Drawing.Size(138, 40);
-			this.backStage1.Location = new System.Drawing.Point(1, 51);
-			this.backStage1.Name = "backStage1";
-			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Blue;
-			this.backStage1.Size = new System.Drawing.Size(1271, 716);
-			this.backStage1.TabIndex = 124;
-			this.backStage1.Visible = false;
-			// 
-			// backStageButtonSave
-			// 
-			this.backStageButtonSave.Accelerator = "";
-			this.backStageButtonSave.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButtonSave.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButtonSave.IsBackStageButton = false;
-			this.backStageButtonSave.Location = new System.Drawing.Point(0, 16);
-			this.backStageButtonSave.Name = "backStageButtonSave";
-			this.backStageButtonSave.Size = new System.Drawing.Size(137, 38);
-			this.backStageButtonSave.TabIndex = 3;
-			this.backStageButtonSave.Text = "xxSave";
-			this.backStageButtonSave.Click += new System.EventHandler(this.backStageButtonSave_Click);
-			// 
-			// backStageTab1
-			// 
-			this.backStageTab1.Accelerator = "";
-			this.backStageTab1.BackColor = System.Drawing.Color.White;
-			this.backStageTab1.Image = null;
-			this.backStageTab1.ImageSize = new System.Drawing.Size(16, 16);
-			this.backStageTab1.Location = new System.Drawing.Point(137, 0);
-			this.backStageTab1.Name = "backStageTab1";
-			this.backStageTab1.Position = new System.Drawing.Point(0, 0);
-			this.backStageTab1.ShowCloseButton = true;
-			this.backStageTab1.Size = new System.Drawing.Size(1134, 716);
-			this.backStageTab1.TabIndex = 4;
-			this.backStageTab1.Text = "xxExport";
-			this.backStageTab1.ThemesEnabled = false;
-			// 
-			// backStageButtonClose
-			// 
-			this.backStageButtonClose.Accelerator = "";
-			this.backStageButtonClose.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButtonClose.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButtonClose.IsBackStageButton = false;
-			this.backStageButtonClose.Location = new System.Drawing.Point(0, 91);
-			this.backStageButtonClose.Name = "backStageButtonClose";
-			this.backStageButtonClose.Size = new System.Drawing.Size(137, 38);
-			this.backStageButtonClose.TabIndex = 5;
-			this.backStageButtonClose.Text = "xxClose";
-			this.backStageButtonClose.Click += new System.EventHandler(this.backStageButtonClose_Click);
-			// 
-			// backStageButtonOptions
-			// 
-			this.backStageButtonOptions.Accelerator = "";
-			this.backStageButtonOptions.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButtonOptions.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButtonOptions.IsBackStageButton = false;
-			this.backStageButtonOptions.Location = new System.Drawing.Point(0, 129);
-			this.backStageButtonOptions.Name = "backStageButtonOptions";
-			this.backStageButtonOptions.Size = new System.Drawing.Size(137, 38);
-			this.backStageButtonOptions.TabIndex = 6;
-			this.backStageButtonOptions.Text = "xxOptions";
-			this.backStageButtonOptions.Click += new System.EventHandler(this.backStageButtonOptions_Click);
-			// 
-			// backStageButton4
-			// 
-			this.backStageButton4.Accelerator = "";
-			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButton4.IsBackStageButton = false;
-			this.backStageButton4.Location = new System.Drawing.Point(0, 167);
-			this.backStageButton4.Name = "backStageButton4";
-			this.backStageButton4.Size = new System.Drawing.Size(137, 38);
-			this.backStageButton4.TabIndex = 7;
-			this.backStageButton4.Text = "xxExitTELEOPTICCC";
-			this.backStageButton4.Click += new System.EventHandler(this.backStageButton4_Click);
-			// 
 			// Forecaster
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1346,6 +1346,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
 			this.ribbonControlAdv1.ResumeLayout(false);
 			this.ribbonControlAdv1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.backStage1)).EndInit();
+			this.backStage1.ResumeLayout(false);
 			this.toolStripTabItemHome.Panel.ResumeLayout(false);
 			this.toolStripTabItemHome.Panel.PerformLayout();
 			this.toolStripExWorkflow.ResumeLayout(false);
@@ -1370,8 +1372,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.teleoptiToolStripMultisiteSkill.ResumeLayout(false);
 			this.teleoptiToolStripMultisiteSkill.PerformLayout();
 			this.statusStripEx1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.backStage1)).EndInit();
-			this.backStage1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

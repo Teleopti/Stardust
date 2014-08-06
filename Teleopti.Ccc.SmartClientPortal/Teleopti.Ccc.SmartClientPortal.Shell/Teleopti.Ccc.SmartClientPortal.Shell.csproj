@@ -328,6 +328,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Resources\ccc_PersonalSettings_32x32.png" />
+    <None Include="Resources\Budgets_small.png" />
+    <None Include="Resources\Forecasts_small.png" />
+    <None Include="Resources\Intraday_small.png" />
     <Content Include="Resources\NotifyIconOk.ico" />
     <Content Include="Resources\NotifyIconWarning.ico" />
     <None Include="Resources\ccc_People.png" />
@@ -343,6 +346,8 @@
     <None Include="Resources\help_32.png" />
     <None Include="Resources\information_16.png" />
     <None Include="Resources\Online.jpg" />
+    <None Include="Resources\Payroll_small.png" />
+    <None Include="Resources\People_small.png" />
     <Content Include="Resources\permission.png" />
     <None Include="Resources\WFM-Budgets - Copy.png" />
     <None Include="Resources\WFM-Forecasts - Copy.png" />
@@ -359,13 +364,17 @@
     <None Include="Resources\WFMIconWarning1.ico" />
     <None Include="Resources\WFM-Forecasts-32-32.png" />
     <None Include="Resources\WFM-Intraday-32-32.png" />
-    <None Include="Resources\WFM-Payroll-Integration-32-32.png" />
     <None Include="Resources\WFM-People-32-32.png" />
-    <None Include="Resources\WFM-Performance-Manager-32-32.png" />
     <None Include="Resources\WFM-Reports-32-32.png" />
     <None Include="Resources\WFM-Schedules-32-32.png" />
     <None Include="Resources\WFM-Shifts-32-32.png" />
     <None Include="Resources\WFM-Budgets-old-32-32.png" />
+    <None Include="Resources\Reports_small.png" />
+    <None Include="Resources\Schedules_small.png" />
+    <None Include="Resources\Shifts_small.png" />
+    <None Include="Resources\Teleopti-WFM-main_small.png" />
+    <None Include="Resources\WFM-Payroll-Integration-32-32.png" />
+    <None Include="Resources\WFM-Performance-Manager-32-32.png" />
     <Content Include="TeleoptiCCCv7.ico" />
   </ItemGroup>
   <ItemGroup>
