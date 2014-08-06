@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.GuiHelpers
 			Assert.AreEqual(new BrushInfo(GradientStyle.BackwardDiagonal, Color.White, Color.FromArgb(128, 255, 255, 0)), ColorHelper.UnderstaffingBrush);
 			Assert.AreEqual(new BrushInfo(GradientStyle.BackwardDiagonal, Color.White, Color.FromArgb(128, 255, 0, 0)), ColorHelper.SeriousOverstaffingBrush);
 			Assert.AreEqual(new BrushInfo(GradientStyle.Vertical, Color.White, Color.FromArgb(128, 255, 0, 0)), ColorHelper.BudgetUnderstaffingBrush);
-			Assert.AreEqual(new BrushInfo(GradientStyle.Vertical, Color.White, Color.DarkOrange), ColorHelper.ReadOnlyBackgroundBrush);
+			Assert.AreEqual(new BrushInfo(GradientStyle.Vertical, Color.FromArgb(153, 153, 153), Color.FromArgb(153, 153, 153)), ColorHelper.ReadOnlyBackgroundBrush);
 			Assert.AreEqual(Color.White, ColorHelper.DialogBackColor());
 			Assert.AreEqual(new Font("Arial", 10), ColorHelper.ScheduleViewBaseCellFontBig);
 			Assert.AreEqual(new Font("Arial", 8), ColorHelper.ScheduleViewBaseCellFontSmall);
