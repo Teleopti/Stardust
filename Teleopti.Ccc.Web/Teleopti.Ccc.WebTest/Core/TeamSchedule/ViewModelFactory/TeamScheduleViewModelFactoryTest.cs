@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldCreateViewModelByTwoStepMapping()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new TeamScheduleViewModelFactory(mapper, new FakePermissionProvider(), MockRepository.GenerateMock<IToggleManager>());
+			var target = new TeamScheduleViewModelFactory(mapper, new FakePermissionProvider(), MockRepository.GenerateMock<IToggleManager>(), MockRepository.GenerateMock<IBadgeSettingProvider>());
 			var viewModel = new TeamScheduleViewModel();
 			var data = new TeamScheduleDomainData();
 			var id = Guid.NewGuid();
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void PermissionForShiftTrade_WhenAgentHasNoPermissionToViewShiftTrade_ShouldBFalse()
 		{
-			var target = new TeamScheduleViewModelFactory(createMappingEngine(), new FakePermissionProvider(), MockRepository.GenerateMock<IToggleManager>());
+			var target = new TeamScheduleViewModelFactory(createMappingEngine(), new FakePermissionProvider(), MockRepository.GenerateMock<IToggleManager>(), MockRepository.GenerateMock<IBadgeSettingProvider>());
 
 			var result = target.CreateViewModel(DateOnly.Today, new Guid());
 			Assert.That(result.ShiftTradePermisssion, Is.True);			
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void PermissionForShiftTrade_WhenAgentHasPermissionToViewShiftTrade_ShouldBeTrue()
 		{
-			var target = new TeamScheduleViewModelFactory(createMappingEngine(), new FakePermissionProvider(), MockRepository.GenerateMock<IToggleManager>());
+			var target = new TeamScheduleViewModelFactory(createMappingEngine(), new FakePermissionProvider(), MockRepository.GenerateMock<IToggleManager>(), MockRepository.GenerateMock<IBadgeSettingProvider>());
 
 			var result = target.CreateViewModel(DateOnly.Today, new Guid());
 			Assert.That(result.ShiftTradePermisssion, Is.True);
@@ -53,10 +54,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldGetAgentBadgeEnabled()
 		{
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			var agentBadgeEnabled = true;
+			var badgeSettingProvider = MockRepository.GenerateMock<IBadgeSettingProvider>();
+			
 
-			toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913)).Return(agentBadgeEnabled);
-			var target = new TeamScheduleViewModelFactory(createMappingEngine(), new FakePermissionProvider(), toggleManager);
+			toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913)).Return(true);
+			badgeSettingProvider.Stub(x => x.GetBadgeSettings().EnableBadge).Return(true);
+			var target = new TeamScheduleViewModelFactory(createMappingEngine(), new FakePermissionProvider(), toggleManager, badgeSettingProvider);
 
 			var result = target.CreateViewModel(DateOnly.Today, new Guid());
 			Assert.That(result.AgentBadgeEnabled, Is.True);
