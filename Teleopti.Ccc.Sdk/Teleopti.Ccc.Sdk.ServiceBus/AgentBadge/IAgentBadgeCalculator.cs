@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	public interface IAgentBadgeCalculator
 	{
 		IEnumerable<IPerson> Calculate(IStatelessUnitOfWork unitOfWork, IEnumerable<IPerson> allPersons, int timezoneId, DateTime date,
-			AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int silverBadgeRate, int goldBadgeRate);
+			AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int silverToBronzeBadgeRate, int goldToSilverBadgeRate);
 	}
 }

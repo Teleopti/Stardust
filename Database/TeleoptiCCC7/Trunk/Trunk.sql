@@ -254,8 +254,8 @@ CREATE TABLE [dbo].[AgentBadgeThresholdSettings](
 	[AnsweredCallsThreshold] [int] NOT NULL,
 	[AHTThreshold] [bigint] NOT NULL,
 	[AdherenceThreshold] [float] NOT NULL,
-	[SilverBadgeDaysThreshold] [int] NOT NULL,
-	[GoldBadgeDaysThreshold] [int] NOT NULL,
+	[SilverToBronzeBadgeRate] [int] NOT NULL,
+	[GoldToSilverBadgeRate] [int] NOT NULL,
 	[UpdatedBy] [uniqueidentifier] NOT NULL,
 	[UpdatedOn] [datetime] NOT NULL,
  CONSTRAINT [PK_AgentBadgeThresholdSettings] PRIMARY KEY CLUSTERED 

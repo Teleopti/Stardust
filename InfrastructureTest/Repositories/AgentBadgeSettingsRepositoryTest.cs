@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				AdherenceThreshold = new Percent(0.5),
 				AnsweredCallsThreshold = 50,
 				AHTThreshold = new TimeSpan(0, 5, 30),
-				SilverBadgeDaysThreshold = 5,
-				GoldBadgeDaysThreshold = 10
+				SilverToBronzeBadgeRate = 5,
+				GoldToSilverBadgeRate = 2
 		    };
 	    }
 
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(settings.AdherenceThreshold, loadedAggregateFromDatabase.AdherenceThreshold);
 			Assert.AreEqual(settings.AnsweredCallsThreshold, loadedAggregateFromDatabase.AnsweredCallsThreshold);
 			Assert.AreEqual(settings.AHTThreshold, loadedAggregateFromDatabase.AHTThreshold);
-			Assert.AreEqual(settings.SilverBadgeDaysThreshold, loadedAggregateFromDatabase.SilverBadgeDaysThreshold);
-			Assert.AreEqual(settings.GoldBadgeDaysThreshold, loadedAggregateFromDatabase.GoldBadgeDaysThreshold);
+			Assert.AreEqual(settings.SilverToBronzeBadgeRate, loadedAggregateFromDatabase.SilverToBronzeBadgeRate);
+			Assert.AreEqual(settings.GoldToSilverBadgeRate, loadedAggregateFromDatabase.GoldToSilverBadgeRate);
 	    }
 
 	    protected override Repository<IAgentBadgeThresholdSettings> TestRepository(IUnitOfWork unitOfWork)

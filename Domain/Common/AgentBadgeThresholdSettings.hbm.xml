@@ -52,11 +52,11 @@
 			<property name="Value" not-null="true" type="double" column="AdherenceThreshold" />
 		</component>
 
-		<property name="SilverBadgeDaysThreshold"
+		<property name="SilverToBronzeBadgeRate"
 							type="int"
 							not-null="true" />
 
-		<property name="GoldBadgeDaysThreshold"
+		<property name="GoldToSilverBadgeRate"
 							type="int"
 							not-null="true" />
 		

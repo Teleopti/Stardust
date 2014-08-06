@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.Domain.Common
 		private int _answeredCallsThreshold;
 		private TimeSpan _aHTThreshold;
 		private Percent _adherenceThreshold;
-		private int _silverBadgeDaysThreshold;
-		private int _goldBadgeDaysThreshold;
+		private int _silverToBronzeBadgeRate;
+		private int _goldToSilverBadgeRate;
 
 		public virtual bool EnableBadge
 		{
@@ -44,16 +44,16 @@ namespace Teleopti.Ccc.Domain.Common
 			set { _adherenceThreshold = value; }
 		}
 
-		public virtual int SilverBadgeDaysThreshold
+		public virtual int SilverToBronzeBadgeRate
 		{
-			get { return _silverBadgeDaysThreshold; }
-			set { _silverBadgeDaysThreshold = value; }
+			get { return _silverToBronzeBadgeRate; }
+			set { _silverToBronzeBadgeRate = value; }
 		}
 
-		public virtual int GoldBadgeDaysThreshold
+		public virtual int GoldToSilverBadgeRate
 		{
-			get { return _goldBadgeDaysThreshold; }
-			set { _goldBadgeDaysThreshold = value; }
+			get { return _goldToSilverBadgeRate; }
+			set { _goldToSilverBadgeRate = value; }
 		}
 	}
 }

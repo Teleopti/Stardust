@@ -9,7 +9,7 @@ namespace Teleopti.Interfaces.Domain
 		int AnsweredCallsThreshold { get; set; }
 		TimeSpan AHTThreshold { get; set; }
 		Percent AdherenceThreshold { get; set; }
-		int SilverBadgeDaysThreshold { get; set; }
-		int GoldBadgeDaysThreshold { get; set; }
+		int SilverToBronzeBadgeRate { get; set; }
+		int GoldToSilverBadgeRate { get; set; }
 	}
 }

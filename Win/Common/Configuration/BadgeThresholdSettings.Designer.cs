@@ -37,27 +37,27 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSetThresholdForAHT = new System.Windows.Forms.Label();
 			this.labelSetThresholdForAdherence = new System.Windows.Forms.Label();
 			this.doubleTextBoxThresholdForAdherence = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
-			this.labelSetGoldBadgeDaysThreshold = new System.Windows.Forms.Label();
-			this.labelSetSilverBadgeDaysThreshold = new System.Windows.Forms.Label();
-			this.numericUpDownGoldenBadgeDaysThreshold = new System.Windows.Forms.NumericUpDown();
-			this.numericUpDownSilverBadgeDaysThreshold = new System.Windows.Forms.NumericUpDown();
+			this.labelOneGoldBadgeEqualsSilverBadgeCount = new System.Windows.Forms.Label();
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount = new System.Windows.Forms.Label();
+			this.numericUpDownGoldenToSilverBadgeRate = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDownSilverToBronzeBadgeRate = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDownThresholdForAnsweredCalls = new System.Windows.Forms.NumericUpDown();
 			this.timeSpanTextBoxThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
 			this.checkBoxEnableBadge = new System.Windows.Forms.CheckBox();
 			this.labelCalculationTime = new System.Windows.Forms.Label();
 			this.timeSpanTextBoxCalculationTime = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
 			this.labelSplitter1 = new System.Windows.Forms.Label();
+			this.labelSplitter2 = new System.Windows.Forms.Label();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.buttonDeleteContract = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.labelSplitter2 = new System.Windows.Forms.Label();
 			this.tableLayoutPanelBody.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxThresholdForAdherence)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldenBadgeDaysThreshold)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownSilverBadgeDaysThreshold)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldenToSilverBadgeRate)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownSilverToBronzeBadgeRate)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdForAnsweredCalls)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
@@ -75,10 +75,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBody.Controls.Add(this.labelSetThresholdForAHT, 0, 4);
 			this.tableLayoutPanelBody.Controls.Add(this.labelSetThresholdForAdherence, 0, 5);
 			this.tableLayoutPanelBody.Controls.Add(this.doubleTextBoxThresholdForAdherence, 1, 5);
-			this.tableLayoutPanelBody.Controls.Add(this.labelSetGoldBadgeDaysThreshold, 0, 8);
-			this.tableLayoutPanelBody.Controls.Add(this.labelSetSilverBadgeDaysThreshold, 0, 7);
-			this.tableLayoutPanelBody.Controls.Add(this.numericUpDownGoldenBadgeDaysThreshold, 1, 8);
-			this.tableLayoutPanelBody.Controls.Add(this.numericUpDownSilverBadgeDaysThreshold, 1, 7);
+			this.tableLayoutPanelBody.Controls.Add(this.labelOneGoldBadgeEqualsSilverBadgeCount, 0, 8);
+			this.tableLayoutPanelBody.Controls.Add(this.labelOneSilverBadgeEqualsBronzeBadgeCount, 0, 7);
+			this.tableLayoutPanelBody.Controls.Add(this.numericUpDownGoldenToSilverBadgeRate, 1, 8);
+			this.tableLayoutPanelBody.Controls.Add(this.numericUpDownSilverToBronzeBadgeRate, 1, 7);
 			this.tableLayoutPanelBody.Controls.Add(this.numericUpDownThresholdForAnsweredCalls, 1, 3);
 			this.tableLayoutPanelBody.Controls.Add(this.timeSpanTextBoxThresholdForAHT, 1, 4);
 			this.tableLayoutPanelBody.Controls.Add(this.checkBoxEnableBadge, 0, 0);
@@ -154,41 +154,41 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.doubleTextBoxThresholdForAdherence.TabIndex = 4;
 			this.doubleTextBoxThresholdForAdherence.Text = "0.00";
 			// 
-			// labelSetGoldBadgeDaysThreshold
+			// labelOneGoldBadgeEqualsSilverBadgeCount
 			// 
-			this.labelSetGoldBadgeDaysThreshold.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetGoldBadgeDaysThreshold.AutoSize = true;
-			this.labelSetGoldBadgeDaysThreshold.Location = new System.Drawing.Point(6, 242);
-			this.labelSetGoldBadgeDaysThreshold.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.labelSetGoldBadgeDaysThreshold.Name = "labelSetGoldBadgeDaysThreshold";
-			this.labelSetGoldBadgeDaysThreshold.Size = new System.Drawing.Size(169, 15);
-			this.labelSetGoldBadgeDaysThreshold.TabIndex = 8;
-			this.labelSetGoldBadgeDaysThreshold.Text = "xxSetGoldBadgeDaysThreshold";
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.AutoSize = true;
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.Location = new System.Drawing.Point(6, 242);
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.Name = "labelOneGoldBadgeEqualsSilverBadgeCount";
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.Size = new System.Drawing.Size(225, 15);
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.TabIndex = 8;
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.Text = "xxOneGoldBadgeEqualsSilverBadgeCount";
 			// 
-			// labelSetSilverBadgeDaysThreshold
+			// labelOneSilverBadgeEqualsBronzeBadgeCount
 			// 
-			this.labelSetSilverBadgeDaysThreshold.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetSilverBadgeDaysThreshold.AutoSize = true;
-			this.labelSetSilverBadgeDaysThreshold.Location = new System.Drawing.Point(6, 207);
-			this.labelSetSilverBadgeDaysThreshold.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.labelSetSilverBadgeDaysThreshold.Name = "labelSetSilverBadgeDaysThreshold";
-			this.labelSetSilverBadgeDaysThreshold.Size = new System.Drawing.Size(172, 15);
-			this.labelSetSilverBadgeDaysThreshold.TabIndex = 7;
-			this.labelSetSilverBadgeDaysThreshold.Text = "xxSetSilverBadgeDaysThreshold";
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.AutoSize = true;
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Location = new System.Drawing.Point(6, 207);
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Name = "labelOneSilverBadgeEqualsBronzeBadgeCount";
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Size = new System.Drawing.Size(236, 15);
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.TabIndex = 7;
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Text = "xxOneSilverBadgeEqualsBronzeBadgeCount";
 			// 
-			// numericUpDownGoldenBadgeDaysThreshold
+			// numericUpDownGoldenToSilverBadgeRate
 			// 
-			this.numericUpDownGoldenBadgeDaysThreshold.Location = new System.Drawing.Point(268, 237);
-			this.numericUpDownGoldenBadgeDaysThreshold.Name = "numericUpDownGoldenBadgeDaysThreshold";
-			this.numericUpDownGoldenBadgeDaysThreshold.Size = new System.Drawing.Size(175, 23);
-			this.numericUpDownGoldenBadgeDaysThreshold.TabIndex = 6;
+			this.numericUpDownGoldenToSilverBadgeRate.Location = new System.Drawing.Point(268, 237);
+			this.numericUpDownGoldenToSilverBadgeRate.Name = "numericUpDownGoldenToSilverBadgeRate";
+			this.numericUpDownGoldenToSilverBadgeRate.Size = new System.Drawing.Size(175, 23);
+			this.numericUpDownGoldenToSilverBadgeRate.TabIndex = 6;
 			// 
-			// numericUpDownSilverBadgeDaysThreshold
+			// numericUpDownSilverToBronzeBadgeRate
 			// 
-			this.numericUpDownSilverBadgeDaysThreshold.Location = new System.Drawing.Point(268, 202);
-			this.numericUpDownSilverBadgeDaysThreshold.Name = "numericUpDownSilverBadgeDaysThreshold";
-			this.numericUpDownSilverBadgeDaysThreshold.Size = new System.Drawing.Size(175, 23);
-			this.numericUpDownSilverBadgeDaysThreshold.TabIndex = 5;
+			this.numericUpDownSilverToBronzeBadgeRate.Location = new System.Drawing.Point(268, 202);
+			this.numericUpDownSilverToBronzeBadgeRate.Name = "numericUpDownSilverToBronzeBadgeRate";
+			this.numericUpDownSilverToBronzeBadgeRate.Size = new System.Drawing.Size(175, 23);
+			this.numericUpDownSilverToBronzeBadgeRate.TabIndex = 5;
 			// 
 			// numericUpDownThresholdForAnsweredCalls
 			// 
@@ -207,11 +207,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
 			this.timeSpanTextBoxThresholdForAHT.MaximumValue = System.TimeSpan.Parse("1.00:00:00");
 			this.timeSpanTextBoxThresholdForAHT.Name = "timeSpanTextBoxThresholdForAHT";
-			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(237, 25);
+			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(275, 25);
 			this.timeSpanTextBoxThresholdForAHT.TabIndex = 3;
 			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 272;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 175;
 			// 
 			// checkBoxEnableBadge
 			// 
@@ -244,11 +244,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxCalculationTime.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
 			this.timeSpanTextBoxCalculationTime.MaximumValue = System.TimeSpan.Parse("23:59:00");
 			this.timeSpanTextBoxCalculationTime.Name = "timeSpanTextBoxCalculationTime";
-			this.timeSpanTextBoxCalculationTime.Size = new System.Drawing.Size(237, 29);
+			this.timeSpanTextBoxCalculationTime.Size = new System.Drawing.Size(275, 29);
 			this.timeSpanTextBoxCalculationTime.TabIndex = 1;
 			this.timeSpanTextBoxCalculationTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxCalculationTime.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxCalculationTime.TimeSpanBoxWidth = 272;
+			this.timeSpanTextBoxCalculationTime.TimeSpanBoxWidth = 175;
 			// 
 			// labelSplitter1
 			// 
@@ -259,6 +259,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSplitter1.Name = "labelSplitter1";
 			this.labelSplitter1.Size = new System.Drawing.Size(597, 2);
 			this.labelSplitter1.TabIndex = 16;
+			// 
+			// labelSplitter2
+			// 
+			this.labelSplitter2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelSplitter2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.tableLayoutPanelBody.SetColumnSpan(this.labelSplitter2, 2);
+			this.labelSplitter2.Location = new System.Drawing.Point(6, 194);
+			this.labelSplitter2.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+			this.labelSplitter2.Name = "labelSplitter2";
+			this.labelSplitter2.Size = new System.Drawing.Size(597, 2);
+			this.labelSplitter2.TabIndex = 17;
 			// 
 			// gradientPanelHeader
 			// 
@@ -350,17 +361,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.buttonDeleteContract.TabIndex = 7;
 			this.buttonDeleteContract.TabStop = false;
 			// 
-			// labelSplitter2
-			// 
-			this.labelSplitter2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelSplitter2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.tableLayoutPanelBody.SetColumnSpan(this.labelSplitter2, 2);
-			this.labelSplitter2.Location = new System.Drawing.Point(6, 194);
-			this.labelSplitter2.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
-			this.labelSplitter2.Name = "labelSplitter2";
-			this.labelSplitter2.Size = new System.Drawing.Size(597, 2);
-			this.labelSplitter2.TabIndex = 17;
-			// 
 			// BadgeThresholdSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -374,8 +374,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBody.ResumeLayout(false);
 			this.tableLayoutPanelBody.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxThresholdForAdherence)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldenBadgeDaysThreshold)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownSilverBadgeDaysThreshold)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldenToSilverBadgeRate)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownSilverToBronzeBadgeRate)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdForAnsweredCalls)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
 			this.gradientPanelHeader.ResumeLayout(false);
@@ -399,10 +399,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private Syncfusion.Windows.Forms.ButtonAdv buttonDeleteContract;
 		private System.Windows.Forms.Label labelSetThresholdForAHT;
 		private System.Windows.Forms.Label labelSetThresholdForAdherence;
-		private System.Windows.Forms.Label labelSetSilverBadgeDaysThreshold;
-		private System.Windows.Forms.Label labelSetGoldBadgeDaysThreshold;
-		private System.Windows.Forms.NumericUpDown numericUpDownGoldenBadgeDaysThreshold;
-		private System.Windows.Forms.NumericUpDown numericUpDownSilverBadgeDaysThreshold;
+		private System.Windows.Forms.Label labelOneSilverBadgeEqualsBronzeBadgeCount;
+		private System.Windows.Forms.Label labelOneGoldBadgeEqualsSilverBadgeCount;
+		private System.Windows.Forms.NumericUpDown numericUpDownGoldenToSilverBadgeRate;
+		private System.Windows.Forms.NumericUpDown numericUpDownSilverToBronzeBadgeRate;
 		private System.Windows.Forms.NumericUpDown numericUpDownThresholdForAnsweredCalls;
 		private Controls.TimeSpanTextBox timeSpanTextBoxThresholdForAHT;
 		private Syncfusion.Windows.Forms.Tools.DoubleTextBox doubleTextBoxThresholdForAdherence;

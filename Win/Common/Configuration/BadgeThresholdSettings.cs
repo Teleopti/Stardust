@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				AdherenceThreshold = new Percent(0.75),
 				AnsweredCallsThreshold = 100,
 				AHTThreshold = new TimeSpan(0, 5, 0),
-				SilverBadgeDaysThreshold = 5,
-				GoldBadgeDaysThreshold = 10
+				SilverToBronzeBadgeRate = 5,
+				GoldToSilverBadgeRate = 2
 			};
 
 			checkBoxEnableBadge.Checked = settings.EnableBadge;
@@ -70,8 +70,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			doubleTextBoxThresholdForAdherence.DoubleValue = settings.AdherenceThreshold.Value;
 			timeSpanTextBoxThresholdForAHT.SetInitialResolution(settings.AHTThreshold);
 			numericUpDownThresholdForAnsweredCalls.Value = settings.AnsweredCallsThreshold;
-			numericUpDownGoldenBadgeDaysThreshold.Value = settings.GoldBadgeDaysThreshold;
-			numericUpDownSilverBadgeDaysThreshold.Value = settings.SilverBadgeDaysThreshold;
+			numericUpDownSilverToBronzeBadgeRate.Value = settings.SilverToBronzeBadgeRate;
+			numericUpDownGoldenToSilverBadgeRate.Value = settings.GoldToSilverBadgeRate;
 
 			setControlsEnabled(settings.EnableBadge);
 		}
@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue);
 			settings.AHTThreshold = timeSpanTextBoxThresholdForAHT.Value;
 			settings.AnsweredCallsThreshold = (int)numericUpDownThresholdForAnsweredCalls.Value;
-			settings.GoldBadgeDaysThreshold = (int)numericUpDownGoldenBadgeDaysThreshold.Value;
-			settings.SilverBadgeDaysThreshold = (int)numericUpDownSilverBadgeDaysThreshold.Value;
+			settings.GoldToSilverBadgeRate = (int)numericUpDownGoldenToSilverBadgeRate.Value;
+			settings.SilverToBronzeBadgeRate = (int)numericUpDownSilverToBronzeBadgeRate.Value;
 
 			_repository.Add(settings);
 		}
@@ -123,8 +123,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			doubleTextBoxThresholdForAdherence.Enabled = enabled;
 			timeSpanTextBoxThresholdForAHT.Enabled = enabled;
 			numericUpDownThresholdForAnsweredCalls.Enabled = enabled;
-			numericUpDownGoldenBadgeDaysThreshold.Enabled = enabled;
-			numericUpDownSilverBadgeDaysThreshold.Enabled = enabled;
+			numericUpDownSilverToBronzeBadgeRate.Enabled = enabled;
+			numericUpDownGoldenToSilverBadgeRate.Enabled = enabled;
 		}
     }
 }

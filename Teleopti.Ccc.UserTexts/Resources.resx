@@ -12153,13 +12153,13 @@ Reduce the complexity to use these shifts.</value>
     <value>Adherence Threshold: </value>
     <comment>Label for Badge Threshold for Adherence setting</comment>
   </data>
-  <data name="SetSilverBadgeDaysThreshold" xml:space="preserve">
-    <value>Silver Badge Days Threshold: </value>
-    <comment>Label for Silver Badge Days Threshold setting</comment>
+  <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
+    <value>A silver badge equals bronze badge count: </value>
+    <comment>Label for silver badge to bronze badge rate</comment>
   </data>
-  <data name="SetGoldBadgeDaysThreshold" xml:space="preserve">
-    <value>Gold Badge Days Threshold: </value>
-    <comment>Label for Gold Badge Days Threshold setting</comment>
+  <data name="OneGoldBadgeEqualsSilverBadgeCount" xml:space="preserve">
+    <value>A gold badge equals silver badge count: </value>
+    <comment>Label for gold badge to silver badge rate</comment>
   </data>
   <data name="EnableBadge" xml:space="preserve">
     <value>Enable agent badge</value>

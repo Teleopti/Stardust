@@ -3612,7 +3612,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Badge calculation time.
+        ///   Looks up a localized string similar to Badge calculation time:.
         /// </summary>
         public static string CalculationTime {
             get {
@@ -15670,6 +15670,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A gold badge equals silver badge count: .
+        /// </summary>
+        public static string OneGoldBadgeEqualsSilverBadgeCount {
+            get {
+                return ResourceManager.GetString("OneGoldBadgeEqualsSilverBadgeCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to One or more messages were too long. Please try a shorter message..
         /// </summary>
         public static string OneOrMoreMessagesWereTooLongPleaseTryAShorterMessage {
@@ -15693,6 +15702,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OneRoleAvailable {
             get {
                 return ResourceManager.GetString("OneRoleAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A silver badge equals bronze badge count: .
+        /// </summary>
+        public static string OneSilverBadgeEqualsBronzeBadgeCount {
+            get {
+                return ResourceManager.GetString("OneSilverBadgeEqualsBronzeBadgeCount", resourceCulture);
             }
         }
         
@@ -21906,15 +21924,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gold Badge Days Threshold: .
-        /// </summary>
-        public static string SetGoldBadgeDaysThreshold {
-            get {
-                return ResourceManager.GetString("SetGoldBadgeDaysThreshold", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Set KPI Targets.
         /// </summary>
         public static string SetKPITargets {
@@ -21965,15 +21974,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SetScorecards {
             get {
                 return ResourceManager.GetString("SetScorecards", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Silver Badge Days Threshold: .
-        /// </summary>
-        public static string SetSilverBadgeDaysThreshold {
-            get {
-                return ResourceManager.GetString("SetSilverBadgeDaysThreshold", resourceCulture);
             }
         }
         

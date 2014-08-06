@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				nextCalculateDate = tomorrowForTimezone.ToLocalTime();
 				_lastCalculatedDates[keyName] = nextCalculateDate;
 				var peopleGotABadge = calculator.Calculate(statisticUow, allAgents, timezone.Id, yesterdayForTimezone,
-					adherenceCalculationMethod, agentBadgeSetting.SilverBadgeDaysThreshold, agentBadgeSetting.GoldBadgeDaysThreshold);
+					adherenceCalculationMethod, agentBadgeSetting.SilverToBronzeBadgeRate, agentBadgeSetting.GoldToSilverBadgeRate);
 				foreach (var person in peopleGotABadge)
 				{
 					SendPushMessageService

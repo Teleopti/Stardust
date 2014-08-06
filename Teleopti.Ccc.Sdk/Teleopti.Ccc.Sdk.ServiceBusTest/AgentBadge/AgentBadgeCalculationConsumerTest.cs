@@ -110,8 +110,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				new AgentBadgeThresholdSettings
 				{
 					EnableBadge = true,
-					SilverBadgeDaysThreshold = 5,
-					GoldBadgeDaysThreshold = 10
+					SilverToBronzeBadgeRate = 5,
+					GoldToSilverBadgeRate = 2
 				}
 			});
 
