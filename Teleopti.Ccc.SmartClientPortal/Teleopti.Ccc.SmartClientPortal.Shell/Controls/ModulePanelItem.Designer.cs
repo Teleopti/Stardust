@@ -31,9 +31,9 @@
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.panelImage = new System.Windows.Forms.Panel();
+			this.pictureBoxIcon = new System.Windows.Forms.PictureBox();
 			this.labelModuleText = new System.Windows.Forms.Label();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-			this.pictureBoxIcon = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.panelImage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBoxIcon)).BeginInit();
@@ -73,6 +73,18 @@
 			this.panelImage.MouseEnter += new System.EventHandler(this.onMouseEnter);
 			this.panelImage.MouseLeave += new System.EventHandler(this.onMouseLeave);
 			// 
+			// pictureBoxIcon
+			// 
+			this.pictureBoxIcon.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pictureBoxIcon.Location = new System.Drawing.Point(0, 0);
+			this.pictureBoxIcon.Name = "pictureBoxIcon";
+			this.pictureBoxIcon.Size = new System.Drawing.Size(32, 32);
+			this.pictureBoxIcon.TabIndex = 1;
+			this.pictureBoxIcon.TabStop = false;
+			this.pictureBoxIcon.Click += new System.EventHandler(this.onClick);
+			this.pictureBoxIcon.MouseEnter += new System.EventHandler(this.onMouseEnter);
+			this.pictureBoxIcon.MouseLeave += new System.EventHandler(this.onMouseLeave);
+			// 
 			// labelModuleText
 			// 
 			this.labelModuleText.AutoSize = true;
@@ -91,15 +103,6 @@
 			// toolTip1
 			// 
 			this.toolTip1.Active = false;
-			// 
-			// pictureBoxIcon
-			// 
-			this.pictureBoxIcon.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.pictureBoxIcon.Location = new System.Drawing.Point(0, 0);
-			this.pictureBoxIcon.Name = "pictureBoxIcon";
-			this.pictureBoxIcon.Size = new System.Drawing.Size(32, 32);
-			this.pictureBoxIcon.TabIndex = 1;
-			this.pictureBoxIcon.TabStop = false;
 			// 
 			// ModulePanelItem
 			// 
