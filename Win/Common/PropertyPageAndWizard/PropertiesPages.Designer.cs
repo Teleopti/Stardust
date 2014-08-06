@@ -29,71 +29,34 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Wizard");
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PropertiesPages));
-			this.treeViewPages = new System.Windows.Forms.TreeView();
-			this.splitContainerPages = new System.Windows.Forms.SplitContainer();
 			this.buttonOK = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.splitContainerHorizontal = new System.Windows.Forms.SplitContainer();
+			this.splitContainerPages = new System.Windows.Forms.SplitContainer();
+			this.treeViewPages = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
 			this.tableLayoutPanelButtonsRtl = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainerPages)).BeginInit();
-			this.splitContainerPages.Panel1.SuspendLayout();
-			this.splitContainerPages.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerHorizontal)).BeginInit();
 			this.splitContainerHorizontal.Panel1.SuspendLayout();
 			this.splitContainerHorizontal.Panel2.SuspendLayout();
 			this.splitContainerHorizontal.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainerPages)).BeginInit();
+			this.splitContainerPages.Panel1.SuspendLayout();
+			this.splitContainerPages.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.treeViewPages)).BeginInit();
 			this.tableLayoutPanelButtonsRtl.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// treeViewPages
-			// 
-			this.treeViewPages.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.treeViewPages.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.treeViewPages.FullRowSelect = true;
-			this.treeViewPages.Location = new System.Drawing.Point(12, 12);
-			this.treeViewPages.Name = "treeViewPages";
-			treeNode1.Name = "Node0";
-			treeNode1.Text = "Wizard";
-			this.treeViewPages.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
-			this.treeViewPages.ShowPlusMinus = false;
-			this.treeViewPages.ShowRootLines = false;
-			this.treeViewPages.Size = new System.Drawing.Size(147, 411);
-			this.treeViewPages.TabIndex = 0;
-			this.treeViewPages.TabStop = false;
-			this.treeViewPages.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewPages_AfterSelect);
-			// 
-			// splitContainerPages
-			// 
-			this.splitContainerPages.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainerPages.IsSplitterFixed = true;
-			this.splitContainerPages.Location = new System.Drawing.Point(0, 0);
-			this.splitContainerPages.Name = "splitContainerPages";
-			// 
-			// splitContainerPages.Panel1
-			// 
-			this.splitContainerPages.Panel1.Controls.Add(this.treeViewPages);
-			this.splitContainerPages.Panel1.Padding = new System.Windows.Forms.Padding(12);
-			this.splitContainerPages.Panel1MinSize = 120;
-			this.splitContainerPages.Size = new System.Drawing.Size(627, 435);
-			this.splitContainerPages.SplitterDistance = 171;
-			this.splitContainerPages.SplitterWidth = 1;
-			this.splitContainerPages.TabIndex = 6;
-			this.splitContainerPages.TabStop = false;
 			// 
 			// buttonOK
 			// 
 			this.buttonOK.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonOK.BeforeTouchSize = new System.Drawing.Size(99, 23);
+			this.buttonOK.BeforeTouchSize = new System.Drawing.Size(99, 27);
 			this.buttonOK.ForeColor = System.Drawing.Color.White;
 			this.buttonOK.IsBackStageButton = false;
-			this.buttonOK.Location = new System.Drawing.Point(412, 3);
+			this.buttonOK.Location = new System.Drawing.Point(412, 7);
 			this.buttonOK.Name = "buttonOK";
-			this.buttonOK.Size = new System.Drawing.Size(99, 23);
+			this.buttonOK.Size = new System.Drawing.Size(99, 27);
 			this.buttonOK.TabIndex = 2;
 			this.buttonOK.Text = "xxOk";
 			this.buttonOK.UseVisualStyle = true;
@@ -116,11 +79,62 @@
 			// splitContainerHorizontal.Panel2
 			// 
 			this.splitContainerHorizontal.Panel2.Controls.Add(this.tableLayoutPanelButtonsRtl);
-			this.splitContainerHorizontal.Size = new System.Drawing.Size(627, 466);
-			this.splitContainerHorizontal.SplitterDistance = 435;
+			this.splitContainerHorizontal.Size = new System.Drawing.Size(627, 462);
+			this.splitContainerHorizontal.SplitterDistance = 419;
 			this.splitContainerHorizontal.SplitterWidth = 1;
 			this.splitContainerHorizontal.TabIndex = 8;
 			this.splitContainerHorizontal.TabStop = false;
+			// 
+			// splitContainerPages
+			// 
+			this.splitContainerPages.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainerPages.Location = new System.Drawing.Point(0, 0);
+			this.splitContainerPages.Name = "splitContainerPages";
+			// 
+			// splitContainerPages.Panel1
+			// 
+			this.splitContainerPages.Panel1.Controls.Add(this.treeViewPages);
+			this.splitContainerPages.Panel1.Padding = new System.Windows.Forms.Padding(12);
+			this.splitContainerPages.Panel1MinSize = 120;
+			this.splitContainerPages.Size = new System.Drawing.Size(627, 419);
+			this.splitContainerPages.SplitterDistance = 171;
+			this.splitContainerPages.SplitterWidth = 1;
+			this.splitContainerPages.TabIndex = 6;
+			this.splitContainerPages.TabStop = false;
+			// 
+			// treeViewPages
+			// 
+			this.treeViewPages.BackColor = System.Drawing.Color.White;
+			this.treeViewPages.BeforeTouchSize = new System.Drawing.Size(147, 395);
+			this.treeViewPages.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
+			this.treeViewPages.BorderColor = System.Drawing.Color.Transparent;
+			this.treeViewPages.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.treeViewPages.CanSelectDisabledNode = false;
+			this.treeViewPages.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeViewPages.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+			// 
+			// 
+			// 
+			this.treeViewPages.HelpTextControl.Location = new System.Drawing.Point(0, 0);
+			this.treeViewPages.HelpTextControl.Name = "helpText";
+			this.treeViewPages.HelpTextControl.TabIndex = 0;
+			this.treeViewPages.Location = new System.Drawing.Point(12, 12);
+			this.treeViewPages.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.treeViewPages.Name = "treeViewPages";
+			this.treeViewPages.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
+			this.treeViewPages.ShowFocusRect = false;
+			this.treeViewPages.ShowPlusMinus = false;
+			this.treeViewPages.ShowRootLines = false;
+			this.treeViewPages.Size = new System.Drawing.Size(147, 395);
+			this.treeViewPages.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
+			this.treeViewPages.TabIndex = 0;
+			this.treeViewPages.TabStop = false;
+			// 
+			// 
+			// 
+			this.treeViewPages.ToolTipControl.Location = new System.Drawing.Point(0, 0);
+			this.treeViewPages.ToolTipControl.Name = "toolTip";
+			this.treeViewPages.ToolTipControl.TabIndex = 1;
 			// 
 			// tableLayoutPanelButtonsRtl
 			// 
@@ -134,7 +148,7 @@
 			this.tableLayoutPanelButtonsRtl.Name = "tableLayoutPanelButtonsRtl";
 			this.tableLayoutPanelButtonsRtl.RowCount = 1;
 			this.tableLayoutPanelButtonsRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(627, 30);
+			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(627, 42);
 			this.tableLayoutPanelButtonsRtl.TabIndex = 4;
 			// 
 			// buttonCancel
@@ -142,13 +156,13 @@
 			this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonCancel.BeforeTouchSize = new System.Drawing.Size(99, 23);
+			this.buttonCancel.BeforeTouchSize = new System.Drawing.Size(99, 27);
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonCancel.IsBackStageButton = false;
-			this.buttonCancel.Location = new System.Drawing.Point(525, 3);
+			this.buttonCancel.Location = new System.Drawing.Point(525, 7);
 			this.buttonCancel.Name = "buttonCancel";
-			this.buttonCancel.Size = new System.Drawing.Size(99, 23);
+			this.buttonCancel.Size = new System.Drawing.Size(99, 27);
 			this.buttonCancel.TabIndex = 3;
 			this.buttonCancel.Text = "xxCancel";
 			this.buttonCancel.UseVisualStyle = true;
@@ -159,26 +173,31 @@
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(627, 466);
+			this.BorderColor = System.Drawing.Color.Blue;
+			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ClientSize = new System.Drawing.Size(627, 462);
 			this.Controls.Add(this.splitContainerHorizontal);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.HelpButton = false;
 			this.MaximizeBox = false;
 			this.MaximumSize = new System.Drawing.Size(639, 502);
+			this.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(639, 502);
 			this.Name = "PropertiesPages";
 			this.ShowIcon = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "xxProperties";
-			this.Load += new System.EventHandler(this.PropertiesPages_Load);
-			this.splitContainerPages.Panel1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.splitContainerPages)).EndInit();
-			this.splitContainerPages.ResumeLayout(false);
+			this.Load += new System.EventHandler(this.propertiesPagesLoad);
 			this.splitContainerHorizontal.Panel1.ResumeLayout(false);
 			this.splitContainerHorizontal.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerHorizontal)).EndInit();
 			this.splitContainerHorizontal.ResumeLayout(false);
+			this.splitContainerPages.Panel1.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.splitContainerPages)).EndInit();
+			this.splitContainerPages.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.treeViewPages)).EndInit();
 			this.tableLayoutPanelButtonsRtl.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -186,7 +205,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeViewPages;
+		private Syncfusion.Windows.Forms.Tools.TreeViewAdv treeViewPages;
         private System.Windows.Forms.SplitContainer splitContainerPages;
         private Syncfusion.Windows.Forms.ButtonAdv buttonOK;
         private System.Windows.Forms.SplitContainer splitContainerHorizontal;
