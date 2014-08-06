@@ -15,28 +15,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	{
 		private readonly IServiceBus _serviceBus;
 		private readonly IRepositoryFactory _repositoryFactory;
-		private readonly IAgentBadgeCalculator _calculator;
 
 		public AgentBadgeCalculationConsumer(IServiceBus serviceBus, IRepositoryFactory repositoryFactory)
 		{
 			_serviceBus = serviceBus;
 			_repositoryFactory = repositoryFactory;
-			if (_repositoryFactory != null)
-			{
-				_calculator = new AgentBadgeCalculator(_repositoryFactory.CreateStatisticRepository());
-			}
-			_calculator.LastCalculatedDates = new Dictionary<int, DateTime>();
 		}
 
 		public void Consume(AgentBadgeCalculateMessage message)
 		{
-			foreach (
-				var dataSource in
-					GetRegisteredDataSourceCollection()
-						.Where(dataSource => dataSource.Statistic != null && dataSource.Application != null))
+			foreach (var dataSource in GetValidDataSources())
 			{
 				using (var appuow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
+					var calculator = new AgentBadgeCalculator(_repositoryFactory.CreateStatisticRepository());
+
 					var agentBadgeSetting = _repositoryFactory.CreateAgentBadgeSettingsRepository(appuow).LoadAll().FirstOrDefault();
 					if (agentBadgeSetting == null || !agentBadgeSetting.EnableBadge)
 					{
@@ -55,6 +48,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						continue;
 					}
 
+					var silverBadgeRate = agentBadgeSetting.SilverBadgeDaysThreshold;
+					var goldBadgeRate = agentBadgeSetting.GoldBadgeDaysThreshold;
+
 					var adherenceReportSetting = _repositoryFactory.CreateGlobalSettingDataRepository(appuow)
 						.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 					var allAgents = _repositoryFactory.CreatePersonRepository(appuow).LoadAll();
@@ -70,13 +66,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 								var yesterdayForTimezone = todayForTimezone.AddDays(-1);
 								var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Distance);
 
-								var peopleGotABadge = _calculator.Calculate(uow, allAgents, timezone.Id, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
-								_calculator.LastCalculatedDates.Add(timezone.Id, yesterdayForTimezone);
+								var peopleGotABadge = calculator.Calculate(uow, allAgents, timezone.Id, yesterdayForTimezone,
+									adherenceReportSetting.CalculationMethod, silverBadgeRate, goldBadgeRate);
+								calculator.LastCalculatedDates.Add(timezone.Id, yesterdayForTimezone);
 								foreach (var person in peopleGotABadge)
 								{
-									SendPushMessageService.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false)
-									.To(person)
-									.SendConversation(_repositoryFactory.CreatePushMessageRepository(appuow));
+									SendPushMessageService
+										.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false)
+										.To(person)
+										.SendConversation(_repositoryFactory.CreatePushMessageRepository(appuow));
 									appuow.PersistAll();
 								}
 								if (_serviceBus != null)
@@ -99,24 +97,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 							var yesterdayForTimezone = todayForTimezone.AddDays(-1);
 							var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Distance);
 							DateTime nextCalculateDate;
-							if (!_calculator.LastCalculatedDates.ContainsKey(timezone.Id))
+							if (!calculator.LastCalculatedDates.ContainsKey(timezone.Id))
 							{
-								_calculator.LastCalculatedDates.Add(timezone.Id, tomorrowForTimezone.AddDays(-1).ToLocalTime());
+								calculator.LastCalculatedDates.Add(timezone.Id, tomorrowForTimezone.AddDays(-1).ToLocalTime());
 							}
-							if (_calculator.LastCalculatedDates[timezone.Id] == tomorrowForTimezone.ToLocalTime())
+							if (calculator.LastCalculatedDates[timezone.Id] == tomorrowForTimezone.ToLocalTime())
 							{
 								nextCalculateDate = tomorrowForTimezone.AddDays(1).ToLocalTime();
 							}
 							else
 							{
 								nextCalculateDate = tomorrowForTimezone.ToLocalTime();
-								_calculator.LastCalculatedDates[timezone.Id] = nextCalculateDate;
-								var peopleGotABadge = _calculator.Calculate(uow, allAgents, timezone.Id, yesterdayForTimezone, adherenceReportSetting.CalculationMethod);
+								calculator.LastCalculatedDates[timezone.Id] = nextCalculateDate;
+								var peopleGotABadge = calculator.Calculate(uow, allAgents, timezone.Id, yesterdayForTimezone,
+									adherenceReportSetting.CalculationMethod, silverBadgeRate, goldBadgeRate);
 								foreach (var person in peopleGotABadge)
 								{
-									SendPushMessageService.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false)
-									.To(person)
-									.SendConversation(_repositoryFactory.CreatePushMessageRepository(appuow));
+									SendPushMessageService
+										.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false)
+										.To(person)
+										.SendConversation(_repositoryFactory.CreatePushMessageRepository(appuow));
 									appuow.PersistAll();
 								}
 							}
@@ -136,9 +136,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		}
 		}
 
-		protected virtual IEnumerable<IDataSource> GetRegisteredDataSourceCollection()
+		protected virtual IEnumerable<IDataSource> GetValidDataSources()
 		{
-			return StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection;
+			return StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection
+				.Where(dataSource => dataSource.Statistic != null && dataSource.Application != null);
 		}
 	}
 }

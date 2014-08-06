@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_dataSource = dataSource;
 		}
 
-		protected override IEnumerable<IDataSource> GetRegisteredDataSourceCollection()
+		protected override IEnumerable<IDataSource> GetValidDataSources()
 		{
 			return new[] { _dataSource };
 		}

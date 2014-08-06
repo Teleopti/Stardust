@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -13,17 +11,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	public class AgentBadgeCalculator : IAgentBadgeCalculator
 	{
 		private readonly IStatisticRepository _statisticRepository;
-		private const int silverBadgeRate = 5;
-		private const int goldBadgeRate = 10;
-		private const int goldToSilverBadgeRate = goldBadgeRate/silverBadgeRate;
+
+		public IDictionary<int, DateTime> LastCalculatedDates { get; set; }
 
 		public AgentBadgeCalculator(IStatisticRepository statisticRepository)
 		{
 			_statisticRepository = statisticRepository;
+
+			LastCalculatedDates = new Dictionary<int, DateTime>();
 		}
 
-		protected IList<IPerson> addBadge(IEnumerable<IPerson> allPersons, IEnumerable<Guid> agentsThatShouldGetBadge, BadgeType badgeType)
+		protected IList<IPerson> AddBadge(IEnumerable<IPerson> allPersons, IEnumerable<Guid> agentsThatShouldGetBadge, BadgeType badgeType,
+			int silverBadgeRate, int goldBadgeRate)
 		{
+			var goldToSilverBadgeRate = goldBadgeRate/silverBadgeRate;
+
 			var personsThatGotABadge = new List<IPerson>();
 			if (agentsThatShouldGetBadge != null)
 			{
@@ -84,33 +86,32 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return personsThatGotABadge;
 		}
 
-		public IEnumerable<IPerson> Calculate(IStatelessUnitOfWork unitOfWork, IEnumerable<IPerson> allPersons, int timezoneId, DateTime date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
+		public IEnumerable<IPerson> Calculate(IStatelessUnitOfWork unitOfWork, IEnumerable<IPerson> allPersons, int timezoneId,
+			DateTime date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int silverBadgeRate, int goldBadgeRate)
 		{
 			var personsThatGotBadge = new List<IPerson>();
 			var agents = _statisticRepository.LoadAgentsOverThresholdForAdherence(unitOfWork, adherenceCalculationMethod, timezoneId, date);
 			if (agents != null)
 			{
-				var personsThatGotAAdherenceBadge = addBadge(allPersons, agents, BadgeType.Adherence);
+				var personsThatGotAAdherenceBadge = AddBadge(allPersons, agents, BadgeType.Adherence, silverBadgeRate, goldBadgeRate);
 				personsThatGotBadge.AddRange(personsThatGotAAdherenceBadge);
 			}
 
 			agents = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(unitOfWork, timezoneId, date);
 			if (agents != null)
 			{
-				var personsThatGotAAnsweredCallsBadge = addBadge(allPersons, agents, BadgeType.AnsweredCalls);
+				var personsThatGotAAnsweredCallsBadge = AddBadge(allPersons, agents, BadgeType.AnsweredCalls, silverBadgeRate, goldBadgeRate);
 				personsThatGotBadge.AddRange(personsThatGotAAnsweredCallsBadge);
 			}
 
 			agents = _statisticRepository.LoadAgentsUnderThresholdForAHT(unitOfWork, timezoneId, date);
 			if (agents != null)
 			{
-				var personsThatGotAAHTBadge = addBadge(allPersons, agents, BadgeType.AverageHandlingTime);
+				var personsThatGotAAHTBadge = AddBadge(allPersons, agents, BadgeType.AverageHandlingTime, silverBadgeRate, goldBadgeRate);
 				personsThatGotBadge.AddRange(personsThatGotAAHTBadge);
 			}
 
 			return personsThatGotBadge;
 		}
-
-		public IDictionary<int, DateTime> LastCalculatedDates { get; set; }
 	}
 }
