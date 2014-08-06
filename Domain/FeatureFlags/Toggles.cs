@@ -20,6 +20,7 @@
 
 		RTA_RtaLastStatesOverview_27789,
 		RTA_DrilldownToAllAgentsInOneTeam_25234,
+		RTA_MonitorMultipleBusinessUnits_28348,
 
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,
