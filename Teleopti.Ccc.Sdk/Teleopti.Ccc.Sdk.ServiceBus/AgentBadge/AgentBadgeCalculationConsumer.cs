@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
@@ -48,44 +49,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						continue;
 					}
 
-					var silverBadgeRate = agentBadgeSetting.SilverBadgeDaysThreshold;
-					var goldBadgeRate = agentBadgeSetting.GoldBadgeDaysThreshold;
-
 					var adherenceReportSetting = _repositoryFactory.CreateGlobalSettingDataRepository(appuow)
 						.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 					var allAgents = _repositoryFactory.CreatePersonRepository(appuow).LoadAll();
 
-					using (var uow = dataSource.Statistic.CreateAndOpenStatelessUnitOfWork())
+					using (var statisticUow = dataSource.Statistic.CreateAndOpenStatelessUnitOfWork())
 					{
-						var timeZoneList = _repositoryFactory.CreateStatisticRepository().LoadAllTimeZones(uow);
+						var timeZoneList = _repositoryFactory.CreateStatisticRepository().LoadAllTimeZones(statisticUow);
 						if (message.IsInitialization)
 						{
 							foreach (var timezone in timeZoneList)
 							{
-								var todayForTimezone = DateTime.UtcNow.Date;
-								var yesterdayForTimezone = todayForTimezone.AddDays(-1);
-								var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Distance);
-
-								var peopleGotABadge = calculator.Calculate(uow, allAgents, timezone.Id, yesterdayForTimezone,
-									adherenceReportSetting.CalculationMethod, silverBadgeRate, goldBadgeRate);
-								calculator.LastCalculatedDates.Add(timezone.Id, yesterdayForTimezone);
-								foreach (var person in peopleGotABadge)
-								{
-									SendPushMessageService
-										.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false)
-										.To(person)
-										.SendConversation(_repositoryFactory.CreatePushMessageRepository(appuow));
-									appuow.PersistAll();
-								}
-								if (_serviceBus != null)
-								{
-									var nextCalculateDate = tomorrowForTimezone.ToLocalTime().Add(agentBadgeSetting.CalculationTime);
-									_serviceBus.DelaySend(nextCalculateDate, new AgentBadgeCalculateMessage
-									{
-										IsInitialization = false,
-										TimezoneId = timezone.Id
-									});
-								}
+								calculateBadgeForTimeZone(statisticUow, appuow, timezone, calculator, agentBadgeSetting, allAgents,
+									adherenceReportSetting.CalculationMethod);
 							}
 						}
 						else
@@ -93,47 +69,57 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 							var timezone = timeZoneList.First(tz => tz.Id == message.TimezoneId);
 							if (timezone == null) continue;
 
-							var todayForTimezone = DateTime.UtcNow.Date;
-							var yesterdayForTimezone = todayForTimezone.AddDays(-1);
-							var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Distance);
-							DateTime nextCalculateDate;
-							if (!calculator.LastCalculatedDates.ContainsKey(timezone.Id))
-							{
-								calculator.LastCalculatedDates.Add(timezone.Id, tomorrowForTimezone.AddDays(-1).ToLocalTime());
-							}
-							if (calculator.LastCalculatedDates[timezone.Id] == tomorrowForTimezone.ToLocalTime())
-							{
-								nextCalculateDate = tomorrowForTimezone.AddDays(1).ToLocalTime();
-							}
-							else
-							{
-								nextCalculateDate = tomorrowForTimezone.ToLocalTime();
-								calculator.LastCalculatedDates[timezone.Id] = nextCalculateDate;
-								var peopleGotABadge = calculator.Calculate(uow, allAgents, timezone.Id, yesterdayForTimezone,
-									adherenceReportSetting.CalculationMethod, silverBadgeRate, goldBadgeRate);
-								foreach (var person in peopleGotABadge)
-								{
-									SendPushMessageService
-										.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false)
-										.To(person)
-										.SendConversation(_repositoryFactory.CreatePushMessageRepository(appuow));
-									appuow.PersistAll();
-								}
-							}
-
-							if (_serviceBus != null)
-							{
-								nextCalculateDate = nextCalculateDate.Add(agentBadgeSetting.CalculationTime);
-								_serviceBus.DelaySend(nextCalculateDate, new AgentBadgeCalculateMessage
-								{
-									IsInitialization = false,
-									TimezoneId = message.TimezoneId
-								});
-							}
+							calculateBadgeForTimeZone(statisticUow, appuow, timezone, calculator, agentBadgeSetting, allAgents,
+								adherenceReportSetting.CalculationMethod);
 						}
 					}
+				}
 			}
 		}
+
+		private void calculateBadgeForTimeZone(IStatelessUnitOfWork statisticUow, IUnitOfWork appuow, ISimpleTimeZone timezone,
+			AgentBadgeCalculator calculator, IAgentBadgeThresholdSettings agentBadgeSetting, IEnumerable<IPerson> allAgents,
+			AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
+		{
+			var todayForTimezone = DateTime.UtcNow.Date;
+			var yesterdayForTimezone = todayForTimezone.AddDays(-1);
+			var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Distance);
+			DateTime nextCalculateDate;
+
+			if (!calculator.LastCalculatedDates.ContainsKey(timezone.Id))
+			{
+				calculator.LastCalculatedDates.Add(timezone.Id, tomorrowForTimezone.AddDays(-1).ToLocalTime());
+			}
+
+			if (calculator.LastCalculatedDates[timezone.Id] == tomorrowForTimezone.ToLocalTime())
+			{
+				nextCalculateDate = tomorrowForTimezone.AddDays(1).ToLocalTime();
+			}
+			else
+			{
+				nextCalculateDate = tomorrowForTimezone.ToLocalTime();
+				calculator.LastCalculatedDates[timezone.Id] = nextCalculateDate;
+				var peopleGotABadge = calculator.Calculate(statisticUow, allAgents, timezone.Id, yesterdayForTimezone,
+					adherenceCalculationMethod, agentBadgeSetting.SilverBadgeDaysThreshold, agentBadgeSetting.GoldBadgeDaysThreshold);
+				foreach (var person in peopleGotABadge)
+				{
+					SendPushMessageService
+						.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false)
+						.To(person)
+						.SendConversation(_repositoryFactory.CreatePushMessageRepository(appuow));
+					appuow.PersistAll();
+				}
+			}
+
+			if (_serviceBus != null)
+			{
+				nextCalculateDate = nextCalculateDate.Add(agentBadgeSetting.CalculationTime);
+				_serviceBus.DelaySend(nextCalculateDate, new AgentBadgeCalculateMessage
+				{
+					IsInitialization = false,
+					TimezoneId = timezone.Id
+				});
+			}
 		}
 
 		protected virtual IEnumerable<IDataSource> GetValidDataSources()
