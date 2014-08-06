@@ -406,28 +406,6 @@ namespace Teleopti.Ccc.Win.Budgeting
 			_localEventAggregator.GetEvent<LoadStaffEmployed>().Publish("LoadStaffEmployed");
 		}
 
-		private void toolStripButtonHelp_Click(object sender, EventArgs e)
-		{
-			ViewBase.ShowHelp(this,false);
-		}
-
-		private void toolStripButtonClose_Click(object sender, EventArgs e)
-		{
-			Close();
-		}
-
-		private void toolStripButtonExit_Click(object sender, EventArgs e)
-		{
-            if (!CloseAllOtherForms(this))
-                return; // a form was canceled
-
-            Close();
-            ////this canceled
-            if (Visible)
-                return;
-            Application.Exit();
-		}
-   
 		public ViewType SelectedView
 		{
 			get
@@ -517,20 +495,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 					break;
 			}
 		}
-
-		private void toolStripButtonOptions_Click(object sender, EventArgs e)
-		{
-            try
-            {
-                var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
-                settings.Show();
-            }
-            catch (DataSourceException ex)
-            {
-                DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-            }
-		}
-
+		
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             const int WM_KEYDOWN = 0x100;
@@ -548,9 +513,41 @@ namespace Teleopti.Ccc.Win.Budgeting
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-		private void ribbonControlAdv1_Click(object sender, EventArgs e)
+		
+		private void backStageButton1Click(object sender, EventArgs e)
 		{
-
+			_localEventAggregator.GetEvent<SaveBudgetGroupDayView>().Publish("BudgetGroupMainView.btnSave_click");
 		}
+
+		private void backStageButton2Click(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		private void backStageButton3Click(object sender, EventArgs e)
+		{
+			try
+			{
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
+				settings.Show();
+			}
+			catch (DataSourceException ex)
+			{
+				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+			}
+		}
+
+		private void backStageButton4Click(object sender, EventArgs e)
+		{
+			if (!CloseAllOtherForms(this)) return;
+
+			Close();
+
+			////this canceled
+			if (Visible)
+				return;
+			Application.Exit();
+		}
+
 	}
 }

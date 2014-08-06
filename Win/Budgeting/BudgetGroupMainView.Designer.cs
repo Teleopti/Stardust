@@ -34,8 +34,17 @@ namespace Teleopti.Ccc.Win.Budgeting
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BudgetGroupMainView));
 			this.ribbonControlAdvFixed1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
+			this.backStageView1 = new Syncfusion.Windows.Forms.BackStageView(this.components);
+			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
+			this.backStageButton1 = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageSeparator1 = new Syncfusion.Windows.Forms.BackStageSeparator();
+			this.backStageButton2 = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageSeparator2 = new Syncfusion.Windows.Forms.BackStageSeparator();
+			this.backStageButton3 = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageButton4 = new Syncfusion.Windows.Forms.BackStageButton();
 			this.toolStripTabItem2 = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.toolStripEx1 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripExLoad = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
@@ -54,6 +63,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripSpinningProgressControlStatus = new Teleopti.Ccc.Win.Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdvFixed1)).BeginInit();
 			this.ribbonControlAdvFixed1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.backStage1)).BeginInit();
+			this.backStage1.SuspendLayout();
 			this.toolStripTabItem2.Panel.SuspendLayout();
 			this.toolStripExLoad.SuspendLayout();
 			this.toolStripExViews.SuspendLayout();
@@ -65,6 +76,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// 
 			// ribbonControlAdvFixed1
 			// 
+			this.ribbonControlAdvFixed1.BackStageView = this.backStageView1;
 			this.ribbonControlAdvFixed1.CaptionFont = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdvFixed1.Header.AddMainItem(toolStripTabItem2);
 			this.ribbonControlAdvFixed1.Header.AddMainItem(toolStripTabItem3);
@@ -73,8 +85,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			resources.ApplyResources(this.ribbonControlAdvFixed1, "ribbonControlAdvFixed1");
 			this.ribbonControlAdvFixed1.MaximizeToolTip = "Maximize Ribbon";
 			this.ribbonControlAdvFixed1.MenuButtonEnabled = true;
-			this.ribbonControlAdvFixed1.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ribbonControlAdvFixed1.MenuButtonText = "";
+			this.ribbonControlAdvFixed1.MenuButtonFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ribbonControlAdvFixed1.MenuButtonText = "File";
 			this.ribbonControlAdvFixed1.MenuButtonWidth = 56;
 			this.ribbonControlAdvFixed1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
 			this.ribbonControlAdvFixed1.MinimizeToolTip = "Minimize Ribbon";
@@ -96,7 +108,81 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.ribbonControlAdvFixed1.ShowRibbonDisplayOptionButton = false;
 			this.ribbonControlAdvFixed1.SystemText.QuickAccessDialogDropDownName = "Start menu";
 			this.ribbonControlAdvFixed1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
-			this.ribbonControlAdvFixed1.TitleColor = System.Drawing.Color.Black;
+			this.ribbonControlAdvFixed1.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.ribbonControlAdvFixed1.TitleFont = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
+			// 
+			// backStageView1
+			// 
+			this.backStageView1.BackStage = this.backStage1;
+			this.backStageView1.HostControl = null;
+			this.backStageView1.HostForm = this;
+			// 
+			// backStage1
+			// 
+			resources.ApplyResources(this.backStage1, "backStage1");
+			this.backStage1.AllowDrop = true;
+			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1217, 792);
+			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.backStage1.Controls.Add(this.backStageButton1);
+			this.backStage1.Controls.Add(this.backStageSeparator1);
+			this.backStage1.Controls.Add(this.backStageButton2);
+			this.backStage1.Controls.Add(this.backStageSeparator2);
+			this.backStage1.Controls.Add(this.backStageButton3);
+			this.backStage1.Controls.Add(this.backStageButton4);
+			this.backStage1.Name = "backStage1";
+			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
+			// 
+			// backStageButton1
+			// 
+			this.backStageButton1.Accelerator = "";
+			this.backStageButton1.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButton1.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButton1.IsBackStageButton = false;
+			resources.ApplyResources(this.backStageButton1, "backStageButton1");
+			this.backStageButton1.Name = "backStageButton1";
+			this.backStageButton1.Click += new System.EventHandler(this.backStageButton1Click);
+			// 
+			// backStageSeparator1
+			// 
+			this.backStageSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(189)))), ((int)(((byte)(255)))));
+			resources.ApplyResources(this.backStageSeparator1, "backStageSeparator1");
+			this.backStageSeparator1.Name = "backStageSeparator1";
+			// 
+			// backStageButton2
+			// 
+			this.backStageButton2.Accelerator = "";
+			this.backStageButton2.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButton2.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButton2.IsBackStageButton = false;
+			resources.ApplyResources(this.backStageButton2, "backStageButton2");
+			this.backStageButton2.Name = "backStageButton2";
+			this.backStageButton2.Click += new System.EventHandler(this.backStageButton2Click);
+			// 
+			// backStageSeparator2
+			// 
+			this.backStageSeparator2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(189)))), ((int)(((byte)(255)))));
+			resources.ApplyResources(this.backStageSeparator2, "backStageSeparator2");
+			this.backStageSeparator2.Name = "backStageSeparator2";
+			// 
+			// backStageButton3
+			// 
+			this.backStageButton3.Accelerator = "";
+			this.backStageButton3.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButton3.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButton3.IsBackStageButton = false;
+			resources.ApplyResources(this.backStageButton3, "backStageButton3");
+			this.backStageButton3.Name = "backStageButton3";
+			this.backStageButton3.Click += new System.EventHandler(this.backStageButton3Click);
+			// 
+			// backStageButton4
+			// 
+			this.backStageButton4.Accelerator = "";
+			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButton4.IsBackStageButton = false;
+			resources.ApplyResources(this.backStageButton4, "backStageButton4");
+			this.backStageButton4.Name = "backStageButton4";
+			this.backStageButton4.Click += new System.EventHandler(this.backStageButton4Click);
 			// 
 			// toolStripTabItem2
 			// 
@@ -269,6 +355,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.SetShortcut(this.toolStripButtonSave, System.Windows.Forms.Keys.None);
 			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripButtonSave, true);
 			this.ribbonControlAdvFixed1.SetUseInQuickAccessMenu(this.toolStripButtonSave, false);
+			this.toolStripButtonSave.Click += new System.EventHandler(this.btnSave_click);
 			// 
 			// gradientPanelMain
 			// 
@@ -280,7 +367,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// 
 			// statusStripEx1
 			// 
-			this.statusStripEx1.BeforeTouchSize = new System.Drawing.Size(1212, 22);
+			this.statusStripEx1.BeforeTouchSize = new System.Drawing.Size(1218, 22);
 			this.statusStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelBudgetGroupMainView,
             this.toolStripSpinningProgressControlStatus});
@@ -313,8 +400,9 @@ namespace Teleopti.Ccc.Win.Budgeting
 			resources.ApplyResources(this, "$this");
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
-			this.Borders = new System.Windows.Forms.Padding(3, 1, 3, 3);
+			this.Borders = new System.Windows.Forms.Padding(0);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
+			this.Controls.Add(this.backStage1);
 			this.Controls.Add(this.ribbonControlAdvFixed1);
 			this.Controls.Add(this.statusStripEx1);
 			this.Controls.Add(this.gradientPanelMain);
@@ -322,6 +410,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdvFixed1)).EndInit();
 			this.ribbonControlAdvFixed1.ResumeLayout(false);
 			this.ribbonControlAdvFixed1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.backStage1)).EndInit();
+			this.backStage1.ResumeLayout(false);
 			this.toolStripTabItem2.Panel.ResumeLayout(false);
 			this.toolStripTabItem2.Panel.PerformLayout();
 			this.toolStripExLoad.ResumeLayout(false);
@@ -340,6 +430,14 @@ namespace Teleopti.Ccc.Win.Budgeting
 
         #endregion
 
+		private Syncfusion.Windows.Forms.BackStageView backStageView1;
+		private Syncfusion.Windows.Forms.BackStage backStage1;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButton1;
+		private Syncfusion.Windows.Forms.BackStageSeparator backStageSeparator1;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButton2;
+		private Syncfusion.Windows.Forms.BackStageSeparator backStageSeparator2;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButton3;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButton4;
 		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelMain;
 		private Syncfusion.Windows.Forms.Tools.StatusStripEx statusStripEx1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelBudgetGroupMainView;

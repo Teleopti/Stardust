@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 
 		public static BrushInfo ReadOnlyBackgroundBrush
 		{
-			get { return new BrushInfo(GradientStyle.Vertical, Color.Gray, Color.Gray); } 
+			get { return new BrushInfo(GradientStyle.Vertical, Color.FromArgb(153, 153, 153), Color.FromArgb(153, 153, 153)); } 
 		}
 
 		public static Color DialogBackColor()

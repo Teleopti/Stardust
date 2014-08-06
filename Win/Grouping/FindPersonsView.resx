@@ -189,56 +189,128 @@
   <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="tableLayoutPanel2.ColumnCount" type="System.Int32, mscorlib">
-    <value>2</value>
+  <data name="&gt;&gt;groupBoxDateSelection.Name" xml:space="preserve">
+    <value>groupBoxDateSelection</value>
   </data>
-  <data name="dateTimePickerAdvTo.Calendar.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="&gt;&gt;groupBoxDateSelection.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="dateTimePickerAdvTo.Calendar.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt</value>
+  <data name="&gt;&gt;groupBoxDateSelection.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
   </data>
-  <data name="dateTimePickerAdvTo.Calendar.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="dateTimePickerAdvTo.Calendar.NoneButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>124, 1</value>
-  </data>
-  <data name="dateTimePickerAdvTo.Calendar.NoneButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 21</value>
-  </data>
-  <data name="dateTimePickerAdvTo.Calendar.NoneButton.Text" xml:space="preserve">
-    <value>None</value>
-  </data>
-  <data name="dateTimePickerAdvTo.Calendar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>209, 174</value>
-  </data>
-  <data name="dateTimePickerAdvTo.Calendar.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;groupBoxDateSelection.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="dateTimePickerAdvTo.Calendar.TodayButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 1</value>
+  <data name="&gt;&gt;textBoxExtFind.Name" xml:space="preserve">
+    <value>textBoxExtFind</value>
   </data>
-  <data name="dateTimePickerAdvTo.Calendar.TodayButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>122, 21</value>
+  <data name="&gt;&gt;textBoxExtFind.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.TextBoxExt, Syncfusion.Shared.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
-  <data name="dateTimePickerAdvTo.Calendar.TodayButton.Text" xml:space="preserve">
-    <value>Today</value>
+  <data name="&gt;&gt;textBoxExtFind.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
   </data>
-  <data name="dateTimePickerAdvTo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="&gt;&gt;textBoxExtFind.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;label3.Name" xml:space="preserve">
+    <value>label3</value>
+  </data>
+  <data name="&gt;&gt;label3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label3.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;treeViewAdvResult.Name" xml:space="preserve">
+    <value>treeViewAdvResult</value>
+  </data>
+  <data name="&gt;&gt;treeViewAdvResult.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.TreeViewAdv, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;treeViewAdvResult.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;treeViewAdvResult.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="dateTimePickerAdvTo.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9.75pt</value>
+  <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
   </data>
-  <data name="dateTimePickerAdvTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>110, 33</value>
+  <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
-  <data name="dateTimePickerAdvTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 24</value>
+  <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>306, 560</value>
   </data>
-  <data name="dateTimePickerAdvTo.TabIndex" type="System.Int32, mscorlib">
+  <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="groupBoxDateSelection" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="textBoxExtFind" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label3" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="treeViewAdvResult" Row="2" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Absolute,97,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.Name" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.Parent" xml:space="preserve">
+    <value>groupBoxDateSelection</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanel2.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label2" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dateTimePickerAdvTo" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="dateTimePickerAdvFrom" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Absolute,30,Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="groupBoxDateSelection.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="groupBoxDateSelection.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="groupBoxDateSelection.Size" type="System.Drawing.Size, System.Drawing">
+    <value>300, 91</value>
+  </data>
+  <data name="groupBoxDateSelection.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="groupBoxDateSelection.Text" xml:space="preserve">
+    <value>xxDateSelection</value>
+  </data>
+  <data name="&gt;&gt;groupBoxDateSelection.Name" xml:space="preserve">
+    <value>groupBoxDateSelection</value>
+  </data>
+  <data name="&gt;&gt;groupBoxDateSelection.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBoxDateSelection.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;groupBoxDateSelection.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanel2.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvTo.Name" xml:space="preserve">
     <value>dateTimePickerAdvTo</value>
@@ -251,54 +323,6 @@
   </data>
   <data name="&gt;&gt;dateTimePickerAdvTo.ZOrder" xml:space="preserve">
     <value>2</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Calendar.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Calendar.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Calendar.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Calendar.NoneButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>124, 1</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Calendar.NoneButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 21</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Calendar.NoneButton.Text" xml:space="preserve">
-    <value>None</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Calendar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>209, 174</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Calendar.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Calendar.TodayButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 1</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Calendar.TodayButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>122, 21</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Calendar.TodayButton.Text" xml:space="preserve">
-    <value>Today</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9.75pt</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>110, 3</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 24</value>
-  </data>
-  <data name="dateTimePickerAdvFrom.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
   </data>
   <data name="&gt;&gt;dateTimePickerAdvFrom.Name" xml:space="preserve">
     <value>dateTimePickerAdvFrom</value>
@@ -342,32 +366,125 @@
   <data name="tableLayoutPanel2.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label2" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dateTimePickerAdvTo" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="dateTimePickerAdvFrom" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Absolute,30,Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <data name="groupBoxDateSelection.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="dateTimePickerAdvTo.Calendar.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="groupBoxDateSelection.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
+  <data name="dateTimePickerAdvTo.Calendar.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt</value>
   </data>
-  <data name="groupBoxDateSelection.Size" type="System.Drawing.Size, System.Drawing">
-    <value>300, 91</value>
+  <data name="dateTimePickerAdvTo.Calendar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
   </data>
-  <data name="groupBoxDateSelection.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
+  <data name="dateTimePickerAdvTo.Calendar.NoneButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>95, 0</value>
   </data>
-  <data name="groupBoxDateSelection.Text" xml:space="preserve">
-    <value>xxDateSelection</value>
+  <data name="dateTimePickerAdvTo.Calendar.NoneButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>84, 25</value>
   </data>
-  <data name="&gt;&gt;groupBoxDateSelection.Name" xml:space="preserve">
-    <value>groupBoxDateSelection</value>
+  <data name="dateTimePickerAdvTo.Calendar.NoneButton.Text" xml:space="preserve">
+    <value>None</value>
   </data>
-  <data name="&gt;&gt;groupBoxDateSelection.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="dateTimePickerAdvTo.Calendar.Size" type="System.Drawing.Size, System.Drawing">
+    <value>179, 174</value>
   </data>
-  <data name="&gt;&gt;groupBoxDateSelection.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;groupBoxDateSelection.ZOrder" xml:space="preserve">
+  <data name="dateTimePickerAdvTo.Calendar.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
+  </data>
+  <data name="dateTimePickerAdvTo.Calendar.TodayButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="dateTimePickerAdvTo.Calendar.TodayButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>95, 25</value>
+  </data>
+  <data name="dateTimePickerAdvTo.Calendar.TodayButton.Text" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="dateTimePickerAdvTo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="dateTimePickerAdvTo.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9.75pt</value>
+  </data>
+  <data name="dateTimePickerAdvTo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>110, 33</value>
+  </data>
+  <data name="dateTimePickerAdvTo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>181, 24</value>
+  </data>
+  <data name="dateTimePickerAdvTo.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;dateTimePickerAdvTo.Name" xml:space="preserve">
+    <value>dateTimePickerAdvTo</value>
+  </data>
+  <data name="&gt;&gt;dateTimePickerAdvTo.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;dateTimePickerAdvTo.Parent" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
+  </data>
+  <data name="&gt;&gt;dateTimePickerAdvTo.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Calendar.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Calendar.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Calendar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Calendar.NoneButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>95, 0</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Calendar.NoneButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>84, 25</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Calendar.NoneButton.Text" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Calendar.Size" type="System.Drawing.Size, System.Drawing">
+    <value>179, 174</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Calendar.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Calendar.TodayButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Calendar.TodayButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>95, 25</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Calendar.TodayButton.Text" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9.75pt</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>110, 3</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>181, 24</value>
+  </data>
+  <data name="dateTimePickerAdvFrom.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;dateTimePickerAdvFrom.Name" xml:space="preserve">
+    <value>dateTimePickerAdvFrom</value>
+  </data>
+  <data name="&gt;&gt;dateTimePickerAdvFrom.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.DateTimePickerAdv, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;dateTimePickerAdvFrom.Parent" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
+  </data>
+  <data name="&gt;&gt;dateTimePickerAdvFrom.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
   <data name="textBoxExtFind.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -461,7 +578,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABG
-        CAAAAk1TRnQBSQFMAwEBAAFgAQABYAEAARABAAEQAQAE/wEJAQAI/wFCAU0BNgEEBgABNgEEAgABKAMA
+        CAAAAk1TRnQBSQFMAwEBAAFoAQABaAEAARABAAEQAQAE/wEJAQAI/wFCAU0BNgEEBgABNgEEAgABKAMA
         AUADAAEQAwABAQEAAQgGAAEEGAABgAIAAYADAAKAAQABgAMAAYABAAGAAQACgAIAA8ABAAHAAdwBwAEA
         AfABygGmAQABMwUAATMBAAEzAQABMwEAAjMCAAMWAQADHAEAAyIBAAMpAQADVQEAA00BAANCAQADOQEA
         AYABfAH/AQACUAH/AQABkwEAAdYBAAH/AewBzAEAAcYB1gHvAQAB1gLnAQABkAGpAa0CAAH/ATMDAAFm
@@ -537,36 +654,6 @@
   </data>
   <data name="&gt;&gt;treeViewAdvResult.ZOrder" xml:space="preserve">
     <value>3</value>
-  </data>
-  <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>306, 560</value>
-  </data>
-  <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="groupBoxDateSelection" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="textBoxExtFind" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label3" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="treeViewAdvResult" Row="2" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Absolute,97,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="toolStripMenuItemCut.Size" type="System.Drawing.Size, System.Drawing">
     <value>103, 22</value>

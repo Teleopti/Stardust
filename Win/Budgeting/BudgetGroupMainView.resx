@@ -117,65 +117,187 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="backStageView1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="ribbonControlAdvFixed1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1, 0</value>
+  <data name="backStage1.ActiveTabFont" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt, style=Bold</value>
   </data>
-  <data name="ribbonControlAdvFixed1.OfficeMenu.Size" type="System.Drawing.Size, System.Drawing">
-    <value>12, 65</value>
+  <data name="backStageButton1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 16</value>
   </data>
-  <data name="&gt;&gt;ribbonControlAdvFixed1.OfficeMenu.Name" xml:space="preserve">
-    <value>ribbonControlAdvFixed1.OfficeMenu</value>
+  <data name="backStageButton1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 25</value>
   </data>
-  <data name="&gt;&gt;ribbonControlAdvFixed1.OfficeMenu.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
-  </data>
-  <metadata name="toolStripTabItem2.TabGroup" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value />
-  </metadata>
-  <metadata name="toolStripEx1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>692, 17</value>
-  </metadata>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="toolStripEx1.AutoSize" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <data name="backStageButton1.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="toolStripEx1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>None</value>
+  <data name="backStageButton1.Text" xml:space="preserve">
+    <value>xxSave</value>
   </data>
-  <data name="toolStripEx1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 1</value>
+  <data name="&gt;&gt;backStageButton1.Name" xml:space="preserve">
+    <value>backStageButton1</value>
   </data>
-  <data name="toolStripEx1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 88</value>
+  <data name="&gt;&gt;backStageButton1.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.BackStageButton, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
-  <data name="toolStripEx1.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;backStageButton1.Parent" xml:space="preserve">
+    <value>backStage1</value>
+  </data>
+  <data name="&gt;&gt;backStageButton1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="backStageSeparator1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 47</value>
+  </data>
+  <data name="backStageSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 1</value>
+  </data>
+  <data name="backStageSeparator1.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="backStageSeparator1.Text" xml:space="preserve">
+    <value>backStageSeparator1</value>
+  </data>
+  <data name="&gt;&gt;backStageSeparator1.Name" xml:space="preserve">
+    <value>backStageSeparator1</value>
+  </data>
+  <data name="&gt;&gt;backStageSeparator1.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.BackStageSeparator, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;backStageSeparator1.Parent" xml:space="preserve">
+    <value>backStage1</value>
+  </data>
+  <data name="&gt;&gt;backStageSeparator1.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="backStageButton2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 53</value>
+  </data>
+  <data name="backStageButton2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 25</value>
+  </data>
+  <data name="backStageButton2.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="backStageButton2.Text" xml:space="preserve">
+    <value>xxClose</value>
+  </data>
+  <data name="&gt;&gt;backStageButton2.Name" xml:space="preserve">
+    <value>backStageButton2</value>
+  </data>
+  <data name="&gt;&gt;backStageButton2.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.BackStageButton, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;backStageButton2.Parent" xml:space="preserve">
+    <value>backStage1</value>
+  </data>
+  <data name="&gt;&gt;backStageButton2.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="backStageSeparator2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 84</value>
+  </data>
+  <data name="backStageSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 1</value>
+  </data>
+  <data name="backStageSeparator2.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="backStageSeparator2.Text" xml:space="preserve">
+    <value>backStageSeparator2</value>
+  </data>
+  <data name="&gt;&gt;backStageSeparator2.Name" xml:space="preserve">
+    <value>backStageSeparator2</value>
+  </data>
+  <data name="&gt;&gt;backStageSeparator2.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.BackStageSeparator, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;backStageSeparator2.Parent" xml:space="preserve">
+    <value>backStage1</value>
+  </data>
+  <data name="&gt;&gt;backStageSeparator2.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="backStageButton3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 90</value>
+  </data>
+  <data name="backStageButton3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 25</value>
+  </data>
+  <data name="backStageButton3.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
   </data>
-  <data name="toolStripEx1.Text" xml:space="preserve">
-    <value>xxClipboard</value>
+  <data name="backStageButton3.Text" xml:space="preserve">
+    <value>xxOptions</value>
   </data>
-  <data name="&gt;&gt;toolStripEx1.Name" xml:space="preserve">
-    <value>toolStripEx1</value>
+  <data name="&gt;&gt;backStageButton3.Name" xml:space="preserve">
+    <value>backStageButton3</value>
   </data>
-  <data name="&gt;&gt;toolStripEx1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  <data name="&gt;&gt;backStageButton3.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.BackStageButton, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
-  <data name="&gt;&gt;toolStripEx1.Parent" xml:space="preserve">
-    <value>ribbonControlAdvFixed1.ribbonPanel1</value>
+  <data name="&gt;&gt;backStageButton3.Parent" xml:space="preserve">
+    <value>backStage1</value>
   </data>
-  <data name="&gt;&gt;toolStripEx1.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;backStageButton3.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="backStageButton4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 115</value>
+  </data>
+  <data name="backStageButton4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 25</value>
+  </data>
+  <data name="backStageButton4.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="backStageButton4.Text" xml:space="preserve">
+    <value>xxExitTELEOPTICCC</value>
+  </data>
+  <data name="&gt;&gt;backStageButton4.Name" xml:space="preserve">
+    <value>backStageButton4</value>
+  </data>
+  <data name="&gt;&gt;backStageButton4.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.BackStageButton, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;backStageButton4.Parent" xml:space="preserve">
+    <value>backStage1</value>
+  </data>
+  <data name="&gt;&gt;backStageButton4.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="backStage1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 8.25pt</value>
+  </data>
+  <data name="backStage1.ItemSize" type="System.Drawing.Size, System.Drawing">
+    <value>138, 40</value>
+  </data>
+  <data name="backStage1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="backStage1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1217, 792</value>
+  </data>
+  <data name="backStage1.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="backStage1.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;backStage1.Name" xml:space="preserve">
+    <value>backStage1</value>
+  </data>
+  <data name="&gt;&gt;backStage1.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.BackStage, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;backStage1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;backStage1.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <metadata name="toolStripExLoad.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>555, 17</value>
-  </metadata>
-  <data name="toolStripExLoad.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="toolStripButtonLoadForecastedHours.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -202,13 +324,14 @@
     <value>False</value>
   </data>
   <data name="statusStripEx1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 819</value>
+    <value>1, 821</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="statusStripEx1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 0, 16, 0</value>
   </data>
   <data name="statusStripEx1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1212, 22</value>
+    <value>1218, 22</value>
   </data>
   <data name="statusStripEx1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -226,16 +349,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;statusStripEx1.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="gradientPanelMain.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="gradientPanelMain.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 148</value>
+    <value>1, 140</value>
   </data>
   <data name="gradientPanelMain.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1212, 669</value>
+    <value>1218, 682</value>
   </data>
   <data name="gradientPanelMain.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -250,7 +373,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;gradientPanelMain.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -886,10 +1009,19 @@
 </value>
   </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>248, 173</value>
+    <value>270, 173</value>
   </data>
   <data name="$this.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 0, 1, 2</value>
+    <value>1, 0, 1, 0</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>BudgetGroup</value>
+  </data>
+  <data name="&gt;&gt;backStageView1.Name" xml:space="preserve">
+    <value>backStageView1</value>
+  </data>
+  <data name="&gt;&gt;backStageView1.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.BackStageView, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="&gt;&gt;toolStripTabItem2.Name" xml:space="preserve">
     <value>toolStripTabItem2</value>
@@ -957,6 +1089,63 @@
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>Teleopti.Ccc.Win.Common.BaseRibbonForm, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
+  <data name="ribbonControlAdvFixed1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1, 1</value>
+  </data>
+  <data name="ribbonControlAdvFixed1.OfficeMenu.Size" type="System.Drawing.Size, System.Drawing">
+    <value>12, 65</value>
+  </data>
+  <data name="&gt;&gt;ribbonControlAdvFixed1.OfficeMenu.Name" xml:space="preserve">
+    <value>ribbonControlAdvFixed1.OfficeMenu</value>
+  </data>
+  <data name="&gt;&gt;ribbonControlAdvFixed1.OfficeMenu.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <metadata name="toolStripTabItem2.TabGroup" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value />
+  </metadata>
+  <metadata name="toolStripEx1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>436, 17</value>
+  </metadata>
+  <data name="toolStripEx1.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="toolStripEx1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="toolStripEx1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 1</value>
+  </data>
+  <data name="toolStripEx1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 81</value>
+  </data>
+  <data name="toolStripEx1.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="toolStripEx1.Text" xml:space="preserve">
+    <value>xxClipboard</value>
+  </data>
+  <data name="&gt;&gt;toolStripEx1.Name" xml:space="preserve">
+    <value>toolStripEx1</value>
+  </data>
+  <data name="&gt;&gt;toolStripEx1.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;toolStripEx1.Parent" xml:space="preserve">
+    <value>ribbonControlAdvFixed1.ribbonPanel1</value>
+  </data>
+  <data name="&gt;&gt;toolStripEx1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="toolStripExLoad.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>299, 17</value>
+  </metadata>
+  <data name="toolStripExLoad.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="toolStripButtonLoadForecastedHours.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
   <data name="toolStripButtonLoadForecastedHours.Size" type="System.Drawing.Size, System.Drawing">
     <value>135, 29</value>
   </data>
@@ -979,7 +1168,7 @@
     <value>164, 1</value>
   </data>
   <data name="toolStripExLoad.Size" type="System.Drawing.Size, System.Drawing">
-    <value>140, 88</value>
+    <value>140, 81</value>
   </data>
   <data name="toolStripExLoad.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -1000,7 +1189,7 @@
     <value>1</value>
   </data>
   <metadata name="toolStripExViews.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>413, 17</value>
+    <value>157, 17</value>
   </metadata>
   <data name="toolStripExViews.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>None</value>
@@ -1012,7 +1201,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonMonthView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>82, 72</value>
+    <value>82, 65</value>
   </data>
   <data name="toolStripButtonMonthView.Text" xml:space="preserve">
     <value>xxMonthView</value>
@@ -1027,7 +1216,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonWeekView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 72</value>
+    <value>75, 65</value>
   </data>
   <data name="toolStripButtonWeekView.Text" xml:space="preserve">
     <value>xxWeekView</value>
@@ -1042,7 +1231,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonDayView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 72</value>
+    <value>66, 65</value>
   </data>
   <data name="toolStripButtonDayView.Text" xml:space="preserve">
     <value>xxDayView</value>
@@ -1054,7 +1243,7 @@
     <value>306, 1</value>
   </data>
   <data name="toolStripExViews.Size" type="System.Drawing.Size, System.Drawing">
-    <value>230, 88</value>
+    <value>230, 81</value>
   </data>
   <data name="toolStripExViews.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -1102,7 +1291,7 @@
     <value>xxHome</value>
   </data>
   <data name="ribbonControlAdvFixed1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1218, 147</value>
+    <value>1222, 140</value>
   </data>
   <data name="ribbonControlAdvFixed1.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1120,7 +1309,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;ribbonControlAdvFixed1.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <metadata name="toolStripTabItem3.TabGroup" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value />
@@ -1129,7 +1318,7 @@
     <value>Segoe UI, 8.25pt</value>
   </data>
   <metadata name="toolStripEx2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>809, 17</value>
+    <value>553, 17</value>
   </metadata>
   <data name="toolStripEx2.AutoSize" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -1165,7 +1354,7 @@
     <value>0, 1</value>
   </data>
   <data name="toolStripEx2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>215, 0</value>
+    <value>215, 81</value>
   </data>
   <data name="toolStripEx2.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>

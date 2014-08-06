@@ -38,6 +38,9 @@ namespace Teleopti.Ccc.Win.Budgeting
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle5 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle1 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle2 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle3 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle4 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			this.budgetGroupDayViewMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItemAddShrinkageRow = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemUpdateShrinkageRow = new System.Windows.Forms.ToolStripMenuItem();
@@ -208,8 +211,35 @@ namespace Teleopti.Ccc.Win.Budgeting
 			gridRangeStyle1.StyleInfo.Font.Strikeout = false;
 			gridRangeStyle1.StyleInfo.Font.Underline = false;
 			gridRangeStyle1.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridRangeStyle2.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
+			gridRangeStyle2.StyleInfo.Font.Bold = false;
+			gridRangeStyle2.StyleInfo.Font.Facename = "Segoe UI";
+			gridRangeStyle2.StyleInfo.Font.Italic = false;
+			gridRangeStyle2.StyleInfo.Font.Size = 9F;
+			gridRangeStyle2.StyleInfo.Font.Strikeout = false;
+			gridRangeStyle2.StyleInfo.Font.Underline = false;
+			gridRangeStyle2.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridRangeStyle3.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
+			gridRangeStyle3.StyleInfo.Font.Bold = false;
+			gridRangeStyle3.StyleInfo.Font.Facename = "Segoe UI";
+			gridRangeStyle3.StyleInfo.Font.Italic = false;
+			gridRangeStyle3.StyleInfo.Font.Size = 9F;
+			gridRangeStyle3.StyleInfo.Font.Strikeout = false;
+			gridRangeStyle3.StyleInfo.Font.Underline = false;
+			gridRangeStyle3.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridRangeStyle4.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
+			gridRangeStyle4.StyleInfo.Font.Bold = false;
+			gridRangeStyle4.StyleInfo.Font.Facename = "Segoe UI";
+			gridRangeStyle4.StyleInfo.Font.Italic = false;
+			gridRangeStyle4.StyleInfo.Font.Size = 9F;
+			gridRangeStyle4.StyleInfo.Font.Strikeout = false;
+			gridRangeStyle4.StyleInfo.Font.Underline = false;
+			gridRangeStyle4.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
 			this.gridControlDayView.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
-            gridRangeStyle1});
+            gridRangeStyle1,
+            gridRangeStyle2,
+            gridRangeStyle3,
+            gridRangeStyle4});
 			this.gridControlDayView.ResizeRowsBehavior = Syncfusion.Windows.Forms.Grid.GridResizeCellsBehavior.None;
 			this.gridControlDayView.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
@@ -238,6 +268,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 
         #endregion
 
+		
         private TeleoptiGridControl gridControlDayView;
 		private System.Windows.Forms.ContextMenuStrip budgetGroupDayViewMenu;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddShrinkageRow;
