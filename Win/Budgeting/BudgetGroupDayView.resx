@@ -235,7 +235,7 @@
     <value>gridControlDayView</value>
   </data>
   <data name="&gt;&gt;gridControlDayView.Type" xml:space="preserve">
-    <value>Teleopti.Ccc.Win.Common.Controls.TeleoptiGridControl, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+    <value>Syncfusion.Windows.Forms.Grid.GridControl, Syncfusion.Grid.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89</value>
   </data>
   <data name="&gt;&gt;gridControlDayView.Parent" xml:space="preserve">
     <value>$this</value>

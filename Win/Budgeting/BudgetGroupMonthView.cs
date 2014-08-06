@@ -27,40 +27,40 @@ namespace Teleopti.Ccc.Win.Budgeting
 	{
 		private readonly BudgetDayReassociator _budgetDayReassociator;
 		private readonly IEventAggregator _localEventAggregator;
-	    private readonly IBudgetPermissionService _budgetPermissionService;
-	    private ColumnEntityBinder<BudgetGroupMonthDetailModel> _entityBinder;
+		private readonly IBudgetPermissionService _budgetPermissionService;
+		private ColumnEntityBinder<BudgetGroupMonthDetailModel> _entityBinder;
 		private GridRowSection<BudgetGroupMonthDetailModel> _shrinkageSection;
 		private GridRowSection<BudgetGroupMonthDetailModel> _efficiencyShrinkageSection;
 		private IList<double> _modifiedItems;
-	    private readonly IEventAggregator _globalEventAggregator;
+		private readonly IEventAggregator _globalEventAggregator;
 
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reassociator")]
-        public BudgetGroupMonthView(BudgetDayReassociator budgetDayReassociator, IEventAggregatorLocator eventAggregatorLocator, IBudgetPermissionService budgetPermissionService)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reassociator")]
+		public BudgetGroupMonthView(BudgetDayReassociator budgetDayReassociator, IEventAggregatorLocator eventAggregatorLocator, IBudgetPermissionService budgetPermissionService)
 		{
 			_budgetDayReassociator = budgetDayReassociator;
 			_localEventAggregator = eventAggregatorLocator.LocalAggregator();
 			_globalEventAggregator = eventAggregatorLocator.GlobalAggregator();
-		    _budgetPermissionService = budgetPermissionService;
-		    InitializeComponent();
+			_budgetPermissionService = budgetPermissionService;
+			InitializeComponent();
 			InitializeGrid();
 			SetTexts();
 		}
 
 		public BudgetGroupMonthPresenter Presenter { get; set; }
 
-        public void Initialize()
-        {
-            EventSubscription();
+		public void Initialize()
+		{
+			EventSubscription();
 
-            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                 _budgetDayReassociator.Reassociate();
-                 Presenter.Initialize();
-            }
-            
-            SetGridSizes();
-            budgetGroupMonthViewMenu.Items[9].Enabled = false;
-        }
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				 _budgetDayReassociator.Reassociate();
+				 Presenter.Initialize();
+			}
+			
+			SetGridSizes();
+			budgetGroupMonthViewMenu.Items[9].Enabled = false;
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public IList<BudgetGroupMonthDetailModel> DataSource
@@ -74,44 +74,44 @@ namespace Teleopti.Ccc.Win.Budgeting
 			_localEventAggregator.GetEvent<ShrinkageRowAdded>().Subscribe(ShrinkageRowAdded);
 			_localEventAggregator.GetEvent<EfficiencyShrinkageRowAdded>().Subscribe(EfficiencyShrinkageRowAdded);
 			_localEventAggregator.GetEvent<ShrinkageRowsDeleted>().Subscribe(ShrinkageRowsDeleted);
-            _localEventAggregator.GetEvent<EfficiencyShrinkageRowsDeleted>().Subscribe(EfficiencyShrinkageRowsDeleted); 
-            _localEventAggregator.GetEvent<GridSelectionChanged>().Subscribe(GridUpdated);
+			_localEventAggregator.GetEvent<EfficiencyShrinkageRowsDeleted>().Subscribe(EfficiencyShrinkageRowsDeleted); 
+			_localEventAggregator.GetEvent<GridSelectionChanged>().Subscribe(GridUpdated);
 			_localEventAggregator.GetEvent<LoadDataStarted>().Subscribe(LoadDataStarted);
 			_localEventAggregator.GetEvent<LoadDataFinished>().Subscribe(LoadDataFinished);
 			_localEventAggregator.GetEvent<ExitEditMode>().Subscribe(OnExitEditMode);
 			_localEventAggregator.GetEvent<BeginBudgetDaysUpdate>().Subscribe(OnBeginBudgetDaysUpdate);
 			_localEventAggregator.GetEvent<EndBudgetDaysUpdate>().Subscribe(OnEndBudgetDaysUpdate);
 			_localEventAggregator.GetEvent<ViewsClipboardAction>().Subscribe(OnViewsClipboardAction);
-            _localEventAggregator.GetEvent<UpdateShrinkageProperty>().Subscribe(UpdateShrinkageProperty);
-            _localEventAggregator.GetEvent<UpdateEfficiencyShrinkageProperty>().Subscribe(UpdateEfficiencyShrinkageProperty);
-            _globalEventAggregator.GetEvent<BudgetGroupNeedsRefresh>().Subscribe(budgetGroupNeedsRefresh);
-        }
+			_localEventAggregator.GetEvent<UpdateShrinkageProperty>().Subscribe(UpdateShrinkageProperty);
+			_localEventAggregator.GetEvent<UpdateEfficiencyShrinkageProperty>().Subscribe(UpdateEfficiencyShrinkageProperty);
+			_globalEventAggregator.GetEvent<BudgetGroupNeedsRefresh>().Subscribe(budgetGroupNeedsRefresh);
+		}
 
-        private void budgetGroupNeedsRefresh(IBudgetGroup budgetGroup)
-        {
-            Presenter.UpdateBudgetGroup(budgetGroup);
-            reloadShrinkageSections();
-        }
+		private void budgetGroupNeedsRefresh(IBudgetGroup budgetGroup)
+		{
+			Presenter.UpdateBudgetGroup(budgetGroup);
+			reloadShrinkageSections();
+		}
 
-        private void reloadShrinkageSections()
-        {
-            _shrinkageSection.ClearRows();
-            _efficiencyShrinkageSection.ClearRows();
-            Presenter.InitializeShrinkages();
-            Presenter.InitializeEfficiencyShrinkages();
-        }
+		private void reloadShrinkageSections()
+		{
+			_shrinkageSection.ClearRows();
+			_efficiencyShrinkageSection.ClearRows();
+			Presenter.InitializeShrinkages();
+			Presenter.InitializeEfficiencyShrinkages();
+		}
 
-	    private void UpdateEfficiencyShrinkageProperty(ICustomEfficiencyShrinkage customEfficiencyShrinkage)
-        {
-            _efficiencyShrinkageSection.UpdateRowHeaderTextWithTag(customEfficiencyShrinkage, customEfficiencyShrinkage.ShrinkageName + " (%)");
-            gridControlMonthView.Invalidate();
-        }
+		private void UpdateEfficiencyShrinkageProperty(ICustomEfficiencyShrinkage customEfficiencyShrinkage)
+		{
+			_efficiencyShrinkageSection.UpdateRowHeaderTextWithTag(customEfficiencyShrinkage, customEfficiencyShrinkage.ShrinkageName + " (%)");
+			gridControlMonthView.Invalidate();
+		}
 
-        private void UpdateShrinkageProperty(ICustomShrinkage customShrinkage)
-        {
-            _shrinkageSection.UpdateRowHeaderTextWithTag(customShrinkage, customShrinkage.ShrinkageName + " (%)");
-            gridControlMonthView.Invalidate();
-        }
+		private void UpdateShrinkageProperty(ICustomShrinkage customShrinkage)
+		{
+			_shrinkageSection.UpdateRowHeaderTextWithTag(customShrinkage, customShrinkage.ShrinkageName + " (%)");
+			gridControlMonthView.Invalidate();
+		}
 
 		private void OnViewsClipboardAction(ClipboardActionOnViews clipboardActionOnViewsEventArgs)
 		{
@@ -125,12 +125,12 @@ namespace Teleopti.Ccc.Win.Budgeting
 					gridControlMonthView.CutPaste.Cut();
 					break;
 				case ClipboardAction.Paste:
-                    {
-                        OnBeginBudgetDaysUpdate(true);
-                        gridControlMonthView.CutPaste.Paste();
-                        OnEndBudgetDaysUpdate(true);
-                    }
-			        break;
+					{
+						OnBeginBudgetDaysUpdate(true);
+						gridControlMonthView.CutPaste.Paste();
+						OnEndBudgetDaysUpdate(true);
+					}
+					break;
 			}
 		}
 
@@ -285,18 +285,18 @@ namespace Teleopti.Ccc.Win.Budgeting
 			var numCell = new NumericReadOnlyCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2 };
 			var percentCell = new PercentReadOnlyCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2 };
 			var percentWithTwoDecimalsCell = new PercentCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2, MinMax = new MinMax<double>(0, 1) };
-            var restrictedValueForFte = new NumericCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 12d }; 
+			var restrictedValueForFte = new NumericCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 12d }; 
 			var numericWithTwoDecimalsCell = new NumericCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 99999999d };
 			var nullableCellModelWithTwoCecimal = new NullableNumericCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 99999999d };
-            var nullableNegativeCellModelWithTwoDecimalsCell = new NullableNumericCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2, MinValue = -99999999d, MaxValue = 99999999d };
+			var nullableNegativeCellModelWithTwoDecimalsCell = new NullableNumericCellModel(gridControlMonthView.Model) { NumberOfDecimals = 2, MinValue = -99999999d, MaxValue = 99999999d };
 
-            gridControlMonthView.CellModels.Add("RestrictedValueForFTE", restrictedValueForFte);
+			gridControlMonthView.CellModels.Add("RestrictedValueForFTE", restrictedValueForFte);
 			gridControlMonthView.CellModels.Add("NumericReadOnlyCellModel", numCell);
 			gridControlMonthView.CellModels.Add("PercentReadOnlyCellModel", percentCell);
 			gridControlMonthView.CellModels.Add("PercentWithTwoDecimalsCell", percentWithTwoDecimalsCell);
 			gridControlMonthView.CellModels.Add("NumericWithTwoDecimalsCell", numericWithTwoDecimalsCell);
 			gridControlMonthView.CellModels.Add("NullableNumericWithTwoDecimalsCell", nullableCellModelWithTwoCecimal);
-            gridControlMonthView.CellModels.Add("NullableNegativeNumericWithTwoDecimalsCell", nullableNegativeCellModelWithTwoDecimalsCell);
+			gridControlMonthView.CellModels.Add("NullableNegativeNumericWithTwoDecimalsCell", nullableNegativeCellModelWithTwoDecimalsCell);
 
 			_entityBinder = new ColumnEntityBinder<BudgetGroupMonthDetailModel>(gridControlMonthView);
 			_entityBinder.GridColors = new GridColors
@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 				HeaderText = UserTexts.Resources.FulltimeEquivalentHoursPerDay,
 				ValueMember = new ModelProperty<BudgetGroupMonthDetailModel>("FulltimeEquivalentHours"),
 				CellValueType = typeof(double),
-                CellModel = "RestrictedValueForFTE"
+				CellModel = "RestrictedValueForFTE"
 			});
 			_entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
 			{
@@ -423,65 +423,65 @@ namespace Teleopti.Ccc.Win.Budgeting
 				ReadOnly = true
 			});
 
-            if (_budgetPermissionService.IsAllowancePermitted)
-            {
-                _entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
-                                         {
-                                             HeaderText = UserTexts.Resources.BudgetedLeave,
-                                             ValueMember =
-                                                 new ModelProperty<BudgetGroupMonthDetailModel>("BudgetedLeave"),
-                                             CellModel = "NumericReadOnlyCellModel",
-                                             ReadOnly = true
-                                         });
-                _entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
-                                         {
-                                             HeaderText = UserTexts.Resources.BudgetedSurplus,
-                                             ValueMember =
-                                                 new ModelProperty<BudgetGroupMonthDetailModel>("BudgetedSurplus"),
-                                             CellModel = "NumericReadOnlyCellModel",
-                                             ReadOnly = true
-                                         });
-                _entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
-                                         {
-                                             HeaderText = UserTexts.Resources.AbsenceExtra,
-                                             ValueMember =
-                                                 new ModelProperty<BudgetGroupMonthDetailModel>("AbsenceExtra"),
-                                             CellValueType = typeof (double),
-                                             CellModel = "NullableNegativeNumericWithTwoDecimalsCell"
-                                         });
-                _entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
-                                         {
-                                             HeaderText = UserTexts.Resources.AbsenceOverride,
-                                             ValueMember =
-                                                 new ModelProperty<BudgetGroupMonthDetailModel>("AbsenceOverride"),
-                                             CellValueType = typeof (double),
-                                             CellModel = "NullableNegativeNumericWithTwoDecimalsCell"
-                                         });
-                _entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
-                                         {
-                                             HeaderText = UserTexts.Resources.TotalAllowance,
-                                             ValueMember = new ModelProperty<BudgetGroupMonthDetailModel>("TotalAllowance"),
-                                             CellModel = "NumericReadOnlyCellModel",
-                                             ReadOnly = true
-                                         });
-                _entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
-                                         {
-                                             HeaderText = string.Format(UserTexts.Resources.AbsenceThreshold + " (%)"),
-                                             ValueMember =
-                                                 new ModelProperty<BudgetGroupMonthDetailModel>("AbsenceThreshold"),
-                                             CellValueType = typeof (Percent),
-                                             CellModel = "PercentWithTwoDecimalsCell"
-                                         });
-                _entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
-                                         {
-                                             HeaderText = UserTexts.Resources.Allowance,
-                                             ValueMember = new ModelProperty<BudgetGroupMonthDetailModel>("Allowance"),
-                                             CellModel = "NumericReadOnlyCellModel",
-                                             ReadOnly = true
-                                         });
-            }
+			if (_budgetPermissionService.IsAllowancePermitted)
+			{
+				_entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
+										 {
+											 HeaderText = UserTexts.Resources.BudgetedLeave,
+											 ValueMember =
+												 new ModelProperty<BudgetGroupMonthDetailModel>("BudgetedLeave"),
+											 CellModel = "NumericReadOnlyCellModel",
+											 ReadOnly = true
+										 });
+				_entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
+										 {
+											 HeaderText = UserTexts.Resources.BudgetedSurplus,
+											 ValueMember =
+												 new ModelProperty<BudgetGroupMonthDetailModel>("BudgetedSurplus"),
+											 CellModel = "NumericReadOnlyCellModel",
+											 ReadOnly = true
+										 });
+				_entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
+										 {
+											 HeaderText = UserTexts.Resources.AbsenceExtra,
+											 ValueMember =
+												 new ModelProperty<BudgetGroupMonthDetailModel>("AbsenceExtra"),
+											 CellValueType = typeof (double),
+											 CellModel = "NullableNegativeNumericWithTwoDecimalsCell"
+										 });
+				_entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
+										 {
+											 HeaderText = UserTexts.Resources.AbsenceOverride,
+											 ValueMember =
+												 new ModelProperty<BudgetGroupMonthDetailModel>("AbsenceOverride"),
+											 CellValueType = typeof (double),
+											 CellModel = "NullableNegativeNumericWithTwoDecimalsCell"
+										 });
+				_entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
+										 {
+											 HeaderText = UserTexts.Resources.TotalAllowance,
+											 ValueMember = new ModelProperty<BudgetGroupMonthDetailModel>("TotalAllowance"),
+											 CellModel = "NumericReadOnlyCellModel",
+											 ReadOnly = true
+										 });
+				_entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
+										 {
+											 HeaderText = string.Format(UserTexts.Resources.AbsenceThreshold + " (%)"),
+											 ValueMember =
+												 new ModelProperty<BudgetGroupMonthDetailModel>("AbsenceThreshold"),
+											 CellValueType = typeof (Percent),
+											 CellModel = "PercentWithTwoDecimalsCell"
+										 });
+				_entityBinder.AddRow(new GridRow<BudgetGroupMonthDetailModel>
+										 {
+											 HeaderText = UserTexts.Resources.Allowance,
+											 ValueMember = new ModelProperty<BudgetGroupMonthDetailModel>("Allowance"),
+											 CellModel = "NumericReadOnlyCellModel",
+											 ReadOnly = true
+										 });
+			}
 
-		    gridControlMonthView.Rows.HeaderCount = 1;
+			gridControlMonthView.Rows.HeaderCount = 1;
 			gridControlMonthView.Cols.DefaultSize = 100;
 			_entityBinder.SetColumnParentHeaderMember(new ModelProperty<BudgetGroupMonthDetailModel>("Year"));
 			_entityBinder.SetColumnHeaderMember(new ModelProperty<BudgetGroupMonthDetailModel>("Month"));
@@ -583,8 +583,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 		{
 			_shrinkageSection.IsInsideSection(e.Range);
 			_efficiencyShrinkageSection.IsInsideSection(e.Range);
-            _localEventAggregator.GetEvent<GridSelectionChanged>().Publish(true);
-            budgetGroupMonthViewMenu.Items[9].Enabled = true;
+			_localEventAggregator.GetEvent<GridSelectionChanged>().Publish(true);
+			budgetGroupMonthViewMenu.Items[9].Enabled = true;
 		}
 
 		public IEnumerable<IBudgetGroupDayDetailModel> Find()
@@ -606,16 +606,16 @@ namespace Teleopti.Ccc.Win.Budgeting
 			_localEventAggregator.GetEvent<UpdateClipboardStatus>().Publish(new ClipboardStatusEventModel { ClipboardAction = ClipboardAction.Paste, Enabled = true });
 		}
 
-        private void toolStripMenuItemRenameShrinkageRow_Click(object sender, EventArgs e)
-        {
-            var rows = _shrinkageSection.GetSelectedRows(gridControlMonthView.Selections.Ranges);
+		private void toolStripMenuItemRenameShrinkageRow_Click(object sender, EventArgs e)
+		{
+			var rows = _shrinkageSection.GetSelectedRows(gridControlMonthView.Selections.Ranges);
 
-            var shrinkage = rows.First();
-            if (shrinkage != null)
-            {
-                _localEventAggregator.GetEvent<ChangeCustomShrinkage>().Publish((ICustomShrinkage)shrinkage.Tag);
-            }
-        }
+			var shrinkage = rows.First();
+			if (shrinkage != null)
+			{
+				_localEventAggregator.GetEvent<ChangeCustomShrinkage>().Publish((ICustomShrinkage)shrinkage.Tag);
+			}
+		}
 
 		private void toolStripMenuRenameEfficiencyShrinkageRow_Click(object sender, EventArgs e)
 		{
@@ -628,45 +628,45 @@ namespace Teleopti.Ccc.Win.Budgeting
 			}
 		}
 
-	    private void budgetGroupMonthViewMenu_Opening(object sender, CancelEventArgs e)
-	    {
-            if (_efficiencyShrinkageSection.RowCount() > 0)
-            {
-                var efficiencyRows = _efficiencyShrinkageSection.GetSelectedRows(gridControlMonthView.Selections.Ranges);
-                if (efficiencyRows.Any())
-                {
-                    toolStripMenuItemUpdateEfficiencyShrinkageRow.Enabled = true;
-                    toolStripMenuItemDeleteEfficiencyShrinkageRow.Enabled = true;
-                }
-                else
-                {
+		private void budgetGroupMonthViewMenu_Opening(object sender, CancelEventArgs e)
+		{
+			if (_efficiencyShrinkageSection.RowCount() > 0)
+			{
+				var efficiencyRows = _efficiencyShrinkageSection.GetSelectedRows(gridControlMonthView.Selections.Ranges);
+				if (efficiencyRows.Any())
+				{
+					toolStripMenuItemUpdateEfficiencyShrinkageRow.Enabled = true;
+					toolStripMenuItemDeleteEfficiencyShrinkageRow.Enabled = true;
+				}
+				else
+				{
 
-                    toolStripMenuItemUpdateEfficiencyShrinkageRow.Enabled = false;
-                    toolStripMenuItemDeleteEfficiencyShrinkageRow.Enabled = false;
-                }
-            }
+					toolStripMenuItemUpdateEfficiencyShrinkageRow.Enabled = false;
+					toolStripMenuItemDeleteEfficiencyShrinkageRow.Enabled = false;
+				}
+			}
 
-            if (_shrinkageSection.RowCount() > 0)
-            {
-                var shrinkageRows = _shrinkageSection.GetSelectedRows(gridControlMonthView.Selections.Ranges);
+			if (_shrinkageSection.RowCount() > 0)
+			{
+				var shrinkageRows = _shrinkageSection.GetSelectedRows(gridControlMonthView.Selections.Ranges);
 
-                if (shrinkageRows.Any())
-                {
-                    toolStripMenuItemUpdateShrinkageRow.Enabled = true;
-                    toolStripMenuItemDeleteShrinkageRow.Enabled = true;
-                }
-                else
-                {
-                    toolStripMenuItemUpdateShrinkageRow.Enabled = false;
-                    toolStripMenuItemDeleteShrinkageRow.Enabled = false;
-                }
-            }
-	    }
+				if (shrinkageRows.Any())
+				{
+					toolStripMenuItemUpdateShrinkageRow.Enabled = true;
+					toolStripMenuItemDeleteShrinkageRow.Enabled = true;
+				}
+				else
+				{
+					toolStripMenuItemUpdateShrinkageRow.Enabled = false;
+					toolStripMenuItemDeleteShrinkageRow.Enabled = false;
+				}
+			}
+		}
 
-        private void GridUpdated(bool b)
-        {
-            if (!b)
-                budgetGroupMonthViewMenu.Items[9].Enabled = false;
-        }
+		private void GridUpdated(bool b)
+		{
+			if (!b)
+				budgetGroupMonthViewMenu.Items[9].Enabled = false;
+		}
 	}
 }

@@ -235,13 +235,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			var nullableCellModelWithTwoDecimalsCell = new NullableNumericCellModel(gridControlDayView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 99999999d };
 			var nullableNegativeCellModelWithTwoDecimalsCell = new NullableNumericCellModel(gridControlDayView.Model) { NumberOfDecimals = 2, MinValue = -99999999d, MaxValue = 99999999d };
 			var restrictedValueForFte = new NumericCellModel(gridControlDayView.Model) { NumberOfDecimals = 2, MinValue = 0, MaxValue = 12d };
-
-			gridControlDayView.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
-			gridControlDayView.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
-			gridControlDayView.MetroScrollBars = true;
-			gridControlDayView.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-			gridControlDayView.BaseStylesMap.Header.StyleInfo.Font.Size = 9F;
-
+			
 			gridControlDayView.CellModels.Add("RestrictedValueForFTE", restrictedValueForFte);
 			gridControlDayView.CellModels.Add("NumericReadOnlyCellModel", numCell);
 			gridControlDayView.CellModels.Add("PercentReadOnlyCellModel", percentCell);
