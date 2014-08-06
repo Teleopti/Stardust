@@ -29,56 +29,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					var person in
 						agentsThatShouldGetBadge.Select(agent => allPersons.Single(x => x.Id != null && x.Id.Value == agent)).Where(a => a != null))
 				{
-					person.AddBadge(new Domain.Common.AgentBadge { BronzeBadge = 1, BadgeType = badgeType});
+					person.AddBadge(new Domain.Common.AgentBadge { BronzeBadge = 1, BadgeType = badgeType });
+					var badge = person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls);
+					if (badge.BronzeBadge >= silverBadgeRate)
+					{
+						badge.SilverBadge = badge.SilverBadge + badge.BronzeBadge / silverBadgeRate;
+						badge.BronzeBadge = badge.BronzeBadge % silverBadgeRate;
+					}
+
+					if (badge.SilverBadge >= goldToSilverBadgeRate)
+					{
+						badge.GoldBadge = badge.GoldBadge + badge.SilverBadge / goldToSilverBadgeRate;
+						badge.SilverBadge = badge.SilverBadge % goldToSilverBadgeRate;
+					}
+
 					personsThatGotABadge.Add(person);
 				}
 			}
 
-			foreach (var person in personsThatGotABadge)
-			{
-				if (person.Badges.Any(x => x.BadgeType == BadgeType.AnsweredCalls))
-				{
-					var answeredCallsBadge = person.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls);
-					if (answeredCallsBadge.BronzeBadge >= silverBadgeRate)
-					{
-						answeredCallsBadge.SilverBadge = answeredCallsBadge.SilverBadge + answeredCallsBadge.BronzeBadge / silverBadgeRate;
-						answeredCallsBadge.BronzeBadge = answeredCallsBadge.BronzeBadge%silverBadgeRate;
-					}
-					if (answeredCallsBadge.SilverBadge >= goldToSilverBadgeRate)
-					{
-						answeredCallsBadge.GoldBadge = answeredCallsBadge.GoldBadge + answeredCallsBadge.SilverBadge / goldToSilverBadgeRate;
-						answeredCallsBadge.SilverBadge = answeredCallsBadge.SilverBadge % goldToSilverBadgeRate;
-					}
-				}
-				if (person.Badges.Any(x => x.BadgeType == BadgeType.AverageHandlingTime))
-				{
-					var averageHandlingTimeBadge = person.Badges.Single(x => x.BadgeType == BadgeType.AverageHandlingTime);
-					if (averageHandlingTimeBadge.BronzeBadge >= silverBadgeRate)
-					{
-						averageHandlingTimeBadge.SilverBadge = averageHandlingTimeBadge.SilverBadge + averageHandlingTimeBadge.BronzeBadge / silverBadgeRate;
-						averageHandlingTimeBadge.BronzeBadge = averageHandlingTimeBadge.BronzeBadge % silverBadgeRate;
-					}
-					if (averageHandlingTimeBadge.SilverBadge > goldToSilverBadgeRate)
-					{
-						averageHandlingTimeBadge.GoldBadge = averageHandlingTimeBadge.GoldBadge + averageHandlingTimeBadge.SilverBadge / goldToSilverBadgeRate;
-						averageHandlingTimeBadge.SilverBadge = averageHandlingTimeBadge.SilverBadge % goldToSilverBadgeRate;
-					}
-				}
-				if (person.Badges.Any(x => x.BadgeType == BadgeType.Adherence))
-				{
-					var adherenceBadge = person.Badges.Single(x => x.BadgeType == BadgeType.Adherence);
-					if (adherenceBadge.BronzeBadge > silverBadgeRate)
-					{
-						adherenceBadge.SilverBadge = adherenceBadge.SilverBadge + adherenceBadge.BronzeBadge / silverBadgeRate;
-						adherenceBadge.BronzeBadge = adherenceBadge.BronzeBadge % silverBadgeRate;
-					}
-					if (adherenceBadge.SilverBadge > goldToSilverBadgeRate)
-					{
-						adherenceBadge.GoldBadge = adherenceBadge.GoldBadge + adherenceBadge.SilverBadge / goldToSilverBadgeRate;
-						adherenceBadge.SilverBadge = adherenceBadge.SilverBadge % goldToSilverBadgeRate;
-					}
-				}
-			}
 			return personsThatGotABadge;
 		}
 
