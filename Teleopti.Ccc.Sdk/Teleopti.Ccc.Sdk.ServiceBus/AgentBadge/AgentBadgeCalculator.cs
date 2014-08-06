@@ -12,13 +12,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	{
 		private readonly IStatisticRepository _statisticRepository;
 
-		public IDictionary<int, DateTime> LastCalculatedDates { get; set; }
-
 		public AgentBadgeCalculator(IStatisticRepository statisticRepository)
 		{
 			_statisticRepository = statisticRepository;
-
-			LastCalculatedDates = new Dictionary<int, DateTime>();
 		}
 
 		protected IList<IPerson> AddBadge(IEnumerable<IPerson> allPersons, IEnumerable<Guid> agentsThatShouldGetBadge, BadgeType badgeType,
@@ -31,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			{
 				foreach (
 					var person in
-						agentsThatShouldGetBadge.Select(agent => allPersons.Single(x => x.Id.Value == agent)).Where(a => a != null))
+						agentsThatShouldGetBadge.Select(agent => allPersons.Single(x => x.Id != null && x.Id.Value == agent)).Where(a => a != null))
 				{
 					person.AddBadge(new Domain.Common.AgentBadge { BronzeBadge = 1, BadgeType = badgeType});
 					personsThatGotABadge.Add(person);

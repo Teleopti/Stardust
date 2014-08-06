@@ -16,11 +16,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	{
 		private readonly IServiceBus _serviceBus;
 		private readonly IRepositoryFactory _repositoryFactory;
+		private readonly Dictionary<string, DateTime> _lastCalculatedDates;
 
 		public AgentBadgeCalculationConsumer(IServiceBus serviceBus, IRepositoryFactory repositoryFactory)
 		{
 			_serviceBus = serviceBus;
 			_repositoryFactory = repositoryFactory;
+			_lastCalculatedDates = new Dictionary<string, DateTime>();
 		}
 
 		public void Consume(AgentBadgeCalculateMessage message)
@@ -60,8 +62,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						{
 							foreach (var timezone in timeZoneList)
 							{
-								calculateBadgeForTimeZone(statisticUow, appuow, timezone, calculator, agentBadgeSetting, allAgents,
-									adherenceReportSetting.CalculationMethod);
+								calculateBadgeForTimeZone(statisticUow, appuow, dataSource.DataSourceName, timezone, calculator,
+									agentBadgeSetting, allAgents, adherenceReportSetting.CalculationMethod);
 							}
 						}
 						else
@@ -69,36 +71,38 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 							var timezone = timeZoneList.First(tz => tz.Id == message.TimezoneId);
 							if (timezone == null) continue;
 
-							calculateBadgeForTimeZone(statisticUow, appuow, timezone, calculator, agentBadgeSetting, allAgents,
-								adherenceReportSetting.CalculationMethod);
+							calculateBadgeForTimeZone(statisticUow, appuow, dataSource.DataSourceName, timezone, calculator,
+								agentBadgeSetting, allAgents, adherenceReportSetting.CalculationMethod);
 						}
 					}
 				}
 			}
 		}
 
-		private void calculateBadgeForTimeZone(IStatelessUnitOfWork statisticUow, IUnitOfWork appuow, ISimpleTimeZone timezone,
-			AgentBadgeCalculator calculator, IAgentBadgeThresholdSettings agentBadgeSetting, IEnumerable<IPerson> allAgents,
-			AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
+		private void calculateBadgeForTimeZone(IStatelessUnitOfWork statisticUow, IUnitOfWork appuow, string dataSourceName,
+			ISimpleTimeZone timezone, IAgentBadgeCalculator calculator, IAgentBadgeThresholdSettings agentBadgeSetting,
+			IEnumerable<IPerson> allAgents, AdherenceReportSettingCalculationMethod adherenceCalculationMethod)
 		{
 			var todayForTimezone = DateTime.UtcNow.Date;
 			var yesterdayForTimezone = todayForTimezone.AddDays(-1);
 			var tomorrowForTimezone = todayForTimezone.AddDays(1).AddMinutes(-timezone.Distance);
 			DateTime nextCalculateDate;
 
-			if (!calculator.LastCalculatedDates.ContainsKey(timezone.Id))
+			var keyName = string.Format("{0}-{1}", dataSourceName, timezone.Id);
+
+			if (!_lastCalculatedDates.ContainsKey(keyName))
 			{
-				calculator.LastCalculatedDates.Add(timezone.Id, tomorrowForTimezone.AddDays(-1).ToLocalTime());
+				_lastCalculatedDates.Add(keyName, tomorrowForTimezone.AddDays(-1).ToLocalTime());
 			}
 
-			if (calculator.LastCalculatedDates[timezone.Id] == tomorrowForTimezone.ToLocalTime())
+			if (_lastCalculatedDates[keyName] == tomorrowForTimezone.ToLocalTime().Add(agentBadgeSetting.CalculationTime))
 			{
 				nextCalculateDate = tomorrowForTimezone.AddDays(1).ToLocalTime();
 			}
 			else
 			{
 				nextCalculateDate = tomorrowForTimezone.ToLocalTime();
-				calculator.LastCalculatedDates[timezone.Id] = nextCalculateDate;
+				_lastCalculatedDates[keyName] = nextCalculateDate;
 				var peopleGotABadge = calculator.Calculate(statisticUow, allAgents, timezone.Id, yesterdayForTimezone,
 					adherenceCalculationMethod, agentBadgeSetting.SilverBadgeDaysThreshold, agentBadgeSetting.GoldBadgeDaysThreshold);
 				foreach (var person in peopleGotABadge)
@@ -111,15 +115,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				}
 			}
 
-			if (_serviceBus != null)
+			if (_serviceBus == null) return;
+
+			nextCalculateDate = nextCalculateDate.Add(agentBadgeSetting.CalculationTime);
+			_serviceBus.DelaySend(nextCalculateDate, new AgentBadgeCalculateMessage
 			{
-				nextCalculateDate = nextCalculateDate.Add(agentBadgeSetting.CalculationTime);
-				_serviceBus.DelaySend(nextCalculateDate, new AgentBadgeCalculateMessage
-				{
-					IsInitialization = false,
-					TimezoneId = timezone.Id
-				});
-			}
+				IsInitialization = false,
+				TimezoneId = timezone.Id
+			});
 		}
 
 		protected virtual IEnumerable<IDataSource> GetValidDataSources()

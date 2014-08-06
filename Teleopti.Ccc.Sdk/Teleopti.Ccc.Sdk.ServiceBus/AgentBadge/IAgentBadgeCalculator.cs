@@ -10,7 +10,5 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	{
 		IEnumerable<IPerson> Calculate(IStatelessUnitOfWork unitOfWork, IEnumerable<IPerson> allPersons, int timezoneId, DateTime date,
 			AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int silverBadgeRate, int goldBadgeRate);
-
-		IDictionary<int, DateTime> LastCalculatedDates { get; set; }
 	}
 }
