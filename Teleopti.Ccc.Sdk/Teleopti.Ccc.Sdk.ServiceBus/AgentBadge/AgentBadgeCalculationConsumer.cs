@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				_lastCalculatedDates.Add(keyName, tomorrowForTimezone.AddDays(-1).ToLocalTime());
 			}
 
-			if (_lastCalculatedDates[keyName] == tomorrowForTimezone.ToLocalTime().Add(agentBadgeSetting.CalculationTime))
+			if (_lastCalculatedDates[keyName] == tomorrowForTimezone.ToLocalTime())
 			{
 				nextCalculateDate = tomorrowForTimezone.AddDays(1).ToLocalTime();
 			}
