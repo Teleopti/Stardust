@@ -56,13 +56,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			labelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			labelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 
-			teleoptiGridControl1.BackColor = ColorHelper.GridControlGridInteriorColor();
-			teleoptiGridControl1.Properties.BackgroundColor = ColorHelper.WizardBackgroundColor();
+			gridControlAlarms.BackColor = ColorHelper.GridControlGridInteriorColor();
+			gridControlAlarms.Properties.BackgroundColor = ColorHelper.WizardBackgroundColor();
 		}
 
 		public void LoadControl()
 		{
-			_view = new ManageAlarmSituationView(teleoptiGridControl1);
+			_view = new ManageAlarmSituationView(gridControlAlarms);
 			var currentUnitOfWork = UnitOfWorkFactory.CurrentUnitOfWork();
 			_view.Presenter = new ManageAlarmSituationPresenter(UnitOfWorkFactory.Current,
 																new AlarmTypeRepository(currentUnitOfWork),

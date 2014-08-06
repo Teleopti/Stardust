@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Syncfusion.Windows.Shared;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Interfaces.Domain;
@@ -21,8 +22,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
         public event EventHandler<SFGridColumnGridHelperEventArgs<T>> NewSourceEntityWanted;
         public event EventHandler PasteFromClipboardFinished;
 
+	    public SFGridColumnGridHelper(GridControl gridControl, ReadOnlyCollection<SFGridColumnBase<T>> gridColumns,
+		    IList<T> sourceList): this(gridControl, gridColumns, sourceList, true)
+	    {}
 
-        public SFGridColumnGridHelper(GridControl gridControl, ReadOnlyCollection<SFGridColumnBase<T>> gridColumns, IList<T> sourceList)
+        public SFGridColumnGridHelper(GridControl gridControl, ReadOnlyCollection<SFGridColumnBase<T>> gridColumns, IList<T> sourceList, bool styleIt)
         {
             _grid = gridControl;
             _gridColumns = gridColumns;
@@ -36,7 +40,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             _rowHeaders = _grid.Rows.HeaderCount + 1;
             _colHeaders = _grid.Cols.HeaderCount + 1;
 
-            GridHelper.GridStyle(_grid);
+			if (styleIt)
+				GridHelper.GridStyle(_grid);
             // Overrrides standard behavior.
             _grid.ResizeColsBehavior = GridResizeCellsBehavior.ResizeSingle;
 

@@ -529,8 +529,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_gridHelper = new SFGridColumnGridHelper<RotationRestrictionView>(
 				gridControlRotation,
 				new ReadOnlyCollection<SFGridColumnBase<RotationRestrictionView>>(_gridColumns),
-				_restrictionViewList
-				) {AllowExtendedCopyPaste = true};
+				_restrictionViewList, false) {AllowExtendedCopyPaste = true};
 
 			_gridHelper.PasteFromClipboardFinished += gridHelperPasteFromClipboardFinished;
 		}

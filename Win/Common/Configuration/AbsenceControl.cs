@@ -409,7 +409,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			_gridColumnHelper = new SFGridColumnGridHelper<AbsenceView>(gridControlAbsences,
 							   absenceColumns,
-							   _sourceList) {AllowExtendedCopyPaste = true};
+							   _sourceList,false) {AllowExtendedCopyPaste = true};
 
 			_gridColumnHelper.NewSourceEntityWanted += columnGridHelperNewSourceEntityWanted;
 		}

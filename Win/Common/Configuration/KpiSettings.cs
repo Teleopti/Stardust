@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 
 			ReadOnlyCollection<SFGridColumnBase<IKpiTarget>> x = configureGrid();
-			_columnGridHelper = new SFGridColumnGridHelper<IKpiTarget>(gridControl1, x, _source)
+			_columnGridHelper = new SFGridColumnGridHelper<IKpiTarget>(gridControl1, x, _source, false)
 									{AllowExtendedCopyPaste = true};
 			
 			gridControl1.Model.ColWidths.ResizeToFit(GridRangeInfo.Cols(0, gridControl1.ColCount), GridResizeToFitOptions.IncludeHeaders);

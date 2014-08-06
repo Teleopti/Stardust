@@ -284,8 +284,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_gridHelper = new SFGridColumnGridHelper<AvailabilityRestrictionView>(
 				gridControlAvailability,
 				_gridColumns,
-				_restrictionViewList
-				) {AllowExtendedCopyPaste = true};
+				_restrictionViewList,
+				false) {AllowExtendedCopyPaste = true};
 
 			// HACK: Handles event to get rid of fxcop.
 			_gridHelper.NewSourceEntityWanted += gridHelper_NewSourceEntityWanted;

@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
 
             _gridColumnHelper = new SFGridColumnGridHelper<IMultiplicator>(gridMultiplicator,
                                                                            multiplicatorColumns,
-                                                                           new List<IMultiplicator>(_sourceList));
+                                                                           new List<IMultiplicator>(_sourceList),false);
                                     _gridColumnHelper.AllowExtendedCopyPaste = true;
 
             gridMultiplicator.Model.ColWidths.ResizeToFit(GridRangeInfo.Cols(0, gridMultiplicator.ColCount));

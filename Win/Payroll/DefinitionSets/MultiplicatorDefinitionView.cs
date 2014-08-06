@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             ExplorerView.ExplorerPresenter.MultiplicatorDefinitionPresenter.LoadMultiplicatorDefinitions();
             
             _gridHelper = new SFGridColumnGridHelper<IMultiplicatorDefinitionViewModel>(gridControlMultiplicatorDefinition,
-                                                                                        _gridColumns, ExplorerView.ExplorerPresenter.MultiplicatorDefinitionPresenter.ModelCollection);
+                                                                                        _gridColumns, ExplorerView.ExplorerPresenter.MultiplicatorDefinitionPresenter.ModelCollection, false);
             _gridHelper.UnbindClipboardPasteEvent();
 
             _gridHelper.AllowExtendedCopyPaste = true;
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             gridControlMultiplicatorDefinition.ClipboardCut += (gridControlMultiplicatorDefinitionClipboardCut);
             gridControlMultiplicatorDefinition.ClipboardCopy += (gridControlMultiplicatorDefinitionClipboardCopy);
             gridControlMultiplicatorDefinition.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
-            gridControlMultiplicatorDefinition.Model.Options.ExcelLikeCurrentCell = true;
+            
         }
 
         void gridControlMultiplicatorDefinitionClipboardCopy(object sender, GridCutPasteEventArgs e)

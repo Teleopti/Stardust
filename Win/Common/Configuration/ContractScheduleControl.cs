@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
                 new SFGridColumnGridHelper<ContractScheduleWeekAdapter>(gridControlContractSchedule,
                                             _contractScheduleWeekCols,
-                                            _contractScheduleWeekList);
+                                            _contractScheduleWeekList,false);
             }
 
             gridControlContractSchedule.ColWidths[0] = weekColumnWidth;

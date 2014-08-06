@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			_gridHelper = new SFGridColumnGridHelper<ShiftCategoryModel>(gridControlShiftCategory,
 											shiftCatColumns,
-											getSource<ShiftCategoryModel>() ) {AllowExtendedCopyPaste = true};
+											getSource<ShiftCategoryModel>(), false ) {AllowExtendedCopyPaste = true};
 
 			gridControlShiftCategory.ColWidths[1] = nameColumnWidth;
 			gridControlShiftCategory.ColWidths[2] = shortNameColumnWidth;

@@ -105,8 +105,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 			gridColumns.Add(new ActivityUpdatedReadOnlyTextColumn<IActivity>("UpdatedBy", Resources.UpdatedBy));
 			gridColumns.Add(new ActivityUpdatedReadOnlyTextColumn<IActivity>("UpdatedTimeInUserPerspective", Resources.UpdatedOn));
-			gridControlActivities.Font = Font;
+			
+			
+
 			return new ReadOnlyCollection<SFGridColumnBase<IActivity>>(gridColumns);
+
 			
 		}
 
@@ -342,10 +345,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			ReadOnlyCollection<SFGridColumnBase<IActivity>> activityColumns = configureActivityGrid();
 			_gridColumnHelper = new SFGridColumnGridHelper<IActivity>(gridControlActivities,
 								activityColumns,
-								getSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList()) {AllowExtendedCopyPaste = true};
+								getSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList(),false) {AllowExtendedCopyPaste = true};
 
 			_gridColumnHelper.NewSourceEntityWanted += columnGridHelperNewSourceEntityWanted;
-
+			
 		}
 
 		public void SaveChanges()
@@ -437,10 +440,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			gridControlActivities.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
 		}
-
-		private void gridControlActivitiesFontChanged(object sender, EventArgs e)
-		{
-			var d =gridControlActivities.Font;
-		}
+		
 	}
 }

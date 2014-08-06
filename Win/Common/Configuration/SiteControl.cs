@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Configuration.Columns;
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			SetTexts();
 			
 			var columns = configureGrid();
-			_columnGridHelper = new SFGridColumnGridHelper<ISite>(gridControlSites, columns, new List<ISite>()) { AllowExtendedCopyPaste = false };
+			_columnGridHelper = new SFGridColumnGridHelper<ISite>(gridControlSites, columns, new List<ISite>(),false) { AllowExtendedCopyPaste = false };
 		}
 
 		private void setColors()
@@ -126,7 +127,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void LoadSiteGrid(IList<ISite> allNotDeletedSites)
 		{
 			_columnGridHelper.SetSourceList(allNotDeletedSites);
-
+			gridControlSites.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
 		}
 	}
 }

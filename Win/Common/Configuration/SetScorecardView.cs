@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 
 			ReadOnlyCollection<SFGridColumnBase<ITeamScorecardModel>> x = configureGrid();
-			_columnGridHelper = new SFGridColumnGridHelper<ITeamScorecardModel>(gridControl1, x, _source)
+			_columnGridHelper = new SFGridColumnGridHelper<ITeamScorecardModel>(gridControl1, x, _source, false)
 									{AllowExtendedCopyPaste = true};
 		}
 	}

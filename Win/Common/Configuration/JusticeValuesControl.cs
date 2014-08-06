@@ -41,11 +41,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public void LoadControl()
 		{
-			GridHelper.GridStyle(grid);
 			loadSourceList();
 
 			var columns = configureGrid();
-			_gridColumnHelper = new SFGridColumnGridHelper<JusticeValuesView>(grid, columns, _source as List<JusticeValuesView>)
+			_gridColumnHelper = new SFGridColumnGridHelper<JusticeValuesView>(grid, columns, _source as List<JusticeValuesView>, false)
 									{AllowExtendedCopyPaste = false};
 		}
 
