@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
@@ -740,41 +741,41 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             toolStripTextBoxNewScenario.Text = "(" + UserTexts.Resources.NewScenario + ")";
         }
 
-        private void reloadScenarioMenuItems()
-        {
-            using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                IScenarioRepository scenarioRepository = new ScenarioRepository(unitOfWork);
-                IList<IScenario> scenarios = scenarioRepository.FindAllSorted();
+	    private void reloadScenarioMenuItems()
+	    {
+		    using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+		    {
+			    IScenarioRepository scenarioRepository = new ScenarioRepository(unitOfWork);
+			    IList<IScenario> scenarios = scenarioRepository.FindAllSorted();
 
-                officeDropDownButtonSaveToScenario.DropDownItems.Clear();
-                toolStripTextBoxNewScenario.Width = ribbonControlAdv1.OfficeMenu.AuxPanel.PreferredSize.Width;
-                
-                foreach (IScenario scenario in scenarios)
-                {
-                    if (_scenario.Description.Name != scenario.Description.Name)
-                    {
-                        ToolStripMenuItem scenarioMenuItem = new ToolStripMenuItem(scenario.Description.Name);
-                        scenarioMenuItem.TextAlign = ContentAlignment.MiddleLeft;
-                        scenarioMenuItem.Overflow = ToolStripItemOverflow.Never;
-                        scenarioMenuItem.Width = ribbonControlAdv1.OfficeMenu.AuxPanel.PreferredSize.Width;
-                        scenarioMenuItem.Tag = scenario;
-                        scenarioMenuItem.Click += scenarioMenuItem_Click;
-                        officeDropDownButtonSaveToScenario.DropDownItems.Insert(0, scenarioMenuItem);
-                    }
-                }
-            }
-        }
+			    flowLayoutExportToScenario.ContainerControl.Controls.Clear();
+			    foreach (var scenario in scenarios)
+			    {
+				    if (_scenario.Description.Name == scenario.Description.Name) continue;
+				    var button = new ButtonAdv
+				    {
+					    Text = scenario.Description.Name,
+					    Width = 300,
+					    Height = 80,
+					    Appearance = ButtonAppearance.Metro,
+					    UseVisualStyle = true,
+					    Tag = scenario
+				    };
 
-        private void scenarioMenuItem_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender;
-            IScenario scenario = (IScenario)toolStripMenuItem.Tag;
-            
-            SaveForecastToScenario(scenario);
-        }
+				    button.Font.ChangeToBold();
+				    button.Click += scenarioMenuItem_Click;
+				    flowLayoutExportToScenario.ContainerControl.Controls.Add(button);
+			    }
+		    }
+	    }
 
-        private void SaveForecastToScenario(IScenario scenario)
+	    private void scenarioMenuItem_Click(object sender, EventArgs e)
+	    {
+		    var scenario = (IScenario) ((ButtonAdv) sender).Tag;
+			 SaveForecastToScenario(scenario);
+	    }
+
+	    private void SaveForecastToScenario(IScenario scenario)
         {
             Cursor = Cursors.WaitCursor;
 

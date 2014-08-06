@@ -93,16 +93,15 @@
 			// buttonAdvSkillMonth
 			// 
 			this.buttonAdvSkillMonth.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.buttonAdvSkillMonth.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvSkillMonth.BackColor = System.Drawing.Color.White;
+			this.buttonAdvSkillMonth.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonAdvSkillMonth.BeforeTouchSize = new System.Drawing.Size(32, 32);
-			this.buttonAdvSkillMonth.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvSkillMonth.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_SkillGridMonth;
 			this.buttonAdvSkillMonth.IsBackStageButton = false;
 			this.buttonAdvSkillMonth.Location = new System.Drawing.Point(73, 38);
 			this.buttonAdvSkillMonth.Margin = new System.Windows.Forms.Padding(1);
 			this.buttonAdvSkillMonth.Name = "buttonAdvSkillMonth";
-			this.buttonAdvSkillMonth.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvSkillMonth.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Silver;
+			this.buttonAdvSkillMonth.Office2010ColorScheme = Syncfusion.Windows.Forms.Office2010Theme.Silver;
 			this.buttonAdvSkillMonth.PushButton = true;
 			this.buttonAdvSkillMonth.ResetStateOnLostFocus = false;
 			this.buttonAdvSkillMonth.Size = new System.Drawing.Size(32, 32);
@@ -114,16 +113,15 @@
 			// buttonAdvSkillWeek
 			// 
 			this.buttonAdvSkillWeek.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.buttonAdvSkillWeek.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvSkillWeek.BackColor = System.Drawing.Color.White;
+			this.buttonAdvSkillWeek.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonAdvSkillWeek.BeforeTouchSize = new System.Drawing.Size(32, 32);
-			this.buttonAdvSkillWeek.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvSkillWeek.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_SkillGridWeek;
 			this.buttonAdvSkillWeek.IsBackStageButton = false;
 			this.buttonAdvSkillWeek.Location = new System.Drawing.Point(110, 38);
 			this.buttonAdvSkillWeek.Margin = new System.Windows.Forms.Padding(1);
 			this.buttonAdvSkillWeek.Name = "buttonAdvSkillWeek";
-			this.buttonAdvSkillWeek.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvSkillWeek.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Silver;
+			this.buttonAdvSkillWeek.Office2010ColorScheme = Syncfusion.Windows.Forms.Office2010Theme.Silver;
 			this.buttonAdvSkillWeek.PushButton = true;
 			this.buttonAdvSkillWeek.ResetStateOnLostFocus = false;
 			this.buttonAdvSkillWeek.Size = new System.Drawing.Size(32, 32);
@@ -135,17 +133,16 @@
 			// buttonAdvWorkloadIntraday
 			// 
 			this.buttonAdvWorkloadIntraday.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.buttonAdvWorkloadIntraday.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvWorkloadIntraday.BackColor = System.Drawing.Color.White;
+			this.buttonAdvWorkloadIntraday.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonAdvWorkloadIntraday.BeforeTouchSize = new System.Drawing.Size(32, 32);
 			this.buttonAdvWorkloadIntraday.Cursor = System.Windows.Forms.Cursors.Default;
-			this.buttonAdvWorkloadIntraday.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvWorkloadIntraday.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_WorkloadGridIntraday;
 			this.buttonAdvWorkloadIntraday.IsBackStageButton = false;
 			this.buttonAdvWorkloadIntraday.Location = new System.Drawing.Point(184, 2);
 			this.buttonAdvWorkloadIntraday.Margin = new System.Windows.Forms.Padding(1);
 			this.buttonAdvWorkloadIntraday.Name = "buttonAdvWorkloadIntraday";
-			this.buttonAdvWorkloadIntraday.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvWorkloadIntraday.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Silver;
+			this.buttonAdvWorkloadIntraday.Office2010ColorScheme = Syncfusion.Windows.Forms.Office2010Theme.Silver;
 			this.buttonAdvWorkloadIntraday.PushButton = true;
 			this.buttonAdvWorkloadIntraday.ResetStateOnLostFocus = false;
 			this.buttonAdvWorkloadIntraday.Size = new System.Drawing.Size(32, 32);
@@ -157,16 +154,15 @@
 			// buttonAdvSkillIntraday
 			// 
 			this.buttonAdvSkillIntraday.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.buttonAdvSkillIntraday.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvSkillIntraday.BackColor = System.Drawing.Color.White;
+			this.buttonAdvSkillIntraday.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonAdvSkillIntraday.BeforeTouchSize = new System.Drawing.Size(32, 32);
-			this.buttonAdvSkillIntraday.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvSkillIntraday.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_SkillGridIntraday;
 			this.buttonAdvSkillIntraday.IsBackStageButton = false;
 			this.buttonAdvSkillIntraday.Location = new System.Drawing.Point(184, 38);
 			this.buttonAdvSkillIntraday.Margin = new System.Windows.Forms.Padding(1);
 			this.buttonAdvSkillIntraday.Name = "buttonAdvSkillIntraday";
-			this.buttonAdvSkillIntraday.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvSkillIntraday.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Silver;
+			this.buttonAdvSkillIntraday.Office2010ColorScheme = Syncfusion.Windows.Forms.Office2010Theme.Silver;
 			this.buttonAdvSkillIntraday.PushButton = true;
 			this.buttonAdvSkillIntraday.ResetStateOnLostFocus = false;
 			this.buttonAdvSkillIntraday.Size = new System.Drawing.Size(32, 32);
@@ -178,17 +174,17 @@
 			// buttonAdvWorkloadDay
 			// 
 			this.buttonAdvWorkloadDay.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.buttonAdvWorkloadDay.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvWorkloadDay.BackColor = System.Drawing.Color.White;
+			this.buttonAdvWorkloadDay.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvWorkloadDay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.buttonAdvWorkloadDay.BeforeTouchSize = new System.Drawing.Size(32, 32);
 			this.buttonAdvWorkloadDay.Cursor = System.Windows.Forms.Cursors.Default;
-			this.buttonAdvWorkloadDay.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvWorkloadDay.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_WorkloadGridDay;
 			this.buttonAdvWorkloadDay.IsBackStageButton = false;
 			this.buttonAdvWorkloadDay.Location = new System.Drawing.Point(147, 2);
 			this.buttonAdvWorkloadDay.Margin = new System.Windows.Forms.Padding(1);
 			this.buttonAdvWorkloadDay.Name = "buttonAdvWorkloadDay";
-			this.buttonAdvWorkloadDay.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvWorkloadDay.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Silver;
+			this.buttonAdvWorkloadDay.Office2010ColorScheme = Syncfusion.Windows.Forms.Office2010Theme.Silver;
 			this.buttonAdvWorkloadDay.PushButton = true;
 			this.buttonAdvWorkloadDay.ResetStateOnLostFocus = false;
 			this.buttonAdvWorkloadDay.Size = new System.Drawing.Size(32, 32);
@@ -200,16 +196,15 @@
 			// buttonAdvSkillDay
 			// 
 			this.buttonAdvSkillDay.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.buttonAdvSkillDay.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvSkillDay.BackColor = System.Drawing.Color.White;
+			this.buttonAdvSkillDay.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonAdvSkillDay.BeforeTouchSize = new System.Drawing.Size(32, 32);
-			this.buttonAdvSkillDay.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvSkillDay.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_SkillGridDay;
 			this.buttonAdvSkillDay.IsBackStageButton = false;
 			this.buttonAdvSkillDay.Location = new System.Drawing.Point(147, 38);
 			this.buttonAdvSkillDay.Margin = new System.Windows.Forms.Padding(1);
 			this.buttonAdvSkillDay.Name = "buttonAdvSkillDay";
-			this.buttonAdvSkillDay.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvSkillDay.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Silver;
+			this.buttonAdvSkillDay.Office2010ColorScheme = Syncfusion.Windows.Forms.Office2010Theme.Silver;
 			this.buttonAdvSkillDay.PushButton = true;
 			this.buttonAdvSkillDay.ResetStateOnLostFocus = false;
 			this.buttonAdvSkillDay.Size = new System.Drawing.Size(32, 32);
@@ -221,16 +216,15 @@
 			// buttonAdvWorkloadMonth
 			// 
 			this.buttonAdvWorkloadMonth.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.buttonAdvWorkloadMonth.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvWorkloadMonth.BackColor = System.Drawing.Color.White;
+			this.buttonAdvWorkloadMonth.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonAdvWorkloadMonth.BeforeTouchSize = new System.Drawing.Size(32, 32);
-			this.buttonAdvWorkloadMonth.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvWorkloadMonth.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_WorkloadGridMonth;
 			this.buttonAdvWorkloadMonth.IsBackStageButton = false;
 			this.buttonAdvWorkloadMonth.Location = new System.Drawing.Point(73, 2);
 			this.buttonAdvWorkloadMonth.Margin = new System.Windows.Forms.Padding(1);
 			this.buttonAdvWorkloadMonth.Name = "buttonAdvWorkloadMonth";
-			this.buttonAdvWorkloadMonth.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvWorkloadMonth.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Silver;
+			this.buttonAdvWorkloadMonth.Office2010ColorScheme = Syncfusion.Windows.Forms.Office2010Theme.Silver;
 			this.buttonAdvWorkloadMonth.PushButton = true;
 			this.buttonAdvWorkloadMonth.ResetStateOnLostFocus = false;
 			this.buttonAdvWorkloadMonth.Size = new System.Drawing.Size(32, 32);
@@ -242,16 +236,16 @@
 			// buttonAvdWorkloadWeek
 			// 
 			this.buttonAvdWorkloadWeek.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.buttonAvdWorkloadWeek.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAvdWorkloadWeek.BackColor = System.Drawing.Color.White;
+			this.buttonAvdWorkloadWeek.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAvdWorkloadWeek.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.buttonAvdWorkloadWeek.BeforeTouchSize = new System.Drawing.Size(32, 32);
-			this.buttonAvdWorkloadWeek.ForeColor = System.Drawing.Color.White;
 			this.buttonAvdWorkloadWeek.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_WorkloadGridWeek;
 			this.buttonAvdWorkloadWeek.IsBackStageButton = false;
 			this.buttonAvdWorkloadWeek.Location = new System.Drawing.Point(110, 2);
 			this.buttonAvdWorkloadWeek.Margin = new System.Windows.Forms.Padding(1);
 			this.buttonAvdWorkloadWeek.Name = "buttonAvdWorkloadWeek";
-			this.buttonAvdWorkloadWeek.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAvdWorkloadWeek.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Silver;
+			this.buttonAvdWorkloadWeek.Office2010ColorScheme = Syncfusion.Windows.Forms.Office2010Theme.Silver;
 			this.buttonAvdWorkloadWeek.PushButton = true;
 			this.buttonAvdWorkloadWeek.ResetStateOnLostFocus = false;
 			this.buttonAvdWorkloadWeek.Size = new System.Drawing.Size(32, 32);
