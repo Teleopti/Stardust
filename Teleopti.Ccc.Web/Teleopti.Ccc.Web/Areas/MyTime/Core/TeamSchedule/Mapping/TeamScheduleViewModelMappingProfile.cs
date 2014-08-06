@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 	{
 		private readonly Func<IUserTimeZone> _userTimeZone;
 		private readonly ICreateHourText _createHourText;
-		private readonly IBadgeProvider _badgeProvider;
+		private readonly ITeamScheduleBadgeProvider _badgeProvider;
 
-		public TeamScheduleViewModelMappingProfile(Func<IUserTimeZone> userTimeZone, ICreateHourText createHourText, IBadgeProvider badgeProvider)
+		public TeamScheduleViewModelMappingProfile(Func<IUserTimeZone> userTimeZone, ICreateHourText createHourText, ITeamScheduleBadgeProvider badgeProvider)
 		{
 			_userTimeZone = userTimeZone;
 			_createHourText = createHourText;

@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 {
-	public interface IBadgeProvider
+	public interface ITeamScheduleBadgeProvider
 	{
 		IEnumerable<IAgentBadge> GetBadges(Guid? personId);
 	}

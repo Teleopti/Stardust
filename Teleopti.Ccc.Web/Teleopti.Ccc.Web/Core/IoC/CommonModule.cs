@@ -5,6 +5,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<ReportsProvider>().As<IReportsProvider>();
 			builder.RegisterType<ReportsNavigationProvider>().As<IReportsNavigationProvider>();
 			builder.RegisterType<BadgeProvider>().As<IBadgeProvider>();
+			builder.RegisterType<TeamScheduleBadgeProvider>().As<ITeamScheduleBadgeProvider>();
 			builder.RegisterType<BadgeSettingProvider>().As<IBadgeSettingProvider>();
 		}
 

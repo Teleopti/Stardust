@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		private TeamScheduleDomainData data;
 		private IUserTimeZone userTimeZone;
 		private TimeZoneInfo timeZone;
-		private IBadgeProvider badgeProvider;
+		private ITeamScheduleBadgeProvider badgeProvider;
 
 		[SetUp]
 		public void SetUp()
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			userTimeZone.Stub(x => x.TimeZone()).Do((Func<TimeZoneInfo>)(() => timeZone));
 
-			badgeProvider = MockRepository.GenerateMock<IBadgeProvider>();
+			badgeProvider = MockRepository.GenerateMock<ITeamScheduleBadgeProvider>();
 			Mapper.Reset();
 			Mapper.Initialize(
 				c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone, new CreateHourText(new CurrentThreadUserCulture(), userTimeZone), badgeProvider)));

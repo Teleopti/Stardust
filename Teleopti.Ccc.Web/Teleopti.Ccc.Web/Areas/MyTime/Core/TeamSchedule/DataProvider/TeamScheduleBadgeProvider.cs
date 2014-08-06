@@ -5,11 +5,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 {
-	public class BadgeProvider : IBadgeProvider
+	public class TeamScheduleBadgeProvider : ITeamScheduleBadgeProvider
 	{
 		private readonly IPersonRepository _repository;
 
-		public BadgeProvider(IPersonRepository repository)
+		public TeamScheduleBadgeProvider(IPersonRepository repository)
 		{
 			_repository = repository;
 		}

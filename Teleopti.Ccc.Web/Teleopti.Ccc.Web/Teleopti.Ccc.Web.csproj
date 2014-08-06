@@ -351,8 +351,8 @@
     <Compile Include="Areas\MyTime\Core\ShareCalendar\IPrincipalAuthorizationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\PrincipalAuthorizationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailViewModelMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\BadgeProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\IBadgeProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleBadgeProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\ITeamScheduleBadgeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeAddPersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeAddScheduleLayerViewModelMapper.cs" />
