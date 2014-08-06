@@ -85,12 +85,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
 			_adherenceReportSetting = new AdherenceReportSetting();
-			_allTimezones = new List<ISimpleTimeZone> {
-				new SimpleTimeZone(){Id = -1, Name = "UTC", Distance = -60},
-				new SimpleTimeZone(){Id = 0, Name = "UTC", Distance = 0},
-				new SimpleTimeZone(){Id = 1, Name = "UTC+1", Distance = 60},
-				new SimpleTimeZone(){Id = 8, Name = "China", Distance = 480},
-				new SimpleTimeZone(){Id = 10, Name = "UTC+10", Distance = 600}
+			_allTimezones = new List<ISimpleTimeZone>
+			{
+				new SimpleTimeZone {Id = -1, Name = "UTC-1", Distance = -60},
+				new SimpleTimeZone {Id = 0, Name = "UTC", Distance = 0},
+				new SimpleTimeZone {Id = 1, Name = "UTC+1", Distance = 60},
+				new SimpleTimeZone {Id = 8, Name = "China", Distance = 480},
+				new SimpleTimeZone {Id = 10, Name = "UTC+10", Distance = 600}
 			};
 			timezone = _allTimezones.First();
 			timezoneId = timezone.Id;
