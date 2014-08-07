@@ -181,8 +181,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="SignInAsAnotherUser.feature.cs">
-      <DependentUpon>SignInAsAnotherUser.feature</DependentUpon>
+    <Compile Include="SignOut.feature.cs">
+      <DependentUpon>SignOut.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -835,9 +835,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SessionAnywhere.feature.cs</LastGenOutput>
     </None>
-    <None Include="SignInAsAnotherUser.feature">
+    <None Include="SignOut.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SignInAsAnotherUser.feature.cs</LastGenOutput>
+      <LastGenOutput>SignOut.feature.cs</LastGenOutput>
     </None>
     <None Include="Data\iisexpress.config">
       <SubType>Designer</SubType>

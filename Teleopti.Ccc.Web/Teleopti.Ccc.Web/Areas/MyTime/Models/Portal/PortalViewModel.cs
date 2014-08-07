@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public string CustomerName { get; set; }
 		public bool ShowChangePassword { get; set; }
 		public bool HasAsmPermission { get; set; }
-		public bool HasSignInAsAnotherUser { get; set; }
 		public bool ShowMeridian { get; set; }
 		public IEnumerable<BadgeViewModel> Badges { get; set; }
 		public bool IsBadgesToggleEnabled { get; set; }

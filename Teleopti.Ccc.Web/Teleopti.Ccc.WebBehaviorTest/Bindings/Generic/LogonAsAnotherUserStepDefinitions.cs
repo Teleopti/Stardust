@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Interactions.AssertNotExists("#regional-settings", "#signin-as-another");
 		}
 
-		[When(@"I choose to logon as another user")]
-		public void WhenIChooseToLogonAsAnotherUser()
+		[When(@"I choose to sign out")]
+		public void WhenIChooseToSignOut()
 		{
 			Browser.Interactions.Click(".user-name-link");
-			Browser.Interactions.Click("#signin-as-another");
+			Browser.Interactions.Click("#signout");
 		}
 
 		[When(@"I choose teleopti identity provider")]

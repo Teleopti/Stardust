@@ -273,3 +273,14 @@ ALTER TABLE [dbo].[AgentBadgeThresholdSettings]  WITH CHECK ADD  CONSTRAINT [FK_
 REFERENCES [dbo].[Person] ([Id]);
 
 ALTER TABLE [dbo].[AgentBadgeThresholdSettings] CHECK CONSTRAINT [FK_AgentBadgeThresholdSettings_Person];
+
+
+
+
+--Name: Kunning
+--Date: 2014-08-07  
+--Desc: Remove the following new application function> SignInAsAnotherUser
+---------------- 
+DELETE FROM [dbo].[ApplicationFunction] WHERE FunctionCode = 'SignInAsAnotherUser'
+
+GO

@@ -13,7 +13,7 @@ using Teleopti.Ccc.Web.Filters;
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
 	[TestFixture]
-	public class AuthenticationControllerSignOutAndSignInAsAnotherUserTest
+	public class AuthenticationControllerSignOutTest
 	{
 		private AuthenticationController _target;
 		private MockRepository mocks;
@@ -41,26 +41,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		}
 
 		[Test]
-		public void ShouldRedirectToRootWhenNoReturnUrl()
-		{
-			using (mocks.Record())
-			{
-				Expect.Call(_formsAuthentication.SignOut);
-			}
-			using (mocks.Playback())
-			{
-				var result = _target.SignOut() as RedirectToRouteResult;
-
-				result.RouteValues["action"].Should().Be.EqualTo("");
-				result.RouteValues["controller"].Should().Be.EqualTo("Authentication");
-			}
-		}
-
-		[Test]
-		public void ShouldSignInAsAnotherUser()
+		public void ShouldSignOut()
 		{
 			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://localhost/TeleoptiCCC/web/"), new Uri("http://localhost/TeleoptiCCC/web/"));
-			request.Stub(x => x.Url).Return(new Uri("http://localhost/TeleoptiCCC/web/Authentication/SignInAsAnotherUser"));
+			request.Stub(x => x.Url).Return(new Uri("http://localhost/TeleoptiCCC/web/Authentication/SignOut"));
 			var context = new FakeHttpContext("/");
 			context.SetRequest(request);
 			_target.ControllerContext = new ControllerContext(context, new RouteData(), _target);
@@ -72,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			}
 			using (mocks.Playback())
 			{
-				var result = _target.SignInAsAnotherUser() as RedirectResult;
+				var result = _target.SignOut() as RedirectResult;
 
 				result.Url.Should()
 					.Be.EqualTo("http://issuer/?wa=wsignout1.0&wreply=http%3a%2f%2fissuer%2f%3fwa%3dwsignin1.0%26wtrealm%3dtestrealm%26wctx%3dru%253dhttp%253a%252f%252flocalhost%252fTeleoptiCCC%252fweb%252f");

@@ -143,11 +143,8 @@
 								<li class="divider"></li>
 								<li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
 							}
-							@if (Model.HasSignInAsAnotherUser)
-							{
-								<li class="divider"></li>
-								<li>@Html.ActionLink(@Resources.SignInAsAnotherUser, "SignInAsAnotherUser", "Authentication", new { area = "Start" }, new { id = "signin-as-another" })</li>
-							}
+							<li class="divider"></li>
+							<li>@Html.ActionLink(@Resources.SignOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout" })</li>
 						</ul>
 					</li>
 				</ul>

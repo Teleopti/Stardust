@@ -142,28 +142,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			Assert.That(target.CreatePortalViewModel().HasAsmPermission, Is.False);
 		}
 
-		[Test]
-		public void ShouldShowSignInAsAnotherUserIfPermitted()
-		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Expect(p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.SignInAsAnotherUser)).Return(true);
-
-			var target = CreateTarget(permissionProvider);
-
-			Assert.That(target.CreatePortalViewModel().HasSignInAsAnotherUser, Is.True);
-		}
-
-		[Test]
-		public void ShouldNotShowSignInAsAnotherUserIfNoPermission()
-		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Expect(p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.SignInAsAnotherUser)).Return(false);
-
-			var target = CreateTarget(permissionProvider);
-
-			Assert.That(target.CreatePortalViewModel().HasSignInAsAnotherUser, Is.False);
-		}
-
 		[Test, SetCulture("en-US")]
 		public void ShouldShowMeridianWhenUsCulture()
 		{

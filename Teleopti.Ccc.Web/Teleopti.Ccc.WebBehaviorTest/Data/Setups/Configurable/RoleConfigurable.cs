@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToMatrixReports { get; set; }
 		public bool AccessToPersonalAbsenceAccount { get; set; }
 		public bool AccessToMyReportQueueMetrics { get; set; }
-		public bool CanLogonAsAnotherUser { get; set; }
 
 		public bool AddFullDayAbsence { get; set; }
 		public bool AddIntradayAbsence { get; set; }
@@ -81,7 +80,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToTeamSchedule = true;
 			AccessToMatrixReports = true;
 			AccessToPersonalAbsenceAccount = true;
-			CanLogonAsAnotherUser = true;
 			AccessToMyReportQueueMetrics = true;
 			AddFullDayAbsence = true;
 			AddIntradayAbsence = true;
@@ -219,10 +217,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = from f in applicationFunctions
 											  where f.ForeignSource != DefinedForeignSourceNames.SourceMatrix
 											  select f;
-			if (!CanLogonAsAnotherUser)
-				applicationFunctions = from f in applicationFunctions
-									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.SignInAsAnotherUser
-									   select f;
 			if (!AccessToMyReportQueueMetrics)
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics

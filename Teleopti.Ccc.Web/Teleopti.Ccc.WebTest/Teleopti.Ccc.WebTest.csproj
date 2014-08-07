@@ -363,7 +363,7 @@
     <Compile Include="Areas\MyTime\Controllers\StudentAvailabilityControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\PortalControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleControllerTest.cs" />
-    <Compile Include="Areas\Start\Controllers\AuthenticationControllerSignOutAndSignInAsAnotherUserTest.cs" />
+    <Compile Include="Areas\Start\Controllers\AuthenticationControllerSignOutTest.cs" />
     <Compile Include="Core\Authentication\Services\AuthenticatorTest.cs" />
     <Compile Include="Core\Authentication\DataProvider\BusinessUnitProviderTest.cs" />
     <Compile Include="Core\DateTimePeriodFormValidatorTest.cs" />
