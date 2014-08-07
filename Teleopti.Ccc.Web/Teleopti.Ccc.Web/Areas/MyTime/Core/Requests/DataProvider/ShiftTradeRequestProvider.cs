@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			IEnumerable<Guid> personIdList = (from person in possibleShiftTradePersons
 			                                 select person.Id.Value).ToList();
-			return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging);
+			return _scheduleDayReadModelFinder.ForPersonsByFilteredTimes(date, personIdList, paging, filteredStartTimes);
 		}
 
 		public Guid? RetrieveMyTeamId(DateOnly date)
