@@ -1,13 +1,5 @@
-/****** Object:  StoredProcedure [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter]    Script Date: 2014-08-07 13:35:09 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter]
-GO
-
-/****** Object:  StoredProcedure [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter]    Script Date: 2014-08-07 13:35:09 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
 GO
 
 -- =============================================
