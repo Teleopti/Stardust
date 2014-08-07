@@ -654,10 +654,10 @@
     <Compile Include="Common\MessageBoxWithListView.Designer.cs">
       <DependentUpon>MessageBoxWithListView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\PromptDoubleBox.cs">
+    <Compile Include="Budgeting\PromptDoubleBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\PromptDoubleBox.Designer.cs">
+    <Compile Include="Budgeting\PromptDoubleBox.Designer.cs">
       <DependentUpon>PromptDoubleBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\IHelpHelper.cs" />
@@ -2687,7 +2687,7 @@
       <DependentUpon>SiteControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\PromptDoubleBox.resx">
+    <EmbeddedResource Include="Budgeting\PromptDoubleBox.resx">
       <DependentUpon>PromptDoubleBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

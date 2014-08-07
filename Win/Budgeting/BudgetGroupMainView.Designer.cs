@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.SetShortcut(this.toolStripButtonLoadForecastedHours, System.Windows.Forms.Keys.None);
 			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripButtonLoadForecastedHours, true);
 			this.ribbonControlAdvFixed1.SetUseInQuickAccessMenu(this.toolStripButtonLoadForecastedHours, false);
-			this.toolStripButtonLoadForecastedHours.Click += new System.EventHandler(this.toolStripButtonLoadForecastedHours_Click);
+			this.toolStripButtonLoadForecastedHours.Click += new System.EventHandler(this.toolStripButtonLoadForecastedHoursClick);
 			// 
 			// toolStripButtonStaffEmployed
 			// 
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.SetShortcut(this.toolStripButtonStaffEmployed, System.Windows.Forms.Keys.None);
 			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripButtonStaffEmployed, true);
 			this.ribbonControlAdvFixed1.SetUseInQuickAccessMenu(this.toolStripButtonStaffEmployed, false);
-			this.toolStripButtonStaffEmployed.Click += new System.EventHandler(this.toolStripButtonLoadStaffEmployed_Click);
+			this.toolStripButtonStaffEmployed.Click += new System.EventHandler(this.toolStripButtonLoadStaffEmployedClick);
 			// 
 			// toolStripExViews
 			// 
@@ -289,7 +289,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.SetShortcut(this.toolStripButtonMonthView, System.Windows.Forms.Keys.None);
 			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripButtonMonthView, true);
 			this.ribbonControlAdvFixed1.SetUseInQuickAccessMenu(this.toolStripButtonMonthView, false);
-			this.toolStripButtonMonthView.Click += new System.EventHandler(this.toolStripButtonMonthView_Click);
+			this.toolStripButtonMonthView.Click += new System.EventHandler(this.toolStripButtonMonthViewClick);
 			// 
 			// toolStripButtonWeekView
 			// 
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.SetShortcut(this.toolStripButtonWeekView, System.Windows.Forms.Keys.None);
 			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripButtonWeekView, true);
 			this.ribbonControlAdvFixed1.SetUseInQuickAccessMenu(this.toolStripButtonWeekView, false);
-			this.toolStripButtonWeekView.Click += new System.EventHandler(this.toolStripButtonWeekView_Click);
+			this.toolStripButtonWeekView.Click += new System.EventHandler(this.toolStripButtonWeekViewClick);
 			// 
 			// toolStripButtonDayView
 			// 
@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.SetShortcut(this.toolStripButtonDayView, System.Windows.Forms.Keys.None);
 			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripButtonDayView, true);
 			this.ribbonControlAdvFixed1.SetUseInQuickAccessMenu(this.toolStripButtonDayView, false);
-			this.toolStripButtonDayView.Click += new System.EventHandler(this.toolStripButtonDayView_Click);
+			this.toolStripButtonDayView.Click += new System.EventHandler(this.toolStripButtonDayViewClick);
 			// 
 			// toolStripTabItem3
 			// 
@@ -355,7 +355,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.SetShortcut(this.toolStripButtonSave, System.Windows.Forms.Keys.None);
 			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripButtonSave, true);
 			this.ribbonControlAdvFixed1.SetUseInQuickAccessMenu(this.toolStripButtonSave, false);
-			this.toolStripButtonSave.Click += new System.EventHandler(this.btnSave_click);
+			this.toolStripButtonSave.Click += new System.EventHandler(this.btnSaveClick);
 			// 
 			// gradientPanelMain
 			// 

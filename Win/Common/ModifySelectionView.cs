@@ -10,7 +10,7 @@ using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.Win.Common
 {
-    public partial class ModifySelectionView : BaseRibbonForm, IModifySelectionView
+    public partial class ModifySelectionView : BaseDialogForm, IModifySelectionView
     {
         private readonly ModifySelectionPresenter _presenter;
         private string _percentage;

@@ -8,7 +8,7 @@ using Size = System.Drawing.Size;
 
 namespace Teleopti.Ccc.Win.Budgeting
 {
-    public partial class SetEfficiencyShrinkageForm : BaseRibbonForm
+    public partial class SetEfficiencyShrinkageForm : BaseDialogForm
     {
         internal event EventHandler<CustomEventArgs<CustomEfficiencyShrinkageUpdatedEventArgs>> Save;
         private readonly bool _included;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.Budgeting
             tableLayoutPanelFields.Controls.Remove(checkBoxInclude);
             var height = tableLayoutPanelFields.GetRowHeights()[1];
             Size = new Size(Size.Width, Size.Height-height);
-            tableLayoutPanelFields.SetRow(gradientPanelBottom, 1);
+            
             checkBoxInclude = null;
         }
 

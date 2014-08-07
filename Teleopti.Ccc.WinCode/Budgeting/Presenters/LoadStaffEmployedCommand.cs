@@ -6,12 +6,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 {
-    public interface ILoadStaffEmployedCommand : IExecutableCommand
-    {
-    }
+	public interface ILoadStaffEmployedCommand : IExecutableCommand
+	{
+	}
 
-    public class LoadStaffEmployedCommand : ILoadStaffEmployedCommand
-    {
+	public class LoadStaffEmployedCommand : ILoadStaffEmployedCommand
+	{
 		private readonly IBudgetPeopleProvider _budgetPeopleProvider;
 		private readonly BudgetGroupMainModel _mainModel;
 		private readonly IBudgetDaySource _budgetDaySource;
@@ -29,22 +29,22 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 			if (firstBudgetDetailDayOfSelection == null) return;
 
 			var fulltimeEquivalentHoursPerDay = _budgetDaySource.GetFulltimeEquivalentHoursPerDay(firstBudgetDetailDayOfSelection.FulltimeEquivalentHours);
-			if (IsConsideredEmpty(fulltimeEquivalentHoursPerDay)) return;
+			if (isConsideredEmpty(fulltimeEquivalentHoursPerDay)) return;
 
 			var firstDay = firstBudgetDetailDayOfSelection.BudgetDay.Day;
 			var people = _budgetPeopleProvider.FindPeopleWithBudgetGroup(_mainModel.BudgetGroup, firstDay);
 			
-			var totalNumberOfWorktimeHours = GetTotalNumberOfWorktimeHours(firstDay, people);
+			var totalNumberOfWorktimeHours = getTotalNumberOfWorktimeHours(firstDay, people);
 
 			firstBudgetDetailDayOfSelection.StaffEmployed = totalNumberOfWorktimeHours.TotalHours / fulltimeEquivalentHoursPerDay.Value;
 		}
 
-		private static bool IsConsideredEmpty(double? fulltimeEquivalentHoursPerDay)
+		private static bool isConsideredEmpty(double? fulltimeEquivalentHoursPerDay)
 		{
 			return !fulltimeEquivalentHoursPerDay.HasValue || fulltimeEquivalentHoursPerDay.Value==0;
 		}
 
-		private static TimeSpan GetTotalNumberOfWorktimeHours(DateOnly firstDay, IEnumerable<IPerson> people)
+		private static TimeSpan getTotalNumberOfWorktimeHours(DateOnly firstDay, IEnumerable<IPerson> people)
 		{
 			var totalNumberOfWorktimeHours = TimeSpan.Zero;
 			foreach (IPerson person in people)
