@@ -348,6 +348,7 @@
     <None Include="Resources\Online.jpg" />
     <None Include="Resources\Payroll_small.png" />
     <None Include="Resources\People_small.png" />
+    <None Include="Resources\Performance-Manager_small.png" />
     <Content Include="Resources\permission.png" />
     <None Include="Resources\WFM-Budgets - Copy.png" />
     <None Include="Resources\WFM-Forecasts - Copy.png" />

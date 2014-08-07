@@ -618,3 +618,23 @@ Scenario: Should be able to see agents for multiple teams
 	And I click 'open'
 	Then I should see real time agent name for 'Pierre Baldi'
 	And I should see real time agent name for 'Ashley Andeen'
+
+@OnlyRunIfEnabled('RTA_MonitorMultipleBusinessUnits_28348')
+@ignore
+Scenario: Should display sites of a selected business unit
+	Given the current time is '2014-08-01 13:00'
+	And I have a role with
+	| Field                                  | Value             |
+	| Name                                   | Real time analyst |
+	| Access to real time adherence overview | True              |
+	And there is a business unit with
+	| Field | Value           |
+	| Name  | Business Unit 1 |
+	And there is a business unit with
+	| Field | Value           |
+	| Name  | Business Unit 2 |
+	And there is a site 'Paris' on business unit 'Business Unit 1'
+	And there is a site 'London' on business unit 'Business Unit 2'
+	When I view Real time adherence overview
+	And I select business unit 'Business Unit 1'
+	Then I should see the site 'Paris'

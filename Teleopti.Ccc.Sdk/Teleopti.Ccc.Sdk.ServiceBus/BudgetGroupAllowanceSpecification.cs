@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             
             if (personPeriod == null || personPeriod.BudgetGroup == null)
             {
-				Logger.DebugFormat("There is no budget group for you.");
-				invalidConfig = UserTexts.Resources.ResourceManager.GetString("BudgetGroupMissing", culture); 
-                validatedRequest.IsValid = false;
+								Logger.DebugFormat("There is no budget group for you: {0}", absenceRequest.Person.Id);
+								invalidConfig = UserTexts.Resources.ResourceManager.GetString("BudgetGroupMissing", culture); 
+		            validatedRequest.IsValid = false;
                 validatedRequest.ValidationErrors = invalidConfig;
                 return validatedRequest;
 

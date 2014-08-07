@@ -96,5 +96,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .SetReadOnly(true)
 							  .List<PersonScheduleDayReadModel>();
 		}
+
+		public IEnumerable<PersonScheduleDayReadModel> ForPersonsByFilteredTimes(DateOnly shiftTradeDate, IEnumerable<Guid> personIdList, Paging paging, IEnumerable<TimePeriod> filteredStartTimes )
+		{
+			var idlist = string.Join(",", personIdList);
+			var startTimeList = string.Join(",", filteredStartTimes);
+			return _unitOfWork.Session().CreateSQLQuery(
+				"EXEC  [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter] @shiftTradeDate=:shiftTradeDate, @personList=:personIdList, @filteredStartTimeList=:filteredStartTimes, @skip=:skip, @take=:take")
+							  .AddScalar("PersonId", NHibernateUtil.Guid)
+							  .AddScalar("TeamId", NHibernateUtil.Guid)
+							  .AddScalar("SiteId", NHibernateUtil.Guid)
+							  .AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+							  .AddScalar("Date", NHibernateUtil.DateTime)
+							  .AddScalar("Start", NHibernateUtil.DateTime)
+							  .AddScalar("End", NHibernateUtil.DateTime)
+							  .AddScalar("Model", NHibernateUtil.Custom(typeof(CompressedString)))
+							  .AddScalar("MinStart", NHibernateUtil.DateTime)
+							  .AddScalar("Total", NHibernateUtil.Int16)
+							  .AddScalar("IsLastPage", NHibernateUtil.Boolean)
+							  .SetDateTime("shiftTradeDate", shiftTradeDate)
+							  .SetParameter("personIdList", idlist,NHibernateUtil.StringClob)
+							  .SetParameter("filteredStartTimes", startTimeList, NHibernateUtil.StringClob)
+							  .SetParameter("skip", paging.Skip)
+							  .SetParameter("take", paging.Take)
+							  .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
+							  .SetReadOnly(true)
+							  .List<PersonScheduleDayReadModel>();
+		}
 	}
 }

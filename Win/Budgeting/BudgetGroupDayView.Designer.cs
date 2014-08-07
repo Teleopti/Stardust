@@ -38,9 +38,6 @@ namespace Teleopti.Ccc.Win.Budgeting
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle5 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle1 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
-			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle2 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
-			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle3 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
-			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle4 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			this.budgetGroupDayViewMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItemAddShrinkageRow = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemUpdateShrinkageRow = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,7 +51,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripMenuItemLoadStaffEmployed = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemModifySelection = new System.Windows.Forms.ToolStripMenuItem();
-			this.gridControlDayView = new Teleopti.Ccc.Win.Common.Controls.TeleoptiGridControl();
+			this.gridControlDayView = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.budgetGroupDayViewMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlDayView)).BeginInit();
 			this.SuspendLayout();
@@ -196,8 +193,6 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.gridControlDayView.MetroScrollBars = true;
 			this.gridControlDayView.MinResizeColSize = 5;
 			this.gridControlDayView.Name = "gridControlDayView";
-			this.gridControlDayView.Office2007ScrollBars = true;
-			this.gridControlDayView.Office2007ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2007ColorScheme.Managed;
 			this.gridControlDayView.Properties.BackgroundColor = System.Drawing.Color.White;
 			this.gridControlDayView.Properties.ForceImmediateRepaint = false;
 			this.gridControlDayView.Properties.GridLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(212)))));
@@ -211,35 +206,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			gridRangeStyle1.StyleInfo.Font.Strikeout = false;
 			gridRangeStyle1.StyleInfo.Font.Underline = false;
 			gridRangeStyle1.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
-			gridRangeStyle2.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
-			gridRangeStyle2.StyleInfo.Font.Bold = false;
-			gridRangeStyle2.StyleInfo.Font.Facename = "Segoe UI";
-			gridRangeStyle2.StyleInfo.Font.Italic = false;
-			gridRangeStyle2.StyleInfo.Font.Size = 9F;
-			gridRangeStyle2.StyleInfo.Font.Strikeout = false;
-			gridRangeStyle2.StyleInfo.Font.Underline = false;
-			gridRangeStyle2.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
-			gridRangeStyle3.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
-			gridRangeStyle3.StyleInfo.Font.Bold = false;
-			gridRangeStyle3.StyleInfo.Font.Facename = "Segoe UI";
-			gridRangeStyle3.StyleInfo.Font.Italic = false;
-			gridRangeStyle3.StyleInfo.Font.Size = 9F;
-			gridRangeStyle3.StyleInfo.Font.Strikeout = false;
-			gridRangeStyle3.StyleInfo.Font.Underline = false;
-			gridRangeStyle3.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
-			gridRangeStyle4.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
-			gridRangeStyle4.StyleInfo.Font.Bold = false;
-			gridRangeStyle4.StyleInfo.Font.Facename = "Segoe UI";
-			gridRangeStyle4.StyleInfo.Font.Italic = false;
-			gridRangeStyle4.StyleInfo.Font.Size = 9F;
-			gridRangeStyle4.StyleInfo.Font.Strikeout = false;
-			gridRangeStyle4.StyleInfo.Font.Underline = false;
-			gridRangeStyle4.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
 			this.gridControlDayView.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
-            gridRangeStyle1,
-            gridRangeStyle2,
-            gridRangeStyle3,
-            gridRangeStyle4});
+            gridRangeStyle1});
 			this.gridControlDayView.ResizeRowsBehavior = Syncfusion.Windows.Forms.Grid.GridResizeCellsBehavior.None;
 			this.gridControlDayView.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
@@ -269,7 +237,7 @@ namespace Teleopti.Ccc.Win.Budgeting
         #endregion
 
 		
-        private TeleoptiGridControl gridControlDayView;
+        private Syncfusion.Windows.Forms.Grid.GridControl gridControlDayView;
 		private System.Windows.Forms.ContextMenuStrip budgetGroupDayViewMenu;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddShrinkageRow;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddEfficiencyShrinkageRow;

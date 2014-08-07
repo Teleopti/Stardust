@@ -410,9 +410,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WFM_Performance_Manager_32_32 {
+        public static System.Drawing.Bitmap WFM_Performance_Manager_small {
             get {
-                object obj = ResourceManager.GetObject("WFM_Performance_Manager_32_32", resourceCulture);
+                object obj = ResourceManager.GetObject("WFM_Performance_Manager_small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

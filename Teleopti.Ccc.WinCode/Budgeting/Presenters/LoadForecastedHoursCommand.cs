@@ -3,12 +3,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 {
-    public interface ILoadForecastedHoursCommand : IExecutableCommand
-    {
-    }
+	public interface ILoadForecastedHoursCommand : IExecutableCommand
+	{
+	}
 
-    public class LoadForecastedHoursCommand : ILoadForecastedHoursCommand
-    {
+	public class LoadForecastedHoursCommand : ILoadForecastedHoursCommand
+	{
 		private readonly IBudgetSkillStaffPeriodProvider _skillStaffPeriodProvider;
 		private readonly BudgetGroupMainModel _mainModel;
 
