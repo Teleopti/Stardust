@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		{
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Username-input", username);
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Password-input", password);
-			Browser.Interactions.Click("#Login-button");
+			Browser.Interactions.Click("#Signin-button");
 		}
 
 		[Given(@"I sign in")]
