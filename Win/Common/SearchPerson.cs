@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.Win.Common
 {
@@ -16,8 +15,6 @@ namespace Teleopti.Ccc.Win.Common
             if(!DesignMode)
                 SetTexts();
 
-            this.BackColor = ColorHelper.FormBackgroundColor();
-
             searchPersonView1.SetPresenter(new SearchPersonPresenter(searchPersonView1));
             searchPersonView1.SetSearchablePersons(persons);
         }
@@ -27,25 +24,25 @@ namespace Teleopti.Ccc.Win.Common
             get { return _selectedPerson; }
         }
 
-        private void button1_Click(object sender, System.EventArgs e)
+        private void button1Click(object sender, System.EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            DialogResult = DialogResult.OK;
             Close();
         }
 
-        private void SearchPerson_FormClosing(object sender, FormClosingEventArgs e)
+        private void searchPersonFormClosing(object sender, FormClosingEventArgs e)
         {
             _selectedPerson = searchPersonView1.SelectedPerson();
         }
 
-        private void SearchPerson_Load(object sender, System.EventArgs e)
+        private void searchPersonLoad(object sender, System.EventArgs e)
         {
             searchPersonView1.Select();
         }
 
-        private void searchPersonView1_ItemDoubleClick(object sender, System.EventArgs e)
+        private void searchPersonView1ItemDoubleClick(object sender, System.EventArgs e)
         {
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
+            DialogResult = DialogResult.OK;
             Close();
         }
 
