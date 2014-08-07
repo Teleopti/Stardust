@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using Autofac;
 using Newtonsoft.Json;
@@ -28,6 +29,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 			if (!isEnabled)
 				return;
+			var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
+			QueueClearMessages.ClearMessages(dbConnection.ConnectionString, "general", "Timeout");
 			foreach (var dataSource in StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.ToList())
 			{
 				IList<Guid> businessUnitCollection;
