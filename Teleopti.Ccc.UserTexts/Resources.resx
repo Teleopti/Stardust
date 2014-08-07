@@ -12221,4 +12221,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Sign out</value>
     <comment>Sign out</comment>
   </data>
+  <data name="YouAreNotSignedIn" xml:space="preserve">
+    <value>You are not signed in.</value>
+    <comment>You are not signed in.</comment>
+  </data>
 </root>

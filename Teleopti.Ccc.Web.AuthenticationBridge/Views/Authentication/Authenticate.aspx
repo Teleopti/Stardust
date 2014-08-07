@@ -11,6 +11,7 @@
         <form action="" method="get">
             <input type="hidden" name="action" value="verify" />
             <fieldset>
+	            <div class="alert alert-warning"><%=Resources.YouAreNotSignedIn %></div>
                 <div class="panel panel-info">
                     <div class="panel-heading">
                         <span><%=Resources.SignInWith %></span>
