@@ -1,4 +1,6 @@
-﻿using Teleopti.Common.UI.SmartPartControls.SmartParts;
+﻿using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Common.UI.SmartPartControls.SmartParts;
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
     partial class ForecasterNavigator
@@ -71,7 +73,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemRemoveQueue = new System.Windows.Forms.ToolStripMenuItem();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-			this.treeViewSkills = new System.Windows.Forms.TreeView();
+			this.treeViewSkills = new Syncfusion.Windows.Forms.Tools.TreeViewAdv();
 			this.toolStripSkills = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripLabelSkillActions = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripMenuItemActionSkillNewSkill = new System.Windows.Forms.ToolStripMenuItem();
@@ -133,6 +135,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.treeViewSkills)).BeginInit();
 			this.toolStripSkills.SuspendLayout();
 			this.toolStripWorkload.SuspendLayout();
 			this.toolStripQueues.SuspendLayout();
@@ -196,12 +199,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.imageListSkillTypes.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListSkillTypes.ImageStream")));
 			this.imageListSkillTypes.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListSkillTypes.Images.SetKeyName(0, "InboundTelephony");
-			this.imageListSkillTypes.Images.SetKeyName(1, "Email");
-			this.imageListSkillTypes.Images.SetKeyName(2, "Facsimile");
-			this.imageListSkillTypes.Images.SetKeyName(3, "Backoffice");
-			this.imageListSkillTypes.Images.SetKeyName(4, "ccc_SkillGeneral.png");
-			this.imageListSkillTypes.Images.SetKeyName(5, "ccc_SkillTime.png");
+			this.imageListSkillTypes.Images.SetKeyName(0, "Backoffice");
+			this.imageListSkillTypes.Images.SetKeyName(1, "ccc_SkillTime.png");
+			this.imageListSkillTypes.Images.SetKeyName(2, "Email");
+			this.imageListSkillTypes.Images.SetKeyName(3, "InboundTelephony");
+			this.imageListSkillTypes.Images.SetKeyName(4, "Facsimile");
+			this.imageListSkillTypes.Images.SetKeyName(5, "ccc_SkillGeneral.png");
 			this.imageListSkillTypes.Images.SetKeyName(6, "ccc_SkillGeneral.png");
 			this.imageListSkillTypes.Images.SetKeyName(7, "ccc_Workload.png");
 			this.imageListSkillTypes.Images.SetKeyName(8, "graphhs.png");
@@ -488,25 +491,44 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.splitContainer1.Panel2MinSize = 100;
 			this.splitContainer1.Size = new System.Drawing.Size(218, 595);
-			this.splitContainer1.SplitterDistance = 232;
+			this.splitContainer1.SplitterDistance = 237;
 			this.splitContainer1.SplitterWidth = 3;
 			this.splitContainer1.TabIndex = 4;
 			// 
 			// treeViewSkills
 			// 
+			this.treeViewSkills.BackColor = System.Drawing.Color.White;
+			this.treeViewSkills.BeforeTouchSize = new System.Drawing.Size(218, 237);
+			this.treeViewSkills.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.treeViewSkills.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.treeViewSkills.CanSelectDisabledNode = false;
 			this.treeViewSkills.ContextMenuStrip = this.contextMenuStripSkillTypes;
 			this.treeViewSkills.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.treeViewSkills.ImageIndex = 0;
-			this.treeViewSkills.ImageList = this.imageListSkillTypes;
+			this.treeViewSkills.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+			// 
+			// 
+			// 
+			this.treeViewSkills.HelpTextControl.Location = new System.Drawing.Point(0, 0);
+			this.treeViewSkills.HelpTextControl.Name = "helpText";
+			this.treeViewSkills.HelpTextControl.TabIndex = 0;
 			this.treeViewSkills.ItemHeight = 18;
+			this.treeViewSkills.LeftImageList = this.imageListSkillTypes;
 			this.treeViewSkills.Location = new System.Drawing.Point(0, 0);
+			this.treeViewSkills.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.treeViewSkills.Name = "treeViewSkills";
-			this.treeViewSkills.RightToLeftLayout = true;
-			this.treeViewSkills.SelectedImageIndex = 0;
-			this.treeViewSkills.Size = new System.Drawing.Size(218, 232);
+			this.treeViewSkills.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
+			this.treeViewSkills.ShowFocusRect = false;
+			this.treeViewSkills.Size = new System.Drawing.Size(218, 237);
+			this.treeViewSkills.SortWithChildNodes = true;
+			this.treeViewSkills.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
 			this.treeViewSkills.TabIndex = 1;
-			this.treeViewSkills.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewSkillsBeforeSelect);
+			// 
+			// 
+			// 
+			this.treeViewSkills.ToolTipControl.Location = new System.Drawing.Point(0, 0);
+			this.treeViewSkills.ToolTipControl.Name = "toolTip";
+			this.treeViewSkills.ToolTipControl.TabIndex = 1;
+			this.treeViewSkills.BeforeSelect += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvBeforeSelectEventHandler(this.treeViewSkillsBeforeSelectUpdated);
 			this.treeViewSkills.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeViewSkillsMouseDown);
 			// 
 			// toolStripSkills
@@ -1154,6 +1176,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.splitContainer1);
+			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Margin = new System.Windows.Forms.Padding(0);
 			this.Name = "ForecasterNavigator";
 			this.Padding = new System.Windows.Forms.Padding(0);
@@ -1167,6 +1190,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.splitContainer1.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.treeViewSkills)).EndInit();
 			this.toolStripSkills.ResumeLayout(false);
 			this.toolStripSkills.PerformLayout();
 			this.toolStripWorkload.ResumeLayout(false);
@@ -1184,7 +1208,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeViewSkills;
+		  private Syncfusion.Windows.Forms.Tools.TreeViewAdv treeViewSkills;
         private System.Windows.Forms.ImageList imageListSkillTypes;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripSkills;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSkillNew;
