@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
@@ -27,13 +26,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IShiftTradeRequestPersister _shiftTradeRequestPersister;
 		private readonly IRespondToShiftTrade _respondToShiftTrade;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
 								ITextRequestPersister textRequestPersister, 
 								IAbsenceRequestPersister absenceRequestPersister, 
 								IShiftTradeRequestPersister shiftTradeRequestPersister,
 								IRespondToShiftTrade respondToShiftTrade, 
-								IPermissionProvider permissionProvider)
+								IPermissionProvider permissionProvider,
+								IUserTimeZone timeZone)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_shiftTradeRequestPersister = shiftTradeRequestPersister;
 			_respondToShiftTrade = respondToShiftTrade;
 			_permissionProvider = permissionProvider;
+			_userTimeZone = timeZone;
 		}
 
 		[EnsureInPortal]
@@ -168,7 +170,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult ShiftTradeRequestScheduleByFilterTime(DateOnly selectedDate, string teamId, string filteredStartTimes, Paging paging)
 		{
-			var startTimes = filteredStartTimes.Split(',').Select(startTime => new TimePeriod(startTime)).ToList();
+			List<string> startTimesx = (filteredStartTimes.Split(',')).ToList();
+			var periodsAsString = from t in startTimesx
+										 let parts = t.Split('-')
+										 let start = parts[0]
+										 let end = parts[1]
+										 select new
+											 {
+												 Start = start,
+												 End = end
+											 };
+			var periods = from ps in periodsAsString
+							  select new
+								  {
+									  Start = selectedDate.Date.Add(TimeSpan.Parse(ps.Start)),
+									  End = selectedDate.Date.Add(TimeSpan.Parse(ps.End)),
+								  };
+			var periodsDateUtc = from p in periods
+										let start = TimeZoneHelper.ConvertToUtc(p.Start, _userTimeZone.TimeZone())
+										let end = TimeZoneHelper.ConvertToUtc(p.End, _userTimeZone.TimeZone())
+								  let period = new DateTimePeriod(start, end)
+								  select period;
+
+			var periodsUtc = from putc in periodsDateUtc
+			                 let start = putc.StartDateTime.TimeOfDay
+			                 let end = putc.EndDateTime.TimeOfDay
+			                 let period = new TimePeriod(start, end)
+			                 select period;
+			var startTimes = (periodsUtc as IList<TimePeriod>) ?? periodsUtc.ToList();
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, FilteredStartTimes = startTimes };
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
 		}
