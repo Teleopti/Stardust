@@ -445,7 +445,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                         break;
                     default:
                         // add default image as a resource to your module.
-                        outlookBarSmartPartInfo.Icon = Resources.WFM_Performance_Manager_32_32 ;
+                        outlookBarSmartPartInfo.Icon = Resources.WFM_Performance_Manager_small ;
                         break;
                 }
 				modulePanelItems.Add(new ModulePanelItem

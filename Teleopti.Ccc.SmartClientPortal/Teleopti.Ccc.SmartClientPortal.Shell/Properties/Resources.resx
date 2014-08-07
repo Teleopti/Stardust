@@ -236,9 +236,6 @@
   <data name="WFM_People_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\People_small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="WFM_Performance_Manager_32_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFM-Performance-Manager-32-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="WFM_Reports_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Reports_small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -250,5 +247,8 @@
   </data>
   <data name="WFM_Teleopti_WFM_main_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Teleopti-WFM-main_small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WFM_Performance_Manager_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Performance-Manager_small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
