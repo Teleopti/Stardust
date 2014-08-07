@@ -129,7 +129,7 @@
 
 					@foreach (var agentSchedule in Model.AgentSchedules)
 					{
-						<li class="teamschedule-agent relative">
+						<li class="@(Model.AgentBadgeEnabled ? " teamschedule-agent-with-badge" : "teamschedule-agent-without-badge") relative">
 							@if (Model.AgentBadgeEnabled)
 							{
 								<div class="agent-badge">
@@ -147,7 +147,7 @@
 									</span>
 								</div>
 							}
-							<div class="teamschedule-agent-name floatleft">@agentSchedule.AgentName</div>
+							<div class="@(Model.AgentBadgeEnabled ? " teamschedule-agent-name-with-badge" : "teamschedule-agent-name-without-badge") floatleft">@agentSchedule.AgentName</div>
 							<ul class="teamschedule-agent-schedule floatleft relative">
 								@if (agentSchedule.DayOffText != null)
 								{
@@ -162,7 +162,7 @@
 										var widthPixel = rightPixel - leftPixel;
 										var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
 										<li class="layer absolute qtip-tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
-										    style="width: @(widthPixel)px;@left: @(leftPixel)px;background-color: @layer.Color;@(!agentSchedule.HasDayOffUnder ? IEString : "")"></li>
+											style="width: @(widthPixel)px;@left: @(leftPixel)px;background-color: @layer.Color;@(!agentSchedule.HasDayOffUnder ? IEString : "")"></li>
 									}
 								}
 							</ul>
