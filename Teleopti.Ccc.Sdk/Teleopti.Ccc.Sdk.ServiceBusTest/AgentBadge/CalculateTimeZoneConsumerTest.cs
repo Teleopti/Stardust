@@ -2,39 +2,53 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 {
 	class CalculateTimeZoneConsumerTest
 	{
-		private MockRepository mocks;
 		private IServiceBus serviceBus;
 		private CalculateTimeZoneConsumer target;
+		private INow now;
+
 		[SetUp]
 		public void Setup()
 		{
-			mocks = new MockRepository();
-			serviceBus = mocks.DynamicMock<IServiceBus>();
-			target = new CalculateTimeZoneConsumer(serviceBus);
+			serviceBus = MockRepository.GenerateMock<IServiceBus>();
+			now = MockRepository.GenerateMock<INow>();
+			target = new CalculateTimeZoneConsumer(serviceBus, now);
 		}
 
 		[Test]
-		public void IsConsumerCalled()
+		public void ShouldSendCalculateBadgeMessageAtRightTime()
 		{
 			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
 			bussinessUnit.SetId(Guid.NewGuid());
 
-			var message = new CalculateTimeZoneMessage();
-			message.Timestamp = DateTime.Now;
-			message.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
-			message.TimeZone = TimeZoneInfo.Utc;
-
-			mocks.ReplayAll();
+			var message = new CalculateTimeZoneMessage
+			{
+				Timestamp = DateTime.Now,
+				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault(),
+				TimeZone = TimeZoneInfo.Utc
+			};
+			var today = new DateTime(2014, 8, 8);
+			now.Stub(x => x.UtcDateTime()).Return(today);
+			var expectedCalculationDate = TimeZoneInfo.ConvertTime(now.LocalDateOnly().AddDays(-1), TimeZoneInfo.Local, message.TimeZone);
 			target.Consume(message);
-			mocks.VerifyAll();
+
+			serviceBus.AssertWasCalled(x => x.Send(new object()),
+				o =>
+					o.Constraints(
+						Rhino.Mocks.Constraints.Is.Matching(new Predicate<object[]>(m =>
+						{
+							var msg = ((CalculateBadgeMessage) m[0]);
+							return msg.TimeZone == TimeZoneInfo.Utc && msg.CalculationDate == new DateOnly(expectedCalculationDate);
+						}))));
 
 		}
 	}
