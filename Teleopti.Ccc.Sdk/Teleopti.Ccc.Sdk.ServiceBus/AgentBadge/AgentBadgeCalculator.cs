@@ -38,18 +38,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 							BadgeType = badgeType,
 							LastCalculatedDate = date
 						});
-						if (badge.BronzeBadge >= silverToBronzeBadgeRate)
-						{
-							badge.SilverBadge = badge.SilverBadge + badge.BronzeBadge / silverToBronzeBadgeRate;
-							badge.BronzeBadge = badge.BronzeBadge % silverToBronzeBadgeRate;
-						}
-
-						if (badge.SilverBadge >= goldToSilverBadgeRate)
-						{
-							badge.GoldBadge = badge.GoldBadge + badge.SilverBadge / goldToSilverBadgeRate;
-							badge.SilverBadge = badge.SilverBadge % goldToSilverBadgeRate;
-						}
-
 						personsThatGotABadge.Add(person);
 					}
 				}

@@ -209,22 +209,34 @@ namespace Teleopti.Ccc.Domain.Common
 		   addPersonActivityStartingEvent();
 	   }
 
-	    public virtual void AddBadge(IAgentBadge agentBadge)
+	    public virtual void AddBadge(IAgentBadge agentBadge, int silverToBronzeBadgeRate, int goldToSilverBadgeRate)
 	    {
-			    if (_badges.Any(x => x.BadgeType == agentBadge.BadgeType))
-			    {
-					var existedBadge = _badges.Single(x => x.BadgeType == agentBadge.BadgeType);
-					existedBadge.BronzeBadge += agentBadge.BronzeBadge;
-					existedBadge.SilverBadge += agentBadge.SilverBadge;
-					existedBadge.GoldBadge += agentBadge.GoldBadge;
-				    existedBadge.LastCalculatedDate = agentBadge.LastCalculatedDate;
-			    }
-			    else
-			    {
-					
-					agentBadge.SetParent(this);
-					_badges.Add(agentBadge);
-			    }
+		    if (_badges.Any(x => x.BadgeType == agentBadge.BadgeType))
+		    {
+			    var existedBadge = _badges.Single(x => x.BadgeType == agentBadge.BadgeType);
+			    existedBadge.BronzeBadge += agentBadge.BronzeBadge;
+			    existedBadge.SilverBadge += agentBadge.SilverBadge;
+			    existedBadge.GoldBadge += agentBadge.GoldBadge;
+			    existedBadge.LastCalculatedDate = agentBadge.LastCalculatedDate;
+		    }
+		    else
+		    {
+			    agentBadge.SetParent(this);
+			    _badges.Add(agentBadge);
+		    }
+		    //Update according to rate.
+		    var badge = _badges.Single(x => x.BadgeType == agentBadge.BadgeType);
+		    if (badge.BronzeBadge >= silverToBronzeBadgeRate)
+		    {
+			    badge.SilverBadge = badge.SilverBadge + badge.BronzeBadge/silverToBronzeBadgeRate;
+			    badge.BronzeBadge = badge.BronzeBadge%silverToBronzeBadgeRate;
+		    }
+
+		    if (badge.SilverBadge >= goldToSilverBadgeRate)
+		    {
+			    badge.GoldBadge = badge.GoldBadge + badge.SilverBadge/goldToSilverBadgeRate;
+			    badge.SilverBadge = badge.SilverBadge%goldToSilverBadgeRate;
+		    }
 	    }
 
 	    // adding this event so servicebus and rta do a check if person should be monitored in rta
