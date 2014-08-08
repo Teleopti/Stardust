@@ -31,20 +31,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				return;
 			var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
 			QueueClearMessages.ClearMessages(dbConnection.ConnectionString, "general", "Timeout");
-			foreach (var dataSource in StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.ToList())
-			{
-				IList<Guid> businessUnitCollection;
-				using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())
-				{
-					var businessUnitRepository = new BusinessUnitRepository(unitOfWork);
-					businessUnitCollection = businessUnitRepository.LoadAll().Select(b => b.Id.GetValueOrDefault()).ToList();
-				}
-
-				foreach (var businessUnitId in businessUnitCollection)
-				{
-					bus.Send(new AgentBadgeCalculateMessage { Datasource = dataSource.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow, IsInitialization = true });
-				}
-			}
+			var startup = new BusinessUnitStarter(() => Container.Resolve<IServiceBus>());
+			startup.SendMessage();
 		}
 	}
 }
