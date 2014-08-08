@@ -46,6 +46,7 @@
 			// masterGrid
 			// 
 			this.masterGrid.BackColor = System.Drawing.SystemColors.Window;
+			this.masterGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.masterGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.masterGrid.FreezeCaption = false;
 			this.masterGrid.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
@@ -66,13 +67,14 @@
 			// detailGrid
 			// 
 			this.detailGrid.BackColor = System.Drawing.SystemColors.Window;
+			this.detailGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.detailGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.detailGrid.FreezeCaption = false;
 			this.detailGrid.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
 			this.detailGrid.Location = new System.Drawing.Point(0, 0);
 			this.detailGrid.Name = "detailGrid";
 			this.detailGrid.ShowRelationFields = Syncfusion.Grouping.ShowRelationFields.ShowAllRelatedFields;
-			this.detailGrid.Size = new System.Drawing.Size(788, 179);
+			this.detailGrid.Size = new System.Drawing.Size(788, 177);
 			this.detailGrid.SortMappingNames = true;
 			this.detailGrid.TabIndex = 5;
 			this.detailGrid.TableOptions.AllowSelection = ((Syncfusion.Windows.Forms.Grid.GridSelectionFlags)(((Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Row | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Column) 
@@ -84,10 +86,10 @@
 			// 
 			// splitContainerAdv1
 			// 
-			this.splitContainerAdv1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.Transparent);
-			this.splitContainerAdv1.BeforeTouchSize = 1;
+			this.splitContainerAdv1.BeforeTouchSize = 3;
 			this.splitContainerAdv1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainerAdv1.Location = new System.Drawing.Point(0, 0);
+			this.splitContainerAdv1.Margin = new System.Windows.Forms.Padding(0);
 			this.splitContainerAdv1.Name = "splitContainerAdv1";
 			this.splitContainerAdv1.Orientation = System.Windows.Forms.Orientation.Vertical;
 			// 
@@ -104,7 +106,7 @@
 			this.splitContainerAdv1.Panel2.MinimumSize = new System.Drawing.Size(0, 115);
 			this.splitContainerAdv1.Size = new System.Drawing.Size(788, 460);
 			this.splitContainerAdv1.SplitterDistance = 280;
-			this.splitContainerAdv1.SplitterWidth = 1;
+			this.splitContainerAdv1.SplitterWidth = 3;
 			this.splitContainerAdv1.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
 			this.splitContainerAdv1.TabIndex = 6;
 			this.splitContainerAdv1.Text = "splitContainerAdv1";
@@ -136,6 +138,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.buttonAdvClose, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 410);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));

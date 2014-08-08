@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 	{
 		private readonly IEventAggregator _eventAggregator;
 		private readonly RequestDetailsShiftTradeView _requestDetailsShiftTradeView;
-		private readonly RequestDetailsPresenter _presenter;
 
 		public RequestDetailsView()
 		{
@@ -23,8 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!DesignMode)
 			{
 				SetTexts();
-				SetColors();
-				SetToolStripsToPreferredSize();
+				setToolStripsToPreferredSize();
 			}
 		}
 
@@ -32,11 +30,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			: this()
 		{
 			_eventAggregator = eventAggregator;
-			_presenter = new RequestDetailsPresenter(this, model);
-			_presenter.Initialize();
-			if (_presenter.IsShiftTradeRequest())
+			var presenter = new RequestDetailsPresenter(this, model);
+			presenter.Initialize();
+			if (presenter.IsShiftTradeRequest())
 				_requestDetailsShiftTradeView = new RequestDetailsShiftTradeView(model, schedules);
-			if (!_presenter.IsRequestEditable())
+			if (!presenter.IsRequestEditable())
 			{
 				toolStripButtonDeny.Enabled = false;
 				toolStripButtonApprove.Enabled = false;
@@ -46,14 +44,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void SetToolStripsToPreferredSize()
+		private void setToolStripsToPreferredSize()
 		{
 			toolStripExMain.Size = toolStripExMain.PreferredSize;
-		}
-
-		private void SetColors()
-		{
-			BackColor = UserTexts.ThemeSettings.Default.StandardOfficeFormBackground;
 		}
 
 		protected override void SetCommonTexts()
@@ -101,7 +94,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_requestDetailsShiftTradeView.ResumeLayout();
 		}
 
-		private void RequestDetailsView_Load(object sender, EventArgs e)
+		private void requestDetailsViewLoad(object sender, EventArgs e)
 		{
 			if (_requestDetailsShiftTradeView != null)
 				dockShiftTradeGridControl();
@@ -109,44 +102,39 @@ namespace Teleopti.Ccc.Win.Scheduling
 				tableLayoutPanelMain.Dock = DockStyle.Top;
 		}
 
-		private void toolStripButtonClose_Click(object sender, EventArgs e)
-		{
-			Close();
-		}
-
-		private void toolStripButtonApprove_Click(object sender, EventArgs e)
+		private void toolStripButtonApproveClick(object sender, EventArgs e)
 		{
 			new ApproveRequestFromRequestDetailsView().PublishEvent("ApproveRequestFromRequestDetailsView", _eventAggregator);
 			Close();
 		}
 
-		private void toolStripButtonDeny_Click(object sender, EventArgs e)
+		private void toolStripButtonDenyClick(object sender, EventArgs e)
 		{
 			new DenyRequestFromRequestDetailsView().PublishEvent("DenyRequestFromRequestDetailsView", _eventAggregator);
 			Close();
 		}
 
-		private void toolStripButtonReply_Click(object sender, EventArgs e)
+		private void toolStripButtonReplyClick(object sender, EventArgs e)
 		{
 			new ReplyRequestFromRequestDetailsView().PublishEvent("ReplyRequestFromRequestDetailsView", _eventAggregator);
 			Close();
 		}
 
-		private void toolStripButtonReplyAndApprove_Click(object sender, EventArgs e)
+		private void toolStripButtonReplyAndApproveClick(object sender, EventArgs e)
 		{
 			new ReplyAndApproveRequestFromRequestDetailsView().PublishEvent("ReplyAndApproveRequestFromRequestDetailsView", _eventAggregator);
 			Close();
 		}
 
-		private void toolStripButtonReplyAndDeny_Click(object sender, EventArgs e)
+		private void toolStripButtonReplyAndDenyClick(object sender, EventArgs e)
 		{
 			new ReplyAndDenyRequestFromRequestDetailsView().PublishEvent("ReplyAndDenyRequestFromRequestDetailsView", _eventAggregator);
 			Close();
 		}
 
-		private void RequestDetailsView_Resize(object sender, EventArgs e)
+		private void requestDetailsViewResize(object sender, EventArgs e)
 		{
-            if (_requestDetailsShiftTradeView != null) _requestDetailsShiftTradeView.Refresh();
+			if (_requestDetailsShiftTradeView != null) _requestDetailsShiftTradeView.Refresh();
 		}
 	}
 }
