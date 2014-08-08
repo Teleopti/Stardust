@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.Messages.Rta
+namespace Teleopti.Interfaces.Messages
 {
     /// <summary>
     /// 
     /// </summary>
-    public class BusinessUnitInfo : RaptorDomainMessage
+    public class StartUpBusinessUnit : RaptorDomainMessage
     {
         private readonly Guid _messageId = Guid.NewGuid();
 

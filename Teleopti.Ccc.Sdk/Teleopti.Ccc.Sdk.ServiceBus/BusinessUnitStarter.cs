@@ -4,15 +4,15 @@ using System.Linq;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Rta;
+using Teleopti.Interfaces.Messages;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
+namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-    public class BusinessUnitInfoFinder
+    public class BusinessUnitStarter
     {
         private readonly Func<IServiceBus> _serviceBusFinder;
         
-        public BusinessUnitInfoFinder(Func<IServiceBus> serviceBusFinder)
+        public BusinessUnitStarter(Func<IServiceBus> serviceBusFinder)
         {
             _serviceBusFinder = serviceBusFinder;
         }
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 
                 foreach (var businessUnitId in businessUnitCollection)
 			    {
-				    bus.Send(new BusinessUnitInfo { Datasource = dataSource.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow });
+				    bus.Send(new StartUpBusinessUnit { Datasource = dataSource.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow });
 			    }
 			}
 		}

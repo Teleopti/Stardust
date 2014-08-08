@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			QueueClearMessages.ClearMessages(dbConnection.ConnectionString, "rta");
 			
 			//add RTA state checker
-			var rtaChecker = new BusinessUnitInfoFinder(() => Container.Resolve<IServiceBus>());
+			var rtaChecker = new BusinessUnitStarter(() => Container.Resolve<IServiceBus>());
 			rtaChecker.SendMessage();
 		}
 	}

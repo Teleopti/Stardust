@@ -8,7 +8,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Rta;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 {
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 
 			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
 
-			var message = new BusinessUnitInfo();
+			var message = new StartUpBusinessUnit();
 			message.Timestamp = period.StartDateTime;
 			message.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
 

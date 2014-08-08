@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Rta;
+using Teleopti.Interfaces.Messages;
 using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 {
-	public class BusinessUnitInfoConsumer : ConsumerOf<BusinessUnitInfo>
+	public class BusinessUnitInfoConsumer : ConsumerOf<StartUpBusinessUnit>
 	{
 		private readonly IServiceBus _serviceBus;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (BusinessUnitInfoConsumer));
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		public void Consume(BusinessUnitInfo message)
+		public void Consume(StartUpBusinessUnit message)
 		{
 			IList<Guid> persons;
 			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())

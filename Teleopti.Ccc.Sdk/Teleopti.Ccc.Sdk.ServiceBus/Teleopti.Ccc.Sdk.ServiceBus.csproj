@@ -263,7 +263,7 @@
     <Compile Include="BasicState.cs" />
     <Compile Include="NewAbsenceRequestConsumer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rta\BusinessUnitInfoFinder.cs" />
+    <Compile Include="BusinessUnitStarter.cs" />
     <Compile Include="ScheduleIsInvalidSpecification.cs" />
     <Compile Include="SchedulingContainerInstaller.cs" />
     <Compile Include="SdkConfigurationReader.cs" />
