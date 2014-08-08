@@ -133,9 +133,9 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			labelHeading.Text = pp.PageName;
 			splitContainerVertical.Panel2.Controls.Add(c);
 			setButtonState();
-			foreach (TreeNode treeNode in _rootNode.Nodes)
+			foreach (TreeNodeAdv treeNode in _rootNode.Nodes)
 			{
-				treeNode.BackColor = Color.Empty;
+				treeNode.OptionButtonColor = Color.Empty;
 			}
 			splitContainerVertical.ResumeLayout();
 			ResumeLayout();

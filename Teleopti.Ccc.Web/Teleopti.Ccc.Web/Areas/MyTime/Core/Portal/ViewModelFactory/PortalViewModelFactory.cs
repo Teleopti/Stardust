@@ -96,7 +96,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 							CustomerName = customerName,
 							ShowChangePassword = showChangePassword(),
 							HasAsmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
-							HasSignInAsAnotherUser = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.SignInAsAnotherUser),
 							ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
 							Badges = badges == null ? null : badges.Select(x => new BadgeViewModel
 							{

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Newtonsoft.Json;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -16,7 +17,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			var bus = Container.Resolve<IServiceBus>();
 			var toggleManager = Container.Resolve<IToggleManager>();
-			var isEnabled = toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913);
+			var isEnabled = false;
+			try
+			{
+				isEnabled = toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913);
+			}
+			catch (JsonReaderException)
+			{
+				return;
+			}
 			if (!isEnabled)
 				return;
 			foreach (var dataSource in StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.ToList())

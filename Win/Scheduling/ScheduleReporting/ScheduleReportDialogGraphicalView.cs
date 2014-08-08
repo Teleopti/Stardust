@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Drawing;
-using System.Threading;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 
 namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 {
-	public partial class ScheduleReportDialogGraphicalView : BaseRibbonForm, IScheduleReportDialogGraphicalView
+	public partial class ScheduleReportDialogGraphicalView : BaseDialogForm, IScheduleReportDialogGraphicalView
 	{
 		private readonly ScheduleReportDialogGraphicalPresenter _presenter;
 
@@ -20,52 +18,52 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 			_presenter = new ScheduleReportDialogGraphicalPresenter(this, model);
 		}
 
-		private void RadioButtonTeamCheckedChanged(object sender, EventArgs e)
+		private void radioButtonTeamCheckedChanged(object sender, EventArgs e)
 		{
 			_presenter.OnRadioButtonTeamCheckedChanged(radioButtonTeam.Checked);
 		}
 
-		private void RadioButtonIndividualCheckedChanged(object sender, EventArgs e)
+		private void radioButtonIndividualCheckedChanged(object sender, EventArgs e)
 		{
 			_presenter.OnRadioButtonIndividualCheckedChanged(radioButtonIndividual.Checked);
 		}
 
-		private void CheckBoxSingleFileCheckedChanged(object sender, EventArgs e)
+		private void checkBoxSingleFileCheckedChanged(object sender, EventArgs e)
 		{
 			_presenter.OnCheckBoxSingleFileCheckedChanged(checkBoxSingleFile.Checked);
 		}
 
-        private void CheckBoxPublicNoteCheckedChanged(object sender, EventArgs e)
-        {
-            _presenter.OnCheckBoxShowPublicNoteCheckedChanged(checkBoxPublicNote.Checked);
-        }
+		private void checkBoxPublicNoteCheckedChanged(object sender, EventArgs e)
+		{
+			_presenter.OnCheckBoxShowPublicNoteCheckedChanged(checkBoxPublicNote.Checked);
+		}
 
-		private void RadioButtonAgentNameCheckedChanged(object sender, EventArgs e)
+		private void radioButtonAgentNameCheckedChanged(object sender, EventArgs e)
 		{
 			_presenter.OnRadioButtonSortOnAgentNameCheckedChanged(radioButtonAgentName.Checked);
 		}
 
-		private void RadioButtonStartTimeCheckedChanged(object sender, EventArgs e)
+		private void radioButtonStartTimeCheckedChanged(object sender, EventArgs e)
 		{
 			_presenter.OnRadioButtonSortOnStartTimeCheckedChanged(radioButtonStartTime.Checked);
 		}
 
-		private void RadioButtonEndTimeCheckedChanged(object sender, EventArgs e)
+		private void radioButtonEndTimeCheckedChanged(object sender, EventArgs e)
 		{
 			_presenter.OnRadioButtonSortOnEndTimeCheckedChanged(radioButtonEndTime.Checked);
 		}
 
-		private void ButtonAdvOkClick(object sender, EventArgs e)
+		private void buttonAdvOkClick(object sender, EventArgs e)
 		{
 			_presenter.OnButtonOkClick();
 		}
 
-		private void ButtonAdvCancelClick(object sender, EventArgs e)
+		private void buttonAdvCancelClick(object sender, EventArgs e)
 		{
 			_presenter.OnButtonCancelClick();
 		}
 
-		private void ScheduleReportDialogGraphicalViewLoad(object sender, EventArgs e)
+		private void scheduleReportDialogGraphicalViewLoad(object sender, EventArgs e)
 		{
 			_presenter.OnLoad();
 		}
@@ -97,10 +95,10 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 			checkBoxSingleFile.Enabled = enabled;
 		}
 
-        public void EnableShowPublicNote(bool enabled)
-        {
-            checkBoxPublicNote.Enabled = enabled;
-        }
+		public void EnableShowPublicNote(bool enabled)
+		{
+			checkBoxPublicNote.Enabled = enabled;
+		}
 
 		public void UpdateFromModel(ScheduleReportDialogGraphicalModel model)
 		{
@@ -110,7 +108,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 			radioButtonTeam.Checked = model.Team;
 			radioButtonIndividual.Checked = model.Individual;
 			checkBoxSingleFile.Checked = model.OneFileForSelected;
-		    checkBoxPublicNote.Checked = model.ShowPublicNote;
+			checkBoxPublicNote.Checked = model.ShowPublicNote;
 
 			radioButtonAgentName.Checked = model.SortOnAgentName;
 			radioButtonStartTime.Checked = model.SortOnStartTime;
@@ -118,7 +116,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
 
 			EnableSortOptions(model.Team);
 			EnableSingleFile(model.Individual);
-            EnableShowPublicNote(model.Team);
+			EnableShowPublicNote(model.Team);
 		}
 	}
 }

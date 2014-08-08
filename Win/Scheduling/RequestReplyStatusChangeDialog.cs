@@ -8,160 +8,155 @@ using System.Windows.Forms;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    public partial class RequestReplyStatusChangeDialog : BaseRibbonForm
-    {
-        private IList<PersonRequestViewModel> _requestViewAdapterlist;
-        private readonly IHandlePersonRequestCommand _command;
-        private readonly IRequestPresenter _requestPresenter;
-        private bool _setStatus;
+	public partial class RequestReplyStatusChangeDialog : BaseDialogForm
+	{
+		private IList<PersonRequestViewModel> _requestViewAdapterlist;
+		private readonly IHandlePersonRequestCommand _command;
+		private readonly IRequestPresenter _requestPresenter;
+		private readonly bool _setStatus;
 
-        public RequestReplyStatusChangeDialog(IRequestPresenter requestPresenter, IList<PersonRequestViewModel> list, IHandlePersonRequestCommand command)
-        {
-            _requestPresenter = requestPresenter;
-            _requestViewAdapterlist = list;
-            _command = command;
-            InitializeComponent();
+		public RequestReplyStatusChangeDialog(IRequestPresenter requestPresenter, IList<PersonRequestViewModel> list, IHandlePersonRequestCommand command)
+		{
+			_requestPresenter = requestPresenter;
+			_requestViewAdapterlist = list;
+			_command = command;
+			InitializeComponent();
 
-            SetColors();
-            if (!DesignMode) SetTexts();
+			setColors();
+			if (!DesignMode) SetTexts();
 
-            gradientPanelButtons.BackgroundColor = ColorHelper.ControlGradientPanelBrush();
-            gradientPanelMain.BackgroundColor = ColorHelper.ControlGradientPanelBrush();
-            // TODO: check lengths available in notes field and set textbox maxlength accordingly
+			// TODO: check lengths available in notes field and set textbox maxlength accordingly
 
-            if (list.Count == 1)
-            {
-                textBoxMessage.Visible = true;
-                textBoxMessage.Clear();
-                //?Primitivt, 2009, eller?
-                textBoxMessage.Lines = list[0].GetMessage(new NoFormatting()).Split(Environment.NewLine.ToCharArray());
-                //textBoxMessage.Text = list[0].Note;
-            }
-            else if (list.Count > 1)
-            {
-                textBoxMessage.Visible = false;
-                textBoxReply.Dock = DockStyle.Fill;
-            }
+			if (list.Count == 1)
+			{
+				textBoxMessage.Visible = true;
+				textBoxMessage.Clear();
+				//?Primitivt, 2009, eller?
+				textBoxMessage.Lines = list[0].GetMessage(new NoFormatting()).Split(Environment.NewLine.ToCharArray());
+				//textBoxMessage.Text = list[0].Note;
+			}
+			else if (list.Count > 1)
+			{
+				textBoxMessage.Visible = false;
+				textBoxReply.Dock = DockStyle.Fill;
+			}
 
-            _setStatus = true;
-        }
+			_setStatus = true;
+		}
 
-        public RequestReplyStatusChangeDialog(IRequestPresenter requestPresenter, IList<PersonRequestViewModel> list)
-        {
-            _requestViewAdapterlist = list;
-            _requestPresenter = requestPresenter;
-            InitializeComponent();
+		public RequestReplyStatusChangeDialog(IRequestPresenter requestPresenter, IList<PersonRequestViewModel> list)
+		{
+			_requestViewAdapterlist = list;
+			_requestPresenter = requestPresenter;
+			InitializeComponent();
 
-            SetColors();
-            if (!DesignMode) SetTexts();
+			setColors();
+			if (!DesignMode) SetTexts();
 
-            gradientPanelButtons.BackgroundColor = ColorHelper.ControlGradientPanelBrush();
-            gradientPanelMain.BackgroundColor = ColorHelper.ControlGradientPanelBrush();
+			// TODO: check lengths available in notes field and set textbox maxlength accordingly
 
-            // TODO: check lengths available in notes field and set textbox maxlength accordingly
+			if (list.Count == 1)
+			{
+				textBoxMessage.Visible = true;
+				textBoxMessage.Clear();
+				//?Primitivt, 2009, eller?
+				textBoxMessage.Lines = list[0].GetMessage(new NoFormatting()).Split(Environment.NewLine.ToCharArray());
+				//textBoxMessage.Text = list[0].Note;
+			}
+			else if (list.Count > 1)
+			{
+				textBoxMessage.Visible = false;
+				textBoxReply.Dock = DockStyle.Fill;
+			}
+		}
 
-            if (list.Count == 1)
-            {
-                textBoxMessage.Visible = true;
-                textBoxMessage.Clear();
-                //?Primitivt, 2009, eller?
-                textBoxMessage.Lines = list[0].GetMessage(new NoFormatting()).Split(Environment.NewLine.ToCharArray());
-                //textBoxMessage.Text = list[0].Note;
-            }
-            else if (list.Count > 1)
-            {
-                textBoxMessage.Visible = false;
-                textBoxReply.Dock = DockStyle.Fill;
-            }
-        }
+		private void setColors()
+		{
+			BackColor = ColorHelper.StandardPanelBackground();
+		}
 
-        private void SetColors()
-        {
-            BackColor = ColorHelper.StandardPanelBackground();
-        }
+		private void buttonCancelClick(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.Cancel;
+			Close();
+		}
 
-        private void buttonCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
+		private void buttonReplyClick(object sender, EventArgs e)
+		{
+			if (_setStatus)
+				replySetStatus();
+			else
+				reply();
+		}
 
-        private void buttonReply_Click(object sender, EventArgs e)
-        {
-            if (_setStatus)
-                ReplySetStatus();
-            else
-                Reply();
-        }
+		private void replySetStatus()
+		{
+			IList<PersonRequestViewModel> changeList = new List<PersonRequestViewModel>();
+			IList<PersonRequestViewModel> errorList = new List<PersonRequestViewModel>();
 
-        private void ReplySetStatus()
-        {
-            IList<PersonRequestViewModel> changeList = new List<PersonRequestViewModel>();
-            IList<PersonRequestViewModel> errorList = new List<PersonRequestViewModel>();
+			foreach (PersonRequestViewModel adapter in _requestViewAdapterlist)
+			{
+				if (adapter.IsPending)
+				{
+					if (adapter.PersonRequest.CheckReplyTextLength(textBoxReply.Text))
+						changeList.Add(adapter);
+					else
+						errorList.Add(adapter);
+				}
+			}
 
-            foreach (PersonRequestViewModel adapter in _requestViewAdapterlist)
-            {
-                if (adapter.IsPending)
-                {
-                    if (adapter.PersonRequest.CheckReplyTextLength(textBoxReply.Text))
-                        changeList.Add(adapter);
-                    else
-                        errorList.Add(adapter);
-                }
-            }
+			if (changeList.Count > 0)
+			{
+				_requestPresenter.ApproveOrDeny(changeList, _command, textBoxReply.Text);
+			}
+			if (errorList.Count > 0)
+			{
+				showMessage();
+				_requestViewAdapterlist = errorList;
+			}
+			else
+			{
+				DialogResult = DialogResult.OK;
+				Close();
+			}
+		}
 
-            if (changeList.Count > 0)
-            {
-                _requestPresenter.ApproveOrDeny(changeList, _command, textBoxReply.Text);
-            }
-            if (errorList.Count > 0)
-            {
-                showMessage();
-                _requestViewAdapterlist = errorList;
-            }
-            else
-            {
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-        }
+		private void reply()
+		{
+			IList<PersonRequestViewModel> changeList = new List<PersonRequestViewModel>();
+			IList<PersonRequestViewModel> errorList = new List<PersonRequestViewModel>();
+			foreach (PersonRequestViewModel adapter in _requestViewAdapterlist)
+			{
+				if (adapter.IsPending)
+				{
 
-        private void Reply()
-        {
-            IList<PersonRequestViewModel> changeList = new List<PersonRequestViewModel>();
-            IList<PersonRequestViewModel> errorList = new List<PersonRequestViewModel>();
-            foreach (PersonRequestViewModel adapter in _requestViewAdapterlist)
-            {
-                if (adapter.IsPending)
-                {
+					if (adapter.PersonRequest.CheckReplyTextLength(textBoxReply.Text))
+						changeList.Add(adapter);
+					else
+						errorList.Add(adapter);
+				}
+			}
+			if (changeList.Count > 0)
+			{
+				_requestPresenter.Reply(changeList, textBoxReply.Text);    
+			}
 
-                    if (adapter.PersonRequest.CheckReplyTextLength(textBoxReply.Text))
-                        changeList.Add(adapter);
-                    else
-                        errorList.Add(adapter);
-                }
-            }
-            if (changeList.Count > 0)
-            {
-                _requestPresenter.Reply(changeList, textBoxReply.Text);    
-            }
+			if (errorList.Count > 0)
+			{
+				showMessage();
+				_requestViewAdapterlist = errorList;
+			}
+			else
+			{
+				DialogResult = DialogResult.OK;
+				Close();
+			}
+		}
 
-            if (errorList.Count > 0)
-            {
-                showMessage();
-                _requestViewAdapterlist = errorList;
-            }
-            else
-            {
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-        }
-
-        private void showMessage()
-        {
-            string message = UserTexts.Resources.OneOrMoreMessagesWereTooLongPleaseTryAShorterMessage;
-            ShowWarningMessage(message, UserTexts.Resources.MessageTooLong);
-        }
-    }
+		private void showMessage()
+		{
+			string message = UserTexts.Resources.OneOrMoreMessagesWereTooLongPleaseTryAShorterMessage;
+			ViewBase.ShowWarningMessage(message, UserTexts.Resources.MessageTooLong);
+		}
+	}
 }

@@ -10,111 +10,96 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    public partial class SkillSummary : BaseRibbonForm
-    {
-        private readonly IList<ISkill> _skills = new List<ISkill>();
-        private IAggregateSkill _aggregateSkillSkill;
+	public partial class SkillSummary : BaseDialogForm
+	{
+		private readonly IList<ISkill> _skills = new List<ISkill>();
+		private IAggregateSkill _aggregateSkillSkill;
 
-        public SkillSummary(IAggregateSkill aggregateSkillSkill, IList<ISkill> skills)
-        {
-            SetupForm();
-            _skills = skills;
-            _aggregateSkillSkill = aggregateSkillSkill;
-            textBoxSummeryName.Text = ((ISkill) _aggregateSkillSkill).Name;
-            LoadSkills();
-        }
-        public SkillSummary(IList<ISkill> skills)
-        {
-            SetupForm();
-            _skills = skills;
-            LoadSkills();
-        }
+		public SkillSummary(IAggregateSkill aggregateSkillSkill, IList<ISkill> skills)
+		{
+			setupForm();
+			_skills = skills;
+			_aggregateSkillSkill = aggregateSkillSkill;
+			textBoxSummeryName.Text = ((ISkill) _aggregateSkillSkill).Name;
+			loadSkills();
+		}
+		public SkillSummary(IList<ISkill> skills)
+		{
+			setupForm();
+			_skills = skills;
+			loadSkills();
+		}
 
-        /// <summary>
-        /// Gets the virtual skill.
-        /// </summary>
-        /// <value>The virtual skill.</value>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2009-01-20
-        /// </remarks>
-        public IAggregateSkill AggregateSkillSkill { get { return _aggregateSkillSkill; }}
+		public IAggregateSkill AggregateSkillSkill { get { return _aggregateSkillSkill; }}
 
-        private void SetupForm()
-        {
-            InitializeComponent();
-            if (!DesignMode) SetTexts();
-            BackColor = ColorHelper.DialogBackColor();
-            checkedListBoxSkill.Sorted = false;
-            checkedListBoxSkill.DisplayMember = "Name";
-        }
+		private void setupForm()
+		{
+			InitializeComponent();
+			if (!DesignMode) SetTexts();
+			BackColor = ColorHelper.DialogBackColor();
+			checkedListBoxSkill.Sorted = false;
+			checkedListBoxSkill.DisplayMember = "Name";
+		}
 
-        /// <summary>
-        /// Loads the skills, first checked items alphabetical, then unchecked alphabetical.
-        /// </summary>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2009-01-23
-        /// </remarks>
-        private void LoadSkills()
-        {
-            List<ISkill> sortedList = new List<ISkill>();
-            if (_aggregateSkillSkill != null)
-            {
+		private void loadSkills()
+		{
+			var sortedList = new List<ISkill>();
+			if (_aggregateSkillSkill != null)
+			{
 				IList<ISkill> maxSeatSkillsToRemove = new List<ISkill>();
-                foreach (ISkill skill in _aggregateSkillSkill.AggregateSkills)
-                {
+				foreach (ISkill skill in _aggregateSkillSkill.AggregateSkills)
+				{
 					if(skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
 					{
 						maxSeatSkillsToRemove.Add(skill);
 						continue;
 					}
 						
-                    sortedList.Add(skill);
-                    checkedListBoxSkill.Items.Add(skill, true);
-                }
+					sortedList.Add(skill);
+					checkedListBoxSkill.Items.Add(skill, true);
+				}
 
-            	foreach (var skill in maxSeatSkillsToRemove)
-            	{
-            		_aggregateSkillSkill.RemoveAggregateSkill(skill);
-            	}
-            }
+				foreach (var skill in maxSeatSkillsToRemove)
+				{
+					_aggregateSkillSkill.RemoveAggregateSkill(skill);
+				}
+			}
 
 
-            foreach (ISkill skill in _skills.OrderBy(s => s.Name).ToList())
-            {
-                if (!sortedList.Contains(skill) && skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
-                {
-                    checkedListBoxSkill.Items.Add(skill, false);
-                }
-            }
-        }
-
-        private void buttonAdvOk_Click(object sender, EventArgs e)
-        {
-            if (textBoxSummeryName.Text.Length == 0)
-            {
-                ShowWarningMessage(UserTexts.Resources.EnterANameForTheGrouping, UserTexts.Resources.NoNameWasEntered);
-                return;
-            }
-
-           if (_aggregateSkillSkill == null)
-                _aggregateSkillSkill = new Skill(textBoxSummeryName.Text, textBoxSummeryName.Text, Color.Pink, 15, _skills[0].SkillType);
-            else
+			foreach (ISkill skill in _skills.OrderBy(s => s.Name).ToList())
 			{
-            	var skill = (ISkill) AggregateSkillSkill;
-                skill.Name = textBoxSummeryName.Text;
-                skill.Description = textBoxSummeryName.Text;
-            }
-            AggregateSkillSkill.ClearAggregateSkill();
-            foreach (ISkill skill in checkedListBoxSkill.CheckedItems)
-            {
-                AggregateSkillSkill.AddAggregateSkill(skill);
+				if (!sortedList.Contains(skill) && skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
+				{
+					checkedListBoxSkill.Items.Add(skill, false);
+				}
+			}
+		}
+
+		private void buttonAdvOkClick(object sender, EventArgs e)
+		{
+			if (textBoxSummeryName.Text.Length == 0)
+			{
+				ViewBase.ShowWarningMessage(UserTexts.Resources.EnterANameForTheGrouping, UserTexts.Resources.NoNameWasEntered);
+				return;
+			}
+
+		   if (_aggregateSkillSkill == null)
+				_aggregateSkillSkill = new Skill(textBoxSummeryName.Text, textBoxSummeryName.Text, Color.Pink, 15, _skills[0].SkillType);
+			else
+			{
+				var skill = (ISkill) AggregateSkillSkill;
+				skill.Name = textBoxSummeryName.Text;
+				skill.Description = textBoxSummeryName.Text;
+			}
+			AggregateSkillSkill.ClearAggregateSkill();
+			foreach (ISkill skill in checkedListBoxSkill.CheckedItems)
+			{
+				AggregateSkillSkill.AddAggregateSkill(skill);
 			}
 			AggregateSkillSkill.IsVirtual = true;
-            setDefaultResolutionFromSmallestSkillResolution();
+			setDefaultResolutionFromSmallestSkillResolution();
 
-            DialogResult = DialogResult.OK;
+			DialogResult = DialogResult.OK;
 		}
 
 		private void setDefaultResolutionFromSmallestSkillResolution()
@@ -125,5 +110,5 @@ namespace Teleopti.Ccc.Win.Scheduling
 					AggregateSkillSkill.AggregateSkills.Min(s => s.DefaultResolution);
 			}
 		}
-    }
+	}
 }

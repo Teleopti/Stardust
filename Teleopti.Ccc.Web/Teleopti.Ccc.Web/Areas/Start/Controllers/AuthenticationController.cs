@@ -38,12 +38,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		public ActionResult SignOut()
 		{
-			_formsAuthentication.SignOut();
-			return RedirectToAction("", "Authentication");
-		}
-
-		public ActionResult SignInAsAnotherUser()
-		{
 			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 
@@ -51,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			var signInReply = new SignInRequestMessage(new Uri(_authenticationModule.Issuer), _authenticationModule.Realm)
 			{
-				Context = "ru=" + url.AbsoluteUri.Remove(url.AbsoluteUri.IndexOf("Authentication/SignInAsAnotherUser", StringComparison.OrdinalIgnoreCase)),
+				Context = "ru=" + url.AbsoluteUri.Remove(url.AbsoluteUri.IndexOf("Authentication/SignOut", StringComparison.OrdinalIgnoreCase)),
 			};
 
 			var signOut = new SignOutRequestMessage(new Uri(_authenticationModule.Issuer), signInReply.WriteQueryString());

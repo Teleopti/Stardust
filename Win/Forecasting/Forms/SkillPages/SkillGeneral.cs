@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using System.Linq;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Repositories;
@@ -315,7 +316,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 
         private void AdjustWidthComboBox_DropDown(object sender, EventArgs e)
         {
-            var senderComboBox = (ComboBox)sender;
+            var senderComboBox = (ComboBoxAdv)sender;
             int width = senderComboBox.DropDownWidth;
             Graphics g = senderComboBox.CreateGraphics();
             Font font = senderComboBox.Font;

@@ -4,6 +4,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 
 	this.DataSources = ko.observableArray();
 	this.ErrorMessage = ko.observable();
+	this.ShowSignInAsAnotherUser = ko.observable(false);
 	this.HasErrorMessage = ko.computed(function () {
 		var errorMessage = self.ErrorMessage();
 		return errorMessage && errorMessage.length > 0;
@@ -31,6 +32,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 				var dataSources = self.DataSources();
 				if (dataSources.length == 0) {
 					self.ErrorMessage($('#Signin-error').data('nodatasourcetext'));
+					self.ShowSignInAsAnotherUser(true);
 					return;
 				}
 

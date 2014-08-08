@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			var userTexts = JsonConvert.SerializeObject(new
 				{
 					UserTexts.Resources.Home,
-					UserTexts.Resources.SignInAsAnotherUser,
+					UserTexts.Resources.SignOut,
 					UserTexts.Resources.Settings,
 					UserTexts.Resources.ContractTime,
 					UserTexts.Resources.WorkTime,

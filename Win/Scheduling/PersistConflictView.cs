@@ -11,10 +11,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    public partial class PersistConflictView : BaseRibbonForm, 
-                                                IPersistConflictView
-    {
-	    private readonly PersistConflictPresenter _presenter;
+	public partial class PersistConflictView : BaseDialogForm, 
+												IPersistConflictView
+	{
+		private readonly PersistConflictPresenter _presenter;
 
 		public PersistConflictView(IScheduleDictionary scheduleDictionary,
 								IEnumerable<PersistConflict> conflicts,
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_presenter = new PersistConflictPresenter(this, model, messageQueueRemoval);
 		}
 
-		private void PersistConflict_Load(object sender, EventArgs e)
+		private void persistConflictLoad(object sender, EventArgs e)
 		{
 			_presenter.Initialize();
 		}
@@ -41,10 +41,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				gridControlConflict.RowStyles[n].Interior = new BrushInfo(ColorHelper.OfficeBlue);
 			}
-			ResizeColumns();
+			resizeColumns();
 		}
 
-		private void ResizeColumns()
+		private void resizeColumns()
 		{
 			int width = gridControlConflict.Width / 4;
 			gridControlConflict.Cols.Size[1] = width;
@@ -58,17 +58,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Close();
 		}
 
-		private void btnUndo_Click(object sender, EventArgs e)
+		private void btnUndoClick(object sender, EventArgs e)
 		{
 			_presenter.OnDiscardMyChanges();
 		}
 
-		private void btnOverWrite_Click(object sender, EventArgs e)
+		private void btnOverWriteClick(object sender, EventArgs e)
 		{
 			_presenter.OnOverwriteServerChanges();
 		}
 
-		private void gridControlConflict_QueryCellInfo(object sender, Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)
+		private void gridControlConflictQueryCellInfo(object sender, Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)
 		{
 			if (e.RowIndex == 0)
 				e.Style.BaseStyle = "Header";
@@ -77,9 +77,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			e.Style.CellValue = _presenter.OnQueryCellInfo(e.RowIndex, e.ColIndex);
 		}
 		
-		private void gridControlConflict_Resize(object sender, EventArgs e)
+		private void gridControlConflictResize(object sender, EventArgs e)
 		{
-			ResizeColumns();
+			resizeColumns();
 		}	
 	}
 }

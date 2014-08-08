@@ -481,7 +481,15 @@ Teleopti.MyTimeWeb.Request.PageView = function(pageIndex) {
 	self.isSelected = ko.observable(false);
 };
 
-Teleopti.MyTimeWeb.Request.FilterTimeView = function(text, start, end, checked) {
+Teleopti.MyTimeWeb.Request.FilterStartTimeView = function(text, start, end, checked) {
+	var self = this;
+	self.text = text;
+	self.start = start;
+	self.end = end;
+	self.isChecked = ko.observable(checked || false);
+};
+
+Teleopti.MyTimeWeb.Request.FilterEndTimeView = function (text, start, end, checked) {
 	var self = this;
 	self.text = text;
 	self.start = start;
