@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
         /// </summary>
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorkflowValidateView));
 			this.xpTaskBar1 = new Syncfusion.Windows.Forms.Tools.XPTaskBar();
 			this.xpTaskBarBoxSelectPeriod = new Syncfusion.Windows.Forms.Tools.XPTaskBarBox();
@@ -81,31 +82,38 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			// xpTaskBar1
 			// 
 			this.xpTaskBar1.AutoSize = true;
+			this.xpTaskBar1.BackColor = System.Drawing.Color.White;
+			this.xpTaskBar1.BeforeTouchSize = new System.Drawing.Size(172, 600);
 			this.xpTaskBar1.BorderColor = System.Drawing.Color.Black;
+			this.xpTaskBar1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxSelectPeriod);
 			this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxDeviations);
 			this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxSpecialEvents);
 			this.xpTaskBar1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.xpTaskBar1.Location = new System.Drawing.Point(0, 0);
+			this.xpTaskBar1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.xpTaskBar1.MinimumSize = new System.Drawing.Size(0, 0);
 			this.xpTaskBar1.Name = "xpTaskBar1";
-			this.xpTaskBar1.Size = new System.Drawing.Size(170, 600);
+			this.xpTaskBar1.Size = new System.Drawing.Size(172, 600);
+			this.xpTaskBar1.Style = Syncfusion.Windows.Forms.Tools.XPTaskBarStyle.Metro;
 			this.xpTaskBar1.TabIndex = 1;
 			// 
 			// xpTaskBarBoxSelectPeriod
 			// 
 			this.xpTaskBarBoxSelectPeriod.BackColor = System.Drawing.SystemColors.Control;
 			this.xpTaskBarBoxSelectPeriod.Controls.Add(this.gradientPanelSelectPeriod);
-			this.xpTaskBarBoxSelectPeriod.HeaderBackColor = System.Drawing.SystemColors.Control;
+			this.xpTaskBarBoxSelectPeriod.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.xpTaskBarBoxSelectPeriod.HeaderForeColor = System.Drawing.Color.White;
 			this.xpTaskBarBoxSelectPeriod.HeaderImageIndex = -1;
 			this.xpTaskBarBoxSelectPeriod.HitTaskBoxArea = false;
 			this.xpTaskBarBoxSelectPeriod.HotTrackColor = System.Drawing.Color.Empty;
-			this.xpTaskBarBoxSelectPeriod.ItemBackColor = System.Drawing.SystemColors.Control;
+			this.xpTaskBarBoxSelectPeriod.ItemBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(191)))), ((int)(((byte)(237)))));
 			this.xpTaskBarBoxSelectPeriod.Location = new System.Drawing.Point(0, 0);
 			this.xpTaskBarBoxSelectPeriod.Name = "xpTaskBarBoxSelectPeriod";
-			this.xpTaskBarBoxSelectPeriod.PreferredChildPanelHeight = 232;
+			this.xpTaskBarBoxSelectPeriod.PADY = 2;
+			this.xpTaskBarBoxSelectPeriod.PreferredChildPanelHeight = 277;
 			this.xpTaskBarBoxSelectPeriod.ShowCollapseButton = false;
-			this.xpTaskBarBoxSelectPeriod.Size = new System.Drawing.Size(170, 260);
+			this.xpTaskBarBoxSelectPeriod.Size = new System.Drawing.Size(170, 302);
 			this.xpTaskBarBoxSelectPeriod.TabIndex = 0;
 			this.xpTaskBarBoxSelectPeriod.TabStop = false;
 			this.xpTaskBarBoxSelectPeriod.Text = "xxSelectHistoricalData";
@@ -117,9 +125,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.gradientPanelSelectPeriod.Controls.Add(this.buttonAdvCancelLoad);
 			this.gradientPanelSelectPeriod.Controls.Add(this.dateSelectionFromToHistorical);
 			this.gradientPanelSelectPeriod.Controls.Add(this.dateSelectionFromToTarget);
-			this.gradientPanelSelectPeriod.Location = new System.Drawing.Point(2, 26);
+			this.gradientPanelSelectPeriod.Location = new System.Drawing.Point(2, 23);
 			this.gradientPanelSelectPeriod.Name = "gradientPanelSelectPeriod";
-			this.gradientPanelSelectPeriod.Size = new System.Drawing.Size(166, 232);
+			this.gradientPanelSelectPeriod.Size = new System.Drawing.Size(166, 277);
 			this.gradientPanelSelectPeriod.TabIndex = 0;
 			// 
 			// buttonAdvCancelLoad
@@ -127,9 +135,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.buttonAdvCancelLoad.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonAdvCancelLoad.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvCancelLoad.BeforeTouchSize = new System.Drawing.Size(160, 26);
 			this.buttonAdvCancelLoad.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Cancel_16x16;
 			this.buttonAdvCancelLoad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonAdvCancelLoad.Location = new System.Drawing.Point(3, 201);
+			this.buttonAdvCancelLoad.IsBackStageButton = false;
+			this.buttonAdvCancelLoad.Location = new System.Drawing.Point(3, 237);
 			this.buttonAdvCancelLoad.Name = "buttonAdvCancelLoad";
 			this.buttonAdvCancelLoad.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonAdvCancelLoad.Size = new System.Drawing.Size(160, 26);
@@ -147,14 +157,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.dateSelectionFromToHistorical.BackColor = System.Drawing.Color.Transparent;
 			this.dateSelectionFromToHistorical.ButtonApplyText = "xxApply";
 			this.dateSelectionFromToHistorical.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.dateSelectionFromToHistorical.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.dateSelectionFromToHistorical.HideNoneButtons = false;
 			this.dateSelectionFromToHistorical.LabelDateSelectionText = "xxCompareWith";
 			this.dateSelectionFromToHistorical.LabelDateSelectionToText = "xxTo";
-			this.dateSelectionFromToHistorical.Location = new System.Drawing.Point(0, 103);
+			this.dateSelectionFromToHistorical.Location = new System.Drawing.Point(0, 120);
 			this.dateSelectionFromToHistorical.Name = "dateSelectionFromToHistorical";
 			this.dateSelectionFromToHistorical.NoneButtonText = "xxNone";
 			this.dateSelectionFromToHistorical.NullString = "xxNoDateIsSelected";
-			this.dateSelectionFromToHistorical.Size = new System.Drawing.Size(166, 129);
+			this.dateSelectionFromToHistorical.Size = new System.Drawing.Size(166, 157);
 			this.dateSelectionFromToHistorical.TabIndex = 3;
 			this.dateSelectionFromToHistorical.TodayButtonText = "xxToday";
 			this.dateSelectionFromToHistorical.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToHistorical.WorkPeriodEnd")));
@@ -167,6 +178,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.dateSelectionFromToTarget.BackColor = System.Drawing.Color.Transparent;
 			this.dateSelectionFromToTarget.ButtonApplyText = "xxApplyTargetPeriod";
 			this.dateSelectionFromToTarget.Dock = System.Windows.Forms.DockStyle.Top;
+			this.dateSelectionFromToTarget.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.dateSelectionFromToTarget.HideNoneButtons = false;
 			this.dateSelectionFromToTarget.LabelDateSelectionText = "xxValidationPeriod";
 			this.dateSelectionFromToTarget.LabelDateSelectionToText = "xxTo";
@@ -176,7 +188,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.dateSelectionFromToTarget.NoneButtonText = "xxNone";
 			this.dateSelectionFromToTarget.NullString = "xxNoDateIsSelected";
 			this.dateSelectionFromToTarget.ShowApplyButton = false;
-			this.dateSelectionFromToTarget.Size = new System.Drawing.Size(166, 103);
+			this.dateSelectionFromToTarget.Size = new System.Drawing.Size(166, 120);
 			this.dateSelectionFromToTarget.TabIndex = 2;
 			this.dateSelectionFromToTarget.TodayButtonText = "xxToday";
 			this.dateSelectionFromToTarget.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToTarget.WorkPeriodEnd")));
@@ -186,15 +198,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			// xpTaskBarBoxDeviations
 			// 
 			this.xpTaskBarBoxDeviations.Controls.Add(this.gradientPanelDeviations);
-			this.xpTaskBarBoxDeviations.HeaderBackColor = System.Drawing.SystemColors.Control;
+			this.xpTaskBarBoxDeviations.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.xpTaskBarBoxDeviations.HeaderForeColor = System.Drawing.Color.White;
 			this.xpTaskBarBoxDeviations.HeaderImageIndex = -1;
 			this.xpTaskBarBoxDeviations.HitTaskBoxArea = false;
 			this.xpTaskBarBoxDeviations.HotTrackColor = System.Drawing.Color.Empty;
-			this.xpTaskBarBoxDeviations.ItemBackColor = System.Drawing.SystemColors.Control;
-			this.xpTaskBarBoxDeviations.Location = new System.Drawing.Point(0, 260);
+			this.xpTaskBarBoxDeviations.ItemBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(191)))), ((int)(((byte)(237)))));
+			this.xpTaskBarBoxDeviations.Location = new System.Drawing.Point(0, 303);
 			this.xpTaskBarBoxDeviations.Name = "xpTaskBarBoxDeviations";
+			this.xpTaskBarBoxDeviations.PADY = 2;
 			this.xpTaskBarBoxDeviations.PreferredChildPanelHeight = 120;
-			this.xpTaskBarBoxDeviations.Size = new System.Drawing.Size(170, 150);
+			this.xpTaskBarBoxDeviations.Size = new System.Drawing.Size(170, 145);
 			this.xpTaskBarBoxDeviations.TabIndex = 1;
 			this.xpTaskBarBoxDeviations.TabStop = false;
 			this.xpTaskBarBoxDeviations.Text = "xxDeviations";
@@ -204,7 +218,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.gradientPanelDeviations.AutoSize = true;
 			this.gradientPanelDeviations.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanelDeviations.Controls.Add(this.tableLayoutPanel1);
-			this.gradientPanelDeviations.Location = new System.Drawing.Point(2, 28);
+			this.gradientPanelDeviations.Location = new System.Drawing.Point(2, 23);
 			this.gradientPanelDeviations.Name = "gradientPanelDeviations";
 			this.gradientPanelDeviations.Size = new System.Drawing.Size(166, 120);
 			this.gradientPanelDeviations.TabIndex = 0;
@@ -236,7 +250,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.labelDeviationAfterTaskTime.AutoSize = true;
 			this.labelDeviationAfterTaskTime.Location = new System.Drawing.Point(3, 87);
 			this.labelDeviationAfterTaskTime.Name = "labelDeviationAfterTaskTime";
-			this.labelDeviationAfterTaskTime.Size = new System.Drawing.Size(102, 26);
+			this.labelDeviationAfterTaskTime.Size = new System.Drawing.Size(98, 26);
 			this.labelDeviationAfterTaskTime.TabIndex = 5;
 			this.labelDeviationAfterTaskTime.Text = "xxDeviationACWColon";
 			// 
@@ -246,7 +260,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.labelDeviationTaskTime.AutoSize = true;
 			this.labelDeviationTaskTime.Location = new System.Drawing.Point(3, 47);
 			this.labelDeviationTaskTime.Name = "labelDeviationTaskTime";
-			this.labelDeviationTaskTime.Size = new System.Drawing.Size(100, 26);
+			this.labelDeviationTaskTime.Size = new System.Drawing.Size(103, 26);
 			this.labelDeviationTaskTime.TabIndex = 3;
 			this.labelDeviationTaskTime.Text = "xxDeviationTalkTimeColon";
 			// 
@@ -254,16 +268,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			// 
 			this.percentTextBoxTasks.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.percentTextBoxTasks.BackGroundColor = System.Drawing.SystemColors.Window;
+			this.percentTextBoxTasks.BeforeTouchSize = new System.Drawing.Size(45, 22);
 			this.percentTextBoxTasks.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.percentTextBoxTasks.DoubleValue = 0D;
-			this.percentTextBoxTasks.Location = new System.Drawing.Point(122, 10);
+			this.percentTextBoxTasks.Location = new System.Drawing.Point(122, 9);
 			this.percentTextBoxTasks.MaxValue = 100D;
+			this.percentTextBoxTasks.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.percentTextBoxTasks.MinValue = -100D;
 			this.percentTextBoxTasks.Name = "percentTextBoxTasks";
 			this.percentTextBoxTasks.NullString = "0,00 %";
 			this.percentTextBoxTasks.OverflowIndicatorToolTipText = null;
 			this.percentTextBoxTasks.PercentDecimalDigits = 0;
-			this.percentTextBoxTasks.Size = new System.Drawing.Size(45, 20);
+			this.percentTextBoxTasks.Size = new System.Drawing.Size(45, 22);
+			this.percentTextBoxTasks.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.percentTextBoxTasks.TabIndex = 5;
 			this.percentTextBoxTasks.Text = "0 %";
 			this.percentTextBoxTasks.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PercentTextBoxTasks_OnKeyUp);
@@ -276,7 +293,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.labelDeviationTasks.Location = new System.Drawing.Point(3, 7);
 			this.labelDeviationTasks.MaximumSize = new System.Drawing.Size(100, 0);
 			this.labelDeviationTasks.Name = "labelDeviationTasks";
-			this.labelDeviationTasks.Size = new System.Drawing.Size(99, 26);
+			this.labelDeviationTasks.Size = new System.Drawing.Size(97, 26);
 			this.labelDeviationTasks.TabIndex = 1;
 			this.labelDeviationTasks.Text = "xxDeviationCallsColon";
 			// 
@@ -284,16 +301,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			// 
 			this.percentTextBoxDeviationTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.percentTextBoxDeviationTaskTime.BackGroundColor = System.Drawing.SystemColors.Window;
+			this.percentTextBoxDeviationTaskTime.BeforeTouchSize = new System.Drawing.Size(45, 22);
 			this.percentTextBoxDeviationTaskTime.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.percentTextBoxDeviationTaskTime.DoubleValue = 0D;
-			this.percentTextBoxDeviationTaskTime.Location = new System.Drawing.Point(122, 50);
+			this.percentTextBoxDeviationTaskTime.Location = new System.Drawing.Point(122, 49);
 			this.percentTextBoxDeviationTaskTime.MaxValue = 100D;
+			this.percentTextBoxDeviationTaskTime.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.percentTextBoxDeviationTaskTime.MinValue = -100D;
 			this.percentTextBoxDeviationTaskTime.Name = "percentTextBoxDeviationTaskTime";
 			this.percentTextBoxDeviationTaskTime.NullString = "0,00 %";
 			this.percentTextBoxDeviationTaskTime.OverflowIndicatorToolTipText = null;
 			this.percentTextBoxDeviationTaskTime.PercentDecimalDigits = 0;
-			this.percentTextBoxDeviationTaskTime.Size = new System.Drawing.Size(45, 20);
+			this.percentTextBoxDeviationTaskTime.Size = new System.Drawing.Size(45, 22);
+			this.percentTextBoxDeviationTaskTime.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.percentTextBoxDeviationTaskTime.TabIndex = 6;
 			this.percentTextBoxDeviationTaskTime.Text = "0 %";
 			this.percentTextBoxDeviationTaskTime.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PercentTextBoxDeviationTaskTime_OnKeyUp);
@@ -303,16 +323,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			// 
 			this.percentTextBoxDeviationAfterTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.percentTextBoxDeviationAfterTaskTime.BackGroundColor = System.Drawing.SystemColors.Window;
+			this.percentTextBoxDeviationAfterTaskTime.BeforeTouchSize = new System.Drawing.Size(45, 22);
 			this.percentTextBoxDeviationAfterTaskTime.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.percentTextBoxDeviationAfterTaskTime.DoubleValue = 0D;
-			this.percentTextBoxDeviationAfterTaskTime.Location = new System.Drawing.Point(122, 90);
+			this.percentTextBoxDeviationAfterTaskTime.Location = new System.Drawing.Point(122, 89);
 			this.percentTextBoxDeviationAfterTaskTime.MaxValue = 100D;
+			this.percentTextBoxDeviationAfterTaskTime.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.percentTextBoxDeviationAfterTaskTime.MinValue = -100D;
 			this.percentTextBoxDeviationAfterTaskTime.Name = "percentTextBoxDeviationAfterTaskTime";
 			this.percentTextBoxDeviationAfterTaskTime.NullString = "0,00 %";
 			this.percentTextBoxDeviationAfterTaskTime.OverflowIndicatorToolTipText = null;
 			this.percentTextBoxDeviationAfterTaskTime.PercentDecimalDigits = 0;
-			this.percentTextBoxDeviationAfterTaskTime.Size = new System.Drawing.Size(45, 20);
+			this.percentTextBoxDeviationAfterTaskTime.Size = new System.Drawing.Size(45, 22);
+			this.percentTextBoxDeviationAfterTaskTime.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.percentTextBoxDeviationAfterTaskTime.TabIndex = 7;
 			this.percentTextBoxDeviationAfterTaskTime.Text = "0 %";
 			this.percentTextBoxDeviationAfterTaskTime.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PercentTextBoxDeviationAfterTaskTime_OnKeyUp);
@@ -321,15 +344,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			// xpTaskBarBoxSpecialEvents
 			// 
 			this.xpTaskBarBoxSpecialEvents.Controls.Add(this.gradientPanelSpecialEvents);
-			this.xpTaskBarBoxSpecialEvents.HeaderBackColor = System.Drawing.SystemColors.Control;
+			this.xpTaskBarBoxSpecialEvents.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.xpTaskBarBoxSpecialEvents.HeaderForeColor = System.Drawing.Color.White;
 			this.xpTaskBarBoxSpecialEvents.HeaderImageIndex = -1;
 			this.xpTaskBarBoxSpecialEvents.HitTaskBoxArea = false;
 			this.xpTaskBarBoxSpecialEvents.HotTrackColor = System.Drawing.Color.Empty;
-			this.xpTaskBarBoxSpecialEvents.ItemBackColor = System.Drawing.SystemColors.Control;
-			this.xpTaskBarBoxSpecialEvents.Location = new System.Drawing.Point(0, 410);
+			this.xpTaskBarBoxSpecialEvents.ItemBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(191)))), ((int)(((byte)(237)))));
+			this.xpTaskBarBoxSpecialEvents.Location = new System.Drawing.Point(0, 449);
 			this.xpTaskBarBoxSpecialEvents.Name = "xpTaskBarBoxSpecialEvents";
+			this.xpTaskBarBoxSpecialEvents.PADY = 2;
 			this.xpTaskBarBoxSpecialEvents.PreferredChildPanelHeight = 100;
-			this.xpTaskBarBoxSpecialEvents.Size = new System.Drawing.Size(170, 130);
+			this.xpTaskBarBoxSpecialEvents.Size = new System.Drawing.Size(170, 125);
 			this.xpTaskBarBoxSpecialEvents.TabIndex = 7;
 			this.xpTaskBarBoxSpecialEvents.TabStop = false;
 			this.xpTaskBarBoxSpecialEvents.Text = "xxSpecialEvents";
@@ -339,7 +364,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.gradientPanelSpecialEvents.AutoSize = true;
 			this.gradientPanelSpecialEvents.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanelSpecialEvents.Controls.Add(this.outlierBoxControl);
-			this.gradientPanelSpecialEvents.Location = new System.Drawing.Point(2, 28);
+			this.gradientPanelSpecialEvents.Location = new System.Drawing.Point(2, 23);
 			this.gradientPanelSpecialEvents.Name = "gradientPanelSpecialEvents";
 			this.gradientPanelSpecialEvents.Size = new System.Drawing.Size(166, 100);
 			this.gradientPanelSpecialEvents.TabIndex = 1;
@@ -357,6 +382,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			// 
 			// splitContainerAdv2
 			// 
+			this.splitContainerAdv2.BeforeTouchSize = 3;
 			this.splitContainerAdv2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainerAdv2.Location = new System.Drawing.Point(0, 0);
 			this.splitContainerAdv2.Name = "splitContainerAdv2";
@@ -364,16 +390,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			// splitContainerAdv2.Panel1
 			// 
 			this.splitContainerAdv2.Panel1.AutoSize = true;
-			this.splitContainerAdv2.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+			this.splitContainerAdv2.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			// 
 			// splitContainerAdv2.Panel2
 			// 
-			this.splitContainerAdv2.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+			this.splitContainerAdv2.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainerAdv2.Panel2.Controls.Add(this.xpTaskBar1);
 			this.splitContainerAdv2.Size = new System.Drawing.Size(1060, 600);
 			this.splitContainerAdv2.SplitterDistance = 885;
-			this.splitContainerAdv2.SplitterWidth = 5;
-			this.splitContainerAdv2.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
+			this.splitContainerAdv2.SplitterWidth = 3;
+			this.splitContainerAdv2.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
 			this.splitContainerAdv2.TabIndex = 0;
 			this.splitContainerAdv2.TabStop = false;
 			this.splitContainerAdv2.Text = "splitContainerAdv7";
@@ -406,6 +432,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.splitContainerAdv2);
+			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "WorkflowValidateView";
 			this.Size = new System.Drawing.Size(1060, 600);
 			((System.ComponentModel.ISupportInitialize)(this.xpTaskBar1)).EndInit();
@@ -450,8 +477,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
         private Syncfusion.Windows.Forms.Tools.PercentTextBox percentTextBoxDeviationAfterTaskTime;
         private System.Windows.Forms.Label labelDeviationTaskTime;
         private Syncfusion.Windows.Forms.Tools.PercentTextBox percentTextBoxDeviationTaskTime;
-        private System.Windows.Forms.Label labelDeviationTasks;
-        private DateSelectionFromTo dateSelectionFromToHistorical;
+		  private System.Windows.Forms.Label labelDeviationTasks;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private Syncfusion.Windows.Forms.Tools.XPTaskBarBox xpTaskBarBoxSpecialEvents;
@@ -460,5 +486,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
         private System.ComponentModel.BackgroundWorker backgroundWorkerStatistics;
         private System.ComponentModel.BackgroundWorker backgroundWorkerValidationPeriod;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancelLoad;
+		  private DateSelectionFromTo dateSelectionFromToHistorical;
     }
 }

@@ -73,7 +73,7 @@
 			// 
 			this.gradientPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.gradientPanel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-			this.gradientPanel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.LightSteelBlue, System.Drawing.Color.White);
+			this.gradientPanel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.None, System.Drawing.Color.White, System.Drawing.Color.White);
 			this.gradientPanel1.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
 			this.gradientPanel1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanel1.Controls.Add(this.tableLayoutPanel2);
@@ -158,6 +158,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanelMain);
+			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "TemplateSmartPart";
 			this.Size = new System.Drawing.Size(495, 588);
 			this.Enter += new System.EventHandler(this.TemplateSmartPart_Enter);
