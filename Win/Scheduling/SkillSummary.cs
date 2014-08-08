@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    public partial class SkillSummary : BaseRibbonForm
+    public partial class SkillSummary : BaseDialogForm
     {
         private readonly IList<ISkill> _skills = new List<ISkill>();
         private IAggregateSkill _aggregateSkillSkill;
