@@ -2,6 +2,7 @@
 using System.Linq;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.UserTexts;
@@ -20,6 +21,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IGlobalSettingDataRepository _globalSettingRep;
 		private readonly IPushMessageRepository _msgRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly IAgentBadgeCalculator _calculator;
+		private readonly INow _now;
 
 		public CalculateBadgeConsumer(
 									IServiceBus serviceBus, 
@@ -28,7 +31,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 									IPersonRepository personRepository, 
 									IGlobalSettingDataRepository globalSettingRep, 
 									IPushMessageRepository msgRepository, 
-									ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+									ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
+									IAgentBadgeCalculator calculator,
+									INow now)
 		{
 			_serviceBus = serviceBus;
 			_settingsRepository = settingsRepository;
@@ -37,6 +42,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_globalSettingRep = globalSettingRep;
 			_msgRepository = msgRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_calculator = calculator;
+			_now = now;
 		}
 
 		public void Consume(CalculateBadgeMessage message)
@@ -45,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			//get the date for doing the next calculation
 			//delaysend CalculateBadgeMessage to bus for time of next calculation
-			var calculator = new AgentBadgeCalculator(_statisticRepository);
+			//var calculator = new AgentBadgeCalculator(_statisticRepository);
 			var setting = _settingsRepository.LoadAll().FirstOrDefault();
 			if (setting == null)
 			{
@@ -54,14 +61,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			}
 			var adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 
-			var today = DateOnly.Today;
+			var today = _now.LocalDateOnly();
 			var tomorrow = today.AddDays(1);
 			var tomorrowForGivenTimeZone = TimeZoneInfo.ConvertTime(tomorrow, TimeZoneInfo.Local, message.TimeZone);
 			var nextMessageShouldBeProcessed = TimeZoneInfo.ConvertTime(tomorrowForGivenTimeZone.Date, message.TimeZone,
 				TimeZoneInfo.Local);
-			var allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(DateOnly.Today.AddDays(-1), DateOnly.Today.AddDays(1)), false);
+			var allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
-			var peopleGotABadge = calculator.Calculate(allAgents, message.TimeZone.Id, message.CalculationDate,
+			var peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZone.Id, message.CalculationDate,
 				adherenceReportSetting.CalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
 			foreach (var person in peopleGotABadge)
 			{
