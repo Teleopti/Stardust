@@ -6,19 +6,19 @@ GO
 -- Author:		Xinfeng
 -- Create date: 2014-07-22
 -- Update date: 
--- Description:	Gets the agent whose adherence over @threshold during @Date for specify @time_zone_id
+-- Description:	Gets the agent whose adherence over @threshold during @Date for specify @time_zone_code
 -- Example: EXEC [mart].[raptor_adherence_per_agent_by_date]
 --               @threshold=0.58, -- 58%
 --               @local_date='2014-05-29',
 --               @adherence_id=2,
---               @time_zone_id=1;
+--               @time_zone_code='UTC';
 -- ======================================================================================================
 
 CREATE PROCEDURE [mart].[raptor_adherence_per_agent_by_date]
 @local_date smalldatetime,
 @threshold decimal(3, 2),
 @adherence_id int, --1, 2 or 3 from adherence_calculation table
-@time_zone_id int
+@time_zone_code nvarchar(50)
 AS
 Begin
 
@@ -229,7 +229,9 @@ INNER JOIN mart.dim_date d
 	AND d.date_date = @local_date
 INNER JOIN mart.dim_interval i
 	ON b.local_interval_id = i.interval_id
-WHERE b.time_zone_id = @time_zone_id
+INNER JOIN mart.dim_time_zone t
+	ON b.time_zone_id = t.time_zone_id
+WHERE t.time_zone_code = @time_zone_code
 
 --Get the min/max UTC date_id
 SELECT
@@ -248,7 +250,9 @@ INNER JOIN mart.dim_date d
 INNER JOIN mart.dim_interval i
 	ON b.interval_id = i.interval_id
 	AND @nowUtcInterval between i.interval_start and i.interval_end
-WHERE b.time_zone_id=@time_zone_id
+INNER JOIN mart.dim_time_zone t
+	ON b.time_zone_id = t.time_zone_id
+WHERE t.time_zone_code = @time_zone_code
 
 --Multiple Time zones?
 IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
@@ -268,8 +272,10 @@ select distinct
     on tz.time_zone_id = p.time_zone_id
  inner join mart.dim_date d
     on tz.local_date_id = d.date_id
+ INNER JOIN mart.dim_time_zone t
+	ON tz.time_zone_id = t.time_zone_id
  where d.date_date = @local_date
-   and p.time_zone_id = @time_zone_id;
+   and t.time_zone_code = @time_zone_code;
 
 --Create UTC table from: mart.fact_schedule_deviation
 INSERT INTO #fact_schedule_deviation_raw(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
@@ -454,7 +460,9 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 		ON b2.local_interval_id = i.interval_id			
 	INNER JOIN mart.dim_date d 
 		ON b2.local_date_id = d.date_id
-	AND b2.time_zone_id=@time_zone_id
+	INNER JOIN mart.dim_time_zone t
+		ON t.time_zone_code = @time_zone_code 
+		AND b2.time_zone_id = t.time_zone_id
 
 --b) insert agent statistics outside shift
 INSERT #result(shift_startdate_local_id,shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
@@ -507,7 +515,9 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 		ON b2.local_interval_id = i.interval_id			
 	INNER JOIN mart.dim_date d 
 		ON b2.local_date_id = d.date_id
-	AND b2.time_zone_id=@time_zone_id
+	INNER JOIN mart.dim_time_zone t
+		ON t.time_zone_code = @time_zone_code
+		AND b2.time_zone_id= t.time_zone_id
 	WHERE NOT EXISTS (SELECT 1 FROM #result r where r.person_id=fsd.person_id and r.interval_id=i.interval_id and r.date_id=d.date_id)--WHERE NO MATCH ON SCHEDULE
 
 ----------
