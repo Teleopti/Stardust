@@ -80,11 +80,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExMain.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExMain.Image = null;
 			this.toolStripExMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonApprove,
-			this.toolStripButtonDeny,
-			this.toolStripButtonReply,
-			this.toolStripButtonReplyAndApprove,
-			this.toolStripButtonReplyAndDeny});
+            this.toolStripButtonApprove,
+            this.toolStripButtonDeny,
+            this.toolStripButtonReply,
+            this.toolStripButtonReplyAndApprove,
+            this.toolStripButtonReplyAndDeny});
 			this.toolStripExMain.Name = "toolStripExMain";
 			this.toolStripExMain.Office12Mode = false;
 			// 
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.textBoxExtMessage.AcceptsReturn = true;
 			resources.ApplyResources(this.textBoxExtMessage, "textBoxExtMessage");
-			this.textBoxExtMessage.BeforeTouchSize = new System.Drawing.Size(807, 127);
+			this.textBoxExtMessage.BeforeTouchSize = new System.Drawing.Size(809, 127);
 			this.textBoxExtMessage.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxExtMessage.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtMessage.Name = "textBoxExtMessage";
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// textBoxExtSubject
 			// 
 			resources.ApplyResources(this.textBoxExtSubject, "textBoxExtSubject");
-			this.textBoxExtSubject.BeforeTouchSize = new System.Drawing.Size(807, 127);
+			this.textBoxExtSubject.BeforeTouchSize = new System.Drawing.Size(809, 127);
 			this.textBoxExtSubject.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxExtSubject.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtSubject.Name = "textBoxExtSubject";

@@ -1,11 +1,9 @@
 ﻿using System;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    public partial class RequestAllowanceGridControl : TeleoptiGridControl
+    public partial class RequestAllowanceGridControl : GridControl
     {
         public const int NavigationButtonRowIndex = 0;
         public const int PrevButtonColIndex = 1;

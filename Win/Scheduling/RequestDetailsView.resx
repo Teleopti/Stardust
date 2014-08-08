@@ -134,9 +134,6 @@
   <data name="toolStripButtonApprove.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
-  <data name="toolStripButtonApprove.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopCenter</value>
-  </data>
   <data name="toolStripButtonApprove.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -208,7 +205,7 @@
     <value>Vertical</value>
   </data>
   <data name="textBoxExtMessage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>807, 127</value>
+    <value>809, 127</value>
   </data>
   <data name="textBoxExtMessage.TabIndex" type="System.Int32, mscorlib">
     <value>23</value>
@@ -274,7 +271,7 @@
     <value>78</value>
   </data>
   <data name="textBoxExtSubject.Size" type="System.Drawing.Size, System.Drawing">
-    <value>807, 23</value>
+    <value>809, 23</value>
   </data>
   <data name="textBoxExtSubject.TabIndex" type="System.Int32, mscorlib">
     <value>22</value>
@@ -340,7 +337,7 @@
     <value>NoControl</value>
   </data>
   <data name="labelUserStatus.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 260</value>
+    <value>8, 258</value>
   </data>
   <data name="labelUserStatus.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>8, 0, 3, 0</value>
@@ -412,7 +409,7 @@
     <value>NoControl</value>
   </data>
   <data name="textBoxExtStatus.Location" type="System.Drawing.Point, System.Drawing">
-    <value>166, 260</value>
+    <value>166, 258</value>
   </data>
   <data name="textBoxExtStatus.Size" type="System.Drawing.Size, System.Drawing">
     <value>0, 15</value>
@@ -436,13 +433,13 @@
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanelMain.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 131</value>
+    <value>1, 137</value>
   </data>
   <data name="tableLayoutPanelMain.RowCount" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
   <data name="tableLayoutPanelMain.Size" type="System.Drawing.Size, System.Drawing">
-    <value>976, 317</value>
+    <value>978, 313</value>
   </data>
   <data name="tableLayoutPanelMain.TabIndex" type="System.Int32, mscorlib">
     <value>24</value>
@@ -481,7 +478,7 @@
     <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="ribbonControlAdvMain.Size" type="System.Drawing.Size, System.Drawing">
-    <value>982, 129</value>
+    <value>982, 137</value>
   </data>
   <data name="ribbonControlAdvMain.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -508,7 +505,7 @@
     <value>502, 415</value>
   </data>
   <data name="$this.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+    <value>1, 0, 1, 0</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>xxRequestDetails</value>
@@ -556,7 +553,7 @@
     <value>Teleopti.Ccc.Win.Common.BaseRibbonForm, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
   <data name="toolStripButtonApprove.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 54</value>
+    <value>66, 62</value>
   </data>
   <data name="toolStripButtonApprove.Text" xml:space="preserve">
     <value>xxApprove</value>
@@ -570,9 +567,6 @@
   <data name="toolStripButtonDeny.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
-  <data name="toolStripButtonDeny.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopCenter</value>
-  </data>
   <data name="toolStripButtonDeny.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -580,7 +574,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonDeny.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 54</value>
+    <value>48, 62</value>
   </data>
   <data name="toolStripButtonDeny.Text" xml:space="preserve">
     <value>xxDeny</value>
@@ -594,9 +588,6 @@
   <data name="toolStripButtonReply.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
-  <data name="toolStripButtonReply.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopCenter</value>
-  </data>
   <data name="toolStripButtonReply.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -604,7 +595,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonReply.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 54</value>
+    <value>50, 62</value>
   </data>
   <data name="toolStripButtonReply.Text" xml:space="preserve">
     <value>xxReply</value>
@@ -618,9 +609,6 @@
   <data name="toolStripButtonReplyAndApprove.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
-  <data name="toolStripButtonReplyAndApprove.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopCenter</value>
-  </data>
   <data name="toolStripButtonReplyAndApprove.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -628,7 +616,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonReplyAndApprove.Size" type="System.Drawing.Size, System.Drawing">
-    <value>117, 54</value>
+    <value>117, 62</value>
   </data>
   <data name="toolStripButtonReplyAndApprove.Text" xml:space="preserve">
     <value>xxReplyAndApprove</value>
@@ -642,9 +630,6 @@
   <data name="toolStripButtonReplyAndDeny.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
-  <data name="toolStripButtonReplyAndDeny.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopCenter</value>
-  </data>
   <data name="toolStripButtonReplyAndDeny.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -652,7 +637,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonReplyAndDeny.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 54</value>
+    <value>99, 62</value>
   </data>
   <data name="toolStripButtonReplyAndDeny.Text" xml:space="preserve">
     <value>xxReplyAndDeny</value>
@@ -667,7 +652,7 @@
     <value>0, 1</value>
   </data>
   <data name="toolStripExMain.Size" type="System.Drawing.Size, System.Drawing">
-    <value>387, 70</value>
+    <value>418, 78</value>
   </data>
   <data name="toolStripExMain.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
