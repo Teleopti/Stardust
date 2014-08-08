@@ -169,6 +169,9 @@
     </Compile>
     <Compile Include="AgentBadge\AgentBadgeCalculationConsumer.cs" />
     <Compile Include="AgentBadge\AgentBadgeCalculator.cs" />
+    <Compile Include="AgentBadge\BadgeCalculationInitConsumer.cs" />
+    <Compile Include="AgentBadge\CalculateBadgeConsumer.cs" />
+    <Compile Include="AgentBadge\CalculateTimeZoneConsumer.cs" />
     <Compile Include="AgentBadge\IAgentBadgeCalculator.cs" />
     <Compile Include="ApplicationInfrastructureContainerInstaller.cs" />
     <Compile Include="ApplicationLayer\EventsConsumer.cs" />
