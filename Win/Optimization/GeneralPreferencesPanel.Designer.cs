@@ -167,16 +167,14 @@
 			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel6, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel5, 0, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 4;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 203F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 201F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 220F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 220F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(420, 451);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(461, 535);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
 			// tableLayoutPanel8
@@ -203,24 +201,24 @@
 			this.tableLayoutPanel8.Controls.Add(this.label4, 2, 4);
 			this.tableLayoutPanel8.Controls.Add(this.label5, 2, 5);
 			this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 236);
+			this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 253);
 			this.tableLayoutPanel8.Name = "tableLayoutPanel8";
 			this.tableLayoutPanel8.RowCount = 8;
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel8.Size = new System.Drawing.Size(414, 195);
+			this.tableLayoutPanel8.Size = new System.Drawing.Size(455, 214);
 			this.tableLayoutPanel8.TabIndex = 23;
 			// 
 			// numericUpDownPreferences
 			// 
 			this.numericUpDownPreferences.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.numericUpDownPreferences.BeforeTouchSize = new System.Drawing.Size(43, 22);
+			this.numericUpDownPreferences.BeforeTouchSize = new System.Drawing.Size(43, 23);
 			this.numericUpDownPreferences.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownPreferences.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.numericUpDownPreferences.Increment = new decimal(new int[] {
@@ -228,10 +226,10 @@
             0,
             0,
             0});
-			this.numericUpDownPreferences.Location = new System.Drawing.Point(263, 28);
+			this.numericUpDownPreferences.Location = new System.Drawing.Point(263, 33);
 			this.numericUpDownPreferences.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownPreferences.Name = "numericUpDownPreferences";
-			this.numericUpDownPreferences.Size = new System.Drawing.Size(43, 22);
+			this.numericUpDownPreferences.Size = new System.Drawing.Size(43, 23);
 			this.numericUpDownPreferences.TabIndex = 13;
 			this.numericUpDownPreferences.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDownPreferences.Value = new decimal(new int[] {
@@ -243,13 +241,14 @@
 			// 
 			// checkBoxShiftCategoryLimitations
 			// 
-			this.checkBoxShiftCategoryLimitations.BeforeTouchSize = new System.Drawing.Size(254, 23);
+			this.checkBoxShiftCategoryLimitations.BeforeTouchSize = new System.Drawing.Size(247, 24);
 			this.checkBoxShiftCategoryLimitations.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxShiftCategoryLimitations.DrawFocusRectangle = false;
-			this.checkBoxShiftCategoryLimitations.Location = new System.Drawing.Point(3, 153);
+			this.checkBoxShiftCategoryLimitations.Location = new System.Drawing.Point(10, 183);
+			this.checkBoxShiftCategoryLimitations.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxShiftCategoryLimitations.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxShiftCategoryLimitations.Name = "checkBoxShiftCategoryLimitations";
-			this.checkBoxShiftCategoryLimitations.Size = new System.Drawing.Size(254, 23);
+			this.checkBoxShiftCategoryLimitations.Size = new System.Drawing.Size(247, 24);
 			this.checkBoxShiftCategoryLimitations.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxShiftCategoryLimitations.TabIndex = 12;
 			this.checkBoxShiftCategoryLimitations.Text = "xxShiftCategoryLimitations";
@@ -257,13 +256,14 @@
 			// 
 			// checkBoxStudentAvailabilities
 			// 
-			this.checkBoxStudentAvailabilities.BeforeTouchSize = new System.Drawing.Size(254, 19);
+			this.checkBoxStudentAvailabilities.BeforeTouchSize = new System.Drawing.Size(247, 24);
 			this.checkBoxStudentAvailabilities.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxStudentAvailabilities.DrawFocusRectangle = false;
-			this.checkBoxStudentAvailabilities.Location = new System.Drawing.Point(3, 128);
+			this.checkBoxStudentAvailabilities.Location = new System.Drawing.Point(10, 153);
+			this.checkBoxStudentAvailabilities.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxStudentAvailabilities.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxStudentAvailabilities.Name = "checkBoxStudentAvailabilities";
-			this.checkBoxStudentAvailabilities.Size = new System.Drawing.Size(254, 19);
+			this.checkBoxStudentAvailabilities.Size = new System.Drawing.Size(247, 24);
 			this.checkBoxStudentAvailabilities.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxStudentAvailabilities.TabIndex = 11;
 			this.checkBoxStudentAvailabilities.Text = "xxStudentAvailabilities";
@@ -272,13 +272,14 @@
 			// 
 			// checkBoxAvailabilities
 			// 
-			this.checkBoxAvailabilities.BeforeTouchSize = new System.Drawing.Size(254, 19);
+			this.checkBoxAvailabilities.BeforeTouchSize = new System.Drawing.Size(247, 24);
 			this.checkBoxAvailabilities.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxAvailabilities.DrawFocusRectangle = false;
-			this.checkBoxAvailabilities.Location = new System.Drawing.Point(3, 103);
+			this.checkBoxAvailabilities.Location = new System.Drawing.Point(10, 123);
+			this.checkBoxAvailabilities.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxAvailabilities.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAvailabilities.Name = "checkBoxAvailabilities";
-			this.checkBoxAvailabilities.Size = new System.Drawing.Size(254, 19);
+			this.checkBoxAvailabilities.Size = new System.Drawing.Size(247, 24);
 			this.checkBoxAvailabilities.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAvailabilities.TabIndex = 10;
 			this.checkBoxAvailabilities.Text = "xxAvailabilities";
@@ -287,13 +288,14 @@
 			// 
 			// checkBoxRotations
 			// 
-			this.checkBoxRotations.BeforeTouchSize = new System.Drawing.Size(254, 19);
+			this.checkBoxRotations.BeforeTouchSize = new System.Drawing.Size(247, 24);
 			this.checkBoxRotations.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxRotations.DrawFocusRectangle = false;
-			this.checkBoxRotations.Location = new System.Drawing.Point(3, 78);
+			this.checkBoxRotations.Location = new System.Drawing.Point(10, 93);
+			this.checkBoxRotations.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxRotations.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxRotations.Name = "checkBoxRotations";
-			this.checkBoxRotations.Size = new System.Drawing.Size(254, 19);
+			this.checkBoxRotations.Size = new System.Drawing.Size(247, 24);
 			this.checkBoxRotations.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxRotations.TabIndex = 9;
 			this.checkBoxRotations.Text = "xxRotations";
@@ -302,13 +304,14 @@
 			// 
 			// checkBoxMustHaves
 			// 
-			this.checkBoxMustHaves.BeforeTouchSize = new System.Drawing.Size(254, 19);
+			this.checkBoxMustHaves.BeforeTouchSize = new System.Drawing.Size(247, 24);
 			this.checkBoxMustHaves.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxMustHaves.DrawFocusRectangle = false;
-			this.checkBoxMustHaves.Location = new System.Drawing.Point(3, 53);
+			this.checkBoxMustHaves.Location = new System.Drawing.Point(10, 63);
+			this.checkBoxMustHaves.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxMustHaves.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxMustHaves.Name = "checkBoxMustHaves";
-			this.checkBoxMustHaves.Size = new System.Drawing.Size(254, 19);
+			this.checkBoxMustHaves.Size = new System.Drawing.Size(247, 24);
 			this.checkBoxMustHaves.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxMustHaves.TabIndex = 7;
 			this.checkBoxMustHaves.Text = "xxMustHaves";
@@ -317,13 +320,14 @@
 			// 
 			// checkBoxPreferences
 			// 
-			this.checkBoxPreferences.BeforeTouchSize = new System.Drawing.Size(254, 19);
+			this.checkBoxPreferences.BeforeTouchSize = new System.Drawing.Size(247, 24);
 			this.checkBoxPreferences.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxPreferences.DrawFocusRectangle = false;
-			this.checkBoxPreferences.Location = new System.Drawing.Point(3, 28);
+			this.checkBoxPreferences.Location = new System.Drawing.Point(10, 33);
+			this.checkBoxPreferences.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxPreferences.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxPreferences.Name = "checkBoxPreferences";
-			this.checkBoxPreferences.Size = new System.Drawing.Size(254, 19);
+			this.checkBoxPreferences.Size = new System.Drawing.Size(247, 24);
 			this.checkBoxPreferences.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxPreferences.TabIndex = 5;
 			this.checkBoxPreferences.Text = "xxPreferences";
@@ -334,10 +338,11 @@
 			// 
 			this.labelFulfillRestrictions.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelFulfillRestrictions.AutoSize = true;
-			this.labelFulfillRestrictions.Location = new System.Drawing.Point(3, 6);
+			this.labelFulfillRestrictions.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelFulfillRestrictions.Location = new System.Drawing.Point(3, 7);
 			this.labelFulfillRestrictions.Margin = new System.Windows.Forms.Padding(3);
 			this.labelFulfillRestrictions.Name = "labelFulfillRestrictions";
-			this.labelFulfillRestrictions.Size = new System.Drawing.Size(106, 13);
+			this.labelFulfillRestrictions.Size = new System.Drawing.Size(109, 15);
 			this.labelFulfillRestrictions.TabIndex = 8;
 			this.labelFulfillRestrictions.Text = "xxFulfillRestrictions";
 			this.labelFulfillRestrictions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -346,16 +351,16 @@
 			// 
 			this.label0.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label0.AutoSize = true;
-			this.label0.Location = new System.Drawing.Point(313, 31);
+			this.label0.Location = new System.Drawing.Point(313, 37);
 			this.label0.Name = "label0";
-			this.label0.Size = new System.Drawing.Size(16, 13);
+			this.label0.Size = new System.Drawing.Size(17, 15);
 			this.label0.TabIndex = 14;
 			this.label0.Text = "%";
 			// 
 			// numericUpDownMustHaves
 			// 
 			this.numericUpDownMustHaves.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.numericUpDownMustHaves.BeforeTouchSize = new System.Drawing.Size(43, 22);
+			this.numericUpDownMustHaves.BeforeTouchSize = new System.Drawing.Size(43, 23);
 			this.numericUpDownMustHaves.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownMustHaves.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.numericUpDownMustHaves.Increment = new decimal(new int[] {
@@ -363,10 +368,10 @@
             0,
             0,
             0});
-			this.numericUpDownMustHaves.Location = new System.Drawing.Point(263, 53);
+			this.numericUpDownMustHaves.Location = new System.Drawing.Point(263, 63);
 			this.numericUpDownMustHaves.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownMustHaves.Name = "numericUpDownMustHaves";
-			this.numericUpDownMustHaves.Size = new System.Drawing.Size(43, 22);
+			this.numericUpDownMustHaves.Size = new System.Drawing.Size(43, 23);
 			this.numericUpDownMustHaves.TabIndex = 15;
 			this.numericUpDownMustHaves.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDownMustHaves.Value = new decimal(new int[] {
@@ -379,7 +384,7 @@
 			// numericUpDownRotations
 			// 
 			this.numericUpDownRotations.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.numericUpDownRotations.BeforeTouchSize = new System.Drawing.Size(43, 22);
+			this.numericUpDownRotations.BeforeTouchSize = new System.Drawing.Size(43, 23);
 			this.numericUpDownRotations.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownRotations.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.numericUpDownRotations.Increment = new decimal(new int[] {
@@ -387,10 +392,10 @@
             0,
             0,
             0});
-			this.numericUpDownRotations.Location = new System.Drawing.Point(263, 78);
+			this.numericUpDownRotations.Location = new System.Drawing.Point(263, 93);
 			this.numericUpDownRotations.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownRotations.Name = "numericUpDownRotations";
-			this.numericUpDownRotations.Size = new System.Drawing.Size(43, 22);
+			this.numericUpDownRotations.Size = new System.Drawing.Size(43, 23);
 			this.numericUpDownRotations.TabIndex = 16;
 			this.numericUpDownRotations.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDownRotations.Value = new decimal(new int[] {
@@ -403,7 +408,7 @@
 			// numericUpDownAvailabilities
 			// 
 			this.numericUpDownAvailabilities.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.numericUpDownAvailabilities.BeforeTouchSize = new System.Drawing.Size(43, 22);
+			this.numericUpDownAvailabilities.BeforeTouchSize = new System.Drawing.Size(43, 23);
 			this.numericUpDownAvailabilities.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownAvailabilities.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.numericUpDownAvailabilities.Increment = new decimal(new int[] {
@@ -411,10 +416,10 @@
             0,
             0,
             0});
-			this.numericUpDownAvailabilities.Location = new System.Drawing.Point(263, 103);
+			this.numericUpDownAvailabilities.Location = new System.Drawing.Point(263, 123);
 			this.numericUpDownAvailabilities.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownAvailabilities.Name = "numericUpDownAvailabilities";
-			this.numericUpDownAvailabilities.Size = new System.Drawing.Size(43, 22);
+			this.numericUpDownAvailabilities.Size = new System.Drawing.Size(43, 23);
 			this.numericUpDownAvailabilities.TabIndex = 17;
 			this.numericUpDownAvailabilities.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDownAvailabilities.Value = new decimal(new int[] {
@@ -427,7 +432,7 @@
 			// numericUpDownStudentAvailabilities
 			// 
 			this.numericUpDownStudentAvailabilities.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.numericUpDownStudentAvailabilities.BeforeTouchSize = new System.Drawing.Size(43, 22);
+			this.numericUpDownStudentAvailabilities.BeforeTouchSize = new System.Drawing.Size(43, 23);
 			this.numericUpDownStudentAvailabilities.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownStudentAvailabilities.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.numericUpDownStudentAvailabilities.Increment = new decimal(new int[] {
@@ -435,10 +440,10 @@
             0,
             0,
             0});
-			this.numericUpDownStudentAvailabilities.Location = new System.Drawing.Point(263, 128);
+			this.numericUpDownStudentAvailabilities.Location = new System.Drawing.Point(263, 153);
 			this.numericUpDownStudentAvailabilities.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.numericUpDownStudentAvailabilities.Name = "numericUpDownStudentAvailabilities";
-			this.numericUpDownStudentAvailabilities.Size = new System.Drawing.Size(43, 22);
+			this.numericUpDownStudentAvailabilities.Size = new System.Drawing.Size(43, 23);
 			this.numericUpDownStudentAvailabilities.TabIndex = 18;
 			this.numericUpDownStudentAvailabilities.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numericUpDownStudentAvailabilities.Value = new decimal(new int[] {
@@ -452,9 +457,9 @@
 			// 
 			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(313, 56);
+			this.label1.Location = new System.Drawing.Point(313, 67);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(16, 13);
+			this.label1.Size = new System.Drawing.Size(17, 15);
 			this.label1.TabIndex = 19;
 			this.label1.Text = "%";
 			// 
@@ -462,9 +467,9 @@
 			// 
 			this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(313, 81);
+			this.label2.Location = new System.Drawing.Point(313, 97);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(16, 13);
+			this.label2.Size = new System.Drawing.Size(17, 15);
 			this.label2.TabIndex = 20;
 			this.label2.Text = "%";
 			// 
@@ -472,9 +477,9 @@
 			// 
 			this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(313, 106);
+			this.label4.Location = new System.Drawing.Point(313, 127);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(16, 13);
+			this.label4.Size = new System.Drawing.Size(17, 15);
 			this.label4.TabIndex = 21;
 			this.label4.Text = "%";
 			// 
@@ -482,9 +487,9 @@
 			// 
 			this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(313, 131);
+			this.label5.Location = new System.Drawing.Point(313, 157);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(16, 13);
+			this.label5.Size = new System.Drawing.Size(17, 15);
 			this.label5.TabIndex = 22;
 			this.label5.Text = "%";
 			// 
@@ -503,26 +508,27 @@
 			this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 33);
 			this.tableLayoutPanel6.Name = "tableLayoutPanel6";
 			this.tableLayoutPanel6.RowCount = 8;
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel6.Size = new System.Drawing.Size(414, 197);
+			this.tableLayoutPanel6.Size = new System.Drawing.Size(455, 214);
 			this.tableLayoutPanel6.TabIndex = 22;
 			// 
 			// checkBoxFairness
 			// 
-			this.checkBoxFairness.BeforeTouchSize = new System.Drawing.Size(408, 21);
+			this.checkBoxFairness.BeforeTouchSize = new System.Drawing.Size(442, 24);
 			this.checkBoxFairness.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxFairness.DrawFocusRectangle = false;
-			this.checkBoxFairness.Location = new System.Drawing.Point(3, 153);
+			this.checkBoxFairness.Location = new System.Drawing.Point(10, 183);
+			this.checkBoxFairness.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxFairness.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxFairness.Name = "checkBoxFairness";
-			this.checkBoxFairness.Size = new System.Drawing.Size(408, 21);
+			this.checkBoxFairness.Size = new System.Drawing.Size(442, 24);
 			this.checkBoxFairness.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxFairness.TabIndex = 12;
 			this.checkBoxFairness.Text = "xxFairness";
@@ -530,13 +536,14 @@
 			// 
 			// checkBoxShiftsWithinDay
 			// 
-			this.checkBoxShiftsWithinDay.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.checkBoxShiftsWithinDay.BeforeTouchSize = new System.Drawing.Size(442, 24);
 			this.checkBoxShiftsWithinDay.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxShiftsWithinDay.DrawFocusRectangle = false;
-			this.checkBoxShiftsWithinDay.Location = new System.Drawing.Point(3, 128);
+			this.checkBoxShiftsWithinDay.Location = new System.Drawing.Point(10, 153);
+			this.checkBoxShiftsWithinDay.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxShiftsWithinDay.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxShiftsWithinDay.Name = "checkBoxShiftsWithinDay";
-			this.checkBoxShiftsWithinDay.Size = new System.Drawing.Size(408, 19);
+			this.checkBoxShiftsWithinDay.Size = new System.Drawing.Size(442, 24);
 			this.checkBoxShiftsWithinDay.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxShiftsWithinDay.TabIndex = 11;
 			this.checkBoxShiftsWithinDay.Text = "xxShiftsWithinDay";
@@ -544,13 +551,14 @@
 			// 
 			// checkBoxDaysOffFromFlexibleWorkTime
 			// 
-			this.checkBoxDaysOffFromFlexibleWorkTime.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.checkBoxDaysOffFromFlexibleWorkTime.BeforeTouchSize = new System.Drawing.Size(442, 24);
 			this.checkBoxDaysOffFromFlexibleWorkTime.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxDaysOffFromFlexibleWorkTime.DrawFocusRectangle = false;
-			this.checkBoxDaysOffFromFlexibleWorkTime.Location = new System.Drawing.Point(3, 103);
+			this.checkBoxDaysOffFromFlexibleWorkTime.Location = new System.Drawing.Point(10, 123);
+			this.checkBoxDaysOffFromFlexibleWorkTime.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxDaysOffFromFlexibleWorkTime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxDaysOffFromFlexibleWorkTime.Name = "checkBoxDaysOffFromFlexibleWorkTime";
-			this.checkBoxDaysOffFromFlexibleWorkTime.Size = new System.Drawing.Size(408, 19);
+			this.checkBoxDaysOffFromFlexibleWorkTime.Size = new System.Drawing.Size(442, 24);
 			this.checkBoxDaysOffFromFlexibleWorkTime.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxDaysOffFromFlexibleWorkTime.TabIndex = 10;
 			this.checkBoxDaysOffFromFlexibleWorkTime.Text = "xxDaysOffFromFlexibleWorkTime";
@@ -558,13 +566,14 @@
 			// 
 			// checkBoxShiftsForFlexibleWorkTime
 			// 
-			this.checkBoxShiftsForFlexibleWorkTime.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.checkBoxShiftsForFlexibleWorkTime.BeforeTouchSize = new System.Drawing.Size(442, 24);
 			this.checkBoxShiftsForFlexibleWorkTime.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxShiftsForFlexibleWorkTime.DrawFocusRectangle = false;
-			this.checkBoxShiftsForFlexibleWorkTime.Location = new System.Drawing.Point(3, 78);
+			this.checkBoxShiftsForFlexibleWorkTime.Location = new System.Drawing.Point(10, 93);
+			this.checkBoxShiftsForFlexibleWorkTime.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxShiftsForFlexibleWorkTime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxShiftsForFlexibleWorkTime.Name = "checkBoxShiftsForFlexibleWorkTime";
-			this.checkBoxShiftsForFlexibleWorkTime.Size = new System.Drawing.Size(408, 19);
+			this.checkBoxShiftsForFlexibleWorkTime.Size = new System.Drawing.Size(442, 24);
 			this.checkBoxShiftsForFlexibleWorkTime.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxShiftsForFlexibleWorkTime.TabIndex = 9;
 			this.checkBoxShiftsForFlexibleWorkTime.Text = "xxShiftsForFlexibleWorkTime";
@@ -572,13 +581,14 @@
 			// 
 			// checkBoxTimeBetweenDays
 			// 
-			this.checkBoxTimeBetweenDays.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.checkBoxTimeBetweenDays.BeforeTouchSize = new System.Drawing.Size(442, 24);
 			this.checkBoxTimeBetweenDays.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxTimeBetweenDays.DrawFocusRectangle = false;
-			this.checkBoxTimeBetweenDays.Location = new System.Drawing.Point(3, 53);
+			this.checkBoxTimeBetweenDays.Location = new System.Drawing.Point(10, 63);
+			this.checkBoxTimeBetweenDays.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxTimeBetweenDays.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxTimeBetweenDays.Name = "checkBoxTimeBetweenDays";
-			this.checkBoxTimeBetweenDays.Size = new System.Drawing.Size(408, 19);
+			this.checkBoxTimeBetweenDays.Size = new System.Drawing.Size(442, 24);
 			this.checkBoxTimeBetweenDays.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxTimeBetweenDays.TabIndex = 7;
 			this.checkBoxTimeBetweenDays.Text = "xxTimeBetweenDays";
@@ -586,13 +596,14 @@
 			// 
 			// checkBoxDaysOff
 			// 
-			this.checkBoxDaysOff.BeforeTouchSize = new System.Drawing.Size(408, 19);
+			this.checkBoxDaysOff.BeforeTouchSize = new System.Drawing.Size(442, 24);
 			this.checkBoxDaysOff.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxDaysOff.DrawFocusRectangle = false;
-			this.checkBoxDaysOff.Location = new System.Drawing.Point(3, 28);
+			this.checkBoxDaysOff.Location = new System.Drawing.Point(10, 33);
+			this.checkBoxDaysOff.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxDaysOff.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxDaysOff.Name = "checkBoxDaysOff";
-			this.checkBoxDaysOff.Size = new System.Drawing.Size(408, 19);
+			this.checkBoxDaysOff.Size = new System.Drawing.Size(442, 24);
 			this.checkBoxDaysOff.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxDaysOff.TabIndex = 5;
 			this.checkBoxDaysOff.Text = "xxDaysOff";
@@ -602,10 +613,11 @@
 			// 
 			this.labelOptimizationSteps.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelOptimizationSteps.AutoSize = true;
-			this.labelOptimizationSteps.Location = new System.Drawing.Point(3, 6);
+			this.labelOptimizationSteps.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelOptimizationSteps.Location = new System.Drawing.Point(3, 7);
 			this.labelOptimizationSteps.Margin = new System.Windows.Forms.Padding(3);
 			this.labelOptimizationSteps.Name = "labelOptimizationSteps";
-			this.labelOptimizationSteps.Size = new System.Drawing.Size(112, 13);
+			this.labelOptimizationSteps.Size = new System.Drawing.Size(118, 15);
 			this.labelOptimizationSteps.TabIndex = 8;
 			this.labelOptimizationSteps.Text = "xxOptimizationSteps";
 			this.labelOptimizationSteps.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -622,18 +634,18 @@
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
 			this.tableLayoutPanel5.RowCount = 1;
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(414, 24);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(455, 24);
 			this.tableLayoutPanel5.TabIndex = 21;
 			// 
 			// comboBoxAdvTag
 			// 
 			this.comboBoxAdvTag.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBoxAdvTag.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvTag.BeforeTouchSize = new System.Drawing.Size(148, 21);
+			this.comboBoxAdvTag.BeforeTouchSize = new System.Drawing.Size(189, 23);
 			this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvTag.Location = new System.Drawing.Point(263, 3);
 			this.comboBoxAdvTag.Name = "comboBoxAdvTag";
-			this.comboBoxAdvTag.Size = new System.Drawing.Size(148, 21);
+			this.comboBoxAdvTag.Size = new System.Drawing.Size(189, 23);
 			this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvTag.TabIndex = 6;
 			// 
@@ -641,9 +653,9 @@
 			// 
 			this.labelTagChangesWith.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelTagChangesWith.AutoSize = true;
-			this.labelTagChangesWith.Location = new System.Drawing.Point(3, 5);
+			this.labelTagChangesWith.Location = new System.Drawing.Point(3, 4);
 			this.labelTagChangesWith.Name = "labelTagChangesWith";
-			this.labelTagChangesWith.Size = new System.Drawing.Size(136, 13);
+			this.labelTagChangesWith.Size = new System.Drawing.Size(140, 15);
 			this.labelTagChangesWith.TabIndex = 0;
 			this.labelTagChangesWith.Text = "xxTagChangesWithColon";
 			// 
@@ -667,12 +679,12 @@
 			// 
 			// GeneralPreferencesPanel
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.Controls.Add(this.tableLayoutPanel2);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "GeneralPreferencesPanel";
-			this.Size = new System.Drawing.Size(420, 451);
+			this.Size = new System.Drawing.Size(461, 535);
 			this.tableLayoutPanelTagWith.ResumeLayout(false);
 			this.tableLayoutPanelTagWith.PerformLayout();
 			this.tableLayoutPanel2.ResumeLayout(false);

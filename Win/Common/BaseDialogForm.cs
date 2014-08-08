@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.WinCode.Common;
@@ -8,6 +10,8 @@ namespace Teleopti.Ccc.Win.Common
 {
     public partial class BaseDialogForm : MetroForm, ILocalized, IHelpForm
     {
+		private readonly IList<ControlHelpContext> _manualHelpContextList = new List<ControlHelpContext>();
+
         public BaseDialogForm()
         {
             InitializeComponent();
@@ -17,6 +21,20 @@ namespace Teleopti.Ccc.Win.Common
             base.ForeColor = Color.FromArgb(64,64,64);
         		
         }
+		public void AddControlHelpContext(Control control)
+		{
+			if (!_manualHelpContextList.Any(c => c.Control.Equals(control)))
+				_manualHelpContextList.Add(new ControlHelpContext(control));
+		}
+
+		public void RemoveControlHelpContext(Control control)
+		{
+			if (_manualHelpContextList.Any(c => c.Control.Name.Equals(control.Name)))
+			{
+				var helpContext = _manualHelpContextList.FirstOrDefault(c => c.Control.Name.Equals(control.Name));
+				_manualHelpContextList.Remove(helpContext);
+			}
+		}
 
         public void SetTexts()
         {
