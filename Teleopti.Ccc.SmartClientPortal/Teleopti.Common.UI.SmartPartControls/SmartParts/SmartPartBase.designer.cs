@@ -55,15 +55,18 @@
             this.CloseButton,
             this.FormTitle,
             this.addSmartPartsToolStripMenuItem});
+			this.toolStripExHeader.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.toolStripExHeader.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
 			this.toolStripExHeader.Location = new System.Drawing.Point(0, 0);
 			this.toolStripExHeader.Name = "toolStripExHeader";
+			this.toolStripExHeader.Office12Mode = false;
 			this.toolStripExHeader.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Blue;
 			this.toolStripExHeader.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.toolStripExHeader.ShowCaption = false;
 			this.toolStripExHeader.ShowLauncher = false;
 			this.toolStripExHeader.Size = new System.Drawing.Size(401, 25);
 			this.toolStripExHeader.TabIndex = 1;
+			this.toolStripExHeader.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
 			// 
 			// CloseButton
 			// 
@@ -112,14 +115,14 @@
 			// statusStripExSmartPart
 			// 
 			this.statusStripExSmartPart.AllowItemReorder = true;
-			this.statusStripExSmartPart.BackColor = System.Drawing.SystemColors.Control;
+			this.statusStripExSmartPart.BackColor = System.Drawing.Color.White;
 			this.statusStripExSmartPart.BeforeTouchSize = new System.Drawing.Size(401, 22);
 			this.statusStripExSmartPart.Dock = Syncfusion.Windows.Forms.Tools.DockStyleEx.Bottom;
 			this.statusStripExSmartPart.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelIcon});
 			this.statusStripExSmartPart.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
 			this.statusStripExSmartPart.Location = new System.Drawing.Point(0, 248);
-			this.statusStripExSmartPart.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
+			this.statusStripExSmartPart.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.statusStripExSmartPart.Name = "statusStripExSmartPart";
 			this.statusStripExSmartPart.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Blue;
 			this.statusStripExSmartPart.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -128,6 +131,7 @@
 			this.statusStripExSmartPart.SizingGrip = false;
 			this.statusStripExSmartPart.TabIndex = 16;
 			this.statusStripExSmartPart.Text = "statusStripEx4";
+			this.statusStripExSmartPart.VisualStyle = Syncfusion.Windows.Forms.Tools.StatusStripExStyle.Metro;
 			// 
 			// toolStripStatusLabelIcon
 			// 
