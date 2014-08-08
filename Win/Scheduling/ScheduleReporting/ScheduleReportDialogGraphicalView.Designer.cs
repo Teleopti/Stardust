@@ -70,14 +70,14 @@
 			// 
 			// checkBoxPublicNote
 			// 
-			this.checkBoxPublicNote.BeforeTouchSize = new System.Drawing.Size(134, 20);
+			this.checkBoxPublicNote.BeforeTouchSize = new System.Drawing.Size(349, 20);
 			this.checkBoxPublicNote.Checked = true;
 			this.checkBoxPublicNote.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkBoxPublicNote.DrawFocusRectangle = false;
 			this.checkBoxPublicNote.Location = new System.Drawing.Point(43, 48);
 			this.checkBoxPublicNote.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxPublicNote.Name = "checkBoxPublicNote";
-			this.checkBoxPublicNote.Size = new System.Drawing.Size(134, 20);
+			this.checkBoxPublicNote.Size = new System.Drawing.Size(349, 20);
 			this.checkBoxPublicNote.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxPublicNote.TabIndex = 3;
 			this.checkBoxPublicNote.Text = "xxShowPublicNote";
@@ -86,14 +86,14 @@
 			// 
 			// checkBoxSingleFile
 			// 
-			this.checkBoxSingleFile.BeforeTouchSize = new System.Drawing.Size(94, 20);
+			this.checkBoxSingleFile.BeforeTouchSize = new System.Drawing.Size(323, 20);
 			this.checkBoxSingleFile.Checked = true;
 			this.checkBoxSingleFile.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.checkBoxSingleFile.DrawFocusRectangle = false;
 			this.checkBoxSingleFile.Location = new System.Drawing.Point(43, 96);
 			this.checkBoxSingleFile.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxSingleFile.Name = "checkBoxSingleFile";
-			this.checkBoxSingleFile.Size = new System.Drawing.Size(94, 20);
+			this.checkBoxSingleFile.Size = new System.Drawing.Size(323, 20);
 			this.checkBoxSingleFile.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxSingleFile.TabIndex = 2;
 			this.checkBoxSingleFile.Text = "xxSingleFile";
@@ -102,13 +102,13 @@
 			// 
 			// radioButtonIndividual
 			// 
-			this.radioButtonIndividual.BeforeTouchSize = new System.Drawing.Size(93, 20);
+			this.radioButtonIndividual.BeforeTouchSize = new System.Drawing.Size(326, 20);
 			this.radioButtonIndividual.Checked = true;
 			this.radioButtonIndividual.DrawFocusRectangle = false;
 			this.radioButtonIndividual.Location = new System.Drawing.Point(7, 69);
 			this.radioButtonIndividual.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonIndividual.Name = "radioButtonIndividual";
-			this.radioButtonIndividual.Size = new System.Drawing.Size(93, 20);
+			this.radioButtonIndividual.Size = new System.Drawing.Size(326, 20);
 			this.radioButtonIndividual.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Metro;
 			this.radioButtonIndividual.TabIndex = 1;
 			this.radioButtonIndividual.Text = "xxIndividual";
@@ -117,12 +117,12 @@
 			// 
 			// radioButtonTeam
 			// 
-			this.radioButtonTeam.BeforeTouchSize = new System.Drawing.Size(72, 20);
+			this.radioButtonTeam.BeforeTouchSize = new System.Drawing.Size(326, 20);
 			this.radioButtonTeam.DrawFocusRectangle = false;
 			this.radioButtonTeam.Location = new System.Drawing.Point(7, 22);
 			this.radioButtonTeam.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonTeam.Name = "radioButtonTeam";
-			this.radioButtonTeam.Size = new System.Drawing.Size(72, 20);
+			this.radioButtonTeam.Size = new System.Drawing.Size(326, 20);
 			this.radioButtonTeam.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Metro;
 			this.radioButtonTeam.TabIndex = 0;
 			this.radioButtonTeam.Text = "xxTeam";
@@ -144,12 +144,12 @@
 			// 
 			// radioButtonEndTime
 			// 
-			this.radioButtonEndTime.BeforeTouchSize = new System.Drawing.Size(90, 20);
+			this.radioButtonEndTime.BeforeTouchSize = new System.Drawing.Size(359, 20);
 			this.radioButtonEndTime.DrawFocusRectangle = false;
 			this.radioButtonEndTime.Location = new System.Drawing.Point(7, 75);
 			this.radioButtonEndTime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonEndTime.Name = "radioButtonEndTime";
-			this.radioButtonEndTime.Size = new System.Drawing.Size(90, 20);
+			this.radioButtonEndTime.Size = new System.Drawing.Size(359, 20);
 			this.radioButtonEndTime.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Metro;
 			this.radioButtonEndTime.TabIndex = 2;
 			this.radioButtonEndTime.TabStop = false;
@@ -159,13 +159,13 @@
 			// 
 			// radioButtonStartTime
 			// 
-			this.radioButtonStartTime.BeforeTouchSize = new System.Drawing.Size(93, 20);
+			this.radioButtonStartTime.BeforeTouchSize = new System.Drawing.Size(359, 20);
 			this.radioButtonStartTime.Checked = true;
 			this.radioButtonStartTime.DrawFocusRectangle = false;
 			this.radioButtonStartTime.Location = new System.Drawing.Point(7, 48);
 			this.radioButtonStartTime.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonStartTime.Name = "radioButtonStartTime";
-			this.radioButtonStartTime.Size = new System.Drawing.Size(93, 20);
+			this.radioButtonStartTime.Size = new System.Drawing.Size(359, 20);
 			this.radioButtonStartTime.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Metro;
 			this.radioButtonStartTime.TabIndex = 1;
 			this.radioButtonStartTime.Text = "xxStartTime";
@@ -174,12 +174,12 @@
 			// 
 			// radioButtonAgentName
 			// 
-			this.radioButtonAgentName.BeforeTouchSize = new System.Drawing.Size(106, 20);
+			this.radioButtonAgentName.BeforeTouchSize = new System.Drawing.Size(385, 20);
 			this.radioButtonAgentName.DrawFocusRectangle = false;
 			this.radioButtonAgentName.Location = new System.Drawing.Point(7, 22);
 			this.radioButtonAgentName.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonAgentName.Name = "radioButtonAgentName";
-			this.radioButtonAgentName.Size = new System.Drawing.Size(106, 20);
+			this.radioButtonAgentName.Size = new System.Drawing.Size(385, 20);
 			this.radioButtonAgentName.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Metro;
 			this.radioButtonAgentName.TabIndex = 0;
 			this.radioButtonAgentName.Text = "xxAgentName";
