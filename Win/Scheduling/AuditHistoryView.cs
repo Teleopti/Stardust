@@ -19,264 +19,262 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    public partial class AuditHistoryView : BaseDialogForm, IAuditHistoryView
-    {
-        private readonly SchedulingScreen _owner;
-        private readonly IAuditHistoryModel _model;
-        private readonly AuditHistoryPresenter _presenter;
+	public partial class AuditHistoryView : BaseDialogForm, IAuditHistoryView
+	{
+		private readonly SchedulingScreen _owner;
+		private readonly IAuditHistoryModel _model;
+		private readonly AuditHistoryPresenter _presenter;
 
-        public AuditHistoryView(IScheduleDay currentScheduleDay, SchedulingScreen owner)
-        {
-            _owner = owner;
-            InitializeComponent();
-            
-            if (!DesignMode) SetTexts();
+		public AuditHistoryView(IScheduleDay currentScheduleDay, SchedulingScreen owner)
+		{
+			_owner = owner;
+			InitializeComponent();
+			
+			if (!DesignMode) SetTexts();
 
-            _model = new AuditHistoryModel(currentScheduleDay, new ScheduleHistoryRepository(UnitOfWorkFactory.Current), new AuditHistoryScheduleDayCreator());
-            _presenter = new AuditHistoryPresenter(this, _model);
+			_model = new AuditHistoryModel(currentScheduleDay, new ScheduleHistoryRepository(UnitOfWorkFactory.Current), new AuditHistoryScheduleDayCreator());
+			_presenter = new AuditHistoryPresenter(this, _model);
 
-            GridHelper.GridStyle(grid);
-            
-            grid.ResetVolatileData();
-            grid.QueryCellInfo += GridQueryCellInfo;
-            grid.QueryColCount += GridQueryColCount;
-            grid.QueryRowCount += GridQueryRowCount;
-            grid.QueryColWidth += GridQueryColWidth;
-            grid.QueryRowHeight += GridQueryRowHeight;
-            grid.SelectionChanging += GridSelectionChanging;
-            grid.SelectionChanged += GridSelectionChanged;
+			grid.ResetVolatileData();
+			grid.QueryCellInfo += gridQueryCellInfo;
+			grid.QueryColCount += gridQueryColCount;
+			grid.QueryRowCount += gridQueryRowCount;
+			grid.QueryColWidth += gridQueryColWidth;
+			grid.QueryRowHeight += gridQueryRowHeight;
+			grid.SelectionChanging += gridSelectionChanging;
+			grid.SelectionChanged += gridSelectionChanged;
 
-            if (!grid.CellModels.ContainsKey("RevisionChangedByCell")) grid.CellModels.Add("RevisionChangedByCell", new RevisionChangedByHeaderCellModel(grid.Model));
-            if (!grid.CellModels.ContainsKey("TimeLineHeaderCell"))grid.CellModels.Add("TimeLineHeaderCell", new VisualProjectionColumnHeaderCellModel(grid.Model, TimeZoneHelper.CurrentSessionTimeZone)); //get from presenter
-            if (!grid.CellModels.ContainsKey("RevisionChangeCell")) grid.CellModels.Add("RevisionChangeCell", new RevisionChangeCellModel(grid.Model));
-        }
+			if (!grid.CellModels.ContainsKey("RevisionChangedByCell")) grid.CellModels.Add("RevisionChangedByCell", new RevisionChangedByHeaderCellModel(grid.Model));
+			if (!grid.CellModels.ContainsKey("TimeLineHeaderCell"))grid.CellModels.Add("TimeLineHeaderCell", new VisualProjectionColumnHeaderCellModel(grid.Model, TimeZoneHelper.CurrentSessionTimeZone)); //get from presenter
+			if (!grid.CellModels.ContainsKey("RevisionChangeCell")) grid.CellModels.Add("RevisionChangeCell", new RevisionChangeCellModel(grid.Model));
+		}
 
-        void GridSelectionChanged(object sender, GridSelectionChangedEventArgs e)
-        {
-            if (grid.Selections.Count > 1)
-            {
-                var top = grid.Selections.Ranges[0].Top;
-                grid.Selections.Clear();
-                grid.Selections.SetSelectClickRowCol(top, 0);
-            }
+		void gridSelectionChanged(object sender, GridSelectionChangedEventArgs e)
+		{
+			if (grid.Selections.Count > 1)
+			{
+				var top = grid.Selections.Ranges[0].Top;
+				grid.Selections.Clear();
+				grid.Selections.SetSelectClickRowCol(top, 0);
+			}
 
-            if (grid.Selections.Ranges.Count > 0 && grid.Selections.Ranges[0].Top != grid.Selections.Ranges[0].Bottom)
-            {
-                var top = grid.Selections.Ranges[0].Top;
-                grid.Selections.Clear();
-                grid.Selections.SetSelectClickRowCol(top, 0);
-            } 
-        }
+			if (grid.Selections.Ranges.Count > 0 && grid.Selections.Ranges[0].Top != grid.Selections.Ranges[0].Bottom)
+			{
+				var top = grid.Selections.Ranges[0].Top;
+				grid.Selections.Clear();
+				grid.Selections.SetSelectClickRowCol(top, 0);
+			} 
+		}
 
-        static void GridSelectionChanging(object sender, GridSelectionChangingEventArgs e)
-        {
-            if (e.Reason == GridSelectionReason.MouseMove)
-                e.Cancel = true;
-       
+		static void gridSelectionChanging(object sender, GridSelectionChangingEventArgs e)
+		{
+			if (e.Reason == GridSelectionReason.MouseMove)
+				e.Cancel = true;
+	   
 
-            if (!e.Cancel && e.Range.Top == 0 && (e.Range.RangeType == GridRangeInfoType.Cols || e.Range.RangeType == (GridRangeInfoType.Rows | GridRangeInfoType.Cols)))
-                e.Cancel = true;   
-        }
+			if (!e.Cancel && e.Range.Top == 0 && (e.Range.RangeType == GridRangeInfoType.Cols || e.Range.RangeType == (GridRangeInfoType.Rows | GridRangeInfoType.Cols)))
+				e.Cancel = true;   
+		}
 
-        void GridQueryRowHeight(object sender, GridRowColSizeEventArgs e)
-        {
-            var txt = grid[e.Index, 0].FormattedText;
-            if (!string.IsNullOrEmpty(txt))
-            {
-                txt = txt.Substring(0, txt.IndexOf("\n",StringComparison.InvariantCulture));
-            }
-            var rows = Math.Ceiling(txt.Length/(25.0)) +1;
-            e.Size = _presenter.GridQueryRowHeight(e.Index, 28, grid.Font.Height, (int)rows);
-            e.Handled = true;
-        }
+		void gridQueryRowHeight(object sender, GridRowColSizeEventArgs e)
+		{
+			var txt = grid[e.Index, 0].FormattedText;
+			if (!string.IsNullOrEmpty(txt))
+			{
+				txt = txt.Substring(0, txt.IndexOf("\n",StringComparison.InvariantCulture));
+			}
+			var rows = Math.Ceiling(txt.Length/(25.0)) +1;
+			e.Size = _presenter.GridQueryRowHeight(e.Index, 28, grid.Font.Height, (int)rows);
+			e.Handled = true;
+		}
 
-        void GridQueryColWidth(object sender, GridRowColSizeEventArgs e)
-        {
-            e.Size = _presenter.GridQueryColWidth(e.Index, grid.ClientSize.Width);
-            e.Handled = true;
-        }
+		void gridQueryColWidth(object sender, GridRowColSizeEventArgs e)
+		{
+			e.Size = _presenter.GridQueryColWidth(e.Index, grid.ClientSize.Width);
+			e.Handled = true;
+		}
 
-        void GridQueryRowCount(object sender, GridRowColCountEventArgs e)
-        {
-            e.Count = _presenter.GridQueryRowCount();
-            e.Handled = true;
-        }
+		void gridQueryRowCount(object sender, GridRowColCountEventArgs e)
+		{
+			e.Count = _presenter.GridQueryRowCount();
+			e.Handled = true;
+		}
 
-        void GridQueryColCount(object sender, GridRowColCountEventArgs e)
-        {
-            e.Count = _presenter.GridQueryColCount();
-            e.Handled = true;
-        }
+		void gridQueryColCount(object sender, GridRowColCountEventArgs e)
+		{
+			e.Count = _presenter.GridQueryColCount();
+			e.Handled = true;
+		}
 
-        void GridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
-        {
-            _presenter.GridQueryCellInfo(sender, e);
-            e.Handled = true;
-        }
+		void gridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
+		{
+			_presenter.GridQueryCellInfo(sender, e);
+			e.Handled = true;
+		}
 
-        public void RefreshGrid()
-        {
-            grid.Refresh();
-        }
+		public void RefreshGrid()
+		{
+			grid.Refresh();
+		}
 
-        public IScheduleDay SelectedScheduleDay
-        {
-            get { return _model.SelectedScheduleDay; }
-        }
+		public IScheduleDay SelectedScheduleDay
+		{
+			get { return _model.SelectedScheduleDay; }
+		}
 
-        private void buttonClose_Click(object sender, EventArgs e)
-        {
-            _presenter.Close();
-        }
+		private void buttonCloseClick(object sender, EventArgs e)
+		{
+			_presenter.Close();
+		}
 
-        public void CloseView()
-        {
-            Close();   
-        }
+		public void CloseView()
+		{
+			Close();   
+		}
 
-        private void ButtonRestoreClick(object sender, EventArgs e)
-        {
-            IScheduleDay scheduleDay = null;
-           
-            if(grid.Selections.Ranges.Count > 0)
-            {
-                var row = grid.Selections.Ranges[0].Top;
-                var col = grid.Selections.Ranges[0].Left;
+		private void buttonRestoreClick(object sender, EventArgs e)
+		{
+			IScheduleDay scheduleDay = null;
+		   
+			if(grid.Selections.Ranges.Count > 0)
+			{
+				var row = grid.Selections.Ranges[0].Top;
+				var col = grid.Selections.Ranges[0].Left;
 
-                var revisionDisplayRow = grid[row, col].CellValue as RevisionDisplayRow;
+				var revisionDisplayRow = grid[row, col].CellValue as RevisionDisplayRow;
 
-                if (revisionDisplayRow != null)
-                    scheduleDay = revisionDisplayRow.ScheduleDay;
-            }
+				if (revisionDisplayRow != null)
+					scheduleDay = revisionDisplayRow.ScheduleDay;
+			}
 
-            _presenter.Restore(scheduleDay);
-        }
+			_presenter.Restore(scheduleDay);
+		}
 
-        private void AuditHistoryView_Load(object sender, EventArgs e)
-        {
-            grid.Properties.BackgroundColor = Color.White;
-            _presenter.Load();
-        }
+		private void auditHistoryViewLoad(object sender, EventArgs e)
+		{
+			grid.Properties.BackgroundColor = Color.White;
+			_presenter.Load();
+		}
 
-        public bool EnableView
-        {
-            get { return Enabled; }
-            set { Enabled = value; }
-        }
+		public bool EnableView
+		{
+			get { return Enabled; }
+			set { Enabled = value; }
+		}
 
-        public void SelectFirstRowOnGrid()
-        {
-            GridHelper.SelectFirstRowOnGrid(grid);
-        }
+		public void SelectFirstRowOnGrid()
+		{
+			GridHelper.SelectFirstRowOnGrid(grid);
+		}
 
-        public void ShowView()
-        {
-            Show();
-        }
+		public void ShowView()
+		{
+			Show();
+		}
 
-        public void UpdatePageOfStatusText()
-        {
-            var currentPage = _model.CurrentPage;
-            if (_model.NumberOfPages == 0) currentPage = 0;
+		public void UpdatePageOfStatusText()
+		{
+			var currentPage = _model.CurrentPage;
+			if (_model.NumberOfPages == 0) currentPage = 0;
 
-            var pages = string.Format(CultureInfo.CurrentCulture, Resources.PageOf, currentPage, _model.NumberOfPages);
-            pageOfPagesStatusLabel.Text = pages;
-        }
+			var pages = string.Format(CultureInfo.CurrentCulture, Resources.PageOf, currentPage, _model.NumberOfPages);
+			pageOfPagesStatusLabel.Text = pages;
+		}
 
-        public void UpdateHeaderText()
-        {
-            Text = _model.HeaderText;
-        }
+		public void UpdateHeaderText()
+		{
+			Text = _model.HeaderText;
+		}
 
-        private void backgroundWorkerDataLoader_DoWork(object sender, DoWorkEventArgs e)
-        {
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                uow.Reassociate(_owner.SchedulerState.SchedulingResultState.PersonsInOrganization);
-                uow.Reassociate(dataToReassociate(null));
-                _presenter.DoWork(e);
-            }
-        }
+		private void backgroundWorkerDataLoaderDoWork(object sender, DoWorkEventArgs e)
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				uow.Reassociate(_owner.SchedulerState.SchedulingResultState.PersonsInOrganization);
+				uow.Reassociate(dataToReassociate(null));
+				_presenter.DoWork(e);
+			}
+		}
 
-        private IEnumerable<IAggregateRoot>[] dataToReassociate(IPerson personToReassociate)
-        {
-            IEnumerable<IAggregateRoot> personsToReassociate =
-                personToReassociate != null
-                    ? new[] {personToReassociate}
-                    : new IAggregateRoot[] {};
-            return new[]
-                       {
-                           new IAggregateRoot[] {_owner.SchedulerState.RequestedScenario},
-                           personsToReassociate,
-                           _owner.MultiplicatorDefinitionSet,
-                           _owner.SchedulerState.CommonStateHolder.Absences,
-                           _owner.SchedulerState.CommonStateHolder.DayOffs,
-                           _owner.SchedulerState.CommonStateHolder.Activities,
-                           _owner.SchedulerState.CommonStateHolder.ShiftCategories
-                       };
-        }
+		private IEnumerable<IAggregateRoot>[] dataToReassociate(IPerson personToReassociate)
+		{
+			IEnumerable<IAggregateRoot> personsToReassociate =
+				personToReassociate != null
+					? new[] {personToReassociate}
+					: new IAggregateRoot[] {};
+			return new[]
+					   {
+						   new IAggregateRoot[] {_owner.SchedulerState.RequestedScenario},
+						   personsToReassociate,
+						   _owner.MultiplicatorDefinitionSet,
+						   _owner.SchedulerState.CommonStateHolder.Absences,
+						   _owner.SchedulerState.CommonStateHolder.DayOffs,
+						   _owner.SchedulerState.CommonStateHolder.Activities,
+						   _owner.SchedulerState.CommonStateHolder.ShiftCategories
+					   };
+		}
 
-        private void backgroundWorkerDataLoader_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            _presenter.WorkCompleted(e);
-        }
+		private void backgroundWorkerDataLoaderRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			_presenter.WorkCompleted(e);
+		}
 
-        private void linkLabelEarlier_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            _presenter.LinkLabelEarlierClicked();
-        }
+		private void linkLabelEarlierLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			_presenter.LinkLabelEarlierClicked();
+		}
 
-        private void linkLabelLater_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            _presenter.LinkLabelLaterClicked();
-        }
+		private void linkLabelLaterLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			_presenter.LinkLabelLaterClicked();
+		}
 
-        public bool LinkLabelLaterStatus
-        {
-            get { return linkLabelNext.Enabled; }
-            set { linkLabelNext.Enabled = value; }
-        }
+		public bool LinkLabelLaterStatus
+		{
+			get { return linkLabelNext.Enabled; }
+			set { linkLabelNext.Enabled = value; }
+		}
 
-        public void SetRestoreButtonStatus()
-        {
-            if (_model.PageRows.Count <= 0 ||!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment)) buttonRestore.Enabled = false;
-            else buttonRestore.Enabled = true;
-        }
+		public void SetRestoreButtonStatus()
+		{
+			if (_model.PageRows.Count <= 0 ||!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment)) buttonRestore.Enabled = false;
+			else buttonRestore.Enabled = true;
+		}
 
 
-        public bool LinkLabelEarlierStatus
-        {
-            get { return linkLabelPrevious.Enabled; }
-            set { linkLabelPrevious.Enabled = value; }
-        }
+		public bool LinkLabelEarlierStatus
+		{
+			get { return linkLabelPrevious.Enabled; }
+			set { linkLabelPrevious.Enabled = value; }
+		}
 
 
-        public void StartBackgroundWork(AuditHistoryDirection direction)
-        {
-            backgroundWorkerDataLoader.RunWorkerAsync(direction);
-        }
+		public void StartBackgroundWork(AuditHistoryDirection direction)
+		{
+			backgroundWorkerDataLoader.RunWorkerAsync(direction);
+		}
 
-        public void ShowWaitCursor()
-        {
-            Cursor.Current = Cursors.WaitCursor;
-        }
+		public void ShowWaitCursor()
+		{
+			Cursor.Current = Cursors.WaitCursor;
+		}
 
-        public void ShowDefaultCursor()
-        {
-            Cursor.Current = Cursors.Default;
-        }
+		public void ShowDefaultCursor()
+		{
+			Cursor.Current = Cursors.Default;
+		}
 
-        public void ShowDataSourceException(DataSourceException dataSourceException)
-        {
-            using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.ViewScheduleHistory, Resources.ServerUnavailable))
-            {
-                view.ShowDialog(this);
-            }
-        }
+		public void ShowDataSourceException(DataSourceException dataSourceException)
+		{
+			using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.ViewScheduleHistory, Resources.ServerUnavailable))
+			{
+				view.ShowDialog(this);
+			}
+		}
 
 		  private void auditHistoryViewResizeEnd(object sender, EventArgs e)
 		  {
 			  RefreshGrid();
 		  }
-    }
+	}
 }
