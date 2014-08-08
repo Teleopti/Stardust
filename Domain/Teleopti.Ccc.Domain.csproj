@@ -261,7 +261,6 @@
     <Compile Include="Collection\IdenticalLayersSpecification.cs" />
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
-    <Compile Include="Common\SimpleTimeZone.cs" />
     <Compile Include="Common\AgentBadgeThresholdSettings.cs" />
     <Compile Include="Common\AgentBadge.cs" />
     <Compile Include="Common\CommonAgentNameProvider.cs" />

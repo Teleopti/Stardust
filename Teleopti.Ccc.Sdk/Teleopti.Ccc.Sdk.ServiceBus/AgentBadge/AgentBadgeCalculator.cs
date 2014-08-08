@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 							BronzeBadge = 1,
 							BadgeType = badgeType,
 							LastCalculatedDate = date
-						});
+						}, silverToBronzeBadgeRate, goldToSilverBadgeRate);
 						personsThatGotABadge.Add(person);
 					}
 				}

@@ -119,7 +119,6 @@
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
-    <Compile Include="Domain\ISimpleTimeZone.cs" />
     <Compile Include="Domain\IAgentBadge.cs" />
     <Compile Include="Domain\IAgentBadgeThresholdSettings.cs" />
     <Compile Include="Domain\ITime.cs" />
@@ -788,7 +787,6 @@
     <Compile Include="Messages\Denormalize\InitialLoadScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\PersonPeriodChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\ProcessDenormalizeQueue.cs" />
-    <Compile Include="Messages\General\AgentBadgeCalculateMessage.cs" />
     <Compile Include="Messages\General\CalculateBadgeMessage.cs" />
     <Compile Include="Messages\General\CalculateTimeZoneMessage.cs" />
     <Compile Include="Messages\General\ChildSkillSelection.cs" />

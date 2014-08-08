@@ -2,13 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using NHibernate.Mapping;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -140,24 +137,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IStatelessUnitOfWork uow, int timezoneId, DateTime date)
-		{
-			return new List<Guid>();
-		}
-
-		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IStatelessUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int timezoneId, DateTime date)
+	    public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date)
 	    {
-		    return new List<Guid>();
+			return new List<Guid>();
 	    }
 
-		public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IStatelessUnitOfWork uow, int timezoneId, DateTime date)
-		{
-			return new List<Guid>();
-		}
-
-		public IEnumerable<ISimpleTimeZone> LoadAllTimeZones(IStatelessUnitOfWork uow)
+	    public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
+		    string timezoneCode, DateTime date)
 	    {
-			return new List<ISimpleTimeZone>();
+			return new List<Guid>();
+	    }
+
+	    public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date)
+	    {
+			return new List<Guid>();
 	    }
 
 	    public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)

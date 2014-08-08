@@ -965,7 +965,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				BronzeBadge = 1,
 				BadgeType = BadgeType.AnsweredCalls
-			});
+			}, 5, 2);
 
 			PersistAndRemoveFromUnitOfWork(person);
 

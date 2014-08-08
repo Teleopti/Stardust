@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.DomainTest.Common
         private IPerson _target;
         private MockRepository _mockRepository;
         private IPersonAccountUpdater _personAccountUpdater;
+	    private const int silverToBronzeRate = 5;
+	    private const int goldToSilverRate = 2;
         /// <summary>
         /// Runs once per test
         /// </summary>
@@ -836,12 +838,12 @@ namespace Teleopti.Ccc.DomainTest.Common
 			{
 				BadgeType = BadgeType.AnsweredCalls,
 				BronzeBadge = 1
-			});
+			}, silverToBronzeRate, goldToSilverRate);
 			target.AddBadge(new AgentBadge
 			{
 				BadgeType = BadgeType.AnsweredCalls,
 				BronzeBadge = 1
-			});
+			}, silverToBronzeRate, goldToSilverRate);
 		    target.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).BronzeBadge.Should().Be.EqualTo(2);
 	    }
     }

@@ -334,20 +334,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-		public IEnumerable<ISimpleTimeZone> LoadAllTimeZones(IStatelessUnitOfWork uow)
-	    {
-		    
-			var list = ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
-			    "SELECT time_zone_id as Id, time_zone_name as Name, utc_conversion_dst as Distance FROM [mart].[dim_time_zone] WHERE to_be_deleted = 0")
-				.AddScalar("Id", NHibernateUtil.Int16)
-				.AddScalar("Name", NHibernateUtil.String)
-				.AddScalar("Distance", NHibernateUtil.Int32)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(SimpleTimeZone)))
-				.SetReadOnly(true)
-			    .List<ISimpleTimeZone>();
-			return list;
-	    }
-
 		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date)
 		{
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())

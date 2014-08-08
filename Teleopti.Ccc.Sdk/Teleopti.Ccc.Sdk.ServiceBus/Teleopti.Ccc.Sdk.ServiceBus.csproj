@@ -167,7 +167,6 @@
     <Compile Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\ITeleoptiRtaService.cs">
       <Link>Rta\ITeleoptiRtaService.cs</Link>
     </Compile>
-    <Compile Include="AgentBadge\AgentBadgeCalculationConsumer.cs" />
     <Compile Include="AgentBadge\AgentBadgeCalculator.cs" />
     <Compile Include="AgentBadge\BadgeCalculationInitConsumer.cs" />
     <Compile Include="AgentBadge\CalculateBadgeConsumer.cs" />

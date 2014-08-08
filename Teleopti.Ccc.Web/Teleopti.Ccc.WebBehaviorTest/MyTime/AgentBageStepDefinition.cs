@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var rep = new PersonRepository(uow);
 			var people = rep.LoadAll();
 			var person = people.First(p => p.Name == user.Name);
-			person.AddBadge(AgentBadge);
+			person.AddBadge(AgentBadge, 5, 2);
 		}
 	}
 }

@@ -135,6 +135,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date);
 		IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date);
 		IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date);
-		IEnumerable<ISimpleTimeZone> LoadAllTimeZones(IStatelessUnitOfWork uow);
     }
 }
