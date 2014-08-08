@@ -106,13 +106,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see tomorrow")]
 		public void ThenIShouldSeeTheNextDay()
 		{
-			AssertShowingDay(DateOnlyForBehaviorTests.TestToday.AddDays(1));
+			AssertShowingDay(new DateOnly(2014,5,3));
 		}
 
 		[Then(@"I should see the previous day")]
 		public void ThenIShouldSeeThePreviousDay()
 		{
-			AssertShowingDay(DateOnlyForBehaviorTests.TestToday.AddDays(-1));
+			AssertShowingDay(new DateOnly(2014, 5, 1));
 		}
 
 		private void AssertShowingDay(DateOnly date)

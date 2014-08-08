@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			new RuleSetBagRepository(uow).Add(TheRuleSetBag);
 
 			uow.Reassociate(user);
-			user.Period(DateOnlyForBehaviorTests.TestToday).RuleSetBag = TheRuleSetBag;
+			user.Period(new DateOnly(2014,1,1)).RuleSetBag = TheRuleSetBag;
 		}
 	}
 

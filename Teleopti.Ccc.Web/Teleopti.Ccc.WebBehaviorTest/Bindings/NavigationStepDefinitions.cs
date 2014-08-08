@@ -8,6 +8,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -315,25 +316,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToMyDetailedAdherence(dateTime);
 		}
 
-		[Given(@"I am viewing team schedule for tomorrow")]
-		[Given(@"I am viewing group schedule for tomorrow")]
-		public void GivenIAmViewingTeamScheduleForTomorrow()
-		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
-			TestControllerMethods.Logon();
-			Navigation.GotoTeamSchedule(DateOnlyForBehaviorTests.TestToday.Date.AddDays(1));
-		}
-
 		[When(@"I view group schedule for '(.*)'")]
 		[Given(@"I am viewing team schedule for '(.*)'")]
+		[Given(@"I am viewing group schedule for '(.*)'")]
 		public void WhenIViewTeamScheduleFor(DateTime date)
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoTeamSchedule(date);
 		}
-
-
 
 		[Given(@"I am viewing requests")]
 		[When(@"I am viewing requests")]

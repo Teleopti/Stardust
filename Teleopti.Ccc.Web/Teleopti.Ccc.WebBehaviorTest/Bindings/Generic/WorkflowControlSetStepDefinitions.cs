@@ -13,8 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"there is a workflow control set with")]
 		public void GivenThereIsAWorkflowControlSetWith(Table table)
 		{
-			var workflowControlSet = table.CreateInstance<WorkflowControlSetConfigurable>();
-			DataMaker.Data().Apply(workflowControlSet);
+			DataMaker.ApplyFromTable<WorkflowControlSetConfigurable>(table);
 		}
 
 		[Given(@"there is a workflow control set named '(.*)' publishing schedules until '(.*)'")]

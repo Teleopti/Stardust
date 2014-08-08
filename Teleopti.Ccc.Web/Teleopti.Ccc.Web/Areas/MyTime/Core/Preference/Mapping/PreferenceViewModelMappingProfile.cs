@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
@@ -20,14 +21,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly Func<IPreferenceOptionsProvider> _preferenceOptionsProvider;
 		private readonly IToggleManager _toggleManager;
+		private readonly INow _now;
 
 		public PreferenceViewModelMappingProfile(IPermissionProvider permissionProvider,
 			Func<IPreferenceOptionsProvider> preferenceOptionsProvider,
-		IToggleManager toggleManager)
+		IToggleManager toggleManager, INow now)
 		{
 			_permissionProvider = permissionProvider;
 			_preferenceOptionsProvider = preferenceOptionsProvider;
 			_toggleManager = toggleManager;
+			_now = now;
 		}
 
 		private class PreferenceWeekMappingData
@@ -129,7 +132,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 				                                           		var isInsideSchedulePeriod = s.Period.Contains(s.Date);
 				                                           		var isInsidePreferencePeriod = s.WorkflowControlSet.PreferencePeriod.Contains(s.Date);
-				                                           		var isInsidePreferenceInputPeriod = s.WorkflowControlSet.PreferenceInputPeriod.Contains(DateOnly.Today);
+				                                           		var isInsidePreferenceInputPeriod = s.WorkflowControlSet.PreferenceInputPeriod.Contains(_now.LocalDateOnly());
 
 				                                           		return isInsideSchedulePeriod && isInsidePreferencePeriod && isInsidePreferenceInputPeriod;
 				                                           	}))

@@ -16,7 +16,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new StudentAvailabilityViewModelMappingProfile(() => Mapper.Engine, () => scheduleProvider, () => studentAvailabilityProvider, () => virtualSchedulePeriodProvider, () => loggedOnUser)));
+			Mapper.Initialize(c => c.AddProfile(new StudentAvailabilityViewModelMappingProfile(() => Mapper.Engine, () => scheduleProvider, () => studentAvailabilityProvider, () => virtualSchedulePeriodProvider, () => loggedOnUser, ()=> new Now())));
 		}
 
 		[Test]

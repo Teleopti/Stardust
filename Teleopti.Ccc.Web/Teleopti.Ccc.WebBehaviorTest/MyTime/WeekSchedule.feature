@@ -342,7 +342,7 @@ Scenario: Show white activity text when activity background color is black
 Scenario: Show white absence text when absence background color is black
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
-	And I have a full-day absence today with
+	And I have a full-day absence with
 	| Field         | Value      |
 	| Absence color | Black      |
 	| Date          | 2013-01-01 |
@@ -352,7 +352,7 @@ Scenario: Show white absence text when absence background color is black
 Scenario: Show black absence text when absence background color is white
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
-	And I have a full-day absence today with
+	And I have a full-day absence with
 	| Field         | Value      |
 	| Absence color | White      |
 	| Date          | 2013-01-01 |

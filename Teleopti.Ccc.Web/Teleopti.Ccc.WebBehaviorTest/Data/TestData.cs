@@ -43,17 +43,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IActivity ActivityLunch;
 		public static IActivity ActivityTraining;
 
-		public static IWorkflowControlSet WorkflowControlSetExisting;
-		public static IWorkflowControlSet WorkflowControlSetPublished;
-		public static IWorkflowControlSet WorkflowControlSetPublishedUntilWednesday;
-		public static IWorkflowControlSet WorkflowControlSetStudentAvailabilityOpen;
-		public static IWorkflowControlSet WorkflowControlSetStudentAvailabilityClosed;
-		public static IWorkflowControlSet WorkflowControlSetStudentAvailabilityOpenNextMonth;
-		public static IWorkflowControlSet WorkflowControlSetPreferenceOpen;
-		public static IWorkflowControlSet WorkflowControlSetPreferenceOpenWithAllowedPreferences;
-		public static IWorkflowControlSet WorkflowControlSetPreferencesOpenNextMonth;
-		public static IWorkflowControlSet WorkflowControlSetPreferenceClosed;
-
 		public static IShiftCategory ShiftCategory;
 		public static IDayOffTemplate DayOffTemplate;
 		public static IAbsence Absence;

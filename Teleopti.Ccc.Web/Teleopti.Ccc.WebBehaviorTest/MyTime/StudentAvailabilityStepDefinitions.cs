@@ -20,29 +20,35 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Navigation.GotoAvailability();
 		}
 
+		[Given(@"I am viewing student availability for '(.*)'")]
+		[When(@"I view student availability for '(.*)'")]
+		public void WhenIViewStudentAvailabilityFor(DateTime date)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAvailability(date);
+		}
+
 		[When(@"I navigate to the student availability page")]
 		public void WhenINavigateToTheStudentAvailabilityPage()
 		{
 			Navigation.GotoAvailability();
 		}
 
-		[Then(@"I should see the student availability period information")]
-		public void ThenIShouldSeeTheStudentAvailabilityPeriodInformation()
+		[Then(@"I should see the student availability period information with period '(.*)' to '(.*)', and input period '(.*)' to '(.*)'")]
+		public void ThenIShouldSeeTheStudentAvailabilityPeriodInformation(DateTime startDate,DateTime endDate,DateTime inputStartDate,DateTime inputEndDate)
 		{
-			var data = DataMaker.Data().UserData<ExistingWorkflowControlSet>();
 			var cultureInfo = DataMaker.Data().MyCulture;
 
-			Browser.Interactions.AssertFirstContainsUsingJQuery("#StudentAvailability-period",data.StudentAvailabilityInputPeriod.StartDate.ToShortDateString(cultureInfo));
-			Browser.Interactions.AssertFirstContainsUsingJQuery("#StudentAvailability-period",data.StudentAvailabilityInputPeriod.EndDate.ToShortDateString(cultureInfo));
-			Browser.Interactions.AssertFirstContainsUsingJQuery("#StudentAvailability-period",data.StudentAvailabilityPeriod.StartDate.ToShortDateString(cultureInfo));
-			Browser.Interactions.AssertFirstContainsUsingJQuery("#StudentAvailability-period",data.StudentAvailabilityPeriod.EndDate.ToShortDateString(cultureInfo));
+			Browser.Interactions.AssertFirstContainsUsingJQuery("#StudentAvailability-period",inputStartDate.ToString("d",cultureInfo));
+			Browser.Interactions.AssertFirstContainsUsingJQuery("#StudentAvailability-period",inputEndDate.ToString("d",cultureInfo));
+			Browser.Interactions.AssertFirstContainsUsingJQuery("#StudentAvailability-period",startDate.ToString("d",cultureInfo));
+			Browser.Interactions.AssertFirstContainsUsingJQuery("#StudentAvailability-period",endDate.ToString("d",cultureInfo));
 		}
 
 		[Then(@"the student availabilty calendar should be editable")]
 		public void ThenTheCalendarShouldBeEditable()
 		{
-			var editableDate = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			var cell = CalendarCells.DateSelector(editableDate);
+			var cell = CalendarCells.DateSelector("2014-05-03");
 			Browser.Interactions.Click(cell);
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format("{0}.{1}",cell,"ui-selected"));
 		}
@@ -69,20 +75,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see my existing student availability")]
 		public void ThenIShouldSeeMyExistingStudentAvailability()
 		{
-			var data = DataMaker.Data().UserData<StudentAvailability>();
-			var startTime = TimeHelper.TimeOfDayFromTimeSpan(data.StartTime, DataMaker.Data().MyCulture);
-			var endTime = TimeHelper.TimeOfDayFromTimeSpan(data.EndTime, DataMaker.Data().MyCulture);
-
-			var cell = CalendarCells.DateSelector(data.Date);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(cell,startTime);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(cell,endTime);
+			var cell = CalendarCells.DateSelector("2014-05-03");
+			Browser.Interactions.AssertFirstContainsUsingJQuery(cell,"07:00");
+			Browser.Interactions.AssertFirstContainsUsingJQuery(cell,"18:00");
 		}
 
-		[Then(@"I should see the first virtual schedule period overlapping open student availability period")]
-		public void ThenIShouldSeeTheFirstVirtualSchedulePeriodOverlappingOpenStudentAvailabilityPeriod()
+		[Then(@"I should see the first virtual schedule period overlapping open student availability period starting at '(.*)'")]
+		public void ThenIShouldSeeTheFirstVirtualSchedulePeriodOverlappingOpenStudentAvailabilityPeriod(DateTime date)
 		{
-			var studentAvailabilityPeriod = DataMaker.Data().UserData<StudentAvailabilityOpenNextMonthWorkflowControlSet>().StudentAvailabilityPeriod;
-			var displayedPeriod = DataMaker.Data().UserData<SchedulePeriod>().DisplayedVirtualSchedulePeriodForDate(studentAvailabilityPeriod.StartDate);
+			var displayedPeriod = DataMaker.Data().UserData<SchedulePeriod>().DisplayedVirtualSchedulePeriodForDate(new DateOnly(date));
 			calendarShouldDisplayPeriod(displayedPeriod);
 		}
 

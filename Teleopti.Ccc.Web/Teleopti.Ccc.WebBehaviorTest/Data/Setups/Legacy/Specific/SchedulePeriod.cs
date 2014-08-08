@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		public int VirtualSchedulePeriodWeeks;
 		public Domain.Scheduling.Assignment.SchedulePeriod TheSchedulePeriod;
 		public int CreatedWeeksAgo;
+		public DateTime Date = new DateTime(2001,1,1);
 
 		private CultureInfo _cultureInfo;
 		private IPerson _person;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			_person = user;
 			_cultureInfo = cultureInfo;
 
-			var createdDate = DateHelper.GetFirstDateInWeek(DateOnlyForBehaviorTests.TestToday.Date, cultureInfo);
+			var createdDate = DateHelper.GetFirstDateInWeek(Date, cultureInfo);
 			createdDate = createdDate.AddDays(CreatedWeeksAgo * 7 * -1);
 			TheSchedulePeriod = new Domain.Scheduling.Assignment.SchedulePeriod(
 				new DateOnly(createdDate),
@@ -40,22 +41,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			user.AddSchedulePeriod(TheSchedulePeriod);
 		}
 
-		public DateTime FirstDateInVirtualSchedulePeriod() { return DateHelper.GetFirstDateInWeek(DateOnlyForBehaviorTests.TestToday.Date, _cultureInfo); }
-		public DateTime LastDateInVirtualSchedulePeriod() { return FirstDateInVirtualSchedulePeriod().AddDays(7 * VirtualSchedulePeriodWeeks).AddDays(-1); }
-
-		public DateTime FirstDayOfDisplayedPeriod() { return DateHelper.GetFirstDateInWeek(FirstDateInVirtualSchedulePeriod(), _cultureInfo).AddDays(-7); }
-		public DateTime LastDayOfDisplayedPeriod() { return DateHelper.GetLastDateInWeek(LastDateInVirtualSchedulePeriod(), _cultureInfo).AddDays(7); }
-
-
-
-		public DateTime FirstDayOfNextDisplayedVirtualSchedulePeriod() { return FirstDayOfDisplayedPeriod().AddDays(7 * VirtualSchedulePeriodWeeks); }
-		public DateTime LastDayOfNextDisplayedVirtualSchedulePeriod() { return LastDayOfDisplayedPeriod().AddDays(7 * VirtualSchedulePeriodWeeks); }
-
-		public DateTime FirstDayOfDisplayedPreviousVirtualSchedulePeriod() { return FirstDayOfDisplayedPeriod().AddDays(-1 * 7 * VirtualSchedulePeriodWeeks); }
-		public DateTime LastDayOfDisplayedPreviousVirtualSchedulePeriod() { return LastDayOfDisplayedPeriod().AddDays(-1 * 7 * VirtualSchedulePeriodWeeks); }
-
-
-
+		public DateTime FirstDateInVirtualSchedulePeriod() { return DateHelper.GetFirstDateInWeek(Date, _cultureInfo); }
+		
 		public IVirtualSchedulePeriod VirtualSchedulePeriodForDate(DateOnly date)
 		{
 			return _person.VirtualSchedulePeriod(date);

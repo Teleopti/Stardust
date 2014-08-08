@@ -1,23 +1,33 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
 	public class ShiftCategoryPreference : BasePreference
 	{
-		public IShiftCategory ShiftCategory = TestData.ShiftCategory;
-
-		protected override PreferenceRestriction ApplyRestriction()
+		public ShiftCategoryPreference()
 		{
-			return new PreferenceRestriction { ShiftCategory = ShiftCategory };
+			ShiftCategory = TestData.ShiftCategory.Description.Name;
+		}
+
+		public string ShiftCategory { get; set; }
+
+		protected override PreferenceRestriction ApplyRestriction(IUnitOfWork uow)
+		{
+			var rep = new ShiftCategoryRepository(uow);
+			return new PreferenceRestriction
+			{
+				ShiftCategory = rep.LoadAll().FirstOrDefault(s => s.Description.Name == ShiftCategory)
+			};
 		}
 
 		protected override DateTime ApplyDate(CultureInfo cultureInfo)
 		{
-			return DateHelper.GetFirstDateInWeek(DateOnlyForBehaviorTests.TestToday.Date, cultureInfo);
+			return DateTime.Parse(Date, SwedishCultureInfo);
 		}
 	}
 }

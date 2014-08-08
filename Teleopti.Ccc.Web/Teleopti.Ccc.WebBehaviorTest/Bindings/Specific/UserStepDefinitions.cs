@@ -1,18 +1,14 @@
 using System;
-using System.Drawing;
-using System.Globalization;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
-using Teleopti.Ccc.TestCommon.TestData.Setups;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 {
@@ -31,7 +27,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new Agent());
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod());
-			DataMaker.Data().Apply(new ScheduleIsPublished());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable{Name = "Published", SchedulePublishedToDate = "2030-12-01"});
+			DataMaker.Data().Apply(new WorkflowControlSetForUser{Name = "Published"});
 		}
 
 		[Given(@"I am an agent that has a dayoff today according to my contract")]
@@ -51,7 +48,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			                       	};
 			DataMaker.Data().Apply(contractSchedule);
 			DataMaker.Data().Apply(new PersonPeriod { ContractSchedule = contractSchedule.ContractSchedule });
-			DataMaker.Data().Apply(new ScheduleIsPublished());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
 
 		[Given(@"I am an agent in no team with access to my team")]
@@ -59,7 +57,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		{
 			DataMaker.Data().Apply(new Agent());
 			DataMaker.Data().Apply(new SchedulePeriod());
-			DataMaker.Data().Apply(new ScheduleIsPublished());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
 
 		[Given(@"I have analytics data for today")]
@@ -106,7 +105,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
-			DataMaker.Data().Apply(new ScheduleIsPublished());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
 
 		[Given(@"I am an agent in a team with access to another site")]
@@ -117,7 +117,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
-			DataMaker.Data().Apply(new ScheduleIsPublished());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
 
 		[Given(@"I am an agent in a team")]
@@ -130,7 +131,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
-			DataMaker.Data().Apply(new ScheduleIsPublished());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
 
 		[Given(@"I am an agent in a team without access to shift trade requests")]
@@ -141,9 +143,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
-			DataMaker.Data().Apply(new ScheduleIsPublished());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
-
 
 		[Given(@"I am an agent in a team with access only to my own data")]
 		public void GivenIAmAnAgentWithoutPermissionToSeeMyColleagueSSchedule()
@@ -153,7 +155,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
-			DataMaker.Data().Apply(new ScheduleIsPublished());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
 
 		[Given(@"I am a student agent")]
@@ -162,6 +165,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new StudentAgent());
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published Student", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published Student" });
 		}
 
 		[Given(@"I am an agent without access to student availability")]
@@ -182,7 +187,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new AgentWithoutExtendedPreferencesAccess());
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod());
-			DataMaker.Data().Apply(new ScheduleIsPublished());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
 
 		[Given(@"I am an agent without access to any requests")]
@@ -221,80 +227,74 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new DoNotHavePersonPeriods());
 		}
 
-		[Given(@"I have (existing|a) student availability")]
-		public void GivenIHaveExistingStudentAvailability(string aOrExisting)
+		[Given(@"I have (existing|a) shift category preference with")]
+		public void GivenIHaveExistingShiftCategoryPreference(string aOrExisting, Table table)
 		{
-			DataMaker.Data().Apply(new StudentAvailability());
+			DataMaker.ApplyFromTable<ShiftCategoryPreference>(table);
 		}
 
-		[Given(@"I have (existing|a) shift category preference")]
-		public void GivenIHaveExistingShiftCategoryPreference(string aOrExisting)
+		[Given(@"I have (existing|a) day off preference with")]
+		public void GivenIHaveExistingDayOffPreference(string aOrExisting, Table table)
 		{
-			DataMaker.Data().Apply(new ShiftCategoryPreference());
+			DataMaker.ApplyFromTable<DayOffPreference>(table);
 		}
 
-		[Given(@"I have (existing|a) day off preference")]
-		public void GivenIHaveExistingDayOffPreference(string aOrExisting)
+		[Given(@"I have (existing|a) absence preference with")]
+		public void GivenIHaveExistingAbsencePreference(string aOrExisting, Table table)
 		{
-			DataMaker.Data().Apply(new DayOffPreference());
+			DataMaker.ApplyFromTable<AbsencePreference>(table);
 		}
 
-		[Given(@"I have (existing|a) absence preference")]
-		public void GivenIHaveExistingAbsencePreference(string aOrExisting)
-		{
-			DataMaker.Data().Apply(new AbsencePreference());
-		}
-
-		[Given(@"I have a preference with end time limitation between (.*) and (.*)")]
-		public void GivenIHaveAPreferenceWithEndTimeLimitationBetweenAnd(int earliest, int latest)
+		[Given(@"I have a preference with end time limitation between (.*) and (.*) for '(.*)'"), SetCulture("sv-SE")]
+		public void GivenIHaveAPreferenceWithEndTimeLimitationBetweenAnd(int earliest, int latest, DateTime date)
 		{
 			var endTimeLimitation = new EndTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
-			DataMaker.Data().Apply(new ExistingExtendedPreferenceToday(endTimeLimitation));
+			DataMaker.Data().Apply(new ExistingExtendedPreference(endTimeLimitation) { Date = date.ToShortDateString() });
 		}
 
-		[Given(@"I have a preference with start time limitation between (.*) and (.*)")]
-		public void GivenIHaveAPreferenceWithStartTimeLimitationBetweenAnd(int earliest, int latest)
+		[Given(@"I have a preference with start time limitation between (.*) and (.*) for '(.*)'"),SetCulture("sv-SE")]
+		public void GivenIHaveAPreferenceWithStartTimeLimitationBetweenAnd(int earliest, int latest,DateTime date)
 		{
 			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
-			DataMaker.Data().Apply(new ExistingExtendedPreferenceToday(startTimeLimitation));
+			DataMaker.Data().Apply(new ExistingExtendedPreference(startTimeLimitation) { Date = date.ToShortDateString() });
 		}
 
-		[Given(@"I have a preference with work time limitation between (.*) and (.*)")]
-		public void GivenIHaveAPreferenceWithWorkTimeLimitationBetweenAnd(int shortest, int longest)
+		[Given(@"I have a preference with work time limitation between (.*) and (.*) for '(.*)'"), SetCulture("sv-SE")]
+		public void GivenIHaveAPreferenceWithWorkTimeLimitationBetweenAnd(int shortest, int longest, DateTime date)
 		{
 			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(shortest, 0, 0), new TimeSpan(longest, 0, 0));
-			DataMaker.Data().Apply(new ExistingExtendedPreferenceToday(workTimeLimitation));
+			DataMaker.Data().Apply(new ExistingExtendedPreference(workTimeLimitation) { Date = date.ToShortDateString() });
 		}
 
 
-		[Given(@"I have preference for the first category today")]
-		public void GivenIHavePreferenceForTheFirstCategoryToday()
+		[Given(@"I have preference for the first category for '(.*)'"),SetCulture("sv-SE")]
+		public void GivenIHavePreferenceForTheFirstCategoryToday(DateTime date)
 		{
 			var firstCat = DataMaker.Data().UserData<FirstShiftCategory>();
-			var firstCategory = firstCat.ShiftCategory;
+			var firstCategory = firstCat.ShiftCategory.Description.Name;
 
-			DataMaker.Data().Apply(new ShiftCategoryPreferenceToday {ShiftCategory = firstCategory});
+			DataMaker.Data().Apply(new ShiftCategoryPreference {ShiftCategory = firstCategory,Date = date.ToShortDateString()});
 		}
 
-		[Given(@"I have a preference with lunch length limitation of 1 hour today")]
-		public void GivenIHaveAPreferenceWithLunchLengthLimitationOf1HourToday()
+		[Given(@"I have a preference with lunch length limitation of 1 hour for '(.*)'"),SetCulture("sv-SE")]
+		public void GivenIHaveAPreferenceWithLunchLengthLimitationOf1HourToday(DateTime date)
 		{
 			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(1, 0, 0), new TimeSpan(1, 0, 0));
-			DataMaker.Data().Apply(new ExistingLunchPreferenceToday(workTimeLimitation));
+			DataMaker.Data().Apply(new ExistingLunchPreference(workTimeLimitation){Date = date.ToShortDateString()});
 		}
 
-		[Given(@"I have a preference with lunch end time limitation between (.*) and (.*)")]
-		public void GivenIHaveAPreferenceWithLunchEndTimeLimitationBetweenAnd(int earliest, int latest)
+		[Given(@"I have a preference with lunch end time limitation between (.*) and (.*) for '(.*)'"),SetCulture("sv-SE")]
+		public void GivenIHaveAPreferenceWithLunchEndTimeLimitationBetweenAnd(int earliest, int latest, DateTime date)
 		{
 			var endTimeLimitation = new EndTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
-			DataMaker.Data().Apply(new ExistingLunchPreferenceToday(endTimeLimitation));
+			DataMaker.Data().Apply(new ExistingLunchPreference(endTimeLimitation){Date = date.ToShortDateString()});
 		}
 
-		[Given(@"I have a preference with lunch start time limitation between (.*) and (.*)")]
-		public void GivenIHaveAPreferenceWithLunchStartTimeLimitationBetweenAnd(int earliest, int latest)
+		[Given(@"I have a preference with lunch start time limitation between (.*) and (.*) for '(.*)'"),SetCulture("sv-SE")]
+		public void GivenIHaveAPreferenceWithLunchStartTimeLimitationBetweenAnd(int earliest, int latest, DateTime date)
 		{
 			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
-			DataMaker.Data().Apply(new ExistingLunchPreferenceToday(startTimeLimitation));
+			DataMaker.Data().Apply(new ExistingLunchPreference(startTimeLimitation){Date = date.ToShortDateString()});
 		}
 
 		[Given(@"I have a availabilty with earliest start time at (.*)")]
@@ -318,12 +318,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new ExistingAvailability(workTimeLimitation));
 		}
 
-		[Given(@"I have a conflicting preference and availability today")]
-		public void GivenIHaveAConflictingPreferenceAndAvailabilityToday()
+		[Given(@"I have a conflicting preference and availability for '(.*)'"),SetCulture("sv-SE")]
+		public void GivenIHaveAConflictingPreferenceAndAvailability(DateTime date)
 		{
 			var startTimeAvailability = new StartTimeLimitation(new TimeSpan(10, 0, 0), null);
 			var startTimePreference = new StartTimeLimitation(null, new TimeSpan(9, 0, 0));
-			DataMaker.Data().Apply(new ExistingExtendedPreferenceToday(startTimePreference));
+			DataMaker.Data().Apply(new ExistingExtendedPreference(startTimePreference){Date = date.ToShortDateString()});
 			DataMaker.Data().Apply(new ExistingAvailability(startTimeAvailability));
 		}
 
@@ -331,25 +331,41 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"My schedule is published")]
 		public void GivenMyScheduleIsPublished()
 		{
-			DataMaker.Data().Apply(new ScheduleIsPublished());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published2", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published2" });
 		}
 
 		[Given(@"I have a workflow control set")]
 		public void GivenIHaveAWorkflowControlSet()
 		{
-			DataMaker.Data().Apply(new ExistingWorkflowControlSet());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable{Name = "Simple WCS"});
+			DataMaker.Data().Apply(new WorkflowControlSetForUser{Name = "Simple WCS"});
 		}
 
 		[Given(@"I have a workflow control set with open availability periods")]
 		public void GivenIHaveAWorkflowControlSetWithOpenAvailabilityPeriods()
 		{
-			DataMaker.Data().Apply(new StudentAvailabilityOpenWorkflowControlSet());
+			DataMaker.Data()
+				.Apply(new WorkflowControlSetConfigurable
+				{
+					Name = "Published 100 days, SA open",
+					SchedulePublishedToDate = "2030-12-01",
+					StudentAvailabilityPeriodIsClosed = false
+				});
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published 100 days, SA open" });
 		}
 
 		[Given(@"I have a workflow control set with closed student availability periods")]
 		public void GivenIHaveAWorkflowControlSetWithClosedStudentAvailabilityPeriods()
 		{
-			DataMaker.Data().Apply(new StudentAvailabilityClosedWorkflowControlSet());
+			DataMaker.Data()
+				.Apply(new WorkflowControlSetConfigurable
+				{
+					Name = "Published 100 days, SA closed",
+					SchedulePublishedToDate = "2030-12-01",
+					StudentAvailabilityPeriodIsClosed = true
+				});
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published 100 days, SA closed" });
 		}
 
 		[Given(@"I do not have a workflow control set")]
@@ -358,91 +374,107 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new NoWorkflowControlSet());
 		}
 
-		[Given(@"I have a workflow control set with student availability periods open next month")]
-		public void GivenIHaveAWorkflowControlSetWithStudentAvailabilityPeriodsOpenNextMonth()
+		[Given(@"I have a workflow control set with student availability periods open from '(.*)' to '(.*)'")]
+		public void GivenIHaveAWorkflowControlSetWithStudentAvailabilityPeriodsOpenNextMonth(DateTime start,DateTime end)
 		{
-			DataMaker.Data().Apply(new StudentAvailabilityOpenNextMonthWorkflowControlSet());
+			DataMaker.Data()
+				.Apply(new WorkflowControlSetConfigurable
+				{
+					Name = "Open SA",
+					SchedulePublishedToDate = end.AddDays(100).ToShortDateString(),
+					StudentAvailabilityPeriodStart = start.ToShortDateString(),
+					StudentAvailabilityPeriodEnd = end.ToShortDateString()
+				});
+			DataMaker.Data().Apply(new WorkflowControlSetForUser{Name = "Open SA"});
 		}
 
 		[Given(@"I have a workflow control set with open standard preference period")]
 		public void GivenIHaveAWorkflowControlSetWithOpenStandardPreferencePeriod()
 		{
-			DataMaker.Data().Apply(new PreferenceOpenWorkflowControlSet());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable{PreferencePeriodIsClosed = false,SchedulePublishedToDate = "2030-12-01",Name = "Preferences open"});
+			DataMaker.Data().Apply(new WorkflowControlSetForUser{Name = "Preferences open"});
 		}
 
-		[Given(@"I have an open workflow control set with an allowed standard preference")]
-		public void GivenIHaveAnOpenWorkflowControlSetWithAnAllowedStandardPreference()
+		[Given(@"I have an open workflow control set with an allowed standard preference open from '(.*)' to '(.*)'")]
+		public void GivenIHaveAnOpenWorkflowControlSetWithAnAllowedStandardPreference(DateTime start,DateTime end)
 		{
-			DataMaker.Data().Apply(new PreferenceOpenWithAllowedPreferencesWorkflowControlSet());
+			DataMaker.Data()
+				.Apply(new WorkflowControlSetConfigurable
+				{
+					Name = "Open",
+					SchedulePublishedToDate = end.AddDays(100).ToShortDateString(),
+					PreferencePeriodStart = start.ToShortDateString(),
+					PreferencePeriodEnd = end.ToShortDateString(),
+					AvailableShiftCategory = TestData.ShiftCategory.Description.Name,
+					AvailableDayOff = TestData.DayOffTemplate.Description.Name,
+					AvailableAbsence = TestData.Absence.Description.Name
+				});
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Open" });
 		}
 
-		[Given(@"I have existing standard preference")]
-		public void GivenIHaveExistingStandardPreference()
+		[Given(@"I have existing standard preference with")]
+		public void GivenIHaveExistingStandardPreference(Table table)
 		{
-			DataMaker.Data().Apply(new StandardPreference());
+			DataMaker.ApplyFromTable<StandardPreference>(table);
 		}
 
-		[Given(@"I have 2 existing standard preference")]
-		public void GivenIHave2ExistingStandardPreference()
+		[Given(@"I have 2 existing standard preference with")]
+		public void GivenIHave2ExistingStandardPreference(Table table)
 		{
-			DataMaker.Data().Apply(new StandardPreference());
-			DataMaker.Data().Apply(new AnotherStandardPreference());
+			DataMaker.ApplyFromTable<StandardPreference>(table);
+			DataMaker.ApplyFromTable<AnotherStandardPreference>(table);
 		}
 
-		[Given(@"I have a workflow control set with preference periods open next month")]
-		public void GivenIHaveAWorkflowControlSetWithPreferencePeriodsOpenNextMonth()
+		[Given(@"I have a workflow control set with preference periods open from '(.*)' to '(.*)'")]
+		public void GivenIHaveAWorkflowControlSetWithPreferencePeriodsOpenNextMonth(DateTime start,DateTime end)
 		{
-			DataMaker.Data().Apply(new PreferenceOpenNextMonthWorkflowControlSet());
+			DataMaker.Data()
+				.Apply(new WorkflowControlSetConfigurable
+				{
+					Name = "Open",
+					SchedulePublishedToDate = end.AddDays(100).ToShortDateString(),
+					PreferencePeriodStart = start.ToShortDateString(),
+					PreferencePeriodEnd = end.ToShortDateString()
+				});
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Open" });
 		}
 
 		[Given(@"I have a workflow control set with closed preference periods")]
 		public void GivenIHaveAWorkflowControlSetWithClosedPreferencePeriods()
 		{
-			DataMaker.Data().Apply(new PreferenceClosedWorkflowControlSet());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { PreferencePeriodIsClosed = true, SchedulePublishedToDate = "2030-12-01", Name = "Preferences closed" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Preferences closed" });
 		}
 
-		[Given(@"I have a shift today")]
-		public void GivenIHaveAShiftToday()
+		[Given(@"I have an assigned dayoff with")]
+		public void GivenIHaveADayoffToday(Table table)
 		{
-			DataMaker.Data().Apply(new ShiftToday());
+			DataMaker.ApplyFromTable<AssignedDayOff>(table);
 		}
 
-
-		[Given(@"I have a dayoff today")]
-		public void GivenIHaveADayoffToday()
+		[Given(@"I have an assigned full-day absence with")]
+		public void GivenIHaveAFull_DayAbsenceToday(Table table)
 		{
-			DataMaker.Data().Apply(new DayOffToday());
+			DataMaker.ApplyFromTable<AssignedAbsence>(table);
 		}
 
-		[Given(@"I have a full-day absence today")]
-		public void GivenIHaveAFull_DayAbsenceToday()
+		[Given(@"I have a full-day contract time absence on '(.*)'"),SetCulture("sv-SE")]
+		public void GivenIHaveAFull_DayContractTimeAbsenceToday(DateTime date)
 		{
-			DataMaker.Data().Apply(new AbsenceToday());
+			DataMaker.Data().Apply(new AbsenceInContractTime{Date = date.ToShortDateString()});
 		}
 
-		[Given(@"I have a full-day contract time absence today")]
-		public void GivenIHaveAFull_DayContractTimeAbsenceToday()
+		[Given(@"I have a full-day absence with")]
+		public void GivenIHaveAFull_DayAbsenceWith(Table table)
 		{
-			DataMaker.Data().Apply(new AbsenceInContractTimeToday());
-		}
-
-		[Given(@"I have a full-day absence today with")]
-		public void GivenIHaveAFull_DayAbsenceTodayWith(Table table)
-		{
-			var absence = table.CreateInstance<AbsenceToday>();
+			var absence = table.CreateInstance<AssignedAbsence>();
 			DataMaker.Data().Apply(absence);
 		}
 
-		[Given(@"I have a shift from (.*) to (.*)")]
-		public void GivenIHaveAShiftFrom756To1700(string from, string to)
+		[Given(@"I have an assigned shift with")]
+		public void GivenIHaveAShiftAssigned(Table table)
 		{
-			DataMaker.Data().Apply(new ShiftToday(TimeSpan.Parse(from), TimeSpan.Parse(to)));
-		}
-
-		[Given(@"I have an activity from (.*) to (.*)")]
-		public void GivenIHaveAnActivityFromTo(string from, string to)
-		{
-			DataMaker.Data().Apply(new ShiftToday(TimeSpan.Parse(from), TimeSpan.Parse(to), false));
+			DataMaker.ApplyFromTable<AssignedShift>(table);
 		}
 
 		[Given(@"I am swedish")]
@@ -489,7 +521,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		{
 			DataMaker.Person(name).Apply(new UserTimeZoneFor(location));
 		}
-
 
 		[Given(@"I have an existing text request")]
 		public void GivenIHaveAnExistingTextRequest()
@@ -554,12 +585,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new AnotherSitesSecondTeam());
 		}
 		
-		[Given(@"I belong to another site's team tomorrow")]
-		public void GivenIBelongToAnotherSiteSTeamTomorrow()
+		[Given(@"I belong to another site's team on '(.*)'")]
+		public void GivenIBelongToAnotherSiteSTeamTomorrow(DateTime date)
 		{
 			var team = new AnotherSitesTeam();
 			DataMaker.Data().Apply(team);
-			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam, DateOnlyForBehaviorTests.TestToday.AddDays(1)));
+			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam, date));
 		}
 
 		[Given(@"I have a shift bag with start times (.*) to (.*) and end times (.*) to (.*)")]
@@ -601,18 +632,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new RuleSetBagWithTwoShiftsAndLunch(start1, end1, lunchStart1, lunchEnd1, start2, end2, lunchStart2, lunchEnd2));
 		}
 
-		[Given(@"I am an agent in a team that leaves tomorrow")]
-		public void GivenIAmAnAgentThatLeavesTomorrow()
+		[Given(@"I am an agent in a team that leaves on '(.*)'")]
+		public void GivenIAmAnAgentThatLeavesOn(DateTime date)
 		{
-			DataMaker.Data().Apply(new AgentThatLeavesTomorrow());
+			DataMaker.Data().Apply(new AgentThatLeaves(date));
 			var team = new Team();
 			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
-			DataMaker.Data().Apply(new ScheduleIsPublished());
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
-
 	}
 }
-
-

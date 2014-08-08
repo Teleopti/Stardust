@@ -1,41 +1,46 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
-	public class ExistingLunchPreferenceToday : BasePreference
+	public class ExistingLunchPreference : BasePreference
 	{
+		public string LunchActivity = TestData.ActivityLunch.Description.Name;
+
 		private readonly StartTimeLimitation _start;
 		private readonly EndTimeLimitation _end;
 		private readonly WorkTimeLimitation _length;
 
-		public ExistingLunchPreferenceToday(WorkTimeLimitation workTimeLimitation)
+		public ExistingLunchPreference(WorkTimeLimitation workTimeLimitation)
 		{
 			_start = new StartTimeLimitation();
 			_end = new EndTimeLimitation();
 			_length = workTimeLimitation;
 		}
 
-		public ExistingLunchPreferenceToday(EndTimeLimitation endTimeLimitation)
+		public ExistingLunchPreference(EndTimeLimitation endTimeLimitation)
 		{
 			_start = new StartTimeLimitation();
 			_end = endTimeLimitation;
 			_length = new WorkTimeLimitation();
 		}
 
-		public ExistingLunchPreferenceToday(StartTimeLimitation startTimeLimitation)
+		public ExistingLunchPreference(StartTimeLimitation startTimeLimitation)
 		{
 			_start = startTimeLimitation;
 			_end = new EndTimeLimitation();
 			_length = new WorkTimeLimitation();
 		}
 
-		protected override PreferenceRestriction ApplyRestriction()
+		protected override PreferenceRestriction ApplyRestriction(IUnitOfWork uow)
 		{
-			var activityRestriction = new ActivityRestriction(TestData.ActivityLunch)
+			var rep = new ActivityRepository(uow);
+			var activityRestriction = new ActivityRestriction(rep.LoadAll().FirstOrDefault(a => a.Description.Name==LunchActivity))
 			                          	{StartTimeLimitation = _start, EndTimeLimitation = _end, WorkTimeLimitation = _length};
 			var preferenceRestriction = new PreferenceRestriction();
 			preferenceRestriction.AddActivityRestriction(activityRestriction);
@@ -44,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 		protected override DateTime ApplyDate(CultureInfo cultureInfo)
 		{
-            return DateOnlyForBehaviorTests.TestToday;
+            return DateTime.Parse(Date,SwedishCultureInfo);
 		}
 	}
 }

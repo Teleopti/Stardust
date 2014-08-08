@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
@@ -18,19 +19,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 		private readonly Func<IStudentAvailabilityProvider> _studentAvailabilityProvider;
 		private readonly Func<IVirtualSchedulePeriodProvider> _virtualSchedulePeriodProvider;
 		private readonly Func<ILoggedOnUser> _loggedOnUser;
+		private readonly Func<INow> _now;
 
 		public StudentAvailabilityViewModelMappingProfile(
 			Func<IMappingEngine> mapper, 
 			Func<IScheduleProvider> scheduleProvider, 
 			Func<IStudentAvailabilityProvider> studentAvailabilityProvider, 
 			Func<IVirtualSchedulePeriodProvider> virtualSchedulePeriodProvider,
-			Func<ILoggedOnUser> loggedOnUser)
+			Func<ILoggedOnUser> loggedOnUser,
+			Func<INow> now)
 		{
 			_mapper = mapper;
 			_scheduleProvider = scheduleProvider;
 			_studentAvailabilityProvider = studentAvailabilityProvider;
 			_virtualSchedulePeriodProvider = virtualSchedulePeriodProvider;
 			_loggedOnUser = loggedOnUser;
+			_now = now;
 		}
 
 		private TDestination twoStepMapping<TSource, TRelay, TDestination>(TSource source)
@@ -99,7 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 					{
 						if (s.Person.WorkflowControlSet == null) return false;
 						var insideSchedulePeriod = s.Period.Contains(s.Date);
-						var insideInputPeriod = s.Person.WorkflowControlSet.StudentAvailabilityInputPeriod.Contains(DateOnly.Today);
+						var insideInputPeriod = s.Person.WorkflowControlSet.StudentAvailabilityInputPeriod.Contains(_now().LocalDateOnly());
 						var insideStudentAvailabilityPeriod = s.Person.WorkflowControlSet.StudentAvailabilityPeriod.Contains(s.Date);
 						return insideSchedulePeriod && insideInputPeriod && insideStudentAvailabilityPeriod;
 					}))

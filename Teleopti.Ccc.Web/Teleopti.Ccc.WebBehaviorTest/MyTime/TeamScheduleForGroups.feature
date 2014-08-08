@@ -127,7 +127,7 @@ Scenario: Keep selected group when changing date
 
 Scenario: Keep selected date when changing group
 	Given I have the role 'Access to view all group pages'
-	And I am viewing group schedule for tomorrow
+	And I am viewing group schedule for '2014-05-03'
 	When I select something in the team picker
 	Then I should see tomorrow
 

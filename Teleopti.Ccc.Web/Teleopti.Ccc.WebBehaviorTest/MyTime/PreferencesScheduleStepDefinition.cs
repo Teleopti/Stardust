@@ -1,3 +1,5 @@
+using System;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -10,43 +12,43 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class PreferencesScheduleStepDefinition
 	{
-		[Then(@"I should see my shift")]
-		public void ThenIShouldSeeMyShift()
+		[Then(@"I should see my assigned shift for '(.*)'")]
+		public void ThenIShouldSeeMyShift(DateTime date)
 		{
-			var data = DataMaker.Data().UserData<ShiftToday>();
-			var from = TimeHelper.GetLongHourMinuteTimeString(data.StartTime, DataMaker.Data().MyCulture);
-			var to = TimeHelper.GetLongHourMinuteTimeString(data.StartTime, DataMaker.Data().MyCulture);
-			var contractTime = TimeHelper.GetLongHourMinuteTimeString(data.GetContractTime(), DataMaker.Data().MyCulture);
+			var data = DataMaker.Data().UserData<AssignedShift>();
+			var cultureInfo = DataMaker.Data().MyCulture;
+			var from = TimeHelper.GetLongHourMinuteTimeString(TimeSpan.Parse(data.StartTime), cultureInfo);
+			var to = TimeHelper.GetLongHourMinuteTimeString(TimeSpan.Parse(data.EndTime), cultureInfo);
+			var contractTime = TimeHelper.GetLongHourMinuteTimeString(data.GetContractTime(), cultureInfo);
 
-			var selector = CalendarCells.DateSelector(data.Date);
+			var selector = CalendarCells.DateSelector(date);
 			Browser.Interactions.AssertFirstContains(selector, data.ShiftCategory.Description.Name);
 			Browser.Interactions.AssertFirstContains(selector, from);
 			Browser.Interactions.AssertFirstContains(selector, to);
 			Browser.Interactions.AssertFirstContains(selector, contractTime);
 		}
 
-		[Then(@"I should see the dayoff")]
-		public void ThenIShouldSeeTheDayoff()
+		[Then(@"I should see the assigned dayoff for '(.*)'")]
+		public void ThenIShouldSeeTheDayoff(DateTime date)
 		{
-			var data = DataMaker.Data().UserData<DayOffToday>();
+			var data = DataMaker.Data().UserData<AssignedDayOff>();
 			
-			var selector = CalendarCells.DateSelector(data.Date);
+			var selector = CalendarCells.DateSelector(date);
 			Browser.Interactions.AssertFirstContains(selector, data.DayOff.Description.Name);
 		}
 
-		[Then(@"I should see the absence")]
-		public void ThenIShouldSeeTheAbsence()
+		[Then(@"I should see the assigned absence for '(.*)'")]
+		public void ThenIShouldSeeTheAbsence(DateTime date)
 		{
-			var data = DataMaker.Data().UserData<AbsenceToday>();
-			var selector = CalendarCells.DateSelector(data.Date);
+			var data = DataMaker.Data().UserData<AssignedAbsence>();
+			var selector = CalendarCells.DateSelector(date);
 			Browser.Interactions.AssertFirstContains(selector, data.Absence.Description.Name);
 		}
 
-		[Then(@"I should not be able to add preference today")]
-		public void ThenIShouldNotBeAbleToAddPreferenceToday()
+		[Then(@"I should not be able to add preference for '(.*)'")]
+		public void ThenIShouldNotBeAbleToAddPreferenceForDate(DateTime date)
 		{
-			var data = DataMaker.Data().UserData<ShiftToday>();
-			var selector = CalendarCells.DateSelector(data.Date);
+			var selector = CalendarCells.DateSelector(date);
 			
 			Browser.Interactions.AssertNotExists(selector, string.Format("{0} .ui-selectee",selector));
 			Browser.Interactions.Click(selector);

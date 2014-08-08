@@ -9,11 +9,18 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
-	public class DayOffToday : IUserDataSetup
+	public class AssignedDayOff : IUserDataSetup
 	{
-		public DateOnly Date = DateOnlyForBehaviorTests.TestToday;
+		private static readonly CultureInfo SwedishCultureInfo = CultureInfo.GetCultureInfo(1053);
+
+		public string Date { get; set; }
 		public readonly IDayOffTemplate DayOff = TestData.DayOffTemplate;
 		public readonly IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
+
+		public AssignedDayOff()
+		{
+			Date = DateOnlyForBehaviorTests.TestToday.ToShortDateString(SwedishCultureInfo);
+		}
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{

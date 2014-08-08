@@ -3,58 +3,54 @@ using System.Globalization;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
-	public abstract class ShiftForDate : IUserDataSetup
+	public class AssignedShift : IUserDataSetup
 	{
-		public DateTime Date;
-		public IShiftCategory ShiftCategory;
-		public readonly TimeSpan StartTime;
-		public readonly TimeSpan EndTime;
+		protected static readonly CultureInfo SwedishCultureInfo = CultureInfo.GetCultureInfo(1053);
 
-		private readonly bool _withLunch;
+		public string Date { get; set; }
+		public IShiftCategory ShiftCategory;
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
+		public string Foo { get; set; }
+		public bool WithLunch { get; set; }
+
 		private DateTimePeriod _assignmentPeriod;
+
+		public AssignedShift()
+		{
+			StartTime = TimeSpan.FromHours(9).ToString("g",SwedishCultureInfo);
+			EndTime = TimeSpan.FromHours(17).ToString("g",SwedishCultureInfo);
+			WithLunch = true;
+			Date = DateOnlyForBehaviorTests.TestToday.ToShortDateString(SwedishCultureInfo);
+			Foo = "asdf";
+		}
 
 		public IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 
-		protected ShiftForDate(TimeSpan startTime, TimeSpan endTime)
-		{
-			StartTime = startTime;
-			EndTime = endTime;
-			_withLunch = true;
-		}
-
-		protected ShiftForDate(int startHour)
-			: this(TimeSpan.FromHours(startHour), TimeSpan.FromHours(startHour + 8)) { }
-
-		protected ShiftForDate(TimeSpan startTime, TimeSpan endTime, bool withLunch)
-		{
-			StartTime = startTime;
-			EndTime = endTime;
-			_withLunch = withLunch;
-		}
-
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			Date = ApplyDate(cultureInfo);
+			var date = ApplyDate(cultureInfo);
 			ShiftCategory = TestData.ShiftCategory;
 		    var timeZone = user.PermissionInformation.DefaultTimeZone();
-		    var shiftStartUtc = timeZone.SafeConvertTimeToUtc(Date.Add(StartTime));
-		    var shiftEndUtc = timeZone.SafeConvertTimeToUtc(Date.Add(EndTime));
+		    var shiftStartUtc = timeZone.SafeConvertTimeToUtc(date.Add(TimeSpan.Parse(StartTime,SwedishCultureInfo)));
+		    var shiftEndUtc = timeZone.SafeConvertTimeToUtc(date.Add(TimeSpan.Parse(EndTime,SwedishCultureInfo)));
 
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
 			// create main shift
             _assignmentPeriod = new DateTimePeriod(shiftStartUtc, shiftEndUtc);
-			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(Date));
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(date));
 			assignment.AddActivity(TestData.ActivityPhone, _assignmentPeriod);
 
 			// add lunch
-			if (_withLunch)
+			if (WithLunch)
 			{
                 var lunchPeriod = new DateTimePeriod(shiftStartUtc.AddHours(3), shiftStartUtc.AddHours(4));
 				assignment.AddActivity(TestData.ActivityLunch, lunchPeriod);
@@ -65,17 +61,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			assignmentRepository.Add(assignment);
 		}
 
-		protected abstract DateTime ApplyDate(CultureInfo cultureInfo);
+		protected virtual DateTime ApplyDate(CultureInfo cultureInfo)
+		{
+			return DateTime.Parse(Date,SwedishCultureInfo);
+		}
 
 		public TimeSpan GetContractTime()
 		{
 			// rolling my own contract time calculation.
 			// do we need to do a projection here really?
 			var contractTime = _assignmentPeriod.ElapsedTime();
-			if (_withLunch)
+			if (WithLunch)
 				contractTime = contractTime.Subtract(TimeSpan.FromHours(1));
 			return contractTime;
 		}
-
 	}
 }

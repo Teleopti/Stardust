@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling;
+using NHibernate.Engine;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -20,7 +19,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string AvailableAbsence { get; set; }
 		public string AvailableActivity { get; set; }
 		public bool PreferencePeriodIsClosed { get; set; }
+		public string PreferencePeriodStart { get; set; }
+		public string PreferencePeriodEnd { get; set; }
 		public bool StudentAvailabilityPeriodIsClosed { get; set; }
+		public string StudentAvailabilityPeriodStart { get; set; }
+		public string StudentAvailabilityPeriodEnd { get; set; }
 		public int ShiftTradeSlidingPeriodStart { get; set; }
 		public int ShiftTradeSlidingPeriodEnd { get; set; }
 		public string AbsenceRequestOpenPeriodStart { get; set; }
@@ -38,8 +41,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow)
 		{
-			var workflowControlSet = new WorkflowControlSet(Name) { SchedulePublishedToDate = DateTime.Parse(SchedulePublishedToDate) };
+			var workflowControlSet = new WorkflowControlSet(Name) { SchedulePublishedToDate = !string.IsNullOrEmpty(SchedulePublishedToDate) ? DateTime.Parse(SchedulePublishedToDate) : (DateTime?)null };
 
+			if (!string.IsNullOrEmpty(StudentAvailabilityPeriodStart) && !string.IsNullOrEmpty(StudentAvailabilityPeriodEnd))
+			{
+				var studentAvailabilityPeriod = new DateOnlyPeriod(new DateOnly(DateTime.Parse(StudentAvailabilityPeriodStart)), new DateOnly(DateTime.Parse(StudentAvailabilityPeriodEnd)));
+				workflowControlSet.StudentAvailabilityPeriod = studentAvailabilityPeriod;
+				workflowControlSet.StudentAvailabilityInputPeriod = new DateOnlyPeriod(studentAvailabilityPeriod.StartDate.AddDays(-50),studentAvailabilityPeriod.StartDate);
+			}
+
+			if (!string.IsNullOrEmpty(PreferencePeriodStart) && !string.IsNullOrEmpty(PreferencePeriodEnd))
+			{
+				var preferencePeriod = new DateOnlyPeriod(new DateOnly(DateTime.Parse(PreferencePeriodStart)), new DateOnly(DateTime.Parse(PreferencePeriodEnd)));
+				workflowControlSet.PreferencePeriod = preferencePeriod;
+				workflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(preferencePeriod.StartDate.AddDays(-50), preferencePeriod.StartDate);
+			}
 			if (PreferencePeriodIsClosed)
 				workflowControlSet.PreferencePeriod = new DateOnlyPeriod(1900, 1, 1, 1900, 1, 1);
 			if (StudentAvailabilityPeriodIsClosed)

@@ -67,52 +67,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(".weekview-day[data-mytime-date={0}] .overtime-availability-symbol", formattedDate));
 		}
 
-		[Then(@"I should see current or first future virtual schedule period \+/- 1 week")]
-		public void ThenIShouldSeeCurrentOrFirstFutureVirtualSchedulePeriod_1Week()
-		{
-			var virtualSchedulePeriodData = DataMaker.Data().UserData<SchedulePeriod>();
-
-			var firstDateDisplayed = virtualSchedulePeriodData.FirstDayOfDisplayedPeriod();
-			var lastDateDisplayed = virtualSchedulePeriodData.LastDayOfDisplayedPeriod();
-			calendarShouldRangeBetween(firstDateDisplayed, lastDateDisplayed);
-		}
-
 		[Then(@"I should see a user-friendly message explaining I dont have anything to view")]
 		public void ThenIShouldSeeAUser_FriendlyMessageExplainingIDontHaveAnythingToView()
 		{
 			Browser.Interactions.AssertExists(".alert.alert-info");
 		}
 
-		[Then(@"I should see next virtual schedule period")]
-		public void ThenIShouldSeeNextVirtualSchedulePeriod()
+		[Then(@"I should see the virtual schedule period from '(.*)' to '(.*)'")]
+		public void ThenIShouldSeeTheVirtualSchedulePeriod(DateTime start, DateTime end)
 		{
-			var virtualSchedulePeriodData = DataMaker.Data().UserData<SchedulePeriod>();
+			var appendSelectableClass = new Func<string, string>(s => s + ".ui-selectee");
 
-			var nextPeriodFirstDateDisplayed = virtualSchedulePeriodData.FirstDayOfNextDisplayedVirtualSchedulePeriod();
-			var nextPeriodLastDateDisplayed = virtualSchedulePeriodData.LastDayOfNextDisplayedVirtualSchedulePeriod();
-			calendarShouldRangeBetween(nextPeriodFirstDateDisplayed, nextPeriodLastDateDisplayed);
-		}
-
-		[Then(@"I should see previous virtual schedule period")]
-		public void ThenIShouldSeePreviousVirtualSchedulePeriod()
-		{
-			var virtualSchedulePeriodData = DataMaker.Data().UserData<SchedulePeriod>();
-
-			var previousPeriodFirstDateDisplayed = virtualSchedulePeriodData.FirstDayOfDisplayedPreviousVirtualSchedulePeriod();
-			var previousPeriodLastDateDisplayed = virtualSchedulePeriodData.LastDayOfDisplayedPreviousVirtualSchedulePeriod();
-			calendarShouldRangeBetween(previousPeriodFirstDateDisplayed, previousPeriodLastDateDisplayed);
+			Browser.Interactions.AssertNotExistsUsingJQuery(appendSelectableClass(CalendarCells.DateSelector(start)), appendSelectableClass(CalendarCells.DateSelector(start.AddDays(-1))));
+			Browser.Interactions.AssertNotExistsUsingJQuery(appendSelectableClass(CalendarCells.DateSelector(end)), appendSelectableClass(CalendarCells.DateSelector(end.AddDays(1))));
 		}
 
 		[Then(@"I should see a message saying I am missing a workflow control set")]
 		public void ThenIShouldSeeAMessageSayingIAmMissingAWorkflowControlSet()
 		{
 			Browser.Interactions.AssertAnyContains(".alert", Resources.MissingWorkflowControlSet);
-		}
-
-		private static void calendarShouldRangeBetween(DateTime firstDateDisplayed, DateTime lastDateDisplayed)
-		{
-			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCells.DateSelector(firstDateDisplayed), CalendarCells.DateSelector(firstDateDisplayed.AddDays(-1)));
-			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCells.DateSelector(lastDateDisplayed), CalendarCells.DateSelector(lastDateDisplayed.AddDays(1)));
 		}
 	}
 }

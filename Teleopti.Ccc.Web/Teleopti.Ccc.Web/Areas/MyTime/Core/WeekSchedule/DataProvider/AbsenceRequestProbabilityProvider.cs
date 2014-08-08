@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -14,14 +15,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 	{
 		private readonly IAllowanceProvider _allowanceProvider;
 		private readonly IAbsenceTimeProvider _absenceTimeProvider;
+		private readonly INow _now;
 		private string[] texts;
 		readonly string[] cssClass = {"red", "yellow", "green"};
 
 		public AbsenceRequestProbabilityProvider(IAllowanceProvider allowanceProvider,
-		                                         IAbsenceTimeProvider absenceTimeProvider)
+		                                         IAbsenceTimeProvider absenceTimeProvider,
+			INow now)
 		{
 			_allowanceProvider = allowanceProvider;
 			_absenceTimeProvider = absenceTimeProvider;
+			_now = now;
 		}
 
 		public List<Tuple<DateOnly, string, string, bool>> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
@@ -86,7 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 						index = percent > 30 && (allowanceMinutesForDay - absenceTimeForDay) >= 2 * fulltimeEquivalentForDay ? 2 : 1;
 				}
 
-				if (dateOnly < DateTime.Today)
+				if (dateOnly < _now.LocalDateOnly())
 					index = 0;
 				ret.Add(new Tuple<DateOnly, string, string, bool>(dateOnly, cssClass[index], texts[index], allowanceDay.Item5));
 			}
