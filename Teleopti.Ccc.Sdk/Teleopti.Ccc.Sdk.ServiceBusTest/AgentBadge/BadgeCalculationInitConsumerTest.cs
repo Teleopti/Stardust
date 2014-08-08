@@ -9,12 +9,12 @@ using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
+using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 {
 	class BadgeCalculationInitConsumerTest
 	{
-		private MockRepository mocks;
 		private IBusinessUnitRepository businessUnitRepository;
 		private IAgentBadgeSettingsRepository badgeSettingRep;
 		private IServiceBus serviceBus;
@@ -22,15 +22,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[SetUp]
 		public void Setup()
 		{
-			mocks = new MockRepository();
-			businessUnitRepository = mocks.DynamicMock<IBusinessUnitRepository>();
-			badgeSettingRep = mocks.DynamicMock<IAgentBadgeSettingsRepository>();
-			serviceBus = mocks.DynamicMock<IServiceBus>();
+			businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
+			badgeSettingRep = MockRepository.GenerateMock<IAgentBadgeSettingsRepository>();
+			serviceBus = MockRepository.GenerateMock<IServiceBus>();
 			target = new BadgeCalculationInitConsumer(serviceBus, badgeSettingRep, businessUnitRepository);
 		}
 
 		[Test]
-		public void IsConsumerCalled()
+		public void ShouldSendCalculateTimeZoneMessage()
 		{
 			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
 			bussinessUnit.SetId(Guid.NewGuid());
@@ -39,14 +38,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			message.Timestamp = DateTime.Now;
 			message.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
 			var timezoneList = new List<TimeZoneInfo>{TimeZoneInfo.Local};
+			
+			badgeSettingRep.Stub(x =>  x.LoadAll()).Return(new List<IAgentBadgeThresholdSettings>{new AgentBadgeThresholdSettings(){EnableBadge = true}});
+			businessUnitRepository.Stub(x => x.LoadAllTimeZones()).Return(timezoneList);
 
-			Expect.Call(badgeSettingRep.LoadAll()).Return(new List<IAgentBadgeThresholdSettings>{new AgentBadgeThresholdSettings(){EnableBadge = true}});
-			Expect.Call(businessUnitRepository.LoadAllTimeZones()).Return(timezoneList);
-
-			mocks.ReplayAll();
 			target.Consume(message);
-			mocks.VerifyAll();
 
+			serviceBus.AssertWasCalled(x => x.Send(new object()),
+				o =>
+					o.Constraints(
+						Rhino.Mocks.Constraints.Is.Matching(
+							new Predicate<object[]>(m => ((CalculateTimeZoneMessage) m[0]).TimeZone == TimeZoneInfo.Local))));
 		}
 	}
 }
