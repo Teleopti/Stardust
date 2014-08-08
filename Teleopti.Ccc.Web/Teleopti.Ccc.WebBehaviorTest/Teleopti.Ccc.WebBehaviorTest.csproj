@@ -105,6 +105,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Anywhere\ManageAgentScheduleInOtherTimeZone.feature.cs">
+      <DependentUpon>ManageAgentScheduleInOtherTimeZone.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Anywhere\ScheduleChangePermissionControl.feature.cs">
       <DependentUpon>ScheduleChangePermissionControl.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -763,6 +768,10 @@
     <Content Include="BeforeTestRun.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Anywhere\ManageAgentScheduleInOtherTimeZone.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ManageAgentScheduleInOtherTimeZone.feature.cs</LastGenOutput>
+    </None>
     <None Include="Anywhere\ScheduleChangePermissionControl.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ScheduleChangePermissionControl.feature.cs</LastGenOutput>
