@@ -47,7 +47,7 @@
 				            Start time
 				            <b class="caret"></b>
 			            </a>
-			            <ul class="dropdown-menu filter-time-dropdown-form" role="menu" data-bind="foreach: filterTimeList">
+			            <ul class="dropdown-menu filter-time-dropdown-form" role="menu" data-bind="foreach: filterStartTimeList">
 				            <li>
 					            <label class="checkbox">
 						            <input type="checkbox" data-bind="checked: isChecked">
@@ -63,10 +63,10 @@
 				            End time
 				            <b class="caret"></b>
 			            </a>
-			            <ul class="dropdown-menu filter-time-dropdown-form" role="menu" data-bind="foreach: filterTimeList">
+			            <ul class="dropdown-menu filter-time-dropdown-form" role="menu" data-bind="foreach: filterEndTimeList">
 				            <li>
 					            <label class="checkbox">
-						            <input type="checkbox" xdata-bind="checked: isChecked">
+						            <input type="checkbox" data-bind="checked: isChecked">
 										<span data-bind="text: text"></span>
 					            </label>
 				            </li>
