@@ -29,27 +29,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						agentsThatShouldGetBadge.Select(agent => allPersons.Single(x => x.Id != null && x.Id.Value == agent))
 							.Where(a => a != null))
 				{
-					person.AddBadge(new Domain.Common.AgentBadge
+					var badge = person.Badges.First(x => x.BadgeType == badgeType);
+					if (badge == null || badge.LastCalculatedDate < date)
 					{
-						BronzeBadge = 1,
-						BadgeType = badgeType,
-						LastCalculatedDate = date
-					});
+						person.AddBadge(new Domain.Common.AgentBadge
+						{
+							BronzeBadge = 1,
+							BadgeType = badgeType,
+							LastCalculatedDate = date
+						});
+						if (badge.BronzeBadge >= silverToBronzeBadgeRate)
+						{
+							badge.SilverBadge = badge.SilverBadge + badge.BronzeBadge / silverToBronzeBadgeRate;
+							badge.BronzeBadge = badge.BronzeBadge % silverToBronzeBadgeRate;
+						}
 
-					var badge = person.Badges.Single(x => x.BadgeType == badgeType);
-					if (badge.BronzeBadge >= silverToBronzeBadgeRate)
-					{
-						badge.SilverBadge = badge.SilverBadge + badge.BronzeBadge/silverToBronzeBadgeRate;
-						badge.BronzeBadge = badge.BronzeBadge%silverToBronzeBadgeRate;
+						if (badge.SilverBadge >= goldToSilverBadgeRate)
+						{
+							badge.GoldBadge = badge.GoldBadge + badge.SilverBadge / goldToSilverBadgeRate;
+							badge.SilverBadge = badge.SilverBadge % goldToSilverBadgeRate;
+						}
+
+						personsThatGotABadge.Add(person);
 					}
-
-					if (badge.SilverBadge >= goldToSilverBadgeRate)
-					{
-						badge.GoldBadge = badge.GoldBadge + badge.SilverBadge/goldToSilverBadgeRate;
-						badge.SilverBadge = badge.SilverBadge%goldToSilverBadgeRate;
-					}
-
-					personsThatGotABadge.Add(person);
 				}
 			}
 
