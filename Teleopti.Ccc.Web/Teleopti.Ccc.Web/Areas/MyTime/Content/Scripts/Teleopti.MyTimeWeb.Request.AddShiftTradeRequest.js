@@ -811,30 +811,41 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self.filterStartTime = ko.computed(function () {
-			var isGoLoad = true;
+			var someoneUnchecked = false;
+			var isNewAdded = false;
+			
 			$.each(self.filterTimeList(), function (idx, timeInFilter) {
 				if (timeInFilter.isChecked()) {
 					var findThis = false;
-					$.each(self.filteredStartTimesText(), function(index, text) {
+					$.each(self.filteredStartTimesText(), function (index, text) {
 						if (timeInFilter.text == text) {
 							findThis = true;
-							isGoLoad = false;
 							return false;
 						}
 					});
-					if (!findThis) self.filteredStartTimesText.push(timeInFilter.text);
 
-					//self.filteredStartTimeArray.push(timeInFilter);
-					//self.filterSchedule();
+					if (!findThis) {
+						self.filteredStartTimesText.push(timeInFilter.text);
+						isNewAdded = true;
+					}
 				} else {
-					//todo: need search if already exist!!!
-					//self.filteredStartTimeArray.remove(timeInFilter);
-					//self.filterSchedule();
+					$.each(self.filteredStartTimesText(), function (index, text) {
+						if (timeInFilter.text == text) {
+							self.filteredStartTimesText.remove(text);
+							someoneUnchecked = true;
+							return false;
+						}
+					});
 				}
 			});
-			if (self.filteredStartTimesText().length != 0 && isGoLoad) {
+			if (self.filteredStartTimesText().length > 0) {
+				if (isNewAdded || someoneUnchecked) {
+					self.prepareLoad();
+					self.loadScheduleForOneTeamFilteredTime();
+				}
+			} else if (self.filteredStartTimesText().length == 0 && someoneUnchecked) {
 				self.prepareLoad();
-				self.loadSchedule(self.selectedTeamInternal());
+				self.loadOneTeamSchedule();
 			}
 		});
 		
