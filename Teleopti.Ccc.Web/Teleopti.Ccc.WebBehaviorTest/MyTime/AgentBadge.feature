@@ -14,10 +14,10 @@ Given There is a agent badge settings with
   | Field        | Value |
   | BadgeEnabled | True  | 
   And I have badges with
-  | Badge type          | Bronze | Silver | Gold |
-  | AnsweredCalls       | 4      | 1      | 2    |
-  | AverageHandlingTime | 2      | 1      | 1    |
-  | Adherence           | 3      | 0      | 0    |
+  | Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
+  | AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
+  | AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
+  | Adherence           | 3      | 0      | 0    | 2014-08-11         |
  When I am viewing week schedule
  Then I should see I have 9 bronze badge, 2 silver badge and 3 gold badge
  When I view badge details
@@ -39,9 +39,9 @@ Given There is a agent badge settings with
   | Field        | Value |
   | BadgeEnabled | False |
   And I have badges with
-  | Badge type          | Bronze | Silver | Gold |
-  | AnsweredCalls       | 4      | 1      | 2    |
-  | AverageHandlingTime | 2      | 1      | 1    |
-  | Adherence           | 3      | 0      | 0    |
+  | Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
+  | AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
+  | AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
+  | Adherence           | 3      | 0      | 0    | 2014-08-11         |
  When I am viewing week schedule
  Then There should display no badge information
