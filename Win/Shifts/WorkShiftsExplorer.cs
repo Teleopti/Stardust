@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			if (!DesignMode)
 			{
 				SetTexts();
-				ColorHelper.SetRibbonQuickAccessTexts(ribbonControlAdv1);
+				ribbonControlAdv1.MenuButtonText = UserTexts.Resources.FileProperCase.ToUpper();
 			}
 			setPermissionOnControls();
 			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
@@ -105,11 +105,11 @@ namespace Teleopti.Ccc.Win.Shifts
 						_clipboardControl.SetButtonState(ClipboardAction.Paste, anythingSelected && getCurrentViewClickStatus());
 						
 					};
-			KeyDown += WorkShiftsExplorer_KeyDown;
-			KeyPress += WorkShiftsExplorer_KeyPress;
+			KeyDown += workShiftsExplorerKeyDown;
+			KeyPress += workShiftsExplorerKeyPress;
 		}
 
-		void WorkShiftsExplorer_KeyDown(object sender, KeyEventArgs e)
+		void workShiftsExplorerKeyDown(object sender, KeyEventArgs e)
 		{
 			if(_navigationView.DefaultTreeView.IsEditing) return;
 			if (e.KeyValue.Equals(32))
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			}
 		}
 
-		void WorkShiftsExplorer_KeyPress(object sender, KeyPressEventArgs e)
+		void workShiftsExplorerKeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (_navigationView.DefaultTreeView.IsEditing) return;
 			if (e.KeyChar.Equals((Char)Keys.Space))
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
 		private void setPermissionOnControls()
 		{
-			//toolStripButtonSystemOptions.Enabled = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+			backStageButton3.Enabled = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 		}
 
 		private void workShiftsExplorerFormClosing(object sender, FormClosingEventArgs e)
@@ -157,8 +157,8 @@ namespace Teleopti.Ccc.Win.Shifts
 			_editControl.NewSpecialItems.Clear();
 			_editControl.Dispose();
 			_editControl = null;
-			KeyDown -= WorkShiftsExplorer_KeyDown;
-			KeyPress -= WorkShiftsExplorer_KeyPress;
+			KeyDown -= workShiftsExplorerKeyDown;
+			KeyPress -= workShiftsExplorerKeyPress;
 		}
 
 		private void splitContainerAdvHorizontalPanel1Resize(object sender, EventArgs e)
@@ -335,6 +335,11 @@ namespace Teleopti.Ccc.Win.Shifts
 
 		private void toolStripButtonSaveClick(object sender, EventArgs e)
 		{
+			save();
+		}
+
+		private void save()
+		{
 			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
 			if (_lastSaveClick.AddSeconds(1) > DateTime.Now) return;
 			if (validateGrid())
@@ -345,11 +350,6 @@ namespace Teleopti.Ccc.Win.Shifts
 				Cursor.Current = Cursors.Default;
 			}
 			_lastSaveClick = DateTime.Now;
-		}
-
-		private void toolStripButtonHelpClick(object sender, EventArgs e)
-		{
-			ViewBase.ShowHelp(this,false);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
@@ -610,6 +610,40 @@ namespace Teleopti.Ccc.Win.Shifts
 		static void ribbonControlBeforeContextMenuOpen(object sender, ContextMenuEventArgs e)
 		{
 			e.Cancel = true;
+		}
+		private void backStageButton1Click(object sender, EventArgs e)
+		{
+			save();
+		}
+
+		private void backStageButton2Click(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		private void backStageButton3Click(object sender, EventArgs e)
+		{
+			try
+			{
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
+				settings.Show();
+			}
+			catch (DataSourceException ex)
+			{
+				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+			}
+		}
+
+		private void backStageButton4Click(object sender, EventArgs e)
+		{
+			if (!CloseAllOtherForms(this)) return;
+
+			Close();
+
+			////this canceled
+			if (Visible)
+				return;
+			Application.Exit();
 		}
 	}
 }

@@ -42,8 +42,9 @@ namespace Teleopti.Ccc.Win.Shifts
 			// 
 			// tabControlShiftCreator
 			// 
-			this.tabControlShiftCreator.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.tabControlShiftCreator.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
 			this.tabControlShiftCreator.AdjustTopGap = 5;
+			this.tabControlShiftCreator.BeforeTouchSize = new System.Drawing.Size(588, 693);
 			this.tabControlShiftCreator.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlShiftCreator.BorderWidth = 0;
 			this.tabControlShiftCreator.Controls.Add(this.tabPageWorkShiftRule);
@@ -53,16 +54,16 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tabControlShiftCreator.HotTrack = true;
 			this.tabControlShiftCreator.ImageList = this.imageList1;
 			this.tabControlShiftCreator.ImageOffset = 3;
+			this.tabControlShiftCreator.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlShiftCreator.LevelTextAndImage = true;
 			this.tabControlShiftCreator.Location = new System.Drawing.Point(0, 0);
 			this.tabControlShiftCreator.Name = "tabControlShiftCreator";
 			this.tabControlShiftCreator.Padding = new System.Drawing.Point(3, 6);
 			this.tabControlShiftCreator.ShowToolTips = true;
-			this.tabControlShiftCreator.Size = new System.Drawing.Size(504, 601);
-			this.tabControlShiftCreator.TabGap = 10;
+			this.tabControlShiftCreator.Size = new System.Drawing.Size(588, 693);
 			this.tabControlShiftCreator.TabIndex = 11;
-			this.tabControlShiftCreator.TabPanelBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(216)))), ((int)(((byte)(237)))));
-			this.tabControlShiftCreator.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererOffice2007);
+			this.tabControlShiftCreator.TabPanelBackColor = System.Drawing.Color.White;
+			this.tabControlShiftCreator.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			this.tabControlShiftCreator.TextLineAlignment = System.Drawing.StringAlignment.Far;
 			this.tabControlShiftCreator.ThemesEnabled = true;
 			this.tabControlShiftCreator.SelectedIndexChanged += new System.EventHandler(this.tabControlShiftCreatorSelectedIndexChanged);
@@ -74,8 +75,9 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tabPageWorkShiftRule.ImageSize = new System.Drawing.Size(16, 16);
 			this.tabPageWorkShiftRule.Location = new System.Drawing.Point(2, 41);
 			this.tabPageWorkShiftRule.Name = "tabPageWorkShiftRule";
-			this.tabPageWorkShiftRule.Padding = new System.Windows.Forms.Padding(5);
-			this.tabPageWorkShiftRule.Size = new System.Drawing.Size(500, 558);
+			this.tabPageWorkShiftRule.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+			this.tabPageWorkShiftRule.ShowCloseButton = true;
+			this.tabPageWorkShiftRule.Size = new System.Drawing.Size(584, 650);
 			this.tabPageWorkShiftRule.TabIndex = 1;
 			this.tabPageWorkShiftRule.Text = "xxRuleSets";
 			this.tabPageWorkShiftRule.ThemesEnabled = true;
@@ -87,8 +89,9 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tabPageRuleSetBag.ImageSize = new System.Drawing.Size(16, 16);
 			this.tabPageRuleSetBag.Location = new System.Drawing.Point(2, 41);
 			this.tabPageRuleSetBag.Name = "tabPageRuleSetBag";
-			this.tabPageRuleSetBag.Padding = new System.Windows.Forms.Padding(5);
-			this.tabPageRuleSetBag.Size = new System.Drawing.Size(500, 558);
+			this.tabPageRuleSetBag.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+			this.tabPageRuleSetBag.ShowCloseButton = true;
+			this.tabPageRuleSetBag.Size = new System.Drawing.Size(584, 650);
 			this.tabPageRuleSetBag.TabIndex = 1;
 			this.tabPageRuleSetBag.Text = "xxBags";
 			this.tabPageRuleSetBag.ThemesEnabled = true;
@@ -109,11 +112,12 @@ namespace Teleopti.Ccc.Win.Shifts
 			// 
 			// NavigationView
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tabControlShiftCreator);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "NavigationView";
-			this.Size = new System.Drawing.Size(504, 601);
+			this.Size = new System.Drawing.Size(588, 693);
 			((System.ComponentModel.ISupportInitialize)(this.tabControlShiftCreator)).EndInit();
 			this.tabControlShiftCreator.ResumeLayout(false);
 			this.ResumeLayout(false);

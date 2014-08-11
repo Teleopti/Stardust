@@ -31,8 +31,16 @@ namespace Teleopti.Ccc.Win.Shifts
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorkShiftsExplorer));
 			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup1 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorkShiftsExplorer));
+			this.backStageView1 = new Syncfusion.Windows.Forms.BackStageView(this.components);
+			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
+			this.backStageButton1 = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageSeparator1 = new Syncfusion.Windows.Forms.BackStageSeparator();
+			this.backStageButton2 = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageSeparator2 = new Syncfusion.Windows.Forms.BackStageSeparator();
+			this.backStageButton3 = new Syncfusion.Windows.Forms.BackStageButton();
+			this.backStageButton4 = new Syncfusion.Windows.Forms.BackStageButton();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.splitContainerAdvVertical = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
 			this.splitContainerAdvHorizontal = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
@@ -55,6 +63,8 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.toolStripButtonDateExclusion = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonWeekdayExclusion = new System.Windows.Forms.ToolStripButton();
 			this.statusStripEx1 = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
+			((System.ComponentModel.ISupportInitialize)(this.backStage1)).BeginInit();
+			this.backStage1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerAdvVertical)).BeginInit();
 			this.splitContainerAdvVertical.Panel2.SuspendLayout();
 			this.splitContainerAdvVertical.SuspendLayout();
@@ -69,6 +79,103 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tcRename.SuspendLayout();
 			this.tcViews.SuspendLayout();
 			this.SuspendLayout();
+			// 
+			// backStageView1
+			// 
+			this.backStageView1.BackStage = this.backStage1;
+			this.backStageView1.HostControl = null;
+			this.backStageView1.HostForm = this;
+			// 
+			// backStage1
+			// 
+			this.backStage1.ActiveTabFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.backStage1.AllowDrop = true;
+			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1203, 691);
+			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.backStage1.Controls.Add(this.backStageButton1);
+			this.backStage1.Controls.Add(this.backStageSeparator1);
+			this.backStage1.Controls.Add(this.backStageButton2);
+			this.backStage1.Controls.Add(this.backStageSeparator2);
+			this.backStage1.Controls.Add(this.backStageButton3);
+			this.backStage1.Controls.Add(this.backStageButton4);
+			this.backStage1.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+			this.backStage1.ItemSize = new System.Drawing.Size(138, 40);
+			this.backStage1.Location = new System.Drawing.Point(0, 0);
+			this.backStage1.Name = "backStage1";
+			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
+			this.backStage1.Size = new System.Drawing.Size(1203, 691);
+			this.backStage1.TabIndex = 6;
+			this.backStage1.Visible = false;
+			// 
+			// backStageButton1
+			// 
+			this.backStageButton1.Accelerator = "";
+			this.backStageButton1.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButton1.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButton1.IsBackStageButton = false;
+			this.backStageButton1.Location = new System.Drawing.Point(0, 16);
+			this.backStageButton1.Name = "backStageButton1";
+			this.backStageButton1.Size = new System.Drawing.Size(110, 25);
+			this.backStageButton1.TabIndex = 3;
+			this.backStageButton1.Text = "xxSave";
+			this.backStageButton1.Click += new System.EventHandler(this.backStageButton1Click);
+			// 
+			// backStageSeparator1
+			// 
+			this.backStageSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(189)))), ((int)(((byte)(255)))));
+			this.backStageSeparator1.Location = new System.Drawing.Point(15, 47);
+			this.backStageSeparator1.Name = "backStageSeparator1";
+			this.backStageSeparator1.Size = new System.Drawing.Size(100, 1);
+			this.backStageSeparator1.TabIndex = 4;
+			this.backStageSeparator1.Text = "backStageSeparator1";
+			// 
+			// backStageButton2
+			// 
+			this.backStageButton2.Accelerator = "";
+			this.backStageButton2.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButton2.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButton2.IsBackStageButton = false;
+			this.backStageButton2.Location = new System.Drawing.Point(0, 53);
+			this.backStageButton2.Name = "backStageButton2";
+			this.backStageButton2.Size = new System.Drawing.Size(110, 25);
+			this.backStageButton2.TabIndex = 5;
+			this.backStageButton2.Text = "xxClose";
+			this.backStageButton2.Click += new System.EventHandler(this.backStageButton2Click);
+			// 
+			// backStageSeparator2
+			// 
+			this.backStageSeparator2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(189)))), ((int)(((byte)(255)))));
+			this.backStageSeparator2.Location = new System.Drawing.Point(15, 84);
+			this.backStageSeparator2.Name = "backStageSeparator2";
+			this.backStageSeparator2.Size = new System.Drawing.Size(100, 1);
+			this.backStageSeparator2.TabIndex = 6;
+			this.backStageSeparator2.Text = "backStageSeparator2";
+			// 
+			// backStageButton3
+			// 
+			this.backStageButton3.Accelerator = "";
+			this.backStageButton3.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButton3.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButton3.IsBackStageButton = false;
+			this.backStageButton3.Location = new System.Drawing.Point(0, 90);
+			this.backStageButton3.Name = "backStageButton3";
+			this.backStageButton3.Size = new System.Drawing.Size(110, 25);
+			this.backStageButton3.TabIndex = 7;
+			this.backStageButton3.Text = "xxOptions";
+			this.backStageButton3.Click += new System.EventHandler(this.backStageButton3Click);
+			// 
+			// backStageButton4
+			// 
+			this.backStageButton4.Accelerator = "";
+			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButton4.IsBackStageButton = false;
+			this.backStageButton4.Location = new System.Drawing.Point(0, 115);
+			this.backStageButton4.Name = "backStageButton4";
+			this.backStageButton4.Size = new System.Drawing.Size(110, 25);
+			this.backStageButton4.TabIndex = 8;
+			this.backStageButton4.Text = "xxExitTELEOPTICCC";
+			this.backStageButton4.Click += new System.EventHandler(this.backStageButton4Click);
 			// 
 			// imageList1
 			// 
@@ -87,7 +194,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			// 
 			// splitContainerAdvVertical.Panel1
 			// 
-			this.splitContainerAdvVertical.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.White);
+			this.splitContainerAdvVertical.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			// 
 			// splitContainerAdvVertical.Panel2
 			// 
@@ -112,13 +219,13 @@ namespace Teleopti.Ccc.Win.Shifts
 			// 
 			// splitContainerAdvHorizontal.Panel1
 			// 
-			this.splitContainerAdvHorizontal.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.White);
+			this.splitContainerAdvHorizontal.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainerAdvHorizontal.Panel1.Resize += new System.EventHandler(this.splitContainerAdvHorizontalPanel1Resize);
 			// 
 			// splitContainerAdvHorizontal.Panel2
 			// 
 			this.splitContainerAdvHorizontal.Panel2.AutoScroll = true;
-			this.splitContainerAdvHorizontal.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.White);
+			this.splitContainerAdvHorizontal.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainerAdvHorizontal.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
 			this.splitContainerAdvHorizontal.Size = new System.Drawing.Size(920, 575);
 			this.splitContainerAdvHorizontal.SplitterDistance = 289;
@@ -131,6 +238,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			// 
 			this.ribbonControlAdv1.AllowCollapse = false;
 			this.ribbonControlAdv1.AutoSize = true;
+			this.ribbonControlAdv1.BackStageView = this.backStageView1;
 			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.Header.AddMainItem(toolStripTabHome);
 			this.ribbonControlAdv1.HideMenuButtonToolTip = false;
@@ -158,6 +266,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.ribbonControlAdv1.OfficeMenu.SystemPanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.OverFlowButtonToolTip = "Show DropDown";
 			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.ribbonControlAdv1.QuickPanelVisible = false;
 			this.ribbonControlAdv1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.ribbonControlAdv1.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
 			this.ribbonControlAdv1.SelectedTab = this.toolStripTabHome;
@@ -211,13 +320,13 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.toolStripExFile.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExFile.Image = null;
 			this.toolStripExFile.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonSave});
+			this.toolStripButtonSave});
 			this.toolStripExFile.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.toolStripExFile.Location = new System.Drawing.Point(0, 1);
 			this.toolStripExFile.Name = "toolStripExFile";
 			this.toolStripExFile.Office12Mode = false;
 			this.toolStripExFile.ShowLauncher = false;
-			this.toolStripExFile.Size = new System.Drawing.Size(60, 83);
+			this.toolStripExFile.Size = new System.Drawing.Size(91, 83);
 			this.toolStripExFile.TabIndex = 8;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExFile, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripExFile, false);
@@ -238,6 +347,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.toolStripButtonSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonSave, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonSave, false);
+			this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSaveClick);
 			// 
 			// toolStripRefresh
 			// 
@@ -247,8 +357,8 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.toolStripRefresh.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripRefresh.Image = null;
 			this.toolStripRefresh.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonRefresh});
-			this.toolStripRefresh.Location = new System.Drawing.Point(62, 1);
+			this.toolStripButtonRefresh});
+			this.toolStripRefresh.Location = new System.Drawing.Point(93, 1);
 			this.toolStripRefresh.Name = "toolStripRefresh";
 			this.toolStripRefresh.Office12Mode = false;
 			this.toolStripRefresh.ShowCaption = true;
@@ -285,7 +395,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tsClipboard.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.tsClipboard.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.tsClipboard.Image = null;
-			this.tsClipboard.Location = new System.Drawing.Point(139, 1);
+			this.tsClipboard.Location = new System.Drawing.Point(170, 1);
 			this.tsClipboard.Name = "tsClipboard";
 			this.tsClipboard.Office12Mode = false;
 			this.tsClipboard.ShowLauncher = false;
@@ -303,7 +413,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tcEdit.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.tcEdit.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.tcEdit.Image = null;
-			this.tcEdit.Location = new System.Drawing.Point(247, 1);
+			this.tcEdit.Location = new System.Drawing.Point(278, 1);
 			this.tcEdit.Name = "tcEdit";
 			this.tcEdit.Office12Mode = false;
 			this.tcEdit.ShowLauncher = false;
@@ -322,9 +432,9 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tcShiftBags.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.tcShiftBags.Image = null;
 			this.tcShiftBags.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonAddRuleSet});
+			this.toolStripButtonAddRuleSet});
 			this.tcShiftBags.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-			this.tcShiftBags.Location = new System.Drawing.Point(355, 1);
+			this.tcShiftBags.Location = new System.Drawing.Point(386, 1);
 			this.tcShiftBags.Name = "tcShiftBags";
 			this.tcShiftBags.Office12Mode = false;
 			this.tcShiftBags.Padding = new System.Windows.Forms.Padding(0);
@@ -359,8 +469,8 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tcRename.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.tcRename.Image = null;
 			this.tcRename.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonRename});
-			this.tcRename.Location = new System.Drawing.Point(471, 1);
+			this.toolStripButtonRename});
+			this.tcRename.Location = new System.Drawing.Point(502, 1);
 			this.tcRename.Name = "tcRename";
 			this.tcRename.Office12Mode = false;
 			this.tcRename.Padding = new System.Windows.Forms.Padding(0);
@@ -396,13 +506,13 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tcViews.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.tcViews.Image = null;
 			this.tcViews.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonGeneral,
-            this.toolStripButtonCombined,
-            this.toolStripButtonLimitations,
-            this.toolStripButtonDateExclusion,
-            this.toolStripButtonWeekdayExclusion});
+			this.toolStripButtonGeneral,
+			this.toolStripButtonCombined,
+			this.toolStripButtonLimitations,
+			this.toolStripButtonDateExclusion,
+			this.toolStripButtonWeekdayExclusion});
 			this.tcViews.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-			this.tcViews.Location = new System.Drawing.Point(543, 1);
+			this.tcViews.Location = new System.Drawing.Point(574, 1);
 			this.tcViews.Name = "tcViews";
 			this.tcViews.Office12Mode = false;
 			this.tcViews.ShowLauncher = false;
@@ -510,6 +620,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.Borders = new System.Windows.Forms.Padding(0);
 			this.ClientSize = new System.Drawing.Size(1206, 743);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
+			this.Controls.Add(this.backStage1);
 			this.Controls.Add(this.splitContainerAdvVertical);
 			this.Controls.Add(this.ribbonControlAdv1);
 			this.Controls.Add(this.statusStripEx1);
@@ -522,6 +633,8 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.workShiftsExplorerFormClosing);
 			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.shiftCreatorKeyUp);
+			((System.ComponentModel.ISupportInitialize)(this.backStage1)).EndInit();
+			this.backStage1.ResumeLayout(false);
 			this.splitContainerAdvVertical.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerAdvVertical)).EndInit();
 			this.splitContainerAdvVertical.ResumeLayout(false);
@@ -549,6 +662,14 @@ namespace Teleopti.Ccc.Win.Shifts
 
 		#endregion
 
+		private Syncfusion.Windows.Forms.BackStageView backStageView1;
+		private Syncfusion.Windows.Forms.BackStage backStage1;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButton1;
+		private Syncfusion.Windows.Forms.BackStageSeparator backStageSeparator1;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButton2;
+		private Syncfusion.Windows.Forms.BackStageSeparator backStageSeparator2;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButton3;
+		private Syncfusion.Windows.Forms.BackStageButton backStageButton4;
 		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
 		private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdvVertical;
 		private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdvHorizontal;
