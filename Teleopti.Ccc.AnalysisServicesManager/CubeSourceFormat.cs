@@ -61,6 +61,10 @@ namespace AnalysisServicesManager
 					{
 					return "Provider=SQLNCLI11.1;" + connString;
 					}
+                case 12:
+                    {
+                        return "Provider=SQLNCLI11.1;" + connString;
+                    }
             }
             throw new ArgumentOutOfRangeException("Unknown sql version: " + version);
         }
