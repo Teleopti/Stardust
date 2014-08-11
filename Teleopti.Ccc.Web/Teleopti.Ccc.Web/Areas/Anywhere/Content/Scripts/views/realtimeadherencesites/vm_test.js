@@ -110,6 +110,15 @@ define([
 				vm.fill([{ Id: 'guid1' }]);
 
 				assert.isFalse(vm.sites()[0].hasBeenUpdated());
+			},
+
+			"should fill business units": function() {
+				var vm = viewModel();
+				vm.fillBusinessUnits([{ Id: 'guid1', Name: 'bu1' }]);
+
+				assert.equals(vm.businessUnits().length, 1);
+				assert.equals(vm.businessUnits()[0].Id, 'guid1');
+				assert.equals(vm.businessUnits()[0].Name, 'bu1');
 			}
 
 		});

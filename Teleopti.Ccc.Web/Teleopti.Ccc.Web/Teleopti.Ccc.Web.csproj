@@ -846,6 +846,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\business_unit.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\team_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\window.js" />

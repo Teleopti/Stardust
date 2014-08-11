@@ -1,24 +1,33 @@
 ﻿<div class="container realtimeadherencesites">
+	
 	<!-- ko if: agentStatesForMultipleSites()-->
 	<div align="right">
 		<button class="btn-xs open" data-bind="click: openSelectedSites">Open selected sites</button>
 	</div>
-	<br />
+
 	<!-- /ko -->
-	<div class="row" data-bind="foreach: sites">
-		<div data-bind="if: NumberOfAgents > 0"> 
-			<div class="col-md-4">
-				<div class="well well-sm site" >
-					<!-- ko if: $root.agentStatesForMultipleSites()-->
-					<input class="checkbox" type="checkbox" data-bind="checked: $root.sitesToOpen, attr:{value: Id, name : Name}" />
-					<!-- /ko -->
-					<div data-bind="click: openSite">
-						<!-- ko if: !hasBeenUpdated() -->
-						<div class="overlay">
-							<h1 data-bind="text: $root.resources.WaitingThreeDots"></h1>
-						</div>
+	<br />
+	<div class="row">
+		<div class="col-xs-12 col-md-4">
+			<select id="bu-picker" class="col-xs-12" data-bind="foreach: businessUnits">
+					<option data-bind="text: Name, value: Id"></option>
+			</select>
+		</div>
+	</div>
+		<div class="row" data-bind="foreach: sites">
+			<div data-bind="if: NumberOfAgents > 0">
+				<div class="col-md-4">
+					<div class="well well-sm site">
+						<!-- ko if: $root.agentStatesForMultipleSites()-->
+						<input class="checkbox" type="checkbox" data-bind="checked: $root.sitesToOpen, attr:{value: Id, name : Name}" />
 						<!-- /ko -->
-						<div class="gage" data-bind="
+						<div data-bind="click: openSite">
+							<!-- ko if: !hasBeenUpdated() -->
+							<div class="overlay">
+								<h1 data-bind="text: $root.resources.WaitingThreeDots"></h1>
+							</div>
+							<!-- /ko -->
+							<div class="gage" data-bind="
 							justgage: {
 								value: OutOfAdherence,
 								max: NumberOfAgents,
@@ -31,9 +40,9 @@
 								'data-max': NumberOfAgents
 							}
 							"></div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>

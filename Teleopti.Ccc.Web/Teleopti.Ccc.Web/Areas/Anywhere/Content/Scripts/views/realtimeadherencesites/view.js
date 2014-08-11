@@ -47,6 +47,7 @@
 					viewModel.fill(data);
 					checkFeature();
 					checkAgentsForMultipleTeamsFeature();
+					checkBusinessUnitsFeature();
 				}
 			});
 
@@ -69,6 +70,17 @@
 
 			var checkAgentsForMultipleTeamsFeature = function () {
 				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', { enabled: function () { viewModel.agentStatesForMultipleSites(true); } });
+			}
+			
+			var checkBusinessUnitsFeature = function () {
+				toggleQuerier('RTA_MonitorMultipleBusinessUnits_28348', { enabled: function() {
+					ajax.ajax({
+						url: "BusinessUnit",
+						success: function (data) {
+							viewModel.fillBusinessUnits(data);
+						}
+					});
+				} });
 			}
 
 			subscriptions.subscribeAdherence(function (notification) {
