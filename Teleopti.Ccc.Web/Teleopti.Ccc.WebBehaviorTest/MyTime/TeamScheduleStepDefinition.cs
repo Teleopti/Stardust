@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see my schedule")]
 		public void ThenIShouldSeeMySchedule()
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer",
 				DataMaker.Data().MePerson.Name));
 		}
 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see my colleague's schedule")]
 		public void ThenIShouldSeeMyColleagueSSchedule()
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer",
 				DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name));
 		}
 
