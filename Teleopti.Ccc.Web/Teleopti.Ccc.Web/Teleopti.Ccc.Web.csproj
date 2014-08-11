@@ -400,6 +400,7 @@
     <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityProviderAuthenticationType.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerController.cs" />
     <Compile Include="Core\AllowTokenPostRequestValidator.cs" />
+    <Compile Include="Core\Aop\Aspects\MultipleBusinessUnitsAspect.cs" />
     <Compile Include="Core\IdentityProviderProvider.cs" />
     <Compile Include="Core\IIdentityProviderProvider.cs" />
     <Compile Include="Core\IResourceVersion.cs" />
@@ -644,6 +645,7 @@
     <Compile Include="Filters\HttpRequestBaseExtensions.cs" />
     <Compile Include="Filters\IAuthenticationModule.cs" />
     <Compile Include="Filters\ISessionAuthenticationModule.cs" />
+    <Compile Include="Core\Aop\Aspects\MultipleBusinessUnitsAttribute.cs" />
     <Compile Include="Filters\SessionAuthenticationModule.cs" />
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />
