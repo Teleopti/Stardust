@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 	    public WorkloadDayTemplatesDetailView()
         {
             InitializeComponent();
-            SetColors();
             fillSmoothningBoxes();
             if(!DesignMode) 
                 SetTexts();
@@ -115,18 +114,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 	        cmbAverageTimeRunningSmoothning.SelectedIndex = 0;
 	        cmbAverageAfterCallWorkRunningSmoothning.SelectedIndex = 0;
 	    }
-
-	    private void SetColors()
-        {
-            BrushInfo myBrush = ColorHelper.ControlGradientPanelBrush();
-            gradientPanel2.BackgroundColor = new BrushInfo( GradientStyle.None, ColorHelper.XPTaskbarBackgroundColor(), ColorHelper.XPTaskbarBackgroundColor());
-            gradientPanel3.BackgroundColor = myBrush;
-            gradientPanel5.BackgroundColor = myBrush;
-            xpBoxPeriodSelection.BackColor = ColorHelper.XPTaskbarBackgroundColor();
-            xpBoxPeriodSelection.ThemesEnabled = false;
-            xpSmothing.HeaderBackColor = ColorHelper.XPTaskbarHeaderColor();
-            xpSelectperiod.HeaderBackColor = ColorHelper.XPTaskbarHeaderColor();
-        }
 
 	    public int TemplateIndex
 	    {
