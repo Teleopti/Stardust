@@ -27,7 +27,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						agentsThatShouldGetBadge.Select(agent => allPersons.Single(x => x.Id != null && x.Id.Value == agent))
 							.Where(a => a != null))
 				{
-					var badge = person.Badges.First(x => x.BadgeType == badgeType);
+					IAgentBadge badge;
+					if (!person.Badges.Any(x => x.BadgeType == badgeType))
+					{
+						badge = null;
+					}
+					else
+					{
+						badge = person.Badges.First(x => x.BadgeType == badgeType);
+					}
+
 					if (badge == null || badge.LastCalculatedDate < date)
 					{
 						person.AddBadge(new Domain.Common.AgentBadge

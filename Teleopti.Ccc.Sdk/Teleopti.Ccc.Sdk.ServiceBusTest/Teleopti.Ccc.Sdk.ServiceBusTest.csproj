@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbsenceRequestResolveTest.cs" />
+    <Compile Include="AgentBadge\AgentBadgeCalculatorTest.cs" />
     <Compile Include="AgentBadge\BadgeCalculationInitConsumerTest.cs" />
     <Compile Include="AgentBadge\CalculateBadgeConsumerTest.cs" />
     <Compile Include="AgentBadge\CalculateTimeZoneConsumerTest.cs" />
