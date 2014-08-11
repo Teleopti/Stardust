@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         public ForecastWorkflow(IWorkload workload)
             : this()
         {
-            SetColor();
             SetTexts();
 
             _presenter = new ForecastWorkflowPresenter(this, new ForecastWorkflowModel(workload, new ForecastWorkflowDataService(UnitOfWorkFactory.Current)));
@@ -101,12 +100,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             return false;
         }
 
-        private void SetColor()
-        {
-            tabControlAdv1.SelectedTab.TabForeColor = ColorHelper.TabBackColor();
-            var panelbrush = ColorHelper.ControlGradientPanelBrush();
-            gradientPanel1.BackgroundColor = panelbrush;
-        }
 
         #region Navigation
 

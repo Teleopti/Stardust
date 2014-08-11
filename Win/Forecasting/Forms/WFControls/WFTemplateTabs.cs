@@ -24,12 +24,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             _detailViews = new List<WorkloadDayTemplatesDetailView>();
         }
 
-        protected override void SetColors()
-        {
-            tabControlAdv1.SelectedTab.TabForeColor = ColorHelper.TabForegroundColor();
-            tabControlAdv1.TabPanelBackColor = ColorHelper.TabBackColor();
-        }
-
         public bool GoToNextTab(Control forwardButton)
         {
             int i = tabControlAdv1.SelectedIndex;//old index

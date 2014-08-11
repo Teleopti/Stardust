@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SetCulture(CultureInfo cultureInfo)
         {
-			  //dateTimePickerAdvWorkAStartDate.SetCultureInfoSafe(cultureInfo);
-			  //dateTimePickerAdvWorkEndPeriod.SetCultureInfoSafe(cultureInfo);
+			  dateTimePickerAdvWorkAStartDate.SetCultureInfoSafe(cultureInfo);
+			  dateTimePickerAdvWorkEndPeriod.SetCultureInfoSafe(cultureInfo);
         }
 
         public bool HideNoneButtons

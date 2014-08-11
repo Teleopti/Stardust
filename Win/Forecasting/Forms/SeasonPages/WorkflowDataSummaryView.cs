@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             _owner = owner;
             DecideTaskName();
             
-            SetColors();     
             _chartControl = new ChartControl();
             splitContainerAdv1.Panel1.Controls.Add(_chartControl);
             _chartControl.Dock = DockStyle.Fill;
@@ -57,18 +56,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             reloadSeasonData();
         }
         
-        private void SetColors()
-        {
-            BrushInfo brushInfo = ColorHelper.ControlGradientPanelBrush();
-            //gradientPanel1.BackgroundColor = brushInfo;
-            gradientPanel2.BackgroundColor = brushInfo;
-            splitContainerAdv1.Panel1.BackgroundColor = brushInfo;
-            splitContainerAdv1.Panel2.BackgroundColor = brushInfo;
-            xpTaskBar1.BackColor = ColorHelper.XPTaskbarBackgroundColor();
-            xpTaskBar1.ThemesEnabled = false;
-            xpTaskBarBoxHistoricalDepth.HeaderBackColor = ColorHelper.XPTaskbarHeaderColor();
-            //xpTaskBarBox2.HeaderBackColor = GuiHelper.XpTaskBarHeaderColor();
-        }
 
         #region chart methods
         private void setChartRequirements()
