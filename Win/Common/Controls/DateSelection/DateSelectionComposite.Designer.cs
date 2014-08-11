@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
         /// </summary>
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.btnApply = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.periodListSelectionBox1 = new Teleopti.Ccc.Win.Common.Controls.PeriodListSelectionBox();
@@ -59,7 +60,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// btnApply
 			// 
 			this.btnApply.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.btnApply.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.btnApply.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.btnApply.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.btnApply.BeforeTouchSize = new System.Drawing.Size(141, 22);
+			this.btnApply.ForeColor = System.Drawing.Color.White;
+			this.btnApply.IsBackStageButton = false;
 			this.btnApply.Location = new System.Drawing.Point(13, 333);
 			this.btnApply.Name = "btnApply";
 			this.btnApply.Size = new System.Drawing.Size(141, 22);
@@ -82,23 +87,26 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// 
 			this.dateSelectionControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(211)))), ((int)(((byte)(232)))));
 			this.dateSelectionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dateSelectionControl1.Location = new System.Drawing.Point(3, 3);
+			this.dateSelectionControl1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.dateSelectionControl1.Location = new System.Drawing.Point(0, 0);
+			this.dateSelectionControl1.Margin = new System.Windows.Forms.Padding(0);
 			this.dateSelectionControl1.Name = "dateSelectionControl1";
 			this.dateSelectionControl1.ShowAddButtons = true;
 			this.dateSelectionControl1.ShowTabArea = true;
-			this.dateSelectionControl1.Size = new System.Drawing.Size(162, 200);
+			this.dateSelectionControl1.Size = new System.Drawing.Size(168, 206);
 			this.dateSelectionControl1.TabIndex = 9;
-			this.dateSelectionControl1.TabPanelBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(216)))), ((int)(((byte)(237)))));
-			this.dateSelectionControl1.TabPanelBorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			//this.dateSelectionControl1.TabPanelBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(216)))), ((int)(((byte)(237)))));
+			//this.dateSelectionControl1.TabPanelBorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.dateSelectionControl1.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionControl1_DateRangeChanged);
-            this.dateSelectionControl1.AllowValueChangedEvent(false);
-            // 
+			// 
 			// DateSelectionComposite
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
+			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "DateSelectionComposite";
 			this.Size = new System.Drawing.Size(168, 359);
 			this.tableLayoutPanel1.ResumeLayout(false);

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
+			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "Description",
             "Log Object 1"}, -1);
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -119,9 +119,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.tableLayoutPanel2.SetColumnSpan(this.listViewQueues, 2);
 			this.listViewQueues.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewQueues.FullRowSelect = true;
-			listViewItem2.StateImageIndex = 0;
+			listViewItem1.StateImageIndex = 0;
 			this.listViewQueues.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2});
+            listViewItem1});
 			this.listViewQueues.Location = new System.Drawing.Point(5, 30);
 			this.listViewQueues.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
 			this.listViewQueues.Name = "listViewQueues";

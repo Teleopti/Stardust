@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// 
 			// 
 			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.IsBackStageButton = false;
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// 
 			// 
 			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.IsBackStageButton = false;
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.dateTimePickerAdvWorkAStartDate.DropDownImage = null;
 			this.dateTimePickerAdvWorkAStartDate.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvWorkAStartDate.DropDownPressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.dateTimePickerAdvWorkAStartDate.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(191)))), ((int)(((byte)(237)))));
+			this.dateTimePickerAdvWorkAStartDate.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(179)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvWorkAStartDate.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvWorkAStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
 			this.dateTimePickerAdvWorkAStartDate.Location = new System.Drawing.Point(3, 28);
@@ -237,6 +237,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// 
 			// tableLayoutPanel1
 			// 
+			this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.labelTargetPeriod, 0, 0);

@@ -43,8 +43,8 @@
             this.dateSelectionControlPeriod.ShowTabArea = true;
             this.dateSelectionControlPeriod.Size = new System.Drawing.Size(280, 180);
             this.dateSelectionControlPeriod.TabIndex = 0;
-            this.dateSelectionControlPeriod.TabPanelBackColor = System.Drawing.Color.WhiteSmoke;
-            this.dateSelectionControlPeriod.TabPanelBorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+				//this.dateSelectionControlPeriod.TabPanelBackColor = System.Drawing.Color.WhiteSmoke;
+				//this.dateSelectionControlPeriod.TabPanelBorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             // 
             // DateTimePeriodSelection
             // 

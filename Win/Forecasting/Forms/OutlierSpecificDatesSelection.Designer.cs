@@ -107,8 +107,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.dateSelectionControl1.ShowTabArea = true;
             this.dateSelectionControl1.Size = new System.Drawing.Size(210, 225);
             this.dateSelectionControl1.TabIndex = 4;
-            this.dateSelectionControl1.TabPanelBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(216)))), ((int)(((byte)(237)))));
-            this.dateSelectionControl1.TabPanelBorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+				//this.dateSelectionControl1.TabPanelBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(199)))), ((int)(((byte)(216)))), ((int)(((byte)(237)))));
+				//this.dateSelectionControl1.TabPanelBorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             // 
             // OutlierSpecificDatesSelection
             // 
