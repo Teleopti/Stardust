@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    public partial class MeetingPicker : BaseRibbonForm
+    public partial class MeetingPicker : BaseDialogForm
     {
         private bool _cancel = true;
 
@@ -31,13 +31,13 @@ namespace Teleopti.Ccc.Win.Scheduling
             comboBoxMeetings.SelectedIndex = 0;
         }
 
-        private void buttonOk_Click(object sender, EventArgs e)
+        private void buttonOkClick(object sender, EventArgs e)
         {
             _cancel = false;
             Hide();
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void buttonCancelClick(object sender, EventArgs e)
         {
             _cancel = true;
             Hide();

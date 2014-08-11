@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.buttonOk.TabIndex = 4;
 			this.buttonOk.Text = "xxOk";
 			this.buttonOk.UseVisualStyle = true;
-			this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
+			this.buttonOk.Click += new System.EventHandler(this.buttonOkClick);
 			// 
 			// buttonCancel
 			// 
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.buttonCancel.TabIndex = 5;
 			this.buttonCancel.Text = "xxCancel";
 			this.buttonCancel.UseVisualStyle = true;
-			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+			this.buttonCancel.Click += new System.EventHandler(this.buttonCancelClick);
 			// 
 			// panel1
 			// 
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
 			this.tableLayoutPanel5.RowCount = 1;
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 58F));
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
 			this.tableLayoutPanel5.Size = new System.Drawing.Size(381, 62);
 			this.tableLayoutPanel5.TabIndex = 1;
 			// 
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.Calendar.AllowMultipleSelection = false;
 			this.datePicker.Calendar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.datePicker.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.datePicker.Calendar.BottomHeight = 29;
+			this.datePicker.Calendar.BottomHeight = 25;
 			this.datePicker.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.datePicker.Calendar.DayNamesColor = System.Drawing.Color.Empty;
 			this.datePicker.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
@@ -212,7 +212,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.datePicker.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
 			this.datePicker.Calendar.HeaderEndColor = System.Drawing.Color.White;
-			this.datePicker.Calendar.HeaderHeight = 37;
 			this.datePicker.Calendar.HeaderStartColor = System.Drawing.Color.White;
 			this.datePicker.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
 			this.datePicker.Calendar.HighlightColor = System.Drawing.Color.White;
@@ -221,9 +220,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.Calendar.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.datePicker.Calendar.MinValue = new System.DateTime(1990, 12, 31, 0, 0, 0, 0);
 			this.datePicker.Calendar.Name = "monthCalendar";
-			this.datePicker.Calendar.ScrollButtonSize = new System.Drawing.Size(28, 28);
+			this.datePicker.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.datePicker.Calendar.SelectedDates = new System.DateTime[0];
-			this.datePicker.Calendar.Size = new System.Drawing.Size(280, 174);
+			this.datePicker.Calendar.Size = new System.Drawing.Size(292, 174);
 			this.datePicker.Calendar.SizeToFit = true;
 			this.datePicker.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.datePicker.Calendar.TabIndex = 0;
@@ -238,8 +237,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.datePicker.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.datePicker.Calendar.NoneButton.IsBackStageButton = false;
-			this.datePicker.Calendar.NoneButton.Location = new System.Drawing.Point(196, 0);
-			this.datePicker.Calendar.NoneButton.Size = new System.Drawing.Size(84, 29);
+			this.datePicker.Calendar.NoneButton.Location = new System.Drawing.Point(208, 0);
+			this.datePicker.Calendar.NoneButton.Size = new System.Drawing.Size(84, 25);
 			this.datePicker.Calendar.NoneButton.Text = "None";
 			this.datePicker.Calendar.NoneButton.UseVisualStyle = true;
 			// 
@@ -251,7 +250,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.datePicker.Calendar.TodayButton.IsBackStageButton = false;
 			this.datePicker.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.datePicker.Calendar.TodayButton.Size = new System.Drawing.Size(196, 29);
+			this.datePicker.Calendar.TodayButton.Size = new System.Drawing.Size(208, 25);
 			this.datePicker.Calendar.TodayButton.Text = "Today";
 			this.datePicker.Calendar.TodayButton.UseVisualStyle = true;
 			this.datePicker.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -262,14 +261,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.datePicker.DropDownPressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.datePicker.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(179)))), ((int)(((byte)(255)))));
+			this.datePicker.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.datePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.datePicker.Location = new System.Drawing.Point(84, 21);
+			this.datePicker.Location = new System.Drawing.Point(84, 20);
 			this.datePicker.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.datePicker.MinValue = new System.DateTime(1990, 12, 31, 23, 59, 0, 0);
 			this.datePicker.Name = "datePicker";
 			this.datePicker.NoneButtonVisible = false;
 			this.datePicker.ShowCheckBox = false;
-			this.datePicker.Size = new System.Drawing.Size(294, 20);
+			this.datePicker.Size = new System.Drawing.Size(294, 21);
 			this.datePicker.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.datePicker.TabIndex = 8;
 			this.datePicker.ThemedChildControls = true;
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tableLayoutPanel4.ColumnCount = 3;
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 79F));
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 112F));
-			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 190F));
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
 			this.tableLayoutPanel4.Controls.Add(this.checkBoxAdvNextDay, 2, 1);
 			this.tableLayoutPanel4.Controls.Add(this.outlookTimePickerTo, 1, 1);
@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.outlookTimePickerTo.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.outlookTimePickerTo.TabIndex = 2;
 			this.outlookTimePickerTo.Text = "00:00";
-			this.outlookTimePickerTo.TextChanged += new System.EventHandler(this.outlookTimePickerTo_TextChanged);
+			this.outlookTimePickerTo.TextChanged += new System.EventHandler(this.outlookTimePickerToTextChanged);
 			// 
 			// labelTo
 			// 
@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.outlookTimePickerFrom.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.outlookTimePickerFrom.TabIndex = 1;
 			this.outlookTimePickerFrom.Text = "00:00";
-			this.outlookTimePickerFrom.TextChanged += new System.EventHandler(this.outlookTimePickerFrom_TextChanged);
+			this.outlookTimePickerFrom.TextChanged += new System.EventHandler(this.outlookTimePickerFromTextChanged);
 			// 
 			// labelFrom
 			// 
@@ -381,7 +381,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.CancelButton = this.buttonCancel;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
 			this.ClientSize = new System.Drawing.Size(381, 298);
-			this.ControlBox = false;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -393,7 +392,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "xxFilterHourlyAvailability";
-			this.Load += new System.EventHandler(this.FilterOvertimeAvailabilityView_Load);
+			this.Load += new System.EventHandler(this.filterOvertimeAvailabilityViewLoad);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
