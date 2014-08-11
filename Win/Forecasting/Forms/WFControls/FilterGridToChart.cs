@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
     		                                      GridControl.RowHeights.GetTotal(0, GridControl.RowCount) - 48;
 
     		splitContainerAdv1.Panel2.Controls.Add(GridControl);
-    		SetColors();
     		GridControl.Model.MergeCells.EvaluateMergeCells(GridRangeInfo.Table());
     	}
 
@@ -272,16 +271,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             chartControl1.RealMode3D = false;
             chartControl1.Tilt = 0;
             chartControl1.Legend.VisibleCheckBox = false;
-        }
-
-        private void SetColors()
-        {
-            BrushInfo myBrush = ColorHelper.ControlGradientPanelBrush();
-            GridControl.Properties.BackgroundColor = ColorHelper.GridControlGridExteriorColor();
-            GridControl.BackColor = ColorHelper.GridControlGridInteriorColor();
-            splitContainerAdv1.BackgroundColor = myBrush;
-            splitContainerAdv1.Panel1.BackgroundColor = myBrush;
-            splitContainerAdv1.Panel2.BackgroundColor = myBrush;
         }
 
         private void GridToChart_SizeChanged(object sender, EventArgs e)

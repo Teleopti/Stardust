@@ -34,8 +34,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             : this()
         {
             _owner = owner;
-
-            SetColors();
             _volumeYear = volumeYear;
 
             _seasonVolumeGridControl = new SeasonVolumeGridControl(volumeYear, this);
@@ -75,18 +73,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             reloadSeasonData();
         }
 
-        private void SetColors()
-        {
-            BrushInfo brushInfo = ColorHelper.ControlGradientPanelBrush();
-            //gradientPanel1.BackgroundColor = brushInfo;
-            gradientPanel2.BackgroundColor = brushInfo;
-            splitContainerAdv1.Panel1.BackgroundColor = brushInfo;
-            splitContainerAdv1.Panel2.BackgroundColor = brushInfo;
-            xpTaskBar1.BackColor = ColorHelper.XPTaskbarBackgroundColor();
-            xpTaskBar1.ThemesEnabled = false;
-            xpTaskBar1.BackColor = ColorHelper.XPTaskbarBackgroundColor();
-            xpTaskBarBox1.HeaderBackColor = ColorHelper.XPTaskbarHeaderColor();
-        }
 
         #region Chart methods
 

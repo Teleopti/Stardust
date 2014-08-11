@@ -93,7 +93,7 @@
 			// 
 			// splitContainerAdvContent.Panel2
 			// 
-			this.splitContainerAdvContent.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.White, System.Drawing.Color.White);
+			this.splitContainerAdvContent.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.None, System.Drawing.Color.White, System.Drawing.Color.White);
 			this.splitContainerAdvContent.Size = new System.Drawing.Size(598, 245);
 			this.splitContainerAdvContent.SplitterDistance = 152;
 			this.splitContainerAdvContent.SplitterWidth = 1;

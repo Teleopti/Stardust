@@ -187,6 +187,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			// tableLayoutPanel1
 			// 
+			this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.splitContainerWorkloadSkill, 0, 0);
@@ -201,6 +202,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			// splitContainerWorkloadSkill
 			// 
+			this.splitContainerWorkloadSkill.BackColor = System.Drawing.Color.White;
+			this.splitContainerWorkloadSkill.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.DarkGray);
 			this.splitContainerWorkloadSkill.BeforeTouchSize = 3;
 			this.splitContainerWorkloadSkill.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainerWorkloadSkill.Location = new System.Drawing.Point(3, 3);
@@ -227,6 +230,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			// splitContainer2
 			// 
+			this.splitContainer2.BackColor = System.Drawing.Color.White;
+			this.splitContainer2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.DarkGray);
 			this.splitContainer2.BeforeTouchSize = 3;
 			this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainer2.Location = new System.Drawing.Point(0, 0);
@@ -255,7 +260,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.tabControlWorkloads.ActiveTabColor = System.Drawing.Color.DarkGray;
 			this.tabControlWorkloads.BackColor = System.Drawing.Color.White;
 			this.tabControlWorkloads.BeforeTouchSize = new System.Drawing.Size(1266, 171);
-			this.tabControlWorkloads.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tabControlWorkloads.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlWorkloads.Controls.Add(this.tabPage1);
 			this.tabControlWorkloads.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControlWorkloads.FixedSingleBorderColor = System.Drawing.SystemColors.Control;
@@ -275,11 +280,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.tabPage1.BackColor = System.Drawing.Color.White;
 			this.tabPage1.Image = null;
 			this.tabPage1.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPage1.Location = new System.Drawing.Point(3, 24);
+			this.tabPage1.Location = new System.Drawing.Point(2, 23);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage1.ShowCloseButton = true;
-			this.tabPage1.Size = new System.Drawing.Size(1260, 144);
+			this.tabPage1.Size = new System.Drawing.Size(1262, 146);
 			this.tabPage1.TabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.tabPage1.TabIndex = 1;
 			this.tabPage1.ThemesEnabled = false;
@@ -289,7 +294,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.tabControlAdvMultisiteSkill.ActiveTabColor = System.Drawing.Color.DarkGray;
 			this.tabControlAdvMultisiteSkill.BackColor = System.Drawing.Color.White;
 			this.tabControlAdvMultisiteSkill.BeforeTouchSize = new System.Drawing.Size(1266, 161);
-			this.tabControlAdvMultisiteSkill.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tabControlAdvMultisiteSkill.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlAdvMultisiteSkill.Controls.Add(this.tabPageAdvMultisiteSkill);
 			this.tabControlAdvMultisiteSkill.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControlAdvMultisiteSkill.FixedSingleBorderColor = System.Drawing.SystemColors.Control;
@@ -308,11 +313,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.tabPageAdvMultisiteSkill.Image = null;
 			this.tabPageAdvMultisiteSkill.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageAdvMultisiteSkill.Location = new System.Drawing.Point(3, 24);
+			this.tabPageAdvMultisiteSkill.Location = new System.Drawing.Point(2, 23);
 			this.tabPageAdvMultisiteSkill.Name = "tabPageAdvMultisiteSkill";
 			this.tabPageAdvMultisiteSkill.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageAdvMultisiteSkill.ShowCloseButton = true;
-			this.tabPageAdvMultisiteSkill.Size = new System.Drawing.Size(1260, 134);
+			this.tabPageAdvMultisiteSkill.Size = new System.Drawing.Size(1262, 136);
 			this.tabPageAdvMultisiteSkill.TabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.tabPageAdvMultisiteSkill.TabIndex = 1;
 			this.tabPageAdvMultisiteSkill.ThemesEnabled = true;
@@ -426,11 +431,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStageTabExportTo.BackColor = System.Drawing.Color.White;
 			this.backStageTabExportTo.Image = null;
 			this.backStageTabExportTo.ImageSize = new System.Drawing.Size(16, 16);
-			this.backStageTabExportTo.Location = new System.Drawing.Point(129, 0);
+			this.backStageTabExportTo.Location = new System.Drawing.Point(137, 0);
 			this.backStageTabExportTo.Name = "backStageTabExportTo";
 			this.backStageTabExportTo.Position = new System.Drawing.Point(0, 0);
 			this.backStageTabExportTo.ShowCloseButton = true;
-			this.backStageTabExportTo.Size = new System.Drawing.Size(1142, 716);
+			this.backStageTabExportTo.Size = new System.Drawing.Size(1134, 716);
 			this.backStageTabExportTo.TabIndex = 4;
 			this.backStageTabExportTo.Text = "xxExport";
 			this.backStageTabExportTo.ThemesEnabled = false;
@@ -1275,7 +1280,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.toolStripProgressBarMain,
             this.toolStripStatusLabelInfo});
 			this.statusStripEx1.Location = new System.Drawing.Point(1, 745);
-			this.statusStripEx1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
+			this.statusStripEx1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.statusStripEx1.Name = "statusStripEx1";
 			this.statusStripEx1.Size = new System.Drawing.Size(1272, 22);
 			this.statusStripEx1.TabIndex = 123;
@@ -1327,6 +1332,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.White;
 			this.Borders = new System.Windows.Forms.Padding(0);
 			this.ClientSize = new System.Drawing.Size(1274, 768);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
