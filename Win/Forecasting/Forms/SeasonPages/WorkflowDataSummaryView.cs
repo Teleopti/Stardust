@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
         {
             InitializeComponent();
             if (!DesignMode) SetTexts();
+	        splitContainerAdv1.Panel2.BackgroundColor = new BrushInfo( Color.White);
         }
 
         public WorkflowDataSummaryView(WFSeasonalityTabs owner) : this()

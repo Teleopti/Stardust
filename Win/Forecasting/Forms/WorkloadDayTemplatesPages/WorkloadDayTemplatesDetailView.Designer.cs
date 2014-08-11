@@ -78,11 +78,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			// 
 			// splitContainerMain.Panel1
 			// 
-			this.splitContainerMain.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.White);
+			this.splitContainerMain.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			// 
 			// splitContainerMain.Panel2
 			// 
-			this.splitContainerMain.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.White);
+			this.splitContainerMain.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainerMain.Panel2.Controls.Add(this.xpBoxPeriodSelection);
 			this.splitContainerMain.Size = new System.Drawing.Size(1000, 600);
 			this.splitContainerMain.SplitterDistance = 827;
@@ -100,29 +100,27 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.xpBoxPeriodSelection.Controls.Add(this.xpSmothing);
 			this.xpBoxPeriodSelection.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.xpBoxPeriodSelection.Location = new System.Drawing.Point(0, 0);
-			this.xpBoxPeriodSelection.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.xpBoxPeriodSelection.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.xpBoxPeriodSelection.MinimumSize = new System.Drawing.Size(0, 0);
 			this.xpBoxPeriodSelection.Name = "xpBoxPeriodSelection";
 			this.xpBoxPeriodSelection.Size = new System.Drawing.Size(170, 600);
-			this.xpBoxPeriodSelection.Style = Syncfusion.Windows.Forms.Tools.XPTaskBarStyle.Metro;
 			this.xpBoxPeriodSelection.TabIndex = 1;
 			// 
 			// xpSelectperiod
 			// 
 			this.xpSelectperiod.AnimationDelay = 10;
 			this.xpSelectperiod.Controls.Add(this.gradientPanel2);
-			this.xpSelectperiod.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.xpSelectperiod.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.xpSelectperiod.HeaderForeColor = System.Drawing.Color.White;
 			this.xpSelectperiod.HeaderImageIndex = -1;
 			this.xpSelectperiod.HitTaskBoxArea = false;
 			this.xpSelectperiod.HotTrackColor = System.Drawing.Color.Empty;
-			this.xpSelectperiod.ItemBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(191)))), ((int)(((byte)(237)))));
+			this.xpSelectperiod.ItemBackColor = System.Drawing.Color.White;
 			this.xpSelectperiod.Location = new System.Drawing.Point(0, 0);
 			this.xpSelectperiod.Name = "xpSelectperiod";
-			this.xpSelectperiod.PADY = 2;
 			this.xpSelectperiod.PreferredChildPanelHeight = 346;
 			this.xpSelectperiod.ShowCollapseButton = false;
-			this.xpSelectperiod.Size = new System.Drawing.Size(170, 371);
+			this.xpSelectperiod.Size = new System.Drawing.Size(170, 377);
 			this.xpSelectperiod.TabIndex = 1;
 			this.xpSelectperiod.Text = "xxSelectHistoricalData";
 			// 
@@ -131,7 +129,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.gradientPanel2.BackColor = System.Drawing.Color.White;
 			this.gradientPanel2.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanel2.Controls.Add(this.dateSelectionComposite1);
-			this.gradientPanel2.Location = new System.Drawing.Point(2, 23);
+			this.gradientPanel2.Location = new System.Drawing.Point(2, 29);
 			this.gradientPanel2.Name = "gradientPanel2";
 			this.gradientPanel2.Size = new System.Drawing.Size(166, 346);
 			this.gradientPanel2.TabIndex = 0;
@@ -139,7 +137,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			// dateSelectionComposite1
 			// 
 			this.dateSelectionComposite1.AutoSize = true;
-			this.dateSelectionComposite1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(211)))), ((int)(((byte)(232)))));
+			this.dateSelectionComposite1.BackColor = System.Drawing.Color.White;
 			this.dateSelectionComposite1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateSelectionComposite1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateSelectionComposite1.Location = new System.Drawing.Point(0, 0);
@@ -151,17 +149,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			// xpSmothing
 			// 
 			this.xpSmothing.Controls.Add(this.gradientPanel3);
-			this.xpSmothing.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.xpSmothing.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.xpSmothing.HeaderForeColor = System.Drawing.Color.White;
 			this.xpSmothing.HeaderImageIndex = -1;
 			this.xpSmothing.HitTaskBoxArea = false;
 			this.xpSmothing.HotTrackColor = System.Drawing.Color.Empty;
-			this.xpSmothing.ItemBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(191)))), ((int)(((byte)(237)))));
-			this.xpSmothing.Location = new System.Drawing.Point(0, 372);
+			this.xpSmothing.ItemBackColor = System.Drawing.Color.White;
+			this.xpSmothing.Location = new System.Drawing.Point(0, 377);
 			this.xpSmothing.Name = "xpSmothing";
-			this.xpSmothing.PADY = 2;
 			this.xpSmothing.PreferredChildPanelHeight = 110;
-			this.xpSmothing.Size = new System.Drawing.Size(170, 135);
+			this.xpSmothing.Size = new System.Drawing.Size(170, 141);
 			this.xpSmothing.TabIndex = 2;
 			this.xpSmothing.Text = "xxSmoothing";
 			// 
@@ -169,13 +166,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			// 
 			this.gradientPanel3.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanel3.Controls.Add(this.tableLayoutPanel1);
-			this.gradientPanel3.Location = new System.Drawing.Point(2, 23);
+			this.gradientPanel3.Location = new System.Drawing.Point(2, 29);
 			this.gradientPanel3.Name = "gradientPanel3";
 			this.gradientPanel3.Size = new System.Drawing.Size(166, 110);
 			this.gradientPanel3.TabIndex = 0;
 			// 
 			// tableLayoutPanel1
 			// 
+			this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());

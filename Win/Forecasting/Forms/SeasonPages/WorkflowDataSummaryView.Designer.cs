@@ -84,32 +84,30 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			// 
 			this.xpTaskBar1.AutoSize = true;
 			this.xpTaskBar1.BackColor = System.Drawing.Color.White;
-			this.xpTaskBar1.BeforeTouchSize = new System.Drawing.Size(172, 387);
+			this.xpTaskBar1.BeforeTouchSize = new System.Drawing.Size(172, 393);
 			this.xpTaskBar1.BorderColor = System.Drawing.Color.Black;
 			this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxHistoricalDepth);
 			this.xpTaskBar1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.xpTaskBar1.Location = new System.Drawing.Point(0, 0);
-			this.xpTaskBar1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.xpTaskBar1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.xpTaskBar1.MinimumSize = new System.Drawing.Size(0, 0);
 			this.xpTaskBar1.Name = "xpTaskBar1";
-			this.xpTaskBar1.Size = new System.Drawing.Size(172, 387);
-			this.xpTaskBar1.Style = Syncfusion.Windows.Forms.Tools.XPTaskBarStyle.Metro;
+			this.xpTaskBar1.Size = new System.Drawing.Size(172, 393);
 			this.xpTaskBar1.TabIndex = 0;
 			// 
 			// xpTaskBarBoxHistoricalDepth
 			// 
 			this.xpTaskBarBoxHistoricalDepth.Controls.Add(this.gradientPanel2);
-			this.xpTaskBarBoxHistoricalDepth.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.xpTaskBarBoxHistoricalDepth.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.xpTaskBarBoxHistoricalDepth.HeaderForeColor = System.Drawing.Color.White;
 			this.xpTaskBarBoxHistoricalDepth.HeaderImageIndex = -1;
 			this.xpTaskBarBoxHistoricalDepth.HitTaskBoxArea = false;
 			this.xpTaskBarBoxHistoricalDepth.HotTrackColor = System.Drawing.Color.Empty;
-			this.xpTaskBarBoxHistoricalDepth.ItemBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(191)))), ((int)(((byte)(237)))));
+			this.xpTaskBarBoxHistoricalDepth.ItemBackColor = System.Drawing.Color.White;
 			this.xpTaskBarBoxHistoricalDepth.Location = new System.Drawing.Point(0, 0);
 			this.xpTaskBarBoxHistoricalDepth.Name = "xpTaskBarBoxHistoricalDepth";
-			this.xpTaskBarBoxHistoricalDepth.PADY = 2;
 			this.xpTaskBarBoxHistoricalDepth.PreferredChildPanelHeight = 360;
-			this.xpTaskBarBoxHistoricalDepth.Size = new System.Drawing.Size(172, 384);
+			this.xpTaskBarBoxHistoricalDepth.Size = new System.Drawing.Size(172, 390);
 			this.xpTaskBarBoxHistoricalDepth.TabIndex = 0;
 			this.xpTaskBarBoxHistoricalDepth.Text = "xxSelectHistoricalData";
 			// 
@@ -118,7 +116,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.gradientPanel2.AutoSize = true;
 			this.gradientPanel2.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanel2.Controls.Add(this.gradientPanel3);
-			this.gradientPanel2.Location = new System.Drawing.Point(2, 22);
+			this.gradientPanel2.Location = new System.Drawing.Point(2, 28);
 			this.gradientPanel2.Name = "gradientPanel2";
 			this.gradientPanel2.Size = new System.Drawing.Size(168, 360);
 			this.gradientPanel2.TabIndex = 0;
@@ -142,9 +140,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.dateSelectionCompositeHistoricalPeriod.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateSelectionCompositeHistoricalPeriod.Location = new System.Drawing.Point(0, 0);
 			this.dateSelectionCompositeHistoricalPeriod.Name = "dateSelectionCompositeHistoricalPeriod";
-			this.dateSelectionCompositeHistoricalPeriod.ShowDateSelectionCalendar = false;
-			this.dateSelectionCompositeHistoricalPeriod.ShowDateSelectionFromTo = false;
-			this.dateSelectionCompositeHistoricalPeriod.ShowDateSelectionRolling = false;
 			this.dateSelectionCompositeHistoricalPeriod.Size = new System.Drawing.Size(168, 360);
 			this.dateSelectionCompositeHistoricalPeriod.TabIndex = 0;
 			this.dateSelectionCompositeHistoricalPeriod.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionComposite1_DateRangeChanged);
@@ -177,10 +172,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 
         private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv1;
         private Syncfusion.Windows.Forms.Tools.XPTaskBar xpTaskBar1;
-        private Syncfusion.Windows.Forms.Tools.XPTaskBarBox xpTaskBarBoxHistoricalDepth;
-        private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel2;
-        private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel3;
-        private DateSelectionComposite dateSelectionCompositeHistoricalPeriod;
+		  private Syncfusion.Windows.Forms.Tools.XPTaskBarBox xpTaskBarBoxHistoricalDepth;
+		  private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel2;
+		  private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel3;
+		  private DateSelectionComposite dateSelectionCompositeHistoricalPeriod;
 
     }
 }
