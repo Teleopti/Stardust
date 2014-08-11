@@ -29,11 +29,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private CalculateBadgeConsumer target;
 		private IAgentBadgeCalculator calculator;
 		private INow now;
+		private IUnitOfWorkFactory loggedOnUnitOfWorkFactory;
 
 		[SetUp]
 		public void Setup()
 		{
 			unitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(loggedOnUnitOfWorkFactory);
 			serviceBus = MockRepository.GenerateMock<IServiceBus>();
 			badgeSettingsRepository = MockRepository.GenerateMock<IAgentBadgeSettingsRepository>();
 			badgeSettingsRepository.Stub(x => x.LoadAll())
