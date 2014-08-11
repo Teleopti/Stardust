@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public Paging Paging { get; set; }
 
 		public IList<TimePeriod> FilteredStartTimes { get; set; }
+		public IList<TimePeriod> FilteredEndTimes { get; set; }
 	}
 }

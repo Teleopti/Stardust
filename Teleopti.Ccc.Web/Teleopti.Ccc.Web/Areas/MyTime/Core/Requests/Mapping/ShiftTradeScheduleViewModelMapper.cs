@@ -37,13 +37,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			ShiftTradeAddPersonScheduleViewModel mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel);
 			List<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedule;
-			if (data.FilteredStartTimes == null || data.FilteredStartTimes.Count==0)
+			if (data.FilteredStartTimes == null && data.FilteredEndTimes == null)
 			{
 				possibleTradeSchedule = getPossibleTradeSchedules(possibleTradePersons, data.Paging).ToList();
 			}
 			else
 			{
-				possibleTradeSchedule = getFilteredTimesPossibleTradeSchedules(possibleTradePersons, data.Paging, data.FilteredStartTimes).ToList();
+				possibleTradeSchedule = getFilteredTimesPossibleTradeSchedules(possibleTradePersons, data.Paging, data.FilteredStartTimes, data.FilteredEndTimes).ToList();
 			}
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any() ? possibleTradeSchedule.First().Total : 0;
 			var pageCount = possibleTradeScheduleNum % data.Paging.Take != 0 ? possibleTradeScheduleNum / data.Paging.Take + 1 : possibleTradeScheduleNum / data.Paging.Take;
@@ -100,11 +100,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return new List<ShiftTradeAddPersonScheduleViewModel>();
 		}
 
-		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getFilteredTimesPossibleTradeSchedules(DatePersons datePersons, Paging paging, IEnumerable<TimePeriod> filteredStartTimes)
+		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getFilteredTimesPossibleTradeSchedules(DatePersons datePersons, Paging paging, 
+			                                                                                IEnumerable<TimePeriod> filteredStartTimes, IEnumerable<TimePeriod> filteredEndTimes)
 		{
 			if (datePersons.Persons.Any())
 			{
-				var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedulesWithFilteredTimes(datePersons.Date, datePersons.Persons, paging, filteredStartTimes);
+				var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedulesWithFilteredTimes(datePersons.Date, datePersons.Persons, paging, 
+					                                                                                        filteredStartTimes, filteredEndTimes);
 				return _shiftTradePersonScheduleViewModelMapper.Map(schedules);
 			}
 

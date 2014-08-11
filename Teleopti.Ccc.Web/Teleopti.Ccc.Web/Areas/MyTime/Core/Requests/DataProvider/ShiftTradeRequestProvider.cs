@@ -40,11 +40,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging);
 		}
 
-		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedulesWithFilteredTimes(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons, Paging paging, IEnumerable<TimePeriod> filteredStartTimes )
+		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedulesWithFilteredTimes(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons, Paging paging,
+																						IEnumerable<TimePeriod> filteredStartTimes, IEnumerable<TimePeriod> filteredEndTimes)
 		{
 			IEnumerable<Guid> personIdList = (from person in possibleShiftTradePersons
 			                                 select person.Id.Value).ToList();
-			return _scheduleDayReadModelFinder.ForPersonsByFilteredTimes(date, personIdList, paging, filteredStartTimes);
+			return _scheduleDayReadModelFinder.ForPersonsByFilteredTimes(date, personIdList, paging, filteredStartTimes, filteredEndTimes);
 		}
 
 		public Guid? RetrieveMyTeamId(DateOnly date)

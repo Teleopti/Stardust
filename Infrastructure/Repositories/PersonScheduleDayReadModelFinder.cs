@@ -97,12 +97,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .List<PersonScheduleDayReadModel>();
 		}
 
-		public IEnumerable<PersonScheduleDayReadModel> ForPersonsByFilteredTimes(DateOnly shiftTradeDate, IEnumerable<Guid> personIdList, Paging paging, IEnumerable<TimePeriod> filteredStartTimes )
+		public IEnumerable<PersonScheduleDayReadModel> ForPersonsByFilteredTimes(DateOnly shiftTradeDate, IEnumerable<Guid> personIdList, Paging paging,
+																								IEnumerable<TimePeriod> filteredStartTimes, IEnumerable<TimePeriod> filteredEndTimes)
 		{
 			var idlist = string.Join(",", personIdList);
 			var startTimeList = string.Join(",", filteredStartTimes);
+			var endTimeList = string.Join(",", filteredEndTimes);
 			return _unitOfWork.Session().CreateSQLQuery(
-				"EXEC  [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter] @shiftTradeDate=:shiftTradeDate, @personList=:personIdList, @filteredStartTimeList=:filteredStartTimes, @skip=:skip, @take=:take")
+				"EXEC  [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter] @shiftTradeDate=:shiftTradeDate, @personList=:personIdList, @filteredStartTimeList=:filteredStartTimes, @filteredEndTimeList=:filteredEndTimes, @skip=:skip, @take=:take")
 							  .AddScalar("PersonId", NHibernateUtil.Guid)
 							  .AddScalar("TeamId", NHibernateUtil.Guid)
 							  .AddScalar("SiteId", NHibernateUtil.Guid)
@@ -117,6 +119,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .SetDateTime("shiftTradeDate", shiftTradeDate)
 							  .SetParameter("personIdList", idlist,NHibernateUtil.StringClob)
 							  .SetParameter("filteredStartTimes", startTimeList, NHibernateUtil.StringClob)
+							  .SetParameter("filteredEndTimes", endTimeList, NHibernateUtil.StringClob)
 							  .SetParameter("skip", paging.Skip)
 							  .SetParameter("take", paging.Take)
 							  .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))

@@ -730,6 +730,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					selectedDate: self.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase()),
 					teamId: self.selectedTeamInternal(),
 					filteredStartTimes: self.filteredStartTimesText().join(","),
+					filteredEndTimes: self.filteredEndTimesText().join(","),
 					Take: take,
 					Skip: skip
 				},
