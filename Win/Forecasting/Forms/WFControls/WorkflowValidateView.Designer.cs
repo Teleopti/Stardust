@@ -82,9 +82,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			// xpTaskBar1
 			// 
 			this.xpTaskBar1.AutoSize = true;
+			this.xpTaskBar1.BackColor = System.Drawing.Color.White;
 			this.xpTaskBar1.BeforeTouchSize = new System.Drawing.Size(172, 600);
 			this.xpTaskBar1.BorderColor = System.Drawing.Color.Black;
-			this.xpTaskBar1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxSelectPeriod);
 			this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxDeviations);
 			this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxSpecialEvents);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.xpTaskBarBoxSelectPeriod.Name = "xpTaskBarBoxSelectPeriod";
 			this.xpTaskBarBoxSelectPeriod.PreferredChildPanelHeight = 277;
 			this.xpTaskBarBoxSelectPeriod.ShowCollapseButton = false;
-			this.xpTaskBarBoxSelectPeriod.Size = new System.Drawing.Size(170, 308);
+			this.xpTaskBarBoxSelectPeriod.Size = new System.Drawing.Size(172, 308);
 			this.xpTaskBarBoxSelectPeriod.TabIndex = 0;
 			this.xpTaskBarBoxSelectPeriod.TabStop = false;
 			this.xpTaskBarBoxSelectPeriod.Text = "xxSelectHistoricalData";
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.gradientPanelSelectPeriod.Controls.Add(this.dateSelectionFromToTarget);
 			this.gradientPanelSelectPeriod.Location = new System.Drawing.Point(2, 29);
 			this.gradientPanelSelectPeriod.Name = "gradientPanelSelectPeriod";
-			this.gradientPanelSelectPeriod.Size = new System.Drawing.Size(166, 277);
+			this.gradientPanelSelectPeriod.Size = new System.Drawing.Size(168, 277);
 			this.gradientPanelSelectPeriod.TabIndex = 0;
 			// 
 			// buttonAdvCancelLoad
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonAdvCancelLoad.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvCancelLoad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvCancelLoad.BeforeTouchSize = new System.Drawing.Size(162, 26);
+			this.buttonAdvCancelLoad.BeforeTouchSize = new System.Drawing.Size(164, 26);
 			this.buttonAdvCancelLoad.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvCancelLoad.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Cancel_16x16;
 			this.buttonAdvCancelLoad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.buttonAdvCancelLoad.Location = new System.Drawing.Point(3, 237);
 			this.buttonAdvCancelLoad.Name = "buttonAdvCancelLoad";
 			this.buttonAdvCancelLoad.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.buttonAdvCancelLoad.Size = new System.Drawing.Size(162, 26);
+			this.buttonAdvCancelLoad.Size = new System.Drawing.Size(164, 26);
 			this.buttonAdvCancelLoad.TabIndex = 4;
 			this.buttonAdvCancelLoad.Text = "xxxCancelLoading";
 			this.buttonAdvCancelLoad.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.dateSelectionFromToHistorical.Name = "dateSelectionFromToHistorical";
 			this.dateSelectionFromToHistorical.NoneButtonText = "xxNone";
 			this.dateSelectionFromToHistorical.NullString = "xxNoDateIsSelected";
-			this.dateSelectionFromToHistorical.Size = new System.Drawing.Size(166, 157);
+			this.dateSelectionFromToHistorical.Size = new System.Drawing.Size(168, 157);
 			this.dateSelectionFromToHistorical.TabIndex = 3;
 			this.dateSelectionFromToHistorical.TodayButtonText = "xxToday";
 			this.dateSelectionFromToHistorical.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToHistorical.WorkPeriodEnd")));
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.dateSelectionFromToTarget.NoneButtonText = "xxNone";
 			this.dateSelectionFromToTarget.NullString = "xxNoDateIsSelected";
 			this.dateSelectionFromToTarget.ShowApplyButton = false;
-			this.dateSelectionFromToTarget.Size = new System.Drawing.Size(166, 120);
+			this.dateSelectionFromToTarget.Size = new System.Drawing.Size(168, 120);
 			this.dateSelectionFromToTarget.TabIndex = 2;
 			this.dateSelectionFromToTarget.TodayButtonText = "xxToday";
 			this.dateSelectionFromToTarget.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToTarget.WorkPeriodEnd")));
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.xpTaskBarBoxDeviations.Location = new System.Drawing.Point(0, 308);
 			this.xpTaskBarBoxDeviations.Name = "xpTaskBarBoxDeviations";
 			this.xpTaskBarBoxDeviations.PreferredChildPanelHeight = 120;
-			this.xpTaskBarBoxDeviations.Size = new System.Drawing.Size(170, 151);
+			this.xpTaskBarBoxDeviations.Size = new System.Drawing.Size(172, 151);
 			this.xpTaskBarBoxDeviations.TabIndex = 1;
 			this.xpTaskBarBoxDeviations.TabStop = false;
 			this.xpTaskBarBoxDeviations.Text = "xxDeviations";
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.gradientPanelDeviations.Controls.Add(this.tableLayoutPanel1);
 			this.gradientPanelDeviations.Location = new System.Drawing.Point(2, 29);
 			this.gradientPanelDeviations.Name = "gradientPanelDeviations";
-			this.gradientPanelDeviations.Size = new System.Drawing.Size(166, 120);
+			this.gradientPanelDeviations.Size = new System.Drawing.Size(168, 120);
 			this.gradientPanelDeviations.TabIndex = 0;
 			// 
 			// tableLayoutPanel1
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(166, 120);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(168, 120);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// labelDeviationAfterTaskTime
@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.xpTaskBarBoxSpecialEvents.Location = new System.Drawing.Point(0, 459);
 			this.xpTaskBarBoxSpecialEvents.Name = "xpTaskBarBoxSpecialEvents";
 			this.xpTaskBarBoxSpecialEvents.PreferredChildPanelHeight = 100;
-			this.xpTaskBarBoxSpecialEvents.Size = new System.Drawing.Size(170, 131);
+			this.xpTaskBarBoxSpecialEvents.Size = new System.Drawing.Size(172, 131);
 			this.xpTaskBarBoxSpecialEvents.TabIndex = 7;
 			this.xpTaskBarBoxSpecialEvents.TabStop = false;
 			this.xpTaskBarBoxSpecialEvents.Text = "xxSpecialEvents";
@@ -364,7 +364,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.gradientPanelSpecialEvents.Controls.Add(this.outlierBoxControl);
 			this.gradientPanelSpecialEvents.Location = new System.Drawing.Point(2, 29);
 			this.gradientPanelSpecialEvents.Name = "gradientPanelSpecialEvents";
-			this.gradientPanelSpecialEvents.Size = new System.Drawing.Size(166, 100);
+			this.gradientPanelSpecialEvents.Size = new System.Drawing.Size(168, 100);
 			this.gradientPanelSpecialEvents.TabIndex = 1;
 			// 
 			// outlierBoxControl
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.outlierBoxControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.outlierBoxControl.Location = new System.Drawing.Point(0, 0);
 			this.outlierBoxControl.Name = "outlierBoxControl";
-			this.outlierBoxControl.Size = new System.Drawing.Size(166, 100);
+			this.outlierBoxControl.Size = new System.Drawing.Size(168, 100);
 			this.outlierBoxControl.TabIndex = 8;
 			this.outlierBoxControl.AddOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.DateOnly>>(this.outlierBoxControl_AddOutlier);
 			this.outlierBoxControl.DeleteOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.IOutlier>>(this.outlierBoxControl_DeleteOutlier);
@@ -381,6 +381,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			// 
 			// splitContainerAdv2
 			// 
+			this.splitContainerAdv2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.DarkGray);
 			this.splitContainerAdv2.BeforeTouchSize = 3;
 			this.splitContainerAdv2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainerAdv2.Location = new System.Drawing.Point(0, 0);

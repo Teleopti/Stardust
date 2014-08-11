@@ -39,18 +39,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             return i != tabSeasonality.SelectedIndex;//if the index has changed, focus should stay here
         }
 
-        protected override void SetColors()
-        {
-            BrushInfo myBrush = ColorHelper.ControlGradientPanelBrush();
-            tabSeasonality.BackColor = myBrush.BackColor;
-            tabPageDayOfWeek.BackColor = myBrush.BackColor;
-            tabPageWeekOfMonth.BackColor = myBrush.BackColor;
-            tabPageMonthOfYear.BackColor = myBrush.BackColor;
-            tabPageTotal.BackColor = myBrush.BackColor;
-
-            tabSeasonality.TabPanelBackColor = ColorHelper.TabBackColor();
-        }
-
         public bool GoToPreviousTab()
         {//it is not pretty but it works 
             int i = tabSeasonality.SelectedIndex;//old index
