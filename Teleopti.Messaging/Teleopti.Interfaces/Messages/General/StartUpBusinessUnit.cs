@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.Messages
+namespace Teleopti.Interfaces.Messages.General
 {
     /// <summary>
     /// 

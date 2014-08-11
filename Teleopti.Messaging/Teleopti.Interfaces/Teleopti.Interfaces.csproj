@@ -809,7 +809,7 @@
     <Compile Include="Messages\Rta\AgentAdherenceStateInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\UnderstaffingDetails.cs" />
-    <Compile Include="Messages\StartUpBusinessUnit.cs" />
+    <Compile Include="Messages\General\StartUpBusinessUnit.cs" />
     <Compile Include="ReadModel\IScheduleChangedReadModel.cs" />
   </ItemGroup>
   <ItemGroup>
