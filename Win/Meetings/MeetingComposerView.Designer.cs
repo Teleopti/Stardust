@@ -1,36 +1,36 @@
 ﻿namespace Teleopti.Ccc.Win.Meetings
 {
-    partial class MeetingComposerView
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class MeetingComposerView
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                UnhookEvents();
-                ReleaseManagedResources();
-                if (components != null)
-                    components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				unhookEvents();
+				releaseManagedResources();
+				if (components != null)
+					components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Windows Form Designer generated code
+		#region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MeetingComposerView));
 			this.tabControlAdv1 = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageAdvMeetings = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
@@ -161,11 +161,12 @@
 			// 
 			// statusStripEx1
 			// 
-			this.statusStripEx1.BeforeTouchSize = new System.Drawing.Size(722, 22);
-			this.statusStripEx1.Location = new System.Drawing.Point(1, 575);
+			this.statusStripEx1.BeforeTouchSize = new System.Drawing.Size(838, 22);
+			this.statusStripEx1.Location = new System.Drawing.Point(1, 661);
 			this.statusStripEx1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
 			this.statusStripEx1.Name = "statusStripEx1";
-			this.statusStripEx1.Size = new System.Drawing.Size(722, 22);
+			this.statusStripEx1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
+			this.statusStripEx1.Size = new System.Drawing.Size(838, 22);
 			this.statusStripEx1.TabIndex = 4;
 			this.statusStripEx1.Text = "statusStripEx1";
 			// 
@@ -187,7 +188,6 @@
 			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
 			this.ribbonControlAdv1.MenuButtonEnabled = true;
 			this.ribbonControlAdv1.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ribbonControlAdv1.MenuButtonImage = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Menu;
 			this.ribbonControlAdv1.MenuButtonText = "";
 			this.ribbonControlAdv1.MenuButtonVisible = false;
 			this.ribbonControlAdv1.MenuButtonWidth = 56;
@@ -202,7 +202,7 @@
 			this.ribbonControlAdv1.OfficeMenu.AuxPanel.ImageScalingSize = new System.Drawing.Size(100, 100);
 			this.ribbonControlAdv1.OfficeMenu.AuxPanel.MinimumSize = new System.Drawing.Size(250, 100);
 			this.ribbonControlAdv1.OfficeMenu.MainPanel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonClose});
+			this.toolStripButtonClose});
 			this.ribbonControlAdv1.OfficeMenu.MainPanel.MinimumSize = new System.Drawing.Size(75, 100);
 			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
 			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(346, 145);
@@ -213,13 +213,16 @@
 			this.ribbonControlAdv1.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
 			this.ribbonControlAdv1.SelectedTab = this.toolStripTabItemMeeting;
 			this.ribbonControlAdv1.Show2010CustomizeQuickItemDialog = false;
-			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = true;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(726, 157);
+			this.ribbonControlAdv1.ShowLauncher = false;
+			this.ribbonControlAdv1.ShowQuickItemsDropDownButton = false;
+			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = false;
+			this.ribbonControlAdv1.Size = new System.Drawing.Size(844, 149);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "xxStartMenu";
 			this.ribbonControlAdv1.TabIndex = 12;
 			this.ribbonControlAdv1.Text = "Meeting";
 			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
+			this.ribbonControlAdv1.TitleFont = new System.Drawing.Font("Segoe UI", 12F);
 			// 
 			// toolStripTabItemMeeting
 			// 
@@ -231,14 +234,16 @@
 			this.toolStripTabItemMeeting.Panel.Controls.Add(this.toolStripEx2);
 			this.toolStripTabItemMeeting.Panel.Controls.Add(this.toolStripEx3);
 			this.toolStripTabItemMeeting.Panel.Controls.Add(this.toolStripEx4);
+			this.toolStripTabItemMeeting.Panel.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
 			this.toolStripTabItemMeeting.Panel.Name = "ribbonPanel1";
+			this.toolStripTabItemMeeting.Panel.Padding = new System.Windows.Forms.Padding(0, 1, 41, 0);
 			this.toolStripTabItemMeeting.Panel.ScrollPosition = 0;
 			this.toolStripTabItemMeeting.Panel.TabIndex = 2;
-			this.toolStripTabItemMeeting.Panel.Text = "xxMeeting";
+			this.toolStripTabItemMeeting.Panel.Text = "XXMeeting";
 			this.toolStripTabItemMeeting.Position = 0;
 			this.SetShortcut(this.toolStripTabItemMeeting, System.Windows.Forms.Keys.None);
-			this.toolStripTabItemMeeting.Size = new System.Drawing.Size(75, 25);
-			this.toolStripTabItemMeeting.Text = "xxMeeting";
+			this.toolStripTabItemMeeting.Size = new System.Drawing.Size(79, 25);
+			this.toolStripTabItemMeeting.Text = "XXMeeting";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripTabItemMeeting, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripTabItemMeeting, false);
 			// 
@@ -251,13 +256,14 @@
 			this.toolStripEx2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripEx2.Image = null;
 			this.toolStripEx2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonMainSave,
-            this.toolStripButtonMainDelete});
+			this.toolStripButtonMainSave,
+			this.toolStripButtonMainDelete});
 			this.toolStripEx2.Location = new System.Drawing.Point(0, 1);
 			this.toolStripEx2.Name = "toolStripEx2";
 			this.toolStripEx2.Office12Mode = false;
+			this.toolStripEx2.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
 			this.toolStripEx2.ShowLauncher = false;
-			this.toolStripEx2.Size = new System.Drawing.Size(127, 98);
+			this.toolStripEx2.Size = new System.Drawing.Size(148, 90);
 			this.toolStripEx2.TabIndex = 0;
 			this.toolStripEx2.Text = "xxActions";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripEx2, true);
@@ -271,13 +277,13 @@
 			this.toolStripButtonMainSave.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonMainSave.Name = "toolStripButtonMainSave";
 			this.SetShortcut(this.toolStripButtonMainSave, System.Windows.Forms.Keys.None);
-			this.toolStripButtonMainSave.Size = new System.Drawing.Size(45, 82);
+			this.toolStripButtonMainSave.Size = new System.Drawing.Size(45, 74);
 			this.toolStripButtonMainSave.Text = "xxSave";
 			this.toolStripButtonMainSave.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonMainSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonMainSave, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonMainSave, false);
-			this.toolStripButtonMainSave.Click += new System.EventHandler(this.toolStripButtonMainSave_Click);
+			this.toolStripButtonMainSave.Click += new System.EventHandler(this.toolStripButtonMainSaveClick);
 			// 
 			// toolStripButtonMainDelete
 			// 
@@ -287,13 +293,13 @@
 			this.toolStripButtonMainDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonMainDelete.Name = "toolStripButtonMainDelete";
 			this.SetShortcut(this.toolStripButtonMainDelete, System.Windows.Forms.Keys.None);
-			this.toolStripButtonMainDelete.Size = new System.Drawing.Size(54, 82);
+			this.toolStripButtonMainDelete.Size = new System.Drawing.Size(54, 74);
 			this.toolStripButtonMainDelete.Text = "xxDelete";
 			this.toolStripButtonMainDelete.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonMainDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonMainDelete, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonMainDelete, true);
-			this.toolStripButtonMainDelete.Click += new System.EventHandler(this.toolStripButtonMainDelete_Click);
+			this.toolStripButtonMainDelete.Click += new System.EventHandler(this.toolStripButtonMainDeleteClick);
 			// 
 			// toolStripEx3
 			// 
@@ -303,16 +309,16 @@
 			this.toolStripEx3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripEx3.Image = null;
 			this.toolStripEx3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonMeetings,
-            this.toolStripButtonSchedules,
-            this.toolStripButtonImpact,
-            this.toolStripButtonRecurrentMeetings});
+			this.toolStripButtonMeetings,
+			this.toolStripButtonSchedules,
+			this.toolStripButtonImpact,
+			this.toolStripButtonRecurrentMeetings});
 			this.toolStripEx3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-			this.toolStripEx3.Location = new System.Drawing.Point(129, 1);
+			this.toolStripEx3.Location = new System.Drawing.Point(150, 1);
 			this.toolStripEx3.Name = "toolStripEx3";
 			this.toolStripEx3.Office12Mode = false;
 			this.toolStripEx3.ShowLauncher = false;
-			this.toolStripEx3.Size = new System.Drawing.Size(325, 98);
+			this.toolStripEx3.Size = new System.Drawing.Size(325, 90);
 			this.toolStripEx3.TabIndex = 1;
 			this.toolStripEx3.Text = "xxShow";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripEx3, true);
@@ -327,13 +333,13 @@
 			this.toolStripButtonMeetings.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonMeetings.Name = "toolStripButtonMeetings";
 			this.SetShortcut(this.toolStripButtonMeetings, System.Windows.Forms.Keys.None);
-			this.toolStripButtonMeetings.Size = new System.Drawing.Size(70, 82);
+			this.toolStripButtonMeetings.Size = new System.Drawing.Size(70, 74);
 			this.toolStripButtonMeetings.Text = "xxMeetings";
 			this.toolStripButtonMeetings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonMeetings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonMeetings, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonMeetings, false);
-			this.toolStripButtonMeetings.Click += new System.EventHandler(this.toolStripButtonMeetings_Click);
+			this.toolStripButtonMeetings.Click += new System.EventHandler(this.toolStripButtonMeetingsClick);
 			// 
 			// toolStripButtonSchedules
 			// 
@@ -344,13 +350,13 @@
 			this.toolStripButtonSchedules.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonSchedules.Name = "toolStripButtonSchedules";
 			this.SetShortcut(this.toolStripButtonSchedules, System.Windows.Forms.Keys.None);
-			this.toolStripButtonSchedules.Size = new System.Drawing.Size(74, 82);
+			this.toolStripButtonSchedules.Size = new System.Drawing.Size(74, 74);
 			this.toolStripButtonSchedules.Text = "xxSchedules";
 			this.toolStripButtonSchedules.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonSchedules.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonSchedules, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonSchedules, false);
-			this.toolStripButtonSchedules.Click += new System.EventHandler(this.toolStripButtonSchedules_Click);
+			this.toolStripButtonSchedules.Click += new System.EventHandler(this.toolStripButtonSchedulesClick);
 			// 
 			// toolStripButtonImpact
 			// 
@@ -361,13 +367,13 @@
 			this.toolStripButtonImpact.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonImpact.Name = "toolStripButtonImpact";
 			this.SetShortcut(this.toolStripButtonImpact, System.Windows.Forms.Keys.None);
-			this.toolStripButtonImpact.Size = new System.Drawing.Size(58, 82);
+			this.toolStripButtonImpact.Size = new System.Drawing.Size(58, 74);
 			this.toolStripButtonImpact.Text = "xxImpact";
 			this.toolStripButtonImpact.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonImpact.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonImpact, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonImpact, false);
-			this.toolStripButtonImpact.Click += new System.EventHandler(this.ToolStripButtonImpact_Click);
+			this.toolStripButtonImpact.Click += new System.EventHandler(this.toolStripButtonImpactClick);
 			// 
 			// toolStripButtonRecurrentMeetings
 			// 
@@ -377,13 +383,13 @@
 			this.toolStripButtonRecurrentMeetings.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonRecurrentMeetings.Name = "toolStripButtonRecurrentMeetings";
 			this.SetShortcut(this.toolStripButtonRecurrentMeetings, System.Windows.Forms.Keys.None);
-			this.toolStripButtonRecurrentMeetings.Size = new System.Drawing.Size(116, 82);
+			this.toolStripButtonRecurrentMeetings.Size = new System.Drawing.Size(116, 74);
 			this.toolStripButtonRecurrentMeetings.Text = "xxRecurrentMeeting";
 			this.toolStripButtonRecurrentMeetings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonRecurrentMeetings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonRecurrentMeetings, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonRecurrentMeetings, false);
-			this.toolStripButtonRecurrentMeetings.Click += new System.EventHandler(this.toolStripButtonRecurrentMeetings_Click);
+			this.toolStripButtonRecurrentMeetings.Click += new System.EventHandler(this.toolStripButtonRecurrentMeetingsClick);
 			// 
 			// toolStripEx4
 			// 
@@ -394,12 +400,12 @@
 			this.toolStripEx4.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripEx4.Image = null;
 			this.toolStripEx4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonMainAddressBook});
-			this.toolStripEx4.Location = new System.Drawing.Point(456, 1);
+			this.toolStripButtonMainAddressBook});
+			this.toolStripEx4.Location = new System.Drawing.Point(477, 1);
 			this.toolStripEx4.Name = "toolStripEx4";
 			this.toolStripEx4.Office12Mode = false;
 			this.toolStripEx4.ShowLauncher = false;
-			this.toolStripEx4.Size = new System.Drawing.Size(116, 98);
+			this.toolStripEx4.Size = new System.Drawing.Size(135, 90);
 			this.toolStripEx4.TabIndex = 2;
 			this.toolStripEx4.Text = "xxAttendees";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripEx4, true);
@@ -413,13 +419,13 @@
 			this.toolStripButtonMainAddressBook.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonMainAddressBook.Name = "toolStripButtonMainAddressBook";
 			this.SetShortcut(this.toolStripButtonMainAddressBook, System.Windows.Forms.Keys.None);
-			this.toolStripButtonMainAddressBook.Size = new System.Drawing.Size(90, 82);
+			this.toolStripButtonMainAddressBook.Size = new System.Drawing.Size(90, 74);
 			this.toolStripButtonMainAddressBook.Text = "xxAddressBook";
 			this.toolStripButtonMainAddressBook.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonMainAddressBook.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonMainAddressBook, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonMainAddressBook, false);
-			this.toolStripButtonMainAddressBook.Click += new System.EventHandler(this.toolStripButtonMainAddressBook_Click);
+			this.toolStripButtonMainAddressBook.Click += new System.EventHandler(this.toolStripButtonMainAddressBookClick);
 			// 
 			// toolStripButtonClose
 			// 
@@ -434,7 +440,7 @@
 			this.toolStripButtonClose.Text = "xxClose";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonClose, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonClose, true);
-			this.toolStripButtonClose.Click += new System.EventHandler(this.toolStripButtonClose_Click);
+			this.toolStripButtonClose.Click += new System.EventHandler(this.toolStripButtonCloseClick);
 			// 
 			// toolStripButtonDelete
 			// 
@@ -446,7 +452,7 @@
 			this.SetShortcut(this.toolStripButtonDelete, System.Windows.Forms.Keys.None);
 			this.toolStripButtonDelete.Size = new System.Drawing.Size(86, 36);
 			this.toolStripButtonDelete.Text = "xxDelete";
-			this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
+			this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDeleteClick);
 			// 
 			// toolStripButton3
 			// 
@@ -474,33 +480,34 @@
 			// 
 			// panelContent
 			// 
+			this.panelContent.BackColor = System.Drawing.Color.White;
 			this.panelContent.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panelContent.Location = new System.Drawing.Point(1, 157);
+			this.panelContent.Location = new System.Drawing.Point(2, 151);
 			this.panelContent.Name = "panelContent";
-			this.panelContent.Size = new System.Drawing.Size(722, 419);
+			this.panelContent.Size = new System.Drawing.Size(838, 509);
 			this.panelContent.TabIndex = 13;
 			// 
 			// backgroundWorkerLoadStateHolder
 			// 
-			this.backgroundWorkerLoadStateHolder.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerLoadStateHolder_DoWork);
-			this.backgroundWorkerLoadStateHolder.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerLoadStateHolder_RunWorkerCompleted);
+			this.backgroundWorkerLoadStateHolder.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerLoadStateHolderDoWork);
+			this.backgroundWorkerLoadStateHolder.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerLoadStateHolderRunWorkerCompleted);
 			// 
 			// MeetingComposerView
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Borders = new System.Windows.Forms.Padding(0);
-			this.ClientSize = new System.Drawing.Size(724, 598);
+			this.ClientSize = new System.Drawing.Size(842, 684);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.Controls.Add(this.panelContent);
 			this.Controls.Add(this.ribbonControlAdv1);
 			this.Controls.Add(this.statusStripEx1);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(500, 400);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.MinimumSize = new System.Drawing.Size(581, 456);
 			this.Name = "MeetingComposerView";
-			this.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
+			this.Padding = new System.Windows.Forms.Padding(2);
+			this.ShowIcon = false;
 			this.Text = "xxMeetings";
-			this.Load += new System.EventHandler(this.MeetingComposer_Load);
 			((System.ComponentModel.ISupportInitialize)(this.tabControlAdv1)).EndInit();
 			this.tabPageAdvMeetings.ResumeLayout(false);
 			this.tableLayoutPanelMeetingBase.ResumeLayout(false);
@@ -521,36 +528,36 @@
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlAdv1;
-        private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvMeetings;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMeetingBase;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
-        private Syncfusion.Windows.Forms.Tools.StatusStripEx statusStripEx1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPasteNew;
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
-        private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItemMeeting;
-        private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx2;
-        private System.Windows.Forms.ToolStripButton toolStripButtonMainSave;
-        private System.Windows.Forms.ToolStripButton toolStripButtonMainDelete;
-        private System.Windows.Forms.ToolStripButton toolStripButton3;
-        private System.Windows.Forms.ToolStripButton toolStripButtonMainNew;
-        private System.Windows.Forms.ToolStripButton toolStripButtonDelete;
-        private System.Windows.Forms.ToolStripButton toolStripButtonClose;
-        private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx3;
-        private System.Windows.Forms.ToolStripButton toolStripButtonMeetings;
-        private System.Windows.Forms.ToolStripButton toolStripButtonRecurrentMeetings;
-        private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx4;
-        private System.Windows.Forms.ToolStripButton toolStripButtonMainAddressBook;
-        private System.Windows.Forms.ToolStripButton toolStripButtonSchedules;
-        private System.Windows.Forms.Panel panelContent;
-        private System.Windows.Forms.ToolStripButton toolStripButtonImpact;
-        private System.ComponentModel.BackgroundWorker backgroundWorkerLoadStateHolder;
-    }
+		private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlAdv1;
+		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvMeetings;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMeetingBase;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+		private System.Windows.Forms.Panel panel3;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+		private Syncfusion.Windows.Forms.Tools.StatusStripEx statusStripEx1;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPasteNew;
+		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+		private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItemMeeting;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx2;
+		private System.Windows.Forms.ToolStripButton toolStripButtonMainSave;
+		private System.Windows.Forms.ToolStripButton toolStripButtonMainDelete;
+		private System.Windows.Forms.ToolStripButton toolStripButton3;
+		private System.Windows.Forms.ToolStripButton toolStripButtonMainNew;
+		private System.Windows.Forms.ToolStripButton toolStripButtonDelete;
+		private System.Windows.Forms.ToolStripButton toolStripButtonClose;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx3;
+		private System.Windows.Forms.ToolStripButton toolStripButtonMeetings;
+		private System.Windows.Forms.ToolStripButton toolStripButtonRecurrentMeetings;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx4;
+		private System.Windows.Forms.ToolStripButton toolStripButtonMainAddressBook;
+		private System.Windows.Forms.ToolStripButton toolStripButtonSchedules;
+		private System.Windows.Forms.Panel panelContent;
+		private System.Windows.Forms.ToolStripButton toolStripButtonImpact;
+		private System.ComponentModel.BackgroundWorker backgroundWorkerLoadStateHolder;
+	}
 }

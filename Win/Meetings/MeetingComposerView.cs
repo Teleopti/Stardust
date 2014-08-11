@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security;
-using System.Security.Permissions;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Events;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
@@ -16,83 +13,77 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Win.Meetings
 {
 	public partial class MeetingComposerView : BaseRibbonForm, IMeetingComposerView, INotifyComposerMeetingChanged
-    {
-        private readonly IList<IMeetingDetailView> _meetingDetailViews = new List<IMeetingDetailView>();
-        private readonly MeetingComposerPresenter _meetingComposerPresenter;
-        private readonly bool _editMeetingPermission;
-        private readonly bool _viewSchedulesPermission;
-	    private IMeetingDetailView _currentView;
-	    private readonly IEventAggregator _eventAggregator;
-	    private readonly IToggleManager _toogleManager;
+	{
+		private readonly IList<IMeetingDetailView> _meetingDetailViews = new List<IMeetingDetailView>();
+		private readonly MeetingComposerPresenter _meetingComposerPresenter;
+		private readonly bool _viewSchedulesPermission;
+		private IMeetingDetailView _currentView;
+		private readonly IEventAggregator _eventAggregator;
+		private readonly IToggleManager _toogleManager;
 
-	    public event EventHandler<ModifyMeetingEventArgs> ModificationOccurred;
+		public event EventHandler<ModifyMeetingEventArgs> ModificationOccurred;
 
-        protected MeetingComposerView()
-        {
-            InitializeComponent();
-            if (DesignMode) return;
-
-            SetTexts();
-        }
-
-	    public MeetingComposerView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, 
-            bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator, IToggleManager toogleManager)
-            : this()
-        {
-            _editMeetingPermission = editPermission;
-            _viewSchedulesPermission = viewSchedulesPermission;
-            _eventAggregator = eventAggregator;
-	        _toogleManager = toogleManager;
-	        _meetingComposerPresenter = new MeetingComposerPresenter(this,meetingViewModel,schedulerStateHolder);
-            panelContent.Enabled = _editMeetingPermission;
-            ribbonControlAdv1.Enabled = _editMeetingPermission;
-            toolStripButtonSchedules.Enabled = _viewSchedulesPermission;
-			_meetingDetailViews.Add(CreateMeetingGeneralView(_meetingComposerPresenter.Model));
-            _meetingComposerPresenter.Initialize();
-            
-            ChangeView(ViewType.MeetingView);
-
-            SetToolStripsToPreferredSize();
-        }
-
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            const int WM_KEYDOWN = 0x100;
-            const int WM_SYSKEYDOWN = 0x104;
-
-            if ((msg.Msg == WM_KEYDOWN) || (msg.Msg == WM_SYSKEYDOWN))
-            {
-                switch (keyData)
-                {
-                    case Keys.Escape:
-                        // Close the meeting composer
-                        Close();
-                        break;
-
-                }
-            }
-
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-        {
-            base.OnClosing(e);
-
-            _meetingComposerPresenter.OnClose();
-			if (_meetingComposerPresenter.TrySave())
-				SaveValidMeeting();
-            e.Cancel = !_meetingComposerPresenter.CanClose();
-        }
-
-		private void MeetingComposer_Load(object sender, EventArgs e)
-        {
-            BackColor = ColorHelper.ControlPanelColor;
-        }
-
-		private void toolStripButtonMainSave_Click(object sender, EventArgs e)
+		protected MeetingComposerView()
 		{
-			SaveValidMeeting();
+			InitializeComponent();
+			if (DesignMode) return;
+
+			SetTexts();
+		}
+
+		public MeetingComposerView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, 
+			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator, IToggleManager toogleManager)
+			: this()
+		{
+			bool editMeetingPermission = editPermission;
+			_viewSchedulesPermission = viewSchedulesPermission;
+			_eventAggregator = eventAggregator;
+			_toogleManager = toogleManager;
+			_meetingComposerPresenter = new MeetingComposerPresenter(this,meetingViewModel,schedulerStateHolder);
+			panelContent.Enabled = editMeetingPermission;
+			ribbonControlAdv1.Enabled = editMeetingPermission;
+			toolStripButtonSchedules.Enabled = _viewSchedulesPermission;
+			_meetingDetailViews.Add(createMeetingGeneralView(_meetingComposerPresenter.Model));
+			_meetingComposerPresenter.Initialize();
+			
+			changeView(ViewType.MeetingView);
+
+			setToolStripsToPreferredSize();
+		}
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			const int wmKeydown = 0x100;
+			const int wmSyskeydown = 0x104;
+
+			if ((msg.Msg == wmKeydown) || (msg.Msg == wmSyskeydown))
+			{
+				switch (keyData)
+				{
+					case Keys.Escape:
+						// Close the meeting composer
+						Close();
+						break;
+
+				}
+			}
+
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
+		protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+		{
+			base.OnClosing(e);
+
+			_meetingComposerPresenter.OnClose();
+			if (_meetingComposerPresenter.TrySave())
+				saveValidMeeting();
+			e.Cancel = !_meetingComposerPresenter.CanClose();
+		}
+
+		private void toolStripButtonMainSaveClick(object sender, EventArgs e)
+		{
+			saveValidMeeting();
 		}
 
 		public void SetInstanceId(Guid id)
@@ -101,7 +92,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
-		private void SaveValidMeeting()
+		private void saveValidMeeting()
 		{
 			var start = String.Empty;
 			var end = String.Empty;
@@ -146,260 +137,260 @@ namespace Teleopti.Ccc.Win.Meetings
 		}
 
 		public void OnModificationOccurred(IMeeting meeting, bool isDeleted)
-        {
-        	var handler = ModificationOccurred;
-            if (handler!= null)
-            {
-                handler(this, new ModifyMeetingEventArgs(_meetingComposerPresenter.Model.Meeting, false));
-            }
-            _eventAggregator.GetEvent<MeetingModificationOccurred>().Publish(string.Empty);
-        }
+		{
+			var handler = ModificationOccurred;
+			if (handler!= null)
+			{
+				handler(this, new ModifyMeetingEventArgs(_meetingComposerPresenter.Model.Meeting, false));
+			}
+			_eventAggregator.GetEvent<MeetingModificationOccurred>().Publish(string.Empty);
+		}
 
-        private void toolStripButtonMainDelete_Click(object sender, EventArgs e)
-        {
-            _meetingComposerPresenter.DeleteMeeting();
-        }
+		private void toolStripButtonMainDeleteClick(object sender, EventArgs e)
+		{
+			_meetingComposerPresenter.DeleteMeeting();
+		}
 
-        private void toolStripButtonMainAddressBook_Click(object sender, EventArgs e)
-        {
-            _meetingComposerPresenter.ShowAddressBook();
-        }
+		private void toolStripButtonMainAddressBookClick(object sender, EventArgs e)
+		{
+			_meetingComposerPresenter.ShowAddressBook();
+		}
 
-        private void Composer_ParticipantSelectionRequested(object sender, EventArgs e)
-        {
-            _meetingComposerPresenter.ShowAddressBook();
-        }
+		private void composerParticipantSelectionRequested(object sender, EventArgs e)
+		{
+			_meetingComposerPresenter.ShowAddressBook();
+		}
 
-        private void toolStripButtonDelete_Click(object sender, EventArgs e)
-        {
-            _meetingComposerPresenter.DeleteMeeting();
-        }
+		private void toolStripButtonDeleteClick(object sender, EventArgs e)
+		{
+			_meetingComposerPresenter.DeleteMeeting();
+		}
 
-        private void toolStripButtonClose_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+		private void toolStripButtonCloseClick(object sender, EventArgs e)
+		{
+			Close();
+		}
 
-        private void toolStripButtonMeetings_Click(object sender, EventArgs e)
-        {
-			ChangeView(ViewType.MeetingView);
-        }
+		private void toolStripButtonMeetingsClick(object sender, EventArgs e)
+		{
+			changeView(ViewType.MeetingView);
+		}
 
-        private void toolStripButtonSchedules_Click(object sender, EventArgs e)
-        {
-            ChangeView(ViewType.MeetingSchedulerView);
-        }
+		private void toolStripButtonSchedulesClick(object sender, EventArgs e)
+		{
+			changeView(ViewType.MeetingSchedulerView);
+		}
 
-        private void toolStripButtonRecurrentMeetings_Click(object sender, EventArgs e)
-        {
-            using (var meetingRecurrenceView = new MeetingRecurrenceView(_meetingComposerPresenter.Model, this))
-            {
-                _currentView.Presenter.UpdateView();
-                if (meetingRecurrenceView.ShowDialog(this) != DialogResult.OK) return;
-                _meetingComposerPresenter.RecurrentMeetingUpdated();
-            }
-        }
+		private void toolStripButtonRecurrentMeetingsClick(object sender, EventArgs e)
+		{
+			using (var meetingRecurrenceView = new MeetingRecurrenceView(_meetingComposerPresenter.Model, this))
+			{
+				_currentView.Presenter.UpdateView();
+				if (meetingRecurrenceView.ShowDialog(this) != DialogResult.OK) return;
+				_meetingComposerPresenter.RecurrentMeetingUpdated();
+			}
+		}
 
-        public void ShowAddressBook(AddressBookViewModel addressBookViewModel, DateOnly startDate)
-        {
-            using (var addressBookView = new AddressBookView(addressBookViewModel, startDate))
-            {
-                if (addressBookView.ShowDialog(this) != DialogResult.OK) return;
-                _meetingComposerPresenter.AddParticipantsFromAddressBook(addressBookViewModel);
+		public void ShowAddressBook(AddressBookViewModel addressBookViewModel, DateOnly startDate)
+		{
+			using (var addressBookView = new AddressBookView(addressBookViewModel, startDate))
+			{
+				if (addressBookView.ShowDialog(this) != DialogResult.OK) return;
+				_meetingComposerPresenter.AddParticipantsFromAddressBook(addressBookViewModel);
 
-                if (toolStripButtonSchedules.Checked)
-                    ChangeView(ViewType.MeetingSchedulerView);
+				if (toolStripButtonSchedules.Checked)
+					changeView(ViewType.MeetingSchedulerView);
 
-                if(toolStripButtonImpact.Checked)
-                    ChangeView(ViewType.ImpactView);
-            }
-        }
+				if(toolStripButtonImpact.Checked)
+					changeView(ViewType.ImpactView);
+			}
+		}
 
-        public void OnParticipantsSet()
-        {
-            foreach (IMeetingDetailView meetingDetailView in _meetingDetailViews)
-            {
-                meetingDetailView.OnParticipantsSet();
-            }
-        }
+		public void OnParticipantsSet()
+		{
+			foreach (IMeetingDetailView meetingDetailView in _meetingDetailViews)
+			{
+				meetingDetailView.OnParticipantsSet();
+			}
+		}
 
-        public void SetRecurrentMeetingActive(bool recurrentMeetingActive)
-        {
-            toolStripButtonRecurrentMeetings.Checked = recurrentMeetingActive;
-        }
+		public void SetRecurrentMeetingActive(bool recurrentMeetingActive)
+		{
+			toolStripButtonRecurrentMeetings.Checked = recurrentMeetingActive;
+		}
 
-        public void DisableWhileLoadingStateHolder()
-        {
-            toolStripButtonMainAddressBook.Enabled = false;
-            toolStripButtonSchedules.Enabled = false;
-            toolStripButtonImpact.Enabled = false;
-	        toolStripButtonMainDelete.Enabled = false;
-	        toolStripButtonMainSave.Enabled = false;
-	       
-            foreach (IMeetingDetailView meetingDetailView in _meetingDetailViews)
-            {
-                meetingDetailView.OnDisableWhileLoadingStateHolder();
-            }
-        }
+		public void DisableWhileLoadingStateHolder()
+		{
+			toolStripButtonMainAddressBook.Enabled = false;
+			toolStripButtonSchedules.Enabled = false;
+			toolStripButtonImpact.Enabled = false;
+			toolStripButtonMainDelete.Enabled = false;
+			toolStripButtonMainSave.Enabled = false;
+		   
+			foreach (IMeetingDetailView meetingDetailView in _meetingDetailViews)
+			{
+				meetingDetailView.OnDisableWhileLoadingStateHolder();
+			}
+		}
 
-        public void EnableAfterLoadingStateHolder()
-        {
-            toolStripButtonMainAddressBook.Enabled = true;
-            toolStripButtonSchedules.Enabled = _viewSchedulesPermission;
-            toolStripButtonImpact.Enabled = true;
+		public void EnableAfterLoadingStateHolder()
+		{
+			toolStripButtonMainAddressBook.Enabled = true;
+			toolStripButtonSchedules.Enabled = _viewSchedulesPermission;
+			toolStripButtonImpact.Enabled = true;
 			toolStripButtonMainDelete.Enabled = true;
 			toolStripButtonMainSave.Enabled = true;
 	
-            foreach (IMeetingDetailView meetingDetailView in _meetingDetailViews)
-            {
-                meetingDetailView.OnEnableAfterLoadingStateHolder();
-            }
-        }
+			foreach (IMeetingDetailView meetingDetailView in _meetingDetailViews)
+			{
+				meetingDetailView.OnEnableAfterLoadingStateHolder();
+			}
+		}
 
-        public void StartLoadingStateHolder()
-        {
-            backgroundWorkerLoadStateHolder.RunWorkerAsync();
-        }
+		public void StartLoadingStateHolder()
+		{
+			backgroundWorkerLoadStateHolder.RunWorkerAsync();
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
-		private void ChangeView(ViewType viewType)
+		private void changeView(ViewType viewType)
 		{
 			if (_currentView != null)
 				_currentView.ResetSelection();
 
 			panelContent.Controls.Clear();
 
-            toolStripButtonMeetings.Checked = false;
-            toolStripButtonSchedules.Checked = false;
-            toolStripButtonImpact.Checked = false;
+			toolStripButtonMeetings.Checked = false;
+			toolStripButtonSchedules.Checked = false;
+			toolStripButtonImpact.Checked = false;
 
-            switch (viewType)
-            {
-                case ViewType.MeetingView:
-                    toolStripButtonMeetings.Checked = true;
-                    _currentView = _meetingDetailViews[0];
-                    break;
-
-                case ViewType.MeetingSchedulerView:
-                    EnsureSchedulesViewIsLoaded();
-                    toolStripButtonSchedules.Checked = true;
-                    _currentView = _meetingDetailViews[1];
-                    break;
-				case ViewType.ImpactView:
-					EnsureImpactViewIsLoaded();
-					toolStripButtonImpact.Checked = true;
-                    _currentView = _meetingDetailViews[2];
+			switch (viewType)
+			{
+				case ViewType.MeetingView:
+					toolStripButtonMeetings.Checked = true;
+					_currentView = _meetingDetailViews[0];
 					break;
-            }
 
-            if (_currentView == null) return;
+				case ViewType.MeetingSchedulerView:
+					ensureSchedulesViewIsLoaded();
+					toolStripButtonSchedules.Checked = true;
+					_currentView = _meetingDetailViews[1];
+					break;
+				case ViewType.ImpactView:
+					ensureImpactViewIsLoaded();
+					toolStripButtonImpact.Checked = true;
+					_currentView = _meetingDetailViews[2];
+					break;
+			}
 
-            panelContent.Controls.Add((Control)_currentView);
-            ((Control)_currentView).Dock = DockStyle.Fill;
-            _currentView.Presenter.UpdateView();
-        }
+			if (_currentView == null) return;
 
-        private void SetToolStripsToPreferredSize()
-        {
-            toolStripEx2.Size = toolStripEx2.PreferredSize;
-            toolStripEx3.Size = toolStripEx3.PreferredSize;
-            toolStripEx4.Size = toolStripEx4.PreferredSize;
-        }
+			panelContent.Controls.Add((Control)_currentView);
+			((Control)_currentView).Dock = DockStyle.Fill;
+			_currentView.Presenter.UpdateView();
+		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        private IMeetingGeneralView CreateMeetingGeneralView(IMeetingViewModel meetingViewModel)
-        {
-            var meetingGeneralView = new MeetingGeneralView(meetingViewModel, this) {Dock = DockStyle.Fill};
-            meetingGeneralView.ParticipantSelectionRequested += Composer_ParticipantSelectionRequested;
-            
-            return meetingGeneralView;
-        }
+		private void setToolStripsToPreferredSize()
+		{
+			toolStripEx2.Size = toolStripEx2.PreferredSize;
+			toolStripEx3.Size = toolStripEx3.PreferredSize;
+			toolStripEx4.Size = toolStripEx4.PreferredSize;
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private IMeetingImpactView GetImpactView()
+		private IMeetingGeneralView createMeetingGeneralView(IMeetingViewModel meetingViewModel)
+		{
+			var meetingGeneralView = new MeetingGeneralView(meetingViewModel, this) {Dock = DockStyle.Fill};
+			meetingGeneralView.ParticipantSelectionRequested += composerParticipantSelectionRequested;
+			
+			return meetingGeneralView;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private IMeetingImpactView getImpactView()
 		{
 			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder, this, _toogleManager);
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        private IMeetingDetailView CreateMeetingSchedulesView(IMeetingViewModel model, ISchedulerStateHolder holder)
-        {
-            var meetingSchedulesView = new MeetingSchedulesView(model, holder, this);
-            return meetingSchedulesView;
-        }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private IMeetingDetailView createMeetingSchedulesView(IMeetingViewModel model, ISchedulerStateHolder holder)
+		{
+			var meetingSchedulesView = new MeetingSchedulesView(model, holder, this);
+			return meetingSchedulesView;
+		}
 
-        private void ToolStripButtonImpact_Click(object sender, EventArgs e)
-        {
-			ChangeView(ViewType.ImpactView);
-        }
+		private void toolStripButtonImpactClick(object sender, EventArgs e)
+		{
+			changeView(ViewType.ImpactView);
+		}
 
-        private void backgroundWorkerLoadStateHolder_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            _meetingComposerPresenter.OnSchedulerStateHolderRequested();
-        }
+		private void backgroundWorkerLoadStateHolderDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+		{
+			_meetingComposerPresenter.OnSchedulerStateHolderRequested();
+		}
 
-        private void backgroundWorkerLoadStateHolder_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            if (IsDisposed) return;
+		private void backgroundWorkerLoadStateHolderRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+		{
+			if (IsDisposed) return;
 
-            _meetingComposerPresenter.OnSchedulerStateHolderLoaded();
-        }
+			_meetingComposerPresenter.OnSchedulerStateHolderLoaded();
+		}
 
-		private void EnsureSchedulesViewIsLoaded()
+		private void ensureSchedulesViewIsLoaded()
 		{
 			if (_meetingDetailViews.Count == 1)
-				_meetingDetailViews.Add(CreateMeetingSchedulesView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder));
+				_meetingDetailViews.Add(createMeetingSchedulesView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder));
 		}
 		
-		private void EnsureImpactViewIsLoaded()
+		private void ensureImpactViewIsLoaded()
 		{
-			EnsureSchedulesViewIsLoaded();
+			ensureSchedulesViewIsLoaded();
 			if (_meetingDetailViews.Count == 2)
-				_meetingDetailViews.Add(GetImpactView());
+				_meetingDetailViews.Add(getImpactView());
 		}
 
-        private void ReleaseManagedResources()
-        {
-            _meetingComposerPresenter.Dispose();
-        }
+		private void releaseManagedResources()
+		{
+			_meetingComposerPresenter.Dispose();
+		}
 
-        private void UnhookEvents()
-        {
-            if (_meetingDetailViews.Count==0) return;
-            var generalView = _meetingDetailViews[0] as MeetingGeneralView;
-            if (generalView!=null)
-            {
-                generalView.ParticipantSelectionRequested -= Composer_ParticipantSelectionRequested;
-            }
-            foreach (var meetingDetailView in _meetingDetailViews)
-            {
-                meetingDetailView.Presenter.CancelAllLoads();
-                meetingDetailView.Presenter.Dispose();
-            	var disposableView = meetingDetailView as IDisposable;
+		private void unhookEvents()
+		{
+			if (_meetingDetailViews.Count==0) return;
+			var generalView = _meetingDetailViews[0] as MeetingGeneralView;
+			if (generalView!=null)
+			{
+				generalView.ParticipantSelectionRequested -= composerParticipantSelectionRequested;
+			}
+			foreach (var meetingDetailView in _meetingDetailViews)
+			{
+				meetingDetailView.Presenter.CancelAllLoads();
+				meetingDetailView.Presenter.Dispose();
+				var disposableView = meetingDetailView as IDisposable;
 				if (disposableView != null)
 					disposableView.Dispose();
-            }
-            _meetingDetailViews.Clear();
-        }
+			}
+			_meetingDetailViews.Clear();
+		}
 
 		public void NotifyMeetingDatesChanged(object sender)
-    	{
+		{
 			foreach (var detailView in _meetingDetailViews)
 			{
 				if (detailView.Equals(sender)) continue;
 				detailView.OnMeetingDatesChanged();
 			}
-    	}
+		}
 
-    	public void NotifyMeetingTimeChanged(object sender)
-    	{
+		public void NotifyMeetingTimeChanged(object sender)
+		{
 			foreach (var detailView in _meetingDetailViews)
 			{
 				if (detailView == sender) continue;
 				detailView.OnMeetingTimeChanged();
 			}
-    	}
-    }
+		}
+	}
 
 	public interface INotifyComposerMeetingChanged
 	{

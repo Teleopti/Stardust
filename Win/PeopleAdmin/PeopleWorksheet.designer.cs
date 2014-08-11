@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// 
 			this.backStage1.ActiveTabFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.backStage1.AllowDrop = true;
-			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1402, 579);
+			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1402, 798);
 			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.backStage1.Controls.Add(this.backStageButton1);
 			this.backStage1.Controls.Add(this.backStageSeparator1);
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.backStage1.Location = new System.Drawing.Point(0, 0);
 			this.backStage1.Name = "backStage1";
 			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
-			this.backStage1.Size = new System.Drawing.Size(1402, 579);
+			this.backStage1.Size = new System.Drawing.Size(1402, 798);
 			this.backStage1.TabIndex = 6;
 			this.backStage1.Visible = false;
 			// 
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// contextMenuStripExExternalLogOn
 			// 
 			this.contextMenuStripExExternalLogOn.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.xxSearchThreeDotsToolStripMenuItem});
+			this.xxSearchThreeDotsToolStripMenuItem});
 			this.contextMenuStripExExternalLogOn.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(236)))), ((int)(((byte)(249)))));
 			this.contextMenuStripExExternalLogOn.Name = "contextMenuStripExExternalLogOn";
 			this.contextMenuStripExExternalLogOn.Size = new System.Drawing.Size(174, 26);
@@ -371,7 +371,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.peopleRibbon.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			this.peopleRibbon.TitleColor = System.Drawing.Color.Black;
 			this.peopleRibbon.TitleFont = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
-			this.peopleRibbon.Click += new System.EventHandler(this.peopleRibbon_Click);
 			// 
 			// toolStripTabItem1
 			// 
@@ -390,12 +389,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripTabItem1.Panel.Name = "ribbonPanel1";
 			this.toolStripTabItem1.Panel.ScrollPosition = 0;
 			this.toolStripTabItem1.Panel.TabIndex = 2;
-			this.toolStripTabItem1.Panel.Text = "xxHome";
+			this.toolStripTabItem1.Panel.Text = "XXHome";
 			this.toolStripTabItem1.Position = 0;
 			this.SetShortcut(this.toolStripTabItem1, System.Windows.Forms.Keys.None);
-			this.toolStripTabItem1.Size = new System.Drawing.Size(70, 25);
+			this.toolStripTabItem1.Size = new System.Drawing.Size(74, 25);
 			this.toolStripTabItem1.Tag = "1";
-			this.toolStripTabItem1.Text = "xxHome";
+			this.toolStripTabItem1.Text = "XXHome";
 			this.peopleRibbon.SetUseInCustomQuickAccessDialog(this.toolStripTabItem1, false);
 			this.peopleRibbon.SetUseInQuickAccessMenu(this.toolStripTabItem1, false);
 			// 
@@ -440,9 +439,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripFilter.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripFilter.Image = null;
 			this.toolStripFilter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonFilterPeople,
-            this.toolStripSeparator3,
-            this.toolStripComboBoxExTrackerDescription});
+			this.toolStripButtonFilterPeople,
+			this.toolStripSeparator3,
+			this.toolStripComboBoxExTrackerDescription});
 			this.toolStripFilter.Location = new System.Drawing.Point(216, 1);
 			this.toolStripFilter.Name = "toolStripFilter";
 			this.toolStripFilter.Office12Mode = false;
@@ -520,12 +519,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripViews.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripViews.Image = null;
 			this.toolStripViews.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonGeneral,
-            this.toolStripButtonPeoplePeriods,
-            this.toolStripButtonSchedulePeriods,
-            this.toolStripButtonPersonRotation,
-            this.toolStripButtonPersonAccounts,
-            this.toolStripButtonPersonAvailability});
+			this.toolStripButtonGeneral,
+			this.toolStripButtonPeoplePeriods,
+			this.toolStripButtonSchedulePeriods,
+			this.toolStripButtonPersonRotation,
+			this.toolStripButtonPersonAccounts,
+			this.toolStripButtonPersonAvailability});
 			this.toolStripViews.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
 			this.toolStripViews.Location = new System.Drawing.Point(595, 1);
 			this.toolStripViews.Name = "toolStripViews";
@@ -647,9 +646,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripExEditing.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExEditing.Image = null;
 			this.toolStripExEditing.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonFind,
-            this.toolStripDropDownButtonSort,
-            this.toolStripButtonClosePreviousPeriod});
+			this.toolStripButtonFind,
+			this.toolStripDropDownButtonSort,
+			this.toolStripButtonClosePreviousPeriod});
 			this.toolStripExEditing.Location = new System.Drawing.Point(1191, 1);
 			this.toolStripExEditing.Name = "toolStripExEditing";
 			this.toolStripExEditing.Office12Mode = false;
@@ -682,8 +681,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// 
 			this.peopleRibbon.SetDescription(this.toolStripDropDownButtonSort, "");
 			this.toolStripDropDownButtonSort.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemSortAsc,
-            this.toolStripMenuItemSortDesc});
+			this.toolStripMenuItemSortAsc,
+			this.toolStripMenuItemSortDesc});
 			this.toolStripDropDownButtonSort.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Sort;
 			this.toolStripDropDownButtonSort.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripDropDownButtonSort.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -741,12 +740,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripTabItem2.Panel.Name = "ribbonPanel2";
 			this.toolStripTabItem2.Panel.ScrollPosition = 0;
 			this.toolStripTabItem2.Panel.TabIndex = 3;
-			this.toolStripTabItem2.Panel.Text = "xxSettings";
+			this.toolStripTabItem2.Panel.Text = "XXSettings";
 			this.toolStripTabItem2.Position = 1;
 			this.SetShortcut(this.toolStripTabItem2, System.Windows.Forms.Keys.None);
-			this.toolStripTabItem2.Size = new System.Drawing.Size(79, 25);
+			this.toolStripTabItem2.Size = new System.Drawing.Size(83, 25);
 			this.toolStripTabItem2.Tag = "2";
-			this.toolStripTabItem2.Text = "xxSettings";
+			this.toolStripTabItem2.Text = "XXSettings";
 			this.peopleRibbon.SetUseInCustomQuickAccessDialog(this.toolStripTabItem2, false);
 			this.peopleRibbon.SetUseInQuickAccessMenu(this.toolStripTabItem2, false);
 			// 
@@ -760,14 +759,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripExSettings.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExSettings.Image = null;
 			this.toolStripExSettings.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonContract,
-            this.toolStripButtonContractSchedule,
-            this.toolStripButtonPartTimePercentage});
+			this.toolStripButtonContract,
+			this.toolStripButtonContractSchedule,
+			this.toolStripButtonPartTimePercentage});
 			this.toolStripExSettings.Location = new System.Drawing.Point(0, 1);
 			this.toolStripExSettings.Name = "toolStripExSettings";
 			this.toolStripExSettings.Office12Mode = false;
 			this.toolStripExSettings.ShowLauncher = false;
-			this.toolStripExSettings.Size = new System.Drawing.Size(572, 0);
+			this.toolStripExSettings.Size = new System.Drawing.Size(572, 87);
 			this.toolStripExSettings.TabIndex = 2;
 			this.toolStripExSettings.Text = "xxOptions";
 			this.peopleRibbon.SetUseInCustomQuickAccessDialog(this.toolStripExSettings, true);
@@ -781,7 +780,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripButtonContract.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonContract.Name = "toolStripButtonContract";
 			this.SetShortcut(this.toolStripButtonContract, System.Windows.Forms.Keys.None);
-			this.toolStripButtonContract.Size = new System.Drawing.Size(67, 0);
+			this.toolStripButtonContract.Size = new System.Drawing.Size(67, 71);
 			this.toolStripButtonContract.Text = "xxContract";
 			this.toolStripButtonContract.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonContract.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -798,7 +797,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripButtonContractSchedule.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonContractSchedule.Name = "toolStripButtonContractSchedule";
 			this.SetShortcut(this.toolStripButtonContractSchedule, System.Windows.Forms.Keys.None);
-			this.toolStripButtonContractSchedule.Size = new System.Drawing.Size(115, 0);
+			this.toolStripButtonContractSchedule.Size = new System.Drawing.Size(115, 71);
 			this.toolStripButtonContractSchedule.Text = "xxContractSchedule";
 			this.toolStripButtonContractSchedule.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonContractSchedule.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -814,7 +813,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripButtonPartTimePercentage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonPartTimePercentage.Name = "toolStripButtonPartTimePercentage";
 			this.SetShortcut(this.toolStripButtonPartTimePercentage, System.Windows.Forms.Keys.None);
-			this.toolStripButtonPartTimePercentage.Size = new System.Drawing.Size(128, 0);
+			this.toolStripButtonPartTimePercentage.Size = new System.Drawing.Size(128, 71);
 			this.toolStripButtonPartTimePercentage.Text = "xxPartTimePercentage";
 			this.toolStripButtonPartTimePercentage.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonPartTimePercentage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -853,7 +852,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.Quick_Access_Items.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.Quick_Access_Items.Image = null;
 			this.Quick_Access_Items.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonMainSave});
+			this.toolStripButtonMainSave});
 			this.Quick_Access_Items.Location = new System.Drawing.Point(0, 1);
 			this.Quick_Access_Items.Name = "Quick_Access_Items";
 			this.Quick_Access_Items.Office12Mode = false;

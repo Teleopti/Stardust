@@ -1703,7 +1703,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			PeopleBarItem.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			FunctionsBarItem.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			DataBarItem.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
-			ExplorerRibbon.MenuButtonText = UserTexts.Resources.File;
+			ExplorerRibbon.MenuButtonText = UserTexts.Resources.FileProperCase.ToUpper();
 			showRolesHeader();
 			showPeopleHeader();
 			showFunctionsHeader();

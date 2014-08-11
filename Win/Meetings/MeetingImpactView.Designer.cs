@@ -101,10 +101,10 @@
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(765, 470);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 600);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// gradientPanel2
@@ -112,21 +112,21 @@
 			this.gradientPanel2.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.gradientPanel2.Controls.Add(this.tableLayoutPanel3);
 			this.gradientPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.gradientPanel2.Location = new System.Drawing.Point(318, 390);
+			this.gradientPanel2.Location = new System.Drawing.Point(332, 510);
 			this.gradientPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.gradientPanel2.Name = "gradientPanel2";
-			this.gradientPanel2.Size = new System.Drawing.Size(447, 80);
+			this.gradientPanel2.Size = new System.Drawing.Size(468, 90);
 			this.gradientPanel2.TabIndex = 6;
 			// 
 			// tableLayoutPanel3
 			// 
 			this.tableLayoutPanel3.ColumnCount = 6;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 93F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 41F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 82F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 41F));
 			this.tableLayoutPanel3.Controls.Add(this.autoLabelPickResult, 3, 0);
 			this.tableLayoutPanel3.Controls.Add(this.buttonAdvPickBest, 4, 1);
 			this.tableLayoutPanel3.Controls.Add(this.autoLabel3, 0, 0);
@@ -143,19 +143,19 @@
 			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 3;
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(443, 76);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(464, 86);
 			this.tableLayoutPanel3.TabIndex = 4;
 			// 
 			// autoLabelPickResult
 			// 
 			this.autoLabelPickResult.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanel3.SetColumnSpan(this.autoLabelPickResult, 3);
-			this.autoLabelPickResult.Location = new System.Drawing.Point(306, 6);
+			this.autoLabelPickResult.Location = new System.Drawing.Point(303, 7);
 			this.autoLabelPickResult.Name = "autoLabelPickResult";
-			this.autoLabelPickResult.Size = new System.Drawing.Size(134, 13);
+			this.autoLabelPickResult.Size = new System.Drawing.Size(158, 15);
 			this.autoLabelPickResult.TabIndex = 15;
 			// 
 			// buttonAdvPickBest
@@ -163,49 +163,49 @@
 			this.buttonAdvPickBest.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.buttonAdvPickBest.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvPickBest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvPickBest.BeforeTouchSize = new System.Drawing.Size(64, 19);
+			this.buttonAdvPickBest.BeforeTouchSize = new System.Drawing.Size(75, 22);
 			this.buttonAdvPickBest.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvPickBest.IsBackStageButton = false;
-			this.buttonAdvPickBest.Location = new System.Drawing.Point(341, 28);
+			this.buttonAdvPickBest.Location = new System.Drawing.Point(344, 32);
 			this.buttonAdvPickBest.Name = "buttonAdvPickBest";
-			this.buttonAdvPickBest.Size = new System.Drawing.Size(64, 19);
+			this.buttonAdvPickBest.Size = new System.Drawing.Size(75, 22);
 			this.buttonAdvPickBest.TabIndex = 9;
 			this.buttonAdvPickBest.Text = "xxFind";
 			this.buttonAdvPickBest.UseVisualStyle = true;
-			this.buttonAdvPickBest.Click += new System.EventHandler(this.ButtonAdvPickBestClick);
+			this.buttonAdvPickBest.Click += new System.EventHandler(this.buttonAdvPickBestClick);
 			// 
 			// autoLabel3
 			// 
 			this.autoLabel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanel3.SetColumnSpan(this.autoLabel3, 2);
-			this.autoLabel3.Location = new System.Drawing.Point(3, 6);
+			this.autoLabel3.Location = new System.Drawing.Point(3, 7);
 			this.autoLabel3.Name = "autoLabel3";
-			this.autoLabel3.Size = new System.Drawing.Size(217, 13);
+			this.autoLabel3.Size = new System.Drawing.Size(201, 15);
 			this.autoLabel3.TabIndex = 3;
 			this.autoLabel3.Text = "xxPickBestMeetingSlot";
 			// 
 			// autoLabel1
 			// 
 			this.autoLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.autoLabel1.Location = new System.Drawing.Point(3, 31);
+			this.autoLabel1.Location = new System.Drawing.Point(3, 29);
 			this.autoLabel1.Name = "autoLabel1";
-			this.autoLabel1.Size = new System.Drawing.Size(97, 13);
+			this.autoLabel1.Size = new System.Drawing.Size(61, 29);
 			this.autoLabel1.TabIndex = 0;
 			this.autoLabel1.Text = "xxStartTimeColon";
 			// 
 			// autoLabel2
 			// 
 			this.autoLabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.autoLabel2.Location = new System.Drawing.Point(3, 56);
+			this.autoLabel2.Location = new System.Drawing.Point(3, 58);
 			this.autoLabel2.Name = "autoLabel2";
-			this.autoLabel2.Size = new System.Drawing.Size(97, 13);
+			this.autoLabel2.Size = new System.Drawing.Size(61, 28);
 			this.autoLabel2.TabIndex = 0;
 			this.autoLabel2.Text = "xxEndTimeColon";
 			// 
 			// dateTimePickerAdvStartSlotPeriod
 			// 
 			this.dateTimePickerAdvStartSlotPeriod.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-			this.dateTimePickerAdvStartSlotPeriod.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.dateTimePickerAdvStartSlotPeriod.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			// 
 			// 
 			// 
@@ -231,7 +231,7 @@
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvStartSlotPeriod.Calendar.Size = new System.Drawing.Size(110, 174);
+			this.dateTimePickerAdvStartSlotPeriod.Calendar.Size = new System.Drawing.Size(131, 174);
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.TabIndex = 0;
@@ -245,8 +245,8 @@
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.NoneButton.IsBackStageButton = false;
-			this.dateTimePickerAdvStartSlotPeriod.Calendar.NoneButton.Location = new System.Drawing.Point(137, 0);
-			this.dateTimePickerAdvStartSlotPeriod.Calendar.NoneButton.Size = new System.Drawing.Size(72, 25);
+			this.dateTimePickerAdvStartSlotPeriod.Calendar.NoneButton.Location = new System.Drawing.Point(125, 0);
+			this.dateTimePickerAdvStartSlotPeriod.Calendar.NoneButton.Size = new System.Drawing.Size(84, 25);
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.NoneButton.Text = "None";
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.NoneButton.UseVisualStyle = true;
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.NoneButton.Visible = false;
@@ -259,7 +259,7 @@
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.TodayButton.IsBackStageButton = false;
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvStartSlotPeriod.Calendar.TodayButton.Size = new System.Drawing.Size(110, 25);
+			this.dateTimePickerAdvStartSlotPeriod.Calendar.TodayButton.Size = new System.Drawing.Size(131, 25);
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvStartSlotPeriod.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -272,14 +272,15 @@
 			this.dateTimePickerAdvStartSlotPeriod.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(179)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvStartSlotPeriod.EnableNullDate = false;
 			this.dateTimePickerAdvStartSlotPeriod.EnableNullKeys = false;
+			this.dateTimePickerAdvStartSlotPeriod.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.dateTimePickerAdvStartSlotPeriod.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.dateTimePickerAdvStartSlotPeriod.Location = new System.Drawing.Point(106, 28);
+			this.dateTimePickerAdvStartSlotPeriod.Location = new System.Drawing.Point(70, 32);
 			this.dateTimePickerAdvStartSlotPeriod.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvStartSlotPeriod.MinValue = new System.DateTime(((long)(0)));
 			this.dateTimePickerAdvStartSlotPeriod.Name = "dateTimePickerAdvStartSlotPeriod";
 			this.dateTimePickerAdvStartSlotPeriod.NoneButtonVisible = false;
 			this.dateTimePickerAdvStartSlotPeriod.ShowCheckBox = false;
-			this.dateTimePickerAdvStartSlotPeriod.Size = new System.Drawing.Size(114, 19);
+			this.dateTimePickerAdvStartSlotPeriod.Size = new System.Drawing.Size(133, 21);
 			this.dateTimePickerAdvStartSlotPeriod.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvStartSlotPeriod.TabIndex = 4;
 			this.dateTimePickerAdvStartSlotPeriod.ThemesEnabled = true;
@@ -288,7 +289,7 @@
 			// dateTimePickerAdvEndSlotPeriod
 			// 
 			this.dateTimePickerAdvEndSlotPeriod.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-			this.dateTimePickerAdvEndSlotPeriod.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.dateTimePickerAdvEndSlotPeriod.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			// 
 			// 
 			// 
@@ -314,7 +315,7 @@
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvEndSlotPeriod.Calendar.Size = new System.Drawing.Size(110, 174);
+			this.dateTimePickerAdvEndSlotPeriod.Calendar.Size = new System.Drawing.Size(131, 174);
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.TabIndex = 0;
@@ -328,8 +329,8 @@
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.NoneButton.IsBackStageButton = false;
-			this.dateTimePickerAdvEndSlotPeriod.Calendar.NoneButton.Location = new System.Drawing.Point(137, 0);
-			this.dateTimePickerAdvEndSlotPeriod.Calendar.NoneButton.Size = new System.Drawing.Size(72, 25);
+			this.dateTimePickerAdvEndSlotPeriod.Calendar.NoneButton.Location = new System.Drawing.Point(125, 0);
+			this.dateTimePickerAdvEndSlotPeriod.Calendar.NoneButton.Size = new System.Drawing.Size(84, 25);
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.NoneButton.Text = "None";
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.NoneButton.UseVisualStyle = true;
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.NoneButton.Visible = false;
@@ -342,7 +343,7 @@
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.TodayButton.IsBackStageButton = false;
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvEndSlotPeriod.Calendar.TodayButton.Size = new System.Drawing.Size(110, 25);
+			this.dateTimePickerAdvEndSlotPeriod.Calendar.TodayButton.Size = new System.Drawing.Size(131, 25);
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvEndSlotPeriod.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -355,14 +356,15 @@
 			this.dateTimePickerAdvEndSlotPeriod.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(179)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvEndSlotPeriod.EnableNullDate = false;
 			this.dateTimePickerAdvEndSlotPeriod.EnableNullKeys = false;
+			this.dateTimePickerAdvEndSlotPeriod.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.dateTimePickerAdvEndSlotPeriod.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.dateTimePickerAdvEndSlotPeriod.Location = new System.Drawing.Point(106, 53);
+			this.dateTimePickerAdvEndSlotPeriod.Location = new System.Drawing.Point(70, 61);
 			this.dateTimePickerAdvEndSlotPeriod.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvEndSlotPeriod.MinValue = new System.DateTime(((long)(0)));
 			this.dateTimePickerAdvEndSlotPeriod.Name = "dateTimePickerAdvEndSlotPeriod";
 			this.dateTimePickerAdvEndSlotPeriod.NoneButtonVisible = false;
 			this.dateTimePickerAdvEndSlotPeriod.ShowCheckBox = false;
-			this.dateTimePickerAdvEndSlotPeriod.Size = new System.Drawing.Size(114, 20);
+			this.dateTimePickerAdvEndSlotPeriod.Size = new System.Drawing.Size(133, 21);
 			this.dateTimePickerAdvEndSlotPeriod.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvEndSlotPeriod.TabIndex = 6;
 			this.dateTimePickerAdvEndSlotPeriod.ThemesEnabled = true;
@@ -371,13 +373,13 @@
 			// office2007OutlookTimePickerStartSlotPeriod
 			// 
 			this.office2007OutlookTimePickerStartSlotPeriod.BackColor = System.Drawing.Color.White;
-			this.office2007OutlookTimePickerStartSlotPeriod.BeforeTouchSize = new System.Drawing.Size(74, 21);
+			this.office2007OutlookTimePickerStartSlotPeriod.BeforeTouchSize = new System.Drawing.Size(86, 23);
 			this.office2007OutlookTimePickerStartSlotPeriod.BindableTimeValue = System.TimeSpan.Parse("00:00:00");
-			this.office2007OutlookTimePickerStartSlotPeriod.Location = new System.Drawing.Point(226, 28);
+			this.office2007OutlookTimePickerStartSlotPeriod.Location = new System.Drawing.Point(210, 32);
 			this.office2007OutlookTimePickerStartSlotPeriod.MaxValue = System.TimeSpan.Parse("2.00:00:00");
 			this.office2007OutlookTimePickerStartSlotPeriod.MinValue = System.TimeSpan.Parse("00:00:00");
 			this.office2007OutlookTimePickerStartSlotPeriod.Name = "office2007OutlookTimePickerStartSlotPeriod";
-			this.office2007OutlookTimePickerStartSlotPeriod.Size = new System.Drawing.Size(74, 21);
+			this.office2007OutlookTimePickerStartSlotPeriod.Size = new System.Drawing.Size(86, 23);
 			this.office2007OutlookTimePickerStartSlotPeriod.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.office2007OutlookTimePickerStartSlotPeriod.TabIndex = 5;
 			this.office2007OutlookTimePickerStartSlotPeriod.Text = "00:00";
@@ -385,13 +387,13 @@
 			// office2007OutlookTimePickerEndSlotPeriod
 			// 
 			this.office2007OutlookTimePickerEndSlotPeriod.BackColor = System.Drawing.Color.White;
-			this.office2007OutlookTimePickerEndSlotPeriod.BeforeTouchSize = new System.Drawing.Size(74, 21);
+			this.office2007OutlookTimePickerEndSlotPeriod.BeforeTouchSize = new System.Drawing.Size(86, 23);
 			this.office2007OutlookTimePickerEndSlotPeriod.BindableTimeValue = System.TimeSpan.Parse("00:00:00");
-			this.office2007OutlookTimePickerEndSlotPeriod.Location = new System.Drawing.Point(226, 53);
+			this.office2007OutlookTimePickerEndSlotPeriod.Location = new System.Drawing.Point(210, 61);
 			this.office2007OutlookTimePickerEndSlotPeriod.MaxValue = System.TimeSpan.Parse("2.00:00:00");
 			this.office2007OutlookTimePickerEndSlotPeriod.MinValue = System.TimeSpan.Parse("00:00:00");
 			this.office2007OutlookTimePickerEndSlotPeriod.Name = "office2007OutlookTimePickerEndSlotPeriod";
-			this.office2007OutlookTimePickerEndSlotPeriod.Size = new System.Drawing.Size(74, 21);
+			this.office2007OutlookTimePickerEndSlotPeriod.Size = new System.Drawing.Size(86, 23);
 			this.office2007OutlookTimePickerEndSlotPeriod.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.office2007OutlookTimePickerEndSlotPeriod.TabIndex = 7;
 			this.office2007OutlookTimePickerEndSlotPeriod.Text = "00:00";
@@ -401,34 +403,34 @@
 			this.buttonAdvNext.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.buttonAdvNext.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvNext.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvNext.BeforeTouchSize = new System.Drawing.Size(29, 19);
+			this.buttonAdvNext.BeforeTouchSize = new System.Drawing.Size(34, 22);
 			this.buttonAdvNext.Enabled = false;
 			this.buttonAdvNext.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvNext.IsBackStageButton = false;
-			this.buttonAdvNext.Location = new System.Drawing.Point(411, 28);
+			this.buttonAdvNext.Location = new System.Drawing.Point(426, 32);
 			this.buttonAdvNext.Name = "buttonAdvNext";
-			this.buttonAdvNext.Size = new System.Drawing.Size(29, 19);
+			this.buttonAdvNext.Size = new System.Drawing.Size(34, 22);
 			this.buttonAdvNext.TabIndex = 10;
 			this.buttonAdvNext.Text = ">>";
 			this.buttonAdvNext.UseVisualStyle = true;
-			this.buttonAdvNext.Click += new System.EventHandler(this.ButtonAdvNextClick);
+			this.buttonAdvNext.Click += new System.EventHandler(this.buttonAdvNextClick);
 			// 
 			// buttonAdvPrevious
 			// 
 			this.buttonAdvPrevious.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.buttonAdvPrevious.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvPrevious.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvPrevious.BeforeTouchSize = new System.Drawing.Size(29, 19);
+			this.buttonAdvPrevious.BeforeTouchSize = new System.Drawing.Size(34, 22);
 			this.buttonAdvPrevious.Enabled = false;
 			this.buttonAdvPrevious.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvPrevious.IsBackStageButton = false;
-			this.buttonAdvPrevious.Location = new System.Drawing.Point(306, 28);
+			this.buttonAdvPrevious.Location = new System.Drawing.Point(303, 32);
 			this.buttonAdvPrevious.Name = "buttonAdvPrevious";
-			this.buttonAdvPrevious.Size = new System.Drawing.Size(29, 19);
+			this.buttonAdvPrevious.Size = new System.Drawing.Size(34, 22);
 			this.buttonAdvPrevious.TabIndex = 8;
 			this.buttonAdvPrevious.Text = "<<";
 			this.buttonAdvPrevious.UseVisualStyle = true;
-			this.buttonAdvPrevious.Click += new System.EventHandler(this.ButtonAdvPreviousClick);
+			this.buttonAdvPrevious.Click += new System.EventHandler(this.buttonAdvPreviousClick);
 			// 
 			// panel1
 			// 
@@ -436,21 +438,24 @@
 			this.tableLayoutPanel1.SetColumnSpan(this.panel1, 2);
 			this.panel1.Controls.Add(this.tabControlSkillResultGrid);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(3, 23);
+			this.panel1.Location = new System.Drawing.Point(3, 26);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(759, 364);
+			this.panel1.Size = new System.Drawing.Size(794, 481);
 			this.panel1.TabIndex = 4;
 			// 
 			// tabControlSkillResultGrid
 			// 
-			this.tabControlSkillResultGrid.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
-			this.tabControlSkillResultGrid.BeforeTouchSize = new System.Drawing.Size(759, 364);
+			this.tabControlSkillResultGrid.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
+			this.tabControlSkillResultGrid.ActiveTabFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tabControlSkillResultGrid.BackColor = System.Drawing.Color.White;
+			this.tabControlSkillResultGrid.BeforeTouchSize = new System.Drawing.Size(794, 481);
 			this.tabControlSkillResultGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlSkillResultGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControlSkillResultGrid.Location = new System.Drawing.Point(0, 0);
 			this.tabControlSkillResultGrid.Name = "tabControlSkillResultGrid";
-			this.tabControlSkillResultGrid.Size = new System.Drawing.Size(759, 364);
+			this.tabControlSkillResultGrid.Size = new System.Drawing.Size(794, 481);
 			this.tabControlSkillResultGrid.TabIndex = 2;
+			this.tabControlSkillResultGrid.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabControlSkillResultGrid.TabStop = false;
 			this.tabControlSkillResultGrid.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			// 
@@ -459,17 +464,17 @@
 			this.gradientPanel1.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.gradientPanel1.Controls.Add(this.tableLayoutPanel2);
 			this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.gradientPanel1.Location = new System.Drawing.Point(0, 390);
+			this.gradientPanel1.Location = new System.Drawing.Point(0, 510);
 			this.gradientPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.gradientPanel1.Name = "gradientPanel1";
-			this.gradientPanel1.Size = new System.Drawing.Size(318, 80);
+			this.gradientPanel1.Size = new System.Drawing.Size(332, 90);
 			this.gradientPanel1.TabIndex = 5;
 			// 
 			// tableLayoutPanel2
 			// 
 			this.tableLayoutPanel2.ColumnCount = 3;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
 			this.tableLayoutPanel2.Controls.Add(this.outlookTimePickerEndTime, 2, 2);
 			this.tableLayoutPanel2.Controls.Add(this.outlookTimePickerStartTime, 2, 1);
@@ -482,23 +487,22 @@
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 3;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(314, 76);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(328, 86);
 			this.tableLayoutPanel2.TabIndex = 3;
 			// 
 			// outlookTimePickerEndTime
 			// 
 			this.outlookTimePickerEndTime.BackColor = System.Drawing.Color.White;
-			this.outlookTimePickerEndTime.BeforeTouchSize = new System.Drawing.Size(74, 21);
+			this.outlookTimePickerEndTime.BeforeTouchSize = new System.Drawing.Size(74, 23);
 			this.outlookTimePickerEndTime.BindableTimeValue = System.TimeSpan.Parse("00:00:00");
-			this.outlookTimePickerEndTime.Location = new System.Drawing.Point(237, 53);
+			this.outlookTimePickerEndTime.Location = new System.Drawing.Point(251, 61);
 			this.outlookTimePickerEndTime.MaxValue = System.TimeSpan.Parse("2.00:00:00");
 			this.outlookTimePickerEndTime.MinValue = System.TimeSpan.Parse("00:00:00");
 			this.outlookTimePickerEndTime.Name = "outlookTimePickerEndTime";
-			this.outlookTimePickerEndTime.Size = new System.Drawing.Size(74, 21);
+			this.outlookTimePickerEndTime.Size = new System.Drawing.Size(74, 23);
 			this.outlookTimePickerEndTime.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.outlookTimePickerEndTime.TabIndex = 3;
 			this.outlookTimePickerEndTime.Text = "00:00";
@@ -506,13 +510,13 @@
 			// outlookTimePickerStartTime
 			// 
 			this.outlookTimePickerStartTime.BackColor = System.Drawing.Color.White;
-			this.outlookTimePickerStartTime.BeforeTouchSize = new System.Drawing.Size(74, 21);
+			this.outlookTimePickerStartTime.BeforeTouchSize = new System.Drawing.Size(74, 23);
 			this.outlookTimePickerStartTime.BindableTimeValue = System.TimeSpan.Parse("00:00:00");
-			this.outlookTimePickerStartTime.Location = new System.Drawing.Point(237, 28);
+			this.outlookTimePickerStartTime.Location = new System.Drawing.Point(251, 32);
 			this.outlookTimePickerStartTime.MaxValue = System.TimeSpan.Parse("2.00:00:00");
 			this.outlookTimePickerStartTime.MinValue = System.TimeSpan.Parse("00:00:00");
 			this.outlookTimePickerStartTime.Name = "outlookTimePickerStartTime";
-			this.outlookTimePickerStartTime.Size = new System.Drawing.Size(74, 21);
+			this.outlookTimePickerStartTime.Size = new System.Drawing.Size(74, 23);
 			this.outlookTimePickerStartTime.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.outlookTimePickerStartTime.TabIndex = 2;
 			this.outlookTimePickerStartTime.Text = "00:00";
@@ -520,7 +524,7 @@
 			// dateTimePickerAdvEndDate
 			// 
 			this.dateTimePickerAdvEndDate.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-			this.dateTimePickerAdvEndDate.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.dateTimePickerAdvEndDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			// 
 			// 
 			// 
@@ -546,7 +550,7 @@
 			this.dateTimePickerAdvEndDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvEndDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvEndDate.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvEndDate.Calendar.Size = new System.Drawing.Size(110, 174);
+			this.dateTimePickerAdvEndDate.Calendar.Size = new System.Drawing.Size(131, 174);
 			this.dateTimePickerAdvEndDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvEndDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvEndDate.Calendar.TabIndex = 0;
@@ -560,8 +564,8 @@
 			this.dateTimePickerAdvEndDate.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvEndDate.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvEndDate.Calendar.NoneButton.IsBackStageButton = false;
-			this.dateTimePickerAdvEndDate.Calendar.NoneButton.Location = new System.Drawing.Point(137, 0);
-			this.dateTimePickerAdvEndDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 25);
+			this.dateTimePickerAdvEndDate.Calendar.NoneButton.Location = new System.Drawing.Point(125, 0);
+			this.dateTimePickerAdvEndDate.Calendar.NoneButton.Size = new System.Drawing.Size(84, 25);
 			this.dateTimePickerAdvEndDate.Calendar.NoneButton.Text = "None";
 			this.dateTimePickerAdvEndDate.Calendar.NoneButton.UseVisualStyle = true;
 			this.dateTimePickerAdvEndDate.Calendar.NoneButton.Visible = false;
@@ -574,7 +578,7 @@
 			this.dateTimePickerAdvEndDate.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvEndDate.Calendar.TodayButton.IsBackStageButton = false;
 			this.dateTimePickerAdvEndDate.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvEndDate.Calendar.TodayButton.Size = new System.Drawing.Size(110, 25);
+			this.dateTimePickerAdvEndDate.Calendar.TodayButton.Size = new System.Drawing.Size(131, 25);
 			this.dateTimePickerAdvEndDate.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdvEndDate.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvEndDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -588,14 +592,15 @@
 			this.dateTimePickerAdvEndDate.Enabled = false;
 			this.dateTimePickerAdvEndDate.EnableNullDate = false;
 			this.dateTimePickerAdvEndDate.EnableNullKeys = false;
+			this.dateTimePickerAdvEndDate.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.dateTimePickerAdvEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.dateTimePickerAdvEndDate.Location = new System.Drawing.Point(117, 53);
+			this.dateTimePickerAdvEndDate.Location = new System.Drawing.Point(111, 61);
 			this.dateTimePickerAdvEndDate.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvEndDate.MinValue = new System.DateTime(((long)(0)));
 			this.dateTimePickerAdvEndDate.Name = "dateTimePickerAdvEndDate";
 			this.dateTimePickerAdvEndDate.NoneButtonVisible = false;
 			this.dateTimePickerAdvEndDate.ShowCheckBox = false;
-			this.dateTimePickerAdvEndDate.Size = new System.Drawing.Size(114, 20);
+			this.dateTimePickerAdvEndDate.Size = new System.Drawing.Size(133, 21);
 			this.dateTimePickerAdvEndDate.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvEndDate.TabIndex = 1;
 			this.dateTimePickerAdvEndDate.ThemesEnabled = true;
@@ -604,7 +609,7 @@
 			// dateTimePickerAdvStartDate
 			// 
 			this.dateTimePickerAdvStartDate.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-			this.dateTimePickerAdvStartDate.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.dateTimePickerAdvStartDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			// 
 			// 
 			// 
@@ -630,7 +635,7 @@
 			this.dateTimePickerAdvStartDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvStartDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvStartDate.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvStartDate.Calendar.Size = new System.Drawing.Size(110, 174);
+			this.dateTimePickerAdvStartDate.Calendar.Size = new System.Drawing.Size(131, 174);
 			this.dateTimePickerAdvStartDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvStartDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvStartDate.Calendar.TabIndex = 0;
@@ -644,8 +649,8 @@
 			this.dateTimePickerAdvStartDate.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvStartDate.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvStartDate.Calendar.NoneButton.IsBackStageButton = false;
-			this.dateTimePickerAdvStartDate.Calendar.NoneButton.Location = new System.Drawing.Point(137, 0);
-			this.dateTimePickerAdvStartDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 25);
+			this.dateTimePickerAdvStartDate.Calendar.NoneButton.Location = new System.Drawing.Point(125, 0);
+			this.dateTimePickerAdvStartDate.Calendar.NoneButton.Size = new System.Drawing.Size(84, 25);
 			this.dateTimePickerAdvStartDate.Calendar.NoneButton.Text = "None";
 			this.dateTimePickerAdvStartDate.Calendar.NoneButton.UseVisualStyle = true;
 			this.dateTimePickerAdvStartDate.Calendar.NoneButton.Visible = false;
@@ -658,7 +663,7 @@
 			this.dateTimePickerAdvStartDate.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvStartDate.Calendar.TodayButton.IsBackStageButton = false;
 			this.dateTimePickerAdvStartDate.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvStartDate.Calendar.TodayButton.Size = new System.Drawing.Size(110, 25);
+			this.dateTimePickerAdvStartDate.Calendar.TodayButton.Size = new System.Drawing.Size(131, 25);
 			this.dateTimePickerAdvStartDate.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdvStartDate.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvStartDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -671,14 +676,15 @@
 			this.dateTimePickerAdvStartDate.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(179)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvStartDate.EnableNullDate = false;
 			this.dateTimePickerAdvStartDate.EnableNullKeys = false;
+			this.dateTimePickerAdvStartDate.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.dateTimePickerAdvStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.dateTimePickerAdvStartDate.Location = new System.Drawing.Point(117, 28);
+			this.dateTimePickerAdvStartDate.Location = new System.Drawing.Point(111, 32);
 			this.dateTimePickerAdvStartDate.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvStartDate.MinValue = new System.DateTime(((long)(0)));
 			this.dateTimePickerAdvStartDate.Name = "dateTimePickerAdvStartDate";
 			this.dateTimePickerAdvStartDate.NoneButtonVisible = false;
 			this.dateTimePickerAdvStartDate.ShowCheckBox = false;
-			this.dateTimePickerAdvStartDate.Size = new System.Drawing.Size(114, 19);
+			this.dateTimePickerAdvStartDate.Size = new System.Drawing.Size(133, 21);
 			this.dateTimePickerAdvStartDate.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvStartDate.TabIndex = 1;
 			this.dateTimePickerAdvStartDate.ThemesEnabled = true;
@@ -687,24 +693,25 @@
 			// autoLabelEndTime
 			// 
 			this.autoLabelEndTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.autoLabelEndTime.Location = new System.Drawing.Point(3, 56);
+			this.autoLabelEndTime.Location = new System.Drawing.Point(3, 64);
 			this.autoLabelEndTime.Name = "autoLabelEndTime";
-			this.autoLabelEndTime.Size = new System.Drawing.Size(108, 13);
+			this.autoLabelEndTime.Size = new System.Drawing.Size(102, 15);
 			this.autoLabelEndTime.TabIndex = 0;
 			this.autoLabelEndTime.Text = "xxEndTimeColon";
 			// 
 			// autoLabelStartTime
 			// 
 			this.autoLabelStartTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.autoLabelStartTime.Location = new System.Drawing.Point(3, 31);
+			this.autoLabelStartTime.Location = new System.Drawing.Point(3, 36);
 			this.autoLabelStartTime.Name = "autoLabelStartTime";
-			this.autoLabelStartTime.Size = new System.Drawing.Size(108, 13);
+			this.autoLabelStartTime.Size = new System.Drawing.Size(102, 15);
 			this.autoLabelStartTime.TabIndex = 0;
 			this.autoLabelStartTime.Text = "xxStartTimeColon";
 			// 
 			// gradientPanelTop
 			// 
-			this.gradientPanelTop.Border3DStyle = System.Windows.Forms.Border3DStyle.Etched;
+			this.gradientPanelTop.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
+			this.gradientPanelTop.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tableLayoutPanel1.SetColumnSpan(this.gradientPanelTop, 2);
 			this.gradientPanelTop.Controls.Add(this.progressBarLoading);
 			this.gradientPanelTop.Controls.Add(this.autoLabelMeetingDate);
@@ -712,15 +719,16 @@
 			this.gradientPanelTop.Location = new System.Drawing.Point(0, 0);
 			this.gradientPanelTop.Margin = new System.Windows.Forms.Padding(0);
 			this.gradientPanelTop.Name = "gradientPanelTop";
-			this.gradientPanelTop.Size = new System.Drawing.Size(765, 20);
+			this.gradientPanelTop.Size = new System.Drawing.Size(800, 23);
 			this.gradientPanelTop.TabIndex = 7;
 			// 
 			// progressBarLoading
 			// 
+			this.progressBarLoading.BackColor = System.Drawing.Color.White;
 			this.progressBarLoading.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.progressBarLoading.Location = new System.Drawing.Point(0, 0);
 			this.progressBarLoading.Name = "progressBarLoading";
-			this.progressBarLoading.Size = new System.Drawing.Size(761, 16);
+			this.progressBarLoading.Size = new System.Drawing.Size(800, 23);
 			this.progressBarLoading.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
 			this.progressBarLoading.TabIndex = 5;
 			this.toolTip1.SetToolTip(this.progressBarLoading, "xxLoading");
@@ -733,7 +741,7 @@
 			this.autoLabelMeetingDate.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.autoLabelMeetingDate.Location = new System.Drawing.Point(0, 0);
 			this.autoLabelMeetingDate.Name = "autoLabelMeetingDate";
-			this.autoLabelMeetingDate.Size = new System.Drawing.Size(761, 16);
+			this.autoLabelMeetingDate.Size = new System.Drawing.Size(800, 23);
 			this.autoLabelMeetingDate.TabIndex = 0;
 			this.autoLabelMeetingDate.Text = "Date";
 			this.autoLabelMeetingDate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -746,13 +754,13 @@
 			// 
 			// MeetingImpactView
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Transparent;
 			this.Controls.Add(this.tableLayoutPanel1);
-			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.Name = "MeetingImpactView";
-			this.Size = new System.Drawing.Size(765, 470);
+			this.Size = new System.Drawing.Size(800, 600);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanel2)).EndInit();
 			this.gradientPanel2.ResumeLayout(false);
