@@ -30,9 +30,10 @@
         {
 			this.components = new System.ComponentModel.Container();
 			this.buttonApply = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.comboBoxPeriodScaleUnit = new System.Windows.Forms.ComboBox();
+			this.comboBoxPeriodScaleUnit = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.maskedTextBoxNumberOf = new System.Windows.Forms.MaskedTextBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxPeriodScaleUnit)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -56,12 +57,13 @@
 			// 
 			// comboBoxPeriodScaleUnit
 			// 
-			this.comboBoxPeriodScaleUnit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.comboBoxPeriodScaleUnit.BackColor = System.Drawing.Color.White;
+			this.comboBoxPeriodScaleUnit.BeforeTouchSize = new System.Drawing.Size(74, 21);
 			this.comboBoxPeriodScaleUnit.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.comboBoxPeriodScaleUnit.FormattingEnabled = true;
 			this.comboBoxPeriodScaleUnit.Location = new System.Drawing.Point(83, 3);
 			this.comboBoxPeriodScaleUnit.Name = "comboBoxPeriodScaleUnit";
 			this.comboBoxPeriodScaleUnit.Size = new System.Drawing.Size(74, 21);
+			this.comboBoxPeriodScaleUnit.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxPeriodScaleUnit.TabIndex = 5;
 			// 
 			// maskedTextBoxNumberOf
@@ -98,10 +100,11 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BackColor = System.Drawing.Color.Transparent;
+			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "DateSelectionRolling";
 			this.Size = new System.Drawing.Size(160, 62);
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxPeriodScaleUnit)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.ResumeLayout(false);
@@ -111,7 +114,7 @@
         #endregion
 
         private Syncfusion.Windows.Forms.ButtonAdv buttonApply;
-        private System.Windows.Forms.ComboBox comboBoxPeriodScaleUnit;
+        private Syncfusion .Windows.Forms.Tools.ComboBoxAdv  comboBoxPeriodScaleUnit;
         private System.Windows.Forms.MaskedTextBox maskedTextBoxNumberOf;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }

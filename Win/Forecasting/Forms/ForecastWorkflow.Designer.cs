@@ -140,6 +140,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			// tabSeason
 			// 
+			this.tabSeason.BackColor = System.Drawing.Color.White;
 			this.tabSeason.Controls.Add(this.wfSeasonalityTabs);
 			this.tabSeason.Image = null;
 			this.tabSeason.ImageSize = new System.Drawing.Size(16, 16);
@@ -148,6 +149,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.tabSeason.Name = "tabSeason";
 			this.tabSeason.ShowCloseButton = true;
 			this.tabSeason.Size = new System.Drawing.Size(1088, 607);
+			this.tabSeason.TabBackColor = System.Drawing.Color.LightGray;
 			this.tabSeason.TabIndex = 1;
 			this.tabSeason.Tag = "volume";
 			this.tabSeason.Text = "xxVolumeForecast";
@@ -156,6 +158,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// wfSeasonalityTabs
 			// 
 			this.wfSeasonalityTabs.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.wfSeasonalityTabs.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.wfSeasonalityTabs.Location = new System.Drawing.Point(0, 0);
 			this.wfSeasonalityTabs.Name = "wfSeasonalityTabs";
 			this.wfSeasonalityTabs.Size = new System.Drawing.Size(1088, 607);
@@ -163,6 +166,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			// tabTemplation
 			// 
+			this.tabTemplation.BackColor = System.Drawing.Color.White;
 			this.tabTemplation.Controls.Add(this.wfTemplateTabs);
 			this.tabTemplation.Image = null;
 			this.tabTemplation.ImageSize = new System.Drawing.Size(16, 16);
@@ -171,6 +175,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.tabTemplation.Name = "tabTemplation";
 			this.tabTemplation.ShowCloseButton = true;
 			this.tabTemplation.Size = new System.Drawing.Size(1088, 607);
+			this.tabTemplation.TabBackColor = System.Drawing.Color.LightGray;
 			this.tabTemplation.TabIndex = 6;
 			this.tabTemplation.Tag = "templation";
 			this.tabTemplation.Text = "xxWorkloadDayTemplates";
@@ -179,6 +184,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// wfTemplateTabs
 			// 
 			this.wfTemplateTabs.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.wfTemplateTabs.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.wfTemplateTabs.Location = new System.Drawing.Point(0, 0);
 			this.wfTemplateTabs.Margin = new System.Windows.Forms.Padding(0);
 			this.wfTemplateTabs.Name = "wfTemplateTabs";

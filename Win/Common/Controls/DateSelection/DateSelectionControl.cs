@@ -31,31 +31,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             if (!allow) dateSelectionFromTo1.ValueChanged -= dateSelectionFromTo1DateRangeValueChanged;
         }
 
-        public Color TabPanelBackColor
-        {
-            get
-            {
-                return tabControlAdvDateSelection.TabPanelBackColor;
-            }
-            set
-            {
-                tabControlAdvDateSelection.TabPanelBackColor = value;
-            }
-        }
-
-        public BorderStyle TabPanelBorderStyle
-        {
-            get
-            {
-                return tabControlAdvDateSelection.BorderStyle;
-            }
-            set
-            {
-                tabControlAdvDateSelection.BorderStyle = value;
-            }
-        }
-
-        public IList<DateOnlyPeriod> GetCurrentlySelectedDates()
+		  public IList<DateOnlyPeriod> GetCurrentlySelectedDates()
         {
             var dateSelection =
                 tabControlAdvDateSelection.SelectedTab.Controls[0] as IDateSelectionControl;

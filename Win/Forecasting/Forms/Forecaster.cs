@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             BrushInfo myBrush = ColorHelper.ControlGradientPanelBrush();
 
             splitContainer2.BackgroundColor = myBrush;
-            splitContainerWorkloadSkill.BackgroundColor = myBrush;
+            //splitContainerWorkloadSkill.BackgroundColor = myBrush;
             tableLayoutPanel1.BackColor = myBrush.BackColor;
             tabControlAdvMultisiteSkill.BackColor = myBrush.BackColor;
             tabControlWorkloads.BackColor = myBrush.BackColor;

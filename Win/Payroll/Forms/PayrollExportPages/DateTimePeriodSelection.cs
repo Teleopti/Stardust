@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
         private void SetColors()
         {
             BackColor = ColorHelper.WizardBackgroundColor();
-            dateSelectionControlPeriod.TabPanelBackColor = ColorHelper.WizardBackgroundColor();
+				//dateSelectionControlPeriod.TabPanelBackColor = ColorHelper.WizardBackgroundColor();
         }
 
         public void Populate(IAggregateRoot aggregateRoot)

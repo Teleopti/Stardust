@@ -48,7 +48,7 @@
 			// 
 			// tabControlAdvDateSelection
 			// 
-			this.tabControlAdvDateSelection.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
+			this.tabControlAdvDateSelection.ActiveTabColor = System.Drawing.Color.DarkGray;
 			this.tabControlAdvDateSelection.ActiveTabFont = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabControlAdvDateSelection.BackColor = System.Drawing.Color.White;
 			this.tabControlAdvDateSelection.BeforeTouchSize = new System.Drawing.Size(196, 387);
@@ -57,7 +57,7 @@
 			this.tabControlAdvDateSelection.Controls.Add(this.tabPageAdvFromTo);
 			this.tabControlAdvDateSelection.Controls.Add(this.tabPageAdvCalendar);
 			this.tabControlAdvDateSelection.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tabControlAdvDateSelection.FixedSingleBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.tabControlAdvDateSelection.FixedSingleBorderColor = System.Drawing.Color.White;
 			this.tabControlAdvDateSelection.ImageList = this.imageListTabs;
 			this.tabControlAdvDateSelection.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlAdvDateSelection.Location = new System.Drawing.Point(0, 0);
@@ -69,7 +69,7 @@
 			// 
 			// tabPageAdvRolling
 			// 
-			this.tabPageAdvRolling.BackColor = System.Drawing.SystemColors.Control;
+			this.tabPageAdvRolling.BackColor = System.Drawing.Color.White;
 			this.tabPageAdvRolling.Controls.Add(this.dateSelectionRolling1);
 			this.tabPageAdvRolling.Image = null;
 			this.tabPageAdvRolling.ImageIndex = 5;
@@ -78,12 +78,13 @@
 			this.tabPageAdvRolling.Name = "tabPageAdvRolling";
 			this.tabPageAdvRolling.ShowCloseButton = true;
 			this.tabPageAdvRolling.Size = new System.Drawing.Size(196, 359);
+			this.tabPageAdvRolling.TabBackColor = System.Drawing.Color.White;
 			this.tabPageAdvRolling.TabIndex = 1;
 			this.tabPageAdvRolling.ThemesEnabled = false;
 			// 
 			// dateSelectionRolling1
 			// 
-			this.dateSelectionRolling1.BackColor = System.Drawing.Color.Transparent;
+			this.dateSelectionRolling1.BackColor = System.Drawing.Color.White;
 			this.dateSelectionRolling1.ButtonApplyText = "xxAdd";
 			this.dateSelectionRolling1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.dateSelectionRolling1.Location = new System.Drawing.Point(0, 0);
@@ -112,7 +113,7 @@
 			// 
 			// dateSelectionFromTo1
 			// 
-			this.dateSelectionFromTo1.BackColor = System.Drawing.Color.Transparent;
+			this.dateSelectionFromTo1.BackColor = System.Drawing.Color.White;
 			this.dateSelectionFromTo1.ButtonApplyText = "xxAdd";
 			this.dateSelectionFromTo1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateSelectionFromTo1.Font = new System.Drawing.Font("Segoe UI", 9.75F);
@@ -134,7 +135,7 @@
 			// 
 			// tabPageAdvCalendar
 			// 
-			this.tabPageAdvCalendar.BackColor = System.Drawing.Color.Transparent;
+			this.tabPageAdvCalendar.BackColor = System.Drawing.Color.White;
 			this.tabPageAdvCalendar.Controls.Add(this.dateSelectionCalendar1);
 			this.tabPageAdvCalendar.Image = null;
 			this.tabPageAdvCalendar.ImageIndex = 3;
@@ -143,6 +144,7 @@
 			this.tabPageAdvCalendar.Name = "tabPageAdvCalendar";
 			this.tabPageAdvCalendar.ShowCloseButton = true;
 			this.tabPageAdvCalendar.Size = new System.Drawing.Size(196, 359);
+			this.tabPageAdvCalendar.TabBackColor = System.Drawing.Color.White;
 			this.tabPageAdvCalendar.TabIndex = 2;
 			this.tabPageAdvCalendar.ThemesEnabled = false;
 			// 
