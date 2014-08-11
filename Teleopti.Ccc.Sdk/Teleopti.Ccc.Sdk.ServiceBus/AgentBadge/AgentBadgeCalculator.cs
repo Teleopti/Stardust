@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 {
@@ -18,8 +17,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		}
 
 		protected IList<IPerson> AddBadge(IEnumerable<IPerson> allPersons, IEnumerable<Guid> agentsThatShouldGetBadge,
-			BadgeType badgeType,
-			int silverToBronzeBadgeRate, int goldToSilverBadgeRate, DateOnly date)
+			BadgeType badgeType, int silverToBronzeBadgeRate, int goldToSilverBadgeRate, DateOnly date)
 		{
 			var personsThatGotABadge = new List<IPerson>();
 			if (agentsThatShouldGetBadge != null)
@@ -50,21 +48,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int silverToBronzeBadgeRate, int goldToSilverBadgeRate)
 		{
 			var personsThatGotBadge = new List<IPerson>();
-			var agents = _statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date);
+			var agents = _statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date);
 			if (agents != null)
 			{
 				var personsThatGotAAdherenceBadge = AddBadge(allPersons, agents, BadgeType.Adherence, silverToBronzeBadgeRate, goldToSilverBadgeRate, date);
 				personsThatGotBadge.AddRange(personsThatGotAAdherenceBadge);
 			}
 
-			agents = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date);
+			agents = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date);
 			if (agents != null)
 			{
 				var personsThatGotAAnsweredCallsBadge = AddBadge(allPersons, agents, BadgeType.AnsweredCalls, silverToBronzeBadgeRate, goldToSilverBadgeRate, date);
 				personsThatGotBadge.AddRange(personsThatGotAAnsweredCallsBadge);
 			}
 
-			agents = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date);
+			agents = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date);
 			if (agents != null)
 			{
 				var personsThatGotAAHTBadge = AddBadge(allPersons, agents, BadgeType.AverageHandlingTime, silverToBronzeBadgeRate, goldToSilverBadgeRate, date);
