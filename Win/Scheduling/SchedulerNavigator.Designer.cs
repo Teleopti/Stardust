@@ -91,6 +91,7 @@
 			this.toolStripPeople.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripPeople.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.toolStripPeople.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.toolStripPeople.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripPeople.Image = null;
 			this.toolStripPeople.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,

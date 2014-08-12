@@ -37,7 +37,9 @@
 			// toolStripEx1
 			// 
 			this.toolStripEx1.BackColor = System.Drawing.Color.White;
-			this.toolStripEx1.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripEx1.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+			this.toolStripEx1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.toolStripEx1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripEx1.Image = null;
 			this.toolStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
@@ -51,7 +53,7 @@
 			this.toolStripEx1.Padding = new System.Windows.Forms.Padding(12, 0, 1, 0);
 			this.toolStripEx1.ShowCaption = false;
 			this.toolStripEx1.ShowLauncher = false;
-			this.toolStripEx1.Size = new System.Drawing.Size(299, 82);
+			this.toolStripEx1.Size = new System.Drawing.Size(299, 73);
 			this.toolStripEx1.TabIndex = 0;
 			this.toolStripEx1.Text = "toolStripEx1";
 			this.toolStripEx1.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
@@ -65,7 +67,6 @@
 			// 
 			// toolStripButton1
 			// 
-			this.toolStripButton1.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.toolStripButton1.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Open_small;
 			this.toolStripButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -77,13 +78,13 @@
 			// 
 			// ShiftsNavigationPanel
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.toolStripEx1);
-			this.Font = new System.Drawing.Font("Segoe UI", 9F);
+			this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.Name = "ShiftsNavigationPanel";
-			this.Size = new System.Drawing.Size(299, 646);
+			this.Size = new System.Drawing.Size(299, 732);
 			this.toolStripEx1.ResumeLayout(false);
 			this.toolStripEx1.PerformLayout();
 			this.ResumeLayout(false);

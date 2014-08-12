@@ -196,14 +196,14 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.splitContainer1.Panel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.splitContainer1.Size = new System.Drawing.Size(254, 728);
-			this.splitContainer1.SplitterDistance = 517;
+			this.splitContainer1.SplitterDistance = 521;
 			this.splitContainer1.SplitterWidth = 2;
 			this.splitContainer1.TabIndex = 5;
 			// 
 			// treeViewAdvBudgetGroups
 			// 
 			this.treeViewAdvBudgetGroups.BackColor = System.Drawing.Color.White;
-			this.treeViewAdvBudgetGroups.BeforeTouchSize = new System.Drawing.Size(254, 517);
+			this.treeViewAdvBudgetGroups.BeforeTouchSize = new System.Drawing.Size(254, 521);
 			this.treeViewAdvBudgetGroups.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.treeViewAdvBudgetGroups.BorderColor = System.Drawing.Color.Transparent;
 			this.treeViewAdvBudgetGroups.BorderSides = System.Windows.Forms.Border3DSide.Top;
@@ -222,6 +222,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.treeViewAdvBudgetGroups.HelpTextControl.Size = new System.Drawing.Size(49, 15);
 			this.treeViewAdvBudgetGroups.HelpTextControl.TabIndex = 0;
 			this.treeViewAdvBudgetGroups.HelpTextControl.Text = "help text";
+			this.treeViewAdvBudgetGroups.ItemHeight = 25;
 			this.treeViewAdvBudgetGroups.LeftImageList = this.imageListBudgetGroup;
 			this.treeViewAdvBudgetGroups.Location = new System.Drawing.Point(0, 0);
 			this.treeViewAdvBudgetGroups.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
@@ -229,7 +230,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.treeViewAdvBudgetGroups.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
 			this.treeViewAdvBudgetGroups.ShowCheckBoxes = false;
 			this.treeViewAdvBudgetGroups.ShowFocusRect = false;
-			this.treeViewAdvBudgetGroups.Size = new System.Drawing.Size(254, 517);
+			this.treeViewAdvBudgetGroups.Size = new System.Drawing.Size(254, 521);
 			this.treeViewAdvBudgetGroups.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
 			this.treeViewAdvBudgetGroups.TabIndex = 0;
 			this.treeViewAdvBudgetGroups.Text = "treeViewAdv1";
@@ -253,6 +254,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripBudgetGroups.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripBudgetGroups.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.toolStripBudgetGroups.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.toolStripBudgetGroups.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripBudgetGroups.Image = null;
 			this.toolStripBudgetGroups.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabelSkillActions,
@@ -270,7 +272,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripBudgetGroups.Padding = new System.Windows.Forms.Padding(0);
 			this.toolStripBudgetGroups.ShowCaption = false;
 			this.toolStripBudgetGroups.ShowLauncher = false;
-			this.toolStripBudgetGroups.Size = new System.Drawing.Size(244, 209);
+			this.toolStripBudgetGroups.Size = new System.Drawing.Size(244, 207);
 			this.toolStripBudgetGroups.TabIndex = 5;
 			this.toolStripBudgetGroups.Text = "xxActions";
 			this.toolStripBudgetGroups.Visible = false;
@@ -347,6 +349,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripRoot.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripRoot.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.toolStripRoot.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.toolStripRoot.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripRoot.Image = null;
 			this.toolStripRoot.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabelNewPlanningGroup,
@@ -359,7 +362,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripRoot.Padding = new System.Windows.Forms.Padding(0);
 			this.toolStripRoot.ShowCaption = false;
 			this.toolStripRoot.ShowLauncher = false;
-			this.toolStripRoot.Size = new System.Drawing.Size(244, 209);
+			this.toolStripRoot.Size = new System.Drawing.Size(244, 205);
 			this.toolStripRoot.TabIndex = 5;
 			this.toolStripRoot.Text = "xxActions";
 			this.toolStripRoot.Visible = false;

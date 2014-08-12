@@ -89,7 +89,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.toolStripPeople.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.toolStripPeople.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripPeople.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-			this.toolStripPeople.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripPeople.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.toolStripPeople.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripPeople.Image = null;
 			this.toolStripPeople.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
@@ -180,7 +181,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			this.tsEditGroupPage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsEditGroupPage.Name = "tsEditGroupPage";
 			this.tsEditGroupPage.Padding = new System.Windows.Forms.Padding(4);
-			this.tsEditGroupPage.Size = new System.Drawing.Size(136, 29);
+			this.tsEditGroupPage.Size = new System.Drawing.Size(250, 29);
 			this.tsEditGroupPage.Text = "xxEditGroupPage";
 			this.tsEditGroupPage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.tsEditGroupPage.Click += new System.EventHandler(this.tsEditGroupPageClick);

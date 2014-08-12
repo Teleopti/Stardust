@@ -648,6 +648,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			ModuleSelected(e.SelectedItem);
 		}
 
+		private void ribbonControlAdv1_Click(object sender, EventArgs e)
+		{
+
+		}
+
        
 
     }
