@@ -41,7 +41,9 @@
 
 			ko.applyBindings(viewModel, options.bindingElement);
 
-			ajax.ajax({
+			viewModel.load();
+
+			/*ajax.ajax({
 				url: "Sites",
 				success: function(data) {
 					viewModel.fill(data);
@@ -87,8 +89,8 @@
 				viewModel.updateFromNotification(notification);
 			}, function() {
 				$('.realtimeadherencesites').attr("data-subscription-done"," ");
-			});
-		},
+			});*/
+		}
 	};
 });
 

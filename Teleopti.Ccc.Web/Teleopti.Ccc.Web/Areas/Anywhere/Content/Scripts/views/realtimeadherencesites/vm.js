@@ -5,7 +5,10 @@
 		'views/realtimeadherencesites/business_unit',
 		'resources',
 		'amplify',
-		'navigation'
+		'navigation',
+		'subscriptions.adherencesites',
+		'ajax',
+		'toggleQuerier'
 ],
 	function (
 		ko,
@@ -14,7 +17,10 @@
 		businessUnit,
 		resources,
 		amplify,
-		navigation
+		navigation,
+		subscriptions,
+		ajax,
+		toggleQuerier
 	) {
 		return function () {
 
@@ -44,6 +50,7 @@
 			};
 
 			that.fillBusinessUnits = function (data) {
+				that.businessUnits([]);
 				for (var i = 0; i < data.length; i++) {
 					var newBU = businessUnit();
 					newBU.fill(data[i]);
@@ -69,6 +76,65 @@
 			that.openSelectedSites = function() {
 				amplify.store("MultipleSites", that.sitesToOpen());
 				navigation.GotoRealTimeAdherenceMultipleSiteDetails('MultipleSites');
+			};
+
+			that.businessUnitChanged = function(data, event) {
+				that.load(event.target.options[event.target.selectedIndex].value);
+			};
+
+			that.load = function (businessId) {
+				ajax.ajax({
+					headers: { 'x-business-unit-filter': businessId ? businessId : '' },
+					url: "Sites",
+					success: function(data) {
+						that.fill(data);
+						checkFeature();
+						checkAgentsForMultipleTeamsFeature();
+						checkBusinessUnitsFeature();
+					}
+				});
+				subscriptions.unsubscribeAdherence();
+				subscriptions.subscribeAdherence(function (notification) {
+					that.updateFromNotification(notification);
+				}, function () {
+					$('.realtimeadherencesites').attr("data-subscription-done", " ");
+				});
+			};
+
+
+			var checkFeature = function() {
+				toggleQuerier('RTA_RtaLastStatesOverview_27789', { enabled: loadLastStates });
+			};
+
+
+			var loadLastStates = function () {
+				for (var i = 0; i < that.sites().length; i++) {
+					(function (s) {
+						ajax.ajax({
+							url: "Sites/GetOutOfAdherence?siteId=" + s.Id,
+							success: function (d) {
+								that.update(d);
+							}
+						});
+					})(that.sites()[i]);
+				}
+			};
+
+			var checkAgentsForMultipleTeamsFeature = function() {
+				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', { enabled: function() { that.agentStatesForMultipleSites(true); } });
+			};
+
+			var checkBusinessUnitsFeature = function() {
+				toggleQuerier('RTA_MonitorMultipleBusinessUnits_28348', {
+					enabled: function() {
+						ajax.ajax({
+							url: "BusinessUnit",
+							success: function(data) {
+								that.fillBusinessUnits(data);
+							}
+						});
+					}
+				});
 			};
 
 			return that;

@@ -9,8 +9,8 @@
 	<br />
 	<div class="row">
 		<div class="col-xs-12 col-md-4">
-			<select id="bu-picker" class="col-xs-12" data-bind="foreach: businessUnits">
-					<option data-bind="text: Name, value: Id"></option>
+			<select id="bu-picker" class="col-xs-12" data-bind="foreach: businessUnits, event:{change: businessUnitChanged}">
+				<option data-bind="text: Name, value: Id"></option>
 			</select>
 		</div>
 	</div>

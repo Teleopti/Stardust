@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Core.Aop.Aspects
 
         public void OnBeforeInvokation()
         {
-            var value = _context.Current().Request.Headers["x-override-business-unit-filter"];
+            var value = _context.Current().Request.Headers["x-business-unit-filter"];
             var id = Guid.Parse(value);
             _disposable = _overrider.OverrideWith(id);
         }
