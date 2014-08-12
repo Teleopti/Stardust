@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 						Rhino.Mocks.Constraints.Is.Matching(new Predicate<object[]>(m =>
 						{
 							var msg = ((CalculateBadgeMessage) m[0]);
-							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id && msg.CalculationDate == new DateOnly(expectedCalculationDate);
+							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id && msg.CalculationDate == expectedCalculationDate;
 						}))));
 
 		}

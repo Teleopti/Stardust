@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Messages.General
 			get { return Guid.NewGuid(); }
 		}
 
-		public DateOnly CalculationDate { get; set; }
+		public DateTime CalculationDate { get; set; }
 		public string TimeZoneCode { get; set; }
 	}
 }

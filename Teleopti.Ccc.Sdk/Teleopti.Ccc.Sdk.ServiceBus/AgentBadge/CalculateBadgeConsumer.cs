@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				
 				allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
-				var peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZoneCode, message.CalculationDate,
+				var peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZoneCode, new DateOnly(message.CalculationDate),
 					adherenceReportSetting.CalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
 				foreach (var person in peopleGotABadge)
 				{

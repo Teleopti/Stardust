@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				Datasource = message.Datasource,
 				BusinessUnitId = message.BusinessUnitId,
 				Timestamp = DateTime.UtcNow,
-				CalculationDate = new DateOnly(yesterdayForGivenTimeZone),
+				CalculationDate = yesterdayForGivenTimeZone,
 				TimeZoneCode = message.TimeZoneCode 
 			});
 		}
