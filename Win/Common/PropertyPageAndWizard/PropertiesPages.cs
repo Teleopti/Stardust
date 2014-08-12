@@ -15,19 +15,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 		{
 			InitializeComponent();
 			if (!DesignMode) SetTexts();
-			//SetColor();
 		}
-
-		//private void SetColor()
-		//{
-		//	splitContainerHorizontal.BackColor = ColorHelper.WizardPanelSeparator();
-		//	splitContainerPages.BackColor = ColorHelper.WizardPanelSeparator();
-		//	splitContainerHorizontal.Panel1.BackColor = ColorHelper.WizardPanelBackgroundColor();
-		//	splitContainerHorizontal.Panel2.BackColor = ColorHelper.WizardPanelButtonHolder();
-		//	splitContainerPages.Panel1.BackColor = ColorHelper.WizardPanelBackgroundColor();
-		//	splitContainerPages.Panel2.BackColor = ColorHelper.WizardPanelBackgroundColor();
-		//	treeViewPages.BackColor = ColorHelper.StandardTreeBackgroundColor();
-		//}
 
 		public PropertiesPages(IAbstractPropertyPages propertyPages) : this()
 		{
@@ -54,6 +42,8 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 				treeViewPages.ExpandAll();
 				treeViewPages.EndUpdate();
 				displayPage(_propertyPages.FirstPage);
+				if (treeViewPages.Nodes.Count > 0)
+					treeViewPages.SelectedNodes.Add(treeViewPages.Nodes[0]);
 			}
 		}
 
@@ -70,26 +60,11 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			c.Dock = DockStyle.Fill;
 			c.TabIndex = 1;
 			splitContainerPages.Panel2.Controls.Add(c);
-			treeViewPages.SelectedNodes.Clear();
-			foreach (TreeNodeAdv treeNode in treeViewPages.Nodes)
-			{
-				if (treeNode.Text == _propertyPages.CurrentPage.PageName)
-					treeViewPages.SelectedNodes.Add(treeNode);
-			}
 			splitContainerPages.ResumeLayout();
 			ResumeLayout();
-
-			c.Select();
-			_propertyPages.NameChanged += ppNameChanged;
-
 		}
 
-		private void ppNameChanged(object sender, WizardNameChangedEventArgs e)
-		{
-			Text = e.NewName;
-		}
-
-		private void buttonOK_Click(object sender, EventArgs e)
+		private void buttonOkClick(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
 			IEnumerable<IRootChangeInfo> updatesMade = _propertyPages.Save();
@@ -102,7 +77,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			Cursor = Cursors.Default;
 		}
 
-		private void treeViewPages_AfterSelect(object sender, EventArgs e)
+		private void treeViewPagesAfterSelect(object sender, EventArgs e)
 		{
 			var pp = (IPropertyPage)treeViewPages.SelectedNode.Tag;
 			displayPage(pp);
