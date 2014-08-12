@@ -6,11 +6,11 @@ using System;
 using System.Collections;
 using System.Runtime.Caching;
 using System.Collections.Generic;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+
 
 
 /* Manually copy/pasted from here - https://github.com/diegose/NHibernate.Diegose/tree/master/Caches/RtMemoryCache
- * Easier than version hell when upgrading
+ * Easier than version hell when upgrading (this nuget package is seldom updated)
  */
 
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	/// <summary>
 	/// Pluggable cache implementation using the System.Runtime.Caching classes
 	/// </summary>
-	public class RtMemoryCache : ICache
+	internal class RtMemoryCache : ICache
 	{
 		private static readonly IInternalLogger log = LoggerProvider.LoggerFor(typeof(RtMemoryCache));
 		private readonly string region;
@@ -390,88 +390,8 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			get { return region; }
 		}
 	}
-}
 
-/// <summary>
-/// Cache provider using the System.Runtime.Caching classes
-/// </summary>
-public class RtMemoryCacheProvider : ICacheProvider
-{
-	private static readonly Dictionary<string, ICache> caches;
-	private static readonly IInternalLogger log;
-
-	static RtMemoryCacheProvider()
-	{
-		log = LoggerProvider.LoggerFor(typeof(RtMemoryCacheProvider));
-		caches = new Dictionary<string, ICache>();
-
-		var list = ConfigurationManager.GetSection("rtmemorycache") as CacheConfig[];
-		if (list != null)
-		{
-			foreach (CacheConfig cache in list)
-			{
-				caches.Add(cache.Region, new RtMemoryCache(cache.Region, cache.Properties));
-			}
-		}
-	}
-
-	#region ICacheProvider Members
-
-	/// <summary>
-	/// build a new RtMemoryCache
-	/// </summary>
-	/// <param name="regionName"></param>
-	/// <param name="properties"></param>
-	/// <returns></returns>
-	public ICache BuildCache(string regionName, IDictionary<string, string> properties)
-	{
-		if (regionName == null)
-		{
-			regionName = string.Empty;
-		}
-
-		ICache result;
-		if (caches.TryGetValue(regionName, out result))
-		{
-			return result;
-		}
-
-		// create cache
-		if (properties == null)
-		{
-			properties = new Dictionary<string, string>(1);
-		}
-
-		if (log.IsDebugEnabled)
-		{
-			var sb = new StringBuilder();
-			sb.Append("building cache with region: ").Append(regionName).Append(", properties: ");
-
-			foreach (KeyValuePair<string, string> de in properties)
-			{
-				sb.Append("name=");
-				sb.Append(de.Key);
-				sb.Append("&value=");
-				sb.Append(de.Value);
-				sb.Append(";");
-			}
-			log.Debug(sb.ToString());
-		}
-		return new RtMemoryCache(regionName, properties);
-	}
-
-	public long NextTimestamp()
-	{
-		return Timestamper.Next();
-	}
-
-	public void Start(IDictionary<string, string> properties) { }
-
-	public void Stop() { }
-
-	#endregion
-
-	public class CacheConfig
+	internal class CacheConfig
 	{
 		private readonly Dictionary<string, string> properties;
 		private readonly string regionName;
@@ -500,4 +420,88 @@ public class RtMemoryCacheProvider : ICacheProvider
 			get { return properties; }
 		}
 	}
+
+	/// <summary>
+	/// Cache provider using the System.Runtime.Caching classes
+	/// </summary>
+	internal class RtMemoryCacheProvider : ICacheProvider
+	{
+		private static readonly Dictionary<string, ICache> caches;
+		private static readonly IInternalLogger log;
+
+		static RtMemoryCacheProvider()
+		{
+			log = LoggerProvider.LoggerFor(typeof(RtMemoryCacheProvider));
+			caches = new Dictionary<string, ICache>();
+
+			var list = ConfigurationManager.GetSection("rtmemorycache") as CacheConfig[];
+			if (list != null)
+			{
+				foreach (CacheConfig cache in list)
+				{
+					caches.Add(cache.Region, new RtMemoryCache(cache.Region, cache.Properties));
+				}
+			}
+		}
+
+		#region ICacheProvider Members
+
+		/// <summary>
+		/// build a new RtMemoryCache
+		/// </summary>
+		/// <param name="regionName"></param>
+		/// <param name="properties"></param>
+		/// <returns></returns>
+		public ICache BuildCache(string regionName, IDictionary<string, string> properties)
+		{
+			if (regionName == null)
+			{
+				regionName = string.Empty;
+			}
+
+			ICache result;
+			if (caches.TryGetValue(regionName, out result))
+			{
+				return result;
+			}
+
+			// create cache
+			if (properties == null)
+			{
+				properties = new Dictionary<string, string>(1);
+			}
+
+			if (log.IsDebugEnabled)
+			{
+				var sb = new StringBuilder();
+				sb.Append("building cache with region: ").Append(regionName).Append(", properties: ");
+
+				foreach (KeyValuePair<string, string> de in properties)
+				{
+					sb.Append("name=");
+					sb.Append(de.Key);
+					sb.Append("&value=");
+					sb.Append(de.Value);
+					sb.Append(";");
+				}
+				log.Debug(sb.ToString());
+			}
+			return new RtMemoryCache(regionName, properties);
+		}
+
+		public long NextTimestamp()
+		{
+			return Timestamper.Next();
+		}
+
+		public void Start(IDictionary<string, string> properties) { }
+
+		public void Stop() { }
+
+		#endregion
+
+
+	}
+
 }
+
