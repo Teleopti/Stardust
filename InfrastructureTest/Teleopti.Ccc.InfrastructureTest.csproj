@@ -260,7 +260,6 @@
     <Compile Include="NHibernateConfiguration\PerformanceTest.cs" />
     <Compile Include="NHibernateConfiguration\HashedStringTest.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingTypeTest.cs" />
-    <Compile Include="Foundation\LogOnOffTest.cs" />
     <Compile Include="Foundation\DataSourceExceptionTest.cs" />
     <Compile Include="Foundation\InitializeApplicationTest.cs" />
     <Compile Include="Foundation\LazyLoadingManagerTest.cs" />
@@ -275,7 +274,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Foundation\SessionDataTest.cs" />
-    <Compile Include="Foundation\StateHolderTest.cs" />
     <Compile Include="Foundation\StateTest.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerExceptionConverterTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiDatabaseNamingStrategyTest.cs" />
