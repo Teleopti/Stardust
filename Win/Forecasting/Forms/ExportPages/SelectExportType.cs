@@ -8,32 +8,32 @@ using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
-    public partial class SelectExportType : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
-    {
-        private readonly Action<bool> _callbackOnPageChange;
-        private readonly ICollection<string> _errorMessages = new List<string>();
+	public partial class SelectExportType : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
+	{
+		private readonly Action<bool> _callbackOnPageChange;
+		private readonly ICollection<string> _errorMessages = new List<string>();
 
-        protected SelectExportType()
-        {
-            InitializeComponent();
-            if (!DesignMode) SetTexts();
-                setColors();
-        }
+		protected SelectExportType()
+		{
+			InitializeComponent();
+			if (!DesignMode) SetTexts();
+				setColors();
+		}
 
-        public SelectExportType(Action<bool> callbackOnPageChange) : this()
-        {
-            _callbackOnPageChange = callbackOnPageChange;
-        }
+		public SelectExportType(Action<bool> callbackOnPageChange) : this()
+		{
+			_callbackOnPageChange = callbackOnPageChange;
+		}
 
-        private void setColors()
-        {
-            BackColor = ColorHelper.WizardBackgroundColor();
-        }
+		private void setColors()
+		{
+			BackColor = ColorHelper.WizardBackgroundColor();
+		}
 
-        public void Populate(ExportSkillModel stateObj)
-        {
-        	rbtExportToBU.Visible = stateObj.DirectExportPermitted;
-        	rbtExportToFile.Visible = stateObj.FileExportPermitted;
+		public void Populate(ExportSkillModel stateObj)
+		{
+			rbtExportToBU.Visible = stateObj.DirectExportPermitted;
+			rbtExportToFile.Visible = stateObj.FileExportPermitted;
 			if (stateObj.ExportToFile)
 			{
 				rbtExportToFile.Checked = true;
@@ -42,27 +42,27 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			{
 				rbtExportToBU.Checked = true;
 			}
-        }
+		}
 
-        public bool Depopulate(ExportSkillModel stateObj)
-        {
-            _callbackOnPageChange(rbtExportToFile.Checked);
-            stateObj.ChangeExportType(rbtExportToFile.Checked);
-            return true;
-        }
+		public bool Depopulate(ExportSkillModel stateObj)
+		{
+			_callbackOnPageChange(rbtExportToFile.Checked);
+			stateObj.ChangeExportType(rbtExportToFile.Checked);
+			return true;
+		}
 
-        public void SetEditMode()
-        {
-        }
+		public void SetEditMode()
+		{
+		}
 
-        public string PageName
-        {
-            get { return Resources.FileTypeSelection; }
-        }
+		public string PageName
+		{
+			get { return Resources.FileTypeSelection; }
+		}
 
-        public ICollection<string> ErrorMessages
-        {
-            get { return _errorMessages; }
-        }
-    }
+		public ICollection<string> ErrorMessages
+		{
+			get { return _errorMessages; }
+		}
+	}
 }

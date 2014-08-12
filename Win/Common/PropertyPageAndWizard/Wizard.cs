@@ -237,5 +237,10 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 		{
 			e.Cancel = true;
 		}
+
+		private void splitContainerVertical_Panel2_Paint(object sender, PaintEventArgs e)
+		{
+
+		}
 	}
 }

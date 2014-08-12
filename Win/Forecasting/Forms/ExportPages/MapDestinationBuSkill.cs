@@ -119,5 +119,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
                 Close();
             }
         }
+
     }
 }

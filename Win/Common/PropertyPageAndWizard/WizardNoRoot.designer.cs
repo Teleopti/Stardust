@@ -70,12 +70,12 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.buttonNext.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonNext.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonNext.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonNext.BeforeTouchSize = new System.Drawing.Size(99, 27);
+			this.buttonNext.BeforeTouchSize = new System.Drawing.Size(99, 24);
 			this.buttonNext.ForeColor = System.Drawing.Color.White;
 			this.buttonNext.IsBackStageButton = false;
 			this.buttonNext.Location = new System.Drawing.Point(408, 3);
 			this.buttonNext.Name = "buttonNext";
-			this.buttonNext.Size = new System.Drawing.Size(99, 27);
+			this.buttonNext.Size = new System.Drawing.Size(99, 24);
 			this.buttonNext.TabIndex = 6;
 			this.buttonNext.Text = "xxNextAmpersandArrow";
 			this.buttonNext.UseVisualStyle = true;
@@ -87,13 +87,13 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonCancel.BeforeTouchSize = new System.Drawing.Size(99, 27);
+			this.buttonCancel.BeforeTouchSize = new System.Drawing.Size(99, 24);
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonCancel.IsBackStageButton = false;
 			this.buttonCancel.Location = new System.Drawing.Point(642, 3);
 			this.buttonCancel.Name = "buttonCancel";
-			this.buttonCancel.Size = new System.Drawing.Size(99, 27);
+			this.buttonCancel.Size = new System.Drawing.Size(99, 24);
 			this.buttonCancel.TabIndex = 8;
 			this.buttonCancel.Text = "xxCancel";
 			this.buttonCancel.UseVisualStyle = true;
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// 
 			this.splitContainerHorizontal.Panel2.Controls.Add(this.tableLayoutPanelButtonsRtl);
 			this.splitContainerHorizontal.Size = new System.Drawing.Size(744, 473);
-			this.splitContainerHorizontal.SplitterDistance = 439;
+			this.splitContainerHorizontal.SplitterDistance = 442;
 			this.splitContainerHorizontal.SplitterWidth = 1;
 			this.splitContainerHorizontal.TabIndex = 7;
 			this.splitContainerHorizontal.TabStop = false;
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// splitContainerPages.Panel2
 			// 
 			this.splitContainerPages.Panel2.Controls.Add(this.splitContainerVertical);
-			this.splitContainerPages.Size = new System.Drawing.Size(744, 439);
+			this.splitContainerPages.Size = new System.Drawing.Size(744, 442);
 			this.splitContainerPages.SplitterDistance = 176;
 			this.splitContainerPages.SplitterWidth = 1;
 			this.splitContainerPages.TabIndex = 6;
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// treeViewPages
 			// 
 			this.treeViewPages.BackColor = System.Drawing.Color.White;
-			this.treeViewPages.BeforeTouchSize = new System.Drawing.Size(152, 415);
+			this.treeViewPages.BeforeTouchSize = new System.Drawing.Size(152, 418);
 			this.treeViewPages.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.treeViewPages.BorderColor = System.Drawing.Color.Transparent;
 			this.treeViewPages.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -162,6 +162,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.treeViewPages.HelpTextControl.Location = new System.Drawing.Point(0, 0);
 			this.treeViewPages.HelpTextControl.Name = "helpText";
 			this.treeViewPages.HelpTextControl.TabIndex = 0;
+			this.treeViewPages.HideSelection = false;
 			this.treeViewPages.Location = new System.Drawing.Point(12, 12);
 			this.treeViewPages.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.treeViewPages.Name = "treeViewPages";
@@ -169,7 +170,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.treeViewPages.ShowFocusRect = false;
 			this.treeViewPages.ShowPlusMinus = false;
 			this.treeViewPages.ShowRootLines = false;
-			this.treeViewPages.Size = new System.Drawing.Size(152, 415);
+			this.treeViewPages.Size = new System.Drawing.Size(152, 418);
 			this.treeViewPages.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
 			this.treeViewPages.TabIndex = 0;
 			this.treeViewPages.TabStop = false;
@@ -195,7 +196,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// 
 			this.splitContainerVertical.Panel1.Controls.Add(this.gradientPanel1);
 			this.splitContainerVertical.Panel1MinSize = 40;
-			this.splitContainerVertical.Size = new System.Drawing.Size(567, 439);
+			this.splitContainerVertical.Size = new System.Drawing.Size(567, 442);
 			this.splitContainerVertical.SplitterDistance = 40;
 			this.splitContainerVertical.SplitterWidth = 1;
 			this.splitContainerVertical.TabIndex = 0;
@@ -218,6 +219,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.labelHeading.AutoSize = true;
 			this.labelHeading.BackColor = System.Drawing.Color.Transparent;
 			this.labelHeading.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelHeading.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(51)))), ((int)(((byte)(102)))));
 			this.labelHeading.Location = new System.Drawing.Point(3, 5);
 			this.labelHeading.Name = "labelHeading";
 			this.labelHeading.Size = new System.Drawing.Size(101, 25);
@@ -240,7 +242,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.tableLayoutPanelButtonsRtl.Name = "tableLayoutPanelButtonsRtl";
 			this.tableLayoutPanelButtonsRtl.RowCount = 1;
 			this.tableLayoutPanelButtonsRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(744, 33);
+			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(744, 30);
 			this.tableLayoutPanelButtonsRtl.TabIndex = 9;
 			// 
 			// buttonBack
@@ -248,12 +250,12 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.buttonBack.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonBack.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonBack.BeforeTouchSize = new System.Drawing.Size(99, 27);
+			this.buttonBack.BeforeTouchSize = new System.Drawing.Size(99, 24);
 			this.buttonBack.ForeColor = System.Drawing.Color.White;
 			this.buttonBack.IsBackStageButton = false;
 			this.buttonBack.Location = new System.Drawing.Point(291, 3);
 			this.buttonBack.Name = "buttonBack";
-			this.buttonBack.Size = new System.Drawing.Size(99, 27);
+			this.buttonBack.Size = new System.Drawing.Size(99, 24);
 			this.buttonBack.TabIndex = 5;
 			this.buttonBack.Text = "xxBackAmpersandArrow";
 			this.buttonBack.UseVisualStyle = true;
@@ -265,12 +267,12 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.buttonFinish.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonFinish.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonFinish.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonFinish.BeforeTouchSize = new System.Drawing.Size(99, 27);
+			this.buttonFinish.BeforeTouchSize = new System.Drawing.Size(99, 24);
 			this.buttonFinish.ForeColor = System.Drawing.Color.White;
 			this.buttonFinish.IsBackStageButton = false;
 			this.buttonFinish.Location = new System.Drawing.Point(525, 3);
 			this.buttonFinish.Name = "buttonFinish";
-			this.buttonFinish.Size = new System.Drawing.Size(99, 27);
+			this.buttonFinish.Size = new System.Drawing.Size(99, 24);
 			this.buttonFinish.TabIndex = 7;
 			this.buttonFinish.Text = "xxFinishAmpersand";
 			this.buttonFinish.UseVisualStyle = true;
