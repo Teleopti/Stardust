@@ -9,6 +9,6 @@ namespace Teleopti.Interfaces.Messages.General
 			get { return Guid.NewGuid(); }
 		}
 
-		public TimeZoneInfo TimeZone { get; set; }
+		public string TimeZoneCode { get; set; }
 	}
 }

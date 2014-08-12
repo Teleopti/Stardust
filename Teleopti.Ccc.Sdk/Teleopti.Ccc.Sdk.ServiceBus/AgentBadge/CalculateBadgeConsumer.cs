@@ -59,8 +59,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			ICollection<IPerson> allAgents;
 			var today = _now.LocalDateOnly();
 			var tomorrow = today.AddDays(1);
-			var tomorrowForGivenTimeZone = TimeZoneInfo.ConvertTime(tomorrow, TimeZoneInfo.Local, message.TimeZone);
-			var nextMessageShouldBeProcessed = TimeZoneInfo.ConvertTime(tomorrowForGivenTimeZone.Date, message.TimeZone,
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
+			var tomorrowForGivenTimeZone = TimeZoneInfo.ConvertTime(tomorrow, TimeZoneInfo.Local, timeZone);
+			var nextMessageShouldBeProcessed = TimeZoneInfo.ConvertTime(tomorrowForGivenTimeZone.Date, timeZone,
 				TimeZoneInfo.Local);
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				
 				allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
-				var peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZone.Id, message.CalculationDate,
+				var peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZoneCode, message.CalculationDate,
 					adherenceReportSetting.CalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
 				foreach (var person in peopleGotABadge)
 				{
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				Datasource = message.Datasource,
 				BusinessUnitId = message.BusinessUnitId,
 				Timestamp = DateTime.UtcNow,
-				TimeZone = message.TimeZone,
+				TimeZoneCode = message.TimeZoneCode,
 				CalculationDate = message.CalculationDate.AddDays(1)
 			});
 

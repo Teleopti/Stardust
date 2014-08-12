@@ -38,11 +38,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			if (_serviceBus == null)
 				return;
-			IAgentBadgeThresholdSettings setting;
 			IEnumerable<TimeZoneInfo> timeZoneList;
 			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				setting = _settingsRepository.LoadAll().FirstOrDefault();
+				IAgentBadgeThresholdSettings setting = _settingsRepository.LoadAll().FirstOrDefault();
 				if (setting == null || !setting.EnableBadge)
 				{
 					_serviceBus.DelaySend(DateOnly.Today.AddDays(1), message);
@@ -60,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					BusinessUnitId = message.BusinessUnitId,
 					Datasource = message.Datasource,
 					Timestamp = DateTime.UtcNow,
-					TimeZone = timeZoneInfo
+					TimeZoneCode = timeZoneInfo.Id
 				});
 			}
 		}

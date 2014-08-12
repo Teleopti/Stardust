@@ -21,7 +21,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		public void Consume(CalculateTimeZoneMessage message)
 		{
 			var yesterday = _now.LocalDateOnly().AddDays(-1);
-			var yesterdayForGivenTimeZone = TimeZoneInfo.ConvertTime(yesterday, TimeZoneInfo.Local, message.TimeZone);
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
+			var yesterdayForGivenTimeZone = TimeZoneInfo.ConvertTime(yesterday, TimeZoneInfo.Local, timeZone);
 
 			_serviceBus.Send(new CalculateBadgeMessage
 			{
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				BusinessUnitId = message.BusinessUnitId,
 				Timestamp = DateTime.UtcNow,
 				CalculationDate = new DateOnly(yesterdayForGivenTimeZone),
-				TimeZone = message.TimeZone 
+				TimeZoneCode = message.TimeZoneCode 
 			});
 		}
 	}

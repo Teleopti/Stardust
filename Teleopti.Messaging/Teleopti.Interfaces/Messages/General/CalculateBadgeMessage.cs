@@ -11,6 +11,6 @@ namespace Teleopti.Interfaces.Messages.General
 		}
 
 		public DateOnly CalculationDate { get; set; }
-		public TimeZoneInfo TimeZone { get; set; }
+		public string TimeZoneCode { get; set; }
 	}
 }

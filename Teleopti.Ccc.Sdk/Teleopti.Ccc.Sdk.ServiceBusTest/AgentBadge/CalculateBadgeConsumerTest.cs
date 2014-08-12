@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateOnly().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage()
 			{
-				TimeZone = timezone,
+				TimeZoneCode = timezone.Id,
 				CalculationDate = new DateOnly(calculationDate)
 			};
 
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 						Rhino.Mocks.Constraints.Is.Matching(new Predicate<object[]>(m =>
 						{
 							var msg = ((CalculateBadgeMessage)m[0]);
-							return msg.TimeZone == TimeZoneInfo.Utc && msg.CalculationDate == message.CalculationDate.AddDays(1);
+							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id && msg.CalculationDate == message.CalculationDate.AddDays(1);
 						}))));
 
 		}
