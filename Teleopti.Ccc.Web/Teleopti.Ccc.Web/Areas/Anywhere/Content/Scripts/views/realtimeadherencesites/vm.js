@@ -84,7 +84,7 @@
 
 			that.load = function (businessId) {
 				ajax.ajax({
-					headers: { 'x-business-unit-filter': businessId ? businessId : '' },
+					headers: { 'X-Business-Unit-Filter': businessId ? businessId : '' },
 					url: "Sites",
 					success: function(data) {
 						that.fill(data);
