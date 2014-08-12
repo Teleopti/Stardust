@@ -21870,7 +21870,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adherence Threshold: .
+        ///   Looks up a localized string similar to Adherence Threshold (%): .
         /// </summary>
         public static string SetBadgeThresholdForAdherence {
             get {

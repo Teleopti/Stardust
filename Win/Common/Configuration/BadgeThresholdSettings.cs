@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			};
 
 			checkBoxEnableBadge.Checked = settings.EnableBadge;
-			doubleTextBoxThresholdForAdherence.DoubleValue = settings.AdherenceThreshold.Value;
+			doubleTextBoxThresholdForAdherence.DoubleValue = settings.AdherenceThreshold.Value * 100;
 			timeSpanTextBoxThresholdForAHT.SetInitialResolution(settings.AHTThreshold);
 			numericUpDownThresholdForAnsweredCalls.Value = settings.AnsweredCallsThreshold;
 			numericUpDownSilverToBronzeBadgeRate.Value = settings.SilverToBronzeBadgeRate;
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			var settings = _repository.LoadAll().FirstOrDefault() ?? new AgentBadgeThresholdSettings();
 			settings.EnableBadge = checkBoxEnableBadge.Checked;
-			settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue);
+			settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue / 100);
 			settings.AHTThreshold = timeSpanTextBoxThresholdForAHT.Value;
 			settings.AnsweredCallsThreshold = (int)numericUpDownThresholdForAnsweredCalls.Value;
 			settings.GoldToSilverBadgeRate = (int)numericUpDownGoldenToSilverBadgeRate.Value;

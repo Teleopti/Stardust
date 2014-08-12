@@ -12150,7 +12150,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Label for Badge Threshold for AHT setting</comment>
   </data>
   <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
-    <value>Adherence Threshold: </value>
+    <value>Adherence Threshold (%): </value>
     <comment>Label for Badge Threshold for Adherence setting</comment>
   </data>
   <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
