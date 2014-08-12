@@ -12,8 +12,10 @@ GO
 CREATE PROCEDURE [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter]
 @shiftTradeDate smalldatetime,
 @personList varchar(max),
-@filteredStartTimeList varchar(max),
-@filteredEndTimeList varchar(max),
+@filterStartTimeStarts varchar(max),
+@filterStartTimeEnds varchar(max),
+@filterEndTimeStarts varchar(max),
+@filterEndTimeEnds varchar(max),
 @skip int,
 @take int
 
@@ -28,66 +30,33 @@ AS
 
 	DECLARE @filterStartTimeList table
 	(
-	startTimeStartHour int,
-	startTimeEndHour int,
-	startTimeString varchar(24),
-	startProcessed bit
+	startTimeStart varchar(24),
+	startTimeEnd varchar(24)
 	)
 
 	DECLARE @filterEndTimeList table
 	(
-	endTimeStartHour int,
-	endTimeEndHour int,
-	endTimeString varchar(24),
-	endProcessed bit
+	endTimeStart varchar(24),
+	endTimeEnd varchar(24)
 	)
 
 	--Init
 	INSERT INTO @TempList
 	SELECT * FROM dbo.SplitStringString(@personList)
 
-	--Init
-	INSERT INTO @filterStartTimeList(startTimestring, startProcessed)
-	SELECT *,0 FROM dbo.SplitStringString(@filteredStartTimeList)
+	INSERT INTO @filterStartTimeList(startTimeStart, startTimeEnd)
+	SELECT startTime.string, endTime.string FROM 
+		(SELECT *, ROW_NUMBER()  over(order by string) as id FROM dbo.SplitStringString(@filterStartTimeStarts)) startTime 
+	JOIN
+		(SELECT *, ROW_NUMBER() over(order by string) as id FROM dbo.SplitStringString(@filterStartTimeEnds)) endTime
+	ON startTime.id = endTime.id
 
-	INSERT INTO @filterEndTimeList(endTimestring, endProcessed)
-	SELECT *,0 FROM dbo.SplitStringString(@filteredEndTimeList)
-
-	While (Select Count(*) From @filterStartTimeList Where startProcessed = 0) > 0
-	Begin
-		DECLARE @startHour int, @endHour int, @timestring varchar(24),  @tempstring varchar(8), @substring varchar(8)
-		Select Top 1 @timestring = startTimeString From @filterStartTimeList Where startProcessed = 0
-
-		--processing for start time
-		SET @tempstring = SUBSTRING(@timestring, 0, CHARINDEX('-', @timestring))
-		SET @substring = SUBSTRING(@tempstring, 0, CHARINDEX(':', @tempstring))
-		SET @startHour =  CONVERT(INT, @substring) 
-		SET @tempstring = SUBSTRING(@timestring, CHARINDEX('-', @timestring)+1, LEN(@timestring))
-		SET @substring = SUBSTRING(@tempstring, 0, CHARINDEX(':', @tempstring))
-		SET @endHour =  CONVERT(INT, @substring)
-		INSERT INTO @filterStartTimeList(startTimeStartHour, startTimeEndHour)
-		VALUES(@startHour, @endHour)
-
-		Update @filterStartTimeList Set startProcessed = 1 Where startTimeString = @timestring 
-	End
-
-	While (Select Count(*) From @filterEndTimeList Where endProcessed = 0) > 0
-	Begin
-		Select Top 1 @timestring = endTimeString From @filterEndTimeList Where endProcessed = 0
-
-		PRINT @timestring
-		--processing for end time
-		SET @tempstring = SUBSTRING(@timestring, 0, CHARINDEX('-', @timestring))
-		SET @substring = SUBSTRING(@tempstring, 0, CHARINDEX(':', @tempstring))
-		SET @startHour =  CONVERT(INT, @substring) 
-		SET @tempstring = SUBSTRING(@timestring, CHARINDEX('-', @timestring)+1, LEN(@timestring))
-		SET @substring = SUBSTRING(@tempstring, 0, CHARINDEX(':', @tempstring))
-		SET @endHour =  CONVERT(INT, @substring)
-		INSERT INTO @filterEndTimeList(endTimeStartHour, endTimeEndHour)
-		VALUES(@startHour, @endHour)
-
-		Update @filterEndTimeList Set endProcessed = 1 Where endTimeString = @timestring 
-	End
+	INSERT INTO @filterEndTimeList(endTimeStart, endTimeEnd)
+	SELECT startTime.string, endTime.string FROM 
+		(SELECT *, ROW_NUMBER()  over(order by string) as id FROM dbo.SplitStringString(@filterEndTimeStarts)) startTime 
+	JOIN
+		(SELECT *, ROW_NUMBER() over(order by string) as id FROM dbo.SplitStringString(@filterEndTimeEnds)) endTime
+	ON startTime.id = endTime.id
 
 	SET ROWCOUNT @take;
 	WITH Ass AS
@@ -96,10 +65,8 @@ AS
 		ROW_NUMBER() OVER (ORDER BY sd.Start) AS 'RowNumber'
 		FROM ReadModel.PersonScheduleDay sd
 		INNER JOIN @TempList t ON t.Person = sd.PersonId
-		INNER JOIN @filterStartTimeList fs ON fs.startTimeStartHour <= DATEPART(hh, sd.Start) 
-		AND fs.startTimeEndHour*100 > DATEPART(hh, sd.Start)*100 + DATEPART(mi, sd.Start)
-		INNER JOIN @filterEndTimeList fe ON fe.endTimeStartHour <= DATEPART(hh, sd.[End])
-		AND fe.endTimeEndHour*100 > DATEPART(hh, sd.[End])*100 + DATEPART(mi, sd.[End])
+		INNER JOIN @filterStartTimeList fs ON sd.Start BETWEEN fs.startTimeStart and fs.startTimeEnd
+		INNER JOIN @filterEndTimeList fe ON sd.[End] BETWEEN fe.endTimeStart and fe.endTimeEnd
 		WHERE [BelongsToDate] = @shiftTradeDate
 		AND sd.Start IS NOT NULL
 		AND DATEDIFF(MINUTE,Start, [End] ) <= 1440

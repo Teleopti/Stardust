@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -41,11 +42,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		}
 
 		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedulesWithFilteredTimes(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons, Paging paging,
-																						IEnumerable<TimePeriod> filteredStartTimes, IEnumerable<TimePeriod> filteredEndTimes)
+																						TimeFilterInfo filterInfo)
 		{
 			IEnumerable<Guid> personIdList = (from person in possibleShiftTradePersons
 			                                 select person.Id.Value).ToList();
-			return _scheduleDayReadModelFinder.ForPersonsByFilteredTimes(date, personIdList, paging, filteredStartTimes, filteredEndTimes);
+			return _scheduleDayReadModelFinder.ForPersonsByFilteredTimes(date, personIdList, paging, filterInfo);
 		}
 
 		public Guid? RetrieveMyTeamId(DateOnly date)

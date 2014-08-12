@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -164,12 +166,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			//var calendarDate = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, CultureInfo.CurrentCulture.Calendar);
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging };
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
-		}		
-		
-		private IList<TimePeriod> convertStringToUtcTimes(DateOnly selectedDate, string timesString)
+		}
+
+		private IList<DateTimePeriod> convertStringToUtcTimes(DateOnly selectedDate, string timesString)
 		{
-			if (string.IsNullOrEmpty(timesString)) timesString = "0:00-24:00";
-			List<string> startTimesx = (timesString.Split(',')).ToList();
+			//if (string.IsNullOrEmpty(timesString)) timesString = "0:00-23:59";
+			var startTimesx = string.IsNullOrEmpty(timesString) ? new string[] {} : timesString.Split(',');
 			var periodsAsString = from t in startTimesx
 										 let parts = t.Split('-')
 										 let start = parts[0]
@@ -185,18 +187,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 								  Start = selectedDate.Date.Add(TimeSpan.Parse(ps.Start)),
 								  End = selectedDate.Date.Add(TimeSpan.Parse(ps.End)),
 							  };
-			var periodsDateUtc = from p in periods
+			var periodsList = periods.ToList();
+			if (!periodsList.Any())
+				periodsList.Add(new
+					{
+						Start = selectedDate.Date.Add(TimeSpan.FromHours(0)),
+						End = selectedDate.Date.Add(TimeSpan.FromHours(48)),
+					});
+			var periodsDateUtc = from p in periodsList
 										let start = TimeZoneHelper.ConvertToUtc(p.Start, _userTimeZone.TimeZone())
 										let end = TimeZoneHelper.ConvertToUtc(p.End, _userTimeZone.TimeZone())
 										let period = new DateTimePeriod(start, end)
 										select period;
 
-			var periodsUtc = from putc in periodsDateUtc
-								  let start = putc.StartDateTime.TimeOfDay
-								  let end = putc.EndDateTime.TimeOfDay
-								  let period = new TimePeriod(start, end)
-								  select period;
-			var utcTimes = (periodsUtc as IList<TimePeriod>) ?? periodsUtc.ToList();
+			//var periodsUtc = from putc in periodsDateUtc
+			//					  let start = putc.StartDateTime.TimeOfDay
+			//					  let end = putc.EndDateTime.TimeOfDay
+			//					  let period = new TimePeriod(start, end)
+			//					  select period;
+			var utcTimes = periodsDateUtc.ToList();
 			return utcTimes;
 		}
 
@@ -206,7 +215,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			var startTimes = convertStringToUtcTimes(selectedDate, filteredStartTimes);
 			var endTimes = convertStringToUtcTimes(selectedDate, filteredEndTimes);
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, FilteredStartTimes = startTimes, FilteredEndTimes = endTimes};
+
+			var filter = new TimeFilterInfo();
+			filter.StartTimeStarts = startTimes.Select(x => x.StartDateTime).ToArray();
+			filter.StartTimeEnds = startTimes.Select(x => x.EndDateTime).ToArray();
+			filter.EndTimeStarts = endTimes.Select(x => x.StartDateTime).ToArray();
+			filter.EndTimeEnds = endTimes.Select(x => x.EndDateTime).ToArray();
+
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, TimeFilter = filter };
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 
