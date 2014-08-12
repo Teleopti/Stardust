@@ -213,14 +213,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult ShiftTradeRequestScheduleByFilterTime(DateOnly selectedDate, string teamId, string filteredStartTimes, string filteredEndTimes, Paging paging)
 		{
-			var startTimes = convertStringToUtcTimes(selectedDate, filteredStartTimes);
-			var endTimes = convertStringToUtcTimes(selectedDate, filteredEndTimes);
+			TimeFilterInfo filter;
+			if (string.IsNullOrEmpty(filteredStartTimes) && string.IsNullOrEmpty(filteredEndTimes))
+			{
+				filter = null;
+			}
+			else
+			{
+				var startTimes = convertStringToUtcTimes(selectedDate, filteredStartTimes);
+				var endTimes = convertStringToUtcTimes(selectedDate, filteredEndTimes);
 
-			var filter = new TimeFilterInfo();
-			filter.StartTimeStarts = startTimes.Select(x => x.StartDateTime).ToArray();
-			filter.StartTimeEnds = startTimes.Select(x => x.EndDateTime).ToArray();
-			filter.EndTimeStarts = endTimes.Select(x => x.StartDateTime).ToArray();
-			filter.EndTimeEnds = endTimes.Select(x => x.EndDateTime).ToArray();
+				filter = new TimeFilterInfo();
+				filter.StartTimeStarts = startTimes.Select(x => x.StartDateTime).ToArray();
+				filter.StartTimeEnds = startTimes.Select(x => x.EndDateTime).ToArray();
+				filter.EndTimeStarts = endTimes.Select(x => x.StartDateTime).ToArray();
+				filter.EndTimeEnds = endTimes.Select(x => x.EndDateTime).ToArray();
+			}
+
 
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, TimeFilter = filter };
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
