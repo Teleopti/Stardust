@@ -1,34 +1,34 @@
 ﻿namespace Teleopti.Ccc.Win.Meetings
 {
-    partial class AddressBookView
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class AddressBookView
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                if (_gridHelper!=null) _gridHelper.Dispose();
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				if (_gridHelper != null) _gridHelper.Dispose();
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Windows Form Designer generated code
+		#region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanelForm = new System.Windows.Forms.TableLayoutPanel();
 			this.gridControlPeople = new Syncfusion.Windows.Forms.Grid.GridControl();
@@ -65,19 +65,10 @@
 			this.tableLayoutPanelConfirmButtons.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			this.ribbonControlForm.CaptionFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-
-			this.ribbonControlForm.Location = new System.Drawing.Point(1, 1);
-			this.ribbonControlForm.MenuButtonWidth = 56;
-			this.ribbonControlForm.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
-			this.ribbonControlForm.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
-			this.ribbonControlForm.ShowRibbonDisplayOptionButton = false;
-			this.ribbonControlForm.Size = new System.Drawing.Size(578, 33);
-			this.ribbonControlForm.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			// tableLayoutPanelForm
 			// 
 			this.tableLayoutPanelForm.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.tableLayoutPanelForm.BackColor = System.Drawing.Color.White;
+			this.tableLayoutPanelForm.BackColor = System.Drawing.Color.Transparent;
 			this.tableLayoutPanelForm.ColumnCount = 1;
 			this.tableLayoutPanelForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelForm.Controls.Add(this.gridControlPeople, 0, 1);
@@ -85,7 +76,7 @@
 			this.tableLayoutPanelForm.Controls.Add(this.tableLayoutPanelFilter, 0, 0);
 			this.tableLayoutPanelForm.Controls.Add(this.tableLayoutPanelConfirmButtons, 0, 3);
 			this.tableLayoutPanelForm.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelForm.Location = new System.Drawing.Point(1, 33);
+			this.tableLayoutPanelForm.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelForm.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelForm.Name = "tableLayoutPanelForm";
 			this.tableLayoutPanelForm.Padding = new System.Windows.Forms.Padding(9, 5, 9, 5);
@@ -94,17 +85,17 @@
 			this.tableLayoutPanelForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelForm.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanelForm.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelForm.Size = new System.Drawing.Size(574, 416);
+			this.tableLayoutPanelForm.Size = new System.Drawing.Size(669, 533);
 			this.tableLayoutPanelForm.TabIndex = 6;
 			// 
 			// gridControlPeople
 			// 
 			this.gridControlPeople.ActivateCurrentCellBehavior = Syncfusion.Windows.Forms.Grid.GridCellActivateAction.None;
-			this.gridControlPeople.AllowSelection = ((Syncfusion.Windows.Forms.Grid.GridSelectionFlags)((((((Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Row | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Table) 
-            | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Multiple) 
-            | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Shift) 
-            | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Keyboard) 
-            | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.MixRangeType)));
+			this.gridControlPeople.AllowSelection = ((Syncfusion.Windows.Forms.Grid.GridSelectionFlags)((((((Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Row | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Table)
+				| Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Multiple)
+				| Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Shift)
+				| Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Keyboard)
+				| Syncfusion.Windows.Forms.Grid.GridSelectionFlags.MixRangeType)));
 			this.gridControlPeople.BackColor = System.Drawing.Color.White;
 			this.gridControlPeople.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.gridControlPeople.ColCount = 1;
@@ -119,9 +110,10 @@
 			this.gridControlPeople.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gridControlPeople.ExcelLikeCurrentCell = true;
 			this.gridControlPeople.ExcelLikeSelectionFrame = true;
-			this.gridControlPeople.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
+			this.gridControlPeople.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
 			this.gridControlPeople.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
 			this.gridControlPeople.Location = new System.Drawing.Point(12, 46);
+			this.gridControlPeople.MetroScrollBars = true;
 			this.gridControlPeople.Name = "gridControlPeople";
 			this.gridControlPeople.Properties.DisplayVertLines = false;
 			this.gridControlPeople.Properties.ForceImmediateRepaint = false;
@@ -133,7 +125,7 @@
 			this.gridControlPeople.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.gridControlPeople.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlPeople.Size = new System.Drawing.Size(552, 274);
+			this.gridControlPeople.Size = new System.Drawing.Size(645, 370);
 			this.gridControlPeople.SmartSizeBox = false;
 			this.gridControlPeople.TabIndex = 10;
 			this.gridControlPeople.ThemesEnabled = true;
@@ -152,14 +144,14 @@
 			this.tableLayoutPanelSelection.Controls.Add(this.textBoxExtOptionalParticipant, 0, 1);
 			this.tableLayoutPanelSelection.Controls.Add(this.textBoxExtRequiredParticipant, 1, 0);
 			this.tableLayoutPanelSelection.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelSelection.Location = new System.Drawing.Point(8, 317);
+			this.tableLayoutPanelSelection.Location = new System.Drawing.Point(9, 419);
 			this.tableLayoutPanelSelection.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelSelection.Name = "tableLayoutPanelSelection";
 			this.tableLayoutPanelSelection.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
 			this.tableLayoutPanelSelection.RowCount = 2;
 			this.tableLayoutPanelSelection.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanelSelection.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelSelection.Size = new System.Drawing.Size(558, 62);
+			this.tableLayoutPanelSelection.Size = new System.Drawing.Size(651, 71);
 			this.tableLayoutPanelSelection.TabIndex = 1;
 			// 
 			// buttonAdvOptional
@@ -194,10 +186,10 @@
 			// 
 			// textBoxExtOptionalParticipant
 			// 
-			this.textBoxExtOptionalParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBoxExtOptionalParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxExtOptionalParticipant.BackColor = System.Drawing.Color.White;
-			this.textBoxExtOptionalParticipant.BeforeTouchSize = new System.Drawing.Size(471, 21);
+			this.textBoxExtOptionalParticipant.BeforeTouchSize = new System.Drawing.Size(252, 23);
 			this.textBoxExtOptionalParticipant.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtOptionalParticipant.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtOptionalParticipant.ContextMenuStrip = this.contextMenuStripEx1;
@@ -208,7 +200,7 @@
 			this.textBoxExtOptionalParticipant.Name = "textBoxExtOptionalParticipant";
 			this.textBoxExtOptionalParticipant.OverflowIndicatorToolTipText = null;
 			this.textBoxExtOptionalParticipant.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBoxExtOptionalParticipant.Size = new System.Drawing.Size(471, 21);
+			this.textBoxExtOptionalParticipant.Size = new System.Drawing.Size(552, 24);
 			this.textBoxExtOptionalParticipant.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Metro;
 			this.textBoxExtOptionalParticipant.TabIndex = 3;
 			this.textBoxExtOptionalParticipant.TextChanged += new System.EventHandler(this.textBoxExtOptionalParticipant_TextChanged);
@@ -263,10 +255,10 @@
 			// 
 			// textBoxExtRequiredParticipant
 			// 
-			this.textBoxExtRequiredParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBoxExtRequiredParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxExtRequiredParticipant.BackColor = System.Drawing.Color.White;
-			this.textBoxExtRequiredParticipant.BeforeTouchSize = new System.Drawing.Size(471, 21);
+			this.textBoxExtRequiredParticipant.BeforeTouchSize = new System.Drawing.Size(252, 23);
 			this.textBoxExtRequiredParticipant.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtRequiredParticipant.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtRequiredParticipant.ContextMenuStrip = this.contextMenuStripEx1;
@@ -277,7 +269,7 @@
 			this.textBoxExtRequiredParticipant.Name = "textBoxExtRequiredParticipant";
 			this.textBoxExtRequiredParticipant.OverflowIndicatorToolTipText = null;
 			this.textBoxExtRequiredParticipant.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBoxExtRequiredParticipant.Size = new System.Drawing.Size(471, 21);
+			this.textBoxExtRequiredParticipant.Size = new System.Drawing.Size(552, 24);
 			this.textBoxExtRequiredParticipant.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Metro;
 			this.textBoxExtRequiredParticipant.TabIndex = 2;
 			this.textBoxExtRequiredParticipant.TextChanged += new System.EventHandler(this.textBoxExtRequiredParticipant_TextChanged);
@@ -304,7 +296,7 @@
 			this.tableLayoutPanelFilter.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
 			this.tableLayoutPanelFilter.RowCount = 1;
 			this.tableLayoutPanelFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelFilter.Size = new System.Drawing.Size(558, 33);
+			this.tableLayoutPanelFilter.Size = new System.Drawing.Size(651, 38);
 			this.tableLayoutPanelFilter.TabIndex = 6;
 			// 
 			// dateTimePickerAdvtDate
@@ -319,7 +311,7 @@
 			this.dateTimePickerAdvtDate.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvtDate.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdvtDate.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.dateTimePickerAdvtDate.Calendar.DayNamesColor = System.Drawing.Color.Black;
+			this.dateTimePickerAdvtDate.Calendar.DayNamesColor = System.Drawing.Color.Empty;
 			this.dateTimePickerAdvtDate.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
 			this.dateTimePickerAdvtDate.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
 			this.dateTimePickerAdvtDate.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -336,7 +328,7 @@
 			this.dateTimePickerAdvtDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvtDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvtDate.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvtDate.Calendar.Size = new System.Drawing.Size(100, 174);
+			this.dateTimePickerAdvtDate.Calendar.Size = new System.Drawing.Size(119, 174);
 			this.dateTimePickerAdvtDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvtDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvtDate.Calendar.TabIndex = 0;
@@ -347,12 +339,12 @@
 			// 
 			// 
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.dateTimePickerAdvtDate.Calendar.NoneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvtDate.Calendar.NoneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.IsBackStageButton = false;
-			this.dateTimePickerAdvtDate.Calendar.NoneButton.Location = new System.Drawing.Point(137, 0);
-			this.dateTimePickerAdvtDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 25);
+			this.dateTimePickerAdvtDate.Calendar.NoneButton.Location = new System.Drawing.Point(125, 0);
+			this.dateTimePickerAdvtDate.Calendar.NoneButton.Size = new System.Drawing.Size(84, 25);
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.Text = "None";
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.UseVisualStyle = true;
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.Visible = false;
@@ -360,12 +352,12 @@
 			// 
 			// 
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.dateTimePickerAdvtDate.Calendar.TodayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvtDate.Calendar.TodayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.IsBackStageButton = false;
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvtDate.Calendar.TodayButton.Size = new System.Drawing.Size(100, 25);
+			this.dateTimePickerAdvtDate.Calendar.TodayButton.Size = new System.Drawing.Size(119, 25);
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvtDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -375,13 +367,13 @@
 			this.dateTimePickerAdvtDate.ClipboardFormat = System.Windows.Forms.DateTimePickerFormat.Short;
 			this.dateTimePickerAdvtDate.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateTimePickerAdvtDate.DropDownImage = null;
-			this.dateTimePickerAdvtDate.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
-			this.dateTimePickerAdvtDate.DropDownPressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
-			this.dateTimePickerAdvtDate.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(191)))), ((int)(((byte)(237)))));
+			this.dateTimePickerAdvtDate.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdvtDate.DropDownPressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdvtDate.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(179)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvtDate.EnableNullDate = false;
 			this.dateTimePickerAdvtDate.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.dateTimePickerAdvtDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.dateTimePickerAdvtDate.Location = new System.Drawing.Point(451, 3);
+			this.dateTimePickerAdvtDate.Location = new System.Drawing.Point(527, 3);
 			this.dateTimePickerAdvtDate.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvtDate.MinValue = new System.DateTime(((long)(0)));
 			this.dateTimePickerAdvtDate.Name = "dateTimePickerAdvtDate";
@@ -421,7 +413,7 @@
 			// textBoxExtFilterCriteria
 			// 
 			this.textBoxExtFilterCriteria.BackColor = System.Drawing.Color.White;
-			this.textBoxExtFilterCriteria.BeforeTouchSize = new System.Drawing.Size(471, 21);
+			this.textBoxExtFilterCriteria.BeforeTouchSize = new System.Drawing.Size(252, 23);
 			this.textBoxExtFilterCriteria.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtFilterCriteria.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtFilterCriteria.ContextMenuStrip = this.contextMenuStripEx1;
@@ -446,7 +438,7 @@
 			this.tableLayoutPanelConfirmButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
 			this.tableLayoutPanelConfirmButtons.Controls.Add(this.buttonAdvCancel, 2, 0);
 			this.tableLayoutPanelConfirmButtons.Controls.Add(this.buttonAdvOK, 1, 0);
-			this.tableLayoutPanelConfirmButtons.Location = new System.Drawing.Point(400, 379);
+			this.tableLayoutPanelConfirmButtons.Controls.Add(this.statusLabelMessage, 0, 0);
 			this.tableLayoutPanelConfirmButtons.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelConfirmButtons.Location = new System.Drawing.Point(9, 490);
 			this.tableLayoutPanelConfirmButtons.Margin = new System.Windows.Forms.Padding(0);
@@ -493,24 +485,22 @@
 			// 
 			// statusLabelMessage
 			// 
-			this.statusStripExAddressBook.BackColor = System.Drawing.Color.White;
-			this.statusStripExAddressBook.BeforeTouchSize = new System.Drawing.Size(574, 22);
+			this.statusLabelMessage.AutoSize = true;
+			this.statusLabelMessage.Location = new System.Drawing.Point(3, 10);
 			this.statusLabelMessage.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
 			this.statusLabelMessage.Name = "statusLabelMessage";
-			this.statusStripExAddressBook.Location = new System.Drawing.Point(1, 448);
+			this.statusLabelMessage.Size = new System.Drawing.Size(0, 15);
 			this.statusLabelMessage.TabIndex = 2;
-			this.statusStripExAddressBook.Size = new System.Drawing.Size(574, 22);
-			this.statusStripExAddressBook.VisualStyle = Syncfusion.Windows.Forms.Tools.StatusStripExStyle.Metro;
 			// 
 			// AddressBookView
 			// 
 			this.AcceptButton = this.buttonAdvOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Borders = new System.Windows.Forms.Padding(0);
+			this.BorderColor = System.Drawing.Color.Blue;
 			this.CancelButton = this.buttonAdvCancel;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
-			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
+			this.ClientSize = new System.Drawing.Size(669, 533);
 			this.Controls.Add(this.tableLayoutPanelForm);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.HelpButton = false;
@@ -518,7 +508,7 @@
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(581, 456);
 			this.Name = "AddressBookView";
-			this.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
+			this.ShowIcon = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "xxSelectAttendees";
 			this.tableLayoutPanelForm.ResumeLayout(false);
@@ -538,32 +528,32 @@
 			this.tableLayoutPanelConfirmButtons.PerformLayout();
 			this.ResumeLayout(false);
 
-        }
+		}
 
-        #endregion
+		#endregion
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelForm;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelConfirmButtons;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOK;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelFilter;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelFilterPeople;
-        private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxExtFilterCriteria;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSelection;
-        private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxExtRequiredParticipant;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOptional;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvRequired;
-        private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxExtOptionalParticipant;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelConfirmButtons;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOK;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelFilter;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelFilterPeople;
+		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxExtFilterCriteria;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSelection;
+		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxExtRequiredParticipant;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOptional;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvRequired;
+		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxExtOptionalParticipant;
 		private Syncfusion.Windows.Forms.Grid.GridControl gridControlPeople;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvGo;
-        private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvtDate;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripEx1;
-        private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvGo;
+		private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvtDate;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStripEx1;
+		private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
 		private System.Windows.Forms.Label statusLabelMessage;
-    }
+	}
 }
 
