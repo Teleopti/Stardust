@@ -125,6 +125,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
@@ -158,6 +159,7 @@
     <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
+    <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Repositories\AgentBadgeSettingsRepository.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverrider.cs" />
     <Compile Include="Toggle\IToggleFiller.cs" />
