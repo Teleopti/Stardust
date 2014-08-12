@@ -871,8 +871,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self.loadFilterTimes = function() {
-			var rangStart = 6;
-			for (var i = 0; i < 18; i += 2) {
+			var rangStart = 0;
+			for (var i = 0; i < 24; i += 2) {
 				var rangEnd = rangStart + 2;
 				var filterStartTime = new Teleopti.MyTimeWeb.Request.FilterStartTimeView(rangStart + ":00 - " + rangEnd + ":00", rangStart, rangEnd, false);
 				var filterEndTime = new Teleopti.MyTimeWeb.Request.FilterEndTimeView(rangStart + ":00 - " + rangEnd + ":00", rangStart, rangEnd, false);
