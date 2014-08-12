@@ -42,6 +42,7 @@
 			};
 
 			that.fill = function (data) {
+				that.sites([]);
 				for (var i = 0; i < data.length; i++) {
 					var newSite = site();
 					newSite.fill(data[i]);
@@ -50,7 +51,6 @@
 			};
 
 			that.fillBusinessUnits = function (data) {
-				that.businessUnits([]);
 				for (var i = 0; i < data.length; i++) {
 					var newBU = businessUnit();
 					newBU.fill(data[i]);
@@ -90,7 +90,8 @@
 						that.fill(data);
 						checkFeature();
 						checkAgentsForMultipleTeamsFeature();
-						checkBusinessUnitsFeature();
+						if (that.businessUnits().length == 0)
+							checkBusinessUnitsFeature();
 					}
 				});
 				subscriptions.unsubscribeAdherence();
