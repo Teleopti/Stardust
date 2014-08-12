@@ -50,10 +50,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			//get the date for doing the next calculation
 			//delaysend CalculateBadgeMessage to bus for time of next calculation
-			//var calculator = new AgentBadgeCalculator(_statisticRepository);
-			IAgentBadgeThresholdSettings setting;
-			AdherenceReportSetting adherenceReportSetting;
-			ICollection<IPerson> allAgents;
 			var today = _now.LocalDateOnly();
 			var tomorrow = today.AddDays(1);
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
@@ -62,16 +58,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				TimeZoneInfo.Local);
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				setting = _settingsRepository.LoadAll().FirstOrDefault();
+				IAgentBadgeThresholdSettings setting = _settingsRepository.LoadAll().FirstOrDefault();
 				if (setting == null)
 				{
 					//TODO:error
 					return;
 				}
-				adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
+				AdherenceReportSetting adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 
 				
-				allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
+				ICollection<IPerson> allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
 				var peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZoneCode, new DateOnly(message.CalculationDate),
 					adherenceReportSetting.CalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
