@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
         private WorkflowTotalView()
         {
             InitializeComponent();
-            SetColors();
             if (!DesignMode) SetTexts();
 			dateSelectionFromToTarget.SetCulture(CultureInfo.CurrentCulture);
         }
@@ -42,20 +41,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             _volumes = volumes;
             _owner = owner;
             _workload = _owner.Presenter.Model.Workload;
-        }
-
-        private void SetColors()
-        {
-            BrushInfo myBrush = ColorHelper.ControlGradientPanelBrush();
-            gradientPanel1.BackgroundColor = myBrush;
-            gradientPanel2.BackgroundColor = myBrush;
-            splitContainerAdv1.Panel1.BackgroundColor = myBrush;
-            splitContainerAdv1.Panel2.BackgroundColor = myBrush;
-            xpTaskBarTotal.BackColor = ColorHelper.XPTaskbarBackgroundColor();
-            xpTaskBarTotal.ThemesEnabled = false;
-            xpTaskBarTotal.BackColor = ColorHelper.XPTaskbarBackgroundColor();
-            xpTaskBarBoxPeriod.HeaderBackColor = ColorHelper.XPTaskbarHeaderColor();
-            xpTaskBarBoxSpecialEvents.HeaderBackColor = ColorHelper.XPTaskbarHeaderColor();
         }
 
         protected override void OnLoad(EventArgs e)

@@ -100,7 +100,8 @@
 			// 
 			// splitContainerAdv1.Panel2
 			// 
-			this.splitContainerAdv1.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.White);
+			this.splitContainerAdv1.Panel2.BackColor = System.Drawing.Color.White;
+			this.splitContainerAdv1.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainerAdv1.Size = new System.Drawing.Size(1042, 665);
 			this.splitContainerAdv1.SplitterDistance = 451;
 			this.splitContainerAdv1.SplitterWidth = 3;
