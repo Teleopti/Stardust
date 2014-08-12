@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			if (!isEnabled)
 				return;
 			var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
-			QueueClearMessages.ClearMessages(dbConnection.ConnectionString, "general", "Timeout");
+			QueueClearMessages.ClearSubQueueMessages(dbConnection.ConnectionString, "general", "Timeout");
 			var startup = new BusinessUnitStarter(() => Container.Resolve<IServiceBus>());
 			startup.SendMessage();
 		}
