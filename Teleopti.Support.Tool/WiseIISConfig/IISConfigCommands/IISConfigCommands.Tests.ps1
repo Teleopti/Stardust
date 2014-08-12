@@ -75,7 +75,7 @@ function Config-Load {
 					if ($global:version -ne 'main')
 					{
 						$global:SubSite = 'TeleoptiCCC'
-						$displayName = 'Teleopti CCC Server'
+						$displayName = 'Teleopti CCC Server, version 7'
 					}
                 }
                 
