@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public string TreeNode()
 		{
-			return UserTexts.Resources.AgentBadgeThresholdSetting;
+			return UserTexts.Resources.AgentBadgeSetting;
 		}
 
 		public void LoadControl()
