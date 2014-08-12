@@ -1,7 +1,7 @@
 ﻿
 Teleopti.Start.Authentication.BusinessUnitSelectionViewModel = function (data) {
 	var self = this;
-	this.businessUnitsBusinessUnits = ko.observableArray();
+	this.BusinessUnits = ko.observableArray();
 
 	this.LoadBusinessUnits = function () {
 		data.authenticationState.GetDataForBusinessUnitSelectionView({
