@@ -50,7 +50,7 @@
 			this.tableLayoutPanel1.ColumnCount = 3;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.76812F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 76.23188F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27F));
 			this.tableLayoutPanel1.Controls.Add(this.autoLabelPriority, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.autoLabelOverStaffingFactor, 0, 5);
 			this.tableLayoutPanel1.Controls.Add(this.trackBarExPriority, 1, 2);
@@ -93,13 +93,13 @@
 			// 
 			// trackBarExPriority
 			// 
-			this.trackBarExPriority.BeforeTouchSize = new System.Drawing.Size(253, 20);
+			this.trackBarExPriority.BeforeTouchSize = new System.Drawing.Size(252, 20);
 			this.trackBarExPriority.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.trackBarExPriority.LargeChange = 3;
 			this.trackBarExPriority.Location = new System.Drawing.Point(83, 43);
 			this.trackBarExPriority.Name = "trackBarExPriority";
 			this.trackBarExPriority.ShowButtons = false;
-			this.trackBarExPriority.Size = new System.Drawing.Size(253, 20);
+			this.trackBarExPriority.Size = new System.Drawing.Size(252, 20);
 			this.trackBarExPriority.Style = Syncfusion.Windows.Forms.Tools.TrackBarEx.Theme.Metro;
 			this.trackBarExPriority.TabIndex = 0;
 			this.trackBarExPriority.Text = "xxPriority";
@@ -111,13 +111,13 @@
 			// 
 			// trackBarExOverStaffingFactor
 			// 
-			this.trackBarExOverStaffingFactor.BeforeTouchSize = new System.Drawing.Size(253, 20);
+			this.trackBarExOverStaffingFactor.BeforeTouchSize = new System.Drawing.Size(252, 20);
 			this.trackBarExOverStaffingFactor.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.trackBarExOverStaffingFactor.LargeChange = 20;
 			this.trackBarExOverStaffingFactor.Location = new System.Drawing.Point(83, 109);
 			this.trackBarExOverStaffingFactor.Name = "trackBarExOverStaffingFactor";
 			this.trackBarExOverStaffingFactor.ShowButtons = false;
-			this.trackBarExOverStaffingFactor.Size = new System.Drawing.Size(253, 20);
+			this.trackBarExOverStaffingFactor.Size = new System.Drawing.Size(252, 20);
 			this.trackBarExOverStaffingFactor.SmallChange = 10;
 			this.trackBarExOverStaffingFactor.Style = Syncfusion.Windows.Forms.Tools.TrackBarEx.Theme.Metro;
 			this.trackBarExOverStaffingFactor.TabIndex = 2;
@@ -141,7 +141,7 @@
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(253, 14);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(252, 14);
 			this.tableLayoutPanel2.TabIndex = 6;
 			// 
 			// autoLabelLow
@@ -156,7 +156,7 @@
 			// autoLabelHigh
 			// 
 			this.autoLabelHigh.Dock = System.Windows.Forms.DockStyle.Right;
-			this.autoLabelHigh.Location = new System.Drawing.Point(208, 0);
+			this.autoLabelHigh.Location = new System.Drawing.Point(207, 0);
 			this.autoLabelHigh.Name = "autoLabelHigh";
 			this.autoLabelHigh.Size = new System.Drawing.Size(42, 14);
 			this.autoLabelHigh.TabIndex = 1;
@@ -175,7 +175,7 @@
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(253, 14);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(252, 14);
 			this.tableLayoutPanel3.TabIndex = 7;
 			// 
 			// autoLabelUnderStaff
@@ -189,7 +189,7 @@
 			// autoLabelOverStaff
 			// 
 			this.autoLabelOverStaff.Dock = System.Windows.Forms.DockStyle.Right;
-			this.autoLabelOverStaff.Location = new System.Drawing.Point(168, 0);
+			this.autoLabelOverStaff.Location = new System.Drawing.Point(167, 0);
 			this.autoLabelOverStaff.Name = "autoLabelOverStaff";
 			this.autoLabelOverStaff.Size = new System.Drawing.Size(82, 14);
 			this.autoLabelOverStaff.TabIndex = 1;

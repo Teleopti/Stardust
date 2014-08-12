@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "FileExportFinished";
 			this.Size = new System.Drawing.Size(489, 338);
 			this.tableLayoutPanel1.ResumeLayout(false);
