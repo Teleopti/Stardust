@@ -98,8 +98,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .List<PersonScheduleDayReadModel>();
 		}
 
-		//public IEnumerable<PersonScheduleDayReadModel> ForPersonsByFilteredTimes(DateOnly shiftTradeDate, IEnumerable<Guid> personIdList, Paging paging,
-		//																						IEnumerable<DateTimePeriod> filteredStartTimes, IEnumerable<DateTimePeriod> filteredEndTimes)
 		public IEnumerable<PersonScheduleDayReadModel> ForPersonsByFilteredTimes(DateOnly shiftTradeDate, IEnumerable<Guid> personIdList, Paging paging, TimeFilterInfo filter)
 		{
 			var idlist = string.Join(",", personIdList);

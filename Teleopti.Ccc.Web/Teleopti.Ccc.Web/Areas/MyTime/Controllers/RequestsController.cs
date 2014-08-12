@@ -170,7 +170,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		private IList<DateTimePeriod> convertStringToUtcTimes(DateOnly selectedDate, string timesString)
 		{
-			//if (string.IsNullOrEmpty(timesString)) timesString = "0:00-23:59";
 			var startTimesx = string.IsNullOrEmpty(timesString) ? new string[] {} : timesString.Split(',');
 			var periodsAsString = from t in startTimesx
 										 let parts = t.Split('-')
@@ -192,7 +191,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				periodsList.Add(new
 					{
 						Start = selectedDate.Date.Add(TimeSpan.FromHours(0)),
-						End = selectedDate.Date.Add(TimeSpan.FromHours(48)),
+						End = selectedDate.Date.Add(TimeSpan.FromHours(36)),
 					});
 			var periodsDateUtc = from p in periodsList
 										let start = TimeZoneHelper.ConvertToUtc(p.Start, _userTimeZone.TimeZone())
@@ -200,28 +199,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 										let period = new DateTimePeriod(start, end)
 										select period;
 
-			//var periodsUtc = from putc in periodsDateUtc
-			//					  let start = putc.StartDateTime.TimeOfDay
-			//					  let end = putc.EndDateTime.TimeOfDay
-			//					  let period = new TimePeriod(start, end)
-			//					  select period;
 			var utcTimes = periodsDateUtc.ToList();
 			return utcTimes;
 		}
 
-		[UnitOfWorkAction]
-		[HttpGet]
-		public JsonResult ShiftTradeRequestScheduleByFilterTime(DateOnly selectedDate, string teamId, string filteredStartTimes, string filteredEndTimes, Paging paging)
+		private TimeFilterInfo GetFilter(DateOnly selectedDate, string filterStartTimes, string filterEndTimes)
 		{
 			TimeFilterInfo filter;
-			if (string.IsNullOrEmpty(filteredStartTimes) && string.IsNullOrEmpty(filteredEndTimes))
+			if (string.IsNullOrEmpty(filterStartTimes) && string.IsNullOrEmpty(filterEndTimes))
 			{
 				filter = null;
 			}
 			else
 			{
-				var startTimes = convertStringToUtcTimes(selectedDate, filteredStartTimes);
-				var endTimes = convertStringToUtcTimes(selectedDate, filteredEndTimes);
+				var startTimes = convertStringToUtcTimes(selectedDate, filterStartTimes);
+				var endTimes = convertStringToUtcTimes(selectedDate, filterEndTimes);
 
 				filter = new TimeFilterInfo();
 				filter.StartTimeStarts = startTimes.Select(x => x.StartDateTime).ToArray();
@@ -229,9 +221,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				filter.EndTimeStarts = endTimes.Select(x => x.StartDateTime).ToArray();
 				filter.EndTimeEnds = endTimes.Select(x => x.EndDateTime).ToArray();
 			}
+			return filter;
+		}
 
-
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, TimeFilter = filter };
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult ShiftTradeRequestScheduleByFilterTime(DateOnly selectedDate, string teamId, string filteredStartTimes, string filteredEndTimes, Paging paging)
+		{
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, TimeFilter = GetFilter(selectedDate, filteredStartTimes, filteredEndTimes) };
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 
