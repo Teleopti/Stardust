@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		public ForecasterNavigator()
 		{
 			InitializeComponent();
-			treeViewSkills.Nodes.Sort();
 			if (!DesignMode)
 			{
 				SetTexts();
@@ -381,6 +380,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				foundNode.FirstOrDefault().Nodes.Add(skillNode);
 				reloadWorkloadNodes(skillNode);
 			}
+			treeViewSkills.Nodes.Sort();
 		}
 
 

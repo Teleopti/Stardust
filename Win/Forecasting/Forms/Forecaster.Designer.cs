@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Forecaster));
-			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup2 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup1 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.toolStripBtnCreateWorkloadTemplate = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonExit = new System.Windows.Forms.ToolStripButton();
@@ -241,7 +241,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// splitContainer2.Panel1
 			// 
 			this.splitContainer2.Panel1.BackColor = System.Drawing.Color.White;
-			this.splitContainer2.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainer2.Panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			// 
 			// splitContainer2.Panel2
@@ -333,6 +332,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.ribbonControlAdv1.Header.AddMainItem(toolStripTabItemMultisite);
 			this.ribbonControlAdv1.Header.AddQuickItem(new Syncfusion.Windows.Forms.Tools.QuickButtonReflectable(toolStripButtonSave2));
 			this.ribbonControlAdv1.HideMenuButtonToolTip = false;
+			this.ribbonControlAdv1.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 1);
 			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
 			this.ribbonControlAdv1.MenuButtonEnabled = true;
@@ -374,14 +374,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = false;
 			this.ribbonControlAdv1.Size = new System.Drawing.Size(1276, 160);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "xxStartMenu";
-			toolStripTabGroup2.Color = System.Drawing.Color.LightGray;
-			toolStripTabGroup2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			toolStripTabGroup2.Name = "xxTemplates";
-			toolStripTabGroup2.Visible = true;
-			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup2);
-			this.ribbonControlAdv1.TabGroups.SetTabGroup(toolStripTabItemSkill, toolStripTabGroup2);
-			this.ribbonControlAdv1.TabGroups.SetTabGroup(toolStripTabItemWorkload, toolStripTabGroup2);
-			this.ribbonControlAdv1.TabGroups.SetTabGroup(toolStripTabItemMultisite, toolStripTabGroup2);
+			toolStripTabGroup1.Color = System.Drawing.Color.LightGray;
+			toolStripTabGroup1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			toolStripTabGroup1.Name = "xxTemplates";
+			toolStripTabGroup1.Visible = true;
+			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup1);
+			this.ribbonControlAdv1.TabGroups.SetTabGroup(toolStripTabItemSkill, toolStripTabGroup1);
+			this.ribbonControlAdv1.TabGroups.SetTabGroup(toolStripTabItemWorkload, toolStripTabGroup1);
+			this.ribbonControlAdv1.TabGroups.SetTabGroup(toolStripTabItemMultisite, toolStripTabGroup1);
 			this.ribbonControlAdv1.TabIndex = 4;
 			this.ribbonControlAdv1.Text = "yyRibbonControlAdv1";
 			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;

@@ -94,11 +94,9 @@
 			// splitContainerJobHistoryView
 			// 
 			this.splitContainerJobHistoryView.BackColor = System.Drawing.SystemColors.Window;
-			this.splitContainerJobHistoryView.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(235)))), ((int)(((byte)(240))))), System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(211)))), ((int)(((byte)(221))))));
-			this.splitContainerJobHistoryView.BeforeTouchSize = 7;
+			this.splitContainerJobHistoryView.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.DarkGray);
+			this.splitContainerJobHistoryView.BeforeTouchSize = 3;
 			this.splitContainerJobHistoryView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainerJobHistoryView.HotBackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(240)))), ((int)(((byte)(171))))), System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(223)))), ((int)(((byte)(103))))));
-			this.splitContainerJobHistoryView.HotExpandLine = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(107)))), ((int)(((byte)(207)))));
 			this.splitContainerJobHistoryView.Location = new System.Drawing.Point(0, 0);
 			this.splitContainerJobHistoryView.Margin = new System.Windows.Forms.Padding(0);
 			this.splitContainerJobHistoryView.Name = "splitContainerJobHistoryView";
@@ -106,17 +104,18 @@
 			// 
 			// splitContainerJobHistoryView.Panel1
 			// 
-			this.splitContainerJobHistoryView.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(194)))), ((int)(((byte)(203))))), System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(227)))), ((int)(((byte)(231))))));
+			this.splitContainerJobHistoryView.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainerJobHistoryView.Panel1.Controls.Add(this.tableLayoutPanel2);
 			// 
 			// splitContainerJobHistoryView.Panel2
 			// 
-			this.splitContainerJobHistoryView.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(194)))), ((int)(((byte)(203))))), System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(227)))), ((int)(((byte)(231))))));
+			this.splitContainerJobHistoryView.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainerJobHistoryView.Panel2.Controls.Add(this.tableLayoutPanel3);
 			this.splitContainerJobHistoryView.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
 			this.splitContainerJobHistoryView.Size = new System.Drawing.Size(1086, 594);
 			this.splitContainerJobHistoryView.SplitterDistance = 307;
-			this.splitContainerJobHistoryView.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Silver;
+			this.splitContainerJobHistoryView.SplitterWidth = 3;
+			this.splitContainerJobHistoryView.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
 			this.splitContainerJobHistoryView.TabIndex = 0;
 			this.splitContainerJobHistoryView.ThemesEnabled = true;
 			// 
@@ -191,11 +190,10 @@
 			this.gridControlJobHistory.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gridControlJobHistory.EnableEdit = false;
 			this.gridControlJobHistory.Font = new System.Drawing.Font("Segoe UI", 8F);
-			this.gridControlJobHistory.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
+			this.gridControlJobHistory.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2010;
 			this.gridControlJobHistory.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
 			this.gridControlJobHistory.Location = new System.Drawing.Point(0, 0);
 			this.gridControlJobHistory.Margin = new System.Windows.Forms.Padding(0);
-			this.gridControlJobHistory.MetroScrollBars = true;
 			this.gridControlJobHistory.MinResizeColSize = 80;
 			this.gridControlJobHistory.Name = "gridControlJobHistory";
 			this.gridControlJobHistory.Office2007ScrollBars = true;
@@ -268,7 +266,7 @@
 			// 
 			this.tableLayoutPanel3.BackColor = System.Drawing.SystemColors.Window;
 			this.tableLayoutPanel3.ColumnCount = 1;
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1077F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1086F));
 			this.tableLayoutPanel3.Controls.Add(this.gridControlDetailedJobHistory, 0, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
@@ -276,7 +274,7 @@
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(1086, 280);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(1086, 284);
 			this.tableLayoutPanel3.TabIndex = 0;
 			// 
 			// gridControlDetailedJobHistory
@@ -325,11 +323,10 @@
 			this.gridControlDetailedJobHistory.EnableEdit = false;
 			this.gridControlDetailedJobHistory.Font = new System.Drawing.Font("Segoe UI", 8F);
 			this.gridControlDetailedJobHistory.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.gridControlDetailedJobHistory.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
+			this.gridControlDetailedJobHistory.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2010;
 			this.gridControlDetailedJobHistory.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
 			this.gridControlDetailedJobHistory.Location = new System.Drawing.Point(0, 0);
 			this.gridControlDetailedJobHistory.Margin = new System.Windows.Forms.Padding(0);
-			this.gridControlDetailedJobHistory.MetroScrollBars = true;
 			this.gridControlDetailedJobHistory.MinResizeColSize = 80;
 			this.gridControlDetailedJobHistory.Name = "gridControlDetailedJobHistory";
 			this.gridControlDetailedJobHistory.Office2007ScrollBars = true;
@@ -341,7 +338,7 @@
 			this.gridControlDetailedJobHistory.Properties.MarkColHeader = false;
 			this.gridControlDetailedJobHistory.Properties.MarkRowHeader = false;
 			this.gridControlDetailedJobHistory.ShowCurrentCellBorderBehavior = Syncfusion.Windows.Forms.Grid.GridShowCurrentCellBorder.GrayWhenLostFocus;
-			this.gridControlDetailedJobHistory.Size = new System.Drawing.Size(1086, 280);
+			this.gridControlDetailedJobHistory.Size = new System.Drawing.Size(1086, 284);
 			this.gridControlDetailedJobHistory.SmartSizeBox = false;
 			this.gridControlDetailedJobHistory.SortBehavior = Syncfusion.Windows.Forms.Grid.GridSortBehavior.SingleClick;
 			this.gridControlDetailedJobHistory.TabIndex = 0;

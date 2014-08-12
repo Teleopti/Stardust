@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			// 
 			// dateSelectionControl1
 			// 
-			this.dateSelectionControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(211)))), ((int)(((byte)(232)))));
+			this.dateSelectionControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateSelectionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateSelectionControl1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateSelectionControl1.Location = new System.Drawing.Point(0, 0);
