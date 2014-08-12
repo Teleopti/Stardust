@@ -72,18 +72,21 @@
 			// 
 			// ribbonControlForm
 			// 
-			this.ribbonControlForm.CaptionFont = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ribbonControlForm.CaptionFont = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlForm.HideMenuButtonToolTip = false;
-			this.ribbonControlForm.Location = new System.Drawing.Point(1, 0);
+			this.ribbonControlForm.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
+			this.ribbonControlForm.Location = new System.Drawing.Point(1, 1);
 			this.ribbonControlForm.MaximizeToolTip = "Maximize Ribbon";
 			this.ribbonControlForm.MenuButtonEnabled = true;
 			this.ribbonControlForm.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlForm.MenuButtonText = "";
 			this.ribbonControlForm.MenuButtonVisible = false;
+			this.ribbonControlForm.MenuButtonWidth = 56;
 			this.ribbonControlForm.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
 			this.ribbonControlForm.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlForm.Name = "ribbonControlForm";
 			this.ribbonControlForm.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
+			this.ribbonControlForm.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
 			// 
 			// ribbonControlForm.OfficeMenu
 			// 
@@ -93,19 +96,21 @@
 			this.ribbonControlForm.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.ribbonControlForm.QuickPanelVisible = false;
 			this.ribbonControlForm.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
+			this.ribbonControlForm.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
 			this.ribbonControlForm.SelectedTab = null;
 			this.ribbonControlForm.Show2010CustomizeQuickItemDialog = false;
-			this.ribbonControlForm.ShowRibbonDisplayOptionButton = true;
-			this.ribbonControlForm.Size = new System.Drawing.Size(574, 33);
+			this.ribbonControlForm.ShowRibbonDisplayOptionButton = false;
+			this.ribbonControlForm.Size = new System.Drawing.Size(578, 33);
 			this.ribbonControlForm.SystemText.QuickAccessDialogDropDownName = "xxStart menu";
 			this.ribbonControlForm.TabIndex = 3;
 			this.ribbonControlForm.Text = "ribbonControlAdv1";
+			this.ribbonControlForm.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			this.ribbonControlForm.TitleColor = System.Drawing.Color.Black;
 			// 
 			// tableLayoutPanelForm
 			// 
 			this.tableLayoutPanelForm.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.tableLayoutPanelForm.BackColor = System.Drawing.Color.Transparent;
+			this.tableLayoutPanelForm.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanelForm.ColumnCount = 1;
 			this.tableLayoutPanelForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelForm.Controls.Add(this.gridControlPeople, 0, 1);
@@ -113,7 +118,7 @@
 			this.tableLayoutPanelForm.Controls.Add(this.tableLayoutPanelFilter, 0, 0);
 			this.tableLayoutPanelForm.Controls.Add(this.tableLayoutPanelConfirmButtons, 0, 3);
 			this.tableLayoutPanelForm.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelForm.Location = new System.Drawing.Point(6, 34);
+			this.tableLayoutPanelForm.Location = new System.Drawing.Point(1, 33);
 			this.tableLayoutPanelForm.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelForm.Name = "tableLayoutPanelForm";
 			this.tableLayoutPanelForm.Padding = new System.Windows.Forms.Padding(8, 4, 8, 4);
@@ -122,7 +127,7 @@
 			this.tableLayoutPanelForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelForm.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanelForm.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelForm.Size = new System.Drawing.Size(564, 413);
+			this.tableLayoutPanelForm.Size = new System.Drawing.Size(574, 416);
 			this.tableLayoutPanelForm.TabIndex = 6;
 			// 
 			// gridControlPeople
@@ -133,6 +138,7 @@
             | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Shift) 
             | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Keyboard) 
             | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.MixRangeType)));
+			this.gridControlPeople.BackColor = System.Drawing.Color.White;
 			this.gridControlPeople.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.gridControlPeople.ColCount = 1;
 			this.gridControlPeople.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
@@ -144,10 +150,9 @@
 			this.gridControlPeople.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gridControlPeople.ExcelLikeCurrentCell = true;
 			this.gridControlPeople.ExcelLikeSelectionFrame = true;
-			this.gridControlPeople.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
+			this.gridControlPeople.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
 			this.gridControlPeople.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
 			this.gridControlPeople.Location = new System.Drawing.Point(11, 40);
-			this.gridControlPeople.MetroScrollBars = true;
 			this.gridControlPeople.Name = "gridControlPeople";
 			this.gridControlPeople.Office2007ScrollBars = true;
 			this.gridControlPeople.Properties.DisplayVertLines = false;
@@ -157,7 +162,7 @@
 			this.gridControlPeople.ReadOnly = true;
 			this.gridControlPeople.RowCount = 1;
 			this.gridControlPeople.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlPeople.Size = new System.Drawing.Size(542, 271);
+			this.gridControlPeople.Size = new System.Drawing.Size(552, 274);
 			this.gridControlPeople.SmartSizeBox = false;
 			this.gridControlPeople.TabIndex = 10;
 			this.gridControlPeople.UseRightToLeftCompatibleTextBox = true;
@@ -175,14 +180,14 @@
 			this.tableLayoutPanelSelection.Controls.Add(this.textBoxExtOptionalParticipant, 0, 1);
 			this.tableLayoutPanelSelection.Controls.Add(this.textBoxExtRequiredParticipant, 1, 0);
 			this.tableLayoutPanelSelection.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelSelection.Location = new System.Drawing.Point(8, 314);
+			this.tableLayoutPanelSelection.Location = new System.Drawing.Point(8, 317);
 			this.tableLayoutPanelSelection.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelSelection.Name = "tableLayoutPanelSelection";
 			this.tableLayoutPanelSelection.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
 			this.tableLayoutPanelSelection.RowCount = 2;
 			this.tableLayoutPanelSelection.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanelSelection.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelSelection.Size = new System.Drawing.Size(548, 62);
+			this.tableLayoutPanelSelection.Size = new System.Drawing.Size(558, 62);
 			this.tableLayoutPanelSelection.TabIndex = 1;
 			// 
 			// buttonAdvOptional
@@ -220,9 +225,9 @@
 			this.textBoxExtOptionalParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxExtOptionalParticipant.BackColor = System.Drawing.Color.White;
-			this.textBoxExtOptionalParticipant.BeforeTouchSize = new System.Drawing.Size(461, 21);
+			this.textBoxExtOptionalParticipant.BeforeTouchSize = new System.Drawing.Size(471, 21);
 			this.textBoxExtOptionalParticipant.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
-			this.textBoxExtOptionalParticipant.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBoxExtOptionalParticipant.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtOptionalParticipant.ContextMenuStrip = this.contextMenuStripEx1;
 			this.textBoxExtOptionalParticipant.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxExtOptionalParticipant.Location = new System.Drawing.Point(84, 36);
@@ -231,7 +236,7 @@
 			this.textBoxExtOptionalParticipant.Name = "textBoxExtOptionalParticipant";
 			this.textBoxExtOptionalParticipant.OverflowIndicatorToolTipText = null;
 			this.textBoxExtOptionalParticipant.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBoxExtOptionalParticipant.Size = new System.Drawing.Size(461, 21);
+			this.textBoxExtOptionalParticipant.Size = new System.Drawing.Size(471, 21);
 			this.textBoxExtOptionalParticipant.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Metro;
 			this.textBoxExtOptionalParticipant.TabIndex = 3;
 			this.textBoxExtOptionalParticipant.TextChanged += new System.EventHandler(this.textBoxExtOptionalParticipant_TextChanged);
@@ -294,7 +299,7 @@
 			this.textBoxExtRequiredParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxExtRequiredParticipant.BackColor = System.Drawing.Color.White;
-			this.textBoxExtRequiredParticipant.BeforeTouchSize = new System.Drawing.Size(461, 21);
+			this.textBoxExtRequiredParticipant.BeforeTouchSize = new System.Drawing.Size(471, 21);
 			this.textBoxExtRequiredParticipant.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtRequiredParticipant.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtRequiredParticipant.ContextMenuStrip = this.contextMenuStripEx1;
@@ -305,7 +310,7 @@
 			this.textBoxExtRequiredParticipant.Name = "textBoxExtRequiredParticipant";
 			this.textBoxExtRequiredParticipant.OverflowIndicatorToolTipText = null;
 			this.textBoxExtRequiredParticipant.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBoxExtRequiredParticipant.Size = new System.Drawing.Size(461, 21);
+			this.textBoxExtRequiredParticipant.Size = new System.Drawing.Size(471, 21);
 			this.textBoxExtRequiredParticipant.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Metro;
 			this.textBoxExtRequiredParticipant.TabIndex = 2;
 			this.textBoxExtRequiredParticipant.TextChanged += new System.EventHandler(this.textBoxExtRequiredParticipant_TextChanged);
@@ -332,13 +337,12 @@
 			this.tableLayoutPanelFilter.Padding = new System.Windows.Forms.Padding(0, 0, 0, 4);
 			this.tableLayoutPanelFilter.RowCount = 1;
 			this.tableLayoutPanelFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelFilter.Size = new System.Drawing.Size(548, 33);
+			this.tableLayoutPanelFilter.Size = new System.Drawing.Size(558, 33);
 			this.tableLayoutPanelFilter.TabIndex = 6;
 			// 
 			// dateTimePickerAdvtDate
 			// 
 			this.dateTimePickerAdvtDate.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-			this.dateTimePickerAdvtDate.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(171)))), ((int)(((byte)(193)))), ((int)(((byte)(222)))));
 			this.dateTimePickerAdvtDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			// 
 			// 
@@ -348,7 +352,7 @@
 			this.dateTimePickerAdvtDate.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvtDate.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdvtDate.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.dateTimePickerAdvtDate.Calendar.DayNamesColor = System.Drawing.Color.Empty;
+			this.dateTimePickerAdvtDate.Calendar.DayNamesColor = System.Drawing.Color.Black;
 			this.dateTimePickerAdvtDate.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
 			this.dateTimePickerAdvtDate.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
 			this.dateTimePickerAdvtDate.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -356,8 +360,8 @@
 			this.dateTimePickerAdvtDate.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvtDate.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
 			this.dateTimePickerAdvtDate.Calendar.HeaderEndColor = System.Drawing.Color.White;
-			this.dateTimePickerAdvtDate.Calendar.HeaderHeight = 34;
 			this.dateTimePickerAdvtDate.Calendar.HeaderStartColor = System.Drawing.Color.White;
+			this.dateTimePickerAdvtDate.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvtDate.Calendar.HighlightColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvtDate.Calendar.Iso8601CalenderFormat = false;
 			this.dateTimePickerAdvtDate.Calendar.Location = new System.Drawing.Point(0, 0);
@@ -365,7 +369,7 @@
 			this.dateTimePickerAdvtDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvtDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvtDate.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvtDate.Calendar.Size = new System.Drawing.Size(209, 174);
+			this.dateTimePickerAdvtDate.Calendar.Size = new System.Drawing.Size(100, 174);
 			this.dateTimePickerAdvtDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvtDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvtDate.Calendar.TabIndex = 0;
@@ -376,11 +380,12 @@
 			// 
 			// 
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.dateTimePickerAdvtDate.Calendar.NoneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.IsBackStageButton = false;
-			this.dateTimePickerAdvtDate.Calendar.NoneButton.Location = new System.Drawing.Point(124, 0);
-			this.dateTimePickerAdvtDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
+			this.dateTimePickerAdvtDate.Calendar.NoneButton.Location = new System.Drawing.Point(137, 0);
+			this.dateTimePickerAdvtDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 25);
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.Text = "None";
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.UseVisualStyle = true;
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.Visible = false;
@@ -388,24 +393,26 @@
 			// 
 			// 
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.dateTimePickerAdvtDate.Calendar.TodayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.IsBackStageButton = false;
-			this.dateTimePickerAdvtDate.Calendar.TodayButton.Location = new System.Drawing.Point(2, 1);
-			this.dateTimePickerAdvtDate.Calendar.TodayButton.Size = new System.Drawing.Size(206, 21);
+			this.dateTimePickerAdvtDate.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
+			this.dateTimePickerAdvtDate.Calendar.TodayButton.Size = new System.Drawing.Size(100, 25);
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvtDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvtDate.CalendarSize = new System.Drawing.Size(189, 176);
-			this.dateTimePickerAdvtDate.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvtDate.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvtDate.ClipboardFormat = System.Windows.Forms.DateTimePickerFormat.Short;
 			this.dateTimePickerAdvtDate.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateTimePickerAdvtDate.DropDownImage = null;
-			this.dateTimePickerAdvtDate.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdvtDate.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvtDate.DropDownPressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvtDate.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(191)))), ((int)(((byte)(237)))));
 			this.dateTimePickerAdvtDate.EnableNullDate = false;
 			this.dateTimePickerAdvtDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.dateTimePickerAdvtDate.Location = new System.Drawing.Point(441, 3);
+			this.dateTimePickerAdvtDate.Location = new System.Drawing.Point(451, 3);
 			this.dateTimePickerAdvtDate.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.dateTimePickerAdvtDate.MinValue = new System.DateTime(((long)(0)));
 			this.dateTimePickerAdvtDate.Name = "dateTimePickerAdvtDate";
@@ -445,7 +452,7 @@
 			// textBoxExtFilterCriteria
 			// 
 			this.textBoxExtFilterCriteria.BackColor = System.Drawing.Color.White;
-			this.textBoxExtFilterCriteria.BeforeTouchSize = new System.Drawing.Size(461, 21);
+			this.textBoxExtFilterCriteria.BeforeTouchSize = new System.Drawing.Size(471, 21);
 			this.textBoxExtFilterCriteria.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtFilterCriteria.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtFilterCriteria.ContextMenuStrip = this.contextMenuStripEx1;
@@ -471,7 +478,7 @@
 			this.tableLayoutPanelConfirmButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelConfirmButtons.Controls.Add(this.buttonAdvCancel, 2, 0);
 			this.tableLayoutPanelConfirmButtons.Controls.Add(this.buttonAdvOK, 0, 0);
-			this.tableLayoutPanelConfirmButtons.Location = new System.Drawing.Point(390, 376);
+			this.tableLayoutPanelConfirmButtons.Location = new System.Drawing.Point(400, 379);
 			this.tableLayoutPanelConfirmButtons.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelConfirmButtons.Name = "tableLayoutPanelConfirmButtons";
 			this.tableLayoutPanelConfirmButtons.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
@@ -513,14 +520,16 @@
 			// 
 			// statusStripExAddressBook
 			// 
-			this.statusStripExAddressBook.BeforeTouchSize = new System.Drawing.Size(564, 22);
+			this.statusStripExAddressBook.BackColor = System.Drawing.Color.White;
+			this.statusStripExAddressBook.BeforeTouchSize = new System.Drawing.Size(574, 22);
 			this.statusStripExAddressBook.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelMessage});
-			this.statusStripExAddressBook.Location = new System.Drawing.Point(6, 447);
+			this.statusStripExAddressBook.Location = new System.Drawing.Point(1, 448);
 			this.statusStripExAddressBook.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
 			this.statusStripExAddressBook.Name = "statusStripExAddressBook";
-			this.statusStripExAddressBook.Size = new System.Drawing.Size(564, 22);
+			this.statusStripExAddressBook.Size = new System.Drawing.Size(574, 22);
 			this.statusStripExAddressBook.TabIndex = 7;
+			this.statusStripExAddressBook.VisualStyle = Syncfusion.Windows.Forms.Tools.StatusStripExStyle.Metro;
 			// 
 			// toolStripStatusLabelMessage
 			// 
@@ -534,10 +543,10 @@
 			this.AcceptButton = this.buttonAdvOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Borders = new System.Windows.Forms.Padding(6, 1, 6, 2);
+			this.Borders = new System.Windows.Forms.Padding(0);
 			this.CancelButton = this.buttonAdvCancel;
 			this.ClientSize = new System.Drawing.Size(576, 471);
-			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Blue;
+			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.Controls.Add(this.statusStripExAddressBook);
 			this.Controls.Add(this.ribbonControlForm);
 			this.Controls.Add(this.tableLayoutPanelForm);
@@ -547,6 +556,7 @@
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(500, 400);
 			this.Name = "AddressBookView";
+			this.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "xxSelectAttendees";
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlForm)).EndInit();
