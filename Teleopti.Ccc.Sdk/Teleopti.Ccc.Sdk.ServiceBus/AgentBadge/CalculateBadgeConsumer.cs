@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	{
 		private readonly IServiceBus _serviceBus;
 		private readonly IAgentBadgeSettingsRepository _settingsRepository;
-		private readonly IStatisticRepository _statisticRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IGlobalSettingDataRepository _globalSettingRep;
 		private readonly IPushMessageRepository _msgRepository;
@@ -27,8 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 		public CalculateBadgeConsumer(
 									IServiceBus serviceBus, 
-									IAgentBadgeSettingsRepository settingsRepository,
-									IStatisticRepository statisticRepository, 
+									IAgentBadgeSettingsRepository settingsRepository, 
 									IPersonRepository personRepository, 
 									IGlobalSettingDataRepository globalSettingRep, 
 									IPushMessageRepository msgRepository, 
@@ -38,7 +36,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			_serviceBus = serviceBus;
 			_settingsRepository = settingsRepository;
-			_statisticRepository = statisticRepository;
 			_personRepository = personRepository;
 			_globalSettingRep = globalSettingRep;
 			_msgRepository = msgRepository;

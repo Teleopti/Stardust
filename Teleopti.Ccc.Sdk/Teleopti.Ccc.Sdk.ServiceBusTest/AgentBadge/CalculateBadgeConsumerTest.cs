@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			msgRepository = MockRepository.GenerateMock<IPushMessageRepository>();
 			now = MockRepository.GenerateMock<INow>();
 			calculator = new AgentBadgeCalculator(statisticRepository);
-			target = new CalculateBadgeConsumer(serviceBus, badgeSettingsRepository, statisticRepository, personRepository, globalSettingRepository, msgRepository, unitOfWorkFactory,calculator, now);
+			target = new CalculateBadgeConsumer(serviceBus, badgeSettingsRepository, personRepository, globalSettingRepository, msgRepository, unitOfWorkFactory,calculator, now);
 
 		}
 		[Test]
