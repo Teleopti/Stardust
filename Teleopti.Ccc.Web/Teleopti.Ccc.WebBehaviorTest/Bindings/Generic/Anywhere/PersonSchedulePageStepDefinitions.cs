@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
         public void ThenIShouldSeeTheAgentSTimeLineWith(Table table)
         {
             var timeLineInfo = table.CreateInstance<TimeLineInfo>();
-            Browser.Interactions.AssertFirstContains(".local-time-zone-short", timeLineInfo.TimeZone);
+            Browser.Interactions.AssertFirstContains(".other-time-zone-short", timeLineInfo.TimeZone);
             Browser.Interactions.AssertExists(".time-line.other-time-zone[data-start-time='{0}'][data-end-time='{1}']", timeLineInfo.StartTime, timeLineInfo.EndTime);
         }
 
@@ -224,18 +224,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
         [When(@"I should not see any local hours for the agent's new activity")]
         public void WhenIShouldNotSeeAnyLocalHoursForTheAgentSNewActivity()
         {
-            Browser.Interactions.AssertNotExists(".activity-form", ".activity-form .local-time-zone");
-            Browser.Interactions.AssertNotExists(".activity-form", ".activity-form .local-start-time");
-            Browser.Interactions.AssertNotExists(".activity-form", ".activity-form .local-end-time");
+            Browser.Interactions.AssertNotExists(".activity-form", ".activity-form .other-time-zone");
+            Browser.Interactions.AssertNotExists(".activity-form", ".activity-form .other-start-time");
+            Browser.Interactions.AssertNotExists(".activity-form", ".activity-form .other-end-time");
         }
 
         [When(@"I should see local hours for the agent's new activity with")]
         public void WhenIShouldSeeLocalHoursForTheAgentSNewActivityWith(Table table)
         {
             var localTimeInfo = table.CreateInstance<AddActivityFormInfo>();
-            Browser.Interactions.AssertFirstContains(".activity-form .local-time-zone", localTimeInfo.LocalTimeZone);
-            Browser.Interactions.AssertExists(".activity-form .local-start-time[data-start-time='{0}']", localTimeInfo.StartTime);
-            Browser.Interactions.AssertExists(".activity-form .local-end-time[data-end-time='{0}']", localTimeInfo.EndTime);
+            Browser.Interactions.AssertFirstContains(".activity-form .other-time-zone", localTimeInfo.LocalTimeZone);
+            Browser.Interactions.AssertExists(".activity-form .other-start-time[data-start-time='{0}']", localTimeInfo.StartTime);
+            Browser.Interactions.AssertExists(".activity-form .other-end-time[data-end-time='{0}']", localTimeInfo.EndTime);
         }
 		[When(@"I click '(.*)' on absence named '(.*)'")]
 		public void WhenIClickOnAbsenceNamed(CssClass cssClass, string absenceName)

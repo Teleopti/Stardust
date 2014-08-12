@@ -86,7 +86,6 @@ Scenario: View new activity input time for agent in other time zone
 	| End time   | 13:00 |
 	And I should see local hours for the agent's new activity with
 	| Field      | Value                 |
-	| Time zone  | (UTC +02:00) Istanbul |
 	| Start time | 13:00                 |
 	| End time   | 14:00                 |
 	
@@ -107,4 +106,22 @@ Scenario: View new activity input time for agent in the same time zone
 	| Start time | 12:00 |
 	| End time   | 13:00 |
 	And I should not see any local hours for the agent's new activity
+
+Scenario: View default times for agent in other time zone
+	Given I have the role 'Anywhere Team Green'
+	And I am located in Stockholm
+	And 'John King' is located in 'Istanbul'
+	And the current time is '2013-11-18 16:00'
+	And 'John King' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-18 08:00 |
+	| End time       | 2013-11-18 17:00 |
+	When I view person schedules add activity form for 'John King' in 'Team green' on '2013-11-18'
+	And I should see local hours for the agent's new activity with
+	| Field      | Value      |
+	| Time zone  | UTC +02:00 |
+	| Start time | 18:15      |
+	| End time   | 19:15      |
 
