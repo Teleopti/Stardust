@@ -3,37 +3,37 @@ using Teleopti.Ccc.WinCode.Budgeting.Presenters;
 
 namespace Teleopti.Ccc.Win.Budgeting
 {
-    partial class BudgetGroupMainView
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class BudgetGroupMainView
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (components != null)
-                    components.Dispose();
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				if (components != null)
+					components.Dispose();
 
-            }
-            base.Dispose(disposing);
-        }
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Windows Form Designer generated code
+		#region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        private void InitializeComponent()
-        {
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private void InitializeComponent()
+		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BudgetGroupMainView));
 			this.ribbonControlAdvFixed1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.ribbonControlAdvFixed1.MenuButtonFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdvFixed1.MenuButtonText = "File";
 			this.ribbonControlAdvFixed1.MenuButtonWidth = 56;
-			this.ribbonControlAdvFixed1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
+			this.ribbonControlAdvFixed1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.ribbonControlAdvFixed1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdvFixed1.Name = "ribbonControlAdvFixed1";
 			this.ribbonControlAdvFixed1.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
@@ -103,10 +103,11 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.ribbonControlAdvFixed1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.ribbonControlAdvFixed1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.ribbonControlAdvFixed1.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
+			this.ribbonControlAdvFixed1.ScaleMenuButtonImage = false;
 			this.ribbonControlAdvFixed1.SelectedTab = this.toolStripTabItem2;
 			this.ribbonControlAdvFixed1.Show2010CustomizeQuickItemDialog = false;
 			this.ribbonControlAdvFixed1.ShowRibbonDisplayOptionButton = false;
-			this.ribbonControlAdvFixed1.SystemText.QuickAccessDialogDropDownName = "Start menu";
+			this.ribbonControlAdvFixed1.SystemText.QuickAccessDialogDropDownName = "";
 			this.ribbonControlAdvFixed1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			this.ribbonControlAdvFixed1.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.ribbonControlAdvFixed1.TitleFont = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold);
@@ -201,7 +202,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.SetShortcut(this.toolStripTabItem2, System.Windows.Forms.Keys.None);
 			resources.ApplyResources(this.toolStripTabItem2, "toolStripTabItem2");
 			this.toolStripTabItem2.Tag = "2";
-			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripTabItem2, true);
+			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripTabItem2, false);
 			this.ribbonControlAdvFixed1.SetUseInQuickAccessMenu(this.toolStripTabItem2, false);
 			// 
 			// toolStripEx1
@@ -228,8 +229,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripExLoad.Image = null;
 			this.toolStripExLoad.ImageScalingSize = new System.Drawing.Size(25, 25);
 			this.toolStripExLoad.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonLoadForecastedHours,
-            this.toolStripButtonStaffEmployed});
+			this.toolStripButtonLoadForecastedHours,
+			this.toolStripButtonStaffEmployed});
 			this.toolStripExLoad.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
 			this.toolStripExLoad.Name = "toolStripExLoad";
 			this.toolStripExLoad.Office12Mode = false;
@@ -269,9 +270,9 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripExViews.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExViews.Image = null;
 			this.toolStripExViews.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonMonthView,
-            this.toolStripButtonWeekView,
-            this.toolStripButtonDayView});
+			this.toolStripButtonMonthView,
+			this.toolStripButtonWeekView,
+			this.toolStripButtonDayView});
 			this.toolStripExViews.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Office2007;
 			this.toolStripExViews.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
 			this.toolStripExViews.Name = "toolStripExViews";
@@ -279,6 +280,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripExViews.ShowLauncher = false;
 			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripExViews, false);
 			this.ribbonControlAdvFixed1.SetUseInQuickAccessMenu(this.toolStripExViews, false);
+			this.toolStripExViews.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
 			// 
 			// toolStripButtonMonthView
 			// 
@@ -339,10 +341,10 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripEx2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripEx2.Image = null;
 			this.toolStripEx2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonSave});
+			this.toolStripButtonSave});
 			this.toolStripEx2.Name = "toolStripEx2";
 			this.toolStripEx2.Office12Mode = false;
-			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripEx2, true);
+			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripEx2, false);
 			this.ribbonControlAdvFixed1.SetUseInQuickAccessMenu(this.toolStripEx2, false);
 			// 
 			// toolStripButtonSave
@@ -369,8 +371,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// 
 			this.statusStripEx1.BeforeTouchSize = new System.Drawing.Size(1218, 22);
 			this.statusStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabelBudgetGroupMainView,
-            this.toolStripSpinningProgressControlStatus});
+			this.toolStripStatusLabelBudgetGroupMainView,
+			this.toolStripSpinningProgressControlStatus});
 			resources.ApplyResources(this.statusStripEx1, "statusStripEx1");
 			this.statusStripEx1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
 			this.statusStripEx1.Name = "statusStripEx1";
@@ -387,12 +389,12 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// 
 			this.toolStripSpinningProgressControlStatus.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(146)))), ((int)(((byte)(33)))));
 			this.toolStripSpinningProgressControlStatus.BackColor = System.Drawing.Color.Transparent;
-			this.toolStripSpinningProgressControlStatus.BehindTransitionSegmentIsActive = true;
+			this.toolStripSpinningProgressControlStatus.BehindTransitionSegmentIsActive = false;
 			this.toolStripSpinningProgressControlStatus.InactiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(218)))), ((int)(((byte)(218)))));
 			this.toolStripSpinningProgressControlStatus.Name = "ToolStripSpinningProgress";
 			this.SetShortcut(this.toolStripSpinningProgressControlStatus, System.Windows.Forms.Keys.None);
 			resources.ApplyResources(this.toolStripSpinningProgressControlStatus, "toolStripSpinningProgressControlStatus");
-			this.toolStripSpinningProgressControlStatus.TransitionSegment = 1;
+			this.toolStripSpinningProgressControlStatus.TransitionSegment = 8;
 			this.toolStripSpinningProgressControlStatus.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			// 
 			// BudgetGroupMainView
@@ -426,9 +428,9 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
-        }
+		}
 
-        #endregion
+		#endregion
 
 		private Syncfusion.Windows.Forms.BackStageView backStageView1;
 		private Syncfusion.Windows.Forms.BackStage backStage1;
@@ -455,5 +457,5 @@ namespace Teleopti.Ccc.Win.Budgeting
 		private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItem3;
 		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx2;
 		private ToolStripButton toolStripButtonSave;
-    }
+	}
 }
