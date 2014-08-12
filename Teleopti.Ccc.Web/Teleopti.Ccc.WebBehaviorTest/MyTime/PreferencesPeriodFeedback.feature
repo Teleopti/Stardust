@@ -17,26 +17,38 @@ Scenario: Period feedback of contract day off
 Scenario: Period feedback of day off preferences
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a day off preference on weekday 3
-	And I have a day off preference on weekday 5
-	When I view preferences
+	And I have a day off preference with
+	| Field | Value        |
+	| Date  | 2014-04-30 |
+	And I have a day off preference with
+	| Field | Value        |
+	| Date  | 2014-05-02 |
+	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result 2 days off
 	And I should not see a warning for my dayoff preferences outside the target
 
 Scenario: Period feedback of day off scheduled
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a day off scheduled on weekday 3
-	And I have a day off scheduled on weekday 5
-	When I view preferences
+	And I have an assigned dayoff with
+         | Field | Value |
+         | Date  | 2014-04-30 |
+		 And I have an assigned dayoff with
+         | Field | Value |
+         | Date  | 2014-05-02 |
+	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result 2 days off
 
 Scenario: Period feedback of day off preferences and scheduled
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a day off preference on weekday 3
-	And I have a day off scheduled on weekday 5
-	When I view preferences
+	And I have a day off preference with
+	| Field | Value        |
+	| Date  | 2014-04-30 |
+		 And I have an assigned dayoff with
+         | Field | Value |
+         | Date  | 2014-05-02 |
+	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result 2 days off
 
 
@@ -67,9 +79,13 @@ Scenario: Period feedback of absence on contract schedule day off
 	| Friday work day    | true  |
 	| Saturday work day  | false |
 	| Sunday work day    | false |
-	And I have a absence preference on weekday 5
-	And I have a absence preference on weekday 6
-	When I view preferences
+	And I have existing absence preference with
+         | Field | Value |
+         | Date  | 2014-05-02 |
+	And I have existing absence preference with
+         | Field | Value |
+         | Date  | 2014-05-03 |
+	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result 1 days off
 
 
@@ -92,9 +108,13 @@ Scenario: Period feedback of contract time for employment type Fixed staff day w
 		| Field                     | Value                     |
 		| Employment type           | Fixed staff day work time |
 		| Average work time per day | 8                         |
-	And I have a day off preference on weekday 6
-	And I have a day off preference on weekday 7
-	When I view preferences
+	And I have existing day off preference with
+         | Field | Value |
+         | Date  | 2014-05-03 |
+	And I have existing day off preference with
+         | Field | Value |
+         | Date  | 2014-05-04 |
+	When I view preferences for date '2014-05-02'
 	Then I should see a message that I should work 40 hours
 
 Scenario: Period feedback of contract time with target tolerance
@@ -123,42 +143,70 @@ Scenario: Period feedback of preferences
 	Given I am an agent
 	And I have a scheduling period of 1 week
 	And I have a shift bag with start times 7 to 9 and end times 15 to 17
-	And I have a shift category preference on weekday 1
-	And I have a shift category preference on weekday 2
-	And I have a shift category preference on weekday 3
-	And I have a shift category preference on weekday 4
-	And I have a shift category preference on weekday 5
-	And I have a day off preference on weekday 6
-	And I have a day off preference on weekday 7
-	When I view preferences
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-04-28 |
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-04-29 |
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-04-30 |
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-05-01 |
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-05-02 |
+	And I have existing day off preference with
+         | Field | Value |
+         | Date  | 2014-05-03 |
+	And I have existing day off preference with
+         | Field | Value      |
+         | Date  | 2014-05-04 |
+	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 30 to 50 hours
 	And I should not see a warning for my time preferences outside the target
 
 Scenario: Period feedback of schedules
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a scheduled shift of 8 hours on weekday 1
-	And I have a scheduled shift of 8 hours on weekday 2
-	And I have a scheduled shift of 8 hours on weekday 3
-	And I have a scheduled shift of 8 hours on weekday 4
-	And I have a scheduled shift of 8 hours on weekday 5
-	And I have a scheduled day off on weekday 6
-	And I have a scheduled day off on weekday 7
-	When I view preferences
+	And I have a scheduled shift of 8 hours on '2014-04-28'
+	And I have a scheduled shift of 8 hours on '2014-04-29'
+	And I have a scheduled shift of 8 hours on '2014-04-30'
+	And I have a scheduled shift of 8 hours on '2014-05-01'
+	And I have a scheduled shift of 8 hours on '2014-05-02'
+	And I have an assigned dayoff with
+	| Field | Value      |
+	| Date  | 2014-05-03 |
+	And I have an assigned dayoff with
+	| Field | Value      |
+	| Date  | 2014-05-04 |
+	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 40 hours
 
 Scenario: Period feedback of schedules and preferences
 	Given I am an agent
 	And I have a scheduling period of 1 week
 	And I have a shift bag with start times 7 to 9 and end times 15 to 17
-	And I have a scheduled shift of 8 hours on weekday 1
-	And I have a scheduled shift of 8 hours on weekday 2
-	And I have a shift category preference on weekday 3
-	And I have a shift category preference on weekday 4
-	And I have a shift category preference on weekday 5
-	And I have a scheduled day off on weekday 6
-	And I have a day off preference on weekday 7
-	When I view preferences
+	And I have a scheduled shift of 8 hours on '2014-04-28'
+	And I have a scheduled shift of 8 hours on '2014-04-29'
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-04-30 |
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-05-01 |
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-05-02 |
+	And I have an assigned dayoff with
+	| Field | Value      |
+	| Date  | 2014-05-03 |
+	And I have existing day off preference with
+         | Field | Value      |
+         | Date  | 2014-05-04 |
+	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 34 to 46 hours
 
 
@@ -171,14 +219,35 @@ Scenario: Period feedback of contract time absence
 		| Average work time per day | 8                            |
 	And I have a shift bag with start times 7 to 9 and end times 15 to 17
 	And I have a contract schedule with 2 days off
-	And I have a contract time absence preference on weekday 1
-	And I have a contract time absence preference on weekday 2
-	And I have a contract time absence preference on weekday 3
-	And I have a contract time absence preference on weekday 4
-	And I have a contract time absence preference on weekday 5
-	And I have a contract time absence preference on weekday 6
-	And I have a contract time absence preference on weekday 7
-	When I view preferences
+	And I have existing absence preference with
+         | Field   | Value                 |
+         | Date    | 2014-04-28            |
+         | Absence | Legacy common vacation absence |
+	And I have existing absence preference with
+         | Field   | Value                          |
+         | Date    | 2014-04-29                    |
+		 | Absence | Legacy common vacation absence |
+	And I have existing absence preference with
+         | Field   | Value                          |
+         | Date    | 2014-04-30                    |
+		 | Absence | Legacy common vacation absence |
+	And I have existing absence preference with
+         | Field   | Value                          |
+         | Date    | 2014-05-01                    |
+		 | Absence | Legacy common vacation absence |
+	And I have existing absence preference with
+         | Field   | Value                          |
+         | Date    | 2014-05-02                    |
+		 | Absence | Legacy common vacation absence |
+	And I have existing absence preference with
+         | Field   | Value                          |
+         | Date    | 2014-05-03                    |
+		 | Absence | Legacy common vacation absence |
+	And I have existing absence preference with
+         | Field   | Value                          |
+         | Date    | 2014-05-04                    |
+		 | Absence | Legacy common vacation absence |
+	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 40 hours
 
 Scenario: Period feedback of non-contract time absence
@@ -189,25 +258,52 @@ Scenario: Period feedback of non-contract time absence
 		| Average work time per day | 8                            |
 	And I have a shift bag with start times 7 to 9 and end times 15 to 17
 	And I have a contract schedule with 2 days off
-	And I have a non-contract time absence preference on weekday 1
-	And I have a non-contract time absence preference on weekday 2
-	And I have a non-contract time absence preference on weekday 3
-	And I have a non-contract time absence preference on weekday 4
-	And I have a non-contract time absence preference on weekday 5
-	And I have a non-contract time absence preference on weekday 6
-	And I have a non-contract time absence preference on weekday 7
-	When I view preferences
+	And I have existing absence preference with
+         | Field   | Value                          |
+         | Date    | 2014-04-28                    |
+         | Absence | Legacy common absence |
+	And I have existing absence preference with
+         | Field   | Value                          |
+         | Date    | 2014-04-29                    |
+         | Absence | Legacy common absence |
+	And I have existing absence preference with
+         | Field   | Value                          |
+         | Date    | 2014-04-30                     |
+         | Absence | Legacy common absence |
+	And I have existing absence preference with
+         | Field   | Value                          |
+         | Date    | 2014-05-01                     |
+         | Absence | Legacy common absence |
+	And I have existing absence preference with
+         | Field   | Value                          |
+         | Date    | 2014-05-02                     |
+         | Absence | Legacy common absence |
+	And I have existing absence preference with
+         | Field   | Value                          |
+         | Date    | 2014-05-03                     |
+         | Absence | Legacy common absence |
+	And I have existing absence preference with
+         | Field   | Value                          |
+         | Date    | 2014-05-04                     |
+         | Absence | Legacy common absence |
+	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 0 hours
 
-
+	
 
 Scenario: Period feedback of day off preferences with warning
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a day off preference on weekday 3
-	And I have a day off preference on weekday 4
-	And I have a day off preference on weekday 5
-	When I view preferences
+	And I have existing day off preference with
+         | Field | Value      |
+         | Date  | 2014-04-30 |
+	And I have existing day off preference with
+         | Field | Value      |
+         | Date  | 2014-05-01 |
+	And I have existing day off preference with
+         | Field | Value      |
+         | Date  | 2014-05-02 |
+	When I view preferences for date '2014-05-02'
 	Then I should see a message that I should have 2 days off
 	And I should see a message that my preferences can result 3 days off
 	And I should see a warning for my dayoff preferences outside the target
@@ -216,14 +312,28 @@ Scenario: Period feedback of preferences with warning
 	Given I am an agent
 	And I have a scheduling period of 1 week
 	And I have a shift bag with start times 7 to 9 and end times 15 to 17
-	And I have a shift category preference on weekday 1
-	And I have a shift category preference on weekday 2
-	And I have a shift category preference on weekday 3
-	And I have a shift category preference on weekday 4
-	And I have a shift category preference on weekday 5
-	And I have a shift category preference on weekday 6
-	And I have a shift category preference on weekday 7
-	When I view preferences
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-04-28 |
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-04-29 |
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-04-30 |
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-05-01 |
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-05-02 |
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-05-03 |
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-05-04 |
+	When I view preferences for date '2014-05-02'
 	Then I should see a message that I should work 40 hours
 	And I should see a message that my preferences can result in 42 to 70 hours
 	And I should see a warning for my time preferences outside the target

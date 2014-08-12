@@ -48,10 +48,10 @@
 			this.toolStripEx1.Margin = new System.Windows.Forms.Padding(3);
 			this.toolStripEx1.Name = "toolStripEx1";
 			this.toolStripEx1.Office12Mode = false;
-			this.toolStripEx1.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
+			this.toolStripEx1.Padding = new System.Windows.Forms.Padding(12, 0, 1, 0);
 			this.toolStripEx1.ShowCaption = false;
 			this.toolStripEx1.ShowLauncher = false;
-			this.toolStripEx1.Size = new System.Drawing.Size(256, 81);
+			this.toolStripEx1.Size = new System.Drawing.Size(299, 82);
 			this.toolStripEx1.TabIndex = 0;
 			this.toolStripEx1.Text = "toolStripEx1";
 			this.toolStripEx1.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
@@ -60,28 +60,30 @@
 			// 
 			this.toolStripLabel1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.toolStripLabel1.Name = "toolStripLabel1";
-			this.toolStripLabel1.Size = new System.Drawing.Size(244, 17);
+			this.toolStripLabel1.Size = new System.Drawing.Size(285, 17);
 			this.toolStripLabel1.Text = "xxActions";
 			// 
 			// toolStripButton1
 			// 
+			this.toolStripButton1.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.toolStripButton1.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Open_small;
 			this.toolStripButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton1.Name = "toolStripButton1";
 			this.toolStripButton1.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButton1.Size = new System.Drawing.Size(244, 28);
+			this.toolStripButton1.Size = new System.Drawing.Size(285, 29);
 			this.toolStripButton1.Text = "xxOpenShiftsTreeDots";
 			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
 			// 
 			// ShiftsNavigationPanel
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.toolStripEx1);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.Name = "ShiftsNavigationPanel";
-			this.Size = new System.Drawing.Size(256, 560);
+			this.Size = new System.Drawing.Size(299, 646);
 			this.toolStripEx1.ResumeLayout(false);
 			this.toolStripEx1.PerformLayout();
 			this.ResumeLayout(false);

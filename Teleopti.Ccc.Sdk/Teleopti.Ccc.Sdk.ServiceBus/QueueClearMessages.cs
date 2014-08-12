@@ -17,5 +17,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				command.ExecuteNonQuery();
 			}
 		}
+		public static void ClearSubQueueMessages(string connectionString, string queueName, string subQueue)
+		{
+			using (var connection = new SqlConnection(connectionString))
+			using (var command = connection.CreateCommand())
+			{
+				connection.Open();
+				command.CommandText = "Queue.CustomClearSubQueueMessages";
+				command.CommandType = CommandType.StoredProcedure;
+				command.Parameters.AddWithValue("@QueueName", queueName);
+				command.Parameters.AddWithValue("@Subqueue", subQueue);
+				command.ExecuteNonQuery();
+			}
+		}
 	}
 }

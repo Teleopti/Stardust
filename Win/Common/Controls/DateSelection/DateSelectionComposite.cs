@@ -18,14 +18,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
         {
             InitializeComponent();
             if (!DesignMode) SetTexts();
-            SetColors();
-        }
-
-        private void SetColors()
-        {
-            BackColor = ColorHelper.StandardPanelBackground();
-            tableLayoutPanel1.BackColor = ColorHelper.TabBackColor();
-        }
+		  }
+		 
 
         public event EventHandler<DateRangeChangedEventArgs> DateRangeChanged;
 

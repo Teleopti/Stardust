@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
     	public SkillDayTemplates()
         {
             InitializeComponent();
-            SetColor();
             if (!DesignMode) SetTexts();
         }
 
@@ -61,12 +60,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             Text = string.Concat(Text, " - ", string.IsNullOrEmpty(_newSkillName) ? _skill.Name : _newSkillName);
         }
 
-        private void SetColor()
-        {
-            tabControlAdvWeekDays.SelectedTab.TabForeColor = ColorHelper.TabForegroundColor();
-            BrushInfo panelbrush = ColorHelper.ControlGradientPanelBrush();
-            gradientPanel1.BackgroundColor = panelbrush;
-        }
 
         private void InitializeTabs()
         {

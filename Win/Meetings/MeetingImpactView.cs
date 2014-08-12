@@ -13,11 +13,9 @@ using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.Win.Scheduling.SkillResult;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -36,7 +34,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		private SkillIntradayGridControl _skillIntradayGridControl;
 		private readonly TransparentMeetingMeetingControl _transparentMeetingMeetingControl;
 		private readonly MeetingStateHolderLoaderHelper _meetingStateHolderLoaderHelper;
-	    private readonly IToggleManager _toggleManager;
+		private readonly IToggleManager _toggleManager;
 
 		public MeetingImpactView()
 		{
@@ -47,9 +45,9 @@ namespace Teleopti.Ccc.Win.Meetings
 		public MeetingImpactView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, MeetingComposerView meetingComposerView, IToggleManager toggleManager)
 			: this()
 		{
-		    _toggleManager = toggleManager;
+			_toggleManager = toggleManager;
 			_transparentMeetingMeetingControl = new TransparentMeetingMeetingControl();
-            _skillIntradayGridControl = new SkillIntradayGridControl("MeetingSkillIntradayGridAndChart", _toggleManager);
+			_skillIntradayGridControl = new SkillIntradayGridControl("MeetingSkillIntradayGridAndChart", _toggleManager);
 
 			_meetingComposerView = meetingComposerView;
 			outlookTimePickerStartTime.CreateAndBindList();
@@ -63,9 +61,9 @@ namespace Teleopti.Ccc.Win.Meetings
 			var slotFinder = new BestSlotForMeetingFinder(slotCalculator);
 			var personSkillProvider = new PersonSkillProvider();
 			var optimizationHelperWin = new ResourceOptimizationHelper(schedulerStateHolder.SchedulingResultState,
-			                                                           new OccupiedSeatCalculator(),
-			                                                           new NonBlendSkillCalculator(),
-			                                                           personSkillProvider, new PeriodDistributionService(), 
+																	   new OccupiedSeatCalculator(),
+																	   new NonBlendSkillCalculator(),
+																	   personSkillProvider, new PeriodDistributionService(), 
 																		new CurrentTeleoptiPrincipal());
 			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(UnitOfWorkFactory.Current));
 			var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,
@@ -79,51 +77,51 @@ namespace Teleopti.Ccc.Win.Meetings
 				gridHandler, transparentWindowHandler, UnitOfWorkFactory.Current);
 			SetTexts();
 
-			dateTimePickerAdvStartDate.ValueChanged += MeetingDateChanged;
-			dateTimePickerAdvStartDate.PopupClosed += MeetingDateChanged;
+			dateTimePickerAdvStartDate.ValueChanged += meetingDateChanged;
+			dateTimePickerAdvStartDate.PopupClosed += meetingDateChanged;
 
 			tabControlSkillResultGrid.TabPages.Clear();
 			tabControlSkillResultGrid.ImageList = imageListSkillTypeIcons;
 
-			tabControlSkillResultGrid.SelectedIndexChanged += TabControlSkillResultGridSelectedIndexChanged;
+			tabControlSkillResultGrid.SelectedIndexChanged += tabControlSkillResultGridSelectedIndexChanged;
 			tabControlSkillResultGrid.SizeChanged += TabControlSkillResultGridSizeChanged;
 
-			outlookTimePickerStartTime.Leave += OutlookTimePickerStartTimeLeave;
-			outlookTimePickerEndTime.Leave += OutlookTimePickerEndTimeLeave;
+			outlookTimePickerStartTime.Leave += outlookTimePickerStartTimeLeave;
+			outlookTimePickerEndTime.Leave += outlookTimePickerEndTimeLeave;
 
-			outlookTimePickerStartTime.KeyDown += OutlookTimePickerStartTimeKeyDown;
-			outlookTimePickerEndTime.KeyDown += OutlookTimePickerEndTimeKeyDown;
+			outlookTimePickerStartTime.KeyDown += outlookTimePickerStartTimeKeyDown;
+			outlookTimePickerEndTime.KeyDown += outlookTimePickerEndTimeKeyDown;
 
-			outlookTimePickerStartTime.SelectedIndexChanged += OutlookTimePickerStartTimeSelectedIndexChanged;
-			outlookTimePickerEndTime.SelectedIndexChanged += OutlookTimePickerEndTimeSelectedIndexChanged;
+			outlookTimePickerStartTime.SelectedIndexChanged += outlookTimePickerStartTimeSelectedIndexChanged;
+			outlookTimePickerEndTime.SelectedIndexChanged += outlookTimePickerEndTimeSelectedIndexChanged;
 
-			office2007OutlookTimePickerStartSlotPeriod.Leave += Office2007OutlookTimePickerStartSlotPeriodLeave;
-			office2007OutlookTimePickerStartSlotPeriod.KeyDown += Office2007OutlookTimePickerStartSlotPeriodKeyDown;
+			office2007OutlookTimePickerStartSlotPeriod.Leave += office2007OutlookTimePickerStartSlotPeriodLeave;
+			office2007OutlookTimePickerStartSlotPeriod.KeyDown += office2007OutlookTimePickerStartSlotPeriodKeyDown;
 
-			office2007OutlookTimePickerEndSlotPeriod.Leave += Office2007OutlookTimePickerEndSlotPeriodLeave;
-			office2007OutlookTimePickerEndSlotPeriod.KeyDown += Office2007OutlookTimePickerEndSlotPeriodKeyDown;
+			office2007OutlookTimePickerEndSlotPeriod.Leave += office2007OutlookTimePickerEndSlotPeriodLeave;
+			office2007OutlookTimePickerEndSlotPeriod.KeyDown += office2007OutlookTimePickerEndSlotPeriodKeyDown;
 
-            dateTimePickerAdvEndDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
-            dateTimePickerAdvStartDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
-            dateTimePickerAdvEndSlotPeriod.SetCultureInfoSafe(CultureInfo.CurrentCulture);
-            dateTimePickerAdvStartSlotPeriod.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+			dateTimePickerAdvEndDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+			dateTimePickerAdvStartDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+			dateTimePickerAdvEndSlotPeriod.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+			dateTimePickerAdvStartSlotPeriod.SetCultureInfoSafe(CultureInfo.CurrentCulture);
 			
 			dateTimePickerAdvStartDate.SetSafeBoundary();
 			dateTimePickerAdvEndDate.SetSafeBoundary();
-            
+			
 			dateTimePickerAdvStartSlotPeriod.SetSafeBoundary();
 			dateTimePickerAdvEndSlotPeriod.SetSafeBoundary();
 
-			dateTimePickerAdvEndSlotPeriod.ValueChanged += DateTimePickerAdvEndSlotPeriodValueChanged;
-			dateTimePickerAdvStartSlotPeriod.ValueChanged += DateTimePickerAdvStartSlotPeriodValueChanged;
-			Paint += MeetingImpactViewPaint;
+			dateTimePickerAdvEndSlotPeriod.ValueChanged += dateTimePickerAdvEndSlotPeriodValueChanged;
+			dateTimePickerAdvStartSlotPeriod.ValueChanged += dateTimePickerAdvStartSlotPeriodValueChanged;
+			Paint += meetingImpactViewPaint;
 
-            office2007OutlookTimePickerStartSlotPeriod.Text = dateTimePickerAdvStartSlotPeriod.MinValue.ToShortTimeString();
-            office2007OutlookTimePickerEndSlotPeriod.Text = dateTimePickerAdvEndSlotPeriod.MinValue.ToShortTimeString();
+			office2007OutlookTimePickerStartSlotPeriod.Text = dateTimePickerAdvStartSlotPeriod.MinValue.ToShortTimeString();
+			office2007OutlookTimePickerEndSlotPeriod.Text = dateTimePickerAdvEndSlotPeriod.MinValue.ToShortTimeString();
 
 		}
 
-		void MeetingImpactViewPaint(object sender, EventArgs e)
+		void meetingImpactViewPaint(object sender, EventArgs e)
 		{
 			_transparentMeetingMeetingControl.Validate();
 		}
@@ -133,7 +131,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			_presenter.UpdateMeetingControl();
 		}
 
-		void TabControlSkillResultGridSelectedIndexChanged(object sender, EventArgs e)
+		void tabControlSkillResultGridSelectedIndexChanged(object sender, EventArgs e)
 		{
 			_presenter.SkillTabChange();
 		}
@@ -170,7 +168,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		{
 			autoLabelMeetingDate.Text = dateTimePickerAdvStartDate.Value.ToShortDateString();
 			if (_skillIntradayGridControl != null)
-				_skillIntradayGridControl.LeftColChanged -= SkillIntradayGridControlLeftColChanged;
+				_skillIntradayGridControl.LeftColChanged -= skillIntradayGridControlLeftColChanged;
 
 			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", _toggleManager) { DefaultColWidth = 45 };
 			_skillIntradayGridControl.SetupDataSource(skillStaffPeriods, skill, schedulerStateHolder);
@@ -178,10 +176,10 @@ namespace Teleopti.Ccc.Win.Meetings
 			_skillIntradayGridControl.SetRowsAndCols();
 			_skillIntradayGridControl.ResizeColsBehavior = GridResizeCellsBehavior.None;
 
-			_skillIntradayGridControl.LeftColChanged += SkillIntradayGridControlLeftColChanged;
+			_skillIntradayGridControl.LeftColChanged += skillIntradayGridControlLeftColChanged;
 		}
 
-		void SkillIntradayGridControlLeftColChanged(object sender, GridRowColIndexChangedEventArgs e)
+		void skillIntradayGridControlLeftColChanged(object sender, GridRowColIndexChangedEventArgs e)
 		{
 			_presenter.OnLeftColChanged();
 		}
@@ -309,19 +307,16 @@ namespace Teleopti.Ccc.Win.Meetings
 			tabControlSkillResultGrid.TabPages.Add(tab);
 		}
 
-
-
-		void MeetingDateChanged(object sender, EventArgs e)
+		void meetingDateChanged(object sender, EventArgs e)
 		{
 			_presenter.MeetingDateChanged();
 		}
 
-
 		public void OnParticipantsSet()
 		{
-			tabControlSkillResultGrid.SelectedIndexChanged -= TabControlSkillResultGridSelectedIndexChanged;
+			tabControlSkillResultGrid.SelectedIndexChanged -= tabControlSkillResultGridSelectedIndexChanged;
 			_presenter.UpdateView();
-			tabControlSkillResultGrid.SelectedIndexChanged += TabControlSkillResultGridSelectedIndexChanged;
+			tabControlSkillResultGrid.SelectedIndexChanged += tabControlSkillResultGridSelectedIndexChanged;
 		}
 
 		public void OnDisableWhileLoadingStateHolder()
@@ -457,7 +452,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			buttonAdvNext.Enabled = state;
 		}
 
-		private void ButtonAdvPickBestClick(object sender, EventArgs e)
+		private void buttonAdvPickBestClick(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
 			buttonAdvPickBest.Cursor = Cursors.WaitCursor;
@@ -468,7 +463,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			buttonAdvPickBest.Cursor = Cursors.Default;
 		}
 
-		private void ButtonAdvPreviousClick(object sender, EventArgs e)
+		private void buttonAdvPreviousClick(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
 			buttonAdvPrevious.Cursor = Cursors.WaitCursor;
@@ -479,7 +474,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			buttonAdvPrevious.Cursor = Cursors.Default;
 		}
 
-		private void ButtonAdvNextClick(object sender, EventArgs e)
+		private void buttonAdvNextClick(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
 			buttonAdvNext.Cursor = Cursors.WaitCursor;
@@ -490,8 +485,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			buttonAdvNext.Cursor = Cursors.Default;
 		}
 
-
-		void OutlookTimePickerStartTimeLeave(object sender, EventArgs e)
+		void outlookTimePickerStartTimeLeave(object sender, EventArgs e)
 		{
 			if (_presenter == null) return;
 			if (outlookTimePickerStartTime.Disposing)
@@ -499,7 +493,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			_presenter.OnMeetingTimeChange(outlookTimePickerStartTime.Text);
 		}
 
-		void OutlookTimePickerEndTimeLeave(object sender, EventArgs e)
+		void outlookTimePickerEndTimeLeave(object sender, EventArgs e)
 		{
 			if (_presenter == null) return;
 			if (outlookTimePickerEndTime.Disposing)
@@ -507,41 +501,41 @@ namespace Teleopti.Ccc.Win.Meetings
 			_presenter.OnMeetingTimeChange(outlookTimePickerEndTime.Text);
 		}
 
-		void OutlookTimePickerStartTimeKeyDown(object sender, KeyEventArgs e)
+		void outlookTimePickerStartTimeKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.Enter)
 				_presenter.OnMeetingTimeChange(outlookTimePickerStartTime.Text);
 		}
 
-		void OutlookTimePickerEndTimeKeyDown(object sender, KeyEventArgs e)
+		void outlookTimePickerEndTimeKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.Enter)
 				_presenter.OnMeetingTimeChange(outlookTimePickerEndTime.Text);
 		}
 
-		void OutlookTimePickerStartTimeSelectedIndexChanged(object sender, EventArgs e)
+		void outlookTimePickerStartTimeSelectedIndexChanged(object sender, EventArgs e)
 		{
 			_presenter.OnMeetingTimeChange(outlookTimePickerStartTime.Text);
 		}
 
-		void OutlookTimePickerEndTimeSelectedIndexChanged(object sender, EventArgs e)
+		void outlookTimePickerEndTimeSelectedIndexChanged(object sender, EventArgs e)
 		{
 			_presenter.OnMeetingTimeChange(outlookTimePickerEndTime.Text);
 		}
 
-		void Office2007OutlookTimePickerEndSlotPeriodKeyDown(object sender, KeyEventArgs e)
+		void office2007OutlookTimePickerEndSlotPeriodKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.Enter)
 				_presenter.OnSlotTimeChange(office2007OutlookTimePickerEndSlotPeriod.Text);
 		}
 
-		void Office2007OutlookTimePickerStartSlotPeriodKeyDown(object sender, KeyEventArgs e)
+		void office2007OutlookTimePickerStartSlotPeriodKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.Enter)
 				_presenter.OnSlotTimeChange(office2007OutlookTimePickerStartSlotPeriod.Text);
 		}
 
-		void Office2007OutlookTimePickerEndSlotPeriodLeave(object sender, EventArgs e)
+		void office2007OutlookTimePickerEndSlotPeriodLeave(object sender, EventArgs e)
 		{
 			if (_presenter == null) return;
 			if (office2007OutlookTimePickerEndSlotPeriod.Disposing)
@@ -549,7 +543,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			_presenter.OnSlotTimeChange(office2007OutlookTimePickerEndSlotPeriod.Text);
 		}
 
-		void Office2007OutlookTimePickerStartSlotPeriodLeave(object sender, EventArgs e)
+		void office2007OutlookTimePickerStartSlotPeriodLeave(object sender, EventArgs e)
 		{
 			if (_presenter == null) return;
 			if (office2007OutlookTimePickerStartSlotPeriod.Disposing)
@@ -567,12 +561,12 @@ namespace Teleopti.Ccc.Win.Meetings
 			office2007OutlookTimePickerEndSlotPeriod.SetTimeValue(timeSpan);
 		}
 
-		void DateTimePickerAdvEndSlotPeriodValueChanged(object sender, EventArgs e)
+		void dateTimePickerAdvEndSlotPeriodValueChanged(object sender, EventArgs e)
 		{
 			_presenter.OnSlotDateChange(dateTimePickerAdvStartSlotPeriod.Value, dateTimePickerAdvEndSlotPeriod.Value);
 		}
 
-		void DateTimePickerAdvStartSlotPeriodValueChanged(object sender, EventArgs e)
+		void dateTimePickerAdvStartSlotPeriodValueChanged(object sender, EventArgs e)
 		{
 			_presenter.OnSlotDateChange(dateTimePickerAdvStartSlotPeriod.Value, dateTimePickerAdvEndSlotPeriod.Value);
 		}

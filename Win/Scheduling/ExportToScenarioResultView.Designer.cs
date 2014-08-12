@@ -50,7 +50,6 @@
 			this.gridControl1 = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.panel4 = new System.Windows.Forms.Panel();
-			this.panel3 = new System.Windows.Forms.Panel();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.spinningProgressControl1 = new Teleopti.Ccc.Win.Common.Controls.SpinningProgress.SpinningProgressControl();
@@ -64,13 +63,14 @@
 			// 
 			// btnOk
 			// 
+			this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.btnOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.btnOk.BeforeTouchSize = new System.Drawing.Size(85, 24);
 			this.btnOk.ForeColor = System.Drawing.Color.White;
 			this.btnOk.IsBackStageButton = false;
-			this.btnOk.Location = new System.Drawing.Point(617, 534);
-			this.btnOk.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.btnOk.Location = new System.Drawing.Point(604, 530);
+			this.btnOk.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.btnOk.Size = new System.Drawing.Size(85, 24);
@@ -81,13 +81,14 @@
 			// 
 			// btnCancel
 			// 
+			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.btnCancel.BeforeTouchSize = new System.Drawing.Size(85, 24);
 			this.btnCancel.ForeColor = System.Drawing.Color.White;
 			this.btnCancel.IsBackStageButton = false;
-			this.btnCancel.Location = new System.Drawing.Point(717, 534);
-			this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.btnCancel.Location = new System.Drawing.Point(724, 530);
+			this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.btnCancel.Size = new System.Drawing.Size(85, 24);
@@ -127,7 +128,7 @@
 			this.groupBoxInfo.Margin = new System.Windows.Forms.Padding(0);
 			this.groupBoxInfo.Name = "groupBoxInfo";
 			this.groupBoxInfo.Padding = new System.Windows.Forms.Padding(3, 15, 3, 3);
-			this.groupBoxInfo.Size = new System.Drawing.Size(809, 91);
+			this.groupBoxInfo.Size = new System.Drawing.Size(814, 91);
 			this.groupBoxInfo.TabIndex = 18;
 			this.groupBoxInfo.TabStop = false;
 			this.groupBoxInfo.Text = "xxInfo";
@@ -152,7 +153,7 @@
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(785, 48);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(790, 48);
 			this.tableLayoutPanel2.TabIndex = 20;
 			// 
 			// autoLabelData
@@ -185,7 +186,7 @@
 			this.groupBoxWarnings.Margin = new System.Windows.Forms.Padding(0);
 			this.groupBoxWarnings.Name = "groupBoxWarnings";
 			this.groupBoxWarnings.Padding = new System.Windows.Forms.Padding(3, 15, 3, 3);
-			this.groupBoxWarnings.Size = new System.Drawing.Size(809, 418);
+			this.groupBoxWarnings.Size = new System.Drawing.Size(814, 403);
 			this.groupBoxWarnings.TabIndex = 19;
 			this.groupBoxWarnings.TabStop = false;
 			this.groupBoxWarnings.Text = "xxWarnings";
@@ -202,7 +203,7 @@
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(792, 377);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(797, 362);
 			this.tableLayoutPanel1.TabIndex = 18;
 			// 
 			// gridControl1
@@ -265,7 +266,7 @@
 			this.gridControl1.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
 			this.gridControl1.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControl1.Size = new System.Drawing.Size(786, 371);
+			this.gridControl1.Size = new System.Drawing.Size(791, 356);
 			this.gridControl1.SmartSizeBox = false;
 			this.gridControl1.TabIndex = 0;
 			this.gridControl1.UseRightToLeftCompatibleTextBox = true;
@@ -273,14 +274,12 @@
 			// 
 			// tableLayoutPanel3
 			// 
-			this.tableLayoutPanel3.ColumnCount = 5;
+			this.tableLayoutPanel3.ColumnCount = 4;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
 			this.tableLayoutPanel3.Controls.Add(this.panel4, 0, 3);
-			this.tableLayoutPanel3.Controls.Add(this.panel3, 4, 1);
 			this.tableLayoutPanel3.Controls.Add(this.panel2, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.panel1, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.groupBoxWarnings, 1, 2);
@@ -296,31 +295,20 @@
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 91F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(819, 564);
 			this.tableLayoutPanel3.TabIndex = 20;
 			// 
 			// panel4
 			// 
 			this.panel4.BackColor = System.Drawing.Color.White;
-			this.tableLayoutPanel3.SetColumnSpan(this.panel4, 5);
+			this.tableLayoutPanel3.SetColumnSpan(this.panel4, 4);
 			this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel4.Location = new System.Drawing.Point(0, 519);
+			this.panel4.Location = new System.Drawing.Point(0, 504);
 			this.panel4.Margin = new System.Windows.Forms.Padding(0);
 			this.panel4.Name = "panel4";
 			this.panel4.Size = new System.Drawing.Size(819, 10);
 			this.panel4.TabIndex = 24;
-			// 
-			// panel3
-			// 
-			this.panel3.BackColor = System.Drawing.Color.White;
-			this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel3.Location = new System.Drawing.Point(814, 10);
-			this.panel3.Margin = new System.Windows.Forms.Padding(0);
-			this.panel3.Name = "panel3";
-			this.tableLayoutPanel3.SetRowSpan(this.panel3, 2);
-			this.panel3.Size = new System.Drawing.Size(5, 509);
-			this.panel3.TabIndex = 23;
 			// 
 			// panel2
 			// 
@@ -330,13 +318,13 @@
 			this.panel2.Margin = new System.Windows.Forms.Padding(0);
 			this.panel2.Name = "panel2";
 			this.tableLayoutPanel3.SetRowSpan(this.panel2, 2);
-			this.panel2.Size = new System.Drawing.Size(5, 509);
+			this.panel2.Size = new System.Drawing.Size(5, 494);
 			this.panel2.TabIndex = 22;
 			// 
 			// panel1
 			// 
 			this.panel1.BackColor = System.Drawing.Color.White;
-			this.tableLayoutPanel3.SetColumnSpan(this.panel1, 5);
+			this.tableLayoutPanel3.SetColumnSpan(this.panel1, 4);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Margin = new System.Windows.Forms.Padding(0);
@@ -348,12 +336,13 @@
 			// 
 			this.spinningProgressControl1.AutoIncrementFrequency = 100D;
 			this.spinningProgressControl1.BehindTransitionSegmentIsActive = false;
-			this.spinningProgressControl1.Location = new System.Drawing.Point(8, 532);
+			this.spinningProgressControl1.Location = new System.Drawing.Point(5, 514);
+			this.spinningProgressControl1.Margin = new System.Windows.Forms.Padding(0);
 			this.spinningProgressControl1.MinimumSize = new System.Drawing.Size(20, 20);
 			this.spinningProgressControl1.Name = "spinningProgressControl1";
 			this.spinningProgressControl1.Size = new System.Drawing.Size(20, 20);
 			this.spinningProgressControl1.TabIndex = 25;
-			this.spinningProgressControl1.TransitionSegment = 5;
+			this.spinningProgressControl1.TransitionSegment = 8;
 			// 
 			// ExportToScenarioResultView
 			// 
@@ -369,6 +358,7 @@
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(332, 45);
 			this.Name = "ExportToScenarioResultView";
+			this.ShowIcon = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.Text = "xxExportToOtherScenario";
 			this.Load += new System.EventHandler(this.ExportToScenarioResultView_Load);
@@ -399,7 +389,6 @@
 		  private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 		  private System.Windows.Forms.Panel panel1;
 		  private System.Windows.Forms.Panel panel4;
-		  private System.Windows.Forms.Panel panel3;
 		  private System.Windows.Forms.Panel panel2;
 		  private Common.Controls.SpinningProgress.SpinningProgressControl spinningProgressControl1;
     }

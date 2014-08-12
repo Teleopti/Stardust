@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		[Test]
 		public void ShouldHaveWorkingConstructor()
 		{
-			var result = new BusinessUnitInfoFinder(null);
+			var result = new BusinessUnitStarter(null);
 			Assert.IsNotNull(result);
 		}
     }

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Forms;
+using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Shifts
 {
-	public partial class ShiftGenerationStatus : Form 
+	public partial class ShiftGenerationStatus : BaseDialogForm 
 	{
 		private readonly IWorkShiftAddCallbackWithEvent _callback;
 		

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			var target = new dataSourceConfigurationSetterForTest(true, false, null, null, new ConfigReader());
 			target.AddDefaultSettingsTo(cfg);
 
-			cfg.GetProperty(Environment.CacheProvider).Should().Be.EqualTo("NHibernate.Caches.SysCache.SysCacheProvider, NHibernate.Caches.SysCache");
+			cfg.GetProperty(Environment.CacheProvider).Should().Contain("RtMemoryCacheProvider");
 			cfg.GetProperty(Environment.UseSecondLevelCache).Should().Be.EqualTo("true");
 			cfg.GetProperty(Environment.UseQueryCache).Should().Be.EqualTo("true");
 		}

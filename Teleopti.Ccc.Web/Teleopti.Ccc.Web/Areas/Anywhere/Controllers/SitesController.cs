@@ -1,13 +1,17 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Core.Aop.Aspects;
+using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
+	[Intercept(typeof(AspectInterceptor))]
 	public class SitesController : Controller
 	{
 		private readonly ISiteRepository _siteRepository;
@@ -21,8 +25,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_siteAdherenceAggregator = siteAdherenceAggregator;
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult Index()
+		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2), HttpGet]
+		public virtual JsonResult Index()
 		{
 			var sites = _siteRepository.LoadAll();
 			var numberOfAgents = _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites);

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools.Enums;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
@@ -94,16 +95,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         /// </remarks>
         private void SetColors()
         {
-            BrushInfo myBrush = ColorHelper.ControlGradientPanelBrush();
-
-            splitContainer2.BackgroundColor = myBrush;
-            splitContainerWorkloadSkill.BackgroundColor = myBrush;
-            tableLayoutPanel1.BackColor = myBrush.BackColor;
-            tabControlAdvMultisiteSkill.BackColor = myBrush.BackColor;
-            tabControlWorkloads.BackColor = myBrush.BackColor;
-            tabPage1.BackColor = myBrush.BackColor;
-            tabPageAdvMultisiteSkill.BackColor = myBrush.BackColor;
-            splitContainer2.Panel2.BackgroundColor = myBrush;
             Color ribbonContextTabColor = ColorHelper.RibbonContextTabColor();
             for (int i = 0; i < ribbonControlAdv1.TabGroups.Count; i++)
             {
@@ -759,7 +750,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					    Height = 80,
 					    Appearance = ButtonAppearance.Metro,
 					    UseVisualStyle = true,
-					    Tag = scenario
+					    Tag = scenario,
+						 BackColor = Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))))
 				    };
 
 				    button.Font.ChangeToBold();
@@ -959,13 +951,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
             SetColors();
             RibbonTemplatePanelsClose();
-
+	        ribbonControlAdv1.MenuButtonText = UserTexts.Resources.File;
             Application.DoEvents();
 
             WindowState = FormWindowState.Maximized;
             toolStripStatusLabelInfo.Text = UserTexts.Resources.Initializing;
             toolStripProgressBarMain.Value = 0;
             toolStripProgressBarMain.Step++;
+
 
             if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
                 Icon = Resources.forecaster;

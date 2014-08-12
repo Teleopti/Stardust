@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		{
 			var allowanceProvider = MockRepository.GenerateMock<IAllowanceProvider>();
 			var absenceTimeProvider = MockRepository.GenerateMock<IAbsenceTimeProvider>();
-			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider);
+			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider, new Now());
 			var date = DateOnly.Today;
 
 			var weekButNoWeek = new DateOnlyPeriod(date, date);
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		{
 			var allowanceProvider = MockRepository.GenerateMock<IAllowanceProvider>();
 			var absenceTimeProvider = MockRepository.GenerateMock<IAbsenceTimeProvider>();
-			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider);
+			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider, new Now());
 			var date = DateOnly.Today;
 
 			var weekButNoWeek = new DateOnlyPeriod(date, date);
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		{
 			var allowanceProvider = MockRepository.GenerateMock<IAllowanceProvider>();
 			var absenceTimeProvider = MockRepository.GenerateMock<IAbsenceTimeProvider>();
-			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider);
+			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider, new Now());
 			var date = DateOnly.Today;
 
 			var weekButNoWeek = new DateOnlyPeriod(date, date);
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		{
 			var allowanceProvider = MockRepository.GenerateMock<IAllowanceProvider>();
 			var absenceTimeProvider = MockRepository.GenerateMock<IAbsenceTimeProvider>();
-			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider);
+			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider, new Now());
 			var date = DateOnly.Today;
 
 			var weekButNoWeek = new DateOnlyPeriod(date, date);
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		{
 			var allowanceProvider = MockRepository.GenerateMock<IAllowanceProvider>();
 			var absenceTimeProvider = MockRepository.GenerateMock<IAbsenceTimeProvider>();
-			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider);
+			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider, new Now());
 			var date = DateOnly.Today;
 
 			var weekButNoWeek = new DateOnlyPeriod(date, date);
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		{
 			var allowanceProvider = MockRepository.GenerateMock<IAllowanceProvider>();
 			var absenceTimeProvider = MockRepository.GenerateMock<IAbsenceTimeProvider>();
-			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider);
+			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider, new Now());
 			var date = DateOnly.Today;
 
 			var weekButNoWeek = new DateOnlyPeriod(date, date);
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		{
 			var allowanceProvider = MockRepository.GenerateMock<IAllowanceProvider>();
 			var absenceTimeProvider = MockRepository.GenerateMock<IAbsenceTimeProvider>();
-			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider);
+			var target = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider, new Now());
 			var date = DateOnly.Today;
 
 			var weekButNoWeek = new DateOnlyPeriod(date, date);

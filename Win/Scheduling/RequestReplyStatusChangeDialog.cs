@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Scheduling;
 using System.Windows.Forms;
 
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_command = command;
 			InitializeComponent();
 
-			setColors();
 			if (!DesignMode) SetTexts();
 
 			// TODO: check lengths available in notes field and set textbox maxlength accordingly
@@ -50,7 +48,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_requestPresenter = requestPresenter;
 			InitializeComponent();
 
-			setColors();
 			if (!DesignMode) SetTexts();
 
 			// TODO: check lengths available in notes field and set textbox maxlength accordingly
@@ -69,12 +66,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				textBoxReply.Dock = DockStyle.Fill;
 			}
 		}
-
-		private void setColors()
-		{
-			BackColor = ColorHelper.StandardPanelBackground();
-		}
-
+		
 		private void buttonCancelClick(object sender, EventArgs e)
 		{
 			DialogResult = DialogResult.Cancel;

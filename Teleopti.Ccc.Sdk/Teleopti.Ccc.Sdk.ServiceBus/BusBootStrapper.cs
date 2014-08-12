@@ -18,6 +18,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
@@ -65,8 +66,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		    build.RegisterModule<EventHandlersModule>();
 		    build.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>();
 		    build.RegisterType<DoNotifySmsLink>().As<IDoNotifySmsLink>();
-				build.RegisterModule(SchedulePersistModule.ForOtherModules());
-				build.RegisterModule(new ToggleNetModule(ConfigurationManager.AppSettings["FeatureToggle"], ConfigurationManager.AppSettings["ToggleMode"]));
+		    build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
+			build.RegisterModule(SchedulePersistModule.ForOtherModules());
+			build.RegisterModule(new ToggleNetModule(ConfigurationManager.AppSettings["FeatureToggle"], ConfigurationManager.AppSettings["ToggleMode"]));
 
 		    build.Update(Container);
 	    }

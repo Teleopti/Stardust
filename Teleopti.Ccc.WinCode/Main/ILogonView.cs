@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Teleopti.Ccc.Infrastructure.Licensing;
 
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.WinCode.Main
 	public interface ILogonView:ILicenseFeedback
 	{
 		ILogonPresenter Presenter { get; set; }
-		bool StartLogon();
+		bool StartLogon(Point startPosition);
         void ShowStep(bool showBackButton);
 		void ClearForm(string labelText);
 		void Exit(DialogResult result);
@@ -19,5 +20,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		void ButtonLogOnOkClick(object sender, EventArgs e);
 		void ButtonLogOnCancelClick(object sender, EventArgs e);
 		void BtnBackClick(object sender, EventArgs e);
+		void HideView();
 	}
 }

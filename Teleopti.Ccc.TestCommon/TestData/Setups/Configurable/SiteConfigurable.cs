@@ -17,9 +17,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public void Apply(IUnitOfWork uow)
 		{
 			Site = SiteFactory.CreateSimpleSite(Name);
+			var businessUnit = new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit);
+			if(!string.IsNullOrEmpty(BusinessUnit))
+				Site.SetBusinessUnit(businessUnit);
 			var siteRepository = new SiteRepository(uow);
 			siteRepository.Add(Site);
-			var businessUnit = new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit);
 			businessUnit.AddSite(Site);
 		}
 	}

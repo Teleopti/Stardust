@@ -964,8 +964,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			person.AddBadge(new AgentBadge()
 			{
 				BronzeBadge = 1,
-				BadgeType = BadgeType.AnsweredCalls
-			});
+				BadgeType = BadgeType.AnsweredCalls,
+				LastCalculatedDate = new DateOnly(2014,8,11)
+			}, 5, 2);
 
 			PersistAndRemoveFromUnitOfWork(person);
 

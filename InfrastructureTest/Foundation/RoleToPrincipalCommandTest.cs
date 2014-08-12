@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             using(mocks.Record())
             {
                 Expect.Call(roleToClaimSetTransformer.Transform(newRole,unitOfWorkFactory)).Return(claimSet);
-                Expect.Call(personRepository.Get(Guid.Empty)).Return(person);
+                Expect.Call(personRepository.Get(Guid.Empty)).IgnoreArguments().Return(person);
             }
             using (mocks.Playback())
             {

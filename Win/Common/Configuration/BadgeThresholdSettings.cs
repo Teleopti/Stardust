@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.ReportingServices.Interfaces;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -13,7 +12,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public partial class BadgeThresholdSettings : BaseUserControl, ISettingPage
-    {
+	{
 		private IUnitOfWork _unitOfWork;
 		private AgentBadgeSettingsRepository _repository;
 
@@ -23,23 +22,23 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 		public void InitializeDialogControl()
-        {
-            setColors();
-            SetTexts();
-        }
+		{
+			setColors();
+			SetTexts();
+		}
 
-        private void setColors()
-        {
-            BackColor = ColorHelper.WizardBackgroundColor();
-            tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
+		private void setColors()
+		{
+			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			labelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 
-            gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
-            labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
-        }
+			gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
+			labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
+		}
 
-        public void Unload()
-        {
-        }
+		public void Unload()
+		{
+		}
 
 		public TreeFamily TreeFamily()
 		{
@@ -48,7 +47,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public string TreeNode()
 		{
-			return UserTexts.Resources.AgentBadgeThresholdSetting;
+			return UserTexts.Resources.AgentBadgeSetting;
 		}
 
 		public void LoadControl()
@@ -66,22 +65,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			};
 
 			checkBoxEnableBadge.Checked = settings.EnableBadge;
-			timeSpanTextBoxCalculationTime.SetInitialResolution(settings.CalculationTime);
-			doubleTextBoxThresholdForAdherence.DoubleValue = settings.AdherenceThreshold.Value;
+			doubleTextBoxThresholdForAdherence.DoubleValue = settings.AdherenceThreshold.Value * 100;
 			timeSpanTextBoxThresholdForAHT.SetInitialResolution(settings.AHTThreshold);
 			numericUpDownThresholdForAnsweredCalls.Value = settings.AnsweredCallsThreshold;
 			numericUpDownSilverToBronzeBadgeRate.Value = settings.SilverToBronzeBadgeRate;
 			numericUpDownGoldenToSilverBadgeRate.Value = settings.GoldToSilverBadgeRate;
 
 			setControlsEnabled(settings.EnableBadge);
+			timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 115;
 		}
 
 		public void SaveChanges()
 		{
 			var settings = _repository.LoadAll().FirstOrDefault() ?? new AgentBadgeThresholdSettings();
 			settings.EnableBadge = checkBoxEnableBadge.Checked;
-			settings.CalculationTime = timeSpanTextBoxCalculationTime.Value;
-			settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue);
+			settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue / 100);
 			settings.AHTThreshold = timeSpanTextBoxThresholdForAHT.Value;
 			settings.AnsweredCallsThreshold = (int)numericUpDownThresholdForAnsweredCalls.Value;
 			settings.GoldToSilverBadgeRate = (int)numericUpDownGoldenToSilverBadgeRate.Value;
@@ -91,14 +89,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 		public void OnShow()
-    	{
-    	}
+		{
+		}
 
-    	public void SetUnitOfWork(IUnitOfWork value)
-    	{
-    		_unitOfWork = value;
+		public void SetUnitOfWork(IUnitOfWork value)
+		{
+			_unitOfWork = value;
 			_repository = new AgentBadgeSettingsRepository(_unitOfWork);
-    	}
+		}
 
 		public void Persist()
 		{
@@ -109,7 +107,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			throw new NotImplementedException();
 		}
 
-        public ViewType ViewType { get; private set; }
+		public ViewType ViewType { get; private set; }
 
 		private void checkBoxEnableBadge_CheckedChanged(object sender, EventArgs e)
 		{
@@ -119,12 +117,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void setControlsEnabled(bool enabled)
 		{
-			timeSpanTextBoxCalculationTime.Enabled = enabled;
 			doubleTextBoxThresholdForAdherence.Enabled = enabled;
 			timeSpanTextBoxThresholdForAHT.Enabled = enabled;
 			numericUpDownThresholdForAnsweredCalls.Enabled = enabled;
 			numericUpDownSilverToBronzeBadgeRate.Enabled = enabled;
 			numericUpDownGoldenToSilverBadgeRate.Enabled = enabled;
 		}
-    }
+	}
 }

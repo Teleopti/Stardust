@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
         public DateSelectionFromTo()
         {
             InitializeComponent();
-            SetColors();
             
             DateOnlyPeriod minPeriod = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime),
                                                           new DateOnly(DateHelper.MaxSmallDateTime));
@@ -71,13 +70,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
         {
 			  dateTimePickerAdvWorkAStartDate.SetCultureInfoSafe(cultureInfo);
 			  dateTimePickerAdvWorkEndPeriod.SetCultureInfoSafe(cultureInfo);
-        }
-
-        private void SetColors()
-        {
-            btnApplyChangedPeriod.Appearance = ButtonAppearance.Office2007;
-            btnApplyChangedPeriod.Office2007ColorScheme = Office2007Theme.Managed ;
-            btnApplyChangedPeriod.UseVisualStyle = true;
         }
 
         public bool HideNoneButtons

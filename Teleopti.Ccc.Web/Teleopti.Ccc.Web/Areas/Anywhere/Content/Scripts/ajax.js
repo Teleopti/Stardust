@@ -17,6 +17,7 @@ define(
                 options.cache = false;
                 options.dataType = options.dataType || "json";
                 options.contentType = options.contentType || "application/json";
+		        options.headers = options.headers || {};
                 options.error = options.error || function (jqXHR, textStatus, errorThrown) {
 
                 	if (options.statusCode401 && jqXHR && jqXHR.status == 401) {

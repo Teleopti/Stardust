@@ -1412,11 +1412,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agent Badge Threshold.
+        ///   Looks up a localized string similar to Agent Badge.
         /// </summary>
-        public static string AgentBadgeThresholdSetting {
+        public static string AgentBadgeSetting {
             get {
-                return ResourceManager.GetString("AgentBadgeThresholdSetting", resourceCulture);
+                return ResourceManager.GetString("AgentBadgeSetting", resourceCulture);
             }
         }
         
@@ -3608,15 +3608,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Calculations {
             get {
                 return ResourceManager.GetString("Calculations", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Badge calculation time:.
-        /// </summary>
-        public static string CalculationTime {
-            get {
-                return ResourceManager.GetString("CalculationTime", resourceCulture);
             }
         }
         
@@ -21879,7 +21870,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adherence Threshold: .
+        ///   Looks up a localized string similar to Adherence Threshold (%): .
         /// </summary>
         public static string SetBadgeThresholdForAdherence {
             get {

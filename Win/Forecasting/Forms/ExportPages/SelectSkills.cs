@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
             listViewSkills.EndUpdate();
         }
 
-        private void textBoxExFilter_TextChanged(object sender, EventArgs e)
+        private void textBoxExFilterTextChanged(object sender, EventArgs e)
         {
             filter(textBoxExFilter.Text);
         }

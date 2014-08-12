@@ -11,20 +11,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    public partial class FilterHourlyAvailabilityView : BaseDialogForm
-    {
-	    private readonly FilterHourlyAvailabilityPresenter _presenter;
-	    public FilterHourlyAvailabilityView(DateOnly defaultDate, ISchedulerStateHolder schedulerStateHolder)
-        {
-	        InitializeComponent();
-			tableLayoutPanel2.BackColor = Color.FromArgb(191, 219, 254);
+	public partial class FilterHourlyAvailabilityView : BaseDialogForm
+	{
+		private readonly FilterHourlyAvailabilityPresenter _presenter;
+		public FilterHourlyAvailabilityView(DateOnly defaultDate, ISchedulerStateHolder schedulerStateHolder)
+		{
+			InitializeComponent();
 			datePicker.Value = defaultDate;
 			datePicker.SetCultureInfoSafe(CultureInfo.CurrentCulture);
 			SetTexts();
-            _presenter = new FilterHourlyAvailabilityPresenter(schedulerStateHolder);
-        }
+			_presenter = new FilterHourlyAvailabilityPresenter(schedulerStateHolder);
+		}
 
-		private void FilterOvertimeAvailabilityView_Load(object sender, EventArgs e)
+		private void filterOvertimeAvailabilityViewLoad(object sender, EventArgs e)
 		{
 			var timeOfDay = DateTime.Now.TimeOfDay;
 			var nextFullHour = TimeSpan.FromHours(Math.Ceiling(timeOfDay.TotalHours));
@@ -37,20 +36,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			get { return new DateOnly(datePicker.Value); }
 		}
 
-	    private void buttonOk_Click(object sender, EventArgs e)
-	    {
-		    if (!validateTimes()) return;
+		private void buttonOkClick(object sender, EventArgs e)
+		{
+			if (!validateTimes()) return;
 
-		    var startTime = outlookTimePickerFrom.TimeValue();
-		    var endTime = outlookTimePickerTo.TimeValue();
-		    if (checkBoxAdvNextDay.Checked && endTime.HasValue)
-			    endTime = endTime.Value.Add(TimeSpan.FromDays(1));
-            _presenter.Filter(startTime.Value, endTime.Value, new DateOnly(datePicker.Value));
+			var startTime = outlookTimePickerFrom.TimeValue();
+			var endTime = outlookTimePickerTo.TimeValue();
+			if (checkBoxAdvNextDay.Checked && endTime.HasValue)
+				endTime = endTime.Value.Add(TimeSpan.FromDays(1));
+			_presenter.Filter(startTime.Value, endTime.Value, new DateOnly(datePicker.Value));
 			DialogResult = DialogResult.OK;
-		    Close();
-	    }
+			Close();
+		}
 
-	    private void buttonCancel_Click(object sender, EventArgs e)
+		private void buttonCancelClick(object sender, EventArgs e)
 		{
 			Close();
 		}
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return true;
 		}
 
-		private void outlookTimePickerTo_TextChanged(object sender, EventArgs e)
+		private void outlookTimePickerToTextChanged(object sender, EventArgs e)
 		{
 
 			if (!string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerFrom)) ||
@@ -106,7 +105,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void outlookTimePickerFrom_TextChanged(object sender, EventArgs e)
+		private void outlookTimePickerFromTextChanged(object sender, EventArgs e)
 		{
 			if (!string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerFrom)) ||
 				!string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerTo)))
@@ -115,5 +114,5 @@ namespace Teleopti.Ccc.Win.Scheduling
 				validateTimes();
 			}
 		}
-    }
+	}
 }

@@ -30,25 +30,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.workflowValidateView = new Teleopti.Ccc.Win.Forecasting.Forms.WFControls.WorkflowValidateView();
-            this.SuspendLayout();
-            // 
-            // workflowValidateView
-            // 
-            this.workflowValidateView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.workflowValidateView.Location = new System.Drawing.Point(0, 0);
-            this.workflowValidateView.Name = "workflowValidateView";
-            this.workflowValidateView.Size = new System.Drawing.Size(1060, 600);
-            this.workflowValidateView.TabIndex = 0;
-            // 
-            // WFValidate
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.workflowValidateView);
-            this.Name = "WFValidate";
-            this.Size = new System.Drawing.Size(1060, 600);
-            this.ResumeLayout(false);
+			this.workflowValidateView = new Teleopti.Ccc.Win.Forecasting.Forms.WFControls.WorkflowValidateView();
+			this.SuspendLayout();
+			// 
+			// workflowValidateView
+			// 
+			this.workflowValidateView.BackColor = System.Drawing.Color.White;
+			this.workflowValidateView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.workflowValidateView.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.workflowValidateView.Location = new System.Drawing.Point(0, 0);
+			this.workflowValidateView.Name = "workflowValidateView";
+			this.workflowValidateView.Size = new System.Drawing.Size(1060, 600);
+			this.workflowValidateView.TabIndex = 0;
+			// 
+			// WFValidate
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.workflowValidateView);
+			this.Name = "WFValidate";
+			this.Size = new System.Drawing.Size(1060, 600);
+			this.ResumeLayout(false);
 
         }
 

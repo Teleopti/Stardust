@@ -334,79 +334,75 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-		public IEnumerable<ISimpleTimeZone> LoadAllTimeZones(IStatelessUnitOfWork uow)
-	    {
-		    
-			var list = ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
-			    "SELECT time_zone_id as Id, time_zone_name as Name, utc_conversion_dst as Distance FROM [mart].[dim_time_zone] WHERE to_be_deleted = 0")
-				.AddScalar("Id", NHibernateUtil.Int16)
-				.AddScalar("Name", NHibernateUtil.String)
-				.AddScalar("Distance", NHibernateUtil.Int32)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(SimpleTimeZone)))
-				.SetReadOnly(true)
-			    .List<ISimpleTimeZone>();
-			return list;
-	    }
-
-		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(IStatelessUnitOfWork uow, int timezoneId, DateTime date)
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date)
 		{
-			const string sql =
-				"exec [mart].[raptor_number_of_calls_per_agent_by_date] @threshold=:threshold, @time_zone_id=:timezoneId, @local_date=:date";
-
-			var thresholdSettings = new AgentBadgeSettingsRepository(AppUnitOfWorkFactory().CreateAndOpenUnitOfWork()).LoadAll().FirstOrDefault();
-			if (thresholdSettings == null)
+			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
-				return new List<Guid>();
+				const string sql =
+				"exec [mart].[raptor_number_of_calls_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date";
+
+				var thresholdSettings = new AgentBadgeSettingsRepository(AppUnitOfWorkFactory().CreateAndOpenUnitOfWork()).LoadAll().FirstOrDefault();
+				if (thresholdSettings == null)
+				{
+					return new List<Guid>();
+				}
+				var threshold = thresholdSettings.AnsweredCallsThreshold;
+
+				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
+					.SetReadOnly(true)
+					.SetInt32("threshold", threshold)
+					.SetString("timezoneCode", timezoneCode)
+					.SetDateTime("date", date)
+					.List<Guid>();
 			}
-			var threshold = thresholdSettings.AnsweredCallsThreshold;
-
-			return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
-				.SetReadOnly(true)
-				.SetInt32("threshold", threshold)
-				.SetInt32("timezoneId", timezoneId)
-				.SetDateTime("date", date)
-				.List<Guid>();
-		}
-
-		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(IStatelessUnitOfWork uow, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int timezoneId, DateTime date)
-		{
-			const string sql =
-				"exec [mart].[raptor_adherence_per_agent_by_date] @threshold=:threshold, @time_zone_id=:timezoneId, @local_date=:date, @adherence_id=:adherenceId";
 			
-			var thresholdSettings = new AgentBadgeSettingsRepository(AppUnitOfWorkFactory().CreateAndOpenUnitOfWork()).LoadAll().FirstOrDefault();
-			if (thresholdSettings == null)
-			{
-				return new List<Guid>();
-			}
-			var threshold = thresholdSettings.AdherenceThreshold;
-
-			return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
-				.SetReadOnly(true)
-				.SetDouble("threshold", threshold.Value)
-				.SetInt32("timezoneId", timezoneId)
-				.SetDateTime("date", date)
-				.SetInt32("adherenceId", (int)adherenceCalculationMethod)
-				.List<Guid>();
 		}
 
-		public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(IStatelessUnitOfWork uow, int timezoneId, DateTime date)
+		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date)
 		{
-			const string sql =
-				"exec [mart].[raptor_AHT_per_agent_by_date] @threshold=:threshold, @time_zone_id=:timezoneId, @local_date=:date";
-
-			var thresholdSettings = new AgentBadgeSettingsRepository(AppUnitOfWorkFactory().CreateAndOpenUnitOfWork()).LoadAll().FirstOrDefault();
-			if (thresholdSettings == null)
+			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
-				return new List<Guid>();
-			}
-			var threshold = thresholdSettings.AHTThreshold;
+				const string sql =
+				"exec [mart].[raptor_adherence_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date, @adherence_id=:adherenceId";
 
-			return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
-				.SetReadOnly(true)
-				.SetDouble("threshold", threshold.TotalSeconds)
-				.SetInt32("timezoneId", timezoneId)
-				.SetDateTime("date", date)
-				.List<Guid>();
+				var thresholdSettings = new AgentBadgeSettingsRepository(AppUnitOfWorkFactory().CreateAndOpenUnitOfWork()).LoadAll().FirstOrDefault();
+				if (thresholdSettings == null)
+				{
+					return new List<Guid>();
+				}
+				var threshold = thresholdSettings.AdherenceThreshold;
+
+				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
+					.SetReadOnly(true)
+					.SetDouble("threshold", threshold.Value)
+					.SetString("timezoneCode", timezoneCode)
+					.SetDateTime("date", date)
+					.SetInt32("adherenceId", (int)adherenceCalculationMethod)
+					.List<Guid>();
+			}
+		}
+
+		public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date)
+		{
+			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				const string sql =
+				"exec [mart].[raptor_AHT_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date";
+
+				var thresholdSettings = new AgentBadgeSettingsRepository(AppUnitOfWorkFactory().CreateAndOpenUnitOfWork()).LoadAll().FirstOrDefault();
+				if (thresholdSettings == null)
+				{
+					return new List<Guid>();
+				}
+				var threshold = thresholdSettings.AHTThreshold;
+
+				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
+					.SetReadOnly(true)
+					.SetDouble("threshold", threshold.TotalSeconds)
+					.SetString("timezoneCode", timezoneCode)
+					.SetDateTime("date", date)
+					.List<Guid>();
+			}
 		}
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

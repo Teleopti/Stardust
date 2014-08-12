@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				SetTexts();
 				setToolStripsToPreferredSize();
 			}
+			Padding = new Padding(2);
 		}
 
 		public RequestDetailsView(IEventAggregator eventAggregator, IPersonRequestViewModel model, IScheduleDictionary schedules)

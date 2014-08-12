@@ -103,11 +103,11 @@
 			// 
 			this.labelTitle.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelTitle.AutoSize = true;
-			this.labelTitle.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold);
-			this.labelTitle.ForeColor = System.Drawing.Color.MidnightBlue;
-			this.labelTitle.Location = new System.Drawing.Point(3, 18);
+			this.labelTitle.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTitle.ForeColor = System.Drawing.Color.Black;
+			this.labelTitle.Location = new System.Drawing.Point(3, 17);
 			this.labelTitle.Name = "labelTitle";
-			this.labelTitle.Size = new System.Drawing.Size(213, 18);
+			this.labelTitle.Size = new System.Drawing.Size(195, 20);
 			this.labelTitle.TabIndex = 0;
 			this.labelTitle.Text = "xxSkillValidationSmartPart";
 			// 

@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			// 
 			// gradientPanel2
 			// 
-			this.gradientPanel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.InactiveCaptionText);
+			this.gradientPanel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.White);
 			this.gradientPanel2.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanel2.Controls.Add(this.gradientPanelExt1);
 			this.gradientPanel2.Controls.Add(this.checkBoxAdvUseTrend);
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			// 
 			this.gradientPanelExt1.AccessibleDescription = "";
 			this.gradientPanelExt1.AccessibleName = "";
-			this.gradientPanelExt1.BackColor = System.Drawing.Color.Transparent;
+			this.gradientPanelExt1.BackColor = System.Drawing.Color.White;
 			this.gradientPanelExt1.Border = new System.Windows.Forms.Padding(3);
 			this.gradientPanelExt1.BorderGap = 3;
 			this.gradientPanelExt1.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			// 
 			this.percentTextBoxTrend.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.percentTextBoxTrend.BackGroundColor = System.Drawing.SystemColors.Window;
-			this.percentTextBoxTrend.BeforeTouchSize = new System.Drawing.Size(100, 20);
+			this.percentTextBoxTrend.BeforeTouchSize = new System.Drawing.Size(58, 22);
 			this.percentTextBoxTrend.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.percentTextBoxTrend.DoubleValue = 0D;
 			this.percentTextBoxTrend.Location = new System.Drawing.Point(99, 43);
@@ -183,11 +183,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			// xpTaskBarBox2
 			// 
 			this.xpTaskBarBox2.Controls.Add(this.gradientPanel2);
-			this.xpTaskBarBox2.HeaderBackColor = System.Drawing.SystemColors.ActiveCaption;
+			this.xpTaskBarBox2.HeaderBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.xpTaskBarBox2.HeaderForeColor = System.Drawing.Color.White;
 			this.xpTaskBarBox2.HeaderImageIndex = -1;
 			this.xpTaskBarBox2.HitTaskBoxArea = false;
 			this.xpTaskBarBox2.HotTrackColor = System.Drawing.Color.Empty;
-			this.xpTaskBarBox2.ItemBackColor = System.Drawing.SystemColors.Control;
+			this.xpTaskBarBox2.ItemBackColor = System.Drawing.Color.White;
 			this.xpTaskBarBox2.Location = new System.Drawing.Point(0, 0);
 			this.xpTaskBarBox2.Name = "xpTaskBarBox2";
 			this.xpTaskBarBox2.PreferredChildPanelHeight = 140;
@@ -204,15 +205,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.xpTaskBar1.Controls.Add(this.xpTaskBarBox2);
 			this.xpTaskBar1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.xpTaskBar1.Location = new System.Drawing.Point(0, 0);
-			this.xpTaskBar1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.xpTaskBar1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.xpTaskBar1.MinimumSize = new System.Drawing.Size(0, 0);
 			this.xpTaskBar1.Name = "xpTaskBar1";
 			this.xpTaskBar1.Size = new System.Drawing.Size(172, 600);
 			this.xpTaskBar1.TabIndex = 1;
-			this.xpTaskBar1.ThemesEnabled = true;
 			// 
 			// splitContainerAdv2
 			// 
+			this.splitContainerAdv2.BackColor = System.Drawing.Color.White;
+			this.splitContainerAdv2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.DarkGray);
 			this.splitContainerAdv2.BeforeTouchSize = 3;
 			this.splitContainerAdv2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainerAdv2.IsSplitterFixed = true;

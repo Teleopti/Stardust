@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Auditing;
@@ -45,9 +46,9 @@ namespace Teleopti.Ccc.WinCodeTest.Main
         [Test]
         public void ShouldCallStartLogonOnViewAtStartUp()
         {
-            Expect.Call(_view.StartLogon()).Return(true);
+	        Expect.Call(_view.StartLogon(new Point())).Return(true);
             _mocks.ReplayAll();
-            _target.Start();
+            _target.Start(new Point());
             _mocks.VerifyAll();
         }
 

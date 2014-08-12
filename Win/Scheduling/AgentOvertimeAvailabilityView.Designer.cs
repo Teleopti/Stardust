@@ -36,54 +36,49 @@
 			this.labelTo = new System.Windows.Forms.Label();
 			this.outlookTimePickerFrom = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
 			this.labelFrom = new System.Windows.Forms.Label();
-			this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdv();
+			this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvNextDay)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerTo)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerFrom)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.ColumnCount = 5;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 15F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 62F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Controls.Add(this.checkBoxAdvNextDay, 3, 2);
-			this.tableLayoutPanel1.Controls.Add(this.outlookTimePickerTo, 2, 2);
-			this.tableLayoutPanel1.Controls.Add(this.labelTo, 1, 2);
-			this.tableLayoutPanel1.Controls.Add(this.outlookTimePickerFrom, 2, 1);
-			this.tableLayoutPanel1.Controls.Add(this.labelFrom, 1, 1);
-			this.tableLayoutPanel1.Controls.Add(this.buttonAdvOk, 2, 4);
-			this.tableLayoutPanel1.Controls.Add(this.buttonAdvCancel, 3, 4);
+			this.tableLayoutPanel1.ColumnCount = 3;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+			this.tableLayoutPanel1.Controls.Add(this.checkBoxAdvNextDay, 2, 2);
+			this.tableLayoutPanel1.Controls.Add(this.outlookTimePickerTo, 1, 2);
+			this.tableLayoutPanel1.Controls.Add(this.labelTo, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.outlookTimePickerFrom, 1, 1);
+			this.tableLayoutPanel1.Controls.Add(this.labelFrom, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.buttonAdvCancel, 2, 3);
+			this.tableLayoutPanel1.Controls.Add(this.buttonAdvOk, 0, 3);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 34);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 5;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
+			this.tableLayoutPanel1.RowCount = 4;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(267, 145);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(355, 176);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 
 			// checkBoxAdvNextDay
 			// 
-			this.checkBoxAdvNextDay.BeforeTouchSize = new System.Drawing.Size(150, 21);
+			this.checkBoxAdvNextDay.BeforeTouchSize = new System.Drawing.Size(114, 24);
 			this.checkBoxAdvNextDay.DrawFocusRectangle = false;
-			this.checkBoxAdvNextDay.Location = new System.Drawing.Point(170, 53);
+			this.checkBoxAdvNextDay.Location = new System.Drawing.Point(238, 80);
+			this.checkBoxAdvNextDay.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
 			this.checkBoxAdvNextDay.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvNextDay.Name = "checkBoxAdvNextDay";
-			this.checkBoxAdvNextDay.Size = new System.Drawing.Size(108, 21);
+			this.checkBoxAdvNextDay.Size = new System.Drawing.Size(114, 24);
 			this.checkBoxAdvNextDay.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAdvNextDay.TabIndex = 3;
 			this.checkBoxAdvNextDay.Text = "xxNextDay";
@@ -93,14 +88,15 @@
 			// outlookTimePickerTo
 			// 
 			this.outlookTimePickerTo.BackColor = System.Drawing.Color.White;
-			this.outlookTimePickerTo.BeforeTouchSize = new System.Drawing.Size(74, 21);
+			this.outlookTimePickerTo.BeforeTouchSize = new System.Drawing.Size(86, 23);
 			this.outlookTimePickerTo.DefaultResolution = 0;
 			this.outlookTimePickerTo.EnableNull = true;
 			this.outlookTimePickerTo.FormatFromCulture = true;
-			this.outlookTimePickerTo.Location = new System.Drawing.Point(80, 53);
+			this.outlookTimePickerTo.Location = new System.Drawing.Point(103, 80);
+			this.outlookTimePickerTo.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
 			this.outlookTimePickerTo.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerTo.Name = "outlookTimePickerTo";
-			this.outlookTimePickerTo.Size = new System.Drawing.Size(74, 21);
+			this.outlookTimePickerTo.Size = new System.Drawing.Size(86, 23);
 			this.outlookTimePickerTo.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.outlookTimePickerTo.TabIndex = 2;
 			this.outlookTimePickerTo.Text = "00:00";
@@ -108,25 +104,26 @@
 			// 
 			// labelTo
 			// 
-			this.labelTo.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelTo.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.labelTo.AutoSize = true;
-			this.labelTo.Location = new System.Drawing.Point(18, 54);
+			this.labelTo.Location = new System.Drawing.Point(34, 82);
 			this.labelTo.Name = "labelTo";
-			this.labelTo.Size = new System.Drawing.Size(53, 26);
+			this.labelTo.Size = new System.Drawing.Size(63, 15);
 			this.labelTo.TabIndex = 3;
 			this.labelTo.Text = "xxToColon";
 			// 
 			// outlookTimePickerFrom
 			// 
 			this.outlookTimePickerFrom.BackColor = System.Drawing.Color.White;
-			this.outlookTimePickerFrom.BeforeTouchSize = new System.Drawing.Size(74, 21);
+			this.outlookTimePickerFrom.BeforeTouchSize = new System.Drawing.Size(86, 23);
 			this.outlookTimePickerFrom.DefaultResolution = 0;
 			this.outlookTimePickerFrom.EnableNull = true;
 			this.outlookTimePickerFrom.FormatFromCulture = true;
-			this.outlookTimePickerFrom.Location = new System.Drawing.Point(80, 18);
+			this.outlookTimePickerFrom.Location = new System.Drawing.Point(103, 40);
+			this.outlookTimePickerFrom.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
 			this.outlookTimePickerFrom.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerFrom.Name = "outlookTimePickerFrom";
-			this.outlookTimePickerFrom.Size = new System.Drawing.Size(74, 21);
+			this.outlookTimePickerFrom.Size = new System.Drawing.Size(86, 23);
 			this.outlookTimePickerFrom.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.outlookTimePickerFrom.TabIndex = 1;
 			this.outlookTimePickerFrom.Text = "00:00";
@@ -134,76 +131,49 @@
 			// 
 			// labelFrom
 			// 
-			this.labelFrom.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelFrom.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.labelFrom.AutoSize = true;
-			this.labelFrom.Location = new System.Drawing.Point(18, 19);
+			this.labelFrom.Location = new System.Drawing.Point(20, 42);
 			this.labelFrom.Name = "labelFrom";
-			this.labelFrom.Size = new System.Drawing.Size(50, 26);
+			this.labelFrom.Size = new System.Drawing.Size(77, 15);
 			this.labelFrom.TabIndex = 2;
 			this.labelFrom.Text = "xxFromColon";
 			// 
-			// buttonAdvOk
-			// 
-			this.buttonAdvOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvOk.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.buttonAdvOk.ForeColor = System.Drawing.Color.White;
-			this.buttonAdvOk.IsBackStageButton = false;
-			this.buttonAdvOk.Location = new System.Drawing.Point(80, 102);
-			this.buttonAdvOk.Name = "buttonAdvOk";
-			this.buttonAdvOk.Size = new System.Drawing.Size(75, 23);
-			this.buttonAdvOk.TabIndex = 4;
-			this.buttonAdvOk.Text = "xxOk";
-			this.buttonAdvOk.UseVisualStyle = true;
-			this.buttonAdvOk.Click += new System.EventHandler(this.buttonAdvOkClick);
-			// 
 			// buttonAdvCancel
 			// 
+			this.buttonAdvCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvCancel.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonAdvCancel.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.buttonAdvCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonAdvCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvCancel.IsBackStageButton = false;
-			this.buttonAdvCancel.Location = new System.Drawing.Point(170, 102);
+			this.buttonAdvCancel.Location = new System.Drawing.Point(258, 139);
+			this.buttonAdvCancel.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonAdvCancel.Name = "buttonAdvCancel";
-			this.buttonAdvCancel.Size = new System.Drawing.Size(75, 23);
+			this.buttonAdvCancel.Size = new System.Drawing.Size(87, 27);
 			this.buttonAdvCancel.TabIndex = 5;
 			this.buttonAdvCancel.Text = "xxCancel";
 			this.buttonAdvCancel.UseVisualStyle = true;
 			this.buttonAdvCancel.Click += new System.EventHandler(this.buttonAdvCancelClick);
 			// 
-			// ribbonControlAdv1
+			// buttonAdvOk
 			// 
-			this.ribbonControlAdv1.HideMenuButtonToolTip = false;
-			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
-			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
-			this.ribbonControlAdv1.MenuButtonEnabled = true;
-			this.ribbonControlAdv1.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ribbonControlAdv1.MenuButtonText = "";
-			this.ribbonControlAdv1.MenuButtonVisible = false;
-			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
-			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
-			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
-			this.ribbonControlAdv1.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
-			// 
-			// ribbonControlAdv1.OfficeMenu
-			// 
-			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
-			this.ribbonControlAdv1.OfficeMenu.ShowItemToolTips = true;
-			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
-			this.ribbonControlAdv1.OverFlowButtonToolTip = "Show DropDown";
-			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.ribbonControlAdv1.QuickPanelVisible = false;
-			this.ribbonControlAdv1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
-			this.ribbonControlAdv1.SelectedTab = null;
-			this.ribbonControlAdv1.Show2010CustomizeQuickItemDialog = false;
-			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = true;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(277, 33);
-			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Start menu";
-			this.ribbonControlAdv1.TabIndex = 0;
-			this.ribbonControlAdv1.Text = "ribbonControlAdv1";
-			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.Black;
+			this.buttonAdvOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonAdvOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvOk.BeforeTouchSize = new System.Drawing.Size(87, 27);
+			this.tableLayoutPanel1.SetColumnSpan(this.buttonAdvOk, 2);
+			this.buttonAdvOk.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvOk.IsBackStageButton = false;
+			this.buttonAdvOk.Location = new System.Drawing.Point(138, 139);
+			this.buttonAdvOk.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
+			this.buttonAdvOk.Name = "buttonAdvOk";
+			this.buttonAdvOk.Size = new System.Drawing.Size(87, 27);
+			this.buttonAdvOk.TabIndex = 4;
+			this.buttonAdvOk.Text = "xxOk";
+			this.buttonAdvOk.UseVisualStyle = true;
+			this.buttonAdvOk.Click += new System.EventHandler(this.buttonAdvOkClick);
 			// 
 			// errorProvider1
 			// 
@@ -213,13 +183,16 @@
 			// AgentOvertimeAvailabilityView
 			// 
 			this.AcceptButton = this.buttonAdvOk;
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BorderColor = System.Drawing.Color.Blue;
 			this.CancelButton = this.buttonAdvCancel;
-			this.ClientSize = new System.Drawing.Size(279, 185);
+			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
+			this.ClientSize = new System.Drawing.Size(355, 176);
 			this.Controls.Add(this.tableLayoutPanel1);
-			this.Controls.Add(this.ribbonControlAdv1);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.HelpButton = false;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "AgentOvertimeAvailabilityView";
@@ -234,7 +207,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvNextDay)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerTo)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerFrom)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
 			this.ResumeLayout(false);
 
@@ -242,7 +214,6 @@
 
 		#endregion
 
-		private Syncfusion.Windows.Forms.Tools.RibbonControlAdv ribbonControlAdv1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOk;

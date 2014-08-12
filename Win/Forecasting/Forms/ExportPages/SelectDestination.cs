@@ -14,36 +14,36 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
-    public partial class SelectDestination : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
-    {
-        private readonly ICollection<string> _errorMessages = new List<string>();
+	public partial class SelectDestination : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
+	{
+		private readonly ICollection<string> _errorMessages = new List<string>();
 
-        public SelectDestination()
-        {
-            InitializeComponent();
-            setColors();
-        }
+		public SelectDestination()
+		{
+			InitializeComponent();
+			setColors();
+		}
 
-        public void Populate(ExportSkillModel stateObj)
-        {
-            var skills = new List<DestinationSkillModel>();
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                foreach (var selection in stateObj.ExportMultisiteSkillToSkillCommandModel.MultisiteSkillSelectionModels)
-                {
-                    var skill = new MultisiteSkillRepository(uow).Get(selection.MultisiteSkillModel.Id);
+		public void Populate(ExportSkillModel stateObj)
+		{
+			var skills = new List<DestinationSkillModel>();
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				foreach (var selection in stateObj.ExportMultisiteSkillToSkillCommandModel.MultisiteSkillSelectionModels)
+				{
+					var skill = new MultisiteSkillRepository(uow).Get(selection.MultisiteSkillModel.Id);
 					if (((IDeleteTag)skill).IsDeleted) continue;
 
-                    foreach (var childSkill in skill.ChildSkills)
-                    {
-                        skills.Add(new DestinationSkillModel(childSkill, selection.ChildSkillMappingModels));
-                    }
-                }
-            }
+					foreach (var childSkill in skill.ChildSkills)
+					{
+						skills.Add(new DestinationSkillModel(childSkill, selection.ChildSkillMappingModels));
+					}
+				}
+			}
 
-        	initializeGrid();
-            gridControlDestination.DataSource = skills;
-        }
+			initializeGrid();
+			gridControlDestination.DataSource = skills;
+		}
 
 		protected override void OnDockChanged(System.EventArgs e)
 		{
@@ -52,124 +52,124 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			resizeColumns();
 		}
 
-        private void grid_CellButtonClicked(object sender, GridCellButtonClickedEventArgs e)
-        {
-            var model = ((IList<DestinationSkillModel>) gridControlDestination.DataSource)[e.RowIndex - 1]; //Syncfusion ?!?
+		private void gridCellButtonClicked(object sender, GridCellButtonClickedEventArgs e)
+		{
+			var model = ((IList<DestinationSkillModel>) gridControlDestination.DataSource)[e.RowIndex - 1]; //Syncfusion ?!?
 
-            using(var mapDestinationBuSkill = new MapDestinationBuSkill(model))
-            {
-                if (mapDestinationBuSkill.ShowDialog(this) == DialogResult.OK)
-                {
-                    var selectedSkill = mapDestinationBuSkill.SelectedSkill();
-                    if (selectedSkill == null)
-                    {
-                        var childSkillMappingModel= model.ChildSkillMapping.Where(m => m.SourceSkill.Id.Equals(model.Skill.Id)).FirstOrDefault();
-                        if (childSkillMappingModel != null)
-                        {
-                            model.ChildSkillMapping.Remove(childSkillMappingModel);
-                            model.TargetBu = string.Empty;
-                            model.TargetSkill = string.Empty;
-                        }
-                    }
-                    else
-                    {
-                        //If exists in list, dont do anything
-                        var models = model.ChildSkillMapping.Where(s => s.SourceSkill.Id.Equals(model.Skill.Id));
+			using(var mapDestinationBuSkill = new MapDestinationBuSkill(model))
+			{
+				if (mapDestinationBuSkill.ShowDialog(this) == DialogResult.OK)
+				{
+					var selectedSkill = mapDestinationBuSkill.SelectedSkill();
+					if (selectedSkill == null)
+					{
+						var childSkillMappingModel= model.ChildSkillMapping.Where(m => m.SourceSkill.Id.Equals(model.Skill.Id)).FirstOrDefault();
+						if (childSkillMappingModel != null)
+						{
+							model.ChildSkillMapping.Remove(childSkillMappingModel);
+							model.TargetBu = string.Empty;
+							model.TargetSkill = string.Empty;
+						}
+					}
+					else
+					{
+						//If exists in list, dont do anything
+						var models = model.ChildSkillMapping.Where(s => s.SourceSkill.Id.Equals(model.Skill.Id));
 
-                        if (!models.IsEmpty())
-                            model.ChildSkillMapping.Remove(models.First());
+						if (!models.IsEmpty())
+							model.ChildSkillMapping.Remove(models.First());
 
-                        if (model.ChildSkillMapping.Any(m => m.TargetSkill.Id.Equals(selectedSkill.Id))) return;
+						if (model.ChildSkillMapping.Any(m => m.TargetSkill.Id.Equals(selectedSkill.Id))) return;
 
-                        var mappingModel = new ChildSkillMappingModel(model.Skill.Id.GetValueOrDefault(),
-                                                                      selectedSkill.Id.GetValueOrDefault(),
-                                                                      selectedSkill.BusinessUnit.Name,
-                                                                      selectedSkill.Name);
+						var mappingModel = new ChildSkillMappingModel(model.Skill.Id.GetValueOrDefault(),
+																	  selectedSkill.Id.GetValueOrDefault(),
+																	  selectedSkill.BusinessUnit.Name,
+																	  selectedSkill.Name);
 
-                        model.ChildSkillMapping.Add(mappingModel);
-                        model.TargetBu = selectedSkill.BusinessUnit.Name;
-                        model.TargetSkill = selectedSkill.Name;
-                    }
-                    gridControlDestination.Refresh();
-                }
-            }
-        }
+						model.ChildSkillMapping.Add(mappingModel);
+						model.TargetBu = selectedSkill.BusinessUnit.Name;
+						model.TargetSkill = selectedSkill.Name;
+					}
+					gridControlDestination.Refresh();
+				}
+			}
+		}
 
-        public bool Depopulate(ExportSkillModel stateObj)
-        {
-            validate(stateObj.ExportMultisiteSkillToSkillCommandModel);
-            
-            gridControlDestination.CellButtonClicked -= grid_CellButtonClicked;
-            return true;
-        }
+		public bool Depopulate(ExportSkillModel stateObj)
+		{
+			validate(stateObj.ExportMultisiteSkillToSkillCommandModel);
+			
+			gridControlDestination.CellButtonClicked -= gridCellButtonClicked;
+			return true;
+		}
 
-        private void validate(ExportMultisiteSkillToSkillCommandModel stateObj)
-        {
-            var errorMessge = Resources.YouHaveToMapAtLeastOneSubSkill;
-            if (stateObj.HasChildSkillMappings)
-            {
-                _errorMessages.Remove(errorMessge);
-            }
-            else
-            {
-                if (!_errorMessages.Contains(errorMessge))
-                    _errorMessages.Add(errorMessge);
-            }
-        }
+		private void validate(ExportMultisiteSkillToSkillCommandModel stateObj)
+		{
+			var errorMessge = Resources.YouHaveToMapAtLeastOneSubSkill;
+			if (stateObj.HasChildSkillMappings)
+			{
+				_errorMessages.Remove(errorMessge);
+			}
+			else
+			{
+				if (!_errorMessages.Contains(errorMessge))
+					_errorMessages.Add(errorMessge);
+			}
+		}
 
-        public void SetEditMode()
-        {
-        }
+		public void SetEditMode()
+		{
+		}
 
-        public string PageName
-        {
-            get { return Resources.SelectDestination; }
-        }
+		public string PageName
+		{
+			get { return Resources.SelectDestination; }
+		}
 
-        public ICollection<string> ErrorMessages
-        {
-            get { return _errorMessages; }
-        }
+		public ICollection<string> ErrorMessages
+		{
+			get { return _errorMessages; }
+		}
 
-        private void setColors()
-        {
-            BackColor = ColorHelper.WizardBackgroundColor();
-            gridControlDestination.Properties.BackgroundColor = ColorHelper.WizardPanelBackgroundColor();
-        }
+		private void setColors()
+		{
+			BackColor = ColorHelper.WizardBackgroundColor();
+			gridControlDestination.Properties.BackgroundColor = ColorHelper.WizardPanelBackgroundColor();
+		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        //Disposar dem i controlens dispose
-        private void initializeGrid()
-        {
-            gridControlDestination.Model.Clear(true);
-            gridControlDestination.Model.ReadOnly = true;
-            gridControlDestination.GridBoundColumns.Clear();
-            gridControlDestination.GridBoundColumns.Add(new GridBoundColumn() { MappingName = "ParentSkill", HeaderText = Resources.MultisiteSkill });
-            gridControlDestination.GridBoundColumns.Add(new GridBoundColumn() { MappingName = "ChildSkill", HeaderText = Resources.SubSkill });
-            gridControlDestination.GridBoundColumns.Add(new GridBoundColumn() { MappingName = "TargetBu", HeaderText =  Resources.TargetBusinessUnit});
-            gridControlDestination.GridBoundColumns.Add(new GridBoundColumn() { MappingName = "TargetSkill", HeaderText = Resources.TargetSkill });
-            
-            var button = new GridBoundColumn(){MappingName = "Map",HeaderText = " "};
-            button.StyleInfo.CellType = "PushButton";
-            button.StyleInfo.Description = "...";
-            button.StyleInfo.HorizontalAlignment = GridHorizontalAlignment.Right;
-            gridControlDestination.CellButtonClicked += grid_CellButtonClicked;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		//Disposar dem i controlens dispose
+		private void initializeGrid()
+		{
+			gridControlDestination.Model.Clear(true);
+			gridControlDestination.Model.ReadOnly = true;
+			gridControlDestination.GridBoundColumns.Clear();
+			gridControlDestination.GridBoundColumns.Add(new GridBoundColumn() { MappingName = "ParentSkill", HeaderText = Resources.MultisiteSkill });
+			gridControlDestination.GridBoundColumns.Add(new GridBoundColumn() { MappingName = "ChildSkill", HeaderText = Resources.SubSkill });
+			gridControlDestination.GridBoundColumns.Add(new GridBoundColumn() { MappingName = "TargetBu", HeaderText =  Resources.TargetBusinessUnit});
+			gridControlDestination.GridBoundColumns.Add(new GridBoundColumn() { MappingName = "TargetSkill", HeaderText = Resources.TargetSkill });
+			
+			var button = new GridBoundColumn(){MappingName = "Map",HeaderText = " "};
+			button.StyleInfo.CellType = "PushButton";
+			button.StyleInfo.Description = "...";
+			button.StyleInfo.HorizontalAlignment = GridHorizontalAlignment.Right;
+			gridControlDestination.CellButtonClicked += gridCellButtonClicked;
 
-            gridControlDestination.GridBoundColumns.Add(button);
-            
-            gridControlDestination.Properties.RowHeaders = false;
-        }
+			gridControlDestination.GridBoundColumns.Add(button);
+			
+			gridControlDestination.Properties.RowHeaders = false;
+		}
 
-        private void resizeColumns()
-        {
-            //Argh syncfusion
-            var colWidth = (gridControlDestination.Width-34) / (gridControlDestination.Model.ColCount - 1); //first and map
-            for (var i = 1; i < gridControlDestination.Model.ColCount; i++)
-            {
-                gridControlDestination.Model.ColWidths.SetSize(i, colWidth);
-            }
-            gridControlDestination.Model.ColWidths.SetSize(5, 22);
-            gridControlDestination.Model.Refresh();
-        }
-    }
+		private void resizeColumns()
+		{
+			//Argh syncfusion
+			var colWidth = (gridControlDestination.Width-34) / (gridControlDestination.Model.ColCount - 1); //first and map
+			for (var i = 1; i < gridControlDestination.Model.ColCount; i++)
+			{
+				gridControlDestination.Model.ColWidths.SetSize(i, colWidth);
+			}
+			gridControlDestination.Model.ColWidths.SetSize(5, 22);
+			gridControlDestination.Model.Refresh();
+		}
+	}
 }

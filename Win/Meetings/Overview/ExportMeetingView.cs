@@ -104,6 +104,11 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             _eventAggregator.GetEvent<ExportMeetingClicked>().Publish(string.Empty);
         }
 
+		private void ExportMeetingView_Load(object sender, EventArgs e)
+		{
+
+		}
+
        
     }
 }

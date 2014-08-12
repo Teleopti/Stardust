@@ -187,6 +187,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			// tableLayoutPanel1
 			// 
+			this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.splitContainerWorkloadSkill, 0, 0);
@@ -201,106 +202,109 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			// splitContainerWorkloadSkill
 			// 
-			this.splitContainerWorkloadSkill.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(235)))), ((int)(((byte)(240))))), System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(211)))), ((int)(((byte)(221))))));
-			this.splitContainerWorkloadSkill.BeforeTouchSize = 7;
+			this.splitContainerWorkloadSkill.BackColor = System.Drawing.Color.White;
+			this.splitContainerWorkloadSkill.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.DarkGray);
+			this.splitContainerWorkloadSkill.BeforeTouchSize = 3;
 			this.splitContainerWorkloadSkill.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainerWorkloadSkill.HotBackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(240)))), ((int)(((byte)(171))))), System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(223)))), ((int)(((byte)(103))))));
-			this.splitContainerWorkloadSkill.HotExpandLine = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(107)))), ((int)(((byte)(207)))));
 			this.splitContainerWorkloadSkill.Location = new System.Drawing.Point(3, 3);
 			this.splitContainerWorkloadSkill.Name = "splitContainerWorkloadSkill";
 			this.splitContainerWorkloadSkill.Orientation = System.Windows.Forms.Orientation.Vertical;
 			// 
 			// splitContainerWorkloadSkill.Panel1
 			// 
-			this.splitContainerWorkloadSkill.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(194)))), ((int)(((byte)(203))))), System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(227)))), ((int)(((byte)(231))))));
+			this.splitContainerWorkloadSkill.Panel1.BackColor = System.Drawing.Color.White;
+			this.splitContainerWorkloadSkill.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainerWorkloadSkill.Panel1.Controls.Add(this.splitContainer2);
 			// 
 			// splitContainerWorkloadSkill.Panel2
 			// 
-			this.splitContainerWorkloadSkill.Panel2.BackColor = System.Drawing.SystemColors.Control;
-			this.splitContainerWorkloadSkill.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(194)))), ((int)(((byte)(203))))), System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(227)))), ((int)(((byte)(231))))));
+			this.splitContainerWorkloadSkill.Panel2.BackColor = System.Drawing.Color.White;
+			this.splitContainerWorkloadSkill.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainerWorkloadSkill.Panel2.Controls.Add(this.tabControlAdvMultisiteSkill);
 			this.splitContainerWorkloadSkill.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel1;
 			this.splitContainerWorkloadSkill.Size = new System.Drawing.Size(1266, 580);
 			this.splitContainerWorkloadSkill.SplitterDistance = 416;
-			this.splitContainerWorkloadSkill.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Silver;
+			this.splitContainerWorkloadSkill.SplitterWidth = 3;
+			this.splitContainerWorkloadSkill.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
 			this.splitContainerWorkloadSkill.TabIndex = 6;
-			this.splitContainerWorkloadSkill.ThemesEnabled = true;
 			// 
 			// splitContainer2
 			// 
-			this.splitContainer2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(235)))), ((int)(((byte)(240))))), System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(211)))), ((int)(((byte)(221))))));
-			this.splitContainer2.BeforeTouchSize = 7;
+			this.splitContainer2.BackColor = System.Drawing.Color.White;
+			this.splitContainer2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.DarkGray);
+			this.splitContainer2.BeforeTouchSize = 3;
 			this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer2.HotBackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(240)))), ((int)(((byte)(171))))), System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(223)))), ((int)(((byte)(103))))));
-			this.splitContainer2.HotExpandLine = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(107)))), ((int)(((byte)(207)))));
 			this.splitContainer2.Location = new System.Drawing.Point(0, 0);
 			this.splitContainer2.Name = "splitContainer2";
 			this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Vertical;
 			// 
 			// splitContainer2.Panel1
 			// 
-			this.splitContainer2.Panel1.BackColor = System.Drawing.SystemColors.Control;
-			this.splitContainer2.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(194)))), ((int)(((byte)(203))))), System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(227)))), ((int)(((byte)(231))))));
+			this.splitContainer2.Panel1.BackColor = System.Drawing.Color.White;
 			this.splitContainer2.Panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			// 
 			// splitContainer2.Panel2
 			// 
-			this.splitContainer2.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(194)))), ((int)(((byte)(203))))), System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(227)))), ((int)(((byte)(231))))));
+			this.splitContainer2.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainer2.Panel2.Controls.Add(this.tabControlWorkloads);
 			this.splitContainer2.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
 			this.splitContainer2.Size = new System.Drawing.Size(1266, 416);
 			this.splitContainer2.SplitterDistance = 242;
-			this.splitContainer2.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Silver;
+			this.splitContainer2.SplitterWidth = 3;
+			this.splitContainer2.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
 			this.splitContainer2.TabIndex = 0;
-			this.splitContainer2.ThemesEnabled = true;
 			// 
 			// tabControlWorkloads
 			// 
-			this.tabControlWorkloads.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.tabControlWorkloads.BackColor = System.Drawing.SystemColors.Control;
-			this.tabControlWorkloads.BeforeTouchSize = new System.Drawing.Size(1266, 167);
+			this.tabControlWorkloads.ActiveTabColor = System.Drawing.Color.DarkGray;
+			this.tabControlWorkloads.BackColor = System.Drawing.Color.White;
+			this.tabControlWorkloads.BeforeTouchSize = new System.Drawing.Size(1266, 171);
+			this.tabControlWorkloads.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlWorkloads.Controls.Add(this.tabPage1);
 			this.tabControlWorkloads.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControlWorkloads.FixedSingleBorderColor = System.Drawing.SystemColors.Control;
+			this.tabControlWorkloads.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlWorkloads.Location = new System.Drawing.Point(0, 0);
 			this.tabControlWorkloads.Name = "tabControlWorkloads";
 			this.tabControlWorkloads.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Silver;
-			this.tabControlWorkloads.Size = new System.Drawing.Size(1266, 167);
+			this.tabControlWorkloads.Size = new System.Drawing.Size(1266, 171);
 			this.tabControlWorkloads.TabIndex = 6;
-			this.tabControlWorkloads.TabPanelBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(216)))), ((int)(((byte)(228)))), ((int)(((byte)(246)))));
-			this.tabControlWorkloads.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererOffice2007);
+			this.tabControlWorkloads.TabPanelBackColor = System.Drawing.Color.White;
+			this.tabControlWorkloads.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			this.tabControlWorkloads.ThemesEnabled = true;
 			this.tabControlWorkloads.SelectedIndexChanged += new System.EventHandler(this.tabControlWorkloads_SelectedIndexChanged);
 			// 
 			// tabPage1
 			// 
+			this.tabPage1.BackColor = System.Drawing.Color.White;
 			this.tabPage1.Image = null;
 			this.tabPage1.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPage1.Location = new System.Drawing.Point(3, 24);
+			this.tabPage1.Location = new System.Drawing.Point(2, 23);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage1.ShowCloseButton = true;
-			this.tabPage1.Size = new System.Drawing.Size(1259, 139);
+			this.tabPage1.Size = new System.Drawing.Size(1262, 146);
 			this.tabPage1.TabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.tabPage1.TabIndex = 1;
-			this.tabPage1.ThemesEnabled = true;
+			this.tabPage1.ThemesEnabled = false;
 			// 
 			// tabControlAdvMultisiteSkill
 			// 
-			this.tabControlAdvMultisiteSkill.ActiveTabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.tabControlAdvMultisiteSkill.BackColor = System.Drawing.SystemColors.Control;
-			this.tabControlAdvMultisiteSkill.BeforeTouchSize = new System.Drawing.Size(1266, 157);
+			this.tabControlAdvMultisiteSkill.ActiveTabColor = System.Drawing.Color.DarkGray;
+			this.tabControlAdvMultisiteSkill.BackColor = System.Drawing.Color.White;
+			this.tabControlAdvMultisiteSkill.BeforeTouchSize = new System.Drawing.Size(1266, 161);
+			this.tabControlAdvMultisiteSkill.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlAdvMultisiteSkill.Controls.Add(this.tabPageAdvMultisiteSkill);
 			this.tabControlAdvMultisiteSkill.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControlAdvMultisiteSkill.FixedSingleBorderColor = System.Drawing.SystemColors.Control;
+			this.tabControlAdvMultisiteSkill.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlAdvMultisiteSkill.Location = new System.Drawing.Point(0, 0);
 			this.tabControlAdvMultisiteSkill.Name = "tabControlAdvMultisiteSkill";
 			this.tabControlAdvMultisiteSkill.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Silver;
-			this.tabControlAdvMultisiteSkill.Size = new System.Drawing.Size(1266, 157);
+			this.tabControlAdvMultisiteSkill.Size = new System.Drawing.Size(1266, 161);
 			this.tabControlAdvMultisiteSkill.TabIndex = 7;
-			this.tabControlAdvMultisiteSkill.TabPanelBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(216)))), ((int)(((byte)(228)))), ((int)(((byte)(246)))));
-			this.tabControlAdvMultisiteSkill.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererOffice2007);
+			this.tabControlAdvMultisiteSkill.TabPanelBackColor = System.Drawing.Color.White;
+			this.tabControlAdvMultisiteSkill.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			this.tabControlAdvMultisiteSkill.ThemesEnabled = true;
 			this.tabControlAdvMultisiteSkill.SelectedIndexChanged += new System.EventHandler(this.tabControlAdvMultisiteSkill_SelectedIndexChanged);
 			// 
@@ -308,11 +312,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.tabPageAdvMultisiteSkill.Image = null;
 			this.tabPageAdvMultisiteSkill.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageAdvMultisiteSkill.Location = new System.Drawing.Point(3, 24);
+			this.tabPageAdvMultisiteSkill.Location = new System.Drawing.Point(2, 23);
 			this.tabPageAdvMultisiteSkill.Name = "tabPageAdvMultisiteSkill";
 			this.tabPageAdvMultisiteSkill.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageAdvMultisiteSkill.ShowCloseButton = true;
-			this.tabPageAdvMultisiteSkill.Size = new System.Drawing.Size(1259, 129);
+			this.tabPageAdvMultisiteSkill.Size = new System.Drawing.Size(1262, 136);
 			this.tabPageAdvMultisiteSkill.TabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.tabPageAdvMultisiteSkill.TabIndex = 1;
 			this.tabPageAdvMultisiteSkill.ThemesEnabled = true;
@@ -328,6 +332,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.ribbonControlAdv1.Header.AddMainItem(toolStripTabItemMultisite);
 			this.ribbonControlAdv1.Header.AddQuickItem(new Syncfusion.Windows.Forms.Tools.QuickButtonReflectable(toolStripButtonSave2));
 			this.ribbonControlAdv1.HideMenuButtonToolTip = false;
+			this.ribbonControlAdv1.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 1);
 			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
 			this.ribbonControlAdv1.MenuButtonEnabled = true;
@@ -400,7 +405,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStage1.Controls.Add(this.backStageButtonOptions);
 			this.backStage1.Controls.Add(this.backStageButton4);
 			this.backStage1.ItemSize = new System.Drawing.Size(138, 40);
-			this.backStage1.Location = new System.Drawing.Point(1, 51);
+			this.backStage1.Location = new System.Drawing.Point(0, 0);
 			this.backStage1.Name = "backStage1";
 			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
 			this.backStage1.Size = new System.Drawing.Size(1271, 716);
@@ -415,7 +420,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStageButtonSave.IsBackStageButton = false;
 			this.backStageButtonSave.Location = new System.Drawing.Point(0, 16);
 			this.backStageButtonSave.Name = "backStageButtonSave";
-			this.backStageButtonSave.Size = new System.Drawing.Size(137, 38);
+			this.backStageButtonSave.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonSave.TabIndex = 3;
 			this.backStageButtonSave.Text = "xxSave";
 			this.backStageButtonSave.Click += new System.EventHandler(this.backStageButtonSave_Click);
@@ -441,9 +446,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStageButtonClose.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonClose.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonClose.IsBackStageButton = false;
-			this.backStageButtonClose.Location = new System.Drawing.Point(0, 91);
+			this.backStageButtonClose.Location = new System.Drawing.Point(0, 78);
 			this.backStageButtonClose.Name = "backStageButtonClose";
-			this.backStageButtonClose.Size = new System.Drawing.Size(137, 38);
+			this.backStageButtonClose.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonClose.TabIndex = 5;
 			this.backStageButtonClose.Text = "xxClose";
 			this.backStageButtonClose.Click += new System.EventHandler(this.backStageButtonClose_Click);
@@ -454,9 +459,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStageButtonOptions.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonOptions.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonOptions.IsBackStageButton = false;
-			this.backStageButtonOptions.Location = new System.Drawing.Point(0, 129);
+			this.backStageButtonOptions.Location = new System.Drawing.Point(0, 103);
 			this.backStageButtonOptions.Name = "backStageButtonOptions";
-			this.backStageButtonOptions.Size = new System.Drawing.Size(137, 38);
+			this.backStageButtonOptions.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonOptions.TabIndex = 6;
 			this.backStageButtonOptions.Text = "xxOptions";
 			this.backStageButtonOptions.Click += new System.EventHandler(this.backStageButtonOptions_Click);
@@ -467,9 +472,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton4.IsBackStageButton = false;
-			this.backStageButton4.Location = new System.Drawing.Point(0, 167);
+			this.backStageButton4.Location = new System.Drawing.Point(0, 128);
 			this.backStageButton4.Name = "backStageButton4";
-			this.backStageButton4.Size = new System.Drawing.Size(137, 38);
+			this.backStageButton4.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton4.TabIndex = 7;
 			this.backStageButton4.Text = "xxExitTELEOPTICCC";
 			this.backStageButton4.Click += new System.EventHandler(this.backStageButton4_Click);
@@ -729,7 +734,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripExChartViews.Name = "toolStripExChartViews";
 			this.toolStripExChartViews.Office12Mode = false;
 			this.toolStripExChartViews.ShowLauncher = false;
-			this.toolStripExChartViews.Size = new System.Drawing.Size(223, 105);
+			this.toolStripExChartViews.Size = new System.Drawing.Size(223, 0);
 			this.toolStripExChartViews.TabIndex = 4;
 			this.toolStripExChartViews.Text = "xxChartViews";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExChartViews, true);
@@ -747,7 +752,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripExGridRowInChartButtons.Name = "toolStripExGridRowInChartButtons";
 			this.toolStripExGridRowInChartButtons.Office12Mode = false;
 			this.toolStripExGridRowInChartButtons.ShowLauncher = false;
-			this.toolStripExGridRowInChartButtons.Size = new System.Drawing.Size(233, 105);
+			this.toolStripExGridRowInChartButtons.Size = new System.Drawing.Size(233, 0);
 			this.toolStripExGridRowInChartButtons.TabIndex = 7;
 			this.toolStripExGridRowInChartButtons.Text = "xxGridRowsInChart";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExGridRowInChartButtons, true);
@@ -768,7 +773,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripExOutput.Name = "toolStripExOutput";
 			this.toolStripExOutput.Office12Mode = false;
 			this.toolStripExOutput.ShowLauncher = false;
-			this.toolStripExOutput.Size = new System.Drawing.Size(147, 105);
+			this.toolStripExOutput.Size = new System.Drawing.Size(147, 0);
 			this.toolStripExOutput.TabIndex = 6;
 			this.toolStripExOutput.Text = "xxOutput";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExOutput, true);
@@ -782,7 +787,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonPrint.Name = "toolStripButtonPrint";
 			this.SetShortcut(this.toolStripButtonPrint, System.Windows.Forms.Keys.None);
-			this.toolStripButtonPrint.Size = new System.Drawing.Size(46, 89);
+			this.toolStripButtonPrint.Size = new System.Drawing.Size(46, 0);
 			this.toolStripButtonPrint.Text = "xxPrint";
 			this.toolStripButtonPrint.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonPrint, true);
@@ -797,7 +802,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonPrintPreview.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonPrintPreview.Name = "toolStripButtonPrintPreview";
 			this.SetShortcut(this.toolStripButtonPrintPreview, System.Windows.Forms.Keys.None);
-			this.toolStripButtonPrintPreview.Size = new System.Drawing.Size(87, 89);
+			this.toolStripButtonPrintPreview.Size = new System.Drawing.Size(87, 0);
 			this.toolStripButtonPrintPreview.Text = "xxPrintPreview";
 			this.toolStripButtonPrintPreview.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonPrintPreview, true);
@@ -843,7 +848,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.teleoptiToolStripSkill.Name = "teleoptiToolStripSkill";
 			this.teleoptiToolStripSkill.Office12Mode = false;
 			this.teleoptiToolStripSkill.ShowLauncher = false;
-			this.teleoptiToolStripSkill.Size = new System.Drawing.Size(785, 105);
+			this.teleoptiToolStripSkill.Size = new System.Drawing.Size(785, 0);
 			this.teleoptiToolStripSkill.TabIndex = 2;
 			this.teleoptiToolStripSkill.Text = "xxTemplates";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.teleoptiToolStripSkill, true);
@@ -876,7 +881,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
 			this.SetShortcut(this.toolStripSeparator2, System.Windows.Forms.Keys.None);
-			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 92);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 0);
 			// 
 			// toolStripBtnCreateSkillTemplate
 			// 
@@ -886,7 +891,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripBtnCreateSkillTemplate.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripBtnCreateSkillTemplate.Name = "toolStripBtnCreateSkillTemplate";
 			this.SetShortcut(this.toolStripBtnCreateSkillTemplate, System.Windows.Forms.Keys.None);
-			this.toolStripBtnCreateSkillTemplate.Size = new System.Drawing.Size(45, 89);
+			this.toolStripBtnCreateSkillTemplate.Size = new System.Drawing.Size(45, 0);
 			this.toolStripBtnCreateSkillTemplate.Text = "xxNew";
 			this.toolStripBtnCreateSkillTemplate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripBtnCreateSkillTemplate, true);
@@ -901,7 +906,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonResetSkillTemplates.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonResetSkillTemplates.Name = "toolStripButtonResetSkillTemplates";
 			this.SetShortcut(this.toolStripButtonResetSkillTemplates, System.Windows.Forms.Keys.None);
-			this.toolStripButtonResetSkillTemplates.Size = new System.Drawing.Size(99, 89);
+			this.toolStripButtonResetSkillTemplates.Size = new System.Drawing.Size(99, 0);
 			this.toolStripButtonResetSkillTemplates.Text = "xxApplyStandard";
 			this.toolStripButtonResetSkillTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonResetSkillTemplates, true);
@@ -917,7 +922,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonLongtermSkillTemplates.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonLongtermSkillTemplates.Name = "toolStripButtonLongtermSkillTemplates";
 			this.SetShortcut(this.toolStripButtonLongtermSkillTemplates, System.Windows.Forms.Keys.None);
-			this.toolStripButtonLongtermSkillTemplates.Size = new System.Drawing.Size(104, 89);
+			this.toolStripButtonLongtermSkillTemplates.Size = new System.Drawing.Size(104, 0);
 			this.toolStripButtonLongtermSkillTemplates.Text = "xxApplyLongterm";
 			this.toolStripButtonLongtermSkillTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonLongtermSkillTemplates, true);
@@ -962,7 +967,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.teleoptiToolStripWorkload.Name = "teleoptiToolStripWorkload";
 			this.teleoptiToolStripWorkload.Office12Mode = false;
 			this.teleoptiToolStripWorkload.ShowLauncher = false;
-			this.teleoptiToolStripWorkload.Size = new System.Drawing.Size(785, 105);
+			this.teleoptiToolStripWorkload.Size = new System.Drawing.Size(785, 0);
 			this.teleoptiToolStripWorkload.TabIndex = 3;
 			this.teleoptiToolStripWorkload.Text = "xxTemplates";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.teleoptiToolStripWorkload, true);
@@ -995,7 +1000,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.SetShortcut(this.toolStripSeparator1, System.Windows.Forms.Keys.None);
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 92);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 0);
 			// 
 			// toolStripButtonCreateNewTemplate
 			// 
@@ -1005,7 +1010,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonCreateNewTemplate.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonCreateNewTemplate.Name = "toolStripButtonCreateNewTemplate";
 			this.SetShortcut(this.toolStripButtonCreateNewTemplate, System.Windows.Forms.Keys.None);
-			this.toolStripButtonCreateNewTemplate.Size = new System.Drawing.Size(45, 89);
+			this.toolStripButtonCreateNewTemplate.Size = new System.Drawing.Size(45, 0);
 			this.toolStripButtonCreateNewTemplate.Text = "xxNew";
 			this.toolStripButtonCreateNewTemplate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonCreateNewTemplate, true);
@@ -1020,7 +1025,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonResetWorkloadTemplates.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonResetWorkloadTemplates.Name = "toolStripButtonResetWorkloadTemplates";
 			this.SetShortcut(this.toolStripButtonResetWorkloadTemplates, System.Windows.Forms.Keys.None);
-			this.toolStripButtonResetWorkloadTemplates.Size = new System.Drawing.Size(99, 89);
+			this.toolStripButtonResetWorkloadTemplates.Size = new System.Drawing.Size(99, 0);
 			this.toolStripButtonResetWorkloadTemplates.Text = "xxApplyStandard";
 			this.toolStripButtonResetWorkloadTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonResetWorkloadTemplates, true);
@@ -1035,7 +1040,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonLongtermWorkloadTemplates.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonLongtermWorkloadTemplates.Name = "toolStripButtonLongtermWorkloadTemplates";
 			this.SetShortcut(this.toolStripButtonLongtermWorkloadTemplates, System.Windows.Forms.Keys.None);
-			this.toolStripButtonLongtermWorkloadTemplates.Size = new System.Drawing.Size(104, 89);
+			this.toolStripButtonLongtermWorkloadTemplates.Size = new System.Drawing.Size(104, 0);
 			this.toolStripButtonLongtermWorkloadTemplates.Text = "xxApplyLongterm";
 			this.toolStripButtonLongtermWorkloadTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonLongtermWorkloadTemplates, true);
@@ -1081,7 +1086,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.teleoptiToolStripMultisiteSkill.Name = "teleoptiToolStripMultisiteSkill";
 			this.teleoptiToolStripMultisiteSkill.Office12Mode = false;
 			this.teleoptiToolStripMultisiteSkill.ShowLauncher = false;
-			this.teleoptiToolStripMultisiteSkill.Size = new System.Drawing.Size(785, 105);
+			this.teleoptiToolStripMultisiteSkill.Size = new System.Drawing.Size(785, 0);
 			this.teleoptiToolStripMultisiteSkill.TabIndex = 4;
 			this.teleoptiToolStripMultisiteSkill.Text = "xxTemplates";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.teleoptiToolStripMultisiteSkill, true);
@@ -1114,7 +1119,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.toolStripSeparator4.Name = "toolStripSeparator4";
 			this.SetShortcut(this.toolStripSeparator4, System.Windows.Forms.Keys.None);
-			this.toolStripSeparator4.Size = new System.Drawing.Size(6, 92);
+			this.toolStripSeparator4.Size = new System.Drawing.Size(6, 0);
 			// 
 			// toolStripBtnCreateMultisiteTemplate
 			// 
@@ -1124,7 +1129,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripBtnCreateMultisiteTemplate.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripBtnCreateMultisiteTemplate.Name = "toolStripBtnCreateMultisiteTemplate";
 			this.SetShortcut(this.toolStripBtnCreateMultisiteTemplate, System.Windows.Forms.Keys.None);
-			this.toolStripBtnCreateMultisiteTemplate.Size = new System.Drawing.Size(45, 89);
+			this.toolStripBtnCreateMultisiteTemplate.Size = new System.Drawing.Size(45, 0);
 			this.toolStripBtnCreateMultisiteTemplate.Text = "xxNew";
 			this.toolStripBtnCreateMultisiteTemplate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripBtnCreateMultisiteTemplate, true);
@@ -1139,7 +1144,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonResetMultisiteSkillTemplates.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonResetMultisiteSkillTemplates.Name = "toolStripButtonResetMultisiteSkillTemplates";
 			this.SetShortcut(this.toolStripButtonResetMultisiteSkillTemplates, System.Windows.Forms.Keys.None);
-			this.toolStripButtonResetMultisiteSkillTemplates.Size = new System.Drawing.Size(99, 89);
+			this.toolStripButtonResetMultisiteSkillTemplates.Size = new System.Drawing.Size(99, 0);
 			this.toolStripButtonResetMultisiteSkillTemplates.Text = "xxApplyStandard";
 			this.toolStripButtonResetMultisiteSkillTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonResetMultisiteSkillTemplates, true);
@@ -1155,7 +1160,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonMultisiteSkillLongtermTemplates.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonMultisiteSkillLongtermTemplates.Name = "toolStripButtonMultisiteSkillLongtermTemplates";
 			this.SetShortcut(this.toolStripButtonMultisiteSkillLongtermTemplates, System.Windows.Forms.Keys.None);
-			this.toolStripButtonMultisiteSkillLongtermTemplates.Size = new System.Drawing.Size(104, 89);
+			this.toolStripButtonMultisiteSkillLongtermTemplates.Size = new System.Drawing.Size(104, 0);
 			this.toolStripButtonMultisiteSkillLongtermTemplates.Text = "xxApplyLongterm";
 			this.toolStripButtonMultisiteSkillLongtermTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonMultisiteSkillLongtermTemplates, true);
@@ -1275,11 +1280,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.toolStripProgressBarMain,
             this.toolStripStatusLabelInfo});
 			this.statusStripEx1.Location = new System.Drawing.Point(1, 745);
-			this.statusStripEx1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
+			this.statusStripEx1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.statusStripEx1.Name = "statusStripEx1";
 			this.statusStripEx1.Size = new System.Drawing.Size(1272, 22);
 			this.statusStripEx1.TabIndex = 123;
 			this.statusStripEx1.Text = "statusStripEx1";
+			this.statusStripEx1.VisualStyle = Syncfusion.Windows.Forms.Tools.StatusStripExStyle.Metro;
 			// 
 			// toolStripProgressBarMain
 			// 
@@ -1326,6 +1332,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.White;
 			this.Borders = new System.Windows.Forms.Padding(0);
 			this.ClientSize = new System.Drawing.Size(1274, 768);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;

@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public partial class AgentOvertimeAvailabilityView : BaseRibbonForm, IAgentOvertimeAvailabilityView
+	public partial class AgentOvertimeAvailabilityView : BaseDialogForm, IAgentOvertimeAvailabilityView
 	{
 		private readonly AgentOvertimeAvailabilityPresenter _presenter;
 		private readonly IOvertimeAvailabilityCreator _dayCreator;

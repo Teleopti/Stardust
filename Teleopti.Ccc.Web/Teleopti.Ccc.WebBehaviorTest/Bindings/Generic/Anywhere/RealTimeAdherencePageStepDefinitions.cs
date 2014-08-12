@@ -73,6 +73,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.ClickUsingJQuery(string.Format(".checkbox[name='{0}']", name));
 		}
 
+		[When(@"I choose business unit '(.*)'")]
+		public void WhenIChooseBusinessUnit(string businessUnitName)
+		{
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#bu-picker", businessUnitName);
+		}
+
 		private static void assertRealTimeAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)
 		{
 			const string selector = ".agent-name:contains('{0}') ~ td:contains('{1}')";

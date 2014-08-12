@@ -261,7 +261,6 @@
     <Compile Include="Collection\IdenticalLayersSpecification.cs" />
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
-    <Compile Include="Common\SimpleTimeZone.cs" />
     <Compile Include="Common\AgentBadgeThresholdSettings.cs" />
     <Compile Include="Common\AgentBadge.cs" />
     <Compile Include="Common\CommonAgentNameProvider.cs" />
@@ -556,6 +555,7 @@
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverService.cs" />
     <Compile Include="Repositories\IAgentBadgeSettingsRepository.cs" />
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
+    <Compile Include="Repositories\TimeFilterInfo.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager.cs" />
     <Compile Include="ResourceCalculation\FairnessValueCalculator.cs" />

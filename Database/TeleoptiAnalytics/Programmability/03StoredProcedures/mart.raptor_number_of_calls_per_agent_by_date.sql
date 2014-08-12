@@ -11,7 +11,7 @@ GO
 
 CREATE PROCEDURE [mart].[raptor_number_of_calls_per_agent_by_date] 
 @threshold int,
-@time_zone_id int,
+@time_zone_code nvarchar(50),
 @local_date smalldatetime
 AS
 Begin
@@ -30,8 +30,10 @@ inner join mart.bridge_time_zone tz
 	and f.interval_id = tz.interval_id 
 inner join mart.dim_date d
 	on tz.local_date_id = d.date_id
+inner join mart.dim_time_zone t
+	on t.time_zone_id = p.time_zone_id
 where d.date_date = @local_date
-  and p.time_zone_id = @time_zone_id
+  and t.time_zone_code = @time_zone_code
 group by
 	p.person_code,
 	d.date_date

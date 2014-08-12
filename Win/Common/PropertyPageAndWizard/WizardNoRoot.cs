@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 
 namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
@@ -21,21 +22,13 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 		{
 			InitializeComponent();
 			if (!DesignMode) SetTexts();
-			//SetColor();
+			setColor();
 		}
 
-		//private void SetColor()
-		//{
-		//	BackColor = ColorHelper.StandardPanelBackground(); 
-		//	treeViewPages.BackColor = ColorHelper.StandardTreeBackgroundColor();
-		//	splitContainerHorizontal.BackColor = ColorHelper.WizardPanelSeparator();
-		//	splitContainerPages.BackColor = ColorHelper.WizardPanelSeparator();
-		//	splitContainerHorizontal.Panel1.BackColor = ColorHelper.WizardPanelBackgroundColor();
-		//	splitContainerHorizontal.Panel2.BackColor = ColorHelper.WizardPanelButtonHolder();
-		//	splitContainerPages.Panel1.BackColor = ColorHelper.WizardPanelBackgroundColor();
-		//	splitContainerPages.Panel2.BackColor = ColorHelper.WizardPanelBackgroundColor();
-		//	gradientPanel1.BackgroundColor = ColorHelper.WizardHeaderBrush;
-		//	}
+		private void setColor()
+		{
+		labelHeading.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
+		}
 
 		public WizardNoRoot(IAbstractPropertyPagesNoRoot<T> propertyPages)
 			: this()
@@ -133,9 +126,11 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			labelHeading.Text = pp.PageName;
 			splitContainerVertical.Panel2.Controls.Add(c);
 			setButtonState();
+			treeViewPages.SelectedNodes.Clear();
 			foreach (TreeNodeAdv treeNode in _rootNode.Nodes)
 			{
-				treeNode.OptionButtonColor = Color.Empty;
+				if (treeNode.Text == _propertyPages.CurrentPage.PageName)
+					treeViewPages.SelectedNodes.Add(treeNode);
 			}
 			splitContainerVertical.ResumeLayout();
 			ResumeLayout();

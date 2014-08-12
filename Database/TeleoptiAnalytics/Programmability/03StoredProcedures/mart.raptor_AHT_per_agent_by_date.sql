@@ -11,7 +11,7 @@ GO
 
 CREATE PROCEDURE [mart].[raptor_AHT_per_agent_by_date] 
 @threshold int,
-@time_zone_id int,
+@time_zone_code nvarchar(50),
 @local_date smalldatetime
 AS
 Begin
@@ -29,8 +29,10 @@ select convert(decimal(18,2),((sum(talk_time_s + after_call_work_time_s))/case w
    and f.interval_id = tz.interval_id 
  inner join mart.dim_date d
     on tz.local_date_id = d.date_id
+inner join mart.dim_time_zone t
+	on p.time_zone_id = t.time_zone_id
  where d.date_date = @local_date
-   and p.time_zone_id = @time_zone_id
+   and t.time_zone_code = @time_zone_code
  group by p.person_code,
        d.date_date
 having convert(decimal(18,2),((sum(talk_time_s + after_call_work_time_s))/case when sum(answered_calls)= 0 THEN 1 ELSE sum(answered_calls) END)) < @threshold

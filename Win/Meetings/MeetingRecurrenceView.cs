@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
@@ -46,10 +45,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			dateTimePickerAdvEnd.ValueChanged += dateTimePickerAdvEndValueChanged;
 			
 		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MeetingRecurrenceView"/> class.
-		/// </summary>
+		
 		public MeetingRecurrenceView(IMeetingViewModel meetingViewModel, INotifyComposerMeetingChanged composer) : this()
 		{
 			if (composer == null) throw new ArgumentNullException("composer");
@@ -64,7 +60,6 @@ namespace Teleopti.Ccc.Win.Meetings
 			if (DesignMode)return;
 				
 			_meetingRecurrencePresenter.Initialize();
-				BackColor = Color.FromArgb(216,228,246);
 	
 		}
 

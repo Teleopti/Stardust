@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			gradientPanelMain.Controls.Add(tabView);
 			tabView.Dock = DockStyle.Fill;
 			tabView.VisibleChanged += budgetGroupTabViewVisibleChanged;
-			
+			ribbonControlAdvFixed1.MenuButtonText = UserTexts.Resources.FileProperCase.ToUpper();
 		}
 
 		void budgetGroupTabViewVisibleChanged(object sender, EventArgs e)
@@ -533,6 +533,5 @@ namespace Teleopti.Ccc.Win.Budgeting
 				return;
 			Application.Exit();
 		}
-
 	}
 }

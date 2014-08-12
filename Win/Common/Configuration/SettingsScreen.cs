@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
@@ -12,7 +13,7 @@ using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceExc
 
 namespace Teleopti.Ccc.Win.Common.Configuration
 {
-	public partial class SettingsScreen : BaseRibbonFormWithUnitOfWork
+	public partial class SettingsScreen : BaseDialogForm
 	{
 		private readonly OptionCore _core;
 		private readonly Timer _timer = new Timer();
@@ -94,14 +95,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			// Loads tree values.
 			_core = optionCore;
-			_core.SetUnitOfWork(UnitOfWork);
+			_core.SetUnitOfWork(UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork());
 			loadTree(-1);
 		}
 
 		public SettingsScreen(OptionCore optionCore,SelectedEntity<IAggregateRoot> selectedEntity):this()
 		{
 			_core = optionCore;
-			_core.SetUnitOfWork(UnitOfWork);
+			_core.SetUnitOfWork(UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork());
 			TreeNodeAdv selectedTreeNode = loadTree(selectedEntity);
 
 			Cursor.Current = Cursors.WaitCursor;
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void timerTick(object sender, EventArgs e)
 		{
-			FormKill();
+			Close();
 		}
 
 		private bool saveChanges()
@@ -157,13 +158,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 			catch (ValidationException ex)
 			{
-				ShowWarningMessage(UserTexts.Resources.InvalidDataOnFollowingPage + ex.Message, UserTexts.Resources.ValidationError);
+				ViewBase.ShowWarningMessage(UserTexts.Resources.InvalidDataOnFollowingPage + ex.Message, UserTexts.Resources.ValidationError);
 				DialogResult = DialogResult.None;
 				return false;
 			}
 			catch (OptimisticLockException)
 			{
-				ShowWarningMessage(UserTexts.Resources.OptimisticLockText, UserTexts.Resources.OptimisticLockHeader);
+				ViewBase.ShowWarningMessage(UserTexts.Resources.OptimisticLockText, UserTexts.Resources.OptimisticLockHeader);
 				DialogResult = DialogResult.None;
 				closeForm();
 			}
@@ -172,21 +173,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				//special case that comes as in bug 22347 -> FK-exception
 				//the reason is most probably a deleted, but then used scorecard in SetScorecard
 
-				ShowWarningMessage(UserTexts.Resources.DataHasBeenDeleted, UserTexts.Resources.OpenTeleoptiCCC);
+				ViewBase.ShowWarningMessage(UserTexts.Resources.DataHasBeenDeleted, UserTexts.Resources.OpenTeleoptiCCC);
 				DialogResult = DialogResult.None;
 				closeForm();
 			}
 			catch (DataSourceException ex)
 			{
 				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-				FormKill();
+				Close();
 			}
 			catch (Exception exception)
 			{
 				if (!(exception.InnerException is SqlException)) throw;
 				if (exception.InnerException.Message.Contains("IX_KpiTarget"))
 				{
-					ShowWarningMessage(UserTexts.Resources.OptimisticLockText, UserTexts.Resources.OptimisticLockHeader);
+					ViewBase.ShowWarningMessage(UserTexts.Resources.OptimisticLockText, UserTexts.Resources.OptimisticLockHeader);
 					DialogResult = DialogResult.None;
 					closeForm();
 					return false;
@@ -305,20 +306,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			RemoveControlHelpContext(control);
 			AddControlHelpContext(control);
-		}
-
-		private void settingsScreenSizeChanged(object sender, EventArgs e)
-		{
-			// this is because syncfusion seems to fuck up the size when you set dock.fill so I handle it myself
-			// otherwise the controls will come outside the form and you can't grab the border of the form and resize it
-			 if(WindowState == FormWindowState.Minimized) return;
-			var offset = 3;
-			if (WindowState == FormWindowState.Maximized)
-				offset = 6;
-			tableLayoutPanel1.Height = Height - (ribbonControlAdv1.Height + offset +3);
-			tableLayoutPanel1.Top = ribbonControlAdv1.Height +offset;
-			tableLayoutPanel1.Left = 3;
-			tableLayoutPanel1.Width = Width - 6;
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
@@ -12,11 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.TeamSchedule)]
 	public class TeamScheduleController : Controller
 	{
+		private readonly INow _now;
 		private readonly ITeamScheduleViewModelFactory _teamScheduleViewModelFactory;
 		private readonly IDefaultTeamProvider _defaultTeamProvider;
 
-		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory, IDefaultTeamProvider defaultTeamProvider)
+		public TeamScheduleController(INow now, ITeamScheduleViewModelFactory teamScheduleViewModelFactory, IDefaultTeamProvider defaultTeamProvider)
 		{
+			_now = now;
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_defaultTeamProvider = defaultTeamProvider;
 		}
@@ -26,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public ViewResult Index(DateOnly? date, Guid? id)
 		{
 			if (!date.HasValue)
-				date = DateOnly.Today;
+				date = _now.LocalDateOnly();
 			if (!id.HasValue)
 			{
 				var defaultTeam = _defaultTeamProvider.DefaultTeam(date.Value);

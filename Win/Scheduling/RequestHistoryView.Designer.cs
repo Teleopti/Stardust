@@ -30,7 +30,6 @@
 		private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RequestHistoryView));
 			this.comboBoxAdvPersons = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.listViewRequests = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -52,18 +51,17 @@
 			// comboBoxAdvPersons
 			// 
 			this.comboBoxAdvPersons.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvPersons.BeforeTouchSize = new System.Drawing.Size(259, 24);
+			this.comboBoxAdvPersons.BeforeTouchSize = new System.Drawing.Size(302, 23);
 			this.comboBoxAdvPersons.DisplayMember = "Name";
 			this.comboBoxAdvPersons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvPersons.Font = new System.Drawing.Font("Tahoma", 9.5F);
 			this.comboBoxAdvPersons.Items.AddRange(new object[] {
             "Banaggg"});
 			this.comboBoxAdvPersons.ItemsImageIndexes.Add(new Syncfusion.Windows.Forms.Tools.ComboBoxAdv.ImageIndexItem(this.comboBoxAdvPersons, "Banaggg"));
-			this.comboBoxAdvPersons.Location = new System.Drawing.Point(10, 10);
-			this.comboBoxAdvPersons.Margin = new System.Windows.Forms.Padding(10, 10, 3, 3);
+			this.comboBoxAdvPersons.Location = new System.Drawing.Point(12, 12);
+			this.comboBoxAdvPersons.Margin = new System.Windows.Forms.Padding(12, 12, 3, 3);
 			this.comboBoxAdvPersons.MaxDropDownItems = 25;
 			this.comboBoxAdvPersons.Name = "comboBoxAdvPersons";
-			this.comboBoxAdvPersons.Size = new System.Drawing.Size(259, 24);
+			this.comboBoxAdvPersons.Size = new System.Drawing.Size(302, 23);
 			this.comboBoxAdvPersons.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvPersons.TabIndex = 0;
 			this.comboBoxAdvPersons.Text = "Banaggg";
@@ -79,13 +77,12 @@
             this.columnHeader3,
             this.columnHeader4});
 			this.listViewRequests.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listViewRequests.Font = new System.Drawing.Font("Tahoma", 8.25F);
 			this.listViewRequests.FullRowSelect = true;
 			this.listViewRequests.HideSelection = false;
-			this.listViewRequests.Location = new System.Drawing.Point(9, 43);
-			this.listViewRequests.Margin = new System.Windows.Forms.Padding(9, 3, 3, 3);
+			this.listViewRequests.Location = new System.Drawing.Point(10, 49);
+			this.listViewRequests.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.listViewRequests.Name = "listViewRequests";
-			this.listViewRequests.Size = new System.Drawing.Size(460, 468);
+			this.listViewRequests.Size = new System.Drawing.Size(538, 536);
 			this.listViewRequests.TabIndex = 1;
 			this.listViewRequests.UseCompatibleStateImageBehavior = false;
 			this.listViewRequests.View = System.Windows.Forms.View.Details;
@@ -126,10 +123,10 @@
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(788, 564);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 58F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(919, 646);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// buttonAdv1
@@ -142,8 +139,8 @@
 			this.buttonAdv1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonAdv1.ForeColor = System.Drawing.Color.White;
 			this.buttonAdv1.IsBackStageButton = false;
-			this.buttonAdv1.Location = new System.Drawing.Point(691, 527);
-			this.buttonAdv1.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
+			this.buttonAdv1.Location = new System.Drawing.Point(820, 607);
+			this.buttonAdv1.Margin = new System.Windows.Forms.Padding(3, 3, 12, 12);
 			this.buttonAdv1.Name = "buttonAdv1";
 			this.buttonAdv1.Size = new System.Drawing.Size(87, 27);
 			this.buttonAdv1.TabIndex = 4;
@@ -155,10 +152,10 @@
 			this.panel1.Controls.Add(this.linkPrevious);
 			this.panel1.Controls.Add(this.linkNext);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(3, 524);
-			this.panel1.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
+			this.panel1.Location = new System.Drawing.Point(3, 600);
+			this.panel1.Margin = new System.Windows.Forms.Padding(3, 12, 3, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(466, 40);
+			this.panel1.Size = new System.Drawing.Size(545, 46);
 			this.panel1.TabIndex = 2;
 			// 
 			// linkPrevious
@@ -166,9 +163,9 @@
 			this.linkPrevious.ActiveLinkColor = System.Drawing.Color.Blue;
 			this.linkPrevious.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.linkPrevious.AutoSize = true;
-			this.linkPrevious.Location = new System.Drawing.Point(130, 8);
+			this.linkPrevious.Location = new System.Drawing.Point(152, 9);
 			this.linkPrevious.Name = "linkPrevious";
-			this.linkPrevious.Size = new System.Drawing.Size(60, 13);
+			this.linkPrevious.Size = new System.Drawing.Size(62, 15);
 			this.linkPrevious.TabIndex = 3;
 			this.linkPrevious.TabStop = true;
 			this.linkPrevious.Text = "xxPrevious";
@@ -179,10 +176,9 @@
 			this.linkNext.ActiveLinkColor = System.Drawing.Color.Blue;
 			this.linkNext.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.linkNext.AutoSize = true;
-			this.linkNext.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.linkNext.Location = new System.Drawing.Point(288, 8);
+			this.linkNext.Location = new System.Drawing.Point(337, 9);
 			this.linkNext.Name = "linkNext";
-			this.linkNext.Size = new System.Drawing.Size(42, 13);
+			this.linkNext.Size = new System.Drawing.Size(41, 15);
 			this.linkNext.TabIndex = 2;
 			this.linkNext.TabStop = true;
 			this.linkNext.Text = "xxNext";
@@ -191,33 +187,35 @@
 			// textBox1
 			// 
 			this.textBox1.BackColor = System.Drawing.Color.White;
-			this.textBox1.BeforeTouchSize = new System.Drawing.Size(296, 461);
+			this.textBox1.BeforeTouchSize = new System.Drawing.Size(344, 527);
 			this.textBox1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBox1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBox1.Location = new System.Drawing.Point(482, 43);
-			this.textBox1.Margin = new System.Windows.Forms.Padding(10, 3, 10, 10);
+			this.textBox1.Location = new System.Drawing.Point(563, 49);
+			this.textBox1.Margin = new System.Windows.Forms.Padding(12, 3, 12, 12);
 			this.textBox1.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ReadOnly = true;
-			this.textBox1.Size = new System.Drawing.Size(296, 461);
+			this.textBox1.Size = new System.Drawing.Size(344, 527);
 			this.textBox1.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Metro;
 			this.textBox1.TabIndex = 3;
 			// 
 			// RequestHistoryView
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(788, 564);
+			this.BorderColor = System.Drawing.Color.Blue;
+			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
+			this.ClientSize = new System.Drawing.Size(919, 646);
 			this.Controls.Add(this.tableLayoutPanel1);
-			this.Font = new System.Drawing.Font("Tahoma", 8.25F);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(800, 600);
+			this.MinimumSize = new System.Drawing.Size(931, 686);
 			this.Name = "RequestHistoryView";
+			this.ShowIcon = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "xxRequestHistory";
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvPersons)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);

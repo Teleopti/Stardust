@@ -382,7 +382,7 @@
     <Compile Include="Core\BrowserDriver\Retrying.cs" />
     <Compile Include="Data\CryptoCreator.cs" />
     <Compile Include="Data\HardCodedResolver.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AbsenceInContractTimeToday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AbsenceInContractTime.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
     <Compile Include="Bindings\Generic\ServerStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\ApplicationPageStepDefinition.cs" />
@@ -560,36 +560,28 @@
       <DependentUpon>PreferencesMustHave.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\UnitTestsStepDefinition.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AbsencePreferenceInContractTimeOnWeekday.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AbsencePreferenceOnWeekday.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ContractScheduleFromTable.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\DayOffPreferenceOnWeekday.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\ShiftOnWeekday.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\SecondScenario.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ContractFromTable.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\DayOffScheduled.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\ShiftCategoryPreferenceOnWeekday.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\UserContractSchedule.cs" />
     <Compile Include="MyTime\PreferencesPeriodFeedbackStepDefinition.cs" />
     <Compile Include="Core\TestControllerMethods.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutAbsenceRequestsAccess.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AbsencePreferenceToday.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingAbsenceRequest.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingAvailability.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\ExistingLunchPreferenceToday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ExistingLunchPreference.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\RuleSetBagWithTwoShiftsAndLunch.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AdministratorRoleWithEveryoneData.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AgentThatLeavesTomorrow.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\ShiftCategoryPreferenceToday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AgentThatLeaves.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\SecondShiftCategory.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\FirstShiftCategory.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\RuleSetBagWithTwoCategories.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\ExistingExtendedPreferenceToday.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\ExistingPreference.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ExistingExtendedPreference.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\RuleSetBag.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\BaseShiftCategory.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AbsenceToday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AssignedAbsence.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutTeamDataAccess.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithSiteAccess.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AnotherSitesSecondTeam.cs" />
@@ -597,9 +589,8 @@
     <Compile Include="Data\Setups\Legacy\Specific\AnotherTeam.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\GeneratedTeam.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\NoVirtualSchedulePeriod.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\DayOffToday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AssignedDayOff.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\SchedulePeriod.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\ShiftToday.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ShiftWithConfidentialAbsence.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Team.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\TwoWeeksAbsence.cs" />
@@ -660,20 +651,12 @@
     <Compile Include="Data\Setups\Legacy\Specific\BasePreference.cs" />
     <Compile Include="Data\IDelayedSetup.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\MoreThanOnePageOfRequests.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\PreferenceClosedWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\PreferenceOpenNextMonthWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\ExistingWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\PreferenceOpenWorkflowControlSet.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\DayOffPreference.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AbsencePreference.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\DoNotHaveVirtualSchedulePeriods.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\NoWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\PreferenceOpenWithAllowedPreferencesWorkflowControlSet.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ShiftCategoryPreference.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\StandardPreference.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\StudentAvailabilityClosedWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\StudentAvailabilityOpenNextMonthWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\StudentAvailabilityOpenWorkflowControlSet.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\StudentAvailability.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\TwoExistingTextRequestChangedOnDifferentTimes.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\PersonPeriod.cs" />
@@ -681,7 +664,6 @@
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Common\CalendarCells.cs" />
     <Compile Include="Pages\Common\DatePicker.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\ScheduleIsPublished.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\StudentAgent.cs" />
     <Compile Include="Pages\Common\IDateRangeSelector.cs" />
     <Compile Include="Core\Legacy\ElementExtensions.cs" />
@@ -698,7 +680,7 @@
     <Compile Include="MyTime\PreferenceStepDefinition.cs" />
     <Compile Include="Core\Extensions\ScenarioContextExtensions.cs" />
     <Compile Include="Bindings\SharedStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\ShiftForDate.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AssignedShift.cs" />
     <Compile Include="MyTime\Requests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

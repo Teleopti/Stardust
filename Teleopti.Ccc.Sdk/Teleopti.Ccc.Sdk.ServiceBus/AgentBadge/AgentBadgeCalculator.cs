@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 {
@@ -18,8 +17,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		}
 
 		protected IList<IPerson> AddBadge(IEnumerable<IPerson> allPersons, IEnumerable<Guid> agentsThatShouldGetBadge,
-			BadgeType badgeType,
-			int silverToBronzeBadgeRate, int goldToSilverBadgeRate)
+			BadgeType badgeType, int silverToBronzeBadgeRate, int goldToSilverBadgeRate, DateOnly date)
 		{
 			var personsThatGotABadge = new List<IPerson>();
 			if (agentsThatShouldGetBadge != null)
@@ -29,54 +27,54 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						agentsThatShouldGetBadge.Select(agent => allPersons.Single(x => x.Id != null && x.Id.Value == agent))
 							.Where(a => a != null))
 				{
-					person.AddBadge(new Domain.Common.AgentBadge
+					IAgentBadge badge;
+					if (!person.Badges.Any(x => x.BadgeType == badgeType))
 					{
-						BronzeBadge = 1,
-						BadgeType = badgeType
-					});
-
-					var badge = person.Badges.Single(x => x.BadgeType == badgeType);
-					if (badge.BronzeBadge >= silverToBronzeBadgeRate)
+						badge = null;
+					}
+					else
 					{
-						badge.SilverBadge = badge.SilverBadge + badge.BronzeBadge/silverToBronzeBadgeRate;
-						badge.BronzeBadge = badge.BronzeBadge%silverToBronzeBadgeRate;
+						badge = person.Badges.First(x => x.BadgeType == badgeType);
 					}
 
-					if (badge.SilverBadge >= goldToSilverBadgeRate)
+					if (badge == null || badge.LastCalculatedDate < date)
 					{
-						badge.GoldBadge = badge.GoldBadge + badge.SilverBadge/goldToSilverBadgeRate;
-						badge.SilverBadge = badge.SilverBadge%goldToSilverBadgeRate;
+						person.AddBadge(new Domain.Common.AgentBadge
+						{
+							BronzeBadge = 1,
+							BadgeType = badgeType,
+							LastCalculatedDate = date
+						}, silverToBronzeBadgeRate, goldToSilverBadgeRate);
+						personsThatGotABadge.Add(person);
 					}
-
-					personsThatGotABadge.Add(person);
 				}
 			}
 
 			return personsThatGotABadge;
 		}
 
-		public IEnumerable<IPerson> Calculate(IStatelessUnitOfWork unitOfWork, IEnumerable<IPerson> allPersons, int timezoneId,
-			DateTime date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int silverToBronzeBadgeRate, int goldToSilverBadgeRate)
+		public IEnumerable<IPerson> Calculate(IEnumerable<IPerson> allPersons, string timezoneCode,
+			DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int silverToBronzeBadgeRate, int goldToSilverBadgeRate)
 		{
 			var personsThatGotBadge = new List<IPerson>();
-			var agents = _statisticRepository.LoadAgentsOverThresholdForAdherence(unitOfWork, adherenceCalculationMethod, timezoneId, date);
+			var agents = _statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date);
 			if (agents != null)
 			{
-				var personsThatGotAAdherenceBadge = AddBadge(allPersons, agents, BadgeType.Adherence, silverToBronzeBadgeRate, goldToSilverBadgeRate);
+				var personsThatGotAAdherenceBadge = AddBadge(allPersons, agents, BadgeType.Adherence, silverToBronzeBadgeRate, goldToSilverBadgeRate, date);
 				personsThatGotBadge.AddRange(personsThatGotAAdherenceBadge);
 			}
 
-			agents = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(unitOfWork, timezoneId, date);
+			agents = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date);
 			if (agents != null)
 			{
-				var personsThatGotAAnsweredCallsBadge = AddBadge(allPersons, agents, BadgeType.AnsweredCalls, silverToBronzeBadgeRate, goldToSilverBadgeRate);
+				var personsThatGotAAnsweredCallsBadge = AddBadge(allPersons, agents, BadgeType.AnsweredCalls, silverToBronzeBadgeRate, goldToSilverBadgeRate, date);
 				personsThatGotBadge.AddRange(personsThatGotAAnsweredCallsBadge);
 			}
 
-			agents = _statisticRepository.LoadAgentsUnderThresholdForAHT(unitOfWork, timezoneId, date);
+			agents = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date);
 			if (agents != null)
 			{
-				var personsThatGotAAHTBadge = AddBadge(allPersons, agents, BadgeType.AverageHandlingTime, silverToBronzeBadgeRate, goldToSilverBadgeRate);
+				var personsThatGotAAHTBadge = AddBadge(allPersons, agents, BadgeType.AverageHandlingTime, silverToBronzeBadgeRate, goldToSilverBadgeRate, date);
 				personsThatGotBadge.AddRange(personsThatGotAAHTBadge);
 			}
 

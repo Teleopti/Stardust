@@ -6,7 +6,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
-	[TestFixture]
+	[TestFixture, Ignore]
 	public class ThreadPrincipalContextTest
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]

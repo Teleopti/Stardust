@@ -8,7 +8,6 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				{
 					c.AddProfile(new PreferenceAndScheduleDayViewModelMappingProfile(_projectionProvider, _userTimeZone));
 					c.AddProfile(new PreferenceDayViewModelMappingProfile(MockRepository.GenerateMock<IExtendedPreferencePredicate>()));
-					c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(), ()=>_preferenceOptionsProvider, _toggleManager));
+					c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(), () => _preferenceOptionsProvider, _toggleManager, new Now()));
 					c.AddProfile(new CommonViewModelMappingProfile());
 				});
 		}

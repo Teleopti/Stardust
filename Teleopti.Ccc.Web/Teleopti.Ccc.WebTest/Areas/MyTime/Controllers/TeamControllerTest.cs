@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
 			viewModelFactory.Stub(x => x.CreateTeamOrGroupOptionsViewModel(DateOnly.Today)).Return(teams);
 
-			var target = new TeamController(viewModelFactory);
+			var target = new TeamController(viewModelFactory, new Now());
 
 			var result = target.TeamsAndOrGroupings(DateOnly.Today);
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldUseTodayWhenDateNotSpecifiedForTeamsAndOrGroupings()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
-			var target = new TeamController(viewModelFactory);
+			var target = new TeamController(viewModelFactory, new Now());
 
 			target.TeamsAndOrGroupings(null);
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldUseTodayWhenDateNotSpecifiedForTeams()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
-			var target = new TeamController(viewModelFactory);
+			var target = new TeamController(viewModelFactory, new Now());
 
 			target.TeamsForShiftTrade(null);
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				x => x.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
 			                .Return(teams);
 
-			var target = new TeamController(viewModelFactory);
+			var target = new TeamController(viewModelFactory, new Now());
 
 			var result = target.TeamsForShiftTrade(DateOnly.Today);
 

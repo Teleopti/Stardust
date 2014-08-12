@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public partial class AgentPreferenceView : BaseRibbonForm, IAgentPreferenceView
+	public partial class AgentPreferenceView : BaseDialogForm, IAgentPreferenceView
 	{
 		private readonly IAgentPreferenceDayCreator _dayCreator;
 		private readonly AgentPreferencePresenter _presenter;
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private static bool hasExtended()
 		{
-            var licensedFunctions = (from o in LicenseSchema.GetActiveLicenseSchema(UnitOfWorkFactory.Current.Name).LicenseOptions
+			var licensedFunctions = (from o in LicenseSchema.GetActiveLicenseSchema(UnitOfWorkFactory.Current.Name).LicenseOptions
 									from f in o.EnabledApplicationFunctions
 									where (o.Enabled && f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences)
 									select f).ToList();
@@ -347,26 +347,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var result = validateTimes(data);
 			var commandToExecute = _presenter.CommandToExecute(data, _dayCreator);
 
-		    if (commandToExecute != null)
-		    {
-		        _presenter.RunCommand(commandToExecute);
-		        Hide();
-                return;
-		    }
-		    
-            if (result.ExtendedTimesError)
-		    {
-		        tabControlAgentInfo.SelectedIndex = 1;
-		        return;
-		    }
+			if (commandToExecute != null)
+			{
+				_presenter.RunCommand(commandToExecute);
+				Hide();
+				return;
+			}
+			
+			if (result.ExtendedTimesError)
+			{
+				tabControlAgentInfo.SelectedIndex = 1;
+				return;
+			}
 
-		    if (result.ActivityTimesError)
-		    {
-		        tabControlAgentInfo.SelectedIndex = 2;
-		        return;
-		    }
+			if (result.ActivityTimesError)
+			{
+				tabControlAgentInfo.SelectedIndex = 2;
+				return;
+			}
 
-		    Hide();
+			Hide();
 		}
 
 		private void buttonAdvCancelClick(object sender, EventArgs e)

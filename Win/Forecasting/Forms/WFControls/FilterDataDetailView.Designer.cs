@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 500F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(500, 500);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
@@ -70,8 +70,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
-			this.BackColor = System.Drawing.SystemColors.Control;
+			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.gradientPanel1);
+			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Margin = new System.Windows.Forms.Padding(0);
 			this.Name = "FilterDataDetailView";
 			this.Size = new System.Drawing.Size(500, 500);

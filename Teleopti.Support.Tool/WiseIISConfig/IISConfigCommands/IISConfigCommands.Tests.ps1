@@ -25,7 +25,7 @@ $Ntml = "Ntlm"
 $None = "None"
 $InstallationAuthSetting = "Ntlm"
 $CccServerMsiKey='{52613B22-2102-4BFB-AAFB-EF420F3A24B5}'
-$displayName = "Teleopti WFM Server"
+$global:displayName = "Teleopti WFM Server"
 $workingFolder = "c:\temp\PesterTest"
 $username = "tfsintegration"
 $domain = "toptinet"
@@ -75,6 +75,7 @@ function Config-Load {
 					if ($global:version -ne 'main')
 					{
 						$global:SubSite = 'TeleoptiCCC'
+						$global:displayName = 'Teleopti CCC Server, version 7'
 					}
                 }
                 
@@ -111,12 +112,12 @@ function TearDown {
 		}
 
 		It "should uninstall product"{
-			[bool] $isInstalled = Check-ProductIsInstalled -DisplayName "$displayName"
+			[bool] $isInstalled = Check-ProductIsInstalled -DisplayName "$global:displayName"
 			if ($isInstalled) {
 				Uninstall-ByRegPath -path $path
 			}
 
-			$isInstalled = Check-ProductIsInstalled -DisplayName "$displayName"
+			$isInstalled = Check-ProductIsInstalled -DisplayName "$global:displayName"
 			$isInstalled | Should Be $False
 		}
         

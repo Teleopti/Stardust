@@ -718,10 +718,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Session.Delete("from Absence");
             Session.Delete("from PushMessageDialogue");
             Session.Delete("from PushMessage");
-            // Ola don't understand what is wrong here now. Gets some strange things with temptables now in trace
-            //Session.CreateQuery("update Person p set p.IsDeleted=1").ExecuteUpdate();
-            Session.CreateQuery("update Scenario s set s.IsDeleted=1").ExecuteUpdate();
-
+					((IDeleteTag)_person).SetDeleted();
+					Session.Update(_person);
+					((IDeleteTag)_defaultScenario).SetDeleted();
+					Session.Update(_defaultScenario);
             Session.Flush();
         }
 

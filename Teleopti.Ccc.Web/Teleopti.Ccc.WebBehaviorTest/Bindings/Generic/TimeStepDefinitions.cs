@@ -1,4 +1,5 @@
 ﻿using System;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"the time is '(.*)'")]
 		[When(@"the current time is '(.*)'")]
 		[When(@"the time is '(.*)'")]
+		[SetCulture("sv-SE")]
 		public void GivenCurrentTimeIs(DateTime time)
 		{
 			CurrentTime.Set(time);

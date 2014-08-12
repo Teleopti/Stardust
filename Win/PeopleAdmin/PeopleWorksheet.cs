@@ -164,10 +164,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			const int WM_KEYDOWN = 0x100;
-			const int WM_SYSKEYDOWN = 0x104;
+			const int wmKeydown = 0x100;
+			const int wmSyskeydown = 0x104;
 
-			if ((msg.Msg == WM_KEYDOWN) || (msg.Msg == WM_SYSKEYDOWN))
+			if ((msg.Msg == wmKeydown) || (msg.Msg == wmSyskeydown))
 			{
 				switch (keyData)
 				{
@@ -624,10 +624,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_gridConstructor.View.DrawCellButton(e);
 		}
 
-		private void toolStripButtonMainHelp_Click(object sender, EventArgs e)
-		{
-			ViewBase.ShowHelp(this,false);
-		}
 		private void toolStripButtonContractClick(object sender, EventArgs e)
 		{
 
@@ -987,14 +983,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			//------
 		}
 
-		private void addNew()
-		{
-			_stateHolder.AddAndSavePerson(_filteredPeopleHolder.FilteredPersonCollection.Count, _filteredPeopleHolder);
-			int rowCount = _filteredPeopleHolder.FilteredPeopleGridData.Count;
-			_gridConstructor.View.Grid.RowCount = rowCount;
-			_gridConstructor.View.Invalidate();
-		}
-
 		public event EventHandler PeopleWorksheetSaved;
 		public event EventHandler PeopleWorksheetForceClose;
 		
@@ -1236,11 +1224,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			setCorrectView(ViewType.PersonAvailabilityView, ViewType.EmptyView, false, false, 0);
 		}
 
-		private void toolStripButtonMainClose_Click(object sender, EventArgs e)
-		{
-			Close();
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void editControlNewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
@@ -1401,11 +1384,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			}
 		}
 
-		private void toolStripButtonMainNewClick(object sender, EventArgs e)
-		{
-			addNew();
-		}
-
 		private void peopleWorksheetShown(object sender, EventArgs e)
 		{
 			//Set toolStrips to preferred Size.
@@ -1422,7 +1400,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			loadPeopleAdminReferences();
 			_filteredPeopleHolder.LoadRuleSetBag();
 			_filteredPeopleHolder.LoadBudgetGroup();
-			peopleRibbon.MenuButtonText = UserTexts.Resources.FileProperCase;
+			peopleRibbon.MenuButtonText = UserTexts.Resources.FileProperCase.ToUpper();
 
 		}
 
@@ -1606,11 +1584,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			if (Visible)
 				return;
 			Application.Exit();
-		}
-
-		private void peopleRibbon_Click(object sender, EventArgs e)
-		{
-
 		}
 	}
 }

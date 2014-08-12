@@ -12,107 +12,106 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 {
-    public partial class SelectDateAndScenario : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
-    {
-        private ExportSkillModel _stateObj;
-        private readonly ICollection<string> _errorMessages = new List<string>();
-        private IList<IScenario> _scenarios;
+	public partial class SelectDateAndScenario : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
+	{
+		private ExportSkillModel _stateObj;
+		private readonly ICollection<string> _errorMessages = new List<string>();
+		private IList<IScenario> _scenarios;
 
-        public SelectDateAndScenario()
-        {
-            InitializeComponent();
-            if (!DesignMode)
-            {
-                SetTexts();
-                setColors();
-                reportDateFromToSelector1.PeriodChanged += reportDateFromToSelector1PeriodChanged;
-            }
-        }
+		public SelectDateAndScenario()
+		{
+			InitializeComponent();
+			if (!DesignMode)
+			{
+				SetTexts();
+				setColors();
+				reportDateFromToSelector1.PeriodChanged += reportDateFromToSelector1PeriodChanged;
+			}
+		}
 
-        void reportDateFromToSelector1PeriodChanged(object sender, EventArgs e)
-        {
-            if (hasScenarioDataChanged(_scenarios))
-                bindScenarioCombo(_scenarios);
-        }
+		void reportDateFromToSelector1PeriodChanged(object sender, EventArgs e)
+		{
+			if (hasScenarioDataChanged(_scenarios))
+				bindScenarioCombo(_scenarios);
+		}
 
-        private void setColors()
-        {
-            BackColor = ColorHelper.WizardBackgroundColor();
-        }
+		private void setColors()
+		{
+			BackColor = ColorHelper.WizardBackgroundColor();
+		}
 
-        public void Populate(ExportSkillModel stateObj)
-        {
-            _stateObj = stateObj;
-        }
-        
-        protected override void OnLoad(System.EventArgs e)
-        {
-            base.OnLoad(e);
-            
-            var exportModel = _stateObj.ExportSkillToFileCommandModel;
-            reportDateFromToSelector1.WorkPeriodStart = exportModel.Period.StartDate == new DateOnly() ? DateOnly.Today : exportModel.Period.StartDate;
-            reportDateFromToSelector1.WorkPeriodEnd = exportModel.Period.EndDate == new DateOnly() ? DateOnly.Today.AddDays(7) : exportModel.Period.EndDate;
+		public void Populate(ExportSkillModel stateObj)
+		{
+			_stateObj = stateObj;
+		}
+		
+		protected override void OnLoad(System.EventArgs e)
+		{
+			base.OnLoad(e);
+			
+			var exportModel = _stateObj.ExportSkillToFileCommandModel;
+			reportDateFromToSelector1.WorkPeriodStart = exportModel.Period.StartDate == new DateOnly() ? DateOnly.Today : exportModel.Period.StartDate;
+			reportDateFromToSelector1.WorkPeriodEnd = exportModel.Period.EndDate == new DateOnly() ? DateOnly.Today.AddDays(7) : exportModel.Period.EndDate;
 
-            loadScenarios();
+			loadScenarios();
 
-            if (!noScenarioAvailable(_scenarios))
-            {
-                bindScenarioCombo(_scenarios);
-            }
-        }
+			if (!noScenarioAvailable(_scenarios))
+			{
+				bindScenarioCombo(_scenarios);
+			}
+		}
 
-        public bool Depopulate(ExportSkillModel stateObj)
-        {
-            stateObj.ExportSkillToFileCommandModel.Period = new DateOnlyPeriod(reportDateFromToSelector1.WorkPeriodStart, reportDateFromToSelector1.WorkPeriodEnd);
-            stateObj.ExportSkillToFileCommandModel.Scenario = (IScenario)comboBoxScenario.SelectedItem;
-            return true;
-        }
+		public bool Depopulate(ExportSkillModel stateObj)
+		{
+			stateObj.ExportSkillToFileCommandModel.Period = new DateOnlyPeriod(reportDateFromToSelector1.WorkPeriodStart, reportDateFromToSelector1.WorkPeriodEnd);
+			stateObj.ExportSkillToFileCommandModel.Scenario = (IScenario)comboBoxScenario.SelectedItem;
+			return true;
+		}
 
-        public void SetEditMode()
-        {
-        }
+		public void SetEditMode()
+		{
+		}
 
-        public string PageName
-        {
-            get { return Resources.SelectDateAndScenario; }
-        }
+		public string PageName
+		{
+			get { return Resources.SelectDateAndScenario; }
+		}
 
-        public ICollection<string> ErrorMessages
-        {
-            get { return _errorMessages; }
-        }
-        
-        private static bool noScenarioAvailable(IList<IScenario> scenarios)
-        {
-            return scenarios.Count == 0;
-        }
+		public ICollection<string> ErrorMessages
+		{
+			get { return _errorMessages; }
+		}
+		
+		private static bool noScenarioAvailable(IList<IScenario> scenarios)
+		{
+			return scenarios.Count == 0;
+		}
 
-        private void loadScenarios()
-        {
-            using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                _scenarios = new ScenarioRepository(uow).FindAllSorted();
-            }
+		private void loadScenarios()
+		{
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				_scenarios = new ScenarioRepository(uow).FindAllSorted();
+			}
 
-            if (noScenarioAvailable(_scenarios))
-            {
-                _scenarios = new List<IScenario>();
-            }
-        }
+			if (noScenarioAvailable(_scenarios))
+			{
+				_scenarios = new List<IScenario>();
+			}
+		}
 
-        private bool hasScenarioDataChanged(IList<IScenario> scenariosToLoad)
-        {
-            if (comboBoxScenario.DataSource == null)
-                return true;
-            return (comboBoxScenario.Items.Count != scenariosToLoad.Count);
-        }
+		private bool hasScenarioDataChanged(IList<IScenario> scenariosToLoad)
+		{
+			if (comboBoxScenario.DataSource == null)
+				return true;
+			return (comboBoxScenario.Items.Count != scenariosToLoad.Count);
+		}
 
-        private void bindScenarioCombo(IList<IScenario> scenariosToLoad)
-        {
-            comboBoxScenario.DataSource = null;
-            comboBoxScenario.DisplayMember = "Description";
-            comboBoxScenario.DataSource = scenariosToLoad;
-        }
-       
-    }
+		private void bindScenarioCombo(IList<IScenario> scenariosToLoad)
+		{
+			comboBoxScenario.DataSource = null;
+			comboBoxScenario.DisplayMember = "Description";
+			comboBoxScenario.DataSource = scenariosToLoad;
+		}
+	}
 }

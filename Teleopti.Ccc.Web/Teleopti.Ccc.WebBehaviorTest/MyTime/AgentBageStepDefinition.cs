@@ -111,6 +111,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public int Bronze { get; set; }
 		public int Silver { get; set; }
 		public int Gold { get; set; }
+		public DateTime LastCalculatedDate { get; set; }
 
 		public IAgentBadge AgentBadge;
 
@@ -128,12 +129,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				BronzeBadge = Bronze,
 				SilverBadge = Silver,
 				GoldBadge = Gold,
+				LastCalculatedDate = new DateOnly(LastCalculatedDate)
 			};
 
 			var rep = new PersonRepository(uow);
 			var people = rep.LoadAll();
 			var person = people.First(p => p.Name == user.Name);
-			person.AddBadge(AgentBadge);
+			person.AddBadge(AgentBadge, 5, 2);
 		}
 	}
 }

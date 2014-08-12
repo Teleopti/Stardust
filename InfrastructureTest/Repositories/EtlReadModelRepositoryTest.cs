@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
-	public class EtlReadModelRepositoryTest : DatabaseTest
+	public class EtlReadModelRepositoryTest : DatabaseTestWithoutTransaction
 	{
 		private EtlReadModelRepository _target;
 

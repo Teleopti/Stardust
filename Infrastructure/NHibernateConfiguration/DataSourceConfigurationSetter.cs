@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
 			if (UseSecondLevelCache)
 			{
-				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.CacheProvider, "NHibernate.Caches.SysCache.SysCacheProvider, NHibernate.Caches.SysCache");
+				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.CacheProvider, typeof(RtMemoryCacheProvider).AssemblyQualifiedName);
 				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.UseSecondLevelCache, "true");
 				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.UseQueryCache, "true");
 			}

@@ -38,7 +38,7 @@
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.BackColor = System.Drawing.Color.Transparent;
+			this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.btnApplyPeriod, 0, 1);
@@ -56,7 +56,7 @@
 			// 
 			this.btnApplyPeriod.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.btnApplyPeriod.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.btnApplyPeriod.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.btnApplyPeriod.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.btnApplyPeriod.BeforeTouchSize = new System.Drawing.Size(134, 23);
 			this.btnApplyPeriod.ForeColor = System.Drawing.Color.White;
 			this.btnApplyPeriod.IsBackStageButton = false;
@@ -90,7 +90,7 @@
 			this.monthCalendarAdv1.Name = "monthCalendarAdv1";
 			this.monthCalendarAdv1.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.monthCalendarAdv1.SelectedDates = new System.DateTime[] {
-        new System.DateTime(2014, 7, 11, 0, 0, 0, 0)};
+        new System.DateTime(2014, 8, 8, 0, 0, 0, 0)};
 			this.monthCalendarAdv1.ShowWeekNumbers = true;
 			this.monthCalendarAdv1.Size = new System.Drawing.Size(186, 160);
 			this.monthCalendarAdv1.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -105,8 +105,8 @@
 			this.monthCalendarAdv1.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.monthCalendarAdv1.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.monthCalendarAdv1.NoneButton.IsBackStageButton = false;
-			this.monthCalendarAdv1.NoneButton.Location = new System.Drawing.Point(82, 0);
-			this.monthCalendarAdv1.NoneButton.Size = new System.Drawing.Size(72, 0);
+			this.monthCalendarAdv1.NoneButton.Location = new System.Drawing.Point(141, 0);
+			this.monthCalendarAdv1.NoneButton.Size = new System.Drawing.Size(72, 25);
 			this.monthCalendarAdv1.NoneButton.Text = "None";
 			this.monthCalendarAdv1.NoneButton.UseVisualStyle = true;
 			this.monthCalendarAdv1.NoneButton.Visible = false;
@@ -119,7 +119,7 @@
 			this.monthCalendarAdv1.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.monthCalendarAdv1.TodayButton.IsBackStageButton = false;
 			this.monthCalendarAdv1.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.monthCalendarAdv1.TodayButton.Size = new System.Drawing.Size(154, 0);
+			this.monthCalendarAdv1.TodayButton.Size = new System.Drawing.Size(213, 25);
 			this.monthCalendarAdv1.TodayButton.Text = "Today";
 			this.monthCalendarAdv1.TodayButton.UseVisualStyle = true;
 			this.monthCalendarAdv1.TodayButton.Visible = false;

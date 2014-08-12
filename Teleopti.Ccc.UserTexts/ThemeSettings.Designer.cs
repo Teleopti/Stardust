@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.UserTexts {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("180, 226, 255")]
+        [global::System.Configuration.DefaultSettingValueAttribute("224, 224, 224")]
         public global::System.Drawing.Color RibbonContextTabColor {
             get {
                 return ((global::System.Drawing.Color)(this["RibbonContextTabColor"]));

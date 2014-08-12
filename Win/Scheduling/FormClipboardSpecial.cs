@@ -10,29 +10,29 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    public partial class FormClipboardSpecial : BaseRibbonForm, IClipboardSpecialView
-    {
-        private readonly ClipboardSpecialPresenter _clipboardSpecialPresenter;
+	public partial class FormClipboardSpecial : BaseDialogForm, IClipboardSpecialView
+	{
+		private readonly ClipboardSpecialPresenter _clipboardSpecialPresenter;
 
-		public FormClipboardSpecial(PasteOptions pasteOptions, ClipboardSpecialOptions clipboardSpecialOptions, IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSet)
-        {
-            InitializeComponent();
+		public FormClipboardSpecial(PasteOptions pasteOptions, ClipboardSpecialOptions clipboardSpecialOptions, IEnumerable<IMultiplicatorDefinitionSet> multiplicatorDefinitionSet)
+		{
+			InitializeComponent();
   
-            _clipboardSpecialPresenter = new ClipboardSpecialPresenter(this, pasteOptions, clipboardSpecialOptions.DeleteMode, clipboardSpecialOptions.ShowRestrictions);
-            _clipboardSpecialPresenter.Initialize();
+			_clipboardSpecialPresenter = new ClipboardSpecialPresenter(this, pasteOptions, clipboardSpecialOptions.DeleteMode, clipboardSpecialOptions.ShowRestrictions);
+			_clipboardSpecialPresenter.Initialize();
 
-	        checkBoxOvertimeAvailability.Visible = clipboardSpecialOptions.ShowOvertimeAvailability;
-	        checkBoxShiftAsOvertime.Visible = clipboardSpecialOptions.ShowShiftAsOvertime;
-	        comboBoxAdvOvertime.Visible = clipboardSpecialOptions.ShowShiftAsOvertime;
+			checkBoxOvertimeAvailability.Visible = clipboardSpecialOptions.ShowOvertimeAvailability;
+			checkBoxShiftAsOvertime.Visible = clipboardSpecialOptions.ShowShiftAsOvertime;
+			comboBoxAdvOvertime.Visible = clipboardSpecialOptions.ShowShiftAsOvertime;
 			fillComboOvertime(multiplicatorDefinitionSet);
 			enableComboBoxOvertime();
-        }
+		}
 
-		private void fillComboOvertime(IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet)
+		private void fillComboOvertime(IEnumerable<IMultiplicatorDefinitionSet> multiplicatorDefinitionSet)
 		{
 			comboBoxAdvOvertime.DisplayMember = "Name";
 
-			var definitionSets = from set in MultiplicatorDefinitionSet
+			var definitionSets = from set in multiplicatorDefinitionSet
 								 where set.MultiplicatorType == MultiplicatorType.Overtime
 								 select set;
 
@@ -40,67 +40,67 @@ namespace Teleopti.Ccc.Win.Scheduling
 			comboBoxAdvOvertime.DataSource = definitionSets.ToArray();
 		}
 
-        public void ShowRestrictions(bool show)
-        {
-            checkBoxPreferences.Visible = show;
-            checkBoxStudentAvailability.Visible = show;
-        }
+		public void ShowRestrictions(bool show)
+		{
+			checkBoxPreferences.Visible = show;
+			checkBoxStudentAvailability.Visible = show;
+		}
 
-        public bool Cancel()
-        {
-            return _clipboardSpecialPresenter.IsCanceled();
-        }
+		public bool Cancel()
+		{
+			return _clipboardSpecialPresenter.IsCanceled();
+		}
 
-        public void SetColor()
-        {
-            this.BackColor = ColorHelper.FormBackgroundColor();
-        }
+		public void SetColor()
+		{
+			BackColor = ColorHelper.FormBackgroundColor();
+		}
 
-        private void buttonOK_Click(object sender, EventArgs e)
-        {
-            _clipboardSpecialPresenter.OnButtonOkClick();
-        }
+		private void buttonOkClick(object sender, EventArgs e)
+		{
+			_clipboardSpecialPresenter.OnButtonOkClick();
+		}
 
-        private void buttonCancel_Click(object sender, EventArgs e)
-        {
-            _clipboardSpecialPresenter.OnButtonCancelClick();
-        }
+		private void buttonCancelClick(object sender, EventArgs e)
+		{
+			_clipboardSpecialPresenter.OnButtonCancelClick();
+		}
 
-        public void HideForm()
-        {
-            this.Hide();
-        }
+		public void HideForm()
+		{
+			Hide();
+		}
 
-        public void SetPermissionOnAbsences(bool permission)
-        {
-            checkBoxAbsences.Enabled = permission;
-        }
+		public void SetPermissionOnAbsences(bool permission)
+		{
+			checkBoxAbsences.Enabled = permission;
+		}
 
-        public void SetPermissionOnDayOffs(bool permission)
-        {
-            checkBoxDayOffs.Enabled = permission;
-        }
+		public void SetPermissionOnDayOffs(bool permission)
+		{
+			checkBoxDayOffs.Enabled = permission;
+		}
 
-        public void SetPermissionOnPersonalAssignments(bool permission)
-        {
-            checkBoxPersonalAssignments.Enabled = permission;
-        }
+		public void SetPermissionOnPersonalAssignments(bool permission)
+		{
+			checkBoxPersonalAssignments.Enabled = permission;
+		}
 
-        public void SetPermissionOnAssignments(bool permission)
-        {
-            checkBoxAssignments.Enabled = permission;
-        }
+		public void SetPermissionOnAssignments(bool permission)
+		{
+			checkBoxAssignments.Enabled = permission;
+		}
 
-        public void SetPermissionOnOvertime(bool permission)
-        {
-            checkBoxOvertime.Enabled = permission;
-        }
+		public void SetPermissionOnOvertime(bool permission)
+		{
+			checkBoxOvertime.Enabled = permission;
+		}
 
-        public void SetPermissionsOnRestrictions(bool permission)
-        {
-            checkBoxPreferences.Enabled = permission;
-            checkBoxStudentAvailability.Enabled = permission;
-        }
+		public void SetPermissionsOnRestrictions(bool permission)
+		{
+			checkBoxPreferences.Enabled = permission;
+			checkBoxStudentAvailability.Enabled = permission;
+		}
 
 		public void SetPermissionsOnShiftAsOvertime(bool permission)
 		{
@@ -108,59 +108,59 @@ namespace Teleopti.Ccc.Win.Scheduling
 			comboBoxAdvOvertime.Enabled = permission;
 		}
 
-        private void checkBoxAssignments_CheckedChanged(object sender, EventArgs e)
-        {
-            _clipboardSpecialPresenter.OnCheckBoxAssignmentsCheckedChanged(checkBoxAssignments.Checked);
-        }
+		private void checkBoxAssignmentsCheckedChanged(object sender, EventArgs e)
+		{
+			_clipboardSpecialPresenter.OnCheckBoxAssignmentsCheckedChanged(checkBoxAssignments.Checked);
+		}
 
-        private void checkBoxAbsences_CheckedChanged(object sender, EventArgs e)
-        {
-            _clipboardSpecialPresenter.OnCheckBoxAbsencesCheckedChanged(checkBoxAbsences.Checked);
-        }
+		private void checkBoxAbsencesCheckedChanged(object sender, EventArgs e)
+		{
+			_clipboardSpecialPresenter.OnCheckBoxAbsencesCheckedChanged(checkBoxAbsences.Checked);
+		}
 
-        private void checkBoxDayOffs_CheckedChanged(object sender, EventArgs e)
-        {
-            _clipboardSpecialPresenter.OnCheckBoxDayOffsCheckedChanged(checkBoxDayOffs.Checked);
-        }
+		private void checkBoxDayOffsCheckedChanged(object sender, EventArgs e)
+		{
+			_clipboardSpecialPresenter.OnCheckBoxDayOffsCheckedChanged(checkBoxDayOffs.Checked);
+		}
 
-        private void checkBoxPersonalAssignments_CheckedChanged(object sender, EventArgs e)
-        {
-            _clipboardSpecialPresenter.OnCheckBoxPersonalAssignmentsCheckedChanged(checkBoxPersonalAssignments.Checked);
-        }
+		private void checkBoxPersonalAssignmentsCheckedChanged(object sender, EventArgs e)
+		{
+			_clipboardSpecialPresenter.OnCheckBoxPersonalAssignmentsCheckedChanged(checkBoxPersonalAssignments.Checked);
+		}
 
-        private void checkBoxOvertime_CheckedChanged(object sender, EventArgs e)
-        {
-            _clipboardSpecialPresenter.OnCheckBoxOvertimeCheckedChanged(checkBoxOvertime.Checked);
-        }
+		private void checkBoxOvertimeCheckedChanged(object sender, EventArgs e)
+		{
+			_clipboardSpecialPresenter.OnCheckBoxOvertimeCheckedChanged(checkBoxOvertime.Checked);
+		}
 
-        private void FormClipboardSpecial_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (e.CloseReason == CloseReason.UserClosing)
-                _clipboardSpecialPresenter.OnFormClosing();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-        }
+		private void formClipboardSpecialFormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (e.CloseReason == CloseReason.UserClosing)
+				_clipboardSpecialPresenter.OnFormClosing();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+		}
 
-        private void checkBoxPreferences_CheckedChanged(object sender, EventArgs e)
-        {
-            _clipboardSpecialPresenter.OnCheckBoxPreferencesCheckedChanged(checkBoxPreferences.Checked);
-        }
+		private void checkBoxPreferencesCheckedChanged(object sender, EventArgs e)
+		{
+			_clipboardSpecialPresenter.OnCheckBoxPreferencesCheckedChanged(checkBoxPreferences.Checked);
+		}
 
-        private void checkBoxStudentAvailability_CheckedChanged(object sender, EventArgs e)
-        {
-            _clipboardSpecialPresenter.OnCheckBoxStudentAvailabilityCheckedChange(checkBoxStudentAvailability.Checked);
-        }
+		private void checkBoxStudentAvailabilityCheckedChanged(object sender, EventArgs e)
+		{
+			_clipboardSpecialPresenter.OnCheckBoxStudentAvailabilityCheckedChange(checkBoxStudentAvailability.Checked);
+		}
 
-        private void checkBoxOvertimeAvailability_CheckedChanged(object sender, EventArgs e)
-        {
-            _clipboardSpecialPresenter.OnCheckBoxOvertimeAvailabilityCheckedChanged(checkBoxOvertimeAvailability.Checked);
-        }
+		private void checkBoxOvertimeAvailabilityCheckedChanged(object sender, EventArgs e)
+		{
+			_clipboardSpecialPresenter.OnCheckBoxOvertimeAvailabilityCheckedChanged(checkBoxOvertimeAvailability.Checked);
+		}
 
-		private void checkBoxShiftAsOvertime_CheckedChanged(object sender, EventArgs e)
+		private void checkBoxShiftAsOvertimeCheckedChanged(object sender, EventArgs e)
 		{
 			_clipboardSpecialPresenter.OnCheckBoxShiftAsOvertimeCheckedChanged(checkBoxShiftAsOvertime.Checked);
 			enableComboBoxOvertime();
 		}
 
-		private void comboBoxAdvOvertime_SelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxAdvOvertimeSelectedIndexChanged(object sender, EventArgs e)
 		{
 			var multiplicatorDefinitionSet = comboBoxAdvOvertime.SelectedItem as IMultiplicatorDefinitionSet;
 			if(multiplicatorDefinitionSet != null)
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			comboBoxAdvOvertime.Enabled = checkBoxShiftAsOvertime.Checked;
 		}
-    }
+	}
 
 	public class ClipboardSpecialOptions
 	{

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 										};
 			var personPeriods = new List<IPersonPeriod> { PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today) };
 
-			var target = new DefaultDateCalculator();
+			var target = new DefaultDateCalculator(new Now());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		public void ShouldCalculateDefaultDateToTodayWhenNoWorkflowControlSet()
 		{
 			var personPeriods = new List<IPersonPeriod> { PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today) };
-			var target = new DefaultDateCalculator();
+			var target = new DefaultDateCalculator(new Now());
 
 			var result = target.Calculate(null, w => w.StudentAvailabilityPeriod, personPeriods);
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 											StudentAvailabilityPeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(-7), DateOnly.Today.AddDays(30))
 										};
 			var personPeriods = new List<IPersonPeriod> { PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-20)) };
-			var target = new DefaultDateCalculator();
+			var target = new DefaultDateCalculator(new Now());
 
 			var result = target.Calculate(workflowControlSet, w => w.StudentAvailabilityPeriod, personPeriods);
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 											PreferencePeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(7), DateOnly.Today.AddDays(30))
 										};
 
-			var target = new DefaultDateCalculator();
+			var target = new DefaultDateCalculator(new Now());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, new List<IPersonPeriod>());
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var pp = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(14));
 			pp.SetParent(new Person());
 			var personPeriods = new List<IPersonPeriod> { pp };
-			var target = new DefaultDateCalculator();
+			var target = new DefaultDateCalculator(new Now());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 

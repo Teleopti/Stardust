@@ -62,23 +62,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see my schedule")]
 		public void ThenIShouldSeeMySchedule()
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer",
 				DataMaker.Data().MePerson.Name));
 		}
 
 		[Then(@"I should see my schedule in team schedule with")]
 		public void WhenIShouldSeeMyScheduleInTeamScheduleWith(Table table)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']",
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']",
 				DataMaker.Data().MePerson.Name, table.Rows[0][1]));
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']",
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']",
 				DataMaker.Data().MePerson.Name, table.Rows[1][1]));
 		}
 
 		[Then(@"I should see my colleague's schedule")]
 		public void ThenIShouldSeeMyColleagueSSchedule()
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer",
 				DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name));
 		}
 
@@ -87,18 +87,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(
 				string.Format(
-					".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']", name,
+					".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']", name,
 					table.Rows[0][1]));
 			Browser.Interactions.AssertExistsUsingJQuery(
 				string.Format(
-					".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']", name,
+					".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']", name,
 					table.Rows[1][1]));
 		}
 
 		[Then(@"I should see my colleague's absence")]
 		public void ThenIShouldMyColleagueSAbsence()
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer",
 				DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name));
 		}
 
@@ -106,13 +106,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see tomorrow")]
 		public void ThenIShouldSeeTheNextDay()
 		{
-			AssertShowingDay(DateOnlyForBehaviorTests.TestToday.AddDays(1));
+			AssertShowingDay(new DateOnly(2014,5,3));
 		}
 
 		[Then(@"I should see the previous day")]
 		public void ThenIShouldSeeThePreviousDay()
 		{
-			AssertShowingDay(DateOnlyForBehaviorTests.TestToday.AddDays(-1));
+			AssertShowingDay(new DateOnly(2014, 5, 1));
 		}
 
 		private void AssertShowingDay(DateOnly date)
@@ -127,16 +127,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var colorAsString = string.Format("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
 
 			Browser.Interactions.AssertNotExistsUsingJQuery(
-				string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+				string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer",
 					DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name),
-				string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[style*='{1}']",
+				string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer[style*='{1}']",
 					DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name, colorAsString));
 		}
 
 		[Then(@"I should see my colleague's day off")]
 		public void ThenIShouldSeeMyColleagueSDayOff()
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .dayoff",
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .dayoff",
 				DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name));
 		}
 
@@ -174,8 +174,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see '(.*)' before myself")]
 		public void ThenIShouldSeeBeforeMyself(string name)
 		{
-			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".teamschedule-agent-name:nth(0)"), name);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".teamschedule-agent-name:nth(1)"), DataMaker.Data().MePerson.Name.ToString());
+			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:nth(0)"), name);
+			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:nth(1)"), DataMaker.Data().MePerson.Name.ToString());
 		}
 
 
@@ -184,8 +184,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var name = DataMaker.Data().MePerson.Name;
 			Browser.Interactions.AssertNotExistsUsingJQuery(
-				string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule",
-					name), string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+				string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule",
+					name), string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer",
 						name));
 		}
 
@@ -194,8 +194,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var name = DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name;
 			Browser.Interactions.AssertNotExistsUsingJQuery(
-				string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule",
-					name), string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer",
+				string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule",
+					name), string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer",
 						name));
 		}
 
@@ -269,21 +269,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"The layer's start time attibute value should be (.*)")]
 		public void ThenTheLayerSStartTimeAttibuteValueShouldBe(string startTime)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']",
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']",
 				DataMaker.Data().MePerson.Name, startTime));
 		}
 
 		[Then(@"The layer's end time attibute value should be (.*)")]
 		public void ThenTheLayerSEndTimeAttibuteValueShouldBe(string endTime)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']",
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-text*='{1}']",
 				DataMaker.Data().MePerson.Name, endTime));
 		}
 
 		[Then(@"The layer's activity name attibute value should be (.*)")]
 		public void ThenTheLayerSActivityNameAttibuteValueShouldBe(String activityName)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-title*='{1}']",
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-title*='{1}']",
 				DataMaker.Data().MePerson.Name, activityName));
 		}
 
@@ -360,12 +360,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		private static void AssertAgentIsDisplayed(string name)
 		{
-			Browser.Interactions.AssertAnyContains(".teamschedule-agent-name", name);
+			Browser.Interactions.AssertAnyContains(".teamschedule-agent-name-without-badge", name);
 		}
 
 		private static void AssertAgentIsNotDisplayed(string name)
 		{
-			Browser.Interactions.AssertNotExistsUsingJQuery(".teamschedule-agent-name", string.Format(".teamschedule-agent-name:contains('{0}')",name));
+			Browser.Interactions.AssertNotExistsUsingJQuery(".teamschedule-agent-name-without-badge", string.Format(".teamschedule-agent-name-without-badge:contains('{0}')", name));
 		}
 	}
 }

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			Mapper.Reset();
 			Mapper.Initialize(c =>
 			                  	{
-			                  		c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(), () => preferenceOptionProvider, toggleManager));
+									c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(), () => preferenceOptionProvider, toggleManager, new Now()));
 									c.AddProfile(new CommonViewModelMappingProfile());
 			                  	});
 		}

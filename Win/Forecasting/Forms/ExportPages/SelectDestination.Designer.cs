@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			this.gridControlDestination.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
 			this.gridControlDestination.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
 			this.gridControlDestination.Location = new System.Drawing.Point(0, 0);
+			this.gridControlDestination.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.gridControlDestination.MetroScrollBars = true;
 			this.gridControlDestination.Name = "gridControlDestination";
 			this.gridControlDestination.Properties.ForceImmediateRepaint = false;
@@ -87,7 +88,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			this.gridControlDestination.Properties.MarkColHeader = false;
 			this.gridControlDestination.Properties.MarkRowHeader = false;
 			this.gridControlDestination.ShowCurrentCellBorderBehavior = Syncfusion.Windows.Forms.Grid.GridShowCurrentCellBorder.GrayWhenLostFocus;
-			this.gridControlDestination.Size = new System.Drawing.Size(294, 242);
+			this.gridControlDestination.Size = new System.Drawing.Size(343, 316);
 			this.gridControlDestination.SmartSizeBox = false;
 			this.gridControlDestination.SortBehavior = Syncfusion.Windows.Forms.Grid.GridSortBehavior.DoubleClick;
 			this.gridControlDestination.TabIndex = 0;
@@ -97,11 +98,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			// 
 			// SelectDestination
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.gridControlDestination);
+			this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.Name = "SelectDestination";
-			this.Size = new System.Drawing.Size(294, 242);
+			this.Size = new System.Drawing.Size(343, 316);
 			((System.ComponentModel.ISupportInitialize)(this.gridControlDestination)).EndInit();
 			this.ResumeLayout(false);
 

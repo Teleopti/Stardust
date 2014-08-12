@@ -6,8 +6,7 @@
 		'subscriptions.adherencesites',
 		'errorview',
 		'ajax',
-		'resources',
-		'toggleQuerier'
+		'resources'
 ], function (
 		ko,
 		justGageBinding,
@@ -16,8 +15,7 @@
 		subscriptions,
 		errorview,
 		ajax,
-		resources,
-		toggleQuerier
+		resources
 	) {
 
 	var viewModel;
@@ -41,42 +39,8 @@
 
 			ko.applyBindings(viewModel, options.bindingElement);
 
-			ajax.ajax({
-				url: "Sites",
-				success: function(data) {
-					viewModel.fill(data);
-					checkFeature();
-					checkAgentsForMultipleTeamsFeature();
-				}
-			});
-
-			var checkFeature = function () {
-				toggleQuerier('RTA_RtaLastStatesOverview_27789', { enabled: loadLastStates });
-			}
-			
-			var loadLastStates = function () {
-				for (var i = 0; i < viewModel.sites().length; i++) {
-					(function(s) {
-						ajax.ajax({
-							url: "Sites/GetOutOfAdherence?siteId=" + s.Id,
-							success: function(d) {
-								viewModel.update(d);
-							}
-						});
-					})(viewModel.sites()[i]);
-				}
-			};
-
-			var checkAgentsForMultipleTeamsFeature = function () {
-				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', { enabled: function () { viewModel.agentStatesForMultipleSites(true); } });
-			}
-
-			subscriptions.subscribeAdherence(function (notification) {
-				viewModel.updateFromNotification(notification);
-			}, function() {
-				$('.realtimeadherencesites').attr("data-subscription-done"," ");
-			});
-		},
+			viewModel.load();
+		}
 	};
 });
 

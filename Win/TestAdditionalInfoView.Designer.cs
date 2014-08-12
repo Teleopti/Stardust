@@ -96,7 +96,7 @@
 			this.buttonOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonOk.Size = new System.Drawing.Size(75, 23);
 			this.buttonOk.TabIndex = 31;
-			this.buttonOk.Text = "xxOk";
+			this.buttonOk.Text = "OK";
 			this.buttonOk.UseVisualStyle = true;
 			// 
 			// panel1

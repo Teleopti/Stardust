@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -25,19 +27,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Apply(new UserContractSchedule(contractSchedule.ContractSchedule));
 		}
 
-		[Given(@"I have a scheduled day off on weekday (\d)")]
-		[Given(@"I have a day off scheduled on weekday (\d)")]
-		public void GivenIHaveADayOffScheduledOnWeekday3(int weekday)
+		[Given(@"I have a scheduled day off on '(.*)'")]
+		[Given(@"I have a day off scheduled on '(.*)'")]
+		public void GivenIHaveADayOffScheduledOnWeekday3(DateTime date)
 		{
-			DataMaker.Data().Apply(new DayOffScheduled(weekday));
+			DataMaker.Data().Apply(new DayOffScheduled(date));
 		}
 		
-		[Given(@"I have a day off preference on weekday (\d)")]
-		public void GivenIHaveADayOffPreferenceOnWeekday3(int weekday)
-		{
-			DataMaker.Data().Apply(new DayOffPreferenceOnWeekday(weekday));
-		}
-
 		[Given(@"I have a contract with:")]
 		public void GivenIHaveAContractWith(Table table)
 		{
@@ -54,29 +50,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Apply(new UserContractSchedule(contractSchedule.ContractSchedule));
 		}
 		
-		[Given(@"I have a absence preference on weekday (\d)")]
-		[Given(@"I have a non-contract time absence preference on weekday (\d)")]
-		public void GivenIHaveAAbsencePreferenceOnWeekdayX(int weekday)
+		[Given(@"I have a scheduled shift of (\d) hours on '(.*)'"), SetCulture("sv-SE")]
+		public void GivenIHaveAScheduledShiftOf8HoursOnWeekday1(int hours, DateTime date)
 		{
-			DataMaker.Data().Apply(new AbsencePreferenceOnWeekday(weekday));
-		}
-
-		[Given(@"I have a contract time absence preference on weekday (\d)")]
-		public void GivenIHaveAContractTimeAbsencePreferenceOnWeekdayX(int weekday)
-		{
-			DataMaker.Data().Apply(new AbsencePreferenceInContractTimeOnWeekday(weekday));
-		}
-
-		[Given(@"I have a shift category preference on weekday (\d)")]
-		public void GivenIHaveAShiftCategoryPreferenceOnWeekday1(int weekday)
-		{
-			DataMaker.Data().Apply(new ShiftCategoryPreferenceOnWeekday(weekday));
-		}
-
-		[Given(@"I have a scheduled shift of (\d) hours on weekday (\d)")]
-		public void GivenIHaveAScheduledShiftOf8HoursOnWeekday1(int hours, int weekday)
-		{
-			DataMaker.Data().Apply(new ShiftOnWeekday(TimeSpan.FromHours(8), TimeSpan.FromHours(8 + hours), weekday));
+			DataMaker.Data()
+				.Apply(new AssignedShift
+				{
+					Date = date.ToShortDateString(),
+					StartTime = TimeSpan.FromHours(8).ToString(),
+					EndTime = TimeSpan.FromHours(8 + hours).ToString(),
+					WithLunch = false
+				});
 		}
 
 

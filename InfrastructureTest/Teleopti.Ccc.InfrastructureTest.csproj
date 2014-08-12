@@ -103,17 +103,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=4.0.0.1001, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NHibernate.4.0.0-Alpha2\lib\net40\NHibernate.dll</HintPath>
+      <HintPath>..\packages\NHibernate.4.0.0-CR1\lib\net40\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.Caches.SysCache, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=6876f2ea66c9f443, processorArchitecture=MSIL">
+    <Reference Include="NHibernate.Envers, Version=2.0.0.400, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NHibernate.Caches.SysCache.4.0.0.4001\lib\Net40\NHibernate.Caches.SysCache.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate.Envers, Version=2.0.0.300, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NHibernate.Envers.2.0.0-Beta3\lib\Net40\NHibernate.Envers.dll</HintPath>
+      <HintPath>..\packages\NHibernate.Envers.2.0.0-CR1\lib\Net40\NHibernate.Envers.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -170,6 +166,7 @@
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
     <Compile Include="Repositories\AgentBadgeSettingsRepositoryTest.cs" />
+    <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
     <Compile Include="Toggle\TogglesActiveTest.cs" />
     <Compile Include="Licensing\CheckLicenseExistsTest.cs" />
     <Compile Include="Licensing\LicenseActivatorProviderTest.cs" />
@@ -263,7 +260,6 @@
     <Compile Include="NHibernateConfiguration\PerformanceTest.cs" />
     <Compile Include="NHibernateConfiguration\HashedStringTest.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingTypeTest.cs" />
-    <Compile Include="Foundation\LogOnOffTest.cs" />
     <Compile Include="Foundation\DataSourceExceptionTest.cs" />
     <Compile Include="Foundation\InitializeApplicationTest.cs" />
     <Compile Include="Foundation\LazyLoadingManagerTest.cs" />
@@ -278,7 +274,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Foundation\SessionDataTest.cs" />
-    <Compile Include="Foundation\StateHolderTest.cs" />
     <Compile Include="Foundation\StateTest.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerExceptionConverterTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiDatabaseNamingStrategyTest.cs" />

@@ -2,17 +2,25 @@
 		'knockout',
 		'lazy',
 		'views/realtimeadherencesites/site',
+		'views/realtimeadherencesites/business_unit',
 		'resources',
 		'amplify',
-		'navigation'
+		'navigation',
+		'subscriptions.adherencesites',
+		'ajax',
+		'toggleQuerier'
 ],
 	function (
 		ko,
 		lazy,
 		site,
+		businessUnit,
 		resources,
 		amplify,
-		navigation
+		navigation,
+		subscriptions,
+		ajax,
+		toggleQuerier
 	) {
 		return function () {
 
@@ -21,6 +29,7 @@
 			that.resources = resources;
 
 			that.sites = ko.observableArray();
+			that.businessUnits = ko.observableArray();
 			that.sitesToOpen = ko.observableArray();
 			that.agentStatesForMultipleSites = ko.observable();
 			var siteForId = function (id) {
@@ -33,10 +42,19 @@
 			};
 
 			that.fill = function (data) {
+				that.sites([]);
 				for (var i = 0; i < data.length; i++) {
 					var newSite = site();
 					newSite.fill(data[i]);
 					that.sites.push(newSite);
+				}
+			};
+
+			that.fillBusinessUnits = function (data) {
+				for (var i = 0; i < data.length; i++) {
+					var newBU = businessUnit();
+					newBU.fill(data[i]);
+					that.businessUnits.push(newBU);
 				}
 			};
 			
@@ -58,6 +76,66 @@
 			that.openSelectedSites = function() {
 				amplify.store("MultipleSites", that.sitesToOpen());
 				navigation.GotoRealTimeAdherenceMultipleSiteDetails('MultipleSites');
+			};
+
+			that.businessUnitChanged = function(data, event) {
+				that.load(event.target.options[event.target.selectedIndex].value);
+			};
+
+			that.load = function (businessId) {
+				ajax.ajax({
+					headers: { 'X-Business-Unit-Filter': businessId ? businessId : '' },
+					url: "Sites",
+					success: function(data) {
+						that.fill(data);
+						checkFeature();
+						checkAgentsForMultipleTeamsFeature();
+						if (that.businessUnits().length == 0)
+							checkBusinessUnitsFeature();
+					}
+				});
+				subscriptions.unsubscribeAdherence();
+				subscriptions.subscribeAdherence(function (notification) {
+					that.updateFromNotification(notification);
+				}, function () {
+					$('.realtimeadherencesites').attr("data-subscription-done", " ");
+				});
+			};
+
+
+			var checkFeature = function() {
+				toggleQuerier('RTA_RtaLastStatesOverview_27789', { enabled: loadLastStates });
+			};
+
+
+			var loadLastStates = function () {
+				for (var i = 0; i < that.sites().length; i++) {
+					(function (s) {
+						ajax.ajax({
+							url: "Sites/GetOutOfAdherence?siteId=" + s.Id,
+							success: function (d) {
+								that.update(d);
+							}
+						});
+					})(that.sites()[i]);
+				}
+			};
+
+			var checkAgentsForMultipleTeamsFeature = function() {
+				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', { enabled: function() { that.agentStatesForMultipleSites(true); } });
+			};
+
+			var checkBusinessUnitsFeature = function() {
+				toggleQuerier('RTA_MonitorMultipleBusinessUnits_28348', {
+					enabled: function() {
+						ajax.ajax({
+							url: "BusinessUnit",
+							success: function(data) {
+								that.fillBusinessUnits(data);
+							}
+						});
+					}
+				});
 			};
 
 			return that;

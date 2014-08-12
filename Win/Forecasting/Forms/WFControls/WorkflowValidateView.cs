@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
         {
             InitializeComponent();
             if (!DesignMode) SetTexts();
-            SetColors();
             dateSelectionFromToHistorical.SetCulture(CultureInfo.CurrentCulture);
             dateSelectionFromToTarget.SetCulture(CultureInfo.CurrentCulture);
             backgroundWorkerValidationPeriod.DoWork += backgroundWorkerValidationPeriod_DoWork;
@@ -98,21 +97,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
                 }
             }
             splitContainerAdv2.Panel1.Controls.Add(gridToChart);
-        }
-
-        protected void SetColors()
-        {
-            BrushInfo myBrush = ColorHelper.ControlGradientPanelBrush();
-            gradientPanelSelectPeriod.BackgroundColor = myBrush;
-            splitContainerAdv2.Panel1.BackgroundColor = myBrush;
-            splitContainerAdv2.Panel2.BackgroundColor = myBrush;
-            xpTaskBar1.BackColor = ColorHelper.XPTaskbarBackgroundColor();
-            xpTaskBarBoxSelectPeriod.HeaderBackColor = ColorHelper.XPTaskbarHeaderColor();
-            xpTaskBarBoxSpecialEvents.HeaderBackColor = ColorHelper.XPTaskbarHeaderColor();
-            xpTaskBarBoxDeviations.HeaderBackColor = ColorHelper.XPTaskbarHeaderColor();
-            gradientPanelDeviations.BackgroundColor = myBrush;
-            gradientPanelSpecialEvents.BackgroundColor = myBrush;
-            buttonAdvCancelLoad.BackColor = ColorHelper.WarningButtonColor;
         }
 
         #region threaded part

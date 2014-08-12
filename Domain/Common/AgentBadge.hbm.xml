@@ -32,5 +32,8 @@
 		<property name="BadgeType"
 							type="int"
 							not-null="true" />
+		<property name="LastCalculatedDate"
+							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+							not-null="true" />
 	</class>
 </hibernate-mapping>

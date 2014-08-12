@@ -42,21 +42,21 @@
 			this.panelClose.BackColor = System.Drawing.Color.Transparent;
 			this.panelClose.Controls.Add(this.buttonClose);
 			this.panelClose.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panelClose.Location = new System.Drawing.Point(0, 443);
+			this.panelClose.Location = new System.Drawing.Point(0, 434);
 			this.panelClose.Name = "panelClose";
-			this.panelClose.Size = new System.Drawing.Size(344, 31);
+			this.panelClose.Size = new System.Drawing.Size(344, 40);
 			this.panelClose.TabIndex = 2;
 			// 
 			// buttonClose
 			// 
 			this.buttonClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
-			this.buttonClose.BeforeTouchSize = new System.Drawing.Size(125, 23);
+			this.buttonClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonClose.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.buttonClose.ForeColor = System.Drawing.Color.White;
 			this.buttonClose.IsBackStageButton = false;
-			this.buttonClose.Location = new System.Drawing.Point(112, 4);
+			this.buttonClose.Location = new System.Drawing.Point(129, 7);
 			this.buttonClose.Name = "buttonClose";
-			this.buttonClose.Size = new System.Drawing.Size(125, 23);
+			this.buttonClose.Size = new System.Drawing.Size(87, 27);
 			this.buttonClose.TabIndex = 1;
 			this.buttonClose.Text = "xxClose";
 			this.buttonClose.UseVisualStyle = true;
@@ -104,18 +104,20 @@
 			// 
 			// panel1
 			// 
-			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel1.BackColor = System.Drawing.Color.Transparent;
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
+			this.panel1.Margin = new System.Windows.Forms.Padding(0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(344, 443);
+			this.panel1.Size = new System.Drawing.Size(344, 434);
 			this.panel1.TabIndex = 4;
 			// 
 			// MeetingOverviewFilter
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(219)))), ((int)(((byte)(254)))));
+			this.BackColor = System.Drawing.Color.White;
+			this.BorderColor = System.Drawing.Color.Blue;
 			this.CaptionForeColor = System.Drawing.Color.White;
 			this.ClientSize = new System.Drawing.Size(344, 474);
 			this.ControlBox = false;

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Common
         private IApplicationAuthenticationInfo _applicationAuthenticationInfo;
 		private readonly IList<IOptionalColumnValue> _optionalColumnValueCollection = new List<IOptionalColumnValue>();
 		private IAuthenticationInfo _authenticationInfo;
-	    private ISet<IAgentBadge> _badges; 
+	    private ISet<IAgentBadge> _badges = new HashSet<IAgentBadge>();
 
 	    public Person()
         {
@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.Domain.Common
             _terminalDate = null;
             _personWriteProtection = new PersonWriteProtectionInfo(this);
             _firstDayOfWeek = DayOfWeek.Monday; //1
-			_badges = new HashSet<IAgentBadge>();
         }
 
         public virtual ITeam MyTeam(DateOnly theDate)
@@ -210,41 +209,33 @@ namespace Teleopti.Ccc.Domain.Common
 		   addPersonActivityStartingEvent();
 	   }
 
-	    public virtual void AddBadge(IAgentBadge agentBadge)
+	    public virtual void AddBadge(IAgentBadge agentBadge, int silverToBronzeBadgeRate, int goldToSilverBadgeRate)
 	    {
-		    if (_badges == null)
+		    if (_badges.Any(x => x.BadgeType == agentBadge.BadgeType))
 		    {
-			    var badge = new AgentBadge()
-			    {
-				    BadgeType = agentBadge.BadgeType,
-				    BronzeBadge = agentBadge.BronzeBadge,
-				    SilverBadge = agentBadge.SilverBadge,
-				    GoldBadge = agentBadge.GoldBadge
-			    };
-				badge.SetParent(this);
-				_badges = new HashSet<IAgentBadge> { badge };
+			    var existedBadge = _badges.Single(x => x.BadgeType == agentBadge.BadgeType);
+			    existedBadge.BronzeBadge += agentBadge.BronzeBadge;
+			    existedBadge.SilverBadge += agentBadge.SilverBadge;
+			    existedBadge.GoldBadge += agentBadge.GoldBadge;
+			    existedBadge.LastCalculatedDate = agentBadge.LastCalculatedDate;
 		    }
 		    else
 		    {
-			    if (_badges.Any(x => x.BadgeType == agentBadge.BadgeType))
-			    {
-					var existedBadge = _badges.Single(x => x.BadgeType == agentBadge.BadgeType);
-					existedBadge.BronzeBadge += agentBadge.BronzeBadge;
-					existedBadge.SilverBadge += agentBadge.SilverBadge;
-					existedBadge.GoldBadge += agentBadge.GoldBadge;
-			    }
-			    else
-			    {
-					var badge = new AgentBadge()
-					{
-						BadgeType = agentBadge.BadgeType,
-						BronzeBadge = agentBadge.BronzeBadge,
-						SilverBadge = agentBadge.SilverBadge,
-						GoldBadge = agentBadge.GoldBadge
-					};
-					badge.SetParent(this);
-					_badges.Add(badge);
-			    }
+			    agentBadge.SetParent(this);
+			    _badges.Add(agentBadge);
+		    }
+		    //Update according to rate.
+		    var badge = _badges.Single(x => x.BadgeType == agentBadge.BadgeType);
+		    if (badge.BronzeBadge >= silverToBronzeBadgeRate)
+		    {
+			    badge.SilverBadge = badge.SilverBadge + badge.BronzeBadge/silverToBronzeBadgeRate;
+			    badge.BronzeBadge = badge.BronzeBadge%silverToBronzeBadgeRate;
+		    }
+
+		    if (badge.SilverBadge >= goldToSilverBadgeRate)
+		    {
+			    badge.GoldBadge = badge.GoldBadge + badge.SilverBadge/goldToSilverBadgeRate;
+			    badge.SilverBadge = badge.SilverBadge%goldToSilverBadgeRate;
 		    }
 	    }
 

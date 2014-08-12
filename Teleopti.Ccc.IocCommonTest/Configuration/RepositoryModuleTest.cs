@@ -73,6 +73,15 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
+		public void ShouldResolveTheAgentBadgeSettingRepository()
+		{
+			using (var container = containerBuilder.Build())
+			{
+				container.Resolve<IAgentBadgeSettingsRepository>().Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
 		public void RepositoriesWithIncorrectCtorAreNotWired()
 		{
 			/*

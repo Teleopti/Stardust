@@ -1,23 +1,30 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
 	public class DayOffPreference : BasePreference
 	{
-		public IDayOffTemplate DayOffTemplate = TestData.DayOffTemplate;
-
-		protected override PreferenceRestriction ApplyRestriction()
+		public DayOffPreference()
 		{
-			return new PreferenceRestriction {DayOffTemplate = DayOffTemplate};
+			DayOffTemplate = TestData.DayOffTemplate.Description.Name;
+		}
+
+		public string DayOffTemplate { get; set; }
+
+		protected override PreferenceRestriction ApplyRestriction(IUnitOfWork uow)
+		{
+			var rep = new DayOffTemplateRepository(uow);
+			return new PreferenceRestriction {DayOffTemplate = rep.LoadAll().FirstOrDefault(d => d.Description.Name == DayOffTemplate)};
 		}
 
 		protected override DateTime ApplyDate(CultureInfo cultureInfo)
 		{
-			return DateHelper.GetFirstDateInWeek(DateOnlyForBehaviorTests.TestToday.Date, cultureInfo);
+			return DateTime.Parse(Date,SwedishCultureInfo);
 		}
 	}
 }

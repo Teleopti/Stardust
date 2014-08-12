@@ -1,23 +1,30 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
 	public class AbsencePreference : BasePreference
 	{
-		public IAbsence Absence = TestData.Absence;
-
-		protected override PreferenceRestriction ApplyRestriction()
+		public AbsencePreference()
 		{
-			return new PreferenceRestriction { Absence = Absence };
+			Absence = TestData.Absence.Description.Name;
+		}
+
+		public string Absence { get; set; }
+
+		protected override PreferenceRestriction ApplyRestriction(IUnitOfWork uow)
+		{
+			var rep = new AbsenceRepository(uow);
+			return new PreferenceRestriction { Absence = rep.LoadAll().FirstOrDefault(a => a.Description.Name == Absence) };
 		}
 
 		protected override DateTime ApplyDate(CultureInfo cultureInfo)
 		{
-            return DateHelper.GetFirstDateInWeek(DateOnlyForBehaviorTests.TestToday.Date, cultureInfo);
+            return DateTime.Parse(Date,SwedishCultureInfo);
 		}
 	}
 }

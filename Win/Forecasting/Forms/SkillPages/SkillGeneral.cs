@@ -307,6 +307,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
         {
             var eventArgs = new WizardNameChangedEventArgs(((TextBox)sender).Text);
             _propertyPages.TriggerNameChanged(eventArgs);
+	        textBoxName.Focus();
         }
 
         private void comboBoxSkillActivity_SelectedIndexChanged(object sender, EventArgs e)

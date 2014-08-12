@@ -620,7 +620,6 @@ Scenario: Should be able to see agents for multiple teams
 	And I should see real time agent name for 'Ashley Andeen'
 
 @OnlyRunIfEnabled('RTA_MonitorMultipleBusinessUnits_28348')
-@ignore
 Scenario: Should display sites of a selected business unit
 	Given the current time is '2014-08-01 13:00'
 	And I have a role with
@@ -636,13 +635,23 @@ Scenario: Should display sites of a selected business unit
 	| Name  | Business Unit 2 |
 	And there is a site 'Paris' on business unit 'Business Unit 1'
 	And there is a site 'London' on business unit 'Business Unit 2'
+	And there is a team named 'Red' on site 'Paris'
+	And there is a team named 'Green' on site 'London'
+	And Pierre Baldi has a person period with
+	 | Field      | Value      |
+	 | Team       | Red |
+	 | Start Date | 2014-01-21 |
+	And Ashley Andeen has a person period with
+	 | Field      | Value       |
+	 | Team       | Green |
+	 | Start Date | 2014-01-21  |
 	When I view Real time adherence overview
-	And I select business unit 'Business Unit 1'
+	And I choose business unit 'Business Unit 1'
 	Then I should see the site 'Paris'
 
 @OnlyRunIfEnabled('RTA_MonitorMultipleBusinessUnits_28348')
 @ignore
-Scenario: Should be able to see all agents of the team with or without state updates within a specific business unit
+Scenario: Should be able to see all agents state updates of a team within a specific business unit
 	Given  the current time is '2014-01-21 12:30:00'
 	And I have a role with
 	| Field                                  | Value             |
@@ -668,33 +677,7 @@ Scenario: Should be able to see all agents of the team with or without state upd
 	 | Team           | Red          |
 	 | Start Date     | 2014-01-21   |
 	 | External Logon | Pierre Baldi |
-	And there is an external logon named 'Ashley Andeen' with datasource 6
-	And Ashley Andeen has a person period with
-	 | Field          | Value         |
-	 | Team           | Red           |
-	 | Start Date     | 2014-01-21    |
-	 | External Logon | Ashley Andeen |
-	 And John Smith has a person period with
-	 | Field      | Value      |
-	 | Team       | Red        |
-	 | Start Date | 2014-01-21 |
 	And Pierre Baldi has a shift with
-	| Field                    | Value            |
-	| Start time               | 2014-01-21 12:00 |
-	| End time                 | 2014-01-21 13:00 |
-	| Activity                 | Phone            |
-	| Next activity            | Lunch            |
-	| Next activity start time | 2014-01-21 13:00 |
-	| Next activity end time   | 2014-01-21 13:30 |
-	And Ashley Andeen has a shift with
-	| Field                    | Value            |
-	| Start time               | 2014-01-21 12:00 |
-	| End time                 | 2014-01-21 13:00 |
-	| Activity                 | Phone            |
-	| Next activity            | Lunch            |
-	| Next activity start time | 2014-01-21 13:00 |
-	| Next activity end time   | 2014-01-21 13:30 |
-	And John Smith has a shift with
 	| Field                    | Value            |
 	| Start time               | 2014-01-21 12:00 |
 	| End time                 | 2014-01-21 13:00 |
@@ -716,10 +699,13 @@ Scenario: Should be able to see all agents of the team with or without state upd
 	| Alarm Color     | Red          |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
-	When I view real time adherence for team 'Red'
-	And the browser time is '2014-01-21 12:45:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
-	And 'Ashley Andeen' sets his phone state to 'Ready' on datasource 6
+	When I view Real time adherence overview
+	And I select business unit 'Business Unit 1'
+	And I click the site checkbox for 'Paris'
+	And I click 'open'
+	And I click the team checkbox for 'Red'
+	And I click 'open'
 	Then I should see real time agent details for 'Pierre Baldi'
 		| Name                     |                  |
 		| Name                     | Pierre Baldi     |
@@ -730,14 +716,3 @@ Scenario: Should be able to see all agents of the team with or without state upd
 		| Alarm                    | Not adhering     |
 		| Alarm Time               | 0:15:00          |
 		| Alarm Color              | Red              |
-	And I should see real time agent details for 'Ashley Andeen'
-		| Field                    | Value            |
-		| Name                     | Ashley Andeen    |
-		| State                    | Ready            |
-		| Activity                 | Phone            |
-		| Next activity            | Lunch            |
-		| Next activity start time | 2014-01-21 13:00 |
-		| Alarm                    | Adhering         |
-		| Alarm Time               | 0:15:00          |
-		| Alarm Color              | Green            |
-	And I should see real time agent name for 'John Smith'

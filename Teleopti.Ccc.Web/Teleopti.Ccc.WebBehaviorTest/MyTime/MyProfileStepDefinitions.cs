@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -105,15 +106,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see US date format"), SetCulture("en-US")]
 		public void ThenIShouldSeeUSDateFormat()
 		{
-			TryGotoTeamSchedule();
-			Browser.Interactions.AssertInputValueUsingJQuery(".navbar-nav input.text-center.form-control", DateOnlyForBehaviorTests.TestToday.Date.ToShortDateString());
+			var date = new DateTime(2014, 5, 2);
+			TryGotoTeamSchedule(date);
+			Browser.Interactions.AssertInputValueUsingJQuery(".navbar-nav input.text-center.form-control", date.ToShortDateString());
 		}
 
-		private void TryGotoTeamSchedule()
+		private void TryGotoTeamSchedule(DateTime date)
 		{
 			//for some unsure reason, it will random failed when go to TeamSchedule page one time, so here try twice
-			Navigation.GotoTeamSchedule();
-			Navigation.GotoTeamSchedule();
+			Navigation.GotoTeamSchedule(date);
+			Navigation.GotoTeamSchedule(date);
 		}
 
 

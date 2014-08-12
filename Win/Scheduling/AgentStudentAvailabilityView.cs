@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public partial class AgentStudentAvailabilityView : BaseRibbonForm, IAgentStudentAvailabilityView
+	public partial class AgentStudentAvailabilityView : BaseDialogForm, IAgentStudentAvailabilityView
 	{
 		private readonly AgentStudentAvailabilityPresenter _presenter;
 		private readonly IAgentStudentAvailabilityDayCreator _dayCreator;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (checkBoxAdvNextDay.Checked && endTime.HasValue)
 				endTime = endTime.Value.Add(TimeSpan.FromDays(1));
 
-            if (!validateTimes()) return;
+			if (!validateTimes()) return;
 
 			var commandToExecute = _presenter.CommandToExecute(startTime, endTime, _dayCreator);
 			if (commandToExecute != null)
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerFromTextChanged(object sender, EventArgs e)
 		{
 			if (!string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerFrom)) ||
-			    !string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerTo)))
+				!string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerTo)))
 			{
 				clearTimeErrorMessages();
 				validateTimes();
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerToTextChanged(object sender, EventArgs e)
 		{
 			if (!string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerFrom)) ||
-			    !string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerTo)))
+				!string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerTo)))
 			{
 				clearTimeErrorMessages();
 				validateTimes();
