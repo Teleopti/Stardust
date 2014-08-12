@@ -12209,10 +12209,6 @@ Reduce the complexity to use these shifts.</value>
     <value>You got new badges!</value>
     <comment>Agent badge notification content</comment>
   </data>
-  <data name="CalculationTime" xml:space="preserve">
-    <value>Badge calculation time:</value>
-    <comment>Label in agent badge threshold setting</comment>
-  </data>
   <data name="FileProperCase" xml:space="preserve">
     <value>File</value>
     <comment>If not using stupid FILE style</comment>

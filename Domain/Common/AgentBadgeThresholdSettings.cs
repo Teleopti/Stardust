@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.Common
 	public class AgentBadgeThresholdSettings : VersionedAggregateRootWithBusinessUnit, IAgentBadgeThresholdSettings
 	{
 		private bool _enableBadge;
-		private TimeSpan _calculationTime;
 		private int _answeredCallsThreshold;
 		private TimeSpan _aHTThreshold;
 		private Percent _adherenceThreshold;
@@ -18,12 +17,6 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get { return _enableBadge; }
 			set { _enableBadge = value; }
-		}
-
-		public virtual TimeSpan CalculationTime
-		{
-			get { return _calculationTime; }
-			set { _calculationTime = value; }
 		}
 
 		public virtual int AnsweredCallsThreshold

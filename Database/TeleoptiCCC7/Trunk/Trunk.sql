@@ -10,3 +10,8 @@ GO
 ALTER TABLE [dbo].[AgentBadge] ALTER COLUMN [LastCalculatedDate] [datetime] NOT NULL
 GO
 
+IF EXISTS(SELECT * FROM sys.columns WHERE [name] = N'CalculationTime' AND [object_id] = OBJECT_ID(N'AgentBadgeThresholdSettings'))
+BEGIN
+    ALTER TABLE [dbo].[AgentBadgeThresholdSettings] DROP COLUMN [CalculationTime]
+END
+GO
