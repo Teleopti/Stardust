@@ -176,6 +176,21 @@
 				vm.filter("'Out of adherence'");
 				assert.equals(vm.filteredAgents().length, 1);
 				assert.equals(vm.filteredAgents()[0].Alarm(), "Out of adherence");
+			},
+			"should only display agent that does not mach when negating filter word with multiple words": function () {
+				var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
+					agent2 = { PersonId: "guid2", Name: "Glen", TimeZoneOffsetMinutes: 0 },
+					agent3 = { PersonId: "guid3", Name: "Arne", TimeZoneOffsetMinutes: 0 },
+					agent1State = { PersonId: "guid1", Alarm: "Positive" },
+					agent2State = { PersonId: "guid2", Alarm: "Positive" },
+					agent3State = { PersonId: "guid3", Alarm: "In adherence" };
+
+				var vm = viewModel();
+				vm.fillAgents([agent1, agent2, agent3]);
+				vm.fillAgentsStates([agent1State, agent2State, agent3State]);
+				vm.filter("!Glen Positive");
+				assert.equals(vm.filteredAgents().length, 1);
+				assert.equals(vm.filteredAgents()[0].Name, "Kurt");
 			}
 		});
 	};
