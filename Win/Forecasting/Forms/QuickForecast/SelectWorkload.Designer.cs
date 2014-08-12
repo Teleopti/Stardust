@@ -53,9 +53,11 @@
 			this.treeViewSkills.BackColor = System.Drawing.Color.White;
 			this.treeViewSkills.BeforeTouchSize = new System.Drawing.Size(410, 282);
 			this.treeViewSkills.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
+			this.treeViewSkills.BorderColor = System.Drawing.Color.Transparent;
 			this.treeViewSkills.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.treeViewSkills.CanSelectDisabledNode = false;
 			this.treeViewSkills.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeViewSkills.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			// 
 			// 
 			// 
@@ -66,8 +68,9 @@
 			this.treeViewSkills.HelpTextControl.TabIndex = 0;
 			this.treeViewSkills.HelpTextControl.Text = "help text";
 			this.treeViewSkills.InteractiveCheckBoxes = true;
+			this.treeViewSkills.ItemHeight = 23;
 			this.treeViewSkills.Location = new System.Drawing.Point(3, 3);
-			this.treeViewSkills.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.treeViewSkills.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.treeViewSkills.Name = "treeViewSkills";
 			this.treeViewSkills.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
 			this.treeViewSkills.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;

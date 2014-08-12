@@ -93,7 +93,6 @@
 			// 
 			this.TargetFromTo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.TargetFromTo.EnableNullDates = true;
-			this.TargetFromTo.Font = new System.Drawing.Font("Segoe UI", 8F);
 			this.TargetFromTo.Location = new System.Drawing.Point(3, 6);
 			this.TargetFromTo.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
 			this.TargetFromTo.Name = "TargetFromTo";
@@ -116,14 +115,14 @@
 			// 
 			// checkBoxUseDayOfMonth
 			// 
-			this.checkBoxUseDayOfMonth.BeforeTouchSize = new System.Drawing.Size(190, 24);
+			this.checkBoxUseDayOfMonth.BeforeTouchSize = new System.Drawing.Size(531, 24);
 			this.tableLayoutPanel1.SetColumnSpan(this.checkBoxUseDayOfMonth, 3);
 			this.checkBoxUseDayOfMonth.DrawFocusRectangle = false;
 			this.checkBoxUseDayOfMonth.Location = new System.Drawing.Point(3, 73);
 			this.checkBoxUseDayOfMonth.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseDayOfMonth.Name = "checkBoxUseDayOfMonth";
 			this.checkBoxUseDayOfMonth.Padding = new System.Windows.Forms.Padding(7, 5, 0, 0);
-			this.checkBoxUseDayOfMonth.Size = new System.Drawing.Size(190, 24);
+			this.checkBoxUseDayOfMonth.Size = new System.Drawing.Size(531, 24);
 			this.checkBoxUseDayOfMonth.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxUseDayOfMonth.TabIndex = 5;
 			this.checkBoxUseDayOfMonth.Text = "xxUseDayOfMonthSeasonality";

@@ -100,5 +100,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 				return "Help";
 			}
 		}
+
     }
 }

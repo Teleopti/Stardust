@@ -57,7 +57,6 @@
 			// 
 			this.HistoricalFromTo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.HistoricalFromTo.EnableNullDates = true;
-			this.HistoricalFromTo.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.HistoricalFromTo.Location = new System.Drawing.Point(3, 6);
 			this.HistoricalFromTo.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
 			this.HistoricalFromTo.Name = "HistoricalFromTo";

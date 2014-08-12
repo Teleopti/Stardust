@@ -1,33 +1,33 @@
 ﻿namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 {
 	partial class SelectHistoricalDateRangeForTemplates
-    {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	{
+		/// <summary> 
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary> 
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Component Designer generated code
+		#region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary> 
+		/// Required method for Designer support - do not modify 
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectHistoricalDateRangeForTemplates));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.comboBoxSmoothing = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
@@ -82,7 +82,6 @@
 			// 
 			this.TemplatesDatesFromTo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.TemplatesDatesFromTo.EnableNullDates = true;
-			this.TemplatesDatesFromTo.Font = new System.Drawing.Font("Segoe UI", 8F);
 			this.TemplatesDatesFromTo.Location = new System.Drawing.Point(3, 6);
 			this.TemplatesDatesFromTo.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
 			this.TemplatesDatesFromTo.Name = "TemplatesDatesFromTo";
@@ -105,14 +104,14 @@
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxSmoothing)).EndInit();
 			this.ResumeLayout(false);
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        private Reporting.ReportDateFromToSelector TemplatesDatesFromTo;
+		private Reporting.ReportDateFromToSelector TemplatesDatesFromTo;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label label2;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv  comboBoxSmoothing;
 
-    }
+	}
 }
