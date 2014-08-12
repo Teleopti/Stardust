@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Markup;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		class SmartClientShellApplication : SmartClientApplication<WorkItem, SmartClientShellForm>
     {
+
 	    /// <summary>
 	    /// Shell application entry point.
 	    /// </summary>
@@ -67,16 +69,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			    typeof (FrameworkElement),
 			    new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
+			Splash splash = new Splash();
+			splash.Show();
+		    var splashPosition = new Point(splash.Left + 150, splash.Top + 150);
+
 		    IContainer container = configureContainer();
 #if (!DEBUG)
 		    //NHibernateProfiler.Initialize();
 		    SetReleaseMode();
 		    var applicationStarter = container.Resolve<ApplicationStartup>();
-		    if (applicationStarter.LogOn())
+		    if (applicationStarter.LogOn(new System.Drawing.Point((int)splashPosition.X, (int)splashPosition.Y)))
 		    {
 			    try
 			    {
+			killNotNeededSessionFactories();
 						populateFeatureToggleFlags(container);
+			splash.Close();
+				splash.Dispose();
 				    applicationStarter.LoadShellApplication();
 			    }
 			    catch (Exception exception)
@@ -84,16 +93,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				    HandleException(exception);
 			    }
 		    }
+			 else
+            {
+				splash.Close();
+				splash.Dispose();
+            }
 #endif
 #if (DEBUG)
-				var applicationStarter = container.Resolve<ApplicationStartup>();
-            if (applicationStarter.LogOn())
+			var applicationStarter = container.Resolve<ApplicationStartup>();
+				if (applicationStarter.LogOn(new System.Drawing.Point((int)splashPosition.X, (int)splashPosition.Y)))
             {
                 killNotNeededSessionFactories();
 								populateFeatureToggleFlags(container);
+				splash.Close();
+				splash.Dispose();
                 applicationStarter.LoadShellApplication();
             }
+            else
+            {
+				splash.Close();
+				splash.Dispose();
+            }
 #endif
+			
 	    }
 
 			private static void populateFeatureToggleFlags(IContainer container)

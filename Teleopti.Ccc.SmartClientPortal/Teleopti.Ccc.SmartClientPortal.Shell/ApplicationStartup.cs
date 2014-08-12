@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Main;
@@ -32,9 +33,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         /// </summary>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
-        public bool LogOn()
+        public bool LogOn(Point startPosition)
         {
-            return _logonPresenter.Start();
+            return _logonPresenter.Start(startPosition);
             //_logOnScreen.ShowDialog();
             //if (_logOnScreen.IsDisposed)
             //    return false;

@@ -28,7 +28,7 @@
     <AssemblyOriginatorKeyFile>..\..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <ApplicationIcon>TeleoptiCCCv7.ico</ApplicationIcon>
+    <ApplicationIcon>WFM-Circle-1.ico</ApplicationIcon>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -283,6 +283,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Splash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Splash.Designer.cs">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </Compile>
     <Compile Include="StartupModule.cs" />
     <EmbeddedResource Include="Controls\ModulePanelItem.resx">
       <DependentUpon>ModulePanelItem.cs</DependentUpon>
@@ -315,11 +321,15 @@
     <Compile Include="SmartClientPortal.designer.cs">
       <DependentUpon>SmartClientPortal.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Splash.resx">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
       <Link>CodeAnalysisDictionary.xml</Link>
     </CodeAnalysisDictionary>
+    <Content Include="WFM-Circle-1.ico" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
