@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             {
                 WorkSkillSplitter.Panel2Collapsed = false;
                 WorkSkillSplitter.IsSplitterFixed = false;
-                WorkSkillSplitter.Style = Style.Office2007Blue;
+                WorkSkillSplitter.Style = Style.Default;
             }
             else
             {
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             {
                 MainSplitter.Panel1Collapsed = false;
                 MainSplitter.IsSplitterFixed = false;
-                MainSplitter.Style = Style.Office2007Blue;
+                MainSplitter.Style = Style.Default;
             }
             else
             {
