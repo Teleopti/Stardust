@@ -837,6 +837,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\moveactivityform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\filter.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agent.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agentstate.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\view.js" />

@@ -1,13 +1,13 @@
 ﻿define(['buster', 'views/realtimeadherenceagents/vm'], function (buster, viewModel) {
 	return function () {
-		
+
 		buster.testCase("real time adherence agents viewmodel", {
-			"should have no agents if none filled": function () {
+			"should have no agents if none filled": function() {
 				var vm = viewModel();
 				assert.equals(vm.agentStates(), []);
 			},
-			
-			"should fill agents info": function () {
+
+			"should fill agents info": function() {
 				var agent = { PersonId: "guid", Name: "Bill", SiteId: "gui1", SiteName: "site", TeamId: "guid2", TeamName: "team", TimeZoneOffsetMinutes: -600 };
 				var vm = viewModel();
 				vm.fillAgents([agent]);
@@ -46,11 +46,13 @@
 				};
 
 				var vm = viewModel();
-				vm.fillAgents([{ PersonId: "guid1", Name: "Bill", SiteId: "gui1", SiteName: "site", TeamId: "guid2", TeamName: "team", TimeZoneOffsetMinutes: -600 },
-					{ PersonId: "guid2", Name: "John", SiteId: "gui1", SiteName: "site", TeamId: "guid2", TeamName: "team", TimeZoneOffsetMinutes: -600 }]);
+				vm.fillAgents([
+					{ PersonId: "guid1", Name: "Bill", SiteId: "gui1", SiteName: "site", TeamId: "guid2", TeamName: "team", TimeZoneOffsetMinutes: -600 },
+					{ PersonId: "guid2", Name: "John", SiteId: "gui1", SiteName: "site", TeamId: "guid2", TeamName: "team", TimeZoneOffsetMinutes: -600 }
+				]);
 				vm.fillAgentsStates([state1, state2]);
 
-				var hexToRgb = function (hex) {
+				var hexToRgb = function(hex) {
 
 					hex = hex ? hex.substring(1) : 'ffffff';
 					var bigint = parseInt(hex, 16);
@@ -80,7 +82,7 @@
 				assert.equals(vm.agentStates()[1].AlarmStart(), moment.utc(state2.AlarmStart).add(-600, 'minutes').format());
 			},
 
-			"should order by agent name" : function() {
+			"should order by agent name": function() {
 				var state1 = {
 					PersonId: 'guid1',
 					State: 'Ready',
@@ -106,12 +108,12 @@
 				var agent1 = { PersonId: "guid1", Name: "John", SiteId: "gui1", SiteName: "site", TeamId: "guid2", TeamName: "team", TimeZoneOffsetMinutes: -600 };
 				var agent2 = { PersonId: "guid2", Name: "Bill", SiteId: "gui1", SiteName: "site", TeamId: "guid2", TeamName: "team", TimeZoneOffsetMinutes: -600 };
 				var vm = viewModel();
-				vm.fillAgents([agent1,agent2]);
+				vm.fillAgents([agent1, agent2]);
 				vm.fillAgentsStates([state1, state2]);
 				assert.equals(vm.agentStates()[0].Name, agent2.Name);
 				assert.equals(vm.agentStates()[1].Name, agent1.Name);
 			},
-			"should display alarmtime based on when agent entered current alarm": function () {
+			"should display alarmtime based on when agent entered current alarm": function() {
 				var state = {
 					PersonId: 'guid1',
 					StateStart: moment().add(-10, 'seconds'),
@@ -123,7 +125,7 @@
 				vm.fillAgentsStates([state]);
 				assert.equals(vm.agentStates()[0].AlarmTime(), "0:00:10");
 			},
-			"should not display alarm or alarm color untill alarm start has passed": function () {
+			"should not display alarm or alarm color untill alarm start has passed": function() {
 				var state = {
 					PersonId: 'guid1',
 					Alarm: 'Adhering',
@@ -136,18 +138,44 @@
 				vm.fillAgentsStates([state]);
 				assert.equals(vm.agentStates()[0].Alarm(), undefined);
 			},
-			"should filter agents": function () {
+			"should only display agents that matches filter": function() {
 				var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
 					agent2 = { PersonId: "guid2", Name: "Glen", TimeZoneOffsetMinutes: 0 },
 					agent1State = { PersonId: "guid1" },
 					agent2State = { PersonId: "guid2" };
-				
+
 				var vm = viewModel();
 				vm.fillAgents([agent1, agent2]);
 				vm.fillAgentsStates([agent1State, agent2State]);
 				vm.filter("Kurt");
 				assert.equals(vm.filteredAgents().length, 1);
 				assert.equals(vm.filteredAgents()[0].Name, "Kurt");
+			},
+			"should only display agent that matches tripple filter criteria": function() {
+				var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
+					agent2 = { PersonId: "guid2", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
+					agent1State = { PersonId: "guid1", Activity: "Lunch", Alarm: "Adhering" },
+					agent2State = { PersonId: "guid2", Activity: "Lunch", Alarm: "Positive" };
+
+				var vm = viewModel();
+				vm.fillAgents([agent1, agent2]);
+				vm.fillAgentsStates([agent1State, agent2State]);
+				vm.filter("Kurt Lunch Adhering");
+				assert.equals(vm.filteredAgents().length, 1);
+				assert.equals(vm.filteredAgents()[0].Alarm(), "Adhering");
+			},
+			"should only display agent that maches two word filter criteria": function() {
+				var agent1 = { PersonId: "guid1", Name: "Out of", TimeZoneOffsetMinutes: 0 },
+					agent2 = { PersonId: "guid2", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
+					agent1State = { PersonId: "guid1", Alarm: "In adherence" },
+					agent2State = { PersonId: "guid2", Alarm: "Out of adherence" };
+
+				var vm = viewModel();
+				vm.fillAgents([agent1, agent2]);
+				vm.fillAgentsStates([agent1State, agent2State]);
+				vm.filter("'Out of adherence'");
+				assert.equals(vm.filteredAgents().length, 1);
+				assert.equals(vm.filteredAgents()[0].Alarm(), "Out of adherence");
 			}
 		});
 	};

@@ -2,11 +2,13 @@
 		'knockout',
 		'views/realtimeadherenceagents/agentstate',
 		'views/realtimeadherenceagents/agent',
+		'views/realtimeadherenceagents/filter',
 		'resources'
 ],
 	function (ko,
 		agentstate,
 		agent,
+		filterService,
 		resources) {
 	return function () {
 
@@ -27,33 +29,20 @@
 				return that.agentStates();
 			} else {
 				return ko.utils.arrayFilter(that.agentStates(), function (item) {
-					return match(
+					return filterService().match(
 					[
 						item.Alarm(),
 						item.Name,
 						item.State(),
 						item.Activity(),
+						item.NextActivity(),
 						item.TeamName
 					], filter);
 
 				});
 			}
 		});
-
-		var match = function(items, filter) {
-			for (var i = 0; i < items.length; i++) {
-				var item = items[i];
-				if (!item) continue;
-				if (stringContains(item, filter))
-					return true;
-			}
-			return false;
-		};
-
-		var stringContains = function (item, filter) {
-			return item.toUpperCase().indexOf(filter.toUpperCase()) > -1;
-		}
-
+		
 		that.fillAgents = function (data) {
 			for (var i = 0; i < data.length; i++) {
 				var a = agent();
