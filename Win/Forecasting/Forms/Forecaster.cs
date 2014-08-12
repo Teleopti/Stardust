@@ -750,7 +750,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					    Height = 80,
 					    Appearance = ButtonAppearance.Metro,
 					    UseVisualStyle = true,
-					    Tag = scenario
+					    Tag = scenario,
+						 BackColor = Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))))
 				    };
 
 				    button.Font.ChangeToBold();
@@ -950,7 +951,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
             SetColors();
             RibbonTemplatePanelsClose();
-
+	        ribbonControlAdv1.MenuButtonText = UserTexts.Resources.File;
             Application.DoEvents();
 
             WindowState = FormWindowState.Maximized;

@@ -90,10 +90,6 @@
 			// 
 			this.splitContainerAdvContent.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
 			this.splitContainerAdvContent.Panel1.Controls.Add(this.listBoxDateProviders);
-			// 
-			// splitContainerAdvContent.Panel2
-			// 
-			this.splitContainerAdvContent.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.None, System.Drawing.Color.White, System.Drawing.Color.White);
 			this.splitContainerAdvContent.Size = new System.Drawing.Size(598, 245);
 			this.splitContainerAdvContent.SplitterDistance = 152;
 			this.splitContainerAdvContent.SplitterWidth = 1;
@@ -186,7 +182,6 @@
 			// 
 			// gradientPanel1
 			// 
-			this.gradientPanel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.None, System.Drawing.Color.White, System.Drawing.Color.White);
 			this.gradientPanel1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanel1.Controls.Add(this.tableLayoutPanel1);
 			this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -198,7 +193,7 @@
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.BackColor = System.Drawing.Color.Transparent;
+			this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel1.ColumnCount = 3;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
