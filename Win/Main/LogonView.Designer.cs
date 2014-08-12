@@ -29,40 +29,19 @@ namespace Teleopti.Ccc.Win.Main
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogonView));
-			this.autoLabel1 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.pnlContent = new System.Windows.Forms.Panel();
-			this.autoLabel2 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabel3 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.elementHost2 = new System.Windows.Forms.Integration.ElementHost();
 			this.progress1 = new Teleopti.Ccc.WpfControls.Controls.Progress();
 			this.SuspendLayout();
 			// 
-			// autoLabel1
-			// 
-			this.autoLabel1.Font = new System.Drawing.Font("Segoe UI", 26F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.autoLabel1.ForeColor = System.Drawing.Color.White;
-			this.autoLabel1.Location = new System.Drawing.Point(19, 8);
-			this.autoLabel1.Name = "autoLabel1";
-			this.autoLabel1.Size = new System.Drawing.Size(253, 47);
-			this.autoLabel1.TabIndex = 0;
-			this.autoLabel1.Text = "Teleopti WFM";
-			// 
 			// pnlContent
 			// 
-			this.pnlContent.Location = new System.Drawing.Point(4, 75);
+			this.pnlContent.Location = new System.Drawing.Point(4, 4);
 			this.pnlContent.Name = "pnlContent";
-			this.pnlContent.Size = new System.Drawing.Size(475, 218);
+			this.pnlContent.Size = new System.Drawing.Size(475, 249);
 			this.pnlContent.TabIndex = 1;
 			this.pnlContent.Visible = false;
-			// 
-			// autoLabel2
-			// 
-			this.autoLabel2.ForeColor = System.Drawing.Color.White;
-			this.autoLabel2.Location = new System.Drawing.Point(30, 53);
-			this.autoLabel2.Name = "autoLabel2";
-			this.autoLabel2.Size = new System.Drawing.Size(77, 19);
-			this.autoLabel2.TabIndex = 2;
-			this.autoLabel2.Text = "autoLabel2";
 			// 
 			// autoLabel3
 			// 
@@ -91,22 +70,24 @@ namespace Teleopti.Ccc.Win.Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.BackColor = System.Drawing.Color.White;
 			this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.ClientSize = new System.Drawing.Size(483, 297);
+			this.ClientSize = new System.Drawing.Size(483, 258);
 			this.Controls.Add(this.pnlContent);
 			this.Controls.Add(this.autoLabel3);
-			this.Controls.Add(this.autoLabel2);
-			this.Controls.Add(this.autoLabel1);
 			this.Controls.Add(this.elementHost2);
 			this.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "LogonView";
 			this.Padding = new System.Windows.Forms.Padding(1);
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "LogonView";
+			this.ShowIcon = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+			this.Text = "Teleopti WFM";
+			this.Load += new System.EventHandler(this.LogonView_Load);
 			this.Shown += new System.EventHandler(this.logonViewShown);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -115,9 +96,7 @@ namespace Teleopti.Ccc.Win.Main
 
 		#endregion
 
-		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel1;
 		private System.Windows.Forms.Panel pnlContent;
-		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel2;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel3;
 		private System.Windows.Forms.Integration.ElementHost elementHost2;
 		private WpfControls.Controls.Progress progress1;
