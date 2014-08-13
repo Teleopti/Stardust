@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
 			this.buttonAdvApply = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -45,18 +46,29 @@
 			// ribbonControlAdv1
 			// 
 			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ribbonControlAdv1.HideMenuButtonToolTip = false;
 			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
+			this.ribbonControlAdv1.MenuButtonEnabled = true;
+			this.ribbonControlAdv1.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.MenuButtonText = "";
 			this.ribbonControlAdv1.MenuButtonVisible = false;
+			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
+			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
+			this.ribbonControlAdv1.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
 			// 
 			// ribbonControlAdv1.OfficeMenu
 			// 
 			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
 			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
+			this.ribbonControlAdv1.OverFlowButtonToolTip = "Show DropDown";
+			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.ribbonControlAdv1.QuickPanelVisible = false;
+			this.ribbonControlAdv1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.ribbonControlAdv1.SelectedTab = null;
-			this.ribbonControlAdv1.ShowMinimizeButton = false;
+			this.ribbonControlAdv1.Show2010CustomizeQuickItemDialog = false;
+			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = true;
 			this.ribbonControlAdv1.Size = new System.Drawing.Size(581, 33);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "xxStartmenu";
 			this.ribbonControlAdv1.TabIndex = 0;
@@ -65,7 +77,11 @@
 			// buttonAdvApply
 			// 
 			this.buttonAdvApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonAdvApply.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvApply.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvApply.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvApply.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonAdvApply.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvApply.IsBackStageButton = false;
 			this.buttonAdvApply.Location = new System.Drawing.Point(496, 393);
 			this.buttonAdvApply.Margin = new System.Windows.Forms.Padding(3, 3, 12, 6);
 			this.buttonAdvApply.Name = "buttonAdvApply";
@@ -80,7 +96,11 @@
 			// buttonAdvCancel
 			// 
 			this.buttonAdvCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvCancel.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonAdvCancel.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvCancel.IsBackStageButton = false;
 			this.buttonAdvCancel.Location = new System.Drawing.Point(409, 393);
 			this.buttonAdvCancel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 6);
 			this.buttonAdvCancel.Name = "buttonAdvCancel";
@@ -95,7 +115,11 @@
 			// buttonBrowse
 			// 
 			this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonBrowse.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonBrowse.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonBrowse.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonBrowse.ForeColor = System.Drawing.Color.White;
+			this.buttonBrowse.IsBackStageButton = false;
 			this.buttonBrowse.Location = new System.Drawing.Point(496, 358);
 			this.buttonBrowse.Margin = new System.Windows.Forms.Padding(3, 3, 12, 6);
 			this.buttonBrowse.Name = "buttonBrowse";
@@ -113,13 +137,16 @@
 			// 
 			// textBoxExtLicenseFilePath
 			// 
+			this.textBoxExtLicenseFilePath.BeforeTouchSize = new System.Drawing.Size(481, 22);
 			this.textBoxExtLicenseFilePath.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxExtLicenseFilePath.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.textBoxExtLicenseFilePath.Location = new System.Drawing.Point(3, 358);
 			this.textBoxExtLicenseFilePath.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+			this.textBoxExtLicenseFilePath.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtLicenseFilePath.Name = "textBoxExtLicenseFilePath";
 			this.textBoxExtLicenseFilePath.OverflowIndicatorToolTipText = null;
-			this.textBoxExtLicenseFilePath.Size = new System.Drawing.Size(481, 20);
+			this.textBoxExtLicenseFilePath.Size = new System.Drawing.Size(481, 22);
+			this.textBoxExtLicenseFilePath.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.textBoxExtLicenseFilePath.TabIndex = 0;
 			// 
 			// labelExplanation
@@ -175,6 +202,7 @@
 			this.ClientSize = new System.Drawing.Size(583, 422);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Controls.Add(this.ribbonControlAdv1);
+			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(207, 243);
