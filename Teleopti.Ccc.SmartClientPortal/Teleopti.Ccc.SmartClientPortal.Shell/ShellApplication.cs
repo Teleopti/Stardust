@@ -82,8 +82,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			killNotNeededSessionFactories();
 						populateFeatureToggleFlags(container);
-			splash.Close();
-				splash.Dispose();
+
 				    applicationStarter.LoadShellApplication();
 			    }
 			    catch (Exception exception)
