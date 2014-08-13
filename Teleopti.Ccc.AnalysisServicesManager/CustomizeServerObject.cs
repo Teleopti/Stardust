@@ -10,16 +10,19 @@ namespace AnalysisServicesManager
 {
 	public class RelationalTable
 	{
-		public string TableName { get; set; }
+		public string DbSchemaName { get; set; }
+		public string DbTableName { get; set; }
+		public string TableType { get; set; }
 		public string CommandText { get; set; }
 		public List<TeleoptiContraints> ListOfConstraints { get; set; }
 	}
 
 	public class TeleoptiContraints
 	{
-		public string ParentColumnName { get; set; }
-		public string ChildColumnName { get; set; }
-		public string ParentTableName { get; set; }
+		public string FkTableName { get; set; }
+		public string FkColumName { get; set; }
+		public string PkTableName { get; set; }
+		public string PkColumName { get; set; }
 	}
 
 	public class ApplyCustom
@@ -46,14 +49,16 @@ namespace AnalysisServicesManager
 			var folderName = argument.FilePath;
 
 			//1) read datasourceview definition file
-			var dateConstraint = new TeleoptiContraints() { ParentColumnName = "date_id", ChildColumnName = "date_id", ParentTableName = "dbo_dim_date" };
-			var acdConstraint = new TeleoptiContraints() { ParentColumnName = "acd_login_id", ChildColumnName = "acd_login_id", ParentTableName = "dbo_dim_acd_login" };
-			var someConstraits = new List<TeleoptiContraints>() { dateConstraint, acdConstraint };
-			var TableDefinitionList = new List<RelationalTable>() { new RelationalTable { TableName = "fact_sales", CommandText = "SELECT * FROM [custom].[fact_sales]", ListOfConstraints = someConstraits } };
-			CreateDataSourceView(TableDefinitionList);
+			//var dateConstraint = new TeleoptiContraints() { ParentColumnName = "date_id", ChildColumnName = "date_id", ParentTableName = "dbo_dim_date" };
+			//var acdConstraint = new TeleoptiContraints() { ParentColumnName = "acd_login_id", ChildColumnName = "acd_login_id", ParentTableName = "dbo_dim_acd_login" };
+			//var someConstraits = new List<TeleoptiContraints>() { dateConstraint, acdConstraint };
+			//var TableDefinitionList = new List<RelationalTable>() { new RelationalTable { TableName = "fact_sales", CommandText = "SELECT * FROM [custom].[fact_sales]", ListOfConstraints = someConstraits } };
+			//CreateDataSourceView(TableDefinitionList);
 
-			TableDefinitionList = new List<RelationalTable>() { new RelationalTable { TableName = "v_fact_calculated_measures", CommandText = "SELECT * FROM [custom].[v_fact_calculated_measures]", ListOfConstraints = someConstraits } };
-			CreateDataSourceView(TableDefinitionList);
+			//TableDefinitionList = new List<RelationalTable>() { new RelationalTable { TableName = "v_fact_calculated_measures", CommandText = "SELECT * FROM [custom].[v_fact_calculated_measures]", ListOfConstraints = someConstraits } };
+			var parser = new ParseDataViewInfoFromXml();
+			var tableDefinitionList = parser.ExtractDataViewInfo(folderName + "\\01 Datasource\\DatasourceViewDefinition.xml");
+			CreateDataSourceView(tableDefinitionList);
 
 			//2) read and deploy measure group file
 			var repository = new Repository(argument);
@@ -86,16 +91,15 @@ namespace AnalysisServicesManager
 				Database targetDb = server.Databases.GetByName(_databaseName);
 				DataSourceView datasourceView = new DataSourceView();
 				var tempDataSourceView = targetDb.DataSourceViews.FindByName(DataSourceViewName);
-				DataTable[] dataTables = adapter.FillSchema(tempDataSourceView.Schema, SchemaType.Mapped, table.TableName);
+				DataTable[] dataTables = adapter.FillSchema(tempDataSourceView.Schema, SchemaType.Mapped, table.DbTableName);
 				DataTable dataTable = dataTables[0];
-				dataTable.ExtendedProperties.Add("TableType", "Table");
-				dataTable.ExtendedProperties.Add("DbSchemaName", "custom");
-				dataTable.ExtendedProperties.Add("DbTableName", table.TableName);
+				dataTable.ExtendedProperties.Add("TableType", table.TableType );
+				dataTable.ExtendedProperties.Add("DbSchemaName", table.DbSchemaName );
+				dataTable.ExtendedProperties.Add("DbTableName", table.DbTableName );
 				dataTable.ExtendedProperties["DataSourceID"] = datasourceView.DataSourceID ;
-				dataTable.ExtendedProperties.Add("FriendlyName", table.TableName);
+				dataTable.ExtendedProperties.Add("FriendlyName", table.DbTableName);
 				foreach(var con in table.ListOfConstraints ){
-
-					AddRelation(tempDataSourceView, table.TableName, con.ChildColumnName, con.ParentTableName, con.ParentColumnName);
+					AddRelation(tempDataSourceView, con.FkTableName , con.FkColumName , con.PkTableName , con.PkColumName );
 				}
 
 
