@@ -1,11 +1,11 @@
 ﻿define([
 		'knockout'
 ],
-	function(ko) {
-		return function() {
+	function (ko) {
+		return function () {
 			var that = {};
 
-			that.match = function(items, filter) {
+			that.match = function (items, filter) {
 				var matchedItems = 0;
 				var filterWords = mapOutFilterWords(filter);
 				if (!filterWords) {
@@ -22,13 +22,7 @@
 						var filterWord = filterWords[wordIter];
 
 						if (shouldNegate(filterWord)) {
-							var filterWordWithoutExlamationMark = filterWord.slice(1);
-							if (shouldMatchExact(filterWordWithoutExlamationMark) &&
-								stringContains(item, removeQuotes(filterWordWithoutExlamationMark))) {
-								return false;
-							}
-
-							if (stringContains(item, filterWord.slice(1))) {
+							if (matchesNegated(item, filterWord)) {
 								return false;
 							}
 						}
@@ -41,19 +35,34 @@
 					}
 
 				}
-				var unNegatedFilterWords = ko.utils.arrayFilter(filterWords, function(word) { return !shouldNegate(word); }).length;
+				var unNegatedFilterWords = ko.utils.arrayFilter(filterWords, function (word) { return !shouldNegate(word); }).length;
 				if (matchedItems === unNegatedFilterWords) {
 					return true;
 				}
 				return false;
 			};
 
-			var mapOutFilterWords = function(rawInput) { return rawInput.match(/([!]*\w+)|(?:[!"']{1,2}(.*?)["'])/g); }
-			var shouldNegate = function(word) { return word.indexOf("!") === 0; }
-			var shouldMatchExact = function (word) { return word.indexOf("'") === 0 || word.indexOf('"') === 0; }
-			var removeQuotes = function(word) { return word.slice(1, word.length - 1); }
+			var mapOutFilterWords = function (rawInput) { return rawInput.match(/([!]*\w+)|(?:[!"']{1,2}(.*?)["'])/g); }
+			var shouldNegate = function (word) { return word.indexOf("!") === 0; }
 
-			var stringContains = function(item, filter) {
+			var matchesNegated = function (item, filterWord) {
+				var filterWordWithoutExlamationMark = filterWord.slice(1);
+
+				if (shouldMatchExact(filterWordWithoutExlamationMark) &&
+					stringContains(item, removeQuotes(filterWordWithoutExlamationMark))) {
+					return true;
+				}
+
+				if (stringContains(item, filterWord.slice(1))) {
+					return true;
+				}
+				return false;
+			}
+
+			var shouldMatchExact = function (word) { return word.indexOf("'") === 0 || word.indexOf('"') === 0; }
+			var removeQuotes = function (word) { return word.slice(1, word.length - 1); }
+
+			var stringContains = function (item, filter) {
 				return item.toUpperCase().indexOf(filter.toUpperCase()) > -1;
 			}
 
