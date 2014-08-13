@@ -9,11 +9,13 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
+using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
 	public class GeneralBusBootStrapper : BusBootStrapper
 	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(GeneralBusBootStrapper));
 		protected override void OnEndStart()
 		{
 			var bus = Container.Resolve<IServiceBus>();
@@ -42,6 +44,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				foreach (var businessUnitId in businessUnitCollection)
 				{
 					bus.Send(new BadgeCalculationInitMessage { Datasource = dataSource.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow});
+					Logger.DebugFormat(
+						"Sending BadgeCalculationInitMessage to Service Bus for Datasource={0} and BusinessUnitId={1}", dataSource.DataSourceName,
+						businessUnitId);
 				}
 			}
 		}

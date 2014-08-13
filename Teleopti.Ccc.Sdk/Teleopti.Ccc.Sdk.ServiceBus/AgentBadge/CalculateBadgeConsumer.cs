@@ -9,6 +9,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
+using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 {
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IAgentBadgeCalculator _calculator;
 		private readonly INow _now;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(CalculateBadgeConsumer));
 
 		public CalculateBadgeConsumer(
 									IServiceBus serviceBus, 
@@ -66,7 +68,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				var setting = _settingsRepository.LoadAll().FirstOrDefault();
 				if (setting == null)
 				{
-					//TODO:error
+					//error happens
+					Logger.Error("Agent badge threshold setting is null before starting badge calculation");
 					return;
 				}
 				var adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
@@ -95,6 +98,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				TimeZoneCode = message.TimeZoneCode,
 				CalculationDate = message.CalculationDate.AddDays(1)
 			});
+			Logger.DebugFormat(
+						"Delay Sending CalculateBadgeMessage to Service Bus for Timezone={0} on next calculation time={1}", message.TimeZoneCode,
+						nextMessageShouldBeProcessed);
 		}
 	}
 }

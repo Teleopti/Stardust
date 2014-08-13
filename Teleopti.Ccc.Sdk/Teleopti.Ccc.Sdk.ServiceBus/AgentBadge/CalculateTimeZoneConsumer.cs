@@ -3,6 +3,7 @@ using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
+using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 {
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	{
 		private readonly IServiceBus _serviceBus;
 		private readonly INow _now;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(CalculateTimeZoneConsumer));
 		//get the date to calculate for the given timezone
 		//send CalculateBadgeMessage to bus for time of next calculation
 		public CalculateTimeZoneConsumer(IServiceBus serviceBus, INow now)
@@ -32,6 +34,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				CalculationDate = yesterdayForGivenTimeZone,
 				TimeZoneCode = message.TimeZoneCode 
 			});
+			Logger.DebugFormat(
+						"Sending CalculateBadgeMessage to Service Bus for Timezone={0} on calculation time={1}", message.TimeZoneCode,
+						yesterdayForGivenTimeZone);
 		}
 	}
 }

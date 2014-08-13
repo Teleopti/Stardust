@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IAgentBadgeSettingsRepository _settingsRepository;
 		private readonly IBusinessUnitRepository _buRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(CalculateTimeZoneConsumer));
 
 		/// <summary>
 		/// get all timezones using businessunitrepository
@@ -36,7 +38,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		public void Consume(BadgeCalculationInitMessage message)
 		{
 			if (_serviceBus == null)
+			{
+				Logger.Error("service bus instance is null for some reason!");
 				return;
+			}
+				
 			IEnumerable<TimeZoneInfo> timeZoneList;
 			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
@@ -44,6 +50,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				if (setting == null || !setting.EnableBadge)
 				{
 					_serviceBus.DelaySend(DateOnly.Today.AddDays(1), message);
+					Logger.DebugFormat(
+						"Feature is diabled. Delay Sending BadgeCalculationInitMessage to Service Bus for BusinessUnitId={0} in DataSource={1} tommorrow", message.BusinessUnitId,
+						message.Datasource);
 					return;
 				}
 
@@ -60,6 +69,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					Timestamp = DateTime.UtcNow,
 					TimeZoneCode = timeZoneInfo.Id
 				});
+				Logger.DebugFormat(
+						"Sending CalculateTimeZoneMessage to Service Bus for Timezone={0} in BusinessUnitId={1}", timeZoneInfo.Id,
+						message.BusinessUnitId);
 			}
 		}
 	}
