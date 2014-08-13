@@ -47,12 +47,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 		    _buttonFilterData = new ButtonAdv
                                     {
 		                                Anchor = AnchorStyles.Top,
-		                                Appearance = ButtonAppearance.Office2007,
+		                                Appearance = ButtonAppearance.Metro,
 		                                Name = "buttonFilterData",
 		                                Size = new Size(141, 22),
                                         Text = UserTexts.Resources.FilterData,
                                         Enabled = false,
-		                                UseVisualStyle = true
+		                                UseVisualStyle = true,
+										BackColor = Color.FromArgb(0,153,255)
 		                            };
 		                            
 			_buttonFilterData.Click += btnFilterData_Click;
