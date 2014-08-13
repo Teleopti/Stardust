@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvApply = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -39,10 +40,14 @@
 			// buttonAdvCancel
 			// 
 			this.buttonAdvCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvCancel.AutoSize = true;
+			this.buttonAdvCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvCancel.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.buttonAdvCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonAdvCancel.Location = new System.Drawing.Point(403, 536);
+			this.buttonAdvCancel.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvCancel.IsBackStageButton = false;
+			this.buttonAdvCancel.Location = new System.Drawing.Point(402, 536);
 			this.buttonAdvCancel.Margin = new System.Windows.Forms.Padding(10);
 			this.buttonAdvCancel.Name = "buttonAdvCancel";
 			this.buttonAdvCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
@@ -55,9 +60,13 @@
 			// buttonAdvApply
 			// 
 			this.buttonAdvApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonAdvApply.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvApply.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvApply.AutoSize = true;
+			this.buttonAdvApply.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvApply.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.buttonAdvApply.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.buttonAdvApply.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvApply.IsBackStageButton = false;
 			this.buttonAdvApply.Location = new System.Drawing.Point(559, 536);
 			this.buttonAdvApply.Margin = new System.Windows.Forms.Padding(10);
 			this.buttonAdvApply.Name = "buttonAdvApply";
@@ -74,7 +83,7 @@
 			this.tableLayoutPanel1.ColumnCount = 3;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70.20649F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.79351F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 155F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 156F));
 			this.tableLayoutPanel1.Controls.Add(this.buttonAdvApply, 2, 2);
 			this.tableLayoutPanel1.Controls.Add(this.buttonAdvCancel, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
@@ -103,8 +112,8 @@
 			// 
 			// textBoxAgreement
 			// 
-			this.tableLayoutPanel1.SetColumnSpan(this.textBoxAgreement, 3);
 			this.textBoxAgreement.BackColor = System.Drawing.SystemColors.Window;
+			this.tableLayoutPanel1.SetColumnSpan(this.textBoxAgreement, 3);
 			this.textBoxAgreement.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.textBoxAgreement.Location = new System.Drawing.Point(3, 45);
 			this.textBoxAgreement.Multiline = true;
