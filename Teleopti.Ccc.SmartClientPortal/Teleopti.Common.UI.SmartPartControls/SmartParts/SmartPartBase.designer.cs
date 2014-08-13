@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Common.UI.SmartPartControls.SmartParts
+﻿using System.Windows.Forms;
+
+namespace Teleopti.Common.UI.SmartPartControls.SmartParts
 {
     partial class SmartPartBase
     {
@@ -36,7 +38,7 @@
 			this.FormTitle = new System.Windows.Forms.ToolStripLabel();
 			this.addSmartPartsToolStripMenuItem = new System.Windows.Forms.ToolStripDropDownButton();
 			this.replaceSmartPartsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.statusStripExSmartPart = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
+			this.statusStripExSmartPart = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabelIcon = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripProgressBarSmartPart = new System.Windows.Forms.ToolStripProgressBar();
 			this.toolStripExHeader.SuspendLayout();
@@ -83,7 +85,7 @@
 			// FormTitle
 			// 
 			this.FormTitle.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-			this.FormTitle.ForeColor = System.Drawing.Color.SteelBlue;
+			this.FormTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.FormTitle.Image = global::Teleopti.Common.UI.SmartPartControls.Properties.Resources.browser;
 			this.FormTitle.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.FormTitle.Margin = new System.Windows.Forms.Padding(5, 1, 0, 2);
@@ -116,22 +118,17 @@
 			// 
 			this.statusStripExSmartPart.AllowItemReorder = true;
 			this.statusStripExSmartPart.BackColor = System.Drawing.Color.White;
-			this.statusStripExSmartPart.BeforeTouchSize = new System.Drawing.Size(401, 22);
-			this.statusStripExSmartPart.Dock = Syncfusion.Windows.Forms.Tools.DockStyleEx.Bottom;
 			this.statusStripExSmartPart.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelIcon});
 			this.statusStripExSmartPart.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-			this.statusStripExSmartPart.Location = new System.Drawing.Point(0, 248);
-			this.statusStripExSmartPart.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.statusStripExSmartPart.Location = new System.Drawing.Point(0, 249);
 			this.statusStripExSmartPart.Name = "statusStripExSmartPart";
-			this.statusStripExSmartPart.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Blue;
-			this.statusStripExSmartPart.RightToLeft = System.Windows.Forms.RightToLeft.No;
+			this.statusStripExSmartPart.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
 			this.statusStripExSmartPart.ShowItemToolTips = true;
-			this.statusStripExSmartPart.Size = new System.Drawing.Size(401, 22);
+			this.statusStripExSmartPart.Size = new System.Drawing.Size(401, 21);
 			this.statusStripExSmartPart.SizingGrip = false;
 			this.statusStripExSmartPart.TabIndex = 16;
 			this.statusStripExSmartPart.Text = "statusStripEx4";
-			this.statusStripExSmartPart.VisualStyle = Syncfusion.Windows.Forms.Tools.StatusStripExStyle.Metro;
 			// 
 			// toolStripStatusLabelIcon
 			// 
@@ -159,6 +156,7 @@
 			this.toolStripExHeader.ResumeLayout(false);
 			this.toolStripExHeader.PerformLayout();
 			this.statusStripExSmartPart.ResumeLayout(false);
+			this.statusStripExSmartPart.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -171,7 +169,7 @@
         private System.Windows.Forms.ToolStripLabel FormTitle;
         private System.Windows.Forms.ToolStripDropDownButton addSmartPartsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem replaceSmartPartsToolStripMenuItem;
-        private Syncfusion.Windows.Forms.Tools.StatusStripEx statusStripExSmartPart;
+        private System.Windows.Forms.StatusStrip statusStripExSmartPart;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBarSmartPart;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelIcon;
 
