@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId)
 		{
 			return _unitOfWork.Session().CreateSQLQuery(
-				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, Start, [End], Model FROM ReadModel.PersonScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
+				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, Start, [End], IsDayOff, Model FROM ReadModel.PersonScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
 			                  .AddScalar("PersonId", NHibernateUtil.Guid)
 			                  .AddScalar("TeamId", NHibernateUtil.Guid)
 			                  .AddScalar("SiteId", NHibernateUtil.Guid)
@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			                  .AddScalar("Date", NHibernateUtil.DateTime)
 			                  .AddScalar("Start", NHibernateUtil.DateTime)
 			                  .AddScalar("End", NHibernateUtil.DateTime)
+									.AddScalar("IsDayOff", NHibernateUtil.Boolean)
 			                  .AddScalar("Model", NHibernateUtil.Custom(typeof (CompressedString)))
 			                  .SetDateTime("startdate", startDate)
 			                  .SetDateTime("enddate", endDate)

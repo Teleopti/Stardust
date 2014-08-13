@@ -15,3 +15,14 @@ BEGIN
     ALTER TABLE [dbo].[AgentBadgeThresholdSettings] DROP COLUMN [CalculationTime]
 END
 GO
+
+
+----------------  
+--Name: Mingdi
+--Date: 2014-08-13  
+--Desc: Add new column for filter dayoff
+----------------  
+
+ALTER TABLE [ReadModel].[PersonScheduleDay] ADD [IsDayOff] [bit] NULL
+
+GO

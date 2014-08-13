@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private void saveReadModel(PersonScheduleDayReadModel model)
 		{
 			_currentUnitOfWork.Session().CreateSQLQuery(
-				"INSERT INTO ReadModel.PersonScheduleDay (PersonId,TeamId,SiteId,BusinessUnitId,Start,[End],BelongsToDate,Model) VALUES (:PersonId,:TeamId,:SiteId,:BusinessUnitId,:Start,:End,:BelongsToDate,:Model)")
+				"INSERT INTO ReadModel.PersonScheduleDay (PersonId,TeamId,SiteId,BusinessUnitId,Start,[End],BelongsToDate,IsDayOff,Model) VALUES (:PersonId,:TeamId,:SiteId,:BusinessUnitId,:Start,:End,:BelongsToDate,:IsDayOff,:Model)")
 			                  .SetGuid("PersonId", model.PersonId)
 			                  .SetGuid("TeamId", model.TeamId)
 			                  .SetGuid("SiteId", model.SiteId)
@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			                  .SetParameter("Start", model.Start)
 			                  .SetParameter("End", model.End)
 			                  .SetDateTime("BelongsToDate", model.BelongsToDate)
+									.SetParameter("IsDayOff", model.IsDayOff)
 			                  .SetParameter("Model", model.Model, NHibernateUtil.Custom(typeof(CompressedString)))
 			                  .ExecuteUpdate();
 		}
