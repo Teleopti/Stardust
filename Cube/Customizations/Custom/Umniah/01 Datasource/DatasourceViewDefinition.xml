@@ -1,44 +1,42 @@
 ﻿<DatasourceViewDefinition>
-    <Tables>
         <DataTable>
             <DbSchemaName>custom</DbSchemaName>
-            <DbTableName>fact_Sales</DbTableName>
-			<TableType>View</TableType>
+            <DbTableName>fact_sales</DbTableName>
+			<TableType>Table</TableType>
 			<CommandText>SELECT * FROM [custom].[fact_sales]</CommandText>
 			<Constraints>
 			<Constraint>
-				<fkTableName>fact_Sales</fkTableName>
-				<fkColumNameName>date_id</fkColumNameName>
+				<fkTableName>fact_sales</fkTableName>
+				<fkColumName>date_id</fkColumName>
 				<pkTableName>dbo_dim_date</pkTableName>
-				<pkColumNameName>date_id</pkColumNameName>
+				<pkColumName>date_id</pkColumName>
 			</Constraint>
 			<Constraint>
-				<fkTableName>fact_Sales</fkTableName>
-				<fkColumNameName>acd_login_id</fkColumNameName>
+				<fkTableName>fact_sales</fkTableName>
+				<fkColumName>acd_login_id</fkColumName>
 				<pkTableName>dbo_dim_acd_login</pkTableName>
-				<pkColumNameName>acd_login_id</pkColumNameName>
+				<pkColumName>acd_login_id</pkColumName>
 			</Constraint>			
 			</Constraints>
         </DataTable>
         <DataTable>
             <DbSchemaName>custom</DbSchemaName>
             <DbTableName>v_fact_calculated_measures</DbTableName>
-			<TableType>View</TableType>
+			<TableType>Table</TableType>
 			<CommandText>SELECT * FROM [custom].[v_fact_calculated_measures]</CommandText>
 			<Constraints>
 			<Constraint>
 				<fkTableName>v_fact_calculated_measures</fkTableName>
-				<fkColumNameName>date_id</fkColumNameName>
+				<fkColumName>date_id</fkColumName>
 				<pkTableName>dbo_dim_date</pkTableName>
-				<pkColumNameName>date_id</pkColumNameName>
+				<pkColumName>date_id</pkColumName>
 			</Constraint>
 			<Constraint>
 				<fkTableName>v_fact_calculated_measures</fkTableName>
-				<fkColumNameName>acd_login_id</fkColumNameName>
+				<fkColumName>acd_login_id</fkColumName>
 				<pkTableName>dbo_dim_acd_login</pkTableName>
-				<pkColumNameName>acd_login_id</pkColumNameName>
+				<pkColumName>acd_login_id</pkColumName>
 			</Constraint>			
 			</Constraints>
         </DataTable>		
-    </Tables>
 </DatasourceViewDefinition>
