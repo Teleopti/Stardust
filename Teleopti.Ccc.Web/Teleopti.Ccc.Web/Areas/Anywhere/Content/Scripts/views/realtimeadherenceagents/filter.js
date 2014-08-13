@@ -13,8 +13,7 @@
 					return false;
 				}
 
-				var andRelationalWords = [],
-					orRelationalWords = [];
+				var orRelationalWords = [];
 				for (var j = 0; j < filterWords.length; j++) {
 					if (filterWords[j].toUpperCase() === "OR") {
 						orRelationalWords.push([filterWords[j - 1], filterWords[j + 1]]);
@@ -22,7 +21,7 @@
 						j++;
 					}
 				}
-				andRelationalWords = filterWords;
+				var andRelationalWords = filterWords;
 
 
 				for (var i = 0; i < items.length; i++) {
@@ -33,14 +32,9 @@
 
 					for (var orWordIterator = 0; orWordIterator < orRelationalWords.length; orWordIterator++) {
 						var wordPair = orRelationalWords[orWordIterator];
-						var firstWordMatch = matchItem(wordPair[0], item);
-						if (firstWordMatch === - 1) {
-							return false;
-						}
-						var secondWordMatch = matchItem(wordPair[1], item);
-						if (secondWordMatch === -1) {
-							return false;
-						}
+						var firstWordMatch = matchItem(wordPair[0], item, orNegateMatching);
+						var secondWordMatch = matchItem(wordPair[1], item, orNegateMatching);
+						
 
 						orRelationalMatches += firstWordMatch;
 						orRelationalMatches += secondWordMatch;
@@ -49,7 +43,7 @@
 					for (var andWordIterator = 0; andWordIterator < andRelationalWords.length; andWordIterator++) {
 						var filterWord = andRelationalWords[andWordIterator];
 
-						var wordMatch = matchItem(filterWord, item);
+						var wordMatch = matchItem(filterWord, item, andNegateMatching);
 						if (wordMatch === -1) {
 							return false;
 						}
@@ -69,11 +63,9 @@
 
 			var mapOutFilterWords = function (rawInput) { return rawInput.match(/([!]*\w+)|(?:[!"']{1,2}(.*?)["'])/g); }
 
-			var matchItem = function (word, item) {
+			var matchItem = function (word, item, negateMatching) {
 				if (shouldNegate(word)) {
-					if (matchesNegated(item, word)) {
-						return -1;
-					}
+					return negateMatching(word, item);
 				}
 				if (shouldMatchExact(word) && item.toUpperCase() === removeQuotes(word).toUpperCase()) {
 					return 1;
@@ -84,6 +76,19 @@
 				return 0;
 			}
 
+			var andNegateMatching = function (word, item) {
+				if (matchesNegated(item, word)) {
+					return -1;
+				}
+				return 0;
+			}
+
+			var orNegateMatching = function (word, item) {
+				if (matchesNegated(item, word)) {
+					return -1;
+				}
+				return 1;
+			}
 			var shouldNegate = function (word) { return word.indexOf("!") === 0; }
 
 			var matchesNegated = function (item, filterWord) {

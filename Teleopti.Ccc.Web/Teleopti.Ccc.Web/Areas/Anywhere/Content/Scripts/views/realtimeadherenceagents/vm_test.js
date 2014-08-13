@@ -144,7 +144,7 @@
 				assert.equals(vm.agentStates()[0].Alarm(), undefined);
 			},
 			"filtering:": {
-				"should only display matching agents": function () {
+				"should only display matching agents": function() {
 					var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
 						agent2 = { PersonId: "guid2", Name: "Glen", TimeZoneOffsetMinutes: 0 },
 						agent1State = { PersonId: "guid1" },
@@ -158,7 +158,7 @@
 					assert.equals(vm.filteredAgents().length, 1);
 					assert.equals(vm.filteredAgents()[0].Name, "Kurt");
 				},
-				"should only display agent matching tripple filter criteria": function () {
+				"should only display agent matching tripple filter criteria": function() {
 					var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
 						agent2 = { PersonId: "guid2", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
 						agent1State = { PersonId: "guid1", Activity: "Lunch", Alarm: "Adhering" },
@@ -172,7 +172,7 @@
 					assert.equals(vm.filteredAgents().length, 1);
 					assert.equals(vm.filteredAgents()[0].Alarm(), "Adhering");
 				},
-				"should only display agent matching two word filter criteria": function () {
+				"should only display agent matching two word filter criteria": function() {
 					var agent1 = { PersonId: "guid1", Name: "Out of", TimeZoneOffsetMinutes: 0 },
 						agent2 = { PersonId: "guid2", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
 						agent1State = { PersonId: "guid1", Alarm: "In adherence" },
@@ -186,7 +186,7 @@
 					assert.equals(vm.filteredAgents().length, 1);
 					assert.equals(vm.filteredAgents()[0].Alarm(), "Out of adherence");
 				},
-				"should only display agent not matching when negating filter word with multiple words": function () {
+				"should only display agent not matching when negating filter word with multiple words": function() {
 					var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
 						agent2 = { PersonId: "guid2", Name: "Glen", TimeZoneOffsetMinutes: 0 },
 						agent3 = { PersonId: "guid3", Name: "Arne", TimeZoneOffsetMinutes: 0 },
@@ -202,7 +202,7 @@
 					assert.equals(vm.filteredAgents().length, 1);
 					assert.equals(vm.filteredAgents()[0].Name, "Kurt");
 				},
-				"should only display agent that exactly matches when using quotes": function () {
+				"should only display agent that exactly matches when using quotes": function() {
 					var agent1 = { PersonId: "guid1", Name: "Glen", TimeZoneOffsetMinutes: 0 },
 						agent2 = { PersonId: "guid2", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
 						agent1State = { PersonId: "guid1", State: "Ready" },
@@ -216,7 +216,7 @@
 					assert.equals(vm.filteredAgents().length, 1);
 					assert.equals(vm.filteredAgents()[0].State(), "Ready");
 				},
-				"should only display agents thats not matching negating quoted searchwords": function () {
+				"should only display agents thats not matching negating quoted searchwords": function() {
 					var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
 						agent2 = { PersonId: "guid2", Name: "Glen", TimeZoneOffsetMinutes: 0 },
 						agent1State = { PersonId: "guid1", Alarm: "Positive" },
@@ -230,7 +230,7 @@
 					assert.equals(vm.filteredAgents().length, 1);
 					assert.equals(vm.filteredAgents()[0].Name, "Kurt");
 				},
-				"should display all matching agents when using OR between searchwords" : function() {
+				"should display all matching agents when using OR between searchwords": function() {
 					var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
 						agent2 = { PersonId: "guid2", Name: "Glen", TimeZoneOffsetMinutes: 0 },
 						agent3 = { PersonId: "guid3", Name: "Arne", TimeZoneOffsetMinutes: 0 },
@@ -260,6 +260,23 @@
 
 					assert.equals(vm.filteredAgents().length, 1);
 					assert.equals(vm.filteredAgents()[0].Name, "Glen");
+				},
+				"should display all agents not matching negated OR": function() {
+					var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
+						agent2 = { PersonId: "guid2", Name: "Glen", TimeZoneOffsetMinutes: 0 },
+						agent3 = { PersonId: "guid3", Name: "Arne", TimeZoneOffsetMinutes: 0 },
+						agent1State = { PersonId: "guid1", Alarm: "In adherence" },
+						agent2State = { PersonId: "guid2", Alarm: "Positive" },
+						agent3State = { PersonId: "guid3", Alarm: "Negative" };
+					var vm = viewModel();
+					vm.fillAgents([agent1, agent2, agent3]);
+					vm.fillAgentsStates([agent1State, agent2State, agent3State]);
+
+					vm.filter("Positive OR !Negative");
+
+					assert.equals(vm.filteredAgents().length, 2);
+					assert.equals(vm.filteredAgents()[0].Name, "Glen");
+					assert.equals(vm.filteredAgents()[1].Name, "Kurt");
 				}
 			}
 		});
