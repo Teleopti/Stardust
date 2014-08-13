@@ -629,5 +629,14 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			requestContainer.Resolve<IDailyMetricsForDayQuery>()
 				.Should().Not.Be.Null();
 		}
+
+
+		[Test]
+		public void ShouldResolveRequestsShiftTradeScheduleFilterController()
+		{
+			requestContainer.Resolve<RequestsShiftTradeScheduleFilterController>()
+				 .Should().Not.Be.Null();
+		}
+
 	}
 }

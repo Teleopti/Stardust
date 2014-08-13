@@ -870,16 +870,38 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		};
 
-		self.loadFilterTimes = function() {
+		self.setTimeFilters = function () {
 			var rangStart = 0;
 			for (var i = 0; i < 24; i += 2) {
 				var rangEnd = rangStart + 2;
-				var filterStartTime = new Teleopti.MyTimeWeb.Request.FilterStartTimeView(rangStart + ":00 - " + rangEnd + ":00", rangStart, rangEnd, false);
+				var filterStartTime = new Teleopti.MyTimeWeb.Request.FilterStartTimeView(rangStart + ":00 - " + rangEnd + ":00", rangStart, rangEnd, false, false);
 				var filterEndTime = new Teleopti.MyTimeWeb.Request.FilterEndTimeView(rangStart + ":00 - " + rangEnd + ":00", rangStart, rangEnd, false);
 				self.filterStartTimeList.push(filterStartTime);
 				self.filterEndTimeList.push(filterEndTime);
 				rangStart += 2;
 			}
+		};
+
+		self.loadFilterTimes = function () {
+			var dayOffNames = "";
+
+			ajax.Ajax({
+				url: "RequestsShiftTradeScheduleFilter/Get",
+				dataType: "json",
+				type: 'GET',
+				contentType: 'application/json; charset=utf-8',
+				success: function (data) {
+					self.setTimeFilters();
+					//set dayoff for start time filter
+					if (data != null) {
+						$.each(data.DayOffShortNames, function (idx, name) {
+							if (idx < data.DayOffShortNames.length-1) dayOffNames += name + ", ";
+							else dayOffNames += name;
+						});
+					}
+					self.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView(dayOffNames, 0, 24, false, true));
+				}
+			});
 		};
 	}
 

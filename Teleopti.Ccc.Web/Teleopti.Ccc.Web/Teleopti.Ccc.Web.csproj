@@ -307,6 +307,7 @@
     <Compile Include="Areas\Diagnosis\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\Diagnosis\DiagnosisAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\RequestsShiftTradeScheduleFilterController.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleViewModelMappingProfile.cs" />

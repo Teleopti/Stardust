@@ -481,12 +481,13 @@ Teleopti.MyTimeWeb.Request.PageView = function(pageIndex) {
 	self.isSelected = ko.observable(false);
 };
 
-Teleopti.MyTimeWeb.Request.FilterStartTimeView = function(text, start, end, checked) {
+Teleopti.MyTimeWeb.Request.FilterStartTimeView = function(text, start, end, checked, isDayOff) {
 	var self = this;
 	self.text = text;
 	self.start = start;
 	self.end = end;
 	self.isChecked = ko.observable(checked || false);
+	self.isDayOff = isDayOff;
 };
 
 Teleopti.MyTimeWeb.Request.FilterEndTimeView = function (text, start, end, checked) {
