@@ -1,7 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
-using Autofac;
-using Teleopti.Ccc.Win.Main;
+﻿using Autofac;
 using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
@@ -10,13 +7,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
     {
         private readonly IComponentContext _componentContext;
         private readonly ILogonPresenter _logonPresenter;
-        //private readonly LogonView _logOnScreen;
 
 		public ApplicationStartup(IComponentContext componentContext, ILogonPresenter logonPresenter)
         {
             _componentContext = componentContext;
 		    _logonPresenter = logonPresenter;
-		    //_logOnScreen = (LogonView)logOnscreen;
         }
 
         /// <summary>
@@ -33,18 +28,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         /// </summary>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
-        public bool LogOn(Point startPosition)
+        public bool LogOn()
         {
-            return _logonPresenter.Start(startPosition);
-            //_logOnScreen.ShowDialog();
-            //if (_logOnScreen.IsDisposed)
-            //    return false;
-
-            //_logOnScreen.Show();
-            //_logOnScreen.Refresh();
-
-            //return (_logOnScreen.DialogResult == DialogResult.OK);
-            //return true;
+            return _logonPresenter.Start();
         }
     }
 }

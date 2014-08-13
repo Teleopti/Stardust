@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Deployment.Application;
-using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
@@ -25,10 +24,8 @@ namespace Teleopti.Ccc.Win.Main
 			InitializeComponent();
 		}
 
-		public bool StartLogon(Point startPosition)
+		public bool StartLogon()
 		{
-			Top = startPosition.Y;
-			Left = startPosition.X;
 			_logonSteps = new List<ILogonStep>
 				{
 					new SelectSdkScreen(this, _model),
@@ -142,12 +139,12 @@ namespace Teleopti.Ccc.Win.Main
 		private void logonViewShown(object sender, EventArgs e)
 		{
 			//We must call back so we not just hang
-			//Presenter.Initialize();
+			Presenter.Initialize();
 		}
 
 		private void LogonView_Load(object sender, EventArgs e)
 		{
-			Presenter.Initialize();
+			//Presenter.Initialize();
 		}
 
 		public void HideView()
@@ -209,9 +206,5 @@ namespace Teleopti.Ccc.Win.Main
 					break;
 			}
 		}
-
-		
-
-		
 	}
 }

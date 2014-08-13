@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -32,6 +33,7 @@ using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
@@ -203,53 +205,63 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
+			"CA1303:Do not pass literals as localized parameters",
+			MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
 		private void SmartClientShellForm_Load(object sender, EventArgs e)
 		{
-			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
-			var loggedOnBu = identity.BusinessUnit;
-			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
-			ribbonControlAdv1.MenuButtonText = LanguageResourceHelper.Translate(ribbonControlAdv1.MenuButtonText);
-			toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;
-			toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text +
-			                                        ApplicationTextHelper.LoggedOnUserText;
+			using (Splash splashScreen = new Splash())
+			{
+				Hide();
+				splashScreen.TopMost = true;
+				splashScreen.Show(this);
+				splashScreen.Refresh();
 
-            setNotifyData(_systemChecker.IsOk());
+				var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
+				var loggedOnBu = identity.BusinessUnit;
+				Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
+				ribbonControlAdv1.MenuButtonText = LanguageResourceHelper.Translate(ribbonControlAdv1.MenuButtonText);
+				toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;
+				toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text +
+				                                        ApplicationTextHelper.LoggedOnUserText;
 
-            LoadOutLookBar();
+				setNotifyData(_systemChecker.IsOk());
 
-            InitializeSmartPartInvoker();
+				LoadOutLookBar();
 
-            Roger65(string.Empty);
-            SetPermissionOnToolStripButtonControls();
+				InitializeSmartPartInvoker();
 
-            if (!string.IsNullOrEmpty(_portalSettings.LastModule))
-            {
-	            startModule(_portalSettings.LastModule);
-            }
-            else
-            {
-	            startFirstEnabledModule();
-            }
- 
-            var showMemConfig = ConfigurationManager.AppSettings.Get("ShowMem");
-            bool showMemBool;
-            if (bool.TryParse(showMemConfig, out showMemBool))
-            {
-                if (showMemBool)
-                {
-                    showMem();
-                }                
-            }
+				Roger65(string.Empty);
+				SetPermissionOnToolStripButtonControls();
 
-			//var uri = new Uri("http://www.teleopti.com/wfmv8/landingpage/iframe");
-			//webBrowser1.Navigate(uri);
-			//webBrowser1.Visible = true;
-		
-		
+				if (!string.IsNullOrEmpty(_portalSettings.LastModule))
+				{
+					startModule(_portalSettings.LastModule);
+				}
+				else
+				{
+					startFirstEnabledModule();
+				}
+
+				var showMemConfig = ConfigurationManager.AppSettings.Get("ShowMem");
+				bool showMemBool;
+				if (bool.TryParse(showMemConfig, out showMemBool))
+				{
+					if (showMemBool)
+					{
+						showMem();
+					}
+				}
+
+				//var uri = new Uri("http://www.teleopti.com/wfmv8/landingpage/iframe");
+				//webBrowser1.Navigate(uri);
+				//webBrowser1.Visible = true;
+				
+			}
+			Show();
 		}
 
-        private void showMem()
+		private void showMem()
         {
 	        toolStripStatusLabelRoger65.Visible = true;
             var t = new Timer { Interval = 1000, Enabled = true };

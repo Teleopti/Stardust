@@ -31,8 +31,6 @@ namespace Teleopti.Ccc.Win.Main
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogonView));
 			this.pnlContent = new System.Windows.Forms.Panel();
 			this.autoLabel3 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.elementHost2 = new System.Windows.Forms.Integration.ElementHost();
-			this.progress1 = new Teleopti.Ccc.WpfControls.Controls.Progress();
 			this.SuspendLayout();
 			// 
 			// pnlContent
@@ -47,24 +45,13 @@ namespace Teleopti.Ccc.Win.Main
 			// 
 			this.autoLabel3.AutoSize = false;
 			this.autoLabel3.Font = new System.Drawing.Font("Segoe UI", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.autoLabel3.ForeColor = System.Drawing.Color.White;
+			this.autoLabel3.ForeColor = System.Drawing.Color.Blue;
 			this.autoLabel3.Location = new System.Drawing.Point(24, 124);
 			this.autoLabel3.Name = "autoLabel3";
 			this.autoLabel3.Size = new System.Drawing.Size(438, 55);
 			this.autoLabel3.TabIndex = 3;
 			this.autoLabel3.Text = "Starting...";
 			this.autoLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// elementHost2
-			// 
-			this.elementHost2.AutoSize = true;
-			this.elementHost2.Location = new System.Drawing.Point(12, 161);
-			this.elementHost2.Name = "elementHost2";
-			this.elementHost2.Size = new System.Drawing.Size(455, 57);
-			this.elementHost2.TabIndex = 0;
-			this.elementHost2.Text = "elementHost2";
-			this.elementHost2.Visible = false;
-			this.elementHost2.Child = this.progress1;
 			// 
 			// LogonView
 			// 
@@ -75,7 +62,6 @@ namespace Teleopti.Ccc.Win.Main
 			this.ClientSize = new System.Drawing.Size(483, 258);
 			this.Controls.Add(this.pnlContent);
 			this.Controls.Add(this.autoLabel3);
-			this.Controls.Add(this.elementHost2);
 			this.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -85,12 +71,10 @@ namespace Teleopti.Ccc.Win.Main
 			this.Name = "LogonView";
 			this.Padding = new System.Windows.Forms.Padding(1);
 			this.ShowIcon = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Teleopti WFM";
-			this.Load += new System.EventHandler(this.LogonView_Load);
 			this.Shown += new System.EventHandler(this.logonViewShown);
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -98,8 +82,6 @@ namespace Teleopti.Ccc.Win.Main
 
 		private System.Windows.Forms.Panel pnlContent;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel3;
-		private System.Windows.Forms.Integration.ElementHost elementHost2;
-		private WpfControls.Controls.Progress progress1;
 
 	}
 }

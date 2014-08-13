@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		void BackButtonClicked();
 		void Initialize();
 		void GetDataForCurrentStep();
-		bool Start(Point startPosition);
+		bool Start();
 		LoginStep CurrentStep { get; set; }
 	}
 
@@ -54,10 +54,10 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public LoginStep CurrentStep { get; set; }
 
-		public bool Start(Point startPosition)
+		public bool Start()
 		{
 			CurrentStep = LoginStep.SelectSdk;
-			return _view.StartLogon(startPosition);
+			return _view.StartLogon();
 		}
 
 		public void Initialize()
@@ -243,6 +243,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		{
 			_view.ClearForm(Resources.InitializingTreeDots);
 			_view.HideView();
+			//här kanske?
 			setBusinessUnit();
 			if (!_initializer.InitializeApplication(_model.SelectedDataSourceContainer))
 			{

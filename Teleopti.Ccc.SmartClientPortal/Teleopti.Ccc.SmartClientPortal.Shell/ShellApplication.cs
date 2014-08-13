@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Markup;
 using Autofac;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		class SmartClientShellApplication : SmartClientApplication<WorkItem, SmartClientShellForm>
     {
-
+	    
 	    /// <summary>
 	    /// Shell application entry point.
 	    /// </summary>
@@ -63,25 +64,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		    Application.EnableVisualStyles();
 		    Application.SetCompatibleTextRenderingDefault(false);
-
+			
 		    // WPF should use CurrentCulture
 		    FrameworkElement.LanguageProperty.OverrideMetadata(
 			    typeof (FrameworkElement),
 			    new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
-
-			Splash splash = new Splash();
-			splash.Show();
-		    var splashPosition = new Point(splash.Left + 150, splash.Top + 150);
 
 		    IContainer container = configureContainer();
 #if (!DEBUG)
 		    //NHibernateProfiler.Initialize();
 		    SetReleaseMode();
 		    var applicationStarter = container.Resolve<ApplicationStartup>();
-		    if (applicationStarter.LogOn(new System.Drawing.Point((int)splashPosition.X, (int)splashPosition.Y)))
+		    if (applicationStarter.LogOn())
 		    {
 			    try
 			    {
+
 			killNotNeededSessionFactories();
 						populateFeatureToggleFlags(container);
 			splash.Close();
@@ -93,26 +91,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				    HandleException(exception);
 			    }
 		    }
-			 else
-            {
-				splash.Close();
-				splash.Dispose();
-            }
+
 #endif
+			
 #if (DEBUG)
 			var applicationStarter = container.Resolve<ApplicationStartup>();
-				if (applicationStarter.LogOn(new System.Drawing.Point((int)splashPosition.X, (int)splashPosition.Y)))
+				if (applicationStarter.LogOn())
             {
+				
                 killNotNeededSessionFactories();
-								populateFeatureToggleFlags(container);
-				splash.Close();
-				splash.Dispose();
-                applicationStarter.LoadShellApplication();
-            }
-            else
-            {
-				splash.Close();
-				splash.Dispose();
+	            populateFeatureToggleFlags(container);
+			
+				applicationStarter.LoadShellApplication();
             }
 #endif
 			
@@ -162,8 +152,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
     	}
 
     	public SmartClientShellApplication(IComponentContext container) : base(container)
-        {
-        }
+    	{}
 
 				[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private static IContainer configureContainer()
