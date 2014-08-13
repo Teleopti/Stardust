@@ -184,11 +184,11 @@ namespace Teleopti.Ccc.TestCommon
 SET @dbname = '{0}'
 
 DECLARE @spid int
-SELECT @spid = min(spid) from master.dbo.sysprocesses where dbid = db_id(@dbname)
+SELECT @spid = min(session_id) from sys.dm_exec_sessions where database_id = db_id(@dbname) and is_user_process=1
 WHILE @spid IS NOT NULL
 BEGIN
 EXECUTE ('KILL ' + @spid)
-SELECT @spid = min(spid) from master.dbo.sysprocesses where dbid = db_id(@dbname) AND spid > @spid
+SELECT @spid = min(session_id) from sys.dm_exec_sessions where database_id = db_id(@dbname) AND session_id > @spid and is_user_process=1
 END";
 			ExecuteNonQuery(killCmd, DatabaseName);
 		}
