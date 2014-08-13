@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 				{
 					readModel.Start = scheduleDay.DayOff.StartDateTime;
 					readModel.End = scheduleDay.DayOff.EndDateTime;
+					readModel.IsDayOff = true;
 				}
 
 				var model = new Model

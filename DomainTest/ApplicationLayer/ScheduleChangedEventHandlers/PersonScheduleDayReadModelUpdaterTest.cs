@@ -167,5 +167,53 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			(firstCall.ElementAt(2) as TrackingMessage).TrackId.Should().Be.EqualTo(trackId);
 		}
 
+
+
+		[Test]
+		public void ShouldUpdateIsDayOff()
+		{
+			var repository = new FakePersonScheduleDayReadModelPersister();
+			var personRepository = new FakePersonRepository();
+			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+
+			target.Handle(new ProjectionChangedEvent
+			{
+				PersonId = personRepository.Single().Id.Value,
+				ScheduleDays = new[]
+						{
+							new ProjectionChangedEventScheduleDay
+								{
+									DayOff = new ProjectionChangedEventDayOff(),
+									Name = "Day off"
+								}
+						}
+			});
+
+			repository.Updated.Single().IsDayOff.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldUpdateIsDayOffToFalseIfNoDayOff()
+		{
+			var repository = new FakePersonScheduleDayReadModelPersister();
+			var personRepository = new FakePersonRepository();
+			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+
+			target.Handle(new ProjectionChangedEvent
+			{
+				PersonId = personRepository.Single().Id.Value,
+				ScheduleDays = new[]
+						{
+							new ProjectionChangedEventScheduleDay
+								{
+									DayOff = null,
+									Name = "Late"
+								}
+						}
+			});
+
+			repository.Updated.Single().IsDayOff.Should().Be.False();
+		}
+
 	}
 }

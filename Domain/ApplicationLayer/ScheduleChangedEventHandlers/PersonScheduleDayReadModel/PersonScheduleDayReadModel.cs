@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
 		public DateTime? Start { get; set; }
 		public DateTime? End { get; set; }
+		public bool IsDayOff { get; set; }
 		public string Model { get; set; }
 		public DateTime? MinStart { get; set; }
 		public bool IsLastPage { get; set; }
