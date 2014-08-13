@@ -12,16 +12,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IServiceBus _serviceBus;
 		private readonly INow _now;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(CalculateTimeZoneConsumer));
-		//get the date to calculate for the given timezone
-		//send CalculateBadgeMessage to bus for time of next calculation
+
 		public CalculateTimeZoneConsumer(IServiceBus serviceBus, INow now)
 		{
 			_serviceBus = serviceBus;
 			_now = now;
 		}
 
+		/// <summary>
+		/// Get the date to calculate for the given timezone
+		/// Send CalculateBadgeMessage to bus for time of next calculation
+		/// </summary>
+		/// <param name="message"></param>
 		public void Consume(CalculateTimeZoneMessage message)
 		{
+			if (Logger.IsDebugEnabled)
+			{
+				Logger.DebugFormat("Consume CalculateTimeZoneMessage with BusinessUnit {0}, DataSource {1} and timezone {2}", message.BusinessUnitId,
+					message.Datasource, message.TimeZoneCode, message.TimeZoneCode);
+			}
 			var yesterday = _now.LocalDateOnly().AddDays(-1);
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
 			var yesterdayForGivenTimeZone = TimeZoneInfo.ConvertTime(yesterday, TimeZoneInfo.Local, timeZone);
@@ -34,9 +43,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				CalculationDate = yesterdayForGivenTimeZone,
 				TimeZoneCode = message.TimeZoneCode 
 			});
-			Logger.DebugFormat(
-						"Sending CalculateBadgeMessage to Service Bus for Timezone={0} on calculation time={1}", message.TimeZoneCode,
-						yesterdayForGivenTimeZone);
+
+			if (Logger.IsDebugEnabled)
+			{
+				Logger.DebugFormat(
+							"Sending CalculateBadgeMessage to Service Bus for Timezone={0} on calculation time={1}", message.TimeZoneCode,
+							yesterdayForGivenTimeZone);
+			}
 		}
 	}
 }

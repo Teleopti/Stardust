@@ -16,11 +16,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IAgentBadgeSettingsRepository _settingsRepository;
 		private readonly IBusinessUnitRepository _buRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(CalculateTimeZoneConsumer));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(BadgeCalculationInitConsumer));
+
 
 		/// <summary>
-		/// get all timezones using businessunitrepository
-		/// foreach send CalculateTimeZoneMessage
+		/// Get all timezones using businessunitrepository
+		/// Foreach send CalculateTimeZoneMessage
 		/// TODO:existed problem: new added timezone to the system will not be calculated now.
 		/// </summary>
 		/// <param name="serviceBus"></param>
@@ -37,28 +38,42 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 		public void Consume(BadgeCalculationInitMessage message)
 		{
+			if (Logger.IsDebugEnabled)
+			{
+				Logger.DebugFormat("Consume message with BusinessUnit {0} and DataSource {1}", message.BusinessUnitId,
+					message.Datasource);
+			}
+
 			if (_serviceBus == null)
 			{
-				Logger.Error("service bus instance is null for some reason!");
+				Logger.Error("Service bus instance is null for some reason!");
 				return;
 			}
-				
+
 			IEnumerable<TimeZoneInfo> timeZoneList;
+
 			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				IAgentBadgeThresholdSettings setting = _settingsRepository.LoadAll().FirstOrDefault();
 				if (setting == null || !setting.EnableBadge)
 				{
 					_serviceBus.DelaySend(DateOnly.Today.AddDays(1), message);
-					Logger.DebugFormat(
-						"Feature is diabled. Delay Sending BadgeCalculationInitMessage to Service Bus for BusinessUnitId={0} in DataSource={1} tommorrow", message.BusinessUnitId,
-						message.Datasource);
+					if (Logger.IsDebugEnabled)
+					{
+						Logger.DebugFormat(
+							"Feature is diabled. Delay Sending BadgeCalculationInitMessage to Service Bus for BusinessUnitId={0} in DataSource={1} tommorrow", message.BusinessUnitId,
+							message.Datasource);
+					}
 					return;
 				}
 
 				timeZoneList = _buRepository.LoadAllTimeZones();
 			}
 			
+			if (Logger.IsDebugEnabled)
+			{
+				Logger.DebugFormat("Retrieved {0} timezones to calculage badges.", timeZoneList.Count());
+			}
 
 			foreach (var timeZoneInfo in timeZoneList)
 			{
@@ -69,9 +84,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					Timestamp = DateTime.UtcNow,
 					TimeZoneCode = timeZoneInfo.Id
 				});
-				Logger.DebugFormat(
-						"Sending CalculateTimeZoneMessage to Service Bus for Timezone={0} in BusinessUnitId={1}", timeZoneInfo.Id,
-						message.BusinessUnitId);
+
+				if (Logger.IsDebugEnabled)
+				{
+					Logger.DebugFormat(
+							"Sending CalculateTimeZoneMessage to Service Bus for Timezone={0} in BusinessUnitId={1}", timeZoneInfo.Id,
+							message.BusinessUnitId);
+				}
 			}
 		}
 	}

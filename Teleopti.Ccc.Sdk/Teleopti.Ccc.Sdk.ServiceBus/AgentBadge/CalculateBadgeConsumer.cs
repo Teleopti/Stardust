@@ -53,6 +53,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		/// <param name="message"></param>
 		public void Consume(CalculateBadgeMessage message)
 		{
+			if (Logger.IsDebugEnabled)
+			{
+				Logger.DebugFormat("Consume CalculateBadgeMessage with BusinessUnit {0}, DataSource {1} and timezone {2}", message.BusinessUnitId,
+					message.Datasource, message.TimeZoneCode, message.TimeZoneCode);
+			}
+
 			var today = _now.LocalDateOnly();
 			var tomorrow = today.AddDays(1);
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
@@ -73,13 +79,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					return;
 				}
 				var adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
-				
+
 				var allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
 				var peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZoneCode, new DateOnly(message.CalculationDate),
 					adherenceReportSetting.CalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
+
+				if (Logger.IsDebugEnabled)
+				{
+					Logger.DebugFormat("Total {0} agents will get new badge", peopleGotABadge.Count());
+				}
+
 				foreach (var person in peopleGotABadge)
 				{
+					if (Logger.IsDebugEnabled)
+					{
+						Logger.DebugFormat("Send badge message to agent {0} (ID: {1})", person.Name, person.Id);
+					}
+
 					SendPushMessageService
 						.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false)
 						.To(person)
@@ -87,6 +104,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					uow.PersistAll();
 				}
 			}
+			
 
 			if (_serviceBus == null) return;
 
@@ -98,9 +116,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				TimeZoneCode = message.TimeZoneCode,
 				CalculationDate = message.CalculationDate.AddDays(1)
 			});
-			Logger.DebugFormat(
+
+			if (Logger.IsDebugEnabled)
+			{			Logger.DebugFormat(
 						"Delay Sending CalculateBadgeMessage to Service Bus for Timezone={0} on next calculation time={1}", message.TimeZoneCode,
 						nextMessageShouldBeProcessed);
+			}
 		}
 	}
 }
