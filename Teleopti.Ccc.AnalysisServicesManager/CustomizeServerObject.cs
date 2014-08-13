@@ -25,10 +25,6 @@ namespace AnalysisServicesManager
 		public string PkColumName { get; set; }
 	}
 
-	public class ApplyCustom
-	{
-
-	}
 	public class CustomizeServerObject
 	{
 		private string _ASconnectionString;
@@ -48,19 +44,10 @@ namespace AnalysisServicesManager
 		{
 			var folderName = argument.FilePath;
 
-			//1) read datasourceview definition file
-			//var dateConstraint = new TeleoptiContraints() { ParentColumnName = "date_id", ChildColumnName = "date_id", ParentTableName = "dbo_dim_date" };
-			//var acdConstraint = new TeleoptiContraints() { ParentColumnName = "acd_login_id", ChildColumnName = "acd_login_id", ParentTableName = "dbo_dim_acd_login" };
-			//var someConstraits = new List<TeleoptiContraints>() { dateConstraint, acdConstraint };
-			//var TableDefinitionList = new List<RelationalTable>() { new RelationalTable { TableName = "fact_sales", CommandText = "SELECT * FROM [custom].[fact_sales]", ListOfConstraints = someConstraits } };
-			//CreateDataSourceView(TableDefinitionList);
-
-			//TableDefinitionList = new List<RelationalTable>() { new RelationalTable { TableName = "v_fact_calculated_measures", CommandText = "SELECT * FROM [custom].[v_fact_calculated_measures]", ListOfConstraints = someConstraits } };
 			var parser = new ParseDataViewInfoFromXml();
 			var tableDefinitionList = parser.ExtractDataViewInfo(folderName + "\\01 Datasource\\DatasourceViewDefinition.xml");
 			CreateDataSourceView(tableDefinitionList);
 
-			//2) read and deploy measure group file
 			var repository = new Repository(argument);
 			argument.CustomFilePath = folderName + "\\02 MeasureGroups\\MeasureGroup.xmla";
 			repository.ExecuteAnyXmla(argument);
@@ -72,7 +59,7 @@ namespace AnalysisServicesManager
 		{
 			if (!verifyDatasourceView())
 			{
-				throw new ArgumentException("The Database, Cube or datasource view is not ok!");
+				throw new ArgumentException("Can't find Datasource View!");
 			}
 
 			foreach (var table in tableDefinitionList)
@@ -98,15 +85,12 @@ namespace AnalysisServicesManager
 				dataTable.ExtendedProperties.Add("DbTableName", table.DbTableName );
 				dataTable.ExtendedProperties["DataSourceID"] = datasourceView.DataSourceID ;
 				dataTable.ExtendedProperties.Add("FriendlyName", table.DbTableName);
-				foreach(var con in table.ListOfConstraints ){
+				foreach(var con in table.ListOfConstraints )
+				{
 					AddRelation(tempDataSourceView, con.FkTableName , con.FkColumName , con.PkTableName , con.PkColumName );
 				}
-
-
 				tempDataSourceView.Update();
 			}
-
-			
 		}
 
 		private void AddRelation(DataSourceView dsv, String fkTableName, String fkColumnName, String pkTableName, String pkColumnName)
