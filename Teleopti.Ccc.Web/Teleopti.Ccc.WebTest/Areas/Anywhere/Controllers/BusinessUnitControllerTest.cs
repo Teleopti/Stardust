@@ -24,13 +24,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var bu2 = new BusinessUnit("bu2").WithId();
 			var buList = new List<IBusinessUnit> {bu1, bu2};
 			var buRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
+			var currentBusinessUnit = MockRepository.GenerateMock<ICurrentBusinessUnit>();
+			currentBusinessUnit.Stub(x => x.Current()).Return(bu1);
 			buRepository.Stub(x => x.LoadAllBusinessUnitSortedByName()).Return(buList);
+			buRepository.Stub(x => x.Get(currentBusinessUnit.Current().Id.GetValueOrDefault())).Return(bu1);
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var person = MockRepository.GenerateMock<IPerson>();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			person.Stub(x => x.PermissionInformation.HasAccessToAllBusinessUnits()).Return(true);
 
-			var target = new BusinessUnitController(buRepository, loggedOnUser);
+			var target = new BusinessUnitController(buRepository, loggedOnUser, currentBusinessUnit);
 
 			var result = (target.Index().Data as IEnumerable<BusinessUnitViewModel>).ToList();
 
@@ -38,6 +41,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			result[0].Name.Should().Be(bu1.Name);
 			result[1].Id.Should().Be(bu2.Id);
 			result[1].Name.Should().Be(bu2.Name);
+		}
+		
+		[Test]
+		public void ShouldGetAllBusinessUnitsIfPermittedWithCurrentBusinessUnitAtFirstPosition()
+		{
+			var bu1 = new BusinessUnit("bu1").WithId();
+			var bu2 = new BusinessUnit("bu2").WithId();
+			var buList = new List<IBusinessUnit> {bu1, bu2};
+			var buRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
+			var currentBusinessUnit = MockRepository.GenerateMock<ICurrentBusinessUnit>();
+			currentBusinessUnit.Stub(x => x.Current()).Return(bu2);
+			buRepository.Stub(x => x.LoadAllBusinessUnitSortedByName()).Return(buList);
+			buRepository.Stub(x => x.Get(currentBusinessUnit.Current().Id.GetValueOrDefault())).Return(bu2);
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			person.Stub(x => x.PermissionInformation.HasAccessToAllBusinessUnits()).Return(true);
+
+			var target = new BusinessUnitController(buRepository, loggedOnUser, currentBusinessUnit);
+
+			var result = (target.Index().Data as IEnumerable<BusinessUnitViewModel>).ToList();
+		
+			result[0].Id.Should().Be(bu2.Id);
+			result[0].Name.Should().Be(bu2.Name);
+			result[1].Id.Should().Be(bu1.Id);
+			result[1].Name.Should().Be(bu1.Name);
 		}
 		
 		[Test]
@@ -53,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			person.Stub(x => x.PermissionInformation).Return(permissionInfo);
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			var target = new BusinessUnitController(null, loggedOnUser);
+			var target = new BusinessUnitController(null, loggedOnUser,null);
 
 			var result = target.Index().Data as IEnumerable<BusinessUnitViewModel>;
 

@@ -1,12 +1,5 @@
 ﻿<div class="container realtimeadherencesites">
-	
-	<!-- ko if: agentStatesForMultipleSites()-->
-	<div align="right">
-		<button class="btn-xs open" data-bind="click: openSelectedSites">Open selected sites</button>
-	</div>
 
-	<!-- /ko -->
-	<br />
 	<!-- ko if: agentStatesForMultipleSites()-->
 	<div class="row">
 		<div class="col-xs-12 col-md-4">
@@ -14,8 +7,14 @@
 				<option data-bind="text: Name, value: Id"></option>
 			</select>
 		</div>
+		<!-- ko if: agentStatesForMultipleSites()-->
+		<div class="col-xs-12 col-md-4 pull-right" align="right">
+			<button class="btn-xs open" data-bind="click: openSelectedSites">Open selected sites</button>
+		</div>
+		<!-- /ko -->
 	</div>
 	<!-- /ko -->
+	<br />
 		<div class="row" data-bind="foreach: sites">
 			<div data-bind="if: NumberOfAgents > 0">
 				<div class="col-md-4">
