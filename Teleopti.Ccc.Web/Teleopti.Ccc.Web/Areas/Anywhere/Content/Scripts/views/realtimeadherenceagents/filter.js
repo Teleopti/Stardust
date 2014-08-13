@@ -5,12 +5,25 @@
 		return function () {
 			var that = {};
 
-			that.match = function (items, filter) {
-				var matchedItems = 0;
+			that.match = function(items, filter) {
+				var andRelationalMatches = 0;
+				var orRelationalMatches = 0;
 				var filterWords = mapOutFilterWords(filter);
 				if (!filterWords) {
 					return false;
 				}
+
+				var andRelationalWords = [],
+					orRelationalWords = [];
+				for (var j = 0; j < filterWords.length; j++) {
+					if (filterWords[j].toUpperCase() === "OR") {
+						orRelationalWords.push([filterWords[j - 1], filterWords[j + 1]]);
+						filterWords.splice(j - 1, 3);
+						j++;
+					}
+				}
+				andRelationalWords = filterWords;
+
 
 				for (var i = 0; i < items.length; i++) {
 					var item = items[i];
@@ -18,31 +31,59 @@
 						continue;
 					}
 
-					for (var wordIter = 0; wordIter < filterWords.length; wordIter++) {
-						var filterWord = filterWords[wordIter];
+					for (var orWordIterator = 0; orWordIterator < orRelationalWords.length; orWordIterator++) {
+						var wordPair = orRelationalWords[orWordIterator];
+						var firstWordMatch = matchItem(wordPair[0], item);
+						if (firstWordMatch === - 1) {
+							return false;
+						}
+						var secondWordMatch = matchItem(wordPair[1], item);
+						if (secondWordMatch === -1) {
+							return false;
+						}
 
-						if (shouldNegate(filterWord)) {
-							if (matchesNegated(item, filterWord)) {
-								return false;
-							}
+						orRelationalMatches += firstWordMatch;
+						orRelationalMatches += secondWordMatch;
+					}
+					
+					for (var andWordIterator = 0; andWordIterator < andRelationalWords.length; andWordIterator++) {
+						var filterWord = andRelationalWords[andWordIterator];
+
+						var wordMatch = matchItem(filterWord, item);
+						if (wordMatch === -1) {
+							return false;
 						}
-						if (shouldMatchExact(filterWord) && item.toUpperCase() === removeQuotes(filterWord).toUpperCase()) {
-							matchedItems++;
-						}
-						if (stringContains(item, filterWord)) {
-							matchedItems++;
-						}
+						
+						andRelationalMatches += wordMatch;
 					}
 
 				}
-				var unNegatedFilterWords = ko.utils.arrayFilter(filterWords, function (word) { return !shouldNegate(word); }).length;
-				if (matchedItems === unNegatedFilterWords) {
+				var unNegatedAndRelationalWords = ko.utils.arrayFilter(andRelationalWords, function (word) { return !shouldNegate(word); }).length;
+				var unNegatedOrRelationalWords = ko.utils.arrayFilter(orRelationalWords, function (word) { return !shouldNegate(word); }).length;
+				if (andRelationalMatches === unNegatedAndRelationalWords
+					&& orRelationalMatches >= unNegatedOrRelationalWords) {
 					return true;
 				}
 				return false;
 			};
 
 			var mapOutFilterWords = function (rawInput) { return rawInput.match(/([!]*\w+)|(?:[!"']{1,2}(.*?)["'])/g); }
+
+			var matchItem = function (word, item) {
+				if (shouldNegate(word)) {
+					if (matchesNegated(item, word)) {
+						return -1;
+					}
+				}
+				if (shouldMatchExact(word) && item.toUpperCase() === removeQuotes(word).toUpperCase()) {
+					return 1;
+				}
+				if (stringContains(item, word)) {
+					return 1;
+				}
+				return 0;
+			}
+
 			var shouldNegate = function (word) { return word.indexOf("!") === 0; }
 
 			var matchesNegated = function (item, filterWord) {
