@@ -169,30 +169,13 @@ namespace Teleopti.Ccc.TestCommon
 		private IDisposable OfflineScope()
 		{
 			ExecuteNonQuery("USE master");
-			killSpidsTheHardWayBecauseItIsALotQuickerThan_SET_OFFLINE_WITH_IMMEDIATE_ROLLBACK();
-			ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE", DatabaseName);
+			ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName);
 			return new GenericDisposable(() =>
 			                             	{
 			                             		ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", DatabaseName);
 			                             		ExecuteNonQuery("USE [{0}]", DatabaseName);
 			                             	});
 		}
-
-		private void killSpidsTheHardWayBecauseItIsALotQuickerThan_SET_OFFLINE_WITH_IMMEDIATE_ROLLBACK()
-		{
-			const string killCmd = @"DECLARE @dbname sysname
-SET @dbname = '{0}'
-
-DECLARE @spid int
-SELECT @spid = min(session_id) from sys.dm_exec_sessions where database_id = db_id(@dbname) and is_user_process=1
-WHILE @spid IS NOT NULL
-BEGIN
-EXECUTE ('KILL ' + @spid)
-SELECT @spid = min(session_id) from sys.dm_exec_sessions where database_id = db_id(@dbname) AND session_id > @spid and is_user_process=1
-END";
-			ExecuteNonQuery(killCmd, DatabaseName);
-		}
-
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		private void ExecuteNonQuery(string sql, params object[] args)
