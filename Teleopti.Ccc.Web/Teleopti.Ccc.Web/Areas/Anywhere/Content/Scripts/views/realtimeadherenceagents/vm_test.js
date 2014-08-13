@@ -204,6 +204,19 @@
 				vm.filter("'Ready'");
 				assert.equals(vm.filteredAgents().length, 1);
 				assert.equals(vm.filteredAgents()[0].State(), "Ready");
+			},
+			"should only display agents that does not match negating filter with quoted searchwords": function() {
+				var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
+					agent2 = { PersonId: "guid2", Name: "Glen", TimeZoneOffsetMinutes: 0 },
+					agent1State = { PersonId: "guid1", Alarm: "Positive" },
+					agent2State = { PersonId: "guid2", Alarm: "In adherence" };
+
+				var vm = viewModel();
+				vm.fillAgents([agent1, agent2]);
+				vm.fillAgentsStates([agent1State, agent2State]);
+				vm.filter("!'In adherence'");
+				assert.equals(vm.filteredAgents().length, 1);
+				assert.equals(vm.filteredAgents()[0].Name, "Kurt");
 			}
 		});
 	};
