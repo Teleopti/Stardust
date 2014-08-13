@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 				dateTimePickerAdv.CalendarSize = new Size(205, 175);
 			}
 			//when right to left the calendar get to small so the numbers are not displayed correctly
-			if (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay)
+			if (TeleoptiPrincipal.Current != null && ((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay)
 			{
 				dateTimePickerAdv.CalendarSizeToFit = false;
 				dateTimePickerAdv.CalendarSize = new Size(205, 175);

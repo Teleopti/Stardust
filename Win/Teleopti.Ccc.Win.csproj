@@ -2611,6 +2611,9 @@
     <EmbeddedResource Include="ExceptionHandling\SimpleExceptionHandlerView.resx">
       <DependentUpon>SimpleExceptionHandlerView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\WFControls\WFBaseControl.resx">
+      <DependentUpon>WFBaseControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Grouping\FindPersonsView.resx">
       <DependentUpon>FindPersonsView.cs</DependentUpon>
     </EmbeddedResource>

@@ -117,44 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="ribbonControlAdvFixed1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1, 1</value>
-  </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ribbonControlAdvFixed1.MenuButtonVisible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="ribbonControlAdvFixed1.OfficeMenu.Size" type="System.Drawing.Size, System.Drawing">
-    <value>12, 65</value>
-  </data>
-  <data name="&gt;&gt;ribbonControlAdvFixed1.OfficeMenu.Name" xml:space="preserve">
-    <value>ribbonControlAdvFixed1.OfficeMenu</value>
-  </data>
-  <data name="&gt;&gt;ribbonControlAdvFixed1.OfficeMenu.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
-  </data>
-  <data name="ribbonControlAdvFixed1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>976, 30</value>
-  </data>
-  <data name="ribbonControlAdvFixed1.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="ribbonControlAdvFixed1.Text" xml:space="preserve">
-    <value>xxFilterData</value>
-  </data>
-  <data name="&gt;&gt;ribbonControlAdvFixed1.Name" xml:space="preserve">
-    <value>ribbonControlAdvFixed1</value>
-  </data>
-  <data name="&gt;&gt;ribbonControlAdvFixed1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
-  </data>
-  <data name="&gt;&gt;ribbonControlAdvFixed1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;ribbonControlAdvFixed1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
@@ -162,14 +125,15 @@
   <data name="btnOk.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Right</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btnOk.Location" type="System.Drawing.Point, System.Drawing">
-    <value>777, 627</value>
+    <value>920, 751</value>
   </data>
   <data name="btnOk.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 10, 3</value>
+    <value>3, 3, 10, 10</value>
   </data>
   <data name="btnOk.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 24</value>
+    <value>87, 27</value>
   </data>
   <data name="btnOk.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -196,13 +160,13 @@
     <value>Right</value>
   </data>
   <data name="btnCancel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>877, 627</value>
+    <value>1037, 751</value>
   </data>
   <data name="btnCancel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 10, 3</value>
+    <value>3, 3, 10, 10</value>
   </data>
   <data name="btnCancel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 24</value>
+    <value>87, 27</value>
   </data>
   <data name="btnCancel.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -235,7 +199,7 @@
     <value>2</value>
   </data>
   <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>972, 657</value>
+    <value>1134, 788</value>
   </data>
   <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -253,16 +217,16 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="btnOk" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="btnCancel" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,100,Absolute,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,100,Absolute,35" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="btnOk" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="btnCancel" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,117,Absolute,117,Absolute,23" /&gt;&lt;Rows Styles="Percent,100,Absolute,40" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gradientPanelMain.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="gradientPanelMain.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1, 30</value>
+    <value>1, 0</value>
   </data>
   <data name="gradientPanelMain.Size" type="System.Drawing.Size, System.Drawing">
-    <value>972, 657</value>
+    <value>1134, 788</value>
   </data>
   <data name="gradientPanelMain.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -277,13 +241,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;gradientPanelMain.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="pictureBoxLoading.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="pictureBoxLoading.Location" type="System.Drawing.Point, System.Drawing">
-    <value>465, 295</value>
+    <value>542, 306</value>
   </data>
   <data name="pictureBoxLoading.MaximumSize" type="System.Drawing.Size, System.Drawing">
     <value>32, 32</value>
@@ -310,7 +274,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;pictureBoxLoading.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <metadata name="backgroundWorker1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
@@ -319,10 +283,13 @@
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
+    <value>7, 15</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>974, 687</value>
+    <value>1136, 788</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -420,7 +387,7 @@
 </value>
   </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>800, 600</value>
+    <value>931, 686</value>
   </data>
   <data name="$this.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 0, 1, 0</value>
@@ -438,6 +405,6 @@
     <value>FilterDataView</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Teleopti.Ccc.Win.Common.BaseRibbonForm, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+    <value>Teleopti.Ccc.Win.Common.BaseDialogForm, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
 </root>

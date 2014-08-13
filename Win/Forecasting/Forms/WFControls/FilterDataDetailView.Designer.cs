@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
         {
             if (disposing)
             {
-                ReleaseManagedResources();
+                releaseManagedResources();
                 if (components != null)
                     components.Dispose();
             }

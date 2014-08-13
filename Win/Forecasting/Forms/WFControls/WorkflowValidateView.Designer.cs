@@ -4,37 +4,37 @@ using DateSelectionFromTo=Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSel
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 {
-    partial class WorkflowValidateView
-    {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class WorkflowValidateView
+	{
+		/// <summary> 
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                UnhookEvents();
-                ReleaseManagedResources();
-                if (components != null)
-                    components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary> 
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				unhookEvents();
+				releaseManagedResources();
+				if (components != null)
+					components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Component Designer generated code
+		#region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary> 
+		/// Required method for Designer support - do not modify 
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorkflowValidateView));
 			this.xpTaskBar1 = new Syncfusion.Windows.Forms.Tools.XPTaskBar();
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			// buttonAdvCancelLoad
 			// 
 			this.buttonAdvCancelLoad.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonAdvCancelLoad.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvCancelLoad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonAdvCancelLoad.BeforeTouchSize = new System.Drawing.Size(164, 26);
@@ -147,9 +147,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.buttonAdvCancelLoad.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.buttonAdvCancelLoad.UseVisualStyle = true;
 			this.buttonAdvCancelLoad.Visible = false;
-			this.buttonAdvCancelLoad.Click += new System.EventHandler(this.buttonAdvCancelLoad_Click);
-			this.buttonAdvCancelLoad.MouseEnter += new System.EventHandler(this.buttonAdvCancelLoad_MouseEnter);
-			this.buttonAdvCancelLoad.MouseLeave += new System.EventHandler(this.buttonAdvCancelLoad_MouseLeave);
+			this.buttonAdvCancelLoad.Click += new System.EventHandler(this.buttonAdvCancelLoadClick);
+			this.buttonAdvCancelLoad.MouseEnter += new System.EventHandler(this.buttonAdvCancelLoadMouseEnter);
+			this.buttonAdvCancelLoad.MouseLeave += new System.EventHandler(this.buttonAdvCancelLoadMouseLeave);
 			// 
 			// dateSelectionFromToHistorical
 			// 
@@ -169,8 +169,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.dateSelectionFromToHistorical.TodayButtonText = "xxToday";
 			this.dateSelectionFromToHistorical.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToHistorical.WorkPeriodEnd")));
 			this.dateSelectionFromToHistorical.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToHistorical.WorkPeriodStart")));
-			this.dateSelectionFromToHistorical.ValueChanged += new System.EventHandler(this.dateSelectionFromToHistorical_ValueChanged);
-			this.dateSelectionFromToHistorical.ButtonClickedNoValidation += new System.EventHandler(this.dateSelectionFromToHistorical_ButtonClicked_novalidation);
+			this.dateSelectionFromToHistorical.ValueChanged += new System.EventHandler(this.dateSelectionFromToHistoricalValueChanged);
+			this.dateSelectionFromToHistorical.ButtonClickedNoValidation += new System.EventHandler(this.dateSelectionFromToHistoricalButtonClickedNovalidation);
 			// 
 			// dateSelectionFromToTarget
 			// 
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.dateSelectionFromToTarget.TodayButtonText = "xxToday";
 			this.dateSelectionFromToTarget.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToTarget.WorkPeriodEnd")));
 			this.dateSelectionFromToTarget.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToTarget.WorkPeriodStart")));
-			this.dateSelectionFromToTarget.ValueChanged += new System.EventHandler(this.dateSelectionFromToTarget_ValueChanged);
+			this.dateSelectionFromToTarget.ValueChanged += new System.EventHandler(this.dateSelectionFromToTargetValueChanged);
 			// 
 			// xpTaskBarBoxDeviations
 			// 
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.percentTextBoxTasks.TabIndex = 5;
 			this.percentTextBoxTasks.Text = "0 %";
 			this.percentTextBoxTasks.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PercentTextBoxTasks_OnKeyUp);
-			this.percentTextBoxTasks.Validated += new System.EventHandler(this.percentTextBoxTasks_Validated);
+			this.percentTextBoxTasks.Validated += new System.EventHandler(this.percentTextBoxTasksValidated);
 			// 
 			// labelDeviationTasks
 			// 
@@ -316,7 +316,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.percentTextBoxDeviationTaskTime.TabIndex = 6;
 			this.percentTextBoxDeviationTaskTime.Text = "0 %";
 			this.percentTextBoxDeviationTaskTime.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PercentTextBoxDeviationTaskTime_OnKeyUp);
-			this.percentTextBoxDeviationTaskTime.Validated += new System.EventHandler(this.percentTextBoxDeviationTaskTime_Validated);
+			this.percentTextBoxDeviationTaskTime.Validated += new System.EventHandler(this.percentTextBoxDeviationTaskTimeValidated);
 			// 
 			// percentTextBoxDeviationAfterTaskTime
 			// 
@@ -338,7 +338,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.percentTextBoxDeviationAfterTaskTime.TabIndex = 7;
 			this.percentTextBoxDeviationAfterTaskTime.Text = "0 %";
 			this.percentTextBoxDeviationAfterTaskTime.KeyUp += new System.Windows.Forms.KeyEventHandler(this.PercentTextBoxDeviationAfterTaskTime_OnKeyUp);
-			this.percentTextBoxDeviationAfterTaskTime.Validated += new System.EventHandler(this.percentTextBoxDeviationAfterTaskTime_Validated);
+			this.percentTextBoxDeviationAfterTaskTime.Validated += new System.EventHandler(this.percentTextBoxDeviationAfterTaskTimeValidated);
 			// 
 			// xpTaskBarBoxSpecialEvents
 			// 
@@ -375,9 +375,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.outlierBoxControl.Name = "outlierBoxControl";
 			this.outlierBoxControl.Size = new System.Drawing.Size(168, 100);
 			this.outlierBoxControl.TabIndex = 8;
-			this.outlierBoxControl.AddOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.DateOnly>>(this.outlierBoxControl_AddOutlier);
-			this.outlierBoxControl.DeleteOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.IOutlier>>(this.outlierBoxControl_DeleteOutlier);
-			this.outlierBoxControl.UpdateOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.IOutlier>>(this.outlierBoxControl_UpdateOutlier);
+			this.outlierBoxControl.AddOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.DateOnly>>(this.outlierBoxControlAddOutlier);
+			this.outlierBoxControl.DeleteOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.IOutlier>>(this.outlierBoxControlDeleteOutlier);
+			this.outlierBoxControl.UpdateOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.IOutlier>>(this.outlierBoxControlUpdateOutlier);
 			// 
 			// splitContainerAdv2
 			// 
@@ -403,7 +403,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.splitContainerAdv2.TabIndex = 0;
 			this.splitContainerAdv2.TabStop = false;
 			this.splitContainerAdv2.Text = "splitContainerAdv7";
-			this.splitContainerAdv2.DoubleClick += new System.EventHandler(this.splitContainerAdv2_DoubleClick);
+			this.splitContainerAdv2.DoubleClick += new System.EventHandler(this.splitContainerAdv2DoubleClick);
 			// 
 			// tableLayoutPanel2
 			// 
@@ -461,31 +461,31 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.splitContainerAdv2.PerformLayout();
 			this.ResumeLayout(false);
 
-        }
+		}
 
-	    #endregion
+		#endregion
 
-        private Syncfusion.Windows.Forms.Tools.XPTaskBar xpTaskBar1;
-        private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv2;
-        private Syncfusion.Windows.Forms.Tools.XPTaskBarBox xpTaskBarBoxSelectPeriod;
-        private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelSelectPeriod;
-        private DateSelectionFromTo dateSelectionFromToTarget;
-        private Syncfusion.Windows.Forms.Tools.XPTaskBarBox xpTaskBarBoxDeviations;
-        private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelDeviations;
-        private Syncfusion.Windows.Forms.Tools.PercentTextBox percentTextBoxTasks;
-        private System.Windows.Forms.Label labelDeviationAfterTaskTime;
-        private Syncfusion.Windows.Forms.Tools.PercentTextBox percentTextBoxDeviationAfterTaskTime;
-        private System.Windows.Forms.Label labelDeviationTaskTime;
-        private Syncfusion.Windows.Forms.Tools.PercentTextBox percentTextBoxDeviationTaskTime;
+		private Syncfusion.Windows.Forms.Tools.XPTaskBar xpTaskBar1;
+		private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv2;
+		private Syncfusion.Windows.Forms.Tools.XPTaskBarBox xpTaskBarBoxSelectPeriod;
+		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelSelectPeriod;
+		private DateSelectionFromTo dateSelectionFromToTarget;
+		private Syncfusion.Windows.Forms.Tools.XPTaskBarBox xpTaskBarBoxDeviations;
+		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelDeviations;
+		private Syncfusion.Windows.Forms.Tools.PercentTextBox percentTextBoxTasks;
+		private System.Windows.Forms.Label labelDeviationAfterTaskTime;
+		private Syncfusion.Windows.Forms.Tools.PercentTextBox percentTextBoxDeviationAfterTaskTime;
+		private System.Windows.Forms.Label labelDeviationTaskTime;
+		private Syncfusion.Windows.Forms.Tools.PercentTextBox percentTextBoxDeviationTaskTime;
 		  private System.Windows.Forms.Label labelDeviationTasks;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private Syncfusion.Windows.Forms.Tools.XPTaskBarBox xpTaskBarBoxSpecialEvents;
-        private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelSpecialEvents;
-        private Common.Controls.OutlierBox outlierBoxControl;
-        private System.ComponentModel.BackgroundWorker backgroundWorkerStatistics;
-        private System.ComponentModel.BackgroundWorker backgroundWorkerValidationPeriod;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancelLoad;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private Syncfusion.Windows.Forms.Tools.XPTaskBarBox xpTaskBarBoxSpecialEvents;
+		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelSpecialEvents;
+		private Common.Controls.OutlierBox outlierBoxControl;
+		private System.ComponentModel.BackgroundWorker backgroundWorkerStatistics;
+		private System.ComponentModel.BackgroundWorker backgroundWorkerValidationPeriod;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancelLoad;
 		  private DateSelectionFromTo dateSelectionFromToHistorical;
-    }
+	}
 }
