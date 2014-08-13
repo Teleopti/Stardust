@@ -3593,6 +3593,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\WFMIcon.ico" />
     <None Include="Resources\WFM-Circle-Schedules.ico" />
     <None Include="Resources\WFM-Shifts.png" />
     <None Include="Resources\WFM-Schedules.png" />
