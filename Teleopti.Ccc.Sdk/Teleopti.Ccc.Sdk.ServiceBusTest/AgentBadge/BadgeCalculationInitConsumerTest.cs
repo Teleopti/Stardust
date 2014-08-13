@@ -5,12 +5,10 @@ using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
@@ -41,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
 			bussinessUnit.SetId(Guid.NewGuid());
 
-			var message = new StartUpBusinessUnit();
+			var message = new BadgeCalculationInitMessage();
 			message.Timestamp = DateTime.Now;
 			message.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
 			var timezoneList = new List<TimeZoneInfo>{TimeZoneInfo.Local};

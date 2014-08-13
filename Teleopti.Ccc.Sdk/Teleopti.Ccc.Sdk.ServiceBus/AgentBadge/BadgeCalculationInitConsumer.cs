@@ -5,12 +5,11 @@ using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 {
-	public class BadgeCalculationInitConsumer : ConsumerOf<StartUpBusinessUnit>
+	public class BadgeCalculationInitConsumer : ConsumerOf<BadgeCalculationInitMessage>
 	{
 		private readonly IServiceBus _serviceBus;
 		private readonly IAgentBadgeSettingsRepository _settingsRepository;
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
-		public void Consume(StartUpBusinessUnit message)
+		public void Consume(BadgeCalculationInitMessage message)
 		{
 			if (_serviceBus == null)
 				return;

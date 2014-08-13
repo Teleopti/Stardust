@@ -10,6 +10,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages;
 using Teleopti.Interfaces.Messages.General;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 {

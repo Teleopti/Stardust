@@ -5,9 +5,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages;
 using log4net;
-using Teleopti.Interfaces.Messages.General;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 {
