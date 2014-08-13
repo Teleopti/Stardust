@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.toolStripStatusLabelLoggedOnUser = new System.Windows.Forms.ToolStripStatusLabel();
 			this._statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.splitContainer = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
+			this.outlookBarWorkSpace1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.OutlookBarWorkSpace();
 			this.webBrowser1 = new System.Windows.Forms.WebBrowser();
 			this.gridWorkspace = new Teleopti.Common.UI.SmartPartControls.SmartParts.GridWorkspace();
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
@@ -90,7 +91,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.notifyTimer = new System.Windows.Forms.Timer(this.components);
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.outlookBar1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.OutlookBar();
-			this.outlookBarWorkSpace1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.OutlookBarWorkSpace();
 			this._mainStatusStrip.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
@@ -184,8 +184,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.splitContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-			this.splitContainer.BeforeTouchSize = 5;
+			this.splitContainer.BackColor = System.Drawing.Color.White;
+			this.splitContainer.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.DarkGray);
+			this.splitContainer.BeforeTouchSize = 3;
 			this.splitContainer.FixedPanel = Syncfusion.Windows.Forms.Tools.Enums.FixedPanel.Panel1;
 			this.splitContainer.Location = new System.Drawing.Point(0, 0);
 			this.splitContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -193,22 +194,31 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			// splitContainer.Panel1
 			// 
-			this.splitContainer.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+			this.splitContainer.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainer.Panel1.Controls.Add(this.outlookBarWorkSpace1);
 			this.splitContainer.Panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.splitContainer.Panel1MinSize = 30;
 			// 
 			// splitContainer.Panel2
 			// 
-			this.splitContainer.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))), System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))));
+			this.splitContainer.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainer.Panel2.Controls.Add(this.webBrowser1);
 			this.splitContainer.Panel2.Controls.Add(this.gridWorkspace);
 			this.splitContainer.Panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.splitContainer.Size = new System.Drawing.Size(1145, 532);
 			this.splitContainer.SplitterDistance = 350;
-			this.splitContainer.SplitterWidth = 5;
-			this.splitContainer.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
+			this.splitContainer.SplitterWidth = 3;
+			this.splitContainer.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
 			this.splitContainer.TabIndex = 3;
+			// 
+			// outlookBarWorkSpace1
+			// 
+			this.outlookBarWorkSpace1.BackColor = System.Drawing.Color.White;
+			this.outlookBarWorkSpace1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.outlookBarWorkSpace1.Location = new System.Drawing.Point(0, 0);
+			this.outlookBarWorkSpace1.Name = "outlookBarWorkSpace1";
+			this.outlookBarWorkSpace1.Size = new System.Drawing.Size(350, 532);
+			this.outlookBarWorkSpace1.TabIndex = 0;
 			// 
 			// webBrowser1
 			// 
@@ -220,7 +230,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
 			this.webBrowser1.Name = "webBrowser1";
 			this.webBrowser1.ScrollBarsEnabled = false;
-			this.webBrowser1.Size = new System.Drawing.Size(786, 532);
+			this.webBrowser1.Size = new System.Drawing.Size(788, 532);
 			this.webBrowser1.TabIndex = 5;
 			this.webBrowser1.Visible = false;
 			// 
@@ -233,7 +243,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.gridWorkspace.Location = new System.Drawing.Point(0, 0);
 			this.gridWorkspace.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.gridWorkspace.Name = "gridWorkspace";
-			this.gridWorkspace.Size = new System.Drawing.Size(790, 532);
+			this.gridWorkspace.Size = new System.Drawing.Size(792, 532);
 			this.gridWorkspace.TabIndex = 0;
 			this.gridWorkspace.Tag = "0";
 			this.gridWorkspace.WorkspaceGridSizeChanged += new System.EventHandler<System.EventArgs>(this.GridWorkspace_WorkspaceGridSizeChanged);
@@ -454,7 +464,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.toolStripTabItem1.Panel.Text = "XXHOME";
 			this.toolStripTabItem1.Position = 0;
 			this.SetShortcut(this.toolStripTabItem1, System.Windows.Forms.Keys.None);
-			this.toolStripTabItem1.Size = new System.Drawing.Size(58, 19);
+			this.toolStripTabItem1.Size = new System.Drawing.Size(72, 25);
 			this.toolStripTabItem1.Tag = "1";
 			this.toolStripTabItem1.Text = "XXHOME";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripTabItem1, true);
@@ -596,15 +606,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.outlookBar1.TabIndex = 7;
 			this.outlookBar1.SelectedItemChanged += new System.EventHandler<Teleopti.Ccc.SmartClientPortal.Shell.Controls.SelectedItemChangedEventArgs>(this.outlookBar1_SelectedItemChanged);
 			this.outlookBar1.SizeChanged += new System.EventHandler(this.outlookBar1_SizeChanged);
-			// 
-			// outlookBarWorkSpace1
-			// 
-			this.outlookBarWorkSpace1.BackColor = System.Drawing.Color.White;
-			this.outlookBarWorkSpace1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.outlookBarWorkSpace1.Location = new System.Drawing.Point(0, 0);
-			this.outlookBarWorkSpace1.Name = "outlookBarWorkSpace1";
-			this.outlookBarWorkSpace1.Size = new System.Drawing.Size(350, 532);
-			this.outlookBarWorkSpace1.TabIndex = 0;
 			// 
 			// SmartClientShellForm
 			// 

@@ -491,16 +491,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.splitContainer1.Panel2MinSize = 100;
 			this.splitContainer1.Size = new System.Drawing.Size(218, 595);
-			this.splitContainer1.SplitterDistance = 239;
+			this.splitContainer1.SplitterDistance = 240;
 			this.splitContainer1.SplitterWidth = 3;
 			this.splitContainer1.TabIndex = 4;
 			// 
 			// treeViewSkills
 			// 
 			this.treeViewSkills.BackColor = System.Drawing.Color.White;
-			this.treeViewSkills.BeforeTouchSize = new System.Drawing.Size(218, 239);
+			this.treeViewSkills.BeforeTouchSize = new System.Drawing.Size(218, 240);
 			this.treeViewSkills.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-			this.treeViewSkills.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.treeViewSkills.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.treeViewSkills.CanSelectDisabledNode = false;
 			this.treeViewSkills.ContextMenuStrip = this.contextMenuStripSkillTypes;
 			this.treeViewSkills.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -518,7 +518,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.treeViewSkills.Name = "treeViewSkills";
 			this.treeViewSkills.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
 			this.treeViewSkills.ShowFocusRect = false;
-			this.treeViewSkills.Size = new System.Drawing.Size(218, 239);
+			this.treeViewSkills.Size = new System.Drawing.Size(218, 240);
 			this.treeViewSkills.SortWithChildNodes = true;
 			this.treeViewSkills.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
 			this.treeViewSkills.TabIndex = 1;
@@ -559,7 +559,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripSkills.Office12Mode = false;
 			this.toolStripSkills.Padding = new System.Windows.Forms.Padding(1);
 			this.toolStripSkills.ShowCaption = false;
-			this.toolStripSkills.Size = new System.Drawing.Size(208, 360);
+			this.toolStripSkills.Size = new System.Drawing.Size(208, 352);
 			this.toolStripSkills.TabIndex = 5;
 			this.toolStripSkills.Text = "xxActions";
 			this.toolStripSkills.Visible = false;
@@ -713,7 +713,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.SkillsMenuItemJobHistory.Name = "SkillsMenuItemJobHistory";
 			this.SkillsMenuItemJobHistory.Overflow = System.Windows.Forms.ToolStripItemOverflow.AsNeeded;
 			this.SkillsMenuItemJobHistory.Padding = new System.Windows.Forms.Padding(4);
-			this.SkillsMenuItemJobHistory.Size = new System.Drawing.Size(205, 28);
+			this.SkillsMenuItemJobHistory.Size = new System.Drawing.Size(94, 28);
 			this.SkillsMenuItemJobHistory.Text = "xxJobHistory";
 			this.SkillsMenuItemJobHistory.Click += new System.EventHandler(this.toolStripMenuItemJobHistoryClick);
 			// 
@@ -741,7 +741,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripWorkload.Office12Mode = false;
 			this.toolStripWorkload.Padding = new System.Windows.Forms.Padding(1);
 			this.toolStripWorkload.ShowCaption = false;
-			this.toolStripWorkload.Size = new System.Drawing.Size(208, 360);
+			this.toolStripWorkload.Size = new System.Drawing.Size(208, 352);
 			this.toolStripWorkload.TabIndex = 6;
 			this.toolStripWorkload.Text = "xxActions";
 			this.toolStripWorkload.Visible = false;
@@ -868,7 +868,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripQueues.Office12Mode = false;
 			this.toolStripQueues.Padding = new System.Windows.Forms.Padding(1);
 			this.toolStripQueues.ShowCaption = false;
-			this.toolStripQueues.Size = new System.Drawing.Size(208, 360);
+			this.toolStripQueues.Size = new System.Drawing.Size(208, 352);
 			this.toolStripQueues.TabIndex = 5;
 			this.toolStripQueues.Text = "xxActions";
 			this.toolStripQueues.Visible = false;
@@ -931,7 +931,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripSkillTypes.Office12Mode = false;
 			this.toolStripSkillTypes.Padding = new System.Windows.Forms.Padding(1);
 			this.toolStripSkillTypes.ShowCaption = false;
-			this.toolStripSkillTypes.Size = new System.Drawing.Size(208, 360);
+			this.toolStripSkillTypes.Size = new System.Drawing.Size(208, 352);
 			this.toolStripSkillTypes.TabIndex = 6;
 			this.toolStripSkillTypes.Text = "xxActions";
 			this.toolStripSkillTypes.Visible = false;
@@ -1031,7 +1031,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStrip1.Padding = new System.Windows.Forms.Padding(1);
 			this.toolStrip1.ShowCaption = false;
 			this.toolStrip1.ShowLauncher = false;
-			this.toolStrip1.Size = new System.Drawing.Size(208, 360);
+			this.toolStrip1.Size = new System.Drawing.Size(208, 352);
 			this.toolStrip1.TabIndex = 0;
 			this.toolStrip1.Text = "xxActions";
 			this.toolStrip1.Visible = false;
