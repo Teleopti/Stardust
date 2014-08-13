@@ -50,7 +50,7 @@
 
 			var mapOutFilterWords = function(rawInput) { return rawInput.match(/([!]*\w+)|(?:[!"']{1,2}(.*?)["'])/g); }
 			var shouldNegate = function(word) { return word.indexOf("!") === 0; }
-			var shouldMatchExact = function(word) { return word.indexOf("'") === 0; }
+			var shouldMatchExact = function (word) { return word.indexOf("'") === 0 || word.indexOf('"') === 0; }
 			var removeQuotes = function(word) { return word.slice(1, word.length - 1); }
 
 			var stringContains = function(item, filter) {
