@@ -9,8 +9,11 @@ namespace AnalysisServicesManager
     {
         public string FileAsString { private set; get; }
 
-        public FileHandler(string file)
+        public FileHandler(string RelativefilePath)
         {
+			string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+			string file = dir + "\\" + RelativefilePath;
             using (var reader = new StreamReader(file, System.Text.Encoding.Unicode))
             {
                 FileAsString = reader.ReadToEnd();

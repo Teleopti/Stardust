@@ -88,6 +88,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLineArgument.cs" />
+    <Compile Include="CustomizeServerObject.cs" />
+    <Compile Include="ExtractConnectionString.cs" />
     <Compile Include="FileHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

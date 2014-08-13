@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace AnalysisServicesManager
 {
@@ -14,6 +15,7 @@ namespace AnalysisServicesManager
 				//Avoid changing WISE, instead: use xmla scriptname as an "argument"
 				const string Drop="DropDatabase.xmla";
 				const string Process="ProcessDatabase.xmla";
+				const string Create = "CreateDatabase.xmla";
 
                 var argument = new CommandLineArgument(args);
 
@@ -31,10 +33,15 @@ namespace AnalysisServicesManager
 						repository.ProcessCube();
 						break;
 
-					//Create, or any other custom xmla 
-					default:
-						Console.WriteLine("Run custom xmla script: [" + argument.FilePath + "] ...");
+					case Create:
+						Console.WriteLine("Create Cube ...");
 						repository.ExecuteAnyXmla(argument);
+						break;
+
+					default:
+						Console.WriteLine("Running custom scripts from folder : " + argument.FilePath);
+						var foo = new CustomizeServerObject(argument);
+						foo.ApplyCustomization(argument);
 						break;
 				}
 

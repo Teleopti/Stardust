@@ -17,6 +17,8 @@ namespace AnalysisServicesManager
 
         public string FilePath { private set; get; }
 
+		public string SQLconnectionString {set; get; }
+		public string CustomFilePath { set; get; }
 
         public CommandLineArgument(string[] argumentCollection)
         {
@@ -37,7 +39,6 @@ namespace AnalysisServicesManager
 
             }
         }
-
 
         private void readArguments(string[] argumentCollection)
         {

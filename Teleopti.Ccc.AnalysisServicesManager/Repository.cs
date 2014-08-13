@@ -23,7 +23,16 @@ namespace AnalysisServicesManager
         {
 			if (argument != null)
 			{
-				string preScript = new FileHandler(argument.FilePath).FileAsString;
+				string preScript = "";
+				if (argument.CustomFilePath != null)
+				{
+					preScript = new FileHandler(argument.CustomFilePath).FileAsString;
+				}
+				else
+				{
+					preScript = new FileHandler(argument.FilePath).FileAsString;
+				}
+
 				string postScript = new CubeSourceFormat(preScript).FindAndReplace(argument);
 
 				using (AdomdConnection connection = new AdomdConnection(_connectionString))

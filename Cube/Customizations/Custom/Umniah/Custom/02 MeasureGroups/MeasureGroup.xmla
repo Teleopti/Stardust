@@ -1,0 +1,208 @@
+﻿<Batch Transaction="true" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+	<Alter AllowCreate="true" ObjectExpansion="ExpandFull">
+		<Object>
+		<DatabaseID>#(SQL_DATABASE_NAME)</DatabaseID>
+		<CubeID>Teleopti Analytics 1</CubeID>
+		<MeasureGroupID>Fact Sales</MeasureGroupID>
+	</Object>
+	<ObjectDefinition>
+		<MeasureGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400">
+			<ID>Fact Sales</ID>
+			<Name>Fact Sales</Name>
+			<Measures>
+				<Measure>
+					<ID>Sales Value</ID>
+					<Name>Sales Value</Name>
+					<DataType>Double</DataType>
+					<Source>
+						<DataType>Double</DataType>
+						<Source xsi:type="ColumnBinding">
+							<TableID>fact_sales</TableID>
+							<ColumnID>sales_value</ColumnID>
+						</Source>
+					</Source>
+				</Measure>
+				<Measure>
+					<ID>HITS</ID>
+					<Name>HITS</Name>
+					<DataType>Integer</DataType>
+					<Source>
+						<DataType>Integer</DataType>
+						<Source xsi:type="ColumnBinding">
+							<TableID>fact_sales</TableID>
+							<ColumnID>HITS</ColumnID>
+						</Source>
+					</Source>
+				</Measure>
+			</Measures>
+			<StorageMode>Molap</StorageMode>
+			<ProcessingMode>Regular</ProcessingMode>
+			<Dimensions>
+				<Dimension xsi:type="RegularMeasureGroupDimension">
+					<CubeDimensionID>Local Date</CubeDimensionID>
+					<Attributes>
+						<Attribute>
+							<AttributeID>Dim Date</AttributeID>
+							<KeyColumns>
+								<KeyColumn>
+									<DataType>Integer</DataType>
+									<Source xsi:type="ColumnBinding">
+										<TableID>fact_sales</TableID>
+										<ColumnID>date_id</ColumnID>
+									</Source>
+								</KeyColumn>
+							</KeyColumns>
+							<Type>Granularity</Type>
+						</Attribute>
+						<Attribute>
+							<AttributeID>Year</AttributeID>
+							<KeyColumns>
+								<KeyColumn>
+									<DataType>Integer</DataType>
+									<Source xsi:type="ColumnBinding">
+										<TableID>dbo_dim_date</TableID>
+										<ColumnID>year</ColumnID>
+									</Source>
+								</KeyColumn>
+							</KeyColumns>
+						</Attribute>
+						<Attribute>
+							<AttributeID>Year Month</AttributeID>
+							<KeyColumns>
+								<KeyColumn>
+									<DataType>Integer</DataType>
+									<Source xsi:type="ColumnBinding">
+										<TableID>dbo_dim_date</TableID>
+										<ColumnID>year_month</ColumnID>
+									</Source>
+								</KeyColumn>
+							</KeyColumns>
+						</Attribute>
+						<Attribute>
+							<AttributeID>Weekday Name</AttributeID>
+							<KeyColumns>
+								<KeyColumn>
+									<DataType>WChar</DataType>
+									<DataSize>20</DataSize>
+									<Source xsi:type="ColumnBinding">
+										<TableID>dbo_dim_date</TableID>
+										<ColumnID>weekday_name</ColumnID>
+									</Source>
+								</KeyColumn>
+							</KeyColumns>
+						</Attribute>
+						<Attribute>
+							<AttributeID>Year Week</AttributeID>
+							<KeyColumns>
+								<KeyColumn>
+									<DataType>WChar</DataType>
+									<DataSize>6</DataSize>
+									<Source xsi:type="ColumnBinding">
+										<TableID>dbo_dim_date</TableID>
+										<ColumnID>year_week</ColumnID>
+									</Source>
+								</KeyColumn>
+							</KeyColumns>
+						</Attribute>
+						<Attribute>
+							<AttributeID>Weekday Number</AttributeID>
+							<KeyColumns>
+								<KeyColumn>
+									<DataType>Integer</DataType>
+									<Source xsi:type="ColumnBinding">
+										<TableID>dbo_dim_date</TableID>
+										<ColumnID>weekday_number</ColumnID>
+									</Source>
+								</KeyColumn>
+							</KeyColumns>
+						</Attribute>
+						<Attribute>
+							<AttributeID>Quarter</AttributeID>
+							<KeyColumns>
+								<KeyColumn>
+									<DataType>WChar</DataType>
+									<DataSize>6</DataSize>
+									<Source xsi:type="ColumnBinding">
+										<TableID>dbo_dim_date</TableID>
+										<ColumnID>quarter</ColumnID>
+									</Source>
+								</KeyColumn>
+							</KeyColumns>
+						</Attribute>
+						<Attribute>
+							<AttributeID>Date Date</AttributeID>
+							<KeyColumns>
+								<KeyColumn>
+									<DataType>Date</DataType>
+									<Source xsi:type="ColumnBinding">
+										<TableID>dbo_dim_date</TableID>
+										<ColumnID>date_date</ColumnID>
+									</Source>
+								</KeyColumn>
+							</KeyColumns>
+						</Attribute>
+					</Attributes>
+				</Dimension>
+				<Dimension xsi:type="RegularMeasureGroupDimension">
+					<CubeDimensionID>ACD Login</CubeDimensionID>
+					<Attributes>
+						<Attribute>
+							<AttributeID>Dim Acd Login</AttributeID>
+							<KeyColumns>
+								<KeyColumn>
+									<DataType>Integer</DataType>
+									<Source xsi:type="ColumnBinding">
+										<TableID>fact_sales</TableID>
+										<ColumnID>acd_login_id</ColumnID>
+									</Source>
+								</KeyColumn>
+							</KeyColumns>
+							<Type>Granularity</Type>
+						</Attribute>
+						<Attribute>
+							<AttributeID>Acd Login Name</AttributeID>
+							<KeyColumns>
+								<KeyColumn>
+									<DataType>WChar</DataType>
+									<DataSize>100</DataSize>
+									<Source xsi:type="ColumnBinding">
+										<TableID>dbo_dim_acd_login</TableID>
+										<ColumnID>acd_login_name</ColumnID>
+									</Source>
+								</KeyColumn>
+							</KeyColumns>
+						</Attribute>
+					</Attributes>
+				</Dimension>
+			</Dimensions>
+			<Partitions>
+				<Partition>
+					<ID>Fact Sales</ID>
+					<Name>Fact Sales</Name>
+					<Source xsi:type="DsvTableBinding">
+						<DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+						<TableID>fact_sales</TableID>
+					</Source>
+					<StorageMode>Molap</StorageMode>
+					<ProcessingMode>Regular</ProcessingMode>
+					<ProactiveCaching>
+						<SilenceInterval>-PT1S</SilenceInterval>
+						<Latency>-PT1S</Latency>
+						<SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+						<ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+						<Source xsi:type="ProactiveCachingInheritedBinding" />
+					</ProactiveCaching>
+				</Partition>
+			</Partitions>
+			<ProactiveCaching>
+				<SilenceInterval>-PT1S</SilenceInterval>
+				<Latency>-PT1S</Latency>
+				<SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+				<ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+				<Source xsi:type="ProactiveCachingInheritedBinding" />
+			</ProactiveCaching>
+		</MeasureGroup>
+
+	</ObjectDefinition>
+	</Alter>
+</Batch>

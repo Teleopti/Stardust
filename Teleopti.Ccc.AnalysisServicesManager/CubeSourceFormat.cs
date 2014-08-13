@@ -16,36 +16,23 @@ namespace AnalysisServicesManager
 
         public string FindAndReplace(CommandLineArgument argument)
         {
-
-            string sqlConnectionString;
-
-            if (argument.UseIntegratedSecurity)
-            {
-                sqlConnectionString =
-                string.Format(CultureInfo.InvariantCulture,
-                              "Application Name=TeleoptiPM;Data Source={0};Persist Security Info=True;Integrated Security=SSPI;Initial Catalog={1}",
-                              argument.SqlServer, argument.SqlDatabase);
-            }
-            else
-            {
-                sqlConnectionString =
-                    string.Format(CultureInfo.InvariantCulture,
-                                  "Application Name=TeleoptiPM;Data Source={0};Persist Security Info=True;User ID={1};Password={2};Initial Catalog={3}",
-                                  argument.SqlServer, argument.SqlUser, argument.SqlPassword, argument.SqlDatabase);
-            }
-
             var SqlDatabaseName = argument.AnalysisDatabase;
-            int dbVersion = version(sqlConnectionString);
-            sqlConnectionString = fixConnString(dbVersion, sqlConnectionString);
+            string sqlConnectionString;
+			string sqlConnectionStringWithProvide;
+			sqlConnectionString = ExtractConnectionString.sqlConnectionStringSet(argument);
+
+			int dbVersion = version(sqlConnectionString);
+			sqlConnectionStringWithProvide = AddSQLProvider(dbVersion, sqlConnectionString);
+
             string post = _pre;
             post = post.Replace(@"#(AS_DATABASE)", SqlDatabaseName);
             post = post.Replace(@"#(SQL_DATABASE_NAME)", SqlDatabaseName);
-            post = post.Replace(@"#(SQL_CONN_STRING)", sqlConnectionString);
+			post = post.Replace(@"#(SQL_CONN_STRING)", sqlConnectionStringWithProvide);
 
             return post;
         }
 
-        private static string fixConnString(int version, string connString)
+        private static string AddSQLProvider(int version, string connString)
         {
             switch (version)
             {
