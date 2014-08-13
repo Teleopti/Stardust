@@ -29,6 +29,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var shiftCategories = table.CreateSet<ActivityConfigurable>();
 			shiftCategories.ForEach(x => DataMaker.Data().Apply(x));
 		}
+
+		[Given(@"there is an activity in business unit '(.*)' named '(.*)'")]
+		public void GivenThereIsAnActivityInBusinessUnitNamed(string businessUnitName, string activityName)
+		{
+			var activity = new ActivityConfigurable { Name = activityName, BusinessUnit = businessUnitName};
+			DataMaker.Data().Apply(activity);
+		}
+
 	}
 
 }

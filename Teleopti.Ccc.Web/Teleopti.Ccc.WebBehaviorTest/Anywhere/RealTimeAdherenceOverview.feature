@@ -650,7 +650,6 @@ Scenario: Should display sites of a selected business unit
 	Then I should see the site 'Paris'
 
 @OnlyRunIfEnabled('RTA_MonitorMultipleBusinessUnits_28348')
-@ignore
 Scenario: Should be able to see all agents state updates of a team within a specific business unit
 	Given  the current time is '2014-01-21 12:30:00'
 	And I have a role with
@@ -667,8 +666,8 @@ Scenario: Should be able to see all agents state updates of a team within a spec
 	And there is a site 'Paris' on business unit 'Business Unit 1'
 	And there is a site 'London' on business unit 'Business Unit 2'
 	And there is a team named 'Red' on site 'Paris'
-	And there is an activity named 'Phone'
-	And there is an activity named 'Lunch'
+	And there is an activity in business unit 'Business Unit 1' named 'Phone'
+	And there is an activity in business unit 'Business Unit 1' named 'Lunch'
 	And there is a datasouce with id 6
 	And I am located in 'London'
 	And there is an external logon named 'Pierre Baldi' with datasource 6
@@ -687,6 +686,7 @@ Scenario: Should be able to see all agents state updates of a team within a spec
 	| Next activity end time   | 2014-01-21 13:30 |
 	And there is an alarm with 
 	| Field           | Value    |
+	| Business Unit   | Business Unit 1    |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
@@ -694,18 +694,18 @@ Scenario: Should be able to see all agents state updates of a team within a spec
 	| Staffing effect | 0        |
 	And there is an alarm with 
 	| Field           | Value        |
+	| Business Unit   | Business Unit 1    |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
 	| Alarm Color     | Red          |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
-	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	When I view Real time adherence overview
-	And I select business unit 'Business Unit 1'
-	And I click the site checkbox for 'Paris'
-	And I click 'open'
-	And I click the team checkbox for 'Red'
-	And I click 'open'
+	And the browser time is '2014-01-21 12:45:00'
+	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
+	And I choose business unit 'Business Unit 1'
+	And I click the site 'Paris'
+	And I click the team 'Red'
 	Then I should see real time agent details for 'Pierre Baldi'
 		| Name                     |                  |
 		| Name                     | Pierre Baldi     |

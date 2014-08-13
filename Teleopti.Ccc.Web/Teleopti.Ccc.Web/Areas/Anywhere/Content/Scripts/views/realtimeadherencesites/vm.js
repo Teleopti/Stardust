@@ -82,9 +82,9 @@
 				that.load(event.target.options[event.target.selectedIndex].value);
 			};
 
-			that.load = function (businessId) {
+			that.load = function (businessUnitId) {
 				ajax.ajax({
-					headers: { 'X-Business-Unit-Filter': businessId ? businessId : '' },
+					headers: { 'X-Business-Unit-Filter': businessUnitId ? businessUnitId : '' },
 					url: "Sites",
 					success: function(data) {
 						that.fill(data);
@@ -97,7 +97,7 @@
 				subscriptions.unsubscribeAdherence();
 				subscriptions.subscribeAdherence(function (notification) {
 					that.updateFromNotification(notification);
-				}, function () {
+				}, businessUnitId, function () {
 					$('.realtimeadherencesites').attr("data-subscription-done", " ");
 				});
 			};

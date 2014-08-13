@@ -1,3 +1,4 @@
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Color { get; set; }
 		public bool? AllowMeeting { get; set; }
 		public bool? InReadyTime { get; set; }
+		public string BusinessUnit { get; set; }
 
 	    public IActivity Activity;
 
@@ -32,8 +34,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				Activity.InReadyTime = InReadyTime.Value;
 			}
 
+			if(!string.IsNullOrEmpty(BusinessUnit))
+				Activity.SetBusinessUnit(new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit));
+
 			var activityRepository = new ActivityRepository(uow);
-            activityRepository.Add(Activity);
+			activityRepository.Add(Activity);
 		}
 	}
 }
