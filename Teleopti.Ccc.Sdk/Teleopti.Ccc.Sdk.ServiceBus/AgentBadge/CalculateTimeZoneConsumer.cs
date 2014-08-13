@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			if (Logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("Consume CalculateTimeZoneMessage with BusinessUnit {0}, DataSource {1} and timezone {2}", message.BusinessUnitId,
-					message.Datasource, message.TimeZoneCode, message.TimeZoneCode);
+				Logger.DebugFormat("Consume CalculateTimeZoneMessage with BusinessUnit {0}, DataSource {1} and timezone {2}",
+					message.BusinessUnitId, message.Datasource, message.TimeZoneCode);
 			}
 			var yesterday = _now.LocalDateOnly().AddDays(-1);
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat(
-							"Sending CalculateBadgeMessage to Service Bus for Timezone={0} on calculation time={1}", message.TimeZoneCode,
-							yesterdayForGivenTimeZone);
+					"Sending CalculateBadgeMessage to Service Bus for Timezone={0} on calculation time={1}",
+					message.TimeZoneCode, yesterdayForGivenTimeZone);
 			}
 		}
 	}

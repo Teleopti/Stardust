@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat("Consume CalculateBadgeMessage with BusinessUnit {0}, DataSource {1} and timezone {2}", message.BusinessUnitId,
-					message.Datasource, message.TimeZoneCode, message.TimeZoneCode);
+					message.Datasource, message.TimeZoneCode);
 			}
 
 			var today = _now.LocalDateOnly();
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				var allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
 				var peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZoneCode, new DateOnly(message.CalculationDate),
-					adherenceReportSetting.CalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
+					adherenceReportSetting.CalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate).ToList();
 
 				if (Logger.IsDebugEnabled)
 				{

@@ -36,15 +36,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 							person.Name, person.Id, badgeType);
 					}
 
-					IAgentBadge badge;
-					if (!person.Badges.Any(x => x.BadgeType == badgeType))
-					{
-						badge = null;
-					}
-					else
-					{
-						badge = person.Badges.First(x => x.BadgeType == badgeType);
-					}
+					var badge = person.Badges.Any(x => x.BadgeType == badgeType)
+						? person.Badges.Single(x => x.BadgeType == badgeType)
+						: null;
 
 					if (badge == null || badge.LastCalculatedDate < date)
 					{
@@ -60,8 +54,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					if (Logger.IsDebugEnabled)
 					{
 						badge = person.Badges.First(x => x.BadgeType == badgeType);
-						Logger.DebugFormat("Now the agent {0} (ID: {1}) has {2} bronze badge, {3} silver badge, {4} gold badge "
-						                   + "for {5}", person.Name, person.Id, badge.BronzeBadge, badge.SilverBadge, badge.GoldBadge,
+						Logger.DebugFormat(
+							"Now the agent {0} (ID: {1}) has {2} bronze badge, {3} silver badge, {4} gold badge "
+							+ "for {5}", person.Name, person.Id, badge.BronzeBadge, badge.SilverBadge, badge.GoldBadge,
 							badgeType);
 					}
 				}
@@ -71,26 +66,31 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		}
 
 		public IEnumerable<IPerson> Calculate(IEnumerable<IPerson> allPersons, string timezoneCode,
-			DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int silverToBronzeBadgeRate, int goldToSilverBadgeRate)
+			DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, int silverToBronzeBadgeRate,
+			int goldToSilverBadgeRate)
 		{
 			if (Logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("Calculate badge for timezone: {0}, date: {1}, AdherenceReportSettingCalculationMethod: {2},"
-				                   + "silver to bronze badge rate: {3}, gold to silver badge rate: {4}", timezoneCode, date.Date,
+				Logger.DebugFormat(
+					"Calculate badge for timezone: {0}, date: {1}, AdherenceReportSettingCalculationMethod: {2},"
+					+ "silver to bronze badge rate: {3}, gold to silver badge rate: {4}", timezoneCode, date.Date,
 					adherenceCalculationMethod, silverToBronzeBadgeRate, goldToSilverBadgeRate);
 			}
 
+			var personList = allPersons.ToList();
 			var personsThatGotBadge = new List<IPerson>();
-			var agents = _statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date);
+			var agentsList =
+				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date);
 
-			if (agents != null && agents.Any())
+			var agents = agentsList == null ? new List<Guid>() : agentsList.ToList();
+			if (agents.Any())
 			{
 				if (Logger.IsDebugEnabled)
 				{
 					Logger.DebugFormat("{0} agents will get badge for adherence", agents.Count());
 				}
 
-				var personsThatGotAAdherenceBadge = AddBadge(allPersons, agents, BadgeType.Adherence, silverToBronzeBadgeRate,
+				var personsThatGotAAdherenceBadge = AddBadge(personList, agents, BadgeType.Adherence, silverToBronzeBadgeRate,
 					goldToSilverBadgeRate, date);
 				personsThatGotBadge.AddRange(personsThatGotAAdherenceBadge);
 			}
@@ -102,16 +102,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				}
 			}
 
-			agents = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date);
+			agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date);
+			agents = agentsList == null ? new List<Guid>() : agentsList.ToList();
 
-			if (agents != null && agents.Any())
+			if (agents.Any())
 			{
 				if (Logger.IsDebugEnabled)
 				{
 					Logger.DebugFormat("{0} agents will get badge for answered calls", agents.Count());
 				}
 
-				var personsThatGotAAnsweredCallsBadge = AddBadge(allPersons, agents, BadgeType.AnsweredCalls, silverToBronzeBadgeRate, goldToSilverBadgeRate, date);
+				var personsThatGotAAnsweredCallsBadge
+					= AddBadge(personList, agents, BadgeType.AnsweredCalls, silverToBronzeBadgeRate, goldToSilverBadgeRate, date);
 				personsThatGotBadge.AddRange(personsThatGotAAnsweredCallsBadge);
 			}
 			else
@@ -122,15 +124,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				}
 			}
 
-			agents = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date);
-			if (agents != null && agents.Any())
+			agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date);
+			agents = agentsList == null ? new List<Guid>() : agentsList.ToList();
+
+			if (agents.Any())
 			{
 				if (Logger.IsDebugEnabled)
 				{
 					Logger.DebugFormat("{0} agents will get badge for AHT", agents.Count());
 				}
 
-				var personsThatGotAAHTBadge = AddBadge(allPersons, agents, BadgeType.AverageHandlingTime, silverToBronzeBadgeRate, goldToSilverBadgeRate, date);
+				var personsThatGotAAHTBadge
+					= AddBadge(personList, agents, BadgeType.AverageHandlingTime, silverToBronzeBadgeRate, goldToSilverBadgeRate, date);
 				personsThatGotBadge.AddRange(personsThatGotAAHTBadge);
 			}
 			else

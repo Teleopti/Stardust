@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		/// <param name="settingsRepository"></param>
 		/// <param name="buRepository"></param>
 		/// <param name="unitOfWorkFactory"></param>
-		public BadgeCalculationInitConsumer(IServiceBus serviceBus, IAgentBadgeSettingsRepository settingsRepository, IBusinessUnitRepository buRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public BadgeCalculationInitConsumer(IServiceBus serviceBus, IAgentBadgeSettingsRepository settingsRepository,
+			IBusinessUnitRepository buRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_serviceBus = serviceBus;
 			_settingsRepository = settingsRepository;
@@ -50,24 +51,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				return;
 			}
 
-			IEnumerable<TimeZoneInfo> timeZoneList;
-
+			List<TimeZoneInfo> timeZoneList;
 			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				IAgentBadgeThresholdSettings setting = _settingsRepository.LoadAll().FirstOrDefault();
+				var setting = _settingsRepository.LoadAll().FirstOrDefault();
 				if (setting == null || !setting.EnableBadge)
 				{
 					_serviceBus.DelaySend(DateOnly.Today.AddDays(1), message);
 					if (Logger.IsDebugEnabled)
 					{
 						Logger.DebugFormat(
-							"Feature is diabled. Delay Sending BadgeCalculationInitMessage to Service Bus for BusinessUnitId={0} in DataSource={1} tommorrow", message.BusinessUnitId,
+							"Feature is diabled. Delay Sending BadgeCalculationInitMessage to Service Bus for "
+							+ "BusinessUnitId={0} in DataSource={1} tommorrow", message.BusinessUnitId,
 							message.Datasource);
 					}
 					return;
 				}
 
-				timeZoneList = _buRepository.LoadAllTimeZones();
+				timeZoneList = _buRepository.LoadAllTimeZones().ToList();
 			}
 			
 			if (Logger.IsDebugEnabled)
@@ -88,8 +89,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				if (Logger.IsDebugEnabled)
 				{
 					Logger.DebugFormat(
-							"Sending CalculateTimeZoneMessage to Service Bus for Timezone={0} in BusinessUnitId={1}", timeZoneInfo.Id,
-							message.BusinessUnitId);
+						"Sending CalculateTimeZoneMessage to Service Bus for Timezone={0} in BusinessUnitId={1}",
+						timeZoneInfo.Id, message.BusinessUnitId);
 				}
 			}
 		}
