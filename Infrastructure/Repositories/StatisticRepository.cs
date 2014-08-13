@@ -349,6 +349,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var threshold = thresholdSettings.AnsweredCallsThreshold;
 
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
+					.AddScalar("person_code", NHibernateUtil.Guid)
 					.SetReadOnly(true)
 					.SetInt32("threshold", threshold)
 					.SetString("timezoneCode", timezoneCode)
@@ -373,6 +374,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var threshold = thresholdSettings.AdherenceThreshold;
 
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
+					.AddScalar("person_code", NHibernateUtil.Guid)
 					.SetReadOnly(true)
 					.SetDouble("threshold", threshold.Value)
 					.SetString("timezoneCode", timezoneCode)
@@ -397,6 +399,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var threshold = thresholdSettings.AHTThreshold;
 
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
+					.AddScalar("person_code", NHibernateUtil.Guid)
 					.SetReadOnly(true)
 					.SetDouble("threshold", threshold.TotalSeconds)
 					.SetString("timezoneCode", timezoneCode)
