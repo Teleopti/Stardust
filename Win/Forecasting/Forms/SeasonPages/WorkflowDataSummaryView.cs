@@ -223,5 +223,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
                 _chartControl.Dispose();
             }
         }
+
+		private void splitContainerAdv1_Click(object sender, EventArgs e)
+		{
+
+		}
     }
 }

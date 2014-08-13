@@ -70,21 +70,22 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			// splitContainerAdv1.Panel2
 			// 
 			this.splitContainerAdv1.Panel2.BackColor = System.Drawing.Color.White;
-			this.splitContainerAdv1.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.White);
+			this.splitContainerAdv1.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainerAdv1.Panel2.Controls.Add(this.xpTaskBar1);
-			this.splitContainerAdv1.Size = new System.Drawing.Size(1060, 600);
-			this.splitContainerAdv1.SplitterDistance = 885;
+			this.splitContainerAdv1.Size = new System.Drawing.Size(1141, 711);
+			this.splitContainerAdv1.SplitterDistance = 952;
 			this.splitContainerAdv1.SplitterWidth = 3;
 			this.splitContainerAdv1.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
 			this.splitContainerAdv1.TabIndex = 0;
 			this.splitContainerAdv1.Text = "yysplitContainerAdv1";
+			this.splitContainerAdv1.Click += new System.EventHandler(this.splitContainerAdv1_Click);
 			this.splitContainerAdv1.DoubleClick += new System.EventHandler(this.splitContainerAdv1_DoubleClick);
 			// 
 			// xpTaskBar1
 			// 
 			this.xpTaskBar1.AutoSize = true;
 			this.xpTaskBar1.BackColor = System.Drawing.Color.White;
-			this.xpTaskBar1.BeforeTouchSize = new System.Drawing.Size(172, 393);
+			this.xpTaskBar1.BeforeTouchSize = new System.Drawing.Size(186, 450);
 			this.xpTaskBar1.BorderColor = System.Drawing.Color.Black;
 			this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxHistoricalDepth);
 			this.xpTaskBar1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.xpTaskBar1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.xpTaskBar1.MinimumSize = new System.Drawing.Size(0, 0);
 			this.xpTaskBar1.Name = "xpTaskBar1";
-			this.xpTaskBar1.Size = new System.Drawing.Size(172, 393);
+			this.xpTaskBar1.Size = new System.Drawing.Size(186, 450);
 			this.xpTaskBar1.TabIndex = 0;
 			// 
 			// xpTaskBarBoxHistoricalDepth
@@ -106,8 +107,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.xpTaskBarBoxHistoricalDepth.ItemBackColor = System.Drawing.Color.White;
 			this.xpTaskBarBoxHistoricalDepth.Location = new System.Drawing.Point(0, 0);
 			this.xpTaskBarBoxHistoricalDepth.Name = "xpTaskBarBoxHistoricalDepth";
-			this.xpTaskBarBoxHistoricalDepth.PreferredChildPanelHeight = 360;
-			this.xpTaskBarBoxHistoricalDepth.Size = new System.Drawing.Size(172, 390);
+			this.xpTaskBarBoxHistoricalDepth.PreferredChildPanelHeight = 415;
+			this.xpTaskBarBoxHistoricalDepth.Size = new System.Drawing.Size(186, 447);
 			this.xpTaskBarBoxHistoricalDepth.TabIndex = 0;
 			this.xpTaskBarBoxHistoricalDepth.Text = "xxSelectHistoricalData";
 			// 
@@ -116,9 +117,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.gradientPanel2.AutoSize = true;
 			this.gradientPanel2.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanel2.Controls.Add(this.gradientPanel3);
-			this.gradientPanel2.Location = new System.Drawing.Point(2, 28);
+			this.gradientPanel2.Location = new System.Drawing.Point(2, 30);
 			this.gradientPanel2.Name = "gradientPanel2";
-			this.gradientPanel2.Size = new System.Drawing.Size(168, 360);
+			this.gradientPanel2.Size = new System.Drawing.Size(182, 415);
 			this.gradientPanel2.TabIndex = 0;
 			// 
 			// gradientPanel3
@@ -129,7 +130,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.gradientPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gradientPanel3.Location = new System.Drawing.Point(0, 0);
 			this.gradientPanel3.Name = "gradientPanel3";
-			this.gradientPanel3.Size = new System.Drawing.Size(168, 360);
+			this.gradientPanel3.Size = new System.Drawing.Size(182, 415);
 			this.gradientPanel3.TabIndex = 2;
 			// 
 			// dateSelectionCompositeHistoricalPeriod
@@ -137,20 +138,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.dateSelectionCompositeHistoricalPeriod.AutoSize = true;
 			this.dateSelectionCompositeHistoricalPeriod.BackColor = System.Drawing.Color.White;
 			this.dateSelectionCompositeHistoricalPeriod.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dateSelectionCompositeHistoricalPeriod.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateSelectionCompositeHistoricalPeriod.Location = new System.Drawing.Point(0, 0);
 			this.dateSelectionCompositeHistoricalPeriod.Name = "dateSelectionCompositeHistoricalPeriod";
-			this.dateSelectionCompositeHistoricalPeriod.Size = new System.Drawing.Size(168, 360);
+			this.dateSelectionCompositeHistoricalPeriod.Size = new System.Drawing.Size(182, 415);
 			this.dateSelectionCompositeHistoricalPeriod.TabIndex = 0;
 			this.dateSelectionCompositeHistoricalPeriod.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionComposite1_DateRangeChanged);
 			// 
 			// WorkflowDataSummaryView
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.splitContainerAdv1);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "WorkflowDataSummaryView";
-			this.Size = new System.Drawing.Size(1060, 600);
+			this.Size = new System.Drawing.Size(1141, 711);
 			this.splitContainerAdv1.Panel2.ResumeLayout(false);
 			this.splitContainerAdv1.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv1)).EndInit();

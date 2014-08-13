@@ -331,6 +331,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
             if (handler != null)
                 handler(this, new FilterDataViewClosedEventArgs(filteredDates));
         }
+
+		private void cmbTaskRunningSmoothning_Click(object sender, EventArgs e)
+		{
+
+		}
     }
 
     public class FilterDataViewClosedEventArgs : EventArgs

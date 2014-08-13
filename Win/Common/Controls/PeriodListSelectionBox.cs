@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this.buttonAdvRemove.Enabled = false;
 			this.buttonAdvRemove.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvRemove.IsBackStageButton = false;
-			this.buttonAdvRemove.Location = new System.Drawing.Point(5, 2);
+			this.buttonAdvRemove.Location = new System.Drawing.Point(4, 2);
 			this.buttonAdvRemove.Margin = new System.Windows.Forms.Padding(2);
 			this.buttonAdvRemove.Name = "buttonAdvRemove";
 			this.buttonAdvRemove.Size = new System.Drawing.Size(76, 23);
@@ -136,8 +136,8 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 2;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.Controls.Add(this.gridListControlPeriods, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.buttonAdvRemove, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.buttonAdvClear, 1, 0);

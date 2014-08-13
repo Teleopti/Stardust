@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			// 
 			this.splitContainerMain.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainerMain.Panel2.Controls.Add(this.xpBoxPeriodSelection);
-			this.splitContainerMain.Size = new System.Drawing.Size(1000, 600);
-			this.splitContainerMain.SplitterDistance = 827;
+			this.splitContainerMain.Size = new System.Drawing.Size(1167, 692);
+			this.splitContainerMain.SplitterDistance = 965;
 			this.splitContainerMain.SplitterWidth = 3;
 			this.splitContainerMain.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
 			this.splitContainerMain.TabIndex = 0;
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			// xpBoxPeriodSelection
 			// 
 			this.xpBoxPeriodSelection.BackColor = System.Drawing.Color.White;
-			this.xpBoxPeriodSelection.BeforeTouchSize = new System.Drawing.Size(170, 600);
+			this.xpBoxPeriodSelection.BeforeTouchSize = new System.Drawing.Size(199, 692);
 			this.xpBoxPeriodSelection.BorderColor = System.Drawing.Color.Black;
 			this.xpBoxPeriodSelection.Controls.Add(this.xpSelectperiod);
 			this.xpBoxPeriodSelection.Controls.Add(this.xpSmothing);
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.xpBoxPeriodSelection.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.xpBoxPeriodSelection.MinimumSize = new System.Drawing.Size(0, 0);
 			this.xpBoxPeriodSelection.Name = "xpBoxPeriodSelection";
-			this.xpBoxPeriodSelection.Size = new System.Drawing.Size(170, 600);
+			this.xpBoxPeriodSelection.Size = new System.Drawing.Size(199, 692);
 			this.xpBoxPeriodSelection.TabIndex = 1;
 			// 
 			// xpSelectperiod
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.xpSelectperiod.Name = "xpSelectperiod";
 			this.xpSelectperiod.PreferredChildPanelHeight = 346;
 			this.xpSelectperiod.ShowCollapseButton = false;
-			this.xpSelectperiod.Size = new System.Drawing.Size(170, 377);
+			this.xpSelectperiod.Size = new System.Drawing.Size(199, 378);
 			this.xpSelectperiod.TabIndex = 1;
 			this.xpSelectperiod.Text = "xxSelectHistoricalData";
 			// 
@@ -129,9 +129,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.gradientPanel2.BackColor = System.Drawing.Color.White;
 			this.gradientPanel2.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanel2.Controls.Add(this.dateSelectionComposite1);
-			this.gradientPanel2.Location = new System.Drawing.Point(2, 29);
+			this.gradientPanel2.Location = new System.Drawing.Point(2, 30);
 			this.gradientPanel2.Name = "gradientPanel2";
-			this.gradientPanel2.Size = new System.Drawing.Size(166, 346);
+			this.gradientPanel2.Size = new System.Drawing.Size(195, 346);
 			this.gradientPanel2.TabIndex = 0;
 			// 
 			// dateSelectionComposite1
@@ -139,10 +139,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.dateSelectionComposite1.AutoSize = true;
 			this.dateSelectionComposite1.BackColor = System.Drawing.Color.White;
 			this.dateSelectionComposite1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dateSelectionComposite1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateSelectionComposite1.Location = new System.Drawing.Point(0, 0);
 			this.dateSelectionComposite1.Name = "dateSelectionComposite1";
-			this.dateSelectionComposite1.Size = new System.Drawing.Size(166, 346);
+			this.dateSelectionComposite1.Size = new System.Drawing.Size(195, 346);
 			this.dateSelectionComposite1.TabIndex = 0;
 			this.dateSelectionComposite1.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionComposite1_DateRangeChanged);
 			// 
@@ -155,10 +154,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.xpSmothing.HitTaskBoxArea = false;
 			this.xpSmothing.HotTrackColor = System.Drawing.Color.Empty;
 			this.xpSmothing.ItemBackColor = System.Drawing.Color.White;
-			this.xpSmothing.Location = new System.Drawing.Point(0, 377);
+			this.xpSmothing.Location = new System.Drawing.Point(0, 378);
 			this.xpSmothing.Name = "xpSmothing";
 			this.xpSmothing.PreferredChildPanelHeight = 110;
-			this.xpSmothing.Size = new System.Drawing.Size(170, 141);
+			this.xpSmothing.Size = new System.Drawing.Size(199, 142);
 			this.xpSmothing.TabIndex = 2;
 			this.xpSmothing.Text = "xxSmoothing";
 			// 
@@ -166,9 +165,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			// 
 			this.gradientPanel3.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanel3.Controls.Add(this.tableLayoutPanel1);
-			this.gradientPanel3.Location = new System.Drawing.Point(2, 29);
+			this.gradientPanel3.Location = new System.Drawing.Point(2, 30);
 			this.gradientPanel3.Name = "gradientPanel3";
-			this.gradientPanel3.Size = new System.Drawing.Size(166, 110);
+			this.gradientPanel3.Size = new System.Drawing.Size(195, 110);
 			this.gradientPanel3.TabIndex = 0;
 			// 
 			// tableLayoutPanel1
@@ -190,16 +189,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(166, 110);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(195, 110);
 			this.tableLayoutPanel1.TabIndex = 5;
 			// 
 			// labelDeviationAfterTaskTime
 			// 
 			this.labelDeviationAfterTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelDeviationAfterTaskTime.AutoSize = true;
-			this.labelDeviationAfterTaskTime.Location = new System.Drawing.Point(3, 84);
+			this.labelDeviationAfterTaskTime.Location = new System.Drawing.Point(3, 83);
 			this.labelDeviationAfterTaskTime.Name = "labelDeviationAfterTaskTime";
-			this.labelDeviationAfterTaskTime.Size = new System.Drawing.Size(129, 13);
+			this.labelDeviationAfterTaskTime.Size = new System.Drawing.Size(133, 15);
 			this.labelDeviationAfterTaskTime.TabIndex = 3;
 			this.labelDeviationAfterTaskTime.Text = "xxForecastedACWColon";
 			// 
@@ -207,40 +206,44 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			// 
 			this.cmbAverageAfterCallWorkRunningSmoothning.AllowNewText = false;
 			this.cmbAverageAfterCallWorkRunningSmoothning.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.cmbAverageAfterCallWorkRunningSmoothning.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
-			this.cmbAverageAfterCallWorkRunningSmoothning.BeforeTouchSize = new System.Drawing.Size(63, 21);
+			this.cmbAverageAfterCallWorkRunningSmoothning.BackColor = System.Drawing.Color.White;
+			this.cmbAverageAfterCallWorkRunningSmoothning.BeforeTouchSize = new System.Drawing.Size(73, 23);
 			this.cmbAverageAfterCallWorkRunningSmoothning.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cmbAverageAfterCallWorkRunningSmoothning.Location = new System.Drawing.Point(156, 80);
+			this.cmbAverageAfterCallWorkRunningSmoothning.Location = new System.Drawing.Point(164, 80);
+			this.cmbAverageAfterCallWorkRunningSmoothning.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.cmbAverageAfterCallWorkRunningSmoothning.Name = "cmbAverageAfterCallWorkRunningSmoothning";
-			this.cmbAverageAfterCallWorkRunningSmoothning.Size = new System.Drawing.Size(63, 21);
-			this.cmbAverageAfterCallWorkRunningSmoothning.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+			this.cmbAverageAfterCallWorkRunningSmoothning.Size = new System.Drawing.Size(73, 23);
+			this.cmbAverageAfterCallWorkRunningSmoothning.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.cmbAverageAfterCallWorkRunningSmoothning.TabIndex = 4;
 			this.cmbAverageAfterCallWorkRunningSmoothning.SelectionChangeCommitted += new System.EventHandler(this.cmbAverageAfterCallWorkRunningSmoothning_SelectionChangeCommitted);
 			// 
 			// cmbTaskRunningSmoothning
 			// 
 			this.cmbTaskRunningSmoothning.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.cmbTaskRunningSmoothning.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
-			this.cmbTaskRunningSmoothning.BeforeTouchSize = new System.Drawing.Size(63, 21);
+			this.cmbTaskRunningSmoothning.BackColor = System.Drawing.Color.White;
+			this.cmbTaskRunningSmoothning.BeforeTouchSize = new System.Drawing.Size(73, 23);
 			this.cmbTaskRunningSmoothning.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cmbTaskRunningSmoothning.Location = new System.Drawing.Point(156, 7);
+			this.cmbTaskRunningSmoothning.Location = new System.Drawing.Point(164, 7);
+			this.cmbTaskRunningSmoothning.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.cmbTaskRunningSmoothning.Name = "cmbTaskRunningSmoothning";
-			this.cmbTaskRunningSmoothning.Size = new System.Drawing.Size(63, 21);
-			this.cmbTaskRunningSmoothning.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+			this.cmbTaskRunningSmoothning.Size = new System.Drawing.Size(73, 23);
+			this.cmbTaskRunningSmoothning.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.cmbTaskRunningSmoothning.TabIndex = 0;
 			this.cmbTaskRunningSmoothning.SelectionChangeCommitted += new System.EventHandler(this.cmbTaskRunningSmoothning_SelectionChangeCommitted);
+			this.cmbTaskRunningSmoothning.Click += new System.EventHandler(this.cmbTaskRunningSmoothning_Click);
 			// 
 			// cmbAverageTimeRunningSmoothning
 			// 
 			this.cmbAverageTimeRunningSmoothning.AllowNewText = false;
 			this.cmbAverageTimeRunningSmoothning.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.cmbAverageTimeRunningSmoothning.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
-			this.cmbAverageTimeRunningSmoothning.BeforeTouchSize = new System.Drawing.Size(63, 21);
+			this.cmbAverageTimeRunningSmoothning.BackColor = System.Drawing.Color.White;
+			this.cmbAverageTimeRunningSmoothning.BeforeTouchSize = new System.Drawing.Size(73, 23);
 			this.cmbAverageTimeRunningSmoothning.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cmbAverageTimeRunningSmoothning.Location = new System.Drawing.Point(156, 43);
+			this.cmbAverageTimeRunningSmoothning.Location = new System.Drawing.Point(164, 43);
+			this.cmbAverageTimeRunningSmoothning.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.cmbAverageTimeRunningSmoothning.Name = "cmbAverageTimeRunningSmoothning";
-			this.cmbAverageTimeRunningSmoothning.Size = new System.Drawing.Size(63, 21);
-			this.cmbAverageTimeRunningSmoothning.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+			this.cmbAverageTimeRunningSmoothning.Size = new System.Drawing.Size(73, 23);
+			this.cmbAverageTimeRunningSmoothning.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.cmbAverageTimeRunningSmoothning.TabIndex = 4;
 			this.cmbAverageTimeRunningSmoothning.SelectionChangeCommitted += new System.EventHandler(this.cmbAverageTimeRunningSmoothning_SelectionChangeCommitted);
 			// 
@@ -248,9 +251,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			// 
 			this.labelDeviationTasks.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelDeviationTasks.AutoSize = true;
-			this.labelDeviationTasks.Location = new System.Drawing.Point(3, 11);
+			this.labelDeviationTasks.Location = new System.Drawing.Point(3, 10);
 			this.labelDeviationTasks.Name = "labelDeviationTasks";
-			this.labelDeviationTasks.Size = new System.Drawing.Size(128, 13);
+			this.labelDeviationTasks.Size = new System.Drawing.Size(131, 15);
 			this.labelDeviationTasks.TabIndex = 3;
 			this.labelDeviationTasks.Text = "xxForecastedCallsColon";
 			// 
@@ -258,9 +261,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			// 
 			this.labelDeviationTaskTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelDeviationTaskTime.AutoSize = true;
-			this.labelDeviationTaskTime.Location = new System.Drawing.Point(3, 47);
+			this.labelDeviationTaskTime.Location = new System.Drawing.Point(3, 46);
 			this.labelDeviationTaskTime.Name = "labelDeviationTaskTime";
-			this.labelDeviationTaskTime.Size = new System.Drawing.Size(147, 13);
+			this.labelDeviationTaskTime.Size = new System.Drawing.Size(155, 15);
 			this.labelDeviationTaskTime.TabIndex = 3;
 			this.labelDeviationTaskTime.Text = "xxForecastedTalkTimeColon";
 			// 
@@ -273,13 +276,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			// 
 			// WorkloadDayTemplatesDetailView
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.splitContainerMain);
-			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.MinimumSize = new System.Drawing.Size(500, 500);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F);
+			this.MinimumSize = new System.Drawing.Size(583, 577);
 			this.Name = "WorkloadDayTemplatesDetailView";
-			this.Size = new System.Drawing.Size(1000, 600);
+			this.Size = new System.Drawing.Size(1167, 692);
 			this.splitContainerMain.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
 			this.splitContainerMain.ResumeLayout(false);

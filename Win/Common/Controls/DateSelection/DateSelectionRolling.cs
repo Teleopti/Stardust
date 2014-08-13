@@ -20,14 +20,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             if (!DesignMode) initializePeriodUnitComboBox();
         }
 
-        /// <summary>
-        /// Gets or sets the button apply text.
-        /// </summary>
-        /// <value>The button apply text.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-15
-        /// </remarks>
         [Category("Teleopti Texts"), Localizable(true), Browsable(true)]
         public string ButtonApplyText
         {
@@ -35,15 +27,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             set { buttonApply.Text = value; }
         }
 
-        /// <summary>
-        /// Gets or sets the factor to get dates from history or future.
-        /// -1 gets history, 1 gets future
-        /// </summary>
-        /// <value>The factor.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-15
-        /// </remarks>
         [Category("Teleopti behavior"), Browsable(true), DefaultValue(-1)]
         public int Factor
         {
@@ -71,28 +54,20 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             comboBoxPeriodScaleUnit.SelectedItem = _periodScaleUnitTypes[1];
         }
 
-        private void buttonApply_Click(object sender, EventArgs e)
+        private void buttonApplyClick(object sender, EventArgs e)
         {
             if (DateRangeChanged == null) return;
 
-            ReadOnlyCollection<DateOnlyPeriod> dates = new ReadOnlyCollection<DateOnlyPeriod>(GetSelectedDates());
+            var dates = new ReadOnlyCollection<DateOnlyPeriod>(GetSelectedDates());
             if (dates.Count>0)
             {
-                DateRangeChangedEventArgs dateRangeChangedEventArgs = new DateRangeChangedEventArgs(dates);
+                var dateRangeChangedEventArgs = new DateRangeChangedEventArgs(dates);
                 DateRangeChanged(this, dateRangeChangedEventArgs);
             }
         }
 
         #region IDateSelectionControl Members
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [show apply button].
-        /// </summary>
-        /// <value><c>true</c> if [show apply button]; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-02
-        /// </remarks>
         [Browsable(true), DefaultValue(true), Category("Teleopti Behavior")]
         public bool ShowApplyButton
         {
@@ -106,14 +81,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             }
         }
 
-        /// <summary>
-        /// Gets the selected dates.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-02
-        /// </remarks>
         [Browsable(false)]
         public IList<DateOnlyPeriod> GetSelectedDates()
         {
@@ -123,7 +90,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             if (!string.IsNullOrEmpty(value) &&
                 int.TryParse(value, out valueAsInt))
             {
-                PeriodScaleUnit periodScaleUnit = (PeriodScaleUnit) comboBoxPeriodScaleUnit.SelectedItem;
+                var periodScaleUnit = (PeriodScaleUnit) comboBoxPeriodScaleUnit.SelectedItem;
                 DateOnlyPeriod dateTimePeriod = PeriodScaleUnit.GetScaleUnitDateTimePeriod(
                     periodScaleUnit.UnitType,
                     valueAsInt*_factor,

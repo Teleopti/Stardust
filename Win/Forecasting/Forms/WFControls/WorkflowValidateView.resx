@@ -120,12 +120,6 @@
   <metadata name="xpTaskBar1.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="xpTaskBarBoxSelectPeriod.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="xpTaskBarBoxSelectPeriod.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="gradientPanelSelectPeriod.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -133,32 +127,32 @@
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFZUZWxlb3B0aS5JbnRlcmZhY2VzLCBWZXJzaW9uPTEuMC4wLjAs
         IEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49OWU3OTMyY2RiYjM5YzQ1ZgUBAAAAI1RlbGVv
-        cHRpLkludGVyZmFjZXMuRG9tYWluLkRhdGVPbmx5AQAAABFfaW50ZXJuYWxEYXRlVGltZQANAgAAAAAA
-        RKKB4soICw==
+        cHRpLkludGVyZmFjZXMuRG9tYWluLkRhdGVPbmx5AQAAABFfaW50ZXJuYWxEYXRlVGltZQANAgAAAADA
+        8aighNGICw==
 </value>
   </data>
   <data name="dateSelectionFromToHistorical.WorkPeriodStart" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFZUZWxlb3B0aS5JbnRlcmZhY2VzLCBWZXJzaW9uPTEuMC4wLjAs
         IEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49OWU3OTMyY2RiYjM5YzQ1ZgUBAAAAI1RlbGVv
-        cHRpLkludGVyZmFjZXMuRG9tYWluLkRhdGVPbmx5AQAAABFfaW50ZXJuYWxEYXRlVGltZQANAgAAAAAA
-        RKKB4soICw==
+        cHRpLkludGVyZmFjZXMuRG9tYWluLkRhdGVPbmx5AQAAABFfaW50ZXJuYWxEYXRlVGltZQANAgAAAADA
+        8aighNGICw==
 </value>
   </data>
   <data name="dateSelectionFromToTarget.WorkPeriodEnd" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFZUZWxlb3B0aS5JbnRlcmZhY2VzLCBWZXJzaW9uPTEuMC4wLjAs
         IEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49OWU3OTMyY2RiYjM5YzQ1ZgUBAAAAI1RlbGVv
-        cHRpLkludGVyZmFjZXMuRG9tYWluLkRhdGVPbmx5AQAAABFfaW50ZXJuYWxEYXRlVGltZQANAgAAAAAA
-        RKKB4soICw==
+        cHRpLkludGVyZmFjZXMuRG9tYWluLkRhdGVPbmx5AQAAABFfaW50ZXJuYWxEYXRlVGltZQANAgAAAADA
+        8aighNGICw==
 </value>
   </data>
   <data name="dateSelectionFromToTarget.WorkPeriodStart" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFZUZWxlb3B0aS5JbnRlcmZhY2VzLCBWZXJzaW9uPTEuMC4wLjAs
         IEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49OWU3OTMyY2RiYjM5YzQ1ZgUBAAAAI1RlbGVv
-        cHRpLkludGVyZmFjZXMuRG9tYWluLkRhdGVPbmx5AQAAABFfaW50ZXJuYWxEYXRlVGltZQANAgAAAAAA
-        RKKB4soICw==
+        cHRpLkludGVyZmFjZXMuRG9tYWluLkRhdGVPbmx5AQAAABFfaW50ZXJuYWxEYXRlVGltZQANAgAAAADA
+        8aighNGICw==
 </value>
   </data>
   <metadata name="splitContainerAdv2.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -172,5 +166,8 @@
   </metadata>
   <metadata name="$this.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>30</value>
   </metadata>
 </root>
