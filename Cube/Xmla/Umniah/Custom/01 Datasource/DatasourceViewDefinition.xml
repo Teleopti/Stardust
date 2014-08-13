@@ -1,0 +1,44 @@
+﻿<DatasourceViewDefinition>
+    <Tables>
+        <DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>fact_Sales</DbTableName>
+			<TableType>View</TableType>
+			<CommandText>SELECT * FROM [custom].[fact_sales]</CommandText>
+			<Constraints>
+			<Constraint>
+				<fkTableName>fact_Sales</fkTableName>
+				<fkColumNameName>date_id</fkColumNameName>
+				<pkTableName>dbo_dim_date</pkTableName>
+				<pkColumNameName>date_id</pkColumNameName>
+			</Constraint>
+			<Constraint>
+				<fkTableName>fact_Sales</fkTableName>
+				<fkColumNameName>acd_login_id</fkColumNameName>
+				<pkTableName>dbo_dim_acd_login</pkTableName>
+				<pkColumNameName>acd_login_id</pkColumNameName>
+			</Constraint>			
+			</Constraints>
+        </DataTable>
+        <DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>v_fact_calculated_measures</DbTableName>
+			<TableType>View</TableType>
+			<CommandText>SELECT * FROM [custom].[v_fact_calculated_measures]</CommandText>
+			<Constraints>
+			<Constraint>
+				<fkTableName>v_fact_calculated_measures</fkTableName>
+				<fkColumNameName>date_id</fkColumNameName>
+				<pkTableName>dbo_dim_date</pkTableName>
+				<pkColumNameName>date_id</pkColumNameName>
+			</Constraint>
+			<Constraint>
+				<fkTableName>v_fact_calculated_measures</fkTableName>
+				<fkColumNameName>acd_login_id</fkColumNameName>
+				<pkTableName>dbo_dim_acd_login</pkTableName>
+				<pkColumNameName>acd_login_id</pkColumNameName>
+			</Constraint>			
+			</Constraints>
+        </DataTable>		
+    </Tables>
+</DatasourceViewDefinition>
