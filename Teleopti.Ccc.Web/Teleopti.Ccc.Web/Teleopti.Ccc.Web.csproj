@@ -404,6 +404,7 @@
     <Compile Include="Core\Aop\Aspects\MultipleBusinessUnitsAspect.cs" />
     <Compile Include="Core\IanaTimeZoneProvider.cs" />
     <Compile Include="Core\IdentityProviderProvider.cs" />
+    <Compile Include="Core\IIanaTimeZoneProvider.cs" />
     <Compile Include="Core\IIdentityProviderProvider.cs" />
     <Compile Include="Core\IResourceVersion.cs" />
     <Compile Include="Core\MachineKeyCookieTransform.cs" />

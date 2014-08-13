@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Web.Core
 {
-    public class IanaTimeZoneProvider
+    public class IanaTimeZoneProvider : IIanaTimeZoneProvider
     {
         // This will return the Windows zone that matches the IANA zone, if one exists.
         public string IanaToWindows(string ianaZoneId)
