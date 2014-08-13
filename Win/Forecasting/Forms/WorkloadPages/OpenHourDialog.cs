@@ -3,26 +3,17 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 {
-    public partial class OpenHourDialog : BaseRibbonForm
+    public partial class OpenHourDialog : BaseDialogForm
     {
         private TimePeriod _openHourPeriod;
         private bool _isClosed;
         private TimePeriod _displayPeriod;
         private readonly IWorkload _workload;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OpenHourDialog"/> class.
-        /// </summary>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-02-20
-        /// </remarks>
         public OpenHourDialog()
         {
 
@@ -32,7 +23,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             InitializeComponent();
             if (!DesignMode)
                 SetTexts();
-            SetColor();
 
             _workload = workload;
 
@@ -75,13 +65,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
         {
             checkIfInputTimePeriodIsValid();
         }
-
-        private void SetColor()
-        {
-            BackColor = ColorHelper.WizardBackgroundColor();
-            groupBoxOpenHour.BackColor = ColorHelper.WizardBackgroundColor();
-        }
-
 
         public TimePeriod OpenHourPeriod
         {
@@ -150,5 +133,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             if (_isClosed) errorProvider1.Clear();
             else checkIfInputTimePeriodIsValid();
         }
+
+		private void groupBoxOpenHour_Enter(object sender, EventArgs e)
+		{
+
+		}
     }
 }
