@@ -56,6 +56,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
+		public void ShouldMapTimeZoneName()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var person = new Person();
+		    var timeZone = TimeZoneInfoFactory.BrazilTimeZoneInfo();
+            person.PermissionInformation.SetDefaultTimeZone(timeZone);
+
+            var result = target.Map(new PersonScheduleData { Person = person, CommonAgentNameSetting = new CommonNameDescriptionSetting() });
+
+			result.TimeZoneName.Should().Be(timeZone.DisplayName);
+		}
+
+		[Test]
 		public void ShouldMapDefaultIntradayAbsenceTimesInUserTimeZone()
 		{
 			var target = new PersonScheduleViewModelMapper();

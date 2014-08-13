@@ -82,6 +82,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.Person == person)));
 		}
 
+        [Test]
+        public void ShouldRetrieveTimeZoneNameToMapping()
+        {
+            var person = FakePerson();
+            var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
+            var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer(), _permissionProvider, _commonAgentNameProvider);
+
+            target.CreateViewModel(person.Id.Value, DateTime.Today);
+
+            personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.Person.PermissionInformation.DefaultTimeZone().DisplayName == person.PermissionInformation.DefaultTimeZone().DisplayName)));
+        }
+
 		[Test]
 		public void ShouldRetrieveHasViewConfidentialPermissionToMapping()
 		{

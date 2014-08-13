@@ -30,6 +30,10 @@ define([
 		this.StartTime = ko.observable();
 		this.EndTime = ko.observable();
 		this.WorkingShift = ko.observable();
+
+		this.TimeZoneName = ko.observable();
+		this.OtherTimeZoneStartTime = ko.observable();
+		this.OtherTimeZoneEndTime = ko.observable();
 		
 		var groupId;
 		var personId;
@@ -121,10 +125,10 @@ define([
 			groupId = data.GroupId;
 			personId = data.PersonId;
 			personName = data.PersonName;
-			groupId = data.GroupId;
 			self.Date(data.Date);
 
 			if (data.DefaultIntradayAbsenceData) {
+			    self.TimeZoneName(data.TimeZoneName);
 				self.StartTime(data.DefaultIntradayAbsenceData.StartTime);
 				self.EndTime(data.DefaultIntradayAbsenceData.EndTime);
 				startTimeAsMoment = getMomentFromInput(self.StartTime());
