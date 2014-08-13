@@ -32,6 +32,7 @@
 			that.businessUnits = ko.observableArray();
 			that.sitesToOpen = ko.observableArray();
 			that.agentStatesForMultipleSites = ko.observable();
+			that.monitorMultipleBusinessUnits = ko.observable();
 			var siteForId = function (id) {
 				if (!id)
 					return undefined;
@@ -130,7 +131,8 @@
 					enabled: function() {
 						ajax.ajax({
 							url: "BusinessUnit",
-							success: function(data) {
+							success: function (data) {
+								that.monitorMultipleBusinessUnits(true);
 								that.fillBusinessUnits(data);
 							}
 						});
