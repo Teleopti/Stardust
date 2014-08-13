@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
@@ -10,7 +8,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
-using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
@@ -40,13 +37,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			serviceBus = MockRepository.GenerateMock<IServiceBus>();
 			badgeSettingsRepository = MockRepository.GenerateMock<IAgentBadgeSettingsRepository>();
 			badgeSettingsRepository.Stub(x => x.LoadAll())
-				.Return(new List<IAgentBadgeThresholdSettings>() {new AgentBadgeThresholdSettings {EnableBadge = true}});
+				.Return(new List<IAgentBadgeThresholdSettings> {new AgentBadgeThresholdSettings {EnableBadge = true}});
 
 			statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(
 				x => x.FindPeopleInOrganization(new DateOnlyPeriod(new DateOnly(2014, 8, 7), new DateOnly(2014, 8, 9)), false))
-				.Return(new List<IPerson>() {new Person()});
+				.Return(new List<IPerson> {new Person()});
 
 			globalSettingRepository = MockRepository.GenerateMock<IGlobalSettingDataRepository>();
 			globalSettingRepository.Stub(x => x.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()))
@@ -56,8 +53,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			msgRepository = MockRepository.GenerateMock<IPushMessageRepository>();
 			now = MockRepository.GenerateMock<INow>();
 			calculator = new AgentBadgeCalculator(statisticRepository);
-			target = new CalculateBadgeConsumer(serviceBus, badgeSettingsRepository, personRepository, globalSettingRepository, msgRepository, unitOfWorkFactory,calculator, now);
-
+			target = new CalculateBadgeConsumer(serviceBus, badgeSettingsRepository, personRepository, globalSettingRepository,
+				msgRepository, unitOfWorkFactory, calculator, now);
 		}
 		[Test]
 		public void ShouldSendCalculateBadgeMessageAtRightTime()
@@ -66,17 +63,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var today = new DateTime(2014, 8, 8);
 			var tomorrow = today.AddDays(1);
 			var tomorrowForGivenTimeZone = TimeZoneInfo.ConvertTime(tomorrow, TimeZoneInfo.Local, timezone);
-			var expectedNextMessageShouldBeProcessed = TimeZoneInfo.ConvertTime(tomorrowForGivenTimeZone.Date, timezone,
-				TimeZoneInfo.Local);
+			var expectedNextMessageShouldBeProcessed =
+				TimeZoneInfo.ConvertTime(tomorrowForGivenTimeZone.Date, timezone, TimeZoneInfo.Local).AddHours(5);
 			
 			now.Stub(x => x.UtcDateTime()).Return(today);
 			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateOnly().AddDays(-1), TimeZoneInfo.Local, timezone);
-			var message = new CalculateBadgeMessage()
+			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
 				CalculationDate = new DateOnly(calculationDate)
 			};
-
 		
 			target.Consume(message);
 
@@ -89,9 +85,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 							var msg = ((CalculateBadgeMessage)m[0]);
 							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id && msg.CalculationDate == message.CalculationDate.AddDays(1);
 						}))));
-
 		}
-
- 
 	}
 }

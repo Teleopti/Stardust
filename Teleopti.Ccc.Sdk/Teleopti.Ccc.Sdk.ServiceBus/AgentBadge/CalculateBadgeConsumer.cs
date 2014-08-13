@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common.Messaging;
@@ -44,30 +43,35 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_now = now;
 		}
 
+		/// <summary>
+		/// Calculate the badge stuff
+		/// Get the date for doing the next calculation
+		/// Delaysend CalculateBadgeMessage to bus for time of next calculation
+		/// </summary>
+		/// <param name="message"></param>
 		public void Consume(CalculateBadgeMessage message)
 		{
-			//calculate the badge stuff
-
-			//get the date for doing the next calculation
-			//delaysend CalculateBadgeMessage to bus for time of next calculation
 			var today = _now.LocalDateOnly();
 			var tomorrow = today.AddDays(1);
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
 			var tomorrowForGivenTimeZone = TimeZoneInfo.ConvertTime(tomorrow, TimeZoneInfo.Local, timeZone);
-			var nextMessageShouldBeProcessed = TimeZoneInfo.ConvertTime(tomorrowForGivenTimeZone.Date, timeZone,
-				TimeZoneInfo.Local);
+
+			// Set badge calculation start at 5:00 AM
+			// Just hard code it now, the best solution is to trigger it from ETL
+			var nextMessageShouldBeProcessed =
+				TimeZoneInfo.ConvertTime(tomorrowForGivenTimeZone.Date, timeZone, TimeZoneInfo.Local).AddHours(5);
+
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				IAgentBadgeThresholdSettings setting = _settingsRepository.LoadAll().FirstOrDefault();
+				var setting = _settingsRepository.LoadAll().FirstOrDefault();
 				if (setting == null)
 				{
 					//TODO:error
 					return;
 				}
-				AdherenceReportSetting adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
-
+				var adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 				
-				ICollection<IPerson> allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
+				var allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
 				var peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZoneCode, new DateOnly(message.CalculationDate),
 					adherenceReportSetting.CalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
@@ -80,7 +84,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					uow.PersistAll();
 				}
 			}
-			
 
 			if (_serviceBus == null) return;
 
@@ -92,7 +95,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				TimeZoneCode = message.TimeZoneCode,
 				CalculationDate = message.CalculationDate.AddDays(1)
 			});
-
 		}
 	}
 }
