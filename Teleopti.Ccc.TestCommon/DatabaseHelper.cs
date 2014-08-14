@@ -9,11 +9,8 @@ using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
-	public class DatabaseHelper : IDisposable
+	public class DatabaseHelper
 	{
-		private SqlConnection _connection;
-
 		public DatabaseHelper(string connectionString, DatabaseType databaseType) : this(connectionString, new SqlConnectionStringBuilder(connectionString).InitialCatalog, databaseType) { }
 		public DatabaseHelper(string connectionString, string databaseName, DatabaseType databaseType)
 		{
@@ -28,42 +25,38 @@ namespace Teleopti.Ccc.TestCommon
 
 		private SqlConnection Connection()
 		{
-			if (_connection == null)
-			{
-				var connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString);
-				connectionStringBuilder.InitialCatalog = "master";
-				_connection = new SqlConnection(connectionStringBuilder.ConnectionString);
-				_connection.Open();
-				if (Exists())
-					ExecuteNonQuery("USE [{0}]", DatabaseName);
-			}
-			return _connection;
+			var conn = new SqlConnection(ConnectionString);
+			conn.Open();
+			return conn;
+		}
+
+		private SqlConnection ConnectionOnMaster()
+		{
+			var connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString) { InitialCatalog = "master" };
+			var conn = new SqlConnection(connectionStringBuilder.ConnectionString);
+			conn.Open();
+			return conn;
 		}
 
 		public bool Exists()
 		{
-			var databaseId = ExecuteScalar<int>("SELECT database_id FROM sys.databases WHERE Name = '{0}'", 0, DatabaseName);
+			var databaseId = ExecuteScalarOnMaster("SELECT database_id FROM sys.databases WHERE Name = '{0}'", 0, DatabaseName);
 			return databaseId > 0;
 		}
 
 		public void Drop()
 		{
-			ExecuteNonQuery("USE master");
-			ExecuteNonQuery("DROP DATABASE [{0}]", DatabaseName);
-		}
-
-		public void Create()
-		{
-			ExecuteNonQuery("CREATE DATABASE [{0}]", DatabaseName);
-			ExecuteNonQuery("USE [{0}]", DatabaseName);
+			ExecuteNonQueryOnMaster("DROP DATABASE [{0}]", DatabaseName);
 		}
 
 		public void CreateByDbManager()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
-			var creator = new DatabaseCreator(databaseFolder, _connection);
-			creator.CreateDatabase(DatabaseType, DatabaseName);
-			ExecuteNonQuery("USE [{0}]", DatabaseName);
+			using (var conn = ConnectionOnMaster())
+			{
+				var creator = new DatabaseCreator(databaseFolder, conn);
+				creator.CreateDatabase(DatabaseType, DatabaseName);
+			}
 		}
 
 		public void CleanByGenericProcedure()
@@ -88,35 +81,45 @@ namespace Teleopti.Ccc.TestCommon
 		public void CreateSchemaByDbManager()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
-			var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, _connection);
-			databaseVersionInformation.CreateTable();
-			var schemaVersionInformation = new SchemaVersionInformation(databaseFolder);
-			var schemaCreator = new DatabaseSchemaCreator(
-				databaseVersionInformation,
-				schemaVersionInformation,
-				_connection,
-				databaseFolder,
-				new NullLog());
-			schemaCreator.Create(DatabaseType);
+			using (var conn = Connection())
+			{
+				var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, conn);
+				databaseVersionInformation.CreateTable();
+				var schemaVersionInformation = new SchemaVersionInformation(databaseFolder);
+				var schemaCreator = new DatabaseSchemaCreator(
+					databaseVersionInformation,
+					schemaVersionInformation,
+					conn,
+					databaseFolder,
+					new NullLog());
+				schemaCreator.Create(DatabaseType);
+			}
 		}
 
 		public Backup BackupByFileCopy(string name)
 		{
 			var backup = new Backup();
-			using (var reader = ExecuteToReader("select * from sys.sysfiles"))
+			using (var conn = Connection())
 			{
-				backup.Files = (from r in reader.Cast<IDataRecord>()
-								let file = r.GetString(r.GetOrdinal("filename"))
-								select new BackupFile { Source = file })
-					.ToArray();
+				using (var command = conn.CreateCommand())
+				{
+					command.CommandText = string.Format("select * from sys.sysfiles");
+					using (var reader = command.ExecuteReader())
+					{
+						backup.Files = (from r in reader.Cast<IDataRecord>()
+														let file = r.GetString(r.GetOrdinal("filename"))
+														select new BackupFile { Source = file })
+							.ToArray();
+					}
+				}
 			}
 			using (OfflineScope())
 			{
 				backup.Files.ForEach(f =>
-				                     	{
-				                     		f.Backup = Path.GetFileName(f.Source) + "." + name;
-				                     		File.Copy(f.Source, f.Backup, true);
-				                     	});
+															{
+																f.Backup = Path.GetFileName(f.Source) + "." + name;
+																File.Copy(f.Source, f.Backup, true);
+															});
 			}
 			return backup;
 		}
@@ -140,13 +143,14 @@ namespace Teleopti.Ccc.TestCommon
 			public string Backup { get; set; }
 		}
 
-
-
 		public int DatabaseVersion()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
-			var versionInfo = new DatabaseVersionInformation(databaseFolder, _connection);
-			return versionInfo.GetDatabaseVersion();
+			using (var conn = Connection())
+			{
+				var versionInfo = new DatabaseVersionInformation(databaseFolder, conn);
+				return versionInfo.GetDatabaseVersion();
+			}
 		}
 
 		public int SchemaVersion()
@@ -163,58 +167,51 @@ namespace Teleopti.Ccc.TestCommon
 			return versionInfo.GetOtherScriptFilesHash(DatabaseType);
 		}
 
-
-
-
 		private IDisposable OfflineScope()
 		{
-			ExecuteNonQuery("USE master");
-			ExecuteNonQuery("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName);
-			return new GenericDisposable(() =>
-			                             	{
-			                             		ExecuteNonQuery("ALTER DATABASE [{0}] SET ONLINE", DatabaseName);
-			                             		ExecuteNonQuery("USE [{0}]", DatabaseName);
-			                             	});
+			ExecuteNonQueryOnMaster("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName);
+			return new GenericDisposable(() => ExecuteNonQueryOnMaster("ALTER DATABASE [{0}] SET ONLINE", DatabaseName));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		private void ExecuteNonQuery(string sql, params object[] args)
 		{
-			using (var command = Connection().CreateCommand())
+			using (var conn = Connection())
 			{
-				command.CommandText = string.Format(sql, args);
-				command.ExecuteNonQuery();
+				using (var command = conn.CreateCommand())
+				{
+					command.CommandText = string.Format(sql, args);
+					command.ExecuteNonQuery();
+				}				
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		private T ExecuteScalar<T>(string sql, T nullValue, params object[] args)
+		private void ExecuteNonQueryOnMaster(string sql, params object[] args)
 		{
-			using (var command = Connection().CreateCommand())
+			using (var conn = ConnectionOnMaster())
 			{
-				command.CommandText = string.Format(sql, args);
-				var value = command.ExecuteScalar();
-				if (value == null)
-					return nullValue;
-				return (T) value;
+				using (var cmd = conn.CreateCommand())
+				{
+					cmd.CommandText = string.Format(sql, args);
+					cmd.ExecuteNonQuery();
+				}
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		private SqlDataReader ExecuteToReader(string sql, params object[] args)
+		private T ExecuteScalarOnMaster<T>(string sql, T nullValue, params object[] args)
 		{
-			using (var command = Connection().CreateCommand())
+			var connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString) { InitialCatalog = "master" };
+			using (var conn = new SqlConnection(connectionStringBuilder.ConnectionString))
 			{
-				command.CommandText = string.Format(sql, args);
-				return command.ExecuteReader();
+				conn.Open();
+				using (var cmd = conn.CreateCommand())
+				{
+					cmd.CommandText = string.Format(sql, args);
+					var value = cmd.ExecuteScalar();
+					if (value == null)
+						return nullValue;
+					return (T)value;
+				}
 			}
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
-		public void Dispose()
-		{
-			if (_connection != null)
-				_connection.Dispose();
 		}
 	}
 }

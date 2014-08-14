@@ -17,11 +17,11 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest());
 
-			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
-				SetupCcc7(ccc7);
+			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
+			SetupCcc7(ccc7);
 
-			using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
-				SetupAnalytics(analytics);
+			var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
+			SetupAnalytics(analytics);
 
 			return CreateDataSource(dataSourceFactory, name);
 		}
@@ -183,34 +183,26 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static void ClearCcc7Data()
 		{
-			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
-			{
-				ccc7.CleanByGenericProcedure();
-			}
+			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
+			ccc7.CleanByGenericProcedure();
 		}
 
 		public static void ClearAnalyticsData()
 		{
-			using (var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics))
-			{
-				analytics.CleanByAnalyticsProcedure();
-			}
+			var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
+			analytics.CleanByAnalyticsProcedure();
 		}
 
 		public static DatabaseHelper.Backup BackupCcc7DataByFileCopy(string name)
 		{
-			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
-			{
-				return ccc7.BackupByFileCopy(name);
-			}
+			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
+			return ccc7.BackupByFileCopy(name);
 		}
 
 		public static void RestoreCcc7DataByFileCopy(DatabaseHelper.Backup backup)
 		{
-			using (var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7))
-			{
-				ccc7.RestoreByFileCopy(backup);
-			}
+			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
+			ccc7.RestoreByFileCopy(backup);
 		}
 
 		private static void ExceptionToConsole(Action action, string exceptionMessage, params object[] args)
