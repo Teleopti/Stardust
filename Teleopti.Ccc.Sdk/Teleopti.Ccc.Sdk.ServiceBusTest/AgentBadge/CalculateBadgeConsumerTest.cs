@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -28,13 +29,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IAgentBadgeCalculator calculator;
 		private INow now;
 		private IUnitOfWorkFactory loggedOnUnitOfWorkFactory;
+		private IUnitOfWork unitOfWork;
 
 		[SetUp]
 		public void Setup()
 		{
 			unitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			unitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(loggedOnUnitOfWorkFactory);
+			loggedOnUnitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			serviceBus = MockRepository.GenerateMock<IServiceBus>();
 			badgeSettingsRepository = MockRepository.GenerateMock<IAgentBadgeSettingsRepository>();
 			badgeSettingsRepository.Stub(x => x.LoadAll())
