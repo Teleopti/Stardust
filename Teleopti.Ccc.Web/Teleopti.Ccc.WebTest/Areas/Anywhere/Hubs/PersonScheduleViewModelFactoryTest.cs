@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
             target.CreateViewModel(person.Id.Value, DateTime.Today);
 
-            personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.IanaTimeZone == "America/Washington")));
+            personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.IanaTimeZoneOther == "America/Washington")));
         }
 
 		[Test]

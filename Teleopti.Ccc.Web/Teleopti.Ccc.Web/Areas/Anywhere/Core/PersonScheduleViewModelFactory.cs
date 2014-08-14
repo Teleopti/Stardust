@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				Absences = _absenceRepository.LoadAllSortByName(),
 				Activities = _activityRepository.LoadAllSortByName(),
 				HasViewConfidentialPermission = hasViewConfidentialPermission,
-                IanaTimeZone = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id)
+                IanaTimeZoneOther = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id)
 			};
 
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)

@@ -1,6 +1,7 @@
 define([
 	'knockout',
 	'moment',
+	'momentTimezone',
 	'navigation',
 	'ajax',
 	'resources',
@@ -11,6 +12,7 @@ define([
 ], function (
 	ko,
 	moment,
+	momentTimezone,
 	navigation,
 	ajax,
 	resources,
@@ -32,8 +34,14 @@ define([
 		this.WorkingShift = ko.observable();
 
 		this.TimeZoneName = ko.observable();
-		this.OtherTimeZoneStartTime = ko.observable();
-		this.OtherTimeZoneEndTime = ko.observable();
+
+		this.StartTimeOtherTimeZone = ko.computed(function () {
+			var x = momentTimezone.tz("2014-06-01 12:00", "America/New_York");
+			return x;
+			//var otherStartTime = this.StartTime plus moment-timezone(this.TimeZoneName's timmar)
+		});
+
+		this.EndTimeOtherTimeZone = ko.observable();
 		
 		var groupId;
 		var personId;

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public IEnumerable<PersonScheduleViewModelPersonAbsence> PersonAbsences  { get; private set; }
 		public DefaultIntradayAbsenceViewModel DefaultIntradayAbsenceData { get; set; }
 	    public string TimeZoneName { get; set; }
-	    public string IanaTimeZone { get; set; }
+	    public string IanaTimeZoneOther { get; set; }
 	}
 
 	public class DefaultIntradayAbsenceViewModel

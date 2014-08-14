@@ -17,6 +17,7 @@ var requireconfiguration = {
 		momentDatepicker: '../../../../Content/moment-datepicker/moment-datepicker',
 		momentLanguages: '../../../../Content/moment/moment.all.min',
 		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko-amd',
+		momentTimezone: '../../../../Content/moment-timezone/moment-timezone',
 		select2: '../../../../Content/select2/select2',
 		timepicker: '../../../../Content/bootstrap-timepicker/js/bootstrap-timepicker',
 		buster: '../../../../Content/busterjs/buster-test',
@@ -58,6 +59,7 @@ var requireconfiguration = {
 		'momentLanguages': ['moment'],
 		'momentDatepicker': ['momentLanguages'],
 		'momentDatepickerKo': ['momentDatepicker'],
+		'momentTimezone': ['momentDatepickerKo'],
 		'swipeListener': ['jquery'],
 		'justgage': {
 			exports: 'JustGage',
