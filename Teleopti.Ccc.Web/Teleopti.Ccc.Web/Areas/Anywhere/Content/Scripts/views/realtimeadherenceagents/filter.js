@@ -13,8 +13,9 @@
 					return false;
 				}
 
-				var orRelationalWords = mapRelationsBetweenWords(filterWords);
-				var andRelationalWords = filterWords;
+				var mapping =  mapRelationsBetweenWords(filterWords);
+				var orRelationalCombinations = mapping.orRelationalWords;
+				var andRelationalWords = mapping.andRelationalWords;
 				
 				for (var i = 0; i < items.length; i++) {
 					var item = items[i];
@@ -22,32 +23,21 @@
 						continue;
 					}
 
-					for (var orWordIterator = 0; orWordIterator < orRelationalWords.length; orWordIterator++) {
-						var wordCombination = orRelationalWords[orWordIterator];
-						var combinationMatch = false;
-						for (var wordCombinationIter = 0; wordCombinationIter < wordCombination.length; wordCombinationIter++) {
-							var currentOrWord = wordCombination[wordCombinationIter];
-							if (!currentOrWord) {
-								continue;
-							}
-							var wordInCombinationMatch = matchItem(currentOrWord, item, orNegateMatching);
-							if (wordInCombinationMatch === -1) {
-								return false;
-							}
-							if (wordInCombinationMatch === 1) {
-								combinationMatch = true;
-							}
-
+					for (var orCombinationIter = 0; orCombinationIter < orRelationalCombinations.length; orCombinationIter++) {
+						var orCombination = orRelationalCombinations[orCombinationIter];
+						var combinationMatch = matchOrCombination(orCombination, item);
+						if (combinationMatch === -1) {
+							return false;
 						}
 						orRelationalMatches += combinationMatch;
 					}
 
 					for (var andWordIterator = 0; andWordIterator < andRelationalWords.length; andWordIterator++) {
-						var filterWord = andRelationalWords[andWordIterator];
-						if (filterWord.toUpperCase() === "OR") {
+						var currentAndWord = andRelationalWords[andWordIterator];
+						if (currentAndWord.toUpperCase() === "OR") {
 							continue;
 						}
-						var wordMatch = matchItem(filterWord, item, andNegateMatching);
+						var wordMatch = matchItem(currentAndWord, item, andNegateMatching);
 						if (wordMatch === -1) {
 							return false;
 						}
@@ -57,37 +47,57 @@
 
 				}
 
-				return calculateResult(andRelationalWords, andRelationalMatches, orRelationalWords, orRelationalMatches);
+				return calculateResult(andRelationalWords, andRelationalMatches, orRelationalCombinations, orRelationalMatches);
 			};
 
 			var mapOutFilterWords = function(rawInput) { return rawInput.match(/([!]*\w+)|(?:[!"']{1,2}(.*?)["'])/g); }
 
-			var mapRelationsBetweenWords = function(filterWords) {
+			var mapRelationsBetweenWords = function (filterWords) {
+				var returnObject = {};
 				var orRelationalWords = [];
-				var orIndex = [];
-				if (filterWords.length >= 3) {
+				var orKeywordWasFoundOnIndex = [];
+				if (couldContainOrRelation(filterWords)) {
 					for (var j = 0; j < filterWords.length; j++) {
 						if (filterWords[j].toUpperCase() === "OR") {
-							
 							orRelationalWords.push([filterWords[j - 1], filterWords[j + 1]]);
 							if (j > 1)
-								orIndex.push(j-1);
+								orKeywordWasFoundOnIndex.push(j-1);
 							j += 2;
 
 							while (filterWords[j] && filterWords[j].toUpperCase() === "OR") {
 								orRelationalWords[orRelationalWords.length - 1].push(filterWords[j + 1]);
-								orIndex.push(j);
+								orKeywordWasFoundOnIndex.push(j);
 								j += 2;
 							}
 						}
 					}
 					if (orRelationalWords.length > 0) {
-						for (var k = orIndex.length; k >= 0; k--) {
+						for (var k = orKeywordWasFoundOnIndex.length; k >= 0; k--) {
 							filterWords.splice(k, 3);
 						}
 					}
 				}
-				return orRelationalWords;
+				returnObject.orRelationalWords = orRelationalWords;
+				returnObject.andRelationalWords = filterWords;
+				return returnObject;
+			}
+			var couldContainOrRelation = function (words) { return words.length >= 3; }
+
+			var matchOrCombination = function (orCombination, item) {
+				for (var wordInCombinationIter = 0; wordInCombinationIter < orCombination.length; wordInCombinationIter++) {
+					var currentOrWord = orCombination[wordInCombinationIter];
+					if (!currentOrWord) {
+						continue;
+					}
+					var combinationMatch = matchItem(currentOrWord, item, orNegateMatching);
+					if (combinationMatch === -1) {
+						return -1;
+					}
+					if (combinationMatch === 1) {
+						return 1;
+					}
+				}
+				return 0;
 			}
 
 			var orNegateMatching = function(word, item) {
@@ -139,9 +149,6 @@
 			var calculateResult = function(andWords, andMatches, orWords, orMatches) {
 				var unNegatedAndRelationalWords = ko.utils.arrayFilter(andWords, function(word) { return !shouldNegate(word); }).length;
 				var unNegatedOrRelationalWords = ko.utils.arrayFilter(orWords, function (word) { return !shouldNegate(word); }).length;
-				console.log("and: " + andMatches + "/" + unNegatedAndRelationalWords)
-				console.log("or: " + orMatches + "/" + unNegatedOrRelationalWords)
-
 				return (andMatches === unNegatedAndRelationalWords
 					&& orMatches >= unNegatedOrRelationalWords);
 			}
