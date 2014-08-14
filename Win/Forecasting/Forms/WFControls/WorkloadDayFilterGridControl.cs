@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			_manager = new TextManager(_skillType);
 			_firstTime = _workloadDayTemplate.TaskPeriodListPeriod.StartDateTime;
 			_lastTime = _workloadDayTemplate.TaskPeriodListPeriod.EndDateTime;
+			TeleoptiStyling = true;
 		}
 
 		public void LoadTaskOwnerDaysWithFilterStatus(WorkloadDayTemplateFilterStatus filterStatus)

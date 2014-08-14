@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             InitializeComponent();
             initializeGrid();
             CreateContextMenu();
+	        TeleoptiStyling = true;
         }
 
         public void CreateContextMenu()

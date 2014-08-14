@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 
             _skillType = skillType;
             CreateContextMenu();
+			TeleoptiStyling = true;
         }
 
         public void CreateContextMenu()

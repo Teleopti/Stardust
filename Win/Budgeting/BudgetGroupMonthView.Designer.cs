@@ -33,7 +33,9 @@
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle2 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			this.gridControlMonthView = new Syncfusion.Windows.Forms.Grid.GridControl();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle1 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle2 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			this.gridControlMonthView = new Teleopti.Ccc.Win.Common.Controls.TeleoptiGridControl();
 			this.budgetGroupMonthViewMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItemAddShrinkageRow = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemUpdateShrinkageRow = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,18 +78,19 @@
 			gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
 			gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.gridControlMonthView.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle1,
-            gridBaseStyle2,
-            gridBaseStyle3,
-            gridBaseStyle4});
+			gridBaseStyle1,
+			gridBaseStyle2,
+			gridBaseStyle3,
+			gridBaseStyle4});
 			this.gridControlMonthView.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
-            new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
+			new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
 			this.gridControlMonthView.ContextMenuStrip = this.budgetGroupMonthViewMenu;
 			this.gridControlMonthView.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
 			this.gridControlMonthView.DefaultRowHeight = 20;
 			this.gridControlMonthView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gridControlMonthView.ExcelLikeCurrentCell = true;
 			this.gridControlMonthView.ExcelLikeSelectionFrame = true;
+			this.gridControlMonthView.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.gridControlMonthView.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
 			this.gridControlMonthView.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
 			this.gridControlMonthView.HorizontalThumbTrack = true;
@@ -95,20 +98,39 @@
 			this.gridControlMonthView.MetroScrollBars = true;
 			this.gridControlMonthView.MinResizeColSize = 5;
 			this.gridControlMonthView.Name = "gridControlMonthView";
-			this.gridControlMonthView.Office2007ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2007ColorScheme.Managed;
 			this.gridControlMonthView.Properties.BackgroundColor = System.Drawing.Color.White;
 			this.gridControlMonthView.Properties.ForceImmediateRepaint = false;
 			this.gridControlMonthView.Properties.GridLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(212)))));
 			this.gridControlMonthView.Properties.MarkColHeader = false;
 			this.gridControlMonthView.Properties.MarkRowHeader = false;
+			gridRangeStyle1.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
+			gridRangeStyle1.StyleInfo.Font.Bold = false;
+			gridRangeStyle1.StyleInfo.Font.Facename = "Segoe UI";
+			gridRangeStyle1.StyleInfo.Font.Italic = false;
+			gridRangeStyle1.StyleInfo.Font.Size = 9F;
+			gridRangeStyle1.StyleInfo.Font.Strikeout = false;
+			gridRangeStyle1.StyleInfo.Font.Underline = false;
+			gridRangeStyle1.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridRangeStyle2.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
+			gridRangeStyle2.StyleInfo.Font.Bold = false;
+			gridRangeStyle2.StyleInfo.Font.Facename = "Segoe UI";
+			gridRangeStyle2.StyleInfo.Font.Italic = false;
+			gridRangeStyle2.StyleInfo.Font.Size = 9F;
+			gridRangeStyle2.StyleInfo.Font.Strikeout = false;
+			gridRangeStyle2.StyleInfo.Font.Underline = false;
+			gridRangeStyle2.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			this.gridControlMonthView.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
+			gridRangeStyle1,
+			gridRangeStyle2});
 			this.gridControlMonthView.ResizeRowsBehavior = Syncfusion.Windows.Forms.Grid.GridResizeCellsBehavior.None;
 			this.gridControlMonthView.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
-            new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
+			new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.gridControlMonthView.SelectCellsMouseButtonsMask = System.Windows.Forms.MouseButtons.Left;
 			this.gridControlMonthView.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
 			this.gridControlMonthView.Size = new System.Drawing.Size(665, 248);
 			this.gridControlMonthView.SmartSizeBox = false;
 			this.gridControlMonthView.TabIndex = 1;
+			this.gridControlMonthView.TeleoptiStyling = false;
 			this.gridControlMonthView.Text = "gridControl1";
 			this.gridControlMonthView.ThemesEnabled = true;
 			this.gridControlMonthView.UseRightToLeftCompatibleTextBox = true;
@@ -120,18 +142,18 @@
 			// budgetGroupMonthViewMenu
 			// 
 			this.budgetGroupMonthViewMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemAddShrinkageRow,
-            this.toolStripMenuItemUpdateShrinkageRow,
-            this.toolStripMenuItemDeleteShrinkageRow,
-            this.toolStripSeparator1,
-            this.toolStripMenuItemAddEfficiencyShrinkageRow,
-            this.toolStripMenuItemUpdateEfficiencyShrinkageRow,
-            this.toolStripMenuItemDeleteEfficiencyShrinkageRow,
-            this.toolStripSeparator2,
-            this.toolStripMenuItemLoadForecast,
-            this.toolStripMenuItemLoadStaffEmployed,
-            this.toolStripSeparator3,
-            this.toolStripMenuItemModifySelection});
+			this.toolStripMenuItemAddShrinkageRow,
+			this.toolStripMenuItemUpdateShrinkageRow,
+			this.toolStripMenuItemDeleteShrinkageRow,
+			this.toolStripSeparator1,
+			this.toolStripMenuItemAddEfficiencyShrinkageRow,
+			this.toolStripMenuItemUpdateEfficiencyShrinkageRow,
+			this.toolStripMenuItemDeleteEfficiencyShrinkageRow,
+			this.toolStripSeparator2,
+			this.toolStripMenuItemLoadForecast,
+			this.toolStripMenuItemLoadStaffEmployed,
+			this.toolStripSeparator3,
+			this.toolStripMenuItemModifySelection});
 			this.budgetGroupMonthViewMenu.Name = "budgetGroupMonthViewMenu";
 			this.budgetGroupMonthViewMenu.Size = new System.Drawing.Size(249, 220);
 			this.budgetGroupMonthViewMenu.Opening += new System.ComponentModel.CancelEventHandler(this.budgetGroupMonthViewMenu_Opening);
@@ -241,7 +263,6 @@
 
 		#endregion
 
-		private Syncfusion.Windows.Forms.Grid.GridControl gridControlMonthView;
 		private System.Windows.Forms.ContextMenuStrip budgetGroupMonthViewMenu;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddShrinkageRow;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDeleteShrinkageRow;
@@ -255,5 +276,6 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemModifySelection;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUpdateShrinkageRow;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUpdateEfficiencyShrinkageRow;
+		private Common.Controls.TeleoptiGridControl gridControlMonthView;
 	}
 }

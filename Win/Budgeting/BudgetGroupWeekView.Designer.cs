@@ -33,7 +33,7 @@
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle2 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			this.gridControlWeekView = new Syncfusion.Windows.Forms.Grid.GridControl();
+			this.gridControlWeekView = new Teleopti.Ccc.Win.Common.Controls.TeleoptiGridControl();
 			this.budgetGroupWeekViewMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItemAddShrinkageRow = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemUpdateShrinkageRow = new System.Windows.Forms.ToolStripMenuItem();
@@ -100,7 +100,6 @@
 			this.gridControlWeekView.MetroScrollBars = true;
 			this.gridControlWeekView.MinResizeColSize = 5;
 			this.gridControlWeekView.Name = "gridControlWeekView";
-			this.gridControlWeekView.Office2007ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2007ColorScheme.Managed;
 			this.gridControlWeekView.Properties.BackgroundColor = System.Drawing.Color.White;
 			this.gridControlWeekView.Properties.ForceImmediateRepaint = false;
 			this.gridControlWeekView.Properties.GridLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(212)))));
@@ -115,6 +114,7 @@
 			this.gridControlWeekView.Size = new System.Drawing.Size(799, 254);
 			this.gridControlWeekView.SmartSizeBox = false;
 			this.gridControlWeekView.TabIndex = 1;
+			this.gridControlWeekView.TeleoptiStyling = false;
 			this.gridControlWeekView.ThemesEnabled = true;
 			this.gridControlWeekView.UseRightToLeftCompatibleTextBox = true;
 			this.gridControlWeekView.VerticalThumbTrack = true;
@@ -246,7 +246,6 @@
 
 		#endregion
 
-		private Syncfusion.Windows.Forms.Grid.GridControl gridControlWeekView;
 		private System.Windows.Forms.ContextMenuStrip budgetGroupWeekViewMenu;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddShrinkageRow;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDeleteShrinkageRow;
@@ -260,5 +259,6 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemModifySelection;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUpdateShrinkageRow;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUpdateEfficiencyShrinkageRow;
+		private Common.Controls.TeleoptiGridControl gridControlWeekView;
 	}
 }

@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
             ColWidths[0] = headerWidth;
             if (!TimeHelper.CurrentCultureUsing24HourClock()) RowHeights[0] = headerHeight12HourClock;
             DefaultColWidth = 70;
+	        TeleoptiStyling = true;
         }
 
         public SkillIntradayGridControl(string settingName, IToggleManager toggleManager)

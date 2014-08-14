@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             createGridRows();
             initializeGrid();
             CreateContextMenu();
+			TeleoptiStyling = true;
         }
 
         public void CreateContextMenu()

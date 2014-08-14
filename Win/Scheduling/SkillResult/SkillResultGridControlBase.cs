@@ -24,6 +24,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 		private IList<IGridRow> _gridRows;
 		public AbstractDetailView Owner { get; set; }
 
+		protected SkillResultGridControlBase()
+		{
+			TeleoptiStyling = true;
+		}
+
 		public void InitializeBase(string settingName)
 		{
 			setupChartDefault();

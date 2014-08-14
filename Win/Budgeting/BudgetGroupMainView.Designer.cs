@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			resources.ApplyResources(this.ribbonControlAdvFixed1, "ribbonControlAdvFixed1");
 			this.ribbonControlAdvFixed1.MaximizeToolTip = "Maximize Ribbon";
 			this.ribbonControlAdvFixed1.MenuButtonEnabled = true;
-			this.ribbonControlAdvFixed1.MenuButtonFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ribbonControlAdvFixed1.MenuButtonFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.ribbonControlAdvFixed1.MenuButtonText = "File";
 			this.ribbonControlAdvFixed1.MenuButtonWidth = 56;
 			this.ribbonControlAdvFixed1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
@@ -101,10 +101,11 @@ namespace Teleopti.Ccc.Win.Budgeting
 			resources.ApplyResources(this.ribbonControlAdvFixed1.OfficeMenu, "ribbonControlAdvFixed1.OfficeMenu");
 			this.ribbonControlAdvFixed1.OverFlowButtonToolTip = "Show DropDown";
 			this.ribbonControlAdvFixed1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.ribbonControlAdvFixed1.QuickPanelVisible = false;
 			this.ribbonControlAdvFixed1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.ribbonControlAdvFixed1.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
 			this.ribbonControlAdvFixed1.ScaleMenuButtonImage = false;
-			this.ribbonControlAdvFixed1.SelectedTab = this.toolStripTabItem2;
+			this.ribbonControlAdvFixed1.SelectedTab = null;
 			this.ribbonControlAdvFixed1.Show2010CustomizeQuickItemDialog = false;
 			this.ribbonControlAdvFixed1.ShowRibbonDisplayOptionButton = false;
 			this.ribbonControlAdvFixed1.SystemText.QuickAccessDialogDropDownName = "";
@@ -120,7 +121,6 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// 
 			// backStage1
 			// 
-			resources.ApplyResources(this.backStage1, "backStage1");
 			this.backStage1.AllowDrop = true;
 			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1217, 792);
 			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -130,6 +130,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.backStage1.Controls.Add(this.backStageSeparator2);
 			this.backStage1.Controls.Add(this.backStageButton3);
 			this.backStage1.Controls.Add(this.backStageButton4);
+			resources.ApplyResources(this.backStage1, "backStage1");
 			this.backStage1.Name = "backStage1";
 			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
 			// 
@@ -145,7 +146,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// 
 			// backStageSeparator1
 			// 
-			this.backStageSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(189)))), ((int)(((byte)(255)))));
+			this.backStageSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
 			resources.ApplyResources(this.backStageSeparator1, "backStageSeparator1");
 			this.backStageSeparator1.Name = "backStageSeparator1";
 			// 
@@ -161,7 +162,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// 
 			// backStageSeparator2
 			// 
-			this.backStageSeparator2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(189)))), ((int)(((byte)(255)))));
+			this.backStageSeparator2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
 			resources.ApplyResources(this.backStageSeparator2, "backStageSeparator2");
 			this.backStageSeparator2.Name = "backStageSeparator2";
 			// 
@@ -229,8 +230,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripExLoad.Image = null;
 			this.toolStripExLoad.ImageScalingSize = new System.Drawing.Size(25, 25);
 			this.toolStripExLoad.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonLoadForecastedHours,
-			this.toolStripButtonStaffEmployed});
+            this.toolStripButtonLoadForecastedHours,
+            this.toolStripButtonStaffEmployed});
 			this.toolStripExLoad.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
 			this.toolStripExLoad.Name = "toolStripExLoad";
 			this.toolStripExLoad.Office12Mode = false;
@@ -270,9 +271,9 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripExViews.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExViews.Image = null;
 			this.toolStripExViews.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonMonthView,
-			this.toolStripButtonWeekView,
-			this.toolStripButtonDayView});
+            this.toolStripButtonMonthView,
+            this.toolStripButtonWeekView,
+            this.toolStripButtonDayView});
 			this.toolStripExViews.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Office2007;
 			this.toolStripExViews.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
 			this.toolStripExViews.Name = "toolStripExViews";
@@ -341,7 +342,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripEx2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripEx2.Image = null;
 			this.toolStripEx2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonSave});
+            this.toolStripButtonSave});
 			this.toolStripEx2.Name = "toolStripEx2";
 			this.toolStripEx2.Office12Mode = false;
 			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripEx2, false);
@@ -371,8 +372,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// 
 			this.statusStripEx1.BeforeTouchSize = new System.Drawing.Size(1218, 22);
 			this.statusStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripStatusLabelBudgetGroupMainView,
-			this.toolStripSpinningProgressControlStatus});
+            this.toolStripStatusLabelBudgetGroupMainView,
+            this.toolStripSpinningProgressControlStatus});
 			resources.ApplyResources(this.statusStripEx1, "statusStripEx1");
 			this.statusStripEx1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
 			this.statusStripEx1.Name = "statusStripEx1";
@@ -394,7 +395,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripSpinningProgressControlStatus.Name = "ToolStripSpinningProgress";
 			this.SetShortcut(this.toolStripSpinningProgressControlStatus, System.Windows.Forms.Keys.None);
 			resources.ApplyResources(this.toolStripSpinningProgressControlStatus, "toolStripSpinningProgressControlStatus");
-			this.toolStripSpinningProgressControlStatus.TransitionSegment = 8;
+			this.toolStripSpinningProgressControlStatus.TransitionSegment = 5;
 			this.toolStripSpinningProgressControlStatus.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			// 
 			// BudgetGroupMainView

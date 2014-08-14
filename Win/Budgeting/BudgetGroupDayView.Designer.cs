@@ -2,34 +2,34 @@
 
 namespace Teleopti.Ccc.Win.Budgeting
 {
-    partial class BudgetGroupDayView
-    {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class BudgetGroupDayView
+	{
+		/// <summary> 
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary> 
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Component Designer generated code
+		#region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary> 
+		/// Required method for Designer support - do not modify 
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BudgetGroupDayView));
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle1 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripMenuItemLoadStaffEmployed = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemModifySelection = new System.Windows.Forms.ToolStripMenuItem();
-			this.gridControlDayView = new Syncfusion.Windows.Forms.Grid.GridControl();
+			this.gridControlDayView = new Teleopti.Ccc.Win.Common.Controls.TeleoptiGridControl();
 			this.budgetGroupDayViewMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlDayView)).BeginInit();
 			this.SuspendLayout();
@@ -59,18 +59,18 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// budgetGroupDayViewMenu
 			// 
 			this.budgetGroupDayViewMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemAddShrinkageRow,
-            this.toolStripMenuItemUpdateShrinkageRow,
-            this.toolStripMenuItemDeleteShrinkageRow,
-            this.toolStripSeparator1,
-            this.toolStripMenuItemAddEfficiencyShrinkageRow,
-            this.toolStripMenuItemUpdateEfficiencyShrinkageRow,
-            this.toolStripMenuItemDeleteEfficiencyShrinkageRow,
-            this.toolStripSeparator2,
-            this.toolStripMenuItemLoadForecast,
-            this.toolStripMenuItemLoadStaffEmployed,
-            this.toolStripSeparator3,
-            this.toolStripMenuItemModifySelection});
+			this.toolStripMenuItemAddShrinkageRow,
+			this.toolStripMenuItemUpdateShrinkageRow,
+			this.toolStripMenuItemDeleteShrinkageRow,
+			this.toolStripSeparator1,
+			this.toolStripMenuItemAddEfficiencyShrinkageRow,
+			this.toolStripMenuItemUpdateEfficiencyShrinkageRow,
+			this.toolStripMenuItemDeleteEfficiencyShrinkageRow,
+			this.toolStripSeparator2,
+			this.toolStripMenuItemLoadForecast,
+			this.toolStripMenuItemLoadStaffEmployed,
+			this.toolStripSeparator3,
+			this.toolStripMenuItemModifySelection});
 			this.budgetGroupDayViewMenu.Name = "budgetGroupDayViewMenu";
 			resources.ApplyResources(this.budgetGroupDayViewMenu, "budgetGroupDayViewMenu");
 			this.budgetGroupDayViewMenu.Opening += new System.ComponentModel.CancelEventHandler(this.budgetGroupDayViewMenu_Opening);
@@ -174,13 +174,13 @@ namespace Teleopti.Ccc.Win.Budgeting
 			gridBaseStyle5.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
 			gridBaseStyle5.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.gridControlDayView.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle1,
-            gridBaseStyle2,
-            gridBaseStyle3,
-            gridBaseStyle4,
-            gridBaseStyle5});
+			gridBaseStyle1,
+			gridBaseStyle2,
+			gridBaseStyle3,
+			gridBaseStyle4,
+			gridBaseStyle5});
 			this.gridControlDayView.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
-            new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
+			new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
 			this.gridControlDayView.ContextMenuStrip = this.budgetGroupDayViewMenu;
 			this.gridControlDayView.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
 			this.gridControlDayView.DefaultRowHeight = 20;
@@ -207,10 +207,10 @@ namespace Teleopti.Ccc.Win.Budgeting
 			gridRangeStyle1.StyleInfo.Font.Underline = false;
 			gridRangeStyle1.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
 			this.gridControlDayView.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
-            gridRangeStyle1});
+			gridRangeStyle1});
 			this.gridControlDayView.ResizeRowsBehavior = Syncfusion.Windows.Forms.Grid.GridResizeCellsBehavior.None;
 			this.gridControlDayView.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
-            new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
+			new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.gridControlDayView.SelectCellsMouseButtonsMask = System.Windows.Forms.MouseButtons.Left;
 			this.gridControlDayView.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
 			this.gridControlDayView.SmartSizeBox = false;
@@ -232,24 +232,24 @@ namespace Teleopti.Ccc.Win.Budgeting
 			((System.ComponentModel.ISupportInitialize)(this.gridControlDayView)).EndInit();
 			this.ResumeLayout(false);
 
-        }
+		}
 
-        #endregion
+		#endregion
 
 		
-        private Syncfusion.Windows.Forms.Grid.GridControl gridControlDayView;
+		private Syncfusion.Windows.Forms.Grid.GridControl gridControlDayView;
 		private System.Windows.Forms.ContextMenuStrip budgetGroupDayViewMenu;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddShrinkageRow;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddEfficiencyShrinkageRow;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDeleteShrinkageRow;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDeleteEfficiencyShrinkageRow;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemLoadForecast;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemLoadForecast;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemLoadStaffEmployed;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemModifySelection;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemModifySelection;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUpdateShrinkageRow;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUpdateEfficiencyShrinkageRow;
-    }
+	}
 }

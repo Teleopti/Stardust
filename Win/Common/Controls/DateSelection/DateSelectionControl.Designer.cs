@@ -129,8 +129,6 @@
 			this.dateSelectionFromTo1.Size = new System.Drawing.Size(196, 359);
 			this.dateSelectionFromTo1.TabIndex = 0;
 			this.dateSelectionFromTo1.TodayButtonText = "xxToday";
-			this.dateSelectionFromTo1.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromTo1.WorkPeriodEnd")));
-			this.dateSelectionFromTo1.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromTo1.WorkPeriodStart")));
 			this.dateSelectionFromTo1.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionFromTo1DateRangeChanged);
 			// 
 			// tabPageAdvCalendar

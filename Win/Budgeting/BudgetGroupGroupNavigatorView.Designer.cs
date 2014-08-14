@@ -196,14 +196,14 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.splitContainer1.Panel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.splitContainer1.Size = new System.Drawing.Size(254, 728);
-			this.splitContainer1.SplitterDistance = 521;
+			this.splitContainer1.SplitterDistance = 523;
 			this.splitContainer1.SplitterWidth = 2;
 			this.splitContainer1.TabIndex = 5;
 			// 
 			// treeViewAdvBudgetGroups
 			// 
 			this.treeViewAdvBudgetGroups.BackColor = System.Drawing.Color.White;
-			this.treeViewAdvBudgetGroups.BeforeTouchSize = new System.Drawing.Size(254, 521);
+			this.treeViewAdvBudgetGroups.BeforeTouchSize = new System.Drawing.Size(254, 523);
 			this.treeViewAdvBudgetGroups.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.treeViewAdvBudgetGroups.BorderColor = System.Drawing.Color.Transparent;
 			this.treeViewAdvBudgetGroups.BorderSides = System.Windows.Forms.Border3DSide.Top;
@@ -225,12 +225,12 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.treeViewAdvBudgetGroups.ItemHeight = 25;
 			this.treeViewAdvBudgetGroups.LeftImageList = this.imageListBudgetGroup;
 			this.treeViewAdvBudgetGroups.Location = new System.Drawing.Point(0, 0);
-			this.treeViewAdvBudgetGroups.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.treeViewAdvBudgetGroups.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.treeViewAdvBudgetGroups.Name = "treeViewAdvBudgetGroups";
 			this.treeViewAdvBudgetGroups.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
 			this.treeViewAdvBudgetGroups.ShowCheckBoxes = false;
 			this.treeViewAdvBudgetGroups.ShowFocusRect = false;
-			this.treeViewAdvBudgetGroups.Size = new System.Drawing.Size(254, 521);
+			this.treeViewAdvBudgetGroups.Size = new System.Drawing.Size(254, 523);
 			this.treeViewAdvBudgetGroups.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
 			this.treeViewAdvBudgetGroups.TabIndex = 0;
 			this.treeViewAdvBudgetGroups.Text = "treeViewAdv1";

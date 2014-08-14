@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             _rowManagerMultisiteDay = new RowManager<MultisiteDayGridRow, IMultisiteDay>(this, null, -1);
             _rowManagerMultisiteDay.SetDataSource(multisiteDays);
             _chartSettings = chartSettings;
+			TeleoptiStyling = true;
         }
 
         public void Create()

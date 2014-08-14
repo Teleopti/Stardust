@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             _totalVolume = totalVolume;
             _rowManagerTotalDayItem = new RowManager<TotalVolumeTaskIndexGridRow, TotalDayItem>(this, null, -1);
             CreateContextMenu();
+			TeleoptiStyling = true;
         }
 
         public void CreateContextMenu()

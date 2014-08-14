@@ -129,6 +129,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 			if (_owner != null)
 				_owner.ChangeUnsavedDaysStyle += _owner_ChangeUnsavedDaysStyle;
+	        TeleoptiStyling = true;
         }
 
         #endregion
