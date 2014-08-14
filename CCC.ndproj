@@ -51,6 +51,7 @@
     <Name>ClickOnceSign</Name>
     <Name>Teleopti.Ccc.Web</Name>
     <Name>Teleopti.Ccc.WebTest</Name>
+	<Name>Teleopti.Ccc.WebBehaviorTest</Name>
     <Name>Teleopti.Support.LicTool</Name>
     <Name>Teleopti.Ccc.Web.Broker</Name>
     <Name>Teleopti.Analytics.PM.PMServiceHost</Name>
