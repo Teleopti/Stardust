@@ -661,5 +661,6 @@ inner join #result r
 
 select person_code, [date], adherence_tot as Adherence
   from #result
+ where adherence_tot > @threshold
  group by person_code, [date], adherence_tot
 end
