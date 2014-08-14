@@ -33,8 +33,8 @@
         {
 			this.tabControl = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageMonth = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.tabPageWeek = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tabPageDay = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+			this.tabPageWeek = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tabPageIntraday = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			((System.ComponentModel.ISupportInitialize)(this.tabControl)).BeginInit();
 			this.tabControl.SuspendLayout();
@@ -42,19 +42,19 @@
 			// 
 			// tabControl
 			// 
-			this.tabControl.ActiveTabColor = System.Drawing.Color.DarkGray;
-			this.tabControl.BeforeTouchSize = new System.Drawing.Size(469, 335);
+			this.tabControl.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
+			this.tabControl.BeforeTouchSize = new System.Drawing.Size(547, 387);
 			this.tabControl.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControl.Controls.Add(this.tabPageMonth);
-			this.tabControl.Controls.Add(this.tabPageWeek);
 			this.tabControl.Controls.Add(this.tabPageDay);
+			this.tabControl.Controls.Add(this.tabPageWeek);
 			this.tabControl.Controls.Add(this.tabPageIntraday);
 			this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControl.ItemSize = new System.Drawing.Size(54, 0);
 			this.tabControl.Location = new System.Drawing.Point(0, 0);
 			this.tabControl.Name = "tabControl";
-			this.tabControl.Size = new System.Drawing.Size(469, 335);
+			this.tabControl.Size = new System.Drawing.Size(547, 387);
 			this.tabControl.TabIndex = 0;
 			this.tabControl.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabControl.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
@@ -70,27 +70,11 @@
 			this.tabPageMonth.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPageMonth.Name = "tabPageMonth";
 			this.tabPageMonth.ShowCloseButton = true;
-			this.tabPageMonth.Size = new System.Drawing.Size(465, 332);
+			this.tabPageMonth.Size = new System.Drawing.Size(543, 384);
 			this.tabPageMonth.TabBackColor = System.Drawing.Color.White;
-			this.tabPageMonth.TabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
 			this.tabPageMonth.TabIndex = 1;
 			this.tabPageMonth.Text = "xxMonth";
 			this.tabPageMonth.ThemesEnabled = true;
-			// 
-			// tabPageWeek
-			// 
-			this.tabPageWeek.BackColor = System.Drawing.Color.White;
-			this.tabPageWeek.Image = null;
-			this.tabPageWeek.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageWeek.Location = new System.Drawing.Point(2, 1);
-			this.tabPageWeek.Margin = new System.Windows.Forms.Padding(0);
-			this.tabPageWeek.Name = "tabPageWeek";
-			this.tabPageWeek.ShowCloseButton = true;
-			this.tabPageWeek.Size = new System.Drawing.Size(465, 332);
-			this.tabPageWeek.TabBackColor = System.Drawing.Color.White;
-			this.tabPageWeek.TabIndex = 1;
-			this.tabPageWeek.Text = "xxWeek";
-			this.tabPageWeek.ThemesEnabled = true;
 			// 
 			// tabPageDay
 			// 
@@ -101,11 +85,26 @@
 			this.tabPageDay.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPageDay.Name = "tabPageDay";
 			this.tabPageDay.ShowCloseButton = true;
-			this.tabPageDay.Size = new System.Drawing.Size(465, 332);
+			this.tabPageDay.Size = new System.Drawing.Size(543, 384);
 			this.tabPageDay.TabBackColor = System.Drawing.Color.White;
 			this.tabPageDay.TabIndex = 2;
 			this.tabPageDay.Text = "xxDay";
 			this.tabPageDay.ThemesEnabled = true;
+			// 
+			// tabPageWeek
+			// 
+			this.tabPageWeek.BackColor = System.Drawing.Color.White;
+			this.tabPageWeek.Image = null;
+			this.tabPageWeek.ImageSize = new System.Drawing.Size(16, 16);
+			this.tabPageWeek.Location = new System.Drawing.Point(2, 1);
+			this.tabPageWeek.Margin = new System.Windows.Forms.Padding(0);
+			this.tabPageWeek.Name = "tabPageWeek";
+			this.tabPageWeek.ShowCloseButton = true;
+			this.tabPageWeek.Size = new System.Drawing.Size(543, 384);
+			this.tabPageWeek.TabBackColor = System.Drawing.Color.White;
+			this.tabPageWeek.TabIndex = 1;
+			this.tabPageWeek.Text = "xxWeek";
+			this.tabPageWeek.ThemesEnabled = true;
 			// 
 			// tabPageIntraday
 			// 
@@ -116,7 +115,7 @@
 			this.tabPageIntraday.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPageIntraday.Name = "tabPageIntraday";
 			this.tabPageIntraday.ShowCloseButton = true;
-			this.tabPageIntraday.Size = new System.Drawing.Size(465, 332);
+			this.tabPageIntraday.Size = new System.Drawing.Size(543, 384);
 			this.tabPageIntraday.TabBackColor = System.Drawing.Color.White;
 			this.tabPageIntraday.TabIndex = 3;
 			this.tabPageIntraday.Text = "xxIntraday";
@@ -124,11 +123,12 @@
 			// 
 			// AbstractDetailView
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tabControl);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.Name = "AbstractDetailView";
-			this.Size = new System.Drawing.Size(469, 335);
+			this.Size = new System.Drawing.Size(547, 387);
 			((System.ComponentModel.ISupportInitialize)(this.tabControl)).EndInit();
 			this.tabControl.ResumeLayout(false);
 			this.ResumeLayout(false);

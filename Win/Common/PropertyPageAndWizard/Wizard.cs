@@ -19,19 +19,11 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 		{
 			InitializeComponent();
 			if (!DesignMode) SetTexts();
-			SetColor();
+			setColor();
 		}
 
-		private void SetColor()
+		private void setColor()
 		{
-			//BackColor = ColorHelper.StandardPanelBackground();
-			//treeViewPages.BackColor = ColorHelper.StandardTreeBackgroundColor();
-			//splitContainerHorizontal.BackColor = ColorHelper.WizardPanelSeparator();
-			//splitContainerPages.BackColor = ColorHelper.WizardPanelSeparator();
-			//splitContainerHorizontal.Panel1.BackColor = ColorHelper.WizardPanelBackgroundColor();
-			//splitContainerHorizontal.Panel2.BackColor = ColorHelper.WizardPanelButtonHolder();
-			//splitContainerPages.Panel1.BackColor = ColorHelper.WizardPanelBackgroundColor();
-			//splitContainerPages.Panel2.BackColor = ColorHelper.WizardPanelBackgroundColor();
 			labelHeading.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 		}
 
@@ -159,7 +151,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 				Width = currentControlSize.Width + widthOffset;
 		}
 
-		private Size getControlSize(Control control)
+		private static Size getControlSize(Control control)
 		{
 			var savedAnchor = control.Anchor;
 			var saveDock = control.Dock;

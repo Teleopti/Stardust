@@ -138,5 +138,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             HandleTabSelectionChanged();
         }
+
+		private void ribbonControlAdv1_Click(object sender, EventArgs e)
+		{
+
+		}
     }
 }

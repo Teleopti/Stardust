@@ -90,5 +90,25 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             Presenter.SetTargetSkill(((ISkill) ((TupleItem) comboBoxAdvSkills.SelectedItem).ValueMember));
         }
+
+		private void CopyToSkillView_Load(object sender, EventArgs e)
+		{
+
+		}
+
+		private void tableLayoutPanel1_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+		{
+
+		}
+
+		private void buttonAdvCancel_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void tableLayoutPanel2_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+		{
+
+		}
     }
 }

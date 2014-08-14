@@ -4987,7 +4987,7 @@ tillgänglighet</value>
     <comment>column header for the counterpart in a shift trade in request view</comment>
   </data>
   <data name="PrepareForecast" xml:space="preserve">
-    <value>Förebered workload</value>
+    <value>Förbered workload</value>
     <comment>Prepare Workload</comment>
   </data>
   <data name="CompTime" xml:space="preserve">

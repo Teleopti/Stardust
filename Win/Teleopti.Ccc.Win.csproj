@@ -2537,6 +2537,9 @@
     <EmbeddedResource Include="Common\PropertyPageAndWizard\WizardNoRoot.resx">
       <DependentUpon>WizardNoRoot.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ChildSkillDetailView.resx">
+      <DependentUpon>ChildSkillDetailView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\CopyToSkillView.resx">
       <DependentUpon>CopyToSkillView.cs</DependentUpon>
     </EmbeddedResource>
@@ -2596,6 +2599,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\QuickForecast\SelectWorkload.resx">
       <DependentUpon>SelectWorkload.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\SkillDetailView.resx">
+      <DependentUpon>SkillDetailView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\WFControls\FilterDataView.resx">
       <DependentUpon>FilterDataView.cs</DependentUpon>

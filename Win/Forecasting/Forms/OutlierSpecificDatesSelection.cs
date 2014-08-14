@@ -6,63 +6,65 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
-    public partial class OutlierSpecificDatesSelection : BaseUserControl
-    {
-        private readonly IOutlier _outlier;
-        private readonly EditOutlier _editOutlier;
-        public OutlierSpecificDatesSelection()
-        {
-            InitializeComponent();
-            if (!DesignMode) SetTexts();
-            dateSelectionControl1.ShowTabArea = false;
-        }
+	public partial class OutlierSpecificDatesSelection : BaseUserControl
+	{
+		private readonly IOutlier _outlier;
+		private readonly EditOutlier _editOutlier;
+		public OutlierSpecificDatesSelection()
+		{
+			InitializeComponent();
+			if (!DesignMode) SetTexts();
+			dateSelectionControl1.ShowTabArea = false;
+		}
 
 
-        public OutlierSpecificDatesSelection(IOutlier outlier, EditOutlier editOutlier) : this()
-        {
-            _outlier = outlier;
-            _editOutlier = editOutlier;
-            RefreshSelectedDates();
-        }
+		public OutlierSpecificDatesSelection(IOutlier outlier, EditOutlier editOutlier) : this()
+		{
+			_outlier = outlier;
+			_editOutlier = editOutlier;
+			RefreshSelectedDates();
+		}
 
-        private void buttonAdvAdd_Click(object sender, EventArgs e)
-        {
-            string containingOutlierName = string.Empty;
-            foreach (DateOnlyPeriod datePair in dateSelectionControl1.GetCurrentlySelectedDates())
-            {
-                DateOnly currentDate = datePair.StartDate;
-                while (currentDate <= datePair.EndDate)
-                {
-                    _outlier.AddDate(currentDate);
+		private void buttonAdvAddClick(object sender, EventArgs e)
+		{
+			foreach (DateOnlyPeriod datePair in dateSelectionControl1.GetCurrentlySelectedDates())
+			{
+				DateOnly currentDate = datePair.StartDate;
+				while (currentDate <= datePair.EndDate)
+				{
+					_outlier.AddDate(currentDate);
 
-                    if (!_editOutlier.OutlierDateIsAvailable(out containingOutlierName))
-                    {
-                        _outlier.RemoveDate(currentDate);
-                        _editOutlier.MessageDateContainsOutlier(containingOutlierName);
-                    }
-                    currentDate = currentDate.AddDays(1);
-                }
-            }
-            RefreshSelectedDates();
-        }
-        
-        public void SetCurrentDate(DateOnly currentDate)
-        {
-            dateSelectionControl1.SetInitialDates(new DateOnlyPeriod(currentDate,currentDate));
-        }
+					string containingOutlierName;
+					if (!_editOutlier.OutlierDateIsAvailable(out containingOutlierName))
+					{
+						_outlier.RemoveDate(currentDate);
+						_editOutlier.MessageDateContainsOutlier(containingOutlierName);
+					}
+					currentDate = currentDate.AddDays(1);
+				}
+			}
+			RefreshSelectedDates();
+		}
+		
+		public void SetCurrentDate(DateOnly currentDate)
+		{
+			dateSelectionControl1.SetInitialDates(new DateOnlyPeriod(currentDate,currentDate));
+		}
 
-        public void RefreshSelectedDates()
-        {
-            listBoxSelectedDates.DataSource = null;
-            listBoxSelectedDates.FormatString = "d";
-            listBoxSelectedDates.DataSource = _outlier.Dates.OrderBy(d => d).Select(d => new TupleItem(d.ToShortDateString(),d)).ToList();
-        }
+		public void RefreshSelectedDates()
+		{
+			listBoxSelectedDates.DataSource = null;
+			listBoxSelectedDates.FormatString = "d";
+			listBoxSelectedDates.DataSource = _outlier.Dates.OrderBy(d => d).Select(d => new TupleItem(d.ToShortDateString(),d)).ToList();
+		}
 
-        private void buttonAdvRemove_Click(object sender, EventArgs e)
-        {
-            if (listBoxSelectedDates.SelectedItem == null) return;
-            _outlier.RemoveDate((DateOnly)((TupleItem)listBoxSelectedDates.SelectedItem).ValueMember);
-            RefreshSelectedDates();
-        }
-    }
+		private void buttonAdvRemoveClick(object sender, EventArgs e)
+		{
+			if (listBoxSelectedDates.SelectedItem == null) return;
+			_outlier.RemoveDate((DateOnly)((TupleItem)listBoxSelectedDates.SelectedItem).ValueMember);
+			RefreshSelectedDates();
+		}
+
+
+	}
 }

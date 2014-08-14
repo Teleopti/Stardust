@@ -291,10 +291,5 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 				_seasonVolumeGridControl = null;
 			}
 		}
-
-		private void xpTaskBarBox1_ItemClick(object sender, Syncfusion.Windows.Forms.Tools.XPTaskBarItemClickArgs e)
-		{
-
-		}
 	}
 }
