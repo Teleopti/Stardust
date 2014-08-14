@@ -277,6 +277,26 @@
 					assert.equals(vm.filteredAgents().length, 2);
 					assert.equals(vm.filteredAgents()[0].Name, "Glen");
 					assert.equals(vm.filteredAgents()[1].Name, "Kurt");
+				},
+				"should display agents matching more than two OR searchwords" : function() {
+					var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
+						agent2 = { PersonId: "guid2", Name: "Glen", TimeZoneOffsetMinutes: 0 },
+						agent3 = { PersonId: "guid3", Name: "Arne", TimeZoneOffsetMinutes: 0 },
+						agent4 = { PersonId: "guid4", Name: "Kalle", TimeZoneOffsetMinutes: 0 },
+						agent1State = { PersonId: "guid1", State: "Phone" },
+						agent2State = { PersonId: "guid2", State: "Lunch" },
+						agent3State = { PersonId: "guid3", State: "Break" },
+						agent4State = { PersonId: "guid4", State: "Admin" };
+					var vm = viewModel();
+					vm.fillAgents([agent1, agent2, agent3, agent4]);
+					vm.fillAgentsStates([agent1State, agent2State, agent3State, agent4State]);
+
+					vm.filter("Phone OR Lunch OR Break");
+
+					assert.equals(vm.filteredAgents().length, 3);
+					assert.equals(vm.filteredAgents()[0].Name, "Arne");
+					assert.equals(vm.filteredAgents()[1].Name, "Glen");
+					assert.equals(vm.filteredAgents()[2].Name, "Kurt");
 				}
 			}
 		});
