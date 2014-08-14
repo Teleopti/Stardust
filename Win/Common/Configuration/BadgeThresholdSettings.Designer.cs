@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.doubleTextBoxThresholdForAdherence.Size = new System.Drawing.Size(115, 23);
 			this.doubleTextBoxThresholdForAdherence.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.doubleTextBoxThresholdForAdherence.TabIndex = 4;
-			this.doubleTextBoxThresholdForAdherence.Text = "0,00";
+			this.doubleTextBoxThresholdForAdherence.Text = "0.00";
 			// 
 			// labelOneGoldBadgeEqualsSilverBadgeCount
 			// 
@@ -180,17 +180,37 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.numericUpDownGoldenToSilverBadgeRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.numericUpDownGoldenToSilverBadgeRate.Location = new System.Drawing.Point(265, 242);
+			this.numericUpDownGoldenToSilverBadgeRate.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
 			this.numericUpDownGoldenToSilverBadgeRate.Name = "numericUpDownGoldenToSilverBadgeRate";
 			this.numericUpDownGoldenToSilverBadgeRate.Size = new System.Drawing.Size(115, 23);
 			this.numericUpDownGoldenToSilverBadgeRate.TabIndex = 6;
+			this.numericUpDownGoldenToSilverBadgeRate.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
 			// 
 			// numericUpDownSilverToBronzeBadgeRate
 			// 
 			this.numericUpDownSilverToBronzeBadgeRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.numericUpDownSilverToBronzeBadgeRate.Location = new System.Drawing.Point(265, 207);
+			this.numericUpDownSilverToBronzeBadgeRate.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
 			this.numericUpDownSilverToBronzeBadgeRate.Name = "numericUpDownSilverToBronzeBadgeRate";
 			this.numericUpDownSilverToBronzeBadgeRate.Size = new System.Drawing.Size(115, 23);
 			this.numericUpDownSilverToBronzeBadgeRate.TabIndex = 5;
+			this.numericUpDownSilverToBronzeBadgeRate.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
 			// 
 			// numericUpDownThresholdForAnsweredCalls
 			// 
