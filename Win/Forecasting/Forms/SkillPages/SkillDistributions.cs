@@ -158,5 +158,40 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
         public void SetEditMode()
         {
         }
+
+		private void panelMoreOptions_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+		{
+
+		}
+
+		private void panelMain_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+		{
+
+		}
+
+		private void labelServiceLevelPercentage_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void labelServiceLevelTarget_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void labelMinimumOccupancy_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void labelMaximumOccupancy_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void labelShrinkage_Click(object sender, EventArgs e)
+		{
+
+		}
     }
 }

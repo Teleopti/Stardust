@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.panelMain = new System.Windows.Forms.Panel();
 			this.tableLayoutPanelMainRtl = new System.Windows.Forms.TableLayoutPanel();
 			this.labelShrinkage = new System.Windows.Forms.Label();
 			this.labelHandledWithin = new System.Windows.Forms.Label();
@@ -44,22 +43,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.integerTextBoxMaximumAgents = new Syncfusion.Windows.Forms.Tools.IntegerTextBox();
 			this.integerTextBoxMinimumAgents = new Syncfusion.Windows.Forms.Tools.IntegerTextBox();
 			this.labelMaximumAgents = new System.Windows.Forms.Label();
-			this.panelMain.SuspendLayout();
 			this.tableLayoutPanelMainRtl.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.integerTextBoxMaximumAgents)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.integerTextBoxMinimumAgents)).BeginInit();
 			this.SuspendLayout();
-			// 
-			// panelMain
-			// 
-			this.panelMain.BackColor = System.Drawing.Color.White;
-			this.panelMain.Controls.Add(this.tableLayoutPanelMainRtl);
-			this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panelMain.Location = new System.Drawing.Point(10, 10);
-			this.panelMain.Margin = new System.Windows.Forms.Padding(0);
-			this.panelMain.Name = "panelMain";
-			this.panelMain.Size = new System.Drawing.Size(304, 501);
-			this.panelMain.TabIndex = 0;
 			// 
 			// tableLayoutPanelMainRtl
 			// 
@@ -72,26 +59,27 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.tableLayoutPanelMainRtl.Controls.Add(this.percentTextBox1, 1, 1);
 			this.tableLayoutPanelMainRtl.Controls.Add(this.labelEfficiencyPercentage, 0, 2);
 			this.tableLayoutPanelMainRtl.Controls.Add(this.efficiencyPercentTextBox1, 1, 2);
+			this.tableLayoutPanelMainRtl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelMainRtl.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelMainRtl.Name = "tableLayoutPanelMainRtl";
 			this.tableLayoutPanelMainRtl.RowCount = 6;
-			this.tableLayoutPanelMainRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-			this.tableLayoutPanelMainRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-			this.tableLayoutPanelMainRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-			this.tableLayoutPanelMainRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-			this.tableLayoutPanelMainRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-			this.tableLayoutPanelMainRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanelMainRtl.Size = new System.Drawing.Size(291, 193);
+			this.tableLayoutPanelMainRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+			this.tableLayoutPanelMainRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+			this.tableLayoutPanelMainRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+			this.tableLayoutPanelMainRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+			this.tableLayoutPanelMainRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+			this.tableLayoutPanelMainRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+			this.tableLayoutPanelMainRtl.Size = new System.Drawing.Size(350, 300);
 			this.tableLayoutPanelMainRtl.TabIndex = 12;
 			// 
 			// labelShrinkage
 			// 
 			this.labelShrinkage.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelShrinkage.AutoSize = true;
-			this.labelShrinkage.Location = new System.Drawing.Point(15, 41);
-			this.labelShrinkage.Margin = new System.Windows.Forms.Padding(15, 0, 3, 0);
+			this.labelShrinkage.Location = new System.Drawing.Point(3, 48);
+			this.labelShrinkage.Margin = new System.Windows.Forms.Padding(3);
 			this.labelShrinkage.Name = "labelShrinkage";
-			this.labelShrinkage.Size = new System.Drawing.Size(65, 13);
+			this.labelShrinkage.Size = new System.Drawing.Size(69, 15);
 			this.labelShrinkage.TabIndex = 18;
 			this.labelShrinkage.Text = "xxShrinkage";
 			// 
@@ -99,10 +87,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			this.labelHandledWithin.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelHandledWithin.AutoSize = true;
-			this.labelHandledWithin.Location = new System.Drawing.Point(15, 9);
-			this.labelHandledWithin.Margin = new System.Windows.Forms.Padding(15, 0, 3, 0);
+			this.labelHandledWithin.Location = new System.Drawing.Point(3, 11);
+			this.labelHandledWithin.Margin = new System.Windows.Forms.Padding(3);
 			this.labelHandledWithin.Name = "labelHandledWithin";
-			this.labelHandledWithin.Size = new System.Drawing.Size(113, 13);
+			this.labelHandledWithin.Size = new System.Drawing.Size(128, 15);
 			this.labelHandledWithin.TabIndex = 20;
 			this.labelHandledWithin.Text = "xxHandledWithinHMM";
 			// 
@@ -110,16 +98,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			this.timeSpanTextBoxServiceLevelTime.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
 			this.timeSpanTextBoxServiceLevelTime.DefaultInterpretAsMinutes = false;
-			this.timeSpanTextBoxServiceLevelTime.Location = new System.Drawing.Point(197, 6);
-			this.timeSpanTextBoxServiceLevelTime.Margin = new System.Windows.Forms.Padding(0, 6, 0, 0);
+			this.timeSpanTextBoxServiceLevelTime.Location = new System.Drawing.Point(238, 7);
+			this.timeSpanTextBoxServiceLevelTime.Margin = new System.Windows.Forms.Padding(0, 7, 0, 0);
 			this.timeSpanTextBoxServiceLevelTime.MaximumValue = System.TimeSpan.Parse("2.00:00:00");
 			this.timeSpanTextBoxServiceLevelTime.MinimumValue = System.TimeSpan.Parse("00:00:00");
 			this.timeSpanTextBoxServiceLevelTime.Name = "timeSpanTextBoxServiceLevelTime";
-			this.timeSpanTextBoxServiceLevelTime.Size = new System.Drawing.Size(79, 22);
+			this.timeSpanTextBoxServiceLevelTime.Size = new System.Drawing.Size(88, 25);
 			this.timeSpanTextBoxServiceLevelTime.TabIndex = 0;
-			this.timeSpanTextBoxServiceLevelTime.TimeSpanBoxHeight = 20;
-			this.timeSpanTextBoxServiceLevelTime.TimeSpanBoxWidth = 59;
-			this.timeSpanTextBoxServiceLevelTime.Value = System.TimeSpan.Parse("00:00:00");
+			this.timeSpanTextBoxServiceLevelTime.TimeSpanBoxHeight = 23;
+			this.timeSpanTextBoxServiceLevelTime.TimeSpanBoxWidth = 79;
 			this.timeSpanTextBoxServiceLevelTime.Validated += new System.EventHandler(this.timeSpanTextBoxServiceLevelTime_TimeSpanBoxTextChanged);
 			// 
 			// percentTextBox1
@@ -129,12 +116,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.percentTextBox1.DefaultValue = 0D;
 			this.percentTextBox1.DoubleValue = 0D;
 			this.percentTextBox1.ForeColor = System.Drawing.Color.Black;
-			this.percentTextBox1.Location = new System.Drawing.Point(197, 37);
-			this.percentTextBox1.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
+			this.percentTextBox1.Location = new System.Drawing.Point(238, 43);
+			this.percentTextBox1.Margin = new System.Windows.Forms.Padding(0, 6, 3, 3);
 			this.percentTextBox1.Maximum = 99D;
 			this.percentTextBox1.Minimum = 0D;
 			this.percentTextBox1.Name = "percentTextBox1";
-			this.percentTextBox1.Size = new System.Drawing.Size(59, 20);
+			this.percentTextBox1.Size = new System.Drawing.Size(68, 23);
 			this.percentTextBox1.TabIndex = 1;
 			this.percentTextBox1.Text = "0%";
 			// 
@@ -142,10 +129,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			this.labelEfficiencyPercentage.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelEfficiencyPercentage.AutoSize = true;
-			this.labelEfficiencyPercentage.Location = new System.Drawing.Point(15, 73);
-			this.labelEfficiencyPercentage.Margin = new System.Windows.Forms.Padding(15, 0, 3, 0);
+			this.labelEfficiencyPercentage.Location = new System.Drawing.Point(3, 85);
+			this.labelEfficiencyPercentage.Margin = new System.Windows.Forms.Padding(3);
 			this.labelEfficiencyPercentage.Name = "labelEfficiencyPercentage";
-			this.labelEfficiencyPercentage.Size = new System.Drawing.Size(63, 13);
+			this.labelEfficiencyPercentage.Size = new System.Drawing.Size(68, 15);
 			this.labelEfficiencyPercentage.TabIndex = 22;
 			this.labelEfficiencyPercentage.Text = "xxEfficiency";
 			// 
@@ -156,12 +143,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.efficiencyPercentTextBox1.DefaultValue = 0D;
 			this.efficiencyPercentTextBox1.DoubleValue = 0.01D;
 			this.efficiencyPercentTextBox1.ForeColor = System.Drawing.Color.Black;
-			this.efficiencyPercentTextBox1.Location = new System.Drawing.Point(197, 69);
-			this.efficiencyPercentTextBox1.Margin = new System.Windows.Forms.Padding(0, 5, 3, 3);
+			this.efficiencyPercentTextBox1.Location = new System.Drawing.Point(238, 80);
+			this.efficiencyPercentTextBox1.Margin = new System.Windows.Forms.Padding(0, 6, 3, 3);
 			this.efficiencyPercentTextBox1.Maximum = 100D;
 			this.efficiencyPercentTextBox1.Minimum = 0.01D;
 			this.efficiencyPercentTextBox1.Name = "efficiencyPercentTextBox1";
-			this.efficiencyPercentTextBox1.Size = new System.Drawing.Size(59, 20);
+			this.efficiencyPercentTextBox1.Size = new System.Drawing.Size(68, 23);
 			this.efficiencyPercentTextBox1.TabIndex = 2;
 			this.efficiencyPercentTextBox1.Text = "1 %";
 			// 
@@ -234,13 +221,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			// SkillEmailDistributions
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.panelMain);
+			this.BackColor = System.Drawing.Color.White;
+			this.Controls.Add(this.tableLayoutPanelMainRtl);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "SkillEmailDistributions";
-			this.Padding = new System.Windows.Forms.Padding(10);
-			this.Size = new System.Drawing.Size(324, 521);
-			this.panelMain.ResumeLayout(false);
+			this.Size = new System.Drawing.Size(350, 300);
 			this.tableLayoutPanelMainRtl.ResumeLayout(false);
 			this.tableLayoutPanelMainRtl.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.integerTextBoxMaximumAgents)).EndInit();
@@ -251,7 +238,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 
 		#endregion
 
-		private System.Windows.Forms.Panel panelMain;
 		private System.Windows.Forms.Label labelMaximumAgents;
 		private System.Windows.Forms.Label labelMinimumAgents;
 		private Syncfusion.Windows.Forms.Tools.IntegerTextBox integerTextBoxMaximumAgents;

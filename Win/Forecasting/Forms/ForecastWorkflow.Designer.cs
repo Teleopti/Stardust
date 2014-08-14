@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.wfValidate.Name = "wfValidate";
 			this.wfValidate.Size = new System.Drawing.Size(1088, 626);
 			this.wfValidate.TabIndex = 0;
+			this.wfValidate.Load += new System.EventHandler(this.wfValidate_Load);
 			// 
 			// tabSeason
 			// 

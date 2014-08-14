@@ -212,6 +212,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 
 		}
+
+		private void wfValidate_Load(object sender, EventArgs e)
+		{
+
+		}
 	}
 
 	public interface IForecastWorkflowView

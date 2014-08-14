@@ -59,7 +59,7 @@
 			this.tableLayoutPanel1.ColumnCount = 3;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53.73832F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 46.26168F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 128F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 129F));
 			this.tableLayoutPanel1.Controls.Add(this.labelSource, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.labelSourceWorkload, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.labelTargetSkill, 0, 1);
@@ -93,9 +93,9 @@
 			this.labelSourceWorkload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.labelSourceWorkload.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.labelSourceWorkload, 2);
-			this.labelSourceWorkload.Location = new System.Drawing.Point(124, 11);
+			this.labelSourceWorkload.Location = new System.Drawing.Point(123, 11);
 			this.labelSourceWorkload.Name = "labelSourceWorkload";
-			this.labelSourceWorkload.Size = new System.Drawing.Size(227, 13);
+			this.labelSourceWorkload.Size = new System.Drawing.Size(228, 13);
 			this.labelSourceWorkload.TabIndex = 1;
 			this.labelSourceWorkload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -112,13 +112,13 @@
 			// checkBoxAdvIncludeTemplates
 			// 
 			this.checkBoxAdvIncludeTemplates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.checkBoxAdvIncludeTemplates.BeforeTouchSize = new System.Drawing.Size(150, 21);
+			this.checkBoxAdvIncludeTemplates.BeforeTouchSize = new System.Drawing.Size(228, 20);
 			this.tableLayoutPanel1.SetColumnSpan(this.checkBoxAdvIncludeTemplates, 2);
 			this.checkBoxAdvIncludeTemplates.DrawFocusRectangle = false;
-			this.checkBoxAdvIncludeTemplates.Location = new System.Drawing.Point(124, 76);
+			this.checkBoxAdvIncludeTemplates.Location = new System.Drawing.Point(123, 76);
 			this.checkBoxAdvIncludeTemplates.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvIncludeTemplates.Name = "checkBoxAdvIncludeTemplates";
-			this.checkBoxAdvIncludeTemplates.Size = new System.Drawing.Size(227, 20);
+			this.checkBoxAdvIncludeTemplates.Size = new System.Drawing.Size(228, 20);
 			this.checkBoxAdvIncludeTemplates.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAdvIncludeTemplates.TabIndex = 4;
 			this.checkBoxAdvIncludeTemplates.Text = "xxIncludeTemplates";
@@ -128,13 +128,13 @@
 			// checkBoxAdvIncludeQueues
 			// 
 			this.checkBoxAdvIncludeQueues.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.checkBoxAdvIncludeQueues.BeforeTouchSize = new System.Drawing.Size(150, 21);
+			this.checkBoxAdvIncludeQueues.BeforeTouchSize = new System.Drawing.Size(228, 18);
 			this.tableLayoutPanel1.SetColumnSpan(this.checkBoxAdvIncludeQueues, 2);
 			this.checkBoxAdvIncludeQueues.DrawFocusRectangle = false;
-			this.checkBoxAdvIncludeQueues.Location = new System.Drawing.Point(124, 110);
+			this.checkBoxAdvIncludeQueues.Location = new System.Drawing.Point(123, 110);
 			this.checkBoxAdvIncludeQueues.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvIncludeQueues.Name = "checkBoxAdvIncludeQueues";
-			this.checkBoxAdvIncludeQueues.Size = new System.Drawing.Size(227, 18);
+			this.checkBoxAdvIncludeQueues.Size = new System.Drawing.Size(228, 18);
 			this.checkBoxAdvIncludeQueues.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAdvIncludeQueues.TabIndex = 5;
 			this.checkBoxAdvIncludeQueues.Text = "xxIncludeQueues";
@@ -145,12 +145,12 @@
 			// 
 			this.comboBoxAdvSkills.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBoxAdvSkills.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvSkills.BeforeTouchSize = new System.Drawing.Size(227, 21);
+			this.comboBoxAdvSkills.BeforeTouchSize = new System.Drawing.Size(228, 21);
 			this.tableLayoutPanel1.SetColumnSpan(this.comboBoxAdvSkills, 2);
 			this.comboBoxAdvSkills.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvSkills.Location = new System.Drawing.Point(124, 42);
+			this.comboBoxAdvSkills.Location = new System.Drawing.Point(123, 42);
 			this.comboBoxAdvSkills.Name = "comboBoxAdvSkills";
-			this.comboBoxAdvSkills.Size = new System.Drawing.Size(227, 21);
+			this.comboBoxAdvSkills.Size = new System.Drawing.Size(228, 21);
 			this.comboBoxAdvSkills.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvSkills.TabIndex = 1;
 			this.comboBoxAdvSkills.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvSkills_SelectedIndexChanged);

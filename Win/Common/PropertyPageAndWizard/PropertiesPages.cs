@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			{
 				_propertyPages.LoadAggregateRootWorkingCopy();
 			}
+			labelHeading.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 		}
 
 		private void propertiesPagesLoad(object sender, EventArgs e)
@@ -54,14 +56,15 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 				pp.SetEditMode();
 
 			SuspendLayout();
-			splitContainerPages.SuspendLayout();
+			panelContainer.SuspendLayout();
 			var c = (Control)pp;
-			splitContainerPages.Panel2.Controls.Clear();
+			panelContainer.Controls.Clear();
 			c.Dock = DockStyle.Fill;
 			c.TabIndex = 1;
-			splitContainerPages.Panel2.Controls.Add(c);
-			splitContainerPages.ResumeLayout();
+			panelContainer.Controls.Add(c);
+			panelContainer.ResumeLayout();
 			ResumeLayout();
+			labelHeading.Text = pp.PageName;
 		}
 
 		private void buttonOkClick(object sender, EventArgs e)
@@ -81,6 +84,11 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 		{
 			var pp = (IPropertyPage)treeViewPages.SelectedNode.Tag;
 			displayPage(pp);
+		}
+
+		private void splitContainerPages_SplitterMoved(object sender, SplitterEventArgs e)
+		{
+
 		}
 	}
 }

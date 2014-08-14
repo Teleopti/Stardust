@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.tableLayoutPanelForRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
 			this.tableLayoutPanelForRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
 			this.tableLayoutPanelForRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelForRtl.Size = new System.Drawing.Size(398, 343);
+			this.tableLayoutPanelForRtl.Size = new System.Drawing.Size(398, 273);
 			this.tableLayoutPanelForRtl.TabIndex = 14;
 			// 
 			// labelOffered
@@ -470,7 +470,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.Controls.Add(this.tableLayoutPanelForRtl);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.Name = "WorkloadQueueAdjustment";
-			this.Size = new System.Drawing.Size(398, 343);
+			this.Size = new System.Drawing.Size(398, 273);
 			this.tableLayoutPanelForRtl.ResumeLayout(false);
 			this.tableLayoutPanelForRtl.PerformLayout();
 			this.ResumeLayout(false);

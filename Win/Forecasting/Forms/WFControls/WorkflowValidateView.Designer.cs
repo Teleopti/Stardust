@@ -108,9 +108,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.xpTaskBarBoxSelectPeriod.ItemBackColor = System.Drawing.SystemColors.Control;
 			this.xpTaskBarBoxSelectPeriod.Location = new System.Drawing.Point(0, 0);
 			this.xpTaskBarBoxSelectPeriod.Name = "xpTaskBarBoxSelectPeriod";
-			this.xpTaskBarBoxSelectPeriod.PreferredChildPanelHeight = 333;
+			this.xpTaskBarBoxSelectPeriod.PreferredChildPanelHeight = 339;
 			this.xpTaskBarBoxSelectPeriod.ShowCollapseButton = false;
-			this.xpTaskBarBoxSelectPeriod.Size = new System.Drawing.Size(186, 365);
+			this.xpTaskBarBoxSelectPeriod.Size = new System.Drawing.Size(186, 371);
 			this.xpTaskBarBoxSelectPeriod.TabIndex = 0;
 			this.xpTaskBarBoxSelectPeriod.TabStop = false;
 			this.xpTaskBarBoxSelectPeriod.Text = "xxSelectHistoricalData";
@@ -124,13 +124,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.gradientPanelSelectPeriod.Controls.Add(this.dateSelectionFromToTarget);
 			this.gradientPanelSelectPeriod.Location = new System.Drawing.Point(2, 30);
 			this.gradientPanelSelectPeriod.Name = "gradientPanelSelectPeriod";
-			this.gradientPanelSelectPeriod.Size = new System.Drawing.Size(182, 333);
+			this.gradientPanelSelectPeriod.Size = new System.Drawing.Size(182, 339);
 			this.gradientPanelSelectPeriod.TabIndex = 0;
 			// 
 			// buttonAdvCancelLoad
 			// 
 			this.buttonAdvCancelLoad.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonAdvCancelLoad.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvCancelLoad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonAdvCancelLoad.BeforeTouchSize = new System.Drawing.Size(176, 30);
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.buttonAdvCancelLoad.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Cancel_16x16;
 			this.buttonAdvCancelLoad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.buttonAdvCancelLoad.IsBackStageButton = false;
-			this.buttonAdvCancelLoad.Location = new System.Drawing.Point(3, 290);
+			this.buttonAdvCancelLoad.Location = new System.Drawing.Point(3, 296);
 			this.buttonAdvCancelLoad.Name = "buttonAdvCancelLoad";
 			this.buttonAdvCancelLoad.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonAdvCancelLoad.Size = new System.Drawing.Size(176, 30);
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.dateSelectionFromToHistorical.Name = "dateSelectionFromToHistorical";
 			this.dateSelectionFromToHistorical.NoneButtonText = "xxNone";
 			this.dateSelectionFromToHistorical.NullString = "xxNoDateIsSelected";
-			this.dateSelectionFromToHistorical.Size = new System.Drawing.Size(182, 202);
+			this.dateSelectionFromToHistorical.Size = new System.Drawing.Size(182, 208);
 			this.dateSelectionFromToHistorical.TabIndex = 3;
 			this.dateSelectionFromToHistorical.TodayButtonText = "xxToday";
 			this.dateSelectionFromToHistorical.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToHistorical.WorkPeriodEnd")));
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.dateSelectionFromToTarget.LabelDateSelectionText = "xxValidationPeriod";
 			this.dateSelectionFromToTarget.LabelDateSelectionToText = "xxTo";
 			this.dateSelectionFromToTarget.Location = new System.Drawing.Point(0, 0);
-			this.dateSelectionFromToTarget.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+			this.dateSelectionFromToTarget.Margin = new System.Windows.Forms.Padding(5);
 			this.dateSelectionFromToTarget.Name = "dateSelectionFromToTarget";
 			this.dateSelectionFromToTarget.NoneButtonText = "xxNone";
 			this.dateSelectionFromToTarget.NullString = "xxNoDateIsSelected";
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.xpTaskBarBoxDeviations.HitTaskBoxArea = false;
 			this.xpTaskBarBoxDeviations.HotTrackColor = System.Drawing.Color.Empty;
 			this.xpTaskBarBoxDeviations.ItemBackColor = System.Drawing.SystemColors.Control;
-			this.xpTaskBarBoxDeviations.Location = new System.Drawing.Point(0, 365);
+			this.xpTaskBarBoxDeviations.Location = new System.Drawing.Point(0, 371);
 			this.xpTaskBarBoxDeviations.Name = "xpTaskBarBoxDeviations";
 			this.xpTaskBarBoxDeviations.PreferredChildPanelHeight = 138;
 			this.xpTaskBarBoxDeviations.Size = new System.Drawing.Size(186, 170);
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.xpTaskBarBoxSpecialEvents.HitTaskBoxArea = false;
 			this.xpTaskBarBoxSpecialEvents.HotTrackColor = System.Drawing.Color.Empty;
 			this.xpTaskBarBoxSpecialEvents.ItemBackColor = System.Drawing.SystemColors.Control;
-			this.xpTaskBarBoxSpecialEvents.Location = new System.Drawing.Point(0, 535);
+			this.xpTaskBarBoxSpecialEvents.Location = new System.Drawing.Point(0, 541);
 			this.xpTaskBarBoxSpecialEvents.Name = "xpTaskBarBoxSpecialEvents";
 			this.xpTaskBarBoxSpecialEvents.PreferredChildPanelHeight = 115;
 			this.xpTaskBarBoxSpecialEvents.Size = new System.Drawing.Size(186, 147);

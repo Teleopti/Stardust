@@ -1,34 +1,34 @@
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 {
-    partial class SkillThresholds
-    {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class SkillThresholds
+	{
+		/// <summary> 
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary> 
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Component Designer generated code
+		#region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary> 
+		/// Required method for Designer support - do not modify 
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SkillThresholds));
 			this.labelSeriousUnderstaffing = new System.Windows.Forms.Label();
 			this.tableLayoutPanelForRtl = new System.Windows.Forms.TableLayoutPanel();
@@ -130,18 +130,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.tableLayoutPanelForRtl.PerformLayout();
 			this.ResumeLayout(false);
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        private System.Windows.Forms.Label labelSeriousUnderstaffing;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelForRtl;
-        private System.Windows.Forms.Label labelOverstaffing;
-        private System.Windows.Forms.Label labelUnderstaffing;
-        private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxSeriousUnderstaffing;
-        private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxUnderstaffing;
-        private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxOverstaffing;
+		private System.Windows.Forms.Label labelSeriousUnderstaffing;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelForRtl;
+		private System.Windows.Forms.Label labelUnderstaffing;
+		private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxSeriousUnderstaffing;
+		private Teleopti.Ccc.Win.Common.Controls.TeleoptiPercentTextBox percentTextBoxUnderstaffing;
 		private Common.Controls.TeleoptiPercentTextBox percentTextBoxUnderstaffingFor;
 		private System.Windows.Forms.Label labelFor;
-    }
+		private Common.Controls.TeleoptiPercentTextBox percentTextBoxOverstaffing;
+		private System.Windows.Forms.Label labelOverstaffing;
+	}
 }

@@ -127,13 +127,13 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="labelSeriousUnderstaffing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 0</value>
+    <value>3, 6</value>
   </data>
   <data name="labelSeriousUnderstaffing.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 3, 0, 0</value>
   </data>
   <data name="labelSeriousUnderstaffing.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 27</value>
+    <value>127, 18</value>
   </data>
   <data name="labelSeriousUnderstaffing.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -157,10 +157,10 @@
     <value>4</value>
   </data>
   <data name="percentTextBoxOverstaffing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 59</value>
+    <value>209, 63</value>
   </data>
   <data name="percentTextBoxOverstaffing.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
+    <value>57, 23</value>
   </data>
   <data name="percentTextBoxOverstaffing.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -186,14 +186,17 @@
   <data name="labelOverstaffing.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="labelOverstaffing.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="labelOverstaffing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 56</value>
+    <value>3, 66</value>
   </data>
   <data name="labelOverstaffing.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 3, 0, 0</value>
   </data>
   <data name="labelOverstaffing.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 27</value>
+    <value>82, 18</value>
   </data>
   <data name="labelOverstaffing.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -220,13 +223,13 @@
     <value>True</value>
   </data>
   <data name="labelUnderstaffing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 27</value>
+    <value>3, 36</value>
   </data>
   <data name="labelUnderstaffing.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 3, 0, 0</value>
   </data>
   <data name="labelUnderstaffing.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 29</value>
+    <value>89, 18</value>
   </data>
   <data name="labelUnderstaffing.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -247,10 +250,10 @@
     <value>2</value>
   </data>
   <data name="percentTextBoxSeriousUnderstaffing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 3</value>
+    <value>209, 3</value>
   </data>
   <data name="percentTextBoxSeriousUnderstaffing.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
+    <value>57, 23</value>
   </data>
   <data name="percentTextBoxSeriousUnderstaffing.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -271,10 +274,10 @@
     <value>4</value>
   </data>
   <data name="percentTextBoxUnderstaffing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 30</value>
+    <value>209, 34</value>
   </data>
   <data name="percentTextBoxUnderstaffing.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
+    <value>57, 23</value>
   </data>
   <data name="percentTextBoxUnderstaffing.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -295,10 +298,10 @@
     <value>5</value>
   </data>
   <data name="percentTextBoxUnderstaffingFor.Location" type="System.Drawing.Point, System.Drawing">
-    <value>243, 30</value>
+    <value>334, 34</value>
   </data>
   <data name="percentTextBoxUnderstaffingFor.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
+    <value>57, 23</value>
   </data>
   <data name="percentTextBoxUnderstaffingFor.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -325,10 +328,10 @@
     <value>True</value>
   </data>
   <data name="labelFor.Location" type="System.Drawing.Point, System.Drawing">
-    <value>185, 35</value>
+    <value>272, 38</value>
   </data>
   <data name="labelFor.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 13</value>
+    <value>56, 15</value>
   </data>
   <data name="labelFor.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -352,13 +355,13 @@
     <value>Fill</value>
   </data>
   <data name="tableLayoutPanelForRtl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 10</value>
+    <value>0, 0</value>
   </data>
   <data name="tableLayoutPanelForRtl.RowCount" type="System.Int32, mscorlib">
-    <value>7</value>
+    <value>4</value>
   </data>
   <data name="tableLayoutPanelForRtl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>346, 280</value>
+    <value>394, 335</value>
   </data>
   <data name="tableLayoutPanelForRtl.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
@@ -376,19 +379,19 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanelForRtl.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="percentTextBoxOverstaffing" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="labelOverstaffing" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelUnderstaffing" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelSeriousUnderstaffing" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="percentTextBoxSeriousUnderstaffing" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="percentTextBoxUnderstaffing" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="percentTextBoxUnderstaffingFor" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="labelFor" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;Rows Styles="Absolute,27,AutoSize,0,Absolute,27,Absolute,27,Absolute,27,Absolute,27,Absolute,27" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="percentTextBoxOverstaffing" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="labelOverstaffing" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelUnderstaffing" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelSeriousUnderstaffing" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="percentTextBoxSeriousUnderstaffing" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="percentTextBoxUnderstaffing" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="percentTextBoxUnderstaffingFor" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="labelFor" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,AutoSize,0,AutoSize,0,AutoSize,50" /&gt;&lt;Rows Styles="Absolute,31,AutoSize,0,Absolute,31,Absolute,31" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
+    <value>7, 15</value>
   </data>
-  <data name="$this.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>10, 10, 10, 10</value>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>366, 300</value>
+    <value>394, 335</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>SkillThresholds</value>
