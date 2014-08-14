@@ -58,6 +58,11 @@
 			};
 
 			that.openSelectedTeams = function () {
+				if (that.teamsToOpen().length === 0) {
+					that.teamsToOpen(lazy(that.teams())
+						.pluck("Id")
+						.toArray());
+				}
 				amplify.store("MultipleTeams", that.teamsToOpen());
 				navigation.GotoRealTimeAdherenceMultipleTeamDetails('MultipleTeams');
 			}

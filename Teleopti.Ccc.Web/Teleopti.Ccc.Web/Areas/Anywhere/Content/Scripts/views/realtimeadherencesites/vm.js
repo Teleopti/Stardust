@@ -74,7 +74,12 @@
 				}
 			};
 
-			that.openSelectedSites = function() {
+			that.openSelectedSites = function () {
+				if (that.sitesToOpen().length === 0) {
+					that.sitesToOpen(lazy(that.sites())
+						.pluck("Id")
+						.toArray());
+				}
 				amplify.store("MultipleSites", that.sitesToOpen());
 				navigation.GotoRealTimeAdherenceMultipleSiteDetails('MultipleSites');
 			};
