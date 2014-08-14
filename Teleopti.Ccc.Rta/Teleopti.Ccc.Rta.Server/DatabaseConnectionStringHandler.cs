@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.Rta.Server
 	{
 		public string AppConnectionString()
 		{
-			return ConfigurationManager.AppSettings["AppDb"];
+			return ConfigurationManager.ConnectionStrings["RtaApplication"].ConnectionString;
 		}
 
 		public string DataStoreConnectionString()
 		{
-			return ConfigurationManager.AppSettings["DataStore"];
+			return ConfigurationManager.ConnectionStrings["RtaAnalytics"].ConnectionString;
 		}
 	}
 }
