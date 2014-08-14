@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 
-		private IList<DateTimePeriod> convertStringToUtcTimes(DateOnly selectedDate, string timesString)
+		private IList<DateTimePeriod> convertStringToUtcTimes(DateOnly selectedDate, string timesString, bool isFullDay)
 		{
 			var startTimesx = string.IsNullOrEmpty(timesString) ? new string[] {} : timesString.Split(',');
 			var periodsAsString = from t in startTimesx
@@ -188,11 +188,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 							  };
 			var periodsList = periods.ToList();
 			if (!periodsList.Any())
-				periodsList.Add(new
+			{
+				if (isFullDay)
+				{
+					periodsList.Add(new
+						{
+							Start = selectedDate.Date.Add(TimeSpan.FromHours(0)),
+							End = selectedDate.Date.Add(TimeSpan.FromHours(36)),
+						});
+				}
+				else
+				{
+					periodsList.Add(new
 					{
 						Start = selectedDate.Date.Add(TimeSpan.FromHours(0)),
-						End = selectedDate.Date.Add(TimeSpan.FromHours(36)),
+						End = selectedDate.Date.Add(TimeSpan.FromHours(0)),
 					});
+				}
+			}
+
 			var periodsDateUtc = from p in periodsList
 										let start = TimeZoneHelper.ConvertToUtc(p.Start, _userTimeZone.TimeZone())
 										let end = TimeZoneHelper.ConvertToUtc(p.End, _userTimeZone.TimeZone())
@@ -208,12 +222,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			TimeFilterInfo filter;
 			if (string.IsNullOrEmpty(filterStartTimes) && string.IsNullOrEmpty(filterEndTimes))
 			{
-				filter = null;
+				if (isDayOff)
+				{
+					var startTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, false);
+					var endTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, false);
+
+					filter = new TimeFilterInfo();
+					filter.StartTimeStarts = startTimes.Select(x => x.StartDateTime).ToArray();
+					filter.StartTimeEnds = startTimes.Select(x => x.EndDateTime).ToArray();
+					filter.EndTimeStarts = endTimes.Select(x => x.StartDateTime).ToArray();
+					filter.EndTimeEnds = endTimes.Select(x => x.EndDateTime).ToArray();
+					filter.IsDayOff = isDayOff;
+				}
+				else
+				{
+					filter = null;
+				}
 			}
 			else
 			{
-				var startTimes = convertStringToUtcTimes(selectedDate, filterStartTimes);
-				var endTimes = convertStringToUtcTimes(selectedDate, filterEndTimes);
+				var startTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, true);
+				var endTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, true);
 
 				filter = new TimeFilterInfo();
 				filter.StartTimeStarts = startTimes.Select(x => x.StartDateTime).ToArray();

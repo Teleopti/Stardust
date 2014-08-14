@@ -7,7 +7,9 @@ GO
 -- Create date: 2014-08-05
 -- Description:	Load Schedule for possible shift trades with filtered times
 -- =============================================
--- ReadModel. LoadPossibleShiftTradeSchedulesWithTimeFilter '2014-08-08', 'b46a2588-8861-42e3-ab03-9b5e015b257c,47a3d4aa-3cd8-4235-a7eb-9b5e015b2560,88be31b0-9c70-4076-9743-9b5e015b2577,9d42c9bf-f766-473f-970c-9b5e015b2564,94329a0e-b3c5-4b1f-beb9-9b5e015b2564','4:00-6:00,10:00-12:00', '12:00-14:00,20:00-22:00',00,20
+-- ReadModel. LoadPossibleShiftTradeSchedulesWithTimeFilter '2014-08-08', 'b46a2588-8861-42e3-ab03-9b5e015b257c,47a3d4aa-3cd8-4235-a7eb-9b5e015b2560,88be31b0-9c70-4076-9743-9b5e015b2577,9d42c9bf-f766-473f-970c-9b5e015b2564,94329a0e-b3c5-4b1f-beb9-9b5e015b2564',
+--'2014-08-08 10:00','2014-08-08 12:00', '2014-08-08 20:00','2014-08-08 22:00',
+-- false,00,20
 
 CREATE PROCEDURE [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter]
 @shiftTradeDate smalldatetime,
@@ -66,12 +68,14 @@ AS
 		ROW_NUMBER() OVER (ORDER BY sd.Start) AS 'RowNumber'
 		FROM ReadModel.PersonScheduleDay sd
 		INNER JOIN @TempList t ON t.Person = sd.PersonId
-		INNER JOIN @filterStartTimeList fs ON sd.Start BETWEEN fs.startTimeStart and fs.startTimeEnd
-		INNER JOIN @filterEndTimeList fe ON sd.[End] BETWEEN fe.endTimeStart and fe.endTimeEnd
+		INNER JOIN @filterStartTimeList fs ON fs.startTimeStart <= sd.Start
+		AND fs.startTimeEnd > sd.Start
+		INNER JOIN @filterEndTimeList fe ON fe.endTimeStart <= sd.[End] 
+		AND fe.endTimeEnd >sd.[End]
 		WHERE [BelongsToDate] = @shiftTradeDate
 		AND sd.Start IS NOT NULL
 		AND DATEDIFF(MINUTE,Start, [End] ) < 1440
-		AND sd.IsDayOff = @isDayOff
+		OR sd.IsDayOff = @isDayOff
 		ORDER BY sd.Start
 	) 
 	

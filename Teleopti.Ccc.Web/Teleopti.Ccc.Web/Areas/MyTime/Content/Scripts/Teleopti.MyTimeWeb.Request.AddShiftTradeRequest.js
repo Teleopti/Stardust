@@ -313,7 +313,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.loadSchedule = function(value) {
 			if (value != "allTeams") {
-				if (self.filteredStartTimesText().length == 0 && self.filteredEndTimesText().length == 0) {
+				if (self.filteredStartTimesText().length == 0 && self.filteredEndTimesText().length == 0 && !self.isDayoffFiltered()) {
 					self.loadOneTeamSchedule();
 				} else {
 					self.loadScheduleForOneTeamFilterTime();
@@ -771,10 +771,17 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			var isEndUnchecked = false;
 			var isStartNewAdded = false;
 			var isEndNewAdded = false;
+			var isDayOffModified = false;
 			
 			$.each(self.filterStartTimeList(), function (idx, timeInFilter) {
 				if (timeInFilter.isChecked()) {
-					if (timeInFilter.isDayOff) self.isDayoffFiltered(true);
+					if (timeInFilter.isDayOff()) {
+						if (!self.isDayoffFiltered()) {
+							isDayOffModified = true;
+							self.isDayoffFiltered(true);
+						}
+					} 
+					
 					var findThis = false;
 					$.each(self.filteredStartTimesText(), function (index, text) {
 						if (timeInFilter.text == text) {
@@ -783,12 +790,17 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 						}
 					});
 
-					if (!findThis && !timeInFilter.isDayOff) {
+					if (!findThis && !timeInFilter.isDayOff()) {
 						self.filteredStartTimesText.push(timeInFilter.text);
 						isStartNewAdded = true;
 					}
 				} else {
-					if (timeInFilter.isDayOff) self.isDayoffFiltered(false);
+					if (timeInFilter.isDayOff()) {
+						if (self.isDayoffFiltered()) {
+							isDayOffModified = true;
+							self.isDayoffFiltered(false);
+						}
+					}
 
 					$.each(self.filteredStartTimesText(), function (index, text) {
 						if (timeInFilter.text == text) {
@@ -825,7 +837,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				}
 			});
 
-			if (isStartNewAdded || isStartUnchecked || isEndNewAdded || isEndUnchecked) {
+			if (isStartNewAdded || isStartUnchecked || isEndNewAdded || isEndUnchecked || isDayOffModified) {
 				self.prepareLoad();
 				self.loadSchedule(self.selectedTeamInternal());
 			}
