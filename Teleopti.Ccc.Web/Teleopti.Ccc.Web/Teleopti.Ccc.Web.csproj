@@ -188,6 +188,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NodaTime">
+      <HintPath>..\..\packages\NodaTime.1.3.0\lib\net35-Client\NodaTime.dll</HintPath>
+    </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -399,7 +402,9 @@
     <Compile Include="Areas\Toggle\ToggleHandlerController.cs" />
     <Compile Include="Core\AllowTokenPostRequestValidator.cs" />
     <Compile Include="Core\Aop\Aspects\MultipleBusinessUnitsAspect.cs" />
+    <Compile Include="Core\IanaTimeZoneProvider.cs" />
     <Compile Include="Core\IdentityProviderProvider.cs" />
+    <Compile Include="Core\IIanaTimeZoneProvider.cs" />
     <Compile Include="Core\IIdentityProviderProvider.cs" />
     <Compile Include="Core\IResourceVersion.cs" />
     <Compile Include="Core\MachineKeyCookieTransform.cs" />

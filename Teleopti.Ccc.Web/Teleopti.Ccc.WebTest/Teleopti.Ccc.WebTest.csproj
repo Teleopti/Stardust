@@ -179,6 +179,7 @@
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
     <Compile Include="Core\Aop\Aspects\MultipleBusinessUnitsAspectTest.cs" />
+    <Compile Include="Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingTest.cs" />
     <Compile Include="Core\Portal\DataProvider\ReportsProviderTest.cs" />
     <Compile Include="Core\Portal\DataProvider\ReportsNavigationProviderTest.cs" />

@@ -30,6 +30,7 @@ define([
 		this.StartTime = ko.observable();
 		this.EndTime = ko.observable();
 		this.WorkingShift = ko.observable();
+		this.TimeZoneName = ko.observable();
 		
 		var personId;
 		var personName;
@@ -43,6 +44,7 @@ define([
 			personName = data.PersonName;
 			self.ScheduleDate(data.Date);
 			self.ActivityTypes(data.Activities);
+		    self.TimeZoneName(data.TimeZoneName);
 		};
 
 		this.Apply = function () {

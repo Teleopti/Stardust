@@ -226,12 +226,12 @@ define([
 				activeLayer.Selected(true);
 			return activeLayer;
 		};
-		
-		this.updateStartTime = function (pixels) {
-			var minutes = pixels / self.TimeLine.PixelsPerMinute();
-			var newStartTimeMinutes = self.MoveActivityForm.getMinutesFromStartTime() + Math.round(minutes / 15) * 15;
-			self.MoveActivityForm.StartTime(self.MoveActivityForm.getStartTimeFromMinutes(newStartTimeMinutes));
-		}
+
+	    this.updateStartTime = function(pixels) {
+	        var minutes = pixels / self.TimeLine.PixelsPerMinute();
+	        var newStartTimeMinutes = self.MoveActivityForm.getMinutesFromStartTime() + Math.round(minutes / 15) * 15;
+	        self.MoveActivityForm.StartTime(self.MoveActivityForm.getStartTimeFromMinutes(newStartTimeMinutes));
+	    };
 
 		this.lengthMinutesToPixels = function (minutes) {
 			var pixels = minutes * self.TimeLine.PixelsPerMinute();
@@ -242,9 +242,9 @@ define([
 	        self.TimeLine.WidthPixels(width);
 	    };
 
-        this.initMoveActivityForm = function() {
-            self.MoveActivityForm.SelectedStartMinutes(self.SelectedStartMinutes());
-            self.MoveActivityForm.ScheduleDate(self.ScheduleDate());
-        }
+	    this.initMoveActivityForm = function() {
+	        self.MoveActivityForm.SelectedStartMinutes(self.SelectedStartMinutes());
+	        self.MoveActivityForm.ScheduleDate(self.ScheduleDate());
+	    };
 	};
 });

@@ -31,14 +31,16 @@
 		self.Activities = ko.observableArray();
 		self.WorkingShift = ko.observable();
 		self.layer = ko.observable();
-	    self.SelectedStartMinutes = ko.observable();
+		self.SelectedStartMinutes = ko.observable();
+		self.TimeZoneName = ko.observable();
 
 		this.SetData = function (data) {
 			self.PersonId(data.PersonId);
 			personName = data.PersonName;
 			self.GroupId(data.GroupId);
 			self.ScheduleDate(data.Date);
-		    self.Activities(data.Activities);
+			self.Activities(data.Activities);
+		    self.TimeZoneName(data.TimeZoneName);
 		};
 
 		this.DisplayedStartTime = ko.computed({
