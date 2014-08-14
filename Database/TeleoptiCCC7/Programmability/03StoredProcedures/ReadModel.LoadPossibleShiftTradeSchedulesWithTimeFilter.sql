@@ -16,6 +16,7 @@ CREATE PROCEDURE [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter]
 @filterStartTimeEnds varchar(max),
 @filterEndTimeStarts varchar(max),
 @filterEndTimeEnds varchar(max),
+@isDayOff bit,
 @skip int,
 @take int
 
@@ -69,7 +70,8 @@ AS
 		INNER JOIN @filterEndTimeList fe ON sd.[End] BETWEEN fe.endTimeStart and fe.endTimeEnd
 		WHERE [BelongsToDate] = @shiftTradeDate
 		AND sd.Start IS NOT NULL
-		AND DATEDIFF(MINUTE,Start, [End] ) <= 1440
+		AND DATEDIFF(MINUTE,Start, [End] ) < 1440
+		AND sd.IsDayOff = @isDayOff
 		ORDER BY sd.Start
 	) 
 	

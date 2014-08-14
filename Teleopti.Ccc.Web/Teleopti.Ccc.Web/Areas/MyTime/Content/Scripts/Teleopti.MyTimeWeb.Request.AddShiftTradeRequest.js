@@ -64,6 +64,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.filterEndTimeList = ko.observableArray();
 		self.filteredStartTimesText = ko.observableArray();
 		self.filteredEndTimesText = ko.observableArray();
+		self.isDayoffFiltered = ko.observable(false);
 
 		self.isDetailVisible = ko.computed(function() {
 			if (self.agentChoosed() === null) {
@@ -731,6 +732,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					teamId: self.selectedTeamInternal(),
 					filteredStartTimes: self.filteredStartTimesText().join(","),
 					filteredEndTimes: self.filteredEndTimesText().join(","),
+					isDayOff: self.isDayoffFiltered(),
 					Take: take,
 					Skip: skip
 				},
@@ -772,6 +774,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			
 			$.each(self.filterStartTimeList(), function (idx, timeInFilter) {
 				if (timeInFilter.isChecked()) {
+					if (timeInFilter.isDayOff) self.isDayoffFiltered(true);
 					var findThis = false;
 					$.each(self.filteredStartTimesText(), function (index, text) {
 						if (timeInFilter.text == text) {
@@ -780,11 +783,13 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 						}
 					});
 
-					if (!findThis) {
+					if (!findThis && !timeInFilter.isDayOff) {
 						self.filteredStartTimesText.push(timeInFilter.text);
 						isStartNewAdded = true;
 					}
 				} else {
+					if (timeInFilter.isDayOff) self.isDayoffFiltered(false);
+
 					$.each(self.filteredStartTimesText(), function (index, text) {
 						if (timeInFilter.text == text) {
 							self.filteredStartTimesText.remove(text);

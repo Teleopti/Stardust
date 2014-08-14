@@ -487,7 +487,7 @@ Teleopti.MyTimeWeb.Request.FilterStartTimeView = function(text, start, end, chec
 	self.start = start;
 	self.end = end;
 	self.isChecked = ko.observable(checked || false);
-	self.isDayOff = isDayOff;
+	self.isDayOff = ko.observable(isDayOff || false);
 };
 
 Teleopti.MyTimeWeb.Request.FilterEndTimeView = function (text, start, end, checked) {

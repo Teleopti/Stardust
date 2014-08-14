@@ -7,4 +7,5 @@ public class TimeFilterInfo
 	public IEnumerable<DateTime> StartTimeEnds { get; set; }
 	public IEnumerable<DateTime> EndTimeStarts { get; set; }
 	public IEnumerable<DateTime> EndTimeEnds { get; set; }
+	public bool IsDayOff { get; set; }
 }

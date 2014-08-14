@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return _unitOfWork.Session().CreateSQLQuery(
 				@"EXEC  [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter] @shiftTradeDate=:shiftTradeDate, @personList=:personIdList, 
 							@filterStartTimeStarts=:filterStartTimeStarts, @filterStartTimeEnds=:filterStartTimeEnds, 
-							@filterEndTimeStarts=:filterEndTimeStarts, @filterEndTimeEnds=:filterEndTimeEnds, 
+							@filterEndTimeStarts=:filterEndTimeStarts, @filterEndTimeEnds=:filterEndTimeEnds, @isDayOff=:isDayOff
 							@skip=:skip, @take=:take")
 							  .AddScalar("PersonId", NHibernateUtil.Guid)
 							  .AddScalar("TeamId", NHibernateUtil.Guid)
@@ -128,6 +128,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .SetParameter("filterStartTimeEnds", filterStartTimeEnds, NHibernateUtil.StringClob)
 							  .SetParameter("filterEndTimeStarts", filterEndTimeStarts, NHibernateUtil.StringClob)
 							  .SetParameter("filterEndTimeEnds", filterEndTimeEnds, NHibernateUtil.StringClob)
+							  .SetParameter("isDayOff", filter.IsDayOff, NHibernateUtil.Boolean)
 							  .SetParameter("skip", paging.Skip)
 							  .SetParameter("take", paging.Take)
 							  .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))

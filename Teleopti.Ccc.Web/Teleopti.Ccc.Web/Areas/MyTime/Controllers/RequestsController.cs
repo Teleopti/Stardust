@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return utcTimes;
 		}
 
-		private TimeFilterInfo GetFilter(DateOnly selectedDate, string filterStartTimes, string filterEndTimes)
+		private TimeFilterInfo GetFilter(DateOnly selectedDate, string filterStartTimes, string filterEndTimes, bool isDayOff)
 		{
 			TimeFilterInfo filter;
 			if (string.IsNullOrEmpty(filterStartTimes) && string.IsNullOrEmpty(filterEndTimes))
@@ -220,15 +220,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				filter.StartTimeEnds = startTimes.Select(x => x.EndDateTime).ToArray();
 				filter.EndTimeStarts = endTimes.Select(x => x.StartDateTime).ToArray();
 				filter.EndTimeEnds = endTimes.Select(x => x.EndDateTime).ToArray();
+				filter.IsDayOff = isDayOff;
 			}
 			return filter;
 		}
 
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult ShiftTradeRequestScheduleByFilterTime(DateOnly selectedDate, string teamId, string filteredStartTimes, string filteredEndTimes, Paging paging)
+		public JsonResult ShiftTradeRequestScheduleByFilterTime(DateOnly selectedDate, string teamId, string filteredStartTimes, string filteredEndTimes, bool isDayOff, Paging paging)
 		{
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, TimeFilter = GetFilter(selectedDate, filteredStartTimes, filteredEndTimes) };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, TimeFilter = GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 
