@@ -10,7 +10,8 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 {
-	class CalculateTimeZoneConsumerTest
+	[TestFixture]
+	public class CalculateTimeZoneConsumerTest
 	{
 		private IServiceBus serviceBus;
 		private CalculateTimeZoneConsumer target;

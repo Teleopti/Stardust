@@ -13,7 +13,8 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 {
-	class BadgeCalculationInitConsumerTest
+	[TestFixture]
+	public class BadgeCalculationInitConsumerTest
 	{
 		private IBusinessUnitRepository businessUnitRepository;
 		private IAgentBadgeSettingsRepository badgeSettingRep;

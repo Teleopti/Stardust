@@ -11,7 +11,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 {
-	class AgentBadgeCalculatorTest
+	[TestFixture]
+	public class AgentBadgeCalculatorTest
 	{
 		private const string _timezoneCode = "";
 		private const int silverToBronzeBadgeRate = 5;

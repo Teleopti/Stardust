@@ -14,7 +14,8 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 {
-	class CalculateBadgeConsumerTest
+	[TestFixture]
+	public class CalculateBadgeConsumerTest
 	{
 		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
 		private IServiceBus serviceBus;
