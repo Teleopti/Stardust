@@ -181,7 +181,7 @@
 			this.AcceptButton = this.buttonAdvOk;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BorderColor = System.Drawing.Color.Blue;
+			this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.CancelButton = this.buttonAdvCancel;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
 			this.ClientSize = new System.Drawing.Size(408, 396);

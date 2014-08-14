@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			// 
 			resources.ApplyResources(this, "$this");
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BorderColor = System.Drawing.Color.Blue;
+			this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.CancelButton = this.btnCancel;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
 			this.Controls.Add(this.pictureBoxLoading);

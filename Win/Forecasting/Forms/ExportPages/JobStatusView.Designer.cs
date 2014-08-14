@@ -34,8 +34,8 @@
 			this.labelTitle = new System.Windows.Forms.Label();
 			this.labelDetail = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.progressBar1 = new Syncfusion.Windows.Forms.Tools.ProgressBarAdv();
 			this.buttonAdvClose = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.progressBar1 = new Syncfusion.Windows.Forms.Tools.ProgressBarAdv();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.progressBar1)).BeginInit();
@@ -85,10 +85,28 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(408, 220);
 			this.tableLayoutPanel1.TabIndex = 5;
 			// 
+			// buttonAdvClose
+			// 
+			this.buttonAdvClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonAdvClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvClose.BeforeTouchSize = new System.Drawing.Size(87, 27);
+			this.buttonAdvClose.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.buttonAdvClose.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvClose.IsBackStageButton = false;
+			this.buttonAdvClose.Location = new System.Drawing.Point(311, 183);
+			this.buttonAdvClose.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
+			this.buttonAdvClose.Name = "buttonAdvClose";
+			this.buttonAdvClose.Size = new System.Drawing.Size(87, 27);
+			this.buttonAdvClose.TabIndex = 4;
+			this.buttonAdvClose.Text = "xxHide";
+			this.buttonAdvClose.UseVisualStyle = true;
+			this.buttonAdvClose.Click += new System.EventHandler(this.buttonAdvClose_Click);
+			// 
 			// progressBar1
 			// 
 			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.progressBar1.BackColor = System.Drawing.Color.White;
 			this.progressBar1.BackGradientEndColor = System.Drawing.Color.White;
 			this.progressBar1.BackGradientStartColor = System.Drawing.Color.White;
@@ -116,29 +134,11 @@
 			this.progressBar1.TubeStartColor = System.Drawing.Color.Red;
 			this.progressBar1.WaitingGradientWidth = 400;
 			// 
-			// buttonAdvClose
-			// 
-			this.buttonAdvClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonAdvClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvClose.BeforeTouchSize = new System.Drawing.Size(87, 27);
-			this.buttonAdvClose.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonAdvClose.ForeColor = System.Drawing.Color.White;
-			this.buttonAdvClose.IsBackStageButton = false;
-			this.buttonAdvClose.Location = new System.Drawing.Point(311, 183);
-			this.buttonAdvClose.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
-			this.buttonAdvClose.Name = "buttonAdvClose";
-			this.buttonAdvClose.Size = new System.Drawing.Size(87, 27);
-			this.buttonAdvClose.TabIndex = 4;
-			this.buttonAdvClose.Text = "xxHide";
-			this.buttonAdvClose.UseVisualStyle = true;
-			this.buttonAdvClose.Click += new System.EventHandler(this.buttonAdvClose_Click);
-			// 
 			// JobStatusView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BorderColor = System.Drawing.Color.Blue;
+			this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
 			this.ClientSize = new System.Drawing.Size(408, 220);
 			this.Controls.Add(this.tableLayoutPanel1);

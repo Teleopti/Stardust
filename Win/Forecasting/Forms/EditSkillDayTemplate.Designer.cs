@@ -50,7 +50,7 @@
 			// 
 			this.textBoxTemplateName.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.textBoxTemplateName.BackColor = System.Drawing.Color.White;
-			this.textBoxTemplateName.BeforeTouchSize = new System.Drawing.Size(488, 23);
+			this.textBoxTemplateName.BeforeTouchSize = new System.Drawing.Size(255, 23);
 			this.textBoxTemplateName.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxTemplateName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxTemplateName.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -119,7 +119,7 @@
 			this.ribbonControlAdv1.MenuButtonText = "";
 			this.ribbonControlAdv1.MenuButtonVisible = false;
 			this.ribbonControlAdv1.MenuButtonWidth = 56;
-			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
+			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
 			this.ribbonControlAdv1.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
@@ -142,8 +142,8 @@
 			this.ribbonControlAdv1.TabIndex = 11;
 			this.ribbonControlAdv1.Text = "xxOutlier";
 			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
-			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.Black;
-			this.ribbonControlAdv1.TitleFont = new System.Drawing.Font("Segoe UI", 12F);
+			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
+			this.ribbonControlAdv1.TitleFont = new System.Drawing.Font("Segoe UI", 11.25F);
 			// 
 			// gradientPanel1
 			// 

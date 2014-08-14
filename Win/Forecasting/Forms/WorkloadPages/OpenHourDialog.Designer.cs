@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.label3 = new System.Windows.Forms.Label();
 			this.comboBoxAdv1 = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.btnCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.groupBoxOpenHour = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanelOpenHoursRtl = new System.Windows.Forms.TableLayoutPanel();
-			this.timePicker = new Teleopti.Ccc.Win.Common.Controls.FromToTimePicker();
 			this.autoLabelTo = new Syncfusion.Windows.Forms.Tools.AutoLabel();
+			this.timePicker = new Teleopti.Ccc.Win.Common.Controls.FromToTimePicker();
 			this.autoLabelFrom = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.chbClose = new System.Windows.Forms.CheckBox();
-			this.btnCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.btnOk = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).BeginInit();
@@ -140,6 +140,24 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(509, 213);
 			this.tableLayoutPanel1.TabIndex = 4;
 			// 
+			// btnCancel
+			// 
+			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.btnCancel.BeforeTouchSize = new System.Drawing.Size(87, 27);
+			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.btnCancel.ForeColor = System.Drawing.Color.White;
+			this.btnCancel.IsBackStageButton = false;
+			this.btnCancel.Location = new System.Drawing.Point(412, 176);
+			this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
+			this.btnCancel.Name = "btnCancel";
+			this.btnCancel.Size = new System.Drawing.Size(87, 27);
+			this.btnCancel.TabIndex = 3;
+			this.btnCancel.Text = "xxCancel";
+			this.btnCancel.UseVisualStyle = true;
+			this.btnCancel.UseVisualStyleBackColor = true;
+			// 
 			// groupBoxOpenHour
 			// 
 			this.tableLayoutPanel1.SetColumnSpan(this.groupBoxOpenHour, 2);
@@ -173,6 +191,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.tableLayoutPanelOpenHoursRtl.Size = new System.Drawing.Size(497, 85);
 			this.tableLayoutPanelOpenHoursRtl.TabIndex = 5;
 			// 
+			// autoLabelTo
+			// 
+			this.autoLabelTo.Location = new System.Drawing.Point(105, 0);
+			this.autoLabelTo.Name = "autoLabelTo";
+			this.autoLabelTo.Size = new System.Drawing.Size(63, 15);
+			this.autoLabelTo.TabIndex = 2;
+			this.autoLabelTo.Text = "xxToColon";
+			// 
 			// timePicker
 			// 
 			this.timePicker.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -187,14 +213,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.timePicker.Size = new System.Drawing.Size(306, 28);
 			this.timePicker.TabIndex = 0;
 			this.timePicker.WholeDayText = "xxNextDay";
-			// 
-			// autoLabelTo
-			// 
-			this.autoLabelTo.Location = new System.Drawing.Point(105, 0);
-			this.autoLabelTo.Name = "autoLabelTo";
-			this.autoLabelTo.Size = new System.Drawing.Size(63, 15);
-			this.autoLabelTo.TabIndex = 2;
-			this.autoLabelTo.Text = "xxToColon";
 			// 
 			// autoLabelFrom
 			// 
@@ -216,24 +234,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.chbClose.Text = "xxClosed";
 			this.chbClose.UseVisualStyleBackColor = true;
 			this.chbClose.CheckedChanged += new System.EventHandler(this.chbClose_CheckedChanged);
-			// 
-			// btnCancel
-			// 
-			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.btnCancel.BeforeTouchSize = new System.Drawing.Size(87, 27);
-			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.ForeColor = System.Drawing.Color.White;
-			this.btnCancel.IsBackStageButton = false;
-			this.btnCancel.Location = new System.Drawing.Point(412, 176);
-			this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
-			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(87, 27);
-			this.btnCancel.TabIndex = 3;
-			this.btnCancel.Text = "xxCancel";
-			this.btnCancel.UseVisualStyle = true;
-			this.btnCancel.UseVisualStyleBackColor = true;
 			// 
 			// btnOk
 			// 
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
-			this.BorderColor = System.Drawing.Color.Blue;
+			this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
 			this.ClientSize = new System.Drawing.Size(509, 213);
 			this.ControlBox = false;

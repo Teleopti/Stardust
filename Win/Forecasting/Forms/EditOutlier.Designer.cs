@@ -50,7 +50,7 @@
 			// 
 			this.textBoxTemplateName.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.textBoxTemplateName.BackColor = System.Drawing.Color.White;
-			this.textBoxTemplateName.BeforeTouchSize = new System.Drawing.Size(255, 23);
+			this.textBoxTemplateName.BeforeTouchSize = new System.Drawing.Size(489, 23);
 			this.textBoxTemplateName.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxTemplateName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxTemplateName.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -178,7 +178,7 @@
 			this.AcceptButton = this.buttonAdvOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BorderColor = System.Drawing.Color.Blue;
+			this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.CancelButton = this.buttonAdvCancel;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
 			this.ClientSize = new System.Drawing.Size(706, 398);

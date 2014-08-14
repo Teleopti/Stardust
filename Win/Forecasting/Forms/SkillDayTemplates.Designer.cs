@@ -64,7 +64,7 @@
 			this.ribbonControlAdv1.MenuButtonText = "";
 			this.ribbonControlAdv1.MenuButtonVisible = false;
 			this.ribbonControlAdv1.MenuButtonWidth = 56;
-			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
+			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
 			this.ribbonControlAdv1.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
@@ -82,18 +82,18 @@
 			this.ribbonControlAdv1.SelectedTab = null;
 			this.ribbonControlAdv1.Show2010CustomizeQuickItemDialog = false;
 			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = false;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(1098, 31);
+			this.ribbonControlAdv1.Size = new System.Drawing.Size(1098, 33);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "StartMenu";
 			this.ribbonControlAdv1.TabIndex = 0;
 			this.ribbonControlAdv1.Text = "ribbonControlAdv1";
 			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
-			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.Black;
-			this.ribbonControlAdv1.TitleFont = new System.Drawing.Font("Segoe UI", 12F);
+			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
+			this.ribbonControlAdv1.TitleFont = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			// 
 			// tabControlAdvWeekDays
 			// 
 			this.tabControlAdvWeekDays.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
-			this.tabControlAdvWeekDays.BeforeTouchSize = new System.Drawing.Size(1088, 603);
+			this.tabControlAdvWeekDays.BeforeTouchSize = new System.Drawing.Size(1088, 601);
 			this.tabControlAdvWeekDays.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tableLayoutPanel1.SetColumnSpan(this.tabControlAdvWeekDays, 4);
 			this.tabControlAdvWeekDays.Controls.Add(this.tabPageAdvDay0);
@@ -108,7 +108,7 @@
 			this.tabControlAdvWeekDays.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlAdvWeekDays.Location = new System.Drawing.Point(3, 3);
 			this.tabControlAdvWeekDays.Name = "tabControlAdvWeekDays";
-			this.tabControlAdvWeekDays.Size = new System.Drawing.Size(1088, 603);
+			this.tabControlAdvWeekDays.Size = new System.Drawing.Size(1088, 601);
 			this.tabControlAdvWeekDays.TabIndex = 0;
 			this.tabControlAdvWeekDays.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabControlAdvWeekDays.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
@@ -122,7 +122,7 @@
 			this.tabPageAdvDay0.Location = new System.Drawing.Point(2, 25);
 			this.tabPageAdvDay0.Name = "tabPageAdvDay0";
 			this.tabPageAdvDay0.ShowCloseButton = true;
-			this.tabPageAdvDay0.Size = new System.Drawing.Size(1084, 576);
+			this.tabPageAdvDay0.Size = new System.Drawing.Size(1084, 574);
 			this.tabPageAdvDay0.TabIndex = 1;
 			this.tabPageAdvDay0.Text = "tabPageAdvDay0";
 			this.tabPageAdvDay0.ThemesEnabled = true;
@@ -134,7 +134,7 @@
 			this.tabPageAdvDay1.Location = new System.Drawing.Point(2, 25);
 			this.tabPageAdvDay1.Name = "tabPageAdvDay1";
 			this.tabPageAdvDay1.ShowCloseButton = true;
-			this.tabPageAdvDay1.Size = new System.Drawing.Size(1084, 576);
+			this.tabPageAdvDay1.Size = new System.Drawing.Size(1084, 574);
 			this.tabPageAdvDay1.TabIndex = 2;
 			this.tabPageAdvDay1.Text = "tabPageAdvDay1";
 			this.tabPageAdvDay1.ThemesEnabled = true;
@@ -146,7 +146,7 @@
 			this.tabPageAdvDay2.Location = new System.Drawing.Point(2, 25);
 			this.tabPageAdvDay2.Name = "tabPageAdvDay2";
 			this.tabPageAdvDay2.ShowCloseButton = true;
-			this.tabPageAdvDay2.Size = new System.Drawing.Size(1084, 576);
+			this.tabPageAdvDay2.Size = new System.Drawing.Size(1084, 574);
 			this.tabPageAdvDay2.TabIndex = 3;
 			this.tabPageAdvDay2.Text = "tabPageAdvDay2";
 			this.tabPageAdvDay2.ThemesEnabled = true;
@@ -158,7 +158,7 @@
 			this.tabPageAdvDay3.Location = new System.Drawing.Point(2, 25);
 			this.tabPageAdvDay3.Name = "tabPageAdvDay3";
 			this.tabPageAdvDay3.ShowCloseButton = true;
-			this.tabPageAdvDay3.Size = new System.Drawing.Size(1084, 576);
+			this.tabPageAdvDay3.Size = new System.Drawing.Size(1084, 574);
 			this.tabPageAdvDay3.TabIndex = 4;
 			this.tabPageAdvDay3.Text = "tabPageAdvDay3";
 			this.tabPageAdvDay3.ThemesEnabled = true;
@@ -170,7 +170,7 @@
 			this.tabPageAdvDay4.Location = new System.Drawing.Point(2, 25);
 			this.tabPageAdvDay4.Name = "tabPageAdvDay4";
 			this.tabPageAdvDay4.ShowCloseButton = true;
-			this.tabPageAdvDay4.Size = new System.Drawing.Size(1084, 576);
+			this.tabPageAdvDay4.Size = new System.Drawing.Size(1084, 574);
 			this.tabPageAdvDay4.TabIndex = 5;
 			this.tabPageAdvDay4.Text = "tabPageAdvDay4";
 			this.tabPageAdvDay4.ThemesEnabled = true;
@@ -182,7 +182,7 @@
 			this.tabPageAdvDay5.Location = new System.Drawing.Point(2, 25);
 			this.tabPageAdvDay5.Name = "tabPageAdvDay5";
 			this.tabPageAdvDay5.ShowCloseButton = true;
-			this.tabPageAdvDay5.Size = new System.Drawing.Size(1084, 576);
+			this.tabPageAdvDay5.Size = new System.Drawing.Size(1084, 574);
 			this.tabPageAdvDay5.TabIndex = 6;
 			this.tabPageAdvDay5.Text = "tabPageAdvDay5";
 			this.tabPageAdvDay5.ThemesEnabled = true;
@@ -194,7 +194,7 @@
 			this.tabPageAdvDay6.Location = new System.Drawing.Point(2, 25);
 			this.tabPageAdvDay6.Name = "tabPageAdvDay6";
 			this.tabPageAdvDay6.ShowCloseButton = true;
-			this.tabPageAdvDay6.Size = new System.Drawing.Size(1084, 576);
+			this.tabPageAdvDay6.Size = new System.Drawing.Size(1084, 574);
 			this.tabPageAdvDay6.TabIndex = 7;
 			this.tabPageAdvDay6.Text = "tabPageAdvDay6";
 			this.tabPageAdvDay6.ThemesEnabled = true;
@@ -207,7 +207,7 @@
 			this.btnFinish.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.btnFinish.ForeColor = System.Drawing.Color.White;
 			this.btnFinish.IsBackStageButton = false;
-			this.btnFinish.Location = new System.Drawing.Point(897, 622);
+			this.btnFinish.Location = new System.Drawing.Point(897, 620);
 			this.btnFinish.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.btnFinish.Name = "btnFinish";
 			this.btnFinish.Size = new System.Drawing.Size(87, 27);
@@ -224,7 +224,7 @@
 			this.btnForward.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.btnForward.ForeColor = System.Drawing.Color.White;
 			this.btnForward.IsBackStageButton = false;
-			this.btnForward.Location = new System.Drawing.Point(797, 622);
+			this.btnForward.Location = new System.Drawing.Point(797, 620);
 			this.btnForward.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.btnForward.Name = "btnForward";
 			this.btnForward.Size = new System.Drawing.Size(87, 27);
@@ -241,7 +241,7 @@
 			this.btnBack.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.btnBack.ForeColor = System.Drawing.Color.White;
 			this.btnBack.IsBackStageButton = false;
-			this.btnBack.Location = new System.Drawing.Point(697, 622);
+			this.btnBack.Location = new System.Drawing.Point(697, 620);
 			this.btnBack.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.btnBack.Name = "btnBack";
 			this.btnBack.Size = new System.Drawing.Size(87, 27);
@@ -259,7 +259,7 @@
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnCancel.ForeColor = System.Drawing.Color.White;
 			this.btnCancel.IsBackStageButton = false;
-			this.btnCancel.Location = new System.Drawing.Point(997, 622);
+			this.btnCancel.Location = new System.Drawing.Point(997, 620);
 			this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(87, 27);
@@ -270,16 +270,17 @@
 			// 
 			// gradientPanel1
 			// 
+			this.gradientPanel1.BackColor = System.Drawing.Color.White;
 			this.gradientPanel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.None, System.Drawing.Color.White, System.Drawing.Color.White);
 			this.gradientPanel1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.gradientPanel1.Controls.Add(this.tableLayoutPanel1);
 			this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gradientPanel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.gradientPanel1.Location = new System.Drawing.Point(1, 31);
+			this.gradientPanel1.Location = new System.Drawing.Point(1, 33);
 			this.gradientPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.gradientPanel1.Name = "gradientPanel1";
 			this.gradientPanel1.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-			this.gradientPanel1.Size = new System.Drawing.Size(1094, 669);
+			this.gradientPanel1.Size = new System.Drawing.Size(1094, 667);
 			this.gradientPanel1.TabIndex = 2;
 			// 
 			// tableLayoutPanel1
@@ -301,7 +302,7 @@
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(1094, 659);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(1094, 657);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// SkillDayTemplates

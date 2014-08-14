@@ -241,6 +241,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// splitContainer2.Panel1
 			// 
 			this.splitContainer2.Panel1.BackColor = System.Drawing.Color.White;
+			this.splitContainer2.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainer2.Panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			// 
 			// splitContainer2.Panel2
@@ -256,7 +257,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			// tabControlWorkloads
 			// 
-			this.tabControlWorkloads.ActiveTabColor = System.Drawing.Color.DarkGray;
+			this.tabControlWorkloads.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
 			this.tabControlWorkloads.BackColor = System.Drawing.Color.White;
 			this.tabControlWorkloads.BeforeTouchSize = new System.Drawing.Size(1266, 171);
 			this.tabControlWorkloads.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -284,13 +285,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage1.ShowCloseButton = true;
 			this.tabPage1.Size = new System.Drawing.Size(1262, 146);
-			this.tabPage1.TabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.tabPage1.TabBackColor = System.Drawing.Color.White;
 			this.tabPage1.TabIndex = 1;
 			this.tabPage1.ThemesEnabled = false;
 			// 
 			// tabControlAdvMultisiteSkill
 			// 
-			this.tabControlAdvMultisiteSkill.ActiveTabColor = System.Drawing.Color.DarkGray;
+			this.tabControlAdvMultisiteSkill.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
 			this.tabControlAdvMultisiteSkill.BackColor = System.Drawing.Color.White;
 			this.tabControlAdvMultisiteSkill.BeforeTouchSize = new System.Drawing.Size(1266, 161);
 			this.tabControlAdvMultisiteSkill.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -300,10 +301,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.tabControlAdvMultisiteSkill.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlAdvMultisiteSkill.Location = new System.Drawing.Point(0, 0);
 			this.tabControlAdvMultisiteSkill.Name = "tabControlAdvMultisiteSkill";
-			this.tabControlAdvMultisiteSkill.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Silver;
 			this.tabControlAdvMultisiteSkill.Size = new System.Drawing.Size(1266, 161);
 			this.tabControlAdvMultisiteSkill.TabIndex = 7;
-			this.tabControlAdvMultisiteSkill.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabControlAdvMultisiteSkill.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			this.tabControlAdvMultisiteSkill.ThemesEnabled = true;
 			this.tabControlAdvMultisiteSkill.SelectedIndexChanged += new System.EventHandler(this.tabControlAdvMultisiteSkill_SelectedIndexChanged);
@@ -317,7 +316,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.tabPageAdvMultisiteSkill.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageAdvMultisiteSkill.ShowCloseButton = true;
 			this.tabPageAdvMultisiteSkill.Size = new System.Drawing.Size(1262, 136);
-			this.tabPageAdvMultisiteSkill.TabFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+			this.tabPageAdvMultisiteSkill.TabBackColor = System.Drawing.Color.White;
 			this.tabPageAdvMultisiteSkill.TabIndex = 1;
 			this.tabPageAdvMultisiteSkill.ThemesEnabled = true;
 			// 
@@ -385,7 +384,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.ribbonControlAdv1.TabIndex = 4;
 			this.ribbonControlAdv1.Text = "yyRibbonControlAdv1";
 			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
-			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.Black;
+			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
+			this.ribbonControlAdv1.TitleFont = new System.Drawing.Font("Segoe UI", 10F);
 			// 
 			// backStageView
 			// 
@@ -431,11 +431,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStageTabExportTo.BackColor = System.Drawing.Color.White;
 			this.backStageTabExportTo.Image = null;
 			this.backStageTabExportTo.ImageSize = new System.Drawing.Size(16, 16);
-			this.backStageTabExportTo.Location = new System.Drawing.Point(137, 0);
+			this.backStageTabExportTo.Location = new System.Drawing.Point(129, 0);
 			this.backStageTabExportTo.Name = "backStageTabExportTo";
 			this.backStageTabExportTo.Position = new System.Drawing.Point(0, 0);
 			this.backStageTabExportTo.ShowCloseButton = true;
-			this.backStageTabExportTo.Size = new System.Drawing.Size(1134, 716);
+			this.backStageTabExportTo.Size = new System.Drawing.Size(1142, 716);
 			this.backStageTabExportTo.TabIndex = 4;
 			this.backStageTabExportTo.Text = "xxExport";
 			this.backStageTabExportTo.ThemesEnabled = false;
