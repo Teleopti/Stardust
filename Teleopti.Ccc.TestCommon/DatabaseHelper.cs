@@ -11,11 +11,10 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class DatabaseHelper
 	{
-		public DatabaseHelper(string connectionString, DatabaseType databaseType) : this(connectionString, new SqlConnectionStringBuilder(connectionString).InitialCatalog, databaseType) { }
-		public DatabaseHelper(string connectionString, string databaseName, DatabaseType databaseType)
+		public DatabaseHelper(string connectionString, DatabaseType databaseType)
 		{
 			ConnectionString = connectionString;
-			DatabaseName = databaseName;
+			DatabaseName = new SqlConnectionStringBuilder(connectionString).InitialCatalog;
 			DatabaseType = databaseType;
 		}
 
@@ -23,65 +22,32 @@ namespace Teleopti.Ccc.TestCommon
 		public DatabaseType DatabaseType { get; private set; }
 		public string DatabaseName { get; private set; }
 
-		private SqlConnection Connection()
-		{
-			var conn = new SqlConnection(ConnectionString);
-			conn.Open();
-			return conn;
-		}
-
-		private SqlConnection ConnectionOnMaster()
-		{
-			var connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString) { InitialCatalog = "master" };
-			var conn = new SqlConnection(connectionStringBuilder.ConnectionString);
-			conn.Open();
-			return conn;
-		}
-
 		public bool Exists()
 		{
-			var databaseId = ExecuteScalarOnMaster("SELECT database_id FROM sys.databases WHERE Name = '{0}'", 0, DatabaseName);
+			var databaseId = executeScalarOnMaster("SELECT database_id FROM sys.databases WHERE Name = '{0}'", 0, DatabaseName);
 			return databaseId > 0;
-		}
-
-		public void Drop()
-		{
-			ExecuteNonQueryOnMaster("DROP DATABASE [{0}]", DatabaseName);
 		}
 
 		public void CreateByDbManager()
 		{
+			dropIfExists();
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
-			using (var conn = ConnectionOnMaster())
+			using (var conn = openConnection(true))
 			{
 				var creator = new DatabaseCreator(databaseFolder, conn);
 				creator.CreateDatabase(DatabaseType, DatabaseName);
 			}
 		}
 
-		public void CleanByGenericProcedure()
-		{
-			ExecuteNonQuery(File.ReadAllText("Teleopti.Ccc.TestCommon.sp_deleteAllData.DROP.sql"));
-			ExecuteNonQuery(File.ReadAllText("Teleopti.Ccc.TestCommon.sp_deleteAllData.sql"));
-			ExecuteNonQuery("EXEC sp_deleteAllData");
-		}
-
 		public void CleanByAnalyticsProcedure()
 		{
-			ExecuteNonQuery("EXEC [mart].[etl_data_mart_delete] @DeleteAll=1");
-		}
-
-		public void DropConnections()
-		{
-			using (OfflineScope())
-			{
-			}
+			executeNonQuery("EXEC [mart].[etl_data_mart_delete] @DeleteAll=1");
 		}
 
 		public void CreateSchemaByDbManager()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
-			using (var conn = Connection())
+			using (var conn = openConnection())
 			{
 				var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, conn);
 				databaseVersionInformation.CreateTable();
@@ -99,7 +65,7 @@ namespace Teleopti.Ccc.TestCommon
 		public Backup BackupByFileCopy(string name)
 		{
 			var backup = new Backup();
-			using (var conn = Connection())
+			using (var conn = openConnection())
 			{
 				using (var command = conn.CreateCommand())
 				{
@@ -113,7 +79,7 @@ namespace Teleopti.Ccc.TestCommon
 					}
 				}
 			}
-			using (OfflineScope())
+			using (offlineScope())
 			{
 				backup.Files.ForEach(f =>
 															{
@@ -126,7 +92,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void RestoreByFileCopy(Backup backup)
 		{
-			using (OfflineScope())
+			using (offlineScope())
 			{
 				backup.Files.ForEach(f => File.Copy(f.Backup, f.Source, true));
 			}
@@ -146,7 +112,7 @@ namespace Teleopti.Ccc.TestCommon
 		public int DatabaseVersion()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
-			using (var conn = Connection())
+			using (var conn = openConnection())
 			{
 				var versionInfo = new DatabaseVersionInformation(databaseFolder, conn);
 				return versionInfo.GetDatabaseVersion();
@@ -167,15 +133,23 @@ namespace Teleopti.Ccc.TestCommon
 			return versionInfo.GetOtherScriptFilesHash(DatabaseType);
 		}
 
-		private IDisposable OfflineScope()
+		private IDisposable offlineScope()
 		{
-			ExecuteNonQueryOnMaster("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName);
-			return new GenericDisposable(() => ExecuteNonQueryOnMaster("ALTER DATABASE [{0}] SET ONLINE", DatabaseName));
+			executeNonQueryOnMaster("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName);
+			return new GenericDisposable(() => executeNonQueryOnMaster("ALTER DATABASE [{0}] SET ONLINE", DatabaseName));
 		}
 
-		private void ExecuteNonQuery(string sql, params object[] args)
+		private void dropIfExists()
 		{
-			using (var conn = Connection())
+			if (!Exists()) return;
+
+			executeNonQueryOnMaster("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName);
+			executeNonQueryOnMaster("DROP DATABASE [{0}]", DatabaseName);
+		}
+
+		private void executeNonQuery(string sql, params object[] args)
+		{
+			using (var conn = openConnection())
 			{
 				using (var command = conn.CreateCommand())
 				{
@@ -185,9 +159,9 @@ namespace Teleopti.Ccc.TestCommon
 			}
 		}
 
-		private void ExecuteNonQueryOnMaster(string sql, params object[] args)
+		private void executeNonQueryOnMaster(string sql, params object[] args)
 		{
-			using (var conn = ConnectionOnMaster())
+			using (var conn = openConnection(true))
 			{
 				using (var cmd = conn.CreateCommand())
 				{
@@ -197,7 +171,7 @@ namespace Teleopti.Ccc.TestCommon
 			}
 		}
 
-		private T ExecuteScalarOnMaster<T>(string sql, T nullValue, params object[] args)
+		private T executeScalarOnMaster<T>(string sql, T nullValue, params object[] args)
 		{
 			var connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString) { InitialCatalog = "master" };
 			using (var conn = new SqlConnection(connectionStringBuilder.ConnectionString))
@@ -212,6 +186,18 @@ namespace Teleopti.Ccc.TestCommon
 					return (T)value;
 				}
 			}
+		}
+
+		private SqlConnection openConnection(bool masterDb = false)
+		{
+			var connectionStringBuilder = new SqlConnectionStringBuilder(ConnectionString);
+			if (masterDb)
+			{
+				connectionStringBuilder.InitialCatalog = "master";
+			}
+			var conn = new SqlConnection(connectionStringBuilder.ConnectionString);
+			conn.Open();
+			return conn;
 		}
 	}
 }

@@ -17,17 +17,15 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest());
 
-			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			SetupCcc7(ccc7);
-
-			var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
-			SetupAnalytics(analytics);
+			SetupCcc7();
+			SetupAnalytics();
 
 			return CreateDataSource(dataSourceFactory, name);
 		}
 
-		private static void SetupCcc7(DatabaseHelper ccc7)
+		private static void SetupCcc7()
 		{
+			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
 			if (TryRestoreDatabase(ccc7))
 				return;
 
@@ -56,8 +54,9 @@ namespace Teleopti.Ccc.TestCommon
 				);
 		}
 
-		private static void SetupAnalytics(DatabaseHelper analytics)
+		private static void SetupAnalytics()
 		{
+			var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
 			if (TryRestoreDatabase(analytics))
 				return;
 
@@ -69,15 +68,7 @@ namespace Teleopti.Ccc.TestCommon
 		private static void CreateDatabase(DatabaseHelper database)
 		{
 			ExceptionToConsole(
-				() =>
-				{
-					if (database.Exists())
-					{
-						database.DropConnections();
-						database.Drop();
-					}
-					database.CreateByDbManager();
-				},
+				database.CreateByDbManager,
 				"Failed to prepare database {0}!", database.ConnectionString
 				);
 		}
@@ -132,8 +123,6 @@ namespace Teleopti.Ccc.TestCommon
 			return databaseType + "." + databaseName + "." + databaseVersion + "." + otherScriptFilesHash;
 		}
 
-
-
 		private static IDataSource CreateDataSource(DataSourcesFactory dataSourceFactory, string name)
 		{
 			return ExceptionToConsole(
@@ -179,12 +168,6 @@ namespace Teleopti.Ccc.TestCommon
 			if (timeout.HasValue)
 				dictionary[NHibernate.Cfg.Environment.CommandTimeout] = timeout.Value.ToString(CultureInfo.CurrentCulture);
 			return dictionary;
-		}
-
-		public static void ClearCcc7Data()
-		{
-			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			ccc7.CleanByGenericProcedure();
 		}
 
 		public static void ClearAnalyticsData()

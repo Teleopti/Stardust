@@ -62,11 +62,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			CreateAndPersistTestData();
 		}
 
-		public static void ClearCcc7Data()
-		{
-			DataSourceHelper.ClearCcc7Data();
-		}
-
 		public static void ClearAnalyticsData()
 		{
 			DataSourceHelper.ClearAnalyticsData();
@@ -81,12 +76,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			DataSourceHelper.RestoreCcc7DataByFileCopy(_Ccc7DataBackup);
 		}
-
-
-
-
-
-
 
 		private static void CreateAndPersistTestData()
 		{
