@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			// Just hard code it now, the best solution is to trigger it from ETL
 			var nextMessageShouldBeProcessed =
 				TimeZoneInfo.ConvertTime(tomorrowForGivenTimeZone.Date, timeZone, TimeZoneInfo.Local).AddHours(5);
+			var peopleGotABadge = new List<IPerson>();
 
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				var allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
-				var peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZoneCode, new DateOnly(message.CalculationDate),
+				peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZoneCode, new DateOnly(message.CalculationDate),
 					adherenceReportSetting.CalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate).ToList();
 
 				if (Logger.IsDebugEnabled)
@@ -93,6 +94,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					Logger.DebugFormat("Total {0} agents will get new badge", peopleGotABadge.Count());
 				}
 
+			}
+			//For some reason, the session above cant persist the message since the session changed somehow. Dont know why.
+			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
 				foreach (var person in peopleGotABadge)
 				{
 					if (Logger.IsDebugEnabled)
@@ -103,9 +108,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					SendPushMessageService
 						.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false)
 						.To(person)
-						.SendConversation(_msgRepository);
-					uow.PersistAll();
+						.SendConversation(_msgPersister);
 				}
+
+				uow.PersistAll();
 			}
 			
 
