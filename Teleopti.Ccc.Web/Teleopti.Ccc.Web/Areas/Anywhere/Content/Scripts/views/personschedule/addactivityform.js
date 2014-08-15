@@ -1,6 +1,7 @@
 define([
 	'knockout',
 	'moment',
+	'momentTimezoneData',
 	'navigation',
 	'ajax',
 	'resources',
@@ -11,6 +12,7 @@ define([
 ], function (
 	ko,
 	moment,
+	momentTimezoneData,
 	navigation,
 	ajax,
 	resources,
@@ -37,6 +39,26 @@ define([
 		var groupId;
 		var startTimeAsMoment;
 		var endTimeAsMoment;
+		var ianaTimeZone;
+		var ianaTimeZoneOther;
+
+		this.StartTimeOtherTimeZone = ko.computed(function () {
+			if (self.StartTime() && ianaTimeZone) {
+				var userTime = getMomentFromInput(self.StartTime()).tz(ianaTimeZone);
+				var otherTime = userTime.clone().tz(ianaTimeZoneOther);
+				return otherTime.format('HH:mm');
+			}
+			return undefined;
+		});
+
+		this.EndTimeOtherTimeZone = ko.computed(function () {
+			if (self.EndTime() && ianaTimeZone) {
+				var userTime = getMomentFromInput(self.EndTime()).tz(ianaTimeZone);
+				var otherTime = userTime.clone().tz(ianaTimeZoneOther);
+				return otherTime.format('HH:mm');
+			}
+			return undefined;
+		});
 
 		this.SetData = function (data) {
 			personId = data.PersonId;
@@ -44,7 +66,9 @@ define([
 			personName = data.PersonName;
 			self.ScheduleDate(data.Date);
 			self.ActivityTypes(data.Activities);
-		    self.TimeZoneName(data.TimeZoneName);
+			self.TimeZoneName(data.TimeZoneName);
+			ianaTimeZone = data.IanaTimeZoneLoggedOnUser;
+			ianaTimeZoneOther = data.IanaTimeZoneOther;
 		};
 
 		this.Apply = function () {
@@ -70,6 +94,11 @@ define([
 				}
 			);
 			notificationsViewModel.AddNotification(trackId, resources.AddingActivityFor + " " + personName + "... ");
+		};
+
+		var getMomentFromInput = function (input) {
+			var momentInput = moment(input, resources.TimeFormatForMoment);
+			return moment(self.ScheduleDate()).add('h', momentInput.hours()).add('m', momentInput.minutes());
 		};
 
 		this.visibleLayers = ko.computed(function () {

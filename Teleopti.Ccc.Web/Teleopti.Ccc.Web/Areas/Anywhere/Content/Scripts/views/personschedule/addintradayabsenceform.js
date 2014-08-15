@@ -35,9 +35,6 @@ define([
 
 		this.TimeZoneName = ko.observable();
 		
-
-		this.EndTimeOtherTimeZone = ko.observable();
-		
 		var groupId;
 		var personId;
 		var personName;
@@ -47,8 +44,21 @@ define([
 		var ianaTimeZoneOther;
 
 		this.StartTimeOtherTimeZone = ko.computed(function () {
-			var userTimeZone = moment.tz(startTimeAsMoment, ianaTimeZone);
-			return userTimeZone.clone().tz(ianaTimeZoneOther);
+			if (self.StartTime()) {
+				var userTime = getMomentFromInput(self.StartTime()).tz(ianaTimeZone);
+				var otherTime = userTime.clone().tz(ianaTimeZoneOther);
+				return otherTime.format('HH:mm');
+			}
+			return undefined;
+		});
+
+		this.EndTimeOtherTimeZone = ko.computed(function () {
+			if (self.EndTime()) {
+				var userTime = getMomentFromInput(self.EndTime()).tz(ianaTimeZone);
+				var otherTime = userTime.clone().tz(ianaTimeZoneOther);
+				return otherTime.format('HH:mm');
+			}
+			return undefined;
 		});
 
 		this.visibleLayers = ko.computed(function () {
