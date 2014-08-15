@@ -15,7 +15,7 @@ var requireconfiguration = {
 		hasher: '../../../../Content/hasher/hasher',
 		swipeListener: '../../../../Content/jquery-plugin/jquery.swipeListener',
 		momentDatepicker: '../../../../Content/moment-datepicker/moment-datepicker',
-		momentLanguages: '../../../../Content/moment/moment.all.min',
+		momentLanguages: '../../../../Content/moment/moment-with-locales',
 		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko-amd',
 		select2: '../../../../Content/select2/select2',
 		timepicker: '../../../../Content/bootstrap-timepicker/js/bootstrap-timepicker',
