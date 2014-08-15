@@ -766,81 +766,33 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		};
 
-		self.filterTime = ko.computed(function () {
-			var isStartUnchecked = false;
-			var isEndUnchecked = false;
-			var isStartNewAdded = false;
-			var isEndNewAdded = false;
-			var isDayOffModified = false;
-			
-			$.each(self.filterStartTimeList(), function (idx, timeInFilter) {
+		self.filterTime = ko.computed(function () {		
+			self.filteredStartTimesText.removeAll();
+			self.filteredEndTimesText.removeAll();
+
+			$.each(self.filterStartTimeList(), function(idx, timeInFilter) {
 				if (timeInFilter.isChecked()) {
 					if (timeInFilter.isDayOff()) {
-						if (!self.isDayoffFiltered()) {
-							isDayOffModified = true;
-							self.isDayoffFiltered(true);
-						}
-					} 
-					
-					var findThis = false;
-					$.each(self.filteredStartTimesText(), function (index, text) {
-						if (timeInFilter.text == text) {
-							findThis = true;
-							return false;
-						}
-					});
-
-					if (!findThis && !timeInFilter.isDayOff()) {
-						self.filteredStartTimesText.push(timeInFilter.text);
-						isStartNewAdded = true;
+						self.isDayoffFiltered(true);
 					}
+					self.filteredStartTimesText.push(timeInFilter.text);
 				} else {
 					if (timeInFilter.isDayOff()) {
-						if (self.isDayoffFiltered()) {
-							isDayOffModified = true;
-							self.isDayoffFiltered(false);
-						}
+						self.isDayoffFiltered(false);
 					}
-
-					$.each(self.filteredStartTimesText(), function (index, text) {
-						if (timeInFilter.text == text) {
-							self.filteredStartTimesText.remove(text);
-							isStartUnchecked = true;
-							return false;
-						}
-					});
 				}
 			});
-			
+
 			$.each(self.filterEndTimeList(), function (idx, timeInFilter) {
 				if (timeInFilter.isChecked()) {
-					var findThis = false;
-					$.each(self.filteredEndTimesText(), function (index, text) {
-						if (timeInFilter.text == text) {
-							findThis = true;
-							return false;
-						}
-					});
-
-					if (!findThis) {
-						self.filteredEndTimesText.push(timeInFilter.text);
-						isEndNewAdded = true;
-					}
-				} else {
-					$.each(self.filteredEndTimesText(), function (index, text) {
-						if (timeInFilter.text == text) {
-							self.filteredEndTimesText.remove(text);
-							isEndUnchecked = true;
-							return false;
-						}
-					});
-				}
+					self.filteredEndTimesText.push(timeInFilter.text);
+				} 
 			});
+		});
 
-			if (isStartNewAdded || isStartUnchecked || isEndNewAdded || isEndUnchecked || isDayOffModified) {
-				self.prepareLoad();
-				self.loadSchedule(self.selectedTeamInternal());
-			}
+		self.filterTime.subscribe(function() {
+			self.prepareLoad();
+			self.loadSchedule(self.selectedTeamInternal());
 		});
 		
 		self.changeRequestedDate = function (movement) {
