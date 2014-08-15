@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
-		public void ShouldMapIanaTimeZoneOtherName()
+		public void ShouldMapIanaTimeZoneNameOther()
 		{
 			var target = new PersonScheduleViewModelMapper();
 			var person = new Person();
@@ -81,6 +81,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
             });
 
             result.IanaTimeZoneOther.Should().Be("America/Washington");
+		}
+		[Test]
+		public void ShouldMapIanaTimeZoneName()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var person = new Person();
+
+			var result = target.Map(new PersonScheduleData
+			{
+				Person = person,
+				CommonAgentNameSetting = new CommonNameDescriptionSetting(),
+				IanaTimeZoneLoggedOnUser = "America/Washington"
+			});
+
+			result.IanaTimeZoneLoggedOnUser.Should().Be("America/Washington");
 		}
 
 		[Test]

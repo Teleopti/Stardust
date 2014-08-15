@@ -23,8 +23,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 	    private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
+		private readonly IUserTimeZone _userTimeZone;
 
-	    public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer deserializer, IPermissionProvider permissionProvider, ICommonAgentNameProvider commonAgentNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider)
+		public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer deserializer, IPermissionProvider permissionProvider, ICommonAgentNameProvider commonAgentNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IUserTimeZone userTimeZone)
 		{
 			_personRepository = personRepository;
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			_permissionProvider = permissionProvider;
 			_commonAgentNameProvider = commonAgentNameProvider;
 		    _ianaTimeZoneProvider = ianaTimeZoneProvider;
+		    _userTimeZone = userTimeZone;
 		}
 
 		public PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date)
@@ -52,7 +54,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				Absences = _absenceRepository.LoadAllSortByName(),
 				Activities = _activityRepository.LoadAllSortByName(),
 				HasViewConfidentialPermission = hasViewConfidentialPermission,
-                IanaTimeZoneOther = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id)
+                IanaTimeZoneOther = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
+				IanaTimeZoneLoggedOnUser = _ianaTimeZoneProvider.WindowsToIana(_userTimeZone.TimeZone().Id)
 			};
 
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)

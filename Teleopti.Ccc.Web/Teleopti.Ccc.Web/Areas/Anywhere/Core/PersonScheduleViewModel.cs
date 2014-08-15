@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public DefaultIntradayAbsenceViewModel DefaultIntradayAbsenceData { get; set; }
 	    public string TimeZoneName { get; set; }
 	    public string IanaTimeZoneOther { get; set; }
+		public string IanaTimeZoneLoggedOnUser { get; set; }
 	}
 
 	public class DefaultIntradayAbsenceViewModel

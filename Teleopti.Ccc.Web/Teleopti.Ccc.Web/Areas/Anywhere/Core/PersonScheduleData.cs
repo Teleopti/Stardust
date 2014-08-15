@@ -16,5 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public bool HasViewConfidentialPermission { get; set; }
 		public ICommonNameDescriptionSetting CommonAgentNameSetting { get; set; }
 	    public string IanaTimeZoneOther { get; set; }
+		public string IanaTimeZoneLoggedOnUser { get; set; }
 	}
 }

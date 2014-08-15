@@ -34,12 +34,7 @@ define([
 		this.WorkingShift = ko.observable();
 
 		this.TimeZoneName = ko.observable();
-
-		this.StartTimeOtherTimeZone = ko.computed(function () {
-			var x = moment.tz("2014-06-01 12:00", "America/Los_Angeles");
-			return x.format();
-			//var otherStartTime = this.StartTime plus moment-timezone(this.TimeZoneName's timmar)
-		});
+		
 
 		this.EndTimeOtherTimeZone = ko.observable();
 		
@@ -48,6 +43,13 @@ define([
 		var personName;
 		var startTimeAsMoment;
 		var endTimeAsMoment;
+		var ianaTimeZone;
+		var ianaTimeZoneOther;
+
+		this.StartTimeOtherTimeZone = ko.computed(function () {
+			var userTimeZone = moment.tz(startTimeAsMoment, ianaTimeZone);
+			return userTimeZone.clone().tz(ianaTimeZoneOther);
+		});
 
 		this.visibleLayers = ko.computed(function () {
 			var shift = self.WorkingShift();
@@ -136,7 +138,9 @@ define([
 			self.Date(data.Date);
 
 			if (data.DefaultIntradayAbsenceData) {
-			    self.TimeZoneName(data.TimeZoneName);
+				self.TimeZoneName(data.TimeZoneName);
+				ianaTimeZone = data.IanaTimeZoneLoggedOnUser;
+				ianaTimeZoneOther = data.IanaTimeZoneOther;
 				self.StartTime(data.DefaultIntradayAbsenceData.StartTime);
 				self.EndTime(data.DefaultIntradayAbsenceData.EndTime);
 				startTimeAsMoment = getMomentFromInput(self.StartTime());
