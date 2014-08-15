@@ -38,6 +38,7 @@
 			// 
 			// tableLayoutPanel1
 			// 
+			this.tableLayoutPanel1.AutoScroll = true;
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 1);
@@ -54,6 +55,7 @@
 			// 
 			// panel1
 			// 
+			this.panel1.AutoScroll = true;
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(9, 48);
 			this.panel1.Name = "panel1";
@@ -62,6 +64,7 @@
 			// 
 			// panel2
 			// 
+			this.panel2.AutoScroll = true;
 			this.panel2.BackColor = System.Drawing.SystemColors.Control;
 			this.panel2.Controls.Add(this.selectedModulePanel1);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
