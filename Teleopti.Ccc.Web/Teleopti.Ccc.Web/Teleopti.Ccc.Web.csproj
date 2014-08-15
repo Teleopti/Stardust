@@ -1188,6 +1188,8 @@
     <Content Include="Content\moment-datepicker\moment.i18n\tr.js" />
     <Content Include="Content\moment-datepicker\moment.i18n\zh-cn.js" />
     <Content Include="Content\moment-datepicker\moment.i18n\zh-tw.js" />
+    <Content Include="Content\moment-timezone\moment-timezone-with-data.js" />
+    <Content Include="Content\moment-timezone\moment-timezone-with-data.min.js" />
     <Content Include="Content\moment\moment-with-locales.js" />
     <Content Include="Content\moment\moment-with-locales.min.js" />
     <Content Include="Content\select2\select2-bootstrap.css" />
@@ -1195,7 +1197,6 @@
     <Content Include="Content\modernizr\modernizr-2.6.2.js" />
     <Content Include="Content\modernizr\modernizr-2.6.2.min.js" />
     <Content Include="Content\moment-datepicker\datepicker.css" />
-    <Content Include="Content\moment\moment.all.min.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\resourcesr.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\signalrrr.js" />
     <Content Include="Content\require\noext.js" />

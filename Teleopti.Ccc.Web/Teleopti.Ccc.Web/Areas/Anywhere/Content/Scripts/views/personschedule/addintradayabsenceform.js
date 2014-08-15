@@ -1,7 +1,7 @@
 define([
 	'knockout',
 	'moment',
-	'momentTimezone',
+	'momentTimezoneData',
 	'navigation',
 	'ajax',
 	'resources',
@@ -12,7 +12,7 @@ define([
 ], function (
 	ko,
 	moment,
-	momentTimezone,
+	momentTimezoneData,
 	navigation,
 	ajax,
 	resources,
@@ -36,8 +36,8 @@ define([
 		this.TimeZoneName = ko.observable();
 
 		this.StartTimeOtherTimeZone = ko.computed(function () {
-			var x = momentTimezone.tz("2014-06-01 12:00", "America/New_York");
-			return x;
+			var x = moment.tz("2014-06-01 12:00", "America/Los_Angeles");
+			return x.format();
 			//var otherStartTime = this.StartTime plus moment-timezone(this.TimeZoneName's timmar)
 		});
 
