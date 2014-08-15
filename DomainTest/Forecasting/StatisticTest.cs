@@ -165,8 +165,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Assert.AreEqual(150d, workloadDay.SortedTaskPeriodList[32].StatisticTask.StatAnsweredTasks);
 				Assert.AreEqual(40d, workloadDay.SortedTaskPeriodList[32].StatisticTask.StatCalculatedTasks);
 				Assert.AreEqual(40d, workloadDay.SortedTaskPeriodList[32].StatisticTask.StatOfferedTasks);
-				Assert.AreEqual(47, workloadDay.SortedTaskPeriodList[32].StatisticTask.StatAverageAfterTaskTimeSeconds);
-				Assert.AreEqual(27, workloadDay.SortedTaskPeriodList[32].StatisticTask.StatAverageTaskTimeSeconds);
+				Assert.AreEqual(47.33D, Math.Round(workloadDay.SortedTaskPeriodList[32].StatisticTask.StatAverageAfterTaskTimeSeconds, 2));
+				Assert.AreEqual(27.33D, Math.Round(workloadDay.SortedTaskPeriodList[32].StatisticTask.StatAverageTaskTimeSeconds, 2));
 				Assert.AreEqual(statisticTask4, workloadDay.SortedTaskPeriodList[33].StatisticTask);
 		  }
 
@@ -473,9 +473,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			Assert.AreEqual(30, stat.StatAnsweredTasksWithinSL);
 			Assert.AreEqual(36, stat.StatCalculatedTasks);
 			Assert.AreEqual(42, stat.StatOfferedTasks);
-			Assert.AreEqual((1 * 4 + 2 * 8 + 4 * 12) / (4 + 8 + 12), stat.StatAverageAfterTaskTimeSeconds);
-			Assert.AreEqual((2 * 4 + 4 * 8 + 8 * 12) / (4 + 8 + 12), stat.StatAverageTaskTimeSeconds);
-			Assert.AreEqual((3 * 4 + 8 * 8 + 12 * 12) / (4 + 8 + 12), stat.StatAverageQueueTimeSeconds);
+			Assert.AreEqual((double)(1 * 4 + 2 * 8 + 4 * 12) / (4 + 8 + 12), stat.StatAverageAfterTaskTimeSeconds);
+			Assert.AreEqual((double)(2 * 4 + 4 * 8 + 8 * 12) / (4 + 8 + 12), stat.StatAverageTaskTimeSeconds);
+			Assert.AreEqual(Math.Round((double)(3 * 4 + 8 * 8 + 12 * 12) / (4 + 8 + 12),2), Math.Round(stat.StatAverageQueueTimeSeconds, 2));
 			Assert.AreEqual(66, stat.StatOverflowInTasks);
 			Assert.AreEqual(72, stat.StatOverflowOutTasks);
 		}
@@ -487,26 +487,20 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			tasks.Add(new StatisticTask
 			{
 				StatAnsweredTasks = 4,
-				StatAverageAfterTaskTimeSeconds = 1,
-				StatAverageTaskTimeSeconds = 2,
 				StatAverageHandleTimeSeconds = 3
 			});
 			tasks.Add(new StatisticTask
 			{
 				StatAnsweredTasks = 8,
-				StatAverageAfterTaskTimeSeconds = 2,
-				StatAverageTaskTimeSeconds = 4,
 				StatAverageHandleTimeSeconds = 6
 			});
 			tasks.Add(new StatisticTask
 			{
 				StatAnsweredTasks = 12,
-				StatAverageAfterTaskTimeSeconds = 4,
-				StatAverageTaskTimeSeconds = 8,
 				StatAverageHandleTimeSeconds = 12
 			});
 			var stat = Statistic.MergeStatisticTasks(tasks);
-			Assert.That(stat.StatAverageHandleTimeSeconds, Is.EqualTo((3 * 4 + 6 * 8 + 12 * 12) / (4 + 8 + 12)));
+			Assert.That(stat.StatAverageHandleTimeSeconds, Is.EqualTo((double)(3 * 4 + 6 * 8 + 12 * 12) / (4 + 8 + 12)));
 		}
 
 		 [Test]
