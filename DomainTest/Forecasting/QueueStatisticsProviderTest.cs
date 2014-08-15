@@ -166,8 +166,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
                 var result = _target.GetStatisticsForPeriod(new DateTimePeriod(_dateTime, _dateTime.AddMinutes(15)));
                 Assert.AreEqual(900, result.StatAnsweredTasks);
-                Assert.AreEqual(32, Math.Round(result.StatAverageTaskTimeSeconds, 2));
-                Assert.AreEqual(64, Math.Round(result.StatAverageAfterTaskTimeSeconds, 2));
+                Assert.AreEqual(32.22D, Math.Round(result.StatAverageTaskTimeSeconds, 2));
+                Assert.AreEqual(64.44D, Math.Round(result.StatAverageAfterTaskTimeSeconds, 2));
             }
         }
 
