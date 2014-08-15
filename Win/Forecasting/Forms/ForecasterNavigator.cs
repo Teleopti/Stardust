@@ -206,8 +206,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 									.ToList();
 							if (foundNodes.Count > 0)
 							{
-								reloadWorkloadNodes(skillNode);
-								foundNodes[0].Nodes.Add(skillNode);
+								reloadSkillTypeNode(foundNodes[0]);
 							}
 							if (isSkillSelected)
 								treeViewSkills.SelectedNode = skillNode;
