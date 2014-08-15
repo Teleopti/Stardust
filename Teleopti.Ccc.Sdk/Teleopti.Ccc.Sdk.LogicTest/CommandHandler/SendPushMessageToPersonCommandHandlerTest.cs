@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     public class SendPushMessageToPersonCommandHandlerTest
     {
         private MockRepository mock;
-        private IPushMessageRepository pushMessageRepository;
+		private IPushMessagePersister pushMessageRepository;
         private IUnitOfWorkFactory unitOfWorkFactory;
         private SendPushMessageToPersonCommandHandler target;
     	private IPersonRepository personRepository;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public void Setup()
         {
             mock = new MockRepository();
-            pushMessageRepository = mock.StrictMock<IPushMessageRepository>();
+            pushMessageRepository = mock.StrictMock<IPushMessagePersister>();
             personRepository = mock.StrictMock<IPersonRepository>();
             unitOfWorkFactory = mock.StrictMock<IUnitOfWorkFactory>();
             currentUnitOfWorkFactory = mock.DynamicMock<ICurrentUnitOfWorkFactory>();

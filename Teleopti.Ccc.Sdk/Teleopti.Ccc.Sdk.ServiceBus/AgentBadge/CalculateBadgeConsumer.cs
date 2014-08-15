@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -19,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IAgentBadgeSettingsRepository _settingsRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IGlobalSettingDataRepository _globalSettingRep;
-		private readonly IPushMessageRepository _msgRepository;
+		private readonly IPushMessagePersister _msgPersister;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IAgentBadgeCalculator _calculator;
 		private readonly INow _now;
@@ -29,8 +32,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 									IServiceBus serviceBus, 
 									IAgentBadgeSettingsRepository settingsRepository, 
 									IPersonRepository personRepository, 
-									IGlobalSettingDataRepository globalSettingRep, 
-									IPushMessageRepository msgRepository, 
+									IGlobalSettingDataRepository globalSettingRep,
+									IPushMessagePersister msgPersister, 
 									ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 									IAgentBadgeCalculator calculator,
 									INow now)
@@ -39,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_settingsRepository = settingsRepository;
 			_personRepository = personRepository;
 			_globalSettingRep = globalSettingRep;
-			_msgRepository = msgRepository;
+			_msgPersister = msgPersister;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_calculator = calculator;
 			_now = now;

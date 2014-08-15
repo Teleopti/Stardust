@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common.Messaging;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
@@ -59,8 +60,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
         {
             IUnitOfWork uow = _mocker.StrictMock<IUnitOfWork>();
             IRepositoryFactory repositoryfactory = _mocker.StrictMock<IRepositoryFactory>();
-            IPushMessageRepository pushMessageRepository = _mocker.StrictMock<IPushMessageRepository>();
-            ISendPushMessageService pushMessageService = _mocker.StrictMock<ISendPushMessageService>();
+			var pushMessageRepository = _mocker.StrictMock<IPushMessageRepository>();
+			ISendPushMessageService pushMessageService = _mocker.StrictMock<ISendPushMessageService>();
             IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
             _target = new SendPushMessageViewModelForTest(repositoryfactory, unitOfWorkFactory);
             _target.Message = "not cleared";
@@ -70,8 +71,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
             using (_mocker.Record())
             {
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-                Expect.Call(repositoryfactory.CreatePushMessageRepository(uow)).Return(pushMessageRepository);
-                Expect.Call(() => pushMessageService.SendConversation(pushMessageRepository));
+				Expect.Call(repositoryfactory.CreatePushMessageRepository(uow)).Return(pushMessageRepository);
+                Expect.Call(() => pushMessageService.SendConversation(null)).IgnoreArguments();
                 Expect.Call(uow.PersistAll()).Return(null);
                 Expect.Call(uow.Dispose).Repeat.Once();
             }

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IStatisticRepository statisticRepository;
 		private IPersonRepository personRepository;
 		private IGlobalSettingDataRepository globalSettingRepository;
-		private IPushMessageRepository msgRepository;
+		private IPushMessagePersister msgRepository;
 		private CalculateBadgeConsumer target;
 		private IAgentBadgeCalculator calculator;
 		private INow now;
@@ -55,11 +55,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.IgnoreArguments()
 				.Return(new AdherenceReportSetting());
 
-			msgRepository = MockRepository.GenerateMock<IPushMessageRepository>();
+			msgRepository = MockRepository.GenerateMock<IPushMessagePersister>();
 			now = MockRepository.GenerateMock<INow>();
 			calculator = new AgentBadgeCalculator(statisticRepository);
 			target = new CalculateBadgeConsumer(serviceBus, badgeSettingsRepository, personRepository, globalSettingRepository,
-				msgRepository, unitOfWorkFactory, calculator, now);
+				msgRepository, 
+				unitOfWorkFactory, calculator, now);
 		}
 		[Test]
 		public void ShouldSendCalculateBadgeMessageAtRightTime()

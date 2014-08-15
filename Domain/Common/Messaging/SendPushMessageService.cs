@@ -79,14 +79,14 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
             return this;
         }
 
-        public void SendConversation(IPushMessageRepository repository)
+		public void SendConversation(IPushMessagePersister repository)
         {
             repository.Add(PushMessage,Receivers);
         }
 
-        public ISendPushMessageReceipt SendConversationWithReceipt(IPushMessageRepository repository)
+		public ISendPushMessageReceipt SendConversationWithReceipt(IPushMessagePersister repository)
         {
-            return repository.Add(PushMessage, Receivers, new CreatePushMessageDialoguesService());
+            return repository.Add(PushMessage, Receivers);
         }
 
         public void SendConversation(IPushMessageRepository pushMessageRepository, IPushMessageDialogueRepository pushMessageDialogueRepository)

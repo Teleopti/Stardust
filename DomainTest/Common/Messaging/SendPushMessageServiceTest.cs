@@ -18,12 +18,13 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
         private IPushMessage _pushMessage;
         private SendPushMessageService _sendPushMessage;
         private MockRepository _mocker;
-        private IPushMessageRepository _repository;
+		private IPushMessagePersister _persister;
         private IPushMessageDialogueRepository _dialogueRepository;
         private string _option1 = "option1";
         private string _option2 = "option2";
+	    private IPushMessageRepository _repository;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _sender = new Person();
@@ -32,8 +33,9 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
             _pushMessage = new PushMessage();
             _sendPushMessage = new SendPushMessageService(_pushMessage);
             _mocker = new MockRepository();
-            _repository = _mocker.StrictMock<IPushMessageRepository>();
-            _dialogueRepository = _mocker.StrictMock<IPushMessageDialogueRepository>();
+			_persister = _mocker.StrictMock<IPushMessagePersister>();
+			_repository = _mocker.StrictMock<IPushMessageRepository>();
+			_dialogueRepository = _mocker.StrictMock<IPushMessageDialogueRepository>();
         }
 
         [Test]
@@ -59,11 +61,11 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
         {
             using (_mocker.Record())
             {
-                Expect.Call(() => _repository.Add(_pushMessage,new List<IPerson>())).IgnoreArguments();
+                Expect.Call(() => _persister.Add(_pushMessage,new List<IPerson>())).IgnoreArguments();
             }
             using (_mocker.Playback())
             {
-                SendPushMessageService.CreateConversation("Title", "Message", false).From(_sender).To(_receiver1).SendConversation(_repository);
+                SendPushMessageService.CreateConversation("Title", "Message", false).From(_sender).To(_receiver1).SendConversation(_persister);
             }
         }
 
@@ -74,15 +76,15 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
 
             //Todo check the conversation and receiver of the new conversationdialogue....
             PushMessageDialogue dialogue = new PushMessageDialogue(_pushMessage,_receiver1);
-
+			
             using(_mocker.Record())
             {
-                Expect.Call(()=>_repository.Add(_pushMessage));
+				Expect.Call(()=>_repository.Add(_pushMessage));
                 Expect.Call(()=>_dialogueRepository.Add(dialogue)).IgnoreArguments(); //do abetter check here! The only thing thats interesting is that conversation and receiver is correct
             }
             using(_mocker.Playback())
             {
-                sendPushMessage.From(_sender).To(_receiver1).SendConversation(_repository,_dialogueRepository);
+				sendPushMessage.From(_sender).To(_receiver1).SendConversation(_repository, _dialogueRepository);
 
             }
         }

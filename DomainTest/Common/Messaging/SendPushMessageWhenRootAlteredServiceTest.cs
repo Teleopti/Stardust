@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
             var rootThatShouldNotify = _mocks.StrictMultiMock<IAggregateRoot>(typeof(IPushMessageWhenRootAltered));
             var messgeWhenAlteredRoot = (IPushMessageWhenRootAltered)rootThatShouldNotify;
             var rootChangedInfo1 = _mocks.StrictMock<IRootChangeInfo>();
-            var repository = _mocks.StrictMock<IPushMessageRepository>();
+			var repository = _mocks.StrictMock<IPushMessagePersister>();
             var pushMessageService = _mocks.StrictMock<ISendPushMessageService>();
             var pushMessageReceipt = _mocks.StrictMock<ISendPushMessageReceipt>();
 

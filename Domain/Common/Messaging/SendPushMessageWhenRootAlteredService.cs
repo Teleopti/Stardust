@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
             }
         }
 
-        public IList<IAggregateRoot> SendPushMessages(IPushMessageRepository repository)
+        public IList<IAggregateRoot> SendPushMessages(IPushMessagePersister repository)
         {
             IList<IAggregateRoot> addedRoots = new List<IAggregateRoot>();
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
         }
 
 
-        public IList<IAggregateRoot> SendPushMessages(IEnumerable<IRootChangeInfo> changedRoots, IPushMessageRepository repository)
+		public IList<IAggregateRoot> SendPushMessages(IEnumerable<IRootChangeInfo> changedRoots, IPushMessagePersister repository)
         {
             SendPushMessagesWhenRootAltered.Clear();
             AddAlteredRoots(changedRoots);

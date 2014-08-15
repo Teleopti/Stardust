@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
         /// Created by: henrika
         /// Created date: 2009-10-22
         /// </remarks>
-        IList<IAggregateRoot> SendPushMessages(IEnumerable<IRootChangeInfo> changedRoots, IPushMessageRepository repository);
+		IList<IAggregateRoot> SendPushMessages(IEnumerable<IRootChangeInfo> changedRoots, IPushMessagePersister repository);
 
      }
 }

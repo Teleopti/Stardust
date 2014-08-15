@@ -145,8 +145,10 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 
         private void SendMessage(IUnitOfWork uow)
         {
-            IPushMessageRepository repository = _repositoryFactory.CreatePushMessageRepository(uow);
-            CreateSendPushMessageService().SendConversation(repository);
+            var repository = _repositoryFactory.CreatePushMessageRepository(uow);
+	        var persister = new PushMessagePersister(repository, new PushMessageDialogueRepository(uow),
+		        new CreatePushMessageDialoguesService());
+			CreateSendPushMessageService().SendConversation(persister);
             uow.PersistAll();
             ClearValue(MessageProperty);
             ClearValue(TitleProperty);

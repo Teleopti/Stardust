@@ -6,83 +6,53 @@ using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class PushMessageRepository :Repository<IPushMessage>, IPushMessageRepository
+	
+	public class PushMessagePersister : IPushMessagePersister
 	{
-		private readonly IPushMessageDialogueRepository _pushMessageDialogueRepository;
+		private readonly IPushMessageRepository _repository;
+		private readonly IPushMessageDialogueRepository _dialogueRepository;
+		private readonly ICreatePushMessageDialoguesService _dialoguesService;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PushMessageRepository"/> class.
-		/// </summary>
-		/// <param name="unitOfWork">The UnitOfWork.</param>
-		public PushMessageRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+		public PushMessagePersister(IPushMessageRepository repository, IPushMessageDialogueRepository dialogueRepository, ICreatePushMessageDialoguesService dialoguesService)
 		{
-			_pushMessageDialogueRepository = new PushMessageDialogueRepository(unitOfWork);
+			_repository = repository;
+			_dialogueRepository = dialogueRepository;
+			_dialoguesService = dialoguesService;
 		}
 
-		public PushMessageRepository(ICurrentUnitOfWork currentUnitOfWork, IPushMessageDialogueRepository pushMessageDialogueRepository)
-			: base(currentUnitOfWork)
+		public ISendPushMessageReceipt Add(IPushMessage pushMessage, IEnumerable<IPerson> receivers)
 		{
-			_pushMessageDialogueRepository = pushMessageDialogueRepository;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PushMessageRepository"/> class.
-		/// </summary>
-		/// <param name="unitOfWork">The unit of work.</param>
-		/// <param name="pushMessageDialogueRepository">The conversation dialogue repository.</param>
-		/// <remarks>
-		/// Injects a repository for ConversationDialogues
-		/// Created by: henrika
-		/// Created date: 2009-05-19
-		/// </remarks>
-		public PushMessageRepository(IUnitOfWork unitOfWork,IPushMessageDialogueRepository pushMessageDialogueRepository) : base(unitOfWork)
-		{
-			_pushMessageDialogueRepository = pushMessageDialogueRepository;
-		}
-
-		/// <summary>
-		/// Removes the specified entity from repository.
-		/// Will be deleted when PersistAll is called (or sooner).
-		/// </summary>
-		/// <param name="entity">The entity.</param>
-		/// <remarks>
-		/// Removes any ConversationDialogues as well
-		/// Created by: henrika
-		/// Created date: 2009-05-19
-		/// </remarks>
-		public override void Remove(IPushMessage entity)
-		{
-			_pushMessageDialogueRepository.Remove(entity);
-			base.Remove(entity);
-		}
-
-		/// <summary>
-		/// Adds the specified pushMessage and creates the dialogues
-		/// </summary>
-		/// <param name="pushMessage">The conversation.</param>
-		/// <param name="receivers">The receivers.</param>
-		/// <remarks>
-		/// Created by: henrika
-		/// Created date: 2009-05-19
-		/// </remarks>
-		public void Add(IPushMessage pushMessage, IEnumerable<IPerson> receivers)
-		{
-			Add(pushMessage,receivers,new CreatePushMessageDialoguesService());
-		}
-
-		public ISendPushMessageReceipt Add(IPushMessage pushMessage,IEnumerable<IPerson> receivers,ICreatePushMessageDialoguesService createPushMessageDialoguesService)
-		{
-			Add(pushMessage);
-			ISendPushMessageReceipt receipt = createPushMessageDialoguesService.Create(pushMessage, receivers);
-			receipt.CreatedDialogues.ForEach(d => _pushMessageDialogueRepository.Add(d));
+			_repository.Add(pushMessage);
+			ISendPushMessageReceipt receipt = _dialoguesService.Create(pushMessage, receivers);
+			receipt.CreatedDialogues.ForEach(d => _dialogueRepository.Add(d));
 			return receipt;
 		}
 
+		public void Remove(IPushMessage pushMessage)
+		{
+			_repository.Remove(pushMessage);
+			_dialogueRepository.Remove(pushMessage);
+		}
+
+	}
+
+	public class PushMessageRepository :Repository<IPushMessage>, IPushMessageRepository
+	{
+
+		public PushMessageRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+		{
+		}
+
+		public PushMessageRepository(ICurrentUnitOfWork currentUnitOfWork)
+			: base(currentUnitOfWork)
+		{
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public ICollection<IPushMessage> Find(IPerson sender, PagingDetail pagingDetail)

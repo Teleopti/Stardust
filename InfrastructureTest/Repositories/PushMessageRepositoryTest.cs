@@ -72,12 +72,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
         
         [Test]
-        public void ShouldCreateWithFactory()
-        {
-            Assert.NotNull(new PushMessageRepository(UnitOfWorkFactory.CurrentUnitOfWork(),new PushMessageDialogueRepository(UnitOfWorkFactory.CurrentUnitOfWork())));
-        }
-
-        [Test]
         public void VerifySenderReturnsCreatedByIfNull()
         {
             PushMessage pushMessage = new PushMessage();
@@ -90,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
            
             IPushMessageDialogueRepository dialogueRepository = Mocks.StrictMock<IPushMessageDialogueRepository>();
-            IPushMessageRepository rep = new PushMessageRepository(UnitOfWork, dialogueRepository);
+			var rep = new PushMessagePersister(new PushMessageRepository(UnitOfWork), dialogueRepository, null);
             _pushMessage = new PushMessage();
             PersistAndRemoveFromUnitOfWork(_pushMessage);
 
@@ -109,11 +103,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             MockRepository _mocks = new MockRepository();
             IPushMessageDialogueRepository dialogueRepository = _mocks.StrictMock<IPushMessageDialogueRepository>();
-            IPushMessageRepository rep = new PushMessageRepository(UnitOfWork, dialogueRepository);
             _pushMessage = new PushMessage();
             IList<IPerson> receivers = new List<IPerson>();
             ISendPushMessageReceipt receipt = _mocks.StrictMock<ISendPushMessageReceipt>();
             ICreatePushMessageDialoguesService service = _mocks.StrictMock<ICreatePushMessageDialoguesService>();
+			var rep = new PushMessagePersister(new PushMessageRepository(UnitOfWork), dialogueRepository, service);
             
             IPushMessageDialogue createdDialogue = new PushMessageDialogue(_pushMessage,PersonFactory.CreatePerson("Receiver"));
 
@@ -125,7 +119,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             }
             using(_mocks.Playback())
             {
-                rep.Add(_pushMessage, receivers, service);
+                rep.Add(_pushMessage, receivers);
             }
         }
 

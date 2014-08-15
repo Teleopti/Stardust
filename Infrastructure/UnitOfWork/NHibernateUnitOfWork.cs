@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Transactions;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using log4net;
 using NHibernate;
@@ -268,7 +269,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				Interceptor.Iteration = InterceptorIteration.Normal;
 				Session.Flush();
 				Interceptor.Iteration = InterceptorIteration.UpdateRoots;
-				_sendPushMessageWhenRootAlteredService.SendPushMessages(Interceptor.ModifiedRoots, new PushMessageRepository(this));
+				_sendPushMessageWhenRootAlteredService.SendPushMessages(Interceptor.ModifiedRoots,
+					new PushMessagePersister(new PushMessageRepository(this), new PushMessageDialogueRepository(this),
+						new CreatePushMessageDialoguesService()));
 				Session.Flush();
 			}
 			catch (StaleStateException ex)

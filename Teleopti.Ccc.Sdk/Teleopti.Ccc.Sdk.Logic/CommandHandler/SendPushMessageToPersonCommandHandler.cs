@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 	public class SendPushMessageToPersonCommandHandler : IHandleCommand<SendPushMessageToPeopleCommandDto>
 	{
 		private readonly IPersonRepository _personRepository;
-		private readonly IPushMessageRepository _pushMessageRepository;
+		private readonly IPushMessagePersister _pushMessagePersister;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public SendPushMessageToPersonCommandHandler(IPersonRepository personRepository, IPushMessageRepository pushMessageRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public SendPushMessageToPersonCommandHandler(IPersonRepository personRepository, IPushMessagePersister pushMessagePersister, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_personRepository = personRepository;
-			_pushMessageRepository = pushMessageRepository;
+			_pushMessagePersister = pushMessagePersister;
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 					var service = SendPushMessageService.CreateConversation(command.Title, command.Message, command.AllowReply).To(people).
 						AddReplyOption(command.ReplyOptions);
-					service.SendConversation(_pushMessageRepository);
+					service.SendConversation(_pushMessagePersister);
 					uow.PersistAll();
 
 					result.AffectedItems = 1;

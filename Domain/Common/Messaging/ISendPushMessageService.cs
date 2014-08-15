@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
         /// <summary>
         /// Sends the conversation.
         /// </summary>
-        void SendConversation(IPushMessageRepository repository);
+		void SendConversation(IPushMessagePersister repository);
 
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
         /// Created by: henrika
         /// Created date: 2009-10-22
         /// </remarks>
-        ISendPushMessageReceipt SendConversationWithReceipt(IPushMessageRepository repository);
+		ISendPushMessageReceipt SendConversationWithReceipt(IPushMessagePersister repository);
 
         /// <summary>
         /// Sends the conversation.

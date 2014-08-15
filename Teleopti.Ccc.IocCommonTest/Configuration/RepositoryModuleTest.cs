@@ -44,26 +44,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		public void PushMessageRepositoryShouldNotBeSingleton()
-		{
-			IPushMessageRepository rep1;
-			IPushMessageRepository rep2;
-
-			using (var container = containerBuilder.Build())
-			{
-				using (container.BeginLifetimeScope())
-				{
-					rep1 = container.Resolve<IPushMessageRepository>();					
-				}
-				using (container.BeginLifetimeScope())
-				{
-					rep2 = container.Resolve<IPushMessageRepository>();
-				}
-			}
-			rep1.Should().Not.Be.SameInstanceAs(rep2);
-		}
-
-		[Test]
 		public void ShouldResolveTheStatisticRepository()
 		{
 			using (var container = containerBuilder.Build())

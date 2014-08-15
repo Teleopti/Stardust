@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
@@ -31,12 +32,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				}
 			}
 
+			builder.RegisterType<PushMessagePersister>()
+				.As<IPushMessagePersister>()
+				.SingleInstance();
+			builder.RegisterType<CreatePushMessageDialoguesService>()
+				.As<ICreatePushMessageDialoguesService>()
+				.SingleInstance();
+
 			builder.Register(c => StatisticRepositoryFactory.Create())
 				.As<IStatisticRepository>();
 
-			builder.RegisterType<PushMessageRepository>()
-				.As<IPushMessageRepository>()
-				.InstancePerDependency();
 
 			builder.RegisterType<DefaultScenarioFromRepository>()
 			       .As<ICurrentScenario>()

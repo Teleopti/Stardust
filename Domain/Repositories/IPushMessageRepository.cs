@@ -4,35 +4,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
+	public interface IPushMessagePersister
+	{
+		ISendPushMessageReceipt Add(IPushMessage pushMessage, IEnumerable<IPerson> receivers);
+		void Remove(IPushMessage pushMessage);
+	}
+
 	public interface IPushMessageRepository:IRepository<IPushMessage>
 	{
-		/// <summary>
-		/// Adds the specified pushMessage and creates the PushMessageDialogues for the receivers
-		/// </summary>
-		/// <param name="pushMessage">The conversation.</param>
-		/// <param name="receivers">The receivers.</param>
-		/// <remarks>
-		/// Created by: henrika
-		/// Created date: 2009-05-19
-		/// </remarks>
-		void Add(IPushMessage pushMessage, IEnumerable<IPerson> receivers);
-
-
-		/// <summary>
-		/// Adds the specified pushMessage and creates the PushMessageDialogues for the receivers
-		/// </summary>
-		/// <param name="pushMessage">The conversation.</param>
-		/// <param name="receivers">The receivers.</param>
-		/// <param name="createPushMessageDialoguesService">Service for creating dialogues</param>
-		/// <returns>
-		/// Information about roots that was created
-		/// </returns>
-		/// <remarks>
-		/// Created by: henrika
-		/// Created date: 2009-10-22
-		/// </remarks>
-		ISendPushMessageReceipt Add(IPushMessage pushMessage, IEnumerable<IPerson> receivers,
-									ICreatePushMessageDialoguesService createPushMessageDialoguesService);
 
 		/// <summary>
 		/// Finds the messages sent from sender.
