@@ -22,7 +22,24 @@ GO
 --Date: 2014-08-13  
 --Desc: Add new column for filter dayoff
 ----------------  
-
-ALTER TABLE [ReadModel].[PersonScheduleDay] ADD [IsDayOff] [bit] NULL
-
+ALTER TABLE [ReadModel].[PersonScheduleDay] ADD [IsDayOff] [bit] NULL -- 245557 rows => 166765
 GO
+
+--populate with data from data source.
+UPDATE psd
+SET IsDayOff = 
+	CASE
+		WHEN pa.DayOffTemplate IS NULL THEN 0
+		ELSE 1
+	END
+FROM dbo.PersonAssignment pa
+INNER JOIN [ReadModel].[PersonScheduleDay] psd
+	ON psd.PersonId = pa.Person
+	AND psd.BelongsToDate = pa.[Date]
+INNER JOIN dbo.Scenario s
+	ON s.Id = pa.Scenario
+	AND s.DefaultScenario = 1
+
+--Next statment would be good in order to avoid a NULL design on the bit.
+-- .... The PersonScheduleDay holds meeting and Absence. In that case NULL :-(
+--ALTER TABLE [ReadModel].[PersonScheduleDay] ADD [IsDayOff] [bit NOT] NULL
