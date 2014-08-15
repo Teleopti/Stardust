@@ -525,7 +525,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				 }
 			 };
 
-			 var stat = Statistic.MergeStatisticTasks(tasks);
+			 var stat = tasks.MergeStatisticTasks();
 
 			 stat.StatAverageAfterTaskTimeSeconds.Should().Be.EqualTo(1.5D);
 			 stat.StatAverageTaskTimeSeconds.Should().Be.EqualTo(1.5D);
