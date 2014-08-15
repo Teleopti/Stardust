@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			// Just hard code it now, the best solution is to trigger it from ETL
 			var nextMessageShouldBeProcessed =
 				TimeZoneInfo.ConvertTime(tomorrowForGivenTimeZone.Date, timeZone, TimeZoneInfo.Local).AddHours(5);
-			var peopleGotABadge = new List<IPerson>();
+			List<IPerson> peopleGotABadge;
 
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var setting = _settingsRepository.LoadAll().FirstOrDefault();
 				if (setting == null)
