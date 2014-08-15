@@ -66,6 +66,12 @@
 	padding-right: 0;
 	width: auto;
 }
+.person-schedule .schedule-column.edit-column {
+	padding-left: 0;
+	padding-right: 0;
+    padding-top: 30px;
+    padding-bottom: 40px;
+}
 
 .person-schedule .dayoff {
 	text-align: center;
@@ -80,7 +86,7 @@
 	top: -8px;
 	height: 57px;
 }
-sh
+
 .person-schedule .dayoff .layer-description {
 	margin-top: 18px;
 	text-shadow: none;
@@ -166,20 +172,16 @@ sh
 	}
 }
 
-.person-schedule .full-day-absence-form {
-	width: 228px;
+.person-schedule .full-day-absence-form .start-date
+{
+	text-align: left;
 }
 
-	.person-schedule .full-day-absence-form .start-date
-	{
-		text-align: left;
-	}
-
-	.person-schedule .full-day-absence-form .end-date {
-		background-color: #FFFFFF;
-		cursor: pointer;
-		text-align: left;
-	}
+.person-schedule .full-day-absence-form .end-date {
+	background-color: #FFFFFF;
+	cursor: pointer;
+	text-align: left;
+}
 
 .person-schedule .absence-item {
 	vertical-align: middle;
@@ -205,4 +207,29 @@ sh
 	height: 100%;
 	width: 100%;
 	position: absolute;
+}
+
+.person-schedule .schedule-column .edit-time-column {
+    padding-right: 50px;
+}
+
+.person-schedule .schedule-column .edit-time-column select,
+.person-schedule .schedule-column .edit-time-column .input-group {
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+}
+
+.person-schedule .schedule-column .apply {
+    margin-top: 10px !important;
+}
+
+.person-schedule .schedule-column .edit-area {
+    table-layout: fixed;
+    width: 800px;
+}
+
+.other-time-zone {
+    white-space: nowrap;
+    width: 400px;
+    overflow: hidden;
 }

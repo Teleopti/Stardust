@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<IpAddressResolver>().As<IIpAddressResolver>();
 			builder.RegisterType<AuthenticationModule>().As<IAuthenticationModule>().SingleInstance();
 			builder.RegisterType<IdentityProviderProvider>().As<IIdentityProviderProvider>().SingleInstance();
+            builder.RegisterType<IanaTimeZoneProvider>().As<IIanaTimeZoneProvider>().SingleInstance();
 		}
 	}
 }

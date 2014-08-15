@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
@@ -21,8 +22,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IJsonDeserializer _deserializer;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
+	    private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 
-		public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer deserializer, IPermissionProvider permissionProvider, ICommonAgentNameProvider commonAgentNameProvider)
+	    public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer deserializer, IPermissionProvider permissionProvider, ICommonAgentNameProvider commonAgentNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider)
 		{
 			_personRepository = personRepository;
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
@@ -33,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			_deserializer = deserializer;
 			_permissionProvider = permissionProvider;
 			_commonAgentNameProvider = commonAgentNameProvider;
+		    _ianaTimeZoneProvider = ianaTimeZoneProvider;
 		}
 
 		public PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date)
@@ -48,7 +51,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				CommonAgentNameSetting = _commonAgentNameProvider.CommonAgentNameSettings,
 				Absences = _absenceRepository.LoadAllSortByName(),
 				Activities = _activityRepository.LoadAllSortByName(),
-				HasViewConfidentialPermission = hasViewConfidentialPermission
+				HasViewConfidentialPermission = hasViewConfidentialPermission,
+                IanaTimeZoneOther = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id)
 			};
 
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
