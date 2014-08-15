@@ -1876,7 +1876,11 @@ namespace Teleopti.Ccc.Win.Permissions
 
 		private void listViewRolesSelectedIndexChanged(object sender, EventArgs e)
 		{
-
+			if (!isRoleSelected())
+			{
+				//Clear the controls
+				clearControls();
+			}
 		}
 
 		private void treeViewFunctionsAfterCheck(object sender, TreeNodeAdvEventArgs e)
