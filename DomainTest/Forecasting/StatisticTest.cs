@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -507,5 +508,36 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			var stat = Statistic.MergeStatisticTasks(tasks);
 			Assert.That(stat.StatAverageHandleTimeSeconds, Is.EqualTo((3 * 4 + 6 * 8 + 12 * 12) / (4 + 8 + 12)));
 		}
+
+		 [Test]
+		 public void ShouldNotRoundWhenMerging()
+		 {
+			 var tasks = new List<IStatisticTask>
+			 {
+				 new StatisticTask
+				 {
+					 StatAnsweredTasks = 1,
+					 StatAverageAfterTaskTimeSeconds = 1,
+					 StatAverageTaskTimeSeconds = 1,
+					 StatAverageHandleTimeSeconds = 1,
+					 StatAverageQueueTimeSeconds = 1
+				 },
+				 new StatisticTask
+				 {
+					 StatAnsweredTasks = 1,
+					 StatAverageAfterTaskTimeSeconds = 2,
+					 StatAverageTaskTimeSeconds = 2,
+					 StatAverageHandleTimeSeconds = 2,
+					 StatAverageQueueTimeSeconds = 2 
+				 }
+			 };
+
+			 var stat = Statistic.MergeStatisticTasks(tasks);
+
+			 stat.StatAverageAfterTaskTimeSeconds.Should().Be.EqualTo(1.5D);
+			 stat.StatAverageTaskTimeSeconds.Should().Be.EqualTo(1.5D);
+			 stat.StatAverageQueueTimeSeconds.Should().Be.EqualTo(1.5D);
+			 stat.StatAverageHandleTimeSeconds.Should().Be.EqualTo(1.5D);
+		 }
 	 }
 }

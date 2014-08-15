@@ -199,11 +199,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             if (statAnsweredTasks > 0)
             {
-                newStatisticTask.StatAverageAfterTaskTimeSeconds =
-                    (int)(statTaskAverageAfterTaskTimeSeconds / statAnsweredTasks);
-                newStatisticTask.StatAverageTaskTimeSeconds = (int)(statTaskAverageTaskTimeSeconds / statAnsweredTasks);
-                newStatisticTask.StatAverageQueueTimeSeconds = (int)(statTaskAverageQueueTimeSeconds / statAnsweredTasks);
-                newStatisticTask.StatAverageHandleTimeSeconds = (int)(statTaskAverageHandleTimeSeconds / statAnsweredTasks);
+                newStatisticTask.StatAverageAfterTaskTimeSeconds = statTaskAverageAfterTaskTimeSeconds / statAnsweredTasks;
+                newStatisticTask.StatAverageTaskTimeSeconds = statTaskAverageTaskTimeSeconds / statAnsweredTasks;
+                newStatisticTask.StatAverageQueueTimeSeconds = statTaskAverageQueueTimeSeconds / statAnsweredTasks;
+                newStatisticTask.StatAverageHandleTimeSeconds = statTaskAverageHandleTimeSeconds / statAnsweredTasks;
             }
             else
             {
