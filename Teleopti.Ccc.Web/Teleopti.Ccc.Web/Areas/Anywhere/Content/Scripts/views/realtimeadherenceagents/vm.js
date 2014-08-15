@@ -43,13 +43,23 @@
 			}
 		});
 		
-		that.fillAgents = function (data) {
+		that.fillAgents = function(data) {
 			for (var i = 0; i < data.length; i++) {
 				var a = agent();
 				a.fill(data[i]);
 				that.agents.push(a);
-				that.teamName(data[i].TeamName);
-				that.siteName(data[i].SiteName);
+				var locationHash = window.location.hash;
+				if (locationHash.match(/MultipleSites$/)) {
+					that.teamName('');
+					that.siteName('');
+				} else if (locationHash.match(/MultipleTeams$/)) {
+					that.teamName('');
+					that.siteName(data[i].SiteName);
+				} else {
+					that.teamName(data[i].TeamName);
+					that.siteName(data[i].SiteName);
+				}
+
 				that.siteId(data[i].SiteId);
 			}
 			that.siteURI('#realtimeadherenceteams/' + that.siteId());
