@@ -11490,6 +11490,8 @@ namespace Teleopti.Ccc.UserTexts {
         ///   Looks up a localized string similar to License key successfully applied.
         ///Congratulations! You are now a licensed user of this award winning solution for workforce management.
         ///The application will now exit.
+        ///
+        ///Important:
         ///In order to get all services and web applications to fully function and to get access to newly licensed options, please run &quot;Restart Teleopti WFM&quot; from the Teleopti folder in the Start Menu..
         /// </summary>
         public static string LicenseApplicationSuccess {

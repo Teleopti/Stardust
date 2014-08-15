@@ -5354,6 +5354,7 @@ Feldetaljer:
     <value>Installationen av licensen lyckades.
 Applikationen kommer att stängas. 
 
+Viktigt:
 För att alla tjänster och webbapplikationer ska fungera normalt och för att aktivera nylicensierade tillval, var god kör "Restart Teleopti WFM" som du hittar i Teleopti-mappen i Startmenyn.</value>
     <comment>license upload success message</comment>
   </data>
