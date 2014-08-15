@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                 workloadDayBase.SplitTemplateTaskPeriods(workloadDayBase.TaskPeriodList.ToList());
                 var skillDay = workloadDayBase.Parent as ISkillDay;
                 if (skillDay != null)
-                {
+				{
+					skillDay.SplitSkillDataPeriods(skillDay.SkillDataPeriodCollection.ToList());
                     setTargetBusinessUnit(skillDay, skill.BusinessUnit);
                 }
             }
