@@ -283,12 +283,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Splash.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Splash.Designer.cs">
-      <DependentUpon>Splash.cs</DependentUpon>
-    </Compile>
     <Compile Include="StartupModule.cs" />
     <EmbeddedResource Include="Controls\ModulePanelItem.resx">
       <DependentUpon>ModulePanelItem.cs</DependentUpon>
@@ -321,9 +315,6 @@
     <Compile Include="SmartClientPortal.designer.cs">
       <DependentUpon>SmartClientPortal.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Splash.resx">
-      <DependentUpon>Splash.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

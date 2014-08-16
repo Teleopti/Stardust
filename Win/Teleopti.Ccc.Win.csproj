@@ -3805,9 +3805,12 @@
     <None Include="Resources\leftarrow.png" />
     <Content Include="Resources\intraday.png" />
     <Content Include="Resources\leftScale.png" />
+    <None Include="Resources\left_round-32.png" />
     <Content Include="Resources\line.png" />
     <Content Include="Resources\lock-32x32.png" />
     <Content Include="Resources\lock-off-32x32.png" />
+    <None Include="Resources\Logon.ico" />
+    <None Include="Resources\LoginHeaderText.png" />
     <Content Include="Resources\magnifier_16x16.png" />
     <Content Include="Resources\magnifier_8x8.png" />
     <None Include="Resources\Magnifier_zoom_in.png" />
@@ -3823,6 +3826,7 @@
     <Content Include="Resources\rightScale.png" />
     <Content Include="Resources\RightToLeft.bmp" />
     <None Include="Resources\scheduler.ico" />
+    <None Include="Resources\right_round-32.png" />
     <Content Include="Resources\Scorecard.gif" />
     <None Include="Resources\StartTime.PNG" />
     <None Include="Resources\shiftEditor_16x16.png" />
@@ -3833,6 +3837,7 @@
     <Content Include="Resources\Summary.png" />
     <Content Include="Resources\tag_blue.png" />
     <Content Include="Resources\tb_report-sched.png" />
+    <None Include="Resources\Teleopti-WFM-main-icon256.png" />
     <Content Include="Resources\test_add2.png" />
     <Content Include="Resources\test_delete_32x32.png" />
     <Content Include="Resources\text_list_bullets.png" />

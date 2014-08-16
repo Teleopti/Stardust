@@ -160,6 +160,8 @@ namespace Teleopti.Ccc.WinCode.Main
 				CurrentStep++;
 				getDataSources();
 			}
+			
+			
 			_view.ShowStep(false);
 		}
 
@@ -242,8 +244,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		private void initApplication()
 		{
 			_view.ClearForm(Resources.InitializingTreeDots);
-			_view.HideView();
-			//här kanske?
 			setBusinessUnit();
 			if (!_initializer.InitializeApplication(_model.SelectedDataSourceContainer))
 			{

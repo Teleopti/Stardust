@@ -14,12 +14,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		    _logonView = logonView;
 		    _model = model;
             InitializeComponent();
-            labelLogOn.Text = Resources.PleaseEnterYourLogonCredentials;
-            labelLoginName.Text = Resources.LoginNameColon;
-            labelPassword.Text = Resources.PasswordColon;
-			buttonLogOnCancel.Text = Resources.Cancel;
-			buttonLogOnOK.Text = Resources.Ok;
-			btnBack.Text = Resources.Back;
+            
 		}
 
         public void SetData()

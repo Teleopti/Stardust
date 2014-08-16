@@ -1,6 +1,4 @@
-using System.Drawing;
 using System.Windows.Forms;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.Win.Main.LogonScreens
@@ -15,26 +13,29 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		    _logonView = logonView;
 		    _model = model;
             InitializeComponent();
-	        labelChooseSDK.Text = Resources.PleaseChooseSDK;
-			buttonLogOnCancel.Text = Resources.Cancel;
-			buttonLogOnOK.Text = Resources.Ok;
-			btnBack.Text = Resources.Back;
+			if(!DesignMode)
+				runTimeDesign();
+		}
+
+		private void runTimeDesign()
+		{
+			comboBoxAdvSDKList.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 		}
 
         public void SetData()
 		{
-			lbxSelectSDK.DataSource = _model.Sdks;
+			comboBoxAdvSDKList.DataSource = _model.Sdks;
 		}
 
 		public void GetData()
         {
-            _model.SelectedSdk = lbxSelectSDK.SelectedItem.ToString();
+			_model.SelectedSdk = comboBoxAdvSDKList.SelectedItem.ToString();
         }
 
 	    public void Release()
 	    {
 	       _model = null;
-	        lbxSelectSDK.DataSource = null;
+		   comboBoxAdvSDKList.DataSource = null;
 	    }
 
 		public void SetBackButtonVisible(bool visible)
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			_logonView.HandleKeyPress(msg, keyData, lbxSelectSDK.Focused);
+			_logonView.HandleKeyPress(msg, keyData, true);
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
@@ -56,33 +57,6 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		private void buttonLogOnOK_Click(object sender, System.EventArgs e)
 		{
 			_logonView.ButtonLogOnOkClick(sender, e);
-		}
-
-		private void buttonLogOnCancel_Click(object sender, System.EventArgs e)
-		{
-			_logonView.ButtonLogOnCancelClick(sender, e);
-		}
-
-		private void lbxSelectSDK_DrawItem(object sender, DrawItemEventArgs e)
-		{
-			ListBox listBox = (ListBox)sender;
-			e.DrawBackground();
-			Brush myBrush = Brushes.Black;
-
-			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
-			{
-				myBrush = Brushes.White;
-				e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(0, 153, 255)), e.Bounds);
-			}
-
-			else
-			{
-				e.Graphics.FillRectangle(Brushes.White, e.Bounds);
-
-			}
-
-			e.Graphics.DrawString(listBox.Items[e.Index].ToString() , e.Font, myBrush, e.Bounds);
-			e.DrawFocusRectangle();
 		}
 	}
 }

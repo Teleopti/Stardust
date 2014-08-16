@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.Win.Main
 		{
 			pnlContent.Controls.Clear();
 			pnlContent.Controls.Add(userControl);
+			userControl.Dock = DockStyle.Fill;
 			ActiveControl = userControl;
 			pnlContent.Visible = true;
 		}
@@ -140,11 +141,6 @@ namespace Teleopti.Ccc.Win.Main
 		{
 			//We must call back so we not just hang
 			Presenter.Initialize();
-		}
-
-		private void LogonView_Load(object sender, EventArgs e)
-		{
-			//Presenter.Initialize();
 		}
 
 		public void HideView()
@@ -205,6 +201,15 @@ namespace Teleopti.Ccc.Win.Main
 
 					break;
 			}
+		}
+
+		private void LogonView_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			//if (_exiting)
+			//	return;
+
+			//e.Cancel = true;
+			//Exit(DialogResult.Cancel);
 		}
 	}
 }
