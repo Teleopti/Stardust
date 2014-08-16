@@ -55,7 +55,7 @@
 			// 
 			this.labelPassword.AutoSize = true;
 			this.labelPassword.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelPassword.Location = new System.Drawing.Point(6, 74);
+			this.labelPassword.Location = new System.Drawing.Point(6, 70);
 			this.labelPassword.Name = "labelPassword";
 			this.labelPassword.Size = new System.Drawing.Size(57, 15);
 			this.labelPassword.TabIndex = 39;
@@ -65,7 +65,7 @@
 			// 
 			this.labelLoginName.AutoSize = true;
 			this.labelLoginName.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelLoginName.Location = new System.Drawing.Point(6, 45);
+			this.labelLoginName.Location = new System.Drawing.Point(6, 41);
 			this.labelLoginName.Name = "labelLoginName";
 			this.labelLoginName.Size = new System.Drawing.Size(70, 15);
 			this.labelLoginName.TabIndex = 38;
@@ -116,7 +116,7 @@
 			this.textBoxLogOnName.CornerRadius = 4;
 			this.textBoxLogOnName.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxLogOnName.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBoxLogOnName.Location = new System.Drawing.Point(82, 41);
+			this.textBoxLogOnName.Location = new System.Drawing.Point(82, 37);
 			this.textBoxLogOnName.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxLogOnName.MinimumSize = new System.Drawing.Size(12, 8);
 			this.textBoxLogOnName.Name = "textBoxLogOnName";
@@ -133,7 +133,7 @@
 			this.textBoxPassword.CornerRadius = 4;
 			this.textBoxPassword.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxPassword.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBoxPassword.Location = new System.Drawing.Point(82, 70);
+			this.textBoxPassword.Location = new System.Drawing.Point(82, 66);
 			this.textBoxPassword.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxPassword.MinimumSize = new System.Drawing.Size(12, 8);
 			this.textBoxPassword.Name = "textBoxPassword";

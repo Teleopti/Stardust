@@ -17,26 +17,30 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 	        _logonView = logonView;
 	        _model = model;
             InitializeComponent();
-            labelChooseBu.Text = Resources.PleaseChooseABusinessUnit;
-			buttonLogOnCancel.Text = Resources.Cancel;
-			buttonLogOnOK.Text = Resources.Ok;
-			btnBack.Text = Resources.Back;
+            if(!DesignMode)
+				runTimeDesign();
 		}
 
-        public void SetData()
+		private void runTimeDesign()
 		{
-			lbxSelectBu.DataSource = _model.AvailableBus;
+			comboBoxAdvBUList.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
+		}
+		
+        public void SetData()
+        {
+	        comboBoxAdvBUList.DisplayMember = "Name";
+			comboBoxAdvBUList.DataSource = _model.AvailableBus;
 		}
 
 		public void GetData()
 	    {
-            _model.SelectedBu = (IBusinessUnit)lbxSelectBu.SelectedItem;
+			_model.SelectedBu = (IBusinessUnit)comboBoxAdvBUList.SelectedItem;
 	    }
 
 	    public void Release()
 	    {
 	        _model = null;
-	        lbxSelectBu.DataSource = null;
+			comboBoxAdvBUList.DataSource = null;
 	    }
 
 		public void SetBackButtonVisible(bool visible)
@@ -46,7 +50,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			_logonView.HandleKeyPress(msg, keyData, lbxSelectBu.Focused);
+			_logonView.HandleKeyPress(msg, keyData, comboBoxAdvBUList.Focused);
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
@@ -60,31 +64,5 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			_logonView.ButtonLogOnOkClick(sender, e);
 		}
 
-		private void buttonLogOnCancel_Click(object sender, System.EventArgs e)
-		{
-			_logonView.ButtonLogOnCancelClick(sender, e);
-		}
-
-		private void lbxSelectBu_DrawItem(object sender, DrawItemEventArgs e)
-		{
-			ListBox listBox = (ListBox)sender;
-			e.DrawBackground();
-			Brush myBrush = Brushes.Black;
-
-			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
-			{
-				myBrush = Brushes.White;
-				e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(0,153,255)), e.Bounds);
-			}
-
-			else
-			{
-				e.Graphics.FillRectangle(Brushes.White, e.Bounds);
-
-			}
-
-			e.Graphics.DrawString(((BusinessUnit)(listBox.Items[e.Index])).Name, e.Font, myBrush, e.Bounds);
-			e.DrawFocusRectangle();
-		}
 	}
 }

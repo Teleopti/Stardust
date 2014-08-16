@@ -30,115 +30,94 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		{
 			this.components = new System.ComponentModel.Container();
 			this.labelChooseBu = new System.Windows.Forms.Label();
-			this.lbxSelectBu = new System.Windows.Forms.ListBox();
 			this.btnBack = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.buttonLogOnCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonLogOnOK = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.comboBoxAdvBUList = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvBUList)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// labelChooseBu
 			// 
-			this.labelChooseBu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelChooseBu.AutoSize = true;
 			this.labelChooseBu.BackColor = System.Drawing.Color.Transparent;
-			this.labelChooseBu.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelChooseBu.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelChooseBu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.labelChooseBu.Location = new System.Drawing.Point(0, 0);
 			this.labelChooseBu.Name = "labelChooseBu";
-			this.labelChooseBu.Padding = new System.Windows.Forms.Padding(0, 15, 0, 0);
-			this.labelChooseBu.Size = new System.Drawing.Size(483, 245);
+			this.labelChooseBu.Size = new System.Drawing.Size(177, 25);
 			this.labelChooseBu.TabIndex = 36;
-			this.labelChooseBu.Text = "xxChooseBu";
-			this.labelChooseBu.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
-			// lbxSelectBu
-			// 
-			this.lbxSelectBu.DisplayMember = "Name";
-			this.lbxSelectBu.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.lbxSelectBu.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lbxSelectBu.FormattingEnabled = true;
-			this.lbxSelectBu.ItemHeight = 17;
-			this.lbxSelectBu.Location = new System.Drawing.Point(71, 51);
-			this.lbxSelectBu.Name = "lbxSelectBu";
-			this.lbxSelectBu.Size = new System.Drawing.Size(352, 123);
-			this.lbxSelectBu.TabIndex = 37;
-			this.lbxSelectBu.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.lbxSelectBu_DrawItem);
+			this.labelChooseBu.Text = "Select business unit";
 			// 
 			// btnBack
 			// 
+			this.btnBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnBack.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.btnBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.btnBack.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.btnBack.BackColor = System.Drawing.Color.White;
+			this.btnBack.BeforeTouchSize = new System.Drawing.Size(35, 35);
 			this.btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.btnBack.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.btnBack.ForeColor = System.Drawing.Color.White;
+			this.btnBack.Image = global::Teleopti.Ccc.Win.Properties.Resources.left_round_32;
 			this.btnBack.IsBackStageButton = false;
-			this.btnBack.Location = new System.Drawing.Point(186, 190);
+			this.btnBack.Location = new System.Drawing.Point(209, 107);
 			this.btnBack.Name = "btnBack";
-			this.btnBack.Size = new System.Drawing.Size(75, 23);
+			this.btnBack.Size = new System.Drawing.Size(35, 35);
 			this.btnBack.TabIndex = 42;
-			this.btnBack.Text = "xxBack";
 			this.btnBack.UseVisualStyleBackColor = false;
 			this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
-			// 
-			// buttonLogOnCancel
-			// 
-			this.buttonLogOnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonLogOnCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonLogOnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonLogOnCancel.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.buttonLogOnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonLogOnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonLogOnCancel.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.buttonLogOnCancel.ForeColor = System.Drawing.Color.White;
-			this.buttonLogOnCancel.IsBackStageButton = false;
-			this.buttonLogOnCancel.Location = new System.Drawing.Point(348, 190);
-			this.buttonLogOnCancel.Name = "buttonLogOnCancel";
-			this.buttonLogOnCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonLogOnCancel.TabIndex = 41;
-			this.buttonLogOnCancel.Text = "xxCancel";
-			this.buttonLogOnCancel.UseVisualStyleBackColor = false;
-			this.buttonLogOnCancel.Click += new System.EventHandler(this.buttonLogOnCancel_Click);
 			// 
 			// buttonLogOnOK
 			// 
 			this.buttonLogOnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonLogOnOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonLogOnOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonLogOnOK.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonLogOnOK.BackColor = System.Drawing.Color.White;
+			this.buttonLogOnOK.BeforeTouchSize = new System.Drawing.Size(35, 35);
 			this.buttonLogOnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonLogOnOK.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonLogOnOK.ForeColor = System.Drawing.Color.White;
+			this.buttonLogOnOK.Image = global::Teleopti.Ccc.Win.Properties.Resources.right_round_32;
 			this.buttonLogOnOK.IsBackStageButton = false;
-			this.buttonLogOnOK.Location = new System.Drawing.Point(267, 190);
+			this.buttonLogOnOK.Location = new System.Drawing.Point(250, 107);
 			this.buttonLogOnOK.Name = "buttonLogOnOK";
-			this.buttonLogOnOK.Size = new System.Drawing.Size(75, 23);
+			this.buttonLogOnOK.Size = new System.Drawing.Size(35, 35);
 			this.buttonLogOnOK.TabIndex = 40;
-			this.buttonLogOnOK.Text = "xxOK";
 			this.buttonLogOnOK.UseVisualStyleBackColor = false;
 			this.buttonLogOnOK.Click += new System.EventHandler(this.buttonLogOnOK_Click);
+			// 
+			// comboBoxAdvBUList
+			// 
+			this.comboBoxAdvBUList.BackColor = System.Drawing.Color.White;
+			this.comboBoxAdvBUList.BeforeTouchSize = new System.Drawing.Size(223, 23);
+			this.comboBoxAdvBUList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxAdvBUList.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.comboBoxAdvBUList.Location = new System.Drawing.Point(5, 28);
+			this.comboBoxAdvBUList.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.comboBoxAdvBUList.Name = "comboBoxAdvBUList";
+			this.comboBoxAdvBUList.Size = new System.Drawing.Size(223, 23);
+			this.comboBoxAdvBUList.TabIndex = 44;
 			// 
 			// SelectBuScreen
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.BackColor = System.Drawing.Color.White;
+			this.Controls.Add(this.comboBoxAdvBUList);
 			this.Controls.Add(this.btnBack);
-			this.Controls.Add(this.buttonLogOnCancel);
 			this.Controls.Add(this.buttonLogOnOK);
-			this.Controls.Add(this.lbxSelectBu);
 			this.Controls.Add(this.labelChooseBu);
 			this.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "SelectBuScreen";
-			this.Size = new System.Drawing.Size(483, 296);
+			this.Size = new System.Drawing.Size(285, 142);
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvBUList)).EndInit();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
 		#endregion
 
-        private System.Windows.Forms.Label labelChooseBu;
-		private System.Windows.Forms.ListBox lbxSelectBu;
+		private System.Windows.Forms.Label labelChooseBu;
 		private Syncfusion.Windows.Forms.ButtonAdv btnBack;
-		private Syncfusion.Windows.Forms.ButtonAdv buttonLogOnCancel;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonLogOnOK;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvBUList;
 	}
 }
