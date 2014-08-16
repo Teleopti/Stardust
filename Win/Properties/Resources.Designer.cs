@@ -2001,16 +2001,6 @@ namespace Teleopti.Ccc.Win.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Logon {
-            get {
-                object obj = ResourceManager.GetObject("Logon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Magifier_zoom_out {
@@ -2277,6 +2267,16 @@ namespace Teleopti.Ccc.Win.Properties {
             get {
                 object obj = ResourceManager.GetObject("Teleopti_WFM_main_icon256", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon TeleoptiWFMLogin {
+            get {
+                object obj = ResourceManager.GetObject("TeleoptiWFMLogin", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

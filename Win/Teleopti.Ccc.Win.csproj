@@ -3811,6 +3811,7 @@
     <Content Include="Resources\lock-off-32x32.png" />
     <None Include="Resources\Logon.ico" />
     <None Include="Resources\LoginHeaderText.png" />
+    <None Include="Resources\Login1.ico" />
     <Content Include="Resources\magnifier_16x16.png" />
     <Content Include="Resources\magnifier_8x8.png" />
     <None Include="Resources\Magnifier_zoom_in.png" />
@@ -3838,6 +3839,7 @@
     <Content Include="Resources\tag_blue.png" />
     <Content Include="Resources\tb_report-sched.png" />
     <None Include="Resources\Teleopti-WFM-main-icon256.png" />
+    <None Include="Resources\TeleoptiWFMLogin.ico" />
     <Content Include="Resources\test_add2.png" />
     <Content Include="Resources\test_delete_32x32.png" />
     <Content Include="Resources\text_list_bullets.png" />

@@ -211,5 +211,10 @@ namespace Teleopti.Ccc.Win.Main
 			//e.Cancel = true;
 			//Exit(DialogResult.Cancel);
 		}
+
+		private void LogonView_Load(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
