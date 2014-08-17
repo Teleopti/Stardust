@@ -202,19 +202,5 @@ namespace Teleopti.Ccc.Win.Main
 					break;
 			}
 		}
-
-		private void LogonView_FormClosing(object sender, FormClosingEventArgs e)
-		{
-			//if (_exiting)
-			//	return;
-
-			//e.Cancel = true;
-			//Exit(DialogResult.Cancel);
-		}
-
-		private void LogonView_Load(object sender, EventArgs e)
-		{
-
-		}
 	}
 }

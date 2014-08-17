@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
         public void SetData()
 		{
 			comboBoxAdvSDKList.DataSource = _model.Sdks;
+			comboBoxAdvSDKList.Select();
 		}
 
 		public void GetData()
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			_logonView.HandleKeyPress(msg, keyData, true);
+			_logonView.HandleKeyPress(msg, keyData, comboBoxAdvSDKList.Focused);
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 

@@ -1,7 +1,4 @@
-using System.Drawing;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
 
@@ -30,6 +27,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
         {
 	        comboBoxAdvBUList.DisplayMember = "Name";
 			comboBoxAdvBUList.DataSource = _model.AvailableBus;
+			comboBoxAdvBUList.Select();
 		}
 
 		public void GetData()

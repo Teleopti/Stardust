@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
 
@@ -44,7 +41,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 				comboBoxAdvDataSource.DataSource = _availableApplicationDataSources;
 			}
 
-			comboBoxAdvDataSource.Focus();
+			comboBoxAdvDataSource.Select();
 		}
 
 		public void GetData()
@@ -65,7 +62,8 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			_logonView.HandleKeyPress(msg, keyData, true);
+			_logonView.HandleKeyPress(msg, keyData,
+				comboBoxAdvDataSource.Focused || radioButtonAdvWindows.Focused || radioButtonAdvApplication.Focused);
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
@@ -92,7 +90,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 				comboBoxAdvDataSource.DataSource = _availableApplicationDataSources;
 			}
 
-			comboBoxAdvDataSource.Focus();
+			comboBoxAdvDataSource.Select();
 		}
 
 	}

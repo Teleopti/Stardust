@@ -85,7 +85,7 @@
 			this.btnBack.Location = new System.Drawing.Point(209, 107);
 			this.btnBack.Name = "btnBack";
 			this.btnBack.Size = new System.Drawing.Size(35, 35);
-			this.btnBack.TabIndex = 43;
+			this.btnBack.TabIndex = 3;
 			this.btnBack.UseVisualStyleBackColor = false;
 			this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
 			// 
@@ -103,14 +103,14 @@
 			this.buttonLogOnOK.Location = new System.Drawing.Point(250, 107);
 			this.buttonLogOnOK.Name = "buttonLogOnOK";
 			this.buttonLogOnOK.Size = new System.Drawing.Size(35, 35);
-			this.buttonLogOnOK.TabIndex = 41;
+			this.buttonLogOnOK.TabIndex = 2;
 			this.buttonLogOnOK.UseVisualStyleBackColor = false;
 			this.buttonLogOnOK.Click += new System.EventHandler(this.buttonLogOnOK_Click);
 			// 
 			// textBoxLogOnName
 			// 
 			this.textBoxLogOnName.BackColor = System.Drawing.Color.White;
-			this.textBoxLogOnName.BeforeTouchSize = new System.Drawing.Size(144, 23);
+			this.textBoxLogOnName.BeforeTouchSize = new System.Drawing.Size(100, 20);
 			this.textBoxLogOnName.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxLogOnName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxLogOnName.CornerRadius = 4;
@@ -122,12 +122,12 @@
 			this.textBoxLogOnName.Name = "textBoxLogOnName";
 			this.textBoxLogOnName.Size = new System.Drawing.Size(144, 23);
 			this.textBoxLogOnName.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Metro;
-			this.textBoxLogOnName.TabIndex = 44;
+			this.textBoxLogOnName.TabIndex = 0;
 			// 
 			// textBoxPassword
 			// 
 			this.textBoxPassword.BackColor = System.Drawing.Color.White;
-			this.textBoxPassword.BeforeTouchSize = new System.Drawing.Size(144, 23);
+			this.textBoxPassword.BeforeTouchSize = new System.Drawing.Size(100, 20);
 			this.textBoxPassword.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxPassword.CornerRadius = 4;
@@ -140,7 +140,7 @@
 			this.textBoxPassword.PasswordChar = '●';
 			this.textBoxPassword.Size = new System.Drawing.Size(144, 23);
 			this.textBoxPassword.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Metro;
-			this.textBoxPassword.TabIndex = 45;
+			this.textBoxPassword.TabIndex = 1;
 			this.textBoxPassword.UseSystemPasswordChar = true;
 			// 
 			// LoginScreen

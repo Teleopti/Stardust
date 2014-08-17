@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.btnBack.Location = new System.Drawing.Point(209, 107);
 			this.btnBack.Name = "btnBack";
 			this.btnBack.Size = new System.Drawing.Size(35, 35);
-			this.btnBack.TabIndex = 42;
+			this.btnBack.TabIndex = 2;
 			this.btnBack.UseVisualStyleBackColor = false;
 			this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
 			// 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonLogOnOK.Location = new System.Drawing.Point(250, 107);
 			this.buttonLogOnOK.Name = "buttonLogOnOK";
 			this.buttonLogOnOK.Size = new System.Drawing.Size(35, 35);
-			this.buttonLogOnOK.TabIndex = 40;
+			this.buttonLogOnOK.TabIndex = 1;
 			this.buttonLogOnOK.UseVisualStyleBackColor = false;
 			this.buttonLogOnOK.Click += new System.EventHandler(this.buttonLogOnOK_Click);
 			// 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.comboBoxAdvBUList.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.comboBoxAdvBUList.Name = "comboBoxAdvBUList";
 			this.comboBoxAdvBUList.Size = new System.Drawing.Size(223, 23);
-			this.comboBoxAdvBUList.TabIndex = 44;
+			this.comboBoxAdvBUList.TabIndex = 0;
 			// 
 			// SelectBuScreen
 			// 
