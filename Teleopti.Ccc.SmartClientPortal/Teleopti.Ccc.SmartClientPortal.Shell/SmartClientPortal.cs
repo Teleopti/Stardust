@@ -545,7 +545,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         {
             if (isOk)
             {
-                notifyIcon.Icon =  Resources.WFMIcon;
+                notifyIcon.Icon =  Resources.NotifyOK;
                 notifyIcon.Text = UserTexts.Resources.CheckSystemOk;
                 notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
                 notifyIcon.BalloonTipTitle = UserTexts.Resources.CheckSystemOk;
@@ -553,7 +553,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             }
             else
             {
-                notifyIcon.Icon = Resources.WFMIcon;
+                notifyIcon.Icon = Resources.NotifyWarning;
                 notifyIcon.Text = UserTexts.Resources.CheckSystemWarning;
                 notifyIcon.BalloonTipIcon = ToolTipIcon.Warning;
                 notifyIcon.BalloonTipTitle = UserTexts.Resources.CheckSystemWarning;

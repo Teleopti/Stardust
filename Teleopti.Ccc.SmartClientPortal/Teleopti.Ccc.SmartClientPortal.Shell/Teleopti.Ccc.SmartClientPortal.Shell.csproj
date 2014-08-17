@@ -28,7 +28,7 @@
     <AssemblyOriginatorKeyFile>..\..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <ApplicationIcon>WFM-Circle-1.ico</ApplicationIcon>
+    <ApplicationIcon>TeleoptiWFM.ico</ApplicationIcon>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -320,6 +320,10 @@
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
       <Link>CodeAnalysisDictionary.xml</Link>
     </CodeAnalysisDictionary>
+    <None Include="Resources\TeleoptiWFM.ico" />
+    <None Include="Resources\NotifyOK.ico" />
+    <None Include="Resources\NotifyWarning.ico" />
+    <Content Include="TeleoptiWFM.ico" />
     <Content Include="WFM-Circle-1.ico" />
     <None Include="packages.config">
       <SubType>Designer</SubType>

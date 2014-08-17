@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonPermissions.IsBackStageButton = false;
 			this.backStageButtonPermissions.Location = new System.Drawing.Point(0, 53);
 			this.backStageButtonPermissions.Name = "backStageButtonPermissions";
-			this.backStageButtonPermissions.Size = new System.Drawing.Size(128, 29);
+			this.backStageButtonPermissions.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonPermissions.TabIndex = 11;
 			this.backStageButtonPermissions.Text = "xxPermissions";
 			this.backStageButtonPermissions.Click += new System.EventHandler(this.toolStripButtonPermissons_Click);
@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonMyProfile.IsBackStageButton = false;
 			this.backStageButtonMyProfile.Location = new System.Drawing.Point(0, 82);
 			this.backStageButtonMyProfile.Name = "backStageButtonMyProfile";
-			this.backStageButtonMyProfile.Size = new System.Drawing.Size(128, 29);
+			this.backStageButtonMyProfile.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonMyProfile.TabIndex = 12;
 			this.backStageButtonMyProfile.Text = "xxMyProfile";
 			this.backStageButtonMyProfile.Click += new System.EventHandler(this.toolStripButtonMyProfile_Click);
@@ -387,7 +387,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonHelp.IsBackStageButton = false;
 			this.backStageButtonHelp.Location = new System.Drawing.Point(0, 111);
 			this.backStageButtonHelp.Name = "backStageButtonHelp";
-			this.backStageButtonHelp.Size = new System.Drawing.Size(128, 29);
+			this.backStageButtonHelp.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonHelp.TabIndex = 13;
 			this.backStageButtonHelp.Text = "xxHelp";
 			this.backStageButtonHelp.Click += new System.EventHandler(this.toolStripButtonHelp_Click);
@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonSignCustomerWeb.IsBackStageButton = false;
 			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(0, 140);
 			this.backStageButtonSignCustomerWeb.Name = "backStageButtonSignCustomerWeb";
-			this.backStageButtonSignCustomerWeb.Size = new System.Drawing.Size(128, 29);
+			this.backStageButtonSignCustomerWeb.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonSignCustomerWeb.TabIndex = 14;
 			this.backStageButtonSignCustomerWeb.Text = "xxSignCustomerWeb";
 			this.backStageButtonSignCustomerWeb.Click += new System.EventHandler(this.toolStripButtonCustomerWeb_Click);
@@ -422,7 +422,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonOptions.IsBackStageButton = false;
 			this.backStageButtonOptions.Location = new System.Drawing.Point(0, 181);
 			this.backStageButtonOptions.Name = "backStageButtonOptions";
-			this.backStageButtonOptions.Size = new System.Drawing.Size(128, 29);
+			this.backStageButtonOptions.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonOptions.TabIndex = 16;
 			this.backStageButtonOptions.Text = "xxOptions";
 			this.backStageButtonOptions.Click += new System.EventHandler(this.toolStripButtonSystemOptions_Click);
@@ -435,7 +435,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonAbout.IsBackStageButton = false;
 			this.backStageButtonAbout.Location = new System.Drawing.Point(0, 210);
 			this.backStageButtonAbout.Name = "backStageButtonAbout";
-			this.backStageButtonAbout.Size = new System.Drawing.Size(128, 29);
+			this.backStageButtonAbout.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonAbout.TabIndex = 17;
 			this.backStageButtonAbout.Text = "xxAbout";
 			this.backStageButtonAbout.Click += new System.EventHandler(this.toolStripButtonAbout_Click);
@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonExitTELEOPTICCC.IsBackStageButton = false;
 			this.backStageButtonExitTELEOPTICCC.Location = new System.Drawing.Point(0, 239);
 			this.backStageButtonExitTELEOPTICCC.Name = "backStageButtonExitTELEOPTICCC";
-			this.backStageButtonExitTELEOPTICCC.Size = new System.Drawing.Size(128, 29);
+			this.backStageButtonExitTELEOPTICCC.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonExitTELEOPTICCC.TabIndex = 18;
 			this.backStageButtonExitTELEOPTICCC.Text = "xxExitTELEOPTICCC";
 			this.backStageButtonExitTELEOPTICCC.Click += new System.EventHandler(this.toolStripButtonSystemExit_Click);

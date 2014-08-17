@@ -275,9 +275,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon NotifyIconOk {
+        public static System.Drawing.Icon NotifyOK {
             get {
-                object obj = ResourceManager.GetObject("NotifyIconOk", resourceCulture);
+                object obj = ResourceManager.GetObject("NotifyOK", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -285,9 +285,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        public static System.Drawing.Icon NotifyIconWarning {
+        public static System.Drawing.Icon NotifyWarning {
             get {
-                object obj = ResourceManager.GetObject("NotifyIconWarning", resourceCulture);
+                object obj = ResourceManager.GetObject("NotifyWarning", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -345,6 +345,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         public static string ServiceAddedOnDemand {
             get {
                 return ResourceManager.GetString("ServiceAddedOnDemand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon TeleoptiWFM {
+            get {
+                object obj = ResourceManager.GetObject("TeleoptiWFM", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -454,36 +464,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
             get {
                 object obj = ResourceManager.GetObject("WFM_Teleopti_WFM_main_small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon WFMIcon {
-            get {
-                object obj = ResourceManager.GetObject("WFMIcon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon WFMIconVarning {
-            get {
-                object obj = ResourceManager.GetObject("WFMIconVarning", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon WFMIconWarning1 {
-            get {
-                object obj = ResourceManager.GetObject("WFMIconWarning1", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
     }
