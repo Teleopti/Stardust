@@ -36,6 +36,7 @@
 						item.State(),
 						item.Activity(),
 						item.NextActivity(),
+						item.NextActivityStartTime(),
 						item.TeamName
 					], filter);
 
