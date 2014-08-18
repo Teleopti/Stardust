@@ -774,8 +774,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				if (timeInFilter.isChecked()) {
 					if (timeInFilter.isDayOff()) {
 						self.isDayoffFiltered(true);
+					} else {
+						self.filteredStartTimesText.push(timeInFilter.text);
 					}
-					self.filteredStartTimesText.push(timeInFilter.text);
 				} else {
 					if (timeInFilter.isDayOff()) {
 						self.isDayoffFiltered(false);
