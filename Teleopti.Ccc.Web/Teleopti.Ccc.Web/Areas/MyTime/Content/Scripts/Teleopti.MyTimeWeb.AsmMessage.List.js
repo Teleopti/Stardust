@@ -44,10 +44,14 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 
 			self.asmMessageList($.merge(self.asmMessageList(), asmMessageItems));
 		};
+
+		self.isBadgeFeatureEnabled = ko.observable(false);
 	}
 
 	function asmMessageItemViewModel(item) {
 		var self = this;
+		self.messageType = ko.observable(item.MessageType);
+		self.isBadgeMessage = ko.observable(self.messageType() == 1);
 		self.title = ko.observable(item.Title);
 		self.message = ko.observable(item.Message);
 	    self.errorMessage = ko.observable();
@@ -230,6 +234,15 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 				}
 			},
 			error: function () {
+			}
+		});
+
+		ajax.Ajax({
+			url: "../ToggleHandler/IsEnabled?toggle=MyTimeWeb_AgentBadge_28913",
+			success: function (data) {
+				if (data.IsEnabled) {
+					vm.isBadgeFeatureEnabled(true);
+				}
 			}
 		});
 	}

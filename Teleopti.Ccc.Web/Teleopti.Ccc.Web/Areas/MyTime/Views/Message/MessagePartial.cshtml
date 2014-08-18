@@ -20,6 +20,11 @@
 							</div>
 							<div>
 								<div>
+									<!-- ko if: $root.isBadgeFeatureEnabled-->
+									<span data-bind="visible: isBadgeMessage">
+										<i class="glyphicon glyphicon-star" style="color:gold"></i>
+									</span>
+									<!-- /ko -->
 									<span>@Resources.Sender: </span>
 									<span class="sender" data-bind="text: sender"></span>
 									<span>@Resources.Sent: </span>
