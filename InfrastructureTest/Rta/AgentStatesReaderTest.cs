@@ -226,21 +226,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				throw new NotImplementedException();
 			}
 
-			public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date)
+			public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold)
 			{
 				throw new NotImplementedException();
 			}
 
-			public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date)
+			public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
+				string timezoneCode, DateTime date, Percent adherenceThreshold)
 			{
 				throw new NotImplementedException();
 			}
 
-			public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date)
+			public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold)
 			{
 				throw new NotImplementedException();
 			}
-
 		}
 
 		private static IPerson createPersonInTeam(ITeam team)

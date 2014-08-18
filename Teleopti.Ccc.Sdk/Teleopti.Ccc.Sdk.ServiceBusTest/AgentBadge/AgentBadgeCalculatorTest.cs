@@ -15,18 +15,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 	public class AgentBadgeCalculatorTest
 	{
 		private const string _timezoneCode = "";
-		private const int silverToBronzeBadgeRate = 5;
-		private const int goldToSilverBadgeRate = 2;
 
 		private IAgentBadgeCalculator _calculator;
 		private DateOnly _calculateDateOnly;
 		private Guid _lastPersonId;
 		private List<IPerson> _allPersons;
 		private IStatisticRepository _statisticRepository;
+		private AgentBadgeThresholdSettings _badgeSetting;
 
 		[SetUp]
 		public void Setup()
 		{
+			_badgeSetting = new AgentBadgeThresholdSettings()
+			{
+				AdherenceThreshold = new Percent(0.6),
+				AHTThreshold = new TimeSpan(0, 5, 0),
+				AnsweredCallsThreshold = 10,
+				EnableBadge = true,
+				GoldToSilverBadgeRate = 2,
+				SilverToBronzeBadgeRate = 5
+			};
 			_allPersons = new List<IPerson>();
 
 			IPerson person = null;
@@ -44,18 +52,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_statisticRepository.Stub(
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-						_timezoneCode, DateTime.Now))
+						_timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold))
 				.IgnoreArguments().Return(new List<Guid> {_lastPersonId});
 
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsOverThresholdForAnsweredCalls(_timezoneCode, DateTime.Now))
+					x.LoadAgentsOverThresholdForAnsweredCalls(_timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold))
 				.IgnoreArguments()
 				.Return(new List<Guid> {_lastPersonId});
 
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsUnderThresholdForAHT(_timezoneCode, DateTime.Now))
+					x.LoadAgentsUnderThresholdForAHT(_timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold))
 				.IgnoreArguments()
 				.Return(new List<Guid> {_lastPersonId});
 
@@ -67,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			var result = _calculator.Calculate(_allPersons, _timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				silverToBronzeBadgeRate, goldToSilverBadgeRate);
+				_badgeSetting);
 
 			var lastPerson = result.First(x => x.Id == _lastPersonId);
 

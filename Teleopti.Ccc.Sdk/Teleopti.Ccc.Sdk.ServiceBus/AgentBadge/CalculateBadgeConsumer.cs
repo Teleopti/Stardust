@@ -71,9 +71,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			// Just hard code it now, the best solution is to trigger it from ETL
 			var nextMessageShouldBeProcessed =
 				TimeZoneInfo.ConvertTime(tomorrowForGivenTimeZone.Date, timeZone, TimeZoneInfo.Local).AddHours(5);
-			List<IPerson> peopleGotABadge;
 
-			using (_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var setting = _settingsRepository.LoadAll().FirstOrDefault();
 				if (setting == null)
@@ -84,20 +83,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				}
 				var adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 
-				var allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
+				ICollection<IPerson> allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
-				peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZoneCode, new DateOnly(message.CalculationDate),
-					adherenceReportSetting.CalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate).ToList();
+				List<IPerson> peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZoneCode, new DateOnly(message.CalculationDate),
+					adherenceReportSetting.CalculationMethod, setting).ToList();
 
 				if (Logger.IsDebugEnabled)
 				{
 					Logger.DebugFormat("Total {0} agents will get new badge", peopleGotABadge.Count());
 				}
-
-			}
-			//For some reason, the session above cant persist the message since the session changed somehow. Dont know why.
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
-			{
 				foreach (var person in peopleGotABadge)
 				{
 					if (Logger.IsDebugEnabled)
@@ -110,10 +104,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						.To(person)
 						.SendConversation(_msgPersister);
 				}
-
 				uow.PersistAll();
 			}
-			
 
 			if (_serviceBus == null) return;
 

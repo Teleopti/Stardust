@@ -137,18 +137,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-	    public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date)
-	    {
+	    public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold)
+		{
 			return new List<Guid>();
-	    }
+		}
 
 	    public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
-		    string timezoneCode, DateTime date)
+		    string timezoneCode, DateTime date, Percent adherenceThreshold)
 	    {
 			return new List<Guid>();
 	    }
 
-	    public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date)
+	    public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold)
 	    {
 			return new List<Guid>();
 	    }
