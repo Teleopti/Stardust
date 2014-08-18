@@ -35,8 +35,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private IDictionary<IAbsence, MonthlyProjectionVisualiser> _projectionCache =
 			new Dictionary<IAbsence, MonthlyProjectionVisualiser>();
 		private Point _gridPoint;
-		private const int maxHoursPerDay = 24;
-		private const int maxHoursPerWeek = 168;
 
 		public WorkflowControlSetView()
 		{
@@ -1022,35 +1020,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_presenter.SetStudentAvailabilityInputPeriod(studentAvailabilityInputPeriod);
 		}
 
-		private void textBoxExtMinTimePerWeek_Validating(object sender, CancelEventArgs e)
-		{
-				e.Cancel = validateMinHoursPerWeek();
-		}
-
-		private bool validateMinHoursPerWeek()
-		{
-			var cancel = false;
-
-			var hoursPerWeek = textBoxExtMinTimePerWeek.Value;
-			if (!validateMaxHours(hoursPerWeek, maxHoursPerWeek))
-			{
-				ViewBase.ShowErrorMessage(Resources.MaximumHoursPerWeekCannotBeMoreThan168Hours,
-								   Resources.TimeError);
-				cancel = true;
-			}
-
-			//Check contract setting
-			//var currentContract = (Contract)_contract;
-			//var maxHoursPerWeek = currentContract.WorkTimeDirective.MaxTimePerWeek;
-			//if (hoursPerWeek > maxHoursPerWeek)
-			//{
-			//	ViewBase.ShowErrorMessage("Resources.MinimumHoursPerWeekCannotBiggerThanMaximumHoursPerWeekInContract",
-			//		Resources.TimeError);
-			//	cancel = true;
-			//}
-
-			return cancel;
-		}
 
 		private void textBoxExtMinTimePerWeek_Validated(object sender, EventArgs e)
 		{
@@ -1058,31 +1027,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_presenter.SetMinTimePerWeek(textBoxExtMinTimePerWeek.Value);
 		}
 
-		private static bool validateMaxHours(TimeSpan timeSpan, int maxHours)
-		{
-			var isValid = true;
-
-			switch (maxHours)
-			{
-				case maxHoursPerDay:
-					if (timeSpan.Days > 0 || timeSpan.Hours > maxHours)
-					{
-						isValid = false;
-					}
-					break;
-				case maxHoursPerWeek:
-					if (timeSpan.Days * 24 + timeSpan.Hours > maxHours)
-					{
-						isValid = false;
-					}
-					break;
-				default:
-					isValid = false;
-					break;
-			}
-
-			return isValid;
-		}
 
 		private void twoListSelectorDayOffs_Load(object sender, EventArgs e)
 		{
