@@ -121,21 +121,6 @@
   <data name="help_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\help_32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Intraday" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\ccc_intraday.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_Reports" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Reports.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_Shift" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Shift.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_PersonalSettings_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_PersonalSettings_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_Forecasts" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Forecasts.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="information_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\information_16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -161,15 +146,6 @@
   <data name="ModuleNotFound" xml:space="preserve">
     <value>Assembly file {0} was not found.</value>
   </data>
-  <data name="ccc_Schedule" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Schedule.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="permission" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\permission.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_payroll" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_payroll.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="AddServicesCalled" xml:space="preserve">
     <value>AddServices() method called for Module {0}.</value>
   </data>
@@ -179,47 +155,17 @@
   <data name="ReferencedAssemblyNotFound" xml:space="preserve">
     <value>The ModuleLoaderService cannot initialize the module because some of their dependencies are not present. Make sure to deploy all the assemblies needed to execute the module.</value>
   </data>
-  <data name="ccc_People" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_People.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="NotifyIconWarning" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\NotifyIconWarning.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ServiceAdded" xml:space="preserve">
     <value>Service {1} added for Module {0}.</value>
   </data>
   <data name="NoUserProvidedForAuthentication" xml:space="preserve">
     <value>No user was selected for the authentication service.</value>
   </data>
-  <data name="ccc_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Settings.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_temp_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_temp_Settings.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ServiceAddedOnDemand" xml:space="preserve">
     <value>Service {1} will be added on demand for Module {0}.</value>
   </data>
   <data name="DependencyNotFound" xml:space="preserve">
     <value>Section '{0}' depends on section '{1}' which was not found.</value>
-  </data>
-  <data name="ccc_permission" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\ccc_permission.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="NotifyIconOk" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\NotifyIconOk.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Online" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Online.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WFMIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFMIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WFMIconVarning" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFMIconVarning.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WFMIconWarning1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFMIconWarning1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WFM_Budgets_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Budgets_small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -250,5 +196,14 @@
   </data>
   <data name="WFM_Performance_Manager_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Performance-Manager_small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NotifyOK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NotifyOK.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NotifyWarning" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NotifyWarning.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TeleoptiWFM" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TeleoptiWFM.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

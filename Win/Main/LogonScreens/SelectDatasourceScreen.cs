@@ -1,9 +1,8 @@
-using System.Drawing;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Common;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
 
@@ -13,58 +12,48 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 	{
 		private readonly ILogonView _logonView;
 		private LogonModel _model;
+		private List<IDataSourceContainer> _logonableWindowsDataSources;
+		private List<IDataSourceContainer> _availableApplicationDataSources;
 
 		public SelectDatasourceScreen(ILogonView logonView, LogonModel model)
 		{
 		    _logonView = logonView;
 		    _model = model;
             InitializeComponent();
-            labelChooseDataSource.Text = Resources.PleaseChooseADatasource;
-            tabPageWindowsDataSources.Text = Resources.WindowsLogon;
-            tabPageApplicationDataSources.Text = Resources.ApplicationLogon;
-			buttonLogOnCancel.Text = Resources.Cancel;
-			buttonLogOnOK.Text = Resources.Ok;
-			btnBack.Text = Resources.Back;
+			if (!DesignMode)
+				runTimeDesign();
 		}
 
+		private void runTimeDesign()
+		{
+			comboBoxAdvDataSource.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
+		}
 		public void SetData()
 		{
-            var logonableWindowsDataSources = _model.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Windows).ToList();
-            var availableApplicationDataSources = _model.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Application).ToList();
+			_logonableWindowsDataSources = _model.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Windows).ToList();
+			_availableApplicationDataSources = _model.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Application).ToList();
+			comboBoxAdvDataSource.DisplayMember = "DataSourceName";
+			comboBoxAdvDataSource.DataSource = _logonableWindowsDataSources;
 
-            listBoxApplicationDataSources.DataSource = availableApplicationDataSources;
-            listBoxWindowsDataSources.DataSource = logonableWindowsDataSources;
-
-		    Control itemToFocus;
-			if (logonableWindowsDataSources.Count < 1)
+			if (_logonableWindowsDataSources.Count < 1)
 			{
-			    var idx = tabControlChooseDataSource.TabPages.IndexOf(tabPageWindowsDataSources);
-                if(idx > -1)
-                    tabControlChooseDataSource.TabPages.RemoveAt(idx);
-				tabControlChooseDataSource.SelectedIndex = 0;
-				itemToFocus  = listBoxApplicationDataSources;
-			}
-			else
-			{
-				itemToFocus = listBoxWindowsDataSources;
+				radioButtonAdvApplication.Visible = false;
+				radioButtonAdvWindows.Visible = false;
+				comboBoxAdvDataSource.DataSource = _availableApplicationDataSources;
 			}
 
-            tabControlChooseDataSource.Visible = true;
-		    itemToFocus.Focus();
+			comboBoxAdvDataSource.Select();
 		}
 
 		public void GetData()
 	    {
-            _model.SelectedDataSourceContainer = (IDataSourceContainer)listBoxApplicationDataSources.SelectedItem;
-            if (tabControlChooseDataSource.SelectedTab.Equals(tabPageWindowsDataSources))
-                _model.SelectedDataSourceContainer = (IDataSourceContainer)listBoxWindowsDataSources.SelectedItem;
+            _model.SelectedDataSourceContainer = (IDataSourceContainer)comboBoxAdvDataSource.SelectedItem;
 	    }
 
 	    public void Release()
 	    {
 	        _model = null;
-	        listBoxWindowsDataSources.DataSource = null;
-	        listBoxApplicationDataSources.DataSource = null;
+			comboBoxAdvDataSource.DataSource = null;
 	    }
 
 		public void SetBackButtonVisible(bool visible)
@@ -74,7 +63,15 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			_logonView.HandleKeyPress(msg, keyData, listBoxWindowsDataSources.Focused || listBoxApplicationDataSources.Focused);
+			if(ActiveControl == null)
+				return base.ProcessCmdKey(ref msg, keyData);
+
+			var controlType = ActiveControl.GetType();
+			if (controlType == typeof (ComboBoxAdv) || controlType == typeof(RadioButtonAdv))
+			{
+				_logonView.HandleKeyPress(msg, keyData, true);
+			}
+			
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
@@ -83,58 +80,26 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			_logonView.ButtonLogOnOkClick(sender, e);
 		}
 
-		private void buttonLogOnCancel_Click(object sender, System.EventArgs e)
-		{
-			_logonView.ButtonLogOnCancelClick(sender, e);		
-		}
-
 		private void btnBack_Click(object sender, System.EventArgs e)
 		{
 			_logonView.BtnBackClick(sender, e);
 		}
 
-		private void listBoxWindowsDataSources_DrawItem(object sender, DrawItemEventArgs e)
+		private void radioButtonAdvWindows_CheckChanged(object sender, System.EventArgs e)
 		{
-			ListBox listBox = (ListBox)sender;
-			e.DrawBackground();
-			Brush myBrush = Brushes.Black;
-
-			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+			comboBoxAdvDataSource.DataSource = null;
+			comboBoxAdvDataSource.DisplayMember = "DataSourceName";
+			if (radioButtonAdvWindows.Checked)
 			{
-				myBrush = Brushes.White;
-				e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(0, 153, 255)), e.Bounds);
+				comboBoxAdvDataSource.DataSource = _logonableWindowsDataSources;
 			}
-
 			else
 			{
-				e.Graphics.FillRectangle(Brushes.White, e.Bounds);
-
+				comboBoxAdvDataSource.DataSource = _availableApplicationDataSources;
 			}
 
-			e.Graphics.DrawString(((DataSourceContainer)(listBox.Items[e.Index])).DataSourceName, e.Font, myBrush, e.Bounds);
-			e.DrawFocusRectangle();
+			comboBoxAdvDataSource.Select();
 		}
 
-		private void listBoxApplicationDataSources_DrawItem(object sender, DrawItemEventArgs e)
-		{
-			ListBox listBox = (ListBox)sender;
-			e.DrawBackground();
-			Brush myBrush = Brushes.Black;
-
-			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
-			{
-				myBrush = Brushes.White;
-				e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(0, 153, 255)), e.Bounds);
-			}
-
-			else
-			{
-				e.Graphics.FillRectangle(Brushes.White, e.Bounds);
-
-			}
-
-			e.Graphics.DrawString(((DataSourceContainer)(listBox.Items[e.Index])).DataSourceName, e.Font, myBrush, e.Bounds);
-			e.DrawFocusRectangle();
-		}
 	}
 }

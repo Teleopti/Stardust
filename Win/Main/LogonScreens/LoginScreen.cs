@@ -1,5 +1,4 @@
 using System.Windows.Forms;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.Win.Main.LogonScreens
@@ -14,12 +13,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		    _logonView = logonView;
 		    _model = model;
             InitializeComponent();
-            labelLogOn.Text = Resources.PleaseEnterYourLogonCredentials;
-            labelLoginName.Text = Resources.LoginNameColon;
-            labelPassword.Text = Resources.PasswordColon;
-			buttonLogOnCancel.Text = Resources.Cancel;
-			buttonLogOnOK.Text = Resources.Ok;
-			btnBack.Text = Resources.Back;
+            
 		}
 
         public void SetData()
@@ -65,9 +59,5 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			_logonView.ButtonLogOnOkClick(sender, e);
 		}
 
-		private void buttonLogOnCancel_Click(object sender, System.EventArgs e)
-		{
-			_logonView.ButtonLogOnCancelClick(sender, e);
-		}
 	}
 }

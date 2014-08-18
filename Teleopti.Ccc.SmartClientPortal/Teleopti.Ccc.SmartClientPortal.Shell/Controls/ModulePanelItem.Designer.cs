@@ -52,7 +52,7 @@
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(146, 32);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(143, 32);
 			this.tableLayoutPanel1.TabIndex = 0;
 			this.tableLayoutPanel1.Click += new System.EventHandler(this.onClick);
 			this.tableLayoutPanel1.MouseEnter += new System.EventHandler(this.onMouseEnter);
@@ -90,7 +90,8 @@
 			this.labelModuleText.AutoSize = true;
 			this.labelModuleText.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.labelModuleText.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelModuleText.Location = new System.Drawing.Point(35, 0);
+			this.labelModuleText.Location = new System.Drawing.Point(32, 0);
+			this.labelModuleText.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.labelModuleText.Name = "labelModuleText";
 			this.labelModuleText.Size = new System.Drawing.Size(108, 32);
 			this.labelModuleText.TabIndex = 1;
@@ -113,7 +114,7 @@
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Margin = new System.Windows.Forms.Padding(2);
 			this.Name = "ModulePanelItem";
-			this.Size = new System.Drawing.Size(146, 32);
+			this.Size = new System.Drawing.Size(143, 32);
 			this.Click += new System.EventHandler(this.onClick);
 			this.MouseEnter += new System.EventHandler(this.onMouseEnter);
 			this.MouseLeave += new System.EventHandler(this.onMouseLeave);

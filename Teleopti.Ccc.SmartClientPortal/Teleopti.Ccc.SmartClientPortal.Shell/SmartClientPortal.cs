@@ -210,55 +210,46 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
 		private void SmartClientShellForm_Load(object sender, EventArgs e)
 		{
-			using (Splash splashScreen = new Splash())
+			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
+			var loggedOnBu = identity.BusinessUnit;
+			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
+			ribbonControlAdv1.MenuButtonText = LanguageResourceHelper.Translate(ribbonControlAdv1.MenuButtonText);
+			toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;
+			toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text +
+			                                        ApplicationTextHelper.LoggedOnUserText;
+
+			setNotifyData(_systemChecker.IsOk());
+
+			LoadOutLookBar();
+
+			InitializeSmartPartInvoker();
+
+			Roger65(string.Empty);
+			SetPermissionOnToolStripButtonControls();
+
+			if (!string.IsNullOrEmpty(_portalSettings.LastModule))
 			{
-				Hide();
-				splashScreen.TopMost = true;
-				splashScreen.Show(this);
-				splashScreen.Refresh();
-
-				var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
-				var loggedOnBu = identity.BusinessUnit;
-				Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
-				ribbonControlAdv1.MenuButtonText = LanguageResourceHelper.Translate(ribbonControlAdv1.MenuButtonText);
-				toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;
-				toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text +
-				                                        ApplicationTextHelper.LoggedOnUserText;
-
-				setNotifyData(_systemChecker.IsOk());
-
-				LoadOutLookBar();
-
-				InitializeSmartPartInvoker();
-
-				Roger65(string.Empty);
-				SetPermissionOnToolStripButtonControls();
-
-				if (!string.IsNullOrEmpty(_portalSettings.LastModule))
-				{
-					startModule(_portalSettings.LastModule);
-				}
-				else
-				{
-					startFirstEnabledModule();
-				}
-
-				var showMemConfig = ConfigurationManager.AppSettings.Get("ShowMem");
-				bool showMemBool;
-				if (bool.TryParse(showMemConfig, out showMemBool))
-				{
-					if (showMemBool)
-					{
-						showMem();
-					}
-				}
-
-				//var uri = new Uri("http://www.teleopti.com/wfmv8/landingpage/iframe");
-				//webBrowser1.Navigate(uri);
-				//webBrowser1.Visible = true;
-				
+				startModule(_portalSettings.LastModule);
 			}
-			Show();
+			else
+			{
+				startFirstEnabledModule();
+			}
+
+			var showMemConfig = ConfigurationManager.AppSettings.Get("ShowMem");
+			bool showMemBool;
+			if (bool.TryParse(showMemConfig, out showMemBool))
+			{
+				if (showMemBool)
+				{
+					showMem();
+				}
+			}
+
+			//var uri = new Uri("http://www.teleopti.com/wfmv8/landingpage/iframe");
+			//webBrowser1.Navigate(uri);
+			//webBrowser1.Visible = true;
+
 		}
 
 		private void showMem()
@@ -438,7 +429,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                         outlookBarSmartPartInfo.Icon = Resources.WFM_Intraday_small ;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.OpenPermissionPage:
-                        outlookBarSmartPartInfo.Icon = Resources.ccc_permission;
+                        outlookBarSmartPartInfo.Icon = Resources.WFM_Teleopti_WFM_main_small;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.Shifts:
                         outlookBarSmartPartInfo.Icon = Resources.WFM_Shifts_small ;
@@ -447,7 +438,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                         outlookBarSmartPartInfo.Icon = Resources.WFM_Reports_small;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.OpenOptionsPage:
-                        outlookBarSmartPartInfo.Icon = Resources.ccc_Settings;
+						outlookBarSmartPartInfo.Icon = Resources.WFM_Teleopti_WFM_main_small;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.OpenBudgets:
                         outlookBarSmartPartInfo.Icon = Resources.WFM_Budgets_small ;
@@ -554,7 +545,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         {
             if (isOk)
             {
-                notifyIcon.Icon =  Resources.WFMIcon;
+                notifyIcon.Icon =  Resources.NotifyOK;
                 notifyIcon.Text = UserTexts.Resources.CheckSystemOk;
                 notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
                 notifyIcon.BalloonTipTitle = UserTexts.Resources.CheckSystemOk;
@@ -562,7 +553,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             }
             else
             {
-                notifyIcon.Icon = Resources.WFMIcon;
+                notifyIcon.Icon = Resources.NotifyWarning;
                 notifyIcon.Text = UserTexts.Resources.CheckSystemWarning;
                 notifyIcon.BalloonTipIcon = ToolTipIcon.Warning;
                 notifyIcon.BalloonTipTitle = UserTexts.Resources.CheckSystemWarning;
