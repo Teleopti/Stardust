@@ -70,15 +70,10 @@ namespace Teleopti.Ccc.DomainTest.Helper
             DateTime dateWorkday = new DateTime(2007, 11, 22);
             DateTime dateWeekend1 = new DateTime(2007, 11, 24);
             DateTime dateWeekend2 = new DateTime(2007, 11, 25);
-            DateTime dateWeekend3 = new DateTime(2007, 12, 13);
 
             Assert.IsFalse(DateHelper.IsWeekend(dateWorkday, _cult));
             Assert.IsTrue(DateHelper.IsWeekend(dateWeekend1, _cult));
             Assert.IsTrue(DateHelper.IsWeekend(dateWeekend2, _cult));
-            CultureInfo arabic = new CultureInfo("ar-SA");
-            Assert.IsTrue(DateHelper.IsWeekend(dateWeekend3, arabic));
-            Assert.IsTrue(DateHelper.IsWeekend(dateWeekend3.AddDays(1), arabic));
-            Assert.IsFalse(DateHelper.IsWeekend(dateWeekend3.AddDays(2), arabic));
         }
 
         /// <summary>
@@ -138,10 +133,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
             CultureInfo culture = CultureInfo.GetCultureInfo(1053); //Swedish
 
             Assert.AreEqual(expected, DateHelper.GetFirstDateInWeek(dateToUse, culture));
-
-            expected = new DateTime(2007, 12, 15);
-            culture = CultureInfo.GetCultureInfo(1025); //Arabic - Saudi
-            Assert.AreEqual(expected, DateHelper.GetFirstDateInWeek(dateToUse, culture));
         }
 
         /// <summary>
@@ -158,10 +149,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
             DateTime expected = new DateTime(2007, 12, 23);
             CultureInfo culture = CultureInfo.GetCultureInfo(1053); //Swedish
 
-            Assert.AreEqual(expected, DateHelper.GetLastDateInWeek(dateToUse, culture));
-
-            expected = new DateTime(2007, 12, 21);
-            culture = CultureInfo.GetCultureInfo(1025); //Arabic - Saudi
             Assert.AreEqual(expected, DateHelper.GetLastDateInWeek(dateToUse, culture));
         }
 
@@ -208,13 +195,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
             Assert.AreEqual(7, weekDays.Count);
             Assert.AreEqual(DayOfWeek.Monday, weekDays[0]);
             Assert.AreEqual(DayOfWeek.Sunday, weekDays[6]);
-
-            culture = CultureInfo.GetCultureInfo(1025); //Arabic - Saudi
-            weekDays = DateHelper.GetDaysOfWeek(culture);
-
-            Assert.AreEqual(7, weekDays.Count);
-            Assert.AreEqual(DayOfWeek.Saturday, weekDays[0]);
-            Assert.AreEqual(DayOfWeek.Friday, weekDays[6]);
         }
 
 		[Test]
