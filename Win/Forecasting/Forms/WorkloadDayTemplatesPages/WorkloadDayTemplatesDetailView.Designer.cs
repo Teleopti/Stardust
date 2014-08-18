@@ -118,9 +118,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.xpSelectperiod.ItemBackColor = System.Drawing.Color.White;
 			this.xpSelectperiod.Location = new System.Drawing.Point(0, 0);
 			this.xpSelectperiod.Name = "xpSelectperiod";
-			this.xpSelectperiod.PreferredChildPanelHeight = 346;
+			this.xpSelectperiod.PreferredChildPanelHeight = 440;
 			this.xpSelectperiod.ShowCollapseButton = false;
-			this.xpSelectperiod.Size = new System.Drawing.Size(199, 378);
+			this.xpSelectperiod.Size = new System.Drawing.Size(199, 472);
 			this.xpSelectperiod.TabIndex = 1;
 			this.xpSelectperiod.Text = "xxSelectHistoricalData";
 			// 
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.gradientPanel2.Controls.Add(this.dateSelectionComposite1);
 			this.gradientPanel2.Location = new System.Drawing.Point(2, 30);
 			this.gradientPanel2.Name = "gradientPanel2";
-			this.gradientPanel2.Size = new System.Drawing.Size(195, 346);
+			this.gradientPanel2.Size = new System.Drawing.Size(195, 440);
 			this.gradientPanel2.TabIndex = 0;
 			// 
 			// dateSelectionComposite1
@@ -139,9 +139,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.dateSelectionComposite1.AutoSize = true;
 			this.dateSelectionComposite1.BackColor = System.Drawing.Color.White;
 			this.dateSelectionComposite1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dateSelectionComposite1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateSelectionComposite1.Location = new System.Drawing.Point(0, 0);
 			this.dateSelectionComposite1.Name = "dateSelectionComposite1";
-			this.dateSelectionComposite1.Size = new System.Drawing.Size(195, 346);
+			this.dateSelectionComposite1.Size = new System.Drawing.Size(195, 440);
 			this.dateSelectionComposite1.TabIndex = 0;
 			this.dateSelectionComposite1.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionComposite1_DateRangeChanged);
 			// 
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			this.xpSmothing.HitTaskBoxArea = false;
 			this.xpSmothing.HotTrackColor = System.Drawing.Color.Empty;
 			this.xpSmothing.ItemBackColor = System.Drawing.Color.White;
-			this.xpSmothing.Location = new System.Drawing.Point(0, 378);
+			this.xpSmothing.Location = new System.Drawing.Point(0, 472);
 			this.xpSmothing.Name = "xpSmothing";
 			this.xpSmothing.PreferredChildPanelHeight = 110;
 			this.xpSmothing.Size = new System.Drawing.Size(199, 142);
