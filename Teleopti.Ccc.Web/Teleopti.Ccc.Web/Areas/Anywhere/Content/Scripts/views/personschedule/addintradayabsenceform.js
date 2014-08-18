@@ -1,7 +1,5 @@
 define([
 	'knockout',
-	'moment',
-	'momentTimezoneData',
 	'navigation',
 	'ajax',
 	'resources',
@@ -11,8 +9,6 @@ define([
 	'notifications'
 ], function (
 	ko,
-	moment,
-	momentTimezoneData,
 	navigation,
 	ajax,
 	resources,

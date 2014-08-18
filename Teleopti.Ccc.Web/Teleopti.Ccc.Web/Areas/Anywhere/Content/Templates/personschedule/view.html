@@ -140,7 +140,7 @@
                                                         </td>
                                                         <td>
                                                             <i class="glyphicon glyphicon-step-backward"></i>
-																													<span data-bind="html: StartTimeOtherTimeZone"></span>
+															<span data-bind="html: StartTimeOtherTimeZone"></span>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -154,8 +154,8 @@
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <i class="glyphicon glyphicon-step-forward"></i>
-																													<span data-bind="html: EndTimeOtherTimeZone"></span>
+	                                                        <i class="glyphicon glyphicon-step-forward"></i>
+															<span data-bind="html: EndTimeOtherTimeZone"></span>	
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -198,8 +198,8 @@
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <i class="glyphicon glyphicon-step-backward"></i>
-																													<span data-bind="html: StartTimeOtherTimeZone"></span>
+	                                                        <i class="glyphicon glyphicon-step-backward"></i>
+															<span data-bind="html: StartTimeOtherTimeZone"></span>
                                                         </td>
                                                     </tr>
 
@@ -226,18 +226,12 @@
                                             <form action="#" class="full-day-absence-form">
                                                 <table class="edit-area">
                                                     <tr>
-                                                        <td class="col-md-4 edit-time-column">
+                                                        <td class="col-md-5 edit-time-column">
                                                             <select id="absence-type" class="absence-type input-sm form-control" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: AbsenceType"></select>
-                                                        </td>
-                                                        <td class="other-time-zone">
-                                                            <div>
-                                                                <i class="glyphicon glyphicon-globe"></i>
-                                                                <span data-bind="html: TimeZoneName"></span>
-                                                            </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="col-md-4 edit-time-column">
+                                                        <td class="col-md-5 edit-time-column">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon">
                                                                     <i class="glyphicon glyphicon-step-backward"></i>
@@ -245,13 +239,9 @@
                                                                 <input type="text" class="start-date form-control" readonly="readonly" data-bind="value: StartDateFormatted" />
                                                             </div>
                                                         </td>
-                                                        <td>
-                                                            <i class="glyphicon glyphicon-step-backward"></i>
-                                                            <span>datum</span>
-                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="col-md-4 edit-time-column">
+                                                        <td class="col-md-5 edit-time-column">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon">
                                                                     <i class="glyphicon glyphicon-step-forward"></i>
@@ -264,14 +254,10 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td>
-                                                            <i class="glyphicon glyphicon-step-forward"></i>
-                                                            <span>datum</span>
-                                                        </td>
                                                     </tr>
 
                                                     <tr>
-                                                        <td class="col-md-4">
+                                                        <td class="col-md-5">
                                                             <!-- ko if: InvalidEndDate -->
                                                             <div class="alert">
                                                                 <span data-bind="text: $root.Resources.InvalidEndDate"></span>

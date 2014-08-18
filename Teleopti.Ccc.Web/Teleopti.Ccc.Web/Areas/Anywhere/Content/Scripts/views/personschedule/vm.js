@@ -1,5 +1,7 @@
 define([
 	'knockout',
+	'moment',
+	'momentTimezoneData',
 	'navigation',
 	'shared/timeline',
 	'views/personschedule/person',
@@ -15,6 +17,8 @@ define([
 	'lazy'
 ], function (
 	ko,
+	moment,
+	momentTimezoneData,
 	navigation,
 	timeLineViewModel,
 	personViewModel,

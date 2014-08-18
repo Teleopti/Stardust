@@ -1,7 +1,5 @@
 define([
 	'knockout',
-	'moment',
-	'momentTimezoneData',
 	'navigation',
 	'ajax',
 	'resources',
@@ -11,8 +9,6 @@ define([
 	'notifications'
 ], function (
 	ko,
-	moment,
-	momentTimezoneData,
 	navigation,
 	ajax,
 	resources,
@@ -33,28 +29,28 @@ define([
 		this.EndTime = ko.observable();
 		this.WorkingShift = ko.observable();
 		this.TimeZoneName = ko.observable();
+		this.ianaTimeZone = ko.observable();
+		this.ianaTimeZoneOther = ko.observable();
 		
 		var personId;
 		var personName;
 		var groupId;
 		var startTimeAsMoment;
 		var endTimeAsMoment;
-		var ianaTimeZone;
-		var ianaTimeZoneOther;
 
 		this.StartTimeOtherTimeZone = ko.computed(function () {
-			if (self.StartTime() && ianaTimeZone) {
-				var userTime = getMomentFromInput(self.StartTime()).tz(ianaTimeZone);
-				var otherTime = userTime.clone().tz(ianaTimeZoneOther);
+			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
+				var userTime = getMomentFromInput(self.StartTime()).tz(self.ianaTimeZone());
+				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
 				return otherTime.format('HH:mm');
 			}
 			return undefined;
 		});
 
 		this.EndTimeOtherTimeZone = ko.computed(function () {
-			if (self.EndTime() && ianaTimeZone) {
-				var userTime = getMomentFromInput(self.EndTime()).tz(ianaTimeZone);
-				var otherTime = userTime.clone().tz(ianaTimeZoneOther);
+			if (self.EndTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
+				var userTime = getMomentFromInput(self.EndTime()).tz(self.ianaTimeZone());
+				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
 				return otherTime.format('HH:mm');
 			}
 			return undefined;
@@ -67,8 +63,8 @@ define([
 			self.ScheduleDate(data.Date);
 			self.ActivityTypes(data.Activities);
 			self.TimeZoneName(data.TimeZoneName);
-			ianaTimeZone = data.IanaTimeZoneLoggedOnUser;
-			ianaTimeZoneOther = data.IanaTimeZoneOther;
+			self.ianaTimeZone(data.IanaTimeZoneLoggedOnUser);
+			self.ianaTimeZoneOther(data.IanaTimeZoneOther);
 		};
 
 		this.Apply = function () {
