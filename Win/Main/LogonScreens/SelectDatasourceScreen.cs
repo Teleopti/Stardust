@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
@@ -62,8 +63,15 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			_logonView.HandleKeyPress(msg, keyData,
-				comboBoxAdvDataSource.Focused || radioButtonAdvWindows.Focused || radioButtonAdvApplication.Focused);
+			if(ActiveControl == null)
+				return base.ProcessCmdKey(ref msg, keyData);
+
+			var controlType = ActiveControl.GetType();
+			if (controlType == typeof (ComboBoxAdv) || controlType == typeof(RadioButtonAdv))
+			{
+				_logonView.HandleKeyPress(msg, keyData, true);
+			}
+			
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 

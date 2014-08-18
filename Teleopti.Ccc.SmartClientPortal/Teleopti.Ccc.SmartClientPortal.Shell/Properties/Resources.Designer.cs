@@ -70,116 +70,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap ccc_Forecasts {
-            get {
-                object obj = ResourceManager.GetObject("ccc_Forecasts", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap ccc_Intraday {
-            get {
-                object obj = ResourceManager.GetObject("ccc_Intraday", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap ccc_payroll {
-            get {
-                object obj = ResourceManager.GetObject("ccc_payroll", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap ccc_People {
-            get {
-                object obj = ResourceManager.GetObject("ccc_People", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap ccc_permission {
-            get {
-                object obj = ResourceManager.GetObject("ccc_permission", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap ccc_PersonalSettings_32x32 {
-            get {
-                object obj = ResourceManager.GetObject("ccc_PersonalSettings_32x32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap ccc_Reports {
-            get {
-                object obj = ResourceManager.GetObject("ccc_Reports", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap ccc_Schedule {
-            get {
-                object obj = ResourceManager.GetObject("ccc_Schedule", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap ccc_Settings {
-            get {
-                object obj = ResourceManager.GetObject("ccc_Settings", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap ccc_Shift {
-            get {
-                object obj = ResourceManager.GetObject("ccc_Shift", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap ccc_temp_Settings {
-            get {
-                object obj = ResourceManager.GetObject("ccc_temp_Settings", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Section &apos;{0}&apos; depends on section &apos;{1}&apos; which was not found..
         /// </summary>
         public static string DependencyNotFound {
@@ -298,16 +188,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         public static string NoUserProvidedForAuthentication {
             get {
                 return ResourceManager.GetString("NoUserProvidedForAuthentication", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Online {
-            get {
-                object obj = ResourceManager.GetObject("Online", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

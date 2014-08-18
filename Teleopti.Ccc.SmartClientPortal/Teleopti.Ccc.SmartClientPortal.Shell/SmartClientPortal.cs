@@ -429,7 +429,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                         outlookBarSmartPartInfo.Icon = Resources.WFM_Intraday_small ;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.OpenPermissionPage:
-                        outlookBarSmartPartInfo.Icon = Resources.ccc_permission;
+                        outlookBarSmartPartInfo.Icon = Resources.WFM_Teleopti_WFM_main_small;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.Shifts:
                         outlookBarSmartPartInfo.Icon = Resources.WFM_Shifts_small ;
@@ -438,7 +438,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                         outlookBarSmartPartInfo.Icon = Resources.WFM_Reports_small;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.OpenOptionsPage:
-                        outlookBarSmartPartInfo.Icon = Resources.ccc_Settings;
+						outlookBarSmartPartInfo.Icon = Resources.WFM_Teleopti_WFM_main_small;
                         break;
                     case DefinedRaptorApplicationFunctionPaths.OpenBudgets:
                         outlookBarSmartPartInfo.Icon = Resources.WFM_Budgets_small ;

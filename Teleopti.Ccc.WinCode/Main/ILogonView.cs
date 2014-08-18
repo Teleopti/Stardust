@@ -19,6 +19,5 @@ namespace Teleopti.Ccc.WinCode.Main
 		void ButtonLogOnOkClick(object sender, EventArgs e);
 		void ButtonLogOnCancelClick(object sender, EventArgs e);
 		void BtnBackClick(object sender, EventArgs e);
-		void HideView();
 	}
 }

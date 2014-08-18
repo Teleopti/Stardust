@@ -143,11 +143,6 @@ namespace Teleopti.Ccc.Win.Main
 			Presenter.Initialize();
 		}
 
-		public void HideView()
-		{
-			Hide();
-		}
-
 		public void ShowErrorMessage(string message, string caption)
 		{
 			MessageDialogs.ShowWarning(this, message, caption);

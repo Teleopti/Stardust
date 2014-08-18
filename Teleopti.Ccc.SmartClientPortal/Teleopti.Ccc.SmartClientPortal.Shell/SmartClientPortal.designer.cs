@@ -493,7 +493,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// toolStripButtonMyProfile
 			// 
 			this.ribbonControlAdv1.SetDescription(this.toolStripButtonMyProfile, "");
-			this.toolStripButtonMyProfile.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_PersonalSettings_32x32;
+			this.toolStripButtonMyProfile.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.WFM_Teleopti_WFM_main_small;
 			this.toolStripButtonMyProfile.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonMyProfile.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButtonMyProfile.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -523,7 +523,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// toolStripButtonCustomerWeb
 			// 
 			this.ribbonControlAdv1.SetDescription(this.toolStripButtonCustomerWeb, "");
-			this.toolStripButtonCustomerWeb.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_People;
+			this.toolStripButtonCustomerWeb.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.WFM_Teleopti_WFM_main_small;
 			this.toolStripButtonCustomerWeb.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonCustomerWeb.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButtonCustomerWeb.ImageTransparentColor = System.Drawing.Color.Magenta;
