@@ -281,6 +281,9 @@ ALTER TABLE [dbo].[AgentBadgeThresholdSettings] CHECK CONSTRAINT [FK_AgentBadgeT
 --Date: 2014-08-07  
 --Desc: Remove the following new application function> SignInAsAnotherUser
 ---------------- 
+DELETE FROM ApplicationFunctionInRole 
+WHERE ApplicationFunction IN (SELECT Id FROM ApplicationFunction WHERE FunctionCode IN ('SignInAsAnotherUser'))
+
 DELETE FROM [dbo].[ApplicationFunction] WHERE FunctionCode = 'SignInAsAnotherUser'
 
 GO
