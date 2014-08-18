@@ -125,7 +125,10 @@ AS
 				[End],
 				Model
 			FROM ReadModel.PersonScheduleDay sd
+			INNER JOIN @TempList t
+				ON t.Person = sd.PersonId
 			WHERE [BelongsToDate] = @shiftTradeDate
+			AND IsDayOff = 1
 			AND IsDayOff = @isDayOff
 			) a
 	)
