@@ -317,9 +317,13 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self.loadOneTeamSchedule();
 				} else {
 					self.loadScheduleForOneTeamFilterTime();
-				}
+				} 
 			} else {
-				self.loadScheduleForAllTeams();
+				if (self.filteredStartTimesText().length == 0 && self.filteredEndTimesText().length == 0 && !self.isDayoffFiltered()) {
+					self.loadScheduleForAllTeams();
+				} else {
+					self.loadScheduleForAllTeamsFilterTime();
+				}
 			}
 		};
 		
@@ -749,6 +753,55 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					
 					self.setPossibleTradeSchedulesRaw(data);
 					
+					self.updateSelectedPage();
+					self._createPossibleTradeSchedules(self.possibleTradeSchedulesRaw);
+					self.keepSelectedAgentVisible();
+					self.isReadyLoaded(true);
+
+					// Redraw layers after data loaded
+					_redrawLayers();
+				},
+				error: function (e) {
+					//console.log(e);
+				},
+				complete: function () {
+					self.IsLoading(false);
+				}
+			});
+		};
+
+		self.loadScheduleForAllTeamsFilterTime = function () {
+			if (self.IsLoading()) return;
+			var take = 20;
+			var skip = (self.selectedPageIndex() - 1) * take;
+
+			ajax.Ajax({
+				url: "Requests/ShiftTradeRequestScheduleForAllTeamsByFilterTime",
+				dataType: "json",
+				type: 'GET',
+				contentType: 'application/json; charset=utf-8',
+				data: {
+					selectedDate: self.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase()),
+					teamIds: self.availableAllTeamIds().join(","),
+					filteredStartTimes: self.filteredStartTimesText().join(","),
+					filteredEndTimes: self.filteredEndTimesText().join(","),
+					isDayOff: self.isDayoffFiltered(),
+					Take: take,
+					Skip: skip
+				},
+				beforeSend: function () {
+					self.IsLoading(true);
+				},
+				success: function (data, textStatus, jqXHR) {
+					self.pageCount(data.PageCount);
+					self.setPageVisiblity();
+					self.resetDisplayedPages();
+
+					self._createTimeLine(data.TimeLineHours);
+					self._createMySchedule(data.MySchedule);
+
+					self.setPossibleTradeSchedulesRaw(data);
+
 					self.updateSelectedPage();
 					self._createPossibleTradeSchedules(self.possibleTradeSchedulesRaw);
 					self.keepSelectedAgentVisible();

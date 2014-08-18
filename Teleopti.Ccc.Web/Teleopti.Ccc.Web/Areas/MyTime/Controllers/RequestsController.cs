@@ -264,6 +264,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
+		public JsonResult ShiftTradeRequestScheduleForAllTeamsByFilterTime(DateOnly selectedDate, string teamIds, string filteredStartTimes, string filteredEndTimes, bool isDayOff, Paging paging)
+		{
+			var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
+			var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = selectedDate, TeamIds = allTeamIds, Paging = paging, TimeFilter = GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
+			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModelForAllTeams(data), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
 		public JsonResult ShiftTradeRequestScheduleForAllTeams(DateOnly selectedDate, string teamIds, Paging paging)
 		{
 			var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();

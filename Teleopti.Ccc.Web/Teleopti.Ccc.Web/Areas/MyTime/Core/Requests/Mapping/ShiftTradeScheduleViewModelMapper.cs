@@ -64,16 +64,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		public ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelDataForAllTeams data)
 		{
-			var paging = new Paging() {Take = data.Paging.Take, Skip = data.Paging.Skip};
 			var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(data.ShiftTradeDate);
 			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersonsForAllTeams(data);
-			if (paging == null || paging.Take <= 0)
+			if (data.Paging == null || data.Paging.Take <= 0)
 			{
 				return new ShiftTradeScheduleViewModel();
 			}
 
 			ShiftTradeAddPersonScheduleViewModel mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel);
-			var possibleTradeSchedule = getPossibleTradeSchedules(possibleTradePersons, paging).ToList();
+			List<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedule;
+			if (data.TimeFilter == null)
+			{
+				possibleTradeSchedule = getPossibleTradeSchedules(possibleTradePersons, data.Paging).ToList();
+			}
+			else
+			{
+				possibleTradeSchedule = getFilteredTimesPossibleTradeSchedules(possibleTradePersons, data.Paging, data.TimeFilter).ToList();
+			}
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any() ? possibleTradeSchedule.First().Total : 0;
 			var pageCount = possibleTradeScheduleNum % data.Paging.Take != 0 ? possibleTradeScheduleNum / data.Paging.Take + 1 : possibleTradeScheduleNum / data.Paging.Take;
 
