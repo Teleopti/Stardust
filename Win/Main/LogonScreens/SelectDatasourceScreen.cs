@@ -64,7 +64,10 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if(ActiveControl == null)
+			{
+				_logonView.HandleKeyPress(msg, keyData, true);
 				return base.ProcessCmdKey(ref msg, keyData);
+			}
 
 			var controlType = ActiveControl.GetType();
 			if (controlType == typeof (ComboBoxAdv) || controlType == typeof(RadioButtonAdv))
