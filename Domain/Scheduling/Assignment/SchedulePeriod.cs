@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				{
 					double periodTime = PeriodTime.Value.TotalMinutes;
 					int totalWorkDay = workdaysForTotalPeriod();
-					double periodMinutes = periodTime / totalWorkDay;
+					double periodMinutes = totalWorkDay == 0 ? 0 : periodTime/totalWorkDay;
 					return TimeSpan.FromMinutes(periodMinutes);
 				}
 
