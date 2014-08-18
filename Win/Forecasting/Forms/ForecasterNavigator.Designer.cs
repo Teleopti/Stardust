@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.toolStripMenuItemSkillsProperties,
             this.toolStripMenuItemSkillsImportForecast});
 			this.contextMenuStripSkills.Name = "contextMenuStripForecasts";
-			this.contextMenuStripSkills.Size = new System.Drawing.Size(241, 258);
+			this.contextMenuStripSkills.Size = new System.Drawing.Size(241, 236);
 			// 
 			// toolStripMenuItemSkillNew
 			// 
@@ -466,7 +466,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			// splitContainer1
 			// 
-			this.splitContainer1.BackColor = System.Drawing.Color.Silver;
+			this.splitContainer1.BackColor = System.Drawing.Color.White;
 			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
 			this.splitContainer1.Location = new System.Drawing.Point(0, 0);
@@ -491,15 +491,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
 			this.splitContainer1.Panel2MinSize = 100;
 			this.splitContainer1.Size = new System.Drawing.Size(254, 778);
-			this.splitContainer1.SplitterDistance = 422;
+			this.splitContainer1.SplitterDistance = 425;
+			this.splitContainer1.SplitterWidth = 1;
 			this.splitContainer1.TabIndex = 4;
 			// 
 			// treeViewSkills
 			// 
 			this.treeViewSkills.BackColor = System.Drawing.Color.White;
-			this.treeViewSkills.BeforeTouchSize = new System.Drawing.Size(254, 422);
+			this.treeViewSkills.BeforeTouchSize = new System.Drawing.Size(254, 425);
 			this.treeViewSkills.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
-			this.treeViewSkills.BorderColor = System.Drawing.Color.Transparent;
+			this.treeViewSkills.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.treeViewSkills.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.treeViewSkills.CanSelectDisabledNode = false;
 			this.treeViewSkills.ContextMenuStrip = this.contextMenuStripSkillTypes;
@@ -518,7 +519,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.treeViewSkills.Name = "treeViewSkills";
 			this.treeViewSkills.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255))))));
 			this.treeViewSkills.ShowFocusRect = false;
-			this.treeViewSkills.Size = new System.Drawing.Size(254, 422);
+			this.treeViewSkills.Size = new System.Drawing.Size(254, 425);
 			this.treeViewSkills.SortWithChildNodes = true;
 			this.treeViewSkills.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
 			this.treeViewSkills.TabIndex = 1;
