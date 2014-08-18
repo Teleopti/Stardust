@@ -328,55 +328,18 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Resources\ccc_PersonalSettings_32x32.png" />
     <None Include="Resources\Budgets_small.png" />
     <None Include="Resources\Forecasts_small.png" />
     <None Include="Resources\Intraday_small.png" />
-    <Content Include="Resources\NotifyIconOk.ico" />
-    <Content Include="Resources\NotifyIconWarning.ico" />
-    <None Include="Resources\ccc_People.png" />
-    <None Include="Resources\ccc_Forecasts.png" />
-    <None Include="Resources\ccc_Schedule.png" />
-    <None Include="Resources\ccc_Shift.png" />
-    <None Include="Resources\ccc_Reports.png" />
-    <None Include="Resources\ccc_Settings.png" />
-    <None Include="Resources\ccc_temp_Settings.png" />
-    <Content Include="Resources\ccc_Intraday.png" />
-    <None Include="Resources\ccc_payroll.png" />
-    <Content Include="Resources\ccc_permission.png" />
     <None Include="Resources\help_32.png" />
     <None Include="Resources\information_16.png" />
-    <None Include="Resources\Online.jpg" />
     <None Include="Resources\Payroll_small.png" />
     <None Include="Resources\People_small.png" />
     <None Include="Resources\Performance-Manager_small.png" />
-    <Content Include="Resources\permission.png" />
-    <None Include="Resources\WFM-Budgets - Copy.png" />
-    <None Include="Resources\WFM-Forecasts - Copy.png" />
-    <None Include="Resources\WFM-Intraday - Copy.png" />
-    <None Include="Resources\WFM-Payroll-Integration - Copy.png" />
-    <None Include="Resources\WFM-People - Copy.png" />
-    <None Include="Resources\WFM-Performance-Manager - Copy.png" />
-    <None Include="Resources\WFM-Reports.png" />
-    <None Include="Resources\WFM-Schedules.png" />
-    <None Include="Resources\WFM-Shifts.png" />
-    <None Include="Resources\WFM-Circle-1.ico" />
-    <None Include="Resources\WFMIcon.ico" />
-    <None Include="Resources\WFMIconVarning.ico" />
-    <None Include="Resources\WFMIconWarning1.ico" />
-    <None Include="Resources\WFM-Forecasts-32-32.png" />
-    <None Include="Resources\WFM-Intraday-32-32.png" />
-    <None Include="Resources\WFM-People-32-32.png" />
-    <None Include="Resources\WFM-Reports-32-32.png" />
-    <None Include="Resources\WFM-Schedules-32-32.png" />
-    <None Include="Resources\WFM-Shifts-32-32.png" />
-    <None Include="Resources\WFM-Budgets-old-32-32.png" />
     <None Include="Resources\Reports_small.png" />
     <None Include="Resources\Schedules_small.png" />
     <None Include="Resources\Shifts_small.png" />
     <None Include="Resources\Teleopti-WFM-main_small.png" />
-    <None Include="Resources\WFM-Payroll-Integration-32-32.png" />
-    <None Include="Resources\WFM-Performance-Manager-32-32.png" />
     <Content Include="TeleoptiCCCv7.ico" />
   </ItemGroup>
   <ItemGroup>

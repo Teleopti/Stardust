@@ -192,16 +192,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap permission {
-            get {
-                object obj = ResourceManager.GetObject("permission", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The ModuleLoaderService cannot initialize the module because some of their dependencies are not present. Make sure to deploy all the assemblies needed to execute the module..
         /// </summary>
         public static string ReferencedAssemblyNotFound {
