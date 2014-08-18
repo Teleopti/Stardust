@@ -77,9 +77,9 @@
       <Private>True</Private>
       <HintPath>..\..\packages\Teleopti.AnalysisServices.10.0.0\lib\net40\Microsoft.AnalysisServices.AdomdClient.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\NHibernate.4.0.0-CR1\lib\net40\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\packages\NHibernate.4.0.0.4000\lib\net40\NHibernate.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
