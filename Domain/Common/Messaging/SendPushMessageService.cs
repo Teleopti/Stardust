@@ -20,12 +20,16 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
         }
 
         #region factory
-        public static ISendPushMessageOption<string> CreateConversation(string title, string message, bool allowDialogueReply)
+        public static ISendPushMessageOption<string> CreateConversation(string title, string message, bool allowDialogueReply,
+			MessageType type = MessageType.Information)
         {
-            IPushMessage pushMessage = new PushMessage();
-            pushMessage.Title = title;
-            pushMessage.Message = message;
-            pushMessage.AllowDialogueReply = allowDialogueReply;
+            var pushMessage = new PushMessage
+            {
+	            Title = title,
+	            Message = message,
+	            AllowDialogueReply = allowDialogueReply,
+	            MessageType = type
+            };
             return new SendPushMessageService(pushMessage);
         }
 

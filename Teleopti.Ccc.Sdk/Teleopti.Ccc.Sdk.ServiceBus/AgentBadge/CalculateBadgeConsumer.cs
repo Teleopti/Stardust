@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					}
 
 					SendPushMessageService
-						.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false)
+						.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false, MessageType.Badge)
 						.To(person)
 						.SendConversation(_msgPersister);
 				}
