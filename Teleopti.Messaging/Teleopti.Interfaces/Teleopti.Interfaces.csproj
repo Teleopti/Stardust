@@ -124,6 +124,7 @@
     <Compile Include="Domain\ITime.cs" />
     <Compile Include="Domain\IAuthenticationInfo.cs" />
     <Compile Include="Domain\MaxSeatsFeatureOptions.cs" />
+    <Compile Include="Domain\MessageType.cs" />
     <Compile Include="Domain\PersianCultureHelper.cs" />
     <Compile Include="Domain\SchedulingServiceSuccessfulEventArgs.cs" />
     <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />

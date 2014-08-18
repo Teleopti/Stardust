@@ -39,7 +39,15 @@ INNER JOIN [ReadModel].[PersonScheduleDay] psd
 INNER JOIN dbo.Scenario s
 	ON s.Id = pa.Scenario
 	AND s.DefaultScenario = 1
+GO
 
 --Next statment would be good in order to avoid a NULL design on the bit.
 -- .... The PersonScheduleDay holds meeting and Absence. In that case NULL :-(
 --ALTER TABLE [ReadModel].[PersonScheduleDay] ADD [IsDayOff] [bit NOT] NULL
+
+--Name: Xinfeng, Chundan
+--Date: 2014-08-18
+--Desc: Add new column for message type
+----------------  
+Alter Table [dbo].[PushMessage] Add [MessageType] int NOT NULL default 0
+GO

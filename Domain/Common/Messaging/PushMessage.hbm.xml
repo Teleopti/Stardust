@@ -47,6 +47,10 @@
 			  not-null="true"
         type="boolean" />
 
+		<property name="MessageType"
+							type="int"
+							not-null="true" />
+
     <many-to-one name="Sender"
               class="Teleopti.Ccc.Domain.Common.Person"
               foreign-key="FK_PushMessage_Person_Sender"

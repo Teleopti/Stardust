@@ -61,5 +61,14 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2009-11-02
         /// </remarks>
         bool TranslateMessage{ get; set; }
+
+		/// <summary>
+		/// Get or set a value indicating the type of the push message
+		/// </summary>
+		/// <remarks>
+		/// Created by: Xinfeng Li
+		/// Created date: 2014-08-18
+		/// </remarks>
+		MessageType MessageType { get; set; }
     }
 }

@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
         private readonly IList<string> _replyOptions;
         private bool _allowDialogueReply = true;
         private bool _translateMessage;
+        private MessageType _messageType = MessageType.Information;
 
         public PushMessage()
             : this(new List<string>())
@@ -60,6 +61,12 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
         {
             get { return _translateMessage; }
             set { _translateMessage = value; }
+        }
+
+        public virtual MessageType MessageType
+        {
+            get { return _messageType; }
+            set { _messageType = value; }
         }
 
         public virtual IPerson Sender
