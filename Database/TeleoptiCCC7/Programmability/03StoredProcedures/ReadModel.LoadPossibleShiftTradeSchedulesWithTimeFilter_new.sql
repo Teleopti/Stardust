@@ -1,5 +1,5 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[ReadModel.LoadPossibleShiftTradeSchedulesWithTimeFilter_new]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [ReadModel].[ReadModel.LoadPossibleShiftTradeSchedulesWithTimeFilter_new]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter_new]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter_new]
 GO
 
 -- =============================================
@@ -8,14 +8,14 @@ GO
 -- Description:	Load Schedule for possible shift trades with filtered times
 -- =============================================
 /*
-ReadModel.ReadModel.LoadPossibleShiftTradeSchedulesWithTimeFilter_new
+ReadModel.LoadPossibleShiftTradeSchedulesWithTimeFilter_new
 '2014-08-08',
 'b46a2588-8861-42e3-ab03-9b5e015b257c,47a3d4aa-3cd8-4235-a7eb-9b5e015b2560,88be31b0-9c70-4076-9743-9b5e015b2577,9d42c9bf-f766-473f-970c-9b5e015b2564,94329a0e-b3c5-4b1f-beb9-9b5e015b2564',
 '2014-08-08 10:00;2014-08-08 12:00,2014-08-08 10:00;2014-08-08 16:00',
 '2014-08-08 20:00;2014-08-08 22:00,2014-08-09 00:00;2014-08-09 01:00',
 true,00,20
 
-ReadModel.ReadModel.LoadPossibleShiftTradeSchedulesWithTimeFilter_new
+ReadModel.LoadPossibleShiftTradeSchedulesWithTimeFilter_new
 '2014-08-08',
 'b46a2588-8861-42e3-ab03-9b5e015b257c,47a3d4aa-3cd8-4235-a7eb-9b5e015b2560,88be31b0-9c70-4076-9743-9b5e015b2577,9d42c9bf-f766-473f-970c-9b5e015b2564,94329a0e-b3c5-4b1f-beb9-9b5e015b2564',
 '2014-08-08 10:00;2014-08-08 12:00',
@@ -23,7 +23,7 @@ ReadModel.ReadModel.LoadPossibleShiftTradeSchedulesWithTimeFilter_new
 true,00,20
 
  */
-CREATE PROCEDURE [ReadModel].[ReadModel.LoadPossibleShiftTradeSchedulesWithTimeFilter_new]
+CREATE PROCEDURE [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter_new]
 @shiftTradeDate smalldatetime,
 @personList varchar(max),
 @filterStartTime varchar(max),
