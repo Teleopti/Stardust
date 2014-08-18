@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 								skillTypeNode[0].Nodes.Cast<TreeNodeAdv>()
 									.Where(tempNode => ((skillModel)tempNode.Tag).Id == skill.Id)
 									.ToList();
-						if (model.IsDeleted)
+						if (model.IsDeleted && skillNodes.Count >0 )
 						{
 							skillNodes[0].Nodes.Clear();
 							var skillModel = createSkillModel(skill);
@@ -155,9 +155,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 						if (skillNodes.Count > 0)
 						{
 							skillNodes[0].Nodes.Clear();
-							reloadSkillFromNode(skillNodes[0], uow, false);
+							skillNodes[0].Tag = createSkillModel(skill);
+							reloadWorkloadNodes(skillNodes[0]);
 							reloadQueueSourceNodes(workloadNode);
-							skillNodes[0].Nodes.Add(workloadNode);
 						}
 						if (isWorkloadSelected)
 							treeViewSkills.SelectedNode = workloadNode;
@@ -216,22 +216,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void reloadSkillFromNode(TreeNodeAdv node, IUnitOfWork uow, bool force)
-		{
-			var skill = node.Tag as skillModel;
-			if (skill == null) return;
-			if (force || !skill.WorkloadModels.Any())
-			{
-				var repository = _repositoryFactory.CreateSkillRepository(uow);
-				var updatedSkill = repository.Get(skill.Id);
-				node.Tag = createSkillModel(updatedSkill);
-			}
-		}
-
+		
 		#endregion
-
-		//Dont know about this but, this might need to be standardized
-		//But it works for now, we need to go on with the Sprint
 
 		#region uow_Stuff 
 

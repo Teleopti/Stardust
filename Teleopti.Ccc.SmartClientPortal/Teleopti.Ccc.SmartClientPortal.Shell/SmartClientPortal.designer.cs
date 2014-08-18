@@ -183,7 +183,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			// splitContainer
 			// 
-			this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.splitContainer.BackColor = System.Drawing.SystemColors.Control;
 			this.splitContainer.BeforeTouchSize = 5;
@@ -205,7 +206,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.splitContainer.Panel2.Controls.Add(this.webBrowser1);
 			this.splitContainer.Panel2.Controls.Add(this.gridWorkspace);
 			this.splitContainer.Panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.splitContainer.Size = new System.Drawing.Size(958, 614);
+			this.splitContainer.Size = new System.Drawing.Size(958, 555);
 			this.splitContainer.SplitterDistance = 350;
 			this.splitContainer.SplitterWidth = 5;
 			this.splitContainer.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
@@ -217,7 +218,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.outlookBarWorkSpace1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.outlookBarWorkSpace1.Location = new System.Drawing.Point(0, 0);
 			this.outlookBarWorkSpace1.Name = "outlookBarWorkSpace1";
-			this.outlookBarWorkSpace1.Size = new System.Drawing.Size(350, 614);
+			this.outlookBarWorkSpace1.Size = new System.Drawing.Size(350, 555);
 			this.outlookBarWorkSpace1.TabIndex = 0;
 			// 
 			// webBrowser1
@@ -230,7 +231,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.webBrowser1.MinimumSize = new System.Drawing.Size(23, 23);
 			this.webBrowser1.Name = "webBrowser1";
 			this.webBrowser1.ScrollBarsEnabled = false;
-			this.webBrowser1.Size = new System.Drawing.Size(376, 520);
+			this.webBrowser1.Size = new System.Drawing.Size(376, 461);
 			this.webBrowser1.TabIndex = 5;
 			this.webBrowser1.Visible = false;
 			// 
@@ -243,7 +244,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.gridWorkspace.Location = new System.Drawing.Point(0, 0);
 			this.gridWorkspace.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.gridWorkspace.Name = "gridWorkspace";
-			this.gridWorkspace.Size = new System.Drawing.Size(603, 614);
+			this.gridWorkspace.Size = new System.Drawing.Size(603, 555);
 			this.gridWorkspace.TabIndex = 0;
 			this.gridWorkspace.Tag = "0";
 			this.gridWorkspace.WorkspaceGridSizeChanged += new System.EventHandler<System.EventArgs>(this.GridWorkspace_WorkspaceGridSizeChanged);
