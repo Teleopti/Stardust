@@ -911,6 +911,7 @@
     <Content Include="Areas\MyTime\Content\Css\MyReport.css" />
     <Content Include="Areas\MyTime\Content\Css\MonthView.css" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
+    <Content Include="Areas\MyTime\Content\Images\badge.png" />
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyQueueMetrics.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyAdherence.js" />
