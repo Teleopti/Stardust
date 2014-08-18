@@ -92,6 +92,12 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 		}
 
 		[Test]
+		public void ShouldMapMessageType()
+		{
+			_result.First().MessageType.Should().Be.EqualTo((int)_pushMessage.MessageType);
+		}
+
+		[Test]
 		public void ShouldMapMessageToShowShortMessage()
 		{
 			_result.First().Message.Should().Be.EqualTo(_pushMessage.GetMessage(new NoFormatting()));

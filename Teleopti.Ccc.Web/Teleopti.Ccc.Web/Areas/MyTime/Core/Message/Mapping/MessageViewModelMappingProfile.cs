@@ -25,8 +25,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
     			.ForMember(d => d.SenderId, o => o.MapFrom(m => m.Sender.Id))
     			.ForMember(d => d.Sender, o => o.MapFrom(m => m.Sender.Name.ToString()))
 				.ForMember(d => d.Created, o => o.MapFrom(m => TimeZoneInfo.ConvertTimeFromUtc(m.Created,_userTimeZone.Invoke().TimeZone()).ToShortDateTimeString()));
-				
+
             CreateMap<IPushMessageDialogue, MessageViewModel>()
+				.ForMember(d => d.MessageType, o => o.MapFrom(m => (int)m.PushMessage.MessageType))
                 .ForMember(d => d.MessageId, o => o.MapFrom(m => m.Id.ToString()))
                 .ForMember(d => d.Title, o => o.MapFrom(m => m.PushMessage.GetTitle(new NoFormatting())))
 				.ForMember(d => d.Message, o => o.ResolveUsing(m =>

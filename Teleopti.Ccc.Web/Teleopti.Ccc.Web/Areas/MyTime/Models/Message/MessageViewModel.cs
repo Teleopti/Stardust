@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Message
 		public bool AllowDialogueReply { get; set; }
 		public IList<DialogueMessageViewModel> DialogueMessages { get; set; }
 		public IList<string> ReplyOptions { get; set; }
+		public int MessageType { get; set; }
 	}
 
 	public class ConfirmMessageViewModel
