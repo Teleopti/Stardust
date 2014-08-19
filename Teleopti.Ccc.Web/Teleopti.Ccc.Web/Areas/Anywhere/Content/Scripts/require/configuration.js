@@ -31,6 +31,7 @@ var requireconfiguration = {
 		noext: '../../../../Content/require/noext',
 		signalrrr: 'require/signalrrr',
 		resourcesr: 'require/resourcesr',
+		xregexp: 'require/xregexp-all-min',
 
 		templates: '../templates',
 

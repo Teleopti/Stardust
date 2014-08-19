@@ -310,6 +310,32 @@
 
 					assert.equals(vm.filteredAgents().length, 1);
 					assert.equals(vm.filteredAgents()[0].Name, "Kurt");
+				},
+				"should display agents matching symbols like '$' searchwords": function () {
+					var agent1 = { PersonId: "guid1", Name: "I$Like$Money", TimeZoneOffsetMinutes: 0 },
+						agent2 = { PersonId: "guid2", Name: "Glen", TimeZoneOffsetMinutes: 0 },
+						agent1State = { PersonId: "guid1", State: "Phone", NextActivity: "Lunch", NextActivityStartTime: moment('2014-01-21 13:00').format() },
+						agent2State = { PersonId: "guid2", State: "Lunch", NextActivity: "Lunch", NextActivityStartTime: moment('2014-01-22 13:00').format() };
+					var vm = viewModel();
+					vm.fillAgents([agent1, agent2]);
+					vm.fillAgentsStates([agent1State, agent2State]);
+					vm.filter("$");
+
+					assert.equals(vm.filteredAgents().length, 1);
+					assert.equals(vm.filteredAgents()[0].Name, "I$Like$Money");
+				},
+				"should display agents matching arabic name like 'اختبار' searchwords": function () {
+					var agent1 = { PersonId: "guid1", Name: "اختبار", TimeZoneOffsetMinutes: 0 },
+						agent2 = { PersonId: "guid2", Name: "Glen", TimeZoneOffsetMinutes: 0 },
+						agent1State = { PersonId: "guid1", State: "Phone", NextActivity: "Lunch", NextActivityStartTime: moment('2014-01-21 13:00').format() },
+						agent2State = { PersonId: "guid2", State: "Lunch", NextActivity: "Lunch", NextActivityStartTime: moment('2014-01-22 13:00').format() };
+					var vm = viewModel();
+					vm.fillAgents([agent1, agent2]);
+					vm.fillAgentsStates([agent1State, agent2State]);
+					vm.filter("ار");
+
+					assert.equals(vm.filteredAgents().length, 1);
+					assert.equals(vm.filteredAgents()[0].Name, "اختبار");
 				}
 			}
 		});

@@ -1,7 +1,8 @@
 ﻿define([
-		'knockout'
+		'knockout',
+		'xregexp'
 ],
-	function(ko) {
+	function(ko, xregexp) {
 		return function() {
 			var that = {};
 
@@ -9,7 +10,7 @@
 				var andRelationalMatches = 0;
 				var orRelationalMatches = 0;
 				var filterWords = mapOutFilterWords(filter);
-				if (!filterWords) {
+				if (!filterWords || filterWords.length === 0) {
 					return false;
 				}
 
@@ -50,7 +51,10 @@
 				return calculateResult(andRelationalWords, andRelationalMatches, orRelationalCombinations, orRelationalMatches);
 			};
 
-			var mapOutFilterWords = function(rawInput) { return rawInput.match(/([!]*\w+)|(?:[!"']{1,2}(.*?)["'])/g); }
+			var mapOutFilterWords = function (rawInput) {
+				var reg = xregexp('([!]*(\\p{L}|\\p{N}|\\p{S})+)|(?:[!"\']{1,2}(.*?)["\'])', 'g');
+				return xregexp.match(rawInput, reg);
+			}
 
 			var mapRelationsBetweenWords = function (filterWords) {
 				var returnObject = {};
