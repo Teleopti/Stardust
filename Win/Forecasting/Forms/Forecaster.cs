@@ -951,7 +951,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
             SetColors();
             RibbonTemplatePanelsClose();
-	        ribbonControlAdv1.MenuButtonText = UserTexts.Resources.File;
+	        ribbonControlAdv1.MenuButtonText = UserTexts.Resources.FileProperCase.ToUpper();
             Application.DoEvents();
 
             WindowState = FormWindowState.Maximized;

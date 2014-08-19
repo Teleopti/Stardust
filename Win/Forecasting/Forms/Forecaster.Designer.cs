@@ -469,6 +469,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// backStageButton4
 			// 
 			this.backStageButton4.Accelerator = "";
+			this.backStageButton4.AutoSize = true;
 			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton4.IsBackStageButton = false;
