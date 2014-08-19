@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
@@ -14,7 +15,6 @@ using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.Win.Properties;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Ccc.WinCode.Shifts.Views;
@@ -377,11 +377,6 @@ namespace Teleopti.Ccc.Win.Shifts
 			}
 		}
 
-		private void toolStripButtonCloseExitClick(object sender, EventArgs e)
-		{
-			Close();
-		}
-
 		private void toolStripAssignRuleSetClick(object sender, EventArgs e)
 		{
 			_navigationView.AssignRuleSet();
@@ -395,32 +390,6 @@ namespace Teleopti.Ccc.Win.Shifts
 		private void toolStripButtonWeekdayExclusionClick(object sender, EventArgs e)
 		{
 			loadView(ShiftCreatorViewType.WeekdayExclusion);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private void toolStripButtonSystemOptionsClick(object sender, EventArgs e)
-		{
-			try
-			{
-					var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
-				settings.Show();
-			}
-			catch (DataSourceException ex)
-			{
-				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-			}
-		}
-
-		private void toolStripButtonExitSystemClick(object sender, EventArgs e)
-		{
-			if (!CloseAllOtherForms(this))
-				return; // a form was canceled
-
-			Close();
-			////this canceled
-			if (Visible)
-				return;
-			Application.Exit();
 		}
 
 		private void persist()
@@ -439,7 +408,7 @@ namespace Teleopti.Ccc.Win.Shifts
 		public bool AskForDelete()
 		{
 			DialogResult result = ShowYesNoMessage(UserTexts.Resources.AreYouSureYouWantToDelete, UserTexts.Resources.Delete);
-			return (result == DialogResult.Yes) ? true : false;
+			return (result == DialogResult.Yes);
 		}
 
 
@@ -644,6 +613,11 @@ namespace Teleopti.Ccc.Win.Shifts
 			if (Visible)
 				return;
 			Application.Exit();
+		}
+
+		private void backStageButton4VisibleChanged(object sender, EventArgs e)
+		{
+			backStageButton4.Location = new Point(0, backStageButton4.Location.Y);
 		}
 	}
 }
