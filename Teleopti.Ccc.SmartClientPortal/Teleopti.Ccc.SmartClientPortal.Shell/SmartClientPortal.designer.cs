@@ -396,6 +396,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// backStageButtonSignCustomerWeb
 			// 
 			this.backStageButtonSignCustomerWeb.Accelerator = "";
+			this.backStageButtonSignCustomerWeb.AutoSize = true;
 			this.backStageButtonSignCustomerWeb.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonSignCustomerWeb.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonSignCustomerWeb.IsBackStageButton = false;
@@ -444,6 +445,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// backStageButtonExitTELEOPTICCC
 			// 
 			this.backStageButtonExitTELEOPTICCC.Accelerator = "";
+			this.backStageButtonExitTELEOPTICCC.AutoSize = true;
 			this.backStageButtonExitTELEOPTICCC.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonExitTELEOPTICCC.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonExitTELEOPTICCC.IsBackStageButton = false;
