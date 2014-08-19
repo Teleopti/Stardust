@@ -28,7 +28,7 @@ Background:
 	| Name  | Lunch  |
 	| Color | Yellow |
 
-Scenario: View timeline for agent in other time zone
+Scenario: Timeline for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
 	And 'John King' is located in 'Istanbul'
@@ -42,15 +42,15 @@ Scenario: View timeline for agent in other time zone
 	Then I should see schedule for 'John King'
 	And I should see my time line with
 	| Field      | Value |
-	| Start time | 09:00 |
-	| End time   | 17:00 |
+	| Start time | 08:00 |
+	| End time   | 16:00 |
 	And I should see the agent's time line with
 	| Field      | Value      |
 	| Time zone  | UTC +02:00 |
-	| Start time | 10:00      |
-	| End time   | 18:00      |
+	| Start time | 09:00      |
+	| End time   | 17:00      |
 
-Scenario: View timeline for agent in the same time zone
+Scenario: Timeline for agent in the same time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
 	And 'John King' is located in Stockholm
@@ -64,11 +64,31 @@ Scenario: View timeline for agent in the same time zone
 	Then I should see schedule for 'John King'
 	And I should see my time line with
 	| Field      | Value |
-	| Start time | 09:00 |
-	| End time   | 17:00 |
+	| Start time | 08:00 |
+	| End time   | 16:00 |
 	And I should not see the agent's timeline
 
-Scenario: View new activity input time for agent in other time zone
+
+
+Scenario: Add activity default times for agent in other time zone
+	Given I have the role 'Anywhere Team Green'
+	And I am located in Stockholm
+	And the current time is '2013-11-18 12:05'
+	And 'John King' is located in 'Istanbul'
+	And 'John King' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-18 08:00 |
+	| End time       | 2013-11-18 17:00 |
+	When I view person schedules add activity form for 'John King' in 'Team green' on '2013-11-18'
+	And the browser time is '2013-11-18 12:05:00'
+	Then I should see local hours for the agent's new activity with
+	| Field      | Value      |
+	| Start time | 13:15      |
+	| End time   | 14:15      |
+
+Scenario: Add activity times changed for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
 	And 'John King' is located in 'Istanbul'
@@ -89,7 +109,7 @@ Scenario: View new activity input time for agent in other time zone
 	| Start time | 13:00      |
 	| End time   | 14:00      |
 	
-Scenario: Do not show times in other time zone
+Scenario: Add activity times not displayed in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
 	And 'John King' is located in Stockholm
@@ -102,21 +122,23 @@ Scenario: Do not show times in other time zone
 	When I view person schedules add activity form for 'John King' in 'Team green' on '2013-11-18'
 	Then I should not see any local hours for the agent's new activity
 
-Scenario: View default times for agent in other time zone
+
+
+
+	Scenario: Add intraday absence default times for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
+	And the current time is '2013-11-17 12:00'
 	And 'John King' is located in 'Istanbul'
-	And the current time is '2013-11-18 12:00'
 	And 'John King' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
 	| Start time     | 2013-11-18 08:00 |
 	| End time       | 2013-11-18 17:00 |
-	When the current browser time is '2013-11-18 12:00'
-	And I view person schedules add activity form for 'John King' in 'Team green' on '2013-11-18'
+	When I view person schedules add intraday absence form for 'John King' in 'Team green' on '2013-11-18'
+	And the browser time is '2013-11-17 12:00:00'
 	Then I should see local hours for the agent's new activity with
 	| Field      | Value      |
-	| Start time | 18:15      |
-	| End time   | 19:15      |
-
+	| Start time | 09:00      |
+	| End time   | 10:00      |
