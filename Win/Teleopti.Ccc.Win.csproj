@@ -3820,6 +3820,7 @@
     <None Include="Resources\NewMeeting.PNG" />
     <None Include="Resources\Open.PNG" />
     <None Include="Resources\pinned.jpg" />
+    <None Include="Resources\Performance-Manager.ico" />
     <Content Include="Resources\period.png" />
     <Content Include="Resources\process.ico" />
     <None Include="Resources\rights.ico" />
@@ -3828,6 +3829,7 @@
     <Content Include="Resources\RightToLeft.bmp" />
     <None Include="Resources\scheduler.ico" />
     <None Include="Resources\right_round-32.png" />
+    <None Include="Resources\Schedules.ico" />
     <Content Include="Resources\Scorecard.gif" />
     <None Include="Resources\StartTime.PNG" />
     <None Include="Resources\shiftEditor_16x16.png" />
@@ -3840,6 +3842,7 @@
     <Content Include="Resources\tb_report-sched.png" />
     <None Include="Resources\Teleopti-WFM-main-icon256.png" />
     <None Include="Resources\TeleoptiWFMLogin.ico" />
+    <None Include="Resources\Teleopti-WFM-main-icon.ico" />
     <Content Include="Resources\test_add2.png" />
     <Content Include="Resources\test_delete_32x32.png" />
     <Content Include="Resources\text_list_bullets.png" />

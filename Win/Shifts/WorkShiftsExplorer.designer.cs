@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.splitContainerAdvHorizontal.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainerAdvHorizontal.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
 			this.splitContainerAdvHorizontal.Size = new System.Drawing.Size(920, 575);
-			this.splitContainerAdvHorizontal.SplitterDistance = 289;
+			this.splitContainerAdvHorizontal.SplitterDistance = 400;
 			this.splitContainerAdvHorizontal.SplitterWidth = 3;
 			this.splitContainerAdvHorizontal.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
 			this.splitContainerAdvHorizontal.TabIndex = 0;
@@ -320,13 +320,13 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.toolStripExFile.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExFile.Image = null;
 			this.toolStripExFile.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonSave});
+            this.toolStripButtonSave});
 			this.toolStripExFile.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.toolStripExFile.Location = new System.Drawing.Point(0, 1);
 			this.toolStripExFile.Name = "toolStripExFile";
 			this.toolStripExFile.Office12Mode = false;
 			this.toolStripExFile.ShowLauncher = false;
-			this.toolStripExFile.Size = new System.Drawing.Size(91, 83);
+			this.toolStripExFile.Size = new System.Drawing.Size(60, 83);
 			this.toolStripExFile.TabIndex = 8;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExFile, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripExFile, false);
@@ -357,8 +357,8 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.toolStripRefresh.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripRefresh.Image = null;
 			this.toolStripRefresh.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonRefresh});
-			this.toolStripRefresh.Location = new System.Drawing.Point(93, 1);
+            this.toolStripButtonRefresh});
+			this.toolStripRefresh.Location = new System.Drawing.Point(62, 1);
 			this.toolStripRefresh.Name = "toolStripRefresh";
 			this.toolStripRefresh.Office12Mode = false;
 			this.toolStripRefresh.ShowCaption = true;
@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tsClipboard.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.tsClipboard.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.tsClipboard.Image = null;
-			this.tsClipboard.Location = new System.Drawing.Point(170, 1);
+			this.tsClipboard.Location = new System.Drawing.Point(139, 1);
 			this.tsClipboard.Name = "tsClipboard";
 			this.tsClipboard.Office12Mode = false;
 			this.tsClipboard.ShowLauncher = false;
@@ -413,7 +413,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tcEdit.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.tcEdit.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.tcEdit.Image = null;
-			this.tcEdit.Location = new System.Drawing.Point(278, 1);
+			this.tcEdit.Location = new System.Drawing.Point(247, 1);
 			this.tcEdit.Name = "tcEdit";
 			this.tcEdit.Office12Mode = false;
 			this.tcEdit.ShowLauncher = false;
@@ -432,9 +432,9 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tcShiftBags.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.tcShiftBags.Image = null;
 			this.tcShiftBags.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonAddRuleSet});
+            this.toolStripButtonAddRuleSet});
 			this.tcShiftBags.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-			this.tcShiftBags.Location = new System.Drawing.Point(386, 1);
+			this.tcShiftBags.Location = new System.Drawing.Point(355, 1);
 			this.tcShiftBags.Name = "tcShiftBags";
 			this.tcShiftBags.Office12Mode = false;
 			this.tcShiftBags.Padding = new System.Windows.Forms.Padding(0);
@@ -469,8 +469,8 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tcRename.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.tcRename.Image = null;
 			this.tcRename.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonRename});
-			this.tcRename.Location = new System.Drawing.Point(502, 1);
+            this.toolStripButtonRename});
+			this.tcRename.Location = new System.Drawing.Point(471, 1);
 			this.tcRename.Name = "tcRename";
 			this.tcRename.Office12Mode = false;
 			this.tcRename.Padding = new System.Windows.Forms.Padding(0);
@@ -506,13 +506,13 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tcViews.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.tcViews.Image = null;
 			this.tcViews.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonGeneral,
-			this.toolStripButtonCombined,
-			this.toolStripButtonLimitations,
-			this.toolStripButtonDateExclusion,
-			this.toolStripButtonWeekdayExclusion});
+            this.toolStripButtonGeneral,
+            this.toolStripButtonCombined,
+            this.toolStripButtonLimitations,
+            this.toolStripButtonDateExclusion,
+            this.toolStripButtonWeekdayExclusion});
 			this.tcViews.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-			this.tcViews.Location = new System.Drawing.Point(574, 1);
+			this.tcViews.Location = new System.Drawing.Point(543, 1);
 			this.tcViews.Name = "tcViews";
 			this.tcViews.Office12Mode = false;
 			this.tcViews.ShowLauncher = false;

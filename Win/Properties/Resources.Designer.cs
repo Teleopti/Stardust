@@ -1893,16 +1893,6 @@ namespace Teleopti.Ccc.Win.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon forecaster {
-            get {
-                object obj = ResourceManager.GetObject("forecaster", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
         internal static System.Drawing.Icon Forecasts {
             get {
                 object obj = ResourceManager.GetObject("Forecasts", resourceCulture);
@@ -1953,19 +1943,9 @@ namespace Teleopti.Ccc.Win.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon intraday {
+        internal static System.Drawing.Icon Intraday {
             get {
-                object obj = ResourceManager.GetObject("intraday", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Intraday1 {
-            get {
-                object obj = ResourceManager.GetObject("Intraday1", resourceCulture);
+                object obj = ResourceManager.GetObject("Intraday", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -2073,16 +2053,6 @@ namespace Teleopti.Ccc.Win.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon options {
-            get {
-                object obj = ResourceManager.GetObject("options", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
         internal static System.Drawing.Icon Payroll_Integration {
             get {
                 object obj = ResourceManager.GetObject("Payroll_Integration", resourceCulture);
@@ -2093,19 +2063,9 @@ namespace Teleopti.Ccc.Win.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon people {
+        internal static System.Drawing.Icon People {
             get {
-                object obj = ResourceManager.GetObject("people", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon People1 {
-            get {
-                object obj = ResourceManager.GetObject("People1", resourceCulture);
+                object obj = ResourceManager.GetObject("People", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -2161,32 +2121,12 @@ namespace Teleopti.Ccc.Win.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon rights {
-            get {
-                object obj = ResourceManager.GetObject("rights", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap RightToLeft {
             get {
                 object obj = ResourceManager.GetObject("RightToLeft", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon scheduler {
-            get {
-                object obj = ResourceManager.GetObject("scheduler", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -2223,19 +2163,9 @@ namespace Teleopti.Ccc.Win.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon shifts {
+        internal static System.Drawing.Icon Shifts {
             get {
-                object obj = ResourceManager.GetObject("shifts", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Shifts1 {
-            get {
-                object obj = ResourceManager.GetObject("Shifts1", resourceCulture);
+                object obj = ResourceManager.GetObject("Shifts", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -2257,6 +2187,16 @@ namespace Teleopti.Ccc.Win.Properties {
             get {
                 object obj = ResourceManager.GetObject("tag_blue", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Teleopti_WFM_main_icon {
+            get {
+                object obj = ResourceManager.GetObject("Teleopti_WFM_main_icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -2327,16 +2267,6 @@ namespace Teleopti.Ccc.Win.Properties {
             get {
                 object obj = ResourceManager.GetObject("WFM_Budgets", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon WFM_Circle_Schedules {
-            get {
-                object obj = ResourceManager.GetObject("WFM_Circle_Schedules", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

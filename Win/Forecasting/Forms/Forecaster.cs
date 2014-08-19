@@ -958,10 +958,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             toolStripStatusLabelInfo.Text = UserTexts.Resources.Initializing;
             toolStripProgressBarMain.Value = 0;
             toolStripProgressBarMain.Step++;
-
-
-            if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
-                Icon = Resources.forecaster;
         }
 
         /// <summary>

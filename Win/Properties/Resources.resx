@@ -136,9 +136,6 @@
   <data name="ccc_role_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_role_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="options" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\options.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_Copy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Copy.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -147,9 +144,6 @@
   </data>
   <data name="ccc_PersonalSettings_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_PersonalSettings_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Schedules" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFM-Schedules.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_SkillGridWeek" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_SkillGridWeek.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -190,9 +184,6 @@
   <data name="ccc_Realtime_adherence_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Realtime_adherence_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="scheduler" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\scheduler.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="circle_ball" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\circle-ball-dark-antialiased.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -219,9 +210,6 @@
   </data>
   <data name="ccc_Redo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Redo.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="intraday" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\intraday.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Template_6_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Template_6_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -304,7 +292,7 @@
   <data name="ccc_shrinkage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_shrinkage.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="People1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="People" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WFM-People.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_BrowseDots" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -370,14 +358,8 @@
   <data name="ccc_calculation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_calculation.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="shifts" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\shifts.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_result_view_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_result_view_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="WFM_Circle_Schedules" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFM-Circle-Schedules.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Magnifier_zoom_in" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Magnifier_zoom_in.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -406,9 +388,6 @@
   <data name="tag_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tag_blue.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Performance_Manager" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WFM-Performance-Manager.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_SwapShifts_32x321" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_SwapShifts_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -417,9 +396,6 @@
   </data>
   <data name="ccc_Lock2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Lock2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="people" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\people.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_ok_green_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_ok_green _16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -448,7 +424,7 @@
   <data name="ccc_agent_request_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_agent_request_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Shifts1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="Shifts" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WFM-Shifts.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_AgentInfo2" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -460,14 +436,11 @@
   <data name="warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\warning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Intraday1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="Intraday" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WFM-Intraday.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Close" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Close.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="forecaster" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\forecaster.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_SchedulerSchedule" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_SchedulerSchedule.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -649,9 +622,6 @@
   <data name="Open" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Open.PNG;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="rights" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\rights.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_ShiftWeekExclusions" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_ShiftWeekExclusions.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -831,5 +801,14 @@
   </data>
   <data name="TeleoptiWFMLogin" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TeleoptiWFMLogin.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Performance_Manager" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Performance-Manager.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Schedules" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Schedules.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Teleopti_WFM_main_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Teleopti-WFM-main-icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
