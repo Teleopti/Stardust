@@ -38,9 +38,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				TimeZoneCode = TimeZoneInfo.Utc.Id
 			};
 			var timezone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
-			var today = new DateTime(2014, 8, 8);
+			var uTCToday = new DateTime(2014, 8, 8);
+			var today = TimeZoneInfo.ConvertTime(uTCToday, TimeZoneInfo.Utc, TimeZoneInfo.Local);
+			var todayForGivenTimeZone = TimeZoneInfo.ConvertTime(today, TimeZoneInfo.Local, timezone);
 			now.Stub(x => x.UtcDateTime()).Return(today);
-			var expectedCalculationDate = TimeZoneInfo.ConvertTime(now.LocalDateOnly().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var expectedCalculationDate = todayForGivenTimeZone.AddDays(-1);
 			target.Consume(message);
 
 			serviceBus.AssertWasCalled(x => x.Send(new object()),
@@ -49,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 						Rhino.Mocks.Constraints.Is.Matching(new Predicate<object[]>(m =>
 						{
 							var msg = ((CalculateBadgeMessage) m[0]);
-							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id && msg.CalculationDate == expectedCalculationDate;
+							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id && msg.CalculationDate == expectedCalculationDate.Date;
 						}))));
 
 		}

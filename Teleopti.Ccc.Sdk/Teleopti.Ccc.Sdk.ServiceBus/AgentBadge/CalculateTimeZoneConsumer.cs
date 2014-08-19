@@ -31,16 +31,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				Logger.DebugFormat("Consume CalculateTimeZoneMessage with BusinessUnit {0}, DataSource {1} and timezone {2}",
 					message.BusinessUnitId, message.Datasource, message.TimeZoneCode);
 			}
-			var yesterday = _now.LocalDateOnly().AddDays(-1);
+			var today = _now.LocalDateTime();
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
-			var yesterdayForGivenTimeZone = TimeZoneInfo.ConvertTime(yesterday, TimeZoneInfo.Local, timeZone);
+			var todayForGivenTimeZone = TimeZoneInfo.ConvertTime(today, TimeZoneInfo.Local, timeZone);
+			var yesterdayForGivenTimeZone = todayForGivenTimeZone.AddDays(-1);
 
 			_serviceBus.Send(new CalculateBadgeMessage
 			{
 				Datasource = message.Datasource,
 				BusinessUnitId = message.BusinessUnitId,
 				Timestamp = DateTime.UtcNow,
-				CalculationDate = yesterdayForGivenTimeZone,
+				CalculationDate = yesterdayForGivenTimeZone.Date,
 				TimeZoneCode = message.TimeZoneCode 
 			});
 
