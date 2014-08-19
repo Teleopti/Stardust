@@ -52,6 +52,9 @@ define([
 			groupsubscriptions.subscribeGroupSchedule(
 				viewModel.GroupId(),
 				helpers.Date.ToServer(viewModel.ScheduleDate()),
+				function(personId) {
+					return personId == viewModel.PersonId();
+				},
 				function (data) {
 					viewModel.UpdateSchedules(data);
 					resize.notify();

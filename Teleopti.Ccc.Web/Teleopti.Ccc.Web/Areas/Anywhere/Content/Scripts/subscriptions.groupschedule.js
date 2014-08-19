@@ -53,13 +53,15 @@ define([
 		return false;
 	};
 
+	var currentThrottleTimeout;
+
 	return {
 		start: function () {
 			startPromise = messagebroker.start();
 			return startPromise;
 		},
 		
-		subscribeGroupSchedule: function (groupId, date, callback) {
+		subscribeGroupSchedule: function (groupId, date, peopleCheckCallback, callback) {
 			unsubscribeGroupSchedule();
 			incomingGroupSchedule = callback;
 			startPromise.done(function () {
@@ -69,7 +71,15 @@ define([
 					domainType: 'IPersonScheduleDayReadModel',
 					callback: function (notification) {
 						if (isMatchingDates(date, notification.StartDate, notification.EndDate)) {
-							groupScheduleHub.server.subscribeGroupSchedule(groupId, date);
+							if (peopleCheckCallback(notification.DomainReferenceId)) {
+								if (!currentThrottleTimeout) {
+									currentThrottleTimeout = setTimeout(function () {
+										clearTimeout(currentThrottleTimeout);
+										currentThrottleTimeout = undefined;
+										groupScheduleHub.server.subscribeGroupSchedule(groupId, date);
+									}, 500);
+								}
+							}
 						}
 					}
 				});

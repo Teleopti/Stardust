@@ -124,6 +124,16 @@ define([
 				groupschedulesubscriptions.subscribeGroupSchedule(
 					viewModel.GroupId(),
 					helpers.Date.ToServer(viewModel.Date()),
+					function (personIdToCheck) {
+						var found = false;
+						ko.utils.arrayForEach(viewModel.Persons(), function(p) {
+							if (p.Id == personIdToCheck) {
+								found = true;
+								return;
+							}
+						});
+						return found;
+					},
 					function (data) {
 						viewModel.UpdateSchedules(data);
 						groupScheduleDeferred.resolve();
