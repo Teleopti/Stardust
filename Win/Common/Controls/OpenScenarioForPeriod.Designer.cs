@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.comboBoxScenario = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.dateSelectionControl1 = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionControl();
 			this.labelScenario = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -45,6 +44,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this.checkBoxAdvShrinkage = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxAdvCalculation = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxAdvValidation = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.dateSelectionControl1 = new Teleopti.Ccc.Win.Common.Controls.DateSelection.DateSelectionControl();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
 			this.panelSelection.SuspendLayout();
@@ -67,11 +67,11 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this.panelSelection.Controls.Add(this.buttonCancel);
 			this.panelSelection.Controls.Add(this.tableLayoutPanel1);
 			this.panelSelection.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panelSelection.Location = new System.Drawing.Point(177, 0);
+			this.panelSelection.Location = new System.Drawing.Point(162, 0);
 			this.panelSelection.Margin = new System.Windows.Forms.Padding(0);
 			this.panelSelection.Name = "panelSelection";
 			this.panelSelection.Padding = new System.Windows.Forms.Padding(6);
-			this.panelSelection.Size = new System.Drawing.Size(341, 356);
+			this.panelSelection.Size = new System.Drawing.Size(313, 297);
 			this.panelSelection.TabIndex = 0;
 			// 
 			// buttonOK
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this.buttonOK.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonOK.ForeColor = System.Drawing.Color.White;
 			this.buttonOK.IsBackStageButton = false;
-			this.buttonOK.Location = new System.Drawing.Point(149, 317);
+			this.buttonOK.Location = new System.Drawing.Point(121, 258);
 			this.buttonOK.Margin = new System.Windows.Forms.Padding(0);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(87, 27);
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this.buttonCancel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonCancel.IsBackStageButton = false;
-			this.buttonCancel.Location = new System.Drawing.Point(244, 317);
+			this.buttonCancel.Location = new System.Drawing.Point(216, 258);
 			this.buttonCancel.Margin = new System.Windows.Forms.Padding(6);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(87, 27);
@@ -116,6 +116,8 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			// 
 			// tableLayoutPanel1
 			// 
+			this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.03279F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 61.96721F));
@@ -128,29 +130,31 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(303, 196);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(281, 196);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// comboBoxScenario
 			// 
 			this.comboBoxScenario.BackColor = System.Drawing.Color.White;
-			this.comboBoxScenario.BeforeTouchSize = new System.Drawing.Size(177, 21);
+			this.comboBoxScenario.BeforeTouchSize = new System.Drawing.Size(164, 21);
+			this.comboBoxScenario.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxScenario.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxScenario.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
 			this.comboBoxScenario.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.comboBoxScenario.Location = new System.Drawing.Point(120, 6);
+			this.comboBoxScenario.Location = new System.Drawing.Point(111, 6);
 			this.comboBoxScenario.Margin = new System.Windows.Forms.Padding(5, 6, 6, 6);
 			this.comboBoxScenario.Name = "comboBoxScenario";
-			this.comboBoxScenario.Size = new System.Drawing.Size(177, 21);
+			this.comboBoxScenario.Size = new System.Drawing.Size(164, 21);
 			this.comboBoxScenario.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxScenario.TabIndex = 1;
 			// 
 			// labelScenario
 			// 
+			this.labelScenario.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.labelScenario.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.labelScenario.Location = new System.Drawing.Point(3, 0);
 			this.labelScenario.Name = "labelScenario";
-			this.labelScenario.Size = new System.Drawing.Size(108, 30);
+			this.labelScenario.Size = new System.Drawing.Size(100, 33);
 			this.labelScenario.TabIndex = 0;
 			this.labelScenario.Text = "xxScenarioColon";
 			this.labelScenario.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -164,7 +168,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this.groupBox1.Location = new System.Drawing.Point(3, 45);
 			this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 12, 3, 3);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(297, 148);
+			this.groupBox1.Size = new System.Drawing.Size(275, 148);
 			this.groupBox1.TabIndex = 2;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "xxToggle";
@@ -186,17 +190,17 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(291, 124);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(269, 124);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
 			// checkBoxAdvLeaderMode
 			// 
-			this.checkBoxAdvLeaderMode.BeforeTouchSize = new System.Drawing.Size(285, 23);
+			this.checkBoxAdvLeaderMode.BeforeTouchSize = new System.Drawing.Size(263, 23);
 			this.checkBoxAdvLeaderMode.DrawFocusRectangle = false;
 			this.checkBoxAdvLeaderMode.Location = new System.Drawing.Point(3, 3);
 			this.checkBoxAdvLeaderMode.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvLeaderMode.Name = "checkBoxAdvLeaderMode";
-			this.checkBoxAdvLeaderMode.Size = new System.Drawing.Size(285, 23);
+			this.checkBoxAdvLeaderMode.Size = new System.Drawing.Size(263, 23);
 			this.checkBoxAdvLeaderMode.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAdvLeaderMode.TabIndex = 0;
 			this.checkBoxAdvLeaderMode.Text = "xxForecasts";
@@ -205,13 +209,13 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			// 
 			// checkBoxAdvShrinkage
 			// 
-			this.checkBoxAdvShrinkage.BeforeTouchSize = new System.Drawing.Size(271, 23);
+			this.checkBoxAdvShrinkage.BeforeTouchSize = new System.Drawing.Size(249, 23);
 			this.checkBoxAdvShrinkage.DrawFocusRectangle = false;
 			this.checkBoxAdvShrinkage.Location = new System.Drawing.Point(17, 32);
 			this.checkBoxAdvShrinkage.Margin = new System.Windows.Forms.Padding(17, 3, 3, 3);
 			this.checkBoxAdvShrinkage.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvShrinkage.Name = "checkBoxAdvShrinkage";
-			this.checkBoxAdvShrinkage.Size = new System.Drawing.Size(271, 23);
+			this.checkBoxAdvShrinkage.Size = new System.Drawing.Size(249, 23);
 			this.checkBoxAdvShrinkage.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAdvShrinkage.TabIndex = 1;
 			this.checkBoxAdvShrinkage.Text = "xxShrinkage";
@@ -220,13 +224,13 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			// 
 			// checkBoxAdvCalculation
 			// 
-			this.checkBoxAdvCalculation.BeforeTouchSize = new System.Drawing.Size(271, 23);
+			this.checkBoxAdvCalculation.BeforeTouchSize = new System.Drawing.Size(249, 23);
 			this.checkBoxAdvCalculation.DrawFocusRectangle = false;
 			this.checkBoxAdvCalculation.Location = new System.Drawing.Point(17, 61);
 			this.checkBoxAdvCalculation.Margin = new System.Windows.Forms.Padding(17, 3, 3, 3);
 			this.checkBoxAdvCalculation.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvCalculation.Name = "checkBoxAdvCalculation";
-			this.checkBoxAdvCalculation.Size = new System.Drawing.Size(271, 23);
+			this.checkBoxAdvCalculation.Size = new System.Drawing.Size(249, 23);
 			this.checkBoxAdvCalculation.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAdvCalculation.TabIndex = 2;
 			this.checkBoxAdvCalculation.Text = "xxCalculations";
@@ -235,30 +239,31 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			// 
 			// checkBoxAdvValidation
 			// 
-			this.checkBoxAdvValidation.BeforeTouchSize = new System.Drawing.Size(285, 23);
+			this.checkBoxAdvValidation.BeforeTouchSize = new System.Drawing.Size(263, 23);
 			this.checkBoxAdvValidation.DrawFocusRectangle = false;
 			this.checkBoxAdvValidation.Location = new System.Drawing.Point(3, 90);
 			this.checkBoxAdvValidation.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvValidation.Name = "checkBoxAdvValidation";
-			this.checkBoxAdvValidation.Size = new System.Drawing.Size(285, 23);
+			this.checkBoxAdvValidation.Size = new System.Drawing.Size(263, 23);
 			this.checkBoxAdvValidation.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAdvValidation.TabIndex = 3;
 			this.checkBoxAdvValidation.Text = "xxValidations";
 			this.checkBoxAdvValidation.ThemesEnabled = false;
 			this.checkBoxAdvValidation.CheckStateChanged += new System.EventHandler(this.checkBoxAdvValidationCheckStateChanged);
-			//
+			// 
 			// dateSelectionControl1
 			// 
 			this.dateSelectionControl1.BackColor = System.Drawing.Color.White;
 			this.dateSelectionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dateSelectionControl1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateSelectionControl1.Location = new System.Drawing.Point(0, 0);
-			this.dateSelectionControl1.Margin = new System.Windows.Forms.Padding(0, -2, 0, 0);
+			this.dateSelectionControl1.Margin = new System.Windows.Forms.Padding(0);
 			this.dateSelectionControl1.Name = "dateSelectionControl1";
 			this.dateSelectionControl1.ShowAddButtons = false;
 			this.dateSelectionControl1.ShowDateSelectionCalendar = false;
 			this.dateSelectionControl1.ShowDateSelectionRolling = false;
 			this.dateSelectionControl1.ShowTabArea = false;
-			this.dateSelectionControl1.Size = new System.Drawing.Size(165, 298);
+			this.dateSelectionControl1.Size = new System.Drawing.Size(162, 297);
 			this.dateSelectionControl1.TabIndex = 4;
 			this.dateSelectionControl1.UseFuture = true;
 			// 
@@ -268,12 +273,13 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.25532F));
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65.74468F));
 			this.tableLayoutPanel3.Controls.Add(this.panelSelection, 1, 0);
+			this.tableLayoutPanel3.Controls.Add(this.dateSelectionControl1, 0, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(1, 0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(518, 356);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(475, 297);
 			this.tableLayoutPanel3.TabIndex = 0;
 			// 
 			// errorProvider1
@@ -287,19 +293,21 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(520, 356);
+			this.ClientSize = new System.Drawing.Size(477, 297);
 			this.Controls.Add(this.tableLayoutPanel3);
-			this.tableLayoutPanel3.Controls.Add(this.dateSelectionControl1, 0, 0);
 			this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.HelpButton = false;
+			this.Location = new System.Drawing.Point(200, 200);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(231, 40);
 			this.Name = "OpenScenarioForPeriod";
 			this.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
 			this.ShowIcon = false;
+			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "xxOpen";
 			this.panelSelection.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);

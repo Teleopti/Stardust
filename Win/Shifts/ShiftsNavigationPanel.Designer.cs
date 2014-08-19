@@ -53,7 +53,7 @@
 			this.toolStripEx1.Padding = new System.Windows.Forms.Padding(12, 0, 1, 0);
 			this.toolStripEx1.ShowCaption = false;
 			this.toolStripEx1.ShowLauncher = false;
-			this.toolStripEx1.Size = new System.Drawing.Size(299, 73);
+			this.toolStripEx1.Size = new System.Drawing.Size(299, 54);
 			this.toolStripEx1.TabIndex = 0;
 			this.toolStripEx1.Text = "toolStripEx1";
 			this.toolStripEx1.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
@@ -85,6 +85,7 @@
 			this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.Name = "ShiftsNavigationPanel";
 			this.Size = new System.Drawing.Size(299, 732);
+			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ShiftsNavigationPanel_KeyUp);
 			this.toolStripEx1.ResumeLayout(false);
 			this.toolStripEx1.PerformLayout();
 			this.ResumeLayout(false);

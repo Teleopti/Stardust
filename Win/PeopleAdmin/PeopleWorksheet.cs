@@ -70,8 +70,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// Set colors, themes on controls.
 			SetColors();
 			setPermissionOnControls();
-			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
-				Icon = Resources.people;
+
 			_readOnly = !PrincipalAuthorization.Instance().IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
 		}

@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				SetTexts();
 			}
-			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
-				Icon = Properties.Resources.options;
+
 			// Sets colors for form & controls.
 			SetColors();
 

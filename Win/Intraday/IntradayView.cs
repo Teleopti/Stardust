@@ -65,8 +65,6 @@ namespace Teleopti.Ccc.Win.Intraday
             ControlBox = false;
             StartProgress();
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(Resources.LoadingFormThreeDots);
-            if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
-                Icon = Properties.Resources.intraday;
 
             _settingManager = new IntradaySettingManager();
 

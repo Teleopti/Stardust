@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.splitContainerAdvHorizontal.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.splitContainerAdvHorizontal.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
 			this.splitContainerAdvHorizontal.Size = new System.Drawing.Size(920, 579);
-			this.splitContainerAdvHorizontal.SplitterDistance = 290;
+			this.splitContainerAdvHorizontal.SplitterDistance = 400;
 			this.splitContainerAdvHorizontal.SplitterWidth = 3;
 			this.splitContainerAdvHorizontal.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
 			this.splitContainerAdvHorizontal.TabIndex = 0;

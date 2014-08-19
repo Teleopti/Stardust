@@ -374,9 +374,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripStatusLabelTimeZone,
             this.toolStripStatusLabelScheduleTag,
             this.toolStripStatusLabelContractTime});
-			this.statusStrip1.Location = new System.Drawing.Point(3, 485);
+			this.statusStrip1.Location = new System.Drawing.Point(3, 669);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(1267, 26);
+			this.statusStrip1.Size = new System.Drawing.Size(1229, 26);
 			this.statusStrip1.TabIndex = 0;
 			this.statusStrip1.Text = "yystatusStrip1";
 			// 
@@ -390,7 +390,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 9;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 10;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -401,7 +401,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripStatusLabelStatus.Name = "toolStripStatusLabelStatus";
 			this.toolStripStatusLabelStatus.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.SetShortcut(this.toolStripStatusLabelStatus, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(1128, 21);
+			this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(1089, 21);
 			this.toolStripStatusLabelStatus.Spring = true;
 			this.toolStripStatusLabelStatus.Text = "READY";
 			this.toolStripStatusLabelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1392,7 +1392,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.SelectedTab = this.toolStripTabItemHome;
 			this.ribbonControlAdv1.Show2010CustomizeQuickItemDialog = false;
 			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = true;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(1273, 160);
+			this.ribbonControlAdv1.Size = new System.Drawing.Size(1235, 160);
 			this.ribbonControlAdv1.SystemText.QuickAccessCustomizeCaptionText = "Customize QuickAccess Toolbar";
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "";
 			toolStripTabGroup1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
@@ -3380,7 +3380,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.schedulerSplitters1.Location = new System.Drawing.Point(3, 160);
 			this.schedulerSplitters1.Name = "schedulerSplitters1";
 			this.schedulerSplitters1.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
-			this.schedulerSplitters1.Size = new System.Drawing.Size(1267, 325);
+			this.schedulerSplitters1.Size = new System.Drawing.Size(1229, 509);
 			this.schedulerSplitters1.TabIndex = 6;
 			// 
 			// contextMenuStripRequests
@@ -3479,7 +3479,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Borders = new System.Windows.Forms.Padding(0);
-			this.ClientSize = new System.Drawing.Size(1271, 511);
+			this.ClientSize = new System.Drawing.Size(1233, 695);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.Controls.Add(this.backStage1);
 			this.Controls.Add(this.schedulerSplitters1);

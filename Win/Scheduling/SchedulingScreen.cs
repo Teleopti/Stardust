@@ -225,8 +225,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemPaidTime.Tag = ScheduleTimeType.PaidTime;
 			toolStripMenuItemOverTime.Tag = ScheduleTimeType.OverTime;
 			if (!DesignMode) SetTexts();
-			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
-				Icon = Properties.Resources.scheduler;
 
 			// this timer is just for fixing bug 17948 regarding dateNavigationControl
 			_tmpTimer.Interval = 50;

@@ -67,8 +67,6 @@ namespace Teleopti.Ccc.Win.Permissions
 			}
 
 			PermissionsExplorerStateHolder = new PermissionsExplorerStateHolder();
-			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
-				Icon = Resources.rights;
 
 		}
 

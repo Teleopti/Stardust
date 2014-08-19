@@ -46,5 +46,11 @@ namespace Teleopti.Ccc.Win.Shifts
 		{
 			open();
 		}
+
+		private void ShiftsNavigationPanel_KeyUp(object sender, KeyEventArgs e)
+		{
+			if(e.KeyCode == Keys.Enter)
+				OpenShifts();
+		}
     }
 }

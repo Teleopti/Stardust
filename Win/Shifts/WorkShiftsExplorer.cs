@@ -48,8 +48,6 @@ namespace Teleopti.Ccc.Win.Shifts
 				ribbonControlAdv1.MenuButtonText = UserTexts.Resources.FileProperCase.ToUpper();
 			}
 			setPermissionOnControls();
-			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
-				Icon = Resources.shifts;
 			ribbonControlAdv1.BeforeContextMenuOpen += ribbonControlBeforeContextMenuOpen;
 		}
 
