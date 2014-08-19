@@ -55,20 +55,21 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-					<RepeatButton  Width="30" Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalEarlier}" Grid.Column="0" Content="&lt;&lt;" Padding="0"  />
+					<RepeatButton  Width="30" Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalEarlier}" Grid.Column="0" Content="&lt;&lt;" Padding="0" x:Name="MoveBackButton" />
 
-					<RepeatButton   Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalEarlier}"  Grid.Column="1" Content="&lt;" Padding="0"  />
+					<RepeatButton   Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalEarlier}"  Grid.Column="1" Content="&lt;" Padding="0" x:Name="DecreaseStartButton" />
                     
-                    <TextBox MaxHeight="22" Keyboard.KeyDown="TextBox_KeyDown" Grid.Column="2">
-                        <TextBox.Text>
-                            <MultiBinding Converter="{StaticResource startDateTimeToLocalStringConverter}" ConverterParameter="{StaticResource DateMode}" Mode="TwoWay">
-                                <MultiBinding.Bindings>
-                                    <Binding Path="Period.Start"/>
-                                    <Binding RelativeSource="{RelativeSource Self}" Path="(GuiHelpers:VisualTreeTimeZoneInfo.TimeZoneInfo)"/>
-                                </MultiBinding.Bindings>
-                            </MultiBinding>
-                        </TextBox.Text>
-                    </TextBox>
+                    <TextBox MaxHeight="22" Keyboard.KeyDown="TextBox_KeyDown" Grid.Column="2" x:Name="FromDatTextBox">
+						<TextBox.Text>
+							<MultiBinding Converter="{StaticResource startDateTimeToLocalStringConverter}" ConverterParameter="{StaticResource DateMode}" Mode="TwoWay">
+								<MultiBinding.Bindings>
+									<Binding Path="Period.Start"/>
+									<Binding RelativeSource="{RelativeSource Self}" Path="(GuiHelpers:VisualTreeTimeZoneInfo.TimeZoneInfo)"/>
+								</MultiBinding.Bindings>
+							</MultiBinding>
+						</TextBox.Text>
+						
+					</TextBox>
 
                     <TextBox MaxHeight="22" Keyboard.KeyDown="TextBox_KeyDown" Grid.Column="3" >
                         <TextBox.Text>
@@ -79,8 +80,26 @@
                                 </MultiBinding.Bindings>
                             </MultiBinding>
                         </TextBox.Text>
-                    </TextBox>
-					<RepeatButton  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalLater}" Grid.Column="4" HorizontalAlignment="Left" Content="&gt;" Padding="0" />
+						<TextBox.Style>
+							<Style TargetType="TextBox">
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding ElementName=DecreaseStartButton, Path=IsMouseOver}" Value="True">
+										<Setter Property="FontWeight" Value="Bold"></Setter>
+									</DataTrigger>
+									<DataTrigger Binding="{Binding ElementName=IncreaseStartButton, Path=IsMouseOver}" Value="True">
+										<Setter Property="FontWeight" Value="Bold"></Setter>
+									</DataTrigger>
+									<DataTrigger Binding="{Binding ElementName=MoveForwardButton, Path=IsMouseOver}" Value="True">
+										<Setter Property="FontWeight" Value="Bold"></Setter>
+									</DataTrigger>
+									<DataTrigger Binding="{Binding ElementName=MoveBackButton, Path=IsMouseOver}" Value="True">
+										<Setter Property="FontWeight" Value="Bold"></Setter>
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</TextBox.Style>
+					</TextBox>
+					<RepeatButton  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalLater}" Grid.Column="4" HorizontalAlignment="Left" Content="&gt;" Padding="0" x:Name="IncreaseStartButton"/>
                 </Grid>
 
                 <!--EndDateTime-->
@@ -94,7 +113,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-					<RepeatButton  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalEarlier}" HorizontalAlignment="Right" Grid.Column="1" Content="&lt;" Padding="0" >
+					<RepeatButton  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalEarlier}" HorizontalAlignment="Right" Grid.Column="1" Content="&lt;" Padding="0" x:Name="DecreaseEndButton" >
 					</RepeatButton>
                     <TextBox MaxHeight="22" Keyboard.KeyDown="TextBox_KeyDown" Grid.Column="2" >
                         <TextBox.Text>
@@ -105,7 +124,8 @@
                                 </MultiBinding.Bindings>
                             </MultiBinding>
                         </TextBox.Text>
-                    </TextBox>
+					
+					</TextBox>
 
                     <TextBox MaxHeight="22" Keyboard.KeyDown="TextBox_KeyDown" Grid.Column="3">
                         <TextBox.Text>
@@ -116,10 +136,28 @@
                                 </MultiBinding.Bindings>
                             </MultiBinding>
                         </TextBox.Text>
-                    </TextBox>
+						<TextBox.Style>
+							<Style TargetType="TextBox">
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding ElementName=DecreaseEndButton, Path=IsMouseOver}" Value="True">
+										<Setter Property="FontWeight" Value="Bold"></Setter>
+									</DataTrigger>
+									<DataTrigger Binding="{Binding ElementName=IncreaseEndButton, Path=IsMouseOver}" Value="True">
+										<Setter Property="FontWeight" Value="Bold"></Setter>
+									</DataTrigger>
+									<DataTrigger Binding="{Binding ElementName=MoveForwardButton, Path=IsMouseOver}" Value="True">
+										<Setter Property="FontWeight" Value="Bold"></Setter>
+									</DataTrigger>
+									<DataTrigger Binding="{Binding ElementName=MoveBackButton, Path=IsMouseOver}" Value="True">
+										<Setter Property="FontWeight" Value="Bold"></Setter>
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</TextBox.Style>
+					</TextBox>
 
-					<RepeatButton  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalLater}" Grid.Column="4" Content="&gt;" Padding="0"  />
-					<RepeatButton  Width="30" Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalLater}" Grid.Column="5" Content="&gt;&gt;" Padding="0"  />
+					<RepeatButton  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalLater}" Grid.Column="4" Content="&gt;" Padding="0" x:Name="IncreaseEndButton" />
+					<RepeatButton  Width="30" Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalLater}" Grid.Column="5" Content="&gt;&gt;" Padding="0"  x:Name="MoveForwardButton"/>
                 </Grid>
 
                 <ComboBox ItemsSource="{Binding Path=SelectablePayloads}"  
