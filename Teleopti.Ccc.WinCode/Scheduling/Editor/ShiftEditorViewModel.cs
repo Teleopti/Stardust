@@ -348,9 +348,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 					if (assignement != null)
 					{
 						var editorShift = _editableShiftMapper.CreateEditorShift(assignement);
-                        editorShift.ShiftCategory = _category;
-						_editableShiftMapper.SetMainShiftLayers(assignement, editorShift);
-                        new TriggerShiftEditorUpdate().PublishEvent("ShiftEditorViewModel", _eventAggregator); 
+						if (editorShift != null)
+						{
+							editorShift.ShiftCategory = _category;
+							_editableShiftMapper.SetMainShiftLayers(assignement, editorShift);
+							new TriggerShiftEditorUpdate().PublishEvent("ShiftEditorViewModel", _eventAggregator); 
+						}
+						
                     }
                 }
             }

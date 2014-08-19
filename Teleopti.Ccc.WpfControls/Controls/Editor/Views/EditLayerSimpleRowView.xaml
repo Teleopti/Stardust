@@ -6,7 +6,8 @@
     xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode"
     xmlns:DateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter;assembly=Teleopti.Ccc.WinCode"
     xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
-    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode">
+    xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
+    xmlns:views="clr-namespace:Teleopti.Ccc.WpfControls.Controls.Editor.Views">
 
 
     <UserControl.Resources>
@@ -20,10 +21,12 @@
             <DateTimeConverter:DateTimeParseMode x:Key="TimeMode">Time</DateTimeConverter:DateTimeParseMode>
             <DateTimeConverter:DateTimeParseMode x:Key="DateMode">Date</DateTimeConverter:DateTimeParseMode>
             
-            <DataTemplate x:Key="PayloadTemplate">
-                <TextBlock Text="{Binding Path=Description}"/>
-            </DataTemplate>
-
+			<DataTemplate x:Key="PayloadTemplate">
+				<views:ActivityShortView DataContext="{Binding}"/>
+			</DataTemplate>
+			
+			<Geometry x:Key="DownArrowGeometry">M 0 0 L 3.5 4 L 7 0 Z</Geometry>
+			
 		</ResourceDictionary>
     </UserControl.Resources>
 
@@ -55,9 +58,9 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-					<RepeatButton  Width="30" Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalEarlier}" Grid.Column="0" Content="&lt;&lt;" Padding="0" x:Name="MoveBackButton" />
+					<RepeatButton   MaxHeight="22" Width="30" Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalEarlier}" Grid.Column="0" Content="&lt;&lt;" Padding="0" x:Name="MoveBackButton" />
 
-					<RepeatButton   Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalEarlier}"  Grid.Column="1" Content="&lt;" Padding="0" x:Name="DecreaseStartButton" />
+					<RepeatButton   MaxHeight="22" Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalEarlier}"  Grid.Column="1" Content="&lt;" Padding="0" x:Name="DecreaseStartButton" />
                     
                     <TextBox MaxHeight="22" Keyboard.KeyDown="TextBox_KeyDown" Grid.Column="2" x:Name="FromDatTextBox">
 						<TextBox.Text>
@@ -99,7 +102,7 @@
 							</Style>
 						</TextBox.Style>
 					</TextBox>
-					<RepeatButton  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalLater}" Grid.Column="4" HorizontalAlignment="Left" Content="&gt;" Padding="0" x:Name="IncreaseStartButton"/>
+					<RepeatButton  MaxHeight="22"  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveStartOneIntervalLater}" Grid.Column="4" HorizontalAlignment="Left" Content="&gt;" Padding="0" x:Name="IncreaseStartButton"/>
                 </Grid>
 
                 <!--EndDateTime-->
@@ -113,7 +116,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-					<RepeatButton  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalEarlier}" HorizontalAlignment="Right" Grid.Column="1" Content="&lt;" Padding="0" x:Name="DecreaseEndButton" >
+					<RepeatButton  MaxHeight="22" Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalEarlier}" HorizontalAlignment="Right" Grid.Column="1" Content="&lt;" Padding="0" x:Name="DecreaseEndButton" >
 					</RepeatButton>
                     <TextBox MaxHeight="22" Keyboard.KeyDown="TextBox_KeyDown" Grid.Column="2" >
                         <TextBox.Text>
@@ -156,18 +159,27 @@
 						</TextBox.Style>
 					</TextBox>
 
-					<RepeatButton  Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalLater}" Grid.Column="4" Content="&gt;" Padding="0" x:Name="IncreaseEndButton" />
-					<RepeatButton  Width="30" Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalLater}" Grid.Column="5" Content="&gt;&gt;" Padding="0"  x:Name="MoveForwardButton"/>
+					<RepeatButton  MaxHeight="22" Width="15" Command="{x:Static Commands:CommonRoutedCommands.MoveEndOneIntervalLater}" Grid.Column="4" Content="&gt;" Padding="0" x:Name="IncreaseEndButton" />
+					<RepeatButton  MaxHeight="22" Width="30" Command="{x:Static Commands:CommonRoutedCommands.MovePeriodOneIntervalLater}" Grid.Column="5" Content="&gt;&gt;" Padding="0"  x:Name="MoveForwardButton"/>
                 </Grid>
 
-                <ComboBox ItemsSource="{Binding Path=SelectablePayloads}"  
+				<ComboBox  MaxHeight="22"
+						   ItemsSource="{Binding Path=SelectablePayloads}"  
                           IsSynchronizedWithCurrentItem="True"  
                           Grid.Column="3" 
                           Style="{StaticResource BasicComboBox}"
                           ItemTemplate="{StaticResource PayloadTemplate}"/>
-                
-                
-                <Button Command="{Binding Path=UpdateLayerCommand.Command}"
+
+				<Path
+				Margin="3,1,8,0"
+					 Grid.Column="3"
+                  Fill="{Binding Path=Foreground, ElementName=CmBox}"
+                  Data="{DynamicResource DownArrowGeometry}"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Center" IsHitTestVisible="False">
+				</Path>
+				
+				<Button Command="{Binding Path=UpdateLayerCommand.Command}"
 				    MaxHeight="22"
                     Grid.Column="4"
 				    Content="{x:Static UserTexts:Resources.Update}" IsDefault="True" Focusable="True">
