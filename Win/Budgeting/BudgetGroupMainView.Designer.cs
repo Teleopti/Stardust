@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
 
 namespace Teleopti.Ccc.Win.Budgeting
@@ -178,6 +179,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// 
 			// backStageButton4
 			// 
+			this.backStageButton4.AutoSize = true;
 			this.backStageButton4.Accelerator = "";
 			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
@@ -185,6 +187,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			resources.ApplyResources(this.backStageButton4, "backStageButton4");
 			this.backStageButton4.Name = "backStageButton4";
 			this.backStageButton4.Click += new System.EventHandler(this.backStageButton4Click);
+			this.backStageButton4.VisibleChanged +=	new EventHandler(this.backStageButton4VisibleChanged);
 			// 
 			// toolStripTabItem2
 			// 
@@ -230,8 +233,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripExLoad.Image = null;
 			this.toolStripExLoad.ImageScalingSize = new System.Drawing.Size(25, 25);
 			this.toolStripExLoad.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonLoadForecastedHours,
-            this.toolStripButtonStaffEmployed});
+			this.toolStripButtonLoadForecastedHours,
+			this.toolStripButtonStaffEmployed});
 			this.toolStripExLoad.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
 			this.toolStripExLoad.Name = "toolStripExLoad";
 			this.toolStripExLoad.Office12Mode = false;
@@ -271,9 +274,9 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripExViews.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExViews.Image = null;
 			this.toolStripExViews.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonMonthView,
-            this.toolStripButtonWeekView,
-            this.toolStripButtonDayView});
+			this.toolStripButtonMonthView,
+			this.toolStripButtonWeekView,
+			this.toolStripButtonDayView});
 			this.toolStripExViews.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Office2007;
 			this.toolStripExViews.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
 			this.toolStripExViews.Name = "toolStripExViews";
@@ -342,7 +345,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.toolStripEx2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripEx2.Image = null;
 			this.toolStripEx2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonSave});
+			this.toolStripButtonSave});
 			this.toolStripEx2.Name = "toolStripEx2";
 			this.toolStripEx2.Office12Mode = false;
 			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripEx2, false);
@@ -372,8 +375,8 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// 
 			this.statusStripEx1.BeforeTouchSize = new System.Drawing.Size(1218, 22);
 			this.statusStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabelBudgetGroupMainView,
-            this.toolStripSpinningProgressControlStatus});
+			this.toolStripStatusLabelBudgetGroupMainView,
+			this.toolStripSpinningProgressControlStatus});
 			resources.ApplyResources(this.statusStripEx1, "statusStripEx1");
 			this.statusStripEx1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
 			this.statusStripEx1.Name = "statusStripEx1";

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Budgeting;
@@ -63,6 +64,10 @@ namespace Teleopti.Ccc.Win.Budgeting
 			tabView.Dock = DockStyle.Fill;
 			tabView.VisibleChanged += budgetGroupTabViewVisibleChanged;
 			ribbonControlAdvFixed1.MenuButtonText = UserTexts.Resources.FileProperCase.ToUpper();
+			
+			ribbonControlAdvFixed1.QuickPanelVisible = true;
+			ribbonControlAdvFixed1.ShowQuickItemsDropDownButton = false;
+			ribbonControlAdvFixed1.Show2010CustomizeQuickItemDialog = false;
 		}
 
 		void budgetGroupTabViewVisibleChanged(object sender, EventArgs e)
@@ -532,6 +537,11 @@ namespace Teleopti.Ccc.Win.Budgeting
 			if (Visible)
 				return;
 			Application.Exit();
+		}
+
+		private void backStageButton4VisibleChanged(object sender, EventArgs e)
+		{
+			backStageButton4.Location = new Point(0, backStageButton4.Location.Y);
 		}
 	}
 }
