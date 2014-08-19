@@ -308,14 +308,6 @@ BEGIN
 		AND b.acd_login_id			= fa.acd_login_id
 		AND ch.shift_startdate_id	= fa.date_id
 	WHERE b.business_unit_id = @business_unit_id
-
-	DELETE fs
-	FROM #stg_schedule_changed ch
-	INNER JOIN mart.fact_schedule_deviation fs
-		ON ch.person_id = fs.person_id
-		AND ch.shift_startdate_id = fs.shift_startdate_id 
-	WHERE fs.business_unit_id = @business_unit_id
-
 END
 
 --remove one minute from shifts ending at UTC midnight(00:00)
@@ -429,9 +421,25 @@ AND stat.date_id >= shifts.shift_startdate_id
 AND stat.date_id >= shifts.date_id --make sure the stat intervals are after shift
 AND stat.interval_id >= shifts.interval_id
 
-
 DELETE FROM #fact_schedule_deviation WHERE shift_startdate_id IS NULL
 
+--Shorten the time between delete and insert, might help for #
+if (@isIntraday=0)
+BEGIN
+	DELETE FROM mart.fact_schedule_deviation
+	WHERE date_id between @start_date_id AND @end_date_id
+	AND business_unit_id = @business_unit_id
+END
+
+if (@isIntraday=1)
+BEGIN
+	DELETE fs
+	FROM #stg_schedule_changed ch
+	INNER JOIN mart.fact_schedule_deviation fs
+		ON ch.person_id = fs.person_id
+		AND ch.shift_startdate_id = fs.shift_startdate_id 
+	WHERE fs.business_unit_id = @business_unit_id
+END
 
 /* Insert of new data */
 INSERT INTO mart.fact_schedule_deviation
