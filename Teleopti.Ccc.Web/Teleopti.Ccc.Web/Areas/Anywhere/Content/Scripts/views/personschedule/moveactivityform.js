@@ -35,11 +35,13 @@
 		self.TimeZoneName = ko.observable();
 		self.ianaTimeZone = ko.observable();
 		self.ianaTimeZoneOther = ko.observable();
+		self.IsOtherTimezone = ko.observable(false);
 
 		this.StartTimeOtherTimeZone = ko.computed(function () {
 			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
 				var userTime = getMomentFromInput(self.StartTime()).tz(self.ianaTimeZone());
 				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
+				self.IsOtherTimezone(otherTime.format('ha z') != userTime.format('ha z'));
 				return otherTime.format('HH:mm');
 			}
 			return undefined;

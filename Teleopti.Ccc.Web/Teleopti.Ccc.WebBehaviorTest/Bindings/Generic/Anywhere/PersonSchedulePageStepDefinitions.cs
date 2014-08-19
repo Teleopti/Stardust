@@ -221,22 +221,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
             Browser.Interactions.AssertNotExists(".time-line", ".time-line.other-time-zone");
         }
 
-        [When(@"I should not see any local hours for the agent's new activity")]
+        [Then(@"I should not see any local hours for the agent's new activity")]
         public void WhenIShouldNotSeeAnyLocalHoursForTheAgentSNewActivity()
         {
-            Browser.Interactions.AssertNotExists(".activity-form", ".activity-form .other-time-zone");
-            Browser.Interactions.AssertNotExists(".activity-form", ".activity-form .other-start-time");
-            Browser.Interactions.AssertNotExists(".activity-form", ".activity-form .other-end-time");
+            Browser.Interactions.AssertNotVisibleUsingJQuery(".activity-form .other-time-zone span");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".activity-form .other-start-time span");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".activity-form .other-end-time span");
         }
 
-        [When(@"I should see local hours for the agent's new activity with")]
+        [Then(@"I should see local hours for the agent's new activity with")]
         public void WhenIShouldSeeLocalHoursForTheAgentSNewActivityWith(Table table)
         {
             var localTimeInfo = table.CreateInstance<AddActivityFormInfo>();
-            Browser.Interactions.AssertFirstContains(".activity-form .other-time-zone", localTimeInfo.LocalTimeZone);
-            Browser.Interactions.AssertExists(".activity-form .other-start-time[data-start-time='{0}']", localTimeInfo.StartTime);
-            Browser.Interactions.AssertExists(".activity-form .other-end-time[data-end-time='{0}']", localTimeInfo.EndTime);
+			Browser.Interactions.AssertFirstContains(".activity-form .other-start-time span", localTimeInfo.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.AssertFirstContains(".activity-form .other-end-time span", localTimeInfo.EndTime.ToShortTimeString(DataMaker.Me().Culture));
         }
+
 		[When(@"I click '(.*)' on absence named '(.*)'")]
 		public void WhenIClickOnAbsenceNamed(CssClass cssClass, string absenceName)
 		{

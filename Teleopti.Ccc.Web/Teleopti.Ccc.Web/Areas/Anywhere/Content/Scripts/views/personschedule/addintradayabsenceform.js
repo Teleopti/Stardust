@@ -30,6 +30,7 @@ define([
 		this.WorkingShift = ko.observable();
 
 		this.TimeZoneName = ko.observable();
+		this.IsOtherTimezone = ko.observable(false);
 		
 		var groupId;
 		var personId;
@@ -43,6 +44,7 @@ define([
 			if (self.StartTime()) {
 				var userTime = getMomentFromInput(self.StartTime()).tz(ianaTimeZone);
 				var otherTime = userTime.clone().tz(ianaTimeZoneOther);
+				self.IsOtherTimezone(otherTime.format('ha z') != userTime.format('ha z'));
 				return otherTime.format('HH:mm');
 			}
 			return undefined;

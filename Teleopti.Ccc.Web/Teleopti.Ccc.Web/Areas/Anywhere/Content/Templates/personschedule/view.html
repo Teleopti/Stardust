@@ -58,15 +58,17 @@
                                             <!-- ko with: $root.AddIntradayAbsenceForm -->
                                             <form action="#" class="intraday-absence-form">
                                                 <table class="edit-area">
-                                                    <tr>
-                                                        <td class="col-md-3 edit-time-column">
-                                                            <select class="absence-type input-sm form-control" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence"></select>
-                                                        </td>
-                                                        <td class="other-time-zone">
-                                                            <i class="glyphicon glyphicon-globe"></i>
-                                                            <span data-bind="html: TimeZoneName"></span>
-                                                        </td>
-                                                    </tr>
+													<tr>
+														<td class="col-md-3 edit-time-column">
+															<select class="absence-type input-sm form-control" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence"></select>
+														</td>
+														<td class="other-time-zone">
+															<div data-bind="visible:IsOtherTimezone">
+																<i class="glyphicon glyphicon-globe"></i>
+																<span data-bind="html: TimeZoneName"></span>
+															</div>
+														</td>
+													</tr>
                                                     <tr>
                                                         <td class="col-md-3 edit-time-column">
                                                             <div class="bootstrap-timepicker">
@@ -77,26 +79,30 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td>
-                                                            <i class="glyphicon glyphicon-step-backward"></i>
-                                                            <span data-bind="html: StartTimeOtherTimeZone"></span>
-                                                        </td>
+	                                                    <td>
+		                                                    <div data-bind="visible:IsOtherTimezone">
+			                                                    <i class="glyphicon glyphicon-step-backward"></i>
+			                                                    <span data-bind="html: StartTimeOtherTimeZone"></span>
+		                                                    </div>
+	                                                    </td>
                                                     </tr>
-                                                    <tr>
-                                                        <td class="col-md-3 edit-time-column">
-                                                            <div class="bootstrap-timepicker">
-                                                                <div class="input-group">
-                                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-step-forward"></i></span>
-                                                                    <input type="text" class="end-time form-control" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
-                                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <i class="glyphicon glyphicon-step-forward"></i>
-                                                            <span data-bind="html: EndTimeOtherTimeZone"></span>
-                                                        </td>
-                                                    </tr>
+													<tr>
+														<td class="col-md-3 edit-time-column">
+															<div class="bootstrap-timepicker">
+																<div class="input-group">
+																	<span class="input-group-addon"><i class="glyphicon glyphicon-step-forward"></i></span>
+																	<input type="text" class="end-time form-control" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
+																	<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+																</div>
+															</div>
+														</td>
+														<td>
+															<div data-bind="visible:IsOtherTimezone">
+																<i class="glyphicon glyphicon-step-forward"></i>
+																<span data-bind="html: EndTimeOtherTimeZone"></span>
+															</div>
+														</td>
+													</tr>
                                                     <tr>
                                                         <td class="col-md-3">
                                                             <!-- ko if: ErrorMessage -->
@@ -123,10 +129,12 @@
                                                         <td class="col-md-3 edit-time-column">
                                                             <select class="activity-type input-sm form-control" data-bind="enable: !$root.Loading(), options: ActivityTypes, optionsText: 'Name', optionsValue: 'Id', value: Activity"></select>
                                                         </td>
-                                                        <td class="other-time-zone">
-                                                            <i class="glyphicon glyphicon-globe"></i>
-                                                            <span data-bind="html: TimeZoneName"></span>
-                                                        </td>
+	                                                    <td class="other-time-zone">
+															<div data-bind="visible:IsOtherTimezone">
+																<i class="glyphicon glyphicon-globe"></i>
+																<span data-bind="html: TimeZoneName"></span>
+															</div>
+	                                                    </td>
                                                     </tr>
                                                     <tr>
                                                         <td class="col-md-3 edit-time-column">
@@ -138,10 +146,12 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td>
-                                                            <i class="glyphicon glyphicon-step-backward"></i>
-															<span data-bind="html: StartTimeOtherTimeZone"></span>
-                                                        </td>
+	                                                    <td class="other-start-time">
+															<div data-bind="visible:IsOtherTimezone">
+																<i class="glyphicon glyphicon-step-backward"></i>
+																<span data-bind="html: StartTimeOtherTimeZone"></span>
+															</div>
+	                                                    </td>
                                                     </tr>
                                                     <tr>
                                                         <td class="col-md-3 edit-time-column">
@@ -153,10 +163,12 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td>
-	                                                        <i class="glyphicon glyphicon-step-forward"></i>
-															<span data-bind="html: EndTimeOtherTimeZone"></span>	
-                                                        </td>
+	                                                    <td class="other-end-time">
+															<div data-bind="visible:IsOtherTimezone">
+																<i class="glyphicon glyphicon-step-forward"></i>
+																<span data-bind="html: EndTimeOtherTimeZone"></span>
+															</div>
+	                                                    </td>
                                                     </tr>
                                                     <tr>
                                                         <td class="col-md-6">
@@ -182,10 +194,12 @@
                                                 <table class="edit-area">
                                                     <tr>
                                                         <td class="col-md-3 edit-time-column"></td>
-                                                        <td class="other-time-zone">
-                                                            <i class="glyphicon glyphicon-globe"></i>
-                                                            <span data-bind="html: TimeZoneName"></span>
-                                                        </td>
+	                                                    <td class="other-time-zone">
+															<div data-bind="visible:IsOtherTimezone">
+																<i class="glyphicon glyphicon-globe"></i>
+																<span data-bind="html: TimeZoneName"></span>
+															</div>
+	                                                    </td>
                                                     </tr>
                                                     <tr>
                                                         <td class="col-md-3 edit-time-column">
@@ -197,10 +211,12 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td>
-	                                                        <i class="glyphicon glyphicon-step-backward"></i>
-															<span data-bind="html: StartTimeOtherTimeZone"></span>
-                                                        </td>
+	                                                    <td>
+		                                                    <div data-bind="visible:IsOtherTimezone">
+			                                                    <i class="glyphicon glyphicon-step-backward"></i>
+			                                                    <span data-bind="html: StartTimeOtherTimeZone"></span>
+		                                                    </div>
+	                                                    </td>
                                                     </tr>
 
                                                     <tr>

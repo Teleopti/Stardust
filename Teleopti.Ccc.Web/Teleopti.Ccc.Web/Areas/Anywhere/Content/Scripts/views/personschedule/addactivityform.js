@@ -31,7 +31,8 @@ define([
 		this.TimeZoneName = ko.observable();
 		this.ianaTimeZone = ko.observable();
 		this.ianaTimeZoneOther = ko.observable();
-		
+		this.IsOtherTimezone = ko.observable(false);
+
 		var personId;
 		var personName;
 		var groupId;
@@ -42,6 +43,7 @@ define([
 			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
 				var userTime = getMomentFromInput(self.StartTime()).tz(self.ianaTimeZone());
 				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
+				self.IsOtherTimezone(otherTime.format('ha z')!=userTime.format('ha z'));
 				return otherTime.format('HH:mm');
 			}
 			return undefined;
