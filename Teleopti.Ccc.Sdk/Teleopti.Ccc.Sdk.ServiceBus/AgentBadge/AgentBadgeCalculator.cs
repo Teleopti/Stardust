@@ -36,9 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 							person.Name, person.Id, badgeType);
 					}
 
-					var badge = person.Badges.Any(x => x.BadgeType == badgeType)
-						? person.Badges.Single(x => x.BadgeType == badgeType)
-						: null;
+					var badge = person.Badges.SingleOrDefault(x => x.BadgeType == badgeType);
 
 					if (badge == null || badge.LastCalculatedDate < date)
 					{
