@@ -1584,5 +1584,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				return;
 			Application.Exit();
 		}
+
+		private void backStageButton4VisibleChanged(object sender, EventArgs e)
+		{
+			backStageButton4.Location = new Point(0, backStageButton4.Location.Y);
+		}
 	}
 }
