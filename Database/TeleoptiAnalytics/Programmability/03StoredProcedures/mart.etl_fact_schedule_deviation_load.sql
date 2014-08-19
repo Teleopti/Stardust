@@ -148,8 +148,8 @@ BEGIN
 		 fs.interval_id,
 		 fs.person_id, 
 		sum(isnull(fs.scheduled_ready_time_m,0)) 'scheduled_ready_time_m',
-		sum(isnull(fs.scheduled_time_m,0))'scheduled_time_m',
 		sum(isnull(fs.scheduled_contract_time_m,0))'scheduled_contract_time_m',
+		sum(isnull(fs.scheduled_time_m,0))'scheduled_time_m',
 		fs.business_unit_id,
 		p.person_code
 	FROM 
@@ -251,8 +251,8 @@ BEGIN
 		 fs.interval_id,
 		 fs.person_id, 
 		sum(isnull(fs.scheduled_ready_time_m,0)) 'scheduled_ready_time_m',
-		sum(isnull(fs.scheduled_time_m,0))'scheduled_time_m',
 		sum(isnull(fs.scheduled_contract_time_m,0))'scheduled_contract_time_m',
+		sum(isnull(fs.scheduled_time_m,0))'scheduled_time_m',
 		fs.business_unit_id,
 		ch.person_code
 	FROM mart.fact_schedule fs
