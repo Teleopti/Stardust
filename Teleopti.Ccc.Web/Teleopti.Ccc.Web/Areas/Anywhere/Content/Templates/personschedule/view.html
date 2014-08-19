@@ -4,14 +4,14 @@
 			<div class="relative">
 
 				<!-- ko with: TimeLine -->
-					<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime, 'data-minute-length': PixelsPerMinute }">
-							<div class="relative">
-									<div data-bind="foreach: Times">
-											<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
-											<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
-									</div>
-							</div>
+				<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime, 'data-minute-length': PixelsPerMinute }">
+					<div class="relative">
+						<div data-bind="foreach: Times">
+							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
+							<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
+						</div>
 					</div>
+				</div>
 				<!-- /ko -->
 
 				<table class="table table-hover">
@@ -31,10 +31,10 @@
 								<div class="relative time-line-for">
 									<!-- ko foreach: Shifts -->
 									<div class="shift" data-bind="
-    template: {
-        name: 'layerTemplate',
-        foreach: Layers
-    }">
+		template: {
+				name: 'layerTemplate',
+				foreach: Layers
+		}">
 									</div>
 									<!-- /ko -->
 									<!-- ko if: IsDayOff() -->
@@ -50,14 +50,14 @@
 
 						<tr class="form-placeholder" data-bind="if: DisplayForm">
 							<td class="person-name-column"></td>
-						    <td class="schedule-column edit-column">
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <!-- ko if: $root.AddingIntradayAbsence -->
-                                            <!-- ko with: $root.AddIntradayAbsenceForm -->
-                                            <form action="#" class="intraday-absence-form">
-                                                <table class="edit-area">
+							<td class="schedule-column edit-column">
+								<table>
+									<tr>
+										<td>
+											<!-- ko if: $root.AddingIntradayAbsence -->
+											<!-- ko with: $root.AddIntradayAbsenceForm -->
+											<form action="#" class="intraday-absence-form">
+												<table class="edit-area">
 													<tr>
 														<td class="col-md-3 edit-time-column">
 															<select class="absence-type input-sm form-control" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence"></select>
@@ -69,23 +69,23 @@
 															</div>
 														</td>
 													</tr>
-                                                    <tr>
-                                                        <td class="col-md-3 edit-time-column">
-                                                            <div class="bootstrap-timepicker">
-                                                                <div class="input-group">
-                                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-step-backward"></i></span>
-                                                                    <input type="text" class="start-time form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
-                                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-	                                                    <td>
-		                                                    <div data-bind="visible:IsOtherTimezone">
-			                                                    <i class="glyphicon glyphicon-step-backward"></i>
-			                                                    <span data-bind="html: StartTimeOtherTimeZone"></span>
-		                                                    </div>
-	                                                    </td>
-                                                    </tr>
+													<tr>
+														<td class="col-md-3 edit-time-column">
+															<div class="bootstrap-timepicker">
+																<div class="input-group">
+																	<span class="input-group-addon"><i class="glyphicon glyphicon-step-backward"></i></span>
+																	<input type="text" class="start-time form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
+																	<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+																</div>
+															</div>
+														</td>
+														<td>
+															<div data-bind="visible:IsOtherTimezone">
+																<i class="glyphicon glyphicon-step-backward"></i>
+																<span data-bind="html: StartTimeOtherTimeZone"></span>
+															</div>
+														</td>
+													</tr>
 													<tr>
 														<td class="col-md-3 edit-time-column">
 															<div class="bootstrap-timepicker">
@@ -103,198 +103,195 @@
 															</div>
 														</td>
 													</tr>
-                                                    <tr>
-                                                        <td class="col-md-3">
-                                                            <!-- ko if: ErrorMessage -->
-                                                            <div class="alert">
-                                                                <span data-bind="text: ErrorMessage"></span>
-                                                            </div>
-                                                            <!-- /ko -->
-                                                            <div>
-                                                                <button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
-                                                            </div>
-                                                        </td>
-                                                        <td></td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                            <!-- /ko -->
-                                            <!-- /ko -->
-
-                                            <!-- ko if: $root.AddingActivity -->
-                                            <!-- ko with: $root.AddActivityForm -->
-                                            <form action="#" class="activity-form">
-                                                <table class="edit-area">
-                                                    <tr>
-                                                        <td class="col-md-3 edit-time-column">
-                                                            <select class="activity-type input-sm form-control" data-bind="enable: !$root.Loading(), options: ActivityTypes, optionsText: 'Name', optionsValue: 'Id', value: Activity"></select>
-                                                        </td>
-	                                                    <td class="other-time-zone">
+													<tr>
+														<td class="col-md-3">
+															<!-- ko if: ErrorMessage -->
+															<div class="alert">
+																<span data-bind="text: ErrorMessage"></span>
+															</div>
+															<!-- /ko -->
+															<div>
+																<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
+															</div>
+														</td>
+														<td></td>
+													</tr>
+												</table>
+											</form>
+											<!-- /ko -->
+											<!-- /ko -->
+											<!-- ko if: $root.AddingActivity -->
+											<!-- ko with: $root.AddActivityForm -->
+											<form action="#" class="activity-form">
+												<table class="edit-area">
+													<tr>
+														<td class="col-md-3 edit-time-column">
+															<select class="activity-type input-sm form-control" data-bind="enable: !$root.Loading(), options: ActivityTypes, optionsText: 'Name', optionsValue: 'Id', value: Activity"></select>
+														</td>
+														<td class="other-time-zone">
 															<div data-bind="visible:IsOtherTimezone">
 																<i class="glyphicon glyphicon-globe"></i>
 																<span data-bind="html: TimeZoneName"></span>
 															</div>
-	                                                    </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="col-md-3 edit-time-column">
-                                                            <div class="bootstrap-timepicker">
-                                                                <div class="input-group">
-                                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-step-backward"></i></span>
-                                                                    <input type="text" class="start-time form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
-                                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-	                                                    <td class="other-start-time">
+														</td>
+													</tr>
+													<tr>
+														<td class="col-md-3 edit-time-column">
+															<div class="bootstrap-timepicker">
+																<div class="input-group">
+																	<span class="input-group-addon"><i class="glyphicon glyphicon-step-backward"></i></span>
+																	<input type="text" class="start-time form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
+																	<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+																</div>
+															</div>
+														</td>
+														<td class="other-start-time">
 															<div data-bind="visible:IsOtherTimezone">
 																<i class="glyphicon glyphicon-step-backward"></i>
 																<span data-bind="html: StartTimeOtherTimeZone"></span>
 															</div>
-	                                                    </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="col-md-3 edit-time-column">
-                                                            <div class="bootstrap-timepicker">
-                                                                <div class="input-group">
-                                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-step-forward"></i></span>
-                                                                    <input type="text" class="end-time form-control" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
-                                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-	                                                    <td class="other-end-time">
+														</td>
+													</tr>
+													<tr>
+														<td class="col-md-3 edit-time-column">
+															<div class="bootstrap-timepicker">
+																<div class="input-group">
+																	<span class="input-group-addon"><i class="glyphicon glyphicon-step-forward"></i></span>
+																	<input type="text" class="end-time form-control" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
+																	<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+																</div>
+															</div>
+														</td>
+														<td class="other-end-time">
 															<div data-bind="visible:IsOtherTimezone">
 																<i class="glyphicon glyphicon-step-forward"></i>
 																<span data-bind="html: EndTimeOtherTimeZone"></span>
 															</div>
-	                                                    </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="col-md-6">
-                                                            <!-- ko if: ErrorMessage -->
-                                                            <div class="alert">
-                                                                <span data-bind="text: ErrorMessage"></span>
-                                                            </div>
-                                                            <!-- /ko -->
-                                                            <div>
-                                                                <button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
-                                                            </div>
-                                                        </td>
-                                                        <td></td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                            <!-- /ko -->
-                                            <!-- /ko -->
-
-                                            <!-- ko if: $root.MovingActivity -->
-                                            <!-- ko with: $root.MoveActivityForm -->
-                                            <form action="#" class="activity-form">
-                                                <table class="edit-area">
-                                                    <tr>
-                                                        <td class="col-md-3 edit-time-column"></td>
-	                                                    <td class="other-time-zone">
+														</td>
+													</tr>
+													<tr>
+														<td class="col-md-6">
+															<!-- ko if: ErrorMessage -->
+															<div class="alert">
+																<span data-bind="text: ErrorMessage"></span>
+															</div>
+															<!-- /ko -->
+															<div>
+																<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
+															</div>
+														</td>
+														<td></td>
+													</tr>
+												</table>
+											</form>
+											<!-- /ko -->
+											<!-- /ko -->
+											<!-- ko if: $root.MovingActivity -->
+											<!-- ko with: $root.MoveActivityForm -->
+											<form action="#" class="activity-form">
+												<table class="edit-area">
+													<tr>
+														<td class="col-md-3 edit-time-column"></td>
+														<td class="other-time-zone">
 															<div data-bind="visible:IsOtherTimezone">
 																<i class="glyphicon glyphicon-globe"></i>
 																<span data-bind="html: TimeZoneName"></span>
 															</div>
-	                                                    </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="col-md-3 edit-time-column">
-                                                            <div class="bootstrap-timepicker">
-                                                                <div class="input-group">
-                                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-step-backward"></i></span>
-                                                                    <input type="text" class="start-time form-control" data-bind="timepicker: DisplayedStartTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
-                                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-	                                                    <td>
-		                                                    <div data-bind="visible:IsOtherTimezone">
-			                                                    <i class="glyphicon glyphicon-step-backward"></i>
-			                                                    <span data-bind="html: StartTimeOtherTimeZone"></span>
-		                                                    </div>
-	                                                    </td>
-                                                    </tr>
+														</td>
+													</tr>
+													<tr>
+														<td class="col-md-3 edit-time-column">
+															<div class="bootstrap-timepicker">
+																<div class="input-group">
+																	<span class="input-group-addon"><i class="glyphicon glyphicon-step-backward"></i></span>
+																	<input type="text" class="start-time form-control" data-bind="timepicker: DisplayedStartTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
+																	<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+																</div>
+															</div>
+														</td>
+														<td>
+															<div data-bind="visible:IsOtherTimezone">
+																<i class="glyphicon glyphicon-step-backward"></i>
+																<span data-bind="html: StartTimeOtherTimeZone"></span>
+															</div>
+														</td>
+													</tr>
 
-                                                    <tr>
-                                                        <td class="col-md-3">
-                                                            <!-- ko if: ErrorMessage -->
-                                                            <div class="alert">
-                                                                <span data-bind="text: ErrorMessage"></span>
-                                                            </div>
-                                                            <!-- /ko -->
-                                                            <div>
-                                                                <button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.MoveActivity, click: Apply"></button>
-                                                            </div>
-                                                        </td>
-                                                        <td></td>
-                                                    </tr>
-                                                </table>
-                                            </form>
-                                            <!-- /ko -->
-                                            <!-- /ko -->
-                                            
-                                            <!-- ko if: $root.AddingFullDayAbsence -->
-                                            <!-- ko with: $root.AddFullDayAbsenceForm -->   
-                                            <form action="#" class="full-day-absence-form">
-                                                <table class="edit-area">
-                                                    <tr>
-                                                        <td class="col-md-5 edit-time-column">
-                                                            <select id="absence-type" class="absence-type input-sm form-control" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: AbsenceType"></select>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="col-md-5 edit-time-column">
-                                                            <div class="input-group">
-                                                                <span class="input-group-addon">
-                                                                    <i class="glyphicon glyphicon-step-backward"></i>
-                                                                </span>
-                                                                <input type="text" class="start-date form-control" readonly="readonly" data-bind="value: StartDateFormatted" />
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="col-md-5 edit-time-column">
-                                                            <div class="input-group">
-                                                                <span class="input-group-addon">
-                                                                    <i class="glyphicon glyphicon-step-forward"></i>
-                                                                </span>
-                                                                <input type="text" class="end-date form-control" readonly="readonly" data-bind="value: EndDateFormatted" />
-                                                                <div class="date input-group-btn">
-                                                                    <button class="btn" data-bind="datepicker: EndDate, datepickerOptions: { format: $root.Resources.DateFormatForMoment, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
-                                                                        <i class="glyphicon glyphicon-calendar"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+													<tr>
+														<td class="col-md-3">
+															<!-- ko if: ErrorMessage -->
+															<div class="alert">
+																<span data-bind="text: ErrorMessage"></span>
+															</div>
+															<!-- /ko -->
+															<div>
+																<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.MoveActivity, click: Apply"></button>
+															</div>
+														</td>
+														<td></td>
+													</tr>
+												</table>
+											</form>
+											<!-- /ko -->
+											<!-- /ko -->
+											<!-- ko if: $root.AddingFullDayAbsence -->
+											<!-- ko with: $root.AddFullDayAbsenceForm -->
+											<form action="#" class="full-day-absence-form">
+												<table class="edit-area">
+													<tr>
+														<td class="col-md-5 edit-time-column">
+															<select id="absence-type" class="absence-type input-sm form-control" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: AbsenceType"></select>
+														</td>
+													</tr>
+													<tr>
+														<td class="col-md-5 edit-time-column">
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-step-backward"></i>
+																</span>
+																<input type="text" class="start-date form-control" readonly="readonly" data-bind="value: StartDateFormatted" />
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td class="col-md-5 edit-time-column">
+															<div class="input-group">
+																<span class="input-group-addon">
+																	<i class="glyphicon glyphicon-step-forward"></i>
+																</span>
+																<input type="text" class="end-date form-control" readonly="readonly" data-bind="value: EndDateFormatted" />
+																<div class="date input-group-btn">
+																	<button class="btn" data-bind="datepicker: EndDate, datepickerOptions: { format: $root.Resources.DateFormatForMoment, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
+																		<i class="glyphicon glyphicon-calendar"></i>
+																	</button>
+																</div>
+															</div>
+														</td>
+													</tr>
 
-                                                    <tr>
-                                                        <td class="col-md-5">
-                                                            <!-- ko if: InvalidEndDate -->
-                                                            <div class="alert">
-                                                                <span data-bind="text: $root.Resources.InvalidEndDate"></span>
-                                                            </div>
-                                                            <!-- /ko -->
-                                                            <div>
-                                                                <button class="btn btn-primary apply" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
-                                                            </div>
-                                                        </td>
-                                                        <td></td>
-                                                    </tr>
-                                                </table>
-                                            </form>                                         
-                                            <!-- /ko -->
-                                            <!-- /ko -->
+													<tr>
+														<td class="col-md-5">
+															<!-- ko if: InvalidEndDate -->
+															<div class="alert">
+																<span data-bind="text: $root.Resources.InvalidEndDate"></span>
+															</div>
+															<!-- /ko -->
+															<div>
+																<button class="btn btn-primary apply" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
+															</div>
+														</td>
+														<td></td>
+													</tr>
+												</table>
+											</form>
+											<!-- /ko -->
+											<!-- /ko -->
 
-                                        </td>
-                                    </tr>
-                                </table>
-						        
-						    </td>
+										</td>
+									</tr>
+								</table>
+
+							</td>
 						</tr>
 
 						<!-- ko ifnot: Loading -->
@@ -308,10 +305,10 @@
 								<div class="relative time-line-for">
 									<!-- ko foreach: Shifts -->
 									<div class="shift" data-bind="
-    template: {
-        name: 'layerTemplate',
-        foreach: Layers
-    }
+		template: {
+				name: 'layerTemplate',
+				foreach: Layers
+		}
 										">
 									</div>
 									<!-- /ko -->
@@ -363,16 +360,16 @@
 <script id="layerTemplate" type="text/html">
 	<!-- ko if: OverlapsTimeLine -->
 	<div class="layer absolute floatleft" data-bind="
-    style: {
-        left: StartPixels() + 'px',
-        width: LengthPixels() + 'px',
-        backgroundColor: Color
-    },
-    attr: {
-        'data-start-time': StartTime,
-        'data-length-minutes': LengthMinutes()
-    },
-    css: Active() 
+		style: {
+				left: StartPixels() + 'px',
+				width: LengthPixels() + 'px',
+				backgroundColor: Color
+		},
+		attr: {
+				'data-start-time': StartTime,
+				'data-length-minutes': LengthMinutes()
+		},
+		css: Active()
 		">
 	</div>
 	<!-- /ko -->
