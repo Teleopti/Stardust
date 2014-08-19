@@ -35,15 +35,16 @@ define([
 		var self = this;
 		
 		this.Loading = ko.observable(false);
-		
+
 		this.Persons = ko.observableArray();
+
 		this.SortedPersons = ko.computed(function () {
 			return self.Persons().sort(function(first, second) {
 				first = first.OrderBy();
 				second = second.OrderBy();
 				return first == second ? 0 : (first < second ? -1 : 1);
 			});
-		});
+		}).extend({ throttle: 500 });
 
 		this.PersonId = ko.observable();
 		this.GroupId = ko.observable();
@@ -60,9 +61,7 @@ define([
 				})
 				.first();
 			if (!person) {
-
 				person = new personViewModel({ Id: id });
-					self.Persons.push(person);
 			}
 			return person;
 		};
@@ -187,6 +186,7 @@ define([
 			self.Persons([]);
 
 			// add schedule data. a person might get more than 1 schedule added
+var people = [];
 			for (var i = 0; i < data.length; i++) {
 				var schedule = data[i];
 				schedule.GroupId = self.GroupId();
@@ -196,8 +196,10 @@ define([
 				var person = personForId(schedule.PersonId);
 
 				person.AddData(schedule, self.TimeLine);
+				people.push(person);
 			}
 
+			self.Persons(people);
 
 			self.AddIntradayAbsenceForm.WorkingShift(self.WorkingShift());
 			self.AddActivityForm.WorkingShift(self.WorkingShift());
