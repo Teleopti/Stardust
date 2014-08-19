@@ -34,14 +34,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			var today = _now.LocalDateTime();
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
 			var todayForGivenTimeZone = TimeZoneInfo.ConvertTime(today, TimeZoneInfo.Local, timeZone);
-			var yesterdayForGivenTimeZone = todayForGivenTimeZone.AddDays(-1);
+			var yesterdayForGivenTimeZone = todayForGivenTimeZone.AddDays(-1).Date;
 
 			_serviceBus.Send(new CalculateBadgeMessage
 			{
 				Datasource = message.Datasource,
 				BusinessUnitId = message.BusinessUnitId,
 				Timestamp = DateTime.UtcNow,
-				CalculationDate = yesterdayForGivenTimeZone.Date,
+				CalculationDate = yesterdayForGivenTimeZone,
 				TimeZoneCode = message.TimeZoneCode 
 			});
 
