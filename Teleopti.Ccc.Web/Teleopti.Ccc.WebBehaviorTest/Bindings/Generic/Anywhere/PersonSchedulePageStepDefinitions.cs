@@ -220,21 +220,53 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertNotExists(".time-line", ".time-line.other-time-zone");
 		}
 
-		[Then(@"I should not see any local hours for the agent's new activity")]
-		public void WhenIShouldNotSeeAnyLocalHoursForTheAgentSNewActivity()
+		[Then(@"I should not see add activity times in other time zone")]
+		public void ThenIShouldNotSeeAddActivityTimesInOtherTimeZone()
 		{
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".activity-form .other-time-zone span");
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".activity-form .other-start-time span");
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".activity-form .other-end-time span");
 		}
 
-		[Then(@"I should see local hours for the agent's new activity with")]
-		public void ThenIShouldSeeLocalHoursForTheAgentSNewActivityWith(Table table)
+		[Then(@"I should not see add intraday absence times in other time zone")]
+		public void ThenIShouldNotSeeAddIntradayAbsenceTimesInOtherTimeZone()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".intraday-absence-form .other-time-zone span");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".intraday-absence-form .other-start-time span");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".intraday-absence-form .other-end-time span");
+		}
+
+		[Then(@"I should not see move activity time in other time zone")]
+		public void ThenIShouldNotSeeMoveActivityTimeInOtherTimeZone()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".activity-form .other-time-zone span");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".activity-form .other-start-time span");
+		}
+
+
+		[Then(@"I should see add activity times in other time zone with")]
+		public void ThenIShouldSeeAddActivityTimesInOtherTimeZoneWith(Table table)
 		{
 			var localTimeInfo = table.CreateInstance<AddActivityFormInfo>();
 			Browser.Interactions.AssertFirstContains(".activity-form .other-start-time span", localTimeInfo.StartTime.ToShortTimeString(DataMaker.Me().Culture));
 			Browser.Interactions.AssertFirstContains(".activity-form .other-end-time span", localTimeInfo.EndTime.ToShortTimeString(DataMaker.Me().Culture));
 		}
+
+		[Then(@"I should see add intraday absence times in other time zone with")]
+		public void ThenIShouldSeeAddIntradayAbsenceTimesInOtherTimeZoneWith(Table table)
+		{
+			var localTimeInfo = table.CreateInstance<AddIntradayAbsenceFormInfo>();
+			Browser.Interactions.AssertFirstContains(".intraday-absence-form .other-start-time span", localTimeInfo.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.AssertFirstContains(".intraday-absence-form .other-end-time span", localTimeInfo.EndTime.ToShortTimeString(DataMaker.Me().Culture));
+		}
+
+		[Then(@"I should see selected activity time in other time zone with")]
+		public void ThenIShouldSeeSelectedActivityTimeInOtherTimeZoneWith(Table table)
+		{
+			var localTimeInfo = table.CreateInstance<AddIntradayAbsenceFormInfo>();
+			Browser.Interactions.AssertFirstContains(".activity-form .other-start-time span", localTimeInfo.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+		}
+
 
 		[When(@"I click '(.*)' on absence named '(.*)'")]
 		public void WhenIClickOnAbsenceNamed(CssClass cssClass, string absenceName)
