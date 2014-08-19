@@ -13,19 +13,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		{
 			var threadPreviousIdentity = Thread.CurrentPrincipal.Identity;
 			var threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
+			try
+			{
+				var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
+				var factory = MockRepository.GenerateMock<IPrincipalFactory>();
+				factory.Stub(x => x.MakePrincipal(null, null, null)).Return(principal);
+				var target = new ThreadPrincipalContext(factory);
 
-			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
-			var factory = MockRepository.GenerateMock<IPrincipalFactory>();
-			factory.Stub(x => x.MakePrincipal(null, null, null)).Return(principal);
-			var target = new ThreadPrincipalContext(factory);
+				target.SetCurrentPrincipal(null, null, null);
 
-			target.SetCurrentPrincipal(null, null, null);
-
-			Assert.That(Thread.CurrentPrincipal, Is.EqualTo(principal));
-
-			Thread.CurrentPrincipal = new TeleoptiPrincipal(threadPreviousIdentity, threadPreviousPerson);
-			((TeleoptiPrincipal)TeleoptiPrincipal.Current).ChangePrincipal(new TeleoptiPrincipal(threadPreviousIdentity,
-				threadPreviousPerson));
+				Assert.That(Thread.CurrentPrincipal, Is.EqualTo(principal));
+			}
+			finally
+			{
+				Thread.CurrentPrincipal = new TeleoptiPrincipal(threadPreviousIdentity, threadPreviousPerson);
+				((TeleoptiPrincipal)TeleoptiPrincipal.Current).ChangePrincipal(new TeleoptiPrincipal(threadPreviousIdentity, threadPreviousPerson));
+			}
 		}
 	}
 }
