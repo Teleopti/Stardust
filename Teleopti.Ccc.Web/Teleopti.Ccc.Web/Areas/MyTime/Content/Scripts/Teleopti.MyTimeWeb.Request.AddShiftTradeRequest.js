@@ -894,6 +894,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self.setTimeFilters = function () {
+			self.filterStartTimeList.removeAll();
+			self.filterEndTimeList.removeAll();
 			var rangStart = 0;
 			for (var i = 0; i < 24; i += 2) {
 				var rangEnd = rangStart + 2;
