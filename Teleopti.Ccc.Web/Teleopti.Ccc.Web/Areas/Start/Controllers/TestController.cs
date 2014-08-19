@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -75,6 +76,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			};
 			return View("Message", viewModel);
 		}
+
+	    public EmptyResult ClearConnections()
+	    {
+		    SqlConnection.ClearAllPools();
+				return new EmptyResult();
+	    }
 
 		public ViewResult Logon(string dataSourceName, string businessUnitName, string userName, string password)
 		{

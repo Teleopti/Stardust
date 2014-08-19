@@ -135,6 +135,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		private IDisposable offlineScope()
 		{
+			SqlConnection.ClearAllPools();
 			executeNonQueryOnMaster("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName);
 			return new GenericDisposable(() => executeNonQueryOnMaster("ALTER DATABASE [{0}] SET ONLINE", DatabaseName));
 		}

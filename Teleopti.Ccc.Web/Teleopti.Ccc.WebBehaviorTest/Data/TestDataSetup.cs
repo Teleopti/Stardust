@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -12,14 +11,13 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Interfaces.Domain;
@@ -74,6 +72,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void RestoreCcc7Data()
 		{
+			Navigation.GoToWaitForUrlAssert("Test/ClearConnections", "Test/ClearConnections", new ApplicationStartupTimeout());
 			DataSourceHelper.RestoreCcc7DataByFileCopy(_Ccc7DataBackup);
 		}
 
