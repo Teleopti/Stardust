@@ -6,13 +6,13 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
-	[TestFixture, Ignore]
 	public class ThreadPrincipalContextTest
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldBeCovered()
 		{
-			var storedPrincipal = Thread.CurrentPrincipal;
+			var threadPreviousIdentity = Thread.CurrentPrincipal.Identity;
+			var threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
 
 			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
 			var factory = MockRepository.GenerateMock<IPrincipalFactory>();
@@ -23,8 +23,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
 			Assert.That(Thread.CurrentPrincipal, Is.EqualTo(principal));
 
-			Thread.CurrentPrincipal = storedPrincipal;
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(threadPreviousIdentity, threadPreviousPerson);
+			((TeleoptiPrincipal)TeleoptiPrincipal.Current).ChangePrincipal(new TeleoptiPrincipal(threadPreviousIdentity,
+				threadPreviousPerson));
 		}
-
 	}
 }

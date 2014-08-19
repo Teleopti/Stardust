@@ -9,37 +9,35 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
-    [TestFixture, Ignore("Robin - can you have a look please?")]
     public class WindowsAppDomainPrincipalContextTest
     {
-        private IIdentity threadPreviousIdentity;
-        private IPerson threadPreviousPerson;
-        private WindowsAppDomainPrincipalContext target;
-
-        [SetUp]
-        public void Setup()
-        {
-            threadPreviousIdentity = Thread.CurrentPrincipal.Identity;
-            threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
-            target = new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory());
-        }
-
         [Test]
         public void ShouldChangeCurrentPrincipalWhenTeleoptiPrincipalForThread()
-        {
-            IPerson newPerson = PersonFactory.CreatePerson();
+		{
+			var threadPreviousIdentity = Thread.CurrentPrincipal.Identity;
+	        var threadPreviousPerson = ((IUnsafePerson) TeleoptiPrincipal.Current).Person;
+	        var target = new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory());
+
+	        IPerson newPerson = PersonFactory.CreatePerson();
 
             target.SetCurrentPrincipal(newPerson,null,null);
 
             var currentPrincipal = TeleoptiPrincipal.Current;
             ((IUnsafePerson)currentPrincipal).Person.Should().Be.EqualTo(newPerson);
             currentPrincipal.Identity.Should().Not.Be.EqualTo(threadPreviousIdentity);
-        }
 
-        [Test]
+	        ((TeleoptiPrincipal) TeleoptiPrincipal.Current).ChangePrincipal(new TeleoptiPrincipal(threadPreviousIdentity,
+		        threadPreviousPerson));
+		}
+
+		[Test]
         public void ShouldChangeCurrentPrincipalWhenNotTeleoptiPrincipalForThread()
         {
-            IPerson newPerson = PersonFactory.CreatePerson();
+	        var threadPreviousIdentity = Thread.CurrentPrincipal.Identity;
+	        var threadPreviousPerson = ((IUnsafePerson) TeleoptiPrincipal.Current).Person;
+	        var target = new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory());
+
+	        IPerson newPerson = PersonFactory.CreatePerson();
 
             Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity("test"),new string[]{});
 				target.SetCurrentPrincipal(newPerson, null, null);
@@ -47,12 +45,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             var currentPrincipal = TeleoptiPrincipal.Current;
             ((IUnsafePerson)currentPrincipal).Person.Should().Be.EqualTo(newPerson);
             currentPrincipal.Identity.Should().Not.Be.EqualTo(threadPreviousIdentity);
-        }
 
-        [TearDown]
-        public void Teardown()
-        {
-            Thread.CurrentPrincipal = new TeleoptiPrincipal(threadPreviousIdentity, threadPreviousPerson);
+			((TeleoptiPrincipal) TeleoptiPrincipal.Current).ChangePrincipal(new TeleoptiPrincipal(threadPreviousIdentity,
+				threadPreviousPerson));
         }
     }
 }
