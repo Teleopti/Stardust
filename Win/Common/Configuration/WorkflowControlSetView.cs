@@ -1027,10 +1027,5 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_presenter.SetMinTimePerWeek(textBoxExtMinTimePerWeek.Value);
 		}
 
-
-		private void twoListSelectorDayOffs_Load(object sender, EventArgs e)
-		{
-
-		}
 	}
 }

@@ -40,14 +40,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorkflowControlSetView));
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle9 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle10 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle11 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle12 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle1 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle2 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle5 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle6 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle7 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle8 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
@@ -776,7 +776,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.twoListSelectorDayOffs.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.twoListSelectorDayOffs.Size = new System.Drawing.Size(965, 176);
 			this.twoListSelectorDayOffs.TabIndex = 12;
-			this.twoListSelectorDayOffs.Load += new System.EventHandler(this.twoListSelectorDayOffs_Load);
 			// 
 			// dateOnlyPeriodsVisualizer1
 			// 
@@ -977,7 +976,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvPublishedTo.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvPublishedTo.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdvPublishedTo.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.dateTimePickerAdvPublishedTo.Calendar.DayNamesColor = System.Drawing.Color.Empty;
+			this.dateTimePickerAdvPublishedTo.Calendar.Cursor = System.Windows.Forms.Cursors.Default;
 			this.dateTimePickerAdvPublishedTo.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
 			this.dateTimePickerAdvPublishedTo.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
 			this.dateTimePickerAdvPublishedTo.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -989,7 +988,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvPublishedTo.Calendar.HighlightColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvPublishedTo.Calendar.Iso8601CalenderFormat = false;
 			this.dateTimePickerAdvPublishedTo.Calendar.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvPublishedTo.Calendar.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvPublishedTo.Calendar.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvPublishedTo.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvPublishedTo.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvPublishedTo.Calendar.SelectedDates = new System.DateTime[0];
@@ -1004,7 +1003,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			// 
 			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.IsBackStageButton = false;
@@ -1016,7 +1015,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			// 
 			this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.IsBackStageButton = false;
@@ -1028,13 +1027,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvPublishedTo.CalendarSize = new System.Drawing.Size(189, 176);
 			this.dateTimePickerAdvPublishedTo.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvPublishedTo.DropDownImage = null;
-			this.dateTimePickerAdvPublishedTo.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
-			this.dateTimePickerAdvPublishedTo.DropDownPressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
-			this.dateTimePickerAdvPublishedTo.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(191)))), ((int)(((byte)(237)))));
-			this.dateTimePickerAdvPublishedTo.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.dateTimePickerAdvPublishedTo.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdvPublishedTo.DropDownPressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdvPublishedTo.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(179)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdvPublishedTo.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.dateTimePickerAdvPublishedTo.Format = System.Windows.Forms.DateTimePickerFormat.Short;
 			this.dateTimePickerAdvPublishedTo.Location = new System.Drawing.Point(422, 42);
-			this.dateTimePickerAdvPublishedTo.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.dateTimePickerAdvPublishedTo.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvPublishedTo.MinValue = new System.DateTime(((long)(0)));
 			this.dateTimePickerAdvPublishedTo.Name = "dateTimePickerAdvPublishedTo";
 			this.dateTimePickerAdvPublishedTo.NullString = "xxNotPublished";
@@ -1079,11 +1078,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExtMinTimePerWeek.Margin = new System.Windows.Forms.Padding(7, 35, 0, 0);
 			this.textBoxExtMinTimePerWeek.MaximumValue = System.TimeSpan.Parse("3.12:00:00");
 			this.textBoxExtMinTimePerWeek.Name = "textBoxExtMinTimePerWeek";
-			this.textBoxExtMinTimePerWeek.Size = new System.Drawing.Size(129, 26);
+			this.textBoxExtMinTimePerWeek.Size = new System.Drawing.Size(201, 26);
 			this.textBoxExtMinTimePerWeek.TabIndex = 11;
 			this.textBoxExtMinTimePerWeek.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExtMinTimePerWeek.TimeSpanBoxHeight = 23;
-			this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 146;
+			this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 230;
 			this.textBoxExtMinTimePerWeek.Leave += new System.EventHandler(this.textBoxExtMinTimePerWeek_Validated);
 			// 
 			// labelMinimumTimePerWeek
@@ -1373,30 +1372,30 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// gridControlAbsenceRequestOpenPeriods
 			// 
 			this.gridControlAbsenceRequestOpenPeriods.AlphaBlendSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(94)))), ((int)(((byte)(171)))), ((int)(((byte)(222)))));
-			gridBaseStyle9.Name = "Header";
-			gridBaseStyle9.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle9.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle9.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle9.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle9.StyleInfo.CellType = "Header";
-			gridBaseStyle9.StyleInfo.Font.Bold = true;
-			gridBaseStyle9.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle9.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
-			gridBaseStyle10.Name = "Standard";
-			gridBaseStyle10.StyleInfo.Font.Facename = "Tahoma";
-			gridBaseStyle10.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-			gridBaseStyle11.Name = "Column Header";
-			gridBaseStyle11.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle11.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
-			gridBaseStyle12.Name = "Row Header";
-			gridBaseStyle12.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle12.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-			gridBaseStyle12.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle1.Name = "Header";
+			gridBaseStyle1.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle1.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle1.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle1.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle1.StyleInfo.CellType = "Header";
+			gridBaseStyle1.StyleInfo.Font.Bold = true;
+			gridBaseStyle1.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle1.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
+			gridBaseStyle2.Name = "Standard";
+			gridBaseStyle2.StyleInfo.Font.Facename = "Tahoma";
+			gridBaseStyle2.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
+			gridBaseStyle3.Name = "Column Header";
+			gridBaseStyle3.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+			gridBaseStyle4.Name = "Row Header";
+			gridBaseStyle4.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
+			gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.gridControlAbsenceRequestOpenPeriods.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle9,
-            gridBaseStyle10,
-            gridBaseStyle11,
-            gridBaseStyle12});
+            gridBaseStyle1,
+            gridBaseStyle2,
+            gridBaseStyle3,
+            gridBaseStyle4});
 			this.gridControlAbsenceRequestOpenPeriods.ColCount = 11;
 			this.gridControlAbsenceRequestOpenPeriods.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
@@ -1596,30 +1595,30 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// gridControlVisualisation
 			// 
 			this.gridControlVisualisation.AlphaBlendSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(94)))), ((int)(((byte)(171)))), ((int)(((byte)(222)))));
-			gridBaseStyle1.Name = "Header";
-			gridBaseStyle1.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.CellType = "Header";
-			gridBaseStyle1.StyleInfo.Font.Bold = true;
-			gridBaseStyle1.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle1.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
-			gridBaseStyle2.Name = "Standard";
-			gridBaseStyle2.StyleInfo.Font.Facename = "Tahoma";
-			gridBaseStyle2.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-			gridBaseStyle3.Name = "Column Header";
-			gridBaseStyle3.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
-			gridBaseStyle4.Name = "Row Header";
-			gridBaseStyle4.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-			gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle5.Name = "Header";
+			gridBaseStyle5.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle5.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle5.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle5.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle5.StyleInfo.CellType = "Header";
+			gridBaseStyle5.StyleInfo.Font.Bold = true;
+			gridBaseStyle5.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle5.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
+			gridBaseStyle6.Name = "Standard";
+			gridBaseStyle6.StyleInfo.Font.Facename = "Tahoma";
+			gridBaseStyle6.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
+			gridBaseStyle7.Name = "Column Header";
+			gridBaseStyle7.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle7.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+			gridBaseStyle8.Name = "Row Header";
+			gridBaseStyle8.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle8.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
+			gridBaseStyle8.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.gridControlVisualisation.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle1,
-            gridBaseStyle2,
-            gridBaseStyle3,
-            gridBaseStyle4});
+            gridBaseStyle5,
+            gridBaseStyle6,
+            gridBaseStyle7,
+            gridBaseStyle8});
 			this.gridControlVisualisation.ColCount = 2;
 			this.gridControlVisualisation.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
@@ -1902,7 +1901,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBox1.TabIndex = 9;
 			this.timeSpanTextBox1.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBox1.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBox1.TimeSpanBoxWidth = 103;
+			this.timeSpanTextBox1.TimeSpanBoxWidth = 160;
 			this.timeSpanTextBox1.Leave += new System.EventHandler(this.timeSpanTextBox1_Leave);
 			// 
 			// labelTolerancePosNeg
