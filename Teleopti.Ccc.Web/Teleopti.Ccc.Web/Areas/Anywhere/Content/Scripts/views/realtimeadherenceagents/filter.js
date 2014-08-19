@@ -52,7 +52,7 @@
 			};
 
 			var mapOutFilterWords = function (rawInput) {
-				var reg = xregexp('([!]*(\\p{L}|\\p{N}|\\p{S})+)|(?:[!"\']{1,2}(.*?)["\'])', 'g');
+				var reg = xregexp('([!]*(\\p{L}|\\p{N}|\\p{S}|(?![\'\!])\\p{P})+)|(?:[!"\']{1,2}(.*?)["\'])', 'g');
 				return xregexp.match(rawInput, reg);
 			}
 
