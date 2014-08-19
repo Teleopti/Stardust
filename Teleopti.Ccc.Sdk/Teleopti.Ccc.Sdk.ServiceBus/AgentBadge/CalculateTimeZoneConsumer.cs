@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat(
-					"Sending CalculateBadgeMessage to Service Bus for Timezone={0} on calculation time={1}",
+					"Sending CalculateBadgeMessage to Service Bus for Timezone={0} on calculation date={1:yyyy-MM-dd HH:mm:ss}",
 					message.TimeZoneCode, yesterdayForGivenTimeZone.Date);
 			}
 		}

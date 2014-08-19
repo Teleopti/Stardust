@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat(
-					"Calculate badge for timezone: {0}, date: {1}, AdherenceReportSettingCalculationMethod: {2},"
+					"Calculate badge for timezone: {0}, date: {1:yyyy-MM-dd HH:mm:ss}, AdherenceReportSettingCalculationMethod: {2},"
 					+ "silver to bronze badge rate: {3}, gold to silver badge rate: {4}", timezoneCode, date.Date,
 					adherenceCalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
 			}

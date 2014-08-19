@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat(
-						"Delay Sending CalculateBadgeMessage to Service Bus for Timezone={0} on next calculation time={1}", message.TimeZoneCode,
+						"Delay Sending CalculateBadgeMessage to Service Bus for Timezone={0} on next calculation time={1:yyyy-MM-dd HH:mm:ss}", message.TimeZoneCode,
 						nextMessageShouldBeProcessed);
 			}
 		}
