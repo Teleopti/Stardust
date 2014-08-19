@@ -63,14 +63,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			}
 
 			var today = _now.LocalDateOnly();
-			var tomorrow = today.AddDays(1);
+			var tomorrow = new DateTime(today.AddDays(1).Date.Ticks, DateTimeKind.Unspecified);
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
-			var tomorrowForGivenTimeZone = TimeZoneInfo.ConvertTime(tomorrow, TimeZoneInfo.Local, timeZone);
 
 			// Set badge calculation start at 5:00 AM
 			// Just hard code it now, the best solution is to trigger it from ETL
 			var nextMessageShouldBeProcessed =
-				TimeZoneInfo.ConvertTime(tomorrowForGivenTimeZone.Date, timeZone, TimeZoneInfo.Local).AddHours(5);
+				TimeZoneInfo.ConvertTime(tomorrow.AddHours(5), timeZone, TimeZoneInfo.Local);
 
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
@@ -119,7 +118,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			});
 
 			if (Logger.IsDebugEnabled)
-			{			Logger.DebugFormat(
+			{
+				Logger.DebugFormat(
 						"Delay Sending CalculateBadgeMessage to Service Bus for Timezone={0} on next calculation time={1}", message.TimeZoneCode,
 						nextMessageShouldBeProcessed);
 			}

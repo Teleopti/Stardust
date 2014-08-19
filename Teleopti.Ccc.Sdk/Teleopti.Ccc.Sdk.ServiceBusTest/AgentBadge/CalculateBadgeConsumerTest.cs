@@ -67,10 +67,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			var timezone = TimeZoneInfo.Utc;
 			var today = new DateTime(2014, 8, 8);
-			var tomorrow = today.AddDays(1);
-			var tomorrowForGivenTimeZone = TimeZoneInfo.ConvertTime(tomorrow, TimeZoneInfo.Local, timezone);
+			var tomorrowUnspecified = new DateTime(2014, 8, 9, 0, 0, 0, DateTimeKind.Unspecified);
 			var expectedNextMessageShouldBeProcessed =
-				TimeZoneInfo.ConvertTime(tomorrowForGivenTimeZone.Date, timezone, TimeZoneInfo.Local).AddHours(5);
+				TimeZoneInfo.ConvertTime(tomorrowUnspecified.AddHours(5), timezone, TimeZoneInfo.Local);
 			
 			now.Stub(x => x.UtcDateTime()).Return(today);
 			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateOnly().AddDays(-1), TimeZoneInfo.Local, timezone);
@@ -89,7 +88,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 						Rhino.Mocks.Constraints.Is.Matching(new Predicate<object[]>(m =>
 						{
 							var msg = ((CalculateBadgeMessage)m[0]);
-							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id && msg.CalculationDate == message.CalculationDate.AddDays(1);
+							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id
+								&& msg.CalculationDate == message.CalculationDate.AddDays(1);
 						}))));
 		}
 	}
