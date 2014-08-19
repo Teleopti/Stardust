@@ -26,16 +26,15 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="15"></ColumnDefinition>
+            <ColumnDefinition Width="20"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
 
 
-        <ComboBox IsEditable="True" ItemsSource="{Binding Path=SelectableStartTimes}" Grid.ColumnSpan="2"
+		<ComboBox IsEditable="True" ItemsSource="{Binding Path=SelectableStartTimes}" Grid.ColumnSpan="2"
                   KeyboardNavigation.ControlTabNavigation="Continue"
-                  KeyboardNavigation.TabIndex="0"
-                  Style="{StaticResource BasicComboBox}">
-            <ComboBox.SelectedItem>
+                  KeyboardNavigation.TabIndex="0">
+			<ComboBox.SelectedItem>
                      <MultiBinding Converter="{StaticResource startDateTimeToLocalStringConverter}" ConverterParameter="{StaticResource TimeMode}" Mode="TwoWay">
                         <MultiBinding.Bindings>
                             <Binding Path="Start"/>
