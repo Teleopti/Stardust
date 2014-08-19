@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			{
 				Logger.DebugFormat(
 					"Sending CalculateBadgeMessage to Service Bus for Timezone={0} on calculation time={1}",
-					message.TimeZoneCode, yesterdayForGivenTimeZone);
+					message.TimeZoneCode, yesterdayForGivenTimeZone.Date);
 			}
 		}
 	}
