@@ -176,11 +176,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			var absenceListItemInfo = table.CreateInstance<AbsenceListItemInfo>();
 
 			Browser.Interactions.AssertExistsUsingJQuery(
-				string.Format(".absence-list .absence:contains('{0}'):contains('{1}'):contains('{2}')",
+				string.Format(".absence-list .absence-user-timezone:contains('{0}'):contains('{1}'):contains('{2}')",
 											absenceListItemInfo.Name,
 											absenceListItemInfo.StartTimeFormatted(),
 											absenceListItemInfo.EndTimeFormatted())
 				);
+		}
+
+		[Then(@"I should see absence in other time zone with")]
+		public void ThenIShouldSeeAbsenceInOtherTimeZoneWith(Table table)
+		{
+			var absenceListItemInfo = table.CreateInstance<AbsenceListItemInfo>();
+
+			Browser.Interactions.AssertExistsUsingJQuery(
+				string.Format(".absence-list .absence-other-timezone:contains('{0}'):contains('{1}'):contains('{2}')",
+											absenceListItemInfo.TimeZone,
+											absenceListItemInfo.StartTimeFormatted(),
+											absenceListItemInfo.EndTimeFormatted())
+				);
+		}
+
+		[Then(@"I should not see absence in other time zone")]
+		public void ThenIShouldNotSeeAbsenceInOtherTimeZone()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".absence-list .absence-other-timezone");
 		}
 
 		[Then(@"I should see (.*) absences in the absence list")]
@@ -370,6 +389,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public class AbsenceListItemInfo
 		{
 			public string Name { get; set; }
+			public string TimeZone { get; set; }
 			public string StartTime { get; set; }
 			public string EndTime { get; set; }
 

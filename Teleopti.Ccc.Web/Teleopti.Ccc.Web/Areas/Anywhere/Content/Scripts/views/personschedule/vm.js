@@ -166,6 +166,9 @@ define([
 				a.Date = self.ScheduleDate();
 				a.GroupId = self.GroupId();
 				a.PersonName = self.Name();
+				a.IanaTimeZoneLoggedOnUser = data.IanaTimeZoneLoggedOnUser;
+				a.IanaTimeZoneOther = data.IanaTimeZoneOther;
+				a.TimeZoneName = data.TimeZoneName;
 				return new absenceListItemViewModel(a);
 			});
 			self.Absences.push.apply(self.Absences, absences);

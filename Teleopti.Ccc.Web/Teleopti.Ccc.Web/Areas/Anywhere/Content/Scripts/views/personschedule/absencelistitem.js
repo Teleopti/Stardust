@@ -21,7 +21,7 @@ define([
 			var self = this;
 
 			var personName = data.PersonName;
-			
+
 			this.StartTime = ko.observable(moment(data.StartTime).format(resources.DateTimeFormatForMoment));
 			this.EndTime = ko.observable(moment(data.EndTime).format(resources.DateTimeFormatForMoment));
 			this.Name = ko.observable(data.Name);
@@ -29,7 +29,38 @@ define([
 			
 			this.AboutToRemove = ko.observable(false);
 			this.Removing = ko.observable(false);
+
+			this.ScheduleDate = ko.observable(moment(data.StartTime).startOf('day'));
+			this.ianaTimeZone = ko.observable(data.IanaTimeZoneLoggedOnUser);
+			this.ianaTimeZoneOther = ko.observable(data.IanaTimeZoneOther);
+			this.IsOtherTimezone = ko.observable(false);
+
+			var getTimeZoneNameShort = function (timeZoneName) {
+				var end = timeZoneName.indexOf(')');
+				return timeZoneName.substring(1, end);
+			};
+
+			this.TimeZoneNameShort = ko.observable(getTimeZoneNameShort(data.TimeZoneName));
 			
+			this.StartTimeOtherTimeZone = ko.computed(function () {
+				if (self.ianaTimeZone() && self.ianaTimeZoneOther()) {
+					var userTime = moment(data.StartTime).tz(self.ianaTimeZone());
+					var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
+					self.IsOtherTimezone(otherTime.format('ha z') != userTime.format('ha z'));
+					return otherTime.format(resources.DateTimeFormatForMoment);
+				}
+				return undefined;
+			});
+
+			this.EndTimeOtherTimeZone = ko.computed(function () {
+				if (self.ianaTimeZone() && self.ianaTimeZoneOther()) {
+					var userTime = moment(data.EndTime).tz(self.ianaTimeZone());
+					var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
+					return otherTime.format(resources.DateTimeFormatForMoment);
+				}
+				return undefined;
+			});
+
 			this.Remove = function() {
 				self.AboutToRemove(true);
 			};

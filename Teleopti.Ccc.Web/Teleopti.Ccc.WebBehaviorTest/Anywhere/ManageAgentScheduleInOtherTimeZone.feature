@@ -254,3 +254,44 @@ Scenario: Move activity times not displayed in other time zone
 	| Start time     | 2013-11-18 12:00 |
 	And I view person schedules move activity form for 'John King' in 'Team green' on '2013-11-18' with selected start minutes of '660'
 	Then I should not see move activity time in other time zone
+
+
+
+
+Scenario: Absence to remove is also displayed in other time zone
+	Given I have the role 'Anywhere Team Green'
+	And I am located in Stockholm
+	And 'John King' is located in 'Istanbul'
+	And 'John King' has an absence with
+	| Field      | Value            |
+	| Name       | Dentist          |
+	| Start time | 2013-11-18 00:00 |
+	| End time   | 2013-11-18 23:59 |
+	When I view person schedule for 'John King' in 'Team green' on '2013-11-18'
+	Then I should see an absence in the absence list with
+	| Field      | Value            |
+	| Name       | Dentist          |
+	| Start time | 2013-11-17 23:00 |
+	| End time   | 2013-11-18 22:59 |
+	And I should see absence in other time zone with
+	| Field      | Value            |
+	| Time zone  | UTC+02:00        |
+	| Start time | 2013-11-18 00:00 |
+	| End time   | 2013-11-18 23:59 |
+
+Scenario: Absence to remove is not displayed in other time zone
+	Given I have the role 'Anywhere Team Green'
+	And I am located in Stockholm
+	And 'John King' is located in Stockholm
+	And 'John King' has an absence with
+	| Field      | Value            |
+	| Name       | Dentist          |
+	| Start time | 2013-11-18 00:00 |
+	| End time   | 2013-11-18 23:59 |
+	When I view person schedule for 'John King' in 'Team green' on '2013-11-18'
+	Then I should see an absence in the absence list with
+	| Field      | Value            |
+	| Name       | Dentist          |
+	| Start time | 2013-11-18 00:00 |
+	| End time   | 2013-11-18 23:59 |
+	And I should not see absence in other time zone 

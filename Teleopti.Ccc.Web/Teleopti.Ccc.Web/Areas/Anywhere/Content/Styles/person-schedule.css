@@ -187,6 +187,12 @@
 	vertical-align: middle;
 }
 
+.absence-other-timezone td{
+	border-top: 0 !important;
+	padding-top: 0 !important;
+	color: darkgrey;
+}
+
 .person-schedule .space {
 	margin-top: 15px;
 }

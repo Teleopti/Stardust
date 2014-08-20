@@ -333,21 +333,55 @@
 
 	<div class="row" data-bind="ifnot: DisplayForm">
 		<div class="col-md-8">
-			<table class="table absence-list">
+			<table class="absence-list">
 				<tbody data-bind="foreach: Absences">
 					<tr class="absence">
-						<td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor }">
-						<td class="absence-item"><span class="absence-name" data-bind="text: Name"></span></td>
-						<td class="absence-item"><i class="glyphicon glyphicon-step-backward"></i><span data-bind="text: StartTime"></span></td>
-						<td class="absence-item"><i class="glyphicon glyphicon-minus"></i></td>
-						<td class="absence-item"><span data-bind="text: EndTime"></span><i class="glyphicon glyphicon-step-forward"></i></td>
-						<td class="absence-item">
-							<!-- ko ifnot: AboutToRemove -->
-							<button class="btn remove" data-bind="click: Remove, text: $root.Resources.Remove" />
-							<!-- /ko -->
-							<!-- ko if: AboutToRemove -->
-							<button class="btn btn-danger confirm-removal" data-bind="disable: Removing, click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
-							<!-- /ko -->
+						<td>
+							<table class="table">
+								<tr class="absence-user-timezone">
+									<td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor }">
+									<td class="absence-item">
+										<span class="absence-name" data-bind="text: Name"></span>
+									</td>
+									<td class="absence-item">
+										<i class="glyphicon glyphicon-step-backward"></i>
+										<span data-bind="text: StartTime"></span>
+									</td>
+									<td class="absence-item">
+										<i class="glyphicon glyphicon-minus"></i>
+									</td>
+									<td class="absence-item">
+										<span data-bind="text: EndTime"></span>
+										<i class="glyphicon glyphicon-step-forward"></i>
+									</td>
+									<td class="absence-item" rowspan="2">
+										<!-- ko ifnot: AboutToRemove -->
+										<button class="btn remove" data-bind="click: Remove, text: $root.Resources.Remove" />
+										<!-- /ko -->
+										<!-- ko if: AboutToRemove -->
+										<button class="btn btn-danger confirm-removal" data-bind="disable: Removing, click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
+										<!-- /ko -->
+									</td>
+								</tr>
+								<tr class="absence-other-timezone" data-bind="visible:IsOtherTimezone">
+									<td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor }">
+									<td class="absence-item">
+										<i class="glyphicon glyphicon-globe"></i>
+										<span data-bind="text: TimeZoneNameShort"></span>
+									</td>
+									<td class="absence-item">
+										<i class="glyphicon glyphicon-step-backward"></i>
+										<span data-bind="text: StartTimeOtherTimeZone"></span>
+									</td>
+									<td class="absence-item">
+										<i class="glyphicon glyphicon-minus"></i>
+									</td>
+									<td class="absence-item">
+										<span data-bind="text: EndTimeOtherTimeZone"></span>
+										<i class="glyphicon glyphicon-step-forward"></i>
+									</td>
+								</tr>
+							</table>
 						</td>
 					</tr>
 				</tbody>
