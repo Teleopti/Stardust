@@ -169,12 +169,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.Click(".request-list .request .request-delete");
 		}
-
-		[When(@"I change absence to '(.*)'")]
-		public void WhenIChangeAbsenceTo(string absence)
-		{
-			Browser.Interactions.ClickContaining(string.Format(".request-body:nth-child() .request-data-type"), absence);
-		}
-
 	}
 }

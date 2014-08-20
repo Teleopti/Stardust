@@ -60,42 +60,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
-
-		[Given(@"I have analytics data for today")]
-		public void GivenIHaveAnalyticsDataForToday()
-		{
-			var timeZones = new UtcAndCetTimeZones();
-			var dates = new TodayDate();
-			var intervals = new QuarterOfAnHourInterval();
-			var dataSource = new ExistingDatasources(timeZones);
-			DataMaker.Analytics().Setup(new EternityAndNotDefinedDate());
-			DataMaker.Analytics().Setup(timeZones);
-			DataMaker.Analytics().Setup(dates);
-			DataMaker.Analytics().Setup(intervals);
-			DataMaker.Analytics().Setup(dataSource);
-			DataMaker.Analytics().Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, dataSource));
-		}
-
-		[Given(@"I have analytics data for the current week")]
-		public void GivenIHaveAnalyticsDataForTheCurrentWeek()
-		{
-			var timeZones = new UtcAndCetTimeZones();
-			var dates = new CurrentWeekDates();
-			var intervals = new QuarterOfAnHourInterval();
-			var dataSource = new ExistingDatasources(timeZones);
-			DataMaker.Analytics().Setup(new EternityAndNotDefinedDate());
-			DataMaker.Analytics().Setup(timeZones);
-			DataMaker.Analytics().Setup(dates);
-			DataMaker.Analytics().Setup(intervals);
-			DataMaker.Analytics().Setup(dataSource);
-			DataMaker.Analytics().Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, dataSource));
-		}
-
-		[Given(@"I am user with partial access to reports")]
-		public void GivenIAmUserWithPartialAccessToReports()
-		{
-			DataMaker.Data().Apply(new UserWithoutResReportScheduledAndActualAgentsAccess());
-		}
 		
 		[Given(@"I am an agent in a team with access to the whole site")]
 		public void GivenIAmAnAgentInATeamWithAccessToTheWholeSite()

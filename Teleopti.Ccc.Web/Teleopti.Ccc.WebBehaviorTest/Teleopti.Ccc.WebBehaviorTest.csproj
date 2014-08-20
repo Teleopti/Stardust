@@ -145,7 +145,6 @@
     <Compile Include="Bindings\Generic\LogonAsAnotherUserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
     <Compile Include="MyTime\AgentBadge.feature.cs">
       <AutoGen>True</AutoGen>
@@ -239,7 +238,6 @@
     <Compile Include="Data\Setups\Legacy\Common\CommonContractSchedule.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonScenario.cs" />
     <Compile Include="Data\Setups\Configurable\AbsenceRequestConfigurable.cs" />
-    <Compile Include="Bindings\Generic\NoteStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />
@@ -679,7 +677,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>License.feature</DependentUpon>
     </Compile>
-    <Compile Include="Bindings\Generic\BrowserStepDefinitions.cs" />
     <Compile Include="Bindings\EventDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security.feature.cs">

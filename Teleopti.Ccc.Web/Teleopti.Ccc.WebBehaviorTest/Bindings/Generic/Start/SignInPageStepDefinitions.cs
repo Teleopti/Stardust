@@ -62,12 +62,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			SelectTestDataSource();
 		}
 
-		[When(@"I select windows logon data source")]
-		public void WhenISelectWindowsLogonDataSource()
-		{
-			SelectTestDataSource();
-		}
-
 		[When(@"I sign in by user name and wrong password")]
 		public void WhenISignInByUserNameAndWrongPassword()
 		{
@@ -79,14 +73,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void WhenISelectBusinessUnit(string businessUnit)
 		{
 			Browser.Interactions.ClickContaining("div a", businessUnit);
-		}
-
-		[When(@"I sign in again")]
-		public void WhenISignInAgain()
-		{
-			Navigation.GotoGlobalSignInPage();
-			SelectTestDataSource();
-			SignInApplication(DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName, TestData.CommonPassword);
 		}
 
 		[Given(@"I am signed in")]
@@ -144,12 +130,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			Browser.Interactions.AssertUrlContains("/SSO/OpenId/Provider");
 		}
 
-		[Then(@"I should see the global menu")]
-		public void ThenIShouldSeeTheGlobalMenu()
-		{
-			Browser.Interactions.AssertUrlContains("/Authentication#menu");
-		}
-
 		[When(@"I sign in using my new password '(.*)'")]
 		public void WhenISignInUsingMyNewPassword(string newPassword)
 		{
@@ -157,11 +137,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			SelectTestDataSource();
 			SignInApplication(userName, newPassword);
 		}
-
-
-
-
-
 
 		[When(@"I click skip button")]
 		public void WhenIClickSkipButton()

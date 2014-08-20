@@ -1,4 +1,3 @@
-using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -14,16 +13,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAWorkflowControlSetWith(Table table)
 		{
 			DataMaker.ApplyFromTable<WorkflowControlSetConfigurable>(table);
-		}
-
-		[Given(@"there is a workflow control set named '(.*)' publishing schedules until '(.*)'")]
-		public void GivenThereIsAWorkflowControlSetWith(string name, string publishedToDate)
-		{
-			DataMaker.Data().Apply(new WorkflowControlSetConfigurable
-				{
-					Name = name,
-					SchedulePublishedToDate = publishedToDate
-				});
 		}
 
 		[Given(@"'?(.*)'? (?:has|have) the workflow control set '(.*)'")]

@@ -13,12 +13,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.Data().Apply(new SiteConfigurable {Name = name});
 		}
 
-		[Given(@"there is a site with")]
-		public void GivenThereIsASiteWith(Table table)
-		{
-			DataMaker.ApplyFromTable<SiteConfigurable>(table);
-		}
-
 		[Given(@"there is a site '(.*)' on business unit '(.*)'")]
 		public void GivenThereIsASiteOnBusinessUnit(string site, string bu)
 		{

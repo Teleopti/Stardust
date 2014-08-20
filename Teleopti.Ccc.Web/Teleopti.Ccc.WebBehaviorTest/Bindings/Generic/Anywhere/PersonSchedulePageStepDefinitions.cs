@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Linq;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -260,21 +259,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 
-		[Given(@"'(.*)' has a common agent description like '(.*)'")]
-		public void GivenHasACommonAgentDescriptionLike(string p0, string p1)
-		{
-				// TODO
-		}
-
-		[Then(@"the displayed name should be '(.*)'")]
-		public void ThenTheDisplayedNameShouldBe(string displayedName)
-		{
-				Browser.Interactions.AssertExistsUsingJQuery(
-						".person:contains('{0}') ",
-						displayedName);
-		}
-
-
 		private static void assertScheduledActivity(string personName, ScheduledActivityInfo layer)
 		{
 			if (layer.StartTime.Equals("00:00"))
@@ -283,7 +267,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				Browser.Interactions.AssertExistsUsingJQuery(
 					".person:contains('{0}') .shift .layer[style*='background-color: {1}'][style*='left: 0px']",
 					personName,
-					PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color)
+					ColorNameToCss(layer.Color)
 					);
 			}
 			else
@@ -293,7 +277,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 					personName,
 					layer.StartTime,
 					layer.LengthMinutes(),
-					PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color)
+					ColorNameToCss(layer.Color)
 					);
 			}
 		}

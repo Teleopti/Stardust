@@ -17,12 +17,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			DataMaker.ApplyFromTable<AbsenceConfigurable>(table);
 		}
-		
-		[Given(@"there is an absence named '(.*)'")]
-		public void GivenThereIsAnAbsenceNamed(string name)
-		{
-			DataMaker.Data().Apply(new AbsenceConfigurable{Name = name});
-		}
 
 		[Given(@"there are absences")]
 		public void GivenThereAreAbsences(Table table)

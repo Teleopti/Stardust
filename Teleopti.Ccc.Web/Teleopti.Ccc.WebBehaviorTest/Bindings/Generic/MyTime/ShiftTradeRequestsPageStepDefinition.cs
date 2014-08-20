@@ -245,29 +245,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
             Browser.Interactions.AssertUrlContains("ShiftTrade/"+date.ToString("yyyyMMdd"));
         }
 
-		[Given(@"I have possible shift trades with")]
-		public void GivenIHavePossibleShiftTradesWith(Table table)
-		{
-			var scheduledAgentsForShiftTrade = table.CreateInstance<ScheduledAgentsForShiftTrade>();
-			DataMaker.Data().Apply(scheduledAgentsForShiftTrade);
-		}
-
-		[Given(@"I can see '(.*)' possible shift trades")]
-		[Then(@"I can see '(.*)' possible shift trades")]
-		public void GivenICanSeePossibleShiftTrades(int possibleShiftTradeCount)
-		{
-			const string script = "return $('.shift-trade-person-schedule-row').length";
-			Browser.Interactions.AssertJavascriptResultContains(script, possibleShiftTradeCount.ToString(CultureInfo.InvariantCulture));
-		}
-
-		[When(@"I scroll down to the bottom of the shift trade section")]
-		public void WhenIScrollDownToTheBottomOfTheShiftTradeSection()
-		{
-			var top = Browser.Interactions.Javascript("return $('#tooltipContainer').position().top");
-			Browser.Interactions.AssertJavascriptResultContains("window.scroll(0,"+top+"); return '1';","1");
-			Browser.Interactions.AssertExists(".ready-loading-flag.is-ready-loaded");
-		}
-
 		[Then(@"the option '(.*)' should be selected")]
 		public void ThenTheOptionShouldBeSelected(string optionSelected)
 		{
