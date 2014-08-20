@@ -939,19 +939,26 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 	}
 
+	function getCanvasWidth() {
+		var canvasWidth;
+		var containerWidth = $("#Request-add-shift-trade").width();
+		var nameCellWidth = $("td.shift-trade-agent-name").width();
+		canvasWidth = containerWidth - nameCellWidth;
+		if (vm.isTradeForMultiDaysEnabled()) {
+			var buttonAddCellWidth = $("td.shift-trade-button-cell").width();
+			canvasWidth = canvasWidth - buttonAddCellWidth;
+		}
+		return canvasWidth;
+	}
+
 	function _redrawLayers() {
 		var canvasWidth;
 
 		if (vm.isReadyLoaded()) {
 			canvasWidth = $("td.shift-trade-possible-trade-schedule:visible").width();
+			if (canvasWidth == null) canvasWidth = getCanvasWidth();
 		} else {
-			var containerWidth = $("#Request-add-shift-trade").width();
-			var nameCellWidth = $("td.shift-trade-agent-name").width();
-			canvasWidth = containerWidth - nameCellWidth;
-			if (vm.isTradeForMultiDaysEnabled()) {
-				var buttonAddCellWidth = $("td.shift-trade-button-cell").width();
-				canvasWidth = canvasWidth - buttonAddCellWidth;
-			}
+			canvasWidth = getCanvasWidth();
 		}
 
 		vm.layerCanvasPixelWidth(canvasWidth);
