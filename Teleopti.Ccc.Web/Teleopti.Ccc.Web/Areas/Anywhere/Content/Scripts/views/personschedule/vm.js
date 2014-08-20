@@ -51,23 +51,23 @@ define([
 		this.ScheduleDate = ko.observable();
 		this.SelectedStartMinutes = ko.observable();
 
-		var personForId = function (id) {
-
+		var personForId = function (id, personArray) {
 			if (!id)
 				return undefined;
-			var person = lazy(self.Persons())
+			var person = lazy(personArray)
 				.filter(function(x) {
 					return x.Id == id;
 				})
 				.first();
 			if (!person) {
 				person = new personViewModel({ Id: id });
+				personArray.push(person);
 			}
 			return person;
 		};
 
 		this.SelectedPerson = ko.computed(function () {
-			return personForId(self.PersonId());
+			return personForId(self.PersonId(), self.Persons());
 		});
 
 		this.Name = ko.computed(function () {
@@ -186,19 +186,16 @@ define([
 			self.Persons([]);
 
 			// add schedule data. a person might get more than 1 schedule added
-var people = [];
+			var people = [];
 			for (var i = 0; i < data.length; i++) {
 				var schedule = data[i];
 				schedule.GroupId = self.GroupId();
 				schedule.Offset = self.ScheduleDate();
 				schedule.Date = moment(schedule.Date, resources.FixedDateFormatForMoment);
 
-				var person = personForId(schedule.PersonId);
-
+				var person = personForId(schedule.PersonId, people);
 				person.AddData(schedule, self.TimeLine);
-				people.push(person);
 			}
-
 			self.Persons(people);
 
 			self.AddIntradayAbsenceForm.WorkingShift(self.WorkingShift());

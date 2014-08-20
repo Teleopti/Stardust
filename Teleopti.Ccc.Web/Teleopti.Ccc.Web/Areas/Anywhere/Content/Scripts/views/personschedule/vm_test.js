@@ -365,7 +365,7 @@
 
 					vm.UpdateSchedules(data);
 
-					assert.equals(3, vm.SortedPersons().length);
+					assert.equals(3, vm.Persons().length);
 				},
 
 
