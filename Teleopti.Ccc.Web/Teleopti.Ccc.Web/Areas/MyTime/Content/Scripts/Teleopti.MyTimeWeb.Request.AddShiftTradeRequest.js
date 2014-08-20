@@ -311,18 +311,27 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			}
 		});
 
-		self.loadSchedule = function(value) {
-			if (value != "allTeams") {
-				if (self.filteredStartTimesText().length == 0 && self.filteredEndTimesText().length == 0 && !self.isDayoffFiltered()) {
-					self.loadOneTeamSchedule();
+		self.isFiltered = function() {
+			if (self.filteredStartTimesText().length == 0 && self.filteredEndTimesText().length == 0 && !self.isDayoffFiltered()) {
+				return false;
+			}
+			return true;
+		}
+
+		self.loadSchedule = function (value) {
+			if (self.selectedTeamInternal() != undefined) {
+				if (value != "allTeams") {
+					if (self.isFiltered()) {
+						self.loadScheduleForOneTeamFilterTime();
+					} else {
+						self.loadOneTeamSchedule();
+					}
 				} else {
-					self.loadScheduleForOneTeamFilterTime();
-				} 
-			} else {
-				if (self.filteredStartTimesText().length == 0 && self.filteredEndTimesText().length == 0 && !self.isDayoffFiltered()) {
-					self.loadScheduleForAllTeams();
-				} else {
-					self.loadScheduleForAllTeamsFilterTime();
+					if (self.isFiltered()) {
+						self.loadScheduleForAllTeamsFilterTime();
+					} else {
+						self.loadScheduleForAllTeams();
+					}
 				}
 			}
 		};
@@ -844,9 +853,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		});
 
-		self.filterTime.subscribe(function() {
-			self.prepareLoad();
-			self.loadSchedule(self.selectedTeamInternal());
+		self.filterTime.subscribe(function () {
+				self.prepareLoad();
+				self.loadSchedule(self.selectedTeamInternal());
 		});
 		
 		self.changeRequestedDate = function (movement) {
