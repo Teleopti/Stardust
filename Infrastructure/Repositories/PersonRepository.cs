@@ -462,7 +462,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public ICollection<IPerson> FindPeople(IEnumerable<Guid> peopleId)
         {
             var result = new List<IPerson>();
-            foreach (var peopleBatch in peopleId.Batch(200))
+            foreach (var peopleBatch in peopleId.Batch(400))
             {
                 var currentBatchIds = peopleBatch.ToArray();
 

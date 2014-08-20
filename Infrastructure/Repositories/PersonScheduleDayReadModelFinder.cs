@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -56,22 +56,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<Guid> personIds)
 		{
-			return _unitOfWork.Session().CreateSQLQuery(
-				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, Start, [End], Model FROM ReadModel.PersonScheduleDay WHERE PersonId In (:PersonIds) AND Start IS NOT NULL AND Start < :DateEnd AND [End] > :DateStart")
-							  .AddScalar("PersonId", NHibernateUtil.Guid)
-							  .AddScalar("TeamId", NHibernateUtil.Guid)
-							  .AddScalar("SiteId", NHibernateUtil.Guid)
-							  .AddScalar("BusinessUnitId", NHibernateUtil.Guid)
-							  .AddScalar("Date", NHibernateUtil.DateTime)
-							  .AddScalar("Start", NHibernateUtil.DateTime)
-							  .AddScalar("End", NHibernateUtil.DateTime)
-							  .AddScalar("Model", NHibernateUtil.Custom(typeof(CompressedString)))
-							  .SetParameterList("PersonIds", personIds)
-							  .SetDateTime("DateStart", period.StartDateTime)
-							  .SetDateTime("DateEnd", period.EndDateTime)
-							  .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
-							  .SetReadOnly(true)
-							  .List<PersonScheduleDayReadModel>();
+			var res = new List<PersonScheduleDayReadModel>();
+			foreach (var ids in personIds.Batch(2000))
+			{
+				res.AddRange(_unitOfWork.Session().CreateSQLQuery(
+					"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, Start, [End], Model FROM ReadModel.PersonScheduleDay WHERE PersonId In (:PersonIds) AND Start IS NOT NULL AND Start < :DateEnd AND [End] > :DateStart")
+					.AddScalar("PersonId", NHibernateUtil.Guid)
+					.AddScalar("TeamId", NHibernateUtil.Guid)
+					.AddScalar("SiteId", NHibernateUtil.Guid)
+					.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+					.AddScalar("Date", NHibernateUtil.DateTime)
+					.AddScalar("Start", NHibernateUtil.DateTime)
+					.AddScalar("End", NHibernateUtil.DateTime)
+					.AddScalar("Model", NHibernateUtil.Custom(typeof (CompressedString)))
+					.SetParameterList("PersonIds", ids)
+					.SetDateTime("DateStart", period.StartDateTime)
+					.SetDateTime("DateEnd", period.EndDateTime)
+					.SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
+					.SetReadOnly(true)
+					.List<PersonScheduleDayReadModel>());
+			}
+			return res;
 		}
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPersons(DateOnly shiftTradeDate, IEnumerable<Guid> personIdList, Paging paging)
@@ -146,6 +151,4 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .List<PersonScheduleDayReadModel>();
 		}
 	}
-
-
 }
