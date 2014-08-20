@@ -8,6 +8,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -290,7 +292,44 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = target.ShiftTradeRequestScheduleForAllTeams(DateOnly.Today, Guid.NewGuid().ToString(), new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
-		
+
+		[Test]
+		public void ShouldGetScheduleModelForOneTeamWithTimeFilter()
+		{
+			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var model = new ShiftTradeScheduleViewModel();
+
+			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<ShiftTradeScheduleViewModelData>.Is.Anything))
+							.Return(model);
+
+			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);
+
+			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), userTimeZone);
+
+			var result = target.ShiftTradeRequestScheduleByFilterTime(DateOnly.Today, Guid.NewGuid().ToString(), "8:00-10:00", "16:00-18:00", false, new Paging());
+			result.Data.Should().Be.SameInstanceAs(model);
+		}
+
+		[Test]
+		public void ShouldGetScheduleModelForAllTeamWithTimeFilter()
+		{
+			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var model = new ShiftTradeScheduleViewModel();
+
+			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModelForAllTeams(Arg<ShiftTradeScheduleViewModelDataForAllTeams>.Is.Anything))
+							.Return(model);
+
+			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);
+			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), userTimeZone);
+
+			var result = target.ShiftTradeRequestScheduleForAllTeamsByFilterTime(DateOnly.Today, Guid.NewGuid().ToString(), "8:00-10:00", "16:00-18:00", true, new Paging());
+			result.Data.Should().Be.SameInstanceAs(model);
+		}
+
 		[Test]
 		public void ShouldApproveShiftTradeRequest()
 		{

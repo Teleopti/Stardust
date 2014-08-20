@@ -86,6 +86,24 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
+		public void ShouldMapPossibleTradesWithTimeFilterFromReadModel()
+		{
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid(), Paging = new Paging() { Take = 1 }, TimeFilter = new TimeFilterInfo() };
+			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new[] { new Person() } };
+			var possibleTradeScheduleViewModels = new List<ShiftTradeAddPersonScheduleViewModel>();
+			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
+
+			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradeSchedulesWithFilteredTimes(persons.Date, persons.Persons, data.Paging, data.TimeFilter))
+									  .Return(scheduleReadModels);
+			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
+
+			var result = _target.Map(data);
+
+			result.PossibleTradeSchedules.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldMapNoPossibleScheduleFromPersonAndDate()
 		{
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid(), Paging = new Paging() { Take = 1 } };

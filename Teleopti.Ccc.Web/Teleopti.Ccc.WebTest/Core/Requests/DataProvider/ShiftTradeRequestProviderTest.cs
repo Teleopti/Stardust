@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -67,6 +68,32 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleDayReadModelFinder, MockRepository.GenerateMock<IPermissionProvider>());
 
 			var result = target.RetrievePossibleTradeSchedules(date, new[] { person1, person2 }, new Paging());
+
+			result.Should().Be.SameInstanceAs(scheduleReadModels);
+		}
+
+		[Test]
+		public void ShouldGetScheduleForPossibleTradePersonsWithTimeFilter()
+		{
+			var scheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
+			DateOnly date = DateOnly.Today;
+			var person1 = new Person();
+			var person2 = new Person();
+			person1.SetId(Guid.NewGuid());
+			person2.SetId(Guid.NewGuid());
+			var scheduleReadModels = new[] { new PersonScheduleDayReadModel(), new PersonScheduleDayReadModel() };
+			var filterInfo = new TimeFilterInfo
+			{
+				StartTimes = new List<DateTimePeriod>() {new DateTimePeriod()},
+				EndTimes = new List<DateTimePeriod>() {new DateTimePeriod()},
+				IsDayOff = true
+			};
+
+			scheduleDayReadModelFinder.Stub(x => x.ForPersonsByFilteredTimes(date, new[] { person1.Id.Value, person2.Id.Value }, new Paging(), filterInfo)).Return(scheduleReadModels);
+
+			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleDayReadModelFinder, MockRepository.GenerateMock<IPermissionProvider>());
+
+			var result = target.RetrievePossibleTradeSchedulesWithFilteredTimes(date, new[] { person1, person2 }, new Paging(), filterInfo);
 
 			result.Should().Be.SameInstanceAs(scheduleReadModels);
 		}
