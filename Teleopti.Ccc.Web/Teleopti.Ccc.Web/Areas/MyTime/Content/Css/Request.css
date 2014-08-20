@@ -416,3 +416,8 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     max-height: 300px;
     overflow-y: scroll;
 }
+
+.filter-time-dropdown-button {
+	margin-bottom: 9px; 
+	background-color:#007fff
+}

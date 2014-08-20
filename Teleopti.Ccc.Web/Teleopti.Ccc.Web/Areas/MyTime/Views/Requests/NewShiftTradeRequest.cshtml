@@ -42,7 +42,7 @@
 	            </td>
 	            <!-- ko if: isFilterByTimeEnabled-->
 					<td data-bind="visible: !isDetailVisible()">
-						<div style="margin-bottom: 9px; background-color:#007fff" class="dropdown" data-bind="click: filterStartEndTimeClick">
+						<div class="dropdown filter-time-dropdown-button" data-bind="click: filterStartEndTimeClick">
 							<a class="dropdown-toggle btn" data-toggle="dropdown" href="#" style="color: white">
 								@Resources.StartTime
 								<b class="caret"></b>
@@ -58,7 +58,7 @@
 						</div>
 					</td>	            
 					<td data-bind="visible: !isDetailVisible()">
-						<div style="margin-bottom: 9px; background-color:#007fff" class="dropdown" data-bind="click: filterStartEndTimeClick">
+						<div class="dropdown filter-time-dropdown-button" data-bind="click: filterStartEndTimeClick">
 							<a class="dropdown-toggle btn" data-toggle="dropdown" href="#" style="color: white">
 								@Resources.EndTime
 								<b class="caret"></b>
