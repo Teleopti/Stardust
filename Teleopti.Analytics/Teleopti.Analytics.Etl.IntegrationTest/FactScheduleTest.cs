@@ -239,14 +239,39 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			column = "deviation_schedule_ready_s";
 			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(22500));
 			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(21960));
+
+			var adherance = SqlCommands.ReportDataAgentScheduleAdherence(testDate.AddDays(-2), testDate.AddDays(-1), aheranceTypeReadyTime, person, timeZoneId);
+
+			var cellValue = IntervalValueGet(adherance, testDate.AddDays(-1), "deviation_m", "09:15-09:30", person);
+			Assert.That(cellValue, Is.EqualTo(0));
+
 		}
 
+		public static int IntervalValueGet(DataTable adherance, DateTime testDate, String testColumn, String intervalName, IPerson person)
+		{
+			foreach (DataRow dtRow in adherance.Rows)
+			{
+				if ((dtRow["date"]).Equals(testDate))
+				{
+					foreach (DataColumn dc in adherance.Columns)
+					{
+						if (dc.ColumnName.Equals(testColumn))
+						{
+							if ((dtRow["interval_name"]).ToString().Equals(intervalName))
+							{
+								return Convert.ToInt32(dtRow[testColumn]);
+							}
+						}
+					}
+				}
+			}
+			return -9999;
+		}
 
 		public void assertOverlapping(IPerson person, string timeZoneId, string ETLType, DateTime testDate)
 		{
 			//Tests for "Ready Time vs. Schedule Ready Time"
-			var adheranceId = aheranceTypeReadyTime;
-			var adherance = SqlCommands.ReportDataAgentScheduleAdherence(testDate.AddDays(-2), testDate.AddDays(-1), adheranceId, person, timeZoneId);
+			var adherance = SqlCommands.ReportDataAgentScheduleAdherence(testDate.AddDays(-2), testDate.AddDays(-1), aheranceTypeReadyTime, person, timeZoneId);
 			
 			Assert.That(adherance.Rows.Count, Is.EqualTo(81));
 			foreach (DataRow row in adherance.Rows)
@@ -309,8 +334,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			}
 
 			//Tests for "Ready Time vs. Schedule Time", e.g. the punish if over performing agent
-			adheranceId = aheranceTypeSchedule;
-			adherance = SqlCommands.ReportDataAgentScheduleAdherence(testDate.AddDays(-2), testDate.AddDays(-1), adheranceId, person, timeZoneId);
+			adherance = SqlCommands.ReportDataAgentScheduleAdherence(testDate.AddDays(-2), testDate.AddDays(-1), aheranceTypeSchedule, person, timeZoneId);
 
 			Assert.That(adherance.Rows.Count, Is.EqualTo(81));
 			foreach (DataRow row in adherance.Rows)
