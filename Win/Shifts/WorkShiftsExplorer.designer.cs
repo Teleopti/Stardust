@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			// 
 			this.backStage1.ActiveTabFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.backStage1.AllowDrop = true;
+			this.backStage1.BackColor = System.Drawing.Color.White;
 			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1203, 691);
 			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.backStage1.Controls.Add(this.backStageButton1);
