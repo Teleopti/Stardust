@@ -276,10 +276,12 @@
 			// 
 			// OptimizationPreferencesDialog
 			// 
+			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
 			this.BorderColor = System.Drawing.Color.Blue;
+			this.CancelButton = this.buttonCancel;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ClientSize = new System.Drawing.Size(498, 573);
 			this.Controls.Add(this.tableLayoutPanel1);

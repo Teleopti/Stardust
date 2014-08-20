@@ -159,6 +159,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			// schedulingSessionPreferencesTabPanel1
 			// 
 			this.schedulingSessionPreferencesTabPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.schedulingSessionPreferencesTabPanel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.schedulingSessionPreferencesTabPanel1.Location = new System.Drawing.Point(3, 3);
 			this.schedulingSessionPreferencesTabPanel1.Name = "schedulingSessionPreferencesTabPanel1";
 			this.schedulingSessionPreferencesTabPanel1.ScheduleOnlyAvailableDaysVisible = false;
@@ -190,6 +191,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			// 
 			// dayOffPreferencesPanel1
 			// 
+			this.dayOffPreferencesPanel1.BackColor = System.Drawing.Color.Transparent;
 			this.dayOffPreferencesPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dayOffPreferencesPanel1.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;
@@ -210,9 +212,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			// 
 			// SchedulingSessionPreferencesDialog
 			// 
+			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BorderColor = System.Drawing.Color.Blue;
+			this.CancelButton = this.buttonCancel;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
 			this.ClientSize = new System.Drawing.Size(546, 688);
 			this.Controls.Add(this.tableLayoutPanel1);
