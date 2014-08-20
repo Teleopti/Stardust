@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public bool? AllowMeeting { get; set; }
 		public bool? InReadyTime { get; set; }
 		public string BusinessUnit { get; set; }
+		public bool? InWorkTime { get; set; }
 
 	    public IActivity Activity;
 
@@ -32,6 +33,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (InReadyTime.HasValue)
 			{
 				Activity.InReadyTime = InReadyTime.Value;
+			}
+
+			if (InWorkTime.HasValue)
+			{
+				Activity.InWorkTime = InWorkTime.Value;
 			}
 
 			if(!string.IsNullOrEmpty(BusinessUnit))
