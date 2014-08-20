@@ -83,12 +83,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", "Cookie is expired!");
 		}
 
-		public static void TestMessage(string message)
-		{
-			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.TestMessage('" + message + "');");
-			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", message);
-		}
-
 		public static void WaitUntilReadyForInteraction()
 		{
 			Browser.Interactions.AssertJavascriptResultContains("return (Teleopti != undefined) ? 'go' : 'no go';", "go");

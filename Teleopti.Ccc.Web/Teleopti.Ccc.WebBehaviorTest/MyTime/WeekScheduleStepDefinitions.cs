@@ -81,7 +81,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertFirstContains(".datepicker-days th.dow:nth-child(1)", day);
 		}
 
-
 		[Then(@"I should see start timeline and end timeline according to schedule with:")]
 		public void ThenIShouldSeeStartTimelineAndEndTimelineAccordingToScheduleWith(Table table)
 		{

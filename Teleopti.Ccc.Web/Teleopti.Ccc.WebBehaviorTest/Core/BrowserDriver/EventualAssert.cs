@@ -1,18 +1,12 @@
 using System;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
 	public static class EventualAssert
 	{
-		public static void That<T>(Func<T> value, Constraint constraint)
-		{
-			That(value, constraint, null, new WatiNIEExceptionCatcher());
-		}
-
 		public static void That<T>(Func<T> value, Constraint constraint, Func<string> message, IExceptionCatcher exceptionCatcher)
 		{
 			ReusableConstraint reusableConstraint = constraint;

@@ -1,10 +1,8 @@
 ﻿using System;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
-using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
 
@@ -13,12 +11,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class MyReportStepDefinition
 	{
-		[Then(@"MyReport tab should not be visible")]
-		public void ThenReportTabShouldNotBeVisible()
-		{
-            Browser.Interactions.AssertNotExists(".navbar-default", "a[href$='#MyReportTab']");
-		}
-
 		[Then(@"MyReport tab should be visible")]
 		public void ThenMyReportTabShouldBeVisible()
 		{

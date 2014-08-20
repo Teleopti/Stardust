@@ -25,11 +25,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			return new DirectoryInfo(path).FullName;
 		}
 
-		public static string WebNHibConfPath()
-		{
-			return WebBinPath();
-		}
-
 		public static string WebAuthenticationBridgePath()
 		{
 			return FindProjectPath(@"Teleopti.Ccc.Web.AuthenticationBridge\");

@@ -189,7 +189,6 @@
     <Compile Include="Data\Setups\Configurable\AlertTimeSettingConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\LeavingDateForUser.cs" />
     <Compile Include="Data\Setups\Configurable\PersonAbsenceAccountConfigurable.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\ScheduledAgentsForShiftTrade.cs" />
     <Compile Include="MyTime\AbsenceRequestFromRequests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -477,8 +476,6 @@
     <Compile Include="Data\Setups\Configurable\MeetingConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\PreferencesPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
-    <Compile Include="Pages\Common\ComboBox.cs" />
-    <Compile Include="Pages\Common\IMessageReplyPage.cs" />
     <Compile Include="MyTime\PreferencesFeedbackBlacklisting.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -525,13 +522,9 @@
     <Compile Include="Data\GlobalPrincipalState.cs" />
     <Compile Include="Data\GlobalUnitOfWorkState.cs" />
     <Compile Include="Data\ScenarioUnitOfWorkState.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AgentSecondBusinessUnit.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithAnotherSiteAccess.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonPartTimePercentage.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\IUserRoleSetup.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\SupervisorSecondBusinessUnit.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\UserNoPermission.cs" />
-    <Compile Include="Pages\jQuery\JQueryElementExtensions.cs" />
     <Compile Include="MyTime\PreferencesExtended.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -566,7 +559,6 @@
     <Compile Include="Data\Setups\Legacy\Specific\ExistingExtendedPreference.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\RuleSetBag.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\BaseShiftCategory.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AssignedAbsence.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutTeamDataAccess.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithSiteAccess.cs" />
@@ -574,12 +566,10 @@
     <Compile Include="Data\Setups\Legacy\Specific\AnotherSitesTeam.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AnotherTeam.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\GeneratedTeam.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\NoVirtualSchedulePeriod.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AssignedDayOff.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\SchedulePeriod.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ShiftWithConfidentialAbsence.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Team.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\TwoWeeksAbsence.cs" />
     <Compile Include="MyTime\MyProfile.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -588,8 +578,6 @@
     <Compile Include="MyTime\MyProfileStepDefinitions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutTeamScheduleAccess.cs" />
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\Administrator.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\Supervisor.cs" />
     <Compile Include="MyTime\PreferencesPeriodFeedback.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -627,7 +615,6 @@
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutRequestsAccess.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingTextRequest.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutPreferencesAccess.cs" />
-    <Compile Include="Core\Extensions\LogExtensions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Agent.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutStudentAvailabilityAccess.cs" />
     <Compile Include="Data\TestData.cs" />
@@ -641,17 +628,10 @@
     <Compile Include="Data\Setups\Legacy\Specific\NoWorkflowControlSet.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ShiftCategoryPreference.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\StandardPreference.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\StudentAvailability.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\TwoExistingTextRequestChangedOnDifferentTimes.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\PersonPeriod.cs" />
-    <Compile Include="Pages\Common\ICancelButton.cs" />
-    <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Common\CalendarCells.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\StudentAgent.cs" />
-    <Compile Include="Pages\jQuery\IJQueryExpression.cs" />
-    <Compile Include="Pages\jQuery\jQuery.cs" />
-    <Compile Include="Pages\jQuery\JQueryExpression.cs" />
-    <Compile Include="Core\ScenarioContextLazy.cs" />
     <Compile Include="MyTime\Preferences.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

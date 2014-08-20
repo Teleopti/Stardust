@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -40,13 +39,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("MATRIX_WEB_SITE_URL", "http://localhost:52510");
 			Add("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
 			Add("AGENTPORTALWEB_nhibConfPath", IniFileInfo.AGENTPORTALWEB_nhibConfPath);
-	}
-
-		public AllTags(IEnumerable<KeyValuePair<string, string>> additionalTags)
-			: this()
-		{
-			additionalTags.ForEach(a => Add(a.Key, a.Value));
 		}
-
 	}
 }

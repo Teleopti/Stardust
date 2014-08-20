@@ -1,4 +1,3 @@
-using SharpTestsEx;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
