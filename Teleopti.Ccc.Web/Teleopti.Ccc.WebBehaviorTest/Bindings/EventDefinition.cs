@@ -2,12 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -33,8 +30,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			try
 			{
 				Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));
-
-				TestControllerMethods.BeforeTestRun();
 
 				TestDataSetup.CreateDataSource();
 
