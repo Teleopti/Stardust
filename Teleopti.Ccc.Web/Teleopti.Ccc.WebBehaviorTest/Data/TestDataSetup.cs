@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void CreateMinimumTestData()
 		{
-			DataSourceHelper.PersistAuditSetting();// TODO: Remove, its done in DataSourceHelper.CreateDataSource();
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreatePersonThatCreatesTestData);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateLicense);
 		}
