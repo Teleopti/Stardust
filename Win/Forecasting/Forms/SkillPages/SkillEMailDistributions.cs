@@ -18,11 +18,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
         {
             InitializeComponent();
             if (!DesignMode) SetTexts();
+				this.maskedTimeSpanTextBox1.Size = new System.Drawing.Size(75, 22);
         }
 
         private void SetChildSkillVisible()
         {
-            timeSpanTextBoxServiceLevelTime.Visible = false;
+            maskedTimeSpanTextBox1.Visible = false;
             percentTextBox1.Visible = false;
             labelShrinkage.Visible = false;
             labelEfficiencyPercentage.Visible = false;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private void timeSpanTextBoxServiceLevelTime_TimeSpanBoxTextChanged(object sender, EventArgs e)
         {
-            if (timeSpanTextBoxServiceLevelTime.ValidatedStatus == ValidatedStatus.Error)
+            if (maskedTimeSpanTextBox1.ValidatedStatus == ValidatedStatus.Error)
             {
                 _inputContainsError = true;
                 return;
@@ -48,8 +49,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             if (skillDayTemplate.TemplateSkillDataPeriodCollection.Count > 0)
             {
                 ITemplateSkillDataPeriod skillDataPeriodTemplate = skillDayTemplate.TemplateSkillDataPeriodCollection[0];
-                timeSpanTextBoxServiceLevelTime.MaximumValue = TimeSpan.FromSeconds(skill.DefaultResolution * TimeDefinition.SecondsPerMinute * TimeDefinition.HoursPerDay); 
-                timeSpanTextBoxServiceLevelTime.Value = (TimeSpan.FromSeconds(skillDataPeriodTemplate.ServiceAgreement.ServiceLevel.Seconds));
+                maskedTimeSpanTextBox1.MaximumValue = TimeSpan.FromSeconds(skill.DefaultResolution * TimeDefinition.SecondsPerMinute * TimeDefinition.HoursPerDay); 
+                maskedTimeSpanTextBox1.Value = (TimeSpan.FromSeconds(skillDataPeriodTemplate.ServiceAgreement.ServiceLevel.Seconds));
                 integerTextBoxMinimumAgents.IntegerValue =
                     skillDataPeriodTemplate.SkillPersonData.MinimumPersons;
                 integerTextBoxMaximumAgents.IntegerValue =
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 
             ServiceLevel serviceLevel = new ServiceLevel(new Percent(1d),
                                                          Convert.ToDouble(
-                                                             timeSpanTextBoxServiceLevelTime.Value.TotalSeconds,
+                                                             maskedTimeSpanTextBox1.Value.TotalSeconds,
                                                              CultureInfo.CurrentCulture));
             ServiceAgreement serviceAgreement = new ServiceAgreement();
             serviceAgreement.ServiceLevel = serviceLevel;

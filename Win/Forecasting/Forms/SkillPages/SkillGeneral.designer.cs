@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			this.textBoxName.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.textBoxName.BackColor = System.Drawing.Color.White;
-			this.textBoxName.BeforeTouchSize = new System.Drawing.Size(222, 23);
+			this.textBoxName.BeforeTouchSize = new System.Drawing.Size(68, 23);
 			this.textBoxName.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tableLayoutPanelForRtl.SetColumnSpan(this.textBoxName, 2);
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			this.textBoxDescription.AcceptsReturn = true;
 			this.textBoxDescription.BackColor = System.Drawing.Color.White;
-			this.textBoxDescription.BeforeTouchSize = new System.Drawing.Size(222, 23);
+			this.textBoxDescription.BeforeTouchSize = new System.Drawing.Size(68, 23);
 			this.textBoxDescription.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tableLayoutPanelForRtl.SetColumnSpan(this.textBoxDescription, 2);
@@ -166,12 +166,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			this.comboBoxSkillType.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxSkillType.BackColor = System.Drawing.Color.White;
-			this.comboBoxSkillType.BeforeTouchSize = new System.Drawing.Size(222, 23);
+			this.comboBoxSkillType.BeforeTouchSize = new System.Drawing.Size(222, 19);
 			this.tableLayoutPanelForRtl.SetColumnSpan(this.comboBoxSkillType, 2);
 			this.comboBoxSkillType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxSkillType.Location = new System.Drawing.Point(161, 169);
 			this.comboBoxSkillType.Name = "comboBoxSkillType";
-			this.comboBoxSkillType.Size = new System.Drawing.Size(222, 23);
+			this.comboBoxSkillType.Size = new System.Drawing.Size(222, 19);
 			this.comboBoxSkillType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxSkillType.TabIndex = 7;
 			// 
@@ -191,12 +191,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			this.comboBoxSkillActivity.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxSkillActivity.BackColor = System.Drawing.Color.White;
-			this.comboBoxSkillActivity.BeforeTouchSize = new System.Drawing.Size(222, 23);
+			this.comboBoxSkillActivity.BeforeTouchSize = new System.Drawing.Size(222, 19);
 			this.tableLayoutPanelForRtl.SetColumnSpan(this.comboBoxSkillActivity, 2);
 			this.comboBoxSkillActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxSkillActivity.Location = new System.Drawing.Point(161, 200);
 			this.comboBoxSkillActivity.Name = "comboBoxSkillActivity";
-			this.comboBoxSkillActivity.Size = new System.Drawing.Size(222, 23);
+			this.comboBoxSkillActivity.Size = new System.Drawing.Size(222, 19);
 			this.comboBoxSkillActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxSkillActivity.TabIndex = 9;
 			this.comboBoxSkillActivity.SelectedIndexChanged += new System.EventHandler(this.comboBoxSkillActivity_SelectedIndexChanged);
@@ -281,12 +281,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			this.comboBoxTimeZones.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxTimeZones.BackColor = System.Drawing.Color.White;
-			this.comboBoxTimeZones.BeforeTouchSize = new System.Drawing.Size(222, 23);
+			this.comboBoxTimeZones.BeforeTouchSize = new System.Drawing.Size(222, 19);
 			this.tableLayoutPanelForRtl.SetColumnSpan(this.comboBoxTimeZones, 2);
 			this.comboBoxTimeZones.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxTimeZones.Location = new System.Drawing.Point(161, 262);
 			this.comboBoxTimeZones.Name = "comboBoxTimeZones";
-			this.comboBoxTimeZones.Size = new System.Drawing.Size(222, 23);
+			this.comboBoxTimeZones.Size = new System.Drawing.Size(222, 19);
 			this.comboBoxTimeZones.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxTimeZones.TabIndex = 13;
 			this.comboBoxTimeZones.DropDown += new System.EventHandler(this.AdjustWidthComboBox_DropDown);
@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// office2007OutlookTimePickerMidnightOffsetBreak
 			// 
 			this.office2007OutlookTimePickerMidnightOffsetBreak.BackColor = System.Drawing.Color.White;
-			this.office2007OutlookTimePickerMidnightOffsetBreak.BeforeTouchSize = new System.Drawing.Size(85, 23);
+			this.office2007OutlookTimePickerMidnightOffsetBreak.BeforeTouchSize = new System.Drawing.Size(85, 19);
 			this.office2007OutlookTimePickerMidnightOffsetBreak.BindableTimeValue = System.TimeSpan.Parse("00:00:00");
 			this.office2007OutlookTimePickerMidnightOffsetBreak.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.office2007OutlookTimePickerMidnightOffsetBreak.Location = new System.Drawing.Point(161, 294);
@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			this.office2007OutlookTimePickerMidnightOffsetBreak.MinValue = System.TimeSpan.Parse("00:00:00");
 			this.office2007OutlookTimePickerMidnightOffsetBreak.Name = "office2007OutlookTimePickerMidnightOffsetBreak";
 			this.office2007OutlookTimePickerMidnightOffsetBreak.Office2007ColorTheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.office2007OutlookTimePickerMidnightOffsetBreak.Size = new System.Drawing.Size(85, 23);
+			this.office2007OutlookTimePickerMidnightOffsetBreak.Size = new System.Drawing.Size(85, 19);
 			this.office2007OutlookTimePickerMidnightOffsetBreak.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.office2007OutlookTimePickerMidnightOffsetBreak.TabIndex = 15;
 			this.office2007OutlookTimePickerMidnightOffsetBreak.SelectedValueChanged += new System.EventHandler(this.office2007OutlookTimePickerMidnightOffsetBreak_SelectedValueChanged);
@@ -344,11 +344,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			// 
 			this.comboBoxAdvIntervalLength.AllowNewText = false;
 			this.comboBoxAdvIntervalLength.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvIntervalLength.BeforeTouchSize = new System.Drawing.Size(82, 23);
+			this.comboBoxAdvIntervalLength.BeforeTouchSize = new System.Drawing.Size(82, 19);
 			this.comboBoxAdvIntervalLength.Location = new System.Drawing.Point(161, 136);
 			this.comboBoxAdvIntervalLength.Name = "comboBoxAdvIntervalLength";
 			this.comboBoxAdvIntervalLength.NumberOnly = true;
-			this.comboBoxAdvIntervalLength.Size = new System.Drawing.Size(82, 23);
+			this.comboBoxAdvIntervalLength.Size = new System.Drawing.Size(82, 19);
 			this.comboBoxAdvIntervalLength.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvIntervalLength.TabIndex = 5;
 			// 
