@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Win.Main
 		{
 			_model = model;
 			InitializeComponent();
+			labelVersion.Text = string.Concat("Version ", Application.ProductVersion);
 		}
 
 		public bool StartLogon()
