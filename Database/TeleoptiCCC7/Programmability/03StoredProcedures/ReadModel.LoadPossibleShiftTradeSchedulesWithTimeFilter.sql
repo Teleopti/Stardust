@@ -11,20 +11,16 @@ GO
 ReadModel.LoadPossibleShiftTradeSchedulesWithTimeFilter
 '2014-08-08',
 'b46a2588-8861-42e3-ab03-9b5e015b257c,47a3d4aa-3cd8-4235-a7eb-9b5e015b2560,88be31b0-9c70-4076-9743-9b5e015b2577,9d42c9bf-f766-473f-970c-9b5e015b2564,94329a0e-b3c5-4b1f-beb9-9b5e015b2564',
-'2014-08-08 10:00',
-'2014-08-08 12:00',
-'2014-08-08 20:00',
-'2014-08-08 22:00',
- true,00,20
+'2014-08-08 10:00;2014-08-08 12:00,2014-08-08 12:00;2014-08-08 14:00',
+'2014-08-08 20:00;2014-08-08 22:00,2014-08-09 00:00;2014-08-09 01:00',
+true,00,20
 
  */
 CREATE PROCEDURE [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter]
 @shiftTradeDate smalldatetime,
 @personList varchar(max),
-@filterStartTimeStarts varchar(max),
-@filterStartTimeEnds varchar(max),
-@filterEndTimeStarts varchar(max),
-@filterEndTimeEnds varchar(max),
+@filterStartTimes varchar(max),
+@filterEndTimes varchar(max),
 @isDayOff bit,
 @skip int,
 @take int
@@ -40,14 +36,14 @@ AS
 
 	DECLARE @filterStartTimeList table
 	(
-	startTimeStart varchar(24),
-	startTimeEnd varchar(24)
+	startTimeStart smalldatetime,
+	startTimeEnd smalldatetime
 	)
 
 	DECLARE @filterEndTimeList table
 	(
-	endTimeStart varchar(24),
-	endTimeEnd varchar(24)
+	endTimeStart smalldatetime,
+	endTimeEnd smalldatetime
 	)
 
 	DECLARE @output table
@@ -69,19 +65,13 @@ AS
 	INSERT INTO @TempList
 	SELECT * FROM dbo.SplitStringString(@personList)
 
-	INSERT INTO @filterStartTimeList(startTimeStart, startTimeEnd)
-	SELECT startTime.string, endTime.string FROM 
-		(SELECT *, ROW_NUMBER()  over(order by string) as id FROM dbo.SplitStringString(@filterStartTimeStarts)) startTime 
-	JOIN
-		(SELECT *, ROW_NUMBER() over(order by string) as id FROM dbo.SplitStringString(@filterStartTimeEnds)) endTime
-	ON startTime.id = endTime.id
+	INSERT INTO @filterStartTimeList(startTimeStart,startTimeEnd)
+	SELECT startTime,endTime
+	FROM [dbo].[SplitAndMergeTimeInterval](@filterStartTimes)
 
 	INSERT INTO @filterEndTimeList(endTimeStart, endTimeEnd)
-	SELECT startTime.string, endTime.string FROM 
-		(SELECT *, ROW_NUMBER()  over(order by string) as id FROM dbo.SplitStringString(@filterEndTimeStarts)) startTime 
-	JOIN
-		(SELECT *, ROW_NUMBER() over(order by string) as id FROM dbo.SplitStringString(@filterEndTimeEnds)) endTime
-	ON startTime.id = endTime.id;
+	SELECT startTime,endTime
+	FROM [dbo].[SplitAndMergeTimeInterval](@filterEndTimes)
 
 
 	SET ROWCOUNT @take;		
@@ -104,11 +94,9 @@ AS
 			INNER JOIN @TempList t
 				ON t.Person = sd.PersonId
 			INNER JOIN @filterStartTimeList fs
-				ON fs.startTimeStart <= sd.Start
-				AND fs.startTimeEnd > sd.Start
+				ON sd.Start between fs.startTimeStart and fs.startTimeEnd
 			INNER JOIN @filterEndTimeList fe
-				ON fe.endTimeStart <= sd.[End] 
-				AND fe.endTimeEnd >sd.[End]
+				ON sd.[End] between fe.endTimeStart and fe.endTimeEnd
 			WHERE [BelongsToDate] = @shiftTradeDate
 			AND IsDayOff = 0
 

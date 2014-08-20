@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var filterStartTimes = string.Join(",", startTimesAsString.Select(d => d.startTime));
 			var filterEndTimes = string.Join(",", endTimesAsString.Select(d => d.endTime));
 			return _unitOfWork.Session().CreateSQLQuery(
-				@"EXEC  [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter_new] @shiftTradeDate=:shiftTradeDate, @personList=:personIdList, 
+				@"EXEC  [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter] @shiftTradeDate=:shiftTradeDate, @personList=:personIdList, 
 							@filterStartTimes=:filterStartTimes, @filterEndTimes=:filterEndTimes, @isDayOff=:isDayOff,
 							@skip=:skip, @take=:take")
 							  .AddScalar("PersonId", NHibernateUtil.Guid)
