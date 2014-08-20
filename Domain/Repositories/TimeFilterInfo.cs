@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 public class TimeFilterInfo
 {
-	public IEnumerable<DateTime> StartTimeStarts { get; set; }
-	public IEnumerable<DateTime> StartTimeEnds { get; set; }
-	public IEnumerable<DateTime> EndTimeStarts { get; set; }
-	public IEnumerable<DateTime> EndTimeEnds { get; set; }
+	public IEnumerable<DateTimePeriod> StartTimes { get; set; }
+	public IEnumerable<DateTimePeriod> EndTimes { get; set; } 
 	public bool IsDayOff { get; set; }
 }

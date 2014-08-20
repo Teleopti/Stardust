@@ -224,14 +224,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			{
 				if (isDayOff)
 				{
-					var startTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, false);
-					var endTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, false);
-
 					filter = new TimeFilterInfo();
-					filter.StartTimeStarts = startTimes.Select(x => x.StartDateTime).ToArray();
-					filter.StartTimeEnds = startTimes.Select(x => x.EndDateTime).ToArray();
-					filter.EndTimeStarts = endTimes.Select(x => x.StartDateTime).ToArray();
-					filter.EndTimeEnds = endTimes.Select(x => x.EndDateTime).ToArray();
+					filter.StartTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, false);
+					filter.EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, false);
 					filter.IsDayOff = isDayOff;
 				}
 				else
@@ -241,14 +236,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			}
 			else
 			{
-				var startTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, true);
-				var endTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, true);
-
 				filter = new TimeFilterInfo();
-				filter.StartTimeStarts = startTimes.Select(x => x.StartDateTime).ToArray();
-				filter.StartTimeEnds = startTimes.Select(x => x.EndDateTime).ToArray();
-				filter.EndTimeStarts = endTimes.Select(x => x.StartDateTime).ToArray();
-				filter.EndTimeEnds = endTimes.Select(x => x.EndDateTime).ToArray();
+				filter.StartTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, true);
+				filter.EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, true);
 				filter.IsDayOff = isDayOff;
 			}
 			return filter;
