@@ -319,7 +319,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		}
 
 		self.loadSchedule = function (value) {
-			if (self.selectedTeamInternal() != undefined) {
+			if (value != undefined) {
 				if (value != "allTeams") {
 					if (self.isFiltered()) {
 						self.loadScheduleForOneTeamFilterTime();
