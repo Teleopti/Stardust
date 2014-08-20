@@ -84,7 +84,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateShiftCategory);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateDayOffTemplate);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateAbsence);
-			GlobalUnitOfWorkState.UnitOfWorkAction(CreateAgentPersons);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateActivities);
 		}
 
@@ -264,12 +263,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static void CreatePersonThatCreatesTestData(IUnitOfWork uow)
 		{
 			var personRepository = new PersonRepository(uow);
-			personRepository.Add(TestData.PersonThatCreatesTestData);
-		}
-
-		private static void CreateAgentPersons(IUnitOfWork uow)
-		{
-            var personRepository = new PersonRepository(uow);
 			personRepository.Add(TestData.PersonThatCreatesTestData);
 		}
 
