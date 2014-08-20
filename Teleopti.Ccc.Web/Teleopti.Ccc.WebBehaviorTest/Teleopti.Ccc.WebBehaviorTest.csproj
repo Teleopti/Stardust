@@ -552,7 +552,6 @@
     </Compile>
     <Compile Include="Bindings\UnitTestsStepDefinition.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ContractScheduleFromTable.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\SecondScenario.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ContractFromTable.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\DayOffScheduled.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\UserContractSchedule.cs" />

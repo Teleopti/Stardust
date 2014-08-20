@@ -162,7 +162,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			GlobalDataMaker.Data().Apply(new SecondBusinessUnit());
 			GlobalDataMaker.Data().Apply(new AnotherSite());
-			GlobalDataMaker.Data().Apply(new SecondScenario());
 
 			TestDataSetup.CreateLegacyTestData();
 		}
