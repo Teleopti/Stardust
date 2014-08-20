@@ -180,11 +180,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 											 Start = start,
 											 End = end
 										 };
+
 			var periods = from ps in periodsAsString
+							  let start = int.Parse(ps.Start.Split(':')[0])
+							  let end = int.Parse(ps.End.Split(':')[0])
 							  select new
 							  {
-								  Start = selectedDate.Date.Add(TimeSpan.Parse(ps.Start)),
-								  End = selectedDate.Date.Add(TimeSpan.Parse(ps.End)),
+								  Start = selectedDate.Date.Add(TimeSpan.FromHours(start)),
+								  End = selectedDate.Date.Add(TimeSpan.FromHours(end)),
 							  };
 			var periodsList = periods.ToList();
 			if (!periodsList.Any())
