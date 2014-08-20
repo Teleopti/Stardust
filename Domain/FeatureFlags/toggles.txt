@@ -31,5 +31,6 @@ RTA_ViewAgentsForMultipleTeams_28967 = RC
 RTA_MonitorMultipleBusinessUnits_28348 = RC
 Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341 = RC
 Request_SeePossibleShiftTradesFromAllTeams_28770 = RC
+Request_FilterPossibleShiftTradeByTime_24560 = RC
 MyTimeWeb_AgentBadge_28913 = RC
 Scheduler_ShowIntadayESLWithShrinkage_21874 = RC
