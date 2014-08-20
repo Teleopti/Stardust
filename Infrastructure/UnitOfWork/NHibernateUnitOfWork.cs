@@ -147,8 +147,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			// next step: move to only use constructor injection.
 			setInitiator(initiator);
 
-			//man borde nog styra upp denna genom att använda ISynchronization istället,
-			//när tran startas, lägg på en sync callback via tran.RegisterSynchronization(callback);
+			//man borde nog styra upp denna genom att anvÃ¤nda ISynchronization istÃ¤llet,
+			//nÃ¤r tran startas, lÃ¤gg pÄº en sync callback via tran.RegisterSynchronization(callback);
 			ICollection<IRootChangeInfo> modifiedRoots;
 			try
 			{
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			if (usePessimisticLock)
 			{
 				// use hql query here when SetLockMode works on non entities. Seems to be a problem currently
-				//possible sql injection here but that's pretty långsökt so never mind...
+				//possible sql injection here but that's pretty lÄºngsÃ¶kt so never mind...
 				var sql = "select Version from " + type.Name + " with(updlock, holdlock) where Id =:id";
 				result = Session.CreateSQLQuery(sql)
 					.SetGuid("id", root.Id.Value)
