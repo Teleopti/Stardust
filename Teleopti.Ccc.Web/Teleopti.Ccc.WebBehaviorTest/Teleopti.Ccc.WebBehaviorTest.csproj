@@ -421,7 +421,6 @@
     <Compile Include="Bindings\Generic\MyTime\ShiftTradeRequestsPageStepDefinition.cs" />
     <Compile Include="Bindings\Generic\MyTime\WeekSchedulePageStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\EventualAssert.cs" />
-    <Compile Include="Core\Legacy\EventualElementActions.cs" />
     <Compile Include="Core\BrowserDriver\Timeouts.cs" />
     <Compile Include="Routing.feature.cs">
       <DependentUpon>Routing.feature</DependentUpon>
@@ -435,7 +434,6 @@
     </Compile>
     <Compile Include="Data\Setups\Configurable\UserLogonDetailConfigurable.cs" />
     <Compile Include="Bindings\Transform.cs" />
-    <Compile Include="Core\Legacy\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingShiftTradeRequest.cs" />
     <Compile Include="PasswordPolicy.feature.cs">
       <DependentUpon>PasswordPolicy.feature</DependentUpon>
@@ -590,7 +588,6 @@
       <DependentUpon>MyProfile.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\MyProfileStepDefinitions.cs" />
-    <Compile Include="Pages\Common\SelectBox.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutTeamScheduleAccess.cs" />
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Administrator.cs" />
@@ -632,7 +629,6 @@
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutRequestsAccess.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingTextRequest.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutPreferencesAccess.cs" />
-    <Compile Include="Core\Legacy\EventualElementWaits.cs" />
     <Compile Include="Core\Extensions\LogExtensions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Agent.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutStudentAvailabilityAccess.cs" />
@@ -653,14 +649,10 @@
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Common\CalendarCells.cs" />
-    <Compile Include="Pages\Common\DatePicker.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\StudentAgent.cs" />
-    <Compile Include="Pages\Common\IDateRangeSelector.cs" />
-    <Compile Include="Core\Legacy\ElementExtensions.cs" />
     <Compile Include="Pages\jQuery\IJQueryExpression.cs" />
     <Compile Include="Pages\jQuery\jQuery.cs" />
     <Compile Include="Pages\jQuery\JQueryExpression.cs" />
-    <Compile Include="Pages\Common\SplitButton.cs" />
     <Compile Include="Core\ScenarioContextLazy.cs" />
     <Compile Include="MyTime\Preferences.feature.cs">
       <AutoGen>True</AutoGen>
