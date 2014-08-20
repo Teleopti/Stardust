@@ -245,8 +245,13 @@ div.qtip-content {
 color: #333333;
 }
 
-.day-content .weekly-work-time-alert {
+.day-content .weekly-work-time-alert-editable {
 	color: red;
+	font-weight: bold;
+}
+
+.day-content .weekly-work-time-alert-noneditable {
+	color: rgb(240,118,118);
 	font-weight: bold;
 }
 

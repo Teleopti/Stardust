@@ -254,11 +254,11 @@
 						<div class="day-header"></div>
 						<div class="day-content" >
 							<!-- ko if: IsWeeklyWorkTimeVisible -->
-							<div class="min-hours-per-week" data-bind="css: {'weekly-work-time-alert': IsMinHoursBroken}">
+							<div class="min-hours-per-week" data-bind="css: {'weekly-work-time-alert-editable': IsMinHoursBroken && IsEditable(), 'weekly-work-time-alert-noneditable': IsMinHoursBroken && !IsEditable()}">
 								<span>></span>
 								<span data-bind="text:PossibleResultWeeklyContractTimeLower"></span>
 							</div>
-							<div class="max-hours-per-week" data-bind="css: {'weekly-work-time-alert': IsMaxHoursBroken}">
+							<div class="max-hours-per-week" data-bind="css: {'weekly-work-time-alert-editable': IsMaxHoursBroken && IsEditable(), 'weekly-work-time-alert-noneditable': IsMaxHoursBroken && !IsEditable()}">
 								<span><</span>
 								<span data-bind="text:PossibleResultWeeklyContractTimeUpper"></span>
 							</div>

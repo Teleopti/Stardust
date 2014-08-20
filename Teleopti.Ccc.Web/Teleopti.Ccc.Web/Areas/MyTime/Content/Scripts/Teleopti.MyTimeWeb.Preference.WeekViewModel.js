@@ -86,10 +86,10 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 	});
 
 	self.IsEditable = ko.computed(function () {
-		var isEditable = true;
+		var isEditable = false;
 		$.each(self.DayViewModels(), function (index, day) {
-			if (!day.Editable()) {
-				isEditable = false;
+			if (day.Editable()) {
+				isEditable = true;
 				return false;
 			}
 		});
@@ -104,11 +104,11 @@ Teleopti.MyTimeWeb.Preference.WeekViewModel = function (ajaxForDate) {
 	});
 
 	self.IsMinHoursBroken = ko.computed(function() {
-		 return (self.PossibleResultWeeklyContractTimeMinutesLower() > self.MaxTimePerWeekMinutesSetting())&(self.IsEditable());
+		 return (self.PossibleResultWeeklyContractTimeMinutesLower() > self.MaxTimePerWeekMinutesSetting());
 	});
 
 	self.IsMaxHoursBroken = ko.computed(function () {
-		return (self.PossibleResultWeeklyContractTimeMinutesUpper() < self.MinTimePerWeekMinutesSetting())&(self.IsEditable());
+		return (self.PossibleResultWeeklyContractTimeMinutesUpper() < self.MinTimePerWeekMinutesSetting());
 	});
 
 	self.readWeeklyWorkTimeSettings = function(data) {
