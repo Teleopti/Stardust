@@ -401,7 +401,6 @@
     <Compile Include="Data\AllTags.cs" />
     <Compile Include="Data\FileConfigurator.cs" />
     <Compile Include="Data\Paths.cs" />
-    <Compile Include="Data\ServiceBusSetup.cs" />
     <Compile Include="MyTime\PreferencesExtendedTemplate.feature.cs">
       <DependentUpon>PreferencesExtendedTemplate.feature</DependentUpon>
       <AutoGen>True</AutoGen>

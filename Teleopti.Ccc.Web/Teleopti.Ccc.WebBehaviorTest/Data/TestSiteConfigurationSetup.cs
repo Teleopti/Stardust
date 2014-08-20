@@ -105,14 +105,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var targetFile = Path.Combine(o.TargetFolder, "web.config");
 
 			var tags = new AllTags();
-			if (!IniFileInfo.ServiceBus)
-			{
-				const string module = @"<module type=""Teleopti.Ccc.IocCommon.Configuration.LocalInMemoryEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
+			const string module = @"<module type=""Teleopti.Ccc.IocCommon.Configuration.LocalInMemoryEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
 				tags.Add(
 					"LocalInMemoryEventsPublisherModule",
 					module
 					);
-			}
 
 			FileConfigurator.ConfigureByTags(
 				sourceFile,

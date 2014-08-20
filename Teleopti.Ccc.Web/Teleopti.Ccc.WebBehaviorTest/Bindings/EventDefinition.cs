@@ -46,8 +46,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				TestDataSetup.BackupCcc7Data();
 
 				TestSiteConfigurationSetup.Setup();
-
-				ServiceBusSetup.Setup();
 			}
 			catch (Exception)
 			{
@@ -151,7 +149,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Log.Debug("Cleaing up after test run");
 
 			Browser.Close();
-			ServiceBusSetup.TearDown();
 			TestSiteConfigurationSetup.TearDown();
 
 			Log.Debug("Finished test run");
