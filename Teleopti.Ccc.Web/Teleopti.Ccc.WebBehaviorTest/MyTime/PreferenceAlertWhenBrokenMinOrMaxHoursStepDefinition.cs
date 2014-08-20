@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should be alerted for the min hours")]
 		public void ThenIShouldBeAlertedForTheMaxHours()
 		{
-			 Browser.Interactions.AssertExists(".weekly-work-time-alert");
+			 Browser.Interactions.AssertExists(".weekly-work-time-alert-editable");
 		}
 
 		[Then(@"I should not see min and max hours per week for one week before")]
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not be alerted")]
 		public void ThenIShouldNotBeAlerted()
 		{
-			 Browser.Interactions.AssertNotExists(".max-hours-per-week", ".weekly-work-time-alert");
+			Browser.Interactions.AssertNotExists(".max-hours-per-week", ".weekly-work-time-alert-editable");
 		}
 
 		[Then(@"I should see warning text in top view")]
