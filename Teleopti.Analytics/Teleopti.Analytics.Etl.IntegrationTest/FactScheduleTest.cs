@@ -18,6 +18,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 	[TestFixture]
 	public class FactScheduleTest
 	{
+		private const int aheranceTypeReadyTime = 1;
+		private const int aheranceTypeSchedule = 2;
+		private const int aheranceTypeContract = 3;
+
 		[SetUp]
 		public void Setup()
 		{
@@ -241,7 +245,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		public void assertOverlapping(IPerson person, string timeZoneId, string ETLType, DateTime testDate)
 		{
 			//Tests for "Ready Time vs. Schedule Ready Time"
-			var adheranceId = 1;
+			var adheranceId = aheranceTypeReadyTime;
 			var adherance = SqlCommands.ReportDataAgentScheduleAdherence(testDate.AddDays(-2), testDate.AddDays(-1), adheranceId, person, timeZoneId);
 			
 			Assert.That(adherance.Rows.Count, Is.EqualTo(81));
@@ -305,7 +309,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			}
 
 			//Tests for "Ready Time vs. Schedule Time", e.g. the punish if over performing agent
-			adheranceId = 2;
+			adheranceId = aheranceTypeSchedule;
 			adherance = SqlCommands.ReportDataAgentScheduleAdherence(testDate.AddDays(-2), testDate.AddDays(-1), adheranceId, person, timeZoneId);
 
 			Assert.That(adherance.Rows.Count, Is.EqualTo(81));
