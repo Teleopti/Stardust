@@ -178,6 +178,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.comboBoxAdvActivity.BeforeTouchSize = new System.Drawing.Size(175, 23);
 			this.comboBoxAdvActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvActivity.Location = new System.Drawing.Point(488, 33);
+			this.comboBoxAdvActivity.MatchFirstCharacterOnly = false;
 			this.comboBoxAdvActivity.Name = "comboBoxAdvActivity";
 			this.comboBoxAdvActivity.Size = new System.Drawing.Size(175, 23);
 			this.comboBoxAdvActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
