@@ -6,7 +6,7 @@
 		return function() {
 			var that = {};
 
-			that.match = function(items, filter) {
+			that.match = function (items, filter) {
 				var andRelationalMatches = 0;
 				var orRelationalMatches = 0;
 				var filterWords = mapOutFilterWords(filter);
