@@ -79,7 +79,6 @@
               not-null="true" />
     <property name="WriteProtection"></property>
     <property name="ShiftTradeTargetTimeFlexibility"></property>
-    <property name="MinTimePerWeek"></property>
     
     <set name="MustMatchSkills"
          table="WorkflowControlSetSkills">

@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             workflowControlSet.AddAllowedPreferenceDayOff(_dayOff);
             workflowControlSet.AddAllowedPreferenceShiftCategory(_shiftCategory);
             workflowControlSet.AddAllowedPreferenceAbsence(_absence);
-	        workflowControlSet.MinTimePerWeek = TimeSpan.FromHours(28);
 
             workflowControlSet.AutoGrantShiftTradeRequest = true;
             return workflowControlSet;
@@ -90,7 +89,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(loadedAggregateFromDatabase.StudentAvailabilityPeriod, Is.EqualTo(new DateOnlyPeriod(2008, 5, 27, 2009, 5, 28)));
             Assert.That(loadedAggregateFromDatabase.StudentAvailabilityInputPeriod, Is.EqualTo(new DateOnlyPeriod(2008, 5, 29, 2009, 5, 30)));
             Assert.That(loadedAggregateFromDatabase.ShiftTradeTargetTimeFlexibility, Is.EqualTo(TimeSpan.FromHours(8)));
-            Assert.That(loadedAggregateFromDatabase.MinTimePerWeek, Is.EqualTo(TimeSpan.FromHours(28)));
             Assert.That(loadedAggregateFromDatabase.MustMatchSkills.Count(), Is.EqualTo(1));
             Assert.That(loadedAggregateFromDatabase.ShiftTradeOpenPeriodDaysForward.Minimum, Is.EqualTo(6));
             Assert.That(loadedAggregateFromDatabase.ShiftTradeOpenPeriodDaysForward.Maximum, Is.EqualTo(29));

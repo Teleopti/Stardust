@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string AbsenceRequestPreferencePeriodEnd { get; set; }
 		public string StaffingCheck { get; set; }
 		public string AutoGrant { get; set; }
-		public double MinTimePerWeek { get; set; }
 
 		public WorkflowControlSetConfigurable()
 		{
@@ -161,11 +160,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (ShiftTradeSlidingPeriodStart != 0 || ShiftTradeSlidingPeriodEnd != 0)
 			{
 				workflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(ShiftTradeSlidingPeriodStart, ShiftTradeSlidingPeriodEnd);
-			}
-
-			if (MinTimePerWeek > 0)
-			{
-				workflowControlSet.MinTimePerWeek = TimeSpan.FromHours(MinTimePerWeek);
 			}
 
 			var repository = new WorkflowControlSetRepository(uow);
