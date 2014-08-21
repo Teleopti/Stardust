@@ -1,7 +1,11 @@
 using System;
+using System.Drawing;
 using System.Globalization;
+using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
@@ -20,6 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		public string EndTime { get; set; }
 		public string Foo { get; set; }
 		public bool WithLunch { get; set; }
+		public string Activity { get; set; }
 
 		private DateTimePeriod _assignmentPeriod;
 
@@ -44,16 +49,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
+			IActivity activity;
+			var activityRepository = new ActivityRepository(uow);
+			if (Activity != null)
+			{
+				activity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
+			}
+			else
+			{
+				activity = new Activity(DefaultName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
+				activityRepository.Add(activity);
+			}
+
 			// create main shift
             _assignmentPeriod = new DateTimePeriod(shiftStartUtc, shiftEndUtc);
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(date));
-			assignment.AddActivity(TestData.ActivityPhone, _assignmentPeriod);
+			assignment.AddActivity(activity, _assignmentPeriod);
 
 			// add lunch
 			if (WithLunch)
 			{
+				var lunchactivity = new Activity(DefaultName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Yellow) };
+				activityRepository.Add(lunchactivity);
+
                 var lunchPeriod = new DateTimePeriod(shiftStartUtc.AddHours(3), shiftStartUtc.AddHours(4));
-				assignment.AddActivity(TestData.ActivityLunch, lunchPeriod);
+				assignment.AddActivity(lunchactivity, lunchPeriod);
 			}
 
 			assignment.SetShiftCategory(ShiftCategory);

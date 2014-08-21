@@ -49,17 +49,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the the shift ending at '(.*)' on date '(.*)'")]
 		public void ThenIShouldSeeTheTheShiftEndingAtOnDate(string time, DateTime date)
 		{
-			var activityNameScript =
-				string.Format(
-					".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer:last .weekview-day-schedule-layer-activity:contains('{1}')",
-					date.ToString("yyyy-MM-dd"), 
-					TestData.ActivityPhone.Description.Name);
 			var endTimeScript =
 				string.Format(
 					".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer:last .weekview-day-schedule-layer-time:contains('{1}')",
 					date.ToString("yyyy-MM-dd"), 
 					time);
-			Browser.Interactions.AssertExistsUsingJQuery(activityNameScript);
 			Browser.Interactions.AssertExistsUsingJQuery(endTimeScript);
 		}
 

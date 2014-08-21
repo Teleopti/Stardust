@@ -36,8 +36,9 @@ Scenario: Feedback for a day with work time limitation preference
 
 Scenario: Feedback for a day with lunch start time limitation preference
 	Given I am an agent
-	And I have a shift bag with one shift 8 to 17 and lunch 12 to 13 and one shift 9 to 19 and lunch 13 to 14
-	And I have a preference with lunch start time limitation between 13 and 13 for '2014-05-03'
+	And there is an activity named 'Lunch'
+	And I have a shift bag with one shift 8 to 17 and Lunch 12 to 13 and one shift 9 to 19 and Lunch 13 to 14
+	And I have a preference with Lunch start time limitation between 13 and 13 for '2014-05-03'
 	When I view preferences for date '2014-05-02'
 	Then I should see the start time boundry 9 to 9
 	And I should see the end time boundry 19 to 19
@@ -45,8 +46,9 @@ Scenario: Feedback for a day with lunch start time limitation preference
 
 Scenario: Feedback for a day with lunch end time limitation preference
 	Given I am an agent
-	And I have a shift bag with one shift 9 to 18 and lunch 12 to 13 and one shift 9 to 19 and lunch 12 to 14
-	And I have a preference with lunch end time limitation between 12 and 13 for '2014-05-03'
+	And there is an activity named 'Lunch'
+	And I have a shift bag with one shift 9 to 18 and Lunch 12 to 13 and one shift 9 to 19 and Lunch 12 to 14
+	And I have a preference with Lunch end time limitation between 12 and 13 for '2014-05-03'
 	When I view preferences for date '2014-05-02'
 	Then I should see the start time boundry 9 to 9
 	And I should see the end time boundry 18 to 18
@@ -54,8 +56,9 @@ Scenario: Feedback for a day with lunch end time limitation preference
 
 Scenario: Feedback for a day with lunch length limitation preference
 	Given I am an agent
-	And I have a shift bag with one shift 8 to 17 and lunch 12 to 13 and one shift 9 to 19 and lunch 12 to 14
-	And I have a preference with lunch length limitation of 1 hour for '2014-05-03'
+	And there is an activity named 'Lunch'
+	And I have a shift bag with one shift 8 to 17 and Lunch 12 to 13 and one shift 9 to 19 and Lunch 12 to 14
+	And I have a preference with Lunch length limitation of 1 hour for '2014-05-03'
 	When I view preferences for date '2014-05-02'
 	Then I should see the start time boundry 8 to 8
 	And I should see the end time boundry 17 to 17

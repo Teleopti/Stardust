@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public ShiftConfigurable()
 		{
 			Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario.Description.Name;
-			Activity = TestData.ActivityPhone.Name;
 		}
 	}
 }

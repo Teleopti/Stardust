@@ -837,7 +837,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					if (timeInFilter.isDayOff()) {
 						self.isDayoffFiltered(true);
 					} else {
-						self.filteredStartTimesText.push(timeInFilter.text);
+						var timeText = timeInFilter.start + ":00-" + timeInFilter.end + ":00";
+						self.filteredStartTimesText.push(timeText);
 					}
 				} else {
 					if (timeInFilter.isDayOff()) {
@@ -848,7 +849,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 			$.each(self.filterEndTimeList(), function (idx, timeInFilter) {
 				if (timeInFilter.isChecked()) {
-					self.filteredEndTimesText.push(timeInFilter.text);
+					var timeText = timeInFilter.start + ":00-" + timeInFilter.end + ":00";
+					self.filteredEndTimesText.push(timeText);
 				} 
 			});
 		});
@@ -902,14 +904,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 		};
 
-		self.setTimeFilters = function () {
+		self.setTimeFilters = function (hourTexts) {
 			self.filterStartTimeList.removeAll();
 			self.filterEndTimeList.removeAll();
 			var rangStart = 0;
 			for (var i = 0; i < 24; i += 2) {
 				var rangEnd = rangStart + 2;
-				var filterStartTime = new Teleopti.MyTimeWeb.Request.FilterStartTimeView(rangStart + ":00 - " + rangEnd + ":00", rangStart, rangEnd, false, false);
-				var filterEndTime = new Teleopti.MyTimeWeb.Request.FilterEndTimeView(rangStart + ":00 - " + rangEnd + ":00", rangStart, rangEnd, false);
+				var hourText = hourTexts[i] + " - " + hourTexts[i+2];
+				var filterStartTime = new Teleopti.MyTimeWeb.Request.FilterStartTimeView(hourText, rangStart, rangEnd, false, false);
+				var filterEndTime = new Teleopti.MyTimeWeb.Request.FilterEndTimeView(hourText, rangStart, rangEnd, false);
 				self.filterStartTimeList.push(filterStartTime);
 				self.filterEndTimeList.push(filterEndTime);
 				rangStart += 2;
@@ -925,7 +928,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				type: 'GET',
 				contentType: 'application/json; charset=utf-8',
 				success: function (data) {
-					self.setTimeFilters();
+					self.setTimeFilters(data.HourTexts);
 					//set dayoff for start time filter
 					if (data != null) {
 						$.each(data.DayOffShortNames, function (idx, name) {

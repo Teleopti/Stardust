@@ -421,3 +421,7 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 	margin-bottom: 9px; 
 	background-color:#007fff
 }
+
+.filter-time-text {
+	font-size: 14px;
+}

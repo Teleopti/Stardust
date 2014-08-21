@@ -1,8 +1,11 @@
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -10,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
 	public class ExistingLunchPreference : BasePreference
 	{
-		public string LunchActivity = TestData.ActivityLunch.Description.Name;
+		public string LunchActivity;
 
 		private readonly StartTimeLimitation _start;
 		private readonly EndTimeLimitation _end;
@@ -39,8 +42,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 		protected override PreferenceRestriction ApplyRestriction(IUnitOfWork uow)
 		{
-			var rep = new ActivityRepository(uow);
-			var activityRestriction = new ActivityRestriction(rep.LoadAll().FirstOrDefault(a => a.Description.Name==LunchActivity))
+			IActivity lunchActivity;
+			if (LunchActivity == null)
+			{
+				lunchActivity = new Activity(DefaultName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Yellow) };
+				var activityRepository = new ActivityRepository(uow);
+				activityRepository.Add(lunchActivity);
+			}
+			else
+			{
+				var activityRepository = new ActivityRepository(uow);
+				lunchActivity = activityRepository.LoadAll().FirstOrDefault(a => a.Description.Name == LunchActivity);
+			}
+			var activityRestriction = new ActivityRestriction(lunchActivity)
 			                          	{StartTimeLimitation = _start, EndTimeLimitation = _end, WorkTimeLimitation = _length};
 			var preferenceRestriction = new PreferenceRestriction();
 			preferenceRestriction.AddActivityRestriction(activityRestriction);

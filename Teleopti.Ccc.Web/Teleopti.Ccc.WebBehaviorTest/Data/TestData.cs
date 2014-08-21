@@ -38,11 +38,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IApplicationRole AgentRoleWithAnotherSiteData;
 		public static IApplicationRole AdministratorRoleWithEveryoneData;
 
-		public static IActivity ActivityPhone;
-		public static IActivity ActivityShortBreak;
-		public static IActivity ActivityLunch;
-		public static IActivity ActivityTraining;
-
 		public static IShiftCategory ShiftCategory;
 		public static IDayOffTemplate DayOffTemplate;
 		public static IAbsence Absence;

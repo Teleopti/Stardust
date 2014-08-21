@@ -1,8 +1,12 @@
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
+using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Interfaces.Domain;
@@ -14,23 +18,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 	{
 		private readonly int _start1;
 		private readonly int _end1;
+		private readonly string _lunchActivity1;
 		private readonly int _lunchStart1;
 		private readonly int _lunchEnd1;
 		private readonly int _start2;
 		private readonly int _end2;
+		private readonly string _lunchActivity2;
 		private readonly int _lunchStart2;
 		private readonly int _lunchEnd2;
 
 		public Domain.Scheduling.ShiftCreator.RuleSetBag TheRuleSetBag;
 
-		public RuleSetBagWithTwoShiftsAndLunch(int start1, int end1, int lunchStart1, int lunchEnd1, int start2, int end2, int lunchStart2, int lunchEnd2)
+		public RuleSetBagWithTwoShiftsAndLunch(int start1, int end1, string lunchActivity1, int lunchStart1, int lunchEnd1, int start2, int end2, string lunchActivity2, int lunchStart2, int lunchEnd2)
 		{
 			_start1 = start1;
 			_end1 = end1;
+			_lunchActivity1 = lunchActivity1;
 			_lunchStart1 = lunchStart1;
 			_lunchEnd1 = lunchEnd1;
 			_start2 = start2;
 			_end2 = end2;
+			_lunchActivity2 = lunchActivity2;
 			_lunchStart2 = lunchStart2;
 			_lunchEnd2 = lunchEnd2;
 		}
@@ -51,14 +59,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 				new TimePeriodWithSegment(new TimePeriod(_lunchEnd2 - _lunchStart2, 0, _lunchEnd2 - _lunchStart2, 0),
 				                          new TimeSpan(0, 15, 0));
 
+			var activityRepository = new ActivityRepository(uow);
+			var activity = new Activity(DefaultName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
+			var activityLunch1 = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity1));
+			var activityLunch2 = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity2));
+			activityRepository.Add(activity);
+
 			TheRuleSetBag = new Domain.Scheduling.ShiftCreator.RuleSetBag();
-			var generator1 = new WorkShiftTemplateGenerator(TestData.ActivityPhone, start1, end1, TestData.ShiftCategory);
+			var generator1 = new WorkShiftTemplateGenerator(activity, start1, end1, TestData.ShiftCategory);
 			var ruleSet1 = new WorkShiftRuleSet(generator1);
-			var lunch1 = new ActivityAbsoluteStartExtender(TestData.ActivityLunch, lunchLength1, lunchStart1);
+			var lunch1 = new ActivityAbsoluteStartExtender(activityLunch1, lunchLength1, lunchStart1);
 			ruleSet1.AddExtender(lunch1);
-			var generator2 = new WorkShiftTemplateGenerator(TestData.ActivityPhone, start2, end2, TestData.ShiftCategory);
+			var generator2 = new WorkShiftTemplateGenerator(activity, start2, end2, TestData.ShiftCategory);
 			var ruleSet2 = new WorkShiftRuleSet(generator2);
-			var lunch2 = new ActivityAbsoluteStartExtender(TestData.ActivityLunch, lunchLength2, lunchStart2);
+			var lunch2 = new ActivityAbsoluteStartExtender(activityLunch2, lunchLength2, lunchStart2);
 			ruleSet2.AddExtender(lunch2);
 
 			ruleSet1.Description = new Description("Regeln 1");

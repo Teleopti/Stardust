@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 		[Then(@"The layer's activity name attibute value should be (.*)")]
-		public void ThenTheLayerSActivityNameAttibuteValueShouldBe(String activityName)
+		public void ThenTheLayerSActivityNameAttibuteValueShouldBe(string activityName)
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer[tooltip-title*='{1}']",
 				DataMaker.Data().MePerson.Name, activityName));

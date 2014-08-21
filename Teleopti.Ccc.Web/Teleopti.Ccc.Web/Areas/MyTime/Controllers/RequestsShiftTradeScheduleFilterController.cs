@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Teleopti.Ccc.Domain.Repositories;
+﻿using System.Web.Mvc;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
@@ -27,35 +23,4 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
     }
 
-	public interface IRequestsShiftTradeScheduleFilterViewModelFactory
-	{
-		RequestsShiftTradeScheduleFilterViewModel ViewModel();
-	}
-
-	public class RequestsShiftTradeScheduleFilterViewModelFactory : IRequestsShiftTradeScheduleFilterViewModelFactory
-	{
-		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
-
-		public RequestsShiftTradeScheduleFilterViewModelFactory(IDayOffTemplateRepository dayOffTemplateRepository)
-		{
-			_dayOffTemplateRepository = dayOffTemplateRepository;
-		}
-
-		public RequestsShiftTradeScheduleFilterViewModel ViewModel()
-		{
-			var ret = new RequestsShiftTradeScheduleFilterViewModel
-			{
-				DayOffShortNames =
-					from t in _dayOffTemplateRepository.FindAllDayOffsSortByDescription()
-					select t.Description.ShortName
-			};
-
-			return ret;
-		}
-	}
-
-	public class RequestsShiftTradeScheduleFilterViewModel
-	{
-		public IEnumerable<string> DayOffShortNames { get; set; }
-	}
 }
