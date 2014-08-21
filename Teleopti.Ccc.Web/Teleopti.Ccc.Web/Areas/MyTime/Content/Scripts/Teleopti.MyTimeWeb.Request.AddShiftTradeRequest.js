@@ -832,7 +832,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			self.filteredStartTimesText.removeAll();
 			self.filteredEndTimesText.removeAll();
 
-			self.myFunction = function(idx, timeInFilter) {
+			$.each(self.filterStartTimeList(), function(idx, timeInFilter) {
 				if (timeInFilter.isChecked()) {
 					if (timeInFilter.isDayOff()) {
 						self.isDayoffFiltered(true);
@@ -845,9 +845,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 						self.isDayoffFiltered(false);
 					}
 				}
-			};
-
-			$.each(self.filterStartTimeList(), self.myFunction);
+			});
 
 			$.each(self.filterEndTimeList(), function (idx, timeInFilter) {
 				if (timeInFilter.isChecked()) {
