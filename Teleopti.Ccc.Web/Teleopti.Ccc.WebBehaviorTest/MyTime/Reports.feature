@@ -8,6 +8,11 @@ Given there is a role with
 	| Field                    | Value                       |
 	| Name                     | No access to Matrix reports |
 	| Access To Matrix Reports | False                       |
+Given there is a role with
+	| Field                    | Value                 |
+	| Name                     | AgentWithoutAnyReport |
+	| Access To Matrix Reports | False                 |
+	| Access To MyReport       | False                 |
 
 Scenario: Show reports with permissions
 	When I am viewing an application page
