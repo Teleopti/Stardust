@@ -29,11 +29,13 @@ Scenario: See day off preference
 
 Scenario: See absence preference
 	Given I am an agent
+	And there is an absence named 'Vacation'
 	And I have existing absence preference with
-	| Field | Value      |
-	| Date  | 2014-05-03 |
+	| Field   | Value      |
+	| Date    | 2014-05-03 |
+	| Absence | Vacation   |
 	When I view preferences for date '2014-05-02'
-	Then I should see my existing absence preference
+	Then I should see my existing absence preference 'Vacation'
 	
 Scenario: No schedule period
 	Given I am an agent

@@ -65,17 +65,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 		[Then(@"I should see my existing day off preference '(.*)'")]
+		[Then(@"I should see my existing absence preference '(.*)'")]
 		public void ThenIShouldSeeMyExistingDayOffPreference(string preference)
 		{
 			var cell = CalendarCells.DateSelector("2014-05-03");
 			Browser.Interactions.AssertFirstContains(cell, preference);
-		}
-
-		[Then(@"I should see my existing absence preference")]
-		public void ThenIShouldSeeMyExistingAbsencePreference()
-		{
-			var cell = CalendarCells.DateSelector("2014-05-03");
-			Browser.Interactions.AssertFirstContains(cell,TestData.Absence.Description.Name);
 		}
 
 		[Then(@"I should see the workflow control set's standard preferences list with")]

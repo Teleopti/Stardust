@@ -258,34 +258,35 @@ Scenario: Period feedback of non-contract time absence
 		| Average work time per day | 8                            |
 	And I have a shift bag with start times 7 to 9 and end times 15 to 17
 	And I have a contract schedule with 2 days off
+	And there is an absence named 'Vacation'
 	And I have existing absence preference with
-         | Field   | Value                          |
-         | Date    | 2014-04-28                    |
-         | Absence | Legacy common absence |
+         | Field   | Value      |
+         | Date    | 2014-04-28 |
+         | Absence | Vacation   |
 	And I have existing absence preference with
-         | Field   | Value                          |
-         | Date    | 2014-04-29                    |
-         | Absence | Legacy common absence |
+         | Field   | Value      |
+         | Date    | 2014-04-29 |
+         | Absence | Vacation   |
 	And I have existing absence preference with
-         | Field   | Value                          |
-         | Date    | 2014-04-30                     |
-         | Absence | Legacy common absence |
+         | Field   | Value      |
+         | Date    | 2014-04-30 |
+         | Absence | Vacation   |
 	And I have existing absence preference with
-         | Field   | Value                          |
-         | Date    | 2014-05-01                     |
-         | Absence | Legacy common absence |
+         | Field   | Value      |
+         | Date    | 2014-05-01 |
+         | Absence | Vacation   |
 	And I have existing absence preference with
-         | Field   | Value                          |
-         | Date    | 2014-05-02                     |
-         | Absence | Legacy common absence |
+         | Field   | Value      |
+         | Date    | 2014-05-02 |
+         | Absence | Vacation   |
 	And I have existing absence preference with
-         | Field   | Value                          |
-         | Date    | 2014-05-03                     |
-         | Absence | Legacy common absence |
+         | Field   | Value      |
+         | Date    | 2014-05-03 |
+         | Absence | Vacation   |
 	And I have existing absence preference with
-         | Field   | Value                          |
-         | Date    | 2014-05-04                     |
-         | Absence | Legacy common absence |
+         | Field   | Value      |
+         | Date    | 2014-05-04 |
+         | Absence | Vacation   |
 	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 0 hours
 

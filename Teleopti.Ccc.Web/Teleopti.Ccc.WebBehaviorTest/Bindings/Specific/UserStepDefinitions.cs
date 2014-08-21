@@ -367,7 +367,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I have an open workflow control set with an allowed standard preference open from '(.*)' to '(.*)'")]
 		public void GivenIHaveAnOpenWorkflowControlSetWithAnAllowedStandardPreference(DateTime start,DateTime end)
 		{
-			DataMaker.Data().Apply(new DayOffTemplateConfigurable {Name = "Day off"});
+			DataMaker.Data().Apply(new DayOffTemplateConfigurable { Name = "Day off" });
+			DataMaker.Data().Apply(new AbsenceConfigurable { Name = "Vacation" });
 			DataMaker.Data()
 				.Apply(new WorkflowControlSetConfigurable
 				{
@@ -377,7 +378,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 					PreferencePeriodEnd = end.ToShortDateString(),
 					AvailableShiftCategory = TestData.ShiftCategory.Description.Name,
 					AvailableDayOff = "Day off",
-					AvailableAbsence = TestData.Absence.Description.Name
+					AvailableAbsence = "Vacation"
 				});
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Open" });
 		}

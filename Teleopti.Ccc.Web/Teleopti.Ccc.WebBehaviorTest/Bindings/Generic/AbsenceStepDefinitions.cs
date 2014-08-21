@@ -25,6 +25,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			absences.ForEach(x => DataMaker.Data().Apply(x));
 		}
 
+		[Given(@"there is an absence named '(.*)'")]
+		public void GivenThereIsAnAbsenceNamed(string name)
+		{
+			DataMaker.Data().Apply(new AbsenceConfigurable{Name = name});
+		}
+
 		[Given(@"'?(I)'? have a full day absence named '(.*)' on '(.*)'")]
 		[Given(@"'?(.*)'? has a full day absence named '(.*)' on '(.*)'")]
 		public void GivenHaveAAbsenceWith(string person, string name, DateTime date)
