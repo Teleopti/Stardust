@@ -248,13 +248,6 @@ Scenario: Default to my team
 	And I am viewing team schedule
 	Then the team-picker should have my team selected
 
-@ignore
-Scenario: Default to first team if no access to my team
-	Given I am an agent in a team with access to another site
-	And the other site has 2 teams
-	And I am viewing team schedule
-	Then the team-picker should have the first of the other site's teams selected
-
 Scenario: Don't show team-picker with no team access
 	Given I am an agent in a team with access only to my own data
 	When I view team schedule

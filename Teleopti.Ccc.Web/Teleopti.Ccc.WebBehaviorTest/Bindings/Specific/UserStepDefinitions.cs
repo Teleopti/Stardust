@@ -66,18 +66,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
 
-		[Given(@"I am an agent in a team with access to another site")]
-		public void GivenIAmAnAgentInATeamWithAccessToAnotherSite()
-		{
-			DataMaker.Data().Apply(new AgentWithAnotherSiteAccess());
-			var team = new Team();
-			DataMaker.Data().Apply(team);
-			DataMaker.Data().Apply(new SchedulePeriod());
-			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
-			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
-			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
-		}
-
 		[Given(@"I am an agent in a team")]
 		[Given(@"I am an agent in my own team")]
 		[Given(@"I am an agent in a team with access to my team")]

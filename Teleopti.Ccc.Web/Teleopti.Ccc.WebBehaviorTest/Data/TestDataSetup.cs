@@ -179,7 +179,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestData.AgentRoleWithoutTeamSchedule = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoTeamSchedule", null);
 			TestData.AgentRoleOnlyWithOwnData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "OnlyWithOwnData", null);
 			TestData.AgentRoleWithSiteData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "WithSiteData", null);
-			TestData.AgentRoleWithAnotherSiteData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "WithAnotherSiteData", null);
 
 			var availableDataAnotherSite = new AvailableData();
 			availableDataAnotherSite.AddAvailableSite(anotherSite);
@@ -194,7 +193,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 									new { role = TestData.AgentRoleWithoutTeamSchedule, functions = agentRoleWithoutTeamScheduleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleOnlyWithOwnData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyOwn}},
 									new { role = TestData.AgentRoleWithSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MySite}},
-									new { role = TestData.AgentRoleWithAnotherSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = availableDataAnotherSite},
 			                 	};
 
 			var allRoles = customTestRoles.Union(shippedRolesWithFunctions);
