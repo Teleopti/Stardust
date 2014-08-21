@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void  SaveChanges()
 		{}
 
-		public ContractControl()
+		public ContractControl(IToggleManager toggleManager)
 		{
 			InitializeComponent();
 
@@ -174,6 +175,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			timeSpanTextBoxPlanningMin.Validated += timeSpanTextBoxPlanningMinValidated;
 			timeSpanTextBoxPlanningMax.Validated += timeSpanTextBoxPlanningMaxValidated;
+
+
+			if (!toggleManager.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635))
+			{
+				autoLabel13.Hide();
+				textBoxExtMinTimePerWeek.Hide();
+				var rowIndex = tableLayoutPanel6.GetRow(textBoxExtMinTimePerWeek);
+				tableLayoutPanel6.RowStyles[rowIndex].Height = 0;
+			}
 		}
 
 		void timeSpanTextBoxPlanningMaxValidated(object sender, EventArgs e)
