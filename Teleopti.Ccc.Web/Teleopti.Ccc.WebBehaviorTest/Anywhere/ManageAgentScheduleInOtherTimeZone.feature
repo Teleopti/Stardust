@@ -49,10 +49,10 @@ Scenario: Timeline for agent in other time zone
 	| Start time | 08:00 |
 	| End time   | 16:00 |
 	And I should see the agent's time line with
-	| Field      | Value      |
-	| Time zone  | UTC +02:00 |
-	| Start time | 09:00      |
-	| End time   | 17:00      |
+	| Field      | Value     |
+	| Time zone  | UTC+02:00 |
+	| Start time | 09:00     |
+	| End time   | 17:00     |
 
 Scenario: Timeline for agent in the same time zone
 	Given I have the role 'Anywhere Team Green'

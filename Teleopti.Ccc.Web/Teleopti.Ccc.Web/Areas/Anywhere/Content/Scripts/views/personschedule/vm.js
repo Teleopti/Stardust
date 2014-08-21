@@ -93,7 +93,14 @@ define([
 
 		this.Layers = layers;
 
-		this.TimeLine = new timeLineViewModel(ko.computed(function () { return layers().toArray(); }));
+		this.IanaTimeZoneLoggedOnUser = ko.observable();
+		this.IanaTimeZoneOther = ko.observable();
+
+		this.TimeLine = new timeLineViewModel(
+			ko.computed(function () { return layers().toArray(); }),
+			ko.computed(function () { return self.IanaTimeZoneLoggedOnUser(); }),
+			ko.computed(function () { return self.IanaTimeZoneOther(); })
+		);
 
 		this.WorkingShift = ko.computed(function () {
 			var person = self.SelectedPerson();
@@ -156,7 +163,10 @@ define([
 
 		this.UpdateData = function (data) {
 			data.Date = self.ScheduleDate();
-			
+
+			self.IanaTimeZoneLoggedOnUser(data.IanaTimeZoneLoggedOnUser);
+			self.IanaTimeZoneOther(data.IanaTimeZoneOther);
+
 			var person = self.SelectedPerson();
 			person.AddData(data, self.TimeLine);
 
