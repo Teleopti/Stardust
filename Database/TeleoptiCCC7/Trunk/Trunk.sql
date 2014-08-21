@@ -63,3 +63,5 @@ SET [MinTimePerWeek] = 0
 GO
 ALTER TABLE [dbo].[Contract] ALTER COLUMN [MinTimePerWeek] [bigint] NOT NULL
 GO
+ALTER TABLE [dbo].[WorkflowControlSet] DROP COLUMN [MinTimePerWeek] 
+GO
