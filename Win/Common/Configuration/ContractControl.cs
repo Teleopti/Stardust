@@ -493,9 +493,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private WorkTimeDirective getWorkTimeDirective()
 		{
 			TimeSpan maxTime = textBoxExtMaxTimePerWeek.Value;
+			TimeSpan minTime = textBoxExtMinTimePerWeek.Value;
 			TimeSpan nightRest = textBoxExtNightlyRestTime.Value;
 			TimeSpan weeklyRest = textBoxExtWeeklyRestTime.Value;
-			return new WorkTimeDirective(maxTime, nightRest, weeklyRest);
+			return new WorkTimeDirective(minTime, maxTime, nightRest, weeklyRest);
 		}
 
 		private static bool validateMaxHours(TimeSpan timeSpan, int maxHours)

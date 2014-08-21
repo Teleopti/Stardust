@@ -9,7 +9,8 @@ namespace Teleopti.Interfaces.Domain
     {
         #region Fields
 
-        private TimeSpan _maxTimePerWeek;
+	    private TimeSpan _minTimePerWeek;
+	    private TimeSpan _maxTimePerWeek;
         private TimeSpan _nightlyRest;
         private TimeSpan _weeklyRest;
         private const int _limitWeeklyRest = 24 * 7;
@@ -26,7 +27,7 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The default work time directive.</value>
         public static WorkTimeDirective DefaultWorkTimeDirective
         {
-            get { return new WorkTimeDirective(new TimeSpan(48, 0, 0), new TimeSpan(11, 0, 0), new TimeSpan(36, 0, 0)); }
+			get { return new WorkTimeDirective(new TimeSpan(0, 0, 0), new TimeSpan(48, 0, 0), new TimeSpan(11, 0, 0), new TimeSpan(36, 0, 0)); }
         }
 
         #endregion
@@ -39,6 +40,14 @@ namespace Teleopti.Interfaces.Domain
         public TimeSpan MaxTimePerWeek
         {
             get { return _maxTimePerWeek; }
+        }
+
+        /// <summary>
+        /// Gets the minimum work time per week.
+        /// </summary>
+        public TimeSpan MinTimePerWeek
+        {
+            get { return _minTimePerWeek; }
         }
 
         /// <summary>
@@ -59,18 +68,21 @@ namespace Teleopti.Interfaces.Domain
 
         #endregion
 
-        /// <summary>
-        /// Creates a struct with values
-        /// </summary>
-        /// <param name="maxTimePerWeek">Maximal work time per week.</param>
-        /// <param name="nightlyRest">Minimal nightly rest</param>
-        /// <param name="weeklyRest">Minimal weekly rest</param>
-        public WorkTimeDirective(TimeSpan maxTimePerWeek, TimeSpan nightlyRest, TimeSpan weeklyRest)
+	    /// <summary>
+	    /// Creates a struct with values
+	    /// </summary>
+	    /// <param name="minTimePerWeek"></param>
+	    /// <param name="maxTimePerWeek">Maximal work time per week.</param>
+	    /// <param name="nightlyRest">Minimal nightly rest</param>
+	    /// <param name="weeklyRest">Minimal weekly rest</param>
+	    public WorkTimeDirective(TimeSpan minTimePerWeek, TimeSpan maxTimePerWeek, TimeSpan nightlyRest, TimeSpan weeklyRest)
         {
             InParameter.CheckTimeLimit("maxTimePerWeek", maxTimePerWeek, _limitMaxTimePerWeek);
+            InParameter.CheckTimeLimit("minTimePerWeek", minTimePerWeek, _limitMaxTimePerWeek);
             InParameter.CheckTimeLimit("nightlyRest", nightlyRest, _limitNightlyRest);
             InParameter.CheckTimeLimit("weeklyRest", weeklyRest, _limitWeeklyRest);
 
+	        _minTimePerWeek = minTimePerWeek;
             _maxTimePerWeek = maxTimePerWeek;
             _nightlyRest = nightlyRest;
             _weeklyRest = weeklyRest;
@@ -88,6 +100,7 @@ namespace Teleopti.Interfaces.Domain
         public bool Equals(WorkTimeDirective other)
         {
             return other._maxTimePerWeek == _maxTimePerWeek &&
+					other._minTimePerWeek == _minTimePerWeek &&
                    other._nightlyRest == _nightlyRest &&
                    other._weeklyRest == _weeklyRest;
         }
@@ -141,7 +154,7 @@ namespace Teleopti.Interfaces.Domain
         /// </returns>
         public override int GetHashCode()
         {
-            return _maxTimePerWeek.GetHashCode() ^ _nightlyRest.GetHashCode() ^ _weeklyRest.GetHashCode();
+			return _minTimePerWeek.GetHashCode() ^ _maxTimePerWeek.GetHashCode() ^ _nightlyRest.GetHashCode() ^ _weeklyRest.GetHashCode();
         }
 
         #endregion
