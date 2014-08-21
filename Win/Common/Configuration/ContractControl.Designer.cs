@@ -899,7 +899,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabel13.Name = "autoLabel13";
 			this.autoLabel13.Size = new System.Drawing.Size(344, 24);
 			this.autoLabel13.TabIndex = 71;
-			this.autoLabel13.Text = "xxMinumumTimePerWeekColon";
+			this.autoLabel13.Text = "xxMinimumTimePerWeekColon";
 			this.autoLabel13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textBoxExtMinTimePerWeek
