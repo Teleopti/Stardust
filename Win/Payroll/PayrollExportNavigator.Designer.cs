@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Win.Payroll
 			this.treeViewMain.RightToLeftLayout = true;
 			this.treeViewMain.SelectedImageIndex = 0;
 			this.treeViewMain.ShowLines = false;
-			this.treeViewMain.Size = new System.Drawing.Size(218, 354);
+			this.treeViewMain.Size = new System.Drawing.Size(218, 356);
 			this.treeViewMain.TabIndex = 1;
 			this.treeViewMain.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewMain_BeforeSelect);
 			this.treeViewMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeViewMain_MouseDown);
@@ -222,13 +222,12 @@ namespace Teleopti.Ccc.Win.Payroll
 			this.splitContainer1.Panel2.Controls.Add(this.toolStripPayrollExport);
 			this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.splitContainer1.Size = new System.Drawing.Size(218, 556);
-			this.splitContainer1.SplitterDistance = 354;
+			this.splitContainer1.SplitterDistance = 356;
 			this.splitContainer1.SplitterWidth = 2;
 			this.splitContainer1.TabIndex = 4;
 			// 
 			// toolStripPayrollExport
 			// 
-			this.toolStripPayrollExport.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripPayrollExport.ForeColor = System.Drawing.Color.MidnightBlue;
 			this.toolStripPayrollExport.Image = null;
 			this.toolStripPayrollExport.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -246,7 +245,7 @@ namespace Teleopti.Ccc.Win.Payroll
 			this.toolStripPayrollExport.Office12Mode = false;
 			this.toolStripPayrollExport.ShowCaption = false;
 			this.toolStripPayrollExport.ShowLauncher = false;
-			this.toolStripPayrollExport.Size = new System.Drawing.Size(208, 200);
+			this.toolStripPayrollExport.Size = new System.Drawing.Size(208, 176);
 			this.toolStripPayrollExport.TabIndex = 0;
 			this.toolStripPayrollExport.Text = "toolStrip1";
 			this.toolStripPayrollExport.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;

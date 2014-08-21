@@ -59,7 +59,7 @@
 			this.treeViewReports.Location = new System.Drawing.Point(0, 0);
 			this.treeViewReports.Name = "treeViewReports";
 			this.treeViewReports.SelectedImageIndex = 1;
-			this.treeViewReports.Size = new System.Drawing.Size(232, 305);
+			this.treeViewReports.Size = new System.Drawing.Size(232, 307);
 			this.treeViewReports.TabIndex = 1;
 			// 
 			// imageListPlanningGroup
@@ -98,7 +98,6 @@
 			// toolStripRoot
 			// 
 			this.toolStripRoot.BackColor = System.Drawing.Color.Transparent;
-			this.toolStripRoot.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripRoot.ForeColor = System.Drawing.Color.MidnightBlue;
 			this.toolStripRoot.Image = null;
 			this.toolStripRoot.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -114,7 +113,7 @@
 			this.toolStripRoot.Padding = new System.Windows.Forms.Padding(1);
 			this.toolStripRoot.ShowCaption = false;
 			this.toolStripRoot.ShowLauncher = false;
-			this.toolStripRoot.Size = new System.Drawing.Size(222, 164);
+			this.toolStripRoot.Size = new System.Drawing.Size(205, 103);
 			this.toolStripRoot.TabIndex = 5;
 			this.toolStripRoot.Text = "xxActions";
 			this.toolStripRoot.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
@@ -154,7 +153,6 @@
 			// toolStripReportGroups
 			// 
 			this.toolStripReportGroups.BackColor = System.Drawing.Color.Transparent;
-			this.toolStripReportGroups.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripReportGroups.ForeColor = System.Drawing.Color.MidnightBlue;
 			this.toolStripReportGroups.Image = null;
 			this.toolStripReportGroups.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -162,13 +160,13 @@
             this.toolStripMenuItemNewReport});
 			this.toolStripReportGroups.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.toolStripReportGroups.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-			this.toolStripReportGroups.Location = new System.Drawing.Point(10, 0);
+			this.toolStripReportGroups.Location = new System.Drawing.Point(10, 103);
 			this.toolStripReportGroups.Name = "toolStripReportGroups";
 			this.toolStripReportGroups.Office12Mode = false;
 			this.toolStripReportGroups.Padding = new System.Windows.Forms.Padding(1);
 			this.toolStripReportGroups.ShowCaption = false;
 			this.toolStripReportGroups.ShowLauncher = false;
-			this.toolStripReportGroups.Size = new System.Drawing.Size(222, 164);
+			this.toolStripReportGroups.Size = new System.Drawing.Size(205, 82);
 			this.toolStripReportGroups.TabIndex = 5;
 			this.toolStripReportGroups.Text = "xxActions";
 			this.toolStripReportGroups.Visible = false;
@@ -196,7 +194,7 @@
 			this.splitContainer1.Panel2.Controls.Add(this.toolStripRoot);
 			this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.splitContainer1.Size = new System.Drawing.Size(232, 471);
-			this.splitContainer1.SplitterDistance = 305;
+			this.splitContainer1.SplitterDistance = 307;
 			this.splitContainer1.SplitterWidth = 2;
 			this.splitContainer1.TabIndex = 5;
 			// 
