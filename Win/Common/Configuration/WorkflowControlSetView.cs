@@ -1002,12 +1002,5 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			var studentAvailabilityInputPeriod = new DateOnlyPeriod(dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart, dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd);
 			_presenter.SetStudentAvailabilityInputPeriod(studentAvailabilityInputPeriod);
 		}
-
-
-		private void textBoxExtMinTimePerWeek_Validated(object sender, EventArgs e)
-		{
-			if (_presenter == null || _presenter.SelectedModel == null) return;
-		}
-
 	}
 }
