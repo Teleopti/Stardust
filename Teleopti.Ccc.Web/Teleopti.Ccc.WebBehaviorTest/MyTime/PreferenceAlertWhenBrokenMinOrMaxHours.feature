@@ -30,13 +30,11 @@ When I view preferences
 Then I should be alerted for the max hours
 And I should see warning text in top view
 
-Scenario: Show alert when current max hours per week is less than min hours per week on WCS
+Scenario: Show alert when current max hours per week is less than min hours per week on contract
 Given I am an agent
-And I have a workflow control set with
-	| Field                      | Value              |
-	| Name                       | Published schedule |
-	| Schedule published to date | 2040-06-24         |
-	| Min time per week          | 45                 |
+And I have a contract with:
+         | Field              | Value |
+         | min hours per week | 45    |
 And  I have a shift bag with start times 9 to 9 and end times 15 to 15
 And I have a preference with work time limitation between 6 and 9 for '2014-05-02'
 When I view preferences for date '2014-05-02'
@@ -48,11 +46,7 @@ Given I am an agent
 And I have a contract with:
          | Field              | Value |
          | max hours per week | 80    |
-And I have a workflow control set with
-	| Field                      | Value              |
-	| Name                       | Published schedule |
-	| Schedule published to date | 2040-06-24         |
-	| Min time per week          | 60                 |
+		 | min hours per week | 60    |
 And  I have a shift bag with start times 8 to 10 and end times 15 to 20
 And I have a preference with work time limitation between 7 and 10 for '2014-05-02'
 When I view preferences for date '2014-05-02'
