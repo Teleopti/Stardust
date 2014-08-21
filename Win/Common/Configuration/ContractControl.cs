@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			textBoxExtAvgWorkTimePerDay.SetSize(54, 23);
 			textBoxExtMaxTimePerWeek.SetSize(54, 23);
+			textBoxExtMinTimePerWeek.SetSize(54, 23);
 			textBoxExtNightlyRestTime.SetSize(54, 23);
 			textBoxExtWeeklyRestTime.SetSize(54, 23);
 			timeSpanTextBoxNegativeTolerance.SetSize(54, 23);
