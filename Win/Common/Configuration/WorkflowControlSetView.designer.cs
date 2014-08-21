@@ -1078,11 +1078,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExtMinTimePerWeek.Margin = new System.Windows.Forms.Padding(7, 35, 0, 0);
 			this.textBoxExtMinTimePerWeek.MaximumValue = System.TimeSpan.Parse("3.12:00:00");
 			this.textBoxExtMinTimePerWeek.Name = "textBoxExtMinTimePerWeek";
-			this.textBoxExtMinTimePerWeek.Size = new System.Drawing.Size(201, 26);
+			this.textBoxExtMinTimePerWeek.Size = new System.Drawing.Size(233, 26);
 			this.textBoxExtMinTimePerWeek.TabIndex = 11;
 			this.textBoxExtMinTimePerWeek.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExtMinTimePerWeek.TimeSpanBoxHeight = 23;
-			this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 230;
+			this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 268;
 			this.textBoxExtMinTimePerWeek.Leave += new System.EventHandler(this.textBoxExtMinTimePerWeek_Validated);
 			// 
 			// labelMinimumTimePerWeek
@@ -1503,7 +1503,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvViewpoint.Calendar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.dateTimePickerAdvViewpoint.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvViewpoint.Calendar.BottomHeight = 25;
-			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
+			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("en-US");
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesColor = System.Drawing.Color.Empty;
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
 			this.dateTimePickerAdvViewpoint.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
@@ -1901,7 +1901,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBox1.TabIndex = 9;
 			this.timeSpanTextBox1.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBox1.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBox1.TimeSpanBoxWidth = 160;
+			this.timeSpanTextBox1.TimeSpanBoxWidth = 186;
 			this.timeSpanTextBox1.Leave += new System.EventHandler(this.timeSpanTextBox1_Leave);
 			// 
 			// labelTolerancePosNeg

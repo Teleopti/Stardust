@@ -156,8 +156,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			textBoxDescription.Validated += textBoxDescriptionValidated;
 			textBoxExtAvgWorkTimePerDay.Validating += textBoxExtAvgWorkTimePerDayValidating;
 			textBoxExtAvgWorkTimePerDay.Validated += textBoxExtAvgWorkTimePerDayValidated;
-			textBoxExtMaxTimePerWeek.Validating += textBoxExtMaxTimePerWeekValidating;
-			textBoxExtMaxTimePerWeek.Validated += textBoxExtMaxTimePerWeekValidated;
+			textBoxExtMaxTimePerWeek.Validating += textBoxExtMinMaxTimePerWeekValidating;
+			textBoxExtMinTimePerWeek.Validating += textBoxExtMinMaxTimePerWeekValidating;
+			textBoxExtMaxTimePerWeek.Validated += textBoxExtMinMaxTimePerWeekValidated;
+			textBoxExtMinTimePerWeek.Validated += textBoxExtMinMaxTimePerWeekValidated;
 			textBoxExtNightlyRestTime.Validating += textBoxExtNightlyRestTimeValidating;
 			textBoxExtNightlyRestTime.Validated += textBoxExtNightlyRestTimeValidated;
 			textBoxExtWeeklyRestTime.Validating += textBoxExtWeeklyRestTimeValidating;
@@ -210,7 +212,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			SelectedContract.WorkTimeDirective = getWorkTimeDirective();
 		}
 
-		private void textBoxExtMaxTimePerWeekValidated(object sender, EventArgs e)
+		private void textBoxExtMinMaxTimePerWeekValidated(object sender, EventArgs e)
 		{
 			SelectedContract.WorkTimeDirective = getWorkTimeDirective();
 		}
@@ -240,21 +242,23 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				textBoxExMinTimeSchedulePeriod.SetInitialResolution(TimeSpan.Zero);
 		}
 
-		private void textBoxExtMaxTimePerWeekValidating(object sender, CancelEventArgs e)
+		private void textBoxExtMinMaxTimePerWeekValidating(object sender, CancelEventArgs e)
 		{
 			if (SelectedContract != null)
 			{
-				e.Cancel = validateMaxHoursPerWeek();
+				e.Cancel = validateHoursPerWeek();
 			}
 		}
 
-		private bool validateMaxHoursPerWeek()
+		private bool validateHoursPerWeek()
 		{
-			bool cancel = false;
+			var cancel = false;
 
-			TimeSpan hoursPerWeek = textBoxExtMaxTimePerWeek.Value;
-			if (!validateMaxHours(hoursPerWeek, MaxHoursPerWeek))
+			var minHoursPerWeek = textBoxExtMinTimePerWeek.Value;
+			var maxHoursPerWeek = textBoxExtMaxTimePerWeek.Value;
+			if (!validateHoursSetting(maxHoursPerWeek, minHoursPerWeek, MaxHoursPerWeek))
 			{
+				// Todo: Change resourdce string more describle.
 				ViewBase.ShowErrorMessage(Resources.MaximumHoursPerWeekCannotBeMoreThan168Hours,
 								   Resources.TimeError);
 				cancel = true;
@@ -517,6 +521,39 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 					break;
 			}
 
+			return isValid;
+		}
+
+		private static bool validateHoursSetting(TimeSpan currentMaxHoursSetting, TimeSpan currentMinHoursSetting, int maxHours)
+		{
+			bool isValid = true;
+			if (currentMaxHoursSetting < currentMinHoursSetting)
+			{
+				isValid = false;
+			}
+			else
+			{
+				switch (maxHours)
+				{
+					case maxHoursPerDay:
+						if (currentMaxHoursSetting.Days > 0 || currentMaxHoursSetting.Hours > maxHours|| 
+							currentMinHoursSetting.Days > 0 ||currentMinHoursSetting.Hours > maxHours)
+						{
+							isValid = false;
+						}
+						break;
+					case MaxHoursPerWeek:
+						if ((currentMaxHoursSetting.Days*24 + currentMaxHoursSetting.Hours > maxHours) ||
+						    (currentMinHoursSetting.Days*24 + currentMinHoursSetting.Hours > maxHours))
+						{
+							isValid = false;
+						}
+						break;
+					default:
+						isValid = false;
+						break;
+				}
+			}
 			return isValid;
 		}
 
