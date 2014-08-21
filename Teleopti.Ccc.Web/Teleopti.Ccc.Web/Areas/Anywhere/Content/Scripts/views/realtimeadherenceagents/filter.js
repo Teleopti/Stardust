@@ -119,10 +119,10 @@
 			}
 
 			var matchesNegated = function(item, filterWord) {
-				var filterWordWithoutExlamationMark = filterWord.slice(1);
+				var filterWordWithoutNegationMark = filterWord.slice(1);
 
-				if (shouldMatchExact(filterWordWithoutExlamationMark) &&
-					stringContains(item, removeQuotes(filterWordWithoutExlamationMark))) {
+				if (shouldMatchExact(filterWordWithoutNegationMark) &&
+					stringContains(item, removeQuotes(filterWordWithoutNegationMark))) {
 					return true;
 				}
 
@@ -145,7 +145,7 @@
 				return 0;
 			}
 
-			var shouldNegate = function(word) { return word.indexOf("!") === 0; }
+			var shouldNegate = function (word) { return word.indexOf("!") === 0 || word.indexOf("-") === 0; }
 			var shouldMatchExact = function(word) { return word.indexOf("'") === 0 || word.indexOf('"') === 0; }
 			var removeQuotes = function(word) { return word.slice(1, word.length - 1); }
 			var stringContains = function(item, filter) { return item.toUpperCase().indexOf(filter.toUpperCase()) > -1; }

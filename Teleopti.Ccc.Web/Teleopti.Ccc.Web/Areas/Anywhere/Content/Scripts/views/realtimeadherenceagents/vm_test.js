@@ -278,6 +278,23 @@
 					assert.equals(vm.filteredAgents()[0].Name, "Glen");
 					assert.equals(vm.filteredAgents()[1].Name, "Kurt");
 				},
+				"should display all agents not matching negated with dash negation": function () {
+					var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
+						agent2 = { PersonId: "guid2", Name: "Glen", TimeZoneOffsetMinutes: 0 },
+						agent3 = { PersonId: "guid3", Name: "Arne", TimeZoneOffsetMinutes: 0 },
+						agent1State = { PersonId: "guid1", Alarm: "In adherence" },
+						agent2State = { PersonId: "guid2", Alarm: "Positive" },
+						agent3State = { PersonId: "guid3", Alarm: "Negative" };
+					var vm = viewModel();
+					vm.fillAgents([agent1, agent2, agent3]);
+					vm.fillAgentsStates([agent1State, agent2State, agent3State]);
+
+					vm.filter("-Negative");
+
+					assert.equals(vm.filteredAgents().length, 2);
+					assert.equals(vm.filteredAgents()[0].Name, "Glen");
+					assert.equals(vm.filteredAgents()[1].Name, "Kurt");
+				},
 				"should display agents matching more than two OR searchwords" : function() {
 					var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
 						agent2 = { PersonId: "guid2", Name: "Glen", TimeZoneOffsetMinutes: 0 },
