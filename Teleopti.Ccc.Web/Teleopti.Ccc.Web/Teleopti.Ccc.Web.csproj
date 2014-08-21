@@ -338,6 +338,8 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeEditScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DatePersons.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeScheduleFilterViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleFilterViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarTransformer.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CheckCalendarActiveCommand.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CheckCalendarPermissionCommand.cs" />
@@ -370,6 +372,7 @@
     <Compile Include="Areas\MyTime\Models\MyReport\QueueMetricsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceWeeklyWorkTimeViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\AbsenceAccountViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\RequestsShiftTradeScheduleFilterViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditPersonScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditScheduleLayerViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestReplyForm.cs" />
