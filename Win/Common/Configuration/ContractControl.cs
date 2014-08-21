@@ -259,9 +259,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			var maxHoursPerWeek = textBoxExtMaxTimePerWeek.Value;
 			if (!validateHoursSetting(maxHoursPerWeek, minHoursPerWeek, MaxHoursPerWeek))
 			{
-				// Todo: Change resourdce string more describle.
-				ViewBase.ShowErrorMessage(Resources.MaximumHoursPerWeekCannotBeMoreThan168Hours,
-								   Resources.TimeError);
+				ViewBase.ShowErrorMessage(Resources.HoursPerWeekIsInvalid, Resources.TimeError);
 				cancel = true;
 			}
 

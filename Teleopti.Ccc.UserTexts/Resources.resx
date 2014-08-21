@@ -6956,8 +6956,8 @@ Updated on: {1}</value>
     <value>Payroll Export General Information</value>
     <comment>PayrollExportGeneralInformation</comment>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Maximum hours per week cannot be more than 168 hours</value>
+  <data name="HoursPerWeekIsInvalid" xml:space="preserve">
+    <value>Hours per week is invalid, possible reason: Maximum hours per week is smaller than minimum hours per week.</value>
     <comment>Contract</comment>
   </data>
   <data name="RunExport" xml:space="preserve">

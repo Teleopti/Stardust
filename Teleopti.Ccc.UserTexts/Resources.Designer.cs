@@ -10139,6 +10139,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hours per week is invalid, possible reason: 1. Hours per week cannot be more than 168 hours; 2. Maximum hours per week is smaller than minimum hours per week..
+        /// </summary>
+        public static string HoursPerWeekIsInvalid {
+            get {
+                return ResourceManager.GetString("HoursPerWeekIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Id.
         /// </summary>
         public static string Id {
@@ -12501,15 +12510,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum hours per week cannot be more than 168 hours.
-        /// </summary>
-        public static string MaximumHoursPerWeekCannotBeMoreThan168Hours {
-            get {
-                return ResourceManager.GetString("MaximumHoursPerWeekCannotBeMoreThan168Hours", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Maximum is {0} hours..
         /// </summary>
         public static string MaximumIsParameterHoursDot {
@@ -13041,7 +13041,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Minimum Time Per Week.
+        ///   Looks up a localized string similar to Minimum Time Per Week:.
         /// </summary>
         public static string MinimumTimePerWeekColon {
             get {
