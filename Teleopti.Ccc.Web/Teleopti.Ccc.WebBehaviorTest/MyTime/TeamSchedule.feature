@@ -187,11 +187,13 @@ Scenario: Sort no schedule last
 
 Scenario: Show tooltip with activity name and times
 	Given I am an agent in a team
+	And there is an activity named 'Phone'
 	And I have an assigned shift with
 	| Field     | Value      |
 	| Date      | 2014-05-02 |
 	| StartTime | 8:00       |
 	| EndTime   | 12:00      |
+	| Activity  | Phone      |
 	When I view group schedule for '2014-05-02'
 	Then The layer's start time attibute value should be 08:00
 	And The layer's end time attibute value should be 12:00

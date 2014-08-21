@@ -51,7 +51,18 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 					shiftCategory.DisplayColor = Color.FromName(ShiftColor);
 			}
 
-			var activity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
+			IActivity activity;
+			if (Activity != null)
+			{
+				activity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
+			}
+			else
+			{
+				activity = new Activity(DefaultName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
+				var activityRepository = new ActivityRepository(uow);
+				activityRepository.Add(activity);
+			}
+
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
 			var timeZone = user.PermissionInformation.DefaultTimeZone();

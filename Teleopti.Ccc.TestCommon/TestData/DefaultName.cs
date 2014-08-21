@@ -10,5 +10,10 @@ namespace Teleopti.Ccc.TestCommon.TestData
 		{
 			return name + " " + new Random().Next(0, 50) + "~";
 		}
+
+		public static string Make()
+		{
+			return new Random().Next(0, 50) + "~";
+		}
 	}
 }

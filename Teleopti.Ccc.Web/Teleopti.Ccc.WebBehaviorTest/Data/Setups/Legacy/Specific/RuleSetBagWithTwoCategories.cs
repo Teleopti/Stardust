@@ -1,8 +1,11 @@
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Interfaces.Domain;
@@ -44,10 +47,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
+			var activity = new Activity(DefaultName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
+			var activityRepository = new ActivityRepository(uow);
+			activityRepository.Add(activity);
+
 			TheRuleSetBag = new Domain.Scheduling.ShiftCreator.RuleSetBag();
-			var generator1 = new WorkShiftTemplateGenerator(TestData.ActivityPhone, _start1, _end1, _cat1.ShiftCategory);
+			var generator1 = new WorkShiftTemplateGenerator(activity, _start1, _end1, _cat1.ShiftCategory);
 			var ruleSet1 = new WorkShiftRuleSet(generator1);
-			var generator2 = new WorkShiftTemplateGenerator(TestData.ActivityPhone, _start2, _end2, _cat2.ShiftCategory);
+			var generator2 = new WorkShiftTemplateGenerator(activity, _start2, _end2, _cat2.ShiftCategory);
 			var ruleSet2 = new WorkShiftRuleSet(generator2);
 
 			ruleSet1.Description = new Description("Regeln 1");

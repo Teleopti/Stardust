@@ -1,7 +1,10 @@
 using System;
+using System.Drawing;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Interfaces.Domain;
@@ -19,11 +22,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
+			var activity = new Activity(DefaultName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Purple) };
+			var activityRepository = new ActivityRepository(uow);
+			activityRepository.Add(activity);
+
 			var scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 			var meeting = new Meeting(user,
 									  new[] { new MeetingPerson(user, false) },
 									  Subject, Location, Description ?? String.Empty,
-									  TestData.ActivityTraining, scenario)
+									  activity, scenario)
 			{
 				StartDate = new DateOnly(StartTime),
 				EndDate = new DateOnly(EndTime),

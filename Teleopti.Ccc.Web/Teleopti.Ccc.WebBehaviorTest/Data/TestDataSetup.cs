@@ -83,7 +83,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateShiftCategory);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateDayOffTemplate);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateAbsence);
-			GlobalUnitOfWorkState.UnitOfWorkAction(CreateActivities);
 		}
 
 	    private static void CreateLicense(IUnitOfWork uow)
@@ -265,18 +264,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			personRepository.Add(TestData.PersonThatCreatesTestData);
 		}
 
-		private static void CreateActivities(IUnitOfWork unitOfWork)
-		{
-			TestData.ActivityPhone = new Activity("Legacy activity Phone"){DisplayColor = Color.FromKnownColor(KnownColor.Green)};
-			TestData.ActivityShortBreak = new Activity("Legacy activity ShortBreak"){DisplayColor = Color.FromKnownColor(KnownColor.Red)};
-			TestData.ActivityLunch = new Activity("Legacy activity Lunch"){DisplayColor = Color.FromKnownColor(KnownColor.Yellow)};
-			TestData.ActivityTraining = new Activity("Legacy activity Training"){DisplayColor =  Color.FromKnownColor(KnownColor.Purple)};
-
-			var activityRepository = new ActivityRepository(unitOfWork);
-			activityRepository.Add(TestData.ActivityPhone);
-			activityRepository.Add(TestData.ActivityShortBreak);
-			activityRepository.Add(TestData.ActivityLunch);
-			activityRepository.Add(TestData.ActivityTraining);
 		}
 
 		private static void CreateShiftCategory(IUnitOfWork unitOfWork)

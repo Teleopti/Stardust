@@ -276,25 +276,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new ShiftCategoryPreference {ShiftCategory = firstCategory,Date = date.ToShortDateString()});
 		}
 
-		[Given(@"I have a preference with lunch length limitation of 1 hour for '(.*)'"),SetCulture("sv-SE")]
-		public void GivenIHaveAPreferenceWithLunchLengthLimitationOf1HourToday(DateTime date)
+		[Given(@"I have a preference with (.*) length limitation of 1 hour for '(.*)'"),SetCulture("sv-SE")]
+		public void GivenIHaveAPreferenceWithLunchLengthLimitationOf1HourToday(string lunchActivity, DateTime date)
 		{
 			var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(1, 0, 0), new TimeSpan(1, 0, 0));
-			DataMaker.Data().Apply(new ExistingLunchPreference(workTimeLimitation){Date = date.ToShortDateString()});
+			DataMaker.Data().Apply(new ExistingLunchPreference(workTimeLimitation){Date = date.ToShortDateString(), LunchActivity = lunchActivity});
 		}
 
-		[Given(@"I have a preference with lunch end time limitation between (.*) and (.*) for '(.*)'"),SetCulture("sv-SE")]
-		public void GivenIHaveAPreferenceWithLunchEndTimeLimitationBetweenAnd(int earliest, int latest, DateTime date)
+		[Given(@"I have a preference with (.*) end time limitation between (.*) and (.*) for '(.*)'"), SetCulture("sv-SE")]
+		public void GivenIHaveAPreferenceWithLunchEndTimeLimitationBetweenAnd(string lunchActivity, int earliest, int latest, DateTime date)
 		{
 			var endTimeLimitation = new EndTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
-			DataMaker.Data().Apply(new ExistingLunchPreference(endTimeLimitation){Date = date.ToShortDateString()});
+			DataMaker.Data().Apply(new ExistingLunchPreference(endTimeLimitation) { Date = date.ToShortDateString(), LunchActivity = lunchActivity });
 		}
 
-		[Given(@"I have a preference with lunch start time limitation between (.*) and (.*) for '(.*)'"),SetCulture("sv-SE")]
-		public void GivenIHaveAPreferenceWithLunchStartTimeLimitationBetweenAnd(int earliest, int latest, DateTime date)
+		[Given(@"I have a preference with (.*) start time limitation between (.*) and (.*) for '(.*)'"), SetCulture("sv-SE")]
+		public void GivenIHaveAPreferenceWithLunchStartTimeLimitationBetweenAnd(string lunchActivity, int earliest, int latest, DateTime date)
 		{
 			var startTimeLimitation = new StartTimeLimitation(new TimeSpan(earliest, 0, 0), new TimeSpan(latest, 0, 0));
-			DataMaker.Data().Apply(new ExistingLunchPreference(startTimeLimitation){Date = date.ToShortDateString()});
+			DataMaker.Data().Apply(new ExistingLunchPreference(startTimeLimitation) { Date = date.ToShortDateString(), LunchActivity = lunchActivity });
 		}
 
 		[Given(@"I have a availabilty with earliest start time at (.*)")]
@@ -626,10 +626,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new RuleSetBag(8, 10, 16, 18));
 		}
 
-		[Given(@"I have a shift bag with one shift (.*) to (.*) and lunch (.*) to (.*) and one shift (.*) to (.*) and lunch (.*) to (.*)")]
-		public void GivenIHaveAShiftBagWithOneShiftToAndLunchToAndOneShiftToAndLunchTo(int start1, int end1, int lunchStart1, int lunchEnd1, int start2, int end2, int lunchStart2, int lunchEnd2)
+		[Given(@"I have a shift bag with one shift (.*) to (.*) and (.*) (.*) to (.*) and one shift (.*) to (.*) and (.*) (.*) to (.*)")]
+		public void GivenIHaveAShiftBagWithOneShiftToAndLunchToAndOneShiftToAndLunchTo(int start1, int end1, string lunchActivity1, int lunchStart1, int lunchEnd1, int start2, int end2, string lunchActivity2, int lunchStart2, int lunchEnd2)
 		{
-			DataMaker.Data().Apply(new RuleSetBagWithTwoShiftsAndLunch(start1, end1, lunchStart1, lunchEnd1, start2, end2, lunchStart2, lunchEnd2));
+			DataMaker.Data().Apply(new RuleSetBagWithTwoShiftsAndLunch(start1, end1, lunchActivity1, lunchStart1, lunchEnd1, start2, end2, lunchActivity2, lunchStart2, lunchEnd2));
 		}
 
 		[Given(@"I am an agent in a team that leaves on '(.*)'")]
