@@ -264,8 +264,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			personRepository.Add(TestData.PersonThatCreatesTestData);
 		}
 
-		}
-
 		private static void CreateShiftCategory(IUnitOfWork unitOfWork)
 		{
 			TestData.ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("Legacy common shift category", "Purple");
