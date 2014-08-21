@@ -42,11 +42,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		 }
 		public WorkflowControlSetView(IToggleManager toggleManager):this()
 		{
-			if (!toggleManager.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635))
-			  {
-				  labelMinimumTimePerWeek.Hide();
-				  textBoxExtMinTimePerWeek.Hide();
-			  }
 			if (DesignMode) return;
 			_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory());
 			GridStyleInfoStore.CellValueProperty.IsCloneable = false;
@@ -357,19 +352,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void LoadControl()
 		{
 			_presenter.Initialize();
-				setUpTimeSpanBoxes();
 			dateTimePickerAdvViewpoint.Value = DateTime.Today;
 			comboBoxAdvWorkflowControlSet.Focus();
 			// Hide Absence Request tab if no permissions.
 			var authorization = PrincipalAuthorization.Instance();
 			tabControlAdvArea.TabPages[1].TabVisible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AbsenceRequests);
 			tabControlAdvArea.TabPages[2].TabVisible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequests);
-		}
-
-		private void setUpTimeSpanBoxes()
-		{
-			 textBoxExtMinTimePerWeek.SetSize(54, 23);
-			 textBoxExtMinTimePerWeek.AllowNegativeValues = false;
 		}
 
 		public void SaveChanges()
@@ -991,11 +979,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd = insertPeriod.EndDate;
 			dateSelectionFromToStudentAvailability.WorkPeriodStart = studentAvailabilityPeriod.StartDate;
 			dateSelectionFromToStudentAvailability.WorkPeriodEnd = studentAvailabilityPeriod.EndDate;
-		}
-
-		public void SetMinTimePerWeek(TimeSpan minTimePerWeek)
-		{
-			textBoxExtMinTimePerWeek.SetInitialResolution(minTimePerWeek);
 		}
 
 		private void dateSelectionFromToStudentAvailability_Validating(object sender, CancelEventArgs e)
