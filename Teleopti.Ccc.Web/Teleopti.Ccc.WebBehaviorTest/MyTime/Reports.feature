@@ -3,29 +3,27 @@
 	As an agent
 	I want to be able to view my reports
 
-Background: 
-Given there is a role with
-	| Field                    | Value                       |
-	| Name                     | No access to Matrix reports |
-	| Access To Matrix Reports | False                       |
-Given there is a role with
-	| Field                    | Value                 |
-	| Name                     | AgentWithoutAnyReport |
-	| Access To Matrix Reports | False                 |
-	| Access To MyReport       | False                 |
-
 Scenario: Show reports with permissions
 	When I am viewing an application page
 	And I click reports menu
 	Then I should see the dropdown report list 
 
 Scenario: Should not show the reports menu with no permission for any report
-	Given I have the role 'AgentWithoutAnyReport'
+	Given there is a role with
+	| Field                    | Value                 |
+	| Name                     | AgentWithoutAnyReport |
+	| Access To Matrix Reports | False                 |
+	| Access To MyReport       | False                 |
+	And I have the role 'AgentWithoutAnyReport'
 	When I am viewing an application page
 	Then I should not see any report menu
 
 Scenario: Show MyReport menu
-	Given I have the role 'No access to Matrix reports'
+	Given there is a role with
+	| Field                    | Value                       |
+	| Name                     | No access to Matrix reports |
+	| Access To Matrix Reports | False                       |
+	And I have the role 'No access to Matrix reports'
 	When I am viewing an application page
 	Then MyReport tab should be visible 
 
