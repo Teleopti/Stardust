@@ -230,7 +230,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void CreateAbsence(IUnitOfWork unitOfWork)
 		{
-			TestData.Absence = AbsenceFactory.CreateAbsence("Legacy common absence", "LCA", Color.FromArgb(210, 150, 150));
 			TestData.ConfidentialAbsence = AbsenceFactory.CreateAbsence("Legacy common confidential absence");
 			TestData.ConfidentialAbsence.Confidential = true;
 			TestData.ConfidentialAbsence.DisplayColor = Color.GreenYellow;
@@ -238,7 +237,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestData.AbsenceInContractTime.InContractTime = true;
 
 			var absenceRepository = new AbsenceRepository(unitOfWork);
-			absenceRepository.Add(TestData.Absence);
+			
 			absenceRepository.Add(TestData.ConfidentialAbsence);
 			absenceRepository.Add(TestData.AbsenceInContractTime);
 		}

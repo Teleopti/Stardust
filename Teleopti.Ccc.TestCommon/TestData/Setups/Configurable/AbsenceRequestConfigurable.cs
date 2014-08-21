@@ -1,8 +1,10 @@
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -18,7 +20,18 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var absence = new AbsenceRepository(uow).LoadAll().Single(a => a.Name == Absence);
+
+			IAbsence absence;
+			if (Absence != null)
+			{
+				absence = new AbsenceRepository(uow).LoadAll().Single(a => a.Name == Absence);
+			}
+			else
+			{
+				absence  = AbsenceFactory.CreateAbsence("Legacy common absence", "LCA", Color.FromArgb(210, 150, 150));
+				var absenceRepository = new AbsenceRepository(uow);
+				absenceRepository.Add(absence);
+			}
 
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(DateTime.SpecifyKind(StartTime, DateTimeKind.Utc), DateTime.SpecifyKind(EndTime, DateTimeKind.Utc)));
 			var personRequest = new PersonRequest(user, absenceRequest) { Subject = "I need some vacation" };

@@ -1,8 +1,11 @@
 using System;
+using System.Drawing;
 using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -16,8 +19,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
+			
 			var today = DateTime.UtcNow.Date;
-			AbsenceRequest = new AbsenceRequest(TestData.Absence, new DateTimePeriod(today, today.AddHours(5)));
+
+			var absenceRepository = new AbsenceRepository(uow);
+			var absence = AbsenceFactory.CreateAbsence(DefaultName.Make(), DefaultName.Make(), Color.FromArgb(210, 150, 150));
+			absenceRepository.Add(absence);
+
+			AbsenceRequest = new AbsenceRequest(absence, new DateTimePeriod(today, today.AddHours(5)));
 			PersonRequest = new PersonRequest(user, AbsenceRequest) {Subject = "I need some vacation"};
 			PersonRequest.TrySetMessage("This is just a short text that doesn't say anything, except explaining that it doesn't say anything");
 
@@ -35,7 +44,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var today = DateTime.UtcNow.Date;
-			AbsenceRequest = new AbsenceRequest(TestData.Absence, new DateTimePeriod(today, today.AddHours(5)));
+
+			var absenceRepository = new AbsenceRepository(uow);
+			var absence = AbsenceFactory.CreateAbsence(DefaultName.Make(), DefaultName.Make(), Color.FromArgb(210, 150, 150));
+			absenceRepository.Add(absence);
+			
+			AbsenceRequest = new AbsenceRequest(absence, new DateTimePeriod(today, today.AddHours(5)));
 			PersonRequest = new PersonRequest(user, AbsenceRequest) { Subject = "I need some vacation" };
 			PersonRequest.TrySetMessage("This is just a short text that doesn't say anything, except explaining that it doesn't say anything");
 			PersonRequest.Pending();
@@ -65,7 +79,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var today = DateTime.UtcNow.Date;
-			AbsenceRequest = new AbsenceRequest(TestData.Absence, new DateTimePeriod(today, today.AddHours(5)));
+
+			var absenceRepository = new AbsenceRepository(uow);
+			var absence = AbsenceFactory.CreateAbsence(DefaultName.Make(), DefaultName.Make(), Color.FromArgb(210, 150, 150));
+			absenceRepository.Add(absence);
+
+			AbsenceRequest = new AbsenceRequest(absence, new DateTimePeriod(today, today.AddHours(5)));
 			PersonRequest = new PersonRequest(user, AbsenceRequest) { Subject = "I need some vacation" };
 			PersonRequest.TrySetMessage("This is just a short text that doesn't say anything, except explaining that it doesn't say anything");
 			PersonRequest.Pending();

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 	{
 		private static readonly CultureInfo SwedishCultureInfo = CultureInfo.GetCultureInfo(1053);
 		public string Date { get; set; }
-		public IAbsence Absence = TestData.Absence;
+		public IAbsence Absence;
 		public IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 		public string AbsenceColor { get; set; }
 
@@ -31,20 +31,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			var endTime = startTime.AddHours(24);
 			var period = new DateTimePeriod(startTime, endTime);
 
-			PersonAbsence absence;
+			Absence = new Absence { Description = new Description("Absence") };
+			new AbsenceRepository(uow).Add(Absence);
+			Absence.DisplayColor = AbsenceColor != null ? Color.FromName(AbsenceColor) : Color.FromArgb(210, 150, 150);
 
-			if (AbsenceColor != null)
-			{
-				var newAbsence = new Absence();
-				newAbsence.Description = new Description("Absence");
-				new AbsenceRepository(uow).Add(newAbsence);
-				newAbsence.DisplayColor = Color.FromName(AbsenceColor);
-				absence = new PersonAbsence(user, Scenario, new AbsenceLayer(newAbsence, period));
-			}
-			else
-			{
-				absence = new PersonAbsence(user, Scenario, new AbsenceLayer(TestData.Absence, period));
-			}
+			var absence = new PersonAbsence(user, Scenario, new AbsenceLayer(Absence, period));
 
 			var absenceRepository = new PersonAbsenceRepository(uow);
 
