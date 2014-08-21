@@ -21,23 +21,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 				var weeklyWorkTimeSetting = new WeeklyWorkTimeSetting();
 				weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes = 360;
 				weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes = 120;
-				var workDirective = new WorkTimeDirective(TimeSpan.FromMinutes(weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes), TimeSpan.FromMinutes(weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes), new TimeSpan(), new TimeSpan());
+				var workDirective = new WorkTimeDirective(TimeSpan.FromMinutes(weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes), 
+					TimeSpan.FromMinutes(weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes), new TimeSpan(), new TimeSpan());
 
 				virtualSchedulePeriodProvider.Stub(x => x.VirtualSchedulePeriodForDate(DateOnly.Today)).Return(virtualSchedulePeriod);
 		        virtualSchedulePeriod.Stub(x => x.IsValid).Return(true);
 				virtualSchedulePeriod.Stub(x => x.Contract).Return(contract);
 				contract.Stub(x => x.WorkTimeDirective).Return(workDirective);
 
-				var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-				var workflowControlSet = MockRepository.GenerateMock<IWorkflowControlSet>();
-				var person = MockRepository.GenerateMock<IPerson>();
-
-				loggedOnUser.Stub(u => u.CurrentUser()).Return(person);
-				person.Stub(x => x.WorkflowControlSet).Return(workflowControlSet);
-				workflowControlSet.Stub(x => x.MinTimePerWeek).Return(TimeSpan.FromMinutes(weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes));
-
-
-				var target = new PreferenceWeeklyWorkTimeSettingProvider(loggedOnUser, virtualSchedulePeriodProvider);
+				var target = new PreferenceWeeklyWorkTimeSettingProvider(virtualSchedulePeriodProvider);
 
 				var result = target.RetrieveSetting(DateOnly.Today);
 

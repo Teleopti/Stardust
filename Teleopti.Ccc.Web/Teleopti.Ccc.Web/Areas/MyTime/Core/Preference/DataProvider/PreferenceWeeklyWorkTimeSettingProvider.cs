@@ -1,18 +1,14 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+﻿using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 {
 	 public class PreferenceWeeklyWorkTimeSettingProvider : IPreferenceWeeklyWorkTimeSettingProvider
 	{
-		 private readonly ILoggedOnUser _loggedOnUser;
 		 private readonly IVirtualSchedulePeriodProvider _virtualSchedulePeriodProvider;
 
-		 public PreferenceWeeklyWorkTimeSettingProvider(ILoggedOnUser loggedOnUser, IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider)
+		 public PreferenceWeeklyWorkTimeSettingProvider(IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider)
 		 {
-			 _loggedOnUser = loggedOnUser;
 			 _virtualSchedulePeriodProvider = virtualSchedulePeriodProvider;
 		 }
 
@@ -24,14 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		     if (virtualSchedulePeriod.IsValid)
 		     {
 		         var contract = virtualSchedulePeriod.Contract;
-		         var minTimePerWeekMinutes = _loggedOnUser.CurrentUser().WorkflowControlSet != null
-		             ? _loggedOnUser.CurrentUser().WorkflowControlSet.MinTimePerWeek.TotalMinutes
-		             : 0;
-
-		         var maxTimePerWeekMinutes = contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
-
-		         weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes = minTimePerWeekMinutes;
-		         weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes = maxTimePerWeekMinutes;
+				 weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes = contract.WorkTimeDirective.MinTimePerWeek.TotalMinutes;
+				 weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes = contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
 		     }
 
 		     return weeklyWorkTimeSetting;
