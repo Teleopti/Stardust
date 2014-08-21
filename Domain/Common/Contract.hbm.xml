@@ -54,6 +54,9 @@
 					type="TimeSpan" />
 	  </component>
 	  <component name="WorkTimeDirective" class="Teleopti.Interfaces.Domain.WorkTimeDirective, Teleopti.Interfaces">
+		  <property name="MinTimePerWeek"
+					not-null="true"
+					type="TimeSpan" />
 		  <property name="MaxTimePerWeek"
 					not-null="true"
 					type="TimeSpan" />

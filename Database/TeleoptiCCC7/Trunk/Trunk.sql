@@ -51,3 +51,15 @@ GO
 ----------------  
 Alter Table [dbo].[PushMessage] Add [MessageType] int NOT NULL default 0
 GO
+
+--Name: Xinfeng, Chundan
+--Date: 2014-08-21  
+--Desc: PBI #29223
+----------------  
+ALTER TABLE [dbo].[Contract] ADD [MinTimePerWeek] [bigint] NULL
+GO
+UPDATE [dbo].[Contract]
+SET [MinTimePerWeek] = 0
+GO
+ALTER TABLE [dbo].[Contract] ALTER COLUMN [MinTimePerWeek] [bigint] NOT NULL
+GO
