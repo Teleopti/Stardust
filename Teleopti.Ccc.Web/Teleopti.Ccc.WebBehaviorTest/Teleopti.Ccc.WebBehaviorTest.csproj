@@ -574,7 +574,6 @@
       <DependentUpon>MyProfile.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\MyProfileStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutTeamScheduleAccess.cs" />
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />
     <Compile Include="MyTime\PreferencesPeriodFeedback.feature.cs">
       <AutoGen>True</AutoGen>

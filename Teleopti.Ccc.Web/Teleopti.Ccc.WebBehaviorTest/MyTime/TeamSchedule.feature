@@ -76,12 +76,16 @@ Scenario: Can't see confidential absence
 	And I should not see the absence's color
  
 Scenario: Can't see the team schedule tab without permission 
-	Given I am an agent with no access to team schedule
+	Given I have a role with
+         | Field                   | Value |
+         | Access To Team Schedule | false |
 	When I am viewing an application page
 	Then I should not see the team schedule tab
 
 Scenario: Can't navigate to team schedule without permission 
-	Given I am an agent with no access to team schedule
+	Given I have a role with
+         | Field                   | Value |
+         | Access To Team Schedule | false |
 	When I am viewing an application page
 	And I navigate to the team schedule
 	Then I should see an error message

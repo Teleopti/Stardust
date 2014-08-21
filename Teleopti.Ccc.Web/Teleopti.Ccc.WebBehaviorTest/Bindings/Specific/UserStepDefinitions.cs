@@ -142,12 +142,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new AgentWithoutRequestsAccess());
 		}
 
-		[Given(@"I am an agent with no access to team schedule")]
-		public void GivenIAmAnAgentWithNoAccessToTeamSchedule()
-		{
-			DataMaker.Data().Apply(new AgentWithoutTeamScheduleAccess());
-		}
-
 		[Given(@"I have several virtual schedule periods")]
 		public void GivenIHaveSeveralVirtualSchedulePeriods()
 		{
