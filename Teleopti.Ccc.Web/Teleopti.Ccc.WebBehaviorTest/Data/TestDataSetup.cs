@@ -1,12 +1,10 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -25,28 +23,28 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
-
 	public static class TestDataSetup
 	{
 		private static DatabaseHelper.Backup _Ccc7DataBackup;
+		private static IDataSource datasource;
+		private static IPerson personThatCreatesTestData;
 
 		public static void CreateDataSource()
 		{
-			TestData.DataSource = DataSourceHelper.CreateDataSource(new[] { new EventsMessageSender(new SyncEventsPublisher(new EventPublisher(new HardCodedResolver(), new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))) }, "TestData");
+			datasource = DataSourceHelper.CreateDataSource(new[] { new EventsMessageSender(new SyncEventsPublisher(new EventPublisher(new HardCodedResolver(), new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))) }, "TestData");
 		}
 
 		public static void SetupFakeState()
 		{
-			TestData.PersonThatCreatesTestData = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", TestData.CommonPassword);
+			personThatCreatesTestData = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", TestData.CommonPassword);
 			CommonBusinessUnit.BusinessUnitFromFakeState = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
 			CommonBusinessUnit.BusinessUnitFromFakeState.Name = "BusinessUnit";
 
-			StateHolderProxyHelper.SetupFakeState(TestData.DataSource, TestData.PersonThatCreatesTestData, CommonBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
+			StateHolderProxyHelper.SetupFakeState(datasource, personThatCreatesTestData, CommonBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
 		}
-
 
 		public static void CreateMinimumTestData()
 		{
@@ -123,12 +121,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere &&
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages
 				select r;
-			var agentNoReportsRoleApplicationFunctions =
-				from r in agentRoleApplicationFunctions
-				where
-					r.ForeignSource != DefinedForeignSourceNames.SourceMatrix &&
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyReportWeb
-				select r;
 			var agentRoleWithoutStudentAvailabilityApplicationFunctions =
 				from r in agentRoleApplicationFunctions
 				where
@@ -152,11 +144,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb &&
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb
 				select r;
-			var agentRoleWithoutTextRequestsApplicationFunctions =
-				from r in agentRoleApplicationFunctions
-				where
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.TextRequests
-				select r;
 			var agentRoleWithoutAbsenceRequestsApplicationFunctions =
 				from r in agentRoleApplicationFunctions
 				where
@@ -167,41 +154,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				where
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.TeamSchedule
 				select r;
-			var supervisorRoleApplicationFunctions =
-				from r in allApplicationFunctions
-				where
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.All &&
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules &&
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewConfidential
-				select r;
 
-			var agentRoleWithoutMyTimeWebApplicationFunctions =
-				from r in agentRoleApplicationFunctions
-				where
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyTimeWeb
-				select r;
-			var agentRoleWithoutAgentRoleWithoutResReportScheduledAndActualAgentsMatrixFunction =
-				from r in supervisorRoleApplicationFunctions
-				where
-					!(r.FunctionCode == "ResReportServiceLevelAndAgentsReady" && r.ForeignSource == DefinedForeignSourceNames.SourceMatrix)
-				select r;
-
-
-			var secondBusinessUnit = GlobalDataMaker.Data().Data<SecondBusinessUnit>().BusinessUnit;
 			var anotherSite = GlobalDataMaker.Data().Data<AnotherSite>().Site;
 
-			var shippedRoles = ApplicationRoleFactory.CreateShippedRoles(out TestData.AdministratorRole, out TestData.AgentRole, out TestData.UnitRole, out TestData.SiteRole, out TestData.TeamRole);
+			//
+			IApplicationRole administratorRole, unitRole, siteRole, teamRole;
+			//
+			var shippedRoles = ApplicationRoleFactory.CreateShippedRoles(out administratorRole, out TestData.AgentRole, out unitRole, out siteRole, out teamRole);
 			shippedRoles.ForEach(r => r.Name += "Shipped");
 			var shippedRolesWithFunctions = from role in shippedRoles
 			                                let functions = (role == TestData.AgentRole ? agentRoleApplicationFunctions : allApplicationFunctions)
-											let availableDataRangeOption = (role == TestData.AgentRole ? AvailableDataRangeOption.MyTeam : 
-																			(role == TestData.AdministratorRole ? AvailableDataRangeOption.MyBusinessUnit : AvailableDataRangeOption.None)
+											let availableDataRangeOption = (role == TestData.AgentRole ? AvailableDataRangeOption.MyTeam :
+																			(role == administratorRole ? AvailableDataRangeOption.MyBusinessUnit : AvailableDataRangeOption.None)
 																			)
 											let availableData = new AvailableData{AvailableDataRange = availableDataRangeOption}
 											let businessUnit = TestData.BusinessUnit
 											select new { role, functions, businessUnit, availableData };
-			TestData.AgentRoleSecondBusinessUnit = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "SecondBusinessUnit", null);
-			TestData.AgentRoleSecondBusinessUnit.SetBusinessUnit(secondBusinessUnit);
+
 			TestData.AgentRoleWithoutStudentAvailability = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoStudentAvailability", null);
 			TestData.AgentRoleWithoutPreferences = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoPreferences", null);
 			TestData.AgentRoleWithoutExtendedPreferences = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoExtendedPreferences", null);
@@ -211,35 +180,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestData.AgentRoleOnlyWithOwnData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "OnlyWithOwnData", null);
 			TestData.AgentRoleWithSiteData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "WithSiteData", null);
 			TestData.AgentRoleWithAnotherSiteData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "WithAnotherSiteData", null);
-			TestData.AgentRoleWithoutMyTimeWeb = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoMyTimeWeb", null);
-			TestData.AgentRoleWithoutResReportScheduledAndActualAgents = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoServiceLevelAndAgentsReady", null);
-			TestData.AgentRoleWithoutAnyReport = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "WithoutAnyReport", null);
 			TestData.AdministratorRoleWithEveryoneData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AdministratorRole + "WithEveryoneData", null);
-			TestData.SupervisorRole = ApplicationRoleFactory.CreateRole("SupervisorRole", null);
-			TestData.SupervisorRoleSecondBusinessUnit = ApplicationRoleFactory.CreateRole("SupervisorRole", null);
-			TestData.SupervisorRoleSecondBusinessUnit.SetBusinessUnit(secondBusinessUnit);
 
 			var availableDataAnotherSite = new AvailableData();
 			availableDataAnotherSite.AddAvailableSite(anotherSite);
 
 			var customTestRoles = new[]
 			                 	{
-			                 		new { role = TestData.AgentRoleSecondBusinessUnit, functions = agentRoleApplicationFunctions, businessUnit = secondBusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}}, 
 									new { role = TestData.AgentRoleWithoutStudentAvailability, functions = agentRoleWithoutStudentAvailabilityApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutPreferences, functions = agentRoleWithoutPreferencesApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutExtendedPreferences, functions = agentRoleWithoutExtendedPreferencesApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutRequests, functions = agentRoleWithoutRequestsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutAbsenceRequests, functions = agentRoleWithoutAbsenceRequestsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutTeamSchedule, functions = agentRoleWithoutTeamScheduleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
-									new { role = TestData.AgentRoleWithoutMyTimeWeb, functions = agentRoleWithoutMyTimeWebApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
-									new { role = TestData.AgentRoleWithoutResReportScheduledAndActualAgents, functions = agentRoleWithoutAgentRoleWithoutResReportScheduledAndActualAgentsMatrixFunction, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleOnlyWithOwnData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyOwn}},
 									new { role = TestData.AgentRoleWithSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MySite}},
 									new { role = TestData.AgentRoleWithAnotherSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = availableDataAnotherSite},
-									new { role = TestData.AgentRoleWithoutAnyReport, functions = agentNoReportsRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MySite}},
 									new { role = TestData.AdministratorRoleWithEveryoneData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.Everyone}},
-									new { role = TestData.SupervisorRole, functions = supervisorRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
-									new { role = TestData.SupervisorRoleSecondBusinessUnit, functions = supervisorRoleApplicationFunctions, businessUnit = secondBusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 			                 	};
 
 			var allRoles = customTestRoles.Union(shippedRolesWithFunctions);
@@ -260,7 +217,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static void CreatePersonThatCreatesTestData(IUnitOfWork uow)
 		{
 			var personRepository = new PersonRepository(uow);
-			personRepository.Add(TestData.PersonThatCreatesTestData);
+			personRepository.Add(personThatCreatesTestData);
 		}
 
 		private static void CreateShiftCategory(IUnitOfWork unitOfWork)
