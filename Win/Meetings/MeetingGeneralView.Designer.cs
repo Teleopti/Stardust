@@ -167,6 +167,7 @@ namespace Teleopti.Ccc.Win.Meetings
             this.comboBoxAdvActivity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
             this.comboBoxAdvActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAdvActivity.Location = new System.Drawing.Point(422, 30);
+			this.comboBoxAdvActivity.MatchFirstCharacterOnly = false;
             this.comboBoxAdvActivity.Name = "comboBoxAdvActivity";
             this.comboBoxAdvActivity.Size = new System.Drawing.Size(150, 21);
             this.comboBoxAdvActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
