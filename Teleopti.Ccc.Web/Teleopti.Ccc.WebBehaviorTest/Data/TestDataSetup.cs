@@ -81,7 +81,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateMatrixApplicationFunctions);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateApplicationRoles);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateShiftCategory);
-			GlobalUnitOfWorkState.UnitOfWorkAction(CreateDayOffTemplate);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateAbsence);
 		}
 
@@ -270,14 +269,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			var shiftCategoryRepository = new ShiftCategoryRepository(unitOfWork);
 			shiftCategoryRepository.Add(TestData.ShiftCategory);
-		}
-
-		private static void CreateDayOffTemplate(IUnitOfWork unitOfWork)
-		{
-			TestData.DayOffTemplate = DayOffFactory.CreateDayOff(new Description("Legacy common day off", "LCDO"));
-
-			var dayOffRepository = new DayOffTemplateRepository(unitOfWork);
-			dayOffRepository.Add(TestData.DayOffTemplate);
 		}
 
 		private static void CreateAbsence(IUnitOfWork unitOfWork)

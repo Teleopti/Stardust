@@ -1,6 +1,9 @@
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
@@ -14,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		private static readonly CultureInfo SwedishCultureInfo = CultureInfo.GetCultureInfo(1053);
 
 		public string Date { get; set; }
-		public readonly IDayOffTemplate DayOff = TestData.DayOffTemplate;
+		public IDayOffTemplate DayOff;
 		public readonly IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 
 		public AssignedDayOff()
@@ -24,6 +27,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
+			if (DayOff == null)
+			{
+				DayOff = DayOffFactory.CreateDayOff(new Description(DefaultName.Make(), DefaultName.Make()));
+				var activityRepository = new ActivityRepository(uow);
+				activityRepository.Add(DayOff);
+			}
+
 			var personAssignmentRepository = new PersonAssignmentRepository(uow);
 			var ass = new PersonAssignment(user, Scenario, Date);
 			ass.SetDayOff(DayOff);

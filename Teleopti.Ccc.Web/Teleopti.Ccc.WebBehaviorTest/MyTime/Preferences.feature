@@ -19,11 +19,13 @@ Scenario: See shift category preference
 
 Scenario: See day off preference
 	Given I am an agent
+	And there is a dayoff named 'Day off'
 	And I have existing day off preference with
-	| Field | Value      |
-	| Date  | 2014-05-03 |
+	| Field            | Value      |
+	| Date             | 2014-05-03 |
+	| Day off template | Day off    |
 	When I view preferences for date '2014-05-02'
-	Then I should see my existing day off preference
+	Then I should see my existing day off preference 'Day off'
 
 Scenario: See absence preference
 	Given I am an agent
@@ -72,10 +74,25 @@ Scenario: Navigate previous virtual schedule period
 
 Scenario: View standard preference list
 	Given I am an agent without access to extended preferences
-	And I have an open workflow control set with an allowed standard preference open from '2014-05-03' to '2014-05-05'
+	And there is a shift category named 'Night'
+	And there is a dayoff named 'Day off'
+	And there is an absence named 'Vacation'
+	And I have a workflow control set with
+	| Field                      | Value                |
+	| Name                       | Workflow control set |
+	| Schedule published to date | 2014-06-05           |
+	| Preference period start    | 2014-05-03           |
+	| Preference period end      | 2014-05-05           |
+	| Available shift category   | Night                |
+	| Available day off          | Day off              |
+	| Available absence          | Vacation             |
 	And I am viewing preferences for date '2014-05-02'
 	When I click the standard preference split-button
-	Then I should see the workflow control set's standard preferences list
+	Then I should see the workflow control set's standard preferences list with 
+	| Preference |
+	| Night      |
+	| Day off    |
+	| Vacation   |
 
 Scenario: Remember selected standard preference
 	Given I am an agent without access to extended preferences

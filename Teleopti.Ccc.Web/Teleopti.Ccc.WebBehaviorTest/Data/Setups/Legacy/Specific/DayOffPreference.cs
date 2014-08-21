@@ -3,23 +3,33 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
 	public class DayOffPreference : BasePreference
 	{
-		public DayOffPreference()
-		{
-			DayOffTemplate = TestData.DayOffTemplate.Description.Name;
-		}
-
 		public string DayOffTemplate { get; set; }
 
 		protected override PreferenceRestriction ApplyRestriction(IUnitOfWork uow)
 		{
-			var rep = new DayOffTemplateRepository(uow);
-			return new PreferenceRestriction {DayOffTemplate = rep.LoadAll().FirstOrDefault(d => d.Description.Name == DayOffTemplate)};
+			IDayOffTemplate dayOffTemplate;
+			if (DayOffTemplate != null)
+			{
+				dayOffTemplate = new DayOffTemplateRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(DayOffTemplate));
+			}
+			else
+			{
+				dayOffTemplate = DayOffFactory.CreateDayOff(new Description(DefaultName.Make(), DefaultName.Make()));
+				var activityRepository = new ActivityRepository(uow);
+				activityRepository.Add(dayOffTemplate);
+				DayOffTemplate = dayOffTemplate.Description.Name;
+			}
+
+			return new PreferenceRestriction { DayOffTemplate = dayOffTemplate };
 		}
 
 		protected override DateTime ApplyDate(CultureInfo cultureInfo)

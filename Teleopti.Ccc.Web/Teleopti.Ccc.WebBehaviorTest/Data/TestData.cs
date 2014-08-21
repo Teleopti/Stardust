@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IApplicationRole AdministratorRoleWithEveryoneData;
 
 		public static IShiftCategory ShiftCategory;
-		public static IDayOffTemplate DayOffTemplate;
 		public static IAbsence Absence;
 		public static IAbsence ConfidentialAbsence;
 		public static IAbsence AbsenceInContractTime;

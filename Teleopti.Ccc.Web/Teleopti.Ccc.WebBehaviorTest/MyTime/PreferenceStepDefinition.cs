@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -62,11 +64,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertFirstContains(cell, TestData.ShiftCategory.Description.Name);
 		}
 
-		[Then(@"I should see my existing day off preference")]
-		public void ThenIShouldSeeMyExistingDayOffPreference()
+		[Then(@"I should see my existing day off preference '(.*)'")]
+		public void ThenIShouldSeeMyExistingDayOffPreference(string preference)
 		{
 			var cell = CalendarCells.DateSelector("2014-05-03");
-			Browser.Interactions.AssertFirstContains(cell, TestData.DayOffTemplate.Description.Name);
+			Browser.Interactions.AssertFirstContains(cell, preference);
 		}
 
 		[Then(@"I should see my existing absence preference")]
@@ -76,12 +78,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertFirstContains(cell,TestData.Absence.Description.Name);
 		}
 
-		[Then(@"I should see the workflow control set's standard preferences list")]
-		public void ThenIShouldSeeTheWorkflowControlSetSStandardPreferencesList()
+		[Then(@"I should see the workflow control set's standard preferences list with")]
+		public void ThenIShouldSeeTheWorkflowControlSetSStandardPreferencesList(Table preferences)
 		{
-			Browser.Interactions.AssertFirstContains(".hidden-sm .preference-split-button", TestData.ShiftCategory.Description.Name);
-			Browser.Interactions.AssertFirstContains(".hidden-sm .preference-split-button", TestData.DayOffTemplate.Description.Name);
-			Browser.Interactions.AssertFirstContains(".hidden-sm .preference-split-button", TestData.Absence.Description.Name);
+			var items = preferences.CreateSet<PreferenceListItem>();
+			items.ForEach(i => Browser.Interactions.AssertFirstContains(".hidden-sm .preference-split-button", i.Preference));
+		}
+
+		public class PreferenceListItem
+		{
+			public string Preference { get; set; }
 		}
 
 		[Then(@"I should see the selected standard preference in the split-button")]

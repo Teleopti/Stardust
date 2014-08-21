@@ -2,6 +2,8 @@ using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
@@ -13,8 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 	public class DayOffScheduled : IUserDataSetup
 	{
 		private readonly DateTime _date;
-
-		public readonly IDayOffTemplate DayOffTemplate = TestData.DayOffTemplate;
+		public IDayOffTemplate DayOffTemplate;
 		public readonly IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 
 		public DayOffScheduled(DateTime date)
@@ -24,6 +25,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
+			if (DayOffTemplate == null)
+			{
+				DayOffTemplate = DayOffFactory.CreateDayOff(new Description(DefaultName.Make(), DefaultName.Make()));
+				var activityRepository = new ActivityRepository(uow);
+				activityRepository.Add(DayOffTemplate);
+			}
+
 			var ass = new PersonAssignment(user, Scenario, new DateOnly(_date));
 			ass.SetDayOff(DayOffTemplate);
 			var personAssignmentRepository = new PersonAssignmentRepository(uow);
