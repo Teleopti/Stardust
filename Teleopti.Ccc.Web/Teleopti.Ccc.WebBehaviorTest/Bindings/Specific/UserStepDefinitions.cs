@@ -2,7 +2,6 @@ using System;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -15,12 +14,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 	[Binding]
 	public class UserStepDefinitions
 	{
-		[Given(@"I am a user with everyone access")]
-		public void GivenIAmAUserWithEveryoneAccess()
-		{
-			DataMaker.Data().Apply(new AdministratorRoleWithEveryoneData());
-		}
-
 		[Given(@"I am an agent")]
 		public void GivenIAmAnAgent()
 		{

@@ -551,7 +551,6 @@
     <Compile Include="Data\Setups\Legacy\Specific\ExistingAvailability.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingLunchPreference.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\RuleSetBagWithTwoShiftsAndLunch.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AdministratorRoleWithEveryoneData.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentThatLeaves.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\SecondShiftCategory.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\FirstShiftCategory.cs" />
