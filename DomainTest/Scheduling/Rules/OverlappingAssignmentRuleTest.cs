@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _person = PersonFactory.CreatePerson();
             _nightlyRest = new TimeSpan(8, 0, 0);
             _contract = ContractFactory.CreateContract("for test");
-            _contract.WorkTimeDirective = new WorkTimeDirective(new TimeSpan(40, 0, 0),
+			_contract.WorkTimeDirective = new WorkTimeDirective(new TimeSpan(0, 0, 0), new TimeSpan(40, 0, 0),
                                                                _nightlyRest,
                                                                new TimeSpan(50, 0, 0));
             _schedulePeriod = new DateTimePeriod(2007, 8, 1, 2007, 9, 1);

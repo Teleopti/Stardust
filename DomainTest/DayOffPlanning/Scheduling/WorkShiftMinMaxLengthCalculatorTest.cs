@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _personContract = PersonContractFactory.CreatePersonContract("hej", "du", "glade");
-            _personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.Zero, TimeSpan.Zero);
+			_personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(40), TimeSpan.Zero, TimeSpan.Zero);
             _workShiftWeekMinMaxCalculator = _mocks.StrictMock<IWorkShiftWeekMinMaxCalculator>();
             _possibleMinMaxWorkShiftLengthExtractorForTest = new PossibleMinMaxWorkShiftLengthExtractorForTest();
             _schedulePeriodTargetTimeCalculatorForTest = new SchedulePeriodTargetTimeCalculatorForTest(new MinMax<TimeSpan>(TimeSpan.FromHours(55), TimeSpan.FromHours(57)));
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
         {
             DateOnly day = new DateOnly(2010, 8, 6);
             IPersonPeriod newPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 8, 5));
-            _newContract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.Zero, TimeSpan.Zero);
+			_newContract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(1), TimeSpan.Zero, TimeSpan.Zero);
             newPeriod.PersonContract.Contract = _newContract;
             _person.AddPersonPeriod(newPeriod);
             _person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 8, 15)));
@@ -426,7 +426,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
             Expect.Call(_workShiftWeekMinMaxCalculator.MaxAllowedLength(0, possibleShiftLengths(), day,_matrix)).Return(weeklyMax);
 
-            _personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero);
+			_personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero);
             Expect.Call(_workShiftWeekMinMaxCalculator.CorrectionDiff(0, possibleShiftLengths(), day, _matrix)).Return(TimeSpan.FromHours(0)).Repeat.Once();
             Expect.Call(_workShiftWeekMinMaxCalculator.CorrectionDiff(1, possibleShiftLengths(), day, _matrix)).Return(TimeSpan.FromHours(6)).Repeat.Once();
 
@@ -456,7 +456,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
             //Expect.Call(_workShiftWeekMinMaxCalculator.MaxAllowedLength(0, possibleShiftLengths(), day, _matrix)).Return(weeklyMax).Repeat.Any();
 
-            _personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero);
+			_personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero);
             //Expect.Call(_workShiftWeekMinMaxCalculator.CorrectionDiff(0, possibleShiftLengths(), day, _matrix)).Return(TimeSpan.FromHours(0)).Repeat.Once();
             Expect.Call(_workShiftWeekMinMaxCalculator.CorrectionDiff(1, possibleShiftLengths(), day, _matrix)).IgnoreArguments().Return(TimeSpan.FromHours(0)).Repeat.Any();
 

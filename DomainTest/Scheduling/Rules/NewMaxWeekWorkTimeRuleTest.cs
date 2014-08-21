@@ -32,10 +32,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _permissionInformation = _mocks.StrictMock<IPermissionInformation>();
             _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             var maxTimePerWeek = new TimeSpan(40, 0, 0);
+            var minTimePerWeek = new TimeSpan(0, 0, 0);
             var nightlyRest = new TimeSpan(8, 0, 0);
             var weeklyRest = new TimeSpan(50, 0, 0);
             _contract = new Contract("for test");
-            _contract.WorkTimeDirective = new WorkTimeDirective(maxTimePerWeek,
+			_contract.WorkTimeDirective = new WorkTimeDirective(minTimePerWeek, maxTimePerWeek,
                                                                nightlyRest,
                                                                weeklyRest);
             _personContract = _mocks.StrictMock<IPersonContract>();

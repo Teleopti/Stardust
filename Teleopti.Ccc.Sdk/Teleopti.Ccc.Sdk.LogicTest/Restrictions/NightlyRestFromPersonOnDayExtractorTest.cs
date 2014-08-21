@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 			_period = _mocks.StrictMock<IPersonPeriod>();
 			_personContract = _mocks.StrictMock<IPersonContract>();
 			_contract = _mocks.StrictMock<IContract>();
-			_workTimeDirective = new WorkTimeDirective(TimeSpan.FromDays(5), TimeSpan.FromHours(12), TimeSpan.FromDays(2));
+			_workTimeDirective = new WorkTimeDirective(TimeSpan.FromDays(0), TimeSpan.FromDays(5), TimeSpan.FromHours(12), TimeSpan.FromDays(2));
 			
 			_target = new NightlyRestFromPersonOnDayExtractor(_person);
 		}

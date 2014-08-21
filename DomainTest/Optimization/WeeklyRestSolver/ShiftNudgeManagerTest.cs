@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				_contractWeeklyRestForPersonWeek, _teamBlockScheduleCloner, _filterForTeamBlockInSelection,
 				_teamBlockRestrictionOverLimitValidator, _schedulingOptionsCreator);
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
-			_person.Period(DateOnly.MinValue).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(48), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
+			_person.Period(DateOnly.MinValue).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
 			_personWeek = new PersonWeek(_person, new DateOnlyPeriod(2014, 03, 24, 2014, 03, 31));
 			_teamBlockGenerator = _mocks.StrictMock<ITeamBlockGenerator>();
 			_schedulingOptions = new SchedulingOptions();

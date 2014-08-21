@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 				var weeklyWorkTimeSetting = new WeeklyWorkTimeSetting();
 				weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes = 360;
 				weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes = 120;
-				var workDirective = new WorkTimeDirective(TimeSpan.FromMinutes(weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes), new TimeSpan(), new TimeSpan());
+				var workDirective = new WorkTimeDirective(TimeSpan.FromMinutes(weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes), TimeSpan.FromMinutes(weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes), new TimeSpan(), new TimeSpan());
 
 				virtualSchedulePeriodProvider.Stub(x => x.VirtualSchedulePeriodForDate(DateOnly.Today)).Return(virtualSchedulePeriod);
 		        virtualSchedulePeriod.Stub(x => x.IsValid).Return(true);

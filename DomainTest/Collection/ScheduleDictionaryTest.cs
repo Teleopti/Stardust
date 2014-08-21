@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			_contract = ContractFactory.CreateContract("for test");
 			_nightlyRest = new TimeSpan(8, 0, 0);
-			_contract.WorkTimeDirective = new WorkTimeDirective(new TimeSpan(40, 0, 0),
+			_contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, new TimeSpan(40, 0, 0),
 									   _nightlyRest,
 									   new TimeSpan(50, 0, 0));
 			ITeam team = TeamFactory.CreateSimpleTeam();

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
         [Test]
         public void VerifyCanCreateAbsence()
         {
-            WorkTimeDirective workTimeDirective = new WorkTimeDirective(new TimeSpan(40,0,0), new TimeSpan(8,0,0), new TimeSpan(50,0,0));
+            WorkTimeDirective workTimeDirective = new WorkTimeDirective(new TimeSpan(0, 0, 0), new TimeSpan(40,0,0), new TimeSpan(8,0,0), new TimeSpan(50,0,0));
             WorkTime workTime = new WorkTime(new TimeSpan(8,0,0));
             IContract contract = _target.Create("name", new Description("name", "shortName"),EmploymentType.FixedStaffNormalWorkTime, workTime, workTimeDirective);
             Assert.AreEqual(new Description("name", "shortName"), contract.Description);

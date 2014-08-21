@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_schedulePeriod.Stub(x => x.DateOnlyPeriod).Return(dateOnlyPeriod);
 
 			_contract.Stub(x => x.WorkTimeDirective)
-				.Return(new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.Zero, TimeSpan.Zero));
+				.Return(new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(40), TimeSpan.Zero, TimeSpan.Zero));
 			_schedulePeriod.Stub(x => x.MinTimeSchedulePeriod).Return(TimeSpan.FromHours(8));
 			_schedulePeriod.Stub(x => x.Person).Return(person);
 

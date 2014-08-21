@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
         {
             _startDate = new DateOnly(2010, 9, 6);
             _personContract = PersonContractFactory.CreatePersonContract("hej", "du", "glade");
-            _personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.Zero, TimeSpan.Zero);
+			_personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(40), TimeSpan.Zero, TimeSpan.Zero);
             _mocks = new MockRepository();
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro0 = _mocks.StrictMock<IScheduleDayPro>();
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
         [Test]
         public void VerifyCorrectionDiff()
         {
-            _personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.Zero, TimeSpan.Zero);
+			_personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(40), TimeSpan.Zero, TimeSpan.Zero);
             using (_mocks.Record())
             {
                 commonMocks();
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
         [Test]
         public void VerifyCorrectionDiffCanBeZero()
         {
-            _personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.Zero, TimeSpan.Zero);
+			_personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(40), TimeSpan.Zero, TimeSpan.Zero);
             using (_mocks.Record())
             {
                 commonMocks();
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
         [Test]
         public void VerifyMaxAllowedShiftLength()
         {
-            _personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero);
+			_personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero);
             using (_mocks.Record())
             {
                 commonMocks();
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
         [Test]
         public void VerifyMaxAllowedShiftLengthReturnsNullIfWeekNotInLegalState()
         {
-            _personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero);
+			_personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero);
             using (_mocks.Record())
             {
                 commonMocks();
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
         [Test]
         public void VerifyMaxAllowedShiftLengthCannotReturnMoreThanMaxPossible()
         {
-            _personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero);
+			_personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero);
             using (_mocks.Record())
             {
                 commonMocks();
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
         [Test]
         public void VerifyWeeklyRest()
         {
-            _personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero);
+			_personContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero);
             using (_mocks.Record())
             {
                 commonMocks();

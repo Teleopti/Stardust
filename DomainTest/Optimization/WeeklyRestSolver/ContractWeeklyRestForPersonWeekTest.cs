@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 17, 2014, 03, 23);
             var personWeek = new PersonWeek(_person, dateOnlyPeriod);
             IContract contract = new Contract("asad");
-            contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.Zero, TimeSpan.FromHours(36));
+			contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero, TimeSpan.FromHours(36));
             using (_mock.Record())
             {
                 Expect.Call(_person.Period(personWeek.Week.StartDate)).Return(_personPeriod);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 17, 2014, 03, 23);
             var personWeek = new PersonWeek(_person, dateOnlyPeriod);
             IContract contract = new Contract("asad");
-            contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.Zero, TimeSpan.FromHours(18));
+			contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero, TimeSpan.FromHours(18));
             using (_mock.Record())
             {
                 Expect.Call(_person.Period(personWeek.Week.StartDate)).Return(null);

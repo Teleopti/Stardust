@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _nightlyRest = new TimeSpan(8, 0, 0);
             _contract = 
 				new Contract("for test");
-            _contract.WorkTimeDirective = new WorkTimeDirective(new TimeSpan(40, 0, 0),
+            _contract.WorkTimeDirective = new WorkTimeDirective(new TimeSpan(0, 0, 0), new TimeSpan(40, 0, 0),
                                                                _nightlyRest,
                                                                new TimeSpan(50, 0, 0));
         }

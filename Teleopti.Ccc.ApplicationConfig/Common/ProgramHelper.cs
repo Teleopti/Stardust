@@ -128,7 +128,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			ContractCreator contractCreator = new ContractCreator();
 			IContract contract = contractCreator.Create("Fixed Staff", new Description("Fixed Staff"), EmploymentType.FixedStaffNormalWorkTime,
 								    new WorkTime(new TimeSpan(8, 0, 0)),
-								    new WorkTimeDirective(new TimeSpan(40, 0, 0),
+								    new WorkTimeDirective(new TimeSpan(0, 0, 0),
+										new TimeSpan(40, 0, 0),
 											  new TimeSpan(12, 0, 0),
 											  new TimeSpan(50, 0, 0)));
 			//Create standard scenario

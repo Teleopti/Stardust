@@ -36,11 +36,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			_permissionInformation = _mocks.StrictMock<IPermissionInformation>();
 			_timeZone = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			var maxTimePerWeek = new TimeSpan(40, 0, 0);
+			var minTimePerWeek = new TimeSpan(0, 0, 0);
 			var nightlyRest = new TimeSpan(8, 0, 0);
 			var weeklyRest = new TimeSpan(50, 0, 0);
 			_contract = new Contract("for test")
 			{
-				WorkTimeDirective = new WorkTimeDirective(maxTimePerWeek,
+				WorkTimeDirective = new WorkTimeDirective(minTimePerWeek, maxTimePerWeek,
 					nightlyRest,
 					weeklyRest)
 			};
@@ -183,11 +184,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void ShouldConsiderDayOffBeforeWeek()
 		{
 			var maxTimePerWeek = new TimeSpan(40, 0, 0);
+			var minTimePerWeek = new TimeSpan(0, 0, 0);
 			var nightlyRest = new TimeSpan(8, 0, 0);
 			var weeklyRest = TimeSpan.FromHours(36);
 			_contract = new Contract("for test")
 			{
-				WorkTimeDirective = new WorkTimeDirective(maxTimePerWeek, nightlyRest, weeklyRest)
+				WorkTimeDirective = new WorkTimeDirective(minTimePerWeek, maxTimePerWeek, nightlyRest, weeklyRest)
 			};
 			var person = _mocks.StrictMock<IPerson>();
 			var range = _mocks.StrictMock<IScheduleRange>();
@@ -229,11 +231,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void ShouldConsiderDayOffAfterWeek()
 		{
 			var maxTimePerWeek = new TimeSpan(40, 0, 0);
+			var minTimePerWeek = new TimeSpan(0, 0, 0);
 			var nightlyRest = new TimeSpan(8, 0, 0);
 			var weeklyRest = TimeSpan.FromHours(36);
 			_contract = new Contract("for test")
 			{
-				WorkTimeDirective = new WorkTimeDirective(maxTimePerWeek, nightlyRest, weeklyRest)
+				WorkTimeDirective = new WorkTimeDirective(minTimePerWeek, maxTimePerWeek, nightlyRest, weeklyRest)
 			};
 			var person = _mocks.StrictMock<IPerson>();
 			var range = _mocks.StrictMock<IScheduleRange>();
@@ -354,12 +357,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void ValidateReturnListOfErrorsWhenNotEnoughWeeklyRest()
 		{
 			var maxTimePerWeek = new TimeSpan(40, 0, 0);
+			var minTimePerWeek = new TimeSpan(0, 0, 0);
 			var nightlyRest = new TimeSpan(8, 0, 0);
 			// four days weekly rest
 			var weeklyRest = new TimeSpan(4, 0, 0, 0);
 			_contract = new Contract("for test")
 			{
-				WorkTimeDirective = new WorkTimeDirective(maxTimePerWeek,
+				WorkTimeDirective = new WorkTimeDirective(minTimePerWeek, maxTimePerWeek,
 					nightlyRest,
 					weeklyRest)
 			};
@@ -402,12 +406,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void ShouldNotReturnListIfSundayAndNextMondayIsNotScheduled()
 		{
 			var maxTimePerWeek = new TimeSpan(40, 0, 0);
+			var minTimePerWeek = new TimeSpan(0, 0, 0);
 			var nightlyRest = new TimeSpan(8, 0, 0);
 			// four days weekly rest
 			var weeklyRest = TimeSpan.FromHours(36);
 			_contract = new Contract("for test")
 			{
-				WorkTimeDirective = new WorkTimeDirective(maxTimePerWeek,
+				WorkTimeDirective = new WorkTimeDirective(minTimePerWeek, maxTimePerWeek,
 					nightlyRest,
 					weeklyRest)
 			};

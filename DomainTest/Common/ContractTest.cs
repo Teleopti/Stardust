@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void VerifyWorkTimeDirectiveCanBeSet()
         {
             var workTimeDirective =
-                new WorkTimeDirective(TimeSpan.FromHours(48), TimeSpan.FromHours(11),
+				new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.FromHours(11),
                                       TimeSpan.FromHours(36));
             _testContract.WorkTimeDirective = workTimeDirective;
             Assert.AreEqual(workTimeDirective, _testContract.WorkTimeDirective);
