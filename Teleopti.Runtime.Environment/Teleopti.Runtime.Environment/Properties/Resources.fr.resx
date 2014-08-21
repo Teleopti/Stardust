@@ -120,4 +120,7 @@
   <data name="AlwaysOnTop" xml:space="preserve">
     <value>Toujours au dessus</value>
   </data>
+  <data name="AgentScheduleMessenger" xml:space="preserve">
+    <value>Teleopti WFM Agent Schedule Messenger</value>
+  </data>
 </root>
