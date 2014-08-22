@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var timeZoneInfo = _presenter.TimeZone;
 
             gridControlSchedule.Model.CellModels.Add("ProjectionHeaderCell", new VisualProjectionColumnHeaderCellModel(gridControlSchedule.Model, timeZoneInfo));
-			gridControlSchedule.Model.CellModels.Add("ProjectionCell", new VisualProjectionNoHScrollBarCellModel(gridControlSchedule.Model));
+			gridControlSchedule.Model.CellModels.Add("ProjectionCell", new VisualProjectionNoHScrollBarCellModel(gridControlSchedule.Model, timeZoneInfo));
 			gridControlSchedule.ColWidths[2] = gridControlSchedule.ViewLayout.HscrollAreaBounds.Width;
 
 			gridControlSchedule.ColCount = 2;

@@ -70,17 +70,13 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             base.Draw(g, cellRectangle, rowIndex, colIndex, style);
             base.OnDrawDisplayText(g, cellRectangle, rowIndex, colIndex, style);
 
-            TimeZoneInfo timeZoneInfo;
-            VisualProjectionColumnHeaderCellModel cellModel = style.CellModel as VisualProjectionColumnHeaderCellModel;
-            if (cellModel != null && cellModel.TimeZoneInfo!=null)
-                timeZoneInfo = cellModel.TimeZoneInfo;
-            else
-            {
-                timeZoneInfo = TimeZoneHelper.CurrentSessionTimeZone;
-            }
+	        var cellModel = style.CellModel as VisualProjectionColumnHeaderCellModel;
+	        TimeZoneInfo timeZoneInfo = (cellModel != null && cellModel.TimeZoneInfo != null)
+		        ? cellModel.TimeZoneInfo
+		        : TimeZoneHelper.CurrentSessionTimeZone;
 
-            DateTimePeriod timePeriod = (DateTimePeriod)style.Tag;
-            LengthToTimeCalculator pixelConverter = new LengthToTimeCalculator(timePeriod, cellRectangle.Width);
+	        var timePeriod = (DateTimePeriod)style.Tag;
+            var pixelConverter = new LengthToTimeCalculator(timePeriod, cellRectangle.Width);
             
             string dispDate = (string)style.CellValue;
             SizeF dispDateSize = g.MeasureString(dispDate, font);
