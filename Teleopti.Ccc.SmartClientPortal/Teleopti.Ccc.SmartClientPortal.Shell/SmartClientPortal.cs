@@ -699,11 +699,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             }
         }
 
-		private void outlookBar1_SizeChanged(object sender, EventArgs e)
-		{
-			splitContainer.Size = new Size(outlookBar1.Width, outlookBar1.Top);
-		}
-
 		private void outlookBar1_SelectedItemChanged(object sender, SelectedItemChangedEventArgs e)
 		{
 			outlookBarWorkSpace1.SetHeader(e.SelectedItem);
