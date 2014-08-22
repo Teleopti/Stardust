@@ -404,6 +404,33 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 unitOfWork.AssertWasCalled(x => x.PersistAll());
         }
 
+		[Test]
+		public void ShouldCreateNewPeriodWithShiftBagAndBudgetGroupFromPrevious()
+		{
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
+			personPeriod.RuleSetBag = MockRepository.GenerateMock<IRuleSetBag>();
+			personPeriod.BudgetGroup = MockRepository.GenerateMock<IBudgetGroup>();
+			_person.AddPersonPeriod(personPeriod);
+			
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			_currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).Return(_person);
+			_teamRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(_team);
+			_partTimePercentageRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).Return(_partTimePercentage);
+			_contractRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractId.GetValueOrDefault())).Return(_contract);
+			_contractScheduleRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.ContractScheduleId.GetValueOrDefault())).Return(_contractSchedule);
+			_externalLogOnRepository.Stub(x => x.LoadAllExternalLogOns()).Return(new List<IExternalLogOn>());
+			_personSkillPeriodAssembler.Stub(x => x.DomainEntityToDto(personPeriod)).Return(new PersonSkillPeriodDto());
+
+			_target.Handle(_changePersonEmploymentCommandDto);
+
+			var newPeriod = _person.Period(DateOnly.Today);
+			newPeriod.BudgetGroup.Should().Be.EqualTo(personPeriod.BudgetGroup);
+			newPeriod.RuleSetBag.Should().Be.EqualTo(personPeriod.RuleSetBag);
+			unitOfWork.AssertWasCalled(x => x.PersistAll());
+		}
+
         [Test]
         public void ShouldResetPersonSkillsIfPersonSkillsCollectionIsSetAndPeriodIsNew()
         {

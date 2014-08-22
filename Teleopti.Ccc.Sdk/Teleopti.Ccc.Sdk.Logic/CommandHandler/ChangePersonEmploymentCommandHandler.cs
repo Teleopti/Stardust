@@ -100,6 +100,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 resetPersonSkills(command, person, newPersonPeriod);
 
                 newPersonPeriod.Note = string.IsNullOrEmpty(command.Note) ? lastPersonPeriod.Note : command.Note;
+	            newPersonPeriod.BudgetGroup = lastPersonPeriod.BudgetGroup;
+	            newPersonPeriod.RuleSetBag = lastPersonPeriod.RuleSetBag;
             }
             else
             {
