@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 {
     public partial class WorkflowTrendView : BaseUserControl
     {
-        private readonly IList<IVolumeYear> _volumes;
+        private IList<IVolumeYear> _volumes;
         private TaskOwnerPeriod _currentHistoricPeriod;
-        private readonly ChartControl _chartControl;
+        private ChartControl _chartControl;
         private VolumeTrend _volumeTrend;
         private readonly IList<ChartSeries> _currentHistoricPeriodSeries = new List<ChartSeries>();
 
@@ -32,27 +32,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
         public WorkflowTrendView()
         {
             InitializeComponent();
-            SetColors();
             if (!DesignMode) SetTexts();
         }
 
-        public WorkflowTrendView(IList<IVolumeYear> volumes, IList<ITaskOwner> historicDepth, WFSeasonalityTabs owner)
-            : this()
-        {
-            _skillType = owner.Presenter.Model.Workload.Skill.SkillType;
-            _volumes = volumes;
-            _owner = owner;
-            SetColors();
-
-            _chartControl = new ChartControl();
-            splitContainerAdv2.Panel1.Controls.Add(_chartControl);
-            _chartControl.Dock = DockStyle.Fill;
-            
-            _currentHistoricPeriod = new TaskOwnerPeriod(historicDepth[0].CurrentDate, historicDepth, TaskOwnerPeriodType.Other);
-            setStaticChartRequiremants();
-        }
-
-	    private void SetColors()
+        private void SetColors()
         {
             BrushInfo myBrush = ColorHelper.ControlGradientPanelBrush();
             gradientPanel2.BackgroundColor = myBrush;
@@ -71,13 +54,24 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 
         protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad(e);
-
-            setStaticChartRequiremants();
-            drawValuesInChart();
-            _owner.ReportChanges(false);
-            _chartControl.Name = "Trend";
+			  SetColors();
+			  _chartControl = new ChartControl();
+			  _chartControl.Dock = DockStyle.Fill;
+			  base.OnLoad(e);
         }
+
+	    public void LoadAllComponents(IList<IVolumeYear> volumes, IList<ITaskOwner> historicDepth, WFSeasonalityTabs owner)
+	    {
+			 _skillType = owner.Presenter.Model.Workload.Skill.SkillType;
+			 _volumes = volumes;
+			 _owner = owner;
+			 splitContainerAdv2.Panel1.Controls.Add(_chartControl);
+			 _currentHistoricPeriod = new TaskOwnerPeriod(historicDepth[0].CurrentDate, historicDepth, TaskOwnerPeriodType.Other);
+			 setStaticChartRequiremants();
+			 drawValuesInChart();
+			 _owner.ReportChanges(false);
+			 _chartControl.Name = "Trend";
+	    }
 
         private string getChartSeriesString()
         {
