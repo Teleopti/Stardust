@@ -507,7 +507,6 @@
     <Compile Include="Data\GlobalPrincipalState.cs" />
     <Compile Include="Data\GlobalUnitOfWorkState.cs" />
     <Compile Include="Data\ScenarioUnitOfWorkState.cs" />
-    <Compile Include="Data\Setups\Legacy\Common\CommonPartTimePercentage.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\IUserRoleSetup.cs" />
     <Compile Include="MyTime\PreferencesExtended.feature.cs">
       <AutoGen>True</AutoGen>

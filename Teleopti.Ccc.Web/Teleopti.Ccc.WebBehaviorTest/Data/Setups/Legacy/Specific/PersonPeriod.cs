@@ -37,8 +37,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 				ContractSchedule = contractSchedule.ContractSchedule;	
 			}
 
+			var partTimePercentage = new PartTimePercentageConfigurable();
+			DataMaker.Data().Apply(partTimePercentage);
+
+
 			PersonContract = new PersonContract(Contract,
-												GlobalDataMaker.Data().Data<CommonPartTimePercentage>().PartTimePercentage,
+												partTimePercentage.PartTimePercentage,
 												ContractSchedule);
 			ThePersonPeriod = new Domain.AgentInfo.PersonPeriod(new DateOnly(_startDate), 
 											PersonContract,
