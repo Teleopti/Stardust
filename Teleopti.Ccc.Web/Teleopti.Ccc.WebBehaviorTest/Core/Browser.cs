@@ -75,15 +75,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			return new TimeoutScope(GetStartedActivator(), timeout);
 		}
 
-		public static void NotifyBeforeScenario()
-		{
-			_activator.Activator.NotifyBeforeScenario();
-		}
-
 		public static void Close()
 		{
 			Activators.ForEach(a => a.Activator.Close());
 		}
-
 	}
 }

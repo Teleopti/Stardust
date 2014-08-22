@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
 			Browser.SelectBrowserByTag();
-			Browser.NotifyBeforeScenario();
 
 			addExtraDataSource();
 			TestControllerMethods.BeforeScenario();

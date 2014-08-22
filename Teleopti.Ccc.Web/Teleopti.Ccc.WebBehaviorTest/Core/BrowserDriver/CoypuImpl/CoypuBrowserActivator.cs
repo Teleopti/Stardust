@@ -48,14 +48,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_interactions = null;
 		}
 
-		public void NotifyBeforeScenario()
-		{
-		}
-
 		public IBrowserInteractions GetInteractions()
 		{
 			return _interactions;
 		}
 	}
-
 }
