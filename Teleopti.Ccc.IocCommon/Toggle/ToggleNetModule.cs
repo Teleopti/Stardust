@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			if (togglePathIsAnUrl())
+			if (!togglePathIsNotDefined() && togglePathIsAnUrl())
 			{
 				builder.Register(c => new ToggleQuerier(_pathToToggle))
 					.SingleInstance()
