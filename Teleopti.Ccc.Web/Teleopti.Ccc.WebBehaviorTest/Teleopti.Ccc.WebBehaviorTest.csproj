@@ -612,7 +612,6 @@
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutRequestsAccess.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingTextRequest.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Agent.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutStudentAvailabilityAccess.cs" />
     <Compile Include="Data\TestData.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AnotherStandardPreference.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\BasePreference.cs" />

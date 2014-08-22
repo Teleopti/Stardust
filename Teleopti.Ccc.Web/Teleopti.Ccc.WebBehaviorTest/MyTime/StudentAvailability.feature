@@ -28,12 +28,16 @@ Scenario: No virtual schedule period
 	Then I should see a user-friendly message explaining I dont have anything to view
 
 Scenario: No access to student availability menu item
-	Given I am an agent without access to student availability
+	Given I have a role with
+         | Field                          | Value |
+         | Access To Student Availability | False |
 	When I am viewing an application page
 	Then I should not be able to see student availability link
 
 Scenario: No access to student availability page
-	Given I am an agent without access to student availability
+	Given I have a role with
+         | Field                          | Value |
+         | Access To Student Availability | False |
 	When I am viewing an application page
 	And I navigate to the student availability page
 	Then I should see an error message

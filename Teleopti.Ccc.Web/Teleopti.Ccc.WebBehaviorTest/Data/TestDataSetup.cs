@@ -121,17 +121,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere &&
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages
 				select r;
-			var agentRoleWithoutStudentAvailabilityApplicationFunctions =
-				from r in agentRoleApplicationFunctions
-				where
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.StudentAvailability
-				select r;
-			var agentRoleWithoutPreferencesApplicationFunctions =
-				from r in agentRoleApplicationFunctions
-				where
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb &&
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.StandardPreferences
-				select r;
 			var agentRoleWithoutExtendedPreferencesApplicationFunctions =
 				from r in agentRoleApplicationFunctions
 				where
@@ -149,12 +138,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				where
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb
 				select r;
-			var agentRoleWithoutTeamScheduleApplicationFunctions =
-				from r in agentRoleApplicationFunctions
-				where
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.TeamSchedule
-				select r;
-
+			
 			var anotherSite = GlobalDataMaker.Data().Data<AnotherSite>().Site;
 
 			//
@@ -171,7 +155,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 											let businessUnit = TestData.BusinessUnit
 											select new { role, functions, businessUnit, availableData };
 
-			TestData.AgentRoleWithoutStudentAvailability = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoStudentAvailability", null);
 			TestData.AgentRoleWithoutExtendedPreferences = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoExtendedPreferences", null);
 			TestData.AgentRoleWithoutRequests = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoRequests", null);
 			TestData.AgentRoleWithoutAbsenceRequests = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoAbsenceRequests", null);
@@ -183,7 +166,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			var customTestRoles = new[]
 			                 	{
-									new { role = TestData.AgentRoleWithoutStudentAvailability, functions = agentRoleWithoutStudentAvailabilityApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutExtendedPreferences, functions = agentRoleWithoutExtendedPreferencesApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutRequests, functions = agentRoleWithoutRequestsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutAbsenceRequests, functions = agentRoleWithoutAbsenceRequestsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
