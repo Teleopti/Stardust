@@ -119,8 +119,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages
 				select r;
 			
-			var anotherSite = GlobalDataMaker.Data().Data<AnotherSite>().Site;
-
 			//
 			IApplicationRole administratorRole, unitRole, siteRole, teamRole;
 			//
@@ -135,8 +133,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 											let businessUnit = TestData.BusinessUnit
 											select new { role, functions, businessUnit, availableData };
 
-			var availableDataAnotherSite = new AvailableData();
-			availableDataAnotherSite.AddAvailableSite(anotherSite);
 
 			var applicationRoleRepository = new ApplicationRoleRepository(uow);
 			var availableDataRepository = new AvailableDataRepository(uow);
