@@ -23,39 +23,65 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			var personsThatGotABadge = new List<IPerson>();
 
-			if (agentsThatShouldGetBadge != null)
+			if (agentsThatShouldGetBadge == null)
 			{
-				foreach (
-					var person in
-						agentsThatShouldGetBadge.Select(agent => allPersons.Single(x => x.Id != null && x.Id.Value == agent))
-							.Where(a => a != null))
+				return personsThatGotABadge;
+			}
+
+			foreach (
+				var person in
+					agentsThatShouldGetBadge.Select(agent => allPersons.Single(x => x.Id != null && x.Id.Value == agent))
+						.Where(a => a != null))
+			{
+				const string badgeDescriptionTemplate = "{0} bronze badge(s), {1} silver badge(s) and {2} gold badge(s) for {3}";
+				var badge = person.Badges.SingleOrDefault(x => x.BadgeType == badgeType);
+
+				if (badge == null || badge.LastCalculatedDate < date)
 				{
 					if (Logger.IsDebugEnabled)
 					{
-						Logger.DebugFormat("Award badge to agent {0} (ID: {1}) for {2}", 
-							person.Name, person.Id, badgeType);
-					}
-
-					var badge = person.Badges.SingleOrDefault(x => x.BadgeType == badgeType);
-
-					if (badge == null || badge.LastCalculatedDate < date)
-					{
-						person.AddBadge(new Domain.Common.AgentBadge
+						if (badge == null)
 						{
-							BronzeBadge = 1,
-							BadgeType = badgeType,
-							LastCalculatedDate = date
-						}, silverToBronzeBadgeRate, goldToSilverBadgeRate);
-						personsThatGotABadge.Add(person);
+							Logger.DebugFormat("Award badge to agent {0} (ID: {1}), this agent has no badge for {2} yet.",
+								person.Name, person.Id, badgeType);
+						}
+						else
+						{
+							var badgeDesc = string.Format(badgeDescriptionTemplate, badge.BronzeBadge, badge.SilverBadge, badge.GoldBadge,
+								badgeType);
+							Logger.DebugFormat(
+								"Award badge to agent {0} (ID: {1}), Now this agent has {2}", person.Name, person.Id, badgeDesc);
+						}
 					}
+
+					var newBadge = new Domain.Common.AgentBadge
+					{
+						BronzeBadge = 1,
+						BadgeType = badgeType,
+						LastCalculatedDate = date
+					};
+					person.AddBadge(newBadge, silverToBronzeBadgeRate, goldToSilverBadgeRate);
+					personsThatGotABadge.Add(person);
 
 					if (Logger.IsDebugEnabled)
 					{
 						badge = person.Badges.First(x => x.BadgeType == badgeType);
-						Logger.DebugFormat(
-							"Now the agent {0} (ID: {1}) has {2} bronze badge, {3} silver badge, {4} gold badge "
-							+ "for {5}", person.Name, person.Id, badge.BronzeBadge, badge.SilverBadge, badge.GoldBadge,
+						var badgeDesc = string.Format(badgeDescriptionTemplate, badge.BronzeBadge, badge.SilverBadge, badge.GoldBadge,
 							badgeType);
+						Logger.DebugFormat(
+							"Now the agent {0} (ID: {1}) has {2}.", person.Name, person.Id, badgeDesc);
+					}
+				}
+				else
+				{
+					if (Logger.IsDebugEnabled)
+					{
+						var badgeDesc = string.Format(badgeDescriptionTemplate, badge.BronzeBadge, badge.SilverBadge, badge.GoldBadge,
+							badgeType);
+						Logger.DebugFormat(
+							"Last {0} badge calculated date of agent {1:yyyy-MM-dd} is not earlier than {2:yyyy-MM-dd}, "
+							+ "no badge will awarded. now this agent has {3}.",
+							badgeType, badge.LastCalculatedDate.Date, date.Date, badgeDesc);
 					}
 				}
 			}
