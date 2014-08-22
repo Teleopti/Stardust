@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var timeLineInfo = table.CreateInstance<TimeLineInfo>();
 			Browser.Interactions.AssertFirstContains(".other-time-zone-short", timeLineInfo.TimeZone);
-			Browser.Interactions.AssertExists(".time-line[data-start-time='{0}'][data-end-time='{1}']", timeLineInfo.StartTime, timeLineInfo.EndTime);
+			Browser.Interactions.AssertExists(".time-line[data-start-time-other-time-zone='{0}'][data-end-time-other-time-zone='{1}']", timeLineInfo.StartTime, timeLineInfo.EndTime);
 		}
 
 		[Then(@"I should not see the agent's timeline")]

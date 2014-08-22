@@ -68,8 +68,8 @@ Scenario: Timeline for agent in the same time zone
 	Then I should see schedule for 'John King'
 	And I should see my time line with
 	| Field      | Value |
-	| Start time | 08:00 |
-	| End time   | 16:00 |
+	| Start time | 09:00 |
+	| End time   | 17:00 |
 	And I should not see the agent's timeline
 
 

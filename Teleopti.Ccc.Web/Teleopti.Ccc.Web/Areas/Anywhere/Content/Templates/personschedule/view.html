@@ -4,14 +4,14 @@
 			<div class="relative">
 
 				<!-- ko with: TimeLine -->
-				<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime, 'data-minute-length': PixelsPerMinute }">
+				<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime, 'data-minute-length': PixelsPerMinute, 'data-start-time-other-time-zone': StartTimeOtherTimeZone, 'data-end-time-other-time-zone': EndTimeOtherTimeZone, }">
 					<div class="relative">
 						<div data-bind="foreach: Times">
 							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
 							<div class="label label-info absolute" style="top: -1px;" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
 							<!-- ko if: $parent.IsOtherTimeZone() -->
 							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
-							<div class="label label-info absolute" style="top: 23px;" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: TimeOtherTimeZone"></div>								
+							<div class="label label-info absolute" style="top: 23px;" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: TimeOtherTimeZone"></div>
 							<!-- /ko -->
 						</div>
 					</div>

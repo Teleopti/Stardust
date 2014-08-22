@@ -92,5 +92,19 @@ define([
 					return times[times.length - 1].Time;
 				return "";
 			});
+
+			this.StartTimeOtherTimeZone = ko.computed(function () {
+				var times = self.Times();
+				if (times.length > 0)
+					return self.Times()[0].TimeOtherTimeZone;
+				return "";
+			});
+
+			this.EndTimeOtherTimeZone = ko.computed(function () {
+				var times = self.Times();
+				if (times.length > 0)
+					return times[times.length - 1].TimeOtherTimeZone;
+				return "";
+			});
 		};
 	});
