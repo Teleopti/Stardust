@@ -49,16 +49,6 @@ Scenario: Signed out when cookie expires while I browse the internet
 	And I navigate to an application page
 	Then I should see the sign in page
 
-Scenario: Signed out when saving preference when cookie is expired
-	Given I have a role with
-         | Field                          | Value |
-         | Access To Extended Preferences | False |
-	And I am viewing preferences
-	When my cookie expires
-	And I select an editable day without preference
-	And I try to select a standard preference
-	Then I should see the sign in page
-
 Scenario: Signed out when navigating to next period when cookie is expired
 	Given I am an agent
 	And I have several virtual schedule periods
