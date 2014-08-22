@@ -1,7 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -28,11 +27,17 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Contract = new Contract(Name);
-			Contract.EmploymentType = EmploymentType;
-			Contract.WorkTime = new WorkTime(TimeSpan.Parse(AverageWorkTimePerDay));
-			Contract.PositiveDayOffTolerance = PositiveDayOffTolerance;
-			Contract.NegativeDayOffTolerance = NegativeDayOffTolerance;
+			if (Name == null)
+			{
+				Name = DefaultName.Make();
+			}
+			Contract = new Contract(Name)
+			{
+				EmploymentType = EmploymentType,
+				WorkTime = new WorkTime(TimeSpan.Parse(AverageWorkTimePerDay)),
+				PositiveDayOffTolerance = PositiveDayOffTolerance,
+				NegativeDayOffTolerance = NegativeDayOffTolerance
+			};
 			if (PositiveTargetTolerance != null)
 				Contract.PositivePeriodWorkTimeTolerance = TimeSpan.Parse(PositiveTargetTolerance);
 			if (NegativeTargetTolerance != null)

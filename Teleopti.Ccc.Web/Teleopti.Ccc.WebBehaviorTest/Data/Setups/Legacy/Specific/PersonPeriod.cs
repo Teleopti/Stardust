@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		public PersonContract PersonContract;
 		public Domain.AgentInfo.PersonPeriod ThePersonPeriod;
 		public IContractSchedule ContractSchedule;
-		public IContract Contract = GlobalDataMaker.Data().Data<CommonContract>().Contract;
+		public IContract Contract;
 
 		private readonly DateTime _startDate;
 
@@ -35,6 +35,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 				var contractSchedule = new ContractScheduleConfigurable();
 				DataMaker.Data().Apply(contractSchedule);
 				ContractSchedule = contractSchedule.ContractSchedule;	
+			}
+			if (Contract == null)
+			{
+				var contractConfigurable = new ContractConfigurable();
+				DataMaker.Data().Apply(contractConfigurable);
+				Contract = contractConfigurable.Contract;
 			}
 
 			var partTimePercentage = new PartTimePercentageConfigurable();

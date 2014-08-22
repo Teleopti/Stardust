@@ -7,19 +7,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 	{
 		public PersonPeriodConfigurable()
 		{
-			Contract = GlobalDataMaker.Data().Data<CommonContract>().Contract.Description.Name;
+			if (Contract == null)
+			{
+				var contract = new ContractConfigurable();
+				DataMaker.Data().Apply(contract);
+				Contract = contract.Name;
+
+			}
 
 			if (PartTimePercentage == null)
 			{
 				var partTimePercentage = new PartTimePercentageConfigurable();
-				GlobalDataMaker.Data().Apply(partTimePercentage);
+				DataMaker.Data().Apply(partTimePercentage);
 				PartTimePercentage = partTimePercentage.Name;
 			}
 
 			if (ContractSchedule == null)
 			{
 				var contractSchedule = new ContractScheduleConfigurable();
-				GlobalDataMaker.Data().Apply(contractSchedule);
+				DataMaker.Data().Apply(contractSchedule);
 				ContractSchedule = contractSchedule.ContractSchedule.Description.Name;
 			}
 
