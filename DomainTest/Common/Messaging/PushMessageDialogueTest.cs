@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
         }
 
         [Test]
+        [Ignore]
         public void VerifyReply()
         {
             string replyNotOk = "replyNotOk";
