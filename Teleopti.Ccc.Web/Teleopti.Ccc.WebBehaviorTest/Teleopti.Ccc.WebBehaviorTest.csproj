@@ -299,7 +299,6 @@
     <Compile Include="Core\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
     <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuBrowserInteractions.cs" />
-    <Compile Include="Core\BrowserDriver\BrowserInteractionsImplementationHelper.cs" />
     <Compile Include="Bindings\Generic\MyTime\SettingsPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MyTime\ShareLinkPageStepDefinitions.cs" />
     <Compile Include="MyTime\CalendarShare.feature.cs">
@@ -364,7 +363,6 @@
     <Compile Include="Bindings\Generic\SkillStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
     <Compile Include="Core\BrowserDriver\JavascriptEncodingExtensions.cs" />
-    <Compile Include="Core\BrowserDriver\Retrying.cs" />
     <Compile Include="Data\CryptoCreator.cs" />
     <Compile Include="Data\HardCodedResolver.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AbsenceInContractTime.cs" />
@@ -506,7 +504,6 @@
     <Compile Include="MyTime\AbsenceRequestFromScheduleStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\RoleConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonPeriodConfigurable.cs" />
-    <Compile Include="Core\BrowserDriver\ProcessHelpers.cs" />
     <Compile Include="Core\BrowserDriver\IBrowserActivator.cs" />
     <Compile Include="Data\GlobalDataMaker.cs" />
     <Compile Include="Data\GlobalPrincipalState.cs" />
