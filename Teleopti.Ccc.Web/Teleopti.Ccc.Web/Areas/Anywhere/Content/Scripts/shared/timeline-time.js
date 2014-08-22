@@ -17,8 +17,17 @@ define([
 	            return minutes;
             };
 
+		    var getTimeForOtherTimeZone = function() {
+		    	if (ianaTimeZoneLoggedOnUser && ianaTimeZoneOther) {
+		    		var userTime = time.tz(ianaTimeZoneLoggedOnUser);
+				    var otherTime = userTime.tz(ianaTimeZoneOther);
+				    return otherTime.format(resources.TimeFormatForMoment);
+		    	}
+			    return "";
+		    };
+
             this.Time = hideLabel ? "" : formattedTime;
-			//this.TimeOtherTimeZone = 
+            this.TimeOtherTimeZone = hideLabel ? "" : getTimeForOtherTimeZone();
 
             this.Pixel = ko.computed(function() {
                 var startMinutes = minutes - timeline.StartMinutes();

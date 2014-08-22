@@ -7,7 +7,7 @@ define([
 
 		var minutes = helpers.Minutes;
 
-		return function (timeLineLayers, ianaTimeZoneLoggedOnUser, ianaTimeZoneOther) {
+		return function (timeLineLayers) {
 			var self = this;
 
 			this.WidthPixels = ko.observable();
@@ -54,6 +54,10 @@ define([
 				return self.WidthPixels() / self.Minutes();
 			});
 
+			this.IanaTimeZoneLoggedOnUser = ko.observable();
+			this.IanaTimeZoneOther = ko.observable();
+			this.IsOtherTimeZone = ko.observable();
+
 			this.Times = ko.computed(function () {
 				var times = [];
 				var time = self.StartMinutes();
@@ -67,7 +71,7 @@ define([
 				}
 				var isHidden = false;
 				while (time < end + 1) {
-					times.push(new timeViewModel(self, time, hideEven && isHidden, ianaTimeZoneLoggedOnUser, ianaTimeZoneOther));
+					times.push(new timeViewModel(self, time, hideEven && isHidden, self.IanaTimeZoneLoggedOnUser(), self.IanaTimeZoneOther()));
 					time = minutes.AddHours(time, 1);
 					isHidden = !isHidden;
 				}

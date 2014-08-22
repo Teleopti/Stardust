@@ -153,14 +153,3 @@ Scenario: Remove absence starting from day 2 on night shift
 	| Start time | 02:00 |
 	| End time   | 03:00 |
 	| Color      | Red   |
-
-Scenario: Back to viewing schedule after removing an absence
-	Given I have the role 'Anywhere Team Green'
-	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-04-08'
-	And I input these intraday absence values
-	| Field      | Value   |
-	| Absence    | Illness |
-	| Start time | 17:00   |
-	| End time   | 18:00   |
-	And I initiate 'apply'
-	Then I should be viewing schedules for '2013-04-08'	

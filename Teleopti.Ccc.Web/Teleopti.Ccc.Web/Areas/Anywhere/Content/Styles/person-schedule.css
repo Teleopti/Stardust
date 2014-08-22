@@ -35,7 +35,7 @@
  
 .person-schedule .person.selected-person
 {
-	height: 57px;
+	height: 77px;
 }
 
 .person-schedule .person.selected-person:hover > td 
@@ -46,6 +46,16 @@
 .person-schedule .person.selected-person .layer
 {
 	height: 40px;
+	top: 16px;
+}
+
+.other-time-zone-style{
+ vertical-align: top; 
+ padding-top:4px;
+}
+
+.time-zone-style {
+	padding-top: 2px;
 }
 
 .person-schedule .person-name-column {

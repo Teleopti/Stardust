@@ -93,15 +93,8 @@ define([
 
 		this.Layers = layers;
 
-		this.IanaTimeZoneLoggedOnUser = ko.observable();
-		this.IanaTimeZoneOther = ko.observable();
-
-		this.TimeLine = new timeLineViewModel(
-			ko.computed(function () { return layers().toArray(); }),
-			ko.computed(function () { return self.IanaTimeZoneLoggedOnUser(); }),
-			ko.computed(function () { return self.IanaTimeZoneOther(); })
-		);
-
+		this.TimeLine = new timeLineViewModel(ko.computed(function () { return layers().toArray(); }));
+		
 		this.WorkingShift = ko.computed(function () {
 			var person = self.SelectedPerson();
 			if (person)
@@ -144,6 +137,7 @@ define([
 
 		this.MoveActivityForm = new moveActivityFormViewModel();
 		this.MovingActivity = ko.observable(false);
+		this.TimeZoneName = ko.observable(false);
 
 		this.DisplayForm = ko.computed(function() {
 			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence() || self.MovingActivity();
@@ -161,11 +155,34 @@ define([
             self.initMoveActivityForm();
 		};
 
+		this.IsOtherTimeZone = ko.computed(function() {
+			if (self.TimeLine.IanaTimeZoneLoggedOnUser() && self.TimeLine.IanaTimeZoneOther()) {
+				var userTime = moment().tz(self.TimeLine.IanaTimeZoneLoggedOnUser());
+				var otherTime = userTime.clone().tz(self.TimeLine.IanaTimeZoneOther());
+				return otherTime.format('ha z') != userTime.format('ha z');
+			}
+			return undefined;
+		});
+
+		var getTimeZoneNameShort = function (timeZoneName) {
+			var end = timeZoneName.indexOf(')');
+			return timeZoneName.substring(1, end);
+		};
+
+		this.TimeZoneNameShort = ko.computed(function () {
+			if (self.IsOtherTimeZone() && self.TimeZoneName()) {
+				return getTimeZoneNameShort(self.TimeZoneName());
+			}
+			return undefined;
+		});
+
 		this.UpdateData = function (data) {
 			data.Date = self.ScheduleDate();
 
-			self.IanaTimeZoneLoggedOnUser(data.IanaTimeZoneLoggedOnUser);
-			self.IanaTimeZoneOther(data.IanaTimeZoneOther);
+			self.TimeLine.IanaTimeZoneLoggedOnUser(data.IanaTimeZoneLoggedOnUser);
+			self.TimeLine.IanaTimeZoneOther(data.IanaTimeZoneOther);
+			self.TimeZoneName(data.TimeZoneName);
+			self.TimeLine.IsOtherTimeZone(self.IsOtherTimeZone());
 
 			var person = self.SelectedPerson();
 			person.AddData(data, self.TimeLine);

@@ -41,7 +41,7 @@ define([
 		var ianaTimeZoneOther;
 
 		this.StartTimeOtherTimeZone = ko.computed(function () {
-			if (self.StartTime()) {
+			if (self.StartTime() && ianaTimeZone && ianaTimeZoneOther) {
 				var userTime = getMomentFromInput(self.StartTime()).tz(ianaTimeZone);
 				var otherTime = userTime.clone().tz(ianaTimeZoneOther);
 				self.IsOtherTimezone(otherTime.format('ha z') != userTime.format('ha z'));
@@ -51,7 +51,7 @@ define([
 		});
 
 		this.EndTimeOtherTimeZone = ko.computed(function () {
-			if (self.EndTime()) {
+			if (self.EndTime() && ianaTimeZone && ianaTimeZoneOther) {
 				var userTime = getMomentFromInput(self.EndTime()).tz(ianaTimeZone);
 				var otherTime = userTime.clone().tz(ianaTimeZoneOther);
 				return otherTime.format('HH:mm');
