@@ -14,15 +14,18 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 	public class VisualProjectionNoHScrollBarCellModel : GridStaticCellModel
 	{
 
-		public VisualProjectionNoHScrollBarCellModel(GridModel grid)
+		public VisualProjectionNoHScrollBarCellModel(GridModel grid, TimeZoneInfo timeZoneInfo)
 			: base(grid)
 		{
+			TimeZoneInfo = timeZoneInfo;
 		}
 
 		protected VisualProjectionNoHScrollBarCellModel(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{
 		}
+
+		public TimeZoneInfo TimeZoneInfo { get; set; }
 
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
@@ -109,6 +112,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 			var timePeriod = (DateTimePeriod)style.Tag;
 			var pixelConverter = new LengthToTimeCalculator(new DateTimePeriod(timePeriod.StartDateTime.AddHours(-1), timePeriod.EndDateTime.AddHours(1)), clientRectangle.Width);
 
+			var cellModel = style.CellModel as VisualProjectionNoHScrollBarCellModel;
+			TimeZoneInfo timeZoneInfo = (cellModel != null && cellModel.TimeZoneInfo != null)
+				? cellModel.TimeZoneInfo
+				: TimeZoneHelper.CurrentSessionTimeZone;
+
 			foreach (var interval in timePeriod.AffectedHourCollection())
 			{
 				var position = pixelConverter.PositionFromDateTime(interval.StartDateTime, Grid.IsRightToLeft());
@@ -133,7 +141,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 					using (Brush brush = new LinearGradientBrush(rect2, Color.WhiteSmoke, layer.DisplayColor(), 90, false))
 					{
 						g.FillRectangle(brush, rect);
-						var tipData = new ToolTipData(rect.X, rect.X + rect.Width, layer.DisplayDescription() + "  " + layer.Period.TimePeriodLocal().ToShortTimeString());
+						var tipData = new ToolTipData(rect.X, rect.X + rect.Width, layer.DisplayDescription() + "  " + layer.Period.TimePeriod(timeZoneInfo).ToShortTimeString());
 						tipDatas.Add(tipData);
 					}
 				}
