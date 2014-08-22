@@ -14,17 +14,37 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		 public WeeklyWorkTimeSetting RetrieveSetting(DateOnly date)
 		 {
-              var weeklyWorkTimeSetting = new WeeklyWorkTimeSetting();
-			  var virtualSchedulePeriod = _virtualSchedulePeriodProvider.VirtualSchedulePeriodForDate(date);
+			 var weeklyWorkTimeSetting = new WeeklyWorkTimeSetting();
+			 var virtualSchedulePeriodForWeekStart = _virtualSchedulePeriodProvider.VirtualSchedulePeriodForDate(date);
+			 var virtualSchedulePeriodForWeekEnd = _virtualSchedulePeriodProvider.VirtualSchedulePeriodForDate(date.AddDays(6));
 
-		     if (virtualSchedulePeriod.IsValid)
-		     {
-		         var contract = virtualSchedulePeriod.Contract;
+			 if (virtualSchedulePeriodForWeekStart.IsValid && !virtualSchedulePeriodForWeekEnd.IsValid)
+			 {
+				 var contract = virtualSchedulePeriodForWeekStart.Contract;
 				 weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes = contract.WorkTimeDirective.MinTimePerWeek.TotalMinutes;
 				 weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes = contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
-		     }
+			 }
+			 else if (!virtualSchedulePeriodForWeekStart.IsValid && virtualSchedulePeriodForWeekEnd.IsValid)
+			 {
+				 var contract = virtualSchedulePeriodForWeekEnd.Contract;
+				 weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes = contract.WorkTimeDirective.MinTimePerWeek.TotalMinutes;
+				 weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes = contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
+			 }
+			 else if (virtualSchedulePeriodForWeekStart.IsValid && virtualSchedulePeriodForWeekEnd.IsValid)
+			 {
+				 var contractStart = virtualSchedulePeriodForWeekStart.Contract;
+				 var contractEnd = virtualSchedulePeriodForWeekEnd.Contract;
+				 weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes = contractStart.WorkTimeDirective.MinTimePerWeek.TotalMinutes >
+				                                                   contractEnd.WorkTimeDirective.MinTimePerWeek.TotalMinutes
+					 ? contractEnd.WorkTimeDirective.MinTimePerWeek.TotalMinutes
+					 : contractStart.WorkTimeDirective.MinTimePerWeek.TotalMinutes;
+				 weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes = contractStart.WorkTimeDirective.MaxTimePerWeek.TotalMinutes >
+				                                                   contractEnd.WorkTimeDirective.MaxTimePerWeek.TotalMinutes
+					 ? contractStart.WorkTimeDirective.MaxTimePerWeek.TotalMinutes
+					 : contractEnd.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
+			 }
 
-		     return weeklyWorkTimeSetting;
+			 return weeklyWorkTimeSetting;
 		 }
 	}
 
