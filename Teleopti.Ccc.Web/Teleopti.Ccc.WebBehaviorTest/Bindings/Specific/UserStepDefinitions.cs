@@ -2,12 +2,15 @@ using System;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Interfaces.Domain;
+using SiteConfigurable = Teleopti.Ccc.TestCommon.TestData.Setups.Configurable.SiteConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 {
@@ -505,15 +508,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"the other site has 2 teams")]
 		public void GivenTheOtherSiteHas2Teams()
 		{
-			if (!DataMaker.Data().HasSetup<AnotherSitesTeam>())
-				DataMaker.Data().Apply(new AnotherSitesTeam());
-			DataMaker.Data().Apply(new AnotherSitesSecondTeam());
+			var site = DataMaker.Data().UserData<SiteConfigurable>().Site;
+			DataMaker.Data().Apply(new AnotherSitesSecondTeam(site));
 		}
 		
 		[Given(@"I belong to another site's team on '(.*)'")]
 		public void GivenIBelongToAnotherSiteSTeamTomorrow(DateTime date)
 		{
-			var team = new AnotherSitesTeam();
+			var siteCfg = new SiteConfigurable
+			{
+				BusinessUnit = CommonBusinessUnit.BusinessUnitFromFakeState.Name,
+				Name = DefaultName.Make("site")
+			};
+			DataMaker.Data().Apply(siteCfg);
+			var team = new AnotherSitesTeam(siteCfg.Site);
 			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam, date));
 		}

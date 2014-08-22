@@ -483,7 +483,6 @@
       <DependentUpon>Asm.feature</DependentUpon>
     </Compile>
     <Compile Include="Data\Setups\Configurable\ShiftConfigurable.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AnotherSite.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonBusinessUnit.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonSite.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonTeam.cs" />
