@@ -683,6 +683,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			timeSpanTextBoxPlanningMax.Enabled = !hourly;
 			numericUpDownPositiveDayOff.Enabled = !hourly;
 			numericUpDownNegativeDayOff.Enabled = !hourly;
+			autoLabel13.Enabled = !hourly;
+			textBoxExtMinTimePerWeek.Enabled = !hourly;
 			
 			if (SelectedContract == null) return;
 			SelectedContract.EmploymentType = SelectedEmploymentType;
