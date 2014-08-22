@@ -78,6 +78,7 @@
 			this.buttonAdvOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonAdvOk.BeforeTouchSize = new System.Drawing.Size(87, 27);
+			this.buttonAdvOk.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.buttonAdvOk.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvOk.IsBackStageButton = false;
 			this.buttonAdvOk.Location = new System.Drawing.Point(128, 4);
@@ -87,7 +88,7 @@
 			this.buttonAdvOk.TabIndex = 0;
 			this.buttonAdvOk.Text = "xxOk";
 			this.buttonAdvOk.UseVisualStyle = true;
-			this.buttonAdvOk.Click += new System.EventHandler(this.ButtonAdvOkClick);
+			this.buttonAdvOk.Click += new System.EventHandler(this.buttonAdvOkClick);
 			// 
 			// buttonAdvCancel
 			// 
@@ -95,6 +96,7 @@
 			this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonAdvCancel.BeforeTouchSize = new System.Drawing.Size(87, 27);
+			this.buttonAdvCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonAdvCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvCancel.IsBackStageButton = false;
 			this.buttonAdvCancel.Location = new System.Drawing.Point(248, 4);
@@ -104,7 +106,7 @@
 			this.buttonAdvCancel.TabIndex = 1;
 			this.buttonAdvCancel.Text = "xxCancel";
 			this.buttonAdvCancel.UseVisualStyle = true;
-			this.buttonAdvCancel.Click += new System.EventHandler(this.ButtonAdvCancelClick);
+			this.buttonAdvCancel.Click += new System.EventHandler(this.buttonAdvCancelClick);
 			// 
 			// tableLayoutPanel1
 			// 
