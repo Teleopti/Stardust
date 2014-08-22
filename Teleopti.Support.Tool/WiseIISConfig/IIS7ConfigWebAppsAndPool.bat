@@ -101,6 +101,11 @@ if %errorlevel% NEQ 0 (
 	ECHO updating managedRuntimeVersion to: %NETVersion%
 	"%appcmd%" set apppool /APPPOOL.NAME:"%PoolName%" /managedRuntimeVersion:%NETVersion% /managedPipelineMode:Integrated
 )
+
+ECHO Set Teleopti App pool recycling time ...
+"%appcmd%" set apppool /APPPOOL.NAME:"%PoolName%" /recycling.periodicRestart.time:00:00:00 /commit:apphost
+"%appcmd%" set apppool /APPPOOL.NAME:"%PoolName%" /-recycling.periodicRestart.schedule /commit:apphost
+"%appcmd%" set apppool /APPPOOL.NAME:"%PoolName%" /+recycling.periodicRestart.schedule.[value='04:00:00'] /commit:apphost
 echo.
 exit /B
 
