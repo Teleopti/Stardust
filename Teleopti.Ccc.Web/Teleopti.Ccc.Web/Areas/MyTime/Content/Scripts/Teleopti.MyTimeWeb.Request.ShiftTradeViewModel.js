@@ -352,7 +352,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function() {
 	self.loadSchedule = function (value) {
 		
 		if (value != undefined) {
-			console.log("load schedule");
 			if (value != "allTeams") {
 				if (self.isFiltered()) {
 					self.loadScheduleForOneTeamFilterTime();
@@ -937,9 +936,11 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function() {
 		});
 	});
 
-	self.filterTime.subscribe(function() {
-		self.prepareLoad();
-		self.loadSchedule(self.selectedTeamInternal());
+	self.filterTime.subscribe(function () {
+		if (self.isFilterByTimeEnabled()) {
+			self.prepareLoad();
+			self.loadSchedule(self.selectedTeamInternal());
+		}
 	});
 
 	self.changeRequestedDate = function(movement) {
