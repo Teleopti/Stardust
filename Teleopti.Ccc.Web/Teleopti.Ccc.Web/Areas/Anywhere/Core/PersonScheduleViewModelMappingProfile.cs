@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					     select new MapContext<PersonScheduleData, IPersonAbsence>(s, p)))
 				.ForMember(x => x.DefaultIntradayAbsenceData,
 						   o => o.MapFrom(s => s.Model.Shift.Projection))
+                .ForMember(x => x.TimeZoneName, o => o.MapFrom(s => s.Person.PermissionInformation.DefaultTimeZone().DisplayName))
 				;
 
 			CreateMap<IList<SimpleLayer>, DefaultIntradayAbsenceViewModel>()

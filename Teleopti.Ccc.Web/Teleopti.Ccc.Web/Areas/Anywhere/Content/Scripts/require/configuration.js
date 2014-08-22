@@ -21,6 +21,7 @@ var requireconfiguration = {
 		timepicker: '../../../../Content/bootstrap-timepicker/js/bootstrap-timepicker',
 		buster: '../../../../Content/busterjs/buster-test',
 		amplify: '../../../../Content/amplify/amplify.min',
+		momentTimezoneData: '../../../../Content/moment-timezone/moment-timezone-with-data',
 
 		//depends on eve, hardcoded in  justgage.20130410.js
 		justgage: '../../../../Content/justgage/justgage.20130410',

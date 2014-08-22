@@ -1,6 +1,5 @@
 define([
 	'knockout',
-	'moment',
 	'navigation',
 	'ajax',
 	'resources',
@@ -10,7 +9,6 @@ define([
 	'notifications'
 ], function (
 	ko,
-	moment,
 	navigation,
 	ajax,
 	resources,
@@ -30,12 +28,36 @@ define([
 		this.StartTime = ko.observable();
 		this.EndTime = ko.observable();
 		this.WorkingShift = ko.observable();
+
+		this.TimeZoneName = ko.observable();
+		this.IsOtherTimezone = ko.observable(false);
 		
 		var groupId;
 		var personId;
 		var personName;
 		var startTimeAsMoment;
 		var endTimeAsMoment;
+		var ianaTimeZone;
+		var ianaTimeZoneOther;
+
+		this.StartTimeOtherTimeZone = ko.computed(function () {
+			if (self.StartTime() && ianaTimeZone && ianaTimeZoneOther) {
+				var userTime = getMomentFromInput(self.StartTime()).tz(ianaTimeZone);
+				var otherTime = userTime.clone().tz(ianaTimeZoneOther);
+				self.IsOtherTimezone(otherTime.format('ha z') != userTime.format('ha z'));
+				return otherTime.format('HH:mm');
+			}
+			return undefined;
+		});
+
+		this.EndTimeOtherTimeZone = ko.computed(function () {
+			if (self.EndTime() && ianaTimeZone && ianaTimeZoneOther) {
+				var userTime = getMomentFromInput(self.EndTime()).tz(ianaTimeZone);
+				var otherTime = userTime.clone().tz(ianaTimeZoneOther);
+				return otherTime.format('HH:mm');
+			}
+			return undefined;
+		});
 
 		this.visibleLayers = ko.computed(function () {
 			var shift = self.WorkingShift();
@@ -121,10 +143,12 @@ define([
 			groupId = data.GroupId;
 			personId = data.PersonId;
 			personName = data.PersonName;
-			groupId = data.GroupId;
 			self.Date(data.Date);
 
 			if (data.DefaultIntradayAbsenceData) {
+				self.TimeZoneName(data.TimeZoneName);
+				ianaTimeZone = data.IanaTimeZoneLoggedOnUser;
+				ianaTimeZoneOther = data.IanaTimeZoneOther;
 				self.StartTime(data.DefaultIntradayAbsenceData.StartTime);
 				self.EndTime(data.DefaultIntradayAbsenceData.EndTime);
 				startTimeAsMoment = getMomentFromInput(self.StartTime());

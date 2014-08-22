@@ -21,6 +21,7 @@ define([
             var self = this;
 
             this.AbsenceType = ko.observable("");
+            this.TimeZoneName = ko.observable();
 
             this.StartDate = ko.observable(moment());
             this.EndDate = ko.observable(moment());
@@ -36,6 +37,7 @@ define([
                 self.StartDate(data.Date);
                 self.EndDate(data.Date);
                 self.AbsenceTypes(data.Absences);
+                self.TimeZoneName(data.TimeZoneName);
             };
 
             this.StartDateFormatted = ko.computed(function() {

@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		private static void assertScheduledActivity(ScheduledActivityInfo scheduledActivity)
 		{
 			var selector = string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
-			                             scheduledActivity.StartTimeFormatted(),
-			                             scheduledActivity.LengthMinutes(),
-			                             ColorNameToCss(scheduledActivity.Color));
+																	 scheduledActivity.StartTimeFormatted(),
+																	 scheduledActivity.LengthMinutes(),
+																	 ColorNameToCss(scheduledActivity.Color));
 
 			if (scheduledActivity.Description != null)
 			{
@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertNotExists(
 				".shift",
 				string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
-				              scheduledActivity.StartTime,
-				              scheduledActivity.LengthMinutes(),
-				              ColorNameToCss(scheduledActivity.Color)));
+											scheduledActivity.StartTime,
+											scheduledActivity.LengthMinutes(),
+											ColorNameToCss(scheduledActivity.Color)));
 		}
 
 		public static string ColorNameToCss(string colorName)
@@ -176,11 +176,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			var absenceListItemInfo = table.CreateInstance<AbsenceListItemInfo>();
 
 			Browser.Interactions.AssertExistsUsingJQuery(
-				string.Format(".absence-list .absence:contains('{0}'):contains('{1}'):contains('{2}')",
-				              absenceListItemInfo.Name,
-				              absenceListItemInfo.StartTimeFormatted(),
-				              absenceListItemInfo.EndTimeFormatted())
+				string.Format(".absence-list .absence-user-timezone:contains('{0}'):contains('{1}'):contains('{2}')",
+											absenceListItemInfo.Name,
+											absenceListItemInfo.StartTimeFormatted(),
+											absenceListItemInfo.EndTimeFormatted())
 				);
+		}
+
+		[Then(@"I should see absence in other time zone with")]
+		public void ThenIShouldSeeAbsenceInOtherTimeZoneWith(Table table)
+		{
+			var absenceListItemInfo = table.CreateInstance<AbsenceListItemInfo>();
+
+			Browser.Interactions.AssertExistsUsingJQuery(
+				string.Format(".absence-list .absence-other-timezone:contains('{0}'):contains('{1}'):contains('{2}')",
+											absenceListItemInfo.TimeZone,
+											absenceListItemInfo.StartTimeFormatted(),
+											absenceListItemInfo.EndTimeFormatted())
+				);
+		}
+
+		[Then(@"I should not see absence in other time zone")]
+		public void ThenIShouldNotSeeAbsenceInOtherTimeZone()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".absence-list .absence-other-timezone");
 		}
 
 		[Then(@"I should see (.*) absences in the absence list")]
@@ -199,11 +218,74 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 		[Then(@"I should see the time line with")]
+		[Then(@"I should see my time line with")]
 		public void ThenIShouldSeeTheTimeLineWith(Table table)
 		{
 			var timeLineInfo = table.CreateInstance<TimeLineInfo>();
 			Browser.Interactions.AssertExists(".time-line[data-start-time='{0}'][data-end-time='{1}']", timeLineInfo.StartTime, timeLineInfo.EndTime);
 		}
+
+		[Then(@"I should see the agent's time line with")]
+		public void ThenIShouldSeeTheAgentSTimeLineWith(Table table)
+		{
+			var timeLineInfo = table.CreateInstance<TimeLineInfo>();
+			Browser.Interactions.AssertFirstContains(".other-time-zone-short", timeLineInfo.TimeZone);
+			Browser.Interactions.AssertExists(".time-line[data-start-time-other-time-zone='{0}'][data-end-time-other-time-zone='{1}']", timeLineInfo.StartTime, timeLineInfo.EndTime);
+		}
+
+		[Then(@"I should not see the agent's timeline")]
+		public void ThenIShouldNotSeeTheAgentSTimeline()
+		{
+			Browser.Interactions.AssertNotExists(".time-line", ".time-line.other-time-zone");
+		}
+
+		[Then(@"I should not see add activity times in other time zone")]
+		public void ThenIShouldNotSeeAddActivityTimesInOtherTimeZone()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".activity-form .other-time-zone span");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".activity-form .other-start-time span");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".activity-form .other-end-time span");
+		}
+
+		[Then(@"I should not see add intraday absence times in other time zone")]
+		public void ThenIShouldNotSeeAddIntradayAbsenceTimesInOtherTimeZone()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".intraday-absence-form .other-time-zone span");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".intraday-absence-form .other-start-time span");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".intraday-absence-form .other-end-time span");
+		}
+
+		[Then(@"I should not see move activity time in other time zone")]
+		public void ThenIShouldNotSeeMoveActivityTimeInOtherTimeZone()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".activity-form .other-time-zone span");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".activity-form .other-start-time span");
+		}
+
+
+		[Then(@"I should see add activity times in other time zone with")]
+		public void ThenIShouldSeeAddActivityTimesInOtherTimeZoneWith(Table table)
+		{
+			var localTimeInfo = table.CreateInstance<AddActivityFormInfo>();
+			Browser.Interactions.AssertFirstContains(".activity-form .other-start-time span", localTimeInfo.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.AssertFirstContains(".activity-form .other-end-time span", localTimeInfo.EndTime.ToShortTimeString(DataMaker.Me().Culture));
+		}
+
+		[Then(@"I should see add intraday absence times in other time zone with")]
+		public void ThenIShouldSeeAddIntradayAbsenceTimesInOtherTimeZoneWith(Table table)
+		{
+			var localTimeInfo = table.CreateInstance<AddIntradayAbsenceFormInfo>();
+			Browser.Interactions.AssertFirstContains(".intraday-absence-form .other-start-time span", localTimeInfo.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.AssertFirstContains(".intraday-absence-form .other-end-time span", localTimeInfo.EndTime.ToShortTimeString(DataMaker.Me().Culture));
+		}
+
+		[Then(@"I should see selected activity time in other time zone with")]
+		public void ThenIShouldSeeSelectedActivityTimeInOtherTimeZoneWith(Table table)
+		{
+			var localTimeInfo = table.CreateInstance<AddIntradayAbsenceFormInfo>();
+			Browser.Interactions.AssertFirstContains(".activity-form .other-start-time span", localTimeInfo.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+		}
+
 
 		[When(@"I click '(.*)' on absence named '(.*)'")]
 		public void WhenIClickOnAbsenceNamed(CssClass cssClass, string absenceName)
@@ -221,14 +303,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I view person schedules move activity form for '(.*)' in '(.*)' on '(.*)' with selected start minutes of '(.*)'")]
 		public void WhenIViewPersonSchedulesMoveActivityFormForInOnWithSelectedStartTimeOf(string name, string teamName, DateTime date, string startTime)
 		{
-				DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
-				TestControllerMethods.Logon();
-				var personId = DataMaker.Person(name).Person.Id.Value;
-				var teamId = (from t in DataMaker.Data().UserDatasOfType<TeamConfigurable>()
-											let team = t.Team
-											where team.Description.Name.Equals(teamName)
-											select team.Id.GetValueOrDefault()).First();
-				Navigation.GotoAnywherePersonScheduleMoveActivityForm(personId, teamId, date, startTime);
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			TestControllerMethods.Logon();
+			var personId = DataMaker.Person(name).Person.Id.Value;
+			var teamId = (from t in DataMaker.Data().UserDatasOfType<TeamConfigurable>()
+										let team = t.Team
+										where team.Description.Name.Equals(teamName)
+										select team.Id.GetValueOrDefault()).First();
+			Navigation.GotoAnywherePersonScheduleMoveActivityForm(personId, teamId, date, startTime);
 		}
 
 		[When(@"I move the activity")]
@@ -241,8 +323,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I move the activity by dnd of '(.*)' minutes")]
 		public void WhenIMoveTheActivityByDnd(string minutes)
 		{
-				var pixelsPerMinute = Browser.Interactions.Javascript("return document.querySelectorAll('.time-line')[0].getAttribute('data-minute-length');");
-				Browser.Interactions.DragnDrop(".layer.active", (int)Math.Round(Convert.ToDouble(pixelsPerMinute), 0) * Convert.ToInt32(minutes), 0);
+			var pixelsPerMinute = Browser.Interactions.Javascript("return document.querySelectorAll('.time-line')[0].getAttribute('data-minute-length');");
+			Browser.Interactions.DragnDrop(".layer.active", (int)Math.Round(Convert.ToDouble(pixelsPerMinute), 0) * Convert.ToInt32(minutes), 0);
 		}
 
 		[When(@"I save the shift")]
@@ -284,13 +366,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		public class TimeLineInfo
 		{
+			public string TimeZone { get; set; }
 			public string StartTime { get; set; }
 			public string EndTime { get; set; }
 		}
-		
+
 		public class AbsenceListItemInfo
 		{
 			public string Name { get; set; }
+			public string TimeZone { get; set; }
 			public string StartTime { get; set; }
 			public string EndTime { get; set; }
 
@@ -319,14 +403,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 			public int LengthMinutes()
 			{
-				var result = (int) TimeSpan.Parse(EndTime).Subtract(TimeSpan.Parse(StartTime)).TotalMinutes;
-				if (result < 0) result += 60*24;
+				var result = (int)TimeSpan.Parse(EndTime).Subtract(TimeSpan.Parse(StartTime)).TotalMinutes;
+				if (result < 0) result += 60 * 24;
 				return result;
 			}
 
 			public string StartTimeFormatted()
 			{
-				var format =  DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern;
+				var format = DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern;
 				return DateTime.Parse(StartTime).ToString(format);
 			}
 
@@ -356,6 +440,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			public string Activity { get; set; }
 			public DateTime StartTime { get; set; }
 			public DateTime EndTime { get; set; }
+			public string LocalTimeZone { get; set; }
 		}
 
 		public class MoveActivityFormInfo

@@ -31,14 +31,31 @@
 		self.Activities = ko.observableArray();
 		self.WorkingShift = ko.observable();
 		self.layer = ko.observable();
-	    self.SelectedStartMinutes = ko.observable();
+		self.SelectedStartMinutes = ko.observable();
+		self.TimeZoneName = ko.observable();
+		self.ianaTimeZone = ko.observable();
+		self.ianaTimeZoneOther = ko.observable();
+		self.IsOtherTimezone = ko.observable(false);
+
+		this.StartTimeOtherTimeZone = ko.computed(function () {
+			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
+				var userTime = getMomentFromInput(self.StartTime()).tz(self.ianaTimeZone());
+				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
+				self.IsOtherTimezone(otherTime.format('ha z') != userTime.format('ha z'));
+				return otherTime.format('HH:mm');
+			}
+			return undefined;
+		});
 
 		this.SetData = function (data) {
 			self.PersonId(data.PersonId);
 			personName = data.PersonName;
 			self.GroupId(data.GroupId);
 			self.ScheduleDate(data.Date);
-		    self.Activities(data.Activities);
+			self.Activities(data.Activities);
+			self.TimeZoneName(data.TimeZoneName);
+			self.ianaTimeZone(data.IanaTimeZoneLoggedOnUser);
+			self.ianaTimeZoneOther(data.IanaTimeZoneOther);
 		};
 
 		this.DisplayedStartTime = ko.computed({

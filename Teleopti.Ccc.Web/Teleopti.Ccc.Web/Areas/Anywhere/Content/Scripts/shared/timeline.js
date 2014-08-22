@@ -54,6 +54,10 @@ define([
 				return self.WidthPixels() / self.Minutes();
 			});
 
+			this.IanaTimeZoneLoggedOnUser = ko.observable();
+			this.IanaTimeZoneOther = ko.observable();
+			this.IsOtherTimeZone = ko.observable();
+
 			this.Times = ko.computed(function () {
 				var times = [];
 				var time = self.StartMinutes();
@@ -67,7 +71,7 @@ define([
 				}
 				var isHidden = false;
 				while (time < end + 1) {
-					times.push(new timeViewModel(self, time, hideEven && isHidden));
+					times.push(new timeViewModel(self, time, hideEven && isHidden, self.IanaTimeZoneLoggedOnUser(), self.IanaTimeZoneOther()));
 					time = minutes.AddHours(time, 1);
 					isHidden = !isHidden;
 				}
@@ -86,6 +90,20 @@ define([
 				var times = self.Times();
 				if (times.length > 0)
 					return times[times.length - 1].Time;
+				return "";
+			});
+
+			this.StartTimeOtherTimeZone = ko.computed(function () {
+				var times = self.Times();
+				if (times.length > 0)
+					return self.Times()[0].TimeOtherTimeZone;
+				return "";
+			});
+
+			this.EndTimeOtherTimeZone = ko.computed(function () {
+				var times = self.Times();
+				if (times.length > 0)
+					return times[times.length - 1].TimeOtherTimeZone;
 				return "";
 			});
 		};

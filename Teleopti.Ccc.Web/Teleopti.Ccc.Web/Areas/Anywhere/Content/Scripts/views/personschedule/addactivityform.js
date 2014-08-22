@@ -1,6 +1,5 @@
 define([
 	'knockout',
-	'moment',
 	'navigation',
 	'ajax',
 	'resources',
@@ -10,7 +9,6 @@ define([
 	'notifications'
 ], function (
 	ko,
-	moment,
 	navigation,
 	ajax,
 	resources,
@@ -30,12 +28,35 @@ define([
 		this.StartTime = ko.observable();
 		this.EndTime = ko.observable();
 		this.WorkingShift = ko.observable();
-		
+		this.TimeZoneName = ko.observable();
+		this.ianaTimeZone = ko.observable();
+		this.ianaTimeZoneOther = ko.observable();
+		this.IsOtherTimezone = ko.observable(false);
+
 		var personId;
 		var personName;
 		var groupId;
 		var startTimeAsMoment;
 		var endTimeAsMoment;
+
+		this.StartTimeOtherTimeZone = ko.computed(function () {
+			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
+				var userTime = getMomentFromInput(self.StartTime()).tz(self.ianaTimeZone());
+				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
+				self.IsOtherTimezone(otherTime.format('ha z')!=userTime.format('ha z'));
+				return otherTime.format('HH:mm');
+			}
+			return undefined;
+		});
+
+		this.EndTimeOtherTimeZone = ko.computed(function () {
+			if (self.EndTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
+				var userTime = getMomentFromInput(self.EndTime()).tz(self.ianaTimeZone());
+				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
+				return otherTime.format('HH:mm');
+			}
+			return undefined;
+		});
 
 		this.SetData = function (data) {
 			personId = data.PersonId;
@@ -43,6 +64,9 @@ define([
 			personName = data.PersonName;
 			self.ScheduleDate(data.Date);
 			self.ActivityTypes(data.Activities);
+			self.TimeZoneName(data.TimeZoneName);
+			self.ianaTimeZone(data.IanaTimeZoneLoggedOnUser);
+			self.ianaTimeZoneOther(data.IanaTimeZoneOther);
 		};
 
 		this.Apply = function () {
@@ -68,6 +92,11 @@ define([
 				}
 			);
 			notificationsViewModel.AddNotification(trackId, resources.AddingActivityFor + " " + personName + "... ");
+		};
+
+		var getMomentFromInput = function (input) {
+			var momentInput = moment(input, resources.TimeFormatForMoment);
+			return moment(self.ScheduleDate()).add('h', momentInput.hours()).add('m', momentInput.minutes());
 		};
 
 		this.visibleLayers = ko.computed(function () {
@@ -97,7 +126,7 @@ define([
 		});
 		
 		this.DefaultStart = ko.computed(function () {
-			var now = moment();
+			var now = moment((new Date).getTime());
 			var start;
 			if (self.ShiftStart() < now && now < self.ShiftEnd()) {
 				var minutes = Math.ceil(now.minute() / 15) * 15;

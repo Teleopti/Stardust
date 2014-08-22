@@ -1,5 +1,7 @@
 define([
 	'knockout',
+	'moment',
+	'momentTimezoneData',
 	'navigation',
 	'shared/timeline',
 	'views/personschedule/person',
@@ -15,6 +17,8 @@ define([
 	'lazy'
 ], function (
 	ko,
+	moment,
+	momentTimezoneData,
 	navigation,
 	timeLineViewModel,
 	personViewModel,
@@ -89,7 +93,7 @@ define([
 		this.Layers = layers;
 
 		this.TimeLine = new timeLineViewModel(ko.computed(function () { return layers().toArray(); }));
-
+		
 		this.WorkingShift = ko.computed(function () {
 			var person = self.SelectedPerson();
 			if (person)
@@ -132,6 +136,7 @@ define([
 
 		this.MoveActivityForm = new moveActivityFormViewModel();
 		this.MovingActivity = ko.observable(false);
+		this.TimeZoneName = ko.observable(false);
 
 		this.DisplayForm = ko.computed(function() {
 			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence() || self.MovingActivity();
@@ -149,9 +154,35 @@ define([
             self.initMoveActivityForm();
 		};
 
+		this.IsOtherTimeZone = ko.computed(function() {
+			if (self.TimeLine.IanaTimeZoneLoggedOnUser() && self.TimeLine.IanaTimeZoneOther()) {
+				var userTime = moment().tz(self.TimeLine.IanaTimeZoneLoggedOnUser());
+				var otherTime = userTime.clone().tz(self.TimeLine.IanaTimeZoneOther());
+				return otherTime.format('ha z') != userTime.format('ha z');
+			}
+			return undefined;
+		});
+
+		var getTimeZoneNameShort = function (timeZoneName) {
+			var end = timeZoneName.indexOf(')');
+			return timeZoneName.substring(1, end);
+		};
+
+		this.TimeZoneNameShort = ko.computed(function () {
+			if (self.IsOtherTimeZone() && self.TimeZoneName()) {
+				return getTimeZoneNameShort(self.TimeZoneName());
+			}
+			return undefined;
+		});
+
 		this.UpdateData = function (data) {
 			data.Date = self.ScheduleDate();
-			
+
+			self.TimeLine.IanaTimeZoneLoggedOnUser(data.IanaTimeZoneLoggedOnUser);
+			self.TimeLine.IanaTimeZoneOther(data.IanaTimeZoneOther);
+			self.TimeZoneName(data.TimeZoneName);
+			self.TimeLine.IsOtherTimeZone(self.IsOtherTimeZone());
+
 			var person = self.SelectedPerson();
 			person.AddData(data, self.TimeLine);
 
@@ -161,6 +192,9 @@ define([
 				a.Date = self.ScheduleDate();
 				a.GroupId = self.GroupId();
 				a.PersonName = self.Name();
+				a.IanaTimeZoneLoggedOnUser = data.IanaTimeZoneLoggedOnUser;
+				a.IanaTimeZoneOther = data.IanaTimeZoneOther;
+				a.TimeZoneName = data.TimeZoneName;
 				return new absenceListItemViewModel(a);
 			});
 			self.Absences.push.apply(self.Absences, absences);
@@ -225,12 +259,12 @@ define([
 				activeLayer.Selected(true);
 			return activeLayer;
 		};
-		
-		this.updateStartTime = function (pixels) {
-			var minutes = pixels / self.TimeLine.PixelsPerMinute();
-			var newStartTimeMinutes = self.MoveActivityForm.getMinutesFromStartTime() + Math.round(minutes / 15) * 15;
-			self.MoveActivityForm.StartTime(self.MoveActivityForm.getStartTimeFromMinutes(newStartTimeMinutes));
-		}
+
+	    this.updateStartTime = function(pixels) {
+	        var minutes = pixels / self.TimeLine.PixelsPerMinute();
+	        var newStartTimeMinutes = self.MoveActivityForm.getMinutesFromStartTime() + Math.round(minutes / 15) * 15;
+	        self.MoveActivityForm.StartTime(self.MoveActivityForm.getStartTimeFromMinutes(newStartTimeMinutes));
+	    };
 
 		this.lengthMinutesToPixels = function (minutes) {
 			var pixels = minutes * self.TimeLine.PixelsPerMinute();
@@ -241,9 +275,9 @@ define([
 	        self.TimeLine.WidthPixels(width);
 	    };
 
-        this.initMoveActivityForm = function() {
-            self.MoveActivityForm.SelectedStartMinutes(self.SelectedStartMinutes());
-            self.MoveActivityForm.ScheduleDate(self.ScheduleDate());
-        }
+	    this.initMoveActivityForm = function() {
+	        self.MoveActivityForm.SelectedStartMinutes(self.SelectedStartMinutes());
+	        self.MoveActivityForm.ScheduleDate(self.ScheduleDate());
+	    };
 	};
 });
