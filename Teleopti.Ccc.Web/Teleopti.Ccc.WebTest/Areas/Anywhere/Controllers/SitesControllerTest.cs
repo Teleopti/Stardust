@@ -81,5 +81,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			result.Id.Should().Be(siteId.ToString());
 			result.OutOfAdherence.Should().Be(expected);
 		}
+
+		[Test]
+		public void ShouldReturnAnEmptySiteWhenNoDataInBu()
+		{
+			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+			var target = new SitesController(siteRepository, null, null);
+
+			var result = target.Index().Data as SiteViewModel;
+			result.Id.Should().Be("");
+			result.Name.Should().Be("");
+			result.NumberOfAgents.Should().Be(0);
+		}
 	}
 }

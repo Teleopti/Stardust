@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 using Autofac.Extras.DynamicProxy2;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
@@ -29,15 +30,27 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public virtual JsonResult Index()
 		{
 			var sites = _siteRepository.LoadAll();
-			var numberOfAgents = _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites);
-
-			return Json(sites.Select(site =>
-				new SiteViewModel
+			if (sites.IsNullOrEmpty())
+			{
+				return Json(new SiteViewModel
 				{
-					Id = site.Id.Value.ToString(),
-					Name = site.Description.Name,
-					NumberOfAgents = numberOfAgents[site.Id.Value]
-				}), JsonRequestBehavior.AllowGet);
+					Id = "",
+					Name = "",
+					NumberOfAgents = 0
+				}, JsonRequestBehavior.AllowGet);
+			}
+			else
+			{
+				var numberOfAgents = _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites);
+
+				return Json(sites.Select(site =>
+					new SiteViewModel
+					{
+						Id = site.Id.Value.ToString(),
+						Name = site.Description.Name,
+						NumberOfAgents = numberOfAgents[site.Id.Value]
+					}), JsonRequestBehavior.AllowGet);
+			}
 		}
 
 		[UnitOfWorkAction, HttpGet]
