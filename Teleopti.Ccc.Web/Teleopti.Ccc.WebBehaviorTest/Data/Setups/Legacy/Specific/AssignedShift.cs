@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var date = ApplyDate(cultureInfo);
-			ShiftCategory = TestData.ShiftCategory;
 		    var timeZone = user.PermissionInformation.DefaultTimeZone();
 		    var shiftStartUtc = timeZone.SafeConvertTimeToUtc(date.Add(TimeSpan.Parse(StartTime,SwedishCultureInfo)));
 		    var shiftEndUtc = timeZone.SafeConvertTimeToUtc(date.Add(TimeSpan.Parse(EndTime,SwedishCultureInfo)));
@@ -76,7 +75,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 				assignment.AddActivity(lunchactivity, lunchPeriod);
 			}
 
-			assignment.SetShiftCategory(ShiftCategory);
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory(DefaultName.Make(), "Purple");
+			new ShiftCategoryRepository(uow).Add(shiftCategory);
+			ShiftCategory = shiftCategory;
+
+			assignment.SetShiftCategory(shiftCategory);
 
 			assignmentRepository.Add(assignment);
 		}

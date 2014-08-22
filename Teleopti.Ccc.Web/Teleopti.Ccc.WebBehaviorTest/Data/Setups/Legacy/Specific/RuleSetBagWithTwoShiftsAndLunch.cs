@@ -6,6 +6,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -65,12 +66,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			var activityLunch2 = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity2));
 			activityRepository.Add(activity);
 
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory(DefaultName.Make(), "Purple");
+			new ShiftCategoryRepository(uow).Add(shiftCategory);
+
 			TheRuleSetBag = new Domain.Scheduling.ShiftCreator.RuleSetBag();
-			var generator1 = new WorkShiftTemplateGenerator(activity, start1, end1, TestData.ShiftCategory);
+			var generator1 = new WorkShiftTemplateGenerator(activity, start1, end1, shiftCategory);
 			var ruleSet1 = new WorkShiftRuleSet(generator1);
 			var lunch1 = new ActivityAbsoluteStartExtender(activityLunch1, lunchLength1, lunchStart1);
 			ruleSet1.AddExtender(lunch1);
-			var generator2 = new WorkShiftTemplateGenerator(activity, start2, end2, TestData.ShiftCategory);
+			var generator2 = new WorkShiftTemplateGenerator(activity, start2, end2, shiftCategory);
 			var ruleSet2 = new WorkShiftRuleSet(generator2);
 			var lunch2 = new ActivityAbsoluteStartExtender(activityLunch2, lunchLength2, lunchStart2);
 			ruleSet2.AddExtender(lunch2);

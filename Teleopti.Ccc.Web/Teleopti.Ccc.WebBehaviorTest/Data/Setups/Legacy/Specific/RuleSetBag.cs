@@ -1,12 +1,13 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		private readonly int _earliestEnd;
 		private readonly int _latestEnd;
 		public Domain.Scheduling.ShiftCreator.RuleSetBag TheRuleSetBag;
+		public string ShiftCategory { get; set; }
 
 		public RuleSetBag(int earliestStart, int latestStart, int earliestEnd, int latestEnd)
 		{
@@ -38,7 +40,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			var activityRepository = new ActivityRepository(uow);
 			activityRepository.Add(activity);
 
-			var generator = new WorkShiftTemplateGenerator(activity, start, end, TestData.ShiftCategory);
+			IShiftCategory shiftCategory;
+			if (ShiftCategory != null)
+			{
+				shiftCategory = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
+			}
+			else
+			{
+				shiftCategory = ShiftCategoryFactory.CreateShiftCategory(DefaultName.Make(), "Purple");
+				var shiftCategoryRepository= new ShiftCategoryRepository(uow);
+				shiftCategoryRepository.Add(shiftCategory);
+			}
+
+			var generator = new WorkShiftTemplateGenerator(activity, start, end, shiftCategory);
 			var ruleSet = new WorkShiftRuleSet(generator);
 
 			ruleSet.Description = new Description("Regeln");

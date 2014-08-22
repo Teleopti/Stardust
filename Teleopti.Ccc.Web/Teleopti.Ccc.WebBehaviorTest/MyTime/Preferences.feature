@@ -11,11 +11,13 @@ Scenario: View preferences
 
 Scenario: See shift category preference
 	Given I am an agent
+	And there is a shift category named 'Night'
 	And I have existing shift category preference with
-	| Field | Value      |
-	| Date  | 2014-05-03 |
+	| Field          | Value      |
+	| Date           | 2014-05-03 |
+	| Shift category | Night      |
 	When I view preferences for date '2014-05-02'
-	Then I should see my existing shift category preference
+	Then I should see my existing 'Night' preference
 
 Scenario: See day off preference
 	Given I am an agent
@@ -25,7 +27,7 @@ Scenario: See day off preference
 	| Date             | 2014-05-03 |
 	| Day off template | Day off    |
 	When I view preferences for date '2014-05-02'
-	Then I should see my existing day off preference 'Day off'
+	Then I should see my existing 'Day off' preference
 
 Scenario: See absence preference
 	Given I am an agent
@@ -35,7 +37,7 @@ Scenario: See absence preference
 	| Date    | 2014-05-03 |
 	| Absence | Vacation   |
 	When I view preferences for date '2014-05-02'
-	Then I should see my existing absence preference 'Vacation'
+	Then I should see my existing 'Vacation' preference
 	
 Scenario: No schedule period
 	Given I am an agent
@@ -110,11 +112,18 @@ Scenario: Remember selected standard preference
          | Field                          | Value |
          | Access To Extended Preferences | false |
 	And I have schedule and person period 
-	And I have an open workflow control set with an allowed standard preference open from '2014-05-03' to '2014-05-05'
+	And there is a shift category named 'Night'
+	And I have a workflow control set with
+	| Field                   | Value      |
+	| Name                    | Open       |
+	| SchedulePublishedToDate | 2014-06-05 |
+	| PreferencePeriodStart   | 2014-05-03 |
+	| PreferencePeriodEnd     | 2014-05-05 |
+	| AvailableShiftCategory  | Night      |
 	And I am viewing preferences for date '2014-05-02'
-	When I change standard preference to shift category 'Legacy common shift category'
+	When I change standard preference to shift category 'Night'
 	And I click next virtual schedule period button
-	Then I should see the selected standard preference in the split-button
+	Then I should see the selected standard preference 'Night' in the split-button
 
 Scenario: Add standard preference
 	Given I have a role with
@@ -122,11 +131,18 @@ Scenario: Add standard preference
          | Access To Extended Preferences | false |
 	And I have schedule and person period 
 	And the current time is '2014-05-02 08:00'
-	And I have an open workflow control set with an allowed standard preference open from '2014-05-03' to '2014-05-05'
+	And there is a shift category named 'Night'
+	And I have a workflow control set with
+	| Field                   | Value      |
+	| Name                    | Open       |
+	| SchedulePublishedToDate | 2014-06-05 |
+	| PreferencePeriodStart   | 2014-05-03 |
+	| PreferencePeriodEnd     | 2014-05-05 |
+	| AvailableShiftCategory  | Night      |
 	And I am viewing preferences
 	When I select an editable day without preference
-	And I select shift category 'Legacy common shift category' as standard preference
-	Then I should see the standard preference in the calendar
+	And I select shift category 'Night' as standard preference
+	Then I should see the standard preference 'Night' in the calendar
 
 Scenario: Replace standard preference
 	Given I have a role with
@@ -134,14 +150,24 @@ Scenario: Replace standard preference
          | Access To Extended Preferences | false |
 	And I have schedule and person period 
 	And the current time is '2014-05-02 08:00'
-	And I have an open workflow control set with an allowed standard preference open from '2014-05-03' to '2014-05-05'
+	And there is a shift category named 'Night'
+	And there is a day off named 'Day off'
+	And I have a workflow control set with
+	| Field                   | Value      |
+	| Name                    | Open       |
+	| SchedulePublishedToDate | 2014-06-05 |
+	| PreferencePeriodStart   | 2014-05-03 |
+	| PreferencePeriodEnd     | 2014-05-05 |
+	| AvailableShiftCategory  | Night      |
+	| AvailableDayOff         | Day off    |
 	And I have existing standard preference with
-	| Field | Value      |
-	| Date  | 2014-05-03 |
+	| Field      | Value      |
+	| Date       | 2014-05-03 |
+	| Preference | Day off    |
 	And I am viewing preferences for date '2014-05-02'
 	When I select an editable day with standard preference
-	And I select shift category 'Legacy common shift category' as standard preference
-	Then I should see the standard preference in the calendar
+	And I select shift category 'Night' as standard preference
+	Then I should see the standard preference 'Night' in the calendar
 	And I should not see the former standard preference in the calendar
 
 Scenario: Set multiple preference
@@ -150,15 +176,25 @@ Scenario: Set multiple preference
          | Access To Extended Preferences | false |
 	And I have schedule and person period 
 	And the current time is '2014-05-02 08:00'
-	And I have an open workflow control set with an allowed standard preference open from '2014-05-03' to '2014-05-05'
+	And there is a shift category named 'Night'
+	And there is a day off named 'Day off'
+	And I have a workflow control set with
+	| Field                   | Value      |
+	| Name                    | Open       |
+	| SchedulePublishedToDate | 2014-06-05 |
+	| PreferencePeriodStart   | 2014-05-03 |
+	| PreferencePeriodEnd     | 2014-05-05 |
+	| AvailableShiftCategory  | Night      |
+	| AvailableDayOff         | Day off    |
 	And I have existing standard preference with
-	| Field | Value      |
-	| Date  | 2014-05-02 |
-	And I am viewing preferences for date '2014-05-02'
+	| Field      | Value      |
+	| Date       | 2014-05-03 |
+	| Preference | Day off    |
+	And I am viewing preferences for date '2014-05-03'
 	When I select an editable day with standard preference
 	And I also select an editable day without standard preference
-	And I select shift category 'Legacy common shift category' as standard preference
-	Then I should see the 2 standard preferences in the calendar
+	And I select shift category 'Night' as standard preference
+	Then I should see the 2 standard preferences 'Night' in the calendar
 
 Scenario: Delete multiple standard preference
 	Given I have a role with

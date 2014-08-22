@@ -120,12 +120,13 @@ Scenario: Feedback from an added preference
          | Field                          | Value |
          | Access To Extended Preferences | False |
 	And I have schedule and person period
+	And there is a shift category named 'Day'
 	And the current time is '2014-05-02 08:00'
 	And I have an open workflow control set with an allowed standard preference open from '2014-05-03' to '2014-05-05'
 	And I have a shift bag
 	And I am viewing preferences
 	When I select an editable day without preference
-	And I select shift category 'Legacy common shift category' as standard preference
+	And I select shift category 'Day' as standard preference
 	Then I should see the preference feedback
 	
 Scenario: Feedback from a deleted preference

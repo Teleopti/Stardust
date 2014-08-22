@@ -11,7 +11,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static IApplicationRole AgentRole;
 		public static IApplicationRole AgentRoleWithSiteData;
-
-		public static IShiftCategory ShiftCategory;
 	}
 }

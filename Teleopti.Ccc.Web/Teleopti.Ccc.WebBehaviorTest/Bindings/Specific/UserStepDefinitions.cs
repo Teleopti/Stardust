@@ -313,6 +313,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		{
 			DataMaker.Data().Apply(new DayOffTemplateConfigurable { Name = "Day off" });
 			DataMaker.Data().Apply(new AbsenceConfigurable { Name = "Vacation" });
+			DataMaker.Data().Apply(new ShiftCategoryConfigurable { Name = "Night" });
 			DataMaker.Data()
 				.Apply(new WorkflowControlSetConfigurable
 				{
@@ -320,7 +321,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 					SchedulePublishedToDate = end.AddDays(100).ToShortDateString(),
 					PreferencePeriodStart = start.ToShortDateString(),
 					PreferencePeriodEnd = end.ToShortDateString(),
-					AvailableShiftCategory = TestData.ShiftCategory.Description.Name,
+					AvailableShiftCategory = "Night",
 					AvailableDayOff = "Day off",
 					AvailableAbsence = "Vacation"
 				});
@@ -512,6 +513,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIHaveAShiftBagWithStartTimesToAndEndTimesTo(int earliestStart, int latestStart, int earliestEnd, int latestEnd)
 		{
 			DataMaker.Data().Apply(new RuleSetBag(earliestStart, latestStart, earliestEnd, latestEnd));
+		}
+
+		[Given(@"I have a shift bag with category '(.*)' and start times (.*) to (.*) and end times (.*) to (.*)")]
+		public void GivenIHaveAShiftBagWithCategoryAndWithStartTimesToAndEndTimesTo(string category, int earliestStart, int latestStart, int earliestEnd, int latestEnd)
+		{
+			DataMaker.Data().Apply(new RuleSetBag(earliestStart, latestStart, earliestEnd, latestEnd){ShiftCategory = category});
 		}
 
 		[Given(@"I have a shift bag with two categories with shift from (.*) to (.*) and from (.*) to (.*)")]

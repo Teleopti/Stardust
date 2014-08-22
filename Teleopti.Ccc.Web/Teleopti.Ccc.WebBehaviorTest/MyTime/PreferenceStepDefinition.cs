@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Microsoft.SqlServer.Server;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
@@ -56,16 +57,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			PreferencesPageStepDefinitions.SelectCalendarCellByClass(new DateTime(2014, 5, 3));
 			PreferencesPageStepDefinitions.SelectCalendarCellByClass(new DateTime(2014, 5, 4));
 		}
-
-		[Then(@"I should see my existing shift category preference")]
-		public void ThenIShouldSeeMyExistingShiftCategoryPreference()
-		{
-			var cell = CalendarCells.DateSelector("2014-05-03");
-			Browser.Interactions.AssertFirstContains(cell, TestData.ShiftCategory.Description.Name);
-		}
-
-		[Then(@"I should see my existing day off preference '(.*)'")]
-		[Then(@"I should see my existing absence preference '(.*)'")]
+	
+		[Then(@"I should see my existing '(.*)' preference")]
 		public void ThenIShouldSeeMyExistingDayOffPreference(string preference)
 		{
 			var cell = CalendarCells.DateSelector("2014-05-03");
@@ -84,23 +77,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			public string Preference { get; set; }
 		}
 
-		[Then(@"I should see the selected standard preference in the split-button")]
-		public void ThenIShouldSeeTheSelectedStandardPreferenceInTheSplit_Button()
+		[Then(@"I should see the selected standard preference '(.*)' in the split-button")]
+		public void ThenIShouldSeeTheSelectedStandardPreferenceInTheSplit_Button(string shiftCategory)
 		{
-			Browser.Interactions.AssertFirstContains(".hidden-sm .preference-split-button button", TestData.ShiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(".hidden-sm .preference-split-button button", shiftCategory);
 		}
 
-		[Then(@"I should see the standard preference in the calendar")]
-		public void ThenIShouldSeeTheStandardPreferenceInTheCalendar()
+		[Then(@"I should see the standard preference '(.*)' in the calendar")]
+		public void ThenIShouldSeeTheStandardPreferenceInTheCalendar(string preference)
 		{
-			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector("2014-05-03"), TestData.ShiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector("2014-05-03"), preference);
 		}
 
-		[Then(@"I should see the 2 standard preferences in the calendar")]
-		public void ThenIShouldSeeThe2StandardPreferencesInTheCalendar()
+		[Then(@"I should see the 2 standard preferences '(.*)' in the calendar")]
+		public void ThenIShouldSeeThe2StandardPreferencesInTheCalendar(string preference)
 		{
-			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector("2014-05-03"), TestData.ShiftCategory.Description.Name);
-			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector("2014-05-04"), TestData.ShiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector("2014-05-03"), preference);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector("2014-05-04"), preference);
 		}
 
 		[Then(@"I should not see the former standard preference in the calendar")]

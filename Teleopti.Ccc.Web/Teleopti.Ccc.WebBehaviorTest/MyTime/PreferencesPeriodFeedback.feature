@@ -142,28 +142,34 @@ Scenario: Period feedback of nothing
 Scenario: Period feedback of preferences
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a shift bag with start times 7 to 9 and end times 15 to 17
+	And there is a shift category named 'Day'
+	And I have a shift bag with category 'Day' and start times 7 to 9 and end times 15 to 17
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-04-28 |
+	| Field          | Value      |
+	| Date           | 2014-04-28 |
+	| Shift category | Day        |
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-04-29 |
+	| Field          | Value      |
+	| Date           | 2014-04-29 |
+	| Shift category | Day        |
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-04-30 |
+	| Field          | Value      |
+	| Date           | 2014-04-30 |
+	| Shift category | Day        |
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-05-01 |
+	| Field          | Value      |
+	| Date           | 2014-05-01 |
+	| Shift category | Day        |
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-05-02 |
+	| Field          | Value      |
+	| Date           | 2014-05-02 |
+	| Shift category | Day        |
 	And I have existing day off preference with
-         | Field | Value |
-         | Date  | 2014-05-03 |
+	| Field | Value      |
+	| Date  | 2014-05-03 |
 	And I have existing day off preference with
-         | Field | Value      |
-         | Date  | 2014-05-04 |
+	| Field | Value      |
+	| Date  | 2014-05-04 |
 	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 30 to 50 hours
 	And I should not see a warning for my time preferences outside the target
@@ -188,24 +194,29 @@ Scenario: Period feedback of schedules
 Scenario: Period feedback of schedules and preferences
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a shift bag with start times 7 to 9 and end times 15 to 17
+	And there is a shift category named 'Day'
+	And I have a shift bag with category 'Day' and start times 7 to 9 and end times 15 to 17
 	And I have a scheduled shift of 8 hours on '2014-04-28'
 	And I have a scheduled shift of 8 hours on '2014-04-29'
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-04-30 |
+	| Field          | Value      |
+	| Date           | 2014-04-30 |
+	| Shift category | Day        |
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-05-01 |
+	| Field          | Value      |
+	| Date           | 2014-05-01 |
+	| Shift category | Day        |
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-05-02 |
+	| Field          | Value      |
+	| Date           | 2014-05-02 |
+	| Shift category | Day        |
 	And I have an assigned dayoff with
-	| Field | Value      |
-	| Date  | 2014-05-03 |
+	| Field          | Value      |
+	| Date           | 2014-05-03 |
+	| Shift category | Day        |
 	And I have existing day off preference with
-         | Field | Value      |
-         | Date  | 2014-05-04 |
+  | Field | Value      |
+  | Date  | 2014-05-04 |
 	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 34 to 46 hours
 
@@ -215,38 +226,43 @@ Scenario: Period feedback of contract time absence
 	Given I am an agent
 	And I have a scheduling period of 1 week
 	And I have a contract with:
-		| Field                     | Value                        |
-		| Average work time per day | 8                            |
+		| Field                     | Value |
+		| Average work time per day | 8     |
+		And there is an absence with
+		| Field          | Value    |
+		| Name           | Vacation |
+		| InContractTime | True     |
+		| Requestable    | True     |
 	And I have a shift bag with start times 7 to 9 and end times 15 to 17
 	And I have a contract schedule with 2 days off
 	And I have existing absence preference with
-         | Field   | Value                 |
-         | Date    | 2014-04-28            |
-         | Absence | Legacy common vacation absence |
+  | Field   | Value      |
+  | Date    | 2014-04-28 |
+  | Absence | Vacation   |
 	And I have existing absence preference with
-         | Field   | Value                          |
-         | Date    | 2014-04-29                    |
-		 | Absence | Legacy common vacation absence |
+  | Field   | Value      |
+  | Date    | 2014-04-29 |
+  | Absence | Vacation   |
 	And I have existing absence preference with
-         | Field   | Value                          |
-         | Date    | 2014-04-30                    |
-		 | Absence | Legacy common vacation absence |
+  | Field   | Value      |
+  | Date    | 2014-04-30 |
+  | Absence | Vacation   |
 	And I have existing absence preference with
-         | Field   | Value                          |
-         | Date    | 2014-05-01                    |
-		 | Absence | Legacy common vacation absence |
+  | Field   | Value      |
+  | Date    | 2014-05-01 |
+  | Absence | Vacation   |
 	And I have existing absence preference with
-         | Field   | Value                          |
-         | Date    | 2014-05-02                    |
-		 | Absence | Legacy common vacation absence |
+  | Field   | Value      |
+  | Date    | 2014-05-02 |
+  | Absence | Vacation   |
 	And I have existing absence preference with
-         | Field   | Value                          |
-         | Date    | 2014-05-03                    |
-		 | Absence | Legacy common vacation absence |
+  | Field   | Value      |
+  | Date    | 2014-05-03 |
+  | Absence | Vacation   |
 	And I have existing absence preference with
-         | Field   | Value                          |
-         | Date    | 2014-05-04                    |
-		 | Absence | Legacy common vacation absence |
+	| Field   | Value      |
+	| Date    | 2014-05-04 |
+	| Absence | Vacation   |
 	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 40 hours
 
@@ -312,28 +328,36 @@ Scenario: Period feedback of day off preferences with warning
 Scenario: Period feedback of preferences with warning
 	Given I am an agent
 	And I have a scheduling period of 1 week
-	And I have a shift bag with start times 7 to 9 and end times 15 to 17
+	And there is a shift category named 'Day'
+	And I have a shift bag with category 'Day' and start times 7 to 9 and end times 15 to 17
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-04-28 |
+	| Field          | Value      |
+	| Date           | 2014-04-28 |
+	| Shift category | Day        |
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-04-29 |
+	| Field          | Value      |
+	| Date           | 2014-04-29 |
+	| Shift category | Day        |
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-04-30 |
+	| Field          | Value      |
+	| Date           | 2014-04-30 |
+	| Shift category | Day        |
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-05-01 |
+	| Field          | Value      |
+	| Date           | 2014-05-01 |
+	| Shift category | Day        |
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-05-02 |
+	| Field          | Value      |
+	| Date           | 2014-05-02 |
+	| Shift category | Day        |
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-05-03 |
+	| Field          | Value      |
+	| Date           | 2014-05-03 |
+	| Shift category | Day        |
 	And I have existing shift category preference with
-	| Field      | Value      |
-	| Date | 2014-05-04 |
+	| Field          | Value      |
+	| Date           | 2014-05-04 |
+	| Shift category | Day        |
 	When I view preferences for date '2014-05-02'
 	Then I should see a message that I should work 40 hours
 	And I should see a message that my preferences can result in 42 to 70 hours

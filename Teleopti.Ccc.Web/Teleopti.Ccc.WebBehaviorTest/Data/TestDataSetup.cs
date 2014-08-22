@@ -77,7 +77,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateAllRaptorApplicationFunctions);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateMatrixApplicationFunctions);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateApplicationRoles);
-			GlobalUnitOfWorkState.UnitOfWorkAction(CreateShiftCategory);
 		}
 
 	    private static void CreateLicense(IUnitOfWork uow)
@@ -165,14 +164,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			var personRepository = new PersonRepository(uow);
 			personRepository.Add(personThatCreatesTestData);
-		}
-
-		private static void CreateShiftCategory(IUnitOfWork unitOfWork)
-		{
-			TestData.ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("Legacy common shift category", "Purple");
-
-			var shiftCategoryRepository = new ShiftCategoryRepository(unitOfWork);
-			shiftCategoryRepository.Add(TestData.ShiftCategory);
 		}
 
 	}
