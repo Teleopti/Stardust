@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
@@ -60,36 +61,46 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             _personSelectorPresenter.LoadTabs();
         }
 
-        void ReloadPeople()
+        void reloadPeople()
         {
             _filteredPeopleHolder.SelectedDate = _personSelectorPresenter.SelectedDate;
                  
             _filteredPeopleHolder.ReassociateSelectedPeopleWithNewUow(_personSelectorPresenter.CheckedPersonGuids);
         }
 
-        private void ButtonAdvOkClick(object sender, EventArgs e)
+        private void buttonAdvOkClick(object sender, EventArgs e)
         {
-            Cursor.Current = Cursors.WaitCursor;
-
-            try
-            {
-                ReloadPeople();
-            }
-            catch (DataSourceException ex)
-            {
-                DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-                _parentControl.FormKill();
-                return;
-            }
-
-            _parentControl.RefreshView(_filteredPeopleHolder);
-
-            Cursor.Current = Cursors.Default;
+	        doFilter();
         }
 
-        private void ButtonAdvCancelClick(object sender, EventArgs e)
-        {
-            Hide();
-        }
+	    private void buttonAdvCancelClick(object sender, EventArgs e)
+	    {
+		    cancelFilter();
+	    }
+
+		private void doFilter()
+		{
+			Cursor.Current = Cursors.WaitCursor;
+
+			try
+			{
+				reloadPeople();
+			}
+			catch (DataSourceException ex)
+			{
+				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+				_parentControl.FormKill();
+				return;
+			}
+
+			_parentControl.RefreshView(_filteredPeopleHolder);
+
+			Cursor.Current = Cursors.Default;
+		}
+
+	    private void cancelFilter()
+	    {
+		    Hide();
+	    }
     }
 }
