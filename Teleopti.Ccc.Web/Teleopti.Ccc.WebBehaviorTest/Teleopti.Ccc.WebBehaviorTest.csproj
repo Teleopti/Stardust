@@ -505,7 +505,6 @@
     <Compile Include="Data\Setups\Legacy\Common\CommonBusinessUnit.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonSite.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonTeam.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\SecondBusinessUnit.cs" />
     <Compile Include="Data\Setups\Configurable\RoleForUser.cs" />
     <Compile Include="Data\Setups\Configurable\WorkflowControlSetForUser.cs" />
     <Compile Include="Bindings\Specific\ColleagueStepDefinitions.cs" />

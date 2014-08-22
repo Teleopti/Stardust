@@ -160,7 +160,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			GlobalDataMaker.Data().Apply(new CommonContract());
 			GlobalDataMaker.Data().Apply(new CommonContractSchedule());
 
-			GlobalDataMaker.Data().Apply(new SecondBusinessUnit());
 			GlobalDataMaker.Data().Apply(new AnotherSite());
 
 			TestDataSetup.CreateLegacyTestData();
