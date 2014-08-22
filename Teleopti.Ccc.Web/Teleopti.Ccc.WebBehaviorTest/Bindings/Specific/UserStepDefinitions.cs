@@ -119,13 +119,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		{
 			DataMaker.Data().Apply(new AgentWithoutStudentAvailabilityAccess());
 		}
-
-		[Given(@"I am an agent without access to preferences")]
-		public void GivenIAmAnAgentWithoutAccessToPreferences()
-		{
-			DataMaker.Data().Apply(new AgentWithoutPreferencesAccess());
-		}
-
+		
 		[Given(@"I am an agent without access to extended preferences")]
 		public void GivenIAmAnAgentWithoutAccessToExtendedPreferences()
 		{

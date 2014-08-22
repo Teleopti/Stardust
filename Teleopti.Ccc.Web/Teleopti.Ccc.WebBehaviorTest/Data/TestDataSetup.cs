@@ -172,7 +172,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 											select new { role, functions, businessUnit, availableData };
 
 			TestData.AgentRoleWithoutStudentAvailability = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoStudentAvailability", null);
-			TestData.AgentRoleWithoutPreferences = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoPreferences", null);
 			TestData.AgentRoleWithoutExtendedPreferences = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoExtendedPreferences", null);
 			TestData.AgentRoleWithoutRequests = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoRequests", null);
 			TestData.AgentRoleWithoutAbsenceRequests = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoAbsenceRequests", null);
@@ -185,7 +184,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var customTestRoles = new[]
 			                 	{
 									new { role = TestData.AgentRoleWithoutStudentAvailability, functions = agentRoleWithoutStudentAvailabilityApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
-									new { role = TestData.AgentRoleWithoutPreferences, functions = agentRoleWithoutPreferencesApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutExtendedPreferences, functions = agentRoleWithoutExtendedPreferencesApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutRequests, functions = agentRoleWithoutRequestsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleWithoutAbsenceRequests, functions = agentRoleWithoutAbsenceRequestsApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
