@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 				confidentialAbsence = AbsenceFactory.CreateAbsence(DefaultName.Make());
 				confidentialAbsence.Confidential = true;
 				confidentialAbsence.DisplayColor = Color.GreenYellow;
+				new AbsenceRepository(uow).Add(confidentialAbsence);
 			}
 			else
 			{
