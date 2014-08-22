@@ -57,7 +57,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I am an agent in a team with access to the whole site")]
 		public void GivenIAmAnAgentInATeamWithAccessToTheWholeSite()
 		{
-			DataMaker.Data().Apply(new AgentWithSiteAccess());
+			DataMaker.Data().Apply(new RoleConfigurable
+			{
+				Name = "Access to my site", 
+				AccessToMySite = true
+			});
+			DataMaker.Data().Apply(new RoleForUser
+			{
+				Name = "Access to my site"
+			});
+
 			var team = new Team();
 			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());

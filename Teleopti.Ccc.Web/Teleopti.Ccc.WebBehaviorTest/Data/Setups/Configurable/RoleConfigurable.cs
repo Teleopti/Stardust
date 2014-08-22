@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public string AccessToTeam { get; set; }
 		public bool AccessToMyOwn { get; set; }
+		public bool AccessToMySite { get; set; }
 		public bool AccessToEveryone { get; set; }
 		public bool NoDataAccess { get; set; }
 
@@ -64,6 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			ViewUnpublishedSchedules = false;
 			ViewConfidential = false;
 			AccessToMyOwn = false;
+			AccessToMySite = false;
 			NoDataAccess = false;
 			AccessToExtendedPreferences = true;
 			AccessToMytimeWeb = true;
@@ -96,8 +98,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			var availableDataRangeOption = NoDataAccess
 														 ? AvailableDataRangeOption.None
                                                          : AccessToEveryone ? AvailableDataRangeOption.Everyone
-                                                         : AccessToMyOwn ? AvailableDataRangeOption.MyOwn
-                                                         : AvailableDataRangeOption.MyTeam;
+														 : AccessToMyOwn ? AvailableDataRangeOption.MyOwn
+														 : AccessToMySite ? AvailableDataRangeOption.MySite
+														 : AvailableDataRangeOption.MyTeam;
 			var availableData = new AvailableData
 			{
 				ApplicationRole = role,

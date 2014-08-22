@@ -135,21 +135,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 											let businessUnit = TestData.BusinessUnit
 											select new { role, functions, businessUnit, availableData };
 
-			TestData.AgentRoleWithSiteData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "WithSiteData", null);
-
 			var availableDataAnotherSite = new AvailableData();
 			availableDataAnotherSite.AddAvailableSite(anotherSite);
 
-			var customTestRoles = new[]
-			                 	{
-									new { role = TestData.AgentRoleWithSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MySite}},
-			                 	};
-
-			var allRoles = customTestRoles.Union(shippedRolesWithFunctions);
-
 			var applicationRoleRepository = new ApplicationRoleRepository(uow);
 			var availableDataRepository = new AvailableDataRepository(uow);
-			allRoles.ToList().ForEach(r =>
+			shippedRolesWithFunctions.ToList().ForEach(r =>
 			                          	{
 			                          		r.role.AvailableData = r.availableData;
 			                          		r.availableData.ApplicationRole = r.role;
