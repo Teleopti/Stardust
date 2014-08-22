@@ -596,7 +596,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
         }
 
-		private bool canAccessInternet = true;
+		//private bool canAccessInternet = true;
 		public void ModuleSelected(ModulePanelItem modulePanelItem)
 		{
 			if (modulePanelItem == null)
