@@ -97,7 +97,10 @@ Scenario: Can't navigate to team schedule without permission
 	Then I should see an error message
 
 Scenario: Can't see colleagues schedule without permission
-	Given I am an agent in a team with access only to my own data
+	Given I have a role with
+         | Field            | Value |
+         | Access to my own | true  |
+  And I am in a team with published schedule
 	And I have a colleague
 	And My colleague has an assigned shift with 
 	| Field | Value      |
@@ -259,12 +262,18 @@ Scenario: Default to my team
 	Then the team-picker should have my team selected
 
 Scenario: Don't show team-picker with no team access
-	Given I am an agent in a team with access only to my own data
+	Given I have a role with
+         | Field            | Value |
+         | Access to my own | true  |
+  And I am in a team with published schedule
 	When I view team schedule
 	Then I should not see the team-picker
 
 Scenario: Should show date-picker with no team access
-	Given I am an agent in a team with access only to my own data
+	Given I have a role with
+         | Field            | Value |
+         | Access to my own | true  |
+  And I am in a team with published schedule
 	When I view team schedule
 	Then I should see the date-picker
 
@@ -293,7 +302,10 @@ Scenario: Show friendly message when after leaving date
 	Then I should see a user-friendly message explaining I dont have anything to view
 
 Scenario: Navigate next date without team
-	Given I am an agent in a team with access only to my own data
+	Given I have a role with
+         | Field            | Value |
+         | Access to my own | true  |
+  And I am in a team with published schedule
 	And I am viewing team schedule for '2014-05-02'
 	When I click the next day button
 	Then I should see the next day

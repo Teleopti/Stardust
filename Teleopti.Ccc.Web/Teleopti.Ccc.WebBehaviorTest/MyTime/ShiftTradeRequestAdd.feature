@@ -131,7 +131,10 @@ Scenario: Show possible shift trade when victim has no schedule
 	And I should see a message text saying that no possible shift trades could be found
 
 Scenario: When I only have access to my own data I can't trade shifts
-	Given I am an agent in a team with access only to my own data
+	Given I have a role with
+         | Field            | Value |
+         | Access to my own | true  |
+  And I am in a team with published schedule
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And the current time is '2029-12-20'
 	When I view Add Shift Trade Request for date '2030-01-01'

@@ -556,7 +556,6 @@
     <Compile Include="Data\Setups\Legacy\Specific\RuleSetBag.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\BaseShiftCategory.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AssignedAbsence.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutTeamDataAccess.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithSiteAccess.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AnotherSitesSecondTeam.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AnotherSitesTeam.cs" />
