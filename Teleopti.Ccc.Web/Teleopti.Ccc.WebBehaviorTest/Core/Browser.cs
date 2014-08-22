@@ -5,7 +5,6 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
@@ -23,22 +22,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		private static readonly IList<RegisteredActivator> Activators =
 			new List<RegisteredActivator>
 				{
-					//new RegisteredActivator
-					//	{
-					//		Tag = "PhantomJS",
-					//		Activator = new CoypuPhantomJsActivator(),
-					//		Visible = false
-					//	},
 					new RegisteredActivator
 						{
 							Tag = "Chrome",
 							Activator = new CoypuChromeActivator(),
-							Visible = true
-						},
-					new RegisteredActivator
-						{
-							Tag = "WatiN",
-							Activator = new WatiNSingleBrowserIEActivator(),
 							Visible = true
 						}
 				};

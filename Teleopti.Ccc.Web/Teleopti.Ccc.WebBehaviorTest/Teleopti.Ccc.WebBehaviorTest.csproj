@@ -92,9 +92,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\SpecFlow.1.9.0\lib\net35\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
-    <Reference Include="WatiN.Core, Version=2.1.0.1196, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\WatiN.2.1.0\lib\net40\WatiN.Core.dll</HintPath>
-    </Reference>
     <Reference Include="WebDriver, Version=2.39.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Selenium.WebDriver.2.39.0\lib\net40\WebDriver.dll</HintPath>
@@ -367,7 +364,6 @@
     <Compile Include="Bindings\Generic\SkillStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
     <Compile Include="Core\BrowserDriver\JavascriptEncodingExtensions.cs" />
-    <Compile Include="Core\BrowserDriver\WatiNIE\WatiNIEBrowserInteractions.cs" />
     <Compile Include="Core\BrowserDriver\Retrying.cs" />
     <Compile Include="Data\CryptoCreator.cs" />
     <Compile Include="Data\HardCodedResolver.cs" />
@@ -437,7 +433,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Core\BrowserDriver\WatiNIE\WatiNIEExceptionCatcher.cs" />
     <Compile Include="Data\Setups\Configurable\AvailabilityRotationConfigurable.cs" />
     <Compile Include="Bindings\Generic\AvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
@@ -512,10 +507,7 @@
     <Compile Include="Data\Setups\Configurable\RoleConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonPeriodConfigurable.cs" />
     <Compile Include="Core\BrowserDriver\ProcessHelpers.cs" />
-    <Compile Include="Core\BrowserDriver\WatiNIE\WatiNSingleBrowserFireFoxActivator.cs" />
     <Compile Include="Core\BrowserDriver\IBrowserActivator.cs" />
-    <Compile Include="Core\BrowserDriver\WatiNIE\WatiNSingleBrowserIEActivator.cs" />
-    <Compile Include="Core\BrowserDriver\WatiNIE\WatiNParallelBrowserIEActivator.cs" />
     <Compile Include="Data\GlobalDataMaker.cs" />
     <Compile Include="Data\GlobalPrincipalState.cs" />
     <Compile Include="Data\GlobalUnitOfWorkState.cs" />
