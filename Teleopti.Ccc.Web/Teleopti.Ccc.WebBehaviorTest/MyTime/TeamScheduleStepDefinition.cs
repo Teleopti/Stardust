@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
@@ -120,10 +123,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertUrlContains(string.Format("{0}/{1}/{2}", date.Year, date.Month.ToString("D2"), date.Day.ToString("D2")));
 		}
 
-		[Then(@"I should not see the absence's color")]
-		public void ThenIShouldNotSeeTheAbsenceSColor()
+		[Then(@"I should see the absence with color (.*)")]
+		public void ThenIShouldNotSeeTheAbsenceSColor(string colorName)
 		{
-			var color = TestData.ConfidentialAbsence.ConfidentialDisplayColor(DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person,DateOnly.Today);
+			var color = Color.FromName(colorName);
 			var colorAsString = string.Format("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
 
 			Browser.Interactions.AssertNotExistsUsingJQuery(

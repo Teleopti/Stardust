@@ -68,12 +68,18 @@ Scenario: View team schedule, no shift
 Scenario: Can't see confidential absence
 	Given I am an agent in a team
 	And I have a colleague
+	And there is an absence with
+	| Field        | Value        |
+	| Name         | Confidential |
+	| Confidential | true         |
+	| Color        | GreenYellow  |
 	And My colleague has a confidential absence with
-	| Field | Value      |
-	| Date | 2014-05-02 |
+	| Field   | Value        |
+	| Date    | 2014-05-02   |
+	| Absence | Confidential |
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague's schedule
-	And I should not see the absence's color
+	And I should see the absence with color Gray
  
 Scenario: Can't see the team schedule tab without permission 
 	Given I have a role with
