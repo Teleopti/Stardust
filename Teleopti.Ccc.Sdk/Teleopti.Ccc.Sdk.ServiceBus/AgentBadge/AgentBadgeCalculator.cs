@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 							var badgeDesc = string.Format(badgeDescriptionTemplate, badge.BronzeBadge, badge.SilverBadge, badge.GoldBadge,
 								badgeType);
 							Logger.DebugFormat(
-								"Award badge to agent {0} (ID: {1}), Now this agent has {2}", person.Name, person.Id, badgeDesc);
+								"Award badge to agent {0} (ID: {1}), Now this agent has {2}.", person.Name, person.Id, badgeDesc);
 						}
 					}
 
@@ -79,9 +79,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						var badgeDesc = string.Format(badgeDescriptionTemplate, badge.BronzeBadge, badge.SilverBadge, badge.GoldBadge,
 							badgeType);
 						Logger.DebugFormat(
-							"Last {0} badge calculated date of agent {1:yyyy-MM-dd} is not earlier than {2:yyyy-MM-dd}, "
-							+ "no badge will awarded. now this agent has {3}.",
-							badgeType, badge.LastCalculatedDate.Date, date.Date, badgeDesc);
+							"Last {0} badge calculated date {1:yyyy-MM-dd} of agent {2} (ID: {3}) is not earlier than {4:yyyy-MM-dd}, "
+							+ "no badge will awarded. now this agent has {5}.",
+							badgeType, badge.LastCalculatedDate.Date, person.Name, person.Id, date.Date, badgeDesc);
 					}
 				}
 			}
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			if (Logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("Total {0} agents will get new badge", personsThatGotBadge.Count);
+				Logger.DebugFormat("Total {0} new badge(s) been awarded to agents.", personsThatGotBadge.Count);
 			}
 
 			return personsThatGotBadge;
