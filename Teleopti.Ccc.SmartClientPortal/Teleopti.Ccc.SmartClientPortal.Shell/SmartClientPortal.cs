@@ -642,7 +642,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			//we get a canceled for some reason the first time
 			if (webView1.Url == "" || e.FailedUrl == null) return;
-			canAccessInternet = false;
+			//canAccessInternet = false;
 			// no internet diplay static page
 			//var executingAssembly = Assembly.GetExecutingAssembly();
 			//var pageName = executingAssembly.GetManifestResourceNames().First(n => n.Contains("StaticPage"));
