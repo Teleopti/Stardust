@@ -17,17 +17,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 			}
 			return true;
 		}
-
-		public static void WaitOrThrow(this Func<bool> instance, TimeSpan pollTime, TimeSpan timeOut)
-		{
-			var timeOutTime = DateTime.Now.Add(timeOut);
-			while (!instance.Invoke())
-			{
-				if (DateTime.Now > timeOutTime)
-					throw new Exception("Timeout waiting for " + instance);
-				Thread.Sleep(pollTime);
-			}
-		}
 	}
 
     public static class DateOnlyForBehaviorTests
