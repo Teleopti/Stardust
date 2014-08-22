@@ -79,7 +79,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateMatrixApplicationFunctions);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateApplicationRoles);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateShiftCategory);
-			GlobalUnitOfWorkState.UnitOfWorkAction(CreateAbsence);
 		}
 
 	    private static void CreateLicense(IUnitOfWork uow)
@@ -193,14 +192,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			shiftCategoryRepository.Add(TestData.ShiftCategory);
 		}
 
-		private static void CreateAbsence(IUnitOfWork unitOfWork)
-		{
-			TestData.AbsenceInContractTime = AbsenceFactory.CreateAbsence("Legacy common vacation absence", "LCA2", Color.FromArgb(200, 150, 150));
-			TestData.AbsenceInContractTime.InContractTime = true;
-
-			var absenceRepository = new AbsenceRepository(unitOfWork);
-			
-			absenceRepository.Add(TestData.AbsenceInContractTime);
-		}
 	}
 }

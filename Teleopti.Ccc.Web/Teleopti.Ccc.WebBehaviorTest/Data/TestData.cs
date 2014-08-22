@@ -17,6 +17,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IApplicationRole AgentRoleWithSiteData;
 
 		public static IShiftCategory ShiftCategory;
-		public static IAbsence AbsenceInContractTime;
 	}
 }
