@@ -321,16 +321,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Select2Box.AssertSelectedOptionValue("Team-Picker", myTeam);
 		}
 
-		[Then(@"the team-picker should have the first of the other site's teams selected")]
-		public void ThenTheTeam_PickerShouldHaveTheFirstOfTheOtherSiteSTeamsSelected()
-		{
-			var team1 = DataMaker.Data().UserData<AnotherSitesTeam>().TheTeam;
-			var team2 = DataMaker.Data().UserData<AnotherSitesSecondTeam>().TheTeam;
-			var expected = new[] { team1, team2 }.OrderBy(t => t.Description.Name).First();
-
-			Select2Box.AssertSelectedOptionValue("Team-Picker", expected.Id.Value.ToString());
-		}
-
 		[Then(@"I should not see the team-picker")]
 		public void ThenIShouldNotSeeTheTeam_Picker()
 		{
