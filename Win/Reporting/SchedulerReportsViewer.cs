@@ -353,8 +353,9 @@ namespace Teleopti.Ccc.Win.Reporting
 		public void SetSize(bool arg)
 		{
 			if (reportSettings1.Unfolded()) reportSettings1.Unfold();
-			if (reportSettings1.Height > Height - 40)
-				reportSettings1.Height = Height - 40;
+			var height = Height - 40;
+			if (reportSettings1.Height > height && height > 0)
+				reportSettings1.Height = height;
 		}
 	}
 }
