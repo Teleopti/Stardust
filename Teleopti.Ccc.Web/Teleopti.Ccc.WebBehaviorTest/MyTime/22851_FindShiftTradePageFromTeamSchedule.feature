@@ -12,6 +12,9 @@ Scenario: Initialize a shift trade from team schedule and also see existing requ
 	
 
 Scenario: Can not see shift trade button if no permission
-	Given I am an agent in a team without access to shift trade requests
+	Given I have a role with
+         | Field                          | Value |
+         | Access To Shift Trade Requests | False |
+	And I am in a team with published schedule
 	When I view team schedule
 	Then I should not be able to initialize a shift trade

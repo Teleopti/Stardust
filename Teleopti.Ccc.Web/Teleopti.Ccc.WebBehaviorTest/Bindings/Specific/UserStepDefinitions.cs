@@ -80,10 +80,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
 
-		[Given(@"I am an agent in a team without access to shift trade requests")]
-		public void GivenIAmAnAgentInATeamWithoutAccessToShiftTradeRequests()
+		[Given(@"I am in a team with published schedule")]
+		public void GivenIAmInATeamWithPublishedSchedule()
 		{
-			DataMaker.Data().Apply(new AgentWithoutRequestsAccess());
 			var team = new Team();
 			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());
@@ -122,12 +121,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new PersonPeriod());
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
-		}
-
-		[Given(@"I am an agent without access to any requests")]
-		public void GivenIAmAnAgentWithoutAccessToAnyRequests()
-		{
-			DataMaker.Data().Apply(new AgentWithoutRequestsAccess());
 		}
 
 		[Given(@"I have several virtual schedule periods")]

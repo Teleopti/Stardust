@@ -609,7 +609,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutRequestsAccess.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingTextRequest.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Agent.cs" />
     <Compile Include="Data\TestData.cs" />
