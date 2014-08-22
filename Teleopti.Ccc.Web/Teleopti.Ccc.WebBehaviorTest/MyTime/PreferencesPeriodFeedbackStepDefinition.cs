@@ -3,6 +3,8 @@ using System.Globalization;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
@@ -23,7 +25,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Given(@"I have a contract schedule with 2 days off")]
 		public void GivenIHaveAContractScheduleWith2DaysOff()
 		{
-			var contractSchedule = GlobalDataMaker.Data().Data<CommonContractSchedule>();
+			var contractSchedule = new ContractScheduleConfigurable();
+			DataMaker.Data().Apply(contractSchedule);
 			DataMaker.Data().Apply(new UserContractSchedule(contractSchedule.ContractSchedule));
 		}
 

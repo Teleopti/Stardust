@@ -157,7 +157,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			GlobalDataMaker.Data().Apply(new CommonPartTimePercentage());
 			GlobalDataMaker.Data().Apply(new CommonContract());
-			GlobalDataMaker.Data().Apply(new CommonContractSchedule());
 
 			GlobalDataMaker.Data().Apply(new AnotherSite());
 

@@ -37,6 +37,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow)
 		{
+			if (Name == null)
+			{
+				Name = DefaultName.Make();
+			}
+
 			ContractSchedule = ContractScheduleFactory.CreateContractSchedule(Name);
 			var week = new ContractScheduleWeek();
 			week.Add(DayOfWeek.Monday, MondayWorkDay);

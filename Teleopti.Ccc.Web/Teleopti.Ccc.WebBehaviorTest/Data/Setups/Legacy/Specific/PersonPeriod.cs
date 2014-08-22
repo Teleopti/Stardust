@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -13,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		public ITeam Team;
 		public PersonContract PersonContract;
 		public Domain.AgentInfo.PersonPeriod ThePersonPeriod;
-		public IContractSchedule ContractSchedule = GlobalDataMaker.Data().Data<CommonContractSchedule>().ContractSchedule;
+		public IContractSchedule ContractSchedule;
 		public IContract Contract = GlobalDataMaker.Data().Data<CommonContract>().Contract;
 
 		private readonly DateTime _startDate;
@@ -28,6 +30,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
+			if (ContractSchedule == null)
+			{
+				var contractSchedule = new ContractScheduleConfigurable();
+				DataMaker.Data().Apply(contractSchedule);
+				ContractSchedule = contractSchedule.ContractSchedule;	
+			}
+
 			PersonContract = new PersonContract(Contract,
 												GlobalDataMaker.Data().Data<CommonPartTimePercentage>().PartTimePercentage,
 												ContractSchedule);

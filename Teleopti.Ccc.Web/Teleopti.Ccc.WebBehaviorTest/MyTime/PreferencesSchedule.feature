@@ -58,8 +58,8 @@ Scenario: See scheduled absence on schedule dayoff
 	| Field   | Value                          |
          | Date    | 2014-05-02                    |
 	And I have a full-day absence with
-	| Field   | Value                          |
-         | Date    | 2014-05-02                    |
+	| Field | Value      |
+	| Date  | 2014-05-02 |
 	And My schedule is published
 	When I view preferences for date '2014-05-02'
 	Then I should see the assigned absence for '2014-05-02'
