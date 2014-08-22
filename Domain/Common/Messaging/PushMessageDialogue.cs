@@ -97,11 +97,15 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
 
         public virtual void SetReply(string reply)
         {
-            if (PushMessage.CheckReply(reply) && !IsReplied)
-            {
-                _reply = reply;
-                _isReplied = true;
-            }
+	        if (!IsReplied)
+	        {
+		        _isReplied = true;
+		        if (reply == null)
+		        {
+					reply = "OK";
+		        }
+		        _reply = reply;
+	        }
         }
 
 				public virtual IPerson CreatedBy { get; protected set; }
