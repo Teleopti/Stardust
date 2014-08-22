@@ -475,7 +475,6 @@
     <Compile Include="Data\Setups\Configurable\PublicNoteConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\MeetingConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\PreferencesPageStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
     <Compile Include="MyTime\PreferencesFeedbackBlacklisting.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

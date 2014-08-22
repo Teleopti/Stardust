@@ -116,7 +116,10 @@ Scenario: Feedback from conflicting preferences and availability
 	Then I should see that there are no available shifts
 
 Scenario: Feedback from an added preference
-	Given I am an agent without access to extended preferences
+	Given I have a role with
+         | Field                          | Value |
+         | Access To Extended Preferences | False |
+	And I have schedule and person period
 	And the current time is '2014-05-02 08:00'
 	And I have an open workflow control set with an allowed standard preference open from '2014-05-03' to '2014-05-05'
 	And I have a shift bag

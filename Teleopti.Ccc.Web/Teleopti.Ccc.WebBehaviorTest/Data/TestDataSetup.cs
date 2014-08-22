@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -120,11 +119,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere &&
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages
 				select r;
-			var agentRoleWithoutExtendedPreferencesApplicationFunctions =
-				from r in agentRoleApplicationFunctions
-				where
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb
-				select r;
 			
 			var anotherSite = GlobalDataMaker.Data().Data<AnotherSite>().Site;
 
@@ -142,7 +136,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 											let businessUnit = TestData.BusinessUnit
 											select new { role, functions, businessUnit, availableData };
 
-			TestData.AgentRoleWithoutExtendedPreferences = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "NoExtendedPreferences", null);
 			TestData.AgentRoleOnlyWithOwnData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "OnlyWithOwnData", null);
 			TestData.AgentRoleWithSiteData = ApplicationRoleFactory.CreateRole(ShippedApplicationRoleNames.AgentRole + "WithSiteData", null);
 
@@ -151,7 +144,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			var customTestRoles = new[]
 			                 	{
-									new { role = TestData.AgentRoleWithoutExtendedPreferences, functions = agentRoleWithoutExtendedPreferencesApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyTeam}},
 									new { role = TestData.AgentRoleOnlyWithOwnData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MyOwn}},
 									new { role = TestData.AgentRoleWithSiteData, functions = agentRoleApplicationFunctions, businessUnit = TestData.BusinessUnit, availableData = new AvailableData{AvailableDataRange = AvailableDataRangeOption.MySite}},
 			                 	};

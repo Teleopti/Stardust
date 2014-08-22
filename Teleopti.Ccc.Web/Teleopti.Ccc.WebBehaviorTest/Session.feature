@@ -50,8 +50,9 @@ Scenario: Signed out when cookie expires while I browse the internet
 	Then I should see the sign in page
 
 Scenario: Signed out when saving preference when cookie is expired
-	Given I am an agent without access to extended preferences
-	And I have an open workflow control set with an allowed standard preference
+	Given I have a role with
+         | Field                          | Value |
+         | Access To Extended Preferences | False |
 	And I am viewing preferences
 	When my cookie expires
 	And I select an editable day without preference

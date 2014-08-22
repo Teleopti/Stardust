@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static string CommonPassword = "1";
 
 		public static IApplicationRole AgentRole;
-		public static IApplicationRole AgentRoleWithoutExtendedPreferences;
 		public static IApplicationRole AgentRoleOnlyWithOwnData;
 		public static IApplicationRole AgentRoleWithSiteData;
 

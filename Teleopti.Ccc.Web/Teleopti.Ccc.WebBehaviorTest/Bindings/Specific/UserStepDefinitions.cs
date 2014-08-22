@@ -112,16 +112,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published Student", SchedulePublishedToDate = "2030-12-01" });
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published Student" });
 		}
-		
-		[Given(@"I am an agent without access to extended preferences")]
-		public void GivenIAmAnAgentWithoutAccessToExtendedPreferences()
+
+		[Given(@"I have schedule and person period")]
+		public void GivenIHaveScheduleAndPersonPeriod()
 		{
-			DataMaker.Data().Apply(new AgentWithoutExtendedPreferencesAccess());
 			DataMaker.Data().Apply(new SchedulePeriod());
 			DataMaker.Data().Apply(new PersonPeriod());
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
+
 
 		[Given(@"I have several virtual schedule periods")]
 		public void GivenIHaveSeveralVirtualSchedulePeriods()
