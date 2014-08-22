@@ -69,13 +69,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.AssertFirstContains(".request-body .request-data-type", "Text");
 		}
-
-		[Given(@"I am an agent without access to absence requests")]
-		public void GivenIAmAnAgentWithoutAccessToAbsenceRequests()
-		{
-			DataMaker.Data().Apply(new AgentWithoutAbsenceRequestsAccess());
-		}
-
+		
 		[When(@"I click the send button")]
 		public void WhenIClickTheSendButton()
 		{

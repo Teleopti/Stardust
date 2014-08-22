@@ -207,7 +207,9 @@ Scenario: Add absence request when multiple absences exist
 	Then I should see the absence request containing 'Holiday' in the list
 
 Scenario: Can not add absence request from request view if no permission
-	Given I am an agent without access to absence requests
+	Given I have a role with
+         | Field                      | Value |
+         | Access To Absence Requests | false |
 	When I am viewing requests
 	Then I should not see the New Absence Request menu item
 

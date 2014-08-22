@@ -545,7 +545,6 @@
     <Compile Include="Data\Setups\Legacy\Specific\UserContractSchedule.cs" />
     <Compile Include="MyTime\PreferencesPeriodFeedbackStepDefinition.cs" />
     <Compile Include="Core\TestControllerMethods.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutAbsenceRequestsAccess.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingAbsenceRequest.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingAvailability.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingLunchPreference.cs" />
