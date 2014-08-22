@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
     public class SingleSignOnHelper
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        public static byte[] SingleSignOn()
+        public static string SingleSignOn()
         {
             var token = Guid.NewGuid();
             using (var customerWebProxy = new CustomerWebProxy())
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                     throw new ArgumentException(result.InitializeSSOArrayResult.Message);
                 }
             }
-            return Encoding.UTF8.GetBytes("guid=" + token);
+            return "guid=" + token;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]

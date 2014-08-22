@@ -5,9 +5,12 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Autofac;
+using EO.WebBrowser;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.SmartClientPortal.Shell.Controls;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
@@ -24,11 +27,14 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Properties;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Configuration;
 using Teleopti.Ccc.Win.ExceptionHandling;
+using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.Win.Main;
+using Teleopti.Ccc.Win.Payroll;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.Win.Permissions;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -227,15 +233,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			Roger65(string.Empty);
 			SetPermissionOnToolStripButtonControls();
 
-			if (!string.IsNullOrEmpty(_portalSettings.LastModule))
-			{
-				startModule(_portalSettings.LastModule);
-			}
-			else
-			{
-				startFirstEnabledModule();
-			}
-
 			var showMemConfig = ConfigurationManager.AppSettings.Get("ShowMem");
 			bool showMemBool;
 			if (bool.TryParse(showMemConfig, out showMemBool))
@@ -245,10 +242,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					showMem();
 				}
 			}
-
-			//var uri = new Uri("http://www.teleopti.com/wfmv8/landingpage/iframe");
-			//webBrowser1.Navigate(uri);
-			//webBrowser1.Visible = true;
+			if (!string.IsNullOrEmpty(_portalSettings.LastModule))
+			{
+				startModule(_portalSettings.LastModule);
+			}
+			else
+			{
+				startFirstEnabledModule();
+			}
 
 		}
 
@@ -595,16 +596,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
         }
 
-	    public void ModuleSelected(ModulePanelItem modulePanelItem)
-	    {
-		    if (modulePanelItem == null)
-			    return;
-
+		private bool canAccessInternet = true;
+		public void ModuleSelected(ModulePanelItem modulePanelItem)
+		{
+			if (modulePanelItem == null)
+				return;
+			
 			_portalSettings.LastModule = modulePanelItem.Tag.ToString();
 			SmartPartInvoker.ClearAllSmartParts();
 			var uc = _outlookPanelContentWorker.GetOutlookPanelContent(_portalSettings.LastModule);
 
-			if (uc == null) 
+			if (uc == null)
 				return;
 
 			outlookBarWorkSpace1.SetNavigatorControl(uc);
@@ -614,18 +616,75 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				navigator.RefreshNavigator();
 			}
+			if (uc is ForecasterNavigator || uc is PayrollExportNavigator)
+			{
+				webControl1.Visible = false;
+				return;
+			}
+			
+            //if (webView1.Title != "Static" && webView1.Url == "")
+            //{
+            //    var token = SingleSignOnHelper.SingleSignOn();
+            //    webView1.LoadUrlAndWait(string.Format("http://www.teleopti.com/elogin.aspx?{0}", token));
+            //    if (canAccessInternet)
+            //        webView1.LoadUrl("http://www.teleopti.com/wfmv8/landingpage/iframe");
+            //}
+            //webControl1.Visible = true;
+            //if (!canAccessInternet)
+            //{
+            //    var executingAssembly = Assembly.GetExecutingAssembly();
+            //    var pageName = executingAssembly.GetManifestResourceNames().First(n => n.Contains("StaticPage"));
+            //    webView1.LoadHtml(GetFromResources(pageName));
+            //}
+		}
 
-		    //var shifts = uc as Win.Shifts.ShiftsNavigationPanel;
-		    //if (shifts != null && !startup)
-		    //	shifts.OpenShifts();
-	    }
+		void webView1LoadFailed(object sender, LoadFailedEventArgs e)
+		{
+			//we get a canceled for some reason the first time
+			if (webView1.Url == "" || e.FailedUrl == null) return;
+			canAccessInternet = false;
+			// no internet diplay static page
+			//var executingAssembly = Assembly.GetExecutingAssembly();
+			//var pageName = executingAssembly.GetManifestResourceNames().First(n => n.Contains("StaticPage"));
+			//webView1.LoadHtml(GetFromResources(pageName));
+			
+			//webView1.Url = "";
+		}
+
+		private void webView1_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
+		{
+			foreach (var item in e.Menu.Items)
+			{
+				if (item.CommandId == CommandIds.ViewSource)
+				{
+					e.Menu.Items.Remove(item);
+					break;
+				}
+			}
+			var menuItem = new EO.WebBrowser.MenuItem("Himm");
+			
+			e.Menu.Items.Add(menuItem);
+		}
+
+		public string GetFromResources(string resourceName)
+		{
+			Assembly assem = GetType().Assembly;
+			using (Stream stream = assem.GetManifestResourceStream(resourceName))
+			{
+				if (stream == null) return "";
+				using (var reader = new StreamReader(stream, Encoding.UTF8))
+				{
+					return reader.ReadToEnd();
+				}
+			}
+		}
 
         private void toolStripButtonCustomerWeb_Click(object sender, EventArgs e)
         {
             try
             {
                 var token = SingleSignOnHelper.SingleSignOn();
-                webBrowser1.Navigate(StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["CustomerWebSSOUrl"], "_blank", token, "Content-Type: application/x-www-form-urlencoded");
+               // webView1.go.Navigate(StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["CustomerWebSSOUrl"], "_blank", token, "Content-Type: application/x-www-form-urlencoded");
             }
             catch (ArgumentException exception)
             {
@@ -651,12 +710,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			ModuleSelected(e.SelectedItem);
 		}
 
-		private void ribbonControlAdv1_Click(object sender, EventArgs e)
+		private void webView1_NewWindow(object sender, NewWindowEventArgs e)
 		{
-
+			webView1.LoadUrl(e.TargetUrl);
+			e.Accepted = false;
+			// System.Diagnostics.Process.Start(e.TargetUrl);
 		}
-
-       
 
     }
 }
