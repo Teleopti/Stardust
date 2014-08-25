@@ -2331,7 +2331,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReadyThreeDots");
 			Cursor = Cursors.Default;
 
-			_sikuliTestHelper.AssertTestDone();
+			_sikuliTestHelper.AssertLoaded();
 		}
 
 		private void setupRequestViewButtonStates()
