@@ -24,7 +24,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		var elementToBind = $('#Request-add-shift-trade')[0];
 		if (elementToBind !== undefined) {
 			if ((vm || '') == '') {
-				vm = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+				var ajax = new Teleopti.MyTimeWeb.Ajax();
+				vm = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
 				vm.featureCheck();
 				ko.applyBindings(vm, elementToBind);
 			}

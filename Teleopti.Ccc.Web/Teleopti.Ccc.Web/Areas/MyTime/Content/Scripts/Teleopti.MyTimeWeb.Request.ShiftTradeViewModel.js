@@ -9,9 +9,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js"/>
 
 
-Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function() {
-	var ajax = new Teleopti.MyTimeWeb.Ajax();
-
+Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	var self = this;
 	self.layerCanvasPixelWidth = ko.observable();
 
@@ -1011,15 +1009,15 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function() {
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
 			success: function(data) {
-				self.setTimeFilters(data.HourTexts);
-				//set dayoff for start time filter
+				//set dayoff only in start time filter
 				if (data != null) {
+					self.setTimeFilters(data.HourTexts);
 					$.each(data.DayOffShortNames, function(idx, name) {
 						if (idx < data.DayOffShortNames.length - 1) dayOffNames += name + ", ";
 						else dayOffNames += name;
 					});
+					self.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView(dayOffNames, 0, 24, false, true));
 				}
-				self.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView(dayOffNames, 0, 24, false, true));
 			}
 		});
 	};
