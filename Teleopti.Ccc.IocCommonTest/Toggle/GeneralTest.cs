@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule("http://tralala", string.Empty));
-			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule("https://hejsan", string.Empty));
-			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -42,7 +40,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule("https://hejsan", string.Empty));
-			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -56,7 +53,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule("http://something", string.Empty));
-			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<ITogglesActive>()
@@ -69,7 +65,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule(string.Empty, string.Empty));
-			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			Assert.Throws<ArgumentException>(() =>
 			{
 				using (containerBuilder.Build())
@@ -84,7 +79,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule(string.Empty, string.Empty));
-			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			Assert.Throws<ArgumentException>(() =>
 			{
 				using (containerBuilder.Build())

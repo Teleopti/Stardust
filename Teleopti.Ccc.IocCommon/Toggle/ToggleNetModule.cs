@@ -71,11 +71,6 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				.SingleInstance().As<IAllToggles>();
 		}
 
-		public static void RegisterDependingModules(ContainerBuilder builder)
-		{
-			//put module dependencies here if using in scenarios where not all modules are registered
-		}
-
 		private bool togglePathIsAnUrl()
 		{
 			return _pathToToggle.StartsWith("http://") || _pathToToggle.StartsWith("https://");
