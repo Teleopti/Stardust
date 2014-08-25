@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static void SetupFakeState()
 		{
 			personThatCreatesTestData = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", TestData.CommonPassword);
-			CommonBusinessUnit.BusinessUnitFromFakeState = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
-			CommonBusinessUnit.BusinessUnitFromFakeState.Name = "BusinessUnit";
+			CommonBusinessUnit.BusinessUnitFromFakeState = new BusinessUnit("BusinessUnit");
 
 			StateHolderProxyHelper.SetupFakeState(datasource, personThatCreatesTestData, CommonBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 
