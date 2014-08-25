@@ -283,7 +283,7 @@
     <Compile Include="TestData\Setups\Configurable\WorkflowControlSetConfigurable.cs" />
     <Compile Include="TestData\Setups\Specific\BusinessUnitFromFakeState.cs" />
     <Compile Include="TestData\Setups\Specific\BrasilianTimeZone.cs" />
-    <Compile Include="TestData\DefaultName.cs" />
+    <Compile Include="TestData\RandomName.cs" />
     <Compile Include="TestData\Setups\Specific\GermanCulture.cs" />
     <Compile Include="TestData\Setups\Specific\AustralianTimeZone.cs" />
     <Compile Include="TestData\Setups\Specific\HawaiiTimeZone.cs" />

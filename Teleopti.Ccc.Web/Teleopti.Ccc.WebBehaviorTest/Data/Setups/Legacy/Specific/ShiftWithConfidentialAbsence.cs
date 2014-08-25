@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			IAbsence confidentialAbsence;
 			if (Absence == null)
 			{
-				confidentialAbsence = AbsenceFactory.CreateAbsence(DefaultName.Make());
+				confidentialAbsence = AbsenceFactory.CreateAbsence(RandomName.Make());
 				confidentialAbsence.Confidential = true;
 				confidentialAbsence.DisplayColor = Color.GreenYellow;
 				new AbsenceRepository(uow).Add(confidentialAbsence);

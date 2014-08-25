@@ -61,12 +61,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 				                          new TimeSpan(0, 15, 0));
 
 			var activityRepository = new ActivityRepository(uow);
-			var activity = new Activity(DefaultName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
+			var activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
 			var activityLunch1 = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity1));
 			var activityLunch2 = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(_lunchActivity2));
 			activityRepository.Add(activity);
 
-			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory(DefaultName.Make(), "Purple");
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");
 			new ShiftCategoryRepository(uow).Add(shiftCategory);
 
 			TheRuleSetBag = new Domain.Scheduling.ShiftCreator.RuleSetBag();

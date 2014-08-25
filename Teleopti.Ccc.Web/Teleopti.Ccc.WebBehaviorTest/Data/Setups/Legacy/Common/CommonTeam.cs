@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common
 		{
 			var site = GlobalDataMaker.Data().Data<CommonSite>().Site;
 
-			Team = TeamFactory.CreateSimpleTeam(DefaultName.Make("Common Team"));
+			Team = TeamFactory.CreateSimpleTeam(RandomName.Make("Common Team"));
 			site.AddTeam(Team);
 
 			var teamRepository = new TeamRepository(uow);

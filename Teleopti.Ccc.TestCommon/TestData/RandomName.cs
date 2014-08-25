@@ -5,11 +5,13 @@ namespace Teleopti.Ccc.TestCommon.TestData
 {
 	// used to prevent common and default named entities be referenced from scenarios.
 	// shouldnt they be explicit, if relevant?
-	public static class DefaultName
+	public static class RandomName
 	{
-		public static string Make(string name)
+		private static readonly Random random = new Random();
+
+		public static string Make(string baseName)
 		{
-			return name + " " + randomString(6) + "~";
+			return baseName + " " + randomString(6) + "~";
 		}
 
 		public static string Make()
@@ -17,14 +19,12 @@ namespace Teleopti.Ccc.TestCommon.TestData
 			return randomString(6) + "~";
 		}
 
-		private static readonly Random Random = new Random();
-
 		private static string randomString(int length)
 		{
 			const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 			return new string(
 				Enumerable.Repeat(chars, length)
-						  .Select(s => s[Random.Next(s.Length)])
+						  .Select(s => s[random.Next(s.Length)])
 						  .ToArray());
 		}
 	}

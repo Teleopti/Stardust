@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			}
 			else
 			{
-				absence = AbsenceFactory.CreateAbsence(DefaultName.Make(), DefaultName.Make(), Color.FromArgb(210, 150, 150));
+				absence = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(210, 150, 150));
 				var absenceRepository = new AbsenceRepository(uow);
 				absenceRepository.Add(absence);
 			}

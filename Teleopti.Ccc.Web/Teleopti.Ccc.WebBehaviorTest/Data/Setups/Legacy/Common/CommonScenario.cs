@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Scenario = ScenarioFactory.CreateScenario(DefaultName.Make("Common scenario"), true, false);
+			Scenario = ScenarioFactory.CreateScenario(RandomName.Make("Common scenario"), true, false);
 			new ScenarioRepository(uow).Add(Scenario);
 		}
 	}

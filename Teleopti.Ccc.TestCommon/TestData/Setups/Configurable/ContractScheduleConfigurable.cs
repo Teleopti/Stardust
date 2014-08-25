@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			if (Name == null)
 			{
-				Name = DefaultName.Make();
+				Name = RandomName.Make();
 			}
 
 			ContractSchedule = ContractScheduleFactory.CreateContractSchedule(Name);

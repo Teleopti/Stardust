@@ -518,7 +518,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			var siteCfg = new SiteConfigurable
 			{
 				BusinessUnit = CommonBusinessUnit.BusinessUnitFromFakeState.Name,
-				Name = DefaultName.Make("site")
+				Name = RandomName.Make("site")
 			};
 			DataMaker.Data().Apply(siteCfg);
 			var team = new AnotherSitesTeam(siteCfg.Site);

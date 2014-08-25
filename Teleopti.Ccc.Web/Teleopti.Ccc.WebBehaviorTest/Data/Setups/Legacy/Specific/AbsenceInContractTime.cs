@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var absenceInContractTime = AbsenceFactory.CreateAbsence(DefaultName.Make(), DefaultName.Make(), Color.FromArgb(200, 150, 150));
+			var absenceInContractTime = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(200, 150, 150));
 			absenceInContractTime.InContractTime = true;
 			new AbsenceRepository(uow).Add(absenceInContractTime);
 

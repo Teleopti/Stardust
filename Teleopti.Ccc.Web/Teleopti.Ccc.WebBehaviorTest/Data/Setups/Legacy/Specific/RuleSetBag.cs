@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			var end = new TimePeriodWithSegment(new TimePeriod(_earliestEnd, 0, _latestEnd, 0), new TimeSpan(0, 15, 0));
 			TheRuleSetBag = new Domain.Scheduling.ShiftCreator.RuleSetBag();
 
-			var activity = new Activity(DefaultName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
+			var activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
 			var activityRepository = new ActivityRepository(uow);
 			activityRepository.Add(activity);
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			}
 			else
 			{
-				shiftCategory = ShiftCategoryFactory.CreateShiftCategory(DefaultName.Make(), "Purple");
+				shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");
 				var shiftCategoryRepository= new ShiftCategoryRepository(uow);
 				shiftCategoryRepository.Add(shiftCategory);
 			}

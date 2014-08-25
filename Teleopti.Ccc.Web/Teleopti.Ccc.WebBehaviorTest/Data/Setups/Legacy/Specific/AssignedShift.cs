@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			}
 			else
 			{
-				activity = new Activity(DefaultName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
+				activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
 				activityRepository.Add(activity);
 			}
 
@@ -68,14 +68,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			// add lunch
 			if (WithLunch)
 			{
-				var lunchactivity = new Activity(DefaultName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Yellow) };
+				var lunchactivity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Yellow) };
 				activityRepository.Add(lunchactivity);
 
                 var lunchPeriod = new DateTimePeriod(shiftStartUtc.AddHours(3), shiftStartUtc.AddHours(4));
 				assignment.AddActivity(lunchactivity, lunchPeriod);
 			}
 
-			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory(DefaultName.Make(), "Purple");
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");
 			new ShiftCategoryRepository(uow).Add(shiftCategory);
 			ShiftCategory = shiftCategory;
 
