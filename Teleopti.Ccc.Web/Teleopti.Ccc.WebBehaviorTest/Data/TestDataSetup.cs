@@ -1,11 +1,8 @@
 ﻿using System.IO;
-using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -22,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class TestDataSetup
 	{
-		private static DatabaseHelper.Backup _Ccc7DataBackup;
+		private static DatabaseHelper.Backup _ccc7DataBackup;
 		private static IDataSource datasource;
 		private static IPerson personThatCreatesTestData;
 
@@ -44,8 +41,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void CreateMinimumTestData()
 		{
-			GlobalUnitOfWorkState.UnitOfWorkAction(CreatePersonThatCreatesTestData);
-			GlobalUnitOfWorkState.UnitOfWorkAction(CreateLicense);
+			GlobalUnitOfWorkState.UnitOfWorkAction(createPersonThatCreatesTestData);
+			GlobalUnitOfWorkState.UnitOfWorkAction(createLicense);
 		}
 
 		public static void ClearAnalyticsData()
@@ -55,27 +52,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void BackupCcc7Data()
 		{
-			_Ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy("Teleopti.Ccc.WebBehaviorTest");
+			_ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy("Teleopti.Ccc.WebBehaviorTest");
 		}
 
 		public static void RestoreCcc7Data()
 		{
 			Navigation.GoToWaitForUrlAssert("Test/ClearConnections", new ApplicationStartupTimeout());
-			DataSourceHelper.RestoreCcc7DataByFileCopy(_Ccc7DataBackup);
+			DataSourceHelper.RestoreCcc7DataByFileCopy(_ccc7DataBackup);
 		}
 
-	    private static void CreateLicense(IUnitOfWork uow)
+		private static void createLicense(IUnitOfWork uow)
 		{
 			var license = new License {XmlString = File.ReadAllText("License.xml")};
 			var licenseRepository = new LicenseRepository(uow);
 			licenseRepository.Add(license);
 		}
 
-		private static void CreatePersonThatCreatesTestData(IUnitOfWork uow)
+		private static void createPersonThatCreatesTestData(IUnitOfWork uow)
 		{
 			var personRepository = new PersonRepository(uow);
 			personRepository.Add(personThatCreatesTestData);
 		}
-
 	}
 }
