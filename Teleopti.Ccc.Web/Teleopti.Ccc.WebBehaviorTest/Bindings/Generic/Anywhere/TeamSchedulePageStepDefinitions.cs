@@ -267,7 +267,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			var teams = table.CreateSet<TeamInfo>().ToArray();
 			teams.ForEach(t => Browser.Interactions.AssertAnyContains("#group-picker option", t.Team));
 
-			Browser.Interactions.AssertNotExists("#group-picker option:nth-child(" + teams.Length + ")", "#group-picker option:nth-child(" + (teams.Length + 1) + ")");
+			Browser.Interactions.AssertNotExists("#group-picker optgroup:first-child option:nth-child(" + teams.Length + ")",
+				string.Format("#group-picker optgroup:first-child option:nth-child({0})", teams.Length + 1));
 		}
 
 		[Then(@"I should be able to select skills")]
