@@ -9,4 +9,4 @@ namespace Teleopti.Ccc.Domain.Common
 			// do not do anything
 		}
 	}
-}
+}	

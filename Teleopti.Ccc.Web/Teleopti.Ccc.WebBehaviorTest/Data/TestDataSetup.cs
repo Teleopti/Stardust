@@ -120,13 +120,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				select r;
 			
 			//
-			IApplicationRole administratorRole, unitRole, siteRole, teamRole;
+			IApplicationRole administratorRole, unitRole, siteRole, teamRole, agentRole;
 			//
-			var shippedRoles = ApplicationRoleFactory.CreateShippedRoles(out administratorRole, out TestData.AgentRole, out unitRole, out siteRole, out teamRole);
+			var shippedRoles = ApplicationRoleFactory.CreateShippedRoles(out administratorRole, out agentRole, out unitRole, out siteRole, out teamRole);
 			shippedRoles.ForEach(r => r.Name += "Shipped");
 			var shippedRolesWithFunctions = from role in shippedRoles
-			                                let functions = (role == TestData.AgentRole ? agentRoleApplicationFunctions : allApplicationFunctions)
-											let availableDataRangeOption = (role == TestData.AgentRole ? AvailableDataRangeOption.MyTeam :
+											let functions = (role == agentRole ? agentRoleApplicationFunctions : allApplicationFunctions)
+											let availableDataRangeOption = (role == agentRole ? AvailableDataRangeOption.MyTeam :
 																			(role == administratorRole ? AvailableDataRangeOption.MyBusinessUnit : AvailableDataRangeOption.None)
 																			)
 											let availableData = new AvailableData{AvailableDataRange = availableDataRangeOption}
