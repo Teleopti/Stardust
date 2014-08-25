@@ -11601,4 +11601,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Arkiv</value>
     <comment>If not using stupid FILE style</comment>
   </data>
+  <data name="DeleteSkill" xml:space="preserve">
+    <value>Ta bort skill</value>
+    <comment>Delete skill</comment>
+  </data>
 </root>

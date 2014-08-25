@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			_toggleManager = toggleManager;
 			_repositoryFactory = repositoryFactory;
 			_unitOfWorkFactory = unitOfWorkFactory;
-			splitContainer1.SplitterDistance = splitContainer1.Height - portalSettings.ForecasterActionPaneHeight;
+			//splitContainer1.SplitterDistance = splitContainer1.Height - portalSettings.ForecasterActionPaneHeight;
 
 			setVisibility();
 		}
