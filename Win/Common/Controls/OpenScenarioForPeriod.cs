@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Forms;
 using log4net;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -234,6 +235,8 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			DateTime endDate = _setting.EndDate;
 			dateSelectionControl1.SetInitialDates(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)));
 			buttonOK.Select();
+
+		    if (RightToLeftLayout) Left = Screen.PrimaryScreen.WorkingArea.Right - 200 - Width;
 		}
 
 		private void bindScenarioCombo(IEnumerable<IScenario> scenariosToLoad)
