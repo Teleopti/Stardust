@@ -193,6 +193,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DateTime _lastSaved = DateTime.Now;
         private readonly SchedulingScreenPermissionHelper _permissionHelper;
         private readonly CutPasteHandlerFactory _cutPasteHandlerFactory;
+		private readonly SikuliTestHelper _sikuliTestHelper;
 
 		#region Constructors
 
@@ -230,6 +231,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_tmpTimer.Interval = 50;
 			_tmpTimer.Enabled = false;
 			_tmpTimer.Tick += _tmpTimer_Tick;
+			_sikuliTestHelper = new SikuliTestHelper();
 		}
 
 		private void setMenuItemsHardToLeftToRight()
@@ -1002,10 +1004,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
+						_sikuliTestHelper.RegisterTest(SikuliTestRegister.Select.Optimize);
+
 						var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
-							{
-								OptimizationMethod = OptimizationMethod.ReOptimize
-							};
+						{
+							OptimizationMethod = OptimizationMethod.ReOptimize
+						};
 
 						startBackgroundScheduleWork(_backgroundWorkerOptimization, optimizationPreferences, false);
 					}
@@ -2045,10 +2049,50 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_scheduleOptimizerHelper.ResetWorkShiftFinderResults();
 
-			if (StateHolderReader.Instance.StateReader.SessionScopeData.TestMode)
+			switch (_sikuliTestHelper.CurrentTest)
 			{
-				var testView = new TestAdditionalInfoView{Header = "Task Done"};
-				testView.ShowDialog();
+				case SikuliTestRegister.Select.Optimize:
+					_sikuliTestHelper.AssertTest(assertSikuliOptimizing);
+					break;
+				default:
+					_sikuliTestHelper.AssertTestDone();
+					break;
+			}
+		}
+
+		private bool assertSikuliOptimizing()
+		{
+			var std = getStandardDeviationForPeriod();
+			if (!std.HasValue)
+				return false;
+			if (std.Value > 0.2)
+				return false;
+			return true;
+		}
+
+		private double? getStandardDeviationForPeriod()
+		{
+			try
+			{
+				TabPageAdv skillTabPage = _tabSkillData.TabPages[0];
+				var totalSkill = skillTabPage.Tag as IAggregateSkill;
+				var period = _schedulerState.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(_schedulerState.TimeZoneInfo);
+				var skillStaffPeriodsTotal = _schedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
+					totalSkill, period);
+
+				var skillStaffPeriodsOfFullPeriod = new List<IList<ISkillStaffPeriod>>();
+
+				foreach (var day in _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection())
+				{
+					var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(_schedulerState.TimeZoneInfo);
+					var skillStaffPeriods = skillStaffPeriodsTotal.Where(x => dayUtcPeriod.Contains(x.Period)).ToList();
+					skillStaffPeriodsOfFullPeriod.Add(skillStaffPeriods);
+				}
+				return SkillStaffPeriodHelper.SkillPeriodGridSmoothness(skillStaffPeriodsOfFullPeriod);
+			}
+			catch
+			{
+				return null;
 			}
 		}
 
@@ -2287,11 +2331,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReadyThreeDots");
 			Cursor = Cursors.Default;
 
-			if (StateHolderReader.Instance.StateReader.SessionScopeData.TestMode)
-			{
-				var testView = new TestAdditionalInfoView{Header ="Loaded"};
-				testView.ShowDialog();
-			}
+			_sikuliTestHelper.AssertTestDone();
 		}
 
 		private void setupRequestViewButtonStates()

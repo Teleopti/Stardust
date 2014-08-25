@@ -681,12 +681,14 @@
       <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
-    <Compile Include="TestAdditionalInfoView.cs">
+    <Compile Include="SikuliResultView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TestAdditionalInfoView.Designer.cs">
-      <DependentUpon>TestAdditionalInfoView.cs</DependentUpon>
+    <Compile Include="SikuliResultView.Designer.cs">
+      <DependentUpon>SikuliResultView.cs</DependentUpon>
     </Compile>
+    <Compile Include="SikuliTestHelper.cs" />
+    <Compile Include="SikuliTestRegister.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2786,8 +2788,8 @@
     <EmbeddedResource Include="Permissions\PermissionViewer.resx">
       <DependentUpon>PermissionViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TestAdditionalInfoView.resx">
-      <DependentUpon>TestAdditionalInfoView.cs</DependentUpon>
+    <EmbeddedResource Include="SikuliResultView.resx">
+      <DependentUpon>SikuliResultView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporting\ReportUserSelectorAuditingView.resx">
       <DependentUpon>ReportUserSelectorAuditingView.cs</DependentUpon>
