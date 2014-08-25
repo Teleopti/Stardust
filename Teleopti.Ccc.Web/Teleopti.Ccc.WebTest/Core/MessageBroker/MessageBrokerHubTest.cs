@@ -102,5 +102,30 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			pongedWith.Should().Be(12);
 		}
 
+		[Test]
+		public void Ping_WithNumberOfMessages_ShouldSendThatNumberOfMessageswithSignalR()
+		{
+
+			var expectedNumberOfSentMessages = 17;
+			var target = new MessageBrokerHub(new ActionImmediate(), new SubscriptionPassThrough());
+			var hubBuilder = new TestHubBuilder();
+
+			var numberOfpongs = 0;
+			var client = hubBuilder.FakeClient(
+				"Pong",
+				new Action(() =>
+				{
+					numberOfpongs++;
+				}));
+			hubBuilder.SetupHub(target, client);
+
+			
+
+			target.Ping(expectedNumberOfSentMessages);
+
+			Assert.That(numberOfpongs, Is.EqualTo(expectedNumberOfSentMessages));
+
+		}
+
 	}
 }

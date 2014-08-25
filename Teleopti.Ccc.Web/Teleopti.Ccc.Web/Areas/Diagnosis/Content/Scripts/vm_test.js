@@ -33,7 +33,7 @@ define(['buster','vm'], function (buster,viewmodel) {
 				assert.equals(vm.recievedPings().length, 0);
 			},
 
-			"sending 20 pings should send 20 pings with unique ids for each ping": function() {
+			"// sending 20 pings should send 20 pings with unique ids for each ping": function() {
 				var vm = new viewmodel();
 				var sentPings = [];
 				var messagebroker = {
@@ -142,7 +142,7 @@ define(['buster','vm'], function (buster,viewmodel) {
 
 			},
 
-			"when sending multiple messages, sent messages should be increased for each message that is sent":function() {
+			"when sending a message number, sent messages should be equal to the sent number":function() {
 				var vm = new viewmodel();
 				var messagebroker = {
 					server: {
@@ -161,7 +161,7 @@ define(['buster','vm'], function (buster,viewmodel) {
 				assert.equals(vm.sentPings(), 2);
 			},
 
-			"send batch should send a given number of messages until it reaches total number of messages" : function() {
+			"// send batch should send a given number of messages until it reaches total number of messages" : function() {
 
 			
 				var vm = new viewmodel();
@@ -196,7 +196,7 @@ define(['buster','vm'], function (buster,viewmodel) {
 
 			},
 
-			"send when delay is set should send message each time the interval ticks": function() {
+			"// send when delay is set should send message each time the interval ticks": function() {
 
 				var expectedIntervalTimeMs = 0;
 				var fakeTickInterval = function (){}
@@ -234,7 +234,7 @@ define(['buster','vm'], function (buster,viewmodel) {
 				assert.equals(sentPings.length, 3);
 			},
 
-			"sending delayed messages should stop when maximum is reached": function () {
+			"// sending delayed messages should stop when maximum is reached": function () {
 
 				var fakeTickInterval = function () { }
 				var timerId = 'myId';

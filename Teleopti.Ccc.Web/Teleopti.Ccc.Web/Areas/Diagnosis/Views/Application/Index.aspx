@@ -41,7 +41,6 @@
 	
 <p>Number of pings: <input data-bind="value: numberOfPings" /></p>
 
-   <button class="btn btn-danger" data-bind="click: sendPing">Send</button>
-   <button class="btn btn-danger" data-bind="click: logMe">Log me</button>
+   <button class="btn btn-danger" data-bind="click: sendAllPings">Send</button>
 </body>
 </html>

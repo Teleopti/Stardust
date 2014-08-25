@@ -96,5 +96,13 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			Clients.Caller.Pong(id);
 		}
+
+		public void Ping(int expectedNumberOfSentMessages)
+		{
+			for (var i = 0; i < expectedNumberOfSentMessages; i++)
+			{
+				Ping();
+			}
+		}
 	}
 }
