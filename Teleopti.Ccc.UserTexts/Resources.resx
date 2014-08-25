@@ -12227,4 +12227,8 @@ Reduce the complexity to use these shifts.</value>
     <value>You are not signed in.</value>
     <comment>You are not signed in.</comment>
   </data>
+  <data name="BusinessRuleMinWeekWorktimeErrorMessage" xml:space="preserve">
+    <value>The week contains too little work time ({0}). Min is {1}.</value>
+    <comment>Message when week contains to little work time</comment>
+  </data>
 </root>
