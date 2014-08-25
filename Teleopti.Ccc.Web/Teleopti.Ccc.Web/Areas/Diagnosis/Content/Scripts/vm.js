@@ -21,11 +21,9 @@ define([
 			return self.expectedPongs() - self.recievedPings().length;
 		});
 		self.sentPings = ko.observable(0);
-		self.batchSize = ko.observable(0);
 		self.isOnline = ko.computed(function () {
 			return self.connectionState() == 1;
 		});
-		self.interval_ms = ko.observable(0);
 		self.messageBrokerStatus = ko.computed(function () {
 			return self.connectionStates[self.connectionState()];
 		});
@@ -46,45 +44,21 @@ define([
 			}
 		}
 
-		self.intervalId = null;
-
 		self.sendAllPings = function () {
-
-			if (self.interval_ms() > 0) {
-				self.intervalId = window.setInterval(self.sendNextPing, self.interval_ms());
-			} else {
 				self.sendPings(self.numberOfPings(), 0);
-			}
 		};
 
-		self.sendNextPing = function () {
-			if (self.sentPings() < self.numberOfPings()) {
-				self.hub.server.pingWithId(self.sentPings());
-
-				self.sentPings(self.sentPings() + 1);
-				if (self.sentPings() >= self.numberOfPings() && self.intervalId) window.clearInterval(self.intervalId);
-
-			}
-
-		};
-
-		self.sendBatch = function () {
-
-			for (var i = 0; i < self.batchSize() ; ++i) {
-				if (self.sentPings() < self.numberOfPings()) {
-					self.sendNextPing();
-				}
-			}
-		};
 
 		self.sendPings = function (pings) {
 			self.recievedPings([]);
-			self.sentPings(0);
+			self.sentPings(pings);
 			self.expectedPongs(pings);
 
-			for (var pingId = 0; pingId < pings; ++pingId) {
-				self.sendNextPing();
+			if (self.hub && self.hub.server && self.hub.server.ping) {
+				self.hub.server.ping(self.numberOfPings());
+
 			}
+
 		};
 
 		self.updateMessageBrokerConnection = function () {

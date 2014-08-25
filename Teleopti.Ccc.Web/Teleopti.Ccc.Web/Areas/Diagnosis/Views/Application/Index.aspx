@@ -27,20 +27,24 @@
     <!--[if lt IE 7]>
         <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this application.</p>
     <![endif]-->
-  <div id="bjs">
-	<div>messagebroker is running...</div>
-	<br/>
-	
-	<div>sent: </div><div data-bind="text: sentPings"></div>
-	<br/>
-	<div>left: </div><div data-bind="text: pongsLeft"></div>
-
-	<br/>
+	<div class="container">
+		<div id="bjs" >
+			<h3>messagebroker is running...</h3>
+		<div class="row">
+				<div class="col-lg-6">sent: <span data-bind="text: sentPings"></span></div>
+				<div class="col-lg-6">left: <span data-bind="text: pongsLeft"></span></div>
+		</div>
 	</div>
 	
-	
-<p>Number of pings: <input data-bind="value: numberOfPings" /></p>
-
-   <button class="btn btn-danger" data-bind="click: sendAllPings">Send</button>
+		<form role="form" class="form-horizontal"> 
+			<div class="form-group">
+					<label class="col-lg-2 control-label">Number of pings: </label>
+				<div class="col-lg-2">
+						<input class="form-control" data-bind="value: numberOfPings" />
+					</div>
+			</div>
+			<button class="btn btn-danger" data-bind="click: sendAllPings">Send</button>
+		</form>
+	</div>
 </body>
 </html>
