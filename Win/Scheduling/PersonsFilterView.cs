@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		   
 			SetTexts();
-			
+			buttonAdvance.Visible = ShowAdvancedFilter;
+
 		}
 
 		public HashSet<Guid> SelectedAgentGuids()
@@ -56,5 +57,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			get { return _personSelectorPresenter.SelectedGroupPageKey(); }
 		}
+
+		public bool ShowAdvancedFilter { get; set; }
 	}
 }
