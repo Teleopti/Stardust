@@ -3909,9 +3909,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void showFilterDialog()
 		{
+			var toggleManager = _container.Resolve<IToggleManager>();
 			var scheduleFilterView = getCachedPersonsFilterView();
 
 			scheduleFilterView.StartPosition = FormStartPosition.Manual;
+			scheduleFilterView.ShowAdvancedFilter = toggleManager.IsEnabled(Toggles.Scheduler_AdvanceFilter_29555);
 
 			//TODO: Please come up with a better solution!
 			Point pointToScreen = toolStripExFilter.PointToScreen(
