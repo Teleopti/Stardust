@@ -224,7 +224,7 @@
     <Compile Include="Bindings\Generic\GroupPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\PersonalShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonDayOffConfigurable.cs" />
-    <Compile Include="Data\Setups\Legacy\Common\CommonScenario.cs" />
+    <Compile Include="Data\Setups\Legacy\Common\DefaultScenario.cs" />
     <Compile Include="Data\Setups\Configurable\AbsenceRequestConfigurable.cs" />
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />

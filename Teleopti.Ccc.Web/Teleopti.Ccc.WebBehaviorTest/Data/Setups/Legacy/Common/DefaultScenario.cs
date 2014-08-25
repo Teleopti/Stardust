@@ -7,13 +7,13 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common
 {
-	public class CommonScenario : IDataSetup
+	public class DefaultScenario : IDataSetup
 	{
 		public IScenario Scenario;
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Scenario = ScenarioFactory.CreateScenario(RandomName.Make("Common scenario"), true, false);
+			Scenario = ScenarioFactory.CreateScenario(RandomName.Make("Default scenario"), true, false);
 			new ScenarioRepository(uow).Add(Scenario);
 		}
 	}

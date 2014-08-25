@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 	public class AbsenceInContractTime : IUserDataSetup
 	{
 		private static readonly CultureInfo swedishCulture = CultureInfo.GetCultureInfo("sv-SE");
-		public IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
+		public IScenario Scenario = GlobalDataMaker.Data().Data<DefaultScenario>().Scenario;
 
 		public AbsenceInContractTime()
 		{

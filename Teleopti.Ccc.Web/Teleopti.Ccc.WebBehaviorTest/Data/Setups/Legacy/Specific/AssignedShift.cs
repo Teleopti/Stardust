@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			Foo = "asdf";
 		}
 
-		public IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
+		public IScenario Scenario = GlobalDataMaker.Data().Data<DefaultScenario>().Scenario;
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{

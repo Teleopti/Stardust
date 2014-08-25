@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			var activityRepository = new ActivityRepository(uow);
 			activityRepository.Add(activity);
 
-			var scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
+			var scenario = GlobalDataMaker.Data().Data<DefaultScenario>().Scenario;
 			var meeting = new Meeting(user,
 									  new[] { new MeetingPerson(user, false) },
 									  Subject, Location, Description ?? String.Empty,

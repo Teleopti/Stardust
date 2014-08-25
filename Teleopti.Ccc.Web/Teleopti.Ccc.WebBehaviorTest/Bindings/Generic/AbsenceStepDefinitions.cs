@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			DataMaker.Person(person).Apply(new FullDayAbsenceConfigurable
 				{
-					Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario.Description.Name,
+					Scenario = GlobalDataMaker.Data().Data<DefaultScenario>().Scenario.Description.Name,
 					Name = name,
 					Date = date
 				});

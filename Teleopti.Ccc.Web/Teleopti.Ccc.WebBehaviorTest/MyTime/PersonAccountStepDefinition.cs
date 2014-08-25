@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void GivenHaveAAbsenceWith(string userName, Table table)
 		{
 			DataMaker.ApplyFromTable<PersonAbsenceConfigurable>(userName, table);
-			var currentScenario = new ThisCurrentScenario(GlobalDataMaker.Data().Data<CommonScenario>().Scenario);
+			var currentScenario = new ThisCurrentScenario(GlobalDataMaker.Data().Data<DefaultScenario>().Scenario);
 
 			var personAccountUpdateConfigurable = new PersonAccountUpdateConfigurable { CurrentScenario = currentScenario };
 			DataMaker.Data().Apply(personAccountUpdateConfigurable);
