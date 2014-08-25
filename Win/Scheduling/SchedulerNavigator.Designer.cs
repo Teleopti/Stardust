@@ -71,7 +71,6 @@
 			// 
 			// splitContainerAdv1.Panel2
 			// 
-			this.splitContainerAdv1.Panel2.AutoScroll = true;
 			this.splitContainerAdv1.Panel2.Controls.Add(this.toolStripPeople);
 			this.splitContainerAdv1.Panel2.Margin = new System.Windows.Forms.Padding(0);
 			this.splitContainerAdv1.Panel2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
@@ -88,6 +87,7 @@
 			this.toolStripPeople.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.toolStripPeople.CaptionAlignment = Syncfusion.Windows.Forms.Tools.CaptionAlignment.Center;
 			this.toolStripPeople.CaptionFont = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.toolStripPeople.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripPeople.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.toolStripPeople.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.toolStripPeople.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -113,7 +113,7 @@
 			this.toolStripPeople.Office12Mode = false;
 			this.toolStripPeople.ShowCaption = false;
 			this.toolStripPeople.ShowLauncher = false;
-			this.toolStripPeople.Size = new System.Drawing.Size(235, 347);
+			this.toolStripPeople.Size = new System.Drawing.Size(252, 193);
 			this.toolStripPeople.TabIndex = 0;
 			this.toolStripPeople.Text = "xxActions";
 			this.toolStripPeople.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
@@ -123,7 +123,7 @@
 			this.toolStripLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripLabel1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.toolStripLabel1.Name = "toolStripLabel1";
-			this.toolStripLabel1.Size = new System.Drawing.Size(233, 17);
+			this.toolStripLabel1.Size = new System.Drawing.Size(250, 17);
 			this.toolStripLabel1.Text = "xxActions";
 			// 
 			// toolStripButtonToday
@@ -133,7 +133,7 @@
 			this.toolStripButtonToday.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonToday.Name = "toolStripButtonToday";
 			this.toolStripButtonToday.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonToday.Size = new System.Drawing.Size(233, 29);
+			this.toolStripButtonToday.Size = new System.Drawing.Size(250, 29);
 			this.toolStripButtonToday.Text = "xxToday";
 			this.toolStripButtonToday.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonToday.Visible = false;
@@ -145,7 +145,7 @@
 			this.toolStripButtonOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonOpen.Name = "toolStripButtonOpen";
 			this.toolStripButtonOpen.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonOpen.Size = new System.Drawing.Size(233, 29);
+			this.toolStripButtonOpen.Size = new System.Drawing.Size(250, 29);
 			this.toolStripButtonOpen.Text = "xxOpenScheduler";
 			this.toolStripButtonOpen.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonOpen.Click += new System.EventHandler(this.toolStripButtonOpen_Click);
@@ -153,7 +153,7 @@
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(233, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(250, 6);
 			// 
 			// tsAddGroupPage
 			// 
@@ -162,7 +162,7 @@
 			this.tsAddGroupPage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsAddGroupPage.Name = "tsAddGroupPage";
 			this.tsAddGroupPage.Padding = new System.Windows.Forms.Padding(4);
-			this.tsAddGroupPage.Size = new System.Drawing.Size(233, 29);
+			this.tsAddGroupPage.Size = new System.Drawing.Size(250, 29);
 			this.tsAddGroupPage.Text = "xxAddNewGroupPage";
 			this.tsAddGroupPage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.tsAddGroupPage.Click += new System.EventHandler(this.tsAddGroupPageClick);
@@ -174,7 +174,7 @@
 			this.tsRenameGroupPage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsRenameGroupPage.Name = "tsRenameGroupPage";
 			this.tsRenameGroupPage.Padding = new System.Windows.Forms.Padding(4);
-			this.tsRenameGroupPage.Size = new System.Drawing.Size(233, 29);
+			this.tsRenameGroupPage.Size = new System.Drawing.Size(250, 29);
 			this.tsRenameGroupPage.Text = "xxRenameGroupPage";
 			this.tsRenameGroupPage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.tsRenameGroupPage.Click += new System.EventHandler(this.tsRenameGroupPageClick);
@@ -186,7 +186,7 @@
 			this.tsEditGroupPage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsEditGroupPage.Name = "tsEditGroupPage";
 			this.tsEditGroupPage.Padding = new System.Windows.Forms.Padding(4);
-			this.tsEditGroupPage.Size = new System.Drawing.Size(233, 29);
+			this.tsEditGroupPage.Size = new System.Drawing.Size(136, 29);
 			this.tsEditGroupPage.Text = "xxEditGroupPage";
 			this.tsEditGroupPage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.tsEditGroupPage.Click += new System.EventHandler(this.tsEditGroupPageClick);
@@ -198,7 +198,7 @@
 			this.tsDeleteGroupPage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsDeleteGroupPage.Name = "tsDeleteGroupPage";
 			this.tsDeleteGroupPage.Padding = new System.Windows.Forms.Padding(4);
-			this.tsDeleteGroupPage.Size = new System.Drawing.Size(233, 29);
+			this.tsDeleteGroupPage.Size = new System.Drawing.Size(151, 29);
 			this.tsDeleteGroupPage.Text = "xxDeleteGroupPage";
 			this.tsDeleteGroupPage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.tsDeleteGroupPage.Click += new System.EventHandler(this.tsDeleteGroupPageClick);
@@ -206,7 +206,7 @@
 			// toolStripSeparator5
 			// 
 			this.toolStripSeparator5.Name = "toolStripSeparator5";
-			this.toolStripSeparator5.Size = new System.Drawing.Size(233, 6);
+			this.toolStripSeparator5.Size = new System.Drawing.Size(250, 6);
 			// 
 			// toolStripButtonAddMeeting
 			// 
@@ -215,7 +215,7 @@
 			this.toolStripButtonAddMeeting.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonAddMeeting.Name = "toolStripButtonAddMeeting";
 			this.toolStripButtonAddMeeting.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonAddMeeting.Size = new System.Drawing.Size(233, 29);
+			this.toolStripButtonAddMeeting.Size = new System.Drawing.Size(120, 29);
 			this.toolStripButtonAddMeeting.Text = "xxAddMeeting";
 			this.toolStripButtonAddMeeting.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonAddMeeting.Click += new System.EventHandler(this.toolStripButtonAddMeetingClick);
@@ -227,7 +227,7 @@
 			this.toolStripButtonShowMeetings.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonShowMeetings.Name = "toolStripButtonShowMeetings";
 			this.toolStripButtonShowMeetings.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonShowMeetings.Size = new System.Drawing.Size(233, 29);
+			this.toolStripButtonShowMeetings.Size = new System.Drawing.Size(149, 29);
 			this.toolStripButtonShowMeetings.Text = "xxMeetingOverview";
 			this.toolStripButtonShowMeetings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonShowMeetings.Click += new System.EventHandler(this.toolStripButtonShowMeetingsClick);
@@ -235,7 +235,7 @@
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(233, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(250, 6);
 			// 
 			// toolStripRefresh
 			// 
@@ -244,7 +244,7 @@
 			this.toolStripRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripRefresh.Name = "toolStripRefresh";
 			this.toolStripRefresh.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripRefresh.Size = new System.Drawing.Size(233, 29);
+			this.toolStripRefresh.Size = new System.Drawing.Size(92, 29);
 			this.toolStripRefresh.Text = "xxRefresh";
 			this.toolStripRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripRefresh.Click += new System.EventHandler(this.toolStripRefreshClick);

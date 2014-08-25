@@ -12227,4 +12227,8 @@ Reduce the complexity to use these shifts.</value>
     <value>You are not signed in.</value>
     <comment>You are not signed in.</comment>
   </data>
+  <data name="DeleteSkill" xml:space="preserve">
+    <value>Delelete skill</value>
+    <comment>Delete skill</comment>
+  </data>
 </root>
