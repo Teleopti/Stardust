@@ -44,7 +44,6 @@ namespace Teleopti.Messaging.SignalR
 			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
 			_time = time;
 			FilterManager = typeFilter;
-			IsTypeFilterApplied = true;
 
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
@@ -304,8 +303,6 @@ namespace Teleopti.Messaging.SignalR
 		}
 
 		public string ConnectionString { get; set; }
-
-	    private bool IsTypeFilterApplied { get; set; }
 
 		public bool IsConnected
 		{
