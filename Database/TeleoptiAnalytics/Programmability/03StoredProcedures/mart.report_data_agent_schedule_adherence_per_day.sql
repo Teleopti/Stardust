@@ -546,8 +546,7 @@ FROM (
 	UNION ALL
 	SELECT  min(r.interval_id) minint ,max(r.interval_id) maxint, person_id
 	FROM #result r
-	WHERE r.activity_id = -1
-	AND r.absence_id <> -1
+	WHERE (r.activity_id = -1 AND r.absence_id = -1) --Only stats exists
 	GROUP BY person_id
 ) a
 
