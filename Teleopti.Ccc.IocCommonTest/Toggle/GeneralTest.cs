@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -61,31 +60,31 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		}
 
 		[Test]
-		public void ShouldThrowMeaningfulExceptionIfTogglePatheIsEmpty()
+		public void ShouldSetAllTogglesToFalseIfPathIsEmpty()
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule(string.Empty, string.Empty));
-			Assert.Throws<ArgumentException>(() =>
+			using (var container = containerBuilder.Build())
 			{
-				using (containerBuilder.Build())
-				{
-				}
-			}).ToString()
-			.Should().Contain(ToggleNetModule.MissingPathToToggle);
+				var toggleManager = container.Resolve<IToggleManager>();
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.False();
+				toggleManager.Should().Be.OfType<FalseToggleManager>();
+			}
 		}
 
 		[Test]
-		public void ShouldThrowMeaningfulExceptionIfTogglePathIsNull()
+		public void ShouldSetAllTogglesToFalseIfPathIsNull()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new ToggleNetModule(string.Empty, string.Empty));
-			Assert.Throws<ArgumentException>(() =>
+			containerBuilder.RegisterModule(new ToggleNetModule(null, string.Empty));
+			using (var container = containerBuilder.Build())
 			{
-				using (containerBuilder.Build())
-				{
-				}
-			}).ToString()
-			.Should().Contain(ToggleNetModule.MissingPathToToggle);
+				var toggleManager = container.Resolve<IToggleManager>();
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.False();
+				toggleManager.Should().Be.OfType<FalseToggleManager>();
+			}
 		}
 	}
 }

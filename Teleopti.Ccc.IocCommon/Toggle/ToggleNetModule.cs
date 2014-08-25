@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using log4net;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -12,7 +13,8 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	public class ToggleNetModule : Module
 	{
-		public const string MissingPathToToggle = "Path to toggle file is missing. Please use a valid path (or use a http address to point to the toggle.net service)!";
+		private const string missingPathToToggle = "Path to toggle file is missing. Please use a valid path (or use a http address to point to the toggle.net service)!";
+		private static readonly ILog logger = LogManager.GetLogger(typeof(ToggleNetModule));
 
 		private readonly string _pathToToggle;
 		private readonly string _toggleMode;
@@ -27,9 +29,13 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		protected override void Load(ContainerBuilder builder)
 		{
 			if (string.IsNullOrEmpty(_pathToToggle))
-				throw new ArgumentException(MissingPathToToggle, _pathToToggle);
-
-			if (togglePathIsAnUrl())
+			{
+				logger.Warn(missingPathToToggle);
+				builder.RegisterType<FalseToggleManager>()
+					.SingleInstance()
+					.As<IToggleManager>();
+			}
+			else if (togglePathIsAnUrl())
 			{
 				builder.Register(c => new ToggleQuerier(_pathToToggle))
 					.SingleInstance()
