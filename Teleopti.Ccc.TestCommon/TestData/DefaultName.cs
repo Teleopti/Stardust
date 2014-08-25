@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Teleopti.Ccc.TestCommon.TestData
 {
@@ -8,12 +9,23 @@ namespace Teleopti.Ccc.TestCommon.TestData
 	{
 		public static string Make(string name)
 		{
-			return name + " " + new Random().Next(0, 50) + "~";
+			return name + " " + randomString(6) + "~";
 		}
 
 		public static string Make()
 		{
-			return new Random().Next(0, 50) + "~";
+			return randomString(6) + "~";
+		}
+
+		private static readonly Random Random = new Random();
+
+		private static string randomString(int length)
+		{
+			const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+			return new string(
+				Enumerable.Repeat(chars, length)
+						  .Select(s => s[Random.Next(s.Length)])
+						  .ToArray());
 		}
 	}
 }
