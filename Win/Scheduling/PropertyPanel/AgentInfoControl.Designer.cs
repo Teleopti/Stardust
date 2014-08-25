@@ -108,7 +108,7 @@
 			// 
 			// tabControlAgentInfo
 			// 
-			this.tabControlAgentInfo.ActiveTabColor = System.Drawing.Color.DarkGray;
+			this.tabControlAgentInfo.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
 			this.tabControlAgentInfo.BackColor = System.Drawing.Color.White;
 			this.tabControlAgentInfo.BeforeTouchSize = new System.Drawing.Size(453, 462);
 			this.tabControlAgentInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;

@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			: base(parent, panelRenderer)
 		{
 			((TabControlAdv)TabControl).TabPanelBackColor = Color.White;
-			((TabControlAdv)TabControl).Font = new Font("Segoe UI", 8.25F,FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+			((TabControlAdv)TabControl).Font = new Font("Segoe UI", 8.25F,FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+			((TabControlAdv)TabControl).ActiveTabFont = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			
 			var tab = ((TabControlAdv)TabControl).TabPages[drawItemInfo.Index];
-			Brush bgSelectedTab = new SolidBrush(Color.DarkGray);
+			Brush bgSelectedTab = new SolidBrush(Color.FromArgb(102,102,102));
 			Brush bgInactiveTab = new SolidBrush(Color.White);
 	        if (tab.Name == "Pinned")
 	        {
