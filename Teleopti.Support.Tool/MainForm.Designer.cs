@@ -139,7 +139,7 @@ namespace Teleopti.Support.Tool
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.Location = new System.Drawing.Point(323, 151);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(344, 12);
+            this.label2.Size = new System.Drawing.Size(344, 20);
             this.label2.TabIndex = 8;
             this.label2.Text = "List and manage your Teleopti WFM databases";
             // 

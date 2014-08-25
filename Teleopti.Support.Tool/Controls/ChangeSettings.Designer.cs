@@ -78,7 +78,7 @@
             // 
             // BBack
             // 
-            this.BBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.BBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.BBack.Location = new System.Drawing.Point(5, 451);
             this.BBack.Margin = new System.Windows.Forms.Padding(5);
             this.BBack.Name = "BBack";
