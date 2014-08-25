@@ -115,10 +115,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.toolStripStatusLabelLicense,
 			this.toolStripStatusLabelRoger65,
 			this.toolStripStatusLabelLoggedOnUser});
-			this._mainStatusStrip.Location = new System.Drawing.Point(1, 660);
+			this._mainStatusStrip.Location = new System.Drawing.Point(1, 742);
 			this._mainStatusStrip.Name = "_mainStatusStrip";
 			this._mainStatusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
-			this._mainStatusStrip.Size = new System.Drawing.Size(958, 24);
+			this._mainStatusStrip.Size = new System.Drawing.Size(1024, 24);
 			this._mainStatusStrip.TabIndex = 2;
 			this._mainStatusStrip.Text = "yystatusStrip1";
 			// 
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			this.toolStripStatusLabelSpring.Name = "toolStripStatusLabelSpring";
 			this.SetShortcut(this.toolStripStatusLabelSpring, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelSpring.Size = new System.Drawing.Size(692, 19);
+			this.toolStripStatusLabelSpring.Size = new System.Drawing.Size(758, 19);
 			this.toolStripStatusLabelSpring.Spring = true;
 			this.toolStripStatusLabelSpring.Click += new System.EventHandler(this.toolStripStatusLabelSpring_Click);
 			// 
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.splitContainer.Panel2.Controls.Add(this.webControl1);
 			this.splitContainer.Panel2.Controls.Add(this.gridWorkspace);
 			this.splitContainer.Panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.splitContainer.Size = new System.Drawing.Size(958, 555);
+			this.splitContainer.Size = new System.Drawing.Size(1024, 637);
 			this.splitContainer.SplitterDistance = 350;
 			this.splitContainer.SplitterWidth = 5;
 			this.splitContainer.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
@@ -217,10 +217,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// outlookBarWorkSpace1
 			// 
 			this.outlookBarWorkSpace1.BackColor = System.Drawing.Color.White;
+			this.outlookBarWorkSpace1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.outlookBarWorkSpace1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.outlookBarWorkSpace1.Location = new System.Drawing.Point(0, 0);
 			this.outlookBarWorkSpace1.Name = "outlookBarWorkSpace1";
-			this.outlookBarWorkSpace1.Size = new System.Drawing.Size(350, 555);
+			this.outlookBarWorkSpace1.Size = new System.Drawing.Size(350, 637);
 			this.outlookBarWorkSpace1.TabIndex = 0;
 			// 
 			// webControl1
@@ -250,7 +251,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.gridWorkspace.Location = new System.Drawing.Point(0, 0);
 			this.gridWorkspace.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
 			this.gridWorkspace.Name = "gridWorkspace";
-			this.gridWorkspace.Size = new System.Drawing.Size(603, 555);
+			this.gridWorkspace.Size = new System.Drawing.Size(669, 637);
 			this.gridWorkspace.TabIndex = 0;
 			this.gridWorkspace.Tag = "0";
 			this.gridWorkspace.WorkspaceGridSizeChanged += new System.EventHandler<System.EventArgs>(this.GridWorkspace_WorkspaceGridSizeChanged);
@@ -307,7 +308,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.ribbonControlAdv1.ShowLauncher = false;
 			this.ribbonControlAdv1.ShowQuickItemsDropDownButton = false;
 			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = false;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(962, 65);
+			this.ribbonControlAdv1.Size = new System.Drawing.Size(1028, 65);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Start menu";
 			this.ribbonControlAdv1.TabIndex = 1;
 			this.ribbonControlAdv1.Text = "yyribbonControlAdv1";
@@ -405,7 +406,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonSignCustomerWeb.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonSignCustomerWeb.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonSignCustomerWeb.IsBackStageButton = false;
-			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(26, 128);
+			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(155, 140);
 			this.backStageButtonSignCustomerWeb.Name = "backStageButtonSignCustomerWeb";
 			this.backStageButtonSignCustomerWeb.Size = new System.Drawing.Size(126, 25);
 			this.backStageButtonSignCustomerWeb.TabIndex = 14;
@@ -454,7 +455,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonExitTELEOPTICCC.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonExitTELEOPTICCC.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonExitTELEOPTICCC.IsBackStageButton = false;
-			this.backStageButtonExitTELEOPTICCC.Location = new System.Drawing.Point(26, 215);
+			this.backStageButtonExitTELEOPTICCC.Location = new System.Drawing.Point(155, 239);
 			this.backStageButtonExitTELEOPTICCC.Name = "backStageButtonExitTELEOPTICCC";
 			this.backStageButtonExitTELEOPTICCC.Size = new System.Drawing.Size(120, 25);
 			this.backStageButtonExitTELEOPTICCC.TabIndex = 18;
@@ -602,7 +603,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(1, 65);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(958, 595);
+			this.panel1.Size = new System.Drawing.Size(1024, 677);
 			this.panel1.TabIndex = 9;
 			// 
 			// outlookBar1
@@ -611,21 +612,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.outlookBar1.AutoSize = true;
 			this.outlookBar1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.outlookBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.outlookBar1.Location = new System.Drawing.Point(0, 555);
+			this.outlookBar1.Location = new System.Drawing.Point(0, 637);
 			this.outlookBar1.MinimumSize = new System.Drawing.Size(175, 40);
 			this.outlookBar1.Name = "outlookBar1";
 			this.outlookBar1.Padding = new System.Windows.Forms.Padding(12, 0, 12, 0);
-			this.outlookBar1.Size = new System.Drawing.Size(958, 40);
+			this.outlookBar1.Size = new System.Drawing.Size(1024, 40);
 			this.outlookBar1.TabIndex = 7;
 			this.outlookBar1.SelectedItemChanged += new System.EventHandler<Teleopti.Ccc.SmartClientPortal.Shell.Controls.SelectedItemChangedEventArgs>(this.outlookBar1_SelectedItemChanged);
-			this.outlookBar1.SizeChanged += new System.EventHandler(this.outlookBar1_SizeChanged);
 			// 
 			// SmartClientShellForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Borders = new System.Windows.Forms.Padding(0);
-			this.ClientSize = new System.Drawing.Size(960, 684);
+			this.ClientSize = new System.Drawing.Size(1026, 766);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.ribbonControlAdv1);
@@ -635,7 +635,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.IsMdiContainer = true;
 			this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.MinimumSize = new System.Drawing.Size(477, 66);
+			this.MinimumSize = new System.Drawing.Size(477, 410);
 			this.Name = "SmartClientShellForm";
 			this.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

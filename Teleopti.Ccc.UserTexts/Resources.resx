@@ -12231,4 +12231,8 @@ Reduce the complexity to use these shifts.</value>
     <value>The week contains too little work time ({0}). Min is {1}.</value>
     <comment>Message when week contains to little work time</comment>
   </data>
+  <data name="DeleteSkill" xml:space="preserve">
+    <value>Delelete skill</value>
+    <comment>Delete skill</comment>
+  </data>
 </root>

@@ -6592,6 +6592,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delelete skill.
+        /// </summary>
+        public static string DeleteSkill {
+            get {
+                return ResourceManager.GetString("DeleteSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete skill summary.
         /// </summary>
         public static string DeleteSkillSummery {
