@@ -251,7 +251,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 
 	self.hideShiftTradeWindow = function() {
 		$('#Request-add-shift-trade').hide();
-	}
+	};
 
 	self.saveNewShiftTrade = function() {
 		ajax.Ajax({

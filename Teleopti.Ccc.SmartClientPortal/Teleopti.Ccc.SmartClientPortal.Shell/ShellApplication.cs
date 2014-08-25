@@ -263,7 +263,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 	        var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
 					tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new ToggleNetModule(ConfigurationManager.AppSettings["FeatureToggle"], ConfigurationManager.AppSettings["ToggleMode"]));
-					ToggleNetModule.RegisterDependingModules(tempContainerBecauseWeDontHaveAGlobalOneHere);
 			ExceptionHandlerModel exceptionHandlerModel;
 			using (var container = tempContainerBecauseWeDontHaveAGlobalOneHere.Build())
 	        {

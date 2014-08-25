@@ -1,14 +1,13 @@
-using System;
+﻿using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
+namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
-	public class LeavingDateForUser : IUserSetup, IUserRoleSetup
+	public class LeavingDateForUser : IUserSetup
 	{
 		public DateTime LeavingDate { get; set; }
 
@@ -17,5 +16,4 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			user.TerminatePerson(new DateOnly(LeavingDate), new PersonAccountUpdaterDummy());
 		}
 	}
-
 }

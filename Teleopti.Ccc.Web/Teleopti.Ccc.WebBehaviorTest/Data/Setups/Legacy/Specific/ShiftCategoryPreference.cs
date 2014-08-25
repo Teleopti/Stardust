@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			}
 			else
 			{
-				shiftCategory = ShiftCategoryFactory.CreateShiftCategory(DefaultName.Make(), "Purple");
+				shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");
 				new ShiftCategoryRepository(uow).Add(shiftCategory);
 			}
 

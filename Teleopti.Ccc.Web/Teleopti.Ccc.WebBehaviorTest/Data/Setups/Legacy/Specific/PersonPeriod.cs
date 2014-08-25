@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -20,7 +18,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 		private readonly DateTime _startDate;
 
-		public PersonPeriod() : this(GlobalDataMaker.Data().Data<CommonTeam>().Team) { }
 		public PersonPeriod(ITeam team) : this(team, new DateTime(2001, 1, 1)) { }
 		public PersonPeriod(ITeam team, DateTime startDate)
 		{

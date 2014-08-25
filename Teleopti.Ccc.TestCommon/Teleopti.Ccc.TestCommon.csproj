@@ -244,6 +244,7 @@
     <Compile Include="TestData\Core\IDataSetup.cs" />
     <Compile Include="TestData\Core\IUserDataSetup.cs" />
     <Compile Include="TestData\Core\IUserSetup.cs" />
+    <Compile Include="TestData\Setups\Configurable\LeavingDateForUser.cs" />
     <Compile Include="TestData\Core\PersonDataFactory.cs" />
     <Compile Include="TestData\Core\TestDataFactory.cs" />
     <Compile Include="TestData\Setups\Configurable\AbsenceConfigurable.cs" />
@@ -282,7 +283,7 @@
     <Compile Include="TestData\Setups\Configurable\WorkflowControlSetConfigurable.cs" />
     <Compile Include="TestData\Setups\Specific\BusinessUnitFromFakeState.cs" />
     <Compile Include="TestData\Setups\Specific\BrasilianTimeZone.cs" />
-    <Compile Include="TestData\DefaultName.cs" />
+    <Compile Include="TestData\RandomName.cs" />
     <Compile Include="TestData\Setups\Specific\GermanCulture.cs" />
     <Compile Include="TestData\Setups\Specific\AustralianTimeZone.cs" />
     <Compile Include="TestData\Setups\Specific\HawaiiTimeZone.cs" />

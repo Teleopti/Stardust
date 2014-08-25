@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Autofac;
+﻿using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule("http://tralala", string.Empty));
-			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -29,7 +27,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule("https://hejsan", string.Empty));
-			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -42,7 +39,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule("https://hejsan", string.Empty));
-			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -56,11 +52,38 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new ToggleNetModule("http://something", string.Empty));
-			ToggleNetModule.RegisterDependingModules(containerBuilder);
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<ITogglesActive>()
 					.Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldSetAllTogglesToFalseIfPathIsEmpty()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule(new ToggleNetModule(string.Empty, string.Empty));
+			using (var container = containerBuilder.Build())
+			{
+				var toggleManager = container.Resolve<IToggleManager>();
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.False();
+				toggleManager.Should().Be.OfType<FalseToggleManager>();
+			}
+		}
+
+		[Test]
+		public void ShouldSetAllTogglesToFalseIfPathIsNull()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule(new ToggleNetModule(null, string.Empty));
+			using (var container = containerBuilder.Build())
+			{
+				var toggleManager = container.Resolve<IToggleManager>();
+				toggleManager.IsEnabled(Toggles.TestToggle)
+					.Should().Be.False();
+				toggleManager.Should().Be.OfType<FalseToggleManager>();
 			}
 		}
 	}

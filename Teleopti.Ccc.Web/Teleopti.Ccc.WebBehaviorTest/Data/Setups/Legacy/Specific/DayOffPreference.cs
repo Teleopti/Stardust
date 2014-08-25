@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			}
 			else
 			{
-				dayOffTemplate = DayOffFactory.CreateDayOff(new Description(DefaultName.Make(), DefaultName.Make()));
+				dayOffTemplate = DayOffFactory.CreateDayOff(new Description(RandomName.Make(), RandomName.Make()));
 				var activityRepository = new ActivityRepository(uow);
 				activityRepository.Add(dayOffTemplate);
 				DayOffTemplate = dayOffTemplate.Description.Name;

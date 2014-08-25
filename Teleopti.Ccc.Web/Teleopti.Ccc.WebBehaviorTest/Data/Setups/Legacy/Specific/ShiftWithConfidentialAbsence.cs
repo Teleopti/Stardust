@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 	public class ShiftWithConfidentialAbsence : IUserDataSetup
 	{
 		private static readonly CultureInfo SwedishCultureInfo = CultureInfo.GetCultureInfo(1053);
-		public IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
+		public IScenario Scenario = GlobalDataMaker.Data().Data<DefaultScenario>().Scenario;
 		public string Date { get; set; }
 		public string Absence { get; set; }
 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			IAbsence confidentialAbsence;
 			if (Absence == null)
 			{
-				confidentialAbsence = AbsenceFactory.CreateAbsence(DefaultName.Make());
+				confidentialAbsence = AbsenceFactory.CreateAbsence(RandomName.Make());
 				confidentialAbsence.Confidential = true;
 				confidentialAbsence.DisplayColor = Color.GreenYellow;
 				new AbsenceRepository(uow).Add(confidentialAbsence);

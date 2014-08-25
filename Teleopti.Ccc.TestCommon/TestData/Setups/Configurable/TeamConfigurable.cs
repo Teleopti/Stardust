@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Runtime.InteropServices;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -16,6 +17,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow)
 		{
+			if (Name == null)
+				Name = RandomName.Make("team");
 			var siteRepository = new SiteRepository(uow);
 			var site = siteRepository.LoadAll().Single(c => c.Description.Name == Site);
 			Team = new Team

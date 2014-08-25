@@ -7,19 +7,14 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common
 {
-	public class CommonTeam : IDataSetup
+	public class DefaultScenario : IDataSetup
 	{
-		public ITeam Team;
+		public IScenario Scenario;
 
 		public void Apply(IUnitOfWork uow)
 		{
-			var site = GlobalDataMaker.Data().Data<CommonSite>().Site;
-
-			Team = TeamFactory.CreateSimpleTeam(DefaultName.Make("Common Team"));
-			site.AddTeam(Team);
-
-			var teamRepository = new TeamRepository(uow);
-			teamRepository.Add(Team);
+			Scenario = ScenarioFactory.CreateScenario(RandomName.Make("Default scenario"), true, false);
+			new ScenarioRepository(uow).Add(Scenario);
 		}
 	}
 }

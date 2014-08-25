@@ -1,5 +1,4 @@
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 {
@@ -30,7 +29,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			}
 
 			if (Team == null)
-				Team = GlobalDataMaker.Data().Data<CommonTeam>().Team.Description.Name;
+			{
+				var team = new TeamConfigurable();
+				DataMaker.Data().Apply(team);
+				Team = team.Name;
+			}
 		}
 	}
 }

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public WorkflowControlSetConfigurable()
 		{
-			Name = DefaultName.Make("Workflow control set");
+			Name = RandomName.Make("Workflow control set");
 		}
 
 		public void Apply(IUnitOfWork uow)

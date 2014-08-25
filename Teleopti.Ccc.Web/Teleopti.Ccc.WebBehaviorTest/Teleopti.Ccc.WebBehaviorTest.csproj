@@ -135,6 +135,9 @@
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
+    <Compile Include="Data\CommonRaptorApplicationFunctions.cs" />
+    <Compile Include="Data\CommonMatrixApplicationFunctions.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\Agent.cs" />
     <Compile Include="MyTime\AgentBadge.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -176,7 +179,6 @@
     </Compile>
     <Compile Include="Core\CurrentTime.cs" />
     <Compile Include="Data\Setups\Configurable\AlertTimeSettingConfigurable.cs" />
-    <Compile Include="Data\Setups\Configurable\LeavingDateForUser.cs" />
     <Compile Include="Data\Setups\Configurable\PersonAbsenceAccountConfigurable.cs" />
     <Compile Include="MyTime\AbsenceRequestFromRequests.feature.cs">
       <AutoGen>True</AutoGen>
@@ -222,7 +224,7 @@
     <Compile Include="Bindings\Generic\GroupPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\PersonalShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonDayOffConfigurable.cs" />
-    <Compile Include="Data\Setups\Legacy\Common\CommonScenario.cs" />
+    <Compile Include="Data\Setups\Legacy\Common\DefaultScenario.cs" />
     <Compile Include="Data\Setups\Configurable\AbsenceRequestConfigurable.cs" />
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
@@ -485,7 +487,6 @@
     <Compile Include="Data\Setups\Configurable\ShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonBusinessUnit.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonSite.cs" />
-    <Compile Include="Data\Setups\Legacy\Common\CommonTeam.cs" />
     <Compile Include="Data\Setups\Configurable\RoleForUser.cs" />
     <Compile Include="Data\Setups\Configurable\WorkflowControlSetForUser.cs" />
     <Compile Include="Bindings\Specific\ColleagueStepDefinitions.cs" />
@@ -523,7 +524,6 @@
     <Compile Include="Data\Setups\Legacy\Specific\ExistingAvailability.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingLunchPreference.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\RuleSetBagWithTwoShiftsAndLunch.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AgentThatLeaves.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\SecondShiftCategory.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\FirstShiftCategory.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\RuleSetBagWithTwoCategories.cs" />
@@ -581,7 +581,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Data\Setups\Legacy\Specific\ExistingTextRequest.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\Agent.cs" />
     <Compile Include="Data\TestData.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AnotherStandardPreference.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\BasePreference.cs" />
@@ -596,7 +595,6 @@
     <Compile Include="Data\Setups\Legacy\Specific\TwoExistingTextRequestChangedOnDifferentTimes.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\PersonPeriod.cs" />
     <Compile Include="Pages\Common\CalendarCells.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\StudentAgent.cs" />
     <Compile Include="MyTime\Preferences.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

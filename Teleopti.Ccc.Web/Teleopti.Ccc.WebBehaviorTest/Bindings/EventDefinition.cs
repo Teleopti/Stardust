@@ -9,7 +9,6 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
@@ -17,14 +16,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	[Binding]
 	public class EventDefinition
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof(EventDefinition));
+		private static readonly ILog log = LogManager.GetLogger(typeof(EventDefinition));
 
 		[BeforeTestRun]
 		public static void BeforeTestRun()
 		{
 			log4net.Config.XmlConfigurator.Configure();
 
-			Log.Debug("Preparing for test run");
+			log.Debug("Preparing for test run");
 
 			Browser.SelectDefaultVisibleBrowser();
 			try
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				TestDataSetup.SetupFakeState();
 				TestDataSetup.CreateMinimumTestData();
 
-				CreateData();
+				createGlobalData();
 
 				TestDataSetup.BackupCcc7Data();
 
@@ -49,14 +48,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			}
 			finally
 			{
-				Log.Debug("Starting test run");
+				log.Debug("Starting test run");
 			}
 		}
 		
 		[BeforeScenario]
 		public static void BeforeScenario()
 		{
-			Log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+			log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
 			Browser.SelectBrowserByTag();
 
@@ -66,23 +65,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestDataSetup.RestoreCcc7Data();
 			TestDataSetup.ClearAnalyticsData();
 
-
 			GlobalPrincipalState.EnsureThreadPrincipal();
 			ScenarioUnitOfWorkState.OpenUnitOfWork();
 
-			Log.Debug("Starting scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+			log.Debug("Starting scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
 			checkIfRunTestDueToToggleFlags();
 		}
 
-        private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData2.nhib.xml");
+        private static readonly string targetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData2.nhib.xml");
 
         private static void addExtraDataSource()
         {
             if (!ScenarioContext.Current.ScenarioInfo.Tags.Contains("ExtraDataSource")) return;
             FileConfigurator.ConfigureByTags(
                 "Data\\TestData2.nhib.xml",
-                TargetTestDataNHibFile,
+                targetTestDataNHibFile,
                 new AllTags()
                 );
         }
@@ -92,10 +90,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	        if (!ScenarioContext.Current.ScenarioInfo.Tags.Contains("ExtraDataSource")) return;
 
 	        int i = 0;
-	        while (File.Exists(TargetTestDataNHibFile) && i < 20)
+	        while (File.Exists(targetTestDataNHibFile) && i < 20)
 	        {
 	            i++;
-	            File.Delete(TargetTestDataNHibFile);
+	            File.Delete(targetTestDataNHibFile);
 	        }
 	    }
 
@@ -126,49 +124,45 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[AfterScenario]
 		public static void AfterScenario()
 		{
-			Log.Debug("Cleaning up after scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+			log.Debug("Cleaning up after scenario " + ScenarioContext.Current.ScenarioInfo.Title);
             
             Browser.Interactions.GoToWaitForUrlAssert("about:blank", "about:blank");
             
 			ScenarioUnitOfWorkState.DisposeUnitOfWork();
-			HandleScenarioException();
+			handleScenarioException();
             removeExtraDataSource();
 
-			Log.Debug("Finished scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+			log.Debug("Finished scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 		}
 
 		[AfterTestRun]
 		public static void AfterTestRun()
 		{
-			Log.Debug("Cleaing up after test run");
+			log.Debug("Cleaing up after test run");
 
 			Browser.Close();
 			TestSiteConfigurationSetup.TearDown();
 
-			Log.Debug("Finished test run");
+			log.Debug("Finished test run");
 		}
 
-		private static void CreateData()
+		private static void createGlobalData()
 		{
 			GlobalDataMaker.Data().Apply(new CommonBusinessUnit());
 			GlobalDataMaker.Data().Apply(new CommonSite());
-			GlobalDataMaker.Data().Apply(new CommonTeam());
-			GlobalDataMaker.Data().Apply(new CommonScenario());
+			GlobalDataMaker.Data().Apply(new DefaultScenario());
 
-
-			TestDataSetup.CreateLegacyTestData();
+			GlobalDataMaker.Data().Apply(new CommonRaptorApplicationFunctions());
+			GlobalDataMaker.Data().Apply(new CommonMatrixApplicationFunctions());
 		}
 
-
-
-		private static void HandleScenarioException()
+		private static void handleScenarioException()
 		{
 			if (ScenarioContext.Current.TestError != null)
 			{
-				Log.Error("Scenario exception occurred, dumping info here.");
-				Browser.Interactions.DumpInfo(Log.Error);
+				log.Error("Scenario exception occurred, dumping info here.");
+				Browser.Interactions.DumpInfo(log.Error);
 			}
 		}
-
 	}
 }

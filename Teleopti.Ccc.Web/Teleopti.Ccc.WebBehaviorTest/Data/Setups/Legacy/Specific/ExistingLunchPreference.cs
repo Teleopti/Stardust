@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			IActivity lunchActivity;
 			if (LunchActivity == null)
 			{
-				lunchActivity = new Activity(DefaultName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Yellow) };
+				lunchActivity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Yellow) };
 				var activityRepository = new ActivityRepository(uow);
 				activityRepository.Add(lunchActivity);
 			}

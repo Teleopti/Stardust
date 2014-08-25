@@ -88,5 +88,10 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
             }
             return result;
         }
+
+	    public override string ToString()
+	    {
+			return DataSource != null ? DataSource.DataSourceName : "";
+	    }
     }
 }

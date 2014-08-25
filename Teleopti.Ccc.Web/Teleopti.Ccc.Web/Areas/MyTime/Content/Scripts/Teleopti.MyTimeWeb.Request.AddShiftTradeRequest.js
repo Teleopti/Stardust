@@ -63,6 +63,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	    return vm.requestedDate().format('YYYY-MM-DD');
 	}
 
+	function _hideShiftTradeWindow() {
+		$('#Request-add-shift-trade').hide();
+	}
+
 	function _cleanUp() {
 		var addShiftTradeElement = $('#Request-add-shift-trade')[0];
 		if (addShiftTradeElement) {
@@ -86,7 +90,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		    _openAddShiftTradeWindow();
 		},
 		HideShiftTradeWindow: function () {
-			vm.hideShiftTradeWindow();
+			_hideShiftTradeWindow();
 		},
 		Dispose: function () {
 			_cleanUp();

@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 			else
 			{
-				activity = new Activity(DefaultName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
+				activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
 				var activityRepository = new ActivityRepository(uow);
 				activityRepository.Add(activity);
 			}

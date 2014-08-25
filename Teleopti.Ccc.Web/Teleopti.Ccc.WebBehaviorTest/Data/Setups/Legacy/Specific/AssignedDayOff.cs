@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 		public string Date { get; set; }
 		public IDayOffTemplate DayOff;
-		public readonly IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
+		public readonly IScenario Scenario = GlobalDataMaker.Data().Data<DefaultScenario>().Scenario;
 
 		public AssignedDayOff()
 		{
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		{
 			if (DayOff == null)
 			{
-				DayOff = DayOffFactory.CreateDayOff(new Description(DefaultName.Make(), DefaultName.Make()));
+				DayOff = DayOffFactory.CreateDayOff(new Description(RandomName.Make(), RandomName.Make()));
 				var activityRepository = new ActivityRepository(uow);
 				activityRepository.Add(DayOff);
 			}

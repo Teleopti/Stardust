@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using log4net;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -12,18 +13,29 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	public class ToggleNetModule : Module
 	{
+		private const string missingPathToToggle = "Path to toggle file is missing. Please use a valid path (or use a http address to point to the toggle.net service)!";
+		private static readonly ILog logger = LogManager.GetLogger(typeof(ToggleNetModule));
+
 		private readonly string _pathToToggle;
 		private readonly string _toggleMode;
+
 		
 		public ToggleNetModule(string pathToToggle, string toggleMode)
 		{
 			_toggleMode = toggleMode;
-			_pathToToggle = pathToToggle.Trim();
+			_pathToToggle = pathToToggle;
 		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			if (!togglePathIsNotDefined() && togglePathIsAnUrl())
+			if (string.IsNullOrEmpty(_pathToToggle))
+			{
+				logger.Warn(missingPathToToggle);
+				builder.RegisterType<FalseToggleManager>()
+					.SingleInstance()
+					.As<IToggleManager>();
+			}
+			else if (togglePathIsAnUrl())
 			{
 				builder.Register(c => new ToggleQuerier(_pathToToggle))
 					.SingleInstance()
@@ -40,9 +52,6 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 					var toggleMode = _toggleMode==null ? 
 						string.Empty : 
 						_toggleMode.Trim();
-
-					if (togglePathIsNotDefined())
-						return new FalseToggleManager();
 
 					var defaultSpecification = toggleMode.Equals(developerMode, StringComparison.OrdinalIgnoreCase)
 						? (IToggleSpecification) new TrueSpecification()
@@ -68,19 +77,9 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				.SingleInstance().As<IAllToggles>();
 		}
 
-		public static void RegisterDependingModules(ContainerBuilder builder)
-		{
-			//put module dependencies here if using in scenarios where not all modules are registered
-		}
-
 		private bool togglePathIsAnUrl()
 		{
 			return _pathToToggle.StartsWith("http://") || _pathToToggle.StartsWith("https://");
-		}
-
-		private bool togglePathIsNotDefined()
-		{
-			return string.IsNullOrEmpty(_pathToToggle);
 		}
 
 		private class toggleCheckerWrapper : IToggleManager
