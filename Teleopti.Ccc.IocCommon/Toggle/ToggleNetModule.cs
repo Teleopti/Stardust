@@ -12,18 +12,24 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	public class ToggleNetModule : Module
 	{
+		public const string MissingPathToToggle = "Path to toggle file is missing. Please use a valid path (or use a http address to point to the toggle.net service)!";
+
 		private readonly string _pathToToggle;
 		private readonly string _toggleMode;
+
 		
 		public ToggleNetModule(string pathToToggle, string toggleMode)
 		{
 			_toggleMode = toggleMode;
-			_pathToToggle = pathToToggle.Trim();
+			_pathToToggle = pathToToggle;
 		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			if (!togglePathIsNotDefined() && togglePathIsAnUrl())
+			if (string.IsNullOrEmpty(_pathToToggle))
+				throw new ArgumentException(MissingPathToToggle, _pathToToggle);
+
+			if (togglePathIsAnUrl())
 			{
 				builder.Register(c => new ToggleQuerier(_pathToToggle))
 					.SingleInstance()
@@ -40,9 +46,6 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 					var toggleMode = _toggleMode==null ? 
 						string.Empty : 
 						_toggleMode.Trim();
-
-					if (togglePathIsNotDefined())
-						return new FalseToggleManager();
 
 					var defaultSpecification = toggleMode.Equals(developerMode, StringComparison.OrdinalIgnoreCase)
 						? (IToggleSpecification) new TrueSpecification()
@@ -76,11 +79,6 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		private bool togglePathIsAnUrl()
 		{
 			return _pathToToggle.StartsWith("http://") || _pathToToggle.StartsWith("https://");
-		}
-
-		private bool togglePathIsNotDefined()
-		{
-			return string.IsNullOrEmpty(_pathToToggle);
 		}
 
 		private class toggleCheckerWrapper : IToggleManager

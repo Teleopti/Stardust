@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -62,6 +62,36 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				container.Resolve<ITogglesActive>()
 					.Should().Not.Be.Null();
 			}
+		}
+
+		[Test]
+		public void ShouldThrowMeaningfulExceptionIfTogglePatheIsEmpty()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule(new ToggleNetModule(string.Empty, string.Empty));
+			ToggleNetModule.RegisterDependingModules(containerBuilder);
+			Assert.Throws<ArgumentException>(() =>
+			{
+				using (containerBuilder.Build())
+				{
+				}
+			}).ToString()
+			.Should().Contain(ToggleNetModule.MissingPathToToggle);
+		}
+
+		[Test]
+		public void ShouldThrowMeaningfulExceptionIfTogglePathIsNull()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule(new ToggleNetModule(string.Empty, string.Empty));
+			ToggleNetModule.RegisterDependingModules(containerBuilder);
+			Assert.Throws<ArgumentException>(() =>
+			{
+				using (containerBuilder.Build())
+				{
+				}
+			}).ToString()
+			.Should().Contain(ToggleNetModule.MissingPathToToggle);
 		}
 	}
 }
