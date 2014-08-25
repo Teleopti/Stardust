@@ -49,12 +49,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateLicense);
 		}
 
-		public static void CreateLegacyTestData()
-		{
-			GlobalUnitOfWorkState.UnitOfWorkAction(CreateAllRaptorApplicationFunctions);
-			GlobalUnitOfWorkState.UnitOfWorkAction(CreateMatrixApplicationFunctions);
-		}
-
 		public static void ClearAnalyticsData()
 		{
 			DataSourceHelper.ClearAnalyticsData();
@@ -76,24 +70,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var license = new License {XmlString = File.ReadAllText("License.xml")};
 			var licenseRepository = new LicenseRepository(uow);
 			licenseRepository.Add(license);
-		}
-
-		private static void CreateAllRaptorApplicationFunctions(IUnitOfWork uow)
-		{
-			var applicationFunctionRepository = new ApplicationFunctionRepository(uow);
-			var definedRaptorApplicationFunctionFactory = new DefinedRaptorApplicationFunctionFactory();
-
-			applicationFunctionRepository.AddRange(definedRaptorApplicationFunctionFactory.ApplicationFunctionList);
-		}
-
-		private static void CreateMatrixApplicationFunctions(IUnitOfWork uow)
-		{
-			var applicationFunctionRepository = new ApplicationFunctionRepository(uow);
-			var matrixReportsParent = applicationFunctionRepository.LoadAll().First(x => x.FunctionCode == "Reports");
-			var names = new[] { "ResReportAbandonmentAndSpeedOfAnswer", "ResReportForecastvsActualWorkload", "ResReportServiceLevelAndAgentsReady", "ResReportRequestsPerAgent" };
-
-			applicationFunctionRepository.AddRange(
-				names.Select(n => new ApplicationFunction(n, matrixReportsParent) { ForeignSource = DefinedForeignSourceNames.SourceMatrix }));
 		}
 
 		private static void CreatePersonThatCreatesTestData(IUnitOfWork uow)

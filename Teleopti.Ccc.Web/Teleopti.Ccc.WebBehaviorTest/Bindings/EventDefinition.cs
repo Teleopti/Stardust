@@ -154,8 +154,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			GlobalDataMaker.Data().Apply(new CommonSite());
 			GlobalDataMaker.Data().Apply(new CommonScenario());
 
-
-			TestDataSetup.CreateLegacyTestData();
+			GlobalDataMaker.Data().Apply(new CommonRaptorApplicationFunctions());
+			GlobalDataMaker.Data().Apply(new CommonMatrixApplicationFunctions());
 		}
 
 

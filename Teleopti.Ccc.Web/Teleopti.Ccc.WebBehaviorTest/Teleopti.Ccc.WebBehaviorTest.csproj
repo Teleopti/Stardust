@@ -135,6 +135,8 @@
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
+    <Compile Include="Data\CommonRaptorApplicationFunctions.cs" />
+    <Compile Include="Data\CommonMatrixApplicationFunctions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Agent.cs" />
     <Compile Include="MyTime\AgentBadge.feature.cs">
       <AutoGen>True</AutoGen>
