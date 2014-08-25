@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void RestoreCcc7Data()
 		{
-			Navigation.GoToWaitForUrlAssert("Test/ClearConnections", "Test/ClearConnections", new ApplicationStartupTimeout());
+			Navigation.GoToWaitForUrlAssert("Test/ClearConnections", new ApplicationStartupTimeout());
 			DataSourceHelper.RestoreCcc7DataByFileCopy(_Ccc7DataBackup);
 		}
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using log4net;
 
@@ -9,6 +8,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	public static class Navigation
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(Navigation));
+
+		public static void GoToWaitForUrlAssert(string pageUrlAndAssertUrl, params IGoToInterceptor[] interceptors)
+		{
+			GoToWaitForUrlAssert(pageUrlAndAssertUrl, pageUrlAndAssertUrl, interceptors);
+		}
 
 		public static void GoToWaitForUrlAssert(string pageUrl, string assertUrlContains, params IGoToInterceptor[] interceptors)
 		{
@@ -163,12 +167,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GoToPerformanceTool()
 		{
-			GoToWaitForUrlAssert("PerformanceTool", "PerformanceTool", new ApplicationStartupTimeout());
+			GoToWaitForUrlAssert("PerformanceTool", new ApplicationStartupTimeout());
 		}
 
 		public static void GotoAnywhere()
 		{
-			GoToWaitForUrlAssert("Anywhere", "Anywhere", new ApplicationStartupTimeout());
+			GoToWaitForUrlAssert("Anywhere", new ApplicationStartupTimeout());
 		}
 
 		public static void GotoAnywhereTeamSchedule(DateTime date)
