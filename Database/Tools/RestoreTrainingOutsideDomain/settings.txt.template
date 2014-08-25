@@ -1,0 +1,32 @@
+$(SQL_AUTH_STRING)|Data Source=REPLACEME;User Id=training;Password=training;encrypt=true;trustServerCertificate=true
+$(AS_SERVER_NAME)|MySSAS\instance
+$(AS_DATABASE)|TeleoptiAnalytics
+$(SDK_CRED_PROT)|Ntlm
+$(DB_ANALYTICS)|Training_TeleoptiAnalytics
+$(DB_CCC7)|Training_TeleoptiCCC7
+$(MATRIX_WEB_SITE_URL)|http://REPLACEME/TeleoptiCCC/Analytics
+$(PM_SERVICE)|http://REPLACEME/TeleoptiCCC/PMService/PMService.svc
+$(SDK_SSL_SECURITY_MODE)|TransportCredentialOnly
+$(AGENT_SERVICE)|http://REPLACEME/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc
+$(PM_INSTALL)|False
+$(PM_AUTH_MODE)|Anonymous
+$(PM_ANONYMOUS_DOMAINUSER)|
+$(PM_ANONYMOUS_PWD)|
+$(IIS_AUTH)|Windows
+$(HTTPGETENABLED)|true
+$(HTTPSGETENABLED)|false
+$(RTA_QUEUE_ID)|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003
+$(SDK_SSL_MEX_BINDING)|mexHttpBinding
+$(LOCAL_WIKI)|http://REPLACEME/TeleoptiCCC/LocalWiki/
+$(PM_ASMX)|http://REPLACEME/TeleoptiPM/services/Analyzer2005.asmx
+$(WEB_BROKER_FOR_WEB)|http://REPLACEME/TeleoptiCCC/Web
+$(WEB_BROKER)|http://REPLACEME/TeleoptiCCC/Broker/
+$(WEB_BROKER_BACKPLANE)|http://REPLACEME/TeleoptiCCC/Broker.backplane/backplane
+$(RTA_STATE_CODE)|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB
+$(RTA_SERVICE)|http://REPLACEME/TeleoptiCCC/RTA/TeleoptiRtaService.svc
+$(ETL_SERVICE_nhibConfPath)|c:\Program Files (x86)\Teleopti\TeleoptiCCC\ETL\Service
+$(ETL_TOOL_nhibConfPath)|c:\Program Files (x86)\Teleopti\TeleoptiCCC\ETL\Tools
+$(SDK_nhibConfPath)|c:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK
+$(AGENTPORTALWEB_nhibConfPath)|c:\Program Files (x86)\Teleopti\TeleoptiCCC\Web
+$(DATASOURCE_NAME)|Teleopti CCC
+$(ETLPM_BINDING_NAME)|Etl_Pm_Http_Binding

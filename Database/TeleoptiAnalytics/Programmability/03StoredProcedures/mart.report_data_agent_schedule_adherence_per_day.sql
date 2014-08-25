@@ -536,9 +536,21 @@ FROM #result  r
 INNER JOIN mart.dim_activity a on a.activity_id =-1
 WHERE r.count_activity_per_interval >1
 
-INSERT INTO #minmax
-SELECT min(interval_id) minint ,max(interval_id) maxint, person_id
-FROM #result GROUP BY person_id 
+INSERT INTO #minmax(minint,maxint,person_id)
+SELECT minint,maxint,person_id
+FROM (
+	SELECT  min(r.interval_id) minint ,max(r.interval_id) maxint, person_id
+	FROM #result r
+	WHERE (r.activity_id <> -1 or r.absence_id <> -1)
+	GROUP BY person_id
+	UNION ALL
+	SELECT  min(r.interval_id) minint ,max(r.interval_id) maxint, person_id
+	FROM #result r
+	WHERE r.activity_id = -1
+	AND r.absence_id <> -1
+	GROUP BY person_id
+) a
+
  
 update #result set mininterval = minint, maxinterval = maxint
 from  #minmax

@@ -685,9 +685,19 @@ set shift_interval_id= interval_id+intervals_per_day
 where shift_startdate_id<date_id
 
 INSERT INTO #minmax(minint,maxint,person_id,shift_startdate_id)
-SELECT  min(r.shift_interval_id) minint ,max(r.shift_interval_id) maxint, person_id, shift_startdate_id
-FROM #result r
-GROUP BY shift_startdate_id,person_id
+SELECT minint,maxint,person_id,shift_startdate_id
+FROM (
+	SELECT  min(r.shift_interval_id) minint ,max(r.shift_interval_id) maxint, person_id, shift_startdate_id
+	FROM #result r
+	WHERE (r.activity_id <> -1 or r.absence_id <> -1)
+	GROUP BY shift_startdate_id,person_id
+	UNION ALL
+	SELECT  min(r.shift_interval_id) minint ,max(r.shift_interval_id) maxint, person_id, shift_startdate_id
+	FROM #result r
+	WHERE r.activity_id = -1
+	AND r.absence_id <> -1
+	GROUP BY shift_startdate_id,person_id
+) a
 
 UPDATE #result 
 SET person_min_shiftstart_interval= minint
