@@ -194,6 +194,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public void ToggelPropertyPanel(bool value)
         {
+            //fix to solve right to left cultures not showing panel on start
+            lessIntellegentSplitContainerAdvMainContainer.Panel2Collapsed = !value;
             lessIntellegentSplitContainerAdvMainContainer.Panel2Collapsed = value;
 	        if (!value)
 	        {

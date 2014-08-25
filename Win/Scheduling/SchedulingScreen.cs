@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemOverTime.Tag = ScheduleTimeType.OverTime;
 			if (!DesignMode) SetTexts();
 
-			// this timer is just for fixing bug 17948 regarding dateNavigationControl
+			// this timer is just for fixing bug 17948 regarding dateNavigationControl && show agent info when RTL and coming back from File
 			_tmpTimer.Interval = 50;
 			_tmpTimer.Enabled = false;
 			_tmpTimer.Tick += _tmpTimer_Tick;
@@ -262,6 +262,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_tmpTimer.Enabled = false;
 			updateShiftEditor();
+            if(_showInfoPanel) schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 		}
 
 		private void dateNavigateControlClosedPopup(object sender, EventArgs e)
@@ -6032,7 +6033,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripTabItemHome.Checked = true;
 			zoom(_previousZoomLevel);
 		}
-		
+
+        private void backStage1VisibleChanged(object sender, EventArgs e)
+        {
+            if (!backStage1.Visible && RightToLeftLayout) _tmpTimer.Enabled = true;
+        }
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 
