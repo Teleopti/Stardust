@@ -24,7 +24,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			}
 			else
 			{
-				DataMaker.Person(TeamColleagueName).Apply(new PersonPeriod());
+				var team = new Team();
+				DataMaker.Data().Apply(team);
+				DataMaker.Person(TeamColleagueName).Apply(new PersonPeriod(team.TheTeam));
 			}
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published2", SchedulePublishedToDate = "2030-12-01" });
 			DataMaker.Person(TeamColleagueName).Apply(new WorkflowControlSetForUser { Name = "Published2" });

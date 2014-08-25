@@ -152,7 +152,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			GlobalDataMaker.Data().Apply(new CommonBusinessUnit());
 			GlobalDataMaker.Data().Apply(new CommonSite());
-			GlobalDataMaker.Data().Apply(new CommonTeam());
 			GlobalDataMaker.Data().Apply(new CommonScenario());
 
 
