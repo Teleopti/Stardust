@@ -20,7 +20,7 @@
 				assert.equals(vm.agents[0].TeamName, agent.TeamName);
 				assert.equals(vm.agents[0].TimeZoneOffset, agent.TimeZoneOffsetMinutes);
 			},
-			"=>should fill agent state data": function () {
+			"should fill agent state data": function () {
 				var state1 = {
 					PersonId: 'guid1',
 					State: 'Ready',
