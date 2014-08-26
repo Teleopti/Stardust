@@ -142,17 +142,22 @@ namespace Teleopti.Ccc.Infrastructure.Config
             return _file;
         }
 
-        private static XDocument defaultXDocument()
-        {
-            return new XDocument(
-             new XDeclaration("1.0", "utf-8", "yes"),
-             new XComment("Default config data"),
-             new XElement("PasswordPolicy",
-                 new XAttribute("MaxNumberOfAttempts", _defaultMaxNumberOfAttempts),
-                 new XAttribute("InvalidAttemptWindow", _defaultInvalidAttemptWindow),
-                 new XAttribute("PasswordValidForDayCount", _defaultPasswordValidForDayCount),
-                 new XAttribute("PasswordExpireWarningDayCount", _defaultPasswordExpireWarningDayCount))
-              );
-        }
+	    public void ClearFile()
+	    {
+		    _file = null;
+	    }
+
+		private static XDocument defaultXDocument()
+		{
+			return new XDocument(
+			 new XDeclaration("1.0", "utf-8", "yes"),
+			 new XComment("Default config data"),
+			 new XElement("PasswordPolicy",
+				 new XAttribute("MaxNumberOfAttempts", _defaultMaxNumberOfAttempts),
+				 new XAttribute("InvalidAttemptWindow", _defaultInvalidAttemptWindow),
+				 new XAttribute("PasswordValidForDayCount", _defaultPasswordValidForDayCount),
+				 new XAttribute("PasswordExpireWarningDayCount", _defaultPasswordExpireWarningDayCount))
+			  );
+		}
     }
 }

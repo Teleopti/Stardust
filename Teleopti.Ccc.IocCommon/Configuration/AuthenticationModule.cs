@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             builder.Register(c => StateHolder.Instance.StateReader.ApplicationScopeData)
                 .As<IApplicationData>().SingleInstance();
             builder.Register(c => c.Resolve<IApplicationData>().LoadPasswordPolicyService)
-                .As<ILoadPasswordPolicyService>();
+                .As<ILoadPasswordPolicyService>().SingleInstance();
         	builder.RegisterType<ModifyPassword>().As<IModifyPassword>().SingleInstance();
 			builder.RegisterType<CurrentTeleoptiPrincipal>()
 				.As<ICurrentTeleoptiPrincipal>()

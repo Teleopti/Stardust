@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Interfaces.Domain;
 
@@ -143,6 +144,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Config
             _target.Path = "path";
             Assert.AreEqual("path", _target.Path);
         }
+
+		[Test]
+		public void ShouldClearFile()
+		{
+			_target = new LoadPasswordPolicyService(AddOkRule(TestDocument()));
+            Assert.AreEqual(1, _target.LoadPasswordStrengthRules().Count, "Just to check that a rule gets added");
+			_target.ClearFile();
+			_target.Path = "notExist";
+			Assert.AreEqual(0, _target.LoadPasswordStrengthRules().Count, "Should clear _file");
+		}
 
         #region createXml
         private static XDocument DocWithBadMaxAttemptCount()

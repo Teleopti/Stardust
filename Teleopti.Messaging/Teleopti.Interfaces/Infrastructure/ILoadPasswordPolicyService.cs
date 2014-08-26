@@ -66,5 +66,7 @@ namespace Teleopti.Interfaces.Infrastructure
         /// Created date: 2010-08-19
         /// </remarks>
         string Path { get; set; }
+
+	    void ClearFile();
     }
 }
