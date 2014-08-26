@@ -50,12 +50,13 @@ namespace Teleopti.Ccc.Win
 			_currentTest = SikuliTestRegister.Select.None;
 		}
 
-		public void AssertTest(Func<bool> assertFunc)
+		public void AssertTest(Func<SikuliTestResult> assertFunc)
 		{
 			if (!TestMode)
 				return;
-			bool assertResult = assertFunc();
-			var testView = new SikuliResultView { Header = "Task Done", Result = assertResult };
+			var assertResult = assertFunc();
+			var testView = 
+				new SikuliResultView { Header = "Task Done", Result = assertResult.Result, Details = assertResult.Details.ToString()};
 			testView.ShowDialog();
 			_currentTest = SikuliTestRegister.Select.None;
 		}

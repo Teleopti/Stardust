@@ -547,7 +547,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void editControlDeleteClicked(object sender, EventArgs e)
 		{
-            _cutPasteHandlerFactory.For(_controlType).Delete();
+			_sikuliTestHelper.RegisterTest(SikuliTestRegister.Select.DeleteAll);
+            
+			_cutPasteHandlerFactory.For(_controlType).Delete();
 		}
 
 		private void editControlNewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -1280,7 +1282,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonDeleteClick(object sender, EventArgs e)
 		{
-            _cutPasteHandlerFactory.For(_controlType).Delete();
+			editControlDeleteClicked(sender, e);
 		}
 
 		private void toolStripMenuItemDeleteSpecial2Click(object sender, EventArgs e)
@@ -2054,41 +2056,90 @@ namespace Teleopti.Ccc.Win.Scheduling
 				case SikuliTestRegister.Select.Optimize:
 					_sikuliTestHelper.AssertTest(assertSikuliOptimizing);
 					break;
+				case SikuliTestRegister.Select.DeleteAll:
+					_sikuliTestHelper.AssertTest(assertSikuliDeleteAll);
+					break;
 				default:
 					_sikuliTestHelper.AssertTestDone();
 					break;
 			}
 		}
 
-		private bool assertSikuliOptimizing()
+		private SikuliTestResult assertSikuliOptimizing()
 		{
+			SikuliTestResult result = new SikuliTestResult(true);
 			var std = getStandardDeviationForPeriod();
-			if (!std.HasValue)
-				return false;
-			if (std.Value > 0.2)
-				return false;
-			return true;
+			result.Details.AppendLine("Details:");
+			result.AppendLimitValueLine("Period StdDev", "0,2", std.ToString());
+			if (!std.HasValue || std.Value > 0.2)
+			{
+				result.Result = false;
+			}
+			return result;
 		}
 
-		private double? getStandardDeviationForPeriod()
+		private SikuliTestResult assertSikuliDeleteAll()
 		{
-			try
+			SikuliTestResult result = new SikuliTestResult(true);
+			var std = getDailyScheduledHoursForFullPeriod();
+			result.Details.AppendLine("Details:");
+			if (std.Any(d => d.HasValue && d.Value > 0))
 			{
+				result.Details.AppendLine("Scheduled hours = 0 : Fail");
+				result.Result = false;
+				return result;
+			}
+			result.Details.AppendLine("Scheduled hours = 0 : OK");
+			return result;
+		}
+
+
+		//SkillStaffPeriodHelper.ScheduledTime(SkillStaffPeriodList);
+
+
+		private IEnumerable<IList<ISkillStaffPeriod>> getDailySkillStaffPeriodsForFullPeriod()
+		{
 				TabPageAdv skillTabPage = _tabSkillData.TabPages[0];
 				var totalSkill = skillTabPage.Tag as IAggregateSkill;
 				var period = _schedulerState.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(_schedulerState.TimeZoneInfo);
 				var skillStaffPeriodsTotal = _schedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
 					totalSkill, period);
 
-				var skillStaffPeriodsOfFullPeriod = new List<IList<ISkillStaffPeriod>>();
+				var dailySkillStaffPeriodsForFullPeriod = new List<IList<ISkillStaffPeriod>>();
 
 				foreach (var day in _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection())
 				{
 					var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(_schedulerState.TimeZoneInfo);
 					var skillStaffPeriods = skillStaffPeriodsTotal.Where(x => dayUtcPeriod.Contains(x.Period)).ToList();
-					skillStaffPeriodsOfFullPeriod.Add(skillStaffPeriods);
+					dailySkillStaffPeriodsForFullPeriod.Add(skillStaffPeriods);
 				}
-				return SkillStaffPeriodHelper.SkillPeriodGridSmoothness(skillStaffPeriodsOfFullPeriod);
+			return dailySkillStaffPeriodsForFullPeriod;
+		}
+
+		private IEnumerable<double?> getDailyScheduledHoursForFullPeriod()
+		{
+			try
+			{
+				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod();
+				var dailyScheduledHours = 
+					skillStaffPeriodsOfFullPeriod.Select(SkillStaffPeriodHelper.ScheduledHours).ToList();
+				return dailyScheduledHours;
+			}
+			catch
+			{
+				return null;
+			}
+		}
+
+		private double? getStandardDeviationForPeriod()
+		{
+			try
+			{
+				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod();
+				double? result = SkillStaffPeriodHelper.SkillPeriodGridSmoothness(skillStaffPeriodsOfFullPeriod);
+				if (result.HasValue)
+					return Math.Round(result.Value, 2);
+				return null;
 			}
 			catch
 			{

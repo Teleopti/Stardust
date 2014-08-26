@@ -1,4 +1,7 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
+using Rhino.ServiceBus.DataStructures;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Win.Common;
 
 namespace Teleopti.Ccc.Win
@@ -36,6 +39,14 @@ namespace Teleopti.Ccc.Win
 					labelResult.ForeColor = System.Drawing.Color.Red;
 				}
 				
+			}
+		}
+
+		public string Details
+		{
+			set
+			{
+				textBoxDetails.Text = value;
 			}
 		}
 	}

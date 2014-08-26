@@ -31,10 +31,11 @@
         {
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.labelResult = new System.Windows.Forms.Label();
 			this.labelTestInfoHeader = new System.Windows.Forms.Label();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonOk = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.labelResult = new System.Windows.Forms.Label();
+			this.textBoxDetails = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
@@ -46,6 +47,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.labelResult, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.labelTestInfoHeader, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.textBoxDetails, 0, 2);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -54,8 +56,20 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(405, 265);
 			this.tableLayoutPanel1.TabIndex = 31;
+			// 
+			// labelResult
+			// 
+			this.labelResult.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.labelResult.Font = new System.Drawing.Font("Segoe UI", 16F);
+			this.labelResult.Location = new System.Drawing.Point(3, 42);
+			this.labelResult.Name = "labelResult";
+			this.labelResult.Size = new System.Drawing.Size(399, 42);
+			this.labelResult.TabIndex = 33;
+			this.labelResult.Text = "Label text";
+			this.labelResult.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// labelTestInfoHeader
 			// 
@@ -101,18 +115,20 @@
 			this.buttonOk.Text = "OK";
 			this.buttonOk.UseVisualStyle = true;
 			// 
-			// labelResult
+			// textBoxDetails
 			// 
-			this.labelResult.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.labelResult.Font = new System.Drawing.Font("Segoe UI", 16F);
-			this.labelResult.Location = new System.Drawing.Point(3, 42);
-			this.labelResult.Name = "labelResult";
-			this.labelResult.Size = new System.Drawing.Size(399, 42);
-			this.labelResult.TabIndex = 33;
-			this.labelResult.Text = "Label text";
-			this.labelResult.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.textBoxDetails.BackColor = System.Drawing.SystemColors.Window;
+			this.textBoxDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBoxDetails.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBoxDetails.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.textBoxDetails.Location = new System.Drawing.Point(3, 87);
+			this.textBoxDetails.Multiline = true;
+			this.textBoxDetails.Name = "textBoxDetails";
+			this.textBoxDetails.ReadOnly = true;
+			this.textBoxDetails.Size = new System.Drawing.Size(399, 139);
+			this.textBoxDetails.TabIndex = 34;
 			// 
-			// TestAdditionalInfoView
+			// SikuliResultView
 			// 
 			this.AcceptButton = this.buttonOk;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -125,12 +141,13 @@
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "TestAdditionalInfoView";
+			this.Name = "SikuliResultView";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Additional testing information";
 			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -143,6 +160,7 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonOk;
 		private System.Windows.Forms.Label labelResult;
+		private System.Windows.Forms.TextBox textBoxDetails;
 
 
 	}

@@ -688,6 +688,7 @@
       <DependentUpon>SikuliResultView.cs</DependentUpon>
     </Compile>
     <Compile Include="SikuliTestHelper.cs" />
+    <Compile Include="SikuliTestResult.cs" />
     <Compile Include="SikuliTestRegister.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
