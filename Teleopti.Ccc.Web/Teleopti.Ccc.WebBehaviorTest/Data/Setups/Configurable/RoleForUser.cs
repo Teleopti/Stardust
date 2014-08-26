@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

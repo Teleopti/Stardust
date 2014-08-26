@@ -2,7 +2,7 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {

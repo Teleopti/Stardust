@@ -1,6 +1,5 @@
 using System.Globalization;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
-using Teleopti.Ccc.WebBehaviorTest.Bindings.Specific;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
