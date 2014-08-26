@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -12,18 +13,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
 	public abstract class GeneratedTeam : IDataSetup
 	{
-		public readonly ITeam TheTeam;
-
-		protected GeneratedTeam() : this(GlobalDataMaker.Data().Data<CommonSite>().Site) { }
+		public ISite Site;
+		public ITeam TheTeam;
 
 		protected GeneratedTeam(ISite site)
 		{
-			TheTeam = TeamFactory.CreateSimpleTeam(TeamNameGenerator.Generate());
-			TheTeam.Site = site;
+			Site = site;
 		}
 
 		public void Apply(IUnitOfWork uow)
 		{
+			if (Site == null)
+			{
+				var site = new SiteConfigurable { BusinessUnit = GlobalDataMaker.Data().Data<CommonBusinessUnit>().BusinessUnit.Name };
+				DataMaker.Data().Apply(site);
+				Site = site.Site;
+			}
+
+			TheTeam = TeamFactory.CreateSimpleTeam(TeamNameGenerator.Generate());
+			TheTeam.Site = Site;
+
 			var teamRepository = new TeamRepository(uow);
 			teamRepository.Add(TheTeam);
 		}

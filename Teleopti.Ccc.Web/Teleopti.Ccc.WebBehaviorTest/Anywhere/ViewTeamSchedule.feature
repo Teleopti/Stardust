@@ -4,9 +4,8 @@
 	I want to see the schedules for the team
 	
 Background:
-	Given there is a team with
-	| Field | Value      |
-	| Name  | Team green |
+	Given there is a site named 'The site'
+	And there is a team named 'Team green' on site 'The site'
 	And there is a role with
 	| Field                      | Value               |
 	| Name                       | Anywhere Team Green |
@@ -180,9 +179,7 @@ Scenario: View team schedule, no shift
 	Then I should see no schedule for 'Pierre Baldi'
 	
 Scenario: View team selection
-	Given there is a team with
-	| Field | Value      |
-	| Name  | Team other |
+	Given there is a team named 'Team other' on site 'The site'
 	And 'Ashley Andeen' has a person period with
 	| Field      | Value      |
 	| Team       | Team other |
@@ -201,9 +198,7 @@ Scenario: View team selection
 	| Team other |
 
 Scenario: Change team
-	Given there is a team with
-	| Field | Value      |
-	| Name  | Team other |
+	Given there is a team named 'Team other' on site 'The site'
 	And there is a role with
 	| Field                      | Value                         |
 	| Name                       | Anywhere Team Green And Other |

@@ -5,17 +5,17 @@ using System.Linq;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
+using SiteConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.SiteConfigurable;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
@@ -23,13 +23,142 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class TeamScheduleStepDefinition
 	{
+		private static string TeamColleagueName = "Colleague In Team";
+		private static string OtherTeamColleagueName = "Colleague Not In Team";
+
+		private class TheOtherSite : SiteConfigurable
+		{
+			public TheOtherSite()
+			{
+				BusinessUnit = CommonBusinessUnit.BusinessUnitFromFakeState.Name;
+				Name = "The other site";
+			}
+		}
+
+		private static ISite GetTheOtherSite()
+		{
+			if (!DataMaker.Data().HasSetup<TheOtherSite>())
+				DataMaker.Data().Apply(new TheOtherSite());
+			return DataMaker.Data().UserData<TheOtherSite>().Site;
+		}
+
+		private class TheOtherTeam : GeneratedTeam
+		{
+			public TheOtherTeam() : base(DefaultSite.Get()) { }
+		}
+
+		private static ITeam GetTheOtherTeam()
+		{
+			if (!DataMaker.Data().HasSetup<TheOtherTeam>())
+				DataMaker.Data().Apply(new TheOtherTeam());
+			return DataMaker.Data().UserData<TheOtherTeam>().TheTeam;
+		}
+
+		private class TheOtherSitesFirstTeam : GeneratedTeam
+		{
+			public TheOtherSitesFirstTeam() : base(GetTheOtherSite()) { }
+		}
+
+		private static ITeam GetTheOtherSitesFirstTeam()
+		{
+			if (!DataMaker.Data().HasSetup<TheOtherSitesFirstTeam>())
+				DataMaker.Data().Apply(new TheOtherSitesFirstTeam());
+			return DataMaker.Data().UserData<TheOtherSitesFirstTeam>().TheTeam;
+		}
+
+		private class TheOtherSitesSecondTeam : GeneratedTeam
+		{
+			public TheOtherSitesSecondTeam() : base(GetTheOtherSite()) { }
+		}
+
+		private static ITeam GetTheOtherSitesSecondTeam()
+		{
+			if (!DataMaker.Data().HasSetup<TheOtherSitesSecondTeam>())
+				DataMaker.Data().Apply(new TheOtherSitesSecondTeam());
+			return DataMaker.Data().UserData<TheOtherSitesSecondTeam>().TheTeam;
+		}
+
+		[Given(@"the site has another team")]
+		public void GivenTheSiteHasAnotherTeam()
+		{
+			DefaultSite.Get();
+			DefaultTeam.Get();
+			GetTheOtherTeam();
+		}
+
+		[Given(@"the other site has 2 teams")]
+		public void GivenTheOtherSiteHas2Teams()
+		{
+			GetTheOtherSite();
+			GetTheOtherSitesFirstTeam();
+			GetTheOtherSitesSecondTeam();
+		}
+
+		[Given(@"I belong to another site's team on '(.*)'")]
+		public void GivenIBelongToAnotherSiteSTeamTomorrow(DateTime date)
+		{
+			GetTheOtherSite();
+			var team = GetTheOtherSitesFirstTeam();
+			DataMaker.Data().Apply(new PersonPeriod(team, date));
+		}
+
+		[Given(@"I have a colleague")]
+		public void GivenIHaveAColleague()
+		{
+			DataMaker.Person(TeamColleagueName).Apply(new Agent());
+			DataMaker.Person(TeamColleagueName).Apply(new SchedulePeriod());
+			DataMaker.Person(TeamColleagueName).Apply(new PersonPeriod(DefaultTeam.Get()));
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published2", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Person(TeamColleagueName).Apply(new WorkflowControlSetForUser { Name = "Published2" });
+		}
+
+		[Given(@"I have a colleague in another team")]
+		public void GivenIHaveAColleagueInAnotherTeam()
+		{
+			DataMaker.Person(OtherTeamColleagueName).Apply(new Agent());
+			DataMaker.Person(OtherTeamColleagueName).Apply(new SchedulePeriod());
+			DataMaker.Person(OtherTeamColleagueName).Apply(new PersonPeriod(GetTheOtherTeam()));
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published3", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Person(OtherTeamColleagueName).Apply(new WorkflowControlSetForUser { Name = "Published3" });
+		}
+
+		[Given(@"My colleague has an assigned shift with")]
+		public void GivenMyColleagueHasAShiftWith(Table table)
+		{
+			DataMaker.ApplyFromTable<AssignedShift>(TeamColleagueName, table);
+		}
+
+		[Given(@"The colleague in the other team has an assigned shift with")]
+		public void GivenTheColleagueInTheOtherTeamHasAShiftWith(Table table)
+		{
+			DataMaker.ApplyFromTable<AssignedShift>(OtherTeamColleagueName, table);
+		}
+
+		[Given(@"My colleague has an assigned absence with")]
+		[Given(@"My colleague has an assigned full-day absence with")]
+		public void GivenMyColleagueHasAnAbsenceWith(Table table)
+		{
+			DataMaker.ApplyFromTable<AssignedAbsence>(TeamColleagueName, table);
+		}
+
+		[Given(@"My colleague has an assigned dayoff with")]
+		public void GivenMyColleagueHasADayoffToday(Table table)
+		{
+			DataMaker.ApplyFromTable<AssignedDayOff>(TeamColleagueName, table);
+		}
+
+		[Given(@"My colleague has a confidential absence with")]
+		public void GivenMyColleagueHasAnConfidentialAbsence(Table table)
+		{
+			DataMaker.ApplyFromTable<ShiftWithConfidentialAbsence>(TeamColleagueName, table);
+		}
+
 		[When(@"I select the other team in the team picker")]
 		public void WhenIChooseTheOtherTeamInTheTeamPicker()
 		{
-			var team = DataMaker.Data().UserData<AnotherTeam>().TheTeam;
-			var site = GlobalDataMaker.Data().Data<CommonSite>().Site.Description.Name;
+			var team = GetTheOtherTeam();
 			var id = team.Id.ToString();
-			var text = site + "/" + team.Description.Name;
+			var text = team.Site.Description.Name + "/" + team.Description.Name;
 			Select2Box.SelectItemByIdAndText("Team-Picker", id, text);
 			Browser.Interactions.AssertExists(".input-group-btn button:nth-of-type(2)");
 		}
@@ -81,8 +210,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see my colleague's schedule")]
 		public void ThenIShouldSeeMyColleagueSSchedule()
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer",
-				DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer", DataMaker.Person(TeamColleagueName).Person.Name));
 		}
 
 		[Then(@"I should see '(.*)' schedule in team schedule with")]
@@ -101,15 +229,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see my colleague's absence")]
 		public void ThenIShouldMyColleagueSAbsence()
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer",
-				DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer", DataMaker.Person(TeamColleagueName).Person.Name));
 		}
 
 		[Then(@"I should see the next day")]
 		[Then(@"I should see tomorrow")]
 		public void ThenIShouldSeeTheNextDay()
 		{
-			AssertShowingDay(new DateOnly(2014,5,3));
+			AssertShowingDay(new DateOnly(2014, 5, 3));
 		}
 
 		[Then(@"I should see the previous day")]
@@ -131,16 +258,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 			Browser.Interactions.AssertNotExistsUsingJQuery(
 				string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer",
-					DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name),
+					DataMaker.Person(TeamColleagueName).Person.Name),
 				string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer[style*='{1}']",
-					DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name, colorAsString));
+					DataMaker.Person(TeamColleagueName).Person.Name, colorAsString));
 		}
 
 		[Then(@"I should see my colleague's day off")]
 		public void ThenIShouldSeeMyColleagueSDayOff()
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .dayoff",
-				DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name));
+				DataMaker.Person(TeamColleagueName).Person.Name));
 		}
 
 		[Then(@"The time line should span from (.*) to (.*)")]
@@ -153,7 +280,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see my colleagues schedule")]
 		public void ThenIShouldNotSeeMyColleaguesSchedule()
 		{
-			AssertAgentIsNotDisplayed(DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
+			AssertAgentIsNotDisplayed(DataMaker.Person(TeamColleagueName).Person.Name.ToString());
 		}
 
 		[Then(@"I should not see '(.*)' schedule")]
@@ -165,13 +292,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see the other colleague's schedule")]
 		public void ThenIShouldNotSeeTheOtherColleagueSSchedule()
 		{
-			AssertAgentIsNotDisplayed(DataMaker.Person(ColleagueStepDefinitions.OtherTeamColleagueName).Person.Name.ToString());
+			AssertAgentIsNotDisplayed(DataMaker.Person(OtherTeamColleagueName).Person.Name.ToString());
 		}
 
 		[Then(@"I should see my colleague before myself")]
 		public void ThenIShouldSeeMyColleagueBeforeMyself()
 		{
-			ThenIShouldSeeBeforeMyself(DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
+			ThenIShouldSeeBeforeMyself(DataMaker.Person(TeamColleagueName).Person.Name.ToString());
 		}
 
 		[Then(@"I should see '(.*)' before myself")]
@@ -195,7 +322,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see my colleague without schedule")]
 		public void ThenIShouldSeeMyColleagueWithoutSchedule()
 		{
-			var name = DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name;
+			var name = DataMaker.Person(TeamColleagueName).Person.Name;
 			Browser.Interactions.AssertNotExistsUsingJQuery(
 				string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule",
 					name), string.Format(".teamschedule-agent-name-without-badge:contains('{0}') + .teamschedule-agent-schedule .layer",
@@ -211,9 +338,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the team-picker with both teams")]
 		public void ThenIShouldSeeTheTeam_PickerWithBothTeams()
 		{
-			var site = GlobalDataMaker.Data().Data<CommonSite>().Site.Description.Name;
-			var myTeam = site + "/" + DataMaker.Data().UserData<Team>().TheTeam.Description.Name;
-			var otherTeam = site + "/" + DataMaker.Data().UserData<AnotherTeam>().TheTeam.Description.Name;
+			var team1 = DefaultTeam.Get();
+			var team2 = GetTheOtherTeam();
+
+			var myTeam = team1.Site.Description.Name + "/" + team1.Description.Name;
+			var otherTeam = team2.Site.Description.Name + "/" + team2.Description.Name;
 
 			Select2Box.AssertOptionExist("Team-Picker", myTeam);
 			Select2Box.AssertOptionExist("Team-Picker", otherTeam);
@@ -250,10 +379,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeMyColleague()
 		{
 			// refact hack to see if which colleague has been created in this scenario
-			if (DataMaker.PersonExists(ColleagueStepDefinitions.TeamColleagueName))
-				AssertAgentIsDisplayed(DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
+			if (DataMaker.PersonExists(TeamColleagueName))
+				AssertAgentIsDisplayed(DataMaker.Person(TeamColleagueName).Person.Name.ToString());
 			else
-				AssertAgentIsDisplayed(DataMaker.Person(ColleagueStepDefinitions.OtherTeamColleagueName).Person.Name.ToString());
+				AssertAgentIsDisplayed(DataMaker.Person(OtherTeamColleagueName).Person.Name.ToString());
 		}
 
 		[Then(@"I should see colleague '(.*)'")]
@@ -293,7 +422,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the team-picker with the other site's team")]
 		public void ThenIShouldSeeTheTeam_PickerWithTheOtherSiteSTeam()
 		{
-			var teamId = DataMaker.Data().UserData<AnotherSitesTeam>().TheTeam.Id;
+			var teamId = GetTheOtherSitesFirstTeam().Id;
 
 			var name = DataMaker.Data().MePerson.Name.ToString();
 			AssertAgentIsDisplayed(name);
@@ -310,14 +439,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the other site's team")]
 		public void ThenIShouldSeeTheOtherSiteSTeam()
 		{
-			var theOtherSitesTeam = DataMaker.Data().UserData<AnotherSitesTeam>().TheTeam.Description.Name;
+			var theOtherSitesTeam = GetTheOtherSitesFirstTeam().Description.Name;
 			Browser.Interactions.AssertAnyContains(".select2-chosen", theOtherSitesTeam);
 		}
 
 		[Then(@"the team-picker should have my team selected")]
 		public void ThenTheTeam_PickerShouldHaveMyTeamSelected()
 		{
-			var myTeam = DataMaker.Data().UserData<Team>().TheTeam.Id.Value.ToString();
+			var myTeam = DefaultTeam.Get().Id.Value.ToString();
 			Select2Box.AssertSelectedOptionValue("Team-Picker", myTeam);
 		}
 

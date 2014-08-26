@@ -10,12 +10,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 	public class SiteConfigurable : IDataSetup
 	{
 		public string Name { get; set; }
-
 		public string BusinessUnit { get; set; }
+
 		public ISite Site { get; private set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
+			if (Name == null)
+				Name = RandomName.Make("site");
 			Site = SiteFactory.CreateSimpleSite(Name);
 			var businessUnit = new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit);
 			if(!string.IsNullOrEmpty(BusinessUnit))

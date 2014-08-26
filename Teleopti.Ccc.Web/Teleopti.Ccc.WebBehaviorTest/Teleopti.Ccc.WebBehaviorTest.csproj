@@ -144,6 +144,8 @@
       <DependentUpon>AgentBadge.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\AgentBageStepDefinition.cs" />
+    <Compile Include="Bindings\Specific\DefaultSite.cs" />
+    <Compile Include="Bindings\Specific\DefaultTeam.cs" />
     <Compile Include="MyTime\PreferenceAlertWhenBrokenMinOrMaxHoursStepDefinition.cs" />
     <Compile Include="MyTime\MyReportAgentQueueMetrics.feature.cs">
       <AutoGen>True</AutoGen>
@@ -486,10 +488,8 @@
     </Compile>
     <Compile Include="Data\Setups\Configurable\ShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonBusinessUnit.cs" />
-    <Compile Include="Data\Setups\Legacy\Common\CommonSite.cs" />
     <Compile Include="Data\Setups\Configurable\RoleForUser.cs" />
     <Compile Include="Data\Setups\Configurable\WorkflowControlSetForUser.cs" />
-    <Compile Include="Bindings\Specific\ColleagueStepDefinitions.cs" />
     <Compile Include="MyTime\AbsenceRequestFromScheduleStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\RoleConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonPeriodConfigurable.cs" />
@@ -531,14 +531,10 @@
     <Compile Include="Data\Setups\Legacy\Specific\RuleSetBag.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\BaseShiftCategory.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AssignedAbsence.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AnotherSitesSecondTeam.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AnotherSitesTeam.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\AnotherTeam.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\GeneratedTeam.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AssignedDayOff.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\SchedulePeriod.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ShiftWithConfidentialAbsence.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\Team.cs" />
     <Compile Include="MyTime\MyProfile.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

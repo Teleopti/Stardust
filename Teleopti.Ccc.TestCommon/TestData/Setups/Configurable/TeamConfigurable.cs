@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public Team Team { get; private set; }
 
-		public void Apply(IUnitOfWork uow)
+		public virtual void Apply(IUnitOfWork uow)
 		{
 			if (Name == null)
 				Name = RandomName.Make("team");

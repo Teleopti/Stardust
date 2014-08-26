@@ -2,16 +2,12 @@ using System;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Interfaces.Domain;
-using SiteConfigurable = Teleopti.Ccc.TestCommon.TestData.Setups.Configurable.SiteConfigurable;
-using TeamConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.TeamConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 {
@@ -21,12 +17,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I am an agent")]
 		public void GivenIAmAnAgent()
 		{
-			var teamCfg = new TeamConfigurable();
-			DataMaker.Data().Apply(teamCfg);
-
 			DataMaker.Data().Apply(new Agent());
 			DataMaker.Data().Apply(new SchedulePeriod());
-			DataMaker.Data().Apply(new PersonPeriod(teamCfg.Team));
+			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable{Name = "Published", SchedulePublishedToDate = "2030-12-01"});
 			DataMaker.Data().Apply(new WorkflowControlSetForUser{Name = "Published"});
 		}
@@ -34,9 +27,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I am an agent that has a dayoff today according to my contract")]
 		public void GivenIAmAnAgentThatHasAContractDayOffToday()
 		{
-			var teamCfg = new TeamConfigurable();
-			DataMaker.Data().Apply(teamCfg);
-
 			DataMaker.Data().Apply(new Agent());
 			DataMaker.Data().Apply(new SchedulePeriod());
 			var contractSchedule = new ContractScheduleFromTable
@@ -50,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			                       		SundayWorkDay = false
 			                       	};
 			DataMaker.Data().Apply(contractSchedule);
-			DataMaker.Data().Apply(new PersonPeriod(teamCfg.Team) { ContractSchedule = contractSchedule.ContractSchedule });
+			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()) { ContractSchedule = contractSchedule.ContractSchedule });
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
@@ -77,10 +67,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 				Name = "Access to my site"
 			});
 
-			var team = new Team();
-			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());
-			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
+			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
@@ -91,21 +79,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIAmAnAgentInATeam()
 		{
 			DataMaker.Data().Apply(new Agent());
-			var team = new Team();
-			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());
-			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
-			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
-			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
-		}
-
-		[Given(@"I am in a team with published schedule")]
-		public void GivenIAmInATeamWithPublishedSchedule()
-		{
-			var team = new Team();
-			DataMaker.Data().Apply(team);
-			DataMaker.Data().Apply(new SchedulePeriod());
-			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
+			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
@@ -113,26 +88,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I am a student agent")]
 		public void GivenIAmAStudentAgent()
 		{
-			var team = new Team();
-			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new StudentAgent());
 			DataMaker.Data().Apply(new SchedulePeriod());
-			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
+			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published Student", SchedulePublishedToDate = "2030-12-01" });
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published Student" });
+		}
+
+		[Given(@"I am in a team with published schedule")]
+		public void GivenIAmInATeamWithPublishedSchedule()
+		{
+			DataMaker.Data().Apply(new SchedulePeriod());
+			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
 
 		[Given(@"I have schedule and person period")]
 		public void GivenIHaveScheduleAndPersonPeriod()
 		{
-			var team = new Team();
-			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());
-			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
+			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}
-
 
 		[Given(@"I have several virtual schedule periods")]
 		public void GivenIHaveSeveralVirtualSchedulePeriods()
@@ -510,33 +489,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().ApplyLater(existingShiftTrade);
 		}
 
-		[Given(@"the site has another team")]
-		public void GivenTheSiteHasAnotherTeam()
-		{
-			DataMaker.Data().Apply(new AnotherTeam());
-		}
-
-		[Given(@"the other site has 2 teams")]
-		public void GivenTheOtherSiteHas2Teams()
-		{
-			var site = DataMaker.Data().UserData<SiteConfigurable>().Site;
-			DataMaker.Data().Apply(new AnotherSitesSecondTeam(site));
-		}
-		
-		[Given(@"I belong to another site's team on '(.*)'")]
-		public void GivenIBelongToAnotherSiteSTeamTomorrow(DateTime date)
-		{
-			var siteCfg = new SiteConfigurable
-			{
-				BusinessUnit = CommonBusinessUnit.BusinessUnitFromFakeState.Name,
-				Name = RandomName.Make("site")
-			};
-			DataMaker.Data().Apply(siteCfg);
-			var team = new AnotherSitesTeam(siteCfg.Site);
-			DataMaker.Data().Apply(team);
-			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam, date));
-		}
-
 		[Given(@"I have a shift bag with start times (.*) to (.*) and end times (.*) to (.*)")]
 		public void GivenIHaveAShiftBagWithStartTimesToAndEndTimesTo(int earliestStart, int latestStart, int earliestEnd, int latestEnd)
 		{
@@ -586,10 +538,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIAmAnAgentThatLeavesOn(DateTime date)
 		{
 			DataMaker.Data().Apply(new AgentThatLeaves(date));
-			var team = new Team();
-			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());
-			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
+			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
 			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
 		}

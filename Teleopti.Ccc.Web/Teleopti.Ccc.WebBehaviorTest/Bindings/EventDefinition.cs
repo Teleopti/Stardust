@@ -149,7 +149,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		private static void createGlobalData()
 		{
 			GlobalDataMaker.Data().Apply(new CommonBusinessUnit());
-			GlobalDataMaker.Data().Apply(new CommonSite());
 			GlobalDataMaker.Data().Apply(new DefaultScenario());
 
 			GlobalDataMaker.Data().Apply(new CommonRaptorApplicationFunctions());

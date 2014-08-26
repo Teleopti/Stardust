@@ -286,9 +286,6 @@ Scenario: Default team when no own team but everyone access
 	Given I have a role with
          | Field              | Value |
          | Access To Everyone | True  |
-	And there is a team with
-         | Field | Value     |
-         | Name  | Something |
 	And the site has another team
 	When I view team schedule
 	Then I should see the team-picker
