@@ -140,6 +140,7 @@
     <Compile Include="Data\Setups\Default\DefaultRaptorApplicationFunctions.cs" />
     <Compile Include="Data\Setups\Default\DefaultMatrixApplicationFunctions.cs" />
     <Compile Include="Data\Setups\DoNotUse\Agent.cs" />
+    <Compile Include="Data\Setups\Default\IHashableDataSetup.cs" />
     <Compile Include="MyTime\AgentBadge.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

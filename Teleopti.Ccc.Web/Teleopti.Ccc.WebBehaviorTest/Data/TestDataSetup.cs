@@ -1,5 +1,8 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -16,6 +19,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		private static DatabaseHelper.Backup _ccc7DataBackup;
 		private static IDataSource datasource;
+		private static readonly IEnumerable<IHashableDataSetup> globalData = new IHashableDataSetup[]
+		{
+			new DefaultPersonThatCreatesDbData(),
+			new DefaultLicense(),
+			new DefaultBusinessUnit(),
+			new DefaultScenario(),
+			new DefaultRaptorApplicationFunctions(),
+			new DefaultMatrixApplicationFunctions()
+		};
 
 		public static void CreateDataSource()
 		{
@@ -29,24 +41,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void createGlobalDbData()
 		{
-			GlobalDataMaker.Data().Apply(new DefaultPersonThatCreatesDbData());
-			GlobalDataMaker.Data().Apply(new DefaultLicense());
-			GlobalDataMaker.Data().Apply(new DefaultBusinessUnit());
-			GlobalDataMaker.Data().Apply(new DefaultScenario());
-			GlobalDataMaker.Data().Apply(new DefaultRaptorApplicationFunctions());
-			GlobalDataMaker.Data().Apply(new DefaultMatrixApplicationFunctions());
+			globalData.ForEach(dataSetup => GlobalDataMaker.Data().Apply(dataSetup));
 		}
 
 		private static void setupFakeState()
 		{
-			DefaultBusinessUnit.BusinessUnitFromFakeState = new BusinessUnit("BusinessUnit");
-
 			StateHolderProxyHelper.SetupFakeState(datasource, DefaultPersonThatCreatesDbData.PersonThatCreatesDbData, DefaultBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
 		}
-
 
 		public static void ClearAnalyticsData()
 		{
