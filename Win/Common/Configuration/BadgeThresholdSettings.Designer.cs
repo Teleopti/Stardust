@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxThresholdForAHT.Name = "timeSpanTextBoxThresholdForAHT";
 			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(118, 25);
 			this.timeSpanTextBoxThresholdForAHT.TabIndex = 3;
-			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 23;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 115;
 			// 

@@ -12148,7 +12148,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Label for Badge Threshold for Answered Calls setting</comment>
   </data>
   <data name="SetBadgeThresholdForAHT" xml:space="preserve">
-    <value>Average Handle Time Threshold: </value>
+    <value>Average Handle Time Threshold (HH:mm:ss): </value>
     <comment>Label for Badge Threshold for AHT setting</comment>
   </data>
   <data name="SetBadgeThresholdForAdherence" xml:space="preserve">

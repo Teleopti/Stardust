@@ -21899,7 +21899,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average Handle Time Threshold: .
+        ///   Looks up a localized string similar to Average Handle Time Threshold (HH:mm:ss): .
         /// </summary>
         public static string SetBadgeThresholdForAHT {
             get {
