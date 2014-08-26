@@ -1,10 +1,14 @@
+using System.Globalization;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Specific;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 {
 	public class PersonPeriodConfigurable : TestCommon.TestData.Setups.Configurable.PersonPeriodConfigurable
 	{
-		public PersonPeriodConfigurable()
+		public override void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			if (Contract == null)
 			{
@@ -34,6 +38,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				DataMaker.Data().Apply(team);
 				Team = team.Name;
 			}
+
+			base.Apply(uow, user, cultureInfo);
 		}
 	}
 }

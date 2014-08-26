@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string WorkflowControlSet { get; set; }
 		public string ExternalLogon { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public virtual void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var contractRepository = new ContractRepository(uow);
 			var contract = contractRepository.LoadAll().Single(c => c.Description.Name == Contract);

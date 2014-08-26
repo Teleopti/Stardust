@@ -13,6 +13,8 @@ Background:
 	| Schedule published to date       | 2040-06-24                                |
 	| Shift Trade sliding period start | 1                                         |
 	| Shift Trade sliding period end   | 30                                        |
+	And there is a site named 'The site'
+	And there is a team named 'The team' on site 'The site'
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
@@ -20,10 +22,12 @@ Background:
 	| Length     | 1          |
 	And I have a person period with 
 	| Field      | Value      |
-	| Start date | 2012-06-18 |	
+	| Start date | 2012-06-18 |
+	| Team       | The team   |
 	And OtherAgent has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
+	| Team       | The team   |
 	And there are shift categories
 	| Name  |
 	| Day   |
@@ -79,22 +83,23 @@ Scenario: Show name of sender of a received shifttrade
 	And Ashley Andeen has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
+	| Team       | The team   |
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
 	And 'Ashley Andeen' has a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 12:00 |
-	| EndTime               | 2030-01-01 22:00 |
-	| Shift category			| Day	           |
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 12:00 |
+	| EndTime        | 2030-01-01 22:00 |
+	| Shift category | Day              |
 	And I have received a shift trade request
 	| Field    | Value         |
-	| From     | Ashley Andeen	|
+	| From     | Ashley Andeen |
 	| DateTo   | 2030-01-01    |
 	| DateFrom | 2030-01-01    |
-	| Pending | True          |
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the existing request in the list
 	Then I should see 'Ashley Andeen' as the sender of the request
@@ -133,6 +138,7 @@ Scenario: Show schedules of the shift trade
 	And Ashley Andeen has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
+	| Team       | The team   |
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
@@ -140,26 +146,26 @@ Scenario: Show schedules of the shift trade
 	| Shift category        | Day              |
 	| Lunch3HoursAfterStart | True             |
 	And 'Ashley Andeen' has a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 12:00 |
-	| EndTime               | 2030-01-01 22:00 |
-	| Shift category			| Day	           |
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 12:00 |
+	| EndTime        | 2030-01-01 22:00 |
+	| Shift category | Day              |
 	And I have created a shift trade request
 	| Field    | Value         |
-	| To       | Ashley Andeen	|
+	| To       | Ashley Andeen |
 	| DateTo   | 2030-01-01    |
 	| DateFrom | 2030-01-01    |
 	| Pending  | True          |
 	And I am viewing requests
 	When I click on the existing request in the list
 	Then I should see details with a schedule from
-	| Field			| Value |
-	| Start time	| 06:00 |
-	| End time		| 16:00 |
+	| Field      | Value |
+	| Start time | 06:00 |
+	| End time   | 16:00 |
 	And I should see details with a schedule to
-	| Field			| Value |
-	| Start time	| 12:00 |
-	| End time		| 22:00 |
+	| Field      | Value |
+	| Start time | 12:00 |
+	| End time   | 22:00 |
 
 Scenario: Show day off in a shifttrade
 	Given I have the role 'Full access to mytime'
@@ -167,7 +173,7 @@ Scenario: Show day off in a shifttrade
 	| Field | Value  |
 	| Name  | DayOff |
 	And there is a dayoff with
-	| Field | Value		|
+	| Field | Value                          |
 	| Name  | VacationButWithAReallyLongName |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And 'I' have a day off with
@@ -178,16 +184,17 @@ Scenario: Show day off in a shifttrade
 	And Ashley Andeen has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
+	| Team       | The team   |
 	And 'Ashley Andeen' have a day off with
-	| Field | Value      |
+	| Field | Value                          |
 	| Name  | VacationButWithAReallyLongName |
-	| Date  | 2030-01-04 |
+	| Date  | 2030-01-04                     |
 	And I have created a shift trade request
-	| Field    | Value			|
-	| To       | Ashley Andeen	|
-	| DateTo   | 2030-01-04		|
-	| DateFrom | 2030-01-04		|
-	| Pending  | True			|
+	| Field    | Value         |
+	| To       | Ashley Andeen |
+	| DateTo   | 2030-01-04    |
+	| DateFrom | 2030-01-04    |
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the existing request in the list
 	Then I should see my details scheduled day off 'DayOff'
@@ -331,30 +338,31 @@ Scenario: Do not show referred shifttrade to reciever
 	And I am viewing requests
 	Then I should not see any requests
 
-Scenario: Do not show resend and cancelbuttons to sender when shifttrade is not referred
+Scenario: Do not show resend and cancel buttons to sender when shifttrade is not referred
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Ashley Andeen has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
+	| Team       | The team   |
 	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category        | Day              |
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 06:00 |
+	| EndTime        | 2030-01-01 16:00 |
+	| Shift category | Day              |
 	And 'Ashley Andeen' has a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 12:00 |
-	| EndTime               | 2030-01-01 22:00 |
-	| Shift category			| Day	           |
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 12:00 |
+	| EndTime        | 2030-01-01 22:00 |
+	| Shift category | Day              |
 	And I have created a shift trade request
-	| Field				| Value         |
-	| To				| Ashley Andeen	|
-	| DateTo			| 2030-01-01    |
-	| DateFrom			| 2030-01-01    |
-	| Pending			| True          |
-	| HasBeenReferred	| False         |
+	| Field           | Value         |
+	| To              | Ashley Andeen |
+	| DateTo          | 2030-01-01    |
+	| DateFrom        | 2030-01-01    |
+	| Pending         | True          |
+	| HasBeenReferred | False         |
 	And I am viewing requests
 	When I click on the existing request in the list
 	Then I should not see resend shifttrade button for the request
