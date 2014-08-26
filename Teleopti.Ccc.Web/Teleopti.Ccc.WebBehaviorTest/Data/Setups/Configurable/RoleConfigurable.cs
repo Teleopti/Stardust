@@ -7,7 +7,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public RoleConfigurable()
 		{
 			Name = RandomName.Make("A role");
-			BusinessUnit = GlobalDataMaker.Data().Data<CommonBusinessUnit>().BusinessUnit.Description.Name;
+			BusinessUnit = GlobalDataMaker.Data().Data<DefaultBusinessUnit>().BusinessUnit.Description.Name;
 			ViewUnpublishedSchedules = false;
 			ViewConfidential = false;
 			AccessToMyOwn = false;

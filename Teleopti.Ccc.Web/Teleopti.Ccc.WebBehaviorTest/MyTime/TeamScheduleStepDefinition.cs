@@ -11,7 +11,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			public TheOtherSite()
 			{
-				BusinessUnit = CommonBusinessUnit.BusinessUnitFromFakeState.Name;
+				BusinessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Name;
 				Name = "The other site";
 			}
 		}

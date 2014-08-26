@@ -1,6 +1,6 @@
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		{
 			public TheSite()
 			{
-				BusinessUnit = CommonBusinessUnit.BusinessUnitFromFakeState.Name;
+				BusinessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Name;
 				Name = "The site";
 			}
 		}

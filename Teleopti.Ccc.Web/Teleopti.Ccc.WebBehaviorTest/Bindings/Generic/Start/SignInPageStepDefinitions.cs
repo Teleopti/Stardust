@@ -4,6 +4,7 @@ using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Ccc.WebBehaviorTest.MyTime;
 
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void WhenISignIn()
 		{
 			var userName = DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName;
-			SignInApplication(userName, TestData.CommonPassword);
+			SignInApplication(userName, DefaultPassword.ThePassword);
 		}
 
 		[When(@"I try to sign in with")]

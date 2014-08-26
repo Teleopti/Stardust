@@ -135,8 +135,8 @@
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
-    <Compile Include="Data\CommonRaptorApplicationFunctions.cs" />
-    <Compile Include="Data\CommonMatrixApplicationFunctions.cs" />
+    <Compile Include="Data\Setups\Default\DefaultRaptorApplicationFunctions.cs" />
+    <Compile Include="Data\Setups\Default\DefaultMatrixApplicationFunctions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Agent.cs" />
     <Compile Include="MyTime\AgentBadge.feature.cs">
       <AutoGen>True</AutoGen>
@@ -226,7 +226,7 @@
     <Compile Include="Bindings\Generic\GroupPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\PersonalShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonDayOffConfigurable.cs" />
-    <Compile Include="Data\Setups\Legacy\Common\DefaultScenario.cs" />
+    <Compile Include="Data\Setups\Default\DefaultScenario.cs" />
     <Compile Include="Data\Setups\Configurable\AbsenceRequestConfigurable.cs" />
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
@@ -487,7 +487,7 @@
       <DependentUpon>Asm.feature</DependentUpon>
     </Compile>
     <Compile Include="Data\Setups\Configurable\ShiftConfigurable.cs" />
-    <Compile Include="Data\Setups\Legacy\Common\CommonBusinessUnit.cs" />
+    <Compile Include="Data\Setups\Default\DefaultBusinessUnit.cs" />
     <Compile Include="Data\Setups\Configurable\RoleForUser.cs" />
     <Compile Include="Data\Setups\Configurable\WorkflowControlSetForUser.cs" />
     <Compile Include="MyTime\AbsenceRequestFromScheduleStepDefinitions.cs" />
@@ -577,7 +577,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Data\Setups\Legacy\Specific\ExistingTextRequest.cs" />
-    <Compile Include="Data\TestData.cs" />
+    <Compile Include="Data\Setups\Default\DefaultPassword.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AnotherStandardPreference.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\BasePreference.cs" />
     <Compile Include="Data\IDelayedSetup.cs" />
@@ -1028,7 +1028,9 @@
       <Name>Teleopti.Messaging</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Data\Setups\Legacy\Common\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\Teleopti.Ccc.TestCommon.App.config" "$(ProjectDir)App.config"

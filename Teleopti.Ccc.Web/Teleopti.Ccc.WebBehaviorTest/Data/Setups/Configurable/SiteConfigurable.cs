@@ -1,4 +1,4 @@
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 {
@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 	{
 		public SiteConfigurable()
 		{
-			BusinessUnit = GlobalDataMaker.Data().Data<CommonBusinessUnit>().BusinessUnit.Name;
+			BusinessUnit = GlobalDataMaker.Data().Data<DefaultBusinessUnit>().BusinessUnit.Name;
 		}
 	}
 }

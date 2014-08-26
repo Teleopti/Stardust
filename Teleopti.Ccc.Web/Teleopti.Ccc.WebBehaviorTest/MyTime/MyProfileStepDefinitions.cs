@@ -7,6 +7,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#password", newPassword);
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#passwordValidation", newPassword);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#oldPassword", TestData.CommonPassword);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#oldPassword", DefaultPassword.ThePassword);
 			Browser.Interactions.ClickUsingJQuery("#passwordButton");
 		}
 
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#password", "newP@ssw0rd");
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#passwordValidation", "newP@ssw0rd");
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#oldPassword", TestData.CommonPassword + "fel");
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#oldPassword", DefaultPassword.ThePassword + "fel");
 			Browser.Interactions.ClickUsingJQuery("#passwordButton");
 		}
 
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#password", "newP@ssw0rd");
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#passwordValidation", "newP@ssw0rd" + "fel");
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#oldPassword", TestData.CommonPassword);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#oldPassword", DefaultPassword.ThePassword);
 		}
 
 		[Then(@"I should see my culture")]

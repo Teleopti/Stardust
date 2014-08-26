@@ -3,9 +3,9 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data
+namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 {
-	public class CommonRaptorApplicationFunctions : IDataSetup
+	public class DefaultRaptorApplicationFunctions : IDataSetup
 	{
 		public void Apply(IUnitOfWork uow)
 		{

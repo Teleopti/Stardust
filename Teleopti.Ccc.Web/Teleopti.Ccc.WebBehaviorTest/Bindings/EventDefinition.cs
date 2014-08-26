@@ -8,8 +8,8 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using log4net;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -148,11 +148,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		private static void createGlobalData()
 		{
-			GlobalDataMaker.Data().Apply(new CommonBusinessUnit());
+			GlobalDataMaker.Data().Apply(new DefaultBusinessUnit());
 			GlobalDataMaker.Data().Apply(new DefaultScenario());
-
-			GlobalDataMaker.Data().Apply(new CommonRaptorApplicationFunctions());
-			GlobalDataMaker.Data().Apply(new CommonMatrixApplicationFunctions());
+			GlobalDataMaker.Data().Apply(new DefaultRaptorApplicationFunctions());
+			GlobalDataMaker.Data().Apply(new DefaultMatrixApplicationFunctions());
 		}
 
 		private static void handleScenarioException()

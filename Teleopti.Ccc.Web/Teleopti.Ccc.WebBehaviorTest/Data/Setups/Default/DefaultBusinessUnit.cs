@@ -3,9 +3,9 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common
+namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 {
-	public class CommonBusinessUnit : IDataSetup
+	public class DefaultBusinessUnit : IDataSetup
 	{
 		public static IBusinessUnit BusinessUnitFromFakeState;
 

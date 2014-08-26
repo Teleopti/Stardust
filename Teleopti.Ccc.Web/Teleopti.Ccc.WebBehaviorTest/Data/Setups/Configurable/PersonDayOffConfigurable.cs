@@ -1,5 +1,5 @@
 ﻿using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 {

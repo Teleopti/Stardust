@@ -6,6 +6,7 @@ using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using log4net;
 
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void Logon()
 		{
 			var userName = DataMaker.Data().ApplyDelayed();
-			var password = TestData.CommonPassword;
+			var password = DefaultPassword.ThePassword;
 			InnerLogon(userName, password);
 		}
 
