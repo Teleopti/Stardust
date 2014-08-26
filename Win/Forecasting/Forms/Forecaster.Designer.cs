@@ -365,7 +365,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.toolStripButtonSystemOptions});
 			this.ribbonControlAdv1.OverFlowButtonToolTip = "Show DropDown";
 			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.ribbonControlAdv1.QuickPanelVisible = false;
 			this.ribbonControlAdv1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.ribbonControlAdv1.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
 			this.ribbonControlAdv1.SelectedTab = this.toolStripTabItemHome;
@@ -404,7 +403,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStage1.Controls.Add(this.backStageButtonClose);
 			this.backStage1.Controls.Add(this.backStageButtonOptions);
 			this.backStage1.Controls.Add(this.backStageButton4);
-			this.backStage1.ItemSize = new System.Drawing.Size(138, 40);
+			this.backStage1.ItemSize = new System.Drawing.Size(141, 40);
 			this.backStage1.Location = new System.Drawing.Point(0, 0);
 			this.backStage1.Name = "backStage1";
 			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
@@ -431,11 +430,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStageTabExportTo.BackColor = System.Drawing.Color.White;
 			this.backStageTabExportTo.Image = null;
 			this.backStageTabExportTo.ImageSize = new System.Drawing.Size(16, 16);
-			this.backStageTabExportTo.Location = new System.Drawing.Point(129, 0);
+			this.backStageTabExportTo.Location = new System.Drawing.Point(140, 0);
 			this.backStageTabExportTo.Name = "backStageTabExportTo";
 			this.backStageTabExportTo.Position = new System.Drawing.Point(0, 0);
 			this.backStageTabExportTo.ShowCloseButton = true;
-			this.backStageTabExportTo.Size = new System.Drawing.Size(1142, 716);
+			this.backStageTabExportTo.Size = new System.Drawing.Size(1131, 716);
 			this.backStageTabExportTo.TabIndex = 4;
 			this.backStageTabExportTo.Text = "xxExport";
 			this.backStageTabExportTo.ThemesEnabled = false;
@@ -473,9 +472,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton4.IsBackStageButton = false;
-			this.backStageButton4.Location = new System.Drawing.Point(0, 128);
+			this.backStageButton4.Location = new System.Drawing.Point(11, 128);
 			this.backStageButton4.Name = "backStageButton4";
-			this.backStageButton4.Size = new System.Drawing.Size(110, 25);
+			this.backStageButton4.Size = new System.Drawing.Size(111, 25);
 			this.backStageButton4.TabIndex = 7;
 			this.backStageButton4.Text = "xxExitTELEOPTICCC";
 			this.backStageButton4.Click += new System.EventHandler(this.backStageButton4_Click);
@@ -1365,6 +1364,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.ribbonControlAdv1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.backStage1)).EndInit();
 			this.backStage1.ResumeLayout(false);
+			this.backStage1.PerformLayout();
 			this.toolStripTabItemHome.Panel.ResumeLayout(false);
 			this.toolStripTabItemHome.Panel.PerformLayout();
 			this.toolStripExWorkflow.ResumeLayout(false);
