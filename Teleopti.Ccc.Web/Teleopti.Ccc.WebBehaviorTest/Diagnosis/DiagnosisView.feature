@@ -16,8 +16,8 @@ Background:
 
 Scenario: Should send all messages
 	When I am viewing the diagnosis view
-	And I input a numberOfPings of 1000
-	And I input a numberOfMessagesPerSecond of 100
+	And I input a numberOfPings of 1
+	And I input a numberOfMessagesPerSecond of 30
 	And I click 'send'
-	Then I should see a count of 1000 messages sent
+	Then I should see a count of 1 messages sent
 	And I should see a count of 0 messages left

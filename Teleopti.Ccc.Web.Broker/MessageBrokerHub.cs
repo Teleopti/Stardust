@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Web.Configuration;
 using Microsoft.AspNet.SignalR.Hubs;
 using log4net;
 using Teleopti.Interfaces.MessageBroker;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Web.Broker
 	{
 		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerHub));
 
-		private readonly IActionScheduler _actionScheduler;
+		private IActionScheduler _actionScheduler;
 		private readonly IBeforeSubscribe _beforeSubscribe;
 
 		public MessageBrokerHub(IActionScheduler actionScheduler, IBeforeSubscribe beforeSubscribe)
@@ -101,14 +102,15 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			for (var i = 0; i < expectedNumberOfSentMessages; i++)
 			{
-				Ping();
+				_actionScheduler.Do(Ping);
 			}
 		}
 
 		public void Ping(int expectedNumberOfSentMessages, int messagesPerSecond)
 		{
-			// FIXME to be able to change the throttle
-			// System.Web.Configuration.WebConfigurationManager.AppSettings["MessagesPerSecond"] = messagesPerSecond.ToString();
+			_actionScheduler = new ActionThrottle(messagesPerSecond);
+			((ActionThrottle)_actionScheduler).Start();
+
 			Ping(expectedNumberOfSentMessages);
 		}
 	}
