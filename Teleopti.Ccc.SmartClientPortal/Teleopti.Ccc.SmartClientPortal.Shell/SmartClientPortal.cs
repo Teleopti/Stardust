@@ -700,19 +700,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					var token = SingleSignOnHelper.SingleSignOn();
 					webView1.Url = string.Format("http://www.teleopti.com/elogin.aspx?{0}", token);
 				}
+				catch (ArgumentException exception)
+				{
+					var html = "<!doctype html><html ><head></head><body>{0}</body></html>";
+					webView1.LoadHtml(string.Format(html, exception.Message));
+				}
 				catch (Exception)
 				{
 					canAccessInternet = false;
 					goToLocalPage();
 				}
+				
+				
 			}
 			
 		}
 
-		private void outlookBarWorkSpace1Paint(object sender, PaintEventArgs e)
-		{
-			//if (!canAccessInternet && webView1.Title != "Static")
-			//	goToLocalPage();
-		}
 	}
 }

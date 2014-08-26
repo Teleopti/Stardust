@@ -223,7 +223,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.outlookBarWorkSpace1.Name = "outlookBarWorkSpace1";
 			this.outlookBarWorkSpace1.Size = new System.Drawing.Size(350, 637);
 			this.outlookBarWorkSpace1.TabIndex = 0;
-			this.outlookBarWorkSpace1.Paint += new System.Windows.Forms.PaintEventHandler(this.outlookBarWorkSpace1Paint);
 			// 
 			// webControl1
 			// 

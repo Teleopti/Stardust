@@ -327,6 +327,7 @@
     <None Include="Resources\NotifyOK.ico" />
     <None Include="Resources\NotifyWarning.ico" />
     <EmbeddedResource Include="StaticPage.html" />
+    <EmbeddedResource Include="EmptyStatic.html" />
     <Content Include="StaticPage.min.html">
       <DependentUpon>StaticPage.html</DependentUpon>
     </Content>
