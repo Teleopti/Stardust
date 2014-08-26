@@ -1,33 +1,33 @@
 ﻿namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
-    partial class ZoomButtons
-    {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	 partial class ZoomButtons
+	 {
+		  /// <summary> 
+		  /// Required designer variable.
+		  /// </summary>
+		  private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		  /// <summary> 
+		  /// Clean up any resources being used.
+		  /// </summary>
+		  /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		  protected override void Dispose(bool disposing)
+		  {
+				if (disposing && (components != null))
+				{
+					 components.Dispose();
+				}
+				base.Dispose(disposing);
+		  }
 
-        #region Component Designer generated code
+		  #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		  /// <summary> 
+		  /// Required method for Designer support - do not modify 
+		  /// the contents of this method with the code editor.
+		  /// </summary>
+		  private void InitializeComponent()
+		  {
 			this.components = new System.ComponentModel.Container();
 			this.labelWorkload = new System.Windows.Forms.Label();
 			this.labelSkill = new System.Windows.Forms.Label();
@@ -280,20 +280,20 @@
 			this.tableLayoutPanel1.PerformLayout();
 			this.ResumeLayout(false);
 
-        }
+		  }
 
-        #endregion
+		  #endregion
 
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvWorkloadDay;
-        private System.Windows.Forms.Label labelWorkload;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAvdWorkloadWeek;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvWorkloadMonth;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvSkillIntraday;
-        private System.Windows.Forms.Label labelSkill;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvSkillDay;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvSkillWeek;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvSkillMonth;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvWorkloadIntraday;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-    }
+		  private Syncfusion.Windows.Forms.ButtonAdv buttonAdvWorkloadDay;
+		  private System.Windows.Forms.Label labelWorkload;
+		  private Syncfusion.Windows.Forms.ButtonAdv buttonAvdWorkloadWeek;
+		  private Syncfusion.Windows.Forms.ButtonAdv buttonAdvWorkloadMonth;
+		  private Syncfusion.Windows.Forms.ButtonAdv buttonAdvSkillIntraday;
+		  private System.Windows.Forms.Label labelSkill;
+		  private Syncfusion.Windows.Forms.ButtonAdv buttonAdvSkillDay;
+		  private Syncfusion.Windows.Forms.ButtonAdv buttonAdvSkillWeek;
+		  private Syncfusion.Windows.Forms.ButtonAdv buttonAdvSkillMonth;
+		  private Syncfusion.Windows.Forms.ButtonAdv buttonAdvWorkloadIntraday;
+		  private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+	 }
 }
