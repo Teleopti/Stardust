@@ -666,10 +666,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void goToLocalPage()
 		{
-			webControl1.Visible = true;
-			var executingAssembly = Assembly.GetExecutingAssembly();
-			var pageName = executingAssembly.GetManifestResourceNames().First(n => n.Contains("StaticPage"));
-			webView1.LoadHtml(GetFromResources(pageName));
+			if (_toggleManager.IsEnabled(Toggles.Show_StaticPageOnNoInternet_29415))
+			{
+				webControl1.Visible = true;
+				var executingAssembly = Assembly.GetExecutingAssembly();
+				var pageName = executingAssembly.GetManifestResourceNames().First(n => n.Contains("StaticPage"));
+				webView1.LoadHtml(GetFromResources(pageName));
+			}
+			else
+			{
+				//maybe show some other static page
+				webControl1.Visible = false;
+			}
 		}
 
 		public string GetFromResources(string resourceName)
@@ -692,16 +700,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			if (gotoStart || webView1.Url == "")
 			{
-				var token = SingleSignOnHelper.SingleSignOn();
-				webView1.Url = string.Format("http://wwww.teleopti.com/elogin.aspx?{0}", token);
+				try
+				{
+					var token = SingleSignOnHelper.SingleSignOn();
+					webView1.Url = string.Format("http://wwww.teleopti.com/elogin.aspx?{0}", token);
+				}
+				catch (Exception exception)
+				{
+					canAccessInternet = false;
+					goToLocalPage();
+				}
 			}
 			
 		}
 
 		private void outlookBarWorkSpace1Paint(object sender, PaintEventArgs e)
 		{
-			if (!canAccessInternet && webView1.Title != "Static")
-				goToLocalPage();
+			//if (!canAccessInternet && webView1.Title != "Static")
+			//	goToLocalPage();
 		}
 	}
 }
