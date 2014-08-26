@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			Foo = "asdf";
 		}
 
-		public IScenario Scenario = GlobalDataMaker.Data().Data<DefaultScenario>().Scenario;
+		public IScenario Scenario = DefaultScenario.Scenario;
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{

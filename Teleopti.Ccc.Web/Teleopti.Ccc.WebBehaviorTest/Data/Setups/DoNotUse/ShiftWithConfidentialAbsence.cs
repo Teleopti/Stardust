@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 	public class ShiftWithConfidentialAbsence : IUserDataSetup
 	{
 		private static readonly CultureInfo SwedishCultureInfo = CultureInfo.GetCultureInfo(1053);
-		public IScenario Scenario = GlobalDataMaker.Data().Data<DefaultScenario>().Scenario;
+		public IScenario Scenario = DefaultScenario.Scenario;
 		public string Date { get; set; }
 		public string Absence { get; set; }
 

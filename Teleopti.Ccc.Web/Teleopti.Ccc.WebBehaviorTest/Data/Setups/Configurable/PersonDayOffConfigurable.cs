@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
+﻿using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 {
@@ -7,7 +6,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 	{
 		public PersonDayOffConfigurable()
 		{
-			Scenario = GlobalDataMaker.Data().Data<DefaultScenario>().Scenario.Description.Name;
+			Scenario = DefaultScenario.Scenario.Description.Name;
 		}
 	}
 }

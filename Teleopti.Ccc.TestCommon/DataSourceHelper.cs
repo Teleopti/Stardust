@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.IO;
 using Newtonsoft.Json;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Auditing;
@@ -16,24 +17,33 @@ namespace Teleopti.Ccc.TestCommon
 		public static IDataSource CreateDataSource(IEnumerable<IMessageSender> messageSenders, string name)
 		{
 			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest());
-
-			SetupCcc7();
+			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
+			if (!TryRestoreDatabase(ccc7))
+			{
+				createCcc7(ccc7);
+				BackupDatabase(ccc7, 0);
+			}
 			SetupAnalytics();
-
 			return CreateDataSource(dataSourceFactory, name);
 		}
 
-		private static void SetupCcc7()
+		public static IDataSource CreateDataSourceNoBackup(IEnumerable<IMessageSender> messageSenders, bool createCcc7Database)
 		{
-			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			if (TryRestoreDatabase(ccc7))
-				return;
+			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest());
+			if (createCcc7Database)
+			{
+				var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
+				createCcc7(ccc7);
+			}
+			SetupAnalytics();
+			return CreateDataSource(dataSourceFactory, "TestData");
+		}
 
-			CreateDatabase(ccc7);
-			CreateSchema(ccc7);
+		private static void createCcc7(DatabaseHelper ccc7)
+		{
+			createDatabase(ccc7);
 			CreateUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
 			PersistAuditSetting();
-			BackupDatabase(ccc7);
 		}
 
 		private static void CreateUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests()
@@ -60,21 +70,16 @@ namespace Teleopti.Ccc.TestCommon
 			if (TryRestoreDatabase(analytics))
 				return;
 
-			CreateDatabase(analytics);
-			CreateSchema(analytics);
-			BackupDatabase(analytics);
+			createDatabase(analytics);
+			BackupDatabase(analytics, 0);
 		}
 
-		private static void CreateDatabase(DatabaseHelper database)
+		private static void createDatabase(DatabaseHelper database)
 		{
 			ExceptionToConsole(
 				database.CreateByDbManager,
 				"Failed to prepare database {0}!", database.ConnectionString
 				);
-		}
-
-		private static void CreateSchema(DatabaseHelper database)
-		{
 			ExceptionToConsole(
 				database.CreateSchemaByDbManager,
 				"Failed to create database schema {0}!", database.ConnectionString
@@ -90,37 +95,61 @@ namespace Teleopti.Ccc.TestCommon
 					if (!database.Exists())
 						return false;
 
-					var backupName = BackupName(database.DatabaseType, database.SchemaVersion(), database.OtherScriptFilesHash(), database.DatabaseName);
+					var backupName = BackupName(database.DatabaseType, database.SchemaVersion(), database.OtherScriptFilesHash(), database.DatabaseName, 0);
 					var fileName = backupName + ".backup";
-					if (!System.IO.File.Exists(fileName))
+					if (!File.Exists(fileName))
 						return false;
 
-					var backup = JsonConvert.DeserializeObject<DatabaseHelper.Backup>(System.IO.File.ReadAllText(fileName));
+					var backup = JsonConvert.DeserializeObject<DatabaseHelper.Backup>(File.ReadAllText(fileName));
 					database.RestoreByFileCopy(backup);
 					return true;
 				},
 				"Failed to backup database {0}!", database.ConnectionString
 				);
-
 		}
 
-		private static void BackupDatabase(DatabaseHelper database)
+		public static void RestoreCcc7Database(int dataHash, Action beforeRestore)
+		{
+			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
+			var backupName = BackupName(ccc7.DatabaseType, ccc7.SchemaVersion(), ccc7.OtherScriptFilesHash(), ccc7.DatabaseName, dataHash);
+			var fileName = backupName + ".backup";
+			var backup = JsonConvert.DeserializeObject<DatabaseHelper.Backup>(File.ReadAllText(fileName));
+			if(beforeRestore!=null)
+				beforeRestore();
+			ccc7.RestoreByFileCopy(backup);
+		}
+
+		public static void BackupCcc7Database(int dataHash)
+		{
+			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
+			BackupDatabase(ccc7, dataHash);
+		}
+
+		public static bool Ccc7BackupExists(int dataHash)
+		{
+			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
+			var backupName = BackupName(ccc7.DatabaseType, ccc7.SchemaVersion(), ccc7.OtherScriptFilesHash(), ccc7.DatabaseName, dataHash);
+			var fileName = backupName + ".backup";
+			return File.Exists(fileName);
+		}
+
+		public static void BackupDatabase(DatabaseHelper database, int dataHash)
 		{
 			ExceptionToConsole(
 				() =>
 				{
-					var backupName = BackupName(database.DatabaseType, database.DatabaseVersion(), database.OtherScriptFilesHash(), database.DatabaseName);
+					var backupName = BackupName(database.DatabaseType, database.DatabaseVersion(), database.OtherScriptFilesHash(), database.DatabaseName, dataHash);
 					var backup = database.BackupByFileCopy(backupName);
 					var fileName = backupName + ".backup";
-					System.IO.File.WriteAllText(fileName, JsonConvert.SerializeObject(backup, Formatting.Indented));
+					File.WriteAllText(fileName, JsonConvert.SerializeObject(backup, Formatting.Indented));
 				},
 				"Failed to backup database {0}!", database.ConnectionString
 				);
 		}
 
-		private static string BackupName(DatabaseType databaseType, int databaseVersion, int otherScriptFilesHash, string databaseName)
+		private static string BackupName(DatabaseType databaseType, int databaseVersion, int otherScriptFilesHash, string databaseName, int dataHash)
 		{
-			return databaseType + "." + databaseName + "." + databaseVersion + "." + otherScriptFilesHash;
+			return databaseType + "." + databaseName + "." + databaseVersion + "." + otherScriptFilesHash + "." + dataHash;
 		}
 
 		private static IDataSource CreateDataSource(DataSourcesFactory dataSourceFactory, string name)

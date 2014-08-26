@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var scenario = GlobalDataMaker.Data().Data<DefaultScenario>().Scenario;
+			var scenario = DefaultScenario.Scenario;
 			var scenarioId = scenario.Id.GetValueOrDefault();
 
 			var absenceRepository = new AbsenceRepository(uow);

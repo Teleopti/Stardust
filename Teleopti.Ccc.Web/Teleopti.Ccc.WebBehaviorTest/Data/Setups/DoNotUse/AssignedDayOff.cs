@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 		public string Date { get; set; }
 		public IDayOffTemplate DayOff;
-		public readonly IScenario Scenario = GlobalDataMaker.Data().Data<DefaultScenario>().Scenario;
+		public readonly IScenario Scenario = DefaultScenario.Scenario;
 
 		public AssignedDayOff()
 		{

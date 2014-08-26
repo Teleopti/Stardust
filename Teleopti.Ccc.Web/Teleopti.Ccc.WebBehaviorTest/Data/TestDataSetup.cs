@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
@@ -7,36 +6,46 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class TestDataSetup
 	{
-		private static DatabaseHelper.Backup _ccc7DataBackup;
 		private static IDataSource datasource;
-		private static readonly IEnumerable<IHashableDataSetup> globalData = new IHashableDataSetup[]
-		{
-			new DefaultPersonThatCreatesDbData(),
-			new DefaultLicense(),
-			new DefaultBusinessUnit(),
-			new DefaultScenario(),
-			new DefaultRaptorApplicationFunctions(),
-			new DefaultMatrixApplicationFunctions()
-		};
+		private static readonly DefaultData globalData = new DefaultData();
 
 		public static void CreateDataSource()
 		{
-			datasource = DataSourceHelper.CreateDataSource(new[] { new EventsMessageSender(new SyncEventsPublisher(new EventPublisher(new HardCodedResolver(), new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))) }, "TestData");
+			if (!DataSourceHelper.Ccc7BackupExists(globalData.HashValue))
+			{
+				datasource = DataSourceHelper.CreateDataSourceNoBackup(new[]
+				{
+					new EventsMessageSender(
+						new SyncEventsPublisher(new EventPublisher(new HardCodedResolver(),
+							new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())))))
 
-			setupFakeState();
-			createGlobalDbData();
+				}, true);
+				setupFakeState();
+				createGlobalDbData();
+				backupCcc7Data();
+			}
+			else
+			{
+				datasource = DataSourceHelper.CreateDataSourceNoBackup(new[]
+				{
+					new EventsMessageSender(
+						new SyncEventsPublisher(new EventPublisher(new HardCodedResolver(),
+							new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())))))
 
-			backupCcc7Data();
+				}, false);
+			}
 		}
 
 		private static void createGlobalDbData()
@@ -59,13 +68,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void backupCcc7Data()
 		{
-			_ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy("Teleopti.Ccc.WebBehaviorTest");
+			DataSourceHelper.BackupCcc7Database(globalData.HashValue);
 		}
 
 		public static void RestoreCcc7Data()
 		{
-			Navigation.GoToWaitForUrlAssert("Test/ClearConnections", new ApplicationStartupTimeout());
-			DataSourceHelper.RestoreCcc7DataByFileCopy(_ccc7DataBackup);
+			DataSourceHelper.RestoreCcc7Database(globalData.HashValue, () => Navigation.GoToWaitForUrlAssert("Test/ClearConnections", new ApplicationStartupTimeout()));
+			//hack!
+			using (var uow = ((NHibernateUnitOfWorkFactory)datasource.Application).CreateAndOpenUnitOfWork(null, TransactionIsolationLevel.Default, null))
+			{
+				DefaultPersonThatCreatesDbData.PersonThatCreatesDbData = new PersonRepository(uow).LoadAll().Single(x => x.Name == DefaultPersonThatCreatesDbData.PersonThatCreatesDbData.Name);
+				DefaultBusinessUnit.BusinessUnitFromFakeState = new BusinessUnitRepository(uow).LoadAll().Single(x => x.Name == DefaultBusinessUnit.BusinessUnitFromFakeState.Name);
+				setupFakeState();
+			}
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 {
 	public class DefaultPersonThatCreatesDbData : IHashableDataSetup
 	{
-		public static readonly IPerson PersonThatCreatesDbData =
+		public static IPerson PersonThatCreatesDbData =
 			PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", DefaultPassword.ThePassword);
 
 		public void Apply(IUnitOfWork uow)

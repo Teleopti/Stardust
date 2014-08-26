@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public RoleConfigurable()
 		{
 			Name = RandomName.Make("A role");
-			BusinessUnit = GlobalDataMaker.Data().Data<DefaultBusinessUnit>().BusinessUnit.Description.Name;
+			BusinessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Description.Name;
 			ViewUnpublishedSchedules = false;
 			ViewConfidential = false;
 			AccessToMyOwn = false;

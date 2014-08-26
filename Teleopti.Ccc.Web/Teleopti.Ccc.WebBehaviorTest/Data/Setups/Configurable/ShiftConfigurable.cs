@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 	{
 		public ShiftConfigurable()
 		{
-			Scenario = GlobalDataMaker.Data().Data<DefaultScenario>().Scenario.Description.Name;
+			Scenario = DefaultScenario.Scenario.Description.Name;
 		}
 	}
 }

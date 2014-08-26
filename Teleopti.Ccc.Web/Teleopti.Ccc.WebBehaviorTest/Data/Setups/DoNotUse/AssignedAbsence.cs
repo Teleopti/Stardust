@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		private static readonly CultureInfo SwedishCultureInfo = CultureInfo.GetCultureInfo(1053);
 		public string Date { get; set; }
 		public IAbsence Absence;
-		public IScenario Scenario = GlobalDataMaker.Data().Data<DefaultScenario>().Scenario;
+		public IScenario Scenario = DefaultScenario.Scenario;
 		public string AbsenceColor { get; set; }
 
 		public AssignedAbsence()

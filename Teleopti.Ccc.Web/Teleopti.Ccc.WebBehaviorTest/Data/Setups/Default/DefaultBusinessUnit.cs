@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 {
 	public class DefaultBusinessUnit : IHashableDataSetup
 	{
-		public readonly static IBusinessUnit BusinessUnitFromFakeState = new BusinessUnit("BusinessUnit");
+		public static IBusinessUnit BusinessUnitFromFakeState = new BusinessUnit("BusinessUnit");
 
 		public IBusinessUnit BusinessUnit { get { return BusinessUnitFromFakeState; } }
 
