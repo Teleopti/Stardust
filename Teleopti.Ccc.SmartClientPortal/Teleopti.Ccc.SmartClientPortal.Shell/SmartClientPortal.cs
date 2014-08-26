@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private readonly PortalSettings _portalSettings;
 		private readonly IToggleManager _toggleManager;
 		readonly int homeCommand = CommandIds.RegisterUserCommand("StartPage");
+		private bool canAccessInternet = true;
 
 		protected SmartClientShellForm()
 		{
@@ -551,9 +552,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		}
 
-		private bool canAccessInternet = true;
-		
-
 		public void ModuleSelected(ModulePanelItem modulePanelItem)
 		{
 			if (modulePanelItem == null)
@@ -666,18 +664,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void goToLocalPage()
 		{
-			if (_toggleManager.IsEnabled(Toggles.Show_StaticPageOnNoInternet_29415))
+			webControl1.Visible = true;
+			var executingAssembly = Assembly.GetExecutingAssembly();
+			var pageName = executingAssembly.GetManifestResourceNames().First(n => n.Contains("StaticPage"));
+			if (!_toggleManager.IsEnabled(Toggles.Show_StaticPageOnNoInternet_29415))
 			{
-				webControl1.Visible = true;
-				var executingAssembly = Assembly.GetExecutingAssembly();
-				var pageName = executingAssembly.GetManifestResourceNames().First(n => n.Contains("StaticPage"));
-				webView1.LoadHtml(GetFromResources(pageName));
+				pageName = executingAssembly.GetManifestResourceNames().First(n => n.Contains("EmptyStatic"));
 			}
-			else
-			{
-				//maybe show some other static page
-				webControl1.Visible = false;
-			}
+			
+			webView1.LoadHtml(GetFromResources(pageName));
 		}
 
 		public string GetFromResources(string resourceName)
@@ -703,9 +698,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				try
 				{
 					var token = SingleSignOnHelper.SingleSignOn();
-					webView1.Url = string.Format("http://wwww.teleopti.com/elogin.aspx?{0}", token);
+					webView1.Url = string.Format("http://www.teleopti.com/elogin.aspx?{0}", token);
 				}
-				catch (Exception exception)
+				catch (Exception)
 				{
 					canAccessInternet = false;
 					goToLocalPage();

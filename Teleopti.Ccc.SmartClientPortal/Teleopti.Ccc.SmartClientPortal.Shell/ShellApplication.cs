@@ -104,7 +104,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				applicationStarter.LoadShellApplication();
             }
 #endif
-			
+				EO.WebBrowser.Runtime.AddLicense(
+													"cqvm8fbNn6/c9gQU7qe0psPZr1uXs8+4iVmXpLHnrprj8AAivUaBpLHLn3Xm" +
+													"9vUQ8YLl6gDL45rr6c7NtWiqs8PbsG2ZpAcQ8azg8//ooWuZpMDpjEOXpLHL" +
+													"u6zg6/8M867p6c8j9ZDYtdLy1LDLs+DktYHGtPgUwZ/uwc7nrqzg6/8M867p" +
+													"6c+4iXWm8PoO5Kfq6c+4iXXj7fQQ7azcwp61n1mXpM0X6Jzc8gQQyJ21usPd" +
+													"tG2vuMrgtHWm8PoO5Kfq6doPvUaBpLHLn3Xj7fQQ7azc6c/nrqXg5/YZ8p7c" +
+													"wp61n1mXpM0M66Xm+8+4iVmXpLHLn1mXwPIP41nr/QEQvFu807/u5w==");
 	    }
 
 			private static void populateFeatureToggleFlags(IContainer container)
