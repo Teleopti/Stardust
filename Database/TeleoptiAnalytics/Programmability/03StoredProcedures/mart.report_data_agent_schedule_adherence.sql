@@ -676,13 +676,18 @@ WHERE r.count_activity_per_interval >1
 
 
 --maximum and minimum intervals check
-
 update #result
 set shift_interval_id= interval_id
 
+IF @sort_by=3
 update #result
-set shift_interval_id= interval_id+intervals_per_day
-where shift_startdate_id<date_id
+set shift_interval_id=abs(0-interval_id)
+where shift_startdate_id<>date_id
+
+IF @sort_by=5
+update #result
+set shift_interval_id=interval_id+intervals_per_day
+where shift_startdate_id<>date_id
 
 INSERT INTO #minmax(minint,maxint,person_id,shift_startdate_id)
 SELECT minint,maxint,person_id,shift_startdate_id
@@ -694,8 +699,7 @@ FROM (
 	UNION ALL
 	SELECT  min(r.shift_interval_id) minint ,max(r.shift_interval_id) maxint, person_id, shift_startdate_id
 	FROM #result r
-	WHERE r.activity_id = -1
-	AND r.absence_id <> -1
+	WHERE (r.activity_id = -1 AND r.absence_id = -1) --Only stats exists
 	GROUP BY shift_startdate_id,person_id
 ) a
 
