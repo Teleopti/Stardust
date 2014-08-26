@@ -39,6 +39,16 @@ BEGIN
 		AND pa.[Date]	= tmp.[Date]
 		AND pa.Scenario	= tmp.Scenario
 		AND pa.ShiftCategory = tmp.ShiftCategory
+	
+	--handle Assignments with only Personal or Overtime activies
+	UPDATE tmp
+	SET tmp.Id = pa.Id -- will give a random Id
+	FROM #PersonAssignment tmp
+	INNER JOIN [dbo].[PersonAssignment] pa
+		ON  pa.Person	= tmp.Person
+		AND pa.[Date]	= tmp.[Date]
+		AND pa.Scenario	= tmp.Scenario
+		AND tmp.ShiftCategory IS NULL
 
 	--Get other Ids, the to merge
 	INSERT INTO #mergeUs
