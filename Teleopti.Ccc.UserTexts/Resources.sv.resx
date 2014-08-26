@@ -11605,4 +11605,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Ta bort skill</value>
     <comment>Delete skill</comment>
   </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>Startsidan</value>
+    <comment>Go to landing page in Portal </comment>
+  </data>
 </root>

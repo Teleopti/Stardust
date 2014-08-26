@@ -12235,4 +12235,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Delelete skill</value>
     <comment>Delete skill</comment>
   </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>Start page</value>
+    <comment>Go to landing page in Portal </comment>
+  </data>
 </root>

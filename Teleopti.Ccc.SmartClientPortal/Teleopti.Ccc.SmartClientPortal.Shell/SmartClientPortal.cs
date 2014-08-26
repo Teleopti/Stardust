@@ -241,7 +241,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					showMem();
 				}
 			}
-			
+			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415)) 
+				backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
 
 		}
 
@@ -578,8 +579,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 
 			if (!_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415)) return;
-			backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
-			webControl1.Visible = true;
+			
 			if (!canAccessInternet)
 			{
 				goToLocalPage();
@@ -608,7 +608,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				e.Menu.Items.Remove(item);
 				break;
 			}
-			var menuItem = new EO.WebBrowser.MenuItem("xxStart page",homeCommand);
+			var menuItem = new EO.WebBrowser.MenuItem(UserTexts.Resources.StartPage,homeCommand);
 			
 			e.Menu.Items.Add(menuItem);
 		}
@@ -690,6 +690,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void goToPublicPage(bool  gotoStart)
 		{
+			webControl1.Visible = true;
 			// no internet
 			if (webView1.Title == "Static") return;
 
@@ -709,8 +710,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					canAccessInternet = false;
 					goToLocalPage();
+					return;
 				}
-				
+				canAccessInternet = true;
 				
 			}
 			

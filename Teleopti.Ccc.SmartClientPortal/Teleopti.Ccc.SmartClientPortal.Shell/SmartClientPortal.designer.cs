@@ -82,13 +82,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonAbout = new Syncfusion.Windows.Forms.BackStageButton();
 			this.backStageButtonExitTELEOPTICCC = new Syncfusion.Windows.Forms.BackStageButton();
 			this.toolStripTabItem1 = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
-			this.toolStripButtonPermissions = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonMyProfile = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonHelp = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonCustomerWeb = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonSystemExit = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonAbout = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonSystemOptions = new System.Windows.Forms.ToolStripButton();
 			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.notifyTimer = new System.Windows.Forms.Timer(this.components);
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -285,19 +278,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.ribbonControlAdv1.OfficeMenu.AuxPanel.MinimumSize = new System.Drawing.Size(200, 0);
 			this.ribbonControlAdv1.OfficeMenu.AuxPanel.Text = "";
 			this.ribbonControlAdv1.OfficeMenu.MainPanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ribbonControlAdv1.OfficeMenu.MainPanel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonPermissions,
-            this.toolStripButtonMyProfile,
-            this.toolStripButtonHelp,
-            this.toolStripButtonCustomerWeb});
 			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
 			this.ribbonControlAdv1.OfficeMenu.ShowItemToolTips = true;
 			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(366, 205);
 			this.ribbonControlAdv1.OfficeMenu.SystemPanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ribbonControlAdv1.OfficeMenu.SystemPanel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonSystemExit,
-            this.toolStripButtonAbout,
-            this.toolStripButtonSystemOptions});
 			this.ribbonControlAdv1.OverFlowButtonToolTip = "Show DropDown";
 			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.ribbonControlAdv1.QuickPanelVisible = false;
@@ -485,106 +469,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripTabItem1, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripTabItem1, false);
 			// 
-			// toolStripButtonPermissions
-			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonPermissions, "");
-			this.toolStripButtonPermissions.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonPermissions.Image")));
-			this.toolStripButtonPermissions.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonPermissions.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripButtonPermissions.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonPermissions.Name = "toolStripButtonPermissions";
-			this.SetShortcut(this.toolStripButtonPermissions, System.Windows.Forms.Keys.None);
-			this.toolStripButtonPermissions.Size = new System.Drawing.Size(152, 36);
-			this.toolStripButtonPermissions.Text = "xxPermissions";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonPermissions, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonPermissions, false);
-			this.toolStripButtonPermissions.Click += new System.EventHandler(this.toolStripButtonPermissons_Click);
-			// 
-			// toolStripButtonMyProfile
-			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonMyProfile, "");
-			this.toolStripButtonMyProfile.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.WFM_Teleopti_WFM_main_small;
-			this.toolStripButtonMyProfile.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonMyProfile.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripButtonMyProfile.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonMyProfile.Name = "toolStripButtonMyProfile";
-			this.SetShortcut(this.toolStripButtonMyProfile, System.Windows.Forms.Keys.None);
-			this.toolStripButtonMyProfile.Size = new System.Drawing.Size(152, 36);
-			this.toolStripButtonMyProfile.Text = "xxMyProfile";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonMyProfile, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonMyProfile, false);
-			this.toolStripButtonMyProfile.Click += new System.EventHandler(this.toolStripButtonMyProfile_Click);
-			// 
-			// toolStripButtonHelp
-			// 
-			this.toolStripButtonHelp.AutoToolTip = false;
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonHelp, "");
-			this.toolStripButtonHelp.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.help_32;
-			this.toolStripButtonHelp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonHelp.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripButtonHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonHelp.Name = "toolStripButtonHelp";
-			this.SetShortcut(this.toolStripButtonHelp, System.Windows.Forms.Keys.None);
-			this.toolStripButtonHelp.Size = new System.Drawing.Size(152, 36);
-			this.toolStripButtonHelp.Text = "xxHelp";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonHelp, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonHelp, false);
-			// 
-			// toolStripButtonCustomerWeb
-			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonCustomerWeb, "");
-			this.toolStripButtonCustomerWeb.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.WFM_Teleopti_WFM_main_small;
-			this.toolStripButtonCustomerWeb.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonCustomerWeb.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripButtonCustomerWeb.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonCustomerWeb.Name = "toolStripButtonCustomerWeb";
-			this.SetShortcut(this.toolStripButtonCustomerWeb, System.Windows.Forms.Keys.None);
-			this.toolStripButtonCustomerWeb.Size = new System.Drawing.Size(152, 36);
-			this.toolStripButtonCustomerWeb.Text = "xxSignCustomerWeb";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonCustomerWeb, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonCustomerWeb, false);
-			this.toolStripButtonCustomerWeb.Click += new System.EventHandler(this.toolStripButtonCustomerWeb_Click);
-			// 
-			// toolStripButtonSystemExit
-			// 
-			this.toolStripButtonSystemExit.AutoToolTip = false;
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonSystemExit, "");
-			this.toolStripButtonSystemExit.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSystemExit.Image")));
-			this.toolStripButtonSystemExit.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripButtonSystemExit.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonSystemExit.Name = "toolStripButtonSystemExit";
-			this.SetShortcut(this.toolStripButtonSystemExit, System.Windows.Forms.Keys.None);
-			this.toolStripButtonSystemExit.Size = new System.Drawing.Size(130, 20);
-			this.toolStripButtonSystemExit.Text = "xxExitTELEOPTICCC";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonSystemExit, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonSystemExit, false);
-			// 
-			// toolStripButtonAbout
-			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonAbout, "");
-			this.toolStripButtonAbout.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.information_16;
-			this.toolStripButtonAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonAbout.Name = "toolStripButtonAbout";
-			this.SetShortcut(this.toolStripButtonAbout, System.Windows.Forms.Keys.None);
-			this.toolStripButtonAbout.Size = new System.Drawing.Size(70, 20);
-			this.toolStripButtonAbout.Text = "xxAbout";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonAbout, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonAbout, false);
-			this.toolStripButtonAbout.Click += new System.EventHandler(this.toolStripButtonAbout_Click);
-			// 
-			// toolStripButtonSystemOptions
-			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonSystemOptions, "");
-			this.toolStripButtonSystemOptions.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSystemOptions.Image")));
-			this.toolStripButtonSystemOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonSystemOptions.Name = "toolStripButtonSystemOptions";
-			this.SetShortcut(this.toolStripButtonSystemOptions, System.Windows.Forms.Keys.None);
-			this.toolStripButtonSystemOptions.Size = new System.Drawing.Size(79, 20);
-			this.toolStripButtonSystemOptions.Text = "xxOptions";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonSystemOptions, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonSystemOptions, false);
-			this.toolStripButtonSystemOptions.Click += new System.EventHandler(this.toolStripButtonSystemOptions_Click);
-			// 
 			// notifyIcon
 			// 
 			this.notifyIcon.Text = "notifyIcon1";
@@ -676,18 +560,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelCurrentDatabase;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelSpring;
-		private System.Windows.Forms.ToolStripButton toolStripButtonSystemExit;
-		private System.Windows.Forms.ToolStripButton toolStripButtonPermissions;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelRoger65;
-		private System.Windows.Forms.ToolStripButton toolStripButtonSystemOptions;
-		private System.Windows.Forms.ToolStripButton toolStripButtonAbout;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelLicense;
-		private System.Windows.Forms.ToolStripButton toolStripButtonHelp;
 		private System.Windows.Forms.NotifyIcon notifyIcon;
 		private System.Windows.Forms.Timer notifyTimer;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelLoggedOnUser;
-		private System.Windows.Forms.ToolStripButton toolStripButtonMyProfile;
-		private System.Windows.Forms.ToolStripButton toolStripButtonCustomerWeb;
 		private Syncfusion.Windows.Forms.BackStageView backStageViewMain;
 		private Syncfusion.Windows.Forms.BackStage backStage1;
 		private ToolStripTabItem toolStripTabItem1;
