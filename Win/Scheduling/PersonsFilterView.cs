@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Interfaces.Domain;
@@ -14,8 +17,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IPersonSelectorPresenter _personSelectorPresenter;
 		private PersonsFilterView(){}
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
+		private ICollection<IPerson> _selectedPersons;
 
-		public PersonsFilterView(DateOnlyPeriod selectedPeriod, IEnumerable<Guid> selectedPersonGuids, IComponentContext componentContext,
+		public PersonsFilterView(DateOnlyPeriod selectedPeriod, IDictionary<Guid, IPerson> selectedPersons, IComponentContext componentContext,
 			IApplicationFunction applicationFunction, string selectedGroupPage, IEnumerable<Guid> visiblePersonGuids)
 		{
 			InitializeComponent();
@@ -31,7 +35,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			selectorView.SelectedPeriod = selectedPeriod;
 			_personSelectorPresenter.ShowPersons = true;
 			_personSelectorPresenter.ShowUsers = false;
-			selectorView.PreselectedPersonIds = selectedPersonGuids;
+			selectorView.PreselectedPersonIds = selectedPersons.Keys;
 			selectorView.VisiblePersonIds = visiblePersonGuids;
 			selectorView.ShowCheckBoxes = true;
 			selectorView.KeepInteractiveOnDuringLoad = true;
@@ -44,7 +48,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		   
 			SetTexts();
-			buttonAdvance.Visible = ShowAdvancedFilter;
+			//buttonAdvance.Visible = ShowAdvancedFilter;
+			buttonAdvance.Visible = true;
+			_selectedPersons = selectedPersons.Values ;
 
 		}
 
@@ -59,5 +65,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		public bool ShowAdvancedFilter { get; set; }
+
+		private void buttonAdvance_Click(object sender, EventArgs e)
+		{
+			using (FilterMultiplePersons filterMultiplePersons = new FilterMultiplePersons())
+			{
+				//filterMultiplePersons.SetPresenter(new SearchPersonPresenter(new FilterMultiplePersons()));
+				filterMultiplePersons.SetSearchablePersons(_selectedPersons );
+				filterMultiplePersons.ShowDialog(this);
+
+				if (filterMultiplePersons.DialogResult == DialogResult.OK)
+				{
+					
+				}
+			}
+		}
 	}
 }
