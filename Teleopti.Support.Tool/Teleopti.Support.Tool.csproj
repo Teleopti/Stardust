@@ -256,6 +256,8 @@
     <Content Include="config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Teleopti-WFM-main-icon256.png" />
+    <None Include="Resources\Teleopti-WFM-main_small.png" />
     <None Include="Resources\ccc_icon.png" />
     <None Include="Resources\ccc_Menu.png" />
     <None Include="Resources\warning.png" />

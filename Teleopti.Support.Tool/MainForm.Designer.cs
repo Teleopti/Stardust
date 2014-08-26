@@ -75,7 +75,7 @@ namespace Teleopti.Support.Tool
             this.PTracks.Controls.Add(this.LLChangeSettings);
             this.PTracks.Location = new System.Drawing.Point(0, 0);
             this.PTracks.Name = "PTracks";
-            this.PTracks.Size = new System.Drawing.Size(670, 320);
+            this.PTracks.Size = new System.Drawing.Size(670, 321);
             this.PTracks.TabIndex = 4;
             // 
             // buttonVerifyCredentials
@@ -139,7 +139,7 @@ namespace Teleopti.Support.Tool
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.Location = new System.Drawing.Point(323, 151);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(344, 12);
+            this.label2.Size = new System.Drawing.Size(344, 20);
             this.label2.TabIndex = 8;
             this.label2.Text = "List and manage your Teleopti WFM databases";
             // 
@@ -156,7 +156,7 @@ namespace Teleopti.Support.Tool
             // BClose
             // 
             this.BClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BClose.Location = new System.Drawing.Point(605, 381);
+            this.BClose.Location = new System.Drawing.Point(605, 441);
             this.BClose.Name = "BClose";
             this.BClose.Size = new System.Drawing.Size(75, 23);
             this.BClose.TabIndex = 0;
@@ -166,11 +166,11 @@ namespace Teleopti.Support.Tool
             // 
             // pictureBoxBathingBall
             // 
-            this.pictureBoxBathingBall.Image = global::Teleopti.Support.Tool.Properties.Resources.ccc_icon;
+            this.pictureBoxBathingBall.Image = global::Teleopti.Support.Tool.Properties.Resources.Teleopti_WFM_main_icon256;
             this.pictureBoxBathingBall.Location = new System.Drawing.Point(12, 12);
             this.pictureBoxBathingBall.Name = "pictureBoxBathingBall";
-            this.pictureBoxBathingBall.Size = new System.Drawing.Size(40, 40);
-            this.pictureBoxBathingBall.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxBathingBall.Size = new System.Drawing.Size(96, 96);
+            this.pictureBoxBathingBall.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxBathingBall.TabIndex = 6;
             this.pictureBoxBathingBall.TabStop = false;
             // 
@@ -180,9 +180,9 @@ namespace Teleopti.Support.Tool
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelContent.Controls.Add(this.PTracks);
-            this.panelContent.Location = new System.Drawing.Point(12, 55);
+            this.panelContent.Location = new System.Drawing.Point(12, 114);
             this.panelContent.Name = "panelContent";
-            this.panelContent.Size = new System.Drawing.Size(670, 320);
+            this.panelContent.Size = new System.Drawing.Size(670, 321);
             this.panelContent.TabIndex = 7;
             // 
             // toolTipInfo
@@ -197,7 +197,7 @@ namespace Teleopti.Support.Tool
             this.smoothLabelVersion.AutoSize = true;
             this.smoothLabelVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.smoothLabelVersion.ForeColor = System.Drawing.Color.Gray;
-            this.smoothLabelVersion.Location = new System.Drawing.Point(12, 394);
+            this.smoothLabelVersion.Location = new System.Drawing.Point(12, 454);
             this.smoothLabelVersion.Name = "smoothLabelVersion";
             this.smoothLabelVersion.Size = new System.Drawing.Size(0, 13);
             this.smoothLabelVersion.TabIndex = 8;
@@ -207,10 +207,11 @@ namespace Teleopti.Support.Tool
             // labelHeader
             // 
             this.labelHeader.AutoSize = true;
-            this.labelHeader.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelHeader.Location = new System.Drawing.Point(58, 14);
+            this.labelHeader.Font = new System.Drawing.Font("Segoe UI", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelHeader.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            this.labelHeader.Location = new System.Drawing.Point(114, 37);
             this.labelHeader.Name = "labelHeader";
-            this.labelHeader.Size = new System.Drawing.Size(310, 38);
+            this.labelHeader.Size = new System.Drawing.Size(374, 46);
             this.labelHeader.TabIndex = 5;
             this.labelHeader.Text = "Teleopti WFM Support Tool";
             this.labelHeader.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
@@ -238,7 +239,7 @@ namespace Teleopti.Support.Tool
             this.smoothLabelConnected.ForeColor = System.Drawing.Color.Blue;
             this.smoothLabelConnected.Location = new System.Drawing.Point(27, 155);
             this.smoothLabelConnected.Name = "smoothLabelConnected";
-            this.smoothLabelConnected.Size = new System.Drawing.Size(237, 151);
+            this.smoothLabelConnected.Size = new System.Drawing.Size(237, 152);
             this.smoothLabelConnected.TabIndex = 15;
             this.smoothLabelConnected.Text = "Click \"Verify\" to check your credentials";
             this.smoothLabelConnected.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -292,7 +293,7 @@ namespace Teleopti.Support.Tool
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(694, 416);
+            this.ClientSize = new System.Drawing.Size(694, 476);
             this.Controls.Add(this.smoothLabelVersion);
             this.Controls.Add(this.pictureBoxBathingBall);
             this.Controls.Add(this.labelHeader);
