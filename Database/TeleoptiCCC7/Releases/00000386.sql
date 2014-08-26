@@ -35,18 +35,22 @@ GO
 --Name: MickeD
 --Date: 2014-05-16
 --Desc: Bug #27785 Need to delete person assignments that does not have a main-, personal- or overtime-shift
+--Desc: Bug #29765 Wrong columns in join for how to detect empty PersonAssignment
 ---------------- 
 --this index is added by Security.exe. If the UQ-index doesn't exist, try fix the data before converting data to new PA-structure
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonAssignment]') AND name = N'UQ_PersonAssignment_Date_Scenario_Person')
 BEGIN
-            delete [dbo].[PersonAssignment]
-            from [dbo].[PersonAssignment]
-            left join [dbo].[MainShift] on [dbo].[PersonAssignment].[Id] = [dbo].[MainShift].[Id]
-            left join [dbo].[PersonalShift] on [dbo].[PersonAssignment].[Id] = [dbo].[PersonalShift].[Id]
-            left join [dbo].[OvertimeShift] on [dbo].[PersonAssignment].[Id] = [dbo].[OvertimeShift].[Id]
-            where [dbo].[MainShift].[Id] is null
-            and [dbo].[PersonalShift].[Id] is null
-            and [dbo].[OvertimeShift].[Id] is null
+            delete pa
+            from [dbo].[PersonAssignment] pa
+            left join [dbo].[MainShift] ms
+				on pa.[Id] = ms.[Id]
+            left join [dbo].[PersonalShift] ps
+				on pa.[Id] = ps.[Parent]
+            left join [dbo].[OvertimeShift] ot
+				on pa.[Id] = ot.[Parent]
+            where ms.[Id] is null
+            and ps.[Id] is null
+            and ot.[Id] is null
 END
 GO
 
