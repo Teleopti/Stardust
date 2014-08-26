@@ -4,10 +4,13 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Soap;
 using System.Security.Cryptography;
 using System.Text;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ClientProxies;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Configuration
@@ -29,10 +32,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 var email = currentPerson.Email;
                 if (string.IsNullOrEmpty(email))
                     throw new ArgumentException(
-                        UserTexts.Resources.YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot);
+                        Resources.YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot);
                 ticket.Add("email", email);
                 ticket.Add("firstname", currentPerson.Name.FirstName);
                 ticket.Add("lastname", currentPerson.Name.LastName);
+                ticket.Add("language", currentPerson.PermissionInformation.UICulture().Name);
+                ticket.Add("company", getCustomerName());
                 ticket.Add("guid", token);
                 var iv = "qwertyui";
                 var key = "12345678";
@@ -64,6 +69,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 }
                 return ms.ToArray();
             }
+        }
+
+        private static string getCustomerName()
+        {
+            ILicenseActivator license = DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name);
+            return license.CustomerName;
         }
     }
 }
