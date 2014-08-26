@@ -327,6 +327,9 @@
     <None Include="Resources\NotifyOK.ico" />
     <None Include="Resources\NotifyWarning.ico" />
     <EmbeddedResource Include="StaticPage.html" />
+    <Content Include="StaticPage.min.html">
+      <DependentUpon>StaticPage.html</DependentUpon>
+    </Content>
     <Content Include="TeleoptiWFM.ico" />
     <Content Include="WFM-Circle-1.ico" />
     <None Include="packages.config">

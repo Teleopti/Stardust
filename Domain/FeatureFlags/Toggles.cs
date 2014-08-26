@@ -28,6 +28,7 @@
         Scheduler_ShowIntadayESLWithShrinkage_21874,
 		RTA_ViewAgentsForMultipleTeams_28967,
 
-		MyTimeWeb_AgentBadge_28913
+		MyTimeWeb_AgentBadge_28913,
+        Portal_New_Landingpage_29415
 	}
 }
