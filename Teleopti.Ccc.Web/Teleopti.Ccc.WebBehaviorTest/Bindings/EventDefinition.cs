@@ -9,7 +9,6 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using log4net;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -31,13 +30,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));
 
 				TestDataSetup.CreateDataSource();
-
-				TestDataSetup.SetupFakeState();
-				TestDataSetup.CreateMinimumTestData();
-
-				createGlobalData();
-
-				TestDataSetup.BackupCcc7Data();
 
 				TestSiteConfigurationSetup.Setup();
 			}
@@ -144,14 +136,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestSiteConfigurationSetup.TearDown();
 
 			log.Debug("Finished test run");
-		}
-
-		private static void createGlobalData()
-		{
-			GlobalDataMaker.Data().Apply(new DefaultBusinessUnit());
-			GlobalDataMaker.Data().Apply(new DefaultScenario());
-			GlobalDataMaker.Data().Apply(new DefaultRaptorApplicationFunctions());
-			GlobalDataMaker.Data().Apply(new DefaultMatrixApplicationFunctions());
 		}
 
 		private static void handleScenarioException()

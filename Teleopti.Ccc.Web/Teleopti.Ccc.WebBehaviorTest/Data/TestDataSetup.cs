@@ -26,9 +26,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static void CreateDataSource()
 		{
 			datasource = DataSourceHelper.CreateDataSource(new[] { new EventsMessageSender(new SyncEventsPublisher(new EventPublisher(new HardCodedResolver(), new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))) }, "TestData");
+
+			setupFakeState();
+			createGlobalDbData();
+
+			backupCcc7Data();
 		}
 
-		public static void SetupFakeState()
+		private static void createGlobalDbData()
+		{
+			GlobalUnitOfWorkState.UnitOfWorkAction(createPersonThatCreatesTestData);
+			GlobalUnitOfWorkState.UnitOfWorkAction(createLicense);
+			GlobalDataMaker.Data().Apply(new DefaultBusinessUnit());
+			GlobalDataMaker.Data().Apply(new DefaultScenario());
+			GlobalDataMaker.Data().Apply(new DefaultRaptorApplicationFunctions());
+			GlobalDataMaker.Data().Apply(new DefaultMatrixApplicationFunctions());
+		}
+
+		private static void setupFakeState()
 		{
 			personThatCreatesTestData = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", DefaultPassword.ThePassword);
 			DefaultBusinessUnit.BusinessUnitFromFakeState = new BusinessUnit("BusinessUnit");
@@ -39,18 +54,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
 		}
 
-		public static void CreateMinimumTestData()
-		{
-			GlobalUnitOfWorkState.UnitOfWorkAction(createPersonThatCreatesTestData);
-			GlobalUnitOfWorkState.UnitOfWorkAction(createLicense);
-		}
 
 		public static void ClearAnalyticsData()
 		{
 			DataSourceHelper.ClearAnalyticsData();
 		}
 
-		public static void BackupCcc7Data()
+		private static void backupCcc7Data()
 		{
 			_ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy("Teleopti.Ccc.WebBehaviorTest");
 		}
