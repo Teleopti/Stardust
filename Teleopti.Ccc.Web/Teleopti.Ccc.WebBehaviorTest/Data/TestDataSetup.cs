@@ -9,7 +9,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		private static DatabaseHelper.Backup _ccc7DataBackup;
 		private static IDataSource datasource;
-		private static IPerson personThatCreatesTestData;
 
 		public static void CreateDataSource()
 		{
@@ -35,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void createGlobalDbData()
 		{
-			GlobalUnitOfWorkState.UnitOfWorkAction(createPersonThatCreatesTestData);
+			GlobalDataMaker.Data().Apply(new DefaultPersonThatCreatesDbData());
 			GlobalUnitOfWorkState.UnitOfWorkAction(createLicense);
 			GlobalDataMaker.Data().Apply(new DefaultBusinessUnit());
 			GlobalDataMaker.Data().Apply(new DefaultScenario());
@@ -45,10 +43,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void setupFakeState()
 		{
-			personThatCreatesTestData = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", DefaultPassword.ThePassword);
 			DefaultBusinessUnit.BusinessUnitFromFakeState = new BusinessUnit("BusinessUnit");
 
-			StateHolderProxyHelper.SetupFakeState(datasource, personThatCreatesTestData, DefaultBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
+			StateHolderProxyHelper.SetupFakeState(datasource, DefaultPersonThatCreatesDbData.PersonThatCreatesDbData, DefaultBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
@@ -76,12 +73,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var license = new License {XmlString = File.ReadAllText("License.xml")};
 			var licenseRepository = new LicenseRepository(uow);
 			licenseRepository.Add(license);
-		}
-
-		private static void createPersonThatCreatesTestData(IUnitOfWork uow)
-		{
-			var personRepository = new PersonRepository(uow);
-			personRepository.Add(personThatCreatesTestData);
 		}
 	}
 }

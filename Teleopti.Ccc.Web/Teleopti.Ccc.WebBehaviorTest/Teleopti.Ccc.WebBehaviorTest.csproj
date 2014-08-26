@@ -135,6 +135,7 @@
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Default\DefaultPersonThatCreatesDbData.cs" />
     <Compile Include="Data\Setups\Default\DefaultRaptorApplicationFunctions.cs" />
     <Compile Include="Data\Setups\Default\DefaultMatrixApplicationFunctions.cs" />
     <Compile Include="Data\Setups\DoNotUse\Agent.cs" />
