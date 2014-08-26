@@ -202,10 +202,6 @@ BEGIN
 	WHERE
 		fa.date_id BETWEEN @start_date_id AND @end_date_id
 		AND b.business_unit_id = @business_unit_id
-
-	DELETE FROM mart.fact_schedule_deviation
-	WHERE date_id between @start_date_id AND @end_date_id
-		AND business_unit_id = @business_unit_id
 END
 
 if (@isIntraday=1)
