@@ -18,7 +18,7 @@
                             </button>
 						</span>
                         <![if (!IE)|(gt IE 8)]>
-						<input type="text" class="col-xs-2 form-control add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
+						<input type="text" class="col-xs-2 form-control add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
                         <![endif]>
                         <!--[if lte IE 8]>
                         <input type="text" class="col-xs-2 form-control add-shifttrade-datepicker" data-bind="value: requestedDate().format(DatePickerFormat())" readonly="readonly" />
