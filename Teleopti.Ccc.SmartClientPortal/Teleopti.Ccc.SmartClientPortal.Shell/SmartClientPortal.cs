@@ -579,7 +579,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				return;
 			}
 
-			if (!_toggleManager.IsEnabled(Toggles.Portal_New_Landingpage_29415)) return;
+			if (!_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415)) return;
 			backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
 			webControl1.Visible = true;
 			if (!canAccessInternet)
