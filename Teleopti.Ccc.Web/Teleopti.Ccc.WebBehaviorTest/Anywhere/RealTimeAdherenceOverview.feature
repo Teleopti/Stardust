@@ -650,6 +650,7 @@ Scenario: Should display sites of a selected business unit
 	Then I should see the site 'Paris'
 
 @OnlyRunIfEnabled('RTA_MonitorMultipleBusinessUnits_28348')
+@Ignore
 Scenario: Should be able to see all agents state updates of a team within a specific business unit
 	Given  the current time is '2014-01-21 12:30:00'
 	And I have a role with
