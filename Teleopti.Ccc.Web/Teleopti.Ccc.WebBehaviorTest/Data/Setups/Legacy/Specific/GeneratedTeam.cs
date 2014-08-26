@@ -43,16 +43,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 		public static string Generate()
 		{
-			return NameQueue.Dequeue();
+			return NameQueue().Dequeue();
 		}
 
-		private static readonly Queue<string> NameQueue;
-		static TeamNameGenerator()
+		private static Queue<string> _nameQueue;
+
+		private static Queue<string> NameQueue()
 		{
-			var random = new Random(DateTime.Now.Millisecond);
-			var uniqueNames = Names.Distinct();
-			var randomlyOrderedNames = uniqueNames.OrderBy(n => random.Next(0, 1000000));
-			NameQueue = new Queue<string>(randomlyOrderedNames.ToArray());
+			if (_nameQueue == null || _nameQueue.Count == 0)
+			{
+				var random = new Random(DateTime.Now.Millisecond);
+				var uniqueNames = Names.Distinct();
+				var randomlyOrderedNames = uniqueNames.OrderBy(n => random.Next(0, 1000000));
+				_nameQueue = new Queue<string>(randomlyOrderedNames.ToArray());
+			}
+			return _nameQueue;
 		}
 
 		// generated from http://www.namegenerator.biz/team-name-generator.php just for fun
