@@ -104,5 +104,12 @@ namespace Teleopti.Ccc.Web.Broker
 				Ping();
 			}
 		}
+
+		public void Ping(int expectedNumberOfSentMessages, int messagesPerSecond)
+		{
+			// FIXME to be able to change the throttle
+			// System.Web.Configuration.WebConfigurationManager.AppSettings["MessagesPerSecond"] = messagesPerSecond.ToString();
+			Ping(expectedNumberOfSentMessages);
+		}
 	}
 }

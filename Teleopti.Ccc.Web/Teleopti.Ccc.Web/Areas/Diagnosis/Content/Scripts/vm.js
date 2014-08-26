@@ -13,7 +13,8 @@ define([
 		self.recievedPings = ko.observableArray();
 		self.messageBrokerStatus = ko.observable(self.connectionStates[3]);
 		self.expectedPongs = ko.observable(0);
-		self.numberOfPings = ko.observable(0);
+		self.numberOfPings = ko.observable(100);
+		self.messagesPerSecond = ko.observable(80);
 		self.hasRecievedAllPongs = ko.computed(function () {
 			return self.expectedPongs() <= self.recievedPings().length;
 		});
@@ -55,7 +56,7 @@ define([
 			self.expectedPongs(pings);
 
 			if (self.hub && self.hub.server && self.hub.server.ping) {
-				self.hub.server.ping(self.numberOfPings());
+				self.hub.server.ping(self.numberOfPings(), self.messagesPerSecond());
 
 			}
 

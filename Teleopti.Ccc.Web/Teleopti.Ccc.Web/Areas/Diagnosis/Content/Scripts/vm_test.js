@@ -42,9 +42,10 @@ define(['buster','vm'], function (buster,viewmodel) {
 			"sending 20 pings should call hub to send 20 new messages": function () {
 				var vm = new viewmodel();
 				var sentPings = 0;
+				var messagesPerSecond = 0;
 				var messagebroker = {
 					server: {
-						ping: function (numberOfMessages) {
+						ping: function (numberOfMessages, messagesPerSecond) {
 							sentPings = numberOfMessages;
 						}
 					}
@@ -54,6 +55,7 @@ define(['buster','vm'], function (buster,viewmodel) {
 					messageBroker: messagebroker
 				});
 
+				vm.messagesPerSecond(messagesPerSecond);
 				vm.numberOfPings(20);
 				vm.sendAllPings();
 

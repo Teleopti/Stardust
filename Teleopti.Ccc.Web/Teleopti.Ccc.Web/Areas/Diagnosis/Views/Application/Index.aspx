@@ -27,23 +27,29 @@
     <!--[if lt IE 7]>
         <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this application.</p>
     <![endif]-->
-	<div class="container">
+	<div class="container ">
 		<div id="bjs" >
-			<h3>messagebroker is running...</h3>
+			<h3>Messagebroker is running...</h3>
 		<div class="row">
-				<div class="col-lg-6">sent: <span data-bind="text: sentPings"></span></div>
-				<div class="col-lg-6">left: <span data-bind="text: pongsLeft"></span></div>
+				<div class="col-lg-6">Sent: <span class="sent-pings" data-bind="text: sentPings"></span></div>
+				<div class="col-lg-6">Left: <span class="left-pongs"data-bind="text: pongsLeft"></span></div>
 		</div>
 	</div>
 	
-		<form role="form" class="form-horizontal"> 
+		<form role="form" class="form"> 
 			<div class="form-group">
-					<label class="col-lg-2 control-label">Number of pings: </label>
-				<div class="col-lg-2">
-						<input class="form-control" data-bind="value: numberOfPings" />
+					<label class="control-label">Number of pings: </label>
+					<div>
+						<input class="form-control" name="numberOfPings" data-bind="value: numberOfPings" />
 					</div>
 			</div>
-			<button class="btn btn-danger" data-bind="click: sendAllPings">Send</button>
+			<div class="form-group">
+					<label class="control-label">Number of messages per second: </label>
+					<div >
+						<input class="form-control" name="numberOfMessagesPerSecond" data-bind="value: messagesPerSecond"/>
+					</div>
+			</div>
+			<button class="btn btn-danger send" data-bind="click: sendAllPings">Send</button>
 		</form>
 	</div>
 </body>

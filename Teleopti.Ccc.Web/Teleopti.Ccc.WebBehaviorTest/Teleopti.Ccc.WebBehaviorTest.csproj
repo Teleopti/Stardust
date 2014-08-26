@@ -131,6 +131,7 @@
     </Compile>
     <Compile Include="Bindings\Generic\AlarmStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\DescriptionToggle.cs" />
+    <Compile Include="Bindings\Generic\Diagnosis\DiagnosisViewPageStepDefinition.cs" />
     <Compile Include="Bindings\Generic\LogonAsAnotherUserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
@@ -171,6 +172,11 @@
     <Compile Include="MyTime\WeekScheduleOnMobileStepDefinitions.cs" />
     <Compile Include="MyTime\WeekScheduleOnMobile.feature.cs">
       <DependentUpon>WeekScheduleOnMobile.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Diagnosis\DiagnosisView.feature.cs">
+      <DependentUpon>DiagnosisView.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -744,6 +750,10 @@
     <None Include="MyTime\WeekScheduleOnMobile.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WeekScheduleOnMobile.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Diagnosis\DiagnosisView.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>DiagnosisView.feature.cs</LastGenOutput>
     </None>
     <None Include="SessionAnywhere.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
