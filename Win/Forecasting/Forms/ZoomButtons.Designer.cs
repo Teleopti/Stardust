@@ -109,7 +109,7 @@
 			this.buttonAdvSkillMonth.TabIndex = 20;
 			this.buttonAdvSkillMonth.UseVisualStyle = true;
 			this.buttonAdvSkillMonth.UseVisualStyleBackColor = true;
-			this.buttonAdvSkillMonth.Click += new System.EventHandler(this.SkillZoomButtonClicked);
+			this.buttonAdvSkillMonth.Click += new System.EventHandler(this.skillZoomButtonClicked);
 			// 
 			// buttonAdvSkillWeek
 			// 
@@ -131,7 +131,7 @@
 			this.buttonAdvSkillWeek.TabIndex = 19;
 			this.buttonAdvSkillWeek.UseVisualStyle = true;
 			this.buttonAdvSkillWeek.UseVisualStyleBackColor = true;
-			this.buttonAdvSkillWeek.Click += new System.EventHandler(this.SkillZoomButtonClicked);
+			this.buttonAdvSkillWeek.Click += new System.EventHandler(this.skillZoomButtonClicked);
 			// 
 			// buttonAdvWorkloadIntraday
 			// 
@@ -154,7 +154,7 @@
 			this.buttonAdvWorkloadIntraday.TabIndex = 16;
 			this.buttonAdvWorkloadIntraday.UseVisualStyle = true;
 			this.buttonAdvWorkloadIntraday.UseVisualStyleBackColor = true;
-			this.buttonAdvWorkloadIntraday.Click += new System.EventHandler(this.WorkloadZoomButtonClicked);
+			this.buttonAdvWorkloadIntraday.Click += new System.EventHandler(this.workloadZoomButtonClicked);
 			// 
 			// buttonAdvSkillIntraday
 			// 
@@ -176,7 +176,7 @@
 			this.buttonAdvSkillIntraday.TabIndex = 21;
 			this.buttonAdvSkillIntraday.UseVisualStyle = true;
 			this.buttonAdvSkillIntraday.UseVisualStyleBackColor = true;
-			this.buttonAdvSkillIntraday.Click += new System.EventHandler(this.SkillZoomButtonClicked);
+			this.buttonAdvSkillIntraday.Click += new System.EventHandler(this.skillZoomButtonClicked);
 			// 
 			// buttonAdvWorkloadDay
 			// 
@@ -199,7 +199,7 @@
 			this.buttonAdvWorkloadDay.TabIndex = 18;
 			this.buttonAdvWorkloadDay.UseVisualStyle = true;
 			this.buttonAdvWorkloadDay.UseVisualStyleBackColor = true;
-			this.buttonAdvWorkloadDay.Click += new System.EventHandler(this.WorkloadZoomButtonClicked);
+			this.buttonAdvWorkloadDay.Click += new System.EventHandler(this.workloadZoomButtonClicked);
 			// 
 			// buttonAdvSkillDay
 			// 
@@ -221,13 +221,13 @@
 			this.buttonAdvSkillDay.TabIndex = 22;
 			this.buttonAdvSkillDay.UseVisualStyle = true;
 			this.buttonAdvSkillDay.UseVisualStyleBackColor = true;
-			this.buttonAdvSkillDay.Click += new System.EventHandler(this.SkillZoomButtonClicked);
+			this.buttonAdvSkillDay.Click += new System.EventHandler(this.skillZoomButtonClicked);
 			// 
 			// buttonAdvWorkloadMonth
 			// 
 			this.buttonAdvWorkloadMonth.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonAdvWorkloadMonth.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvWorkloadMonth.BackColor = System.Drawing.Color.White;
+			this.buttonAdvWorkloadMonth.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonAdvWorkloadMonth.BeforeTouchSize = new System.Drawing.Size(37, 34);
 			this.buttonAdvWorkloadMonth.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvWorkloadMonth.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_WorkloadGridMonth;
@@ -243,7 +243,7 @@
 			this.buttonAdvWorkloadMonth.TabIndex = 14;
 			this.buttonAdvWorkloadMonth.UseVisualStyle = true;
 			this.buttonAdvWorkloadMonth.UseVisualStyleBackColor = true;
-			this.buttonAdvWorkloadMonth.Click += new System.EventHandler(this.WorkloadZoomButtonClicked);
+			this.buttonAdvWorkloadMonth.Click += new System.EventHandler(this.workloadZoomButtonClicked);
 			// 
 			// buttonAvdWorkloadWeek
 			// 
@@ -265,7 +265,7 @@
 			this.buttonAvdWorkloadWeek.TabIndex = 12;
 			this.buttonAvdWorkloadWeek.UseVisualStyle = true;
 			this.buttonAvdWorkloadWeek.UseVisualStyleBackColor = true;
-			this.buttonAvdWorkloadWeek.Click += new System.EventHandler(this.WorkloadZoomButtonClicked);
+			this.buttonAvdWorkloadWeek.Click += new System.EventHandler(this.workloadZoomButtonClicked);
 			// 
 			// ZoomButtons
 			// 
