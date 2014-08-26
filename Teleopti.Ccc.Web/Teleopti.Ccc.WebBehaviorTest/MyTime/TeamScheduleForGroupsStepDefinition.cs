@@ -20,9 +20,9 @@ using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
-	[Scope(Feature = "Team schedule")]
+	[Scope(Feature = "Team schedule for groups")]
 	[Binding]
-	public class TeamScheduleStepDefinition
+	public class TeamScheduleForGroupsStepDefinition
 	{
 		private static string TeamColleagueName = "Colleague In Team";
 		private static string OtherTeamColleagueName = "Colleague Not In Team";
@@ -467,18 +467,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheTeam_PickerWithTwoTeams()
 		{
 			Browser.Interactions.AssertExists("#Team-Picker");
-		}
-
-		[When(@"I initialize a shift trade")]
-		public void WhenIInitializeAShiftTrade()
-		{
-			Browser.Interactions.Click(".hidden-sm .initialize-shift-trade");
-		}
-
-		[Then(@"I should not be able to initialize a shift trade")]
-		public void ThenIShouldNotBeAbleToInitializeAShiftTrade()
-		{
-			Browser.Interactions.AssertNotExists(".navbar", ".initialize-shift-trade");
 		}
 
 		private static void AssertAgentIsDisplayed(string name)
