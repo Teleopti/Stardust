@@ -17,20 +17,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			 var weeklyWorkTimeSetting = new WeeklyWorkTimeSetting();
 			 var virtualSchedulePeriodForWeekStart = _virtualSchedulePeriodProvider.VirtualSchedulePeriodForDate(date);
 			 var virtualSchedulePeriodForWeekEnd = _virtualSchedulePeriodProvider.VirtualSchedulePeriodForDate(date.AddDays(6));
+			 var isWeekStartPeriodNull = virtualSchedulePeriodForWeekStart == null;
+			 var isWeekEndPeriodNull = virtualSchedulePeriodForWeekEnd == null;
 
-			 if (virtualSchedulePeriodForWeekStart.IsValid && !virtualSchedulePeriodForWeekEnd.IsValid)
+			 if ((!isWeekStartPeriodNull && virtualSchedulePeriodForWeekStart.IsValid) && (isWeekEndPeriodNull || !virtualSchedulePeriodForWeekEnd.IsValid))
 			 {
 				 var contract = virtualSchedulePeriodForWeekStart.Contract;
 				 weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes = contract.WorkTimeDirective.MinTimePerWeek.TotalMinutes;
 				 weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes = contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
 			 }
-			 else if (!virtualSchedulePeriodForWeekStart.IsValid && virtualSchedulePeriodForWeekEnd.IsValid)
+			 else if ((!isWeekEndPeriodNull && virtualSchedulePeriodForWeekEnd.IsValid) && (isWeekStartPeriodNull || !virtualSchedulePeriodForWeekStart.IsValid))
 			 {
 				 var contract = virtualSchedulePeriodForWeekEnd.Contract;
 				 weeklyWorkTimeSetting.MinWorkTimePerWeekMinutes = contract.WorkTimeDirective.MinTimePerWeek.TotalMinutes;
 				 weeklyWorkTimeSetting.MaxWorkTimePerWeekMinutes = contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
 			 }
-			 else if (virtualSchedulePeriodForWeekStart.IsValid && virtualSchedulePeriodForWeekEnd.IsValid)
+			 else if ((!isWeekStartPeriodNull && virtualSchedulePeriodForWeekStart.IsValid) && (!isWeekEndPeriodNull && virtualSchedulePeriodForWeekEnd.IsValid))
 			 {
 				 var contractStart = virtualSchedulePeriodForWeekStart.Contract;
 				 var contractEnd = virtualSchedulePeriodForWeekEnd.Contract;

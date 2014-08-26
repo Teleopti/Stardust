@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 	public class PreferenceWeeklyWorkTimeSettingProviderTest
 	{
 		[Test]
-		[Ignore]
 		public void ShouldRetrieveSetting()
 		{
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
