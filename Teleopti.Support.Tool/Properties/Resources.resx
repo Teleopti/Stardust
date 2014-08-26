@@ -121,6 +121,9 @@
   <data name="ajax_loader" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\ajax-loader.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ccc_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ConnectedWithLimitedAccess" xml:space="preserve">
     <value>Connected with limited access</value>
     <comment>Connected with limited access</comment>
@@ -131,16 +134,12 @@
   <data name="block" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\block.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ConnectedAsSystemAdmin" xml:space="preserve">
-    <value>Connected as System Admin</value>
-    <comment>Connected as System Admin</comment>
+  <data name="Connecting" xml:space="preserve">
+    <value>Connecting...</value>
   </data>
   <data name="NotConnected" xml:space="preserve">
     <value>Not Connected</value>
     <comment>Not Connected</comment>
-  </data>
-  <data name="Connecting" xml:space="preserve">
-    <value>Connecting...</value>
   </data>
   <data name="delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\delete.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -157,9 +156,16 @@
   <data name="ccc_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Menu.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ConnectedAsSystemAdmin" xml:space="preserve">
+    <value>Connected as System Admin</value>
+    <comment>Connected as System Admin</comment>
+  </data>
   <data name="ClickVerifytoCheckYourCredentials" xml:space="preserve">
     <value>Click "Verify" to check your credentials</value>
     <comment>Click "Verify" to check your credentials</comment>
+  </data>
+  <data name="Teleopti-WFM-main_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Teleopti-WFM-main_small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="info1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\info1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -167,7 +173,7 @@
   <data name="accept1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\accept1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Teleopti-WFM-main-icon256" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Teleopti-WFM-main-icon256.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
