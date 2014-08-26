@@ -24,7 +24,7 @@
     var Datepicker = function (element, options) {
         this.element = $(element);
         this.autoHide = true && (options.autoHide !== false) && (this.element.data('datepicker-autohide') !== false);
-        this.format = options.format || this.element.data('datepicker-format') || moment.langData().longDateFormat('L');
+        this.format = options.format || this.element.data('datepicker-format') || moment.localeData().longDateFormat('L');
         this.calendarPlacement = options.calendarPlacement || this.element.data('datepicker-calendarplacement') || 'right';
         this.picker = $(DPGlobal.template)
 							.appendTo(options.container)
@@ -216,7 +216,7 @@
         fillDow: function () {
             var dowCnt = this.weekStart;
             var html = '<tr>';
-            var daysMin = $.proxy(moment.langData().weekdaysMin, moment.langData());
+            var daysMin = $.proxy(moment.localeData().weekdaysMin, moment.localeData());
             while (dowCnt < this.weekStart + 7) {
                 html += '<th class="dow">' + daysMin(moment().day((dowCnt++) % 7)) + '</th>';
             }
@@ -227,7 +227,7 @@
         fillMonths: function () {
             var html = '';
             var i = 0
-            var monthsShort = $.proxy(moment.langData().monthsShort, moment.langData());
+            var monthsShort = $.proxy(moment.localeData().monthsShort, moment.localeData());
             while (i < 12) {
             	html += '<span class="month">' + monthsShort(moment().startOf('month').month(i++)) + '</span>';
             }
@@ -243,7 +243,7 @@
             var currentMonth = currentMoment ? currentMoment.month() : null;
 
             this.picker.find('.datepicker-days th:eq(1)')
-						.text(moment.langData().months(moment().startOf('month').month(month)) + ' ' + year);
+						.text(moment.localeData().months(moment().startOf('month').month(month)) + ' ' + year);
 
             var prevMonth = moment([year, month, 0]);
             prevMonth.day(prevMonth.day() - (prevMonth.day() - this.weekStart + 7) % 7);
