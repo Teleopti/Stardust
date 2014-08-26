@@ -1,18 +1,14 @@
-﻿using System.IO;
-using System.Threading;
+﻿using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
@@ -34,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static void createGlobalDbData()
 		{
 			GlobalDataMaker.Data().Apply(new DefaultPersonThatCreatesDbData());
-			GlobalUnitOfWorkState.UnitOfWorkAction(createLicense);
+			GlobalDataMaker.Data().Apply(new DefaultLicense());
 			GlobalDataMaker.Data().Apply(new DefaultBusinessUnit());
 			GlobalDataMaker.Data().Apply(new DefaultScenario());
 			GlobalDataMaker.Data().Apply(new DefaultRaptorApplicationFunctions());
@@ -66,13 +62,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			Navigation.GoToWaitForUrlAssert("Test/ClearConnections", new ApplicationStartupTimeout());
 			DataSourceHelper.RestoreCcc7DataByFileCopy(_ccc7DataBackup);
-		}
-
-		private static void createLicense(IUnitOfWork uow)
-		{
-			var license = new License {XmlString = File.ReadAllText("License.xml")};
-			var licenseRepository = new LicenseRepository(uow);
-			licenseRepository.Add(license);
 		}
 	}
 }
