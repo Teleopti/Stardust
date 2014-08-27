@@ -642,7 +642,6 @@
     </Compile>
     <Compile Include="MyTime\StudentAvailabilityStepDefinitions.cs" />
     <Compile Include="Data\TestDataSetup.cs" />
-    <Compile Include="Core\SystemLevelLock.cs" />
     <Compile Include="Data\TestSiteConfigurationSetup.cs" />
     <Compile Include="Core\Browser.cs" />
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
