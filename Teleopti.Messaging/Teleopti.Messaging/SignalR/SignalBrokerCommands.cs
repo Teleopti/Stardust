@@ -5,7 +5,7 @@ using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class SignalBrokerCommands : ISignalBrokerCommands
+	public class SignalBrokerCommands
 	{
 		private readonly ILog _logger;
 		private readonly IStateAccessor _hubProxy;

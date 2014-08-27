@@ -21,7 +21,7 @@ namespace Teleopti.Messaging.SignalR
 		private readonly ITime _time;
 		private readonly string _serverUrl;
 		private IHandleHubConnection _connection;
-		private ISignalBrokerCommands _signalBrokerCommands;
+		private SignalBrokerCommands _signalBrokerCommands;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(SignalSender));
 
 		public static SignalSender MakeForEtl(string serverUrl)

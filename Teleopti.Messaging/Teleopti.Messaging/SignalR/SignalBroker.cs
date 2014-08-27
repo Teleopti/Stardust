@@ -24,7 +24,7 @@ namespace Teleopti.Messaging.SignalR
 		private readonly ITime _time;
 		private readonly IList<SubscriptionCallback> _subscriptions = new List<SubscriptionCallback>();
 		private IHandleHubConnection _connection;
-		private ISignalBrokerCommands _signalBrokerCommands;
+		private SignalBrokerCommands _signalBrokerCommands;
 		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 
