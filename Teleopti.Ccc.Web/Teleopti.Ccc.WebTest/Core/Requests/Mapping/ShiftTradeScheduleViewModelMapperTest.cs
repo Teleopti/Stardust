@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -152,29 +150,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = _target.Map(data);
 
 			result.PossibleTradeSchedules.Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldMapPossibleTradesWithConfidentialAbsenceCorrectly()
-		{
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid(), Paging = new Paging() { Take = 1 } };
-			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new[] { new Person() } };
-			var scheduleLayers = new List<ShiftTradeAddScheduleLayerViewModel>
-			{
-				new ShiftTradeAddScheduleLayerViewModel {IsAbsenceConfidential = true}
-			};
-			var possibleTradeScheduleViewModels = new List<ShiftTradeAddPersonScheduleViewModel> { new ShiftTradeAddPersonScheduleViewModel { ScheduleLayers = scheduleLayers } };
-			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
-
-			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
-			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradeSchedules(persons.Date, persons.Persons, data.Paging))
-									  .Return(scheduleReadModels);
-			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
-
-			var result = _target.Map(data);
-
-			result.PossibleTradeSchedules.First().ScheduleLayers.First().Color.Should().Be.EqualTo(ConfidentialPayloadValues.DisplayColorHex);
-			result.PossibleTradeSchedules.First().ScheduleLayers.First().TitleHeader.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
 		}
 	}
 }

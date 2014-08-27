@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -47,19 +46,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				possibleTradeSchedule = getFilteredTimesPossibleTradeSchedules(possibleTradePersons, data.Paging, data.TimeFilter).ToList();
 			}
-			foreach (var shiftTradeAddPersonScheduleViewModel in possibleTradeSchedule)
-			{
-				if (shiftTradeAddPersonScheduleViewModel.ScheduleLayers != null)
-				{
-					var layers = shiftTradeAddPersonScheduleViewModel.ScheduleLayers.ToList();
-					foreach (var layer in layers.Where(layer => layer.IsAbsenceConfidential))
-					{
-						layer.Color = ConfidentialPayloadValues.DisplayColorHex;
-						layer.TitleHeader = ConfidentialPayloadValues.Description.Name;
-					}
-					shiftTradeAddPersonScheduleViewModel.ScheduleLayers = layers;
-				}
-			}
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any() ? possibleTradeSchedule.First().Total : 0;
 			var pageCount = possibleTradeScheduleNum % data.Paging.Take != 0 ? possibleTradeScheduleNum / data.Paging.Take + 1 : possibleTradeScheduleNum / data.Paging.Take;
 
@@ -95,20 +81,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				possibleTradeSchedule = getFilteredTimesPossibleTradeSchedules(possibleTradePersons, data.Paging, data.TimeFilter).ToList();
 			}
-			foreach (var shiftTradeAddPersonScheduleViewModel in possibleTradeSchedule)
-			{
-				if (shiftTradeAddPersonScheduleViewModel.ScheduleLayers != null)
-				{
-					var layers = shiftTradeAddPersonScheduleViewModel.ScheduleLayers.ToList();
-					foreach (var layer in layers.Where(layer => layer.IsAbsenceConfidential))
-					{
-						layer.Color = ConfidentialPayloadValues.DisplayColorHex;
-						layer.TitleHeader = ConfidentialPayloadValues.Description.Name;
-					}
-					shiftTradeAddPersonScheduleViewModel.ScheduleLayers = layers;
-				}
-			}
-
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any() ? possibleTradeSchedule.First().Total : 0;
 			var pageCount = possibleTradeScheduleNum % data.Paging.Take != 0 ? possibleTradeScheduleNum / data.Paging.Take + 1 : possibleTradeScheduleNum / data.Paging.Take;
 
