@@ -34,10 +34,10 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PersonsFilterView));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.buttonAdvance = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonOk = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.buttonAdvance = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
@@ -62,8 +62,8 @@
 			// 
 			this.tableLayoutPanel2.ColumnCount = 3;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 105F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 113F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 98F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 98F));
 			this.tableLayoutPanel2.Controls.Add(this.buttonAdvance, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.buttonOk, 1, 0);
 			this.tableLayoutPanel2.Controls.Add(this.buttonCancel, 2, 0);
@@ -76,6 +76,26 @@
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(321, 40);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
+			// buttonAdvance
+			// 
+			this.buttonAdvance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonAdvance.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvance.BeforeTouchSize = new System.Drawing.Size(87, 27);
+			this.buttonAdvance.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.buttonAdvance.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.buttonAdvance.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvance.IsBackStageButton = false;
+			this.buttonAdvance.Location = new System.Drawing.Point(35, 10);
+			this.buttonAdvance.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
+			this.buttonAdvance.Name = "buttonAdvance";
+			this.buttonAdvance.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvance.Size = new System.Drawing.Size(87, 27);
+			this.buttonAdvance.TabIndex = 6;
+			this.buttonAdvance.Text = "xxAdvance";
+			this.buttonAdvance.UseVisualStyle = true;
+			this.buttonAdvance.Click += new System.EventHandler(this.buttonAdvance_Click);
+			// 
 			// buttonOk
 			// 
 			this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -86,7 +106,7 @@
 			this.buttonOk.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonOk.ForeColor = System.Drawing.Color.White;
 			this.buttonOk.IsBackStageButton = false;
-			this.buttonOk.Location = new System.Drawing.Point(118, 10);
+			this.buttonOk.Location = new System.Drawing.Point(133, 10);
 			this.buttonOk.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
@@ -122,25 +142,6 @@
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(321, 440);
 			this.panel1.TabIndex = 1;
-			// 
-			// buttonAdvance
-			// 
-			this.buttonAdvance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonAdvance.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvance.BeforeTouchSize = new System.Drawing.Size(87, 27);
-			this.buttonAdvance.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonAdvance.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.buttonAdvance.ForeColor = System.Drawing.Color.White;
-			this.buttonAdvance.IsBackStageButton = false;
-			this.buttonAdvance.Location = new System.Drawing.Point(13, 10);
-			this.buttonAdvance.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
-			this.buttonAdvance.Name = "buttonAdvance";
-			this.buttonAdvance.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.buttonAdvance.Size = new System.Drawing.Size(87, 27);
-			this.buttonAdvance.TabIndex = 6;
-			this.buttonAdvance.Text = "xxAdvance";
-			this.buttonAdvance.UseVisualStyle = true;
 			// 
 			// PersonsFilterView
 			// 

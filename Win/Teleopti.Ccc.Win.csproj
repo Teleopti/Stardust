@@ -682,6 +682,12 @@
     </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
     <Compile Include="SikuliResultView.cs">
+    <Compile Include="Scheduling\FilterMultiplePersons.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\FilterMultiplePersons.Designer.cs">
+      <DependentUpon>FilterMultiplePersons.cs</DependentUpon>
+    </Compile>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SikuliResultView.Designer.cs">
@@ -2788,6 +2794,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Permissions\PermissionViewer.resx">
       <DependentUpon>PermissionViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\FilterMultiplePersons.resx">
+      <DependentUpon>FilterMultiplePersons.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SikuliResultView.resx">
       <DependentUpon>SikuliResultView.cs</DependentUpon>

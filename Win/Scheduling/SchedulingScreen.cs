@@ -3989,7 +3989,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				_cachedPersonsFilterView =
 					new PersonsFilterView(SchedulerState.RequestedPeriod.DateOnlyPeriod,
-											SchedulerState.FilteredPersonDictionary.Keys,
+											SchedulerState.FilteredPersonDictionary,
 											_container,
 											ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory()
 											.ApplicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenSchedulePage),
@@ -4006,7 +4006,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			scheduleFilterView.StartPosition = FormStartPosition.Manual;
 			scheduleFilterView.ShowAdvancedFilter = toggleManager.IsEnabled(Toggles.Scheduler_AdvanceFilter_29555);
-
+			
 			//TODO: Please come up with a better solution!
 			Point pointToScreen = toolStripExFilter.PointToScreen(
 				new Point(toolStripButtonFilterAgents.Bounds.X + 63, toolStripButtonFilterAgents.Bounds.Y +
