@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 {
 	public class DefaultScenario : IHashableDataSetup
 	{
-		public static readonly IScenario Scenario = ScenarioFactory.CreateScenario("Default scenario", true, false);
+		public static IScenario Scenario = ScenarioFactory.CreateScenario("Default scenario", true, false);
 
 		public void Apply(IUnitOfWork uow)
 		{

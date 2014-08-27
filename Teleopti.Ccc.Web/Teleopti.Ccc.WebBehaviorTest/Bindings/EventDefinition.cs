@@ -5,10 +5,12 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using log4net;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -54,6 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			
 			TestDataSetup.RestoreCcc7Data();
 			TestDataSetup.ClearAnalyticsData();
+			shouldBeDeleted();
 
 			GlobalPrincipalState.EnsureThreadPrincipal();
 
@@ -62,7 +65,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			checkIfRunTestDueToToggleFlags();
 		}
 
-        private static readonly string targetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData2.nhib.xml");
+		private static void shouldBeDeleted()
+		{
+			//hack to reset global #¤%#¤% scenario state to db state.
+			//"DefaultScenario" should be deleted!
+			GlobalUnitOfWorkState.UnitOfWorkAction(uow => DefaultScenario.Scenario = new ScenarioRepository(uow).LoadDefaultScenario());
+		}
+
+		private static readonly string targetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData2.nhib.xml");
 
         private static void addExtraDataSource()
         {
