@@ -77,13 +77,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			if (personPeriod == null)
 			{
 				preferenceCellData.WeeklyMax = new TimeSpan(0);
+                preferenceCellData.WeeklyMin = new TimeSpan(0);
 				preferenceCellData.NightlyRest = new TimeSpan(0);
 			}
 			else
 			{
 				var worktimeDirective = personPeriod.PersonContract.Contract.WorkTimeDirective;
 				preferenceCellData.WeeklyMax = worktimeDirective.MaxTimePerWeek;
+			    preferenceCellData.WeeklyMin = worktimeDirective.MinTimePerWeek;
 				preferenceCellData.NightlyRest = worktimeDirective.NightlyRest;
+			    preferenceCellData.EmploymentType = personPeriod.PersonContract.Contract.EmploymentType;
 			}
 		}
 

@@ -335,6 +335,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = !calculation;
 			_validation = validation;
 			_schedulerState.SchedulingResultState.UseValidation = validation;
+            _schedulerState.SchedulingResultState.UseMinWeekWorkTime = _container.Resolve<IToggleManager>().IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635);
 			_teamLeaderMode = teamLeaderMode;
 			_schedulerState.SchedulingResultState.TeamLeaderMode = teamLeaderMode;
 			_skillResultViewSetting = _currentSchedulingScreenSettings.SkillResultViewSetting;

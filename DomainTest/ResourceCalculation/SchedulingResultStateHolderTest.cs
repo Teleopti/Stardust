@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsNotNull(target.Schedules);
             Assert.IsNotNull(target.SkillDays);
             Assert.IsNotNull(target.SkillStaffPeriodHolder);
+            Assert.IsFalse(target.UseMinWeekWorkTime);
         }
 
 
@@ -107,5 +109,23 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IList<ISkill> result = target.NonVirtualSkills;
 			Assert.AreEqual(1, result.Count);
 		}
+
+        [Test]
+        public void ShouldGetRulesWithMinWeekWorkTimeActivated()
+        {
+            var target = new SchedulingResultStateHolder {UseMinWeekWorkTime = true, UseValidation = true};
+            var rules = target.GetRulesToRun();
+            var rule = (MinWeekWorkTimeRule)rules.Item(typeof(MinWeekWorkTimeRule));
+            Assert.IsTrue(rule.ShouldValidate);
+        }
+
+        [Test]
+        public void ShouldGetRulesWithMinWeekWorkTimeDeActivated()
+        {
+            var target = new SchedulingResultStateHolder { UseValidation = true };
+            var rules = target.GetRulesToRun();
+            var rule = (MinWeekWorkTimeRule)rules.Item(typeof(MinWeekWorkTimeRule));
+            Assert.IsFalse(rule.ShouldValidate);
+        }
     }
 }

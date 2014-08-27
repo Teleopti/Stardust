@@ -33,6 +33,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         public bool ForDelete { get; set; }
 
+        public bool ShouldValidate { get; set; }
+
         public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,IEnumerable<IScheduleDay> scheduleDays)
         {
             var responseList = new HashSet<IBusinessRuleResponse>();
@@ -47,6 +49,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 {
                     oldResponses.Remove(createResponse(person, day, "remove", typeof(MinWeekWorkTimeRule)));
                 }
+
+                if (!ShouldValidate) return responseList;
 
                 double minTimePerWeekMinutes;
 

@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private IAgentRestrictionsDetailModel _model;
 		private MockRepository _mocks;
 		private ISchedulerStateHolder _schedulerStateHolder;
+	    private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IGridlockManager _gridlockManager;
 		private ClipHandler<IScheduleDay> _clipHandler;
 		private IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_view = _mocks.StrictMock<IAgentRestrictionsDetailView>();
 			_model = _mocks.StrictMock<IAgentRestrictionsDetailModel>();
 			_schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
+		    _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_gridlockManager = _mocks.StrictMock<IGridlockManager>();
 			_clipHandler = new ClipHandler<IScheduleDay>();
 			_overriddenBusinessRulesHolder = _mocks.StrictMock<IOverriddenBusinessRulesHolder>();
@@ -180,6 +182,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(schedulePart.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
 				Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
 				Expect.Call(visualLayerCollection.HasLayers).Return(false).Repeat.AtLeastOnce(); // this line indicates that the day is not scheduled
+			    Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(_schedulingResultStateHolder);
+			    Expect.Call(_schedulingResultStateHolder.UseMinWeekWorkTime).Return(true);
 			}
 
 			using(_mocks.Playback())
@@ -246,7 +250,59 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
 				Assert.IsNotNull(weekHeaderCellData);
 			}
+
 		}
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "period"), Test]
+        public void ShouldAlertWhenBelowMin()
+        {
+            var preferenceCellData = new PreferenceCellData();
+            var startTimeLimitation = new StartTimeLimitation(new TimeSpan(7, 0, 0), null);
+            var endTimeLimitation = new EndTimeLimitation(new TimeSpan(0, 20, 0), null);
+            var workTimeLimitation = new WorkTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(12, 0, 0));
+            var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Natt");
+            var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, shiftCategory, null, null, new List<IActivityRestriction>());
+            preferenceCellData.EffectiveRestriction = effectiveRestriction;
+
+            var schedulePart = _mocks.StrictMock<IScheduleDay>();
+            var projectionService = _mocks.StrictMock<IProjectionService>();
+            var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+
+            preferenceCellData.SchedulePart = schedulePart;
+
+            preferenceCellData.SchedulingOption = new RestrictionSchedulingOptions {UseScheduling = true};
+            _detailData.Add(0, preferenceCellData);
+            preferenceCellData.WeeklyMax = TimeSpan.FromHours(10);
+            preferenceCellData.WeeklyMin = TimeSpan.FromHours(9);
+
+            using (_mocks.Record())
+            {
+                Expect.Call(_model.DetailData()).Return(_detailData).Repeat.AtLeastOnce();
+
+                Expect.Call(schedulePart.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
+                Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
+                Expect.Call(visualLayerCollection.HasLayers).Return(false).Repeat.AtLeastOnce(); // this line indicates that the day is not scheduled
+                Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(_schedulingResultStateHolder).Repeat.AtLeastOnce();
+                Expect.Call(_schedulingResultStateHolder.UseMinWeekWorkTime).Return(true).Repeat.AtLeastOnce();
+            }
+
+            using (_mocks.Playback())
+            {
+                //because of constructor in SchedulePresenterBase
+                var period = _schedulerStateHolder.RequestedPeriod;
+
+                var e = new GridQueryCellInfoEventArgs(1, 0, _info);
+                _presenter.QueryCellInfo(null, e);
+
+                var weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
+                Assert.IsNotNull(weekHeaderCellData);
+
+                preferenceCellData.EffectiveRestriction = null;
+                weekHeaderCellData = _presenter.OnQueryWeekHeader(1);
+                Assert.IsNotNull(weekHeaderCellData);
+                Assert.IsTrue(weekHeaderCellData.Alert);
+            }
+        }
 
 		public void Dispose()
 		{

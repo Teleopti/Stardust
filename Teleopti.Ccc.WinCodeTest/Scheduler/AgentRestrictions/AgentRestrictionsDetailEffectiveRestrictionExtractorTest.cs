@@ -247,6 +247,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.IsFalse(_preferenceCellData.MustHavePreference);
 			Assert.AreEqual(period.PersonContract.Contract.WorkTimeDirective.NightlyRest, _preferenceCellData.NightlyRest);
 			Assert.AreEqual(period.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek, _preferenceCellData.WeeklyMax);
+            Assert.AreEqual(_preferenceCellData.WeeklyMin, period.PersonContract.Contract.WorkTimeDirective.MinTimePerWeek);
+            Assert.AreEqual(_preferenceCellData.EmploymentType, period.PersonContract.Contract.EmploymentType);
 		}
 	}
 }
