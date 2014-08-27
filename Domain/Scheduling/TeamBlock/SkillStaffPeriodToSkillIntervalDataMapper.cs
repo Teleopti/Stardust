@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
     public class SkillStaffPeriodToSkillIntervalDataMapper : ISkillStaffPeriodToSkillIntervalDataMapper
     {
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "0#")]
 	    public IList<ISkillIntervalData> MapSkillIntervalData(IList<ISkillStaffPeriod> skillStaffPeriodList,DateOnly baseDate, TimeZoneInfo timeZoneInfo)
 	    {
 		    var skillIntervalList = new List<ISkillIntervalData>();
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				    var currentHead = skillStaffPeriod.Payload.CalculatedLoggedOn;
 				    var utcPeriod = skillStaffPeriod.Period;
 				    var localStartTime = DateTime.SpecifyKind(utcPeriod.StartDateTimeLocal(timeZoneInfo), DateTimeKind.Utc);
-				    var localEndTime = DateTime.SpecifyKind(utcPeriod.EndDateTimeLocal(timeZoneInfo), DateTimeKind.Utc);
+					var localEndTime = localStartTime.Add(utcPeriod.ElapsedTime());
 				    var localPeriod = new DateTimePeriod(localStartTime, localEndTime);
 				    skillIntervalList.Add(new SkillIntervalData(localPeriod, skillStaffPeriod.FStaff,
 					    skillStaffPeriod.FStaff - skillStaffPeriod.CalculatedResource, currentHead, minStaff, maxStaff));
