@@ -89,5 +89,10 @@ namespace Teleopti.Messaging.SignalR
 			if (notificationList.Count > 0)
 				_signalBrokerCommands.NotifyClients(notificationList);
 		}
+
+		public void Send(Notification notification)
+		{
+			_signalBrokerCommands.NotifyClients(notification);
+		}
 	}
 }

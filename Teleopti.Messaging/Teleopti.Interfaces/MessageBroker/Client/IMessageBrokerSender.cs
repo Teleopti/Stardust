@@ -32,5 +32,7 @@ namespace Teleopti.Interfaces.MessageBroker.Events
 			string dataSource,
 			Guid businessUnitId,
 			IEventMessage[] eventMessages);
+
+		void Send(Notification notification);
 	}
 }

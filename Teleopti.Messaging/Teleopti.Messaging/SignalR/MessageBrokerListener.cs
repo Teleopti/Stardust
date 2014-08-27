@@ -14,6 +14,12 @@ namespace Teleopti.Messaging.SignalR
 		private readonly IList<SubscriptionCallback> _subscriptions = new List<SubscriptionCallback>();
 		private readonly SignalBrokerCommands _signalBrokerCommands;
 
+		private class SubscriptionCallback
+		{
+			public Subscription Subscription { get; set; }
+			public EventHandler<EventMessageArgs> Callback { get; set; }
+		}
+
 		public MessageBrokerListener(SignalBrokerCommands signalBrokerCommands)
 		{
 			_signalBrokerCommands = signalBrokerCommands;

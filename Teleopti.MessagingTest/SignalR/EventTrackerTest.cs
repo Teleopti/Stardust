@@ -26,7 +26,7 @@ namespace Teleopti.MessagingTest.SignalR
 				TrackId = Guid.NewGuid()
 			});
 
-			var arguments=messageBrokerSender.GetArgumentsForCallsMadeOn(x => x.SendNotification(null), a => a.IgnoreArguments());
+			var arguments=messageBrokerSender.GetArgumentsForCallsMadeOn(x => x.Send(null), a => a.IgnoreArguments());
 
 			var firstCall = arguments.Single();
 			var notification = (Notification)firstCall.Single();

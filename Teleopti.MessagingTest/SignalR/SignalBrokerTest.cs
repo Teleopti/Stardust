@@ -70,7 +70,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = new HubProxyFake();
 			var target = makeTarget(hubProxy);
 
-			target.SendNotification(new Notification());
+			target.Send(new Notification());
 
 			hubProxy.NotifyClientsInvokedWith.Should().Have.Count.EqualTo(1);
 		}

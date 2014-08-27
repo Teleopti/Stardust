@@ -18,7 +18,7 @@ namespace Teleopti.Messaging.SignalR
 		{
 		}
 
-		public void SendNotification(Notification notification)
+		public void Send(Notification notification)
 		{
 		}
 	}

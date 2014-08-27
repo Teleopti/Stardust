@@ -16,7 +16,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void SendTrackingMessage(Guid initiatorId, Guid businessUnitId, TrackingMessage message)
 		{
-			_messageBroker.SendNotification(new Notification
+			_messageBroker.Send(new Notification
 			{
 				BinaryData = JsonConvert.SerializeObject(message),
 				BusinessUnitId = businessUnitId.ToString(),

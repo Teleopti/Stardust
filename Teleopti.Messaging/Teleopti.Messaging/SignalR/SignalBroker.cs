@@ -6,12 +6,12 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
 using log4net;
 using Teleopti.Messaging.SignalR.Wrappers;
-using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
 {
@@ -21,7 +21,6 @@ namespace Teleopti.Messaging.SignalR
 		private readonly ITime _time;
 		private IHandleHubConnection _connection;
 		private SignalBrokerCommands _signalBrokerCommands;
-		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 		private readonly IMessageFilterManager _filterManager;
 		private MessageBrokerSender _messageBrokerSender;
@@ -69,37 +68,50 @@ namespace Teleopti.Messaging.SignalR
 			{
 				throw new BrokerNotInstantiatedException("The SignalBroker can only be used with a valid Uri!");
 			}
+			var connection = new SignalConnection(
+				() => MakeHubConnection(serverUrl),
+				() => _messageBrokerListener.ReregisterSubscriptions(),
+				_connectionKeepAliveStrategy,
+				_time);
 
-			lock (_wrapperLock)
+			_connection = connection;
+
+			_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
+			_messageBrokerSender = new MessageBrokerSender(_signalBrokerCommands, _filterManager);
+			_messageBrokerListener = new MessageBrokerListener(_signalBrokerCommands);
+
+			_connection.StartConnection(_messageBrokerListener.OnNotification, useLongPolling);
+		}
+
+		[CLSCompliant(false)]
+		protected virtual IHubConnectionWrapper MakeHubConnection(Uri serverUrl)
+		{
+			return new HubConnectionWrapper(new HubConnection(serverUrl.ToString()));
+		}
+
+		public void StopMessageBroker()
+		{
+			if (_connection != null)
 			{
-				var connection = new SignalConnection(
-					() => MakeHubConnection(serverUrl),
-					() => _messageBrokerListener.ReregisterSubscriptions(),
-					_connectionKeepAliveStrategy,
-					_time);
-
-				_connection = connection;
-
-				_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
-				_messageBrokerSender = new MessageBrokerSender(_signalBrokerCommands, _filterManager);
-				_messageBrokerListener = new MessageBrokerListener(_signalBrokerCommands);
-
-				_connection.StartConnection(_messageBrokerListener.OnNotification, useLongPolling);
+				_connection.CloseConnection();
 			}
+		}
+
+		public string ConnectionString { get; set; }
+
+		public bool IsConnected
+		{
+			get { return _connection != null && _connection.IsConnected(); }
 		}
 
 		public void Dispose()
 		{
-			lock (_wrapperLock)
-			{
-				if (_connection == null) return;
-
-				_connection.CloseConnection();
-				_connection = null;
-			}
+			if (_connection == null) return;
+			_connection.CloseConnection();
+			_connection = null;
 		}
 
-	    public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
+		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
 			_messageBrokerSender.Send(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, domainObject);
 		}
@@ -114,10 +126,9 @@ namespace Teleopti.Messaging.SignalR
 			_messageBrokerSender.Send(dataSource, businessUnitId, eventMessages);
 		}
 
-		public void SendNotification(Notification notification)
+		public void Send(Notification notification)
 		{
-			if (_connection != null)
-				_signalBrokerCommands.NotifyClients(notification);
+			_messageBrokerSender.Send(notification);
 		}
 
 		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
@@ -150,38 +161,6 @@ namespace Teleopti.Messaging.SignalR
 			_messageBrokerListener.UnregisterEventSubscription(eventMessageHandler);
 		}
 
-		[CLSCompliant(false)]
-		protected virtual IHubConnectionWrapper MakeHubConnection(Uri serverUrl)
-		{
-			return new HubConnectionWrapper(new HubConnection(serverUrl.ToString()));
-		}
-
-		public void StopMessageBroker()
-		{
-			lock (_wrapperLock)
-			{
-				if (_connection != null)
-				{
-					_connection.CloseConnection();
-				}
-			}
-		}
-
-		public string ConnectionString { get; set; }
-
-		public bool IsConnected
-		{
-			get
-			{
-				return _connection!=null && _connection.IsConnected();
-			}
-		}
-
 	}
 
-	public class SubscriptionCallback
-	{
-		public Subscription Subscription { get; set; }
-		public EventHandler<EventMessageArgs> Callback { get; set; }
-	}
 }
