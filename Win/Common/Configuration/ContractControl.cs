@@ -671,6 +671,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void comboBoxAdvEmpTypesSelectedIndexChanged(object sender, EventArgs e)
 		{
+			if (comboBoxAdvEmpTypes.SelectedItem == null) return;
 			var kvp = ((KeyValuePair<EmploymentType, string>)((ComboBoxAdv)sender).SelectedItem);
 
 			var hourly = kvp.Key == EmploymentType.HourlyStaff;
