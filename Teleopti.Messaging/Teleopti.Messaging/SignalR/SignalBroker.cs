@@ -23,6 +23,7 @@ namespace Teleopti.Messaging.SignalR
 		private SignalBrokerCommands _signalBrokerCommands;
 		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
+		private readonly IMessageFilterManager _filterManager;
 		private MessageBrokerSender _messageBrokerSender;
 		private MessageBrokerListener _messageBrokerListener;
 
@@ -41,7 +42,7 @@ namespace Teleopti.Messaging.SignalR
 		{
 			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
 			_time = time;
-			FilterManager = typeFilter;
+			_filterManager = typeFilter;
 
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
@@ -60,8 +61,6 @@ namespace Teleopti.Messaging.SignalR
 		{
 			return true;
 		}
-
-	    private IMessageFilterManager FilterManager { get; set; }
 
 		public void StartMessageBroker(bool useLongPolling = false)
 		{
@@ -82,7 +81,7 @@ namespace Teleopti.Messaging.SignalR
 				_connection = connection;
 
 				_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
-				_messageBrokerSender = new MessageBrokerSender(_signalBrokerCommands, FilterManager);
+				_messageBrokerSender = new MessageBrokerSender(_signalBrokerCommands, _filterManager);
 				_messageBrokerListener = new MessageBrokerListener(_signalBrokerCommands);
 
 				_connection.StartConnection(_messageBrokerListener.OnNotification, useLongPolling);
