@@ -105,12 +105,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var weekNumber = 0;
 
 			var weekMax = new TimeSpan(0);
+		    var weekMin = TimeSpan.MaxValue;
+		    var haveFullTimePersonPeriod = true;
+
 			var startIndex = (rowIndex - 1) * 7;
 			for (int index = startIndex; index < stop; index++)
 			{
 				if (index >= _model.DetailData().Count)break;
 				_model.DetailData().TryGetValue(index, out preferenceCellData);
-
+			   
 				// added as a bugfix for 22545 (In Restriction View, the weekly minimum and maximum values are not calculated correct)
 				var projection = preferenceCellData.SchedulePart.ProjectionService().CreateProjection();
 				if (preferenceCellData.SchedulingOption.UseScheduling &&
@@ -134,9 +137,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 					}
 
 				weekMax = preferenceCellData.WeeklyMax;
+			    if (preferenceCellData.WeeklyMin < weekMin) weekMin = preferenceCellData.WeeklyMin;
+                if (preferenceCellData.EmploymentType.Equals(EmploymentType.HourlyStaff)) haveFullTimePersonPeriod = false;
+                
+
 				weekNumber = myCal.GetWeekOfYear(preferenceCellData.TheDate, myCwr, myFirstDow);
 			}
 			var weekIsLegal = minTime <= weekMax;
+            if (weekIsLegal && haveFullTimePersonPeriod &&  SchedulerState.SchedulingResultState.UseMinWeekWorkTime) weekIsLegal = maxTime >= weekMin;
 			IWeekHeaderCellData weekHeaderCell = new WeekHeaderCellData(minTime, maxTime, !weekIsLegal, weekNumber);
 
 			return weekHeaderCell;

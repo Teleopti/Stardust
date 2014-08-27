@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                                   new WeeksFromScheduleDaysExtractor()),
                               new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), new PersonWeekVoilatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),new VerifyWeeklyRestAroundDayOffSpecification(),ensureWeeklyRestRule )),
                               new NewDayOffRule(new WorkTimeStartEndExtractor()),
-                              new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts)
+                              new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts),
+                              new MinWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor())
 
 							  
 							  //This one takes to long time tu run first time when caches are empty, so put on hold for now
@@ -61,6 +62,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				
 			}
             return ret;
+        }
+
+        public void ActivateMinWeekWorkTimeRule()
+        {
+            var rule = Item(typeof (MinWeekWorkTimeRule));
+            if (rule != null)
+            {
+                ((MinWeekWorkTimeRule) rule).ShouldValidate = true;
+            }
         }
 
         public IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)

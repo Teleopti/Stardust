@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IDictionary<IPerson, IPersonAccountCollection> AllPersonAccounts { get; set; }
 
 		public bool TeamLeaderMode { get; set; }
+        public bool UseMinWeekWorkTime { get; set; }
 
         public SchedulingResultStateHolder()
         {
@@ -178,9 +179,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public INewBusinessRuleCollection GetRulesToRun()
 		{
-			if (UseValidation)
-				return NewBusinessRuleCollection.All(this);
-
+		    if (UseValidation)
+		    {
+                var rules = NewBusinessRuleCollection.All(this);
+                if(UseMinWeekWorkTime) rules.ActivateMinWeekWorkTimeRule();
+                return rules;
+		    }
+				
 			return NewBusinessRuleCollection.MinimumAndPersonAccount(this);
 		}
     }

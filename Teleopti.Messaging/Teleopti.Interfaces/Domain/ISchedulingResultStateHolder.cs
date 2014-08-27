@@ -132,5 +132,10 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <value>The visible skills.</value>
 	    IList<ISkill> NonVirtualSkills { get; }
+
+        /// <summary>
+        /// If rule for min week work time should be used
+        /// </summary>
+        bool UseMinWeekWorkTime { get; set; }
     }
 }

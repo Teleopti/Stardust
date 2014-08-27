@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
         bool Enabled { get; set; }
         bool Legal { get; set; }
         TimeSpan WeeklyMax { get; set; }
+        TimeSpan WeeklyMin { get; set; }
         TimeSpan PeriodTarget { get; set; }
         bool IsInsidePeriod { get; set; }
         Color DisplayColor { get; set; }
@@ -31,5 +32,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
     	bool ViolatesNightlyRest { get; set; }
         bool NoShiftsCanBeFound { get; set; }
     	TimeSpan NightlyRest { get; set; }
+        EmploymentType EmploymentType { get; set; }
     }
 }
