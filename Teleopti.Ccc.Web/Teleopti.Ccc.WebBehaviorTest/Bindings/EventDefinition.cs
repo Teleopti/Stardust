@@ -11,6 +11,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using log4net;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
+using Teleopti.Ccc.WebBehaviorTest.Toggle;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public static void BeforeScenario()
 		{
 			log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+			ToggleStepDefinition.CheckIfRunTestDueToToggleFlags();
 
 			Browser.SelectBrowserByTag();
 
@@ -61,8 +63,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			GlobalPrincipalState.EnsureThreadPrincipal();
 
 			log.Debug("Starting scenario " + ScenarioContext.Current.ScenarioInfo.Title);
-
-			checkIfRunTestDueToToggleFlags();
 		}
 
 		private static void shouldBeDeleted()
@@ -94,30 +94,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	            i++;
 	            File.Delete(targetTestDataNHibFile);
 	        }
-	    }
-
-	    private static void checkIfRunTestDueToToggleFlags()
-	    {
-				const string ignoreMessage = "Ignore toggle {0} because it is {1}.";
-
-				var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
-				var matchingEnkelsnuffs = new Regex(@"\'(.*)\'");
-		    var tags = ScenarioContext.Current.ScenarioInfo.Tags.Union(FeatureContext.Current.FeatureInfo.Tags).ToArray();
-
-		    var allOnlyRunIfEnabled = tags.Where(s => s.StartsWith("OnlyRunIfEnabled"))
-					.Select(onlyRunIfEnabled => (Toggles)Enum.Parse(typeof(Toggles), matchingEnkelsnuffs.Match(onlyRunIfEnabled).Groups[1].ToString()));
-		    var allOnlyRunIfDisabled = tags.Where(s => s.StartsWith("OnlyRunIfDisabled"))
-					.Select(onlyRunIfDisabled => (Toggles)Enum.Parse(typeof(Toggles), matchingEnkelsnuffs.Match(onlyRunIfDisabled).Groups[1].ToString()));
-
-		    foreach (var toggleOnlyRunIfDisabled in allOnlyRunIfDisabled.Where(toggleQuerier.IsEnabled))
-		    {
-			    Assert.Ignore(ignoreMessage, toggleOnlyRunIfDisabled, "enabled");
-		    }
-
-		    foreach (var toggleOnlyRunIfEnabled in allOnlyRunIfEnabled.Where(toggleOnlyRunIfEnabled => !toggleQuerier.IsEnabled(toggleOnlyRunIfEnabled)))
-		    {
-			    Assert.Ignore(ignoreMessage, toggleOnlyRunIfEnabled, "disabled");
-		    }
 	    }
 		
 		[AfterScenario]
