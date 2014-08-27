@@ -174,10 +174,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 						configureAndShowFindAndReplaceForm();
 						break;
 
-					case Keys.Control | Keys.S:
-						toolStripButtonMainSaveMouseUp(this, null);
-						break;
-
 					case Keys.Control | Keys.N:
 						handleControlNCmdKey();
 						break;
@@ -491,11 +487,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 		{
 			_gridConstructor.View.Grid.CurrentCell.MoveTo(0, 0);
 			_gridConstructor.View.Grid.CurrentCell.MoveTo(currentRow, currentCol);
-		}
-
-		private void toolStripButtonMainSaveMouseUp(object sender, MouseEventArgs e)
-		{
-			save();
 		}
 
 		private void save()
@@ -1400,7 +1391,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_filteredPeopleHolder.LoadRuleSetBag();
 			_filteredPeopleHolder.LoadBudgetGroup();
 			peopleRibbon.MenuButtonText = UserTexts.Resources.FileProperCase.ToUpper();
-
+			
 		}
 
 		private void loadPeopleAdminReferences()
@@ -1587,7 +1578,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 		private void backStageButton4VisibleChanged(object sender, EventArgs e)
 		{
-			backStageButton4.Location = new Point(0, backStageButton4.Location.Y);
+			backStageButton4.Location = new Point(0,154);
+		}
+
+		private void toolStripButtonMainSaveClick(object sender, EventArgs e)
+		{
+			save();
 		}
 	}
 }
