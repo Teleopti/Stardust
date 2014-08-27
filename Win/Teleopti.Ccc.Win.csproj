@@ -681,14 +681,12 @@
       <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
-    <Compile Include="SikuliResultView.cs">
+    <Compile Include="SikuliResultView.cs"/>
     <Compile Include="Scheduling\FilterMultiplePersons.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Scheduling\FilterMultiplePersons.Designer.cs">
       <DependentUpon>FilterMultiplePersons.cs</DependentUpon>
-    </Compile>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SikuliResultView.Designer.cs">
       <DependentUpon>SikuliResultView.cs</DependentUpon>
