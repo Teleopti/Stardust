@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.WpfControls.Common.Interop
 
         private void TabControl_Loaded(object sender, RoutedEventArgs e)
         {
-            Trace.WriteLine("When TabbedHostView loaded IsEnabled = " + IsEnabled);
             var count = tabControl.Items.Count;
             for (int i = 0; i < count; i++)
             {
