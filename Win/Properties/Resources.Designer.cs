@@ -1873,16 +1873,6 @@ namespace Teleopti.Ccc.Win.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap editdelete {
-            get {
-                object obj = ResourceManager.GetObject("editdelete", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap editor {
             get {
                 object obj = ResourceManager.GetObject("editor", resourceCulture);

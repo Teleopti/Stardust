@@ -339,9 +339,9 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvStart.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvStart.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdvStart.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.dateTimePickerAdvStart.Calendar.DayNamesColor = System.Drawing.Color.Black;
-			this.dateTimePickerAdvStart.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
-			this.dateTimePickerAdvStart.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
+			this.dateTimePickerAdvStart.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdvStart.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+			this.dateTimePickerAdvStart.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.dateTimePickerAdvStart.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateTimePickerAdvStart.Calendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvStart.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -436,9 +436,9 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvEnd.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvEnd.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdvEnd.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.dateTimePickerAdvEnd.Calendar.DayNamesColor = System.Drawing.Color.Black;
-			this.dateTimePickerAdvEnd.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
-			this.dateTimePickerAdvEnd.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
+			this.dateTimePickerAdvEnd.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdvEnd.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.dateTimePickerAdvEnd.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.dateTimePickerAdvEnd.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateTimePickerAdvEnd.Calendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvEnd.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;

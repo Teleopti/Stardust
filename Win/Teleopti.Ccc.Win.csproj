@@ -3834,6 +3834,7 @@
     <None Include="Resources\Open.PNG" />
     <None Include="Resources\pinned.jpg" />
     <None Include="Resources\Performance-Manager.ico" />
+    <None Include="Resources\mail_delete.png" />
     <Content Include="Resources\period.png" />
     <Content Include="Resources\process.ico" />
     <None Include="Resources\rights.ico" />

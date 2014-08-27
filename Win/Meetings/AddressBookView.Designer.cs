@@ -91,11 +91,11 @@
 			// gridControlPeople
 			// 
 			this.gridControlPeople.ActivateCurrentCellBehavior = Syncfusion.Windows.Forms.Grid.GridCellActivateAction.None;
-			this.gridControlPeople.AllowSelection = ((Syncfusion.Windows.Forms.Grid.GridSelectionFlags)((((((Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Row | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Table)
-				| Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Multiple)
-				| Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Shift)
-				| Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Keyboard)
-				| Syncfusion.Windows.Forms.Grid.GridSelectionFlags.MixRangeType)));
+			this.gridControlPeople.AllowSelection = ((Syncfusion.Windows.Forms.Grid.GridSelectionFlags)((((((Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Row | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Table) 
+            | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Multiple) 
+            | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Shift) 
+            | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Keyboard) 
+            | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.MixRangeType)));
 			this.gridControlPeople.BackColor = System.Drawing.Color.White;
 			this.gridControlPeople.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.gridControlPeople.ColCount = 1;
@@ -186,10 +186,10 @@
 			// 
 			// textBoxExtOptionalParticipant
 			// 
-			this.textBoxExtOptionalParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.textBoxExtOptionalParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxExtOptionalParticipant.BackColor = System.Drawing.Color.White;
-			this.textBoxExtOptionalParticipant.BeforeTouchSize = new System.Drawing.Size(252, 23);
+			this.textBoxExtOptionalParticipant.BeforeTouchSize = new System.Drawing.Size(886, 23);
 			this.textBoxExtOptionalParticipant.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtOptionalParticipant.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtOptionalParticipant.ContextMenuStrip = this.contextMenuStripEx1;
@@ -255,10 +255,10 @@
 			// 
 			// textBoxExtRequiredParticipant
 			// 
-			this.textBoxExtRequiredParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-				| System.Windows.Forms.AnchorStyles.Right)));
+			this.textBoxExtRequiredParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxExtRequiredParticipant.BackColor = System.Drawing.Color.White;
-			this.textBoxExtRequiredParticipant.BeforeTouchSize = new System.Drawing.Size(252, 23);
+			this.textBoxExtRequiredParticipant.BeforeTouchSize = new System.Drawing.Size(886, 23);
 			this.textBoxExtRequiredParticipant.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtRequiredParticipant.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtRequiredParticipant.ContextMenuStrip = this.contextMenuStripEx1;
@@ -311,9 +311,9 @@
 			this.dateTimePickerAdvtDate.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvtDate.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdvtDate.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.dateTimePickerAdvtDate.Calendar.DayNamesColor = System.Drawing.Color.Empty;
-			this.dateTimePickerAdvtDate.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
-			this.dateTimePickerAdvtDate.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
+			this.dateTimePickerAdvtDate.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdvtDate.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+			this.dateTimePickerAdvtDate.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.dateTimePickerAdvtDate.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateTimePickerAdvtDate.Calendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvtDate.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -413,7 +413,7 @@
 			// textBoxExtFilterCriteria
 			// 
 			this.textBoxExtFilterCriteria.BackColor = System.Drawing.Color.White;
-			this.textBoxExtFilterCriteria.BeforeTouchSize = new System.Drawing.Size(252, 23);
+			this.textBoxExtFilterCriteria.BeforeTouchSize = new System.Drawing.Size(886, 23);
 			this.textBoxExtFilterCriteria.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtFilterCriteria.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtFilterCriteria.ContextMenuStrip = this.contextMenuStripEx1;
