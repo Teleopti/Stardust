@@ -175,7 +175,7 @@
 			// 
 			// toolStripButtonDelete
 			// 
-			this.toolStripButtonDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
+			this.toolStripButtonDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.mail_delete;
 			resources.ApplyResources(this.toolStripButtonDelete, "toolStripButtonDelete");
 			this.toolStripButtonDelete.Name = "toolStripButtonDelete";
 			this.SetShortcut(this.toolStripButtonDelete, System.Windows.Forms.Keys.None);
