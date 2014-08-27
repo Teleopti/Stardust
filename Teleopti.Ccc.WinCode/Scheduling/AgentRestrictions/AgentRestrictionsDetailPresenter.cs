@@ -104,7 +104,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var myFirstDow = culture.DateTimeFormat.FirstDayOfWeek;
 			var weekNumber = 0;
 
-			var weekMax = new TimeSpan(0);
+			//var weekMax = new TimeSpan(0);
+		    var weekMax = TimeSpan.MinValue;
 		    var weekMin = TimeSpan.MaxValue;
 		    var haveFullTimePersonPeriod = true;
 
@@ -136,11 +137,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 						}
 					}
 
-				weekMax = preferenceCellData.WeeklyMax;
+			    if (preferenceCellData.WeeklyMax > weekMax) weekMax = preferenceCellData.WeeklyMax;
 			    if (preferenceCellData.WeeklyMin < weekMin) weekMin = preferenceCellData.WeeklyMin;
                 if (preferenceCellData.EmploymentType.Equals(EmploymentType.HourlyStaff)) haveFullTimePersonPeriod = false;
                 
-
 				weekNumber = myCal.GetWeekOfYear(preferenceCellData.TheDate, myCwr, myFirstDow);
 			}
 			var weekIsLegal = minTime <= weekMax;

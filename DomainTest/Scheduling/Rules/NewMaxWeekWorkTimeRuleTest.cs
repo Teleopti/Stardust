@@ -22,6 +22,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private IContract _contract;
         private IPersonContract _personContract;
         private IPersonPeriod _personPeriod;
+        private IPersonPeriod _personPeriod2;
+        private IPersonContract _personContract2;
+        private IContract _contract2;
 
         [SetUp]
         public void Setup()
@@ -41,7 +44,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                                                                weeklyRest);
             _personContract = _mocks.StrictMock<IPersonContract>();
             _personPeriod = _mocks.StrictMock<IPersonPeriod>();
-             
+            _personPeriod2 = _mocks.StrictMock<IPersonPeriod>();
+            _personContract2 = _mocks.StrictMock<IPersonContract>();
+
+            _contract2 = new Contract("for test")
+            {
+                WorkTimeDirective = new WorkTimeDirective(minTimePerWeek, maxTimePerWeek.Add(TimeSpan.FromHours(8)), nightlyRest, weeklyRest),
+                EmploymentType = EmploymentType.FixedStaffNormalWorkTime
+            };
         }
 
         [Test]
@@ -89,9 +99,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
 
                 Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
-                
-                Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
-                Expect.Call(_personContract.Contract).Return(_contract);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 24))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 25))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 26))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 27))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 28))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 29))).Return(_personPeriod);
+
+                Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.AtLeastOnce();
+                Expect.Call(_personContract.Contract).Return(_contract).Repeat.AtLeastOnce();
 	            Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29)))
 	                  .Return(new[]
 		                  {day8Hours, day8Hours, day8Hours, day8Hours, day8Hours, day0Hours, day0Hours});
@@ -148,9 +164,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
 
                 Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 24))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 25))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 26))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 27))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 28))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 29))).Return(_personPeriod);
                 
-                Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
-                Expect.Call(_personContract.Contract).Return(_contract);
+                Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.AtLeastOnce();
+                Expect.Call(_personContract.Contract).Return(_contract).Repeat.AtLeastOnce();
                 Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010, 8, 23,2010,8,29))).Return(new[]{ day8Hours,day8Hours,day8Hours,day8Hours,day8Hours,day1Hour,day1Hour});
 
                 Expect.Call(day8Hours.ProjectionService()).Return(projService8Hours).Repeat.Times(5);
@@ -196,7 +218,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
 
                 Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(null);
-				Expect.Call(person.Period(new DateOnly(2010, 8, 29))).Return(null);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 24))).Return(null);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 25))).Return(null);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 26))).Return(null);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 27))).Return(null);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 28))).Return(null);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 29))).Return(null);
                 Expect.Call(person.Name).Return(new Name("nn","mm")).Repeat.Times(7);
             }
 
@@ -204,6 +231,66 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             {
                 var ret = _target.Validate(dic, lstOfDays);
                 Assert.AreEqual(7, ret.Count());
+            }
+        }
+
+        [Test]
+        public void ShouldUseMaxWorkTimeFromMultiplePeriods()
+        {
+            var person = _mocks.StrictMock<IPerson>();
+            var range = _mocks.StrictMock<IScheduleRange>();
+            var dic = new Dictionary<IPerson, IScheduleRange> { { person, range } };
+            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var lstOfDays = new List<IScheduleDay> { scheduleDay };
+
+            var weekPeriod = new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29);
+            var personWeek = new PersonWeek(person, weekPeriod);
+
+            var personWeeks = new List<PersonWeek> { personWeek };
+            var oldResponses = new List<IBusinessRuleResponse>();
+            var day8Hours = _mocks.StrictMock<IScheduleDay>();
+            var day0Hours = _mocks.StrictMock<IScheduleDay>();
+            var projService8Hours = _mocks.StrictMock<IProjectionService>();
+            var projService0Hours = _mocks.StrictMock<IProjectionService>();
+
+            var visualLayers8Hours = _mocks.StrictMock<IVisualLayerCollection>();
+            var visualLayers0Hours = _mocks.StrictMock<IVisualLayerCollection>();
+
+            using (_mocks.Record())
+            {
+                Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(lstOfDays)).Return(personWeeks);
+                Expect.Call(range.BusinessRuleResponseInternalCollection).Return(oldResponses);
+                Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
+                Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();
+
+                Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 24))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 25))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 26))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 27))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 28))).Return(_personPeriod);
+                Expect.Call(person.Period(new DateOnly(2010, 8, 29))).Return(_personPeriod2);
+
+                Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.AtLeastOnce();
+                Expect.Call(_personPeriod2.PersonContract).Return(_personContract2).Repeat.AtLeastOnce();
+                Expect.Call(_personContract.Contract).Return(_contract).Repeat.AtLeastOnce();
+                Expect.Call(_personContract2.Contract).Return(_contract2).Repeat.AtLeastOnce();
+                Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29))).Return(new[] { day8Hours, day8Hours, day8Hours, day8Hours, day8Hours, day8Hours, day0Hours });
+
+                Expect.Call(day8Hours.ProjectionService()).Return(projService8Hours).Repeat.Times(6);
+                Expect.Call(day0Hours.ProjectionService()).Return(projService0Hours).Repeat.Times(1);
+
+                Expect.Call(projService8Hours.CreateProjection()).Return(visualLayers8Hours).Repeat.Times(6);
+                Expect.Call(projService0Hours.CreateProjection()).Return(visualLayers0Hours).Repeat.Times(1);
+
+                Expect.Call(visualLayers8Hours.WorkTime()).Return(TimeSpan.FromHours(8)).Repeat.Times(6);
+                Expect.Call(visualLayers0Hours.WorkTime()).Return(TimeSpan.FromHours(0)).Repeat.Times(1);
+            }
+
+            using (_mocks.Playback())
+            {
+                var ret = _target.Validate(dic, lstOfDays);
+                Assert.AreEqual(0, ret.Count());
             }
         }
     }

@@ -92,17 +92,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         private static bool setMaxTimePerWeekMinutes(out double maxTimePerWeek, PersonWeek personWeek)
         {
             var person = personWeek.Person;
-			// If the Person starts in the week we cant't find a person period
-			// then we try with the last day
-            var period = person.Period(personWeek.Week.StartDate) ?? person.Period(personWeek.Week.EndDate);
-			
-        	if (period == null)
+            var max = double.MinValue;
+            var noPeriod = true;
+
+            foreach (var dateOnly in personWeek.Week.DayCollection())
+            {
+                var period = person.Period(dateOnly);
+                if(period == null) continue;
+                noPeriod = false;
+                var tmpMax = period.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
+                if (tmpMax > max) max = tmpMax;
+            }
+
+        	if (noPeriod)
             {
                 maxTimePerWeek = 0;
                 return false;
             }
-            maxTimePerWeek = period.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
 
+            maxTimePerWeek = max;
+            
             return true;
         }
 
