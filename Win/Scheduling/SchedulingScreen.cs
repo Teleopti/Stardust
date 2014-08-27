@@ -2053,6 +2053,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			switch (_sikuliTestHelper.CurrentTest)
 			{
+				case SikuliTestRegister.Select.Schedule:
+					_sikuliTestHelper.AssertTest(assertSikuliScheduling);
+					break;
 				case SikuliTestRegister.Select.Optimize:
 					_sikuliTestHelper.AssertTest(assertSikuliOptimizing);
 					break;
@@ -2064,6 +2067,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 					break;
 			}
 		}
+
+		#region sikuli
+		// todo: move it to own class
+
+		private SikuliTestResult assertSikuliScheduling()
+		{
+			var result = new SikuliTestResult(true);
+			var scheduledHours = getDailyScheduledHoursForFullPeriod();
+			var checkResult = checkScheduledHoursPatternForScheduler(scheduledHours);
+			result.Details.AppendLine("Details:");
+			if (checkResult)
+				result.Details.AppendLine("Scheduled hours pattern : OK");
+			else
+			{
+				result.Details.AppendLine("Scheduled hours pattern : Fail");
+				result.Result = false;
+			}
+			return result;
+		}
+
 
 		private SikuliTestResult assertSikuliOptimizing()
 		{
@@ -2081,9 +2104,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private SikuliTestResult assertSikuliDeleteAll()
 		{
 			SikuliTestResult result = new SikuliTestResult(true);
-			var std = getDailyScheduledHoursForFullPeriod();
+			var scheduledHours = getDailyScheduledHoursForFullPeriod();
 			result.Details.AppendLine("Details:");
-			if (std.Any(d => d.HasValue && d.Value > 0))
+			if (scheduledHours.Any(d => d.HasValue && d.Value > 0))
 			{
 				result.Details.AppendLine("Scheduled hours = 0 : Fail");
 				result.Result = false;
@@ -2093,9 +2116,39 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return result;
 		}
 
+		private bool checkScheduledHoursPatternForScheduler(IEnumerable<double?> dailyValues)
+		{
+			const int groupSize = 7;
+			var groupedDailyValues = split(dailyValues.ToList(), groupSize);
+			foreach (var group in groupedDailyValues)
+			{
+				for (int i = 0; i < groupSize; i++)
+				{
+					if(!group[i].HasValue)
+						return false;
+					if (i <= 4)
+					{
+						if (!group[i].Value.Equals(210d))
+							return false;
+					}
+					else
+					{
+						if (!group[i].Value.Equals(0))
+							return false;
+					}
+				}
+			}
+			return true;
+		}
 
-		//SkillStaffPeriodHelper.ScheduledTime(SkillStaffPeriodList);
-
+		private static IEnumerable<List<double?>> split(IEnumerable<double?> source, int groupSize)
+		{
+			return source
+				.Select((x, i) => new { Index = i, Value = x })
+				.GroupBy(x => x.Index / groupSize)
+				.Select(x => x.Select(v => v.Value).ToList())
+				.ToList();
+		}
 
 		private IEnumerable<IList<ISkillStaffPeriod>> getDailySkillStaffPeriodsForFullPeriod()
 		{
@@ -2146,6 +2199,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				return null;
 			}
 		}
+
+
+		#endregion // sikuli
 
 		private void disableScheduleButtonsOnNonCoherentSelection(IEnumerable<IScheduleDay> selectedSchedules)
 		{
@@ -2796,6 +2852,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
+							_sikuliTestHelper.RegisterTest(SikuliTestRegister.Select.Schedule);
 							options.Refresh();
 							startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
 						}
