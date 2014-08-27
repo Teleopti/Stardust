@@ -14,16 +14,19 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DataSourceHelper
 	{
+		private const string backupFileDbWithoutDataFileExtension = ".backup";
+		private const string backupFileDbWithDataFileExtension = ".backupWithData";
+
 		public static IDataSource CreateDataSource(IEnumerable<IMessageSender> messageSenders, string name)
 		{
 			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest());
 			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			if (!TryRestoreDatabase(ccc7))
+			if (!tryRestoreDatabase(ccc7))
 			{
 				createCcc7(ccc7);
-				BackupDatabase(ccc7, 0);
+				backupDatabase(ccc7, 0, backupFileDbWithoutDataFileExtension);
 			}
-			SetupAnalytics();
+			setupAnalytics();
 			return CreateDataSource(dataSourceFactory, name);
 		}
 
@@ -35,21 +38,21 @@ namespace Teleopti.Ccc.TestCommon
 				var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
 				createCcc7(ccc7);
 			}
-			SetupAnalytics();
+			setupAnalytics();
 			return CreateDataSource(dataSourceFactory, "TestData");
 		}
 
 		private static void createCcc7(DatabaseHelper ccc7)
 		{
 			createDatabase(ccc7);
-			CreateUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
+			createUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
 			PersistAuditSetting();
 		}
 
-		private static void CreateUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests()
+		private static void createUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests()
 		{
 			//would be better if dbmanager was called, but don't have the time right now....
-			ExceptionToConsole(
+			exceptionToConsole(
 				() =>
 				{
 					using (var conn = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
@@ -64,39 +67,39 @@ namespace Teleopti.Ccc.TestCommon
 				);
 		}
 
-		private static void SetupAnalytics()
+		private static void setupAnalytics()
 		{
 			var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
-			if (TryRestoreDatabase(analytics))
+			if (tryRestoreDatabase(analytics))
 				return;
 
 			createDatabase(analytics);
-			BackupDatabase(analytics, 0);
+			backupDatabase(analytics, 0, backupFileDbWithoutDataFileExtension);
 		}
 
 		private static void createDatabase(DatabaseHelper database)
 		{
-			ExceptionToConsole(
+			exceptionToConsole(
 				database.CreateByDbManager,
 				"Failed to prepare database {0}!", database.ConnectionString
 				);
-			ExceptionToConsole(
+			exceptionToConsole(
 				database.CreateSchemaByDbManager,
 				"Failed to create database schema {0}!", database.ConnectionString
 				);
 		}
 
-		private static bool TryRestoreDatabase(DatabaseHelper database)
+		private static bool tryRestoreDatabase(DatabaseHelper database)
 		{
-			return ExceptionToConsole(
+			return exceptionToConsole(
 				() =>
 				{
 					// maybe it would be possible to attach it if a file exists but the database doesnt. but wth..
 					if (!database.Exists())
 						return false;
 
-					var backupName = BackupName(database.DatabaseType, database.SchemaVersion(), database.OtherScriptFilesHash(), database.DatabaseName, 0);
-					var fileName = backupName + ".backup";
+					var backupName = DataSourceHelper.backupName(database.DatabaseType, database.SchemaVersion(), database.OtherScriptFilesHash(), database.DatabaseName, 0);
+					var fileName = backupName + backupFileDbWithoutDataFileExtension;
 					if (!File.Exists(fileName))
 						return false;
 
@@ -111,8 +114,8 @@ namespace Teleopti.Ccc.TestCommon
 		public static void RestoreCcc7Database(int dataHash, Action beforeRestore)
 		{
 			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			var backupName = BackupName(ccc7.DatabaseType, ccc7.SchemaVersion(), ccc7.OtherScriptFilesHash(), ccc7.DatabaseName, dataHash);
-			var fileName = backupName + ".backup";
+			var backupName = DataSourceHelper.backupName(ccc7.DatabaseType, ccc7.SchemaVersion(), ccc7.OtherScriptFilesHash(), ccc7.DatabaseName, dataHash);
+			var fileName = backupName + backupFileDbWithDataFileExtension;
 			var backup = JsonConvert.DeserializeObject<DatabaseHelper.Backup>(File.ReadAllText(fileName));
 			if(beforeRestore!=null)
 				beforeRestore();
@@ -122,39 +125,39 @@ namespace Teleopti.Ccc.TestCommon
 		public static void BackupCcc7Database(int dataHash)
 		{
 			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			BackupDatabase(ccc7, dataHash);
+			backupDatabase(ccc7, dataHash, backupFileDbWithDataFileExtension);
 		}
 
 		public static bool Ccc7BackupExists(int dataHash)
 		{
 			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			var backupName = BackupName(ccc7.DatabaseType, ccc7.SchemaVersion(), ccc7.OtherScriptFilesHash(), ccc7.DatabaseName, dataHash);
-			var fileName = backupName + ".backup";
+			var backupName = DataSourceHelper.backupName(ccc7.DatabaseType, ccc7.SchemaVersion(), ccc7.OtherScriptFilesHash(), ccc7.DatabaseName, dataHash);
+			var fileName = backupName + backupFileDbWithDataFileExtension;
 			return File.Exists(fileName);
 		}
 
-		public static void BackupDatabase(DatabaseHelper database, int dataHash)
+		private static void backupDatabase(DatabaseHelper database, int dataHash, string fileExtension)
 		{
-			ExceptionToConsole(
+			exceptionToConsole(
 				() =>
 				{
-					var backupName = BackupName(database.DatabaseType, database.DatabaseVersion(), database.OtherScriptFilesHash(), database.DatabaseName, dataHash);
+					var backupName = DataSourceHelper.backupName(database.DatabaseType, database.DatabaseVersion(), database.OtherScriptFilesHash(), database.DatabaseName, dataHash);
 					var backup = database.BackupByFileCopy(backupName);
-					var fileName = backupName + ".backup";
+					var fileName = backupName + fileExtension;
 					File.WriteAllText(fileName, JsonConvert.SerializeObject(backup, Formatting.Indented));
 				},
 				"Failed to backup database {0}!", database.ConnectionString
 				);
 		}
 
-		private static string BackupName(DatabaseType databaseType, int databaseVersion, int otherScriptFilesHash, string databaseName, int dataHash)
+		private static string backupName(DatabaseType databaseType, int databaseVersion, int otherScriptFilesHash, string databaseName, int dataHash)
 		{
 			return databaseType + "." + databaseName + "." + databaseVersion + "." + otherScriptFilesHash + "." + dataHash;
 		}
 
 		private static IDataSource CreateDataSource(DataSourcesFactory dataSourceFactory, string name)
 		{
-			return ExceptionToConsole(
+			return exceptionToConsole(
 				() =>
 				{
 					var dataSourceSettings = CreateDataSourceSettings(ConnectionStringHelper.ConnectionStringUsedInTests, null, name);
@@ -166,7 +169,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static void PersistAuditSetting()
 		{
-			ExceptionToConsole(
+			exceptionToConsole(
 				() =>
 				{
 					using (var conn = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
@@ -217,7 +220,7 @@ namespace Teleopti.Ccc.TestCommon
 			ccc7.RestoreByFileCopy(backup);
 		}
 
-		private static void ExceptionToConsole(Action action, string exceptionMessage, params object[] args)
+		private static void exceptionToConsole(Action action, string exceptionMessage, params object[] args)
 		{
 			try
 			{
@@ -225,13 +228,13 @@ namespace Teleopti.Ccc.TestCommon
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(string.Format(exceptionMessage, args));
+				Console.WriteLine(exceptionMessage, args);
 				Console.WriteLine(e.ToString());
 				throw;
 			}
 		}
 
-		private static T ExceptionToConsole<T>(Func<T> action, string exceptionMessage, params object[] args)
+		private static T exceptionToConsole<T>(Func<T> action, string exceptionMessage, params object[] args)
 		{
 			try
 			{
@@ -239,7 +242,7 @@ namespace Teleopti.Ccc.TestCommon
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(string.Format(exceptionMessage, args));
+				Console.WriteLine(exceptionMessage, args);
 				Console.WriteLine(e.ToString());
 				throw;
 			}
