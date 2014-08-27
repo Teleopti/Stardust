@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tabPageWorkShiftRule = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tabPageRuleSetBag = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-			this.imageListTreeView = new System.Windows.Forms.ImageList(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.tabControlShiftCreator)).BeginInit();
 			this.tabControlShiftCreator.SuspendLayout();
 			this.SuspendLayout();
@@ -105,13 +104,6 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.imageList1.Images.SetKeyName(0, "ccc_ShiftRuleSet.png");
 			this.imageList1.Images.SetKeyName(1, "ccc_ShiftBag.png");
 			// 
-			// imageListTreeView
-			// 
-			this.imageListTreeView.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTreeView.ImageStream")));
-			this.imageListTreeView.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListTreeView.Images.SetKeyName(0, "bullet_black.png");
-			this.imageListTreeView.Images.SetKeyName(1, "bullet_white.png");
-			// 
 			// NavigationView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -131,7 +123,6 @@ namespace Teleopti.Ccc.Win.Shifts
         private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlShiftCreator;
         private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageWorkShiftRule;
         private System.Windows.Forms.ImageList imageList1;
-        private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageRuleSetBag;
-		private System.Windows.Forms.ImageList imageListTreeView;
+		  private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageRuleSetBag;
     }
 }

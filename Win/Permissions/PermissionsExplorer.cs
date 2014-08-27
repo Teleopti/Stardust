@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
@@ -20,7 +21,6 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Configuration;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
-using Teleopti.Ccc.Win.Properties;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Permissions;
 using Teleopti.Interfaces.Domain;
@@ -66,11 +66,11 @@ namespace Teleopti.Ccc.Win.Permissions
 				ColorHelper.SetRibbonQuickAccessTexts(ExplorerRibbon);
 			}
 
-			PermissionsExplorerStateHolder = new PermissionsExplorerStateHolder();
+			permissionsExplorerStateHolder = new PermissionsExplorerStateHolder();
 
 		}
 
-		private PermissionsExplorerStateHolder PermissionsExplorerStateHolder { get; set; }
+		private PermissionsExplorerStateHolder permissionsExplorerStateHolder { get; set; }
 
 		private void showRolesHeader()
 		{
@@ -213,8 +213,9 @@ namespace Teleopti.Ccc.Win.Permissions
 			if (applicationRole.ApplicationFunctionCollection.Contains(applicationFunction))
 				applicationRole.RemoveApplicationFunction(applicationFunction);
 
-			foreach (IApplicationFunction cf in applicationFunction.ChildCollection)
+			foreach (var parentChildEntity in applicationFunction.ChildCollection)
 			{
+				var cf = (IApplicationFunction) parentChildEntity;
 				removeFromSelectedRole(applicationRole, cf);
 			}
 		}
@@ -229,7 +230,7 @@ namespace Teleopti.Ccc.Win.Permissions
 				insertIntoSelectedRole(applicationRole, function);
 
 				// Queue changes on the repository.
-				PermissionsExplorerStateHolder.AddOrUpdateApplicationRole(applicationRole);
+				permissionsExplorerStateHolder.AddOrUpdateApplicationRole(applicationRole);
 			}
 		}
 
@@ -254,7 +255,7 @@ namespace Teleopti.Ccc.Win.Permissions
 				IApplicationRole applicationRole = rItem.TagObject as ApplicationRole;
 				removeFromSelectedRole(applicationRole, function);
 				// Queue changes on repository.
-				PermissionsExplorerStateHolder.AddOrUpdateApplicationRole(applicationRole);
+				permissionsExplorerStateHolder.AddOrUpdateApplicationRole(applicationRole);
 			}
 		}
 
@@ -706,7 +707,7 @@ namespace Teleopti.Ccc.Win.Permissions
 					removeFromSelectedRole(applicationRole, applicationFunction);
 
 				// Queue changes on the repository.
-				PermissionsExplorerStateHolder.AddOrUpdateApplicationRole(applicationRole);
+				permissionsExplorerStateHolder.AddOrUpdateApplicationRole(applicationRole);
 			}
 		}
 
@@ -848,7 +849,7 @@ namespace Teleopti.Ccc.Win.Permissions
 						}
 					}
 
-					PermissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
+					permissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
 				}
 				else if (siteItem != null)
 				{
@@ -862,7 +863,7 @@ namespace Teleopti.Ccc.Win.Permissions
 						availableData.DeleteAvailableTeam(team);
 					}
 
-					PermissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
+					permissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
 
 					if (removeParentNode(nodeItem))
 					{
@@ -875,7 +876,7 @@ namespace Teleopti.Ccc.Win.Permissions
 					availableData.DeleteAvailableTeam(teamItem);
 					availableData.DeleteAvailableSite(teamItem.Site);
 					availableData.DeleteAvailableBusinessUnit(teamItem.Site.BusinessUnit);
-					PermissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
+					permissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
 
 					if (removeParentNode(nodeItem))
 					{
@@ -911,7 +912,7 @@ namespace Teleopti.Ccc.Win.Permissions
 						}
 					}
 
-					PermissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
+					permissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
 				}
 				else if (siteItem != null)
 				{
@@ -923,7 +924,7 @@ namespace Teleopti.Ccc.Win.Permissions
 							availableData.AddAvailableTeam(team);
 					}
 
-					PermissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
+					permissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
 
 					if (insertParentNode(nodeItem))
 					{
@@ -933,7 +934,7 @@ namespace Teleopti.Ccc.Win.Permissions
 				else if (teamItem != null)
 				{
 					availableData.AddAvailableTeam(teamItem);
-					PermissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
+					permissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
 
 					if (insertParentNode(nodeItem))
 					{
@@ -941,7 +942,7 @@ namespace Teleopti.Ccc.Win.Permissions
 					}
 				}
 
-				PermissionsExplorerStateHolder.AssignAvailableDataInPermissionsDataDictionary(availableData);
+				permissionsExplorerStateHolder.AssignAvailableDataInPermissionsDataDictionary(availableData);
 
 			}
 		}
@@ -973,7 +974,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			foreach (IAvailableData availableData in _availableDataForSelectedRoles)
 			{
 				availableData.AvailableDataRange = rangeOption;
-				PermissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
+				permissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
 			}
 		}
 
@@ -1259,8 +1260,8 @@ namespace Teleopti.Ccc.Win.Permissions
 		{
 			try
 			{
-				PermissionsExplorerStateHolder.QueueDirtyPeopleCollection();
-				PermissionsExplorerStateHolder.PersistAll();
+				permissionsExplorerStateHolder.QueueDirtyPeopleCollection();
+				permissionsExplorerStateHolder.PersistAll();
 				OnSaved();
 			}
 			catch (OptimisticLockException)
@@ -1289,9 +1290,9 @@ namespace Teleopti.Ccc.Win.Permissions
 											DescriptionText = UserTexts.Resources.NewApplicationRole
 										};
 
-			PermissionsExplorerStateHolder.AddOrUpdateApplicationRole(newRole);
+			permissionsExplorerStateHolder.AddOrUpdateApplicationRole(newRole);
 			var permissionsDataHolder = new PermissionsDataHolder(true);
-			PermissionsExplorerStateHolder.AddRoleToPermissionsDataDictionary(newRole, permissionsDataHolder);
+			permissionsExplorerStateHolder.AddRoleToPermissionsDataDictionary(newRole, permissionsDataHolder);
 
 			// manually add BusinessUnit
 			newRole.SetBusinessUnit(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
@@ -1299,8 +1300,8 @@ namespace Teleopti.Ccc.Win.Permissions
 			// Create an AvailableData instance for the new ApplicationRole
 			IAvailableData availableData = new AvailableData { ApplicationRole = newRole };
 
-			PermissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
-			PermissionsExplorerStateHolder.AssignAvailableDataInPermissionsDataDictionary(availableData);
+			permissionsExplorerStateHolder.AddOrUpdateAvailableData(availableData);
+			permissionsExplorerStateHolder.AssignAvailableDataInPermissionsDataDictionary(availableData);
 
 			// Add this AvailableData to the runtime collection which holds all AvailableData objects - Sachintha 06/16/08
 			_availableDataCollection.Add(availableData);
@@ -1405,14 +1406,14 @@ namespace Teleopti.Ccc.Win.Permissions
 					// Remove from runtime collection
 					_availableDataCollection.Remove(availableData);
 					// Queue to remove
-					if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=> PermissionsExplorerStateHolder.DeleteAvailableData(availableData)))
+					if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=> permissionsExplorerStateHolder.DeleteAvailableData(availableData)))
 					{
 						FormKill();
 						return;
 					}
 
 					// Queue on repository.
-					if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=> PermissionsExplorerStateHolder.DeleteApplicationRole(role)))
+					if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=> permissionsExplorerStateHolder.DeleteApplicationRole(role)))
 					{
 						FormKill();
 						return;
@@ -1422,7 +1423,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
 					//listViewRoles.Items.Remove(item);
 					//Remove from the dic too
-					PermissionsExplorerStateHolder.RemoveRoleFromPermissionsDataDictionary(role);
+					permissionsExplorerStateHolder.RemoveRoleFromPermissionsDataDictionary(role);
 
 					listViewRoles.Items.Remove(item);
 				}
@@ -1478,7 +1479,7 @@ namespace Teleopti.Ccc.Win.Permissions
 									removeApplicationRoleAndCache(person.Id, applicationRole);
 									
 									// Remove this person from the cache dictionary also
-									PermissionsExplorerStateHolder.RemovePersonInPermissionsDataDictionary(applicationRole, person);
+									permissionsExplorerStateHolder.RemovePersonInPermissionsDataDictionary(applicationRole, person);
 								}
 
 								// Remove node from the tree.
@@ -1504,14 +1505,14 @@ namespace Teleopti.Ccc.Win.Permissions
 
 		private void removeApplicationRoleAndCache(Guid id, IApplicationRole role)
 		{
-			IPerson personFromCache = PermissionsExplorerStateHolder.IsPersonInTheList(id);
+			IPerson personFromCache = permissionsExplorerStateHolder.IsPersonInTheList(id);
 
 			if (personFromCache != null)
 			{
 				if (personFromCache.PermissionInformation.ApplicationRoleCollection.Contains(role))
 				{
 					personFromCache.PermissionInformation.RemoveApplicationRole(role);
-					PermissionsExplorerStateHolder.MarkAsDirty(personFromCache.Id);
+					permissionsExplorerStateHolder.MarkAsDirty(personFromCache.Id);
 				}
 			}
 			else
@@ -1520,11 +1521,11 @@ namespace Teleopti.Ccc.Win.Permissions
 				{
 					IPersonRepository personRepository = new PersonRepository(uow);
 					personFromCache = personRepository.Load(id);
-					PermissionsExplorerStateHolder.AddPersonAdapter(new PersonAdapter(personFromCache, true));
+					permissionsExplorerStateHolder.AddPersonAdapter(new PersonAdapter(personFromCache, true));
 					if (personFromCache.PermissionInformation.ApplicationRoleCollection.Contains(role))
 					{
 						personFromCache.PermissionInformation.RemoveApplicationRole(role);
-						PermissionsExplorerStateHolder.MarkAsDirty(personFromCache.Id);
+						permissionsExplorerStateHolder.MarkAsDirty(personFromCache.Id);
 					}
 				} 
 			}
@@ -1549,14 +1550,14 @@ namespace Teleopti.Ccc.Win.Permissions
 
 		private void addApplicationRoleAndCache(Guid id, IApplicationRole role)
 		{
-			IPerson personFromCache = PermissionsExplorerStateHolder.IsPersonInTheList(id);
+			IPerson personFromCache = permissionsExplorerStateHolder.IsPersonInTheList(id);
 
 			if (personFromCache != null)
 			{
 				if (!personFromCache.PermissionInformation.ApplicationRoleCollection.Contains(role))
 				{
 					personFromCache.PermissionInformation.AddApplicationRole(role);
-					PermissionsExplorerStateHolder.MarkAsDirty(personFromCache.Id);
+					permissionsExplorerStateHolder.MarkAsDirty(personFromCache.Id);
 				}
 			}
 			else
@@ -1572,13 +1573,13 @@ namespace Teleopti.Ccc.Win.Permissions
 					}
 				}
 
-				PermissionsExplorerStateHolder.AddPersonAdapter(new PersonAdapter(personFromCache, true));
+				permissionsExplorerStateHolder.AddPersonAdapter(new PersonAdapter(personFromCache, true));
 			}
 		}
 
 		private bool copy(ListView view)
 		{
-			PermissionsExplorerStateHolder.CopyPasteStack.Clear();
+			permissionsExplorerStateHolder.CopyPasteStack.Clear();
 			bool canCopy = true;
 
 			int length = view.SelectedItems.Count;
@@ -1603,7 +1604,7 @@ namespace Teleopti.Ccc.Win.Permissions
 													ListViewItem = clonedExtentListItem
 												};
 
-				PermissionsExplorerStateHolder.CopyPasteStack.Push(applicationRoleAdapter);
+				permissionsExplorerStateHolder.CopyPasteStack.Push(applicationRoleAdapter);
 				canCopy = true;
 			}
 			return canCopy;
@@ -1611,18 +1612,18 @@ namespace Teleopti.Ccc.Win.Permissions
 
 		private void paste(ListView view)
 		{
-			if (PermissionsExplorerStateHolder.CanPaste())
+			if (permissionsExplorerStateHolder.CanPaste())
 			{
 				view.BeginUpdate();
 
-				while (PermissionsExplorerStateHolder.CopyPasteStack.Count > 0)
+				while (permissionsExplorerStateHolder.CopyPasteStack.Count > 0)
 				{
 					if (view.SelectedItems.Count != 0)
 					{
 						view.SelectedItems.Clear();
 					}
 
-					ApplicationRoleAdapter applicationRoleAdapter = PermissionsExplorerStateHolder.CopyPasteStack.Pop();
+					ApplicationRoleAdapter applicationRoleAdapter = permissionsExplorerStateHolder.CopyPasteStack.Pop();
 					var extentListItemToPaste = (ExtentListItem)applicationRoleAdapter.ListViewItem;
 					var applicationRole = (IApplicationRole)extentListItemToPaste.TagObject;
 					applicationRole.DescriptionText = UserTexts.Resources.CopyOf + " " + applicationRole.DescriptionText;
@@ -1630,10 +1631,10 @@ namespace Teleopti.Ccc.Win.Permissions
 					// Add to list view.
 					view.Items.Add(extentListItemToPaste);
 
-					PermissionsExplorerStateHolder.SaveApplicationRole(applicationRole);
+					permissionsExplorerStateHolder.SaveApplicationRole(applicationRole);
 
 					ICollection<IPersonInRole> sourcePersonCollection = new List<IPersonInRole>();
-					foreach (var person in PermissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(applicationRoleAdapter.ApplicationRole))
+					foreach (var person in permissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(applicationRoleAdapter.ApplicationRole))
 					{
 						sourcePersonCollection.Add(person);
 					}
@@ -1644,20 +1645,20 @@ namespace Teleopti.Ccc.Win.Permissions
 						addApplicationRoleAndCache(person.Id, applicationRole);
 					}
 
-					IAvailableData sourceAvailableData = PermissionsExplorerStateHolder.GetAvailableDataInPermissionsDataDictionary(applicationRoleAdapter.ApplicationRole);
+					IAvailableData sourceAvailableData = permissionsExplorerStateHolder.GetAvailableDataInPermissionsDataDictionary(applicationRoleAdapter.ApplicationRole);
 
 					IAvailableData availableDataToSave = new AvailableData
 															{
 																ApplicationRole = applicationRole,
 																AvailableDataRange = sourceAvailableData.AvailableDataRange
 															};
-					PermissionsExplorerStateHolder.CopySitesAndTeam(sourceAvailableData, availableDataToSave);
+					permissionsExplorerStateHolder.CopySitesAndTeam(sourceAvailableData, availableDataToSave);
 
-					PermissionsExplorerStateHolder.AddAndSaveAvailableData(availableDataToSave);
+					permissionsExplorerStateHolder.AddAndSaveAvailableData(availableDataToSave);
 
 					//Add the newly duplicated role to the dictionary
 					var permissionsDataHolder = new PermissionsDataHolder(sourcePersonCollection, availableDataToSave, true);
-					PermissionsExplorerStateHolder.AddRoleToPermissionsDataDictionary(applicationRole, permissionsDataHolder);
+					permissionsExplorerStateHolder.AddRoleToPermissionsDataDictionary(applicationRole, permissionsDataHolder);
 				}
 				_clipboardControl.SetButtonState(ClipboardAction.Paste, false);
 				_clipboardControl.SetButtonState(ClipboardAction.Copy, false);
@@ -1673,7 +1674,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			IList<IApplicationFunction> functionList = selectedRole.ApplicationFunctionCollection.ToList();
 			handleRoleUnSelection(itemIndex, functionList);
 
-			IAvailableData availableData = PermissionsExplorerStateHolder.GetAvailableDataInPermissionsDataDictionary(selectedRole) ??
+			IAvailableData availableData = permissionsExplorerStateHolder.GetAvailableDataInPermissionsDataDictionary(selectedRole) ??
 										   AvailableData.FindByApplicationRole(_availableDataCollection, selectedRole);
 
 			if (availableData != null)
@@ -1730,7 +1731,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
 		private void removeDeletedRoleFromPeople(IApplicationRole deletedApplicationRole)
 		{
-			ICollection<IPersonInRole> personCollection = PermissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(deletedApplicationRole);
+			ICollection<IPersonInRole> personCollection = permissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(deletedApplicationRole);
 
 			// Remove roles for each person selected.
 			foreach (var person in personCollection)
@@ -1754,7 +1755,6 @@ namespace Teleopti.Ccc.Win.Permissions
 			initializePermissionsExplorer();
 			listViewRoles.Select();
 			Cursor.Current = Cursors.Default;
-			ExplorerRibbon.QuickPanelVisible = true;
 		}
 
 		private void listViewRolesAfterLabelEdit(object sender, LabelEditEventArgs e)
@@ -1793,7 +1793,7 @@ namespace Teleopti.Ccc.Win.Permissions
 						role.Name = e.Label.Replace(" ", string.Empty);
 						if (role.Name.Length > 50) role.Name = role.Name.Substring(0, 50);
 
-						if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=> PermissionsExplorerStateHolder.AddOrUpdateApplicationRole(role)))
+						if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=> permissionsExplorerStateHolder.AddOrUpdateApplicationRole(role)))
 						{
 							FormKill();
 						}
@@ -1804,13 +1804,6 @@ namespace Teleopti.Ccc.Win.Permissions
 			{
 				e.CancelEdit = true;
 			}
-		}
-
-		private void toolStripButtonSaveClick(object sender, EventArgs e)
-		{
-			Cursor.Current = Cursors.WaitCursor;
-			save();
-			Cursor.Current = Cursors.Default;
 		}
 
 		private void listViewRolesKeyUp(object sender, KeyEventArgs e)
@@ -2002,9 +1995,9 @@ namespace Teleopti.Ccc.Win.Permissions
 		private void permissionsExplorerFormClosing(object sender, FormClosingEventArgs e)
 		{
 			// queue the people also 
-			PermissionsExplorerStateHolder.QueueDirtyPeopleCollection();
+			permissionsExplorerStateHolder.QueueDirtyPeopleCollection();
 
-			if (PermissionsExplorerStateHolder.UnitOfWork.IsDirty())
+			if (permissionsExplorerStateHolder.UnitOfWork.IsDirty())
 			{
 				DialogResult response =
 					ShowYesNoMessage( UserTexts.Resources.DoYouWantToSaveChangesYouMade,
@@ -2017,7 +2010,7 @@ namespace Teleopti.Ccc.Win.Permissions
 						break;
 					case DialogResult.Yes:
 						// Save changes and close.
-						toolStripButtonSave.PerformClick();
+						toolStripButtonMainSave.PerformClick();
 						break;
 					default:
 						// Do not close the form.
@@ -2117,7 +2110,7 @@ namespace Teleopti.Ccc.Win.Permissions
 				foreach (IAvailableData availableData in dataCollection)
 				{
 					var currentAvailableData = availableData;
-					if (!PermissionsExplorerStateHolder.UnitOfWork.Contains(currentAvailableData))
+					if (!permissionsExplorerStateHolder.UnitOfWork.Contains(currentAvailableData))
 					{
 						currentAvailableData = uow.Merge(availableData);
 					}
@@ -2208,7 +2201,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
 		private void handleRoleSelection(IApplicationRole selectedRole, int itemIndex)
 		{
-			var peopleCollection = PermissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(selectedRole);
+			var peopleCollection = permissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(selectedRole);
 			if (peopleCollection == null)
 			{
 				peopleCollection = PermissionsExplorerHelper.LoadPeopleByApplicationRole(selectedRole).ToList();
@@ -2217,7 +2210,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
 			handleRoleSelection(itemIndex, selectedRole.ApplicationFunctionCollection.ToList());
 
-			IAvailableData availableData = PermissionsExplorerStateHolder.GetAvailableDataInPermissionsDataDictionary(selectedRole) ??
+			IAvailableData availableData = permissionsExplorerStateHolder.GetAvailableDataInPermissionsDataDictionary(selectedRole) ??
 										   AvailableData.FindByApplicationRole(_availableDataCollection, selectedRole);
 
 			if (availableData != null && !_availableDataForSelectedRoles.Contains(availableData)) //function explicitly returns null if no AvailableData
@@ -2228,7 +2221,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
 			// Add role to the dictionary
 			var permissionsDataHolder = new PermissionsDataHolder(peopleCollection, availableData, false);
-			PermissionsExplorerStateHolder.AddRoleToPermissionsDataDictionary(selectedRole, permissionsDataHolder);
+			permissionsExplorerStateHolder.AddRoleToPermissionsDataDictionary(selectedRole, permissionsDataHolder);
 		}
 
 		private void handleInsertPeople()
@@ -2250,7 +2243,7 @@ namespace Teleopti.Ccc.Win.Permissions
 								addApplicationRoleAndCache(id, role);
 							}
 
-							PermissionsExplorerStateHolder.AssignPersonInPermissionsDataDictionary(role, tempPersons);
+							permissionsExplorerStateHolder.AssignPersonInPermissionsDataDictionary(role, tempPersons);
 							handleRoleSelection(role, rItem.Index);
 						}
 					   showPeopleHeader();
@@ -2348,5 +2341,14 @@ namespace Teleopti.Ccc.Win.Permissions
 			Application.Exit();
 		}
 
+		private void toolStripButtonMainSaveClick(object sender, EventArgs e)
+		{
+			save();
+		}
+
+		private void backStageButton4VisibleChanged(object sender, EventArgs e)
+		{
+			backStageButton4.Location = new Point(0, 154);
+		}
 	}
 }

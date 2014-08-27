@@ -70,21 +70,22 @@ namespace Teleopti.Ccc.Win.Shifts
 
 		private void createTreeView()
 		{
-			_defaultTreeView = new TreeViewAdv();
-			_defaultTreeView.Style = TreeStyle.Metro;
-			
+			_defaultTreeView = new TreeViewAdv
+			{
+				Style = TreeStyle.Metro,
+				Dock = DockStyle.Fill,
+				ShouldSelectNodeOnEnter = false,
+				SelectionMode = TreeSelectionMode.MultiSelectAll,
+				BorderStyle = BorderStyle.None
+			};
 			tabPageWorkShiftRule.Controls.Add(_defaultTreeView);
 			tabPageWorkShiftRule.Focus();
-			_defaultTreeView.Dock = DockStyle.Fill;
-			_defaultTreeView.ShouldSelectNodeOnEnter = false;
-			_defaultTreeView.SelectionMode = TreeSelectionMode.MultiSelectAll;
-			_defaultTreeView.BorderStyle = BorderStyle.None;
+			
 			_defaultTreeView.NodeEditorValidating += treeViewNodeEditorValidating;
 			_defaultTreeView.NodeEditorValidated += treeViewNodeEditorValidated;
 			_defaultTreeView.AfterSelect += defaultTreeViewAfterSelect;
 			_defaultTreeView.KeyUp += treeViewKeyUp;
 			_defaultTreeView.MouseDown += treeViewMouseDown;
-			_defaultTreeView.LeftImageList = imageListTreeView;
 		}
 
 		void treeViewNodeEditorValidating(object sender, TreeNodeAdvCancelableEditEventArgs e)
