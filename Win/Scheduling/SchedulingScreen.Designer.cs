@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemScheduleSelected = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemScheduleHourlyEmployees = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemScheduleOvertime = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemReOptimize = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemOptimize = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemBackToLegalState = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripDropDownButtonSwap = new System.Windows.Forms.ToolStripSplitButton();
@@ -1765,7 +1765,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripMenuItemScheduleSelected,
             this.ToolStripMenuItemScheduleHourlyEmployees,
             this.ToolStripMenuItemScheduleOvertime,
-            this.toolStripMenuItemReOptimize,
+            this.toolStripMenuItemOptimize,
             this.toolStripSeparator2,
             this.toolStripMenuItemBackToLegalState});
 			this.toolStripSplitButtonSchedule.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_SchedulerSchedule;
@@ -1804,14 +1804,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ToolStripMenuItemScheduleOvertime.Text = "xxScheduleOvertime";
 			this.ToolStripMenuItemScheduleOvertime.Click += new System.EventHandler(this.toolStripMenuItemScheduleOvertime_Click);
 			// 
-			// toolStripMenuItemReOptimize
+			// toolStripMenuItemOptimize
 			// 
-			this.toolStripMenuItemReOptimize.Name = "toolStripMenuItemReOptimize";
-			this.SetShortcut(this.toolStripMenuItemReOptimize, System.Windows.Forms.Keys.F11);
-			this.toolStripMenuItemReOptimize.ShortcutKeys = System.Windows.Forms.Keys.F11;
-			this.toolStripMenuItemReOptimize.Size = new System.Drawing.Size(210, 22);
-			this.toolStripMenuItemReOptimize.Text = "xxReOptimize";
-			this.toolStripMenuItemReOptimize.Click += new System.EventHandler(this.toolStripMenuItemReOptimizeClick);
+			this.toolStripMenuItemOptimize.Name = "toolStripMenuItemOptimize";
+			this.SetShortcut(this.toolStripMenuItemOptimize, System.Windows.Forms.Keys.F11);
+			this.toolStripMenuItemOptimize.ShortcutKeys = System.Windows.Forms.Keys.F11;
+			this.toolStripMenuItemOptimize.Size = new System.Drawing.Size(210, 22);
+			this.toolStripMenuItemOptimize.Text = "xxReOptimize";
+			this.toolStripMenuItemOptimize.Click += new System.EventHandler(this.toolStripMenuItemOptimizeClick);
 			// 
 			// toolStripSeparator2
 			// 
@@ -3637,7 +3637,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripButton toolStripButtonEditNote;
         private System.Windows.Forms.ToolStripButton toolStripButtonReplyAndApprove;
         private System.Windows.Forms.ToolStripButton toolStripButtonReplyAndDeny;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReOptimize;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemOptimize;
         private System.Windows.Forms.ToolStripButton toolStripButtonOptions;
         private System.Windows.Forms.ToolStripButton toolStripButtonSystemExit;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemScheduleHourlyEmployees;
