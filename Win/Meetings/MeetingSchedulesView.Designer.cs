@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			// 
 			this.tableLayoutPanelMain.ColumnCount = 2;
 			this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 170F));
+			this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
 			this.tableLayoutPanelMain.Controls.Add(this.tableLayoutPanelGrid, 0, 0);
 			this.tableLayoutPanelMain.Controls.Add(this.tableLayoutPanelCalendar, 1, 0);
 			this.tableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.tableLayoutPanelGrid.RowCount = 2;
 			this.tableLayoutPanelGrid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelGrid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
-			this.tableLayoutPanelGrid.Size = new System.Drawing.Size(624, 594);
+			this.tableLayoutPanelGrid.Size = new System.Drawing.Size(584, 594);
 			this.tableLayoutPanelGrid.TabIndex = 0;
 			// 
 			// gridControlSchedules
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.gridControlSchedules.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.gridControlSchedules.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlSchedules.Size = new System.Drawing.Size(624, 504);
+			this.gridControlSchedules.Size = new System.Drawing.Size(584, 504);
 			this.gridControlSchedules.SmartSizeBox = false;
 			this.gridControlSchedules.TabIndex = 0;
 			this.gridControlSchedules.Text = "gridControl1";
@@ -165,24 +165,24 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(624, 90);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(584, 90);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 
 			// autoLabelStartTime
 			// 
 			this.autoLabelStartTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.autoLabelStartTime.Location = new System.Drawing.Point(3, 39);
+			this.autoLabelStartTime.Location = new System.Drawing.Point(3, 32);
 			this.autoLabelStartTime.Name = "autoLabelStartTime";
-			this.autoLabelStartTime.Size = new System.Drawing.Size(113, 15);
+			this.autoLabelStartTime.Size = new System.Drawing.Size(73, 29);
 			this.autoLabelStartTime.TabIndex = 0;
 			this.autoLabelStartTime.Text = "xxStartTimeColon";
 			// 
 			// autoLabelEndTime
 			// 
 			this.autoLabelEndTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.autoLabelEndTime.Location = new System.Drawing.Point(3, 68);
+			this.autoLabelEndTime.Location = new System.Drawing.Point(3, 61);
 			this.autoLabelEndTime.Name = "autoLabelEndTime";
-			this.autoLabelEndTime.Size = new System.Drawing.Size(113, 15);
+			this.autoLabelEndTime.Size = new System.Drawing.Size(73, 29);
 			this.autoLabelEndTime.TabIndex = 0;
 			this.autoLabelEndTime.Text = "xxEndTimeColon";
 			// 
@@ -214,6 +214,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvStartDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvStartDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvStartDate.Calendar.SelectedDates = new System.DateTime[0];
+			this.dateTimePickerAdvStartDate.Calendar.ShowWeekNumbers = true;
 			this.dateTimePickerAdvStartDate.Calendar.Size = new System.Drawing.Size(131, 174);
 			this.dateTimePickerAdvStartDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvStartDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -257,7 +258,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvStartDate.EnableNullKeys = false;
 			this.dateTimePickerAdvStartDate.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.dateTimePickerAdvStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.dateTimePickerAdvStartDate.Location = new System.Drawing.Point(122, 35);
+			this.dateTimePickerAdvStartDate.Location = new System.Drawing.Point(82, 35);
 			this.dateTimePickerAdvStartDate.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvStartDate.MinValue = new System.DateTime(((long)(0)));
 			this.dateTimePickerAdvStartDate.Name = "dateTimePickerAdvStartDate";
@@ -299,6 +300,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvEndDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvEndDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvEndDate.Calendar.SelectedDates = new System.DateTime[0];
+			this.dateTimePickerAdvEndDate.Calendar.ShowWeekNumbers = true;
 			this.dateTimePickerAdvEndDate.Calendar.Size = new System.Drawing.Size(131, 174);
 			this.dateTimePickerAdvEndDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvEndDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -343,7 +345,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvEndDate.EnableNullKeys = false;
 			this.dateTimePickerAdvEndDate.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.dateTimePickerAdvEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.dateTimePickerAdvEndDate.Location = new System.Drawing.Point(122, 64);
+			this.dateTimePickerAdvEndDate.Location = new System.Drawing.Point(82, 64);
 			this.dateTimePickerAdvEndDate.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvEndDate.MinValue = new System.DateTime(((long)(0)));
 			this.dateTimePickerAdvEndDate.Name = "dateTimePickerAdvEndDate";
@@ -360,7 +362,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.outlookTimePickerStartTime.BackColor = System.Drawing.Color.White;
 			this.outlookTimePickerStartTime.BeforeTouchSize = new System.Drawing.Size(74, 23);
 			this.outlookTimePickerStartTime.BindableTimeValue = System.TimeSpan.Parse("00:00:00");
-			this.outlookTimePickerStartTime.Location = new System.Drawing.Point(262, 35);
+			this.outlookTimePickerStartTime.Location = new System.Drawing.Point(222, 35);
 			this.outlookTimePickerStartTime.MaxValue = System.TimeSpan.Parse("2.00:00:00");
 			this.outlookTimePickerStartTime.MinValue = System.TimeSpan.Parse("00:00:00");
 			this.outlookTimePickerStartTime.Name = "outlookTimePickerStartTime";
@@ -374,7 +376,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.outlookTimePickerEndTime.BackColor = System.Drawing.Color.White;
 			this.outlookTimePickerEndTime.BeforeTouchSize = new System.Drawing.Size(74, 23);
 			this.outlookTimePickerEndTime.BindableTimeValue = System.TimeSpan.Parse("00:00:00");
-			this.outlookTimePickerEndTime.Location = new System.Drawing.Point(262, 64);
+			this.outlookTimePickerEndTime.Location = new System.Drawing.Point(222, 64);
 			this.outlookTimePickerEndTime.MaxValue = System.TimeSpan.Parse("2.00:00:00");
 			this.outlookTimePickerEndTime.MinValue = System.TimeSpan.Parse("00:00:00");
 			this.outlookTimePickerEndTime.Name = "outlookTimePickerEndTime";
@@ -392,7 +394,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.tableLayoutPanelCalendar.Controls.Add(this.gridControlSuggestions, 0, 6);
 			this.tableLayoutPanelCalendar.Controls.Add(this.tableLayoutPanel2, 0, 5);
 			this.tableLayoutPanelCalendar.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelCalendar.Location = new System.Drawing.Point(630, 0);
+			this.tableLayoutPanelCalendar.Location = new System.Drawing.Point(590, 0);
 			this.tableLayoutPanelCalendar.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelCalendar.Name = "tableLayoutPanelCalendar";
 			this.tableLayoutPanelCalendar.RowCount = 7;
@@ -403,7 +405,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.tableLayoutPanelCalendar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
 			this.tableLayoutPanelCalendar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 74F));
 			this.tableLayoutPanelCalendar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelCalendar.Size = new System.Drawing.Size(170, 600);
+			this.tableLayoutPanelCalendar.Size = new System.Drawing.Size(210, 600);
 			this.tableLayoutPanelCalendar.TabIndex = 1;
 			// 
 			// monthCalendarAdvDateSelection
@@ -415,7 +417,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.monthCalendarAdvDateSelection.Culture = new System.Globalization.CultureInfo("");
 			this.monthCalendarAdvDateSelection.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.monthCalendarAdvDateSelection.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
-			this.monthCalendarAdvDateSelection.DaysFont = new System.Drawing.Font("Verdana", 8F);
+			this.monthCalendarAdvDateSelection.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.monthCalendarAdvDateSelection.DaysHeaderInterior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
 			this.monthCalendarAdvDateSelection.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.monthCalendarAdvDateSelection.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
@@ -429,7 +431,8 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.monthCalendarAdvDateSelection.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.monthCalendarAdvDateSelection.SelectedDates = new System.DateTime[] {
         new System.DateTime(2014, 8, 11, 0, 0, 0, 0)};
-			this.monthCalendarAdvDateSelection.Size = new System.Drawing.Size(164, 179);
+			this.monthCalendarAdvDateSelection.ShowWeekNumbers = true;
+			this.monthCalendarAdvDateSelection.Size = new System.Drawing.Size(204, 179);
 			this.monthCalendarAdvDateSelection.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.monthCalendarAdvDateSelection.TabIndex = 0;
 			this.monthCalendarAdvDateSelection.WeekFont = new System.Drawing.Font("Verdana", 8F);
@@ -456,7 +459,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.monthCalendarAdvDateSelection.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.monthCalendarAdvDateSelection.TodayButton.IsBackStageButton = false;
 			this.monthCalendarAdvDateSelection.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.monthCalendarAdvDateSelection.TodayButton.Size = new System.Drawing.Size(164, 25);
+			this.monthCalendarAdvDateSelection.TodayButton.Size = new System.Drawing.Size(204, 25);
 			this.monthCalendarAdvDateSelection.TodayButton.Text = "Today";
 			this.monthCalendarAdvDateSelection.TodayButton.UseVisualStyle = true;
 			this.monthCalendarAdvDateSelection.DateSelected += new System.EventHandler(this.monthCalendarAdvDateSelectionDateSelected);
@@ -466,7 +469,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			// 
 			this.autoLabel2.Location = new System.Drawing.Point(3, 203);
 			this.autoLabel2.Name = "autoLabel2";
-			this.autoLabel2.Size = new System.Drawing.Size(161, 21);
+			this.autoLabel2.Size = new System.Drawing.Size(168, 15);
 			this.autoLabel2.TabIndex = 3;
 			this.autoLabel2.Text = "xxSuggestTimesBetweenColon";
 			// 
@@ -501,7 +504,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.gridControlSuggestions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.gridControlSuggestions.ColCount = 0;
 			this.gridControlSuggestions.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
-            new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 180)});
+            new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 200)});
 			this.gridControlSuggestions.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
 			this.gridControlSuggestions.DefaultRowHeight = 20;
 			this.gridControlSuggestions.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -526,7 +529,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.gridControlSuggestions.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.gridControlSuggestions.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlSuggestions.Size = new System.Drawing.Size(170, 302);
+			this.gridControlSuggestions.Size = new System.Drawing.Size(210, 302);
 			this.gridControlSuggestions.SmartSizeBox = false;
 			this.gridControlSuggestions.TabIndex = 0;
 			this.gridControlSuggestions.ThemesEnabled = true;
@@ -552,7 +555,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.9434F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 49.0566F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(164, 67);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(204, 67);
 			this.tableLayoutPanel2.TabIndex = 4;
 			// 
 			// autoLabelEndSpan
@@ -560,16 +563,16 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.autoLabelEndSpan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.autoLabelEndSpan.Location = new System.Drawing.Point(3, 43);
 			this.autoLabelEndSpan.Name = "autoLabelEndSpan";
-			this.autoLabelEndSpan.Size = new System.Drawing.Size(73, 15);
+			this.autoLabelEndSpan.Size = new System.Drawing.Size(92, 15);
 			this.autoLabelEndSpan.TabIndex = 5;
 			this.autoLabelEndSpan.Text = "xxEndPeriod";
 			// 
 			// autoLabelStartSpan
 			// 
 			this.autoLabelStartSpan.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.autoLabelStartSpan.Location = new System.Drawing.Point(3, 2);
+			this.autoLabelStartSpan.Location = new System.Drawing.Point(3, 9);
 			this.autoLabelStartSpan.Name = "autoLabelStartSpan";
-			this.autoLabelStartSpan.Size = new System.Drawing.Size(73, 30);
+			this.autoLabelStartSpan.Size = new System.Drawing.Size(92, 15);
 			this.autoLabelStartSpan.TabIndex = 1;
 			this.autoLabelStartSpan.Text = "xxStartPeriod";
 			// 
@@ -578,7 +581,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.office2007OutlookTimePickerStartSpan.BackColor = System.Drawing.Color.White;
 			this.office2007OutlookTimePickerStartSpan.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.office2007OutlookTimePickerStartSpan.BindableTimeValue = System.TimeSpan.Parse("08:00:00");
-			this.office2007OutlookTimePickerStartSpan.Location = new System.Drawing.Point(82, 3);
+			this.office2007OutlookTimePickerStartSpan.Location = new System.Drawing.Point(101, 3);
 			this.office2007OutlookTimePickerStartSpan.MaxValue = System.TimeSpan.Parse("2.00:00:00");
 			this.office2007OutlookTimePickerStartSpan.MinValue = System.TimeSpan.Parse("00:00:00");
 			this.office2007OutlookTimePickerStartSpan.Name = "office2007OutlookTimePickerStartSpan";
@@ -593,7 +596,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.office2007OutlookTimePickerEndSpan.BackColor = System.Drawing.Color.White;
 			this.office2007OutlookTimePickerEndSpan.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.office2007OutlookTimePickerEndSpan.BindableTimeValue = System.TimeSpan.Parse("17:00:00");
-			this.office2007OutlookTimePickerEndSpan.Location = new System.Drawing.Point(82, 37);
+			this.office2007OutlookTimePickerEndSpan.Location = new System.Drawing.Point(101, 37);
 			this.office2007OutlookTimePickerEndSpan.MaxValue = System.TimeSpan.Parse("2.00:00:00");
 			this.office2007OutlookTimePickerEndSpan.MinValue = System.TimeSpan.Parse("00:00:00");
 			this.office2007OutlookTimePickerEndSpan.Name = "office2007OutlookTimePickerEndSpan";

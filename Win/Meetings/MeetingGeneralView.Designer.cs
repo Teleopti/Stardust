@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			// textBoxExtDescription
 			// 
 			this.textBoxExtDescription.BackColor = System.Drawing.Color.White;
-			this.textBoxExtDescription.BeforeTouchSize = new System.Drawing.Size(886, 23);
+			this.textBoxExtDescription.BeforeTouchSize = new System.Drawing.Size(100, 20);
 			this.textBoxExtDescription.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtDescription.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -243,6 +243,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvStartDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvStartDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvStartDate.Calendar.SelectedDates = new System.DateTime[0];
+			this.dateTimePickerAdvStartDate.Calendar.ShowWeekNumbers = true;
 			this.dateTimePickerAdvStartDate.Calendar.Size = new System.Drawing.Size(167, 174);
 			this.dateTimePickerAdvStartDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvStartDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -350,6 +351,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvEndDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvEndDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvEndDate.Calendar.SelectedDates = new System.DateTime[0];
+			this.dateTimePickerAdvEndDate.Calendar.ShowWeekNumbers = true;
 			this.dateTimePickerAdvEndDate.Calendar.Size = new System.Drawing.Size(167, 174);
 			this.dateTimePickerAdvEndDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvEndDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -470,7 +472,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.textBoxExtLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxExtLocation.BackColor = System.Drawing.Color.White;
-			this.textBoxExtLocation.BeforeTouchSize = new System.Drawing.Size(886, 23);
+			this.textBoxExtLocation.BeforeTouchSize = new System.Drawing.Size(100, 20);
 			this.textBoxExtLocation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtLocation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtLocation.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -500,7 +502,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.textBoxExtSubject.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxExtSubject.BackColor = System.Drawing.Color.White;
-			this.textBoxExtSubject.BeforeTouchSize = new System.Drawing.Size(886, 23);
+			this.textBoxExtSubject.BeforeTouchSize = new System.Drawing.Size(100, 20);
 			this.textBoxExtSubject.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtSubject.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtSubject.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -544,7 +546,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.textBoxExtParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxExtParticipant.BackColor = System.Drawing.Color.White;
-			this.textBoxExtParticipant.BeforeTouchSize = new System.Drawing.Size(886, 23);
+			this.textBoxExtParticipant.BeforeTouchSize = new System.Drawing.Size(100, 20);
 			this.textBoxExtParticipant.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtParticipant.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtParticipant.Cursor = System.Windows.Forms.Cursors.IBeam;

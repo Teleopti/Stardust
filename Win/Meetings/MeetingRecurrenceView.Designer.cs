@@ -356,6 +356,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvStart.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvStart.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvStart.Calendar.SelectedDates = new System.DateTime[0];
+			this.dateTimePickerAdvStart.Calendar.ShowWeekNumbers = true;
 			this.dateTimePickerAdvStart.Calendar.Size = new System.Drawing.Size(143, 174);
 			this.dateTimePickerAdvStart.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvStart.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -453,6 +454,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvEnd.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvEnd.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvEnd.Calendar.SelectedDates = new System.DateTime[0];
+			this.dateTimePickerAdvEnd.Calendar.ShowWeekNumbers = true;
 			this.dateTimePickerAdvEnd.Calendar.Size = new System.Drawing.Size(143, 174);
 			this.dateTimePickerAdvEnd.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvEnd.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;

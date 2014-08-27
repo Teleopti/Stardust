@@ -231,6 +231,7 @@
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.SelectedDates = new System.DateTime[0];
+			this.dateTimePickerAdvStartSlotPeriod.Calendar.ShowWeekNumbers = true;
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.Size = new System.Drawing.Size(131, 174);
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvStartSlotPeriod.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -315,6 +316,7 @@
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.SelectedDates = new System.DateTime[0];
+			this.dateTimePickerAdvEndSlotPeriod.Calendar.ShowWeekNumbers = true;
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.Size = new System.Drawing.Size(131, 174);
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvEndSlotPeriod.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -550,6 +552,7 @@
 			this.dateTimePickerAdvEndDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvEndDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvEndDate.Calendar.SelectedDates = new System.DateTime[0];
+			this.dateTimePickerAdvEndDate.Calendar.ShowWeekNumbers = true;
 			this.dateTimePickerAdvEndDate.Calendar.Size = new System.Drawing.Size(131, 174);
 			this.dateTimePickerAdvEndDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvEndDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -635,6 +638,7 @@
 			this.dateTimePickerAdvStartDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvStartDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvStartDate.Calendar.SelectedDates = new System.DateTime[0];
+			this.dateTimePickerAdvStartDate.Calendar.ShowWeekNumbers = true;
 			this.dateTimePickerAdvStartDate.Calendar.Size = new System.Drawing.Size(131, 174);
 			this.dateTimePickerAdvStartDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvStartDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;

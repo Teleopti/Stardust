@@ -202,7 +202,7 @@
 			this.ribbonControlAdv1.OfficeMenu.AuxPanel.ImageScalingSize = new System.Drawing.Size(100, 100);
 			this.ribbonControlAdv1.OfficeMenu.AuxPanel.MinimumSize = new System.Drawing.Size(250, 100);
 			this.ribbonControlAdv1.OfficeMenu.MainPanel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonClose});
+            this.toolStripButtonClose});
 			this.ribbonControlAdv1.OfficeMenu.MainPanel.MinimumSize = new System.Drawing.Size(75, 100);
 			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
 			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(346, 145);
@@ -256,8 +256,8 @@
 			this.toolStripEx2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripEx2.Image = null;
 			this.toolStripEx2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonMainSave,
-			this.toolStripButtonMainDelete});
+            this.toolStripButtonMainSave,
+            this.toolStripButtonMainDelete});
 			this.toolStripEx2.Location = new System.Drawing.Point(0, 1);
 			this.toolStripEx2.Name = "toolStripEx2";
 			this.toolStripEx2.Office12Mode = false;
@@ -288,7 +288,7 @@
 			// toolStripButtonMainDelete
 			// 
 			this.ribbonControlAdv1.SetDescription(this.toolStripButtonMainDelete, "");
-			this.toolStripButtonMainDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Delete;
+			this.toolStripButtonMainDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.mail_delete1;
 			this.toolStripButtonMainDelete.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButtonMainDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonMainDelete.Name = "toolStripButtonMainDelete";
@@ -309,10 +309,10 @@
 			this.toolStripEx3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripEx3.Image = null;
 			this.toolStripEx3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonMeetings,
-			this.toolStripButtonSchedules,
-			this.toolStripButtonImpact,
-			this.toolStripButtonRecurrentMeetings});
+            this.toolStripButtonMeetings,
+            this.toolStripButtonSchedules,
+            this.toolStripButtonImpact,
+            this.toolStripButtonRecurrentMeetings});
 			this.toolStripEx3.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
 			this.toolStripEx3.Location = new System.Drawing.Point(150, 1);
 			this.toolStripEx3.Name = "toolStripEx3";
@@ -400,7 +400,7 @@
 			this.toolStripEx4.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripEx4.Image = null;
 			this.toolStripEx4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripButtonMainAddressBook});
+            this.toolStripButtonMainAddressBook});
 			this.toolStripEx4.Location = new System.Drawing.Point(477, 1);
 			this.toolStripEx4.Name = "toolStripEx4";
 			this.toolStripEx4.Office12Mode = false;

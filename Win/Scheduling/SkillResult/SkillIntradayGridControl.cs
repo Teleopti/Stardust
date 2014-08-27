@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
             ColWidths[0] = headerWidth;
             if (!TimeHelper.CurrentCultureUsing24HourClock()) RowHeights[0] = headerHeight12HourClock;
             DefaultColWidth = 65;
+				TeleoptiStyling = true;
         }
 
         private void gridSkillDataQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)

@@ -189,7 +189,7 @@
 			this.textBoxExtOptionalParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxExtOptionalParticipant.BackColor = System.Drawing.Color.White;
-			this.textBoxExtOptionalParticipant.BeforeTouchSize = new System.Drawing.Size(886, 23);
+			this.textBoxExtOptionalParticipant.BeforeTouchSize = new System.Drawing.Size(252, 23);
 			this.textBoxExtOptionalParticipant.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtOptionalParticipant.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtOptionalParticipant.ContextMenuStrip = this.contextMenuStripEx1;
@@ -258,7 +258,7 @@
 			this.textBoxExtRequiredParticipant.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxExtRequiredParticipant.BackColor = System.Drawing.Color.White;
-			this.textBoxExtRequiredParticipant.BeforeTouchSize = new System.Drawing.Size(886, 23);
+			this.textBoxExtRequiredParticipant.BeforeTouchSize = new System.Drawing.Size(252, 23);
 			this.textBoxExtRequiredParticipant.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtRequiredParticipant.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtRequiredParticipant.ContextMenuStrip = this.contextMenuStripEx1;
@@ -328,6 +328,7 @@
 			this.dateTimePickerAdvtDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvtDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvtDate.Calendar.SelectedDates = new System.DateTime[0];
+			this.dateTimePickerAdvtDate.Calendar.ShowWeekNumbers = true;
 			this.dateTimePickerAdvtDate.Calendar.Size = new System.Drawing.Size(119, 174);
 			this.dateTimePickerAdvtDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvtDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -413,7 +414,7 @@
 			// textBoxExtFilterCriteria
 			// 
 			this.textBoxExtFilterCriteria.BackColor = System.Drawing.Color.White;
-			this.textBoxExtFilterCriteria.BeforeTouchSize = new System.Drawing.Size(886, 23);
+			this.textBoxExtFilterCriteria.BeforeTouchSize = new System.Drawing.Size(252, 23);
 			this.textBoxExtFilterCriteria.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxExtFilterCriteria.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxExtFilterCriteria.ContextMenuStrip = this.contextMenuStripEx1;
