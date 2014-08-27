@@ -549,7 +549,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void editControlDeleteClicked(object sender, EventArgs e)
 		{
 			_sikuliTestHelper.RegisterTest(SikuliTestRegister.Select.DeleteAll);
-            
 			_cutPasteHandlerFactory.For(_controlType).Delete();
 		}
 
@@ -989,7 +988,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void toolStripMenuItemReOptimizeClick(object sender, EventArgs e)
+		private void toolStripMenuItemOptimizeClick(object sender, EventArgs e)
 		{
 			if (_backgroundWorkerRunning) return;
 
@@ -1011,7 +1010,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 						var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 						{
-							OptimizationMethod = OptimizationMethod.ReOptimize
+							OptimizationMethod = OptimizationMethod.Optimize
 						};
 
 						startBackgroundScheduleWork(_backgroundWorkerOptimization, optimizationPreferences, false);
