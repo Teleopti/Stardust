@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			}
 		}
 
-		public static void DisposeUnitOfWork()
+		public static void TryDisposeUnitOfWork()
 		{
 			if (_unitOfWork == null) return;
 

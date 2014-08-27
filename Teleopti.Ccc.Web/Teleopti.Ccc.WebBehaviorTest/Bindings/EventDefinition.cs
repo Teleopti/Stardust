@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
             
             Browser.Interactions.GoToWaitForUrlAssert("about:blank", "about:blank");
             
-			ScenarioUnitOfWorkState.DisposeUnitOfWork();
+			ScenarioUnitOfWorkState.TryDisposeUnitOfWork();
 			handleScenarioException();
             removeExtraDataSource();
 
