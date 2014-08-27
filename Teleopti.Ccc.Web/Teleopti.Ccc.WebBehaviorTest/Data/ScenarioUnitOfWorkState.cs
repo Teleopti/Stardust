@@ -8,25 +8,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		private static IUnitOfWork _unitOfWork;
 
-		public static void OpenUnitOfWork()
+		private static IUnitOfWork unitOfWork
 		{
-			_unitOfWork = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
-
-			// might be required for some scenarios, but not right now.
-			_unitOfWork.DisableFilter(QueryFilter.BusinessUnit);
+			get
+			{
+				if (_unitOfWork == null)
+				{
+					_unitOfWork = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
+					// might be required for some scenarios, but not right now.
+					_unitOfWork.DisableFilter(QueryFilter.BusinessUnit);
+				}
+				return _unitOfWork;
+			}
 		}
 
 		public static void DisposeUnitOfWork()
 		{
-			_unitOfWork.Dispose();
+			if (_unitOfWork == null) return;
+
+			unitOfWork.Dispose();
 			_unitOfWork = null;
 		}
 
 		public static void UnitOfWorkAction(Action<IUnitOfWork> action)
 		{
-			action.Invoke(_unitOfWork);
-			_unitOfWork.PersistAll();
+			action.Invoke(unitOfWork);
+			unitOfWork.PersistAll();
 		}
-
 	}
 }

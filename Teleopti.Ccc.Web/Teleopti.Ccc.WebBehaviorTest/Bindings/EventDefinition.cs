@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestDataSetup.ClearAnalyticsData();
 
 			GlobalPrincipalState.EnsureThreadPrincipal();
-			ScenarioUnitOfWorkState.OpenUnitOfWork();
 
 			log.Debug("Starting scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 

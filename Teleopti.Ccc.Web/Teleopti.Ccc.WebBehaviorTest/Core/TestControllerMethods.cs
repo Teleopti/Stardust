@@ -1,21 +1,14 @@
-using System;
 using System.Globalization;
 using System.Linq;
-using System.Net;
-using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
-using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
-
 	public static class TestControllerMethods
 	{
-
 		public static void CreateCorruptCookie()
 		{
 			Navigation.GoToWaitForCompleted("Test/CorruptMyCookie");
