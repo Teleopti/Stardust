@@ -87,6 +87,7 @@
 			this.dateSelectionRolling1.BackColor = System.Drawing.Color.White;
 			this.dateSelectionRolling1.ButtonApplyText = "xxAdd";
 			this.dateSelectionRolling1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.dateSelectionRolling1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateSelectionRolling1.Location = new System.Drawing.Point(0, 0);
 			this.dateSelectionRolling1.Name = "dateSelectionRolling1";
 			this.dateSelectionRolling1.Padding = new System.Windows.Forms.Padding(0, 12, 0, 0);
@@ -129,6 +130,8 @@
 			this.dateSelectionFromTo1.Size = new System.Drawing.Size(196, 359);
 			this.dateSelectionFromTo1.TabIndex = 0;
 			this.dateSelectionFromTo1.TodayButtonText = "xxToday";
+			this.dateSelectionFromTo1.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromTo1.WorkPeriodEnd")));
+			this.dateSelectionFromTo1.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromTo1.WorkPeriodStart")));
 			this.dateSelectionFromTo1.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionFromTo1DateRangeChanged);
 			// 
 			// tabPageAdvCalendar
@@ -149,11 +152,11 @@
 			// dateSelectionCalendar1
 			// 
 			this.dateSelectionCalendar1.ButtonApplyText = "xxAdd";
-			this.dateSelectionCalendar1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dateSelectionCalendar1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.dateSelectionCalendar1.Location = new System.Drawing.Point(0, 0);
 			this.dateSelectionCalendar1.Name = "dateSelectionCalendar1";
 			this.dateSelectionCalendar1.ShowApplyButton = false;
-			this.dateSelectionCalendar1.Size = new System.Drawing.Size(196, 359);
+			this.dateSelectionCalendar1.Size = new System.Drawing.Size(196, 206);
 			this.dateSelectionCalendar1.TabIndex = 0;
 			this.dateSelectionCalendar1.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionCalendar1DateRangeChanged);
 			// 

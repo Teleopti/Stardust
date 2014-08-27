@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.dateTimePickerAdv1.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdv1.Calendar.SelectedDates = new System.DateTime[0];
 			this.dateTimePickerAdv1.Calendar.ShowWeekNumbers = true;
-			this.dateTimePickerAdv1.Calendar.Size = new System.Drawing.Size(135, 183);
+			this.dateTimePickerAdv1.Calendar.Size = new System.Drawing.Size(248, 183);
 			this.dateTimePickerAdv1.Calendar.SizeToFit = true;
 			this.dateTimePickerAdv1.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdv1.Calendar.TabIndex = 0;
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.dateTimePickerAdv1.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdv1.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdv1.Calendar.NoneButton.IsBackStageButton = false;
-			this.dateTimePickerAdv1.Calendar.NoneButton.Location = new System.Drawing.Point(63, 0);
+			this.dateTimePickerAdv1.Calendar.NoneButton.Location = new System.Drawing.Point(176, 0);
 			this.dateTimePickerAdv1.Calendar.NoneButton.Size = new System.Drawing.Size(72, 25);
 			this.dateTimePickerAdv1.Calendar.NoneButton.UseVisualStyle = true;
 			// 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.dateTimePickerAdv1.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdv1.Calendar.TodayButton.IsBackStageButton = false;
 			this.dateTimePickerAdv1.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdv1.Calendar.TodayButton.Size = new System.Drawing.Size(63, 25);
+			this.dateTimePickerAdv1.Calendar.TodayButton.Size = new System.Drawing.Size(176, 25);
 			this.dateTimePickerAdv1.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdv1.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdv1.CalendarFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

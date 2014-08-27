@@ -975,6 +975,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvPublishedTo.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdvPublishedTo.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateTimePickerAdvPublishedTo.Calendar.Cursor = System.Windows.Forms.Cursors.Default;
+			this.dateTimePickerAdvPublishedTo.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvPublishedTo.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvPublishedTo.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.dateTimePickerAdvPublishedTo.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1870,7 +1871,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBox1.TabIndex = 9;
 			this.timeSpanTextBox1.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBox1.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBox1.TimeSpanBoxWidth = 292;
+			this.timeSpanTextBox1.TimeSpanBoxWidth = 340;
 			this.timeSpanTextBox1.Leave += new System.EventHandler(this.timeSpanTextBox1_Leave);
 			// 
 			// labelTolerancePosNeg

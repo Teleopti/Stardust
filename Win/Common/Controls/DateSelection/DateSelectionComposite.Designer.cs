@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 62.4183F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 37.5817F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(168, 363);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(169, 366);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 
 			// btnApply
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.btnApply.BeforeTouchSize = new System.Drawing.Size(141, 27);
 			this.btnApply.ForeColor = System.Drawing.Color.White;
 			this.btnApply.IsBackStageButton = false;
-			this.btnApply.Location = new System.Drawing.Point(13, 332);
+			this.btnApply.Location = new System.Drawing.Point(14, 335);
 			this.btnApply.Name = "btnApply";
 			this.btnApply.Size = new System.Drawing.Size(141, 27);
 			this.btnApply.TabIndex = 8;
@@ -77,10 +77,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.periodListSelectionBox1.BackColor = System.Drawing.Color.Transparent;
 			this.periodListSelectionBox1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.periodListSelectionBox1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.periodListSelectionBox1.Location = new System.Drawing.Point(3, 208);
+			this.periodListSelectionBox1.Location = new System.Drawing.Point(3, 210);
 			this.periodListSelectionBox1.Name = "periodListSelectionBox1";
 			this.periodListSelectionBox1.Padding = new System.Windows.Forms.Padding(2);
-			this.periodListSelectionBox1.Size = new System.Drawing.Size(162, 118);
+			this.periodListSelectionBox1.Size = new System.Drawing.Size(163, 119);
 			this.periodListSelectionBox1.TabIndex = 0;
 			// 
 			// dateSelectionControl1
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.dateSelectionControl1.Name = "dateSelectionControl1";
 			this.dateSelectionControl1.ShowAddButtons = true;
 			this.dateSelectionControl1.ShowTabArea = true;
-			this.dateSelectionControl1.Size = new System.Drawing.Size(168, 205);
+			this.dateSelectionControl1.Size = new System.Drawing.Size(169, 207);
 			this.dateSelectionControl1.TabIndex = 9;
 			this.dateSelectionControl1.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionControl1DateRangeChanged);
 			// 
@@ -104,9 +104,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.AutoSize = true;
 			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.tableLayoutPanel1);
-			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Font = new System.Drawing.Font("Segoe UI", 8.25F);
 			this.Name = "DateSelectionComposite";
-			this.Size = new System.Drawing.Size(168, 363);
+			this.Size = new System.Drawing.Size(169, 366);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();

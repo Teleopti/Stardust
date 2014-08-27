@@ -53,10 +53,10 @@
 			this.dateTimePickerAdv1.Calendar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.dateTimePickerAdv1.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdv1.Calendar.BottomHeight = 25;
-			this.dateTimePickerAdv1.Calendar.Culture = new System.Globalization.CultureInfo("en-GB");
-			this.dateTimePickerAdv1.Calendar.DayNamesColor = System.Drawing.Color.Empty;
-			this.dateTimePickerAdv1.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
-			this.dateTimePickerAdv1.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
+			this.dateTimePickerAdv1.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
+			this.dateTimePickerAdv1.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdv1.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.dateTimePickerAdv1.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.dateTimePickerAdv1.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateTimePickerAdv1.Calendar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdv1.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -72,7 +72,8 @@
 			this.dateTimePickerAdv1.Calendar.Office2007Theme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.dateTimePickerAdv1.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdv1.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdv1.Calendar.Size = new System.Drawing.Size(172, 174);
+			this.dateTimePickerAdv1.Calendar.ShowWeekNumbers = true;
+			this.dateTimePickerAdv1.Calendar.Size = new System.Drawing.Size(174, 174);
 			this.dateTimePickerAdv1.Calendar.SizeToFit = true;
 			this.dateTimePickerAdv1.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdv1.Calendar.TabIndex = 0;
@@ -87,7 +88,7 @@
 			this.dateTimePickerAdv1.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.dateTimePickerAdv1.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.dateTimePickerAdv1.Calendar.NoneButton.IsBackStageButton = false;
-			this.dateTimePickerAdv1.Calendar.NoneButton.Location = new System.Drawing.Point(88, 0);
+			this.dateTimePickerAdv1.Calendar.NoneButton.Location = new System.Drawing.Point(90, 0);
 			this.dateTimePickerAdv1.Calendar.NoneButton.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.dateTimePickerAdv1.Calendar.NoneButton.Size = new System.Drawing.Size(84, 25);
 			this.dateTimePickerAdv1.Calendar.NoneButton.Text = "None";
@@ -102,7 +103,7 @@
 			this.dateTimePickerAdv1.Calendar.TodayButton.IsBackStageButton = false;
 			this.dateTimePickerAdv1.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
 			this.dateTimePickerAdv1.Calendar.TodayButton.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.dateTimePickerAdv1.Calendar.TodayButton.Size = new System.Drawing.Size(88, 25);
+			this.dateTimePickerAdv1.Calendar.TodayButton.Size = new System.Drawing.Size(90, 25);
 			this.dateTimePickerAdv1.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdv1.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdv1.CalendarFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -112,6 +113,7 @@
 			this.dateTimePickerAdv1.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdv1.DropDownPressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdv1.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(179)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdv1.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.dateTimePickerAdv1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
 			this.dateTimePickerAdv1.Location = new System.Drawing.Point(82, 2);
 			this.dateTimePickerAdv1.Margin = new System.Windows.Forms.Padding(2);
