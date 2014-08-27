@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Events;
 using Teleopti.Messaging.Exceptions;
 using log4net;
 using Teleopti.Messaging.SignalR.Wrappers;
@@ -22,12 +19,12 @@ namespace Teleopti.Messaging.SignalR
 	{
 		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private readonly ITime _time;
-		private readonly IList<SubscriptionCallback> _subscriptions = new List<SubscriptionCallback>();
 		private IHandleHubConnection _connection;
 		private SignalBrokerCommands _signalBrokerCommands;
 		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 		private MessageBrokerSender _messageBrokerSender;
+		private MessageBrokerListener _messageBrokerListener;
 
 		public static SignalBroker MakeForTest(IMessageFilterManager typeFilter)
 		{
@@ -78,11 +75,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				var connection = new SignalConnection(
 					() => MakeHubConnection(serverUrl),
-					() =>
-					{
-						foreach (var subscription in _subscriptions)
-							_signalBrokerCommands.AddSubscription(subscription.Subscription);
-					},
+					() => _messageBrokerListener.ReregisterSubscriptions(),
 					_connectionKeepAliveStrategy,
 					_time);
 
@@ -90,8 +83,9 @@ namespace Teleopti.Messaging.SignalR
 
 				_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
 				_messageBrokerSender = new MessageBrokerSender(_signalBrokerCommands, FilterManager);
+				_messageBrokerListener = new MessageBrokerListener(_signalBrokerCommands);
 
-				_connection.StartConnection(onNotification, useLongPolling);
+				_connection.StartConnection(_messageBrokerListener.OnNotification, useLongPolling);
 			}
 		}
 
@@ -129,110 +123,38 @@ namespace Teleopti.Messaging.SignalR
 
 		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
 		{
-			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
+			_messageBrokerListener.RegisterEventSubscription(dataSource, businessUnitId, eventMessageHandler, domainObjectType);
 		}
 
 		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType)
 		{
-			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
+			_messageBrokerListener.RegisterEventSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, domainObjectType);
 		}
 
 		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, null, domainObjectType, startDate, endDate);
+			_messageBrokerListener.RegisterEventSubscription(dataSource, businessUnitId, eventMessageHandler, domainObjectType, startDate, endDate);
 		}
 
 		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, domainObjectId, domainObjectType, startDate, endDate);
-		}
-
-		private void registerEventSubscription(string datasource, Guid businessUnitId,
-			EventHandler<EventMessageArgs> eventMessageHandler, Guid? referenceObjectId, Type referenceObjectType,
-			Guid? domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
-		{
-			//It is mad that this one is here! But it is "inherited" from the old broker. So it must be here to avoid bugs when running with the web broker only.
-			if (!domainObjectType.IsInterface)
-				throw new NotInterfaceTypeException();
-
-			var subscription = new Subscription
-			{
-				DomainId = domainObjectId.HasValue ? Subscription.IdToString(domainObjectId.Value) : null,
-				DomainType = domainObjectType.Name,
-				DomainReferenceId = referenceObjectId.HasValue ? Subscription.IdToString(referenceObjectId.Value) : null,
-				DomainReferenceType =
-					(referenceObjectType == null) ? null : referenceObjectType.AssemblyQualifiedName,
-				LowerBoundary = Subscription.DateToString(startDate),
-				UpperBoundary = Subscription.DateToString(endDate),
-				DataSource = datasource,
-				BusinessUnitId = Subscription.IdToString(businessUnitId),
-			};
-
-			lock (_wrapperLock)
-			{
-				if (_connection == null) return;
-
-				_subscriptions.Add(new SubscriptionCallback
-				{
-					Subscription = subscription,
-					Callback = eventMessageHandler
-				});
-				_signalBrokerCommands.AddSubscription(subscription);
-			}
-		}
-
-		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
-		{
-			// cleanup refactoring, but keeping the same buggy behavior: does not remove subscription from the server.
-			// should also do this somewhere, when there are no local routes left:
-			//_signalBrokerCommands.RemoveSubscription(route);
-			// if you want more information check hg history
-
-			lock (_wrapperLock)
-			{
-				if (_connection == null) return;
-
-				var toRemove = (from s in _subscriptions
-					where s.Callback == eventMessageHandler
-					select s).ToList();
-
-				toRemove.ForEach(s => _subscriptions.Remove(s));
-			}
+			_messageBrokerListener.RegisterEventSubscription(dataSource, businessUnitId, eventMessageHandler, domainObjectId, domainObjectType, startDate, endDate);
 		}
 
 		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, null, domainObjectType, startDate, endDate);
+			_messageBrokerListener.RegisterEventSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, domainObjectType, startDate, endDate);
+		}
+
+		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
+		{
+			_messageBrokerListener.UnregisterEventSubscription(eventMessageHandler);
 		}
 
 		[CLSCompliant(false)]
 		protected virtual IHubConnectionWrapper MakeHubConnection(Uri serverUrl)
 		{
 			return new HubConnectionWrapper(new HubConnection(serverUrl.ToString()));
-		}
-
-		private void onNotification(Notification d)
-		{
-			var message = new EventMessage
-				{
-					InterfaceType = Type.GetType(d.DomainQualifiedType, false, true),
-					DomainObjectType = d.DomainType,
-					DomainObjectId = d.DomainIdAsGuid(),
-					ModuleId = d.ModuleIdAsGuid(),
-					ReferenceObjectId = d.DomainReferenceIdAsGuid(),
-					ReferenceObjectType = d.DomainReferenceType,
-					EventStartDate = d.StartDateAsDateTime(),
-					EventEndDate = d.EndDateAsDateTime(),
-					DomainUpdateType = d.DomainUpdateTypeAsDomainUpdateType()
-				};
-
-			var domainObject = d.BinaryData;
-			if (!string.IsNullOrEmpty(domainObject))
-			{
-				message.DomainObject = Convert.FromBase64String(domainObject);
-			}
-
-			InvokeEventHandlers(message, d.Routes());
 		}
 
 		public void StopMessageBroker()
@@ -256,24 +178,6 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		private void InvokeEventHandlers(EventMessage eventMessage, IEnumerable<string> routes)
-		{
-			// locks everywhere in this class, but no lock here?!!!
-			// if locks are even required, should be here aswell no?
-
-			var matchingHandlers = from s in _subscriptions
-				from r in routes
-				let route = s.Subscription.Route()
-				where
-					route == r &&
-					s.Subscription.LowerBoundaryAsDateTime() <= eventMessage.EventEndDate &&
-					s.Subscription.UpperBoundaryAsDateTime() >= eventMessage.EventStartDate
-				select s.Callback;
-
-			foreach (var handler in matchingHandlers)
-				handler(this, new EventMessageArgs(eventMessage));
-
-		}
 	}
 
 	public class SubscriptionCallback

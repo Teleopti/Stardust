@@ -148,6 +148,7 @@
     <Compile Include="SignalR\IStateAccessor.cs" />
     <Compile Include="SignalR\IConnectionKeepAliveStrategy.cs" />
     <Compile Include="Events\EventMessageFactory.cs" />
+    <Compile Include="SignalR\MessageBrokerListener.cs" />
     <Compile Include="SignalR\MessageBrokerSender.cs" />
     <Compile Include="SignalR\RecreateOnNoPingReply.cs" />
     <Compile Include="SignalR\RestartOnClosed.cs" />
