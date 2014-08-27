@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
@@ -397,5 +398,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             _errorProvider.SetError(dateTimePickerAdvWorkEndPeriod, error);
             _errorProvider.SetIconPadding(dateTimePickerAdvWorkEndPeriod, -35);
         }
+
+		  private void dateTimePickerAdvWorkAStartDate_OnPopup(object sender, EventArgs e)
+		  {
+			  dateTimePickerAdvWorkAStartDate.Calendar.Size = new Size(250,200);
+		  }
     }
 }

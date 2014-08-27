@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public WorkflowControlSetView()
 		{
 			InitializeComponent();
-		 }
+		}
+
 		public WorkflowControlSetView(IToggleManager toggleManager):this()
 		{
 			if (DesignMode) return;
