@@ -19,18 +19,25 @@ BEGIN
 
 	--temp tables
 	CREATE TABLE #mergeUs (KeepMe uniqueidentifier, MergeUs uniqueidentifier)
-	CREATE TABLE #PersonAssignment (Id uniqueidentifier, Person uniqueidentifier,[Date] datetime,Scenario uniqueidentifier, ShiftCategory uniqueidentifier)
+	CREATE TABLE #PersonAssignment (Id uniqueidentifier not null, Person uniqueidentifier not null,[Date] datetime not null, Scenario uniqueidentifier not null, ShiftCategory uniqueidentifier,DayOffTemplate uniqueidentifier)
 
 	--find duplicates, Id = NULL for now
 	INSERT INTO #PersonAssignment
 	SELECT
-		NULL,[Person],[Date],[Scenario],cast(max(cast(ShiftCategory AS binary(16))) as uniqueidentifier)
+		Id				= '00000000-0000-0000-0000-000000000000',
+		Person			= [Person],
+		[Date]			= [Date],
+		Scenario		= [Scenario],
+		ShiftCategory	= cast(max(cast(ShiftCategory AS binary(16))) as uniqueidentifier),
+		DayOffTemplate	= cast(max(cast(DayOffTemplate AS binary(16))) as uniqueidentifier)
 	FROM [dbo].[PersonAssignment]
 	GROUP BY [Person],[Date],[Scenario]
 	HAVING COUNT(*) > 1
-	ORDER BY cast(max(cast(ShiftCategory AS binary(16))) as uniqueidentifier) DESC --bug #27661 - favor the ShiftCategory Guid before NULL when a mix of PersonalShifts and Activies
+	ORDER BY cast(max(cast(ShiftCategory AS binary(16))) as uniqueidentifier) DESC,	 --bug #27661 - favor the ShiftCategory Guid before NULL when a mix of PersonalShifts and Activies
+	cast(max(cast(DayOffTemplate AS binary(16))) as uniqueidentifier) DESC
 
-	--Set any Id = "the one to keep"
+	--When a mix of PersonAssignments: Set any Id for the one "the one to keep"
+	--1) shifts only
 	UPDATE tmp
 	SET tmp.Id = pa.Id -- will give a random Id
 	FROM #PersonAssignment tmp
@@ -39,8 +46,20 @@ BEGIN
 		AND pa.[Date]	= tmp.[Date]
 		AND pa.Scenario	= tmp.Scenario
 		AND pa.ShiftCategory = tmp.ShiftCategory
+		AND pa.DayOffTemplate IS NULL
+
+	--2) DayOff only
+	UPDATE tmp
+	SET tmp.Id = pa.Id -- will give a random Id
+	FROM #PersonAssignment tmp
+	INNER JOIN [dbo].[PersonAssignment] pa
+		ON  pa.Person	= tmp.Person
+		AND pa.[Date]	= tmp.[Date]
+		AND pa.Scenario	= tmp.Scenario
+		AND pa.ShiftCategory IS NULL
+		AND pa.DayOffTemplate = tmp.DayOffTemplate
 	
-	--handle Assignments with only Personal or Overtime activies
+	--3) handle Assignments with only Personal or Overtime activies. (neither Shift nor DayOff)
 	UPDATE tmp
 	SET tmp.Id = pa.Id -- will give a random Id
 	FROM #PersonAssignment tmp
@@ -49,6 +68,7 @@ BEGIN
 		AND pa.[Date]	= tmp.[Date]
 		AND pa.Scenario	= tmp.Scenario
 		AND tmp.ShiftCategory IS NULL
+		AND tmp.DayOffTemplate IS NULL
 
 	--Get other Ids, the to merge
 	INSERT INTO #mergeUs
