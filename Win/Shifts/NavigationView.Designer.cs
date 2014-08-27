@@ -70,28 +70,30 @@ namespace Teleopti.Ccc.Win.Shifts
 			// 
 			// tabPageWorkShiftRule
 			// 
+			this.tabPageWorkShiftRule.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.tabPageWorkShiftRule.Image = null;
 			this.tabPageWorkShiftRule.ImageIndex = 0;
 			this.tabPageWorkShiftRule.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageWorkShiftRule.Location = new System.Drawing.Point(2, 41);
+			this.tabPageWorkShiftRule.Location = new System.Drawing.Point(2, 37);
 			this.tabPageWorkShiftRule.Name = "tabPageWorkShiftRule";
-			this.tabPageWorkShiftRule.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+			this.tabPageWorkShiftRule.Padding = new System.Windows.Forms.Padding(6);
 			this.tabPageWorkShiftRule.ShowCloseButton = true;
-			this.tabPageWorkShiftRule.Size = new System.Drawing.Size(584, 650);
+			this.tabPageWorkShiftRule.Size = new System.Drawing.Size(584, 654);
 			this.tabPageWorkShiftRule.TabIndex = 1;
 			this.tabPageWorkShiftRule.Text = "xxRuleSets";
 			this.tabPageWorkShiftRule.ThemesEnabled = true;
 			// 
 			// tabPageRuleSetBag
 			// 
+			this.tabPageRuleSetBag.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.tabPageRuleSetBag.Image = null;
 			this.tabPageRuleSetBag.ImageIndex = 1;
 			this.tabPageRuleSetBag.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageRuleSetBag.Location = new System.Drawing.Point(2, 41);
+			this.tabPageRuleSetBag.Location = new System.Drawing.Point(2, 37);
 			this.tabPageRuleSetBag.Name = "tabPageRuleSetBag";
-			this.tabPageRuleSetBag.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+			this.tabPageRuleSetBag.Padding = new System.Windows.Forms.Padding(6);
 			this.tabPageRuleSetBag.ShowCloseButton = true;
-			this.tabPageRuleSetBag.Size = new System.Drawing.Size(584, 650);
+			this.tabPageRuleSetBag.Size = new System.Drawing.Size(584, 654);
 			this.tabPageRuleSetBag.TabIndex = 1;
 			this.tabPageRuleSetBag.Text = "xxBags";
 			this.tabPageRuleSetBag.ThemesEnabled = true;

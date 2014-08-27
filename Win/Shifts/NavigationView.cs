@@ -71,6 +71,8 @@ namespace Teleopti.Ccc.Win.Shifts
 		private void createTreeView()
 		{
 			_defaultTreeView = new TreeViewAdv();
+			_defaultTreeView.Style = TreeStyle.Metro;
+			
 			tabPageWorkShiftRule.Controls.Add(_defaultTreeView);
 			tabPageWorkShiftRule.Focus();
 			_defaultTreeView.Dock = DockStyle.Fill;
