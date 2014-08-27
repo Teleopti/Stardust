@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 var email = currentPerson.Email;
                 if (string.IsNullOrEmpty(email))
                     throw new ArgumentException(
-                        Resources.YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot);
+								Resources.PleaseConfigureYourEmailAddress);
                 ticket.Add("email", email);
                 ticket.Add("firstname", currentPerson.Name.FirstName);
                 ticket.Add("lastname", currentPerson.Name.LastName);

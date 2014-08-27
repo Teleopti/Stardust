@@ -9903,9 +9903,6 @@ These options are activated:
   <data name="MissingWorkflowControlSet" xml:space="preserve">
     <value>Missing workflow control set</value>
   </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Your Email address should be configured in the People Module to use this service.</value>
-  </data>
   <data name="SignCustomerWeb" xml:space="preserve">
     <value>Login customer web</value>
     <comment>Login customer web</comment>
@@ -12238,5 +12235,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="StartPage" xml:space="preserve">
     <value>Start page</value>
     <comment>Go to landing page in Portal </comment>
+  </data>
+  <data name="PleaseConfigureYourEmailAddress" xml:space="preserve">
+    <value>Please configure your email address to access Teleopti resources.</value>
+    <comment>Message in Portal when user have no email in People</comment>
   </data>
 </root>

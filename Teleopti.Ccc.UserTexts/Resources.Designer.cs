@@ -17791,6 +17791,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please configure your email address to access Teleopti resources..
+        /// </summary>
+        public static string PleaseConfigureYourEmailAddress {
+            get {
+                return ResourceManager.GetString("PleaseConfigureYourEmailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enter your logon credentials.
         /// </summary>
         public static string PleaseEnterYourLogonCredentials {
@@ -27645,15 +27654,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YourChangesWillBeDiscardedReloading {
             get {
                 return ResourceManager.GetString("YourChangesWillBeDiscardedReloading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your Email address should be configured in the People Module to use this service..
-        /// </summary>
-        public static string YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot {
-            get {
-                return ResourceManager.GetString("YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot", resourceCulture);
             }
         }
         
