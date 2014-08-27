@@ -10,6 +10,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
@@ -21,13 +22,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 	{
 		//private SearchPersonPresenter _presenter;
 		private ArrayList _persons = new ArrayList();
-		private IEnumerable<IPerson> _searchablePersons;
+		private List<IPerson> _searchablePersons;
 		private ArrayList _userSelectedPersonList;
 
 		public FilterMultiplePersons()
 		{
 			InitializeComponent();
-
+			if(!DesignMode )
+				SetTexts();
 			gridListControl1.DataSource = _persons;
 			gridListControl1.MultiColumn = true;
 			gridListControl1.Grid.MouseDoubleClick += gridMouseDoubleClick;
@@ -112,14 +114,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void SetSearchablePersons(IEnumerable<IPerson> searchablePersons)
 		{
-			_searchablePersons = searchablePersons;
-			//_presenter.SetSearchablePersons(searchablePersons);
+			_searchablePersons = searchablePersons.ToList();
 			textBox1.Select();
 		}
 
 		private void textBox1TextChanged(object sender, EventArgs e)
 		{
-			//_presenter.OnTextBox1TextChanged();
 			FillGridListControl();
 		}
 
@@ -182,6 +182,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void addPersonInFinalGrid(IPerson person)
 		{
+			_searchablePersons.Remove(person);
+			FillGridListControl();
 			_userSelectedPersonList.Add(new FilterMultiplePersonGridControlItem(person));
 			gridListControlSelectedItems.BeginUpdate();
 			gridListControlSelectedItems.DataSource = _userSelectedPersonList;
@@ -231,7 +233,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
 		public string ApplicationLogOnName
 		{
-			get { return _person.ApplicationAuthenticationInfo.ApplicationLogOnName; }
+			get
+			{
+				if (_person.ApplicationAuthenticationInfo!=null)
+					return  _person.ApplicationAuthenticationInfo.ApplicationLogOnName;
+				return string.Empty;
+			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]

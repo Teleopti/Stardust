@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		   
 			SetTexts();
-			//buttonAdvance.Visible = ShowAdvancedFilter;
-			buttonAdvance.Visible = true;
+			buttonAdvance.Visible = ShowAdvancedFilter;
 			_selectedPersons = selectedPersons.Values ;
 
 		}
