@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_layerMapper = layerMapper;
 		}
 
-		public ShiftTradeAddPersonScheduleViewModel Map(IPersonScheduleDayReadModel scheduleReadModel)
+		public ShiftTradeAddPersonScheduleViewModel Map(IPersonScheduleDayReadModel scheduleReadModel, bool isMySchedule=false)
 		{
 			if (scheduleReadModel == null || scheduleReadModel.Start == null)
 				return null;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				PersonId = scheduleReadModel.PersonId,
 				StartTimeUtc = scheduleReadModel.Start.Value,
 				Name = string.Format(CultureInfo.InvariantCulture, "{0} {1}", shiftReadModel.FirstName, shiftReadModel.LastName),
-				ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection),
+				ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection, isMySchedule),
 				MinStart = scheduleReadModel.MinStart,
 				Total = scheduleReadModel.Total,
 						IsDayOff = false
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		public IList<ShiftTradeAddPersonScheduleViewModel> Map(IEnumerable<IPersonScheduleDayReadModel> scheduleReadModels)
 		{
-			return scheduleReadModels.Select(Map).Where(s => s != null).ToList();
+			return scheduleReadModels.Select(scheduleReadModel => Map(scheduleReadModel, false)).Where(s => s != null).ToList();
 		}
 	}
 }

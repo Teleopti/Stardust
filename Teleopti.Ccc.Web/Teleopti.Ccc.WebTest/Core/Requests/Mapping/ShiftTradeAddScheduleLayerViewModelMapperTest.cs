@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Interfaces.Domain;
 
@@ -46,6 +47,55 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			mappedlayer.End.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(readModelLayer.End, _timeZone));
 			mappedlayer.LengthInMinutes.Should().Be.EqualTo(readModelLayer.Minutes);
 			mappedlayer.Color.Should().Be.EqualTo(readModelLayer.Color);
+			mappedlayer.IsAbsenceConfidential.Should().Be.EqualTo(readModelLayer.IsAbsenceConfidential);
+		}
+
+		[Test]
+		public void ShouldMapLayerWithConfidentialAbsenceFromReadModelLayerForMySchedule()
+		{
+			var readModelLayer = new SimpleLayer
+			{
+				Start = DateTime.Now,
+				End = DateTime.Now.AddHours(1),
+				Minutes = 60,
+				Color = "green",
+				Description = "Illness",
+				IsAbsenceConfidential = true
+			};
+
+			var target = new ShiftTradeAddScheduleLayerViewModelMapper(_userTimeZone);
+			var result = target.Map(new[] { readModelLayer }, true);
+
+			var mappedlayer = result.First();
+			mappedlayer.Start.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(readModelLayer.Start,_timeZone));
+			mappedlayer.End.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(readModelLayer.End, _timeZone));
+			mappedlayer.LengthInMinutes.Should().Be.EqualTo(readModelLayer.Minutes);
+			mappedlayer.Color.Should().Be.EqualTo(readModelLayer.Color);
+			mappedlayer.IsAbsenceConfidential.Should().Be.EqualTo(readModelLayer.IsAbsenceConfidential);
+		}
+
+		[Test]
+		public void ShouldMapLayerWithConfidentialAbsenceFromReadModelLayerForOtherSchedule()
+		{
+			var readModelLayer = new SimpleLayer
+			{
+				Start = DateTime.Now,
+				End = DateTime.Now.AddHours(1),
+				Minutes = 60,
+				Color = "green",
+				Description = "Illness",
+				IsAbsenceConfidential = true
+			};
+
+			var target = new ShiftTradeAddScheduleLayerViewModelMapper(_userTimeZone);
+			var result = target.Map(new[] { readModelLayer }, false);
+
+			var mappedlayer = result.First();
+			mappedlayer.Start.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(readModelLayer.Start,_timeZone));
+			mappedlayer.End.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(readModelLayer.End, _timeZone));
+			mappedlayer.LengthInMinutes.Should().Be.EqualTo(readModelLayer.Minutes);
+			mappedlayer.Color.Should().Be.EqualTo(ConfidentialPayloadValues.DisplayColorHex);
+			mappedlayer.TitleHeader.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
 			mappedlayer.IsAbsenceConfidential.Should().Be.EqualTo(readModelLayer.IsAbsenceConfidential);
 		}
 

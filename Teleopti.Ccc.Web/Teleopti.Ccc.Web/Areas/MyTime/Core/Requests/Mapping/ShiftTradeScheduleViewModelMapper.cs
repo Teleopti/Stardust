@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return new ShiftTradeScheduleViewModel();
 			}
 
-			ShiftTradeAddPersonScheduleViewModel mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel);
+			ShiftTradeAddPersonScheduleViewModel mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
 			List<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedule;
 			if (data.TimeFilter == null)
 			{
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return new ShiftTradeScheduleViewModel();
 			}
 
-			ShiftTradeAddPersonScheduleViewModel mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel);
+			ShiftTradeAddPersonScheduleViewModel mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
 			List<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedule;
 			if (data.TimeFilter == null)
 			{

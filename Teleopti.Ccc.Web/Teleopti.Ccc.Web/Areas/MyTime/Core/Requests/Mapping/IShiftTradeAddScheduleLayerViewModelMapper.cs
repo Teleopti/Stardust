@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public interface IShiftTradeAddScheduleLayerViewModelMapper
 	{
-		IEnumerable<ShiftTradeAddScheduleLayerViewModel> Map(IEnumerable<SimpleLayer> sourceLayers);
+		IEnumerable<ShiftTradeAddScheduleLayerViewModel> Map(IEnumerable<SimpleLayer> sourceLayers, bool isMySchedule = false);
 	}
 }
