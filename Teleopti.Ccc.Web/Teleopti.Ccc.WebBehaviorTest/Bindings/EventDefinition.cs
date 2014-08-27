@@ -1,12 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using log4net;
@@ -84,18 +80,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
                 );
         }
 
-	    private static void removeExtraDataSource()
-	    {
-	        if (!ScenarioContext.Current.ScenarioInfo.Tags.Contains("ExtraDataSource")) return;
-
-	        int i = 0;
-	        while (File.Exists(targetTestDataNHibFile) && i < 20)
-	        {
-	            i++;
-	            File.Delete(targetTestDataNHibFile);
-	        }
-	    }
-		
 		[AfterScenario]
 		public static void AfterScenario()
 		{
@@ -105,7 +89,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
             
 			ScenarioUnitOfWorkState.TryDisposeUnitOfWork();
 			handleScenarioException();
-            removeExtraDataSource();
+			File.Delete(targetTestDataNHibFile);
 
 			log.Debug("Finished scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 		}
