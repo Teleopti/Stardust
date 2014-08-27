@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			var shiftReadModel = JsonConvert.DeserializeObject<Model>(scheduleReadModel.Model);
 			ShiftTradeAddPersonScheduleViewModel ret = null;
-			if ((shiftReadModel.Shift != null) && (shiftReadModel.Shift.Projection.Count > 0))
+			if ((shiftReadModel.Shift != null) && (shiftReadModel.Shift.Projection.Count > 0) && (isMySchedule || !shiftReadModel.Shift.IsFullDayAbsence))
 			{
 				ret = new ShiftTradeAddPersonScheduleViewModel
 			{
