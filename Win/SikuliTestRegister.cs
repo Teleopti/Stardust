@@ -9,6 +9,7 @@
 		{
 			None,
 			DeleteAll, 
+			Schedule,
 			Optimize
 		}
 	}
