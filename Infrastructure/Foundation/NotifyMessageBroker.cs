@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 						}
 					}
 				}
-            	_messageBroker.SendEventMessages(dataSourceName, businessUnitId, eventMessages.ToArray());
+            	_messageBroker.Send(dataSourceName, businessUnitId, eventMessages.ToArray());
             }
         }
 

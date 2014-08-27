@@ -774,10 +774,10 @@
     <Compile Include="MessageBroker\Events\EventMessageArgs.cs" />
     <Compile Include="MessageBroker\Events\IEventMessage.cs" />
     <Compile Include="MessageBroker\Events\ITrackingMessageSender.cs" />
-    <Compile Include="MessageBroker\Events\IMessageBroker.cs" />
+    <Compile Include="MessageBroker\Client\IMessageBroker.cs" />
     <Compile Include="MessageBroker\Events\IEventMessageFactory.cs" />
-    <Compile Include="MessageBroker\Events\IMessageBrokerListener.cs" />
-    <Compile Include="MessageBroker\Events\IMessageBrokerSender.cs" />
+    <Compile Include="MessageBroker\Client\IMessageBrokerListener.cs" />
+    <Compile Include="MessageBroker\Client\IMessageBrokerSender.cs" />
     <Compile Include="MessageBroker\Events\TrackingMessage.cs" />
     <Compile Include="MessageBroker\Notification.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />

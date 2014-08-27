@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				{
 					if (Logger.IsDebugEnabled)
 						Logger.Debug("Sending notification for persisted model IPersonScheduleDayReadModel");
-					_messageBroker.SendEventMessage(_currentDataSource.CurrentName(), businessUnitId, period.StartDate, period.EndDate,
+					_messageBroker.Send(_currentDataSource.CurrentName(), businessUnitId, period.StartDate, period.EndDate,
 						Guid.Empty, personId, typeof (Person), Guid.Empty, typeof (IPersonScheduleDayReadModel),
 						DomainUpdateType.NotApplicable, null);
 				});

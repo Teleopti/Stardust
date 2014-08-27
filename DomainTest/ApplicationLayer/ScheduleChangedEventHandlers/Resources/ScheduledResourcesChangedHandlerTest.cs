@@ -94,11 +94,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_target.Handle(@event);
 
-			_messageBroker.AssertWasNotCalled(x => x.SendEventMessage("datasource", @event.BusinessUnitId, period.StartDateTime, period.EndDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null), o => o.Repeat.Times(0));
+			_messageBroker.AssertWasNotCalled(x => x.Send("datasource", @event.BusinessUnitId, period.StartDateTime, period.EndDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null), o => o.Repeat.Times(0));
 
 			_eventSyncronization.RunNow();
 
-			_messageBroker.AssertWasCalled(x => x.SendEventMessage("datasource", @event.BusinessUnitId, period.StartDateTime, period.EndDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null), o => o.Repeat.Once());
+			_messageBroker.AssertWasCalled(x => x.Send("datasource", @event.BusinessUnitId, period.StartDateTime, period.EndDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null), o => o.Repeat.Once());
 		}
 
 		[Test]

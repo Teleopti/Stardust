@@ -58,7 +58,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = new HubProxyFake();
 			var target = makeTarget(hubProxy);
 
-			target.SendEventMessage(string.Empty, Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
+			target.Send(string.Empty, Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
 									typeof(string), DomainUpdateType.Update, new byte[] { });
 
 			hubProxy.NotifyClientsMultipleInvokedWith.Should().Have.Count.GreaterThan(0);
@@ -81,7 +81,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = new HubProxyFake();
 			var target = makeTarget(hubProxy);
 
-			target.SendEventMessages(string.Empty, Guid.Empty,
+			target.Send(string.Empty, Guid.Empty,
 									 new IEventMessage[]
 				                         {
 					                         new EventMessage {DomainObjectType = typeof(string).AssemblyQualifiedName},

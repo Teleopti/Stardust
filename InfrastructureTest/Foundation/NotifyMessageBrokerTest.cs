@@ -52,15 +52,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 using(mocks.Ordered())
                 {
                     Expect.Call(messBroker.IsConnected).Return(true);
-                    messBroker.SendEventMessages(null, Guid.Empty, null);
+                    messBroker.Send(null, Guid.Empty, null);
 					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x => x[0].DomainUpdateType == DomainUpdateType.Insert));
 
                     Expect.Call(messBroker.IsConnected).Return(true);
-					messBroker.SendEventMessages(null, Guid.Empty, null);
+					messBroker.Send(null, Guid.Empty, null);
 					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x => x[0].DomainUpdateType == DomainUpdateType.Update));
 
                     Expect.Call(messBroker.IsConnected).Return(true);
-					messBroker.SendEventMessages(null, Guid.Empty, null);
+					messBroker.Send(null, Guid.Empty, null);
 					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x => x[0].DomainUpdateType == DomainUpdateType.Delete));
 				}
             }
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 				{
 					Expect.Call(messBroker.IsConnected).Return(true);
 
-					messBroker.SendEventMessages(null, Guid.Empty, null);
+					messBroker.Send(null, Guid.Empty, null);
 					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), 
 						Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
 							x[0].DomainUpdateType == DomainUpdateType.Insert && 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
 					Expect.Call(messBroker.IsConnected).Return(true);
 
-					messBroker.SendEventMessages(null, Guid.Empty, null);
+					messBroker.Send(null, Guid.Empty, null);
 					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(),
 						Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
 							x[0].DomainUpdateType == DomainUpdateType.Delete &&
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 using (mocks.Ordered())
                 {
                     Expect.Call(messBroker.IsConnected).Return(true);
-					messBroker.SendEventMessages(null, Guid.Empty, null);
+					messBroker.Send(null, Guid.Empty, null);
 					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(),
 						Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
 							x[0].DomainUpdateType == DomainUpdateType.Insert && 
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 							));
 
                     Expect.Call(messBroker.IsConnected).Return(true);
-					messBroker.SendEventMessages(null, Guid.Empty, null);
+					messBroker.Send(null, Guid.Empty, null);
 					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(),
 						Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
 							x[0].DomainUpdateType == DomainUpdateType.Delete &&
@@ -207,21 +207,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 {
                     Expect.Call(identifier.InitiatorId).Return(moduleId).Repeat.Any();
                     Expect.Call(messBroker.IsConnected).Return(true);
-					messBroker.SendEventMessages(null, Guid.Empty, null);
+					messBroker.Send(null, Guid.Empty, null);
 	                LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(),
 		                Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
 			                x[0].DomainUpdateType == DomainUpdateType.Insert && x[0].ModuleId == moduleId
 			                ));
 
                     Expect.Call(messBroker.IsConnected).Return(true);
-					messBroker.SendEventMessages(null, Guid.Empty, null);
+					messBroker.Send(null, Guid.Empty, null);
 					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(),
 						Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
 							x[0].DomainUpdateType == DomainUpdateType.Update && x[0].ModuleId == moduleId
 							));
 
                     Expect.Call(messBroker.IsConnected).Return(true);
-					messBroker.SendEventMessages(null, Guid.Empty, null);
+					messBroker.Send(null, Guid.Empty, null);
 					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(),
 						Rhino.Mocks.Constraints.Is.Matching<IEventMessage[]>(x =>
 							x[0].DomainUpdateType == DomainUpdateType.Delete && x[0].ModuleId == moduleId

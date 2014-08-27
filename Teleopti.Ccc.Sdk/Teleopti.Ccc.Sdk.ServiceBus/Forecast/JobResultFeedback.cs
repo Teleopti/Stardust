@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
         private void sendMessage(byte[] binaryData)
         {
-	        _messageBroker.SendEventMessage(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name,
+	        _messageBroker.Send(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name,
 		        ((IBelongsToBusinessUnit) _jobResult).BusinessUnit.Id.GetValueOrDefault
 			        (), DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
 		        typeof (IJobResultProgress), DomainUpdateType.NotApplicable, binaryData);

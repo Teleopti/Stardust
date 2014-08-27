@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 			action.Invoke(actions);
 			_eventSyncronization.WhenDone(() =>
 				{
-					_messageBroker.SendEventMessage(dataSource, businessUnitId, actions.LowestDateTime, actions.HighestDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null);
+					_messageBroker.Send(dataSource, businessUnitId, actions.LowestDateTime, actions.HighestDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null);
 				});
 		}
 

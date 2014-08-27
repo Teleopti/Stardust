@@ -113,7 +113,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
 				typeof (IInterfaceForTest));
-			target.SendEventMessage(string.Empty, Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
+			target.Send(string.Empty, Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
 				typeof (IInterfaceForTest), DomainUpdateType.Update, new byte[] {});
 
 			wasEventHandlerCalled.Should().Be(true);
@@ -136,7 +136,7 @@ namespace Teleopti.MessagingTest.SignalR
 				typeof (IInterfaceForTest));
 			hubProxy1.BreakTheConnection();
 			time.Passes(TimeSpan.FromMinutes(2));
-			target.SendEventMessage(string.Empty, Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
+			target.Send(string.Empty, Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
 				typeof (IInterfaceForTest), DomainUpdateType.Update, new byte[] {});
 
 			wasEventHandlerCalled.Should().Be(true);

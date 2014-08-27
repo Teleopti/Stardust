@@ -27,6 +27,7 @@ namespace Teleopti.Messaging.SignalR
 		private SignalBrokerCommands _signalBrokerCommands;
 		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
+		private MessageBrokerSender _messageBrokerSender;
 
 		public static SignalBroker MakeForTest(IMessageFilterManager typeFilter)
 		{
@@ -88,6 +89,7 @@ namespace Teleopti.Messaging.SignalR
 				_connection = connection;
 
 				_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
+				_messageBrokerSender = new MessageBrokerSender(_signalBrokerCommands, FilterManager);
 
 				_connection.StartConnection(onNotification, useLongPolling);
 			}
@@ -104,77 +106,19 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-	    private IEnumerable<Notification> createNotifications(string dataSource, string businessUnitId,
-	                                                          DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
-	                                                          Guid referenceObjectId, Type referenceObjectType,
-	                                                          Guid domainObjectId, Type domainObjectType,
-	                                                          DomainUpdateType updateType, byte[] domainObject)
-        {
-	        if (FilterManager.HasType(domainObjectType))
-	        {
-	            var referenceObjectTypeString = (referenceObjectType == null)
-	                                                ? null
-	                                                : FilterManager.LookupTypeToSend(referenceObjectType);
-	            var eventStartDateString = Subscription.DateToString(eventStartDate);
-	            var eventEndDateString = Subscription.DateToString(eventEndDate);
-	            var moduleIdString = Subscription.IdToString(moduleId);
-	            var domainObjectIdString = Subscription.IdToString(domainObjectId);
-	            var domainQualifiedTypeString = FilterManager.LookupTypeToSend(domainObjectType);
-	            var domainReferenceIdString = Subscription.IdToString(referenceObjectId);
-	            var domainObjectString = (domainObject != null) ? Convert.ToBase64String(domainObject) : null;
-	            yield return new Notification
-	                {
-	                    StartDate = eventStartDateString,
-	                    EndDate = eventEndDateString,
-	                    DomainId = domainObjectIdString,
-	                    DomainType = FilterManager.LookupType(domainObjectType).Name,
-	                    DomainQualifiedType = domainQualifiedTypeString,
-	                    DomainReferenceId = domainReferenceIdString,
-	                    DomainReferenceType = referenceObjectTypeString,
-	                    ModuleId = moduleIdString,
-	                    DomainUpdateType = (int) updateType,
-	                    DataSource = dataSource,
-	                    BusinessUnitId = businessUnitId,
-	                    BinaryData = domainObjectString
-	                };
-	        }
-        }
-
-	    public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
+	    public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
-			var notificationList = createNotifications(dataSource, Subscription.IdToString(businessUnitId), eventStartDate,
-			                                           eventEndDate, moduleId, referenceObjectId,
-			                                           referenceObjectType, domainObjectId, domainObjectType, updateType,
-			                                           domainObject);
-			_signalBrokerCommands.NotifyClients(notificationList);
+			_messageBrokerSender.Send(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, referenceObjectId, referenceObjectType, domainObjectId, domainObjectType, updateType, domainObject);
 		}
 
-		public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
+		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
-			SendEventMessage(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, domainObject);
+			_messageBrokerSender.Send(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, domainObjectId, domainObjectType, updateType, domainObject);
 		}
 
-		public void SendEventMessages(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
+		public void Send(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
 		{
-			var notificationList = new List<Notification>();
-			var businessUnitIdString = Subscription.IdToString(businessUnitId);
-			foreach (var eventMessage in eventMessages)
-			{
-				notificationList.AddRange(createNotifications(dataSource, businessUnitIdString, eventMessage.EventStartDate,
-				                                              eventMessage.EventEndDate, eventMessage.ModuleId,
-				                                              eventMessage.ReferenceObjectId, eventMessage.ReferenceObjectTypeCache,
-				                                              eventMessage.DomainObjectId,
-				                                              eventMessage.DomainObjectTypeCache, eventMessage.DomainUpdateType,
-				                                              eventMessage.DomainObject));
-
-				if (notificationList.Count > 200)
-				{
-					_signalBrokerCommands.NotifyClients(notificationList);
-					notificationList.Clear();
-				}
-			}
-			if (notificationList.Count > 0)
-				_signalBrokerCommands.NotifyClients(notificationList);
+			_messageBrokerSender.Send(dataSource, businessUnitId, eventMessages);
 		}
 
 		public void SendNotification(Notification notification)

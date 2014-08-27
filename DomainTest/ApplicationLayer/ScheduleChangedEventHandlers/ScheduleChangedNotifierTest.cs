@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				};
 			handler.Handle(message);
 
-			broker.AssertWasCalled(x => x.SendEventMessage(
+			broker.AssertWasCalled(x => x.Send(
 				message.Datasource,
 				message.BusinessUnitId,
 				message.StartDateTime,
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			};
 			handler.Handle(message);
 
-			broker.AssertWasNotCalled(x => x.SendEventMessage(
+			broker.AssertWasNotCalled(x => x.Send(
 				message.Datasource,
 				message.BusinessUnitId,
 				message.StartDateTime,
