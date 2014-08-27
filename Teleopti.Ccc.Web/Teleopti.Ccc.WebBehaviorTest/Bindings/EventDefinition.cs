@@ -28,10 +28,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			try
 			{
 				Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));
-
-				TestDataSetup.CreateDataSource();
-
 				TestSiteConfigurationSetup.Setup();
+				TestDataSetup.CreateDataSourceAndStartWebApp();
 			}
 			catch (Exception)
 			{

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net;
 using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static IDataSource datasource;
 		private static readonly DefaultData globalData = new DefaultData();
 
-		public static void CreateDataSource()
+		public static void CreateDataSourceAndStartWebApp()
 		{
 			if (!DataSourceHelper.Ccc7BackupExists(globalData.HashValue))
 			{
@@ -32,12 +33,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 							new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())))))
 
 				}, true);
+				startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons();
 				setupFakeState();
 				createGlobalDbData();
 				backupCcc7Data();
 			}
 			else
 			{
+				startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons();
 				datasource = DataSourceHelper.CreateDataSourceNoBackup(new[]
 				{
 					new EventsMessageSender(
@@ -45,6 +48,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 							new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())))))
 
 				}, false);
+			}
+		}
+
+		private static void startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons()
+		{
+			var url = TestSiteConfigurationSetup.URL;
+			using (var client = new WebClient())
+			{
+				client.DownloadDataAsync(url);
 			}
 		}
 
