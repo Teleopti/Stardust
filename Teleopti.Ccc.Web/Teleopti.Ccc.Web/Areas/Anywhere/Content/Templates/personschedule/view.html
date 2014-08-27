@@ -8,10 +8,10 @@
 					<div class="relative">
 						<div data-bind="foreach: Times">
 							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
-							<div class="label label-info absolute" style="top: -1px;" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
+							<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
 							<!-- ko if: $parent.IsOtherTimeZone() -->
 							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
-							<div class="label label-info absolute" style="top: 23px;" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: TimeOtherTimeZone"></div>
+							<div class="label label-info absolute other-time-zone-label"data-bind="style: { left: (Pixel() - 13) + 'px' }, text: TimeOtherTimeZone"></div>
 							<!-- /ko -->
 						</div>
 					</div>
@@ -27,17 +27,17 @@
 					</thead>
 
 					<tbody>
-						<tr class="person selected-person" data-bind="attr: { 'data-person-id': PersonId }">
-							<td class="person-name person-name-column" data-bind="css:{'other-time-zone-style': IsOtherTimeZone()}">
+						<tr class="person selected-person" data-bind="attr: { 'data-person-id': PersonId }, css:{'time-zone-style': IsOtherTimeZone()}">
+							<td class="person-name person-name-column">
 								<!-- ko if: IsOtherTimeZone() -->
-								<div style="padding-bottom: 15px;">
+								<div class="other-time-zone-name-div">
 									<i class="glyphicon glyphicon-globe"></i>
-									<span class="small other-time-zone-short" style="vertical-align: top;" data-bind="text: TimeZoneNameShort"></span>
+									<span class="small other-time-zone-short" data-bind="text: TimeZoneNameShort"></span>
 								</div>
 								<!-- /ko -->
 								<div class="person-name nowrap" data-bind="text: Name"></div>
 							</td>
-							<td class="schedule schedule-column" data-bind="css:{'time-zone-style': !IsOtherTimeZone()}">
+							<td class="schedule schedule-column">
 								<div class="relative time-line-for">
 									<!-- ko foreach: Shifts -->
 									<div class="shift" data-bind="

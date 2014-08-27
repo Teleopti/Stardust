@@ -35,6 +35,10 @@
  
 .person-schedule .person.selected-person
 {
+	height: 57px;
+}
+.person-schedule .person.selected-person.time-zone-style
+{
 	height: 77px;
 }
 
@@ -46,16 +50,11 @@
 .person-schedule .person.selected-person .layer
 {
 	height: 40px;
+}
+
+.person-schedule .person.selected-person.time-zone-style .layer
+{
 	top: 16px;
-}
-
-.other-time-zone-style{
- vertical-align: top; 
- padding-top:4px;
-}
-
-.time-zone-style {
-	padding-top: 2px;
 }
 
 .person-schedule .person-name-column {
@@ -197,12 +196,6 @@
 	vertical-align: middle;
 }
 
-.absence-other-timezone td{
-	border-top: 0 !important;
-	padding-top: 0 !important;
-	color: darkgrey;
-}
-
 .person-schedule .space {
 	margin-top: 15px;
 }
@@ -244,8 +237,30 @@
     width: 800px;
 }
 
+.time-zone-style .person-name-column{
+	padding-top: 4px;
+	vertical-align: top;
+}
+
 .other-time-zone {
     white-space: nowrap;
     width: 400px;
     overflow: hidden;
+}
+
+.absence-other-timezone td{
+	border-top: 0 !important;
+	padding-top: 0 !important;
+	color: darkgrey;
+}
+
+.other-time-zone-name-div {
+	padding-bottom: 15px;
+}
+.other-time-zone-short {
+	vertical-align: top;
+}
+.other-time-zone-label {
+	background-color: Thistle;
+	top: 22px;
 }

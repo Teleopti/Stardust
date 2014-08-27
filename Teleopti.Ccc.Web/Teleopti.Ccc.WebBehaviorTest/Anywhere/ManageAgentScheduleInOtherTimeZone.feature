@@ -6,8 +6,8 @@ Feature: Manage agent schedule in other time zone
 
 Background:
 	Given there is a team with
-	| Field | Value            |
-	| Name  | Team green       |
+	| Field | Value      |
+	| Name  | Team green |
 	And I have a role with
 	| Field                      | Value               |
 	| Name                       | Anywhere Team Green |
@@ -88,9 +88,9 @@ Scenario: Add activity default times for agent in other time zone
 	When I view person schedules add activity form for 'John King' in 'Team green' on '2013-11-18'
 	And the browser time is '2013-11-18 12:05:00'
 	Then I should see add activity times in other time zone with
-	| Field      | Value      |
-	| Start time | 13:15      |
-	| End time   | 14:15      |
+	| Field      | Value |
+	| Start time | 13:15 |
+	| End time   | 14:15 |
 
 Scenario: Add activity times changed for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
@@ -109,9 +109,9 @@ Scenario: Add activity times changed for agent in other time zone
 	| Start time | 12:00 |
 	| End time   | 13:00 |
 	Then I should see add activity times in other time zone with
-	| Field      | Value      |
-	| Start time | 13:00      |
-	| End time   | 14:00      |
+	| Field      | Value |
+	| Start time | 13:00 |
+	| End time   | 14:00 |
 	
 Scenario: Add activity times not displayed in other time zone
 	Given I have the role 'Anywhere Team Green'
@@ -128,8 +128,7 @@ Scenario: Add activity times not displayed in other time zone
 
 
 
-
-	Scenario: Add intraday absence default times for agent in other time zone
+Scenario: Add intraday absence default times for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
 	And the current time is '2013-11-17 12:00'
@@ -143,11 +142,11 @@ Scenario: Add activity times not displayed in other time zone
 	When I view person schedules add intraday absence form for 'John King' in 'Team green' on '2013-11-18'
 	And the browser time is '2013-11-17 12:00:00'
 	Then I should see add intraday absence times in other time zone with
-	| Field      | Value      |
-	| Start time | 08:00      |
-	| End time   | 09:00      |
+	| Field      | Value |
+	| Start time | 08:00 |
+	| End time   | 09:00 |
 
-	Scenario: Add intraday absence times changed for agent in other time zone
+Scenario: Add intraday absence times changed for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
 	And 'John King' is located in 'Istanbul'
@@ -164,11 +163,11 @@ Scenario: Add activity times not displayed in other time zone
 	| Start time | 11:00   |
 	| End time   | 12:00   |
 	Then I should see add intraday absence times in other time zone with
-	| Field      | Value      |
-	| Start time | 12:00      |
-	| End time   | 13:00      |
+	| Field      | Value |
+	| Start time | 12:00 |
+	| End time   | 13:00 |
 	
-	Scenario: Add intraday absence times not displayed in other time zone
+Scenario: Add intraday absence times not displayed in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
 	And 'John King' is located in Stockholm
@@ -180,7 +179,6 @@ Scenario: Add activity times not displayed in other time zone
 	| End time       | 2013-11-18 17:00 |
 	When I view person schedules add intraday absence form for 'John King' in 'Team green' on '2013-11-18'
 	Then I should not see add intraday absence times in other time zone
-
 
 
 
@@ -205,8 +203,8 @@ Scenario: Move activity default time for agent in other time zone
 	| Start time     | 2013-11-18 11:00 |
 	And I view person schedules move activity form for 'John King' in 'Team green' on '2013-11-18' with selected start minutes of '660'
 	Then I should see selected activity time in other time zone with
-	| Field      | Value      |
-	| Start time | 12:00      |
+	| Field      | Value |
+	| Start time | 12:00 |
 
 	Scenario: Move activity time changed for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
@@ -231,8 +229,8 @@ Scenario: Move activity default time for agent in other time zone
 	| Field          | Value            |
 	| Start time     | 2013-11-18 13:00 |
 	Then I should see selected activity time in other time zone with
-	| Field      | Value      |
-	| Start time | 14:00      |
+	| Field      | Value |
+	| Start time | 14:00 |
 
 Scenario: Move activity times not displayed in other time zone
 	Given I have the role 'Anywhere Team Green'

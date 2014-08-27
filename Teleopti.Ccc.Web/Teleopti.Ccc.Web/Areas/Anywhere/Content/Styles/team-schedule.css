@@ -55,15 +55,9 @@ sh
 	width: auto;
 }
 
-.team-schedule .person-name 
-{
-}
 .team-schedule tbody tr
 {
 	cursor: pointer;
-}
-.team-schedule .schedule
-{
 }
 
 .team-schedule .dayoff 
