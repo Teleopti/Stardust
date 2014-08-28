@@ -4,9 +4,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win
 {
-	public class SikuliHelper
+	public static class SikuliHelper
 	{
-		private SikuliValidatorRegister.Select _currentValidator = SikuliValidatorRegister.Select.None;
+		private static SikuliValidatorRegister.Select _currentValidator = SikuliValidatorRegister.Select.None;
 
 		public static bool TestMode
 		{
@@ -20,14 +20,14 @@ namespace Teleopti.Ccc.Win
 			set { StateHolderReader.Instance.StateReader.SessionScopeData.SikuliValidator = value; }
 		}
 
-		public void RegisterValidator(SikuliValidatorRegister.Select validator)
+		public static void RegisterValidator(SikuliValidatorRegister.Select validator)
 		{
 			if (!TestMode)
 				return;
 			_currentValidator = validator;
 		}
 
-		public SikuliValidatorRegister.Select CurrentValidator
+		public static SikuliValidatorRegister.Select CurrentValidator
 		{
 			get
 			{
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Win
 			}
 		}
 
-		public void ShowLoaded()
+		public static void ShowLoaded()
 		{
 			if (!TestMode)
 				return;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win
 			_currentValidator = SikuliValidatorRegister.Select.None;
 		}
 
-		public void ShowTaskDone()
+		public static void ShowTaskDone()
 		{
 			if (!TestMode)
 				return;
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Win
 			_currentValidator = SikuliValidatorRegister.Select.None;
 		}
 
-		public void AssertValidation(Func<SikuliValidationResult> assertFunc)
+		public static void AssertValidation(Func<SikuliValidationResult> assertFunc)
 		{
 			if (!TestMode)
 				return;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Win
 			_currentValidator = SikuliValidatorRegister.Select.None;
 		}
 
-		public void InputValidator()
+		public static void InputValidator()
 		{
 			using (var dialog = new SikuliInputBox())
 			{
