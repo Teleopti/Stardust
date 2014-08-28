@@ -59,7 +59,7 @@ namespace Teleopti.Messaging.SignalR
 		public static IMessageBroker CompositeClient()
 		{
 			if (_compositeClient == null)
-				_compositeClient = new SignalBroker(messageFilter(), new IConnectionKeepAliveStrategy[] { new RestartOnClosed(), new RecreateOnNoPingReply() }, new Time(new Now()))
+				_compositeClient = new SignalBroker(_serverUrl, messageFilter(), new IConnectionKeepAliveStrategy[] { new RestartOnClosed(), new RecreateOnNoPingReply() }, new Time(new Now()))
 				{
 					ConnectionString = _serverUrl
 				};
@@ -110,26 +110,13 @@ namespace Teleopti.Messaging.SignalR
 		{
 			if (string.IsNullOrEmpty(_serverUrl))
 				return;
-			try
-			{
-				if (_connection == null)
-				{
-					var connection = new SignalConnection(MakeHubConnection, () => { }, _connectionKeepAliveStrategy, _time);
-					
-					_connection = connection;
-					_stateAccessor = connection;
-				}
 
-				_connection.StartConnection(null,useLongPolling);
-			}
-			catch (SocketException exception)
-			{
-				_logger.Error("The message broker seems to be down.", exception);
-			}
-			catch (BrokerNotInstantiatedException exception)
-			{
-				_logger.Error("The message broker seems to be down.", exception);
-			}
+			var connection = new SignalConnection(MakeHubConnection, () => { }, _connectionKeepAliveStrategy, _time);
+
+			_connection = connection;
+			_stateAccessor = connection;
+
+			_connection.StartConnection(null, useLongPolling);
 		}
 
 		public void Call(string methodName, params object[] args)
@@ -155,6 +142,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public virtual void Dispose()
 		{
+			if (_connection == null) return;
 			_connection.CloseConnection();
 			_connection = null;
 			_stateAccessor = null;

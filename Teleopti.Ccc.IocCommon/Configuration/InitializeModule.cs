@@ -26,6 +26,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterInstance(_dataSourceConfigurationSetter);
 			builder.RegisterType<InitializeApplication>().As<IInitializeApplication>().SingleInstance();
 			builder.RegisterType<DataSourcesFactory>().As<IDataSourcesFactory>().SingleInstance();
+
+			registerMessageBroker(builder);
+
+			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
+			builder.RegisterType<EnversConfiguration>().As<IEnversConfiguration>().SingleInstance();
+			builder.RegisterType<ConfigReader>().As<IConfigReader>().SingleInstance();
+			builder.RegisterType<ConfigurationManagerWrapper>().As<IConfigurationWrapper>().SingleInstance();
+		}
+
+		private static void registerMessageBroker(ContainerBuilder builder)
+		{
 			builder.RegisterInstance(MessageFilterManager.Instance).As<IMessageFilterManager>().SingleInstance();
 			builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>();
 			builder.RegisterType<RestartOnClosed>().As<IConnectionKeepAliveStrategy>();
@@ -33,11 +44,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IMessageBroker>()
 				.As<IMessageBrokerSender>()
 				.As<IMessageBrokerListener>()
+				.WithParameter(new NamedParameter("serverUrl", null))
 				.SingleInstance();
-			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
-			builder.RegisterType<EnversConfiguration>().As<IEnversConfiguration>().SingleInstance();
-			builder.RegisterType<ConfigReader>().As<IConfigReader>().SingleInstance();
-			builder.RegisterType<ConfigurationManagerWrapper>().As<IConfigurationWrapper>().SingleInstance();
 		}
 	}
 }

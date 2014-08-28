@@ -17,7 +17,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -31,8 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			if (_messageBroker == null)
 			{
-				var broker = new SignalBroker(MessageFilterManager.Instance, new IConnectionKeepAliveStrategy[] { }, new Time(new Now()));
-				broker.ConnectionString = TestSiteConfigurationSetup.URL.ToString();
+				var broker = new SignalBroker(TestSiteConfigurationSetup.URL.ToString(), MessageFilterManager.Instance, new IConnectionKeepAliveStrategy[] { }, new Time(new Now()));
 				broker.StartBrokerService();
 				_messageBroker = broker;
 			}
@@ -97,8 +95,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 							new PersonSkillProvider(),
 							new EventPublisher(this, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))
 					};
-            Console.WriteLine("Cannot resolve type {0}! Add it manually or consider using autofac!", type);
-		    return null;
+			Console.WriteLine("Cannot resolve type {0}! Add it manually or consider using autofac!", type);
+			return null;
 		}
 
 		private object makeProjectionChangedEventPublisher()

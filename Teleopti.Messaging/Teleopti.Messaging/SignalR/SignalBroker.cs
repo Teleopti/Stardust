@@ -20,37 +20,41 @@ namespace Teleopti.Messaging.SignalR
 	{
 		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private readonly ITime _time;
+		private string _serverUrl;
 		private IHandleHubConnection _connection;
-		private SignalBrokerCommands _signalBrokerCommands;
-		private static readonly ILog _logger = LogManager.GetLogger(typeof (SignalBroker));
+		private IStateAccessor _stateAccessor;
+		private readonly ILog _logger = LogManager.GetLogger(typeof(SignalBroker));
+
 		private readonly IMessageFilterManager _filterManager;
+		private SignalBrokerCommands _signalBrokerCommands;
 		private MessageBrokerSender _messageBrokerSender;
 		private MessageBrokerListener _messageBrokerListener;
-		private SignalConnection _stateAccessor;
 
-		public SignalBroker(IMessageFilterManager typeFilter, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, ITime time)
+		public SignalBroker(string serverUrl, IMessageFilterManager typeFilter, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, ITime time)
 		{
-			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
-			_time = time;
-			_filterManager = typeFilter;
+			_serverUrl = serverUrl;
 
 			ServicePointManager.ServerCertificateValidationCallback = IgnoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
 
-            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
-        }
+			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+
+			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
+			_time = time;
+			_filterManager = typeFilter;
+		}
 
 		private static bool IgnoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
 		{
 			return true;
 		}
 
-        private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
-        {
+		private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+		{
 			if (e.Observed) return;
 			_logger.Debug("An unobserved task failed.", e.Exception);
-	        e.SetObserved();
-        }
+			e.SetObserved();
+		}
 
 		public void StartBrokerService(bool useLongPolling = false)
 		{
@@ -59,6 +63,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				throw new BrokerNotInstantiatedException("The SignalBroker can only be used with a valid Uri!");
 			}
+
 			var connection = new SignalConnection(
 				() => MakeHubConnection(serverUrl),
 				() => _messageBrokerListener.ReregisterSubscriptions(),
@@ -91,6 +96,19 @@ namespace Teleopti.Messaging.SignalR
 			});
 		}
 
+		public bool IsAlive
+		{
+			get { return _connection != null && _connection.IsConnected(); }
+		}
+
+		public void Dispose()
+		{
+			if (_connection == null) return;
+			_connection.CloseConnection();
+			_connection = null;
+			_stateAccessor = null;
+		}
+
 		[CLSCompliant(false)]
 		protected virtual IHubConnectionWrapper MakeHubConnection(Uri serverUrl)
 		{
@@ -105,21 +123,8 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		public string ConnectionString { get; set; }
+		public string ConnectionString { get { return _serverUrl; } set { _serverUrl = value; } }
 
-		public bool IsAlive
-		{
-			get { return _connection != null && _connection.IsConnected(); }
-		}
-
-		public void Dispose()
-		{
-			if (_connection == null) return;
-			_connection.CloseConnection();
-			_connection = null;
-			_stateAccessor = null;
-		}
-		
 
 
 

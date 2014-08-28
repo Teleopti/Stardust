@@ -11,7 +11,7 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 		private readonly IHubConnectionWrapper _hubConnection;
 
 		public SignalBrokerForTest(IMessageFilterManager typeFilter, IHubConnectionWrapper hubConnection)
-			: base(typeFilter, new IConnectionKeepAliveStrategy[] { }, new Time(new Now()))
+			: base(null, typeFilter, new IConnectionKeepAliveStrategy[] { }, new Time(new Now()))
 		{
 			_hubConnection = hubConnection;
 			ConnectionString = "http://neeedsToBeSet";

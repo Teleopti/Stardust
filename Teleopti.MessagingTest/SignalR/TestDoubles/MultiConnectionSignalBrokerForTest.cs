@@ -14,7 +14,7 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 		public MultiConnectionSignalBrokerForTest(IMessageFilterManager typeFilter,
 			IEnumerable<IHubConnectionWrapper> hubConnections, IConnectionKeepAliveStrategy connectionKeepAliveStrategy,
 			ITime time)
-			: base(typeFilter, new[] {connectionKeepAliveStrategy}, time)
+			: base(null, typeFilter, new[] {connectionKeepAliveStrategy}, time)
 		{
 			_hubConnections = new Queue<IHubConnectionWrapper>(hubConnections);
 			ConnectionString = "http://neeedsToBeSet";
