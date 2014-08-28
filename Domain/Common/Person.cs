@@ -229,13 +229,17 @@ namespace Teleopti.Ccc.Domain.Common
 		    if (badge.BronzeBadge >= silverToBronzeBadgeRate)
 		    {
 			    badge.SilverBadge = badge.SilverBadge + badge.BronzeBadge/silverToBronzeBadgeRate;
+			    badge.SilverBadgeAdded = true;
 			    badge.BronzeBadge = badge.BronzeBadge%silverToBronzeBadgeRate;
+			    badge.BronzeBadgeAdded = false;
 		    }
 
 		    if (badge.SilverBadge >= goldToSilverBadgeRate)
 		    {
 			    badge.GoldBadge = badge.GoldBadge + badge.SilverBadge/goldToSilverBadgeRate;
+			    badge.GoldBadgeAdded = true;
 			    badge.SilverBadge = badge.SilverBadge%goldToSilverBadgeRate;
+			    badge.SilverBadgeAdded = false;
 		    }
 	    }
 

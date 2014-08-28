@@ -831,6 +831,26 @@ namespace Teleopti.Ccc.DomainTest.Common
 		}
 
 	    [Test]
+	    public void ShouldAwardBronzeBadgeWhenNoBadge()
+	    {
+		    var target = PersonFactory.CreatePerson("_");
+			
+			target.AddBadge(new AgentBadge
+			{
+				BadgeType = BadgeType.Adherence,
+				BronzeBadge = 1,
+				BronzeBadgeAdded = true
+			}, silverToBronzeRate, goldToSilverRate);
+
+			target.Badges.Single(x => x.BadgeType == BadgeType.Adherence).BronzeBadge.Should().Be.EqualTo(1);
+			target.Badges.Single(x => x.BadgeType == BadgeType.Adherence).BronzeBadgeAdded.Should().Be.EqualTo(true);
+			target.Badges.Single(x => x.BadgeType == BadgeType.Adherence).SilverBadge.Should().Be.EqualTo(0);
+			target.Badges.Single(x => x.BadgeType == BadgeType.Adherence).SilverBadgeAdded.Should().Be.EqualTo(false);
+			target.Badges.Single(x => x.BadgeType == BadgeType.Adherence).GoldBadge.Should().Be.EqualTo(0);
+			target.Badges.Single(x => x.BadgeType == BadgeType.Adherence).GoldBadgeAdded.Should().Be.EqualTo(false);
+	    }
+
+	    [Test]
 	    public void ShouldAwardSilverBadgeWhenBronzeBadgeMatchesSettingRate()
 	    {
 		    var target = PersonFactory.CreatePerson("_");
@@ -842,10 +862,15 @@ namespace Teleopti.Ccc.DomainTest.Common
 			target.AddBadge(new AgentBadge
 			{
 				BadgeType = BadgeType.AnsweredCalls,
-				BronzeBadge = 1
+				BronzeBadge = 1,
+				BronzeBadgeAdded = true
 			}, silverToBronzeRate, goldToSilverRate);
 		    target.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).BronzeBadge.Should().Be.EqualTo(0);
+		    target.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).BronzeBadgeAdded.Should().Be.EqualTo(false);
 		    target.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).SilverBadge.Should().Be.EqualTo(1);
+		    target.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).SilverBadgeAdded.Should().Be.EqualTo(true);
+		    target.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).GoldBadge.Should().Be.EqualTo(0);
+		    target.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls).GoldBadgeAdded.Should().Be.EqualTo(false);
 	    }
 
 	    [Test]
@@ -854,16 +879,23 @@ namespace Teleopti.Ccc.DomainTest.Common
 		    var target = PersonFactory.CreatePerson("_");
 			target.AddBadge(new AgentBadge
 			{
-				BadgeType = BadgeType.Adherence,
+				BadgeType = BadgeType.AverageHandlingTime,
+				BronzeBadge = 4,
 				SilverBadge = 1
 			}, silverToBronzeRate, goldToSilverRate);
 			target.AddBadge(new AgentBadge
 			{
-				BadgeType = BadgeType.Adherence,
-				SilverBadge = 1
+				BadgeType = BadgeType.AverageHandlingTime,
+				BronzeBadge = 1,
+				BronzeBadgeAdded = true
 			}, silverToBronzeRate, goldToSilverRate);
-			target.Badges.Single(x => x.BadgeType == BadgeType.Adherence).SilverBadge.Should().Be.EqualTo(0);
-			target.Badges.Single(x => x.BadgeType == BadgeType.Adherence).GoldBadge.Should().Be.EqualTo(1);
+
+		    target.Badges.Single(x => x.BadgeType == BadgeType.AverageHandlingTime).BronzeBadge.Should().Be.EqualTo(0);
+		    target.Badges.Single(x => x.BadgeType == BadgeType.AverageHandlingTime).BronzeBadgeAdded.Should().Be.EqualTo(false);
+			target.Badges.Single(x => x.BadgeType == BadgeType.AverageHandlingTime).SilverBadge.Should().Be.EqualTo(0);
+			target.Badges.Single(x => x.BadgeType == BadgeType.AverageHandlingTime).SilverBadgeAdded.Should().Be.EqualTo(false);
+			target.Badges.Single(x => x.BadgeType == BadgeType.AverageHandlingTime).GoldBadge.Should().Be.EqualTo(1);
+			target.Badges.Single(x => x.BadgeType == BadgeType.AverageHandlingTime).GoldBadgeAdded.Should().Be.EqualTo(true);
 	    }
     }
 }
