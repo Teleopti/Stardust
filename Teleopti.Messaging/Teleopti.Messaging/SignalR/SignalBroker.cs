@@ -58,14 +58,11 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartBrokerService(bool useLongPolling = false)
 		{
-			Uri serverUrl;
-			if (!Uri.TryCreate(ConnectionString, UriKind.Absolute, out serverUrl))
-			{
-				throw new BrokerNotInstantiatedException("The SignalBroker can only be used with a valid Uri!");
-			}
+			if (string.IsNullOrEmpty(_serverUrl))
+				return;
 
 			var connection = new SignalConnection(
-				() => MakeHubConnection(serverUrl),
+				MakeHubConnection,
 				() => _messageBrokerListener.ReregisterSubscriptions(),
 				_connectionKeepAliveStrategy,
 				_time);
@@ -110,9 +107,9 @@ namespace Teleopti.Messaging.SignalR
 		}
 
 		[CLSCompliant(false)]
-		protected virtual IHubConnectionWrapper MakeHubConnection(Uri serverUrl)
+		protected virtual IHubConnectionWrapper MakeHubConnection()
 		{
-			return new HubConnectionWrapper(new HubConnection(serverUrl.ToString()));
+			return new HubConnectionWrapper(new HubConnection(_serverUrl));
 		}
 
 		public void StopBrokerService()

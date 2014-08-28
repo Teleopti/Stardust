@@ -20,7 +20,7 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 			ConnectionString = "http://neeedsToBeSet";
 		}
 
-		protected override IHubConnectionWrapper MakeHubConnection(Uri serverUrl)
+		protected override IHubConnectionWrapper MakeHubConnection()
 		{
 			return _hubConnections.Dequeue();
 		}

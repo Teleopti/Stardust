@@ -111,7 +111,11 @@ namespace Teleopti.Messaging.SignalR
 			if (string.IsNullOrEmpty(_serverUrl))
 				return;
 
-			var connection = new SignalConnection(MakeHubConnection, () => { }, _connectionKeepAliveStrategy, _time);
+			var connection = new SignalConnection(
+				MakeHubConnection,
+				() => { },
+				_connectionKeepAliveStrategy,
+				_time);
 
 			_connection = connection;
 			_stateAccessor = connection;
