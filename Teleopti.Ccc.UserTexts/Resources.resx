@@ -12204,8 +12204,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Congratulations!</value>
     <comment>Agent badge notification title</comment>
   </data>
-  <data name="YouGotNewBadges" xml:space="preserve">
-    <value>You got new badges!</value>
+  <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
+    <value>You got a new bronze badge! Your adherence is above {0}% for one day.</value>
     <comment>Agent badge notification content</comment>
   </data>
   <data name="FileProperCase" xml:space="preserve">
@@ -12239,6 +12239,32 @@ Reduce the complexity to use these shifts.</value>
   <data name="PleaseConfigureYourEmailAddress" xml:space="preserve">
     <value>Please configure your email address to access Teleopti resources.</value>
     <comment>Message in Portal when user have no email in People</comment>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
+    <value>You got a new bronze badge! Your handling time is below {0} seconds for one day.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
+    <value>You got a new bronze badge! You have answered {0} or more calls in one day.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
+    <value>You got a new gold badge! Your adherence is above {0}% on {1} different days.</value>
+    <comment>Agent badge notification content</comment>
+  </data>
+  <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
+    <value>You got a new gold badge! Your handling time is below {0} seconds on {1} different days.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
+    <value>You got a new gold badge! You have answered {0} or more calls each day on {1} different days.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
+    <value>You got a new silver badge! Your adherence is above {0}% on {1} different days.</value>
+    <comment>Agent badge notification content</comment>
+  </data>
+  <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
+    <value>You got a new silver badge! Your handling time is below {0} seconds on {1} different days.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
+    <value>You got a new silver badge! You have answered {0} or more calls each day on {1} different days.</value>
   </data>
   <data name="Advance" xml:space="preserve">
     <value>Advance</value>
