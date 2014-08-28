@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web.Mvc;
+using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
@@ -168,7 +167,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 
-		private IList<DateTimePeriod> convertStringToUtcTimes(DateOnly selectedDate, string timesString, bool isFullDay)
+		private IList<DateTimePeriod> convertStringToUtcTimes(DateOnly selectedDate, string timesString, bool isFullDay, bool isEndFilter = false)
 		{
 			var startTimesx = string.IsNullOrEmpty(timesString) ? new string[] {} : timesString.Split(',');
 			var periodsAsString = from t in startTimesx
@@ -182,37 +181,44 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 										 };
 
 			var periods = from ps in periodsAsString
-							  let start = int.Parse(ps.Start.Split(':')[0])
-							  let end = int.Parse(ps.End.Split(':')[0])
-							  select new
-							  {
-								  Start = selectedDate.Date.Add(TimeSpan.FromHours(start)),
-								  End = selectedDate.Date.Add(TimeSpan.FromHours(end)),
-							  };
+				let start = int.Parse(ps.Start.Split(':')[0])
+				let end = int.Parse(ps.End.Split(':')[0])
+				select new MinMax<DateTime>(
+					selectedDate.Date.Add(TimeSpan.FromHours(start)),
+					selectedDate.Date.Add(TimeSpan.FromHours(end)));
 			var periodsList = periods.ToList();
+
 			if (!periodsList.Any())
 			{
 				if (isFullDay)
 				{
-					periodsList.Add(new
-						{
-							Start = selectedDate.Date.Add(TimeSpan.FromHours(0)),
-							End = selectedDate.Date.Add(TimeSpan.FromHours(36)),
-						});
+					periodsList.Add(new MinMax<DateTime>(
+						selectedDate.Date.Add(TimeSpan.FromHours(0)),
+						selectedDate.Date.Add(TimeSpan.FromHours(48))
+						));
 				}
 				else
 				{
-					periodsList.Add(new
-					{
-						Start = selectedDate.Date.Add(TimeSpan.FromHours(0)),
-						End = selectedDate.Date.Add(TimeSpan.FromHours(0)),
-					});
+					periodsList.Add(new MinMax<DateTime>(
+						selectedDate.Date.Add(TimeSpan.FromHours(0)),
+						selectedDate.Date.Add(TimeSpan.FromHours(0))
+						));
+				}
+			}else if (isEndFilter)
+			{//only do it for end time filter
+				IList<MinMax<DateTime>> oldCopy = new List<MinMax<DateTime>>();
+				oldCopy.AddRange(periodsList);
+
+				foreach (var t in oldCopy)
+				{// plus 24 hours to get night shifts which may end with tomorrow
+					var plus = new MinMax<DateTime>(t.Minimum.Add(TimeSpan.FromHours(24)), t.Maximum.Add(TimeSpan.FromHours(24)));
+					periodsList.Add(plus);
 				}
 			}
 
 			var periodsDateUtc = from p in periodsList
-										let start = TimeZoneHelper.ConvertToUtc(p.Start, _userTimeZone.TimeZone())
-										let end = TimeZoneHelper.ConvertToUtc(p.End, _userTimeZone.TimeZone())
+										let start = TimeZoneHelper.ConvertToUtc(p.Minimum, _userTimeZone.TimeZone())
+										let end = TimeZoneHelper.ConvertToUtc(p.Maximum, _userTimeZone.TimeZone())
 										let period = new DateTimePeriod(start, end)
 										select period;
 
@@ -241,7 +247,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			{
 				filter = new TimeFilterInfo();
 				filter.StartTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, true);
-				filter.EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, true);
+				filter.EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, true, true);
 				filter.IsDayOff = isDayOff;
 			}
 			return filter;
