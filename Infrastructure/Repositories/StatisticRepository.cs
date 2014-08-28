@@ -354,6 +354,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date, Percent adherenceThreshold)
 		{
+			var reportSetting = new AdherenceReportSetting
+			{
+				CalculationMethod = adherenceCalculationMethod
+			};
+
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				const string sql =
@@ -365,7 +370,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetDouble("threshold", adherenceThreshold.Value)
 					.SetString("timezoneCode", timezoneCode)
 					.SetDateTime("date", date)
-					.SetInt32("adherenceId", (int)adherenceCalculationMethod)
+					.SetInt32("adherenceId", reportSetting.AdherenceIdForReport())
 					.List<Guid>();
 			}
 		}
