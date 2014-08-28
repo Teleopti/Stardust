@@ -29,7 +29,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = new MultiConnectionSignalSenderForTest(new[] {hubConnection1, hubConnection2},
+			var target = new MultiConnectionSignalRClientForTest(new[] {hubConnection1, hubConnection2},
 				new IConnectionKeepAliveStrategy[] {new RestartOnClosed(TimeSpan.FromMinutes(1)), new RecreateOnNoPingReply(TimeSpan.FromMinutes(1))}, time);
 			target.StartBrokerService();
 
@@ -50,7 +50,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = new MultiConnectionSignalSenderForTest(new[] { hubConnection1, hubConnection2 },
+			var target = new MultiConnectionSignalRClientForTest(new[] { hubConnection1, hubConnection2 },
 				new IConnectionKeepAliveStrategy[] { new RestartOnClosed(TimeSpan.FromMinutes(2)), new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)) }, time);
 			target.StartBrokerService();
 

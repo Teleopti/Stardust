@@ -11,17 +11,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			AllNotifications = new List<Notification>();
 		}
 
-		public bool IsAlive { get; private set; }
-		public void StartBrokerService(bool useLongPolling = false)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public void StartBrokerService(int reconnectAttempts)
-		{
-			throw new System.NotImplementedException();
-		}
-
 		public Notification LastNotification;
 		public Notification LastTeamNotification;
 		public Notification LastSiteNotification;

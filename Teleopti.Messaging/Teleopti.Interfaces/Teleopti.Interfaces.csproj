@@ -761,6 +761,7 @@
     <Compile Include="IPossibleStartEndCategory.cs" />
     <Compile Include="Domain\IValidatedRequest.cs" />
     <Compile Include="MessageBroker\Client\IMessageSender.cs" />
+    <Compile Include="MessageBroker\Client\ISignalRClient.cs" />
     <Compile Include="MessageBroker\Core\Consts.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -35,8 +35,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 
 			_jobCategoryDates.Add(startDate, endDate, JobCategoryType.AgentStatistics);
 			var jobParameters = new JobParameters(_jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture);
-			
-			var jobHelper = new JobHelper(_repository, null, null);
+
+			var jobHelper = new JobHelper(_repository, null, null, null);
 			jobParameters.Helper = jobHelper;
 
 			_repository.Expect(x => x.FillScheduleDeviationDataMart(new DateTimePeriod(), null, null, false)).Constraints(
@@ -64,7 +64,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
             _jobCategoryDates.Add(startDate, endDate, JobCategoryType.AgentStatistics);
             var jobParameters = new JobParameters(_jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture);
 
-            var jobHelper = new JobHelper(_repository, null, null);
+			var jobHelper = new JobHelper(_repository, null, null, null);
             jobParameters.Helper = jobHelper;
 
             _repository.Expect(x => x.FillScheduleDeviationDataMart(new DateTimePeriod(), null, null, false)).Constraints(

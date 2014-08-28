@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Events;
 
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 	    public void Notify(Guid moduleId, IEnumerable<IRootChangeInfo> rootModifications)
         {
-            if (_messageBroker==null || !_messageBroker.IsConnected) return;
+            if (_messageBroker==null || !_messageBroker.IsAlive) return;
             
 			var eventMessages = new List<IEventMessage>();
             foreach (var change in rootModifications)

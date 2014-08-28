@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
 using log4net;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                         try
                         {
 							var useLongPolling = StateHolderReader.Instance.StateReader.ApplicationScopeData.AppSettings.GetSettingValue("MessageBrokerLongPolling", bool.Parse);
-							_messaging.StartMessageBroker(useLongPolling);
+							_messaging.StartBrokerService(useLongPolling);
                         }
                         catch (BrokerNotInstantiatedException ex)
                         {
@@ -101,11 +102,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         /// </summary>
         protected virtual void ReleaseManagedResources()
         {
-            if (_messaging != null && _messaging.IsConnected && !MessageBrokerReceiveEnabled)
+            if (_messaging != null && _messaging.IsAlive && !MessageBrokerReceiveEnabled)
             {
                 lock (LockObject)
                 {
-                    _messaging.StopMessageBroker();
+                    _messaging.StopBrokerService();
                 }
             }
         }

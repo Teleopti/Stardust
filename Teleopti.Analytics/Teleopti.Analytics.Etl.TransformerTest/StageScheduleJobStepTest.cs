@@ -38,7 +38,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			var scheduleTransformer = _mock.DynamicMock<IScheduleTransformer>();
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
 			jobParameters.StateHolder = commonStateHolder;
-			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
+			jobParameters.Helper = new JobHelper(raptorRepository, null, null, null);
 			var stageScheduleJobStep = new StageScheduleJobStep(jobParameters, scheduleTransformer);
 
 	        Expect.Call(raptorRepository.TruncateSchedule);

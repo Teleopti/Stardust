@@ -841,7 +841,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
         private void RegisterForMessageBrokerEvents()
         {
             if (StateHolder.Instance.MessageBroker != null &&
-                StateHolder.Instance.MessageBroker.IsConnected)
+                StateHolder.Instance.MessageBroker.IsAlive)
             {
                 try
                 {
@@ -873,7 +873,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
         public void UnregisterMessageBrokerSubscriptions()
         {
-            if (StateHolder.Instance.MessageBroker != null && StateHolder.Instance.MessageBroker.IsConnected)
+            if (StateHolder.Instance.MessageBroker != null && StateHolder.Instance.MessageBroker.IsAlive)
             {
                 try
                 {

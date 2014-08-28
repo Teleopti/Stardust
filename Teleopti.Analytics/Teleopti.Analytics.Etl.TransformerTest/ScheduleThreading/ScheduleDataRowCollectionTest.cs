@@ -38,7 +38,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.ScheduleThreading
 
 			var scheduleProjections = new List<ScheduleProjection> { scheduleProjectionServiceList[0] };
 
-			_jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null,null);
+			_jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null, null);
 
 			IVisualLayerCollection layerCollection = VisualLayerCollectionFactory.CreateForWorkShift(new Person(),
 																									 new TimeSpan(9, 0, 0),

@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
@@ -27,8 +28,8 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			_messageBroker.ConnectionString = ConnectionString();
 			bool useLongPolling;
 			return bool.TryParse(_settings.MessageBrokerLongPolling(), out useLongPolling) 
-				? Task.Factory.StartNew(() => _messageBroker.StartMessageBroker(useLongPolling)) 
-				: Task.Factory.StartNew(() => _messageBroker.StartMessageBroker(true));
+				? Task.Factory.StartNew(() => _messageBroker.StartBrokerService(useLongPolling)) 
+				: Task.Factory.StartNew(() => _messageBroker.StartBrokerService(true));
 		}
 
 		private string ConnectionString()

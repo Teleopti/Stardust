@@ -15,24 +15,24 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
     {
         private IRaptorRepository _repository;
         private ILogOnHelper _logHelp;
-        private IMessageSender _messageSender;
-
-        protected JobHelper(ILogOnHelper logOnHelper, IMessageSender messageSender)
-        {
-            _logHelp = logOnHelper;
-            _messageSender = messageSender;
-        }
+		private ISignalRClient _messageClient;
+		private IMessageSender _messageSender;
 
         public JobHelper()
         {
 			_logHelp = new LogOnHelper(SuperUser.UserName, SuperUser.Password, ConfigurationManager.AppSettings["nhibConfPath"]);
-            _messageSender = SignalSender.MakeForEtl(ConfigurationManager.AppSettings["MessageBroker"]);
+			MessageBrokerContainer.Initialize(ConfigurationManager.AppSettings["MessageBroker"]);
+			_messageSender = MessageBrokerContainer.Sender();
+	        _messageClient = MessageBrokerContainer.SignalRClient();
         }
 
-        public JobHelper(IRaptorRepository repository, IMessageSender messageSender, ILogOnHelper logOnHelper) : this(logOnHelper, messageSender)
+        public JobHelper(IRaptorRepository repository, ISignalRClient messageClient, IMessageSender messageSender, ILogOnHelper logOnHelper)
         {
             _repository = repository;
-        }
+			_logHelp = logOnHelper;
+			_messageClient = messageClient;
+			_messageSender = messageSender;
+		}
 
         public IList<IBusinessUnit> BusinessUnitCollection
         {
@@ -44,10 +44,15 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
             get { return _repository; }
         }
 
-        public IMessageSender MessageSender
-        {
-            get { return _messageSender; }
-        }
+		public ISignalRClient MessageClient
+		{
+			get { return _messageClient; }
+		}
+
+		public IMessageSender MessageSender
+		{
+			get { return _messageSender; }
+		}
 
         public bool LogOnTeleoptiCccDomain(IBusinessUnit businessUnit)
         {
@@ -85,7 +90,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 
         protected virtual void ReleaseUnmanagedResources()
         {
-
         }
 
         protected virtual void ReleaseManagedResources()
@@ -94,6 +98,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
             if (_logHelp != null)
                 _logHelp.Dispose();
             _logHelp = null;
+	        _messageClient = null;
             _messageSender = null;
         }
 

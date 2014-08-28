@@ -9,7 +9,6 @@ using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
@@ -25,7 +24,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 		{
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
 			var target = new StageScheduleDayOffCountJobStep(jobParameters);
-			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null);
+			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null, null);
 			Assert.AreEqual(JobCategoryType.Schedule, target.JobCategory);
 			Assert.AreEqual("stg_schedule_day_off_count, stg_day_off, dim_day_off", target.Name);
 			Assert.IsFalse(target.IsBusinessUnitIndependent);

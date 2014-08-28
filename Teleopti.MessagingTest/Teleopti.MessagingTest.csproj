@@ -39,14 +39,14 @@
     <Compile Include="SignalR\TestDoubles\HubProxyFake.cs" />
     <Compile Include="SignalR\TestDoubles\MessageFilterManagerFake.cs" />
     <Compile Include="SignalR\TestDoubles\MultiConnectionSignalBrokerForTest.cs" />
-    <Compile Include="SignalR\TestDoubles\MultiConnectionSignalSenderForTest.cs" />
+    <Compile Include="SignalR\TestDoubles\MultiConnectionSignalRClientForTest.cs" />
     <Compile Include="SignalR\TestDoubles\SignalBrokerForTest.cs" />
     <Compile Include="SignalR\TestDoubles\HubConnectionMock.cs" />
     <Compile Include="SignalR\SignalBrokerTest.cs" />
     <Compile Include="SignalR\SignalConnectionRestartOnClosedTest.cs" />
     <Compile Include="SignalR\SignalConnectionPingTest.cs" />
     <Compile Include="SignalR\SignalConnectionStrategiesIntegrationTest.cs" />
-    <Compile Include="SignalR\TestDoubles\SignalSenderForTest.cs" />
+    <Compile Include="SignalR\TestDoubles\SignalRClientForTest.cs" />
     <Compile Include="SignalR\SignalSenderTest.cs" />
     <Compile Include="SignalR\TestDoubles\HubProxySubscribableFake.cs" />
   </ItemGroup>

@@ -12,7 +12,9 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
+using IMessageSender = Teleopti.Ccc.Infrastructure.UnitOfWork.IMessageSender;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
@@ -320,7 +322,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				session.Flush();
 				tx.Commit();
 				tx.Dispose();
-				Expect.Call(messageBroker.IsConnected).Return(true);
+				Expect.Call(messageBroker.IsAlive).Return(true);
 			}
 
 			mocks.ReplayAll();
@@ -374,7 +376,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 				Expect.Call(() => messageSender.Execute(new List<IRootChangeInfo>(interceptor.ModifiedRoots))).IgnoreArguments();
 				
-				Expect.Call(messageBroker.IsConnected).Return(true);
+				Expect.Call(messageBroker.IsAlive).Return(true);
 			}
 
 			mocks.ReplayAll();

@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.WebTest.Core.Startup
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 
 			Task.WaitAll(target.Execute());
 
-			messageBroker.AssertWasCalled(x => x.StartMessageBroker(true));
+			messageBroker.AssertWasCalled(x => x.StartBrokerService(true));
 		}
 
 		private static ICurrentHttpContext CurrentHttpContext(string url, string applicationPath)

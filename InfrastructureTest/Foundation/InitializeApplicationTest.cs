@@ -13,9 +13,11 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
 using Teleopti.Messaging.SignalR;
+using IMessageSender = Teleopti.Ccc.Infrastructure.UnitOfWork.IMessageSender;
 using Is = Rhino.Mocks.Constraints.Is;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
@@ -111,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 					.IgnoreArguments()
 					.Constraints(
 					Is.Matching<XElement>(x => x.ToString() == nhibXml2.ToString()), Is.Anything());
-				messBroker.StartMessageBroker();
+				messBroker.StartBrokerService();
 				Expect.Call(messBroker.ConnectionString).PropertyBehavior();
 			}
 
@@ -170,7 +172,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 					.IgnoreArguments()
 					.Constraints(
 					Is.Matching<XElement>(x => x.ToString() == nhibXml2.ToString()), Is.Anything());
-				messBroker.StartMessageBroker();
+				messBroker.StartBrokerService();
 				Expect.Call(messBroker.ConnectionString).PropertyBehavior();
 			}
 

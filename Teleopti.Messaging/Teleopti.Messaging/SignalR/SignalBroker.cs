@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
@@ -15,16 +16,17 @@ using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class SignalBroker : IMessageBroker
+	public class SignalBroker : IMessageBroker, ISignalRClient
 	{
 		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private readonly ITime _time;
 		private IHandleHubConnection _connection;
 		private SignalBrokerCommands _signalBrokerCommands;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
+		private static readonly ILog _logger = LogManager.GetLogger(typeof (SignalBroker));
 		private readonly IMessageFilterManager _filterManager;
 		private MessageBrokerSender _messageBrokerSender;
 		private MessageBrokerListener _messageBrokerListener;
+		private SignalConnection _stateAccessor;
 
 		public static SignalBroker MakeForTest(IMessageFilterManager typeFilter)
 		{
@@ -52,7 +54,7 @@ namespace Teleopti.Messaging.SignalR
         private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
 			if (e.Observed) return;
-			Logger.Debug("An unobserved task failed.", e.Exception);
+			_logger.Debug("An unobserved task failed.", e.Exception);
 	        e.SetObserved();
         }
 
@@ -61,7 +63,7 @@ namespace Teleopti.Messaging.SignalR
 			return true;
 		}
 
-		public void StartMessageBroker(bool useLongPolling = false)
+		public void StartBrokerService(bool useLongPolling = false)
 		{
 			Uri serverUrl;
 			if (!Uri.TryCreate(ConnectionString, UriKind.Absolute, out serverUrl))
@@ -75,12 +77,29 @@ namespace Teleopti.Messaging.SignalR
 				_time);
 
 			_connection = connection;
+			_stateAccessor = connection;
 
-			_signalBrokerCommands = new SignalBrokerCommands(Logger, connection);
+			_signalBrokerCommands = new SignalBrokerCommands(_logger, this);
 			_messageBrokerSender = new MessageBrokerSender(_signalBrokerCommands, _filterManager);
 			_messageBrokerListener = new MessageBrokerListener(_signalBrokerCommands);
 
 			_connection.StartConnection(_messageBrokerListener.OnNotification, useLongPolling);
+		}
+
+		public void Call(string methodName, params object[] args)
+		{
+			if (_stateAccessor == null)
+				return;
+			_stateAccessor.IfProxyConnected(p =>
+			{
+				var task = p.Invoke(methodName, args);
+
+				task.ContinueWith(t =>
+				{
+					if (t.IsFaulted && t.Exception != null)
+						_logger.Info("An error occurred on task calling " + methodName, t.Exception);
+				}, TaskContinuationOptions.OnlyOnFaulted);
+			});
 		}
 
 		[CLSCompliant(false)]
@@ -89,7 +108,7 @@ namespace Teleopti.Messaging.SignalR
 			return new HubConnectionWrapper(new HubConnection(serverUrl.ToString()));
 		}
 
-		public void StopMessageBroker()
+		public void StopBrokerService()
 		{
 			if (_connection != null)
 			{
@@ -99,7 +118,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public string ConnectionString { get; set; }
 
-		public bool IsConnected
+		public bool IsAlive
 		{
 			get { return _connection != null && _connection.IsConnected(); }
 		}
@@ -109,7 +128,15 @@ namespace Teleopti.Messaging.SignalR
 			if (_connection == null) return;
 			_connection.CloseConnection();
 			_connection = null;
+			_stateAccessor = null;
 		}
+		
+
+
+
+
+
+
 
 		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{

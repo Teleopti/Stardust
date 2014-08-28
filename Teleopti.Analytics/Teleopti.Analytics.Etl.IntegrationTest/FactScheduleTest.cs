@@ -34,16 +34,16 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			SetupFixtureForAssembly.EndTest();
 		}
 
-        [Test]
-        public void ShouldHaveCorrectScheduleInReports()
-        {
+		[Test]
+		public void ShouldHaveCorrectScheduleInReports()
+		{
 			DateTime testDate = new DateTime(2013, 06, 15);
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
 
 			AnalyticsRunner.RunSysSetupTestData(testDate);
-            const string timeZoneId = "W. Europe Standard Time";
-            IPerson person;
-            BasicShiftSetup.SetupBasicForShifts();
+			const string timeZoneId = "W. Europe Standard Time";
+			IPerson person;
+			BasicShiftSetup.SetupBasicForShifts();
 			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
 
 
@@ -55,35 +55,35 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(activityPhone);
 			Data.Apply(activityLunch);
 
-            //Add overlapping
-            BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			//Add overlapping
+			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(0), 9, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
-            var period = new DateTimePeriod(testDate.AddDays(-14).ToUniversalTime(), testDate.AddDays(14).ToUniversalTime());
-            var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
-            dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
-            var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
-            {
-                Helper =
-                    new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null),
-                DataSource = 2
-            };
+			var period = new DateTimePeriod(testDate.AddDays(-14).ToUniversalTime(), testDate.AddDays(14).ToUniversalTime());
+			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
+			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
+			{
+				Helper =
+					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null),
+				DataSource = 2
+			};
 
-            jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
-            StepRunner.RunNightly(jobParameters);
+			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
+			StepRunner.RunNightly(jobParameters);
 
-	        const string phone = "Phone";
+			const string phone = "Phone";
 			var schedule = SqlCommands.ReportDataScheduledTimePerAgent(testDate.AddDays(-2), testDate.AddDays(0), 1, person, timeZoneId, phone);
-            
-            Assert.That(schedule.Rows.Count, Is.EqualTo(3));
-	        foreach (DataRow row in schedule.Rows)
-	        {
-		        if ((row["date"]).Equals(testDate.AddDays(-2)))
-		        {
-			        Assert.That((row["activity_absence_name"]), Is.EqualTo(phone));
-			        Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(180));
-		        }
+			
+			Assert.That(schedule.Rows.Count, Is.EqualTo(3));
+			foreach (DataRow row in schedule.Rows)
+			{
+				if ((row["date"]).Equals(testDate.AddDays(-2)))
+				{
+					Assert.That((row["activity_absence_name"]), Is.EqualTo(phone));
+					Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(180));
+				}
 				if ((row["date"]).Equals(testDate.AddDays(-1)))
 				{
 					Assert.That((row["activity_absence_name"]), Is.EqualTo(phone));
@@ -94,7 +94,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 					Assert.That((row["activity_absence_name"]), Is.EqualTo(phone));
 					Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(420));
 				}
-	        }
+			}
 		}
 
 		[Test]
@@ -129,7 +129,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
 			{
 				Helper =
-					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null),DataSource = 2
+					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null),
+				DataSource = 2
 			};
 
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
@@ -157,16 +158,16 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
 			AnalyticsRunner.RunSysSetupTestData(testDate);
 
-		    var el = new ExternalLogonConfigurable
-		    {
-		        AcdLogOnAggId = 52,
-		        AcdLogOnMartId = 1,
-		        AcdLogOnOriginalId = "152",
-		        AcdLogOnName = "Ola H"
-		    };
-            Data.Apply(el);
+			var el = new ExternalLogonConfigurable
+			{
+				AcdLogOnAggId = 52,
+				AcdLogOnMartId = 1,
+				AcdLogOnOriginalId = "152",
+				AcdLogOnName = "Ola H"
+			};
+			Data.Apply(el);
 
-            IPerson person;
+			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
 			BasicShiftSetup.AddPerson(out person, "Ola H", "Ola H", testDate);
 
@@ -192,7 +193,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
 			{
 				Helper =
-					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null),
+					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null),
 				DataSource = 2
 			};
 
@@ -229,7 +230,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(-2)), Is.EqualTo(32));
 			var column = "deviation_schedule_s";
 			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(24540));
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(21960));
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(21960));
 			column = "scheduled_ready_time_s";
 			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(25200));
 			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(25200));
@@ -375,19 +376,19 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			//Asserts on fact_schedule_deviation
 			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(-1)), Is.EqualTo(35), "ETL."+ ETLType + " count intervals for Day-1");
-            Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(-2)), Is.EqualTo(46), "ETL." + ETLType + " count intervals for Day-2");
+			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(-2)), Is.EqualTo(46), "ETL." + ETLType + " count intervals for Day-2");
 			var column = "deviation_schedule_s";
 			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(24540), "ETL." + ETLType + " " + column + " for Day-1");
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(33660), "ETL." + ETLType + " " + column + " for Day-2");
-            column = "scheduled_ready_time_s";
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(25200), "ETL." + ETLType + " " + column + " for Day-1");
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(36000), "ETL." + ETLType + " " + column + " for Day-2");
-            column = "ready_time_s";
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(4740), "ETL." + ETLType + " " + column + " for Day-1");
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(4500), "ETL." + ETLType + " " + column + " for Day-2");
-            column = "deviation_schedule_ready_s";
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(22500), "ETL." + ETLType + " " + column + " for Day-1");
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(32580), "ETL." + ETLType + " " + column + " for Day-2");
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(33660), "ETL." + ETLType + " " + column + " for Day-2");
+			column = "scheduled_ready_time_s";
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(25200), "ETL." + ETLType + " " + column + " for Day-1");
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(36000), "ETL." + ETLType + " " + column + " for Day-2");
+			column = "ready_time_s";
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(4740), "ETL." + ETLType + " " + column + " for Day-1");
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(4500), "ETL." + ETLType + " " + column + " for Day-2");
+			column = "deviation_schedule_ready_s";
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(22500), "ETL." + ETLType + " " + column + " for Day-1");
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(32580), "ETL." + ETLType + " " + column + " for Day-2");
 
 			
 		}

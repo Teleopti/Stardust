@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
@@ -17,7 +16,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
         public void Setup()
         {
             _jobParameters = JobParametersFactory.SimpleParameters(false);
-            _jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null,null);
+			_jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null, null);
         }
 
         [Test]

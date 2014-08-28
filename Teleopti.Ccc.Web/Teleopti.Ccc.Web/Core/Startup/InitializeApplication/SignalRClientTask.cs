@@ -1,17 +1,15 @@
-﻿
-
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 {
 	[TaskPriority(14)]
-	public class SignalSenderTask : IBootstrapperTask
+	public class SignalRClientTask : IBootstrapperTask
 	{
-		private readonly IMessageSender _signalSender;
+		private readonly ISignalRClient _signalSender;
 
-		public SignalSenderTask(IMessageSender signalSender)
+		public SignalRClientTask(ISignalRClient signalSender)
 		{
 			_signalSender = signalSender;
 		}

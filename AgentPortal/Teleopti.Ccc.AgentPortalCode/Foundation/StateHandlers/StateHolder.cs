@@ -2,6 +2,7 @@
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
@@ -141,7 +142,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
 				_messageBroker = broker;
 
         		var useLongPolling = State.SessionScopeData.AppSettings.GetSettingValue("MessageBrokerLongPolling", bool.Parse);
-				_messageBroker.StartMessageBroker(useLongPolling);
+				_messageBroker.StartBrokerService(useLongPolling);
         	}
         }
 

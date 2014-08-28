@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.SystemCheck
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck
             using(mocks.Record())
             {
                 Expect.Call(mb.ConnectionString).Return("Any");
-                Expect.Call(mb.IsConnected)
+                Expect.Call(mb.IsAlive)
                     .Return(true);
             }
             using(mocks.Playback())
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck
             using (mocks.Record())
             {
                 Expect.Call(mb.ConnectionString).Return("Any");
-                Expect.Call(mb.IsConnected)
+                Expect.Call(mb.IsAlive)
                     .Return(false);
             }
             using (mocks.Playback())

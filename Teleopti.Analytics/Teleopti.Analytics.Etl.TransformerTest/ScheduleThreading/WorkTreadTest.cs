@@ -7,7 +7,6 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.ScheduleThreading;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -30,7 +29,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.ScheduleThreading
             var scheduleProjections1 = new List<ScheduleProjection> { scheduleProjectionServiceList[0] };
             var scheduleProjections2 = new List<ScheduleProjection> { scheduleProjectionServiceList[8] };
 
-            jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null,null);
+            jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null, null);
 
             _threadObj1 = new ThreadObj(scheduleProjections1, new DateTime(), jobParameters);
             _threadObj2 = new ThreadObj(scheduleProjections2, new DateTime(), jobParameters);

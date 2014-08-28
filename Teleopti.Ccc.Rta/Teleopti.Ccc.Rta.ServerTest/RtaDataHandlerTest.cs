@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Runtime.Remoting.Messaging;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using log4net;
@@ -19,7 +20,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		private MockRepository _mocks;
 		private RtaDataHandler _target;
 		private IActualAgentAssembler _agentAssembler;
-		private IMessageSender _asyncMessageSender;
+		private ISignalRClient _messageClient;
+		private IMessageSender _messageSender;
 		private IDataSourceResolver _dataSourceResolver;
 		private IPersonResolver _personResolver;
 	    
@@ -41,7 +43,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_mocks = new MockRepository();
 			_agentAssembler = _mocks.StrictMock<IActualAgentAssembler>();
 			_mocks.DynamicMock<ILog>();
-			_asyncMessageSender = _mocks.StrictMock<IMessageSender>();
+			_messageClient = _mocks.StrictMock<ISignalRClient>();
+			_messageSender = _mocks.StrictMock<IMessageSender>();
 			_dataSourceResolver = _mocks.StrictMock<IDataSourceResolver>();
 			_personResolver = _mocks.DynamicMock<IPersonResolver>();
 			
@@ -62,9 +65,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ProcessRtaData_SameStateCode_ShouldAddToDatabaseCache_ButNotSendOverMessageBroker()
 		{
-			_asyncMessageSender = MockRepository.GenerateMock<IMessageSender>();
+			_messageSender = MockRepository.GenerateMock<IMessageSender>();
 
-			_asyncMessageSender.StartBrokerService(useLongPolling:true);
 			var agentState = new ActualAgentState {SendOverMessageBroker = false};
 			int datasourceId;
 			IEnumerable<PersonWithBusinessUnit> outEnumerable;
@@ -83,10 +85,10 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_mocks.ReplayAll();
 
 
-			_target = new RtaDataHandler(_asyncMessageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
+			_target = new RtaDataHandler(_messageClient, _messageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId, _isSnapshot);
 
-			_asyncMessageSender.AssertWasNotCalled(a => a.SendNotification(null), a => a.IgnoreArguments());
+			_messageSender.AssertWasNotCalled(a => a.SendNotification(null), a => a.IgnoreArguments());
 			_mocks.VerifyAll();
 
 		}
@@ -95,7 +97,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void ShouldClearCacheWhenCheckScheduleIsCalled()
 		{
 			var agentHandler = MockRepository.GenerateMock<IActualAgentAssembler>();
-			var target = new RtaDataHandler(_asyncMessageSender, _dataSourceResolver, _personResolver, agentHandler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
+			var target = new RtaDataHandler(_messageClient, _messageSender, _dataSourceResolver, _personResolver, agentHandler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
 			var personId = Guid.NewGuid();
 			var timeStamp = new DateTime(2000, 1, 1);
 
@@ -106,10 +108,10 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void VerifyIsAlive()
 		{
-			Expect.Call(_asyncMessageSender.IsAlive).Return(true);
+			Expect.Call(_messageClient.IsAlive).Return(true);
 			_mocks.ReplayAll();
 
-			_target = new RtaDataHandler(_asyncMessageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
+			_target = new RtaDataHandler(_messageClient, _messageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
 			Assert.IsTrue(_target.IsAlive);
 			_mocks.VerifyAll();
 		}
@@ -213,11 +215,11 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_agentAssembler.Expect(
 				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(agentState);
-			_asyncMessageSender.Expect(m => m.SendNotification(null)).IgnoreArguments();
+			_messageSender.Expect(m => m.SendNotification(null)).IgnoreArguments();
 			
 			_mocks.ReplayAll();
 
-			_target = new RtaDataHandler(_asyncMessageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
+			_target = new RtaDataHandler(_messageClient, _messageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 								   _isSnapshot);
 			
@@ -240,7 +242,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			var agentState = new ActualAgentState { SendOverMessageBroker = true };
 			var afterSend = MockRepository.GenerateMock<IActualAgentStateHasBeenSent>();
 
-			var asyncMessageSender = MockRepository.GenerateStub<IMessageSender>();
+			var messageSender = MockRepository.GenerateStub<IMessageSender>();
 			_dataSourceResolver.Stub(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
 			_personResolver.Stub(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
@@ -251,7 +253,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			
 			_mocks.ReplayAll();
 
-			_target = new RtaDataHandler(asyncMessageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), afterSend);
+			_target = new RtaDataHandler(_messageClient, messageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), afterSend);
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 								   _isSnapshot);
 
@@ -273,10 +275,10 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_agentAssembler.Expect(a => a.InvalidateReadModelCache(_personId));
 			_agentAssembler.Expect(a => a.GetAgentStateForScheduleUpdate(_personId, _businessUnitId, _timestamp)).IgnoreArguments().Return(
 				agentState);
-			_asyncMessageSender.Expect(m => m.SendNotification(null)).IgnoreArguments();
+			_messageSender.Expect(m => m.SendNotification(null)).IgnoreArguments();
 			_mocks.ReplayAll();
 
-			_target = new RtaDataHandler(_asyncMessageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
+			_target = new RtaDataHandler(_messageClient, _messageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
 			_target.ProcessScheduleUpdate(_personId, _businessUnitId, _timestamp);
 			_mocks.VerifyAll();
 		}
@@ -289,7 +291,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_mocks.ReplayAll();
 
 
-			_target = new RtaDataHandler(_asyncMessageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
+			_target = new RtaDataHandler(_messageClient, _messageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
 			_target.ProcessScheduleUpdate(_personId, _businessUnitId, _timestamp);
 			_mocks.VerifyAll();
 		}
@@ -297,12 +299,12 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldReturnFromConstructorWhenNoMessageSender()
 		{
-			_target = new RtaDataHandler(_asyncMessageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
+			_target = new RtaDataHandler(_messageClient, _messageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
 		}
 		
 		private void assignTargetAndRun()
 		{
-			_target = new RtaDataHandler(_asyncMessageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
+			_target = new RtaDataHandler(_messageClient, _messageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 			                       _isSnapshot);
 		}
@@ -319,7 +321,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			_agentAssembler.Expect(a => a.GetAgentStatesForMissingAgents(_batchId, _sourceId))
 			               .Return(new List<IActualAgentState> {agentState, null});
-			_asyncMessageSender.Expect(m => m.SendNotification(null)).IgnoreArguments();
+			_messageSender.Expect(m => m.SendNotification(null)).IgnoreArguments();
 			_mocks.ReplayAll();
 			
 			assignTargetAndRun();

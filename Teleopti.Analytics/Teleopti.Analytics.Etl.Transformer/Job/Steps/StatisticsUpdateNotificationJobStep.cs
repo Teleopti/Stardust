@@ -4,8 +4,6 @@ using System.Net.Sockets;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
 using Teleopti.Messaging.SignalR;
 using log4net;
@@ -27,12 +25,13 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
 			//Send to MessageBroker that new queue stats is loaded
+			var messageClient = _jobParameters.Helper.MessageClient;
 			var messageSender = _jobParameters.Helper.MessageSender;
 			try
 			{
-				if (!messageSender.IsAlive)
-					messageSender.StartBrokerService(useLongPolling:true);
-				if (messageSender.IsAlive)
+				if (!messageClient.IsAlive)
+					messageClient.StartBrokerService(useLongPolling: true);
+				if (messageClient.IsAlive)
 				{
 					var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
 

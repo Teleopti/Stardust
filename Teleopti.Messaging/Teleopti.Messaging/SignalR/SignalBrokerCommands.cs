@@ -1,61 +1,49 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using log4net;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Messaging.SignalR
 {
 	public class SignalBrokerCommands
 	{
 		private readonly ILog _logger;
-		private readonly IStateAccessor _hubProxy;
+		private readonly ISignalRClient _client;
 		private const string notifyclients = "NotifyClients";
 		private const string notifyclientsmultiple = "NotifyClientsMultiple";
 		private const string addsubscription = "AddSubscription";
 		private const string removesubscription = "RemoveSubscription";
 
-		public SignalBrokerCommands(ILog logger, IStateAccessor hubProxy)
+		public SignalBrokerCommands(ILog logger, ISignalRClient client)
 		{
 			_logger = logger;
-			_hubProxy = hubProxy;
+			_client = client;
 		}
 
 		public void AddSubscription(Subscription subscription)
 		{
 			_logger.Debug("AddSubscription");
-			call(addsubscription, subscription);
+			_client.Call(addsubscription, subscription);
 		}
 
 		public void RemoveSubscription(string route)
 		{
 			_logger.Debug("RemoveSubscription");
-			call(removesubscription, route);
+			_client.Call(removesubscription, route);
 		}
 
 		public void NotifyClients(Notification notification)
 		{
 			_logger.Debug("NotifyClients");
-			call(notifyclients, notification);
+			_client.Call(notifyclients, notification);
 		}
 
 		public void NotifyClients(IEnumerable<Notification> notifications)
 		{
 			_logger.Debug("NotifyClients");
-			call(notifyclientsmultiple, notifications);
+			_client.Call(notifyclientsmultiple, notifications);
 		}
 
-		private void call(string methodName, params object[] args)
-		{
-			_hubProxy.IfProxyConnected(p =>
-			{
-				var task = p.Invoke(methodName, args);
-
-				task.ContinueWith(t =>
-				{
-					if (t.IsFaulted && t.Exception != null)
-						_logger.Info("An error occurred on task calling " + methodName, t.Exception);
-				}, TaskContinuationOptions.OnlyOnFaulted);
-			});
-		}
 	}
+
 }

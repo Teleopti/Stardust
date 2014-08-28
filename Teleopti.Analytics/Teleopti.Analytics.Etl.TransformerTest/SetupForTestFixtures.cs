@@ -5,6 +5,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 using BusinessUnitFactory=Teleopti.Analytics.Etl.TransformerTest.FakeData.BusinessUnitFactory;
 

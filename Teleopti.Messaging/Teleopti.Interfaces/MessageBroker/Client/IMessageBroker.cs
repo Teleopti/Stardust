@@ -1,12 +1,12 @@
 using System;
 
-namespace Teleopti.Interfaces.MessageBroker.Events
+namespace Teleopti.Interfaces.MessageBroker.Client
 {
 	public interface IMessageBroker : IDisposable, IMessageBrokerSender, IMessageBrokerListener
 	{
-		void StartMessageBroker(bool useLongPolling = false);
-        void StopMessageBroker();
+		void StartBrokerService(bool useLongPolling = false);
+        void StopBrokerService();
         string ConnectionString { get; set; }
-        bool IsConnected { get; }
+        bool IsAlive { get; }
     }
 }

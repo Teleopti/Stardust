@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             var messageBrokerReceiveDisabled = !messageBrokerReceiveEnabled();
             if (messageBrokerEnabled && messageBrokerReceiveDisabled)
                 if (messageBroker != null)
-                    messageBroker.StopMessageBroker();
+                    messageBroker.StopBrokerService();
 
             var container = buildIoc();
             AutofacHostFactory.Container = container.Build();

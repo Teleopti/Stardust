@@ -17,18 +17,22 @@ namespace Teleopti.Ccc.Rta.Server
 
 		private readonly IActualAgentAssembler _agentAssembler;
 		private readonly IDatabaseWriter _databaseWriter;
-		private readonly IMessageSender _asyncMessageSender;
+		private readonly ISignalRClient _messageClient;
+		private readonly IMessageSender _messageSender;
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
 
-		public RtaDataHandler(IMessageSender asyncMessageSender,
+		public RtaDataHandler(
+			ISignalRClient messageClient,
+			IMessageSender messageSender,
 			IDataSourceResolver dataSourceResolver,
 			IPersonResolver personResolver,
 			IActualAgentAssembler agentAssembler,
 			IDatabaseWriter databaseWriter,
 			IActualAgentStateHasBeenSent actualAgentStateHasBeenSent)
 		{
-			_asyncMessageSender = asyncMessageSender;
+			_messageClient = messageClient;
+			_messageSender = messageSender;
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
 			_agentAssembler = agentAssembler;
@@ -50,7 +54,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public bool IsAlive
 		{
-			get { return _asyncMessageSender.IsAlive; }
+			get { return _messageClient.IsAlive; }
 		}
 
 		// Probably a WaitHandle object isnt a best choice, but same applies to QueueUserWorkItem method.
@@ -131,7 +135,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			var notification = NotificationFactory.CreateNotification(agentState);
 
-			_asyncMessageSender.SendNotification(notification);
+			_messageSender.SendNotification(notification);
 			if (_actualAgentStateHasBeenSent != null)
 			{
 				_actualAgentStateHasBeenSent.Invoke(agentState);

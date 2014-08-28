@@ -1,6 +1,7 @@
 using System;
+using Teleopti.Interfaces.MessageBroker.Events;
 
-namespace Teleopti.Interfaces.MessageBroker.Events
+namespace Teleopti.Interfaces.MessageBroker.Client
 {
 	public interface IMessageBrokerListener
 	{

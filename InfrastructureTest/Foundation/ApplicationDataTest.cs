@@ -13,6 +13,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 #endregion
@@ -192,7 +193,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 ds1.Dispose();
                 ds2.Dispose();
                 //dispose mess broker
-                messBroker.StopMessageBroker();
+                messBroker.StopBrokerService();
                 messBroker.Dispose();
             }
             using (mocks.Playback())

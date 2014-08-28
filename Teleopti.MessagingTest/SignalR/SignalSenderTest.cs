@@ -26,7 +26,7 @@ namespace Teleopti.MessagingTest.SignalR
 		public void ShouldSendSingleNotification()
 		{
 			var hubProxy = new HubProxyFake();
-			var target = new SignalSenderForTest(stubHubConnection(hubProxy));
+			var target = new SignalRClientForTest(stubHubConnection(hubProxy));
 			target.StartBrokerService();
 			var notification1 = new Notification();
 
@@ -39,7 +39,7 @@ namespace Teleopti.MessagingTest.SignalR
 		public void ShouldNotSendSendWhenConnectionHasNotBeenStarted()
 		{
 			var hubProxy = new HubProxyFake();
-			var target = new SignalSenderForTest(stubHubConnection(hubProxy));
+			var target = new SignalRClientForTest(stubHubConnection(hubProxy));
 			
 			target.SendNotification(new Notification());
 
@@ -50,7 +50,7 @@ namespace Teleopti.MessagingTest.SignalR
 		public void ShouldNotSendWhenConnectionHasStartedAndThenStopped()
 		{
 			var hubProxy = new HubProxyFake();
-			var target = new SignalSenderForTest(stubHubConnection(hubProxy));
+			var target = new SignalRClientForTest(stubHubConnection(hubProxy));
 			target.StartBrokerService();
 			target.Dispose();
 

@@ -28,7 +28,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var time = new FakeTime();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
+			var target = new SignalRClientForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
 			target.StartBrokerService();
 
 			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
@@ -43,7 +43,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var time = new FakeTime();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
+			var target = new SignalRClientForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
 			target.StartBrokerService();
 
 			hubConnection.GetEventRaiser(c => c.Closed += null).Raise();
@@ -66,7 +66,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var time = new FakeTime();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
+			var target = new SignalRClientForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
 			target.StartBrokerService();
 			target.Dispose();
 
@@ -82,7 +82,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var time = new FakeTime();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = stubHubConnection(hubProxy);
-			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(0)), time);
+			var target = new SignalRClientForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(0)), time);
 			target.StartBrokerService();
 
 			hubConnection.Stub(x => x.Start()).Return(TaskHelper.MakeFailedTask(new Exception())).Repeat.Once();
@@ -96,7 +96,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var time = new FakeTime();
 			var hubProxy = new HubProxyFake();
 			var hubConnection = new HubConnectionMock(hubProxy);
-			var target = new SignalSenderForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
+			var target = new SignalRClientForTest(hubConnection, new RestartOnClosed(TimeSpan.FromSeconds(4)), time);
 			target.StartBrokerService(useLongPolling: true);
 
 			hubConnection.RaiseClosedEvent();

@@ -35,7 +35,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
             var commonStateHolder = _mock.StrictMock<ICommonStateHolder>();
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
 	        jobParameters.StateHolder = commonStateHolder;
-			jobParameters.Helper = new JobHelper(raptorRepository,null, null);
+			jobParameters.Helper = new JobHelper(raptorRepository, null, null, null);
 			var scheduleTransformer = _mock.StrictMock<IScheduleTransformer>();
 			var stageScheduleJobStep = new IntradayStageScheduleJobStep(jobParameters, scheduleTransformer);
 	        var dic = new Dictionary<DateTimePeriod, IScheduleDictionary>();
@@ -77,7 +77,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var commonStateHolder = _mock.StrictMock<ICommonStateHolder>();
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
 			jobParameters.StateHolder = commonStateHolder;
-			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
+			jobParameters.Helper = new JobHelper(raptorRepository, null, null, null);
 			var stageScheduleJobStep = new IntradayStageScheduleJobStep(jobParameters);
 			
 			Expect.Call(raptorRepository.TruncateSchedule);
@@ -98,7 +98,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var commonStateHolder = _mock.StrictMock<ICommonStateHolder>();
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
 			jobParameters.StateHolder = commonStateHolder;
-			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
+			jobParameters.Helper = new JobHelper(raptorRepository, null, null, null);
 			var stageScheduleJobStep = new IntradayStageScheduleJobStep(jobParameters);
 			var model = new LastChangedReadModel {LastTime = new DateTime(), ThisTime = new DateTime()};
 			Expect.Call(raptorRepository.TruncateSchedule);
@@ -124,7 +124,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
 			jobParameters.StateHolder = commonStateHolder;
-			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
+			jobParameters.Helper = new JobHelper(raptorRepository, null, null, null);
 			var step = new FactScheduleJobStep(jobParameters, true);
 
 			var bu = _mock.DynamicMock<IBusinessUnit>();

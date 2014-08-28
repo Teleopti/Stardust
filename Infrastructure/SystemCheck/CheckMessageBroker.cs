@@ -1,4 +1,5 @@
 ﻿using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.SystemCheck
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
         public bool IsRunningOk()
         {
             return string.IsNullOrEmpty(_messageBroker.ConnectionString) ||
-                   _messageBroker.IsConnected;
+                   _messageBroker.IsAlive;
         }
 
         public string WarningText

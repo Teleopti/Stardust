@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             _raptorRepository = _mocks.StrictMock<IRaptorRepository>();
             
         	_jobParameters = JobParametersFactory.SimpleParameters(false);
-        	_jobParameters.Helper = new JobHelper(_raptorRepository, null,null);
+			_jobParameters.Helper = new JobHelper(_raptorRepository, null, null, null);
 			
             _target = new CommonStateHolder(_jobParameters);
         }

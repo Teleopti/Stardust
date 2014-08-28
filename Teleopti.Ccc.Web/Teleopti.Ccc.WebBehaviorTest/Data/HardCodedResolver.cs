@@ -16,6 +16,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.SignalR;
 
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			{
 				var broker = new SignalBroker(MessageFilterManager.Instance, new IConnectionKeepAliveStrategy[] { }, new Time(new Now()));
 				broker.ConnectionString = TestSiteConfigurationSetup.URL.ToString();
-				broker.StartMessageBroker();
+				broker.StartBrokerService();
 				_messageBroker = broker;
 			}
 			return _messageBroker;

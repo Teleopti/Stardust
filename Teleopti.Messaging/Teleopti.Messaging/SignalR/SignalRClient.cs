@@ -15,21 +15,53 @@ using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class SignalSender : IMessageSender
+	public class SignalRSender : IMessageSender
+	{
+		private readonly ISignalRClient _client;
+
+		public SignalRSender(ISignalRClient client)
+		{
+			_client = client;
+		}
+
+		public void SendNotification(Notification notification)
+		{
+			_client.Call("NotifyClients", notification);
+		}
+	}
+
+	public static class MessageBrokerContainer
+	{
+		private static ISignalRClient _client;
+		private static IMessageSender _sender;
+
+		public static void Initialize(string serverUrl)
+		{
+			_client = new SignalRClient(serverUrl, new IConnectionKeepAliveStrategy[] { }, new Time(new Now()));
+			_sender = new SignalRSender(_client);
+		}
+
+		public static ISignalRClient SignalRClient()
+		{
+			return _client;
+		}
+
+		public static IMessageSender Sender()
+		{
+			return _sender;
+		}
+	}
+
+	public class SignalRClient : ISignalRClient
 	{
 		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private readonly ITime _time;
 		private readonly string _serverUrl;
 		private IHandleHubConnection _connection;
-		private SignalBrokerCommands _signalBrokerCommands;
-		private readonly ILog _logger = LogManager.GetLogger(typeof(SignalSender));
+		private IStateAccessor _stateAccessor;
+		private readonly ILog _logger = LogManager.GetLogger(typeof(SignalRClient));
 
-		public static SignalSender MakeForEtl(string serverUrl)
-		{
-			return new SignalSender(serverUrl, new IConnectionKeepAliveStrategy[] { }, new Time(new Now()));
-		}
-
-		public SignalSender(string serverUrl, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, ITime time)
+		public SignalRClient(string serverUrl, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, ITime time)
 		{
 			_serverUrl = serverUrl;
 
@@ -64,8 +96,8 @@ namespace Teleopti.Messaging.SignalR
 				{
 					var connection = new SignalConnection(MakeHubConnection, () => { }, _connectionKeepAliveStrategy, _time);
 					
-					_signalBrokerCommands = new SignalBrokerCommands(_logger, connection);
 					_connection = connection;
+					_stateAccessor = connection;
 				}
 
 				_connection.StartConnection(null,useLongPolling);
@@ -80,21 +112,32 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
+		public void Call(string methodName, params object[] args)
+		{
+			if (_stateAccessor == null)
+				return;
+			_stateAccessor.IfProxyConnected(p =>
+			{
+				var task = p.Invoke(methodName, args);
+
+				task.ContinueWith(t =>
+				{
+					if (t.IsFaulted && t.Exception != null)
+						_logger.Info("An error occurred on task calling " + methodName, t.Exception);
+				}, TaskContinuationOptions.OnlyOnFaulted);
+			});
+		}
+
 		public bool IsAlive
 		{
 			get { return _connection != null && _connection.IsConnected(); }
-		}
-
-		public void SendNotification(Notification notification)
-		{
-			if (_connection != null)
-				_signalBrokerCommands.NotifyClients(notification);
 		}
 
 		public virtual void Dispose()
 		{
 			_connection.CloseConnection();
 			_connection = null;
+			_stateAccessor = null;
 		}
 
 		[CLSCompliant(false)]

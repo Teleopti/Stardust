@@ -8,8 +8,8 @@ using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Rta.Server.Adherence;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.SignalR;
-using IMessageSender = Teleopti.Interfaces.MessageBroker.Client.IMessageSender;
 
 namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 {
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 		{
 			var teamId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var broker = new assertBrokerMessageSender(numberOfIterations);
+			var broker = new assertBrokerSignalRSender(numberOfIterations);
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 
 			var target = new AdherenceAggregator(broker, organizationForPerson);
@@ -60,22 +60,16 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			broker.HasMatchedAdherence.Should().Be.True();
 		}
 
-		private class assertBrokerMessageSender : IMessageSender
+		private class assertBrokerSignalRSender : IMessageSender
 		{
 			private readonly int _outofAdherence;
 
-			public assertBrokerMessageSender(int outofAdherence)
+			public assertBrokerSignalRSender(int outofAdherence)
 			{
 				_outofAdherence = outofAdherence;
 			}
 
-			public bool IsAlive { get; private set; }
-
 			public bool HasMatchedAdherence { get; private set; }
-
-			public void StartBrokerService(bool useLongPolling = false)
-			{
-			}
 
 			public void SendNotification(Notification notification)
 			{

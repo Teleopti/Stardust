@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Interfaces.Domain

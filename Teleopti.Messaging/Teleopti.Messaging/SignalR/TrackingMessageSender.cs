@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Messaging.SignalR

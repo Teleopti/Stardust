@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 			if (Messaging != null)
 			{
-				Messaging.StopMessageBroker();
+				Messaging.StopBrokerService();
 				Messaging.Dispose();
 			}
 		}

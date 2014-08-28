@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 {
@@ -14,7 +13,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 									 isPMInstalled.ToString(CultureInfo.InvariantCulture),
 									 CultureInfo.CurrentCulture);
 
-			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null);
+			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null, null);
 
 			return jobParameters;
 		}

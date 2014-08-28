@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
 using System.Xml.XPath;
@@ -173,7 +174,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 						{
 							var useLongPolling = appSettings.GetSettingValue("MessageBrokerLongPolling", bool.Parse);
 							MessageBroker.ConnectionString = messageBrokerConnection;
-							MessageBroker.StartMessageBroker(useLongPolling);
+							MessageBroker.StartBrokerService(useLongPolling);
 						}
 					}
 

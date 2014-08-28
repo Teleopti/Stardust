@@ -23,7 +23,7 @@ namespace Teleopti.MessagingTest.SignalR
 		private SignalBrokerForTest makeTarget(IHubProxyWrapper hubProxy)
 		{
 			var signalBroker = new SignalBrokerForTest(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
-			signalBroker.StartMessageBroker();
+			signalBroker.StartBrokerService();
 			return signalBroker;
 		}
 
@@ -47,7 +47,7 @@ namespace Teleopti.MessagingTest.SignalR
 			hubConnection.Stub(x => x.Start(new LongPollingTransport())).IgnoreArguments().Return(TaskHelper.MakeDoneTask());
 
 			var signalBroker = new SignalBrokerForTest(new MessageFilterManagerFake(), hubConnection);
-			signalBroker.StartMessageBroker(useLongPolling: true);
+			signalBroker.StartBrokerService(useLongPolling: true);
 
 			hubConnection.AssertWasCalled(x => x.Start(new LongPollingTransport()), o => o.Constraints(Rhino.Mocks.Constraints.Is.TypeOf<LongPollingTransport>()));
 		}
