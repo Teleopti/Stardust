@@ -187,7 +187,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.chartControlSkillData.PrimaryXAxis.Crossing = double.NaN;
 			this.chartControlSkillData.PrimaryXAxis.Margin = true;
 			this.chartControlSkillData.PrimaryYAxis.Crossing = double.NaN;
-			this.chartControlSkillData.PrimaryYAxis.ForceZero = true;
 			this.chartControlSkillData.PrimaryYAxis.Margin = true;
 			chartSeries1.Name = "Default";
 			chartSeries1.Points.Add(0D, ((double)(54D)), ((double)(319D)), ((double)(249D)), ((double)(127D)));
@@ -553,7 +552,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tabPageAdvShiftCategoryDistribution.Location = new System.Drawing.Point(1, 22);
 			this.tabPageAdvShiftCategoryDistribution.Name = "tabPageAdvShiftCategoryDistribution";
 			this.tabPageAdvShiftCategoryDistribution.ShowCloseButton = true;
-			this.tabPageAdvShiftCategoryDistribution.Size = new System.Drawing.Size(406, 648);
+			this.tabPageAdvShiftCategoryDistribution.Size = new System.Drawing.Size(427, 648);
 			this.tabPageAdvShiftCategoryDistribution.TabIndex = 12;
 			this.tabPageAdvShiftCategoryDistribution.Text = "xxShiftCategoryDistribution";
 			this.tabPageAdvShiftCategoryDistribution.ThemesEnabled = false;
@@ -564,7 +563,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.shiftCategoryDistributionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.shiftCategoryDistributionControl1.Location = new System.Drawing.Point(0, 0);
 			this.shiftCategoryDistributionControl1.Name = "shiftCategoryDistributionControl1";
-			this.shiftCategoryDistributionControl1.Size = new System.Drawing.Size(406, 648);
+			this.shiftCategoryDistributionControl1.Size = new System.Drawing.Size(427, 648);
 			this.shiftCategoryDistributionControl1.TabIndex = 0;
 			// 
 			// lessIntellegentSplitContainerAdvMainContainer
