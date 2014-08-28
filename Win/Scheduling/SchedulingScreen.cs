@@ -232,6 +232,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_tmpTimer.Enabled = false;
 			_tmpTimer.Tick += _tmpTimer_Tick;
 			_sikuliTestHelper = new SikuliTestHelper();
+			//if it disappears again in the designer
+			ribbonControlAdv1.QuickPanelVisible = true;
 		}
 
 		private void setMenuItemsHardToLeftToRight()

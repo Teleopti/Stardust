@@ -1388,7 +1388,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripButtonOptions});
 			this.ribbonControlAdv1.OverFlowButtonToolTip = "Show DropDown";
 			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.ribbonControlAdv1.QuickPanelVisible = false;
 			this.ribbonControlAdv1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.ribbonControlAdv1.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
 			this.ribbonControlAdv1.SelectedTab = this.toolStripTabItemHome;
