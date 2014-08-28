@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					var newBadge = new Domain.Common.AgentBadge
 					{
 						BronzeBadge = 1,
+						BronzeBadgeAdded = true,
 						BadgeType = badgeType,
 						LastCalculatedDate = date
 					};
@@ -89,15 +90,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return personsThatGotABadge;
 		}
 
-		public IEnumerable<IPerson> Calculate(IEnumerable<IPerson> allPersons, string timezoneCode,
-			DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, IAgentBadgeThresholdSettings setting)
+		public IEnumerable<IPerson> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
+			DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
+			IAgentBadgeThresholdSettings setting)
 		{
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat(
-					"Calculate badge for timezone: {0}, date: {1:yyyy-MM-dd HH:mm:ss}, AdherenceReportSettingCalculationMethod: {2},"
-					+ "silver to bronze badge rate: {3}, gold to silver badge rate: {4}", timezoneCode, date.Date,
-					adherenceCalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
+					"Calculate adherence badges for timezone: {0}, date: {1:yyyy-MM-dd HH:mm:ss}, AdherenceReportSettingCalculationMethod: {2},"
+					+ "silver to bronze badge rate: {3}, gold to silver badge rate: {4}, adherenceThreshold: {5}", timezoneCode, date.Date,
+					adherenceCalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate, setting.AdherenceThreshold);
 			}
 
 			var personList = allPersons.ToList();
@@ -125,8 +127,71 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				}
 			}
 
-			agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date, setting.AnsweredCallsThreshold);
-			agents = agentsList == null ? new List<Guid>() : agentsList.ToList();
+			if (Logger.IsDebugEnabled)
+			{
+				Logger.DebugFormat("Total {0} new badge(s) been awarded to agents for adherence.", personsThatGotBadge.Count);
+			}
+
+			return personsThatGotBadge;
+		}
+
+		public IEnumerable<IPerson> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
+			DateOnly date, IAgentBadgeThresholdSettings setting)
+		{
+			if (Logger.IsDebugEnabled)
+			{
+				Logger.DebugFormat(
+					"Calculate AHT badges for timezone: {0}, date: {1:yyyy-MM-dd HH:mm:ss},"
+					+ "silver to bronze badge rate: {2}, gold to silver badge rate: {3}, AHT threshold: {4}.", timezoneCode, date.Date,
+					 setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate, setting.AHTThreshold);
+			}
+
+			var personList = allPersons.ToList();
+			var personsThatGotBadge = new List<IPerson>();
+			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTThreshold);
+			var agents = agentsList == null ? new List<Guid>() : agentsList.ToList();
+
+			if (agents.Any())
+			{
+				if (Logger.IsDebugEnabled)
+				{
+					Logger.DebugFormat("{0} agents will get badge for AHT", agents.Count());
+				}
+
+				var personsThatGotAAHTBadge
+					= AddBadge(personList, agents, BadgeType.AverageHandlingTime, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate, date);
+				personsThatGotBadge.AddRange(personsThatGotAAHTBadge);
+			}
+			else
+			{
+				if (Logger.IsDebugEnabled)
+				{
+					Logger.DebugFormat("No agents will get badge for AHT");
+				}
+			}
+			if (Logger.IsDebugEnabled)
+			{
+				Logger.DebugFormat("Total {0} new badge(s) been awarded to agents for AHT.", personsThatGotBadge.Count);
+			}
+
+			return personsThatGotBadge;
+		}
+
+		public IEnumerable<IPerson> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
+			DateOnly date, IAgentBadgeThresholdSettings setting)
+		{
+			if (Logger.IsDebugEnabled)
+			{
+				Logger.DebugFormat(
+					"Calculate answered calls badges for timezone: {0}, date: {1:yyyy-MM-dd HH:mm:ss},"
+					+ "silver to bronze badge rate: {2}, gold to silver badge rate: {3}, answeredCallsThreshold: {4}", timezoneCode, date.Date,
+					 setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate, setting.AnsweredCallsThreshold);
+			}
+
+			var personList = allPersons.ToList();
+			var personsThatGotBadge = new List<IPerson>();
+			var agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date, setting.AnsweredCallsThreshold);
+			var agents = agentsList == null ? new List<Guid>() : agentsList.ToList();
 
 			if (agents.Any())
 			{
@@ -147,31 +212,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				}
 			}
 
-			agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTThreshold);
-			agents = agentsList == null ? new List<Guid>() : agentsList.ToList();
-
-			if (agents.Any())
-			{
-				if (Logger.IsDebugEnabled)
-				{
-					Logger.DebugFormat("{0} agents will get badge for AHT", agents.Count());
-				}
-
-				var personsThatGotAAHTBadge
-					= AddBadge(personList, agents, BadgeType.AverageHandlingTime, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate, date);
-				personsThatGotBadge.AddRange(personsThatGotAAHTBadge);
-			}
-			else
-			{
-				if (Logger.IsDebugEnabled)
-				{
-					Logger.DebugFormat("No agents will get badge for AHT");
-				}
-			}
-
 			if (Logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("Total {0} new badge(s) been awarded to agents.", personsThatGotBadge.Count);
+				Logger.DebugFormat("Total {0} new badge(s) been awarded to agents for answered calls.", personsThatGotBadge.Count);
 			}
 
 			return personsThatGotBadge;

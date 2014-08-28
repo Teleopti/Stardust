@@ -84,25 +84,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				ICollection<IPerson> allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
-				List<IPerson> peopleGotABadge = _calculator.Calculate(allAgents, message.TimeZoneCode, new DateOnly(message.CalculationDate),
+				var peopleGotABadgeForAdherence = _calculator.CalculateAdherenceBadges(allAgents, message.TimeZoneCode, new DateOnly(message.CalculationDate),
 					adherenceReportSetting.CalculationMethod, setting).ToList();
+				var peopleGotABadgeForAHT = _calculator.CalculateAHTBadges(allAgents, message.TimeZoneCode,
+					new DateOnly(message.CalculationDate), setting).ToList();
+				var peopleGotAbadgeForAnsweredCalls = _calculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode,
+					new DateOnly(message.CalculationDate), setting).ToList();
 
 				if (Logger.IsDebugEnabled)
 				{
-					Logger.DebugFormat("Total {0} agents will get new badge", peopleGotABadge.Count());
+					Logger.DebugFormat("Total {0} agents will get new badge for adherence", peopleGotABadgeForAdherence.Count());
+					Logger.DebugFormat("Total {0} agents will get new badge for AHT", peopleGotABadgeForAHT.Count());
+					Logger.DebugFormat("Total {0} agents will get new badge for answered calls", peopleGotAbadgeForAnsweredCalls.Count());
 				}
-				foreach (var person in peopleGotABadge)
-				{
-					if (Logger.IsDebugEnabled)
-					{
-						Logger.DebugFormat("Send badge message to agent {0} (ID: {1})", person.Name, person.Id);
-					}
-
-					SendPushMessageService
-						.CreateConversation(Resources.Congratulations, Resources.YouGotNewBadges, false, MessageType.Badge)
-						.To(person)
-						.SendConversation(_msgPersister);
-				}
+				// send message
+				sendMessagesToPeopleGotABadge(peopleGotABadgeForAHT, BadgeType.AverageHandlingTime, setting);
+				sendMessagesToPeopleGotABadge(peopleGotABadgeForAdherence, BadgeType.Adherence, setting);
+				sendMessagesToPeopleGotABadge(peopleGotAbadgeForAnsweredCalls, BadgeType.AnsweredCalls, setting);
 				uow.PersistAll();
 			}
 
@@ -122,6 +120,142 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				Logger.DebugFormat(
 						"Delay Sending CalculateBadgeMessage to Service Bus for Timezone={0} on next calculation time={1:yyyy-MM-dd HH:mm:ss}", message.TimeZoneCode,
 						nextMessageShouldBeProcessed);
+			}
+		}
+
+		private void sendMessagesToPeopleGotABadge(IEnumerable<IPerson> peopleGotABadge, BadgeType badgeType,
+			IAgentBadgeThresholdSettings setting)
+		{
+			foreach (var person in peopleGotABadge)
+			{
+				
+				var badge = person.Badges.Single(x => x.BadgeType == badgeType);
+				switch (badgeType)
+				{
+					case BadgeType.AverageHandlingTime:
+						if (badge.BronzeBadgeAdded)
+						{
+							if (Logger.IsDebugEnabled)
+							{
+								Logger.DebugFormat("Send bronze badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id, badgeType);
+							}
+							SendPushMessageService
+								.CreateConversation(Resources.Congratulations,
+									string.Format(Resources.YouGotANewBronzeBadgeForAHT, setting.AHTThreshold.TotalSeconds), false,
+									MessageType.AHTBronzeBadge)
+								.To(person)
+								.SendConversation(_msgPersister);
+						}
+						if (badge.SilverBadgeAdded)
+						{
+							if (Logger.IsDebugEnabled)
+							{
+								Logger.DebugFormat("Send silver badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id, badgeType);
+							}
+							SendPushMessageService
+								.CreateConversation(Resources.Congratulations,
+									string.Format(Resources.YouGotANewSilverBadgeForAHT, setting.AHTThreshold.TotalSeconds,
+										setting.SilverToBronzeBadgeRate), false, MessageType.AHTSilverBadge)
+								.To(person)
+								.SendConversation(_msgPersister);
+						}
+						if (badge.GoldBadgeAdded)
+						{
+							if (Logger.IsDebugEnabled)
+							{
+								Logger.DebugFormat("Send gold badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id, badgeType);
+							}
+							SendPushMessageService
+								.CreateConversation(Resources.Congratulations,
+									string.Format(Resources.YouGotANewGoldBadgeForAHT, setting.AHTThreshold.TotalSeconds,
+										setting.SilverToBronzeBadgeRate*setting.GoldToSilverBadgeRate), false, MessageType.AHTGoldBadge)
+								.To(person)
+								.SendConversation(_msgPersister);
+						}
+						break;
+					case BadgeType.AnsweredCalls:
+						if (badge.BronzeBadgeAdded)
+						{
+							if (Logger.IsDebugEnabled)
+							{
+								Logger.DebugFormat("Send bronze badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id, badgeType);
+							}
+							SendPushMessageService
+								.CreateConversation(Resources.Congratulations,
+									string.Format(Resources.YouGotANewBronzeBadgeForAnsweredCalls, setting.AnsweredCallsThreshold), false,
+									MessageType.AnsweredCallsBronzeBadge)
+								.To(person)
+								.SendConversation(_msgPersister);
+						}
+						if (badge.SilverBadgeAdded)
+						{
+							if (Logger.IsDebugEnabled)
+							{
+								Logger.DebugFormat("Send silver badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id, badgeType);
+							}
+							SendPushMessageService
+								.CreateConversation(Resources.Congratulations,
+									string.Format(Resources.YouGotANewSilverBadgeForAnsweredCalls, setting.AnsweredCallsThreshold,
+										setting.SilverToBronzeBadgeRate), false, MessageType.AnsweredCallsSilverBadge)
+								.To(person)
+								.SendConversation(_msgPersister);
+						}
+						if (badge.GoldBadgeAdded)
+						{
+							if (Logger.IsDebugEnabled)
+							{
+								Logger.DebugFormat("Send gold badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id, badgeType);
+							}
+							SendPushMessageService
+								.CreateConversation(Resources.Congratulations,
+									string.Format(Resources.YouGotANewGoldBadgeForAnsweredCalls, setting.AnsweredCallsThreshold,
+										setting.SilverToBronzeBadgeRate*setting.GoldToSilverBadgeRate), false, MessageType.AnsweredCallsGoldBadge)
+								.To(person)
+								.SendConversation(_msgPersister);
+						}
+						break;
+					case BadgeType.Adherence:
+						if (badge.BronzeBadgeAdded)
+						{
+							if (Logger.IsDebugEnabled)
+							{
+								Logger.DebugFormat("Send bronze badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id, badgeType);
+							}
+							SendPushMessageService
+								.CreateConversation(Resources.Congratulations,
+									string.Format(Resources.YouGotANewBronzeBadgeForAdherence, setting.AdherenceThreshold.ValueAsPercent()), false,
+									MessageType.AdherenceBronzeBadge)
+								.To(person)
+								.SendConversation(_msgPersister);
+						}
+						if (badge.SilverBadgeAdded)
+						{
+							if (Logger.IsDebugEnabled)
+							{
+								Logger.DebugFormat("Send silver badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id, badgeType);
+							}
+							SendPushMessageService
+								.CreateConversation(Resources.Congratulations,
+									string.Format(Resources.YouGotANewSilverBadgeForAdherence, setting.AdherenceThreshold.ValueAsPercent(),
+										setting.SilverToBronzeBadgeRate), false, MessageType.AdherenceSilverBadge)
+								.To(person)
+								.SendConversation(_msgPersister);
+						}
+						if (badge.GoldBadgeAdded)
+						{
+							if (Logger.IsDebugEnabled)
+							{
+								Logger.DebugFormat("Send gold badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id, badgeType);
+							}
+							SendPushMessageService
+								.CreateConversation(Resources.Congratulations,
+									string.Format(Resources.YouGotANewGoldBadgeForAdherence, setting.AdherenceThreshold.ValueAsPercent(),
+										setting.SilverToBronzeBadgeRate*setting.GoldToSilverBadgeRate), false, MessageType.AdherenceGoldBadge)
+								.To(person)
+								.SendConversation(_msgPersister);
+						}
+						break;
+				}
 			}
 		}
 	}

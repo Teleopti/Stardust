@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		}
 
 		[Test]
-		public void ShouldCalculateBadgeForCorrectAgents()
+		public void ShouldCalculateAdherenceBadgeForCorrectAgents()
 		{
-			var result = _calculator.Calculate(_allPersons, _timezoneCode, _calculateDateOnly,
+			var result = _calculator.CalculateAdherenceBadges(_allPersons, _timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
 				_badgeSetting);
 
@@ -84,12 +84,34 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var badge = lastPerson.Badges.Single(x => x.BadgeType == BadgeType.Adherence);
 			Assert.AreEqual(badge.BronzeBadge, 1);
 			Assert.AreEqual(badge.LastCalculatedDate, _calculateDateOnly);
+		}
 
-			badge = lastPerson.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls);
+		[Test]
+		public void ShouldCalculateAHTBadgeForCorrectAgents()
+		{
+			var result = _calculator.CalculateAHTBadges(_allPersons, _timezoneCode, _calculateDateOnly,
+				_badgeSetting);
+
+			var lastPerson = result.First(x => x.Id == _lastPersonId);
+
+			Assert.IsNotNull(lastPerson);
+
+			var badge = lastPerson.Badges.Single(x => x.BadgeType == BadgeType.AverageHandlingTime);
 			Assert.AreEqual(badge.BronzeBadge, 1);
 			Assert.AreEqual(badge.LastCalculatedDate, _calculateDateOnly);
+		}
 
-			badge = lastPerson.Badges.Single(x => x.BadgeType == BadgeType.AverageHandlingTime);
+		[Test]
+		public void ShouldCalculateAnsweredCallsBadgeForCorrectAgents()
+		{
+			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, _timezoneCode, _calculateDateOnly,
+				_badgeSetting);
+
+			var lastPerson = result.First(x => x.Id == _lastPersonId);
+
+			Assert.IsNotNull(lastPerson);
+
+			var badge = lastPerson.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls);
 			Assert.AreEqual(badge.BronzeBadge, 1);
 			Assert.AreEqual(badge.LastCalculatedDate, _calculateDateOnly);
 		}
