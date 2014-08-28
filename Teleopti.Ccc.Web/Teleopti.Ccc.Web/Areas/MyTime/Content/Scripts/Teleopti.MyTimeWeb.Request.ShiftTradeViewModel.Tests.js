@@ -3,6 +3,126 @@ $(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Request.ShiftTradeViewModel");
 
+	test("should get all team ids except 'Team All'", function() {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.availableTeams.push({ id: "A", text: "Team A" });
+		viewModel.availableTeams.push({ id: "B", text: "Team B" });
+		viewModel.availableTeams.push({ id: "allTeams", text: "Team All" });
+
+		var target = viewModel.getAllTeamIds();
+
+		equal(target.length, 2);
+		equal(target[0], "A");
+		equal(target[1], "B");
+	});
+
+	test("should load Team All", function() {
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == "Team/TeamsForShiftTrade") {
+					options.success(
+							[
+								{ id: "A", text: "Team A" },
+								{ id: "B", text: "Team B" },
+								{ id: "C", text: "Team C" }
+							]
+					);
+				}
+			}
+		};
+
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		viewModel.isPossibleSchedulesForAllEnabled(true);
+
+		viewModel.loadTeams();
+
+		equal(viewModel.availableTeams().length, 4);
+		var teamAll = viewModel.availableTeams()[3];
+		equal(teamAll.id, "allTeams");
+		equal(teamAll.text, "Team All");
+	});
+
+	test("should load no teams when no teams returned from server", function () {
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == "Team/TeamsForShiftTrade") {
+					options.success([]);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+
+		viewModel.loadTeams();
+
+		equal(viewModel.availableTeams().length, 0);
+	});
+
+	test("should load teams", function() {
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == "Team/TeamsForShiftTrade") {
+					options.success(
+							[
+								{ id: "A", text: "Team A"},
+								{ id: "B", text: "Team B" },
+								{ id: "C", text: "Team C" }
+							]
+					);
+				}
+			}
+		};
+
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		viewModel.myTeamId("A");
+
+		viewModel.loadTeams();
+
+		equal(viewModel.selectedTeam(), "A");
+		equal(viewModel.availableTeams().length, 3);
+		var teamTwo = viewModel.availableTeams()[1];
+		equal(teamTwo.id, "B");
+		equal(teamTwo.text, "Team B");
+	});
+
+	test("should set default team ID when get nothing", function () {
+		var myTeamId = "";
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == "Requests/ShiftTradeRequestMyTeam") {
+					options.success(
+							myTeamId
+					);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+
+		viewModel.loadMyTeamId();
+
+		equal(viewModel.myTeamId(), undefined);
+		equal(viewModel.missingMyTeam(), true);
+
+	});
+
+	test("should load my team ID", function () {
+		var myTeamId = "myTeam";
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == "Requests/ShiftTradeRequestMyTeam") {
+					options.success(
+							myTeamId
+					);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+
+		viewModel.loadMyTeamId();
+
+		equal(viewModel.myTeamId(), myTeamId);
+		equal(viewModel.missingMyTeam(), false);
+	});
+
 	test("should hide page view selector when no data", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.pageCount(0);

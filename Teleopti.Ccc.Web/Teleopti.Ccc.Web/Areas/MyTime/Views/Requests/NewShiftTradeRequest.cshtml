@@ -154,7 +154,7 @@
 	        <div style="float:right" data-bind="visible: !isDetailVisible() && isPageVisible()">
 		        <a data-bind="click: goToFirstPage"><i class="glyphicon glyphicon-fast-backward"></i></a>
 				  <a data-bind="click: goPreviousPages, visible: isPreviousMore()">...</a>
-		        <!-- ko foreach: displayedPages() -->
+		        <!-- ko foreach: selectablePages() -->
 				  <a data-bind="text: $data.index(), click: $parent.selectPage, css: {'page-selected': $data.isSelected()}"></a>
 				  <!-- /ko -->
 		        <a data-bind="click: goNextPages, visible: isMore()">...</a>
