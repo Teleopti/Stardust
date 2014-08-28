@@ -398,38 +398,38 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				switch (module.FunctionPath)
 				{
 					case DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage:
-						outlookBarSmartPartInfo.Icon = Resources.WFM_People_small  ;
+						outlookBarSmartPartInfo.Icon = Resources.People_filled_space_32x32;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenForecasterPage:
-						outlookBarSmartPartInfo.Icon = Resources.WFM_Forecasts_small ;
+						outlookBarSmartPartInfo.Icon = Resources.Forecasts_filled_space_32x32;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenSchedulePage:
-						outlookBarSmartPartInfo.Icon = Resources.WFM_Schedules_small ;
+						outlookBarSmartPartInfo.Icon = Resources.Schedules_filled_space_32x32;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenIntradayPage:
-						outlookBarSmartPartInfo.Icon = Resources.WFM_Intraday_small ;
+						outlookBarSmartPartInfo.Icon = Resources.Intraday_filled_space_32x32;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenPermissionPage:
 						outlookBarSmartPartInfo.Icon = Resources.WFM_Teleopti_WFM_main_small;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.Shifts:
-						outlookBarSmartPartInfo.Icon = Resources.WFM_Shifts_small ;
+						outlookBarSmartPartInfo.Icon = Resources.Shifts_filled_space_32x32 ;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.AccessToReports:
-						outlookBarSmartPartInfo.Icon = Resources.WFM_Reports_small;
+						outlookBarSmartPartInfo.Icon = Resources.Reports_filled_space_32x32;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenOptionsPage:
 						outlookBarSmartPartInfo.Icon = Resources.WFM_Teleopti_WFM_main_small;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenBudgets:
-						outlookBarSmartPartInfo.Icon = Resources.WFM_Budgets_small ;
+						outlookBarSmartPartInfo.Icon = Resources.Budgets_filled_space_32x32 ;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.PayrollIntegration:
-						outlookBarSmartPartInfo.Icon = Resources.WFM_Payroll_small ;
+						outlookBarSmartPartInfo.Icon = Resources.Payroll_filled_space_32x32 ;
 						break;
 					default:
 						// add default image as a resource to your module.
-						outlookBarSmartPartInfo.Icon = Resources.WFM_Performance_Manager_small ;
+						outlookBarSmartPartInfo.Icon = Resources.Performance_Manager_filled_space_32x32 ;
 						break;
 				}
 				modulePanelItems.Add(new ModulePanelItem

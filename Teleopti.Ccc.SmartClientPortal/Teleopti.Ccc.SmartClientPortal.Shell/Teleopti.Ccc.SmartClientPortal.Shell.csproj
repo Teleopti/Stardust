@@ -328,6 +328,15 @@
     <None Include="Resources\NotifyWarning.ico" />
     <EmbeddedResource Include="StaticPage.html" />
     <EmbeddedResource Include="EmptyStatic.html" />
+    <None Include="Resources\Budgets_filled_space_32x32.png" />
+    <None Include="Resources\Forecasts_filled_space_32x32.png" />
+    <None Include="Resources\Intraday_filled_space_32x32.png" />
+    <None Include="Resources\Payroll_filled_space_32x32.png" />
+    <None Include="Resources\People_filled_space_32x32.png" />
+    <None Include="Resources\Performance-Manager_filled_space_32x32.png" />
+    <None Include="Resources\Reports_filled_space_32x32.png" />
+    <None Include="Resources\Schedules_filled_space_32x32.png" />
+    <None Include="Resources\Shifts_filled_space_32x32.png" />
     <Content Include="StaticPage.min.html">
       <DependentUpon>StaticPage.html</DependentUpon>
     </Content>

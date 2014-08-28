@@ -70,6 +70,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Budgets_filled_space_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Budgets_filled_space_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Section &apos;{0}&apos; depends on section &apos;{1}&apos; which was not found..
         /// </summary>
         public static string DependencyNotFound {
@@ -100,6 +110,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Forecasts_filled_space_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Forecasts_filled_space_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap help_32 {
             get {
                 object obj = ResourceManager.GetObject("help_32", resourceCulture);
@@ -113,6 +133,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         public static System.Drawing.Bitmap information_16 {
             get {
                 object obj = ResourceManager.GetObject("information_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Intraday_filled_space_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Intraday_filled_space_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -192,11 +222,61 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Payroll_filled_space_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Payroll_filled_space_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap People_filled_space_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("People_filled_space_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Performance_Manager_filled_space_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Performance_Manager_filled_space_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The ModuleLoaderService cannot initialize the module because some of their dependencies are not present. Make sure to deploy all the assemblies needed to execute the module..
         /// </summary>
         public static string ReferencedAssemblyNotFound {
             get {
                 return ResourceManager.GetString("ReferencedAssemblyNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Reports_filled_space_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Reports_filled_space_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Schedules_filled_space_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Schedules_filled_space_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -219,6 +299,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Shifts_filled_space_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Shifts_filled_space_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon TeleoptiWFM {
@@ -234,96 +324,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         public static string UserNotFoundMessage {
             get {
                 return ResourceManager.GetString("UserNotFoundMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap WFM_Budgets_small {
-            get {
-                object obj = ResourceManager.GetObject("WFM_Budgets_small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap WFM_Forecasts_small {
-            get {
-                object obj = ResourceManager.GetObject("WFM_Forecasts_small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap WFM_Intraday_small {
-            get {
-                object obj = ResourceManager.GetObject("WFM_Intraday_small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap WFM_Payroll_small {
-            get {
-                object obj = ResourceManager.GetObject("WFM_Payroll_small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap WFM_People_small {
-            get {
-                object obj = ResourceManager.GetObject("WFM_People_small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap WFM_Performance_Manager_small {
-            get {
-                object obj = ResourceManager.GetObject("WFM_Performance_Manager_small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap WFM_Reports_small {
-            get {
-                object obj = ResourceManager.GetObject("WFM_Reports_small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap WFM_Schedules_small {
-            get {
-                object obj = ResourceManager.GetObject("WFM_Schedules_small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap WFM_Shifts_small {
-            get {
-                object obj = ResourceManager.GetObject("WFM_Shifts_small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
