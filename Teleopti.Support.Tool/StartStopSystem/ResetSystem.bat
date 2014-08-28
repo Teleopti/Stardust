@@ -42,9 +42,15 @@ call StartSystem.bat
 )
 
 if %major% GEQ 6 (
-powershell set-executionpolicy unrestricted
-ECHO powershell . .\RestartTeleopti.ps1
-powershell . .\RestartTeleopti.ps1
+	if %minor% GEQ 1 (
+	powershell set-executionpolicy unrestricted
+	ECHO powershell . .\RestartTeleopti.ps1
+	powershell . .\RestartTeleopti.ps1
+	) else (
+	echo "WARNING: This OS version is not supported by Teleopti!"
+	call StopSystem.bat
+	call StartSystem.bat
+	)
 )
 
 exit /b
