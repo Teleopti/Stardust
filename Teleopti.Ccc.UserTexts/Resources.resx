@@ -12240,4 +12240,16 @@ Reduce the complexity to use these shifts.</value>
     <value>Please configure your email address to access Teleopti resources.</value>
     <comment>Message in Portal when user have no email in People</comment>
   </data>
+  <data name="Advance" xml:space="preserve">
+    <value>Advance</value>
+    <comment>Advance filter option used in scheduler filter</comment>
+  </data>
+  <data name="FilteredList" xml:space="preserve">
+    <value>Filtered List</value>
+    <comment>The filtered list is the result that the user constructed using the advance filter</comment>
+  </data>
+  <data name="FilterMultiplePerson" xml:space="preserve">
+    <value>Filter Multiple Person</value>
+    <comment>Used in advance filter</comment>
+  </data>
 </root>
