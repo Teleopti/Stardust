@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.ribbonControlAdv1.MenuButtonEnabled = true;
 			this.ribbonControlAdv1.MenuButtonFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.ribbonControlAdv1.MenuButtonText = "XXFILE";
-			this.ribbonControlAdv1.MenuButtonWidth = 56;
+			this.ribbonControlAdv1.MenuButtonWidth = 70;
 			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdv1.MinimumSize = new System.Drawing.Size(0, 65);
