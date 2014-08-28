@@ -49,7 +49,7 @@
 						<input class="form-control" name="numberOfMessagesPerSecond" data-bind="value: messagesPerSecond"/>
 					</div>
 			</div>
-			<button class="btn btn-danger send" data-bind="click: sendAllPings">Send</button>
+			<button class="btn btn-danger send" data-bind="click: sendAllPings, enable: isOnline">Send</button>
 		</form>
 	</div>
 </body>
