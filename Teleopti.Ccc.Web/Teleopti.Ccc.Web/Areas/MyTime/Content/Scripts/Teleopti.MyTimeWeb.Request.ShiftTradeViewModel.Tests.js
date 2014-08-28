@@ -132,6 +132,16 @@ $(document).ready(function () {
 		equal(viewModel.isPageVisible(), false);
 	});
 
+	test("should can select page", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.selectedPageIndex(1);
+		var page = new Teleopti.MyTimeWeb.Request.PageView(2);
+
+		viewModel.selectPage(page);
+
+		equal(viewModel.selectedPageIndex(), 2);
+	});
+
 	test("should set select page", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.selectedPageIndex(1);

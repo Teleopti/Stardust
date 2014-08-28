@@ -405,6 +405,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		self.selectedPageIndex(1);
 		self.selectablePages.removeAll();
 		self.isPreviousMore(false);
+		self.isMore(false);
 		if (self.agentChoosed() != null && self.isTradeForMultiDaysEnabled()) {
 			self.keepSelectedAgentVisible();
 		} else
@@ -527,6 +528,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		if (self.selectablePages()[4].index() < self.pageCount()) self.isMore(true);
 
 		self.setSelectPage(self.selectablePages()[0].index());
+	};
+
+	self.selectPage = function(page) {
+		self.setSelectPage(page.index());
 	};
 
 	self.setSelectPage = function(pageIdx) {
