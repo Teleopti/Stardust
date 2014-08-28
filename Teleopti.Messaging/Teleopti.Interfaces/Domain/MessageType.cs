@@ -6,6 +6,14 @@ namespace Teleopti.Interfaces.Domain
 	public enum MessageType
 	{
 		Information = 0,
-		Badge
+		AdherenceBronzeBadge,
+		AdherenceSilverBadge,
+		AdherenceGoldBadge,
+		AHTBronzeBadge,
+		AHTSilverBadge,
+		AHTGoldBadge,
+		AnsweredCallsBronzeBadge,
+		AnsweredCallsSilverBadge,
+		AnsweredCallsGoldBadge
 	}
 }
