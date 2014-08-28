@@ -42,6 +42,10 @@
 			this.buttonAdd = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonOk = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.tabControl1 = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
+			this.tabPage1 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+			this.panel4 = new System.Windows.Forms.Panel();
+			this.tabPage2 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -52,6 +56,10 @@
 			((System.ComponentModel.ISupportInitialize)(this.gridListControlSelectedItems)).BeginInit();
 			this.panel3.SuspendLayout();
 			this.panel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.tabControl1)).BeginInit();
+			this.tabControl1.SuspendLayout();
+			this.tabPage1.SuspendLayout();
+			this.panel4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// splitContainer1
@@ -71,8 +79,8 @@
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.gridListControlSelectedItems);
 			this.splitContainer1.Panel2.Controls.Add(this.panel3);
-			this.splitContainer1.Size = new System.Drawing.Size(528, 674);
-			this.splitContainer1.SplitterDistance = 360;
+			this.splitContainer1.Size = new System.Drawing.Size(519, 681);
+			this.splitContainer1.SplitterDistance = 363;
 			this.splitContainer1.SplitterWidth = 6;
 			this.splitContainer1.TabIndex = 1;
 			// 
@@ -89,7 +97,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(528, 333);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(519, 336);
 			this.tableLayoutPanel1.TabIndex = 3;
 			// 
 			// gridListControl1
@@ -131,7 +139,7 @@
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel2.Location = new System.Drawing.Point(0, 0);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(528, 27);
+			this.panel2.Size = new System.Drawing.Size(519, 27);
 			this.panel2.TabIndex = 4;
 			// 
 			// label1
@@ -161,7 +169,7 @@
 			this.gridListControlSelectedItems.Properties.MarkColHeader = false;
 			this.gridListControlSelectedItems.Properties.MarkRowHeader = false;
 			this.gridListControlSelectedItems.SelectedIndex = -1;
-			this.gridListControlSelectedItems.Size = new System.Drawing.Size(528, 287);
+			this.gridListControlSelectedItems.Size = new System.Drawing.Size(519, 291);
 			this.gridListControlSelectedItems.TabIndex = 4;
 			this.gridListControlSelectedItems.ThemesEnabled = true;
 			this.gridListControlSelectedItems.TopIndex = 0;
@@ -172,7 +180,7 @@
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel3.Location = new System.Drawing.Point(0, 0);
 			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(528, 21);
+			this.panel3.Size = new System.Drawing.Size(519, 21);
 			this.panel3.TabIndex = 5;
 			// 
 			// label2
@@ -191,10 +199,10 @@
 			this.panel1.Controls.Add(this.buttonCancel);
 			this.panel1.Controls.Add(this.buttonOk);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel1.Location = new System.Drawing.Point(0, 674);
+			this.panel1.Location = new System.Drawing.Point(0, 640);
 			this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(528, 41);
+			this.panel1.Size = new System.Drawing.Size(519, 41);
 			this.panel1.TabIndex = 2;
 			// 
 			// buttonAdd
@@ -206,7 +214,7 @@
 			this.buttonAdd.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonAdd.ForeColor = System.Drawing.Color.White;
 			this.buttonAdd.IsBackStageButton = false;
-			this.buttonAdd.Location = new System.Drawing.Point(223, 9);
+			this.buttonAdd.Location = new System.Drawing.Point(214, 9);
 			this.buttonAdd.Margin = new System.Windows.Forms.Padding(4, 16, 4, 5);
 			this.buttonAdd.Name = "buttonAdd";
 			this.buttonAdd.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
@@ -226,7 +234,7 @@
 			this.buttonCancel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonCancel.IsBackStageButton = false;
-			this.buttonCancel.Location = new System.Drawing.Point(429, 9);
+			this.buttonCancel.Location = new System.Drawing.Point(420, 9);
 			this.buttonCancel.Margin = new System.Windows.Forms.Padding(4, 16, 4, 5);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
@@ -245,7 +253,7 @@
 			this.buttonOk.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonOk.ForeColor = System.Drawing.Color.White;
 			this.buttonOk.IsBackStageButton = false;
-			this.buttonOk.Location = new System.Drawing.Point(326, 9);
+			this.buttonOk.Location = new System.Drawing.Point(317, 9);
 			this.buttonOk.Margin = new System.Windows.Forms.Padding(4, 16, 4, 5);
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
@@ -254,6 +262,59 @@
 			this.buttonOk.Text = "xxOK";
 			this.buttonOk.UseVisualStyle = true;
 			// 
+			// tabControl1
+			// 
+			this.tabControl1.ActiveTabColor = System.Drawing.Color.DarkGray;
+			this.tabControl1.BeforeTouchSize = new System.Drawing.Size(528, 715);
+			this.tabControl1.Controls.Add(this.tabPage1);
+			this.tabControl1.Controls.Add(this.tabPage2);
+			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tabControl1.InactiveTabColor = System.Drawing.Color.White;
+			this.tabControl1.Location = new System.Drawing.Point(0, 0);
+			this.tabControl1.Name = "tabControl1";
+			this.tabControl1.Size = new System.Drawing.Size(528, 715);
+			this.tabControl1.TabIndex = 4;
+			this.tabControl1.TabPanelBackColor = System.Drawing.Color.White;
+			this.tabControl1.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
+			// 
+			// tabPage1
+			// 
+			this.tabPage1.Controls.Add(this.panel4);
+			this.tabPage1.Image = null;
+			this.tabPage1.ImageSize = new System.Drawing.Size(16, 16);
+			this.tabPage1.Location = new System.Drawing.Point(1, 26);
+			this.tabPage1.Name = "tabPage1";
+			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage1.ShowCloseButton = true;
+			this.tabPage1.Size = new System.Drawing.Size(525, 687);
+			this.tabPage1.TabIndex = 1;
+			this.tabPage1.Text = "xxDefault";
+			this.tabPage1.ThemesEnabled = false;
+			// 
+			// panel4
+			// 
+			this.panel4.Controls.Add(this.panel1);
+			this.panel4.Controls.Add(this.splitContainer1);
+			this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel4.Location = new System.Drawing.Point(3, 3);
+			this.panel4.Name = "panel4";
+			this.panel4.Size = new System.Drawing.Size(519, 681);
+			this.panel4.TabIndex = 5;
+			// 
+			// tabPage2
+			// 
+			this.tabPage2.Image = null;
+			this.tabPage2.ImageSize = new System.Drawing.Size(16, 16);
+			this.tabPage2.Location = new System.Drawing.Point(1, 33);
+			this.tabPage2.Name = "tabPage2";
+			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage2.ShowCloseButton = true;
+			this.tabPage2.Size = new System.Drawing.Size(525, 680);
+			this.tabPage2.TabIndex = 1;
+			this.tabPage2.Text = "xxCustom";
+			this.tabPage2.ThemesEnabled = false;
+			// 
 			// FilterMultiplePersons
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
@@ -261,8 +322,7 @@
 			this.BorderColor = System.Drawing.Color.Blue;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
 			this.ClientSize = new System.Drawing.Size(528, 715);
-			this.Controls.Add(this.splitContainer1);
-			this.Controls.Add(this.panel1);
+			this.Controls.Add(this.tabControl1);
 			this.Font = new System.Drawing.Font("Segoe UI", 12F);
 			this.HelpButton = false;
 			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -285,6 +345,10 @@
 			this.panel3.ResumeLayout(false);
 			this.panel3.PerformLayout();
 			this.panel1.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.tabControl1)).EndInit();
+			this.tabControl1.ResumeLayout(false);
+			this.tabPage1.ResumeLayout(false);
+			this.panel4.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -304,5 +368,9 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Label label2;
+		private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControl1;
+		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPage1;
+		private System.Windows.Forms.Panel panel4;
+		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPage2;
 	}
 }
