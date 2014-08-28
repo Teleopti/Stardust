@@ -12,6 +12,7 @@ using Autofac;
 using EO.WebBrowser;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.SmartClientPortal.Shell.Controls;
+using Teleopti.Ccc.Win;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using log4net;
 using Syncfusion.Windows.Forms.Tools;
@@ -181,7 +182,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			if (e.KeyCode == Keys.T && e.Shift && e.Alt)
 			{
-				StateHolderReader.Instance.StateReader.SessionScopeData.TestMode = true;
+				SikuliHelper.TestMode = true;
+			}
+			if (e.KeyCode == Keys.V && e.Shift && e.Alt)
+			{
+				SikuliHelper.InputValidator();
 			}
 			base.OnKeyDown(e);
 		}
