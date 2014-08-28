@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Win
 {
-	public static class SikuliTestRegister
+	public static class SikuliValidatorRegister
 	{
 		/// <summary>
 		/// Identifier for gui test types

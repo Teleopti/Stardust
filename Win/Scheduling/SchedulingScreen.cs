@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DateTime _lastSaved = DateTime.Now;
         private readonly SchedulingScreenPermissionHelper _permissionHelper;
         private readonly CutPasteHandlerFactory _cutPasteHandlerFactory;
-		private readonly SikuliTestHelper _sikuliTestHelper;
+		private readonly SikuliHelper _sikuliHelper;
 
 		#region Constructors
 
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_tmpTimer.Interval = 50;
 			_tmpTimer.Enabled = false;
 			_tmpTimer.Tick += _tmpTimer_Tick;
-			_sikuliTestHelper = new SikuliTestHelper();
+			_sikuliHelper = new SikuliHelper();
 		}
 
 		private void setMenuItemsHardToLeftToRight()
@@ -548,7 +548,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void editControlDeleteClicked(object sender, EventArgs e)
 		{
-			_sikuliTestHelper.RegisterTest(SikuliTestRegister.Select.DeleteAll);
+			_sikuliHelper.RegisterValidator(SikuliValidatorRegister.Select.DeleteAll);
 			_cutPasteHandlerFactory.For(_controlType).Delete();
 		}
 
@@ -1006,7 +1006,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
-						_sikuliTestHelper.RegisterTest(SikuliTestRegister.Select.Optimize);
+						_sikuliHelper.RegisterValidator(SikuliValidatorRegister.Select.Optimize);
 
 						var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 						{
@@ -2051,19 +2051,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_scheduleOptimizerHelper.ResetWorkShiftFinderResults();
 
-			switch (_sikuliTestHelper.CurrentTest)
+			switch (_sikuliHelper.CurrentValidator)
 			{
-				case SikuliTestRegister.Select.Schedule:
-					_sikuliTestHelper.AssertTest(assertSikuliScheduling);
+				case SikuliValidatorRegister.Select.Schedule:
+					_sikuliHelper.AssertValidation(assertSikuliScheduling);
 					break;
-				case SikuliTestRegister.Select.Optimize:
-					_sikuliTestHelper.AssertTest(assertSikuliOptimizing);
+				case SikuliValidatorRegister.Select.Optimize:
+					_sikuliHelper.AssertValidation(assertSikuliOptimizing);
 					break;
-				case SikuliTestRegister.Select.DeleteAll:
-					_sikuliTestHelper.AssertTest(assertSikuliDeleteAll);
+				case SikuliValidatorRegister.Select.DeleteAll:
+					_sikuliHelper.AssertValidation(assertSikuliDeleteAll);
 					break;
 				default:
-					_sikuliTestHelper.AssertTestDone();
+					_sikuliHelper.ShowTaskDone();
 					break;
 			}
 		}
@@ -2071,9 +2071,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		#region sikuli
 		// todo: move it to own class
 
-		private SikuliTestResult assertSikuliScheduling()
+		private SikuliValidationResult assertSikuliScheduling()
 		{
-			var result = new SikuliTestResult(true);
+			var result = new SikuliValidationResult(true);
 			var scheduledHours = getDailyScheduledHoursForFullPeriod();
 			var checkResult = checkScheduledHoursPatternForScheduler(scheduledHours);
 			result.Details.AppendLine("Details:");
@@ -2088,9 +2088,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 
-		private SikuliTestResult assertSikuliOptimizing()
+		private SikuliValidationResult assertSikuliOptimizing()
 		{
-			SikuliTestResult result = new SikuliTestResult(true);
+			SikuliValidationResult result = new SikuliValidationResult(true);
 			var std = getStandardDeviationForPeriod();
 			result.Details.AppendLine("Details:");
 			result.AppendLimitValueLine("Period StdDev", "0,2", std.ToString());
@@ -2101,9 +2101,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return result;
 		}
 
-		private SikuliTestResult assertSikuliDeleteAll()
+		private SikuliValidationResult assertSikuliDeleteAll()
 		{
-			SikuliTestResult result = new SikuliTestResult(true);
+			SikuliValidationResult result = new SikuliValidationResult(true);
 			var scheduledHours = getDailyScheduledHoursForFullPeriod();
 			result.Details.AppendLine("Details:");
 			if (scheduledHours.Any(d => d.HasValue && d.Value > 0))
@@ -2438,7 +2438,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReadyThreeDots");
 			Cursor = Cursors.Default;
 
-			_sikuliTestHelper.AssertLoaded();
+			_sikuliHelper.ShowLoaded();
 		}
 
 		private void setupRequestViewButtonStates()
@@ -2852,7 +2852,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
-							_sikuliTestHelper.RegisterTest(SikuliTestRegister.Select.Schedule);
+							_sikuliHelper.RegisterValidator(SikuliValidatorRegister.Select.Schedule);
 							options.Refresh();
 							startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
 						}

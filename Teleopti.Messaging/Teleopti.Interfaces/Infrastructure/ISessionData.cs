@@ -38,6 +38,17 @@ namespace Teleopti.Interfaces.Infrastructure
 		/// </remarks>
 		bool TestMode { get; set; }
 
+		/// <summary>
+		/// Gets or sets the name of the sikuli validator name.
+		/// </summary>
+		/// <remarks>
+		/// Created by: tamasb
+		/// Created date: 2014-08-28
+		/// In some Sikuli Gui tests we need to run validation in CCC and then let the result know
+		/// by sikuli. Validator name is stored in this value. 
+		/// </remarks>
+		string SikuliValidator { get; set; }
+
         /// <summary>
         /// Gets or sets the clip. Is used to transport referenses between modules within this instance
         /// A sort of internal ClipBoard
