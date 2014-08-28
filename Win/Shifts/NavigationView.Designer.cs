@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tabControlShiftCreator.LevelTextAndImage = true;
 			this.tabControlShiftCreator.Location = new System.Drawing.Point(0, 0);
 			this.tabControlShiftCreator.Name = "tabControlShiftCreator";
-			this.tabControlShiftCreator.Padding = new System.Drawing.Point(3, 6);
 			this.tabControlShiftCreator.ShowToolTips = true;
 			this.tabControlShiftCreator.Size = new System.Drawing.Size(588, 693);
 			this.tabControlShiftCreator.TabIndex = 11;
@@ -73,11 +72,11 @@ namespace Teleopti.Ccc.Win.Shifts
 			this.tabPageWorkShiftRule.Image = null;
 			this.tabPageWorkShiftRule.ImageIndex = 0;
 			this.tabPageWorkShiftRule.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageWorkShiftRule.Location = new System.Drawing.Point(2, 37);
+			this.tabPageWorkShiftRule.Location = new System.Drawing.Point(2, 31);
 			this.tabPageWorkShiftRule.Name = "tabPageWorkShiftRule";
 			this.tabPageWorkShiftRule.Padding = new System.Windows.Forms.Padding(6);
 			this.tabPageWorkShiftRule.ShowCloseButton = true;
-			this.tabPageWorkShiftRule.Size = new System.Drawing.Size(584, 654);
+			this.tabPageWorkShiftRule.Size = new System.Drawing.Size(584, 660);
 			this.tabPageWorkShiftRule.TabIndex = 1;
 			this.tabPageWorkShiftRule.Text = "xxRuleSets";
 			this.tabPageWorkShiftRule.ThemesEnabled = true;
