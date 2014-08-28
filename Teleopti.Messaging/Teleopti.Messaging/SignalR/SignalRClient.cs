@@ -6,9 +6,11 @@ using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Messaging.Exceptions;
 using log4net;
 using Teleopti.Messaging.SignalR.Wrappers;
@@ -32,23 +34,41 @@ namespace Teleopti.Messaging.SignalR
 
 	public static class MessageBrokerContainer
 	{
+		private static string _serverUrl;
+		private static IMessageFilterManager _messageFilter;
 		private static ISignalRClient _client;
 		private static IMessageSender _sender;
+		private static IMessageBroker _compositeClient;
 
-		public static void Initialize(string serverUrl)
+		public static void Configure(string serverUrl, IMessageFilterManager messageFilter)
 		{
-			_client = new SignalRClient(serverUrl, new IConnectionKeepAliveStrategy[] { }, new Time(new Now()));
-			_sender = new SignalRSender(_client);
+			_serverUrl = serverUrl;
+			_messageFilter = messageFilter;
+		}
+
+		private static IMessageFilterManager messageFilter()
+		{
+			return _messageFilter ?? MessageFilterManager.Instance;
 		}
 
 		public static ISignalRClient SignalRClient()
 		{
-			return _client;
+			return _client ?? (_client = new SignalRClient(_serverUrl, new IConnectionKeepAliveStrategy[] {}, new Time(new Now())));
+		}
+
+		public static IMessageBroker CompositeClient()
+		{
+			if (_compositeClient == null)
+				_compositeClient = new SignalBroker(messageFilter(), new IConnectionKeepAliveStrategy[] { new RestartOnClosed(), new RecreateOnNoPingReply() }, new Time(new Now()))
+				{
+					ConnectionString = _serverUrl
+				};
+			return _compositeClient;
 		}
 
 		public static IMessageSender Sender()
 		{
-			return _sender;
+			return _sender ?? (_sender = new SignalRSender(SignalRClient()));
 		}
 	}
 

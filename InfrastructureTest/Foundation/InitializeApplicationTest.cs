@@ -189,11 +189,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void VerifyDefaultProperty()
 		{
-			target = new InitializeApplication(new DataSourcesFactory(null, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest()),
-				SignalBroker.MakeForTest(MessageFilterManager.Instance));
+			MessageBrokerContainer.Configure(null, MessageFilterManager.Instance);
+			target = new InitializeApplication(new DataSourcesFactory(null, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest()), 
+				MessageBrokerContainer.CompositeClient());
 		}
 
 

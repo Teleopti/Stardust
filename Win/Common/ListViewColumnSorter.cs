@@ -30,13 +30,13 @@ namespace Teleopti.Ccc.Win.Common
         public ListViewColumnSorter()
         {
             //Warning	2	CA1805 : Microsoft.Performance : 'ListViewColumnSorter.ListViewColumnSorter()' initializes field 'ListViewColumnSorter.ColumnToSort' of type 'int' to 0. Remove this initialization because it will be done automatically by the runtime.	C:\Projects\Teleopti\RaptorScrum\Root\Win\Common\ListViewColumnSorter.cs	28	Teleopti.Ccc.Win
-            // Initialize the column to '0'
+            // Configure the column to '0'
             //ColumnToSort = 0;
 
-            // Initialize the sort order to 'none'
+            // Configure the sort order to 'none'
             OrderOfSort = SortOrder.None;
 
-            // Initialize the CaseInsensitiveComparer object
+            // Configure the CaseInsensitiveComparer object
             ObjectCompare = new CaseInsensitiveComparer(Thread.CurrentThread.CurrentCulture);
         }
 

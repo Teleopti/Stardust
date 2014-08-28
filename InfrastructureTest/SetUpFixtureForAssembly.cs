@@ -35,10 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		private static ISessionData sessionData;
 		internal static IDataSource DataSource;
 
-		/// <summary>
-		/// Runs before any test.
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), SetUp]
+		[SetUp]
 		public void RunBeforeAnyTest()
 		{
 			mocks = new MockRepository();
@@ -52,9 +49,10 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			loggedOnPerson = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatClenUpDataSource", string.Empty);
 
+			MessageBrokerContainer.Configure(null, MessageFilterManager.Instance);
 			ApplicationData = new ApplicationData(appSettings,
 									new ReadOnlyCollection<IDataSource>(new List<IDataSource> { DataSource }),
-									SignalBroker.MakeForTest(MessageFilterManager.Instance), null);
+									MessageBrokerContainer.CompositeClient(), null);
 			sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, ApplicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
 
 			StateHolderProxyHelper.SetStateReaderExpectations(stateMock, ApplicationData, sessionData);

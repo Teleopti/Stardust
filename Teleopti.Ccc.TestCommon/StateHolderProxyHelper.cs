@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.TestCommon
 
 		static StateHolderProxyHelper() { DefaultPrincipalContext = new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()); }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static void SetupFakeState(
 			IDataSource dataSource, 
 			IPerson person, 
@@ -42,7 +41,8 @@ namespace Teleopti.Ccc.TestCommon
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, SignalBroker.MakeForTest(MessageFilterManager.Instance), null);
+			var signalBroker = new SignalBroker(MessageFilterManager.Instance, new IConnectionKeepAliveStrategy[] {}, new Time(new Now()));
+			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, signalBroker, null);
 			var sessionData = CreateSessionData(person, applicationData, businessUnit, principalContext);
 
 			var state = new FakeState { ApplicationScopeData = applicationData, SessionScopeData = sessionData, IsLoggedIn = true };

@@ -137,9 +137,8 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
         	Uri serverUrl;
         	if (Uri.TryCreate(_connectionString,UriKind.Absolute,out serverUrl))
         	{
-        		var broker = SignalBroker.Make(new DummyFilterManager());
-        		broker.ConnectionString = _connectionString;
-				_messageBroker = broker;
+				MessageBrokerContainer.Configure(_connectionString, new DummyFilterManager());
+				_messageBroker = MessageBrokerContainer.CompositeClient();
 
         		var useLongPolling = State.SessionScopeData.AppSettings.GetSettingValue("MessageBrokerLongPolling", bool.Parse);
 				_messageBroker.StartBrokerService(useLongPolling);

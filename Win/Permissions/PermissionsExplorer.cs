@@ -1089,7 +1089,7 @@ namespace Teleopti.Ccc.Win.Permissions
 								// Remove this person (if exists).
 								if (people.Contains(currentPerson))
 								{
-									// Initialize the tag of the person (usually this is not supposed to happen).
+									// Configure the tag of the person (usually this is not supposed to happen).
 									if (currentItem.Tag == null)
 										currentItem.Tag = 1;
 

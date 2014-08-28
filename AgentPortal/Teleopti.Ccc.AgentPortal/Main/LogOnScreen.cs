@@ -578,7 +578,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
                     return false;
                 }
 #else
-                StateHolder.Initialize(stateManager);
+                StateHolder.Configure(stateManager);
 #endif
 
                 Thread.CurrentThread.CurrentCulture =

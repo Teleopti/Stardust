@@ -21,7 +21,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
         public JobHelper()
         {
 			_logHelp = new LogOnHelper(SuperUser.UserName, SuperUser.Password, ConfigurationManager.AppSettings["nhibConfPath"]);
-			MessageBrokerContainer.Initialize(ConfigurationManager.AppSettings["MessageBroker"]);
+			MessageBrokerContainer.Configure(ConfigurationManager.AppSettings["MessageBroker"], null);
 			_messageSender = MessageBrokerContainer.Sender();
 	        _messageClient = MessageBrokerContainer.SignalRClient();
         }

@@ -28,28 +28,22 @@ namespace Teleopti.Messaging.SignalR
 		private MessageBrokerListener _messageBrokerListener;
 		private SignalConnection _stateAccessor;
 
-		public static SignalBroker MakeForTest(IMessageFilterManager typeFilter)
-		{
-			return new SignalBroker(typeFilter, new IConnectionKeepAliveStrategy[] {}, new Time(new Now()));
-		}
-
-		public static SignalBroker Make(IMessageFilterManager typeFilter)
-		{
-			return new SignalBroker(typeFilter,
-				new IConnectionKeepAliveStrategy[] {new RestartOnClosed(), new RecreateOnNoPingReply()}, new Time(new Now()));
-		}
-
 		public SignalBroker(IMessageFilterManager typeFilter, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, ITime time)
 		{
 			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
 			_time = time;
 			_filterManager = typeFilter;
 
-			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
+			ServicePointManager.ServerCertificateValidationCallback = IgnoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
 
             TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
         }
+
+		private static bool IgnoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+		{
+			return true;
+		}
 
         private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
@@ -57,11 +51,6 @@ namespace Teleopti.Messaging.SignalR
 			_logger.Debug("An unobserved task failed.", e.Exception);
 	        e.SetObserved();
         }
-
-		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
-		{
-			return true;
-		}
 
 		public void StartBrokerService(bool useLongPolling = false)
 		{

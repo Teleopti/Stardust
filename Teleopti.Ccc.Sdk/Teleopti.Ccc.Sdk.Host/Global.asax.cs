@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					                               new PersonPeriodChangedMessageSender(eventPublisher)
 				                               },
 			                               DataSourceConfigurationSetter.ForSdk()),
-			        SignalBroker.Make(MessageFilterManager.Instance)) {MessageBrokerDisabled = messageBrokerDisabled()};
+					MessageBrokerContainer.CompositeClient()) { MessageBrokerDisabled = messageBrokerDisabled() };
             string sitePath = Global.sitePath();
             initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper(), true);
             var messageBroker = initializeApplication.MessageBroker;

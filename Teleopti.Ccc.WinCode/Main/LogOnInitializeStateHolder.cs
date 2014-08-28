@@ -31,10 +31,11 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public static bool GetConfigFromFileSystem(string nhibConfPath, bool messageBrokerDisabled)
 		{
+			MessageBrokerContainer.Configure(null, MessageFilterManager.Instance);
 			new InitializeApplication(
 				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
 				                       DataSourceConfigurationSetter.ForDesktop()),
-				SignalBroker.Make(MessageFilterManager.Instance)
+				MessageBrokerContainer.CompositeClient()
 				) {
 					MessageBrokerDisabled = messageBrokerDisabled
 				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath),
@@ -90,7 +91,8 @@ namespace Teleopti.Ccc.WinCode.Main
         	
 			var sendToServiceBus = new ServiceBusSender();
 			var eventPublisher = new ServiceBusEventPublisher(sendToServiceBus, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
-        	var initializeApplication =
+			MessageBrokerContainer.Configure(null, MessageFilterManager.Instance);
+			var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
 												  new List<IMessageSender>
@@ -103,7 +105,7 @@ namespace Teleopti.Ccc.WinCode.Main
                                                           new PersonChangedMessageSender(eventPublisher),
                                                           new PersonPeriodChangedMessageSender(eventPublisher)
 												      }, DataSourceConfigurationSetter.ForDesktop()),
-					SignalBroker.Make(MessageFilterManager.Instance))
+					MessageBrokerContainer.CompositeClient())
         			{
         				MessageBrokerDisabled = messageBrokerDisabled
         			};

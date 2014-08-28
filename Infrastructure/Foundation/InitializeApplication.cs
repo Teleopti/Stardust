@@ -17,7 +17,7 @@ using System.Xml.XPath;
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	/// <summary>
-	/// Initialize helper for application
+	/// Configure helper for application
 	/// Run Start method once
 	/// </summary>
 	public class InitializeApplication : IInitializeApplication

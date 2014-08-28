@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void editOutlierLoad(object sender, EventArgs e)
 		{
-			if (_outlier==null || _workload==null) throw new InvalidOperationException("The Initialize method must be used first!");
+			if (_outlier==null || _workload==null) throw new InvalidOperationException("The Configure method must be used first!");
 
 			listBoxDateProviders.Items.Clear();
 			var dateSelection = new OutlierSpecificDatesSelection(_outlier, this);
