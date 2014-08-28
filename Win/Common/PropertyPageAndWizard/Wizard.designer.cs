@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.buttonNext.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.buttonNext.ForeColor = System.Drawing.Color.White;
 			this.buttonNext.IsBackStageButton = false;
-			this.buttonNext.Location = new System.Drawing.Point(290, 6);
+			this.buttonNext.Location = new System.Drawing.Point(290, 3);
 			this.buttonNext.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonNext.Name = "buttonNext";
 			this.buttonNext.Size = new System.Drawing.Size(87, 27);
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonCancel.IsBackStageButton = false;
-			this.buttonCancel.Location = new System.Drawing.Point(530, 6);
+			this.buttonCancel.Location = new System.Drawing.Point(530, 3);
 			this.buttonCancel.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(87, 27);
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// 
 			this.splitContainerHorizontal.Panel2.Controls.Add(this.tableLayoutPanelButtonsRtl);
 			this.splitContainerHorizontal.Size = new System.Drawing.Size(627, 473);
-			this.splitContainerHorizontal.SplitterDistance = 429;
+			this.splitContainerHorizontal.SplitterDistance = 432;
 			this.splitContainerHorizontal.SplitterWidth = 1;
 			this.splitContainerHorizontal.TabIndex = 7;
 			this.splitContainerHorizontal.TabStop = false;
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// splitContainerPages.Panel2
 			// 
 			this.splitContainerPages.Panel2.Controls.Add(this.splitContainerVertical);
-			this.splitContainerPages.Size = new System.Drawing.Size(627, 429);
+			this.splitContainerPages.Size = new System.Drawing.Size(627, 432);
 			this.splitContainerPages.SplitterDistance = 170;
 			this.splitContainerPages.SplitterWidth = 1;
 			this.splitContainerPages.TabIndex = 6;
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// treeViewPages
 			// 
 			this.treeViewPages.BackColor = System.Drawing.Color.White;
-			this.treeViewPages.BeforeTouchSize = new System.Drawing.Size(146, 405);
+			this.treeViewPages.BeforeTouchSize = new System.Drawing.Size(146, 408);
 			this.treeViewPages.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.treeViewPages.BorderColor = System.Drawing.Color.Transparent;
 			this.treeViewPages.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -162,11 +162,11 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.treeViewPages.Location = new System.Drawing.Point(12, 12);
 			this.treeViewPages.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.treeViewPages.Name = "treeViewPages";
-			this.treeViewPages.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
+			this.treeViewPages.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255))))));
 			this.treeViewPages.ShowFocusRect = false;
 			this.treeViewPages.ShowPlusMinus = false;
 			this.treeViewPages.ShowRootLines = false;
-			this.treeViewPages.Size = new System.Drawing.Size(146, 405);
+			this.treeViewPages.Size = new System.Drawing.Size(146, 408);
 			this.treeViewPages.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
 			this.treeViewPages.TabIndex = 0;
 			this.treeViewPages.TabStop = false;
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// splitContainerVertical.Panel2
 			// 
 			this.splitContainerVertical.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainerVertical_Panel2_Paint);
-			this.splitContainerVertical.Size = new System.Drawing.Size(456, 429);
+			this.splitContainerVertical.Size = new System.Drawing.Size(456, 432);
 			this.splitContainerVertical.SplitterDistance = 40;
 			this.splitContainerVertical.SplitterWidth = 1;
 			this.splitContainerVertical.TabIndex = 0;
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.tableLayoutPanelButtonsRtl.Name = "tableLayoutPanelButtonsRtl";
 			this.tableLayoutPanelButtonsRtl.RowCount = 1;
 			this.tableLayoutPanelButtonsRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(627, 43);
+			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(627, 40);
 			this.tableLayoutPanelButtonsRtl.TabIndex = 9;
 			// 
 			// buttonBack
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.buttonBack.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.buttonBack.ForeColor = System.Drawing.Color.White;
 			this.buttonBack.IsBackStageButton = false;
-			this.buttonBack.Location = new System.Drawing.Point(170, 6);
+			this.buttonBack.Location = new System.Drawing.Point(170, 3);
 			this.buttonBack.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonBack.Name = "buttonBack";
 			this.buttonBack.Size = new System.Drawing.Size(87, 27);
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.buttonFinish.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.buttonFinish.ForeColor = System.Drawing.Color.White;
 			this.buttonFinish.IsBackStageButton = false;
-			this.buttonFinish.Location = new System.Drawing.Point(410, 6);
+			this.buttonFinish.Location = new System.Drawing.Point(410, 3);
 			this.buttonFinish.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonFinish.Name = "buttonFinish";
 			this.buttonFinish.Size = new System.Drawing.Size(87, 27);
@@ -292,7 +292,6 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.Controls.Add(this.splitContainerHorizontal);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-			this.HelpButton = false;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(639, 513);

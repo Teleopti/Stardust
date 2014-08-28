@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Win.Common
 
         protected override void OnHelpButtonClicked(CancelEventArgs e)
         {
-            ViewBase.ShowHelp(this,true);
+            ViewBase.ShowHelp(this,false);
             base.OnHelpButtonClicked(e);
         }
 
