@@ -681,6 +681,12 @@
       <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
+    <Compile Include="SikuliInputBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SikuliInputBox.Designer.cs">
+      <DependentUpon>SikuliInputBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="SikuliResultView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -693,9 +699,9 @@
     <Compile Include="SikuliResultView.Designer.cs">
       <DependentUpon>SikuliResultView.cs</DependentUpon>
     </Compile>
-    <Compile Include="SikuliTestHelper.cs" />
-    <Compile Include="SikuliTestResult.cs" />
-    <Compile Include="SikuliTestRegister.cs" />
+    <Compile Include="SikuliHelper.cs" />
+    <Compile Include="SikuliValidationResult.cs" />
+    <Compile Include="SikuliValidatorRegister.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2797,6 +2803,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\FilterMultiplePersons.resx">
       <DependentUpon>FilterMultiplePersons.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SikuliInputBox.resx">
+      <DependentUpon>SikuliInputBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SikuliResultView.resx">
       <DependentUpon>SikuliResultView.cs</DependentUpon>

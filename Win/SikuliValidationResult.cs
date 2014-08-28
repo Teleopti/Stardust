@@ -2,11 +2,11 @@
 
 namespace Teleopti.Ccc.Win
 {
-	public class SikuliTestResult
+	public class SikuliValidationResult
 	{
 		private readonly StringBuilder _stringBuilder;
 
-		public SikuliTestResult(bool defaultResult)
+		public SikuliValidationResult(bool defaultResult)
 		{
 			Result = defaultResult;
 			_stringBuilder = new StringBuilder();

@@ -30,10 +30,15 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
         public bool MickeMode { get; set; }
 
-		[DefaultValue(false)]
+		#region Sikuli
+
 		public bool TestMode { get; set; }
 
-        public object Clip { get; set; }
+		public string SikuliValidator { get; set; }
+
+		#endregion
+
+		public object Clip { get; set; }
 
         public AuthenticationTypeOption AuthenticationTypeOption { get; set; }
     }
