@@ -41,5 +41,9 @@ namespace Teleopti.Ccc.Domain.Common
 			get { return _lastCalculatedDate; }
 			set { _lastCalculatedDate = value; }
 		}
+
+		public bool BronzeBadgeAdded { get; set; }
+		public bool SilverBadgeAdded { get; set; }
+		public bool GoldBadgeAdded { get; set; }
 	}
 }
