@@ -235,6 +235,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripButton1, true);
 			this.ribbonControlAdvFixed1.SetUseInQuickAccessMenu(this.toolStripButton1, false);
 			this.toolStripButton1.Click += new System.EventHandler(this.btnSaveClick);
+			this.toolStripButton1.Text = "xxSave";
 			// 
 			// toolStripEx1
 			// 
