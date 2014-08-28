@@ -176,6 +176,7 @@
     <Compile Include="BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
+    <Compile Include="Diagnostics\DiagnosticsConsumer.cs" />
     <Compile Include="GeneralBusBootStrapper.cs" />
     <Compile Include="GetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="LocalServiceBusPublisher.cs" />

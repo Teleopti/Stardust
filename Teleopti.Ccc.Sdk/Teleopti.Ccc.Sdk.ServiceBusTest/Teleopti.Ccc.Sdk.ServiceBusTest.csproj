@@ -146,6 +146,7 @@
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionResolveTest.cs" />
     <Compile Include="Denormalizer\UpateGroupingReadModelGroupPageConsumerTest.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonConsumerTest.cs" />
+    <Compile Include="Diagnostics\DiagnosticsConsumerTest.cs" />
     <Compile Include="Forecast\ImportForecastsFileToSkillTest.cs" />
     <Compile Include="Forecast\ImportForecastsToSkillConsumerResolveTest.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillsToSkillResolveTest.cs" />

@@ -121,6 +121,7 @@
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
     <Compile Include="Domain\IAgentBadge.cs" />
     <Compile Include="Domain\IAgentBadgeThresholdSettings.cs" />
+    <Compile Include="Domain\ITeleoptiDiagnosticsInformation.cs" />
     <Compile Include="Domain\ITime.cs" />
     <Compile Include="Domain\IAuthenticationInfo.cs" />
     <Compile Include="Domain\MaxSeatsFeatureOptions.cs" />
@@ -590,6 +591,7 @@
     <Compile Include="Domain\StaffingThresholds.cs" />
     <Compile Include="Domain\StartTimeLimitation.cs" />
     <Compile Include="Domain\TeleoptiAuthenticationHeaderNames.cs" />
+    <Compile Include="Domain\TeleoptiDiagnosticsInformation.cs" />
     <Compile Include="Domain\Time.cs" />
     <Compile Include="Domain\TimeFormatsType.cs" />
     <Compile Include="Domain\MultiplicatorType.cs" />
@@ -792,6 +794,7 @@
     <Compile Include="Messages\General\CalculateBadgeMessage.cs" />
     <Compile Include="Messages\General\CalculateTimeZoneMessage.cs" />
     <Compile Include="Messages\General\ChildSkillSelection.cs" />
+    <Compile Include="Messages\General\DiagnosticsMessage.cs" />
     <Compile Include="Messages\General\QuickForecastWorkloadsMessage.cs" />
     <Compile Include="Messages\General\QuickForecastWorkloadMessage.cs" />
     <Compile Include="Messages\General\RecalculateForecastOnSkillMessage.cs" />
