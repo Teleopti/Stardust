@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             {
                 lock (LockObject)
                 {
-                    _messaging.StopBrokerService();
+                    _messaging.Dispose();
                 }
             }
         }

@@ -108,7 +108,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 			if (Messaging != null)
 			{
-				Messaging.StopBrokerService();
 				Messaging.Dispose();
 			}
 		}

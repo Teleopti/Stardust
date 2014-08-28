@@ -10,13 +10,12 @@ using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Exceptions;
 using log4net;
 using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class SignalBroker : IMessageBroker, ISignalRClient
+	public class SignalBroker : IMessageBroker
 	{
 		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private readonly ITime _time;

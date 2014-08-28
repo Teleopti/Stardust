@@ -193,7 +193,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 ds1.Dispose();
                 ds2.Dispose();
                 //dispose mess broker
-                messBroker.StopBrokerService();
                 messBroker.Dispose();
             }
             using (mocks.Playback())
