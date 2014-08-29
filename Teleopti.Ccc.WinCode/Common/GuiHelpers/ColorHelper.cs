@@ -425,7 +425,6 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 			control.BorderWidth = 0;
 			control.Dock = DockStyle.Fill;
 			control.FocusOnTabClick = false;
-			//control.ForeColor = TabForegroundColor();
 			control.HotTrack = true;
 			control.ImageOffset = 10;
 			control.ItemSize = new Size(79, 24);
@@ -445,27 +444,22 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 			control.Panel2.BackgroundColor = myBrush;
 			control.Panel2.Font = new Font("Tahoma", 8.25F);
 			control.BackgroundColor = myBrush;
-			//control.FixedPanel = Syncfusion.Windows.Forms.Tools.Enums.FixedPanel.Panel2;
 			control.Font = new Font("Tahoma", 8.25F);
 			control.SplitterIncrement = 1;
 			control.SplitterWidth = 5;
 			control.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
 		}
-		//public static Color WizardSplitterColor()
-		//{
-		//    return Color.Black;
-		//}
-
-
-
+		
 		public static Color WizardPanelButtonHolder()
 		{
 			return Color.FromArgb(225, 232, 241);
 		}
+
 		public static Color WizardPanelSeparator()
 		{
 			return Color.DarkGray;
 		}
+
 		public static Color StandardTreeSelectedItemColor()
 		{
 			return Color.FromArgb(225, 232, 241);
@@ -517,16 +511,13 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 		public static Color DialogControlHeader()
 		{
 			return Color.LightSteelBlue;
-
 		}
 		
 		public static Color OptionsDialogHeaderBackColor()
 		{
-			//return Color.FromArgb(0, 153, 255);
 			return Color.White;
 		}
 
-		
 		public static Color OptionsDialogSubHeaderBackColor()
 		{
 			return Color.FromArgb(128,191,234);
@@ -539,7 +530,6 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 
 		public static Color OptionsDialogHeaderForeColor()
 		{
-			//return Color.White;
 		    return Color.FromArgb(0, 153, 255);
 		}
 
@@ -578,13 +568,8 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 			theTab.BackColor = Color.Gray;
 			theTab.ActiveTabColor = Color.Red;
 			theTab.InactiveTabColor = Color.Red;
-			//theTab.Font = tabctrlUnselectedTabFont
-			///todo: how to make sure all settingsfiles are synced
 
-
-			//  var s =  FontStyle.Bold ;
 			theTab.ThemesEnabled = false; 
 		}
-
 	}
 }
