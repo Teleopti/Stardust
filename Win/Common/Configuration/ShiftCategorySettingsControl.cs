@@ -130,6 +130,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			gridControlShiftCategory.BackColor = ColorHelper.GridControlGridInteriorColor();
 			gridControlShiftCategory.Properties.BackgroundColor = ColorHelper.WizardBackgroundColor();
+			labelSubHeader2.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]

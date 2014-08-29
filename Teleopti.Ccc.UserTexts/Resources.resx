@@ -12278,4 +12278,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Filter Multiple Person</value>
     <comment>Used in advance filter</comment>
   </data>
+  <data name="EnterPropertyValuesForShiftCategories" xml:space="preserve">
+    <value>Enter property values for shift categories</value>
+    <comment>Used as a header in options</comment>
+  </data>
 </root>

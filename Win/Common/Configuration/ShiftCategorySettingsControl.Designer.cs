@@ -32,10 +32,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle1 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle2 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle5 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle6 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle7 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle8 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			this.toolStripMenuItemAddFromClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
+			this.labelSubHeader2 = new System.Windows.Forms.Label();
 			this.tableLayoutPanelBody.SuspendLayout();
 			this.tableLayoutPanelSubHeader1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlShiftCategory)).BeginInit();
@@ -87,6 +88,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+			this.tableLayoutPanelSubHeader1.Controls.Add(this.labelSubHeader2, 0, 0);
 			this.tableLayoutPanelSubHeader1.Controls.Add(this.buttonAdvDeleteShiftCategory, 2, 0);
 			this.tableLayoutPanelSubHeader1.Controls.Add(this.buttonNewShiftCategory, 1, 0);
 			this.tableLayoutPanelSubHeader1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -136,30 +138,30 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// gridControlShiftCategory
 			// 
 			this.gridControlShiftCategory.AlphaBlendSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(94)))), ((int)(((byte)(171)))), ((int)(((byte)(222)))));
-			gridBaseStyle1.Name = "Header";
-			gridBaseStyle1.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle1.StyleInfo.CellType = "Header";
-			gridBaseStyle1.StyleInfo.Font.Bold = true;
-			gridBaseStyle1.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle1.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
-			gridBaseStyle2.Name = "Standard";
-			gridBaseStyle2.StyleInfo.Font.Facename = "Tahoma";
-			gridBaseStyle2.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-			gridBaseStyle3.Name = "Column Header";
-			gridBaseStyle3.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
-			gridBaseStyle4.Name = "Row Header";
-			gridBaseStyle4.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-			gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle5.Name = "Header";
+			gridBaseStyle5.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle5.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle5.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle5.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle5.StyleInfo.CellType = "Header";
+			gridBaseStyle5.StyleInfo.Font.Bold = true;
+			gridBaseStyle5.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle5.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
+			gridBaseStyle6.Name = "Standard";
+			gridBaseStyle6.StyleInfo.Font.Facename = "Tahoma";
+			gridBaseStyle6.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
+			gridBaseStyle7.Name = "Column Header";
+			gridBaseStyle7.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle7.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+			gridBaseStyle8.Name = "Row Header";
+			gridBaseStyle8.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle8.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
+			gridBaseStyle8.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.gridControlShiftCategory.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle1,
-            gridBaseStyle2,
-            gridBaseStyle3,
-            gridBaseStyle4});
+            gridBaseStyle5,
+            gridBaseStyle6,
+            gridBaseStyle7,
+            gridBaseStyle8});
 			this.gridControlShiftCategory.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
 			this.gridControlShiftCategory.ContextMenuStrip = this.contextMenuStrip2;
@@ -244,6 +246,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelHeader.TabIndex = 0;
 			this.labelHeader.Text = "xxManageShiftCategories";
 			// 
+			// labelSubHeader2
+			// 
+			this.labelSubHeader2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelSubHeader2.AutoSize = true;
+			this.labelSubHeader2.BackColor = System.Drawing.Color.Transparent;
+			this.labelSubHeader2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelSubHeader2.ForeColor = System.Drawing.Color.GhostWhite;
+			this.labelSubHeader2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelSubHeader2.Location = new System.Drawing.Point(3, 8);
+			this.labelSubHeader2.Name = "labelSubHeader2";
+			this.labelSubHeader2.Size = new System.Drawing.Size(261, 17);
+			this.labelSubHeader2.TabIndex = 2;
+			this.labelSubHeader2.Text = "xxEnterPropertyValuesForShiftCategories";
+			this.labelSubHeader2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// ShiftCategorySettingsControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -258,6 +275,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.shiftCategorySettingsControlLayout);
 			this.tableLayoutPanelBody.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader1.ResumeLayout(false);
+			this.tableLayoutPanelSubHeader1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlShiftCategory)).EndInit();
 			this.contextMenuStrip2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
@@ -282,5 +300,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private System.Windows.Forms.Label labelHeader;
         private ContextMenuStrip contextMenuStrip2;
         private ToolStripMenuItem toolStripMenuItem3;
+		  private Label labelSubHeader2;
     }
 }
