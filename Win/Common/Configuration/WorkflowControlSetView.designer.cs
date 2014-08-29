@@ -1474,9 +1474,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvViewpoint.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvViewpoint.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.dateTimePickerAdvViewpoint.Calendar.DayNamesColor = System.Drawing.Color.Empty;
-			this.dateTimePickerAdvViewpoint.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
-			this.dateTimePickerAdvViewpoint.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
+			this.dateTimePickerAdvViewpoint.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdvViewpoint.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.dateTimePickerAdvViewpoint.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.dateTimePickerAdvViewpoint.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateTimePickerAdvViewpoint.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvViewpoint.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
@@ -1490,11 +1490,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvViewpoint.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvViewpoint.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvViewpoint.Calendar.SelectedDates = new System.DateTime[0];
+			this.dateTimePickerAdvViewpoint.Calendar.ShowWeekNumbers = true;
 			this.dateTimePickerAdvViewpoint.Calendar.Size = new System.Drawing.Size(115, 174);
 			this.dateTimePickerAdvViewpoint.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvViewpoint.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdvViewpoint.Calendar.TabIndex = 0;
-			this.dateTimePickerAdvViewpoint.Calendar.WeekFont = new System.Drawing.Font("Verdana", 8F);
+			this.dateTimePickerAdvViewpoint.Calendar.WeekFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.dateTimePickerAdvViewpoint.Calendar.WeekInterior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.PeachPuff, System.Drawing.Color.AntiqueWhite);
 			// 
 			// 
@@ -1871,7 +1872,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBox1.TabIndex = 9;
 			this.timeSpanTextBox1.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBox1.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBox1.TimeSpanBoxWidth = 340;
+			this.timeSpanTextBox1.TimeSpanBoxWidth = 396;
 			this.timeSpanTextBox1.Leave += new System.EventHandler(this.timeSpanTextBox1_Leave);
 			// 
 			// labelTolerancePosNeg
