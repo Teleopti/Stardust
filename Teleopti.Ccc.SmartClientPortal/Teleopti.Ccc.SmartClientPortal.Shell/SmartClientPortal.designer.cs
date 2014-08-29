@@ -314,12 +314,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1023, 714);
 			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.backStage1.Controls.Add(this.backStageTab1);
+			this.backStage1.Controls.Add(this.backStageButtonOptions);
 			this.backStage1.Controls.Add(this.backStageButtonPermissions);
 			this.backStage1.Controls.Add(this.backStageButtonMyProfile);
 			this.backStage1.Controls.Add(this.backStageButtonHelp);
 			this.backStage1.Controls.Add(this.backStageButtonSignCustomerWeb);
 			this.backStage1.Controls.Add(this.backStageSeparator1);
-			this.backStage1.Controls.Add(this.backStageButtonOptions);
 			this.backStage1.Controls.Add(this.backStageButtonAbout);
 			this.backStage1.Controls.Add(this.backStageButtonExitTELEOPTICCC);
 			this.backStage1.ItemSize = new System.Drawing.Size(156, 40);
@@ -345,13 +345,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageTab1.Text = "Teleopti WFM";
 			this.backStageTab1.ThemesEnabled = false;
 			// 
+			// backStageButtonOptions
+			// 
+			this.backStageButtonOptions.Accelerator = "";
+			this.backStageButtonOptions.BackColor = System.Drawing.Color.Transparent;
+			this.backStageButtonOptions.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.backStageButtonOptions.IsBackStageButton = false;
+			this.backStageButtonOptions.Location = new System.Drawing.Point(0, 53);
+			this.backStageButtonOptions.Name = "backStageButtonOptions";
+			this.backStageButtonOptions.Size = new System.Drawing.Size(110, 25);
+			this.backStageButtonOptions.TabIndex = 16;
+			this.backStageButtonOptions.Text = "xxOptions";
+			this.backStageButtonOptions.Click += new System.EventHandler(this.toolStripButtonSystemOptions_Click);
+			// 
 			// backStageButtonPermissions
 			// 
 			this.backStageButtonPermissions.Accelerator = "";
 			this.backStageButtonPermissions.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonPermissions.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonPermissions.IsBackStageButton = false;
-			this.backStageButtonPermissions.Location = new System.Drawing.Point(0, 53);
+			this.backStageButtonPermissions.Location = new System.Drawing.Point(0, 78);
 			this.backStageButtonPermissions.Name = "backStageButtonPermissions";
 			this.backStageButtonPermissions.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonPermissions.TabIndex = 11;
@@ -364,7 +377,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonMyProfile.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonMyProfile.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonMyProfile.IsBackStageButton = false;
-			this.backStageButtonMyProfile.Location = new System.Drawing.Point(0, 78);
+			this.backStageButtonMyProfile.Location = new System.Drawing.Point(0, 103);
 			this.backStageButtonMyProfile.Name = "backStageButtonMyProfile";
 			this.backStageButtonMyProfile.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonMyProfile.TabIndex = 12;
@@ -377,7 +390,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonHelp.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonHelp.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonHelp.IsBackStageButton = false;
-			this.backStageButtonHelp.Location = new System.Drawing.Point(0, 103);
+			this.backStageButtonHelp.Location = new System.Drawing.Point(0, 128);
 			this.backStageButtonHelp.Name = "backStageButtonHelp";
 			this.backStageButtonHelp.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonHelp.TabIndex = 13;
@@ -391,7 +404,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonSignCustomerWeb.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonSignCustomerWeb.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonSignCustomerWeb.IsBackStageButton = false;
-			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(26, 128);
+			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(26, 153);
 			this.backStageButtonSignCustomerWeb.Name = "backStageButtonSignCustomerWeb";
 			this.backStageButtonSignCustomerWeb.Size = new System.Drawing.Size(126, 25);
 			this.backStageButtonSignCustomerWeb.TabIndex = 14;
@@ -401,24 +414,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// backStageSeparator1
 			// 
 			this.backStageSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
-			this.backStageSeparator1.Location = new System.Drawing.Point(15, 159);
+			this.backStageSeparator1.Location = new System.Drawing.Point(15, 184);
 			this.backStageSeparator1.Name = "backStageSeparator1";
 			this.backStageSeparator1.Size = new System.Drawing.Size(100, 1);
 			this.backStageSeparator1.TabIndex = 15;
 			this.backStageSeparator1.Text = "backStageSeparator1";
-			// 
-			// backStageButtonOptions
-			// 
-			this.backStageButtonOptions.Accelerator = "";
-			this.backStageButtonOptions.BackColor = System.Drawing.Color.Transparent;
-			this.backStageButtonOptions.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			this.backStageButtonOptions.IsBackStageButton = false;
-			this.backStageButtonOptions.Location = new System.Drawing.Point(0, 165);
-			this.backStageButtonOptions.Name = "backStageButtonOptions";
-			this.backStageButtonOptions.Size = new System.Drawing.Size(110, 25);
-			this.backStageButtonOptions.TabIndex = 16;
-			this.backStageButtonOptions.Text = "xxOptions";
-			this.backStageButtonOptions.Click += new System.EventHandler(this.toolStripButtonSystemOptions_Click);
 			// 
 			// backStageButtonAbout
 			// 
