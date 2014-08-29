@@ -6191,6 +6191,16 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (!backStage1.Visible && RightToLeftLayout) _tmpTimer.Enabled = true;
         }
+
+		private void toolStripSplitButtonSchedule_EnabledChanged(object sender, EventArgs e)
+		{
+			foreach (var item in toolStripSplitButtonSchedule.DropDownItems)
+			{
+				var control = item as ToolStripItem;
+				if (control != null)
+					control.Enabled = toolStripSplitButtonSchedule.Enabled;
+			}
+		}
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 
