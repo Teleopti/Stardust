@@ -857,7 +857,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 			target.AddBadge(new AgentBadge
 			{
 				BadgeType = BadgeType.AnsweredCalls,
-				BronzeBadge = 4
+				BronzeBadge = 4,
+				BronzeBadgeAdded = true
 			}, silverToBronzeRate, goldToSilverRate);
 			target.AddBadge(new AgentBadge
 			{
@@ -881,7 +882,9 @@ namespace Teleopti.Ccc.DomainTest.Common
 			{
 				BadgeType = BadgeType.AverageHandlingTime,
 				BronzeBadge = 4,
-				SilverBadge = 1
+				BronzeBadgeAdded = true,
+				SilverBadge = 1,
+				SilverBadgeAdded = true
 			}, silverToBronzeRate, goldToSilverRate);
 			target.AddBadge(new AgentBadge
 			{
