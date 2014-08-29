@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             t.SetToolTip(buttonDelete, commonBehavior.ToolTipDelete);
 
             tableLayoutPanel4.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
-            labelDefinitionTypeText.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+				labelDefinitionTypeText.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
         }
 
         /// <summary>

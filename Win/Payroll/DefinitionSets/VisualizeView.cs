@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             dateNavigateControlThinLayout1.SetSelectedDate(DateOnly.Today);
             dateNavigateControlThinLayout1.SelectedDateChanged += dateNavigateControlSelectedDateChanged;
             tableLayoutPanel4.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
-            labelMultiplicatorVisualizer.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+	        labelMultiplicatorVisualizer.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 
         }
 
