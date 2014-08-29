@@ -681,13 +681,13 @@
       <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
-    <Compile Include="SikuliInputBox.cs">
+    <Compile Include="Sikuli\SikuliEnterValidatorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SikuliInputBox.Designer.cs">
-      <DependentUpon>SikuliInputBox.cs</DependentUpon>
+    <Compile Include="Sikuli\SikuliEnterValidatorDialog.Designer.cs">
+      <DependentUpon>SikuliEnterValidatorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="SikuliResultView.cs">
+    <Compile Include="Sikuli\SikuliResultView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Scheduling\FilterMultiplePersons.cs">
@@ -696,12 +696,12 @@
     <Compile Include="Scheduling\FilterMultiplePersons.Designer.cs">
       <DependentUpon>FilterMultiplePersons.cs</DependentUpon>
     </Compile>
-    <Compile Include="SikuliResultView.Designer.cs">
+    <Compile Include="Sikuli\SikuliResultView.Designer.cs">
       <DependentUpon>SikuliResultView.cs</DependentUpon>
     </Compile>
-    <Compile Include="SikuliHelper.cs" />
-    <Compile Include="SikuliValidationResult.cs" />
-    <Compile Include="SikuliValidatorRegister.cs" />
+    <Compile Include="Sikuli\SikuliHelper.cs" />
+    <Compile Include="Sikuli\SikuliValidationResult.cs" />
+    <Compile Include="Sikuli\SikuliValidatorRegister.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2804,10 +2804,10 @@
     <EmbeddedResource Include="Scheduling\FilterMultiplePersons.resx">
       <DependentUpon>FilterMultiplePersons.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SikuliInputBox.resx">
-      <DependentUpon>SikuliInputBox.cs</DependentUpon>
+    <EmbeddedResource Include="Sikuli\SikuliEnterValidatorDialog.resx">
+      <DependentUpon>SikuliEnterValidatorDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SikuliResultView.resx">
+    <EmbeddedResource Include="Sikuli\SikuliResultView.resx">
       <DependentUpon>SikuliResultView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporting\ReportUserSelectorAuditingView.resx">

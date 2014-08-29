@@ -34,6 +34,7 @@ using Teleopti.Ccc.Win.Scheduling.LockMenuBuilders;
 using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals;
 using Teleopti.Ccc.Win.Scheduling.SkillResult;
+using Teleopti.Ccc.Win.Sikuli;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -548,7 +549,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void editControlDeleteClicked(object sender, EventArgs e)
 		{
-			SikuliHelper.RegisterValidator(SikuliValidatorRegister.Select.DeleteAll);
 			_cutPasteHandlerFactory.For(_controlType).Delete();
 		}
 
@@ -616,6 +616,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripMenuItemFindMatching2.Visible = StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
 				Refresh();
 				drawSkillGrid();
+			}
+			if (e.KeyCode == Keys.V && e.Alt && e.Shift)
+			{
+				SikuliHelper.EnterValidator();
 			}
 			if (e.KeyCode == Keys.D && e.Modifiers == Keys.Control)
 			{
@@ -1006,8 +1010,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
-						SikuliHelper.RegisterValidator(SikuliValidatorRegister.Select.Optimize);
-
 						var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 						{
 							OptimizationMethod = OptimizationMethod.Optimize
@@ -2051,15 +2053,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_scheduleOptimizerHelper.ResetWorkShiftFinderResults();
 
-			switch (SikuliHelper.CurrentValidator)
+			switch (SikuliHelper.SikuliValidator)
 			{
-				case SikuliValidatorRegister.Select.Schedule:
+				case SikuliValidatorRegister.SelectValidator.Schedule:
 					SikuliHelper.AssertValidation(assertSikuliScheduling);
 					break;
-				case SikuliValidatorRegister.Select.Optimize:
+				case SikuliValidatorRegister.SelectValidator.Optimize:
 					SikuliHelper.AssertValidation(assertSikuliOptimizing);
 					break;
-				case SikuliValidatorRegister.Select.DeleteAll:
+				case SikuliValidatorRegister.SelectValidator.DeleteAll:
 					SikuliHelper.AssertValidation(assertSikuliDeleteAll);
 					break;
 				default:
@@ -2852,7 +2854,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
-							SikuliHelper.RegisterValidator(SikuliValidatorRegister.Select.Schedule);
 							options.Refresh();
 							startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
 						}
