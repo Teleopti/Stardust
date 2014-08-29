@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			
 			textBoxExtAvgWorkTimePerDay.AllowNegativeValues = false;
 			textBoxExtMaxTimePerWeek.AllowNegativeValues = false;
+			textBoxExtMinTimePerWeek.AllowNegativeValues = false;
 			textBoxExtNightlyRestTime.AllowNegativeValues = false;
 			textBoxExtWeeklyRestTime.AllowNegativeValues = false;
 			timeSpanTextBoxNegativeTolerance.AllowNegativeValues = false;
@@ -483,6 +484,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			textBoxDescription.Text = SelectedContract.Description.ToString();
 			comboBoxAdvEmpTypes.SelectedValue =  SelectedContract.EmploymentType;
 			textBoxExtMaxTimePerWeek.SetInitialResolution(SelectedContract.WorkTimeDirective.MaxTimePerWeek);
+			textBoxExtMinTimePerWeek.SetInitialResolution(SelectedContract.WorkTimeDirective.MinTimePerWeek);
 			textBoxExtNightlyRestTime.SetInitialResolution(SelectedContract.WorkTimeDirective.NightlyRest);
 			textBoxExtWeeklyRestTime.SetInitialResolution(SelectedContract.WorkTimeDirective.WeeklyRest);
 			textBoxExtAvgWorkTimePerDay.SetInitialResolution(SelectedContract.WorkTime.AvgWorkTimePerDay);
