@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			GridStyleInfoStore.CellValueProperty.IsCloneable = false;
 			dateTimePickerAdvPublishedTo.NullString = Resources.NotPublished;
 			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.Current.Regional.UICulture;
+			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
