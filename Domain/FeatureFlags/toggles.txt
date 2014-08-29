@@ -21,6 +21,10 @@
 
 Scheduler_WeeklyRestRuleSolver_27108 = true
 Scheduler_Seniority_11111 = true
+Scheduler_ShowIntadayESLWithShrinkage_21874 = true
+Scheduler_WeeklyRestRuleSolver_27108 = RC
+Scheduler_TeamBlockMoveTimeBetweenDays_22407 = RC
+Scheduler_TeamBlockAdhereWithMaxSeatRule_23419 = RC
 RTA_RtaLastStatesOverview_27789 = true
 RTA_DrilldownToAllAgentsInOneTeam_25234 = true
 MyReport_AgentQueueMetrics_22254 = true
@@ -30,7 +34,6 @@ RTA_ViewAgentsForMultipleTeams_28967 = true
 Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341 = true
 Request_SeePossibleShiftTradesFromAllTeams_28770 = true
 Request_FilterPossibleShiftTradeByTime_24560 = true
-Scheduler_ShowIntadayESLWithShrinkage_21874 = true
 Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = RC
 MyTimeWeb_AgentBadge_28913 = RC
 RTA_MonitorMultipleBusinessUnits_28348 = RC
