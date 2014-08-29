@@ -112,9 +112,43 @@ function fnServiceStop{
  }
   
 function IIS-Restart {
-    Invoke-Expression -Command:"iisreset /STOP"
-    Invoke-Expression -Command:"iisreset /START"
-    fnServiceStart -ServiceName "W3SVC"
+	Invoke-Expression -Command:"iisreset /STOP"
+	fnServiceStop -ServiceName "W3SVC"
+	fnServiceStart -ServiceName "W3SVC"
+	Invoke-Expression -Command:"iisreset /START"
+}
+
+function fnAddTrustedSite ([string]$Site)
+{
+    if ($Site -match "https://") {
+        $ssl = $True
+    } else {
+        $ssl = $False
+    }
+    
+
+    $Site = $Site -replace "/$", "" #remove trailing slash
+    $Site = $Site -replace "http://", ""
+    $Site = $Site -replace "https://", ""
+
+    $regpath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\" +$Site
+    $Escregpath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains\" +$Site
+    if (-not (Test-Path -Path "$regpath"))
+    {
+        $null = New-Item -Path "$regpath"
+    }
+    if (-not (Test-Path -Path "$Escregpath"))
+    {
+        $null = New-Item -Path "$Escregpath"
+    }
+    
+    if ($ssl) {
+        Set-ItemProperty -Path "$regpath" -Name https -Value 1 -Type DWord
+        Set-ItemProperty -Path "$Escregpath" -Name https -Value 1 -Type DWord
+    } else {
+        Set-ItemProperty -Path "$regpath" -Name http -Value 1 -Type DWord
+        Set-ItemProperty -Path "$Escregpath" -Name http -Value 1 -Type DWord
+    }
 }
 
 function AppPools-Start {
@@ -265,12 +299,12 @@ Try
 
 	$isAzure = fnIsAzure
 	$BaseUrl = BaseUrl-get $isAzure
+    fnAddTrustedSite $BaseUrl	
 	TeleoptiWindowsServices-Stop $isAzure
 	IIS-Restart
 	write-host "sleep 5 seconds for IIS to restart ..."
 	Start-Sleep -Seconds 5       
 	AppPools-Start $isAzure
-	TeleoptiWebSites-HttpGet $BaseUrl
 	TeleoptiWindowsServices-Start $isAzure
 }
 
