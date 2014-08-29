@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Dold redigeringsruta för text</value>
@@ -11581,7 +11581,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Servern är inte tillgänglig. På grund av detta kan några funktioner inte aktiveras.</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>FIL</value>
+    <value>ARKIV</value>
   </data>
   <data name="OpenShiftsTreeDots" xml:space="preserve">
     <value>Öppna Skift...</value>
@@ -11608,5 +11608,104 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="StartPage" xml:space="preserve">
     <value>Startsidan</value>
     <comment>Go to landing page in Portal </comment>
+  </data>
+  <data name="MyTradeCart" xml:space="preserve">
+    <value>Min byteskorg:</value>
+  </data>
+  <data name="AllPermittedTeamsToMakeShiftTradeWith" xml:space="preserve">
+    <value>Alla team</value>
+  </data>
+  <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Tröskelvärde för besvarade samtal:</value>
+  </data>
+  <data name="SetBadgeThresholdForAHT" xml:space="preserve">
+    <value>Tröskelvärde för genomsnittlig behandlingstid (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
+    <value>Tröskelvärde för schemauppföljning (%):</value>
+  </data>
+  <data name="AddingActivityFor" xml:space="preserve">
+    <value>Lägger till aktivitet för</value>
+  </data>
+  <data name="AddingFulldayAbsenceFor" xml:space="preserve">
+    <value>Lägger till heldagsfrånvaro för</value>
+  </data>
+  <data name="AddingIntradayAbsenceFor" xml:space="preserve">
+    <value>Lägger till frånvaro inom dag för</value>
+  </data>
+  <data name="FailedWithExclamation" xml:space="preserve">
+    <value>Misslyckades!</value>
+  </data>
+  <data name="MovingActivityFor" xml:space="preserve">
+    <value>Flyttar aktivitet för</value>
+  </data>
+  <data name="RemovingAbsenceFor" xml:space="preserve">
+    <value>Tar bort aktivitet för</value>
+  </data>
+  <data name="PleaseRefreshThePageWithExclamation" xml:space="preserve">
+    <value>Var god uppdatera sidan!</value>
+  </data>
+  <data name="PleaseTryAgainWithExclamation" xml:space="preserve">
+    <value>Var god försök igen!</value>
+  </data>
+  <data name="SuccessWithExclamation" xml:space="preserve">
+    <value>Lyckades!</value>
+  </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>Grattis!</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Logga ut</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Logga in</value>
+  </data>
+  <data name="YouAreNotSignedIn" xml:space="preserve">
+    <value>Du är inte inloggad.</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeErrorMessage" xml:space="preserve">
+    <value>Veckan innehåller för lite arbetstid ({0}). Min är {1}.</value>
+  </data>
+  <data name="FilteredList" xml:space="preserve">
+    <value>Filtrerad lista</value>
+  </data>
+  <data name="AgentBadgeSetting" xml:space="preserve">
+    <value>Agentmedaljer</value>
+  </data>
+  <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
+    <value>En silvermedalj är lika med följande antal bronsmedaljer:</value>
+  </data>
+  <data name="OneGoldBadgeEqualsSilverBadgeCount" xml:space="preserve">
+    <value>En guldmedalj är lika med följande antal silvermedaljer:</value>
+  </data>
+  <data name="EnableBadge" xml:space="preserve">
+    <value>Aktivera agentmedaljer</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
+    <value>Du har en ny bronsmedalj! Din schemauppföljning är över {0}% för en dag. </value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
+    <value>Du har en ny bronsmedalj! Din genomsnittliga behandlingstid är under {0} sekunder för en dag.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Du har en ny bronsmedalj! Du har besvarat {0} eller fler samtal på en dag.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
+    <value>Du har en ny guldmedalj! Din schemauppföljning är över {0}% på {1} olika dagar.  </value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
+    <value>Du har en ny guldmedalj! Din genomsnittliga behandlingstid är under {0} sekunder {1} olika dagar. </value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Du har en ny guldmedalj! Du har besvarat {0} eller fler samtal {1} olika dagar.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
+    <value>Du har en ny silvermedalj! Din schemauppföljning är över {0}% på {1} olika dagar.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
+    <value>Du har en ny silvermedalj! Din genomsnittliga behandlingstid är under {0} sekunder {1} olika dagar.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Du har en ny silvermedalj! Du har besvarat {0} eller fler samtal {1} olika dagar.</value>
   </data>
 </root>
