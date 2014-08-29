@@ -3,6 +3,113 @@ $(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Request.ShiftTradeViewModel");
 
+	test("shift trade date should be invalid when it is not in an open period", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		var periodStart = moment("2014-08-01", "YYYY-MM-DD");
+		var periodEnd = moment("2014-08-31", "YYYY-MM-DD");
+		viewModel.openPeriodStartDate(periodStart);
+		viewModel.openPeriodEndDate(periodEnd);
+
+		var startRangeResult = viewModel.isRequestedDateValid(moment("2014-07-31", "YYYY-MM-DD"));
+		var endRangeResult = viewModel.isRequestedDateValid(moment("2014-09-01", "YYYY-MM-DD"));
+
+		equal(startRangeResult, false);
+		equal(endRangeResult, false);
+	});
+
+	test("shift trade date should be valid when it is in open period", function() {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		var periodStart = moment("2014-08-01", "YYYY-MM-DD");
+		var periodEnd = moment("2014-08-31", "YYYY-MM-DD");
+		viewModel.openPeriodStartDate(periodStart);
+		viewModel.openPeriodEndDate(periodEnd);
+
+		var result = viewModel.isRequestedDateValid(moment("2014-08-15", "YYYY-MM-DD"));
+
+		equal(result, true);
+	});
+
+	test("should go to the requeted date and load team id", function() {
+		var ajax = {
+			Ajax: function(options) {
+				if (options.url == "Requests/ShiftTradeRequestMyTeam") {
+					options.success(
+						"myTeamId"
+					);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		var date = moment("12-25-1995", "MM-DD-YYYY");
+
+		viewModel.requestedDate(date);
+
+		equal(viewModel.requestedDateInternal().format("MM-DD-YYYY"), "12-25-1995");
+		equal(viewModel.myTeamId(), "myTeamId");
+	});
+
+	test("should go to next date", function () {
+		var ajax = {
+			Ajax: function(options) {
+				if (options.url == "Requests/ShiftTradeRequestMyTeam") {
+					options.success(
+						""
+					);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		var date = moment("12-25-1995", "MM-DD-YYYY");
+		viewModel.requestedDate(date);
+		viewModel.isRequestedDateValid = function(date) {
+			return true;
+		};
+
+		viewModel.nextDate();
+
+		equal(viewModel.requestedDateInternal().format("MM-DD-YYYY"), "12-26-1995");
+	});
+
+	test("should go to previous date", function () {
+		var ajax = {
+			Ajax: function(options) {
+				if (options.url == "Requests/ShiftTradeRequestMyTeam") {
+					options.success(
+						""
+					);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		var date = moment("12-25-1995", "MM-DD-YYYY");
+		viewModel.requestedDate(date);
+		viewModel.isRequestedDateValid = function(date) {
+			return true;
+		};
+
+		viewModel.previousDate();
+
+		equal(viewModel.requestedDateInternal().format("MM-DD-YYYY"), "12-24-1995");
+	});
+
+	test("should clean data when prepare load without Multi shifts trade Enabled", function() {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.isTradeForMultiDaysEnabled(false);
+		viewModel.isDetailVisible = function () {
+			return false;
+		}
+
+		viewModel.prepareLoad();
+
+		equal(viewModel.possibleTradeSchedulesRaw.length, 0);
+		equal(viewModel.selectablePages().length, 0);
+		equal(viewModel.selectedPageIndex(), 1);
+		equal(viewModel.isPreviousMore(), false);
+		equal(viewModel.isMore(), false);
+		equal(viewModel.selectedInternal(), false);
+		equal(viewModel.IsLoading(), false);
+	});
+
 	test("should get all team ids except 'Team All'", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.availableTeams.push({ id: "A", text: "Team A" });

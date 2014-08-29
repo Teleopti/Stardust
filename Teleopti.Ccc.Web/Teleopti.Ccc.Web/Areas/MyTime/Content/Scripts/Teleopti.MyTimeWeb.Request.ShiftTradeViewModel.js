@@ -17,7 +17,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	self.weekStart = ko.observable(1);
 	self.openPeriodStartDate = ko.observable(moment().startOf('year').add('days', -1));
 	self.openPeriodEndDate = ko.observable(moment().startOf('year').add('days', -1));
-	self.requestedDate = ko.observable(moment().startOf('day'));
 	self.missingWorkflowControlSet = ko.observable(true);
 
 	self.noPossibleShiftTrades = ko.observable(false);
