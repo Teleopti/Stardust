@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void WhenIClickTheDenyButtonOnTheShiftRequest()
 		{
 			Browser.Interactions.AssertNotExists("#Deny-shift-trade", ".close");
-			Browser.Interactions.Click("#Deny-shift-trade");
+			Browser.Interactions.ClickUsingJQuery("#Deny-shift-trade");
 		}
 
 		[Then(@"I should not see a delete button on the request")]
