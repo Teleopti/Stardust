@@ -72,6 +72,23 @@ CREATE TABLE #fact_schedule_deviation(
 	person_code uniqueidentifier
 )
 
+CREATE TABLE #fact_schedule_deviation_merge(
+	[date_id] [int] NOT NULL,
+	[interval_id] [smallint] NOT NULL,
+	[person_id] [int] NOT NULL,
+	[scheduled_ready_time_s] [int] NULL,
+	[ready_time_s] [int] NULL,
+	[contract_time_s] [int] NULL,
+	[deviation_schedule_s] [decimal](18, 4) NULL,
+	[deviation_schedule_ready_s] [decimal](18, 4) NULL,
+	[deviation_contract_s] [decimal](18, 4) NULL,
+	[business_unit_id] [int] NULL,
+	[is_logged_in] [bit] NOT NULL,
+	[shift_startdate_id] [int] NULL,
+	[shift_startinterval_id] [smallint] NULL
+)
+
+
 CREATE TABLE #fact_schedule (
 	[schedule_date_id] [int] NOT NULL,
 	[shift_startdate_id] [int] NOT NULL,
@@ -419,55 +436,31 @@ AND stat.interval_id >= shifts.interval_id
 
 DELETE FROM #fact_schedule_deviation WHERE shift_startdate_id IS NULL
 
---Shorten the time between delete and insert, might help for #
-if (@isIntraday=0)
-BEGIN
-	DELETE FROM mart.fact_schedule_deviation
-	WHERE date_id between @start_date_id AND @end_date_id
-	AND business_unit_id = @business_unit_id
-END
-
-if (@isIntraday=1)
-BEGIN
-	DELETE fs
-	FROM #stg_schedule_changed ch
-	INNER JOIN mart.fact_schedule_deviation fs
-		ON ch.person_id = fs.person_id
-		AND ch.shift_startdate_id = fs.shift_startdate_id 
-	WHERE fs.business_unit_id = @business_unit_id
-END
-
-/* Insert of new data */
-INSERT INTO mart.fact_schedule_deviation
+/*Merge data*/
+INSERT INTO #fact_schedule_deviation_merge
 	(
 	date_id, 
-	shift_startdate_id,
-	shift_startinterval_id,
-	interval_id,
+	interval_id, 
 	person_id, 
-	scheduled_ready_time_s,
-	ready_time_s,
-	is_logged_in,
-	contract_time_s,
-	business_unit_id,
-	datasource_id, 
-	insert_date, 
-	update_date
+	scheduled_ready_time_s, 
+	ready_time_s, 
+	contract_time_s, 
+	business_unit_id, 
+	is_logged_in, 
+	shift_startdate_id, 
+	shift_startinterval_id
 	)
 SELECT
-	date_id					= date_id, 
-	shift_startdate_id		= MAX(shift_startdate_id),
-	shift_startinterval_id	= max(shift_startinterval_id),
-	interval_id				= interval_id,
-	person_id				= person_id, 
-	scheduled_ready_time_s	= sum(isnull(scheduled_ready_time_s,0)),
-	ready_time_s			= sum(isnull(ready_time_s,0)),
-	is_logged_in			= sum(is_logged_in), --Calculated bit value
-	contract_time_s			= sum(isnull(contract_time_s,0)),
-	business_unit_id		= business_unit_id,
-	datasource_id			= -1, 
-	insert_date				= getdate(), 
-	update_date				= getdate()
+	date_id						= date_id, 
+	interval_id					= interval_id, 
+	person_id					= person_id, 
+	scheduled_ready_time_s		= sum(isnull(scheduled_ready_time_s,0)), 
+	ready_time_s				= sum(isnull(ready_time_s,0)), 
+	contract_time_s				= sum(isnull(contract_time_s,0)), 
+	business_unit_id			= business_unit_id, 
+	is_logged_in				= sum(is_logged_in), --Calculated bit value 
+	shift_startdate_id			= MAX(shift_startdate_id), 
+	shift_startinterval_id		= max(shift_startinterval_id)
 FROM 
 	#fact_schedule_deviation
 GROUP BY 
@@ -493,36 +486,31 @@ GROUP BY
 --See: http://challenger/sites/DefaultCollection/matrix/Shared%20Documents/Design%20Specifications/Adherance.xlsx
 --First handle a special case for [deviation_schedule_ready_s]
 --If we have no Scheduled Ready Time there can be no deviation
-UPDATE mart.fact_schedule_deviation
-SET
-	deviation_schedule_ready_s = 0
-WHERE mart.fact_schedule_deviation.date_id BETWEEN @start_date_id AND @end_date_id
-AND scheduled_ready_time_s=0
+UPDATE #fact_schedule_deviation_merge
+SET	deviation_schedule_ready_s = 0
+WHERE scheduled_ready_time_s=0
 
 --2 Deviation from schedule, i.e all scheduled time, including breaks and lunch
 -- Note: You will get punished if you over perform e.i beeing logged in during breaks, lunch etc.
 --		 You will also get punished if you are logged in on a interval with no scheduled_ready_time_s at all
-UPDATE mart.fact_schedule_deviation
+UPDATE #fact_schedule_deviation_merge
 SET deviation_schedule_s = ABS(scheduled_ready_time_s-ready_time_s)
-WHERE mart.fact_schedule_deviation.date_id BETWEEN @start_date_id AND @end_date_id
 
 --1 Deviation_schedule_ready, only intervals where agents are scheduled to be ready are included
 -- a) Under performance
-UPDATE	mart.fact_schedule_deviation
+UPDATE #fact_schedule_deviation_merge
 SET	deviation_schedule_ready_s = scheduled_ready_time_s-ready_time_s
-WHERE mart.fact_schedule_deviation.date_id BETWEEN @start_date_id AND @end_date_id
-AND scheduled_ready_time_s>0
+WHERE scheduled_ready_time_s>0
 AND scheduled_ready_time_s>=ready_time_s
 
 -- b) Over performance
-UPDATE	mart.fact_schedule_deviation
+UPDATE #fact_schedule_deviation_merge
 SET	deviation_schedule_ready_s = 0 --corrected
-WHERE mart.fact_schedule_deviation.date_id BETWEEN @start_date_id AND @end_date_id
-AND scheduled_ready_time_s>0
+WHERE scheduled_ready_time_s>0
 AND scheduled_ready_time_s<ready_time_s
 
 --3 Calculated as 2) i.e punish for over performance. But only time where agents are contracted to be working are included
-UPDATE mart.fact_schedule_deviation
+UPDATE #fact_schedule_deviation_merge
 SET 	deviation_contract_s = ABS(
 	(
 	CASE
@@ -538,5 +526,62 @@ SET 	deviation_contract_s = ABS(
 	END
 	)
 )
-WHERE mart.fact_schedule_deviation.date_id BETWEEN @start_date_id AND @end_date_id
+
+--Shorten the time between delete and insert, might help for #
+if (@isIntraday=0)
+BEGIN
+	DELETE FROM mart.fact_schedule_deviation
+	WHERE date_id between @start_date_id AND @end_date_id
+	AND business_unit_id = @business_unit_id
+END
+
+if (@isIntraday=1)
+BEGIN
+	DELETE fs
+	FROM #stg_schedule_changed ch
+	INNER JOIN mart.fact_schedule_deviation fs
+		ON ch.person_id = fs.person_id
+		AND ch.shift_startdate_id = fs.shift_startdate_id 
+	WHERE fs.business_unit_id = @business_unit_id
+END
+
+/* Insert of new data */
+INSERT INTO mart.fact_schedule_deviation
+	(
+	date_id, 
+	interval_id, 
+	person_id, 
+	scheduled_ready_time_s, 
+	ready_time_s, 
+	contract_time_s, 
+	deviation_schedule_s, 
+	deviation_schedule_ready_s, 
+	deviation_contract_s, 
+	business_unit_id, 
+	datasource_id, 
+	insert_date, 
+	update_date, 
+	is_logged_in,
+	shift_startdate_id, 
+	shift_startinterval_id
+	)
+SELECT
+	date_id						= date_id, 
+	interval_id					= interval_id, 
+	person_id					= person_id, 
+	scheduled_ready_time_s		= scheduled_ready_time_s, 
+	ready_time_s				= ready_time_s, 
+	contract_time_s				= contract_time_s, 
+	deviation_schedule_s		= deviation_schedule_s, 
+	deviation_schedule_ready_s	= deviation_schedule_ready_s, 
+	deviation_contract_s		= deviation_contract_s, 
+	business_unit_id			= business_unit_id, 
+	datasource_id				= -1, 
+	insert_date					= getdate(), 
+	update_date					= getdate(), 
+	is_logged_in				= is_logged_in,
+	shift_startdate_id			= shift_startdate_id, 
+	shift_startinterval_id		= shift_startinterval_id
+FROM 
+	#fact_schedule_deviation_merge
 GO
