@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Messaging.SignalR;
 using log4net;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Rta.Server
 {

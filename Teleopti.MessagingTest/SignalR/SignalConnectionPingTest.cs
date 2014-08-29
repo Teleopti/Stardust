@@ -7,8 +7,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.SignalR;
-using Teleopti.Messaging.SignalR.Wrappers;
+using Teleopti.Messaging.Client.SignalR;
+using Teleopti.Messaging.Client.SignalR.Wrappers;
 using Teleopti.MessagingTest.SignalR.TestDoubles;
 
 namespace Teleopti.MessagingTest.SignalR

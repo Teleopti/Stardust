@@ -14,7 +14,6 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Messaging.SignalR;
 using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -31,6 +30,7 @@ using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
 {

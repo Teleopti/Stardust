@@ -6,9 +6,11 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.SignalR;
+using Teleopti.Messaging.Client.Composite;
+using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {

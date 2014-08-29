@@ -3,10 +3,11 @@ using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Exceptions;
-using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
 {

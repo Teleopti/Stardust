@@ -6,7 +6,8 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.SignalR;
+using Teleopti.Messaging.Client;
+using Teleopti.Messaging.Client.SignalR;
 using IRaptorRepository = Teleopti.Analytics.Etl.Interfaces.Transformer.IRaptorRepository;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job

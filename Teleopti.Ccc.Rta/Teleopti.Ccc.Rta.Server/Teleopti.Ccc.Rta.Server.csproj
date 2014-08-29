@@ -144,6 +144,7 @@
     <Compile Include="Adherence\AdherenceAggregator.cs" />
     <Compile Include="Adherence\AdherenceAggregatorInitializor.cs" />
     <Compile Include="Adherence\AgentAdherenceAggregator.cs" />
+    <Compile Include="Adherence\AgentsAdherenceMessage.cs" />
     <Compile Include="Adherence\IOrganizationForPerson.cs" />
     <Compile Include="Adherence\IPersonOrganizationProvider.cs" />
     <Compile Include="Adherence\OrganizationForPerson.cs" />
@@ -152,7 +153,9 @@
     <Compile Include="Adherence\RtaAggregationStateProvider.cs" />
     <Compile Include="Adherence\SiteAdherenceAggregator.cs" />
     <Compile Include="Adherence\RtaAggregationState.cs" />
+    <Compile Include="Adherence\SiteAdherenceMessage.cs" />
     <Compile Include="Adherence\TeamAdherenceAggregator.cs" />
+    <Compile Include="Adherence\TeamAdherenceMessage.cs" />
     <Compile Include="AlarmMapper.cs" />
     <Compile Include="Resolvers\PersonWithBusinessUnit.cs" />
     <Compile Include="RtaContainerBuilder.cs" />

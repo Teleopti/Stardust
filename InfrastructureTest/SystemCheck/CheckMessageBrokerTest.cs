@@ -2,6 +2,7 @@
 using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.SystemCheck

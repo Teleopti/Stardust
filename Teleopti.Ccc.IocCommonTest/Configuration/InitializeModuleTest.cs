@@ -8,7 +8,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Messaging.SignalR;
+using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {

@@ -4,8 +4,8 @@ using System.Net.Sockets;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Exceptions;
-using Teleopti.Messaging.SignalR;
 using log4net;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 

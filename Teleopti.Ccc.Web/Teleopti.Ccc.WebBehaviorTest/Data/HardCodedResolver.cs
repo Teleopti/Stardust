@@ -15,7 +15,9 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.SignalR;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
+using Teleopti.Messaging.Client;
+using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {

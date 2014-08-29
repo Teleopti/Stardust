@@ -5,7 +5,6 @@ using System.Configuration;
 using System.Linq;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Messaging.SignalR;
 using log4net.Appender;
 using log4net.Config;
 using log4net.Core;
@@ -21,6 +20,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Messaging.Client;
 
 
 namespace Teleopti.Ccc.InfrastructureTest

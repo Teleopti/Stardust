@@ -4,8 +4,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Messaging.SignalR;
-using Teleopti.Messaging.SignalR.Wrappers;
+using Teleopti.Messaging.Client.SignalR;
+using Teleopti.Messaging.Client.SignalR.Wrappers;
 using Teleopti.MessagingTest.SignalR.TestDoubles;
 
 namespace Teleopti.MessagingTest.SignalR

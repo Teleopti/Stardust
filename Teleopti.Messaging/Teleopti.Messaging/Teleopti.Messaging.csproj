@@ -140,31 +140,29 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SignalR\TrackingMessageSender.cs" />
-    <Compile Include="SignalR\SiteAdherenceMessage.cs" />
-    <Compile Include="SignalR\AgentsAdherenceMessage.cs" />
-    <Compile Include="SignalR\TeamAdherenceMessage.cs" />
-    <Compile Include="SignalR\DoNotSend.cs" />
-    <Compile Include="SignalR\IStateAccessor.cs" />
-    <Compile Include="SignalR\IConnectionKeepAliveStrategy.cs" />
+    <Compile Include="Client\MessageBrokerContainer.cs" />
+    <Compile Include="Client\SignalR\SignalRSender.cs" />
+    <Compile Include="Client\SignalR\DoNotSend.cs" />
+    <Compile Include="Client\SignalR\IStateAccessor.cs" />
+    <Compile Include="Client\SignalR\IConnectionKeepAliveStrategy.cs" />
     <Compile Include="Events\EventMessageFactory.cs" />
-    <Compile Include="SignalR\MessageBrokerListener.cs" />
-    <Compile Include="SignalR\MessageBrokerSender.cs" />
-    <Compile Include="SignalR\RecreateOnNoPingReply.cs" />
-    <Compile Include="SignalR\RestartOnClosed.cs" />
-    <Compile Include="SignalR\SignalBrokerCommands.cs" />
-    <Compile Include="SignalR\SignalConnection.cs" />
-    <Compile Include="SignalR\Wrappers\HubProxyWrapper.cs" />
-    <Compile Include="SignalR\Wrappers\IHubProxyWrapper.cs" />
-    <Compile Include="SignalR\Wrappers\HubConnectionWrapper.cs" />
-    <Compile Include="SignalR\Wrappers\IHubConnectionWrapper.cs" />
-    <Compile Include="SignalR\IHandleHubConnection.cs" />
-    <Compile Include="SignalR\NotificationFactory.cs" />
-    <Compile Include="SignalR\SignalBroker.cs" />
-    <Compile Include="SignalR\SignalRClient.cs" />
-    <Compile Include="SignalR\TaskHelper.cs" />
-    <Compile Include="SignalR\Wrappers\ISubscriptionWrapper.cs" />
-    <Compile Include="SignalR\Wrappers\SubscriptionWrapper.cs" />
+    <Compile Include="Client\Composite\MessageBrokerListener.cs" />
+    <Compile Include="Client\Composite\MessageBrokerSender.cs" />
+    <Compile Include="Client\SignalR\RecreateOnNoPingReply.cs" />
+    <Compile Include="Client\SignalR\RestartOnClosed.cs" />
+    <Compile Include="Client\Composite\SignalBrokerCommands.cs" />
+    <Compile Include="Client\SignalR\SignalRConnection.cs" />
+    <Compile Include="Client\SignalR\Wrappers\HubProxyWrapper.cs" />
+    <Compile Include="Client\SignalR\Wrappers\IHubProxyWrapper.cs" />
+    <Compile Include="Client\SignalR\Wrappers\HubConnectionWrapper.cs" />
+    <Compile Include="Client\SignalR\Wrappers\IHubConnectionWrapper.cs" />
+    <Compile Include="Client\SignalR\IHandleHubConnection.cs" />
+    <Compile Include="Client\NotificationFactory.cs" />
+    <Compile Include="Client\Composite\SignalBroker.cs" />
+    <Compile Include="Client\SignalR\SignalRClient.cs" />
+    <Compile Include="Client\SignalR\TaskHelper.cs" />
+    <Compile Include="Client\SignalR\Wrappers\ISubscriptionWrapper.cs" />
+    <Compile Include="Client\SignalR\Wrappers\SubscriptionWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
@@ -206,9 +204,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Composites\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,6 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Domain.Helper

@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Sdk.ServiceBus.Diagnostics;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.General;
 

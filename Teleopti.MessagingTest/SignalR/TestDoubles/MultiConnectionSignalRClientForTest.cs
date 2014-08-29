@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Messaging.SignalR;
-using Teleopti.Messaging.SignalR.Wrappers;
+using Teleopti.Messaging.Client.SignalR;
+using Teleopti.Messaging.Client.SignalR.Wrappers;
 
 namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {

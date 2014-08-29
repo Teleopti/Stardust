@@ -13,13 +13,13 @@ using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Messaging.SignalR;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.WinCode.Main
 {

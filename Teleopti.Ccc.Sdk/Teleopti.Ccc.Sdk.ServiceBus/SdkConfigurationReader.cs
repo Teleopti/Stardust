@@ -14,7 +14,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Messaging.SignalR;
+using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {

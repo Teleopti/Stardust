@@ -174,8 +174,8 @@
     <Compile Include="ApplicationLayer\Rta\UpdatedScheduleInfoHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\CanNotPublishEventsFromEventHandlers.cs" />
     <Compile Include="ApplicationLayer\ISendDelayedMessages.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IJsonDeserializer.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IJsonSerializer.cs" />
+    <Compile Include="ApplicationLayer\IJsonDeserializer.cs" />
+    <Compile Include="ApplicationLayer\IJsonSerializer.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IPersonScheduleDayReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IPersonScheduleDayReadModelsCreator.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\PersonScheduleDayReadModel.cs" />
@@ -232,6 +232,7 @@
     <Compile Include="ApplicationLayer\Events\ScheduleInitializeTriggeredEventForScheduleProjection.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\UpdateScheduleProjectionReadModel.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisher.cs" />
+    <Compile Include="ApplicationLayer\TrackingMessageSender.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />
     <Compile Include="Auditing\LoginAttemptModel.cs" />
     <Compile Include="Auditing\Revision.cs" />

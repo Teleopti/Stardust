@@ -10,7 +10,7 @@ using Teleopti.Ccc.Rta.Server.Adherence;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.SignalR;
+using Teleopti.Messaging.Client.SignalR;
 using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.Rta.Server

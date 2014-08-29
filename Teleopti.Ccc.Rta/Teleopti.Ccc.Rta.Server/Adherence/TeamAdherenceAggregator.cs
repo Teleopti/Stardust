@@ -3,7 +3,6 @@ using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {
