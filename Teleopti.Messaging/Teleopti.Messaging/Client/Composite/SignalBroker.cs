@@ -19,13 +19,13 @@ namespace Teleopti.Messaging.Client.Composite
 		{
 			_filterManager = typeFilter;
 			_signalRClient = signalRClient;
+			_messageBrokerListener = new MessageBrokerListener(_signalRClient);
 		}
 
 		public void StartBrokerService(bool useLongPolling = false)
 		{
 			_signalBrokerCommands = new SignalBrokerCommands(_signalRClient);
 			_messageBrokerSender = new MessageBrokerSender(_signalBrokerCommands, _filterManager);
-			_messageBrokerListener = new MessageBrokerListener(_signalBrokerCommands);
 			_signalRClient.RegisterCallbacks(_messageBrokerListener.OnNotification, _messageBrokerListener.ReregisterSubscriptions);
 
 			_signalRClient.StartBrokerService(useLongPolling);

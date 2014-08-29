@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SignalR\SignalBrokerSubscriptionsTest.cs" />
     <Compile Include="SignalR\TestDoubles\FailingHubProxyFake.cs" />
     <Compile Include="SignalR\TestDoubles\HubProxyFake.cs" />
     <Compile Include="SignalR\TestDoubles\MessageFilterManagerFake.cs" />

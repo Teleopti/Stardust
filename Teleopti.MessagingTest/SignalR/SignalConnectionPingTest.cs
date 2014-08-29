@@ -101,48 +101,6 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 
 		[Test]
-		public void ShouldSubscribeToNotificationsOnFirstConnection()
-		{
-			var time = new FakeTime();
-			var wasEventHandlerCalled = false;
-			var hubProxy1 = new HubProxyFake();
-			var hubConnection1 = stubHubConnection(hubProxy1);
-			var target = new MultiConnectionSignalBrokerForTest(new MessageFilterManagerFake(),
-				new[] {hubConnection1}, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
-			target.StartBrokerService();
-
-			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
-				typeof (IInterfaceForTest));
-			target.Send(string.Empty, Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
-				typeof (IInterfaceForTest), DomainUpdateType.Update, new byte[] {});
-
-			wasEventHandlerCalled.Should().Be(true);
-		}
-
-		[Test]
-		public void ShouldSubscribeToNotificationsOnRecreatedConnection()
-		{
-			var time = new FakeTime();
-			var wasEventHandlerCalled = false;
-			var hubProxy1 = new HubProxyFake();
-			var hubProxy2 = new HubProxyFake();
-			var hubConnection1 = stubHubConnection(hubProxy1);
-			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = new MultiConnectionSignalBrokerForTest(new MessageFilterManagerFake(),
-				new[] {hubConnection1, hubConnection2}, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
-			target.StartBrokerService();
-
-			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
-				typeof (IInterfaceForTest));
-			hubProxy1.BreakTheConnection();
-			time.Passes(TimeSpan.FromMinutes(2));
-			target.Send(string.Empty, Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
-				typeof (IInterfaceForTest), DomainUpdateType.Update, new byte[] {});
-
-			wasEventHandlerCalled.Should().Be(true);
-		}
-
-		[Test]
 		public void ShouldStartRecreatedConnection()
 		{
 			var time = new FakeTime();
@@ -193,11 +151,5 @@ namespace Teleopti.MessagingTest.SignalR
 
 			hubConnection2.NumberOfTimesStartWithTransportWasCalled.Should().Be.EqualTo(1);
 		}
-
-		private interface IInterfaceForTest
-		{
-
-		}
-
 	}
 }

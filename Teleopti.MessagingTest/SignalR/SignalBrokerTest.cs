@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Transports;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -19,7 +16,6 @@ namespace Teleopti.MessagingTest.SignalR
 	[TestFixture]
 	public class SignalBrokerTest
 	{
-		
 		private SignalBrokerForTest makeTarget(IHubProxyWrapper hubProxy)
 		{
 			var signalBroker = new SignalBrokerForTest(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
@@ -91,89 +87,5 @@ namespace Teleopti.MessagingTest.SignalR
 			hubProxy.NotifyClientsMultipleInvokedWith.Should().Have.Count.GreaterThan(0);
 		}
 
-		[Test]
-		public void ShouldInvokeEventHandlers()
-		{
-			var wasEventHandlerCalled = false;
-			var subscription = MockRepository.GenerateMock<ISubscriptionWrapper>();
-			var hubProxy = new HubProxySubscribableFake(subscription);
-			var target = makeTarget(hubProxy);
-
-			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
-											 typeof(IInterfaceForTest));
-
-			var notification = new Notification
-										{
-											DomainQualifiedType = "IInterfaceForTest",
-											BusinessUnitId = Guid.Empty.ToString(),
-											DataSource = string.Empty,
-											DomainType = "IInterfaceForTest",
-											StartDate = Subscription.DateToString(DateTime.UtcNow),
-											EndDate = Subscription.DateToString(DateTime.UtcNow)
-										};
-			var token = JObject.Parse(JsonConvert.SerializeObject(notification));
-			subscription.GetEventRaiser(x => x.Received += null).Raise(new List<JToken>(new JToken[] { token }));
-
-			wasEventHandlerCalled.Should().Be(true);
-		}
-
-		[Test]
-		public void ShouldIgnoreInvokeForOldSubscriptions()
-		{
-			var wasEventHandlerCalled = false;
-			var subscription = MockRepository.GenerateMock<ISubscriptionWrapper>();
-			var hubProxy = new HubProxySubscribableFake(subscription);
-			var target = makeTarget(hubProxy);
-
-			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
-											 typeof(IInterfaceForTest), DateTime.UtcNow.AddHours(-3),
-											 DateTime.UtcNow.AddHours(-1));
-
-			var notification = new Notification
-			{
-				DomainQualifiedType = "IInterfaceForTest",
-				BusinessUnitId = Guid.Empty.ToString(),
-				DataSource = string.Empty,
-				DomainType = "IInterfaceForTest",
-				StartDate = Subscription.DateToString(DateTime.UtcNow),
-				EndDate = Subscription.DateToString(DateTime.UtcNow)
-			};
-			var token = JObject.Parse(JsonConvert.SerializeObject(notification));
-			subscription.GetEventRaiser(x => x.Received += null).Raise(new List<JToken>(new JToken[] { token }));
-
-			wasEventHandlerCalled.Should().Be(false);
-		}
-
-		[Test]
-		public void ShouldIgnoreInvokeForFutureSubscriptions()
-		{
-			var wasEventHandlerCalled = false;
-			var subscription = MockRepository.GenerateMock<ISubscriptionWrapper>();
-			var hubProxy = new HubProxySubscribableFake(subscription);
-			var target = makeTarget(hubProxy);
-
-			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
-											 typeof(IInterfaceForTest), DateTime.UtcNow.AddHours(1),
-											 DateTime.UtcNow.AddHours(3));
-
-			var notification = new Notification
-			{
-				DomainQualifiedType = "IInterfaceForTest",
-				BusinessUnitId = Guid.Empty.ToString(),
-				DataSource = string.Empty,
-				DomainType = "IInterfaceForTest",
-				StartDate = Subscription.DateToString(DateTime.UtcNow),
-				EndDate = Subscription.DateToString(DateTime.UtcNow)
-			};
-			var token = JObject.Parse(JsonConvert.SerializeObject(notification));
-			subscription.GetEventRaiser(x => x.Received += null).Raise(new List<JToken>(new JToken[] { token }));
-
-			wasEventHandlerCalled.Should().Be(false);
-		}
-
-		private interface IInterfaceForTest
-		{
-
-		}
 	}
 }

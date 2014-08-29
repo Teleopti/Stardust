@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -12,8 +13,8 @@ namespace Teleopti.Messaging.Client.Composite
 {
 	public class MessageBrokerListener : IMessageBrokerListener
 	{
+		private readonly ISignalRClient _client;
 		private readonly IList<SubscriptionCallback> _subscriptions = new List<SubscriptionCallback>();
-		private readonly SignalBrokerCommands _signalBrokerCommands;
 
 		private class SubscriptionCallback
 		{
@@ -21,9 +22,9 @@ namespace Teleopti.Messaging.Client.Composite
 			public EventHandler<EventMessageArgs> Callback { get; set; }
 		}
 
-		public MessageBrokerListener(SignalBrokerCommands signalBrokerCommands)
+		public MessageBrokerListener(ISignalRClient client)
 		{
-			_signalBrokerCommands = signalBrokerCommands;
+			_client = client;
 		}
 
 		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
@@ -77,7 +78,8 @@ namespace Teleopti.Messaging.Client.Composite
 				Subscription = subscription,
 				Callback = eventMessageHandler
 			});
-			_signalBrokerCommands.AddSubscription(subscription);
+
+			addSubscription(subscription);
 		}
 
 		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
@@ -97,7 +99,12 @@ namespace Teleopti.Messaging.Client.Composite
 		public void ReregisterSubscriptions()
 		{
 			foreach (var subscription in _subscriptions)
-				_signalBrokerCommands.AddSubscription(subscription.Subscription);
+				addSubscription(subscription.Subscription);
+		}
+
+		private void addSubscription(Subscription subscription)
+		{
+			_client.Call("AddSubscription", subscription);
 		}
 
 		public void OnNotification(Notification d)
