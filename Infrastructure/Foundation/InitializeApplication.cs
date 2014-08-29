@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private static readonly ILog log = LogManager.GetLogger(typeof (InitializeApplication));
         private readonly IList<string> _unavailableDataSources = new List<string>();
 	    
-		public InitializeApplication(IDataSourcesFactory dataSourcesFactory, IMessageBroker messageBroker)
+		public InitializeApplication(IDataSourcesFactory dataSourcesFactory, IMessageBrokerComposite messageBroker)
 		{
 			DataSourcesFactory = dataSourcesFactory;
 			MessageBroker = messageBroker;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 
 		public IDataSourcesFactory DataSourcesFactory { get; private set; }
-		public IMessageBroker MessageBroker { get; private set; }
+		public IMessageBrokerComposite MessageBroker { get; private set; }
 		public bool MessageBrokerDisabled { get; set; }
 	    
         public IEnumerable<string> UnavailableDataSources

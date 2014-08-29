@@ -18,11 +18,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IRepository<IJobResult> _jobResultRepository;
 		private readonly IJobResultFeedback _feedback;
-		private readonly IMessageBroker _messageBroker;
+		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IServiceBus _serviceBus;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ExportMultisiteSkillsToSkillConsumer));
 
-		public ExportMultisiteSkillsToSkillConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBroker messageBroker, IServiceBus serviceBus)
+		public ExportMultisiteSkillsToSkillConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IServiceBus serviceBus)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_jobResultRepository = jobResultRepository;

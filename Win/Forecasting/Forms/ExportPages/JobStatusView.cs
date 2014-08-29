@@ -102,10 +102,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 	{
 		private IJobStatusView _view;
 		private readonly JobStatusModel _model;
-		private IMessageBroker _messageBroker;
+		private IMessageBrokerComposite _messageBroker;
 		private readonly JobResultProgressDecoder _decoder = new JobResultProgressDecoder();
 
-		public JobStatusPresenter(IJobStatusView view, JobStatusModel model, IMessageBroker messageBroker)
+		public JobStatusPresenter(IJobStatusView view, JobStatusModel model, IMessageBrokerComposite messageBroker)
 		{
 			_view = view;
 			_model = model;

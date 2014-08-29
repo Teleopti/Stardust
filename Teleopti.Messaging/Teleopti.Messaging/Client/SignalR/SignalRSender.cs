@@ -13,12 +13,12 @@ namespace Teleopti.Messaging.Client.SignalR
 			_client = client;
 		}
 
-		public void SendNotification(Notification notification)
+		public void Send(Notification notification)
 		{
 			_client.Call("NotifyClients", notification);
 		}
 
-		public void SendNotifications(IEnumerable<Notification> notifications)
+		public void SendMultiple(IEnumerable<Notification> notifications)
 		{
 			_client.Call("NotifyClientsMultiple", notifications);
 		}

@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		private readonly IRepository<IJobResult> _jobResultRepository;
 		private readonly IMultisiteForecastToSkillCommand _command;
 		private readonly IJobResultFeedback _feedback;
-		private readonly IMessageBroker _messageBroker;
+		private readonly IMessageBrokerComposite _messageBroker;
 
-		public ExportMultisiteSkillToSkillConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IMultisiteForecastToSkillCommand command, IJobResultFeedback feedback, IMessageBroker messageBroker)
+		public ExportMultisiteSkillToSkillConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IMultisiteForecastToSkillCommand command, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_skillRepository = skillRepository;

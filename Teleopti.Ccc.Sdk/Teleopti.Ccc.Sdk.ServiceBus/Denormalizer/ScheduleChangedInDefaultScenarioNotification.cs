@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
 	public class ScheduleChangedInDefaultScenarioNotification : ConsumerOf<ProjectionChangedEvent>
 	{
-		private readonly IMessageBroker _messageBroker;
+		private readonly IMessageBrokerComposite _messageBroker;
 
-		public ScheduleChangedInDefaultScenarioNotification(IMessageBroker messageBroker)
+		public ScheduleChangedInDefaultScenarioNotification(IMessageBrokerComposite messageBroker)
 		{
 			_messageBroker = messageBroker;
 		}

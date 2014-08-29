@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         private ISetScorecardView _view;
         private SetScorecardPresenter _target;
         private ISiteProvider _siteProvider;
-        private IMessageBrokerListener _messageBroker;
+        private IMessageListener _messageBroker;
         private MethodInfo _onSiteEvent;
         private MethodInfo _onScorecardEvent;
         private MethodInfo _onTeamEvent;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _scorecardProvider = _mocks.StrictMock<IScorecardProvider>();
             _siteProvider = _mocks.StrictMock<ISiteProvider>();
             _view = _mocks.StrictMock<ISetScorecardView>();
-            _messageBroker = _mocks.StrictMock<IMessageBrokerListener>();
+            _messageBroker = _mocks.StrictMock<IMessageListener>();
             _target = new SetScorecardPresenter(_view, _unitOfWork, _messageBroker, _scorecardProvider, _siteProvider, _teamProvider);
 
             _onSiteEvent = _target.GetType().GetMethod("OnSiteEvent", BindingFlags.Instance | BindingFlags.NonPublic);

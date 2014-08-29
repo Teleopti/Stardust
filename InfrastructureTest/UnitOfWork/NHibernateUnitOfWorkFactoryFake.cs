@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 		internal ISessionFactory SessFactory { get { return SessionFactory; } }
 
-		protected override IUnitOfWork MakeUnitOfWork(ISession session, IMessageBroker messaging, NHibernateFilterManager filterManager, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator) 
+		protected override IUnitOfWork MakeUnitOfWork(ISession session, IMessageBrokerComposite messaging, NHibernateFilterManager filterManager, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator) 
 		{
 			return _makeUnitOfWork != null ? _makeUnitOfWork.Invoke() : base.MakeUnitOfWork(session, messaging, filterManager, isolationLevel, initiator);
 		}

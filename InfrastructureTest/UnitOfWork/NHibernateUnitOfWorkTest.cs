@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		private IUnitOfWork uow;
 		private ISession session;
 		private MockRepository mocks;
-		private IMessageBroker messageBroker;
+		private IMessageBrokerComposite messageBroker;
 		private ISendPushMessageWhenRootAlteredService pushMessageService;
 
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			mocks = new MockRepository();
 			session = mocks.StrictMock<ISession>();
-			messageBroker = mocks.StrictMock<IMessageBroker>();
+			messageBroker = mocks.StrictMock<IMessageBrokerComposite>();
 			pushMessageService = mocks.DynamicMock<ISendPushMessageWhenRootAlteredService>();
 			uow = new TestUnitOfWork(session, messageBroker, pushMessageService, null);
 		}
@@ -357,7 +357,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			IMessageSender messageSender = mocks.StrictMock<IMessageSender>();
 
 			session = mocks.DynamicMock<ISession>();
-			messageBroker = mocks.DynamicMock<IMessageBroker>();
+			messageBroker = mocks.DynamicMock<IMessageBrokerComposite>();
 			uow = new TestUnitOfWork(session, messageBroker,pushMessageService,new []{messageSender});
 
 			AggregateRootInterceptor interceptor = new AggregateRootInterceptor();
@@ -458,7 +458,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 		private class TestUnitOfWork : NHibernateUnitOfWork
 		{
-			public TestUnitOfWork(ISession mock, IMessageBroker messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, IEnumerable<IMessageSender> denormalizers)
+			public TestUnitOfWork(ISession mock, IMessageBrokerComposite messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, IEnumerable<IMessageSender> denormalizers)
 				: base(mock, messageBroker, denormalizers, null, pushMessageService, NHibernateUnitOfWorkFactory.UnbindStatic, (s, i) => {}, TransactionIsolationLevel.Default, null)
 			{
 			}

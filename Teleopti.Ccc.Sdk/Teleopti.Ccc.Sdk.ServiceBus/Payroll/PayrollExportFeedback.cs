@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
     public class PayrollExportFeedback : IServiceBusPayrollExportFeedback
     {
 	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-	    private IMessageBroker _messageBroker;
+	    private IMessageBrokerComposite _messageBroker;
         private IPayrollResult _payrollResult;
         private JobResultProgressEncoder _payrollResultProgressEncoder = new JobResultProgressEncoder();
         private static readonly ILog Logger = LogManager.GetLogger(typeof (PayrollExportFeedback));
 
-		public PayrollExportFeedback(ICurrentUnitOfWorkFactory unitOfWorkFactory, IMessageBroker messageBroker)
+		public PayrollExportFeedback(ICurrentUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerComposite messageBroker)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_messageBroker = messageBroker;

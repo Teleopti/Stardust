@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PersonScheduleDayReadModelPersister : IPersonScheduleDayReadModelPersister
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-		private readonly IMessageBrokerSender _messageBroker;
+		private readonly IMessageCreator _messageBroker;
 		private readonly ICurrentDataSource _currentDataSource;
 
 		private readonly static ILog Logger = LogManager.GetLogger(typeof(PersonScheduleDayReadModelPersister));
 
-		public PersonScheduleDayReadModelPersister(ICurrentUnitOfWork currentUnitOfWork, IMessageBrokerSender messageBroker, ICurrentDataSource currentDataSource)
+		public PersonScheduleDayReadModelPersister(ICurrentUnitOfWork currentUnitOfWork, IMessageCreator messageBroker, ICurrentDataSource currentDataSource)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_messageBroker = messageBroker;

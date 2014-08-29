@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
         private string _connectionString;
         private static readonly object _locker = new object();
         private readonly IState _state;
-        private IMessageBroker _messageBroker;
+        private IMessageBrokerComposite _messageBroker;
 
         /// <summary>
         /// Gets the instance.
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
         /// Created by: Sumedah
         /// Created date: 2008-08-22
         /// </remarks>
-        public IMessageBroker MessageBroker
+        public IMessageBrokerComposite MessageBroker
         {
             get { return _messageBroker; }
 
@@ -138,8 +138,8 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
         	Uri serverUrl;
         	if (Uri.TryCreate(_connectionString,UriKind.Absolute,out serverUrl))
         	{
-				MessageBrokerContainer.Configure(_connectionString, null, new DummyFilterManager());
-				_messageBroker = MessageBrokerContainer.CompositeClient();
+				MessageBrokerContainerDontUse.Configure(_connectionString, null, new DummyFilterManager());
+				_messageBroker = MessageBrokerContainerDontUse.CompositeClient();
 
         		var useLongPolling = State.SessionScopeData.AppSettings.GetSettingValue("MessageBrokerLongPolling", bool.Parse);
 				_messageBroker.StartBrokerService(useLongPolling);

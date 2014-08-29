@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IJobResultFeedback _feedback;
-		private readonly IMessageBroker _messageBroker;
+		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IWorkloadDayHelper _workloadDayHelper;
 		private readonly IForecastClassesCreator _forecastClassesCreator;
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		                                            ICurrentUnitOfWorkFactory unitOfWorkFactory,
 		                                            IJobResultRepository jobResultRepository,
 		                                            IJobResultFeedback feedback,
-		                                            IMessageBroker messageBroker,
+		                                            IMessageBrokerComposite messageBroker,
 		                                            IWorkloadDayHelper workloadDayHelper,
 		                                            IForecastClassesCreator forecastClassesCreator)
 		{

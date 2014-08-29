@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 		IScheduledResourcesReadModelUpdater
 	{
 		private readonly IScheduledResourcesReadModelPersister _persister;
-		private readonly IMessageBrokerSender _messageBroker;
+		private readonly IMessageCreator _messageBroker;
 		private readonly IEventSyncronization _eventSyncronization;
 
-		public ScheduledResourcesReadModelUpdater(IScheduledResourcesReadModelPersister persister, IMessageBrokerSender messageBroker, IEventSyncronization eventSyncronization)
+		public ScheduledResourcesReadModelUpdater(IScheduledResourcesReadModelPersister persister, IMessageCreator messageBroker, IEventSyncronization eventSyncronization)
 		{
 			_persister = persister;
 			_messageBroker = messageBroker;

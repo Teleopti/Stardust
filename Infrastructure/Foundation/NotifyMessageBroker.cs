@@ -23,10 +23,10 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
     /// </remarks>
     public class NotifyMessageBroker
     {
-        private readonly IMessageBroker _messageBroker;
+        private readonly IMessageBrokerComposite _messageBroker;
 	    private readonly EventMessageFactory _eventMessageFactory;
 
-	    public NotifyMessageBroker(IMessageBroker messageBroker)
+	    public NotifyMessageBroker(IMessageBrokerComposite messageBroker)
         {
 	        _messageBroker = messageBroker;
 	        _eventMessageFactory = new EventMessageFactory();

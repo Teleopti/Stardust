@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		private readonly List<StateGroupActivityAlarmModel> _stateGroupActivityAlarms = new List<StateGroupActivityAlarmModel>();
 		private readonly IList<StateGroupActivityAlarmModel> _stateGroupActivityAlarmsToRemove = new List<StateGroupActivityAlarmModel>();
 		private readonly IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
-		private readonly IMessageBroker _messageBroker;
+		private readonly IMessageBrokerComposite _messageBroker;
 		private IManageAlarmSituationView _manageAlarmSituationView;
 		private readonly IRtaStateGroupRepository _rtaStateGroupRepository;
 		private readonly IActivityRepository _activityRepository;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
 		private readonly object StateGroupLock = new object();
 
-		public ManageAlarmSituationPresenter(IUnitOfWorkFactory unitOfWorkFactory, IAlarmTypeRepository alarmTypeRepository, IRtaStateGroupRepository rtaStateGroupRepository, IActivityRepository activityRepository, IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository, IMessageBroker messageBroker, IManageAlarmSituationView manageAlarmSituationView)
+		public ManageAlarmSituationPresenter(IUnitOfWorkFactory unitOfWorkFactory, IAlarmTypeRepository alarmTypeRepository, IRtaStateGroupRepository rtaStateGroupRepository, IActivityRepository activityRepository, IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository, IMessageBrokerComposite messageBroker, IManageAlarmSituationView manageAlarmSituationView)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_alarmTypeRepository = alarmTypeRepository;

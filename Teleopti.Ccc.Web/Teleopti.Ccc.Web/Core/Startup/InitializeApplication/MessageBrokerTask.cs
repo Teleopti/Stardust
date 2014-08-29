@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 	[TaskPriority(6)]
 	public class MessageBrokerTask : IBootstrapperTask
 	{
-		private readonly IMessageBroker _messageBroker;
+		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly ISettings _settings;
 
-		public MessageBrokerTask(IMessageBroker messageBroker, ICurrentHttpContext currentHttpContext, ISettings settings)
+		public MessageBrokerTask(IMessageBrokerComposite messageBroker, ICurrentHttpContext currentHttpContext, ISettings settings)
 		{
 			_messageBroker = messageBroker;
 			_currentHttpContext = currentHttpContext;

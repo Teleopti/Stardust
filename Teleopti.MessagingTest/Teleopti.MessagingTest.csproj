@@ -38,9 +38,9 @@
     <Compile Include="SignalR\TestDoubles\FailingHubProxyFake.cs" />
     <Compile Include="SignalR\TestDoubles\HubProxyFake.cs" />
     <Compile Include="SignalR\TestDoubles\MessageFilterManagerFake.cs" />
-    <Compile Include="SignalR\TestDoubles\MultiConnectionSignalBrokerForTest.cs" />
+    <Compile Include="SignalR\TestDoubles\MultiConnectionMessageBrokerCompositeClientForTest.cs" />
     <Compile Include="SignalR\TestDoubles\MultiConnectionSignalRClientForTest.cs" />
-    <Compile Include="SignalR\TestDoubles\SignalBrokerForTest.cs" />
+    <Compile Include="SignalR\TestDoubles\MessageBrokerCompositeClientForTest.cs" />
     <Compile Include="SignalR\TestDoubles\HubConnectionMock.cs" />
     <Compile Include="SignalR\SignalBrokerTest.cs" />
     <Compile Include="SignalR\SignalConnectionRestartOnClosedTest.cs" />

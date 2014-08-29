@@ -22,12 +22,12 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
         public JobHelper()
         {
 			_logHelp = new LogOnHelper(SuperUser.UserName, SuperUser.Password, ConfigurationManager.AppSettings["nhibConfPath"]);
-	        MessageBrokerContainer.Configure(
+	        MessageBrokerContainerDontUse.Configure(
 		        ConfigurationManager.AppSettings["MessageBroker"],
 		        new IConnectionKeepAliveStrategy[] {},
 		        null);
-			_messageSender = MessageBrokerContainer.Sender();
-	        _messageClient = MessageBrokerContainer.SignalRClient();
+			_messageSender = MessageBrokerContainerDontUse.Sender();
+	        _messageClient = MessageBrokerContainerDontUse.SignalRClient();
         }
 
         public JobHelper(IRaptorRepository repository, ISignalRClient messageClient, IMessageSender messageSender, ILogOnHelper logOnHelper)

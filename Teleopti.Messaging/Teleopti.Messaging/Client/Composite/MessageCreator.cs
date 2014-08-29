@@ -8,12 +8,12 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Messaging.Client.Composite
 {
-	public class MessageBrokerSender : IMessageBrokerSender
+	public class MessageCreator : IMessageCreator
 	{
 		private readonly IMessageSender _messageSender;
 		private readonly IMessageFilterManager _messageFilterManager;
 
-		public MessageBrokerSender(IMessageSender messageSender, IMessageFilterManager messageFilterManager)
+		public MessageCreator(IMessageSender messageSender, IMessageFilterManager messageFilterManager)
 		{
 			_messageSender = messageSender;
 			_messageFilterManager = messageFilterManager;
@@ -61,7 +61,7 @@ namespace Teleopti.Messaging.Client.Composite
 				eventEndDate, moduleId, referenceObjectId,
 				referenceObjectType, domainObjectId, domainObjectType, updateType,
 				domainObject);
-			_messageSender.SendNotifications(notificationList);
+			_messageSender.SendMultiple(notificationList);
 		}
 
 		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
@@ -84,17 +84,12 @@ namespace Teleopti.Messaging.Client.Composite
 
 				if (notificationList.Count > 200)
 				{
-					_messageSender.SendNotifications(notificationList);
+					_messageSender.SendMultiple(notificationList);
 					notificationList.Clear();
 				}
 			}
 			if (notificationList.Count > 0)
-				_messageSender.SendNotifications(notificationList);
-		}
-
-		public void Send(Notification notification)
-		{
-			_messageSender.SendNotification(notification);
+				_messageSender.SendMultiple(notificationList);
 		}
 	}
 }

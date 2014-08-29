@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public Notification LastAgentsNotification;
 		public ICollection<Notification> AllNotifications;
 
-		public void SendNotification(Notification notification)
+		public void Send(Notification notification)
 		{
 			LastNotification = notification;
 			
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			AllNotifications.Add(notification);
 		}
 
-		public void SendNotifications(IEnumerable<Notification> notifications)
+		public void SendMultiple(IEnumerable<Notification> notifications)
 		{
 			throw new System.NotImplementedException();
 		}

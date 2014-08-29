@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 	public class InitializeApplicationTest
 	{
 		private IDataSourcesFactory datasourcesFactory;
-		private IMessageBroker messBroker;
+		private IMessageBrokerComposite messBroker;
 		private MockRepository mocks;
 		private IState stateStub;
 		private InitializeApplication target;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		{
 			stateStub = new UsedInTestState();
 			mocks = new MockRepository();
-			messBroker = mocks.StrictMock<IMessageBroker>();
+			messBroker = mocks.StrictMock<IMessageBrokerComposite>();
 			datasourcesFactory = mocks.StrictMock<IDataSourcesFactory>();
 			target = new InitializeApplication(datasourcesFactory, messBroker);
 		}
@@ -193,9 +193,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		[Test]
 		public void VerifyDefaultProperty()
 		{
-			MessageBrokerContainer.Configure(null, null, null);
+			MessageBrokerContainerDontUse.Configure(null, null, null);
 			target = new InitializeApplication(new DataSourcesFactory(null, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest()), 
-				MessageBrokerContainer.CompositeClient());
+				MessageBrokerContainerDontUse.CompositeClient());
 		}
 
 

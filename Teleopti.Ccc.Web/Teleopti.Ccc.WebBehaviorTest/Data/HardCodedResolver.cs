@@ -24,14 +24,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 	public class HardCodedResolver : IResolve
 	{
-		private static IMessageBrokerSender _messageBroker;
+		private static IMessageCreator _messageBroker;
 
-		private IMessageBrokerSender messageBroker()
+		private IMessageCreator messageBroker()
 		{
 			if (_messageBroker == null)
 			{
-				MessageBrokerContainer.Configure(null, new IConnectionKeepAliveStrategy[] { }, null);
-				var broker = MessageBrokerContainer.CompositeClient();
+				MessageBrokerContainerDontUse.Configure(null, new IConnectionKeepAliveStrategy[] { }, null);
+				var broker = MessageBrokerContainerDontUse.CompositeClient();
 				broker.StartBrokerService();
 				_messageBroker = broker;
 			}

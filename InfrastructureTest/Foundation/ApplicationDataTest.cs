@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         [Test]
         public void VerifyApplicationDataCanBeSet()
         {
-            IMessageBroker messBroker = mocks.StrictMock<IMessageBroker>();
+            IMessageBrokerComposite messBroker = mocks.StrictMock<IMessageBrokerComposite>();
             ILoadPasswordPolicyService passwordPolicy = mocks.StrictMock<ILoadPasswordPolicyService>();
 
             IApplicationData target = new ApplicationData(_receivedSettings, dataSources, messBroker, passwordPolicy);
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         [Test]
         public void VerifySingleDataSourceConstructor()
         {
-            IMessageBroker messBroker = mocks.StrictMock<IMessageBroker>();
+            IMessageBrokerComposite messBroker = mocks.StrictMock<IMessageBrokerComposite>();
             IDataSource dataSource = mocks.StrictMock<IDataSource>();
             IApplicationData target = new ApplicationData(_receivedSettings, dataSource, messBroker);
             Assert.AreSame(_receivedSettings, target.AppSettings);
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         [Test]
         public void VerifyDispose()
         {
-            IMessageBroker messBroker = mocks.StrictMock<IMessageBroker>();
+            IMessageBrokerComposite messBroker = mocks.StrictMock<IMessageBrokerComposite>();
             IList<IDataSource> dsList = new List<IDataSource>();
             IDataSource ds1 = mocks.StrictMock<IDataSource>();
             IDataSource ds2 = mocks.StrictMock<IDataSource>();

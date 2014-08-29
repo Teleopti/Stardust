@@ -23,14 +23,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
     [Category("LongRunning")]
     public class NotifyMessageBrokerTest : DatabaseTest
     {
-        private IMessageBroker messBroker;
+        private IMessageBrokerComposite messBroker;
         private MockRepository mocks;
         private IUnitOfWork uow;
 
 	    protected override void SetupForRepositoryTest()
         {
             mocks = new MockRepository();
-            messBroker = mocks.StrictMock<IMessageBroker>();
+            messBroker = mocks.StrictMock<IMessageBrokerComposite>();
             SkipRollback();
             uow = createUnitOfWorkWithMessageMock();
         }
@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
         private class ExtendedNotifyMessageBroker : NotifyMessageBroker
         {
-            public ExtendedNotifyMessageBroker(IMessageBroker messageBroker)
+            public ExtendedNotifyMessageBroker(IMessageBrokerComposite messageBroker)
 				: base(messageBroker)
             {
             }

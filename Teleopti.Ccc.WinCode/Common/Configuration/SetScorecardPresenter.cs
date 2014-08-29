@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
     {
         private readonly ISetScorecardView _view;
         private readonly IUnitOfWork _unitOfWork;
-		private readonly IMessageBrokerListener _messageBroker;
+		private readonly IMessageListener _messageBroker;
         private readonly IScorecardProvider _scorecardProvider;
         private readonly ISiteProvider _siteProvider;
         private readonly ITeamProvider _teamProvider;
         private readonly Guid _messageBrokerInstance = Guid.NewGuid();
         private ISite _selectedSite;
 
-        public SetScorecardPresenter(ISetScorecardView view, IUnitOfWork unitOfWork, IMessageBrokerListener messageBroker, IScorecardProvider scorecardProvider, ISiteProvider siteProvider, ITeamProvider teamProvider)
+        public SetScorecardPresenter(ISetScorecardView view, IUnitOfWork unitOfWork, IMessageListener messageBroker, IScorecardProvider scorecardProvider, ISiteProvider siteProvider, ITeamProvider teamProvider)
         {
             _view = view;
             _unitOfWork = unitOfWork;

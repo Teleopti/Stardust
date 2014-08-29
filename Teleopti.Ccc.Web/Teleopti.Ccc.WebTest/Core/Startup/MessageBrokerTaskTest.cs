@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			var currentHttpContext = CurrentHttpContext("http://my.url.com", "/app/");
 			var settings = MockRepository.GenerateMock<ISettings>();
-			var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
+			var messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			messageBroker.Stub(x => x.ServerUrl).PropertyBehavior();
 			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var currentHttpContext = CurrentHttpContext("http://my.url.com", "/app/");
 			var settings = MockRepository.GenerateMock<ISettings>();
 			settings.Stub(x => x.MessageBroker()).Return("http://my.broker.com/path/");
-			var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
+			var messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			messageBroker.Stub(x => x.ServerUrl).PropertyBehavior();
 			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		public void ShouldStartMessageBroker()
 		{
 			var currentHttpContext = CurrentHttpContext("http://localhost", "/");
-			var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
+			var messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			var settings = MockRepository.GenerateMock<ISettings>();
 			settings.Stub(x => x.MessageBrokerLongPolling()).Return("true");
 			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);

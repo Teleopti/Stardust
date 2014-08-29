@@ -35,7 +35,7 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 
 		public void SendNotification(Notification notification)
 		{
-			_sender.SendNotification(notification);
+			_sender.Send(notification);
 		}
 
 	}

@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             var mocks = new MockRepository();
             var stateMock = mocks.StrictMock<IState>();
 
-            var applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBroker>());
+            var applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
             var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
             var sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, applicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
 

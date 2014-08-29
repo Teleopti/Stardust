@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			builder.RegisterType<BusStartup>().As<IServiceBusAware>().SingleInstance();
 			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging)
-				.As<IMessageBroker>()
-				.As<IMessageBrokerSender>()
-				.As<IMessageBrokerListener>()
+				.As<IMessageBrokerComposite>()
+				.As<IMessageCreator>()
+				.As<IMessageListener>()
 				.ExternallyOwned();
 			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData).As<IApplicationData>().ExternallyOwned();
 			builder.Register(c => UnitOfWorkFactoryContainer.Current).As<ICurrentUnitOfWorkFactory>().ExternallyOwned();

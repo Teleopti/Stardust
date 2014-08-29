@@ -31,7 +31,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 
 			var target = new StatisticsUpdateNotificationJobStep(jobParameters);
 			IJobStepResult jobStepResult = target.Run(new List<IJobStep>(), null, new List<IJobResult>(), true);
-			var arguments = messageSender.GetArgumentsForCallsMadeOn(x => x.SendNotification(null), a => a.IgnoreArguments());
+			var arguments = messageSender.GetArgumentsForCallsMadeOn(x => x.Send((Notification) null), a => a.IgnoreArguments());
 
 			jobStepResult.Status.Should().Be.EqualTo("Done");
 

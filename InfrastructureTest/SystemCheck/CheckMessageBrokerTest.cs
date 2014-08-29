@@ -11,13 +11,13 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck
     {
         private CheckMessageBroker target;
         private MockRepository mocks;
-        private IMessageBroker mb;
+        private IMessageBrokerComposite mb;
 
         [SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
-            mb = mocks.StrictMock<IMessageBroker>();
+            mb = mocks.StrictMock<IMessageBrokerComposite>();
             target = new CheckMessageBroker(mb);
         }
 

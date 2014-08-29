@@ -29,15 +29,15 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 
 			var siteAdherence = _siteAdherenceAggregator.CreateNotification(actualAgentState);
 			if (siteAdherence != null)
-				_signalRClient.SendNotification(siteAdherence);
+				_signalRClient.Send(siteAdherence);
 
 			var teamAdherence = _teamAdherenceAggregator.CreateNotification(actualAgentState);
 			if (teamAdherence != null)
-				_signalRClient.SendNotification(teamAdherence);
+				_signalRClient.Send(teamAdherence);
 
 			var agentsAdherence = _agentAdherenceAggregator.CreateNotification(actualAgentState);
 			if (agentsAdherence != null)
-				_signalRClient.SendNotification(agentsAdherence);
+				_signalRClient.Send(agentsAdherence);
 		}
 	}
 }

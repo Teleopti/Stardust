@@ -3,7 +3,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Interfaces.MessageBroker.Client.Composite
 {
-	public interface IMessageBrokerSender
+	public interface IMessageCreator
 	{
 		void Send(
 			string dataSource,
@@ -33,7 +33,5 @@ namespace Teleopti.Interfaces.MessageBroker.Client.Composite
 			string dataSource,
 			Guid businessUnitId,
 			IEventMessage[] eventMessages);
-
-		void Send(Notification notification);
 	}
 }

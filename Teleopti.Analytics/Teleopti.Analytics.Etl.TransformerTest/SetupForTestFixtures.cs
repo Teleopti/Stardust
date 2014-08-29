@@ -31,7 +31,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             _bu = BusinessUnitFactory.CreateSimpleBusinessUnit("bu1");
             _bu.SetId(Guid.NewGuid());
 
-            applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBroker>());
+            applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
             sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, applicationData, _bu);
 

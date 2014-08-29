@@ -18,9 +18,9 @@ namespace Teleopti.MessagingTest.SignalR
 	[TestFixture]
 	public class SignalBrokerSubscriptionsTest
 	{
-		private SignalBrokerForTest makeTarget(IHubProxyWrapper hubProxy)
+		private MessageBrokerCompositeClientForTest makeTarget(IHubProxyWrapper hubProxy)
 		{
-			var signalBroker = SignalBrokerForTest.Make(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
+			var signalBroker = MessageBrokerCompositeClientForTest.Make(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
 			signalBroker.StartBrokerService();
 			return signalBroker;
 		}
@@ -65,7 +65,7 @@ namespace Teleopti.MessagingTest.SignalR
 		{
 			var subscription = MockRepository.GenerateMock<ISubscriptionWrapper>();
 			var hubProxy = new HubProxySubscribableFake(subscription);
-			var target = SignalBrokerForTest.Make(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
+			var target = MessageBrokerCompositeClientForTest.Make(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
 
 			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => {}, typeof(IInterfaceForTest));
 		}
@@ -75,7 +75,7 @@ namespace Teleopti.MessagingTest.SignalR
 		{
 			var subscription = MockRepository.GenerateMock<ISubscriptionWrapper>();
 			var hubProxy = new HubProxySubscribableFake(subscription);
-			var target = SignalBrokerForTest.Make(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
+			var target = MessageBrokerCompositeClientForTest.Make(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
 
 			target.UnregisterEventSubscription((sender, args) => {});
 		}
@@ -141,7 +141,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var wasEventHandlerCalled = false;
 			var hubProxy1 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
-			var target = MultiConnectionSignalBrokerForTest.Make(new MessageFilterManagerFake(),
+			var target = MultiConnectionMessageBrokerCompositeClientForTest.Make(new MessageFilterManagerFake(),
 				new[] { hubConnection1 }, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
 			target.StartBrokerService();
 
@@ -162,7 +162,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy2 = new HubProxyFake();
 			var hubConnection1 = stubHubConnection(hubProxy1);
 			var hubConnection2 = stubHubConnection(hubProxy2);
-			var target = MultiConnectionSignalBrokerForTest.Make(new MessageFilterManagerFake(),
+			var target = MultiConnectionMessageBrokerCompositeClientForTest.Make(new MessageFilterManagerFake(),
 				new[] { hubConnection1, hubConnection2 }, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
 			target.StartBrokerService();
 

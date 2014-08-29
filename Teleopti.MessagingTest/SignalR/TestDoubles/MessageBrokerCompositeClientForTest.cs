@@ -8,19 +8,19 @@ using Teleopti.Messaging.Client.SignalR.Wrappers;
 
 namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
-	public class SignalBrokerForTest : SignalBroker
+	public class MessageBrokerCompositeClientForTest : MessageBrokerCompositeClient
 	{
-		public static SignalBrokerForTest Make(
+		public static MessageBrokerCompositeClientForTest Make(
 			IMessageFilterManager typeFilter,
 			IHubConnectionWrapper hubConnection
 			)
 		{
 			var signalRClient = new signalRClientForTest(hubConnection);
 			var sender = new SignalRSender(signalRClient);
-			return new SignalBrokerForTest(typeFilter, signalRClient, sender);
+			return new MessageBrokerCompositeClientForTest(typeFilter, signalRClient, sender);
 		}
 
-		private SignalBrokerForTest(
+		private MessageBrokerCompositeClientForTest(
 			IMessageFilterManager typeFilter,
 			ISignalRClient client,
 			IMessageSender sender)

@@ -49,10 +49,10 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			loggedOnPerson = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatClenUpDataSource", string.Empty);
 
-			MessageBrokerContainer.Configure(null, null, MessageFilterManager.Instance);
+			MessageBrokerContainerDontUse.Configure(null, null, MessageFilterManager.Instance);
 			ApplicationData = new ApplicationData(appSettings,
 									new ReadOnlyCollection<IDataSource>(new List<IDataSource> { DataSource }),
-									MessageBrokerContainer.CompositeClient(), null);
+									MessageBrokerContainerDontUse.CompositeClient(), null);
 			sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, ApplicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
 
 			StateHolderProxyHelper.SetStateReaderExpectations(stateMock, ApplicationData, sessionData);

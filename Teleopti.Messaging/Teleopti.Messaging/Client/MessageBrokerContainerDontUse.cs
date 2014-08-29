@@ -9,7 +9,7 @@ using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Messaging.Client
 {
-	public static class MessageBrokerContainer
+	public static class MessageBrokerContainerDontUse
 	{
 		private static string _serverUrl;
 		private static IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
@@ -17,7 +17,7 @@ namespace Teleopti.Messaging.Client
 
 		private static ISignalRClient _client;
 		private static IMessageSender _sender;
-		private static IMessageBroker _compositeClient;
+		private static IMessageBrokerComposite _compositeClient;
 
 		public static void Configure(string serverUrl, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, IMessageFilterManager messageFilter)
 		{
@@ -44,9 +44,9 @@ namespace Teleopti.Messaging.Client
 			return _client ?? (_client = new SignalRClient(_serverUrl, connectionKeepAliveStrategy(), new Time(new Now())));
 		}
 
-		public static IMessageBroker CompositeClient()
+		public static IMessageBrokerComposite CompositeClient()
 		{
-			return _compositeClient ?? (_compositeClient = new SignalBroker(messageFilter(), SignalRClient(), Sender()));
+			return _compositeClient ?? (_compositeClient = new MessageBrokerCompositeClient(messageFilter(), SignalRClient(), Sender()));
 		}
 
 		public static IMessageSender Sender()

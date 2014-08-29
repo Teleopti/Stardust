@@ -9,9 +9,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
@@ -23,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         {
             MockRepository mocks = new MockRepository();
             IState state = mocks.StrictMock<IState>();
-            IMessageBroker messageBroker = mocks.DynamicMock<IMessageBroker>();
+            IMessageBrokerComposite messageBroker = mocks.DynamicMock<IMessageBrokerComposite>();
             IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(messageBroker);
             IBusinessUnit businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 

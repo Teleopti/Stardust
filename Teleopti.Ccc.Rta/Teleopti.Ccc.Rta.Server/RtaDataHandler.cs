@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			var notification = NotificationFactory.CreateNotification(agentState);
 
-			_messageSender.SendNotification(notification);
+			_messageSender.Send(notification);
 			if (_actualAgentStateHasBeenSent != null)
 			{
 				_actualAgentStateHasBeenSent.Invoke(agentState);

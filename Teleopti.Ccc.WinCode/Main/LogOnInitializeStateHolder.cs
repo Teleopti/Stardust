@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			new InitializeApplication(
 				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
 				                       DataSourceConfigurationSetter.ForDesktop()),
-				MessageBrokerContainer.CompositeClient()
+				MessageBrokerContainerDontUse.CompositeClient()
 				) {
 					MessageBrokerDisabled = messageBrokerDisabled
 				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath),
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WinCode.Main
         	
 			var sendToServiceBus = new ServiceBusSender();
 			var eventPublisher = new ServiceBusEventPublisher(sendToServiceBus, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
-			MessageBrokerContainer.Configure(null, null, null);
+			MessageBrokerContainerDontUse.Configure(null, null, null);
 			var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WinCode.Main
                                                           new PersonChangedMessageSender(eventPublisher),
                                                           new PersonPeriodChangedMessageSender(eventPublisher)
 												      }, DataSourceConfigurationSetter.ForDesktop()),
-					MessageBrokerContainer.CompositeClient())
+					MessageBrokerContainerDontUse.CompositeClient())
         			{
         				MessageBrokerDisabled = messageBrokerDisabled
         			};

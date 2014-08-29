@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private AggregateRootInterceptor _interceptor;
 		private ISession _session;
-		private IMessageBroker _messageBroker;
+		private IMessageBrokerComposite _messageBroker;
 		private bool disposed;
 		private ITransaction _transaction;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
 		private IInitiatorIdentifier _initiator;
 
-		protected internal NHibernateUnitOfWork(ISession session, IMessageBroker messageBroker, IEnumerable<IMessageSender> messageSenders, NHibernateFilterManager filterManager, ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService, Action<ISession> unbind, Action<ISession, IInitiatorIdentifier> bindInitiator, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
+		protected internal NHibernateUnitOfWork(ISession session, IMessageBrokerComposite messageBroker, IEnumerable<IMessageSender> messageSenders, NHibernateFilterManager filterManager, ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService, Action<ISession> unbind, Action<ISession, IInitiatorIdentifier> bindInitiator, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
 		{
 			InParameter.NotNull("session", session);
 			_session = session;

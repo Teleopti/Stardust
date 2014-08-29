@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
     public class JobResultFeedback : IJobResultFeedback
     {
 	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-	    private IMessageBroker _messageBroker;
+	    private IMessageBrokerComposite _messageBroker;
         private IJobResult _jobResult;
         private JobResultProgressEncoder _jobResultProgressEncoder;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(JobResultFeedback));
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		    _unitOfWorkFactory = unitOfWorkFactory;
 	    }
 
-	    public void SetJobResult(IJobResult jobResult,IMessageBroker messageBroker)
+	    public void SetJobResult(IJobResult jobResult,IMessageBrokerComposite messageBroker)
         {
         	_messageBroker = messageBroker;
             _jobResult = jobResult;

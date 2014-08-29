@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	    private const short itemDiffernce = 1;                      
 		private List<IContract> _contractList;
 		private readonly IDictionary<EmploymentType, string> _employmentTypeList = new Dictionary<EmploymentType, string>();
-		private readonly IMessageBroker _messageBroker = StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging;
+		private readonly IMessageBrokerComposite _messageBroker = StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging;
 
 		public IUnitOfWork UnitOfWork { get; private set; }
 

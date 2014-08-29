@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 
 			public bool HasMatchedAdherence { get; private set; }
 
-			public void SendNotification(Notification notification)
+			public void Send(Notification notification)
 			{
 				var outOfAdherenceValue = notification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence;
 				if (outOfAdherenceValue > _outofAdherence)
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 
 			}
 
-			public void SendNotifications(IEnumerable<Notification> notifications)
+			public void SendMultiple(IEnumerable<Notification> notifications)
 			{
 				throw new NotImplementedException();
 			}

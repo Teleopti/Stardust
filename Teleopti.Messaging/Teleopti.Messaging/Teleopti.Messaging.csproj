@@ -140,14 +140,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Client\MessageBrokerContainer.cs" />
+    <Compile Include="Client\MessageBrokerContainerDontUse.cs" />
     <Compile Include="Client\SignalR\SignalRSender.cs" />
-    <Compile Include="Client\SignalR\DoNotSend.cs" />
+    <Compile Include="Client\Composite\DoNotSend.cs" />
     <Compile Include="Client\SignalR\IStateAccessor.cs" />
     <Compile Include="Client\SignalR\IConnectionKeepAliveStrategy.cs" />
     <Compile Include="Events\EventMessageFactory.cs" />
-    <Compile Include="Client\Composite\MessageBrokerListener.cs" />
-    <Compile Include="Client\Composite\MessageBrokerSender.cs" />
+    <Compile Include="Client\Composite\MessageListener.cs" />
+    <Compile Include="Client\Composite\MessageCreator.cs" />
     <Compile Include="Client\SignalR\RecreateOnNoPingReply.cs" />
     <Compile Include="Client\SignalR\RestartOnClosed.cs" />
     <Compile Include="Client\SignalR\SignalRConnection.cs" />
@@ -157,7 +157,7 @@
     <Compile Include="Client\SignalR\Wrappers\IHubConnectionWrapper.cs" />
     <Compile Include="Client\SignalR\IHandleHubConnection.cs" />
     <Compile Include="Client\NotificationFactory.cs" />
-    <Compile Include="Client\Composite\SignalBroker.cs" />
+    <Compile Include="Client\Composite\MessageBrokerCompositeClient.cs" />
     <Compile Include="Client\SignalR\SignalRClient.cs" />
     <Compile Include="Client\SignalR\TaskHelper.cs" />
     <Compile Include="Client\SignalR\Wrappers\ISubscriptionWrapper.cs" />

@@ -50,10 +50,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<Interfaces.MessageBroker.Client.IMessageSender>()
 				.SingleInstance();
 
-			builder.RegisterType<SignalBroker>()
-				.As<IMessageBroker>()
-				.As<IMessageBrokerSender>()
-				.As<IMessageBrokerListener>()
+			builder.RegisterType<MessageBrokerCompositeClient>()
+				.As<IMessageBrokerComposite>()
+				.As<IMessageCreator>()
+				.As<IMessageListener>()
 				.SingleInstance();
 		}
 	}

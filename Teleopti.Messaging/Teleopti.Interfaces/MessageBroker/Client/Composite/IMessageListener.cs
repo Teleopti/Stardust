@@ -3,7 +3,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Interfaces.MessageBroker.Client.Composite
 {
-	public interface IMessageBrokerListener
+	public interface IMessageListener
 	{
 		void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType);
 		void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType);

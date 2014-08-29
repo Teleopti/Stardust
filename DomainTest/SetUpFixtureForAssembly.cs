@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest
             cfg.SetProperties(ret);
             cfg.AddAssembly("Teleopti.Ccc.Domain");
 
-            applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBroker>());
+            applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
             sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, applicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
 

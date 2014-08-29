@@ -4,7 +4,6 @@ using Microsoft.AspNet.SignalR.Client.Transports;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Client.SignalR;
 using Teleopti.Messaging.Client.SignalR.Wrappers;
@@ -16,9 +15,9 @@ namespace Teleopti.MessagingTest.SignalR
 	[TestFixture]
 	public class SignalBrokerTest
 	{
-		private SignalBrokerForTest makeTarget(IHubProxyWrapper hubProxy)
+		private MessageBrokerCompositeClientForTest makeTarget(IHubProxyWrapper hubProxy)
 		{
-			var signalBroker = SignalBrokerForTest.Make(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
+			var signalBroker = MessageBrokerCompositeClientForTest.Make(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
 			signalBroker.StartBrokerService();
 			return signalBroker;
 		}
@@ -42,7 +41,7 @@ namespace Teleopti.MessagingTest.SignalR
 			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
 			hubConnection.Stub(x => x.Start(new LongPollingTransport())).IgnoreArguments().Return(TaskHelper.MakeDoneTask());
 
-			var signalBroker = SignalBrokerForTest.Make(new MessageFilterManagerFake(), hubConnection);
+			var signalBroker = MessageBrokerCompositeClientForTest.Make(new MessageFilterManagerFake(), hubConnection);
 			signalBroker.StartBrokerService(useLongPolling: true);
 
 			hubConnection.AssertWasCalled(x => x.Start(new LongPollingTransport()), o => o.Constraints(Rhino.Mocks.Constraints.Is.TypeOf<LongPollingTransport>()));
@@ -58,17 +57,6 @@ namespace Teleopti.MessagingTest.SignalR
 									typeof(string), DomainUpdateType.Update, new byte[] { });
 
 			hubProxy.NotifyClientsMultipleInvokedWith.Should().Have.Count.GreaterThan(0);
-		}
-
-		[Test]
-		public void ShouldSendNotification()
-		{
-			var hubProxy = new HubProxyFake();
-			var target = makeTarget(hubProxy);
-
-			target.Send(new Notification());
-
-			hubProxy.NotifyClientsInvokedWith.Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]

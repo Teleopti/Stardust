@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private SFGridColumnGridHelper<RotationRestrictionView> _gridHelper;
 		private SFGridColumnBase<RotationRestrictionView> _lateEndTimeColumn;
 		private SFGridColumnBase<RotationRestrictionView> _lateStartTimeColumn;
-		private IMessageBroker _messageBroker;
+		private IMessageBrokerComposite _messageBroker;
 		private List<RotationRestrictionView> _restrictionViewList = new List<RotationRestrictionView>();
 		private List<IRotation> _rotationList;
 		private SFGridDropDownColumn<RotationRestrictionView, IShiftCategory> _shiftCategoriesColumn;

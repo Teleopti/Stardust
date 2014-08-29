@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	public class ScheduleChangedNotifier : IHandleEvent<ScheduleChangedEvent>
 	{
-		private readonly IMessageBrokerSender _broker;
+		private readonly IMessageCreator _broker;
 
-		public ScheduleChangedNotifier(IMessageBrokerSender broker)
+		public ScheduleChangedNotifier(IMessageCreator broker)
 		{
 			_broker = broker;
 		}

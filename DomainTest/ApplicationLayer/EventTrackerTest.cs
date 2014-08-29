@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldSendTrackingMessage()
 		{
-			var messageBrokerSender = MockRepository.GenerateMock<IMessageBrokerSender>();
+			var messageBrokerSender = MockRepository.GenerateMock<IMessageSender>();
 
 			var target = new TrackingMessageSender(messageBrokerSender, new NewtonsoftJsonSerializer());
 

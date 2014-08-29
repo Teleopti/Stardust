@@ -11,7 +11,7 @@ using Teleopti.Messaging.Exceptions;
 
 namespace Teleopti.Messaging.Client.Composite
 {
-	public class MessageBrokerListener : IMessageBrokerListener
+	public class MessageListener : IMessageListener
 	{
 		private readonly ISignalRClient _client;
 		private readonly IList<SubscriptionCallback> _subscriptions = new List<SubscriptionCallback>();
@@ -22,7 +22,7 @@ namespace Teleopti.Messaging.Client.Composite
 			public EventHandler<EventMessageArgs> Callback { get; set; }
 		}
 
-		public MessageBrokerListener(ISignalRClient client)
+		public MessageListener(ISignalRClient client)
 		{
 			_client = client;
 		}

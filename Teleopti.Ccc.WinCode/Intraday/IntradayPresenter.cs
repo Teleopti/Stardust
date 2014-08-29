@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private ISchedulingResultLoader _schedulingResultLoader;
         private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
-	    private IMessageBroker _messageBroker;
+	    private IMessageBrokerComposite _messageBroker;
         private string _chartIntradayDescription = string.Empty;
         private DateOnly _intradayDate;
         private IRtaStateHolder _rtaStateHolder;
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         public IntradayPresenter(IIntradayView view,
             ISchedulingResultLoader schedulingResultLoader,
-            IMessageBroker messageBroker,
+            IMessageBrokerComposite messageBroker,
             IRtaStateHolder rtaStateHolder,
             IEventAggregator eventAggregator,
 						IScheduleDifferenceSaver scheduleDictionarySaver,

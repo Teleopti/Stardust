@@ -7,7 +7,8 @@ using Teleopti.Interfaces.Domain;
 using log4net;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Rta.Server; 
+using Teleopti.Ccc.Rta.Server;
+using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Exceptions;
 
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_target = new RtaDataHandler(_messageClient, _messageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId, _isSnapshot);
 
-			_messageSender.AssertWasNotCalled(a => a.SendNotification(null), a => a.IgnoreArguments());
+			_messageSender.AssertWasNotCalled(a => a.Send((Notification) null), a => a.IgnoreArguments());
 			_mocks.VerifyAll();
 
 		}
@@ -215,7 +216,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_agentAssembler.Expect(
 				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(agentState);
-			_messageSender.Expect(m => m.SendNotification(null)).IgnoreArguments();
+			_messageSender.Expect(m => m.Send((Notification) null)).IgnoreArguments();
 			
 			_mocks.ReplayAll();
 
@@ -275,7 +276,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_agentAssembler.Expect(a => a.InvalidateReadModelCache(_personId));
 			_agentAssembler.Expect(a => a.GetAgentStateForScheduleUpdate(_personId, _businessUnitId, _timestamp)).IgnoreArguments().Return(
 				agentState);
-			_messageSender.Expect(m => m.SendNotification(null)).IgnoreArguments();
+			_messageSender.Expect(m => m.Send((Notification) null)).IgnoreArguments();
 			_mocks.ReplayAll();
 
 			_target = new RtaDataHandler(_messageClient, _messageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), null);
@@ -321,7 +322,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			_agentAssembler.Expect(a => a.GetAgentStatesForMissingAgents(_batchId, _sourceId))
 			               .Return(new List<IActualAgentState> {agentState, null});
-			_messageSender.Expect(m => m.SendNotification(null)).IgnoreArguments();
+			_messageSender.Expect(m => m.Send((Notification) null)).IgnoreArguments();
 			_mocks.ReplayAll();
 			
 			assignTargetAndRun();

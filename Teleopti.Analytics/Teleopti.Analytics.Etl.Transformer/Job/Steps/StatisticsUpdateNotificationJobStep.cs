@@ -43,7 +43,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 					                                                          identity.DataSource.DataSourceName,
 					                                                          Guid.Empty);
 
-					messageSender.SendNotification(notification);
+					messageSender.Send(notification);
 				}
 			}
 			catch (BrokerNotInstantiatedException exception)

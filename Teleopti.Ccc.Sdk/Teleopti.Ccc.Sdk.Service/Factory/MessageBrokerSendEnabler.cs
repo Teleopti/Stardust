@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     public class MessageBrokerSendEnabler : IDisposable
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(MessageBrokerSendEnabler));
-        private readonly IMessageBroker _messaging;
+        private readonly IMessageBrokerComposite _messaging;
         private readonly static object LockObject = new object();
 
         public MessageBrokerSendEnabler()

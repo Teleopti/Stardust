@@ -9,9 +9,9 @@ using Teleopti.Messaging.Client.SignalR.Wrappers;
 
 namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
-	public class MultiConnectionSignalBrokerForTest : SignalBroker
+	public class MultiConnectionMessageBrokerCompositeClientForTest : MessageBrokerCompositeClient
 	{
-		public static MultiConnectionSignalBrokerForTest Make(
+		public static MultiConnectionMessageBrokerCompositeClientForTest Make(
 			IMessageFilterManager typeFilter,
 			IEnumerable<IHubConnectionWrapper> hubConnections,
 			IConnectionKeepAliveStrategy connectionKeepAliveStrategy,
@@ -19,10 +19,10 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 		{
 			var signalRClient = new signalRClientForTest(hubConnections, connectionKeepAliveStrategy, time);
 			var sender = new SignalRSender(signalRClient);
-			return new MultiConnectionSignalBrokerForTest(typeFilter, signalRClient, sender);
+			return new MultiConnectionMessageBrokerCompositeClientForTest(typeFilter, signalRClient, sender);
 		}
 
-		private MultiConnectionSignalBrokerForTest(
+		private MultiConnectionMessageBrokerCompositeClientForTest(
 			IMessageFilterManager typeFilter,
 			ISignalRClient client,
 			IMessageSender sender)

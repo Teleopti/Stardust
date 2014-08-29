@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private IScheduleProjectionReadOnlyRepository _scheduleProjectionRepository;
 		private IPublishEventsFromEventHandlers _bus;
 		private ControllableEventSyncronization _eventSyncronization;
-		private IMessageBrokerSender _messageBroker;
+		private IMessageCreator _messageBroker;
 		private ISkill _skill;
 		private IPerson _person;
 		
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_bus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
 			_scheduleProjectionRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
 			_eventSyncronization = new ControllableEventSyncronization();
-			_messageBroker = MockRepository.GenerateMock<IMessageBrokerSender>();
+			_messageBroker = MockRepository.GenerateMock<IMessageCreator>();
 
 			_skill = SkillFactory.CreateSkill("Phone");
 			_skill.Activity.SetId(Guid.NewGuid());

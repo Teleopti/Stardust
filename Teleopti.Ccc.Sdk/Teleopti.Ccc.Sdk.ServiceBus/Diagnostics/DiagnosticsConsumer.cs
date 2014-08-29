@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Diagnostics
 {
 	public class DiagnosticsConsumer : ConsumerOf<DiagnosticsMessage>
 	{
-		private readonly IMessageBroker _broker;
+		private readonly IMessageBrokerComposite _broker;
 
-		public DiagnosticsConsumer(IMessageBroker broker)
+		public DiagnosticsConsumer(IMessageBrokerComposite broker)
 		{
 			_broker = broker;
 		}

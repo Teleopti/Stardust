@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		           .SingleInstance();
 		    builder.RegisterType<CheckMessageBroker>().As<ISystemCheck>();
 		    builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging).As
-			    <IMessageBroker>().ExternallyOwned();
+			    <IMessageBrokerComposite>().ExternallyOwned();
 		    builder.RegisterType<SystemCheckerValidator>();
 		    builder.RegisterType<OutlookPanelContentWorker>();
 

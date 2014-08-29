@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Diagnostics
 		[Test]
 		public void ShouldSendNotificationWithProcessInformation()
 		{
-			var broker = MockRepository.GenerateMock<IMessageBroker>();
+			var broker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			var target = new DiagnosticsConsumer(broker);
 
 			var businessUnitId = Guid.NewGuid();

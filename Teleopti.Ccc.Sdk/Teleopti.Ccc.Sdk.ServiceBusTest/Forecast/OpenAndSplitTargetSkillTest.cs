@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
         private ISkillRepository _skillRepository;
         private IJobResultRepository _jobResultRepository;
         private IJobResultFeedback _feedback;
-        private IMessageBroker _messageBroker;
+        private IMessageBrokerComposite _messageBroker;
         private IServiceBus _serviceBus;
         private IOpenAndSplitSkillCommand _command;
         private OpenAndSplitTargetSkillConsumer _target;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             _skillRepository = _mocks.StrictMock<ISkillRepository>();
             _jobResultRepository = _mocks.StrictMock<IJobResultRepository>();
             _feedback = _mocks.DynamicMock<IJobResultFeedback>();
-            _messageBroker = _mocks.DynamicMock<IMessageBroker>();
+            _messageBroker = _mocks.DynamicMock<IMessageBrokerComposite>();
             _serviceBus = _mocks.StrictMock<IServiceBus>();
             _unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
             _jobResult = _mocks.DynamicMock<IJobResult>();

@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 {
     public class CheckMessageBroker : ISystemCheck
     {
-        private readonly IMessageBroker _messageBroker;
+        private readonly IMessageBrokerComposite _messageBroker;
 
-        public CheckMessageBroker(IMessageBroker messageBroker)
+        public CheckMessageBroker(IMessageBrokerComposite messageBroker)
         {
             _messageBroker = messageBroker;
         }
