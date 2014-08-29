@@ -110,8 +110,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.xpTaskBarBoxPeriod.ItemBackColor = System.Drawing.Color.White;
 			this.xpTaskBarBoxPeriod.Location = new System.Drawing.Point(0, 0);
 			this.xpTaskBarBoxPeriod.Name = "xpTaskBarBoxPeriod";
-			this.xpTaskBarBoxPeriod.PreferredChildPanelHeight = 190;
-			this.xpTaskBarBoxPeriod.Size = new System.Drawing.Size(165, 222);
+			this.xpTaskBarBoxPeriod.PreferredChildPanelHeight = 230;
+			this.xpTaskBarBoxPeriod.Size = new System.Drawing.Size(165, 262);
 			this.xpTaskBarBoxPeriod.TabIndex = 0;
 			this.xpTaskBarBoxPeriod.Text = "xxCreateForecastFor";
 			// 
@@ -123,17 +123,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.gradientPanel1.Controls.Add(this.dateSelectionFromToTarget);
 			this.gradientPanel1.Location = new System.Drawing.Point(2, 30);
 			this.gradientPanel1.Name = "gradientPanel1";
-			this.gradientPanel1.Size = new System.Drawing.Size(161, 190);
+			this.gradientPanel1.Size = new System.Drawing.Size(161, 230);
 			this.gradientPanel1.TabIndex = 0;
 			// 
 			// scenarioSelectorControl
 			// 
 			this.scenarioSelectorControl.BackColor = System.Drawing.Color.Transparent;
 			this.scenarioSelectorControl.Dock = System.Windows.Forms.DockStyle.Top;
+			this.scenarioSelectorControl.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.scenarioSelectorControl.Location = new System.Drawing.Point(0, 0);
 			this.scenarioSelectorControl.Name = "scenarioSelectorControl";
 			this.scenarioSelectorControl.SelectedItem = null;
-			this.scenarioSelectorControl.Size = new System.Drawing.Size(161, 57);
+			this.scenarioSelectorControl.Size = new System.Drawing.Size(161, 56);
 			this.scenarioSelectorControl.TabIndex = 1;
 			// 
 			// dateSelectionFromToTarget
@@ -141,11 +142,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.dateSelectionFromToTarget.BackColor = System.Drawing.Color.Transparent;
 			this.dateSelectionFromToTarget.ButtonApplyText = "xxApply";
 			this.dateSelectionFromToTarget.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.dateSelectionFromToTarget.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.dateSelectionFromToTarget.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.dateSelectionFromToTarget.HideNoneButtons = false;
 			this.dateSelectionFromToTarget.LabelDateSelectionText = "xxFrom";
 			this.dateSelectionFromToTarget.LabelDateSelectionToText = "xxTo";
-			this.dateSelectionFromToTarget.Location = new System.Drawing.Point(0, 17);
+			this.dateSelectionFromToTarget.Location = new System.Drawing.Point(0, 57);
 			this.dateSelectionFromToTarget.Name = "dateSelectionFromToTarget";
 			this.dateSelectionFromToTarget.NoneButtonText = "xxNone";
 			this.dateSelectionFromToTarget.NullString = "xxNoDateIsSelected";
@@ -165,7 +166,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.xpTaskBarBoxSpecialEvents.HitTaskBoxArea = false;
 			this.xpTaskBarBoxSpecialEvents.HotTrackColor = System.Drawing.Color.Empty;
 			this.xpTaskBarBoxSpecialEvents.ItemBackColor = System.Drawing.Color.White;
-			this.xpTaskBarBoxSpecialEvents.Location = new System.Drawing.Point(0, 222);
+			this.xpTaskBarBoxSpecialEvents.Location = new System.Drawing.Point(0, 262);
 			this.xpTaskBarBoxSpecialEvents.Name = "xpTaskBarBoxSpecialEvents";
 			this.xpTaskBarBoxSpecialEvents.PreferredChildPanelHeight = 110;
 			this.xpTaskBarBoxSpecialEvents.Size = new System.Drawing.Size(165, 142);
