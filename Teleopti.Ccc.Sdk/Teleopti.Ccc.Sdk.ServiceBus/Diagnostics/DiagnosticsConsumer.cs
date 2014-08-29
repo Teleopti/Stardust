@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Diagnostics
 
 			var binaryData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(diagnostics));
 			_broker.SendEventMessage(message.Datasource, message.BusinessUnitId, DateOnly.Today, DateOnly.Today, Guid.Empty,
-				message.InitiatorId, typeof (TeleoptiDiagnosticsInformation), DomainUpdateType.NotApplicable,
+				message.InitiatorId, typeof (ITeleoptiDiagnosticsInformation), DomainUpdateType.NotApplicable,
 				binaryData);
 		}
 	}

@@ -28,12 +28,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Diagnostics
 			broker.AssertWasCalled(
 				x =>
 					x.SendEventMessage("", Guid.Empty, DateOnly.Today, DateOnly.Today, Guid.Empty, Guid.Empty,
-						typeof (TeleoptiDiagnosticsInformation), DomainUpdateType.NotApplicable, new byte[] {}),
+						typeof (ITeleoptiDiagnosticsInformation), DomainUpdateType.NotApplicable, new byte[] {}),
 				o =>
 					o.Constraints(Rhino.Mocks.Constraints.Is.Equal(datasourceName), Rhino.Mocks.Constraints.Is.Equal(businessUnitId),
 						Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(),
 						Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Equal(initiatorId),
-						Rhino.Mocks.Constraints.Is.Equal(typeof (TeleoptiDiagnosticsInformation)), Rhino.Mocks.Constraints.Is.Anything(),
+						Rhino.Mocks.Constraints.Is.Equal(typeof (ITeleoptiDiagnosticsInformation)), Rhino.Mocks.Constraints.Is.Anything(),
 						Rhino.Mocks.Constraints.Is.Matching(new Predicate<byte[]>(bytes => bytes.Length > 0))));
 		}
 	}
