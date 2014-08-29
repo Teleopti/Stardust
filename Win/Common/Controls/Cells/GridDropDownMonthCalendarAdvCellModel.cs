@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 				try
 				{
 					style.BeginUpdate();
-					style.CellValue = GetValueFromStyle(style, text);
+					style.CellValue = getValueFromStyle(style, text);
 					style.ResetError();
 				}
 				catch (Exception exception)
@@ -122,14 +122,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 				try
 				{
 					style.BeginUpdate();
-					if (!string.IsNullOrEmpty(text))
-					{
-						style.CellValue = GetValueFromStyle(style, text);
-					}
-					else
-					{
-						style.CellValue = text;
-					}
+					style.CellValue = !string.IsNullOrEmpty(text) ? getValueFromStyle(style, text) : text;
 					style.ResetError();
 				}
 				catch (Exception exception)
@@ -168,7 +161,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 		public override string GetFormattedText(GridStyleInfo style, object value, int textInfo)
 		{
 			CultureInfo info = style.CultureInfo ?? CultureInfo.CurrentCulture;
-			object valueFromStyle = GetValueFromStyle(style, value);
+			object valueFromStyle = getValueFromStyle(style, value);
 			if (valueFromStyle is DateTime)
 			{
 				var time = (DateTime)valueFromStyle;
@@ -177,7 +170,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 			return base.GetFormattedText(style, value, textInfo);
 		}
 
-		private static object GetValueFromStyle(GridStyleInfo style, object value)
+		private static object getValueFromStyle(GridStyleInfo style, object value)
 		{
 			if (!(value is DateTime))
 			{
@@ -219,27 +212,27 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 		public void SetNoneButtonText(string theText)
 		{
 			noneButtonText = theText;
-			SetCalenderStyle();
+			setCalenderStyle();
 		}
 
 		public void SetTodayButtonText(string theText)
 		{
 			todayButtonText = theText;
-			SetCalenderStyle();
+			setCalenderStyle();
 		}
 
 		public void HideNoneButton()
 		{
 			showNoneButton = false;
-			SetCalenderStyle();
+			setCalenderStyle();
 		}
 		public void HideTodayButton()
 		{
 			showTodayButton = false;
-			SetCalenderStyle();
+			setCalenderStyle();
 		}
 
-		private void SetCalenderStyle()
+		private void setCalenderStyle()
 		{
 			if (Calendar == null)
 				return;
@@ -261,12 +254,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 			DropDownImp.InitFocusEditPart = true;
 		}
 
-		private void calendar_DateSelected(object sender, EventArgs e)
+		private void calendarDateSelected(object sender, EventArgs e)
 		{
 			CurrentCell.CloseDropDown(PopupCloseType.Done);
 		}
 
-		public override void ChildClosing(IPopupChild childUI, PopupCloseType popupCloseType)
+		public override void ChildClosing(IPopupChild childUi, PopupCloseType popupCloseType)
 		{
 
 			if ((popupCloseType == PopupCloseType.Done) && !IsReadOnly())
@@ -289,7 +282,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 				TextBox.Focus();
 			}
 
-			base.ChildClosing(childUI, popupCloseType);
+			base.ChildClosing(childUi, popupCloseType);
 		}
 
 		public override void DropDownContainerShowingDropDown(object sender, CancelEventArgs e)
@@ -357,15 +350,21 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 				BackColor =Color.White
 			};
 
-			SetCalenderStyle();
+			setCalenderStyle();
 
-			calendar.DateSelected += calendar_DateSelected;
-			calendar.NoneButtonClick += Calendar_NoneButtonClick;
+			calendar.DateSelected += calendarDateSelected;
+			calendar.NoneButtonClick += calendarNoneButtonClick;
+			calendar.VisibleChanged += calendarVisibleChanged;	
 			DropDownContainer.Size = calendar.Size;
 			DropDownContainer.Controls.Add(Calendar);
 		}
 
-		void Calendar_NoneButtonClick(object sender, EventArgs e)
+		void calendarVisibleChanged(object sender, EventArgs e)
+		{
+			Calendar.Refresh();
+		}
+
+		void calendarNoneButtonClick(object sender, EventArgs e)
 		{
 			TextBox.Text = "";
 			CurrentCell.CloseDropDown(PopupCloseType.Canceled);
@@ -377,12 +376,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 			{
 				if (calendarControlSize.IsEmpty)
 				{
-					var window = new TopLevelWindow();
-					window.Location = new Point(0x2710, 0x2710);
-					window.Size = new Size(500, 500);
+					var window = new TopLevelWindow {Location = new Point(0x2710, 0x2710), Size = new Size(500, 500)};
 					window.ShowWindowTopMost();
-					var calendar = new MonthCalendarAdv();
-					calendar.Style = VisualStyle.Metro;
+					var calendar = new MonthCalendarAdv {Style = VisualStyle.Metro};
 					window.Controls.Add(calendar);
 					window.Visible = true;
 					calendarControlSize = calendar.Size;
