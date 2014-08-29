@@ -150,7 +150,6 @@
     <Compile Include="Client\Composite\MessageBrokerSender.cs" />
     <Compile Include="Client\SignalR\RecreateOnNoPingReply.cs" />
     <Compile Include="Client\SignalR\RestartOnClosed.cs" />
-    <Compile Include="Client\Composite\SignalBrokerCommands.cs" />
     <Compile Include="Client\SignalR\SignalRConnection.cs" />
     <Compile Include="Client\SignalR\Wrappers\HubProxyWrapper.cs" />
     <Compile Include="Client\SignalR\Wrappers\IHubProxyWrapper.cs" />

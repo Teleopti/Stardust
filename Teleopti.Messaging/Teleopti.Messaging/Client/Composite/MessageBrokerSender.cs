@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -9,12 +10,12 @@ namespace Teleopti.Messaging.Client.Composite
 {
 	public class MessageBrokerSender : IMessageBrokerSender
 	{
-		private readonly SignalBrokerCommands _signalBrokerCommands;
+		private readonly IMessageSender _messageSender;
 		private readonly IMessageFilterManager _messageFilterManager;
 
-		public MessageBrokerSender(SignalBrokerCommands signalBrokerCommands, IMessageFilterManager messageFilterManager)
+		public MessageBrokerSender(IMessageSender messageSender, IMessageFilterManager messageFilterManager)
 		{
-			_signalBrokerCommands = signalBrokerCommands;
+			_messageSender = messageSender;
 			_messageFilterManager = messageFilterManager;
 		}
 
@@ -60,7 +61,7 @@ namespace Teleopti.Messaging.Client.Composite
 				eventEndDate, moduleId, referenceObjectId,
 				referenceObjectType, domainObjectId, domainObjectType, updateType,
 				domainObject);
-			_signalBrokerCommands.NotifyClients(notificationList);
+			_messageSender.SendNotifications(notificationList);
 		}
 
 		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
@@ -83,17 +84,17 @@ namespace Teleopti.Messaging.Client.Composite
 
 				if (notificationList.Count > 200)
 				{
-					_signalBrokerCommands.NotifyClients(notificationList);
+					_messageSender.SendNotifications(notificationList);
 					notificationList.Clear();
 				}
 			}
 			if (notificationList.Count > 0)
-				_signalBrokerCommands.NotifyClients(notificationList);
+				_messageSender.SendNotifications(notificationList);
 		}
 
 		public void Send(Notification notification)
 		{
-			_signalBrokerCommands.NotifyClients(notification);
+			_messageSender.SendNotification(notification);
 		}
 	}
 }

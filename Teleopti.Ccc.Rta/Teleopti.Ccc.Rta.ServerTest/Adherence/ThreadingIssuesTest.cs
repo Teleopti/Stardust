@@ -79,6 +79,11 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 					HasMatchedAdherence = true;
 
 			}
+
+			public void SendNotifications(IEnumerable<Notification> notifications)
+			{
+				throw new NotImplementedException();
+			}
 		}
 	}
 }

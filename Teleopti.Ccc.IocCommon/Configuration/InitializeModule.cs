@@ -8,7 +8,6 @@ using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Client.Composite;
 using Teleopti.Messaging.Client.SignalR;
 
@@ -47,6 +46,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<ISignalRClient>()
 				.WithParameter(new NamedParameter("serverUrl", null))
 				.SingleInstance();
+			builder.RegisterType<SignalRSender>()
+				.As<Interfaces.MessageBroker.Client.IMessageSender>()
+				.SingleInstance();
+
 			builder.RegisterType<SignalBroker>()
 				.As<IMessageBroker>()
 				.As<IMessageBrokerSender>()

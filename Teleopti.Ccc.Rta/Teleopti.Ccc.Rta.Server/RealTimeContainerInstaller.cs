@@ -2,7 +2,6 @@
 using System.Configuration;
 using Autofac;
 using MbCache.Configuration;
-using MbCache.Core;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.Interfaces;

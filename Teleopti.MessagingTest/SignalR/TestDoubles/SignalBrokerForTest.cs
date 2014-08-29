@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Messaging.Client.Composite;
 using Teleopti.Messaging.Client.SignalR;
@@ -9,8 +10,21 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
 	public class SignalBrokerForTest : SignalBroker
 	{
-		public SignalBrokerForTest(IMessageFilterManager typeFilter, IHubConnectionWrapper hubConnection)
-			: base(typeFilter, new signalRClientForTest(hubConnection))
+		public static SignalBrokerForTest Make(
+			IMessageFilterManager typeFilter,
+			IHubConnectionWrapper hubConnection
+			)
+		{
+			var signalRClient = new signalRClientForTest(hubConnection);
+			var sender = new SignalRSender(signalRClient);
+			return new SignalBrokerForTest(typeFilter, signalRClient, sender);
+		}
+
+		private SignalBrokerForTest(
+			IMessageFilterManager typeFilter,
+			ISignalRClient client,
+			IMessageSender sender)
+			: base(typeFilter, client, sender)
 		{
 		}
 

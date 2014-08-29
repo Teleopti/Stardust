@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 
@@ -15,6 +16,11 @@ namespace Teleopti.Messaging.Client.SignalR
 		public void SendNotification(Notification notification)
 		{
 			_client.Call("NotifyClients", notification);
+		}
+
+		public void SendNotifications(IEnumerable<Notification> notifications)
+		{
+			_client.Call("NotifyClientsMultiple", notifications);
 		}
 	}
 }

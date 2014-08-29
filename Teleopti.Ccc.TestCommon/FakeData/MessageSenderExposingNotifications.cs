@@ -29,5 +29,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				LastSiteNotification = notification;
 			AllNotifications.Add(notification);
 		}
+
+		public void SendNotifications(IEnumerable<Notification> notifications)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }
