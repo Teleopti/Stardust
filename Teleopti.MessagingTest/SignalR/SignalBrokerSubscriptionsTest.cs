@@ -63,13 +63,11 @@ namespace Teleopti.MessagingTest.SignalR
 		[Test]
 		public void ShouldNotThrowWhenSubscribingWhenNotStarted()
 		{
-			var wasEventHandlerCalled = false;
 			var subscription = MockRepository.GenerateMock<ISubscriptionWrapper>();
 			var hubProxy = new HubProxySubscribableFake(subscription);
 			var target = new SignalBrokerForTest(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
 
-			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
-				typeof(IInterfaceForTest));
+			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => {}, typeof(IInterfaceForTest));
 		}
 
 		[Test]
