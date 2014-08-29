@@ -56,6 +56,7 @@
                        HorizontalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"
                        MinRowHeight="22"
 					   CanUserResizeColumns="True"
+						CanUserAddRows="False"
                        x:Name="requestGrid"
 					   SelectedCellsChanged="requestGrid_SelectedCellsChanged" 
 					   MouseDoubleClick="requestGrid_MouseDoubleClick"

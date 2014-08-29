@@ -64,11 +64,14 @@ namespace Teleopti.Ccc.WpfControls.Controls.Requests.Views
         private void requestGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var src = VisualTreeHelper.GetParent((DependencyObject)e.OriginalSource);
-            var srcType = src.GetType();
-            if (srcType != typeof (ListViewItem) && srcType != typeof (ContentPresenter)) return;
-            var dataContext = requestGrid.DataContext as HandlePersonRequestViewModel;
-            if (dataContext != null)
-                dataContext.ShowRequestDetailsView();
+	        if (src != null)
+	        {
+				var srcType = src.GetType();
+				if (srcType != typeof(ListViewItem) && srcType != typeof(ContentPresenter)) return;
+				var dataContext = requestGrid.DataContext as HandlePersonRequestViewModel;
+				if (dataContext != null)
+					dataContext.ShowRequestDetailsView();
+	        }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
