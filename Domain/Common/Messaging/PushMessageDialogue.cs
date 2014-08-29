@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
@@ -97,9 +98,10 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
 
         public virtual void SetReply(string reply)
         {
-	        if (reply == null)
+	        if (reply == null && !PushMessage.ReplyOptions.Any())
 	        {
-		        reply = "OK";
+				_reply = "OK";
+				_isReplied = true;
 	        }
 			if (PushMessage.CheckReply(reply) && !IsReplied)
 			{
