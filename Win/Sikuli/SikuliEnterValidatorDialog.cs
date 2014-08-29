@@ -1,11 +1,11 @@
 ﻿using System.Windows.Forms;
 
-namespace Teleopti.Ccc.Win
+namespace Teleopti.Ccc.Win.Sikuli
 {
-	public partial class SikuliInputBox : Form
+	public partial class SikuliEnterValidatorDialog : Form
 	{
 
-		public SikuliInputBox()
+		public SikuliEnterValidatorDialog()
 		{
 			InitializeComponent();
 		}

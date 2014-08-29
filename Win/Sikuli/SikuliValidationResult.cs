@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Teleopti.Ccc.Win
+namespace Teleopti.Ccc.Win.Sikuli
 {
 	public class SikuliValidationResult
 	{

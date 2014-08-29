@@ -32,6 +32,7 @@ using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.Win.Payroll;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.Win.Permissions;
+using Teleopti.Ccc.Win.Sikuli;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
@@ -182,11 +183,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			if (e.KeyCode == Keys.T && e.Shift && e.Alt)
 			{
-				SikuliHelper.TestMode = true;
+				SikuliHelper.SetTestMode(true);
 			}
 			if (e.KeyCode == Keys.V && e.Shift && e.Alt)
 			{
-				SikuliHelper.InputValidator();
+				SikuliHelper.EnterValidator();
 			}
 			base.OnKeyDown(e);
 		}

@@ -2,36 +2,37 @@
 using System.Windows.Forms;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win
+namespace Teleopti.Ccc.Win.Sikuli
 {
 	public static class SikuliHelper
 	{
-		private static SikuliValidatorRegister.Select _currentValidator = SikuliValidatorRegister.Select.None;
 
 		public static bool TestMode
 		{
 			get { return StateHolderReader.Instance.StateReader.SessionScopeData.TestMode; }
-			set { StateHolderReader.Instance.StateReader.SessionScopeData.TestMode = value; }
+			private set { StateHolderReader.Instance.StateReader.SessionScopeData.TestMode = value; }
 		}
 
 		public static string SikuliValidator
 		{
 			get { return StateHolderReader.Instance.StateReader.SessionScopeData.SikuliValidator; }
-			set { StateHolderReader.Instance.StateReader.SessionScopeData.SikuliValidator = value; }
+			private set { StateHolderReader.Instance.StateReader.SessionScopeData.SikuliValidator = value; }
 		}
 
-		public static void RegisterValidator(SikuliValidatorRegister.Select validator)
+		public static void SetTestMode(bool mode)
 		{
-			if (!TestMode)
-				return;
-			_currentValidator = validator;
+			TestMode = mode;
 		}
 
-		public static SikuliValidatorRegister.Select CurrentValidator
+		public static void EnterValidator()
 		{
-			get
+			using (var dialog = new SikuliEnterValidatorDialog())
 			{
-				return _currentValidator;
+				dialog.ShowDialog();
+				if (dialog.DialogResult == DialogResult.OK)
+				{
+					SikuliValidator = dialog.GetValidatorName;
+				}
 			}
 		}
 
@@ -41,7 +42,6 @@ namespace Teleopti.Ccc.Win
 				return;
 			var testView = new SikuliResultView { Header = "Loaded" };
 			testView.ShowDialog();
-			_currentValidator = SikuliValidatorRegister.Select.None;
 		}
 
 		public static void ShowTaskDone()
@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.Win
 				return;
 			var testView = new SikuliResultView { Header = "Task Done" };
 			testView.ShowDialog();
-			_currentValidator = SikuliValidatorRegister.Select.None;
 		}
 
 		public static void AssertValidation(Func<SikuliValidationResult> assertFunc)
@@ -61,18 +60,7 @@ namespace Teleopti.Ccc.Win
 			var testView = 
 				new SikuliResultView { Header = "Task Done", Result = assertResult.Result, Details = assertResult.Details.ToString()};
 			testView.ShowDialog();
-			_currentValidator = SikuliValidatorRegister.Select.None;
-		}
-
-		public static void InputValidator()
-		{
-			using (var dialog = new SikuliInputBox())
-			{
-				if (dialog.DialogResult == DialogResult.OK)
-				{
-					SikuliValidator = dialog.GetValidatorName;
-				}
-			}
+			SikuliValidator = SikuliValidatorRegister.SelectValidator.None;
 		}
 
 	}
