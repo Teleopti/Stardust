@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(509, 213);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(348, 213);
 			this.tableLayoutPanel1.TabIndex = 4;
 			// 
 			// btnCancel
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnCancel.ForeColor = System.Drawing.Color.White;
 			this.btnCancel.IsBackStageButton = false;
-			this.btnCancel.Location = new System.Drawing.Point(412, 176);
+			this.btnCancel.Location = new System.Drawing.Point(251, 176);
 			this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(87, 27);
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.groupBoxOpenHour.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBoxOpenHour.Location = new System.Drawing.Point(3, 53);
 			this.groupBoxOpenHour.Name = "groupBoxOpenHour";
-			this.groupBoxOpenHour.Size = new System.Drawing.Size(503, 107);
+			this.groupBoxOpenHour.Size = new System.Drawing.Size(342, 107);
 			this.groupBoxOpenHour.TabIndex = 2;
 			this.groupBoxOpenHour.TabStop = false;
 			this.groupBoxOpenHour.Text = "xxAddOpenHours";
@@ -174,8 +174,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			// tableLayoutPanelOpenHoursRtl
 			// 
 			this.tableLayoutPanelOpenHoursRtl.ColumnCount = 3;
-			this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.52314F));
-			this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.6499F));
+			this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.46428F));
+			this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.73809F));
 			this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.59124F));
 			this.tableLayoutPanelOpenHoursRtl.Controls.Add(this.autoLabelTo, 1, 0);
 			this.tableLayoutPanelOpenHoursRtl.Controls.Add(this.timePicker, 0, 1);
@@ -183,17 +183,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.tableLayoutPanelOpenHoursRtl.Controls.Add(this.chbClose, 2, 1);
 			this.tableLayoutPanelOpenHoursRtl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelOpenHoursRtl.Location = new System.Drawing.Point(3, 19);
+			this.tableLayoutPanelOpenHoursRtl.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelOpenHoursRtl.Name = "tableLayoutPanelOpenHoursRtl";
 			this.tableLayoutPanelOpenHoursRtl.RowCount = 3;
 			this.tableLayoutPanelOpenHoursRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
 			this.tableLayoutPanelOpenHoursRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
 			this.tableLayoutPanelOpenHoursRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-			this.tableLayoutPanelOpenHoursRtl.Size = new System.Drawing.Size(497, 85);
+			this.tableLayoutPanelOpenHoursRtl.Size = new System.Drawing.Size(336, 85);
 			this.tableLayoutPanelOpenHoursRtl.TabIndex = 5;
 			// 
 			// autoLabelTo
 			// 
-			this.autoLabelTo.Location = new System.Drawing.Point(105, 0);
+			this.autoLabelTo.Location = new System.Drawing.Point(102, 0);
 			this.autoLabelTo.Name = "autoLabelTo";
 			this.autoLabelTo.Size = new System.Drawing.Size(63, 15);
 			this.autoLabelTo.TabIndex = 2;
@@ -201,16 +202,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			// 
 			// timePicker
 			// 
-			this.timePicker.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.timePicker.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.tableLayoutPanelOpenHoursRtl.SetColumnSpan(this.timePicker, 2);
 			this.timePicker.Location = new System.Drawing.Point(0, 20);
 			this.timePicker.Margin = new System.Windows.Forms.Padding(0, 3, 3, 6);
 			this.timePicker.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("timePicker.MinMaxEndTime")));
 			this.timePicker.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("timePicker.MinMaxStartTime")));
 			this.timePicker.Name = "timePicker";
-			this.timePicker.Size = new System.Drawing.Size(306, 28);
+			this.timePicker.Size = new System.Drawing.Size(198, 28);
 			this.timePicker.TabIndex = 0;
 			this.timePicker.WholeDayText = "xxNextDay";
 			// 
@@ -225,7 +224,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			// chbClose
 			// 
 			this.chbClose.AutoSize = true;
-			this.chbClose.Location = new System.Drawing.Point(309, 20);
+			this.chbClose.Location = new System.Drawing.Point(209, 20);
 			this.chbClose.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
 			this.chbClose.Name = "chbClose";
 			this.chbClose.Padding = new System.Windows.Forms.Padding(6, 7, 0, 0);
@@ -243,7 +242,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.btnOk.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.btnOk.ForeColor = System.Drawing.Color.White;
 			this.btnOk.IsBackStageButton = false;
-			this.btnOk.Location = new System.Drawing.Point(292, 176);
+			this.btnOk.Location = new System.Drawing.Point(131, 176);
 			this.btnOk.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.Size = new System.Drawing.Size(87, 27);
@@ -265,7 +264,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.BackColor = System.Drawing.Color.White;
 			this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
-			this.ClientSize = new System.Drawing.Size(509, 213);
+			this.ClientSize = new System.Drawing.Size(348, 213);
 			this.ControlBox = false;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
