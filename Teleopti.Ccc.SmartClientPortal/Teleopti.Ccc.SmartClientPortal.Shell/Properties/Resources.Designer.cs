@@ -72,6 +72,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Budgets_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Budgets_filled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Budgets_filled_space_32x32 {
             get {
                 object obj = ResourceManager.GetObject("Budgets_filled_space_32x32", resourceCulture);
@@ -110,6 +120,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Forecasts_filled_simplified_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Forecasts_filled_simplified_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Forecasts_filled_space_32x32 {
             get {
                 object obj = ResourceManager.GetObject("Forecasts_filled_space_32x32", resourceCulture);
@@ -133,6 +153,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         public static System.Drawing.Bitmap information_16 {
             get {
                 object obj = ResourceManager.GetObject("information_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Intraday_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Intraday_filled_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -224,6 +254,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Payroll_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Payroll_filled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Payroll_filled_space_32x32 {
             get {
                 object obj = ResourceManager.GetObject("Payroll_filled_space_32x32", resourceCulture);
@@ -234,9 +274,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap People_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("People_filled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap People_filled_space_32x32 {
             get {
                 object obj = ResourceManager.GetObject("People_filled_space_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Performance_Manager_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Performance_Manager_filled_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -263,9 +323,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Reports_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Reports_filled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Reports_filled_space_32x32 {
             get {
                 object obj = ResourceManager.GetObject("Reports_filled_space_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Schedules_filled_simplified_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Schedules_filled_simplified_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -301,9 +381,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Shifts_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Shifts_filled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Shifts_filled_space_32x32 {
             get {
                 object obj = ResourceManager.GetObject("Shifts_filled_space_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Teleopti_WFM_main_icon_simplified_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Teleopti_WFM_main_icon_simplified_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
