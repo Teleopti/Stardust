@@ -5676,7 +5676,7 @@ Congratulations! You are now a licensed user of this award winning solution for 
 The application will now exit.
 
 Important:
-In order to get all services and web applications to fully function and to get access to newly licensed options, please run "Restart Teleopti WFM" from the Teleopti folder in the Start Menu.</value>
+In order to get all services and web applications to fully function and to get access to newly licensed options, please ask your IT to run "Restart Teleopti WFM" from the Teleopti folder in the Start Menu on the server.</value>
     <comment>license upload success message</comment>
   </data>
   <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
