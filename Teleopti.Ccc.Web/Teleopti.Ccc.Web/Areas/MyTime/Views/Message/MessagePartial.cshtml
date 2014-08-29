@@ -21,8 +21,32 @@
 							<div>
 								<div>
 									<!-- ko if: $root.isBadgeFeatureEnabled-->
-									<span data-bind="visible: isBadgeMessage">
-										<img src="~/Areas/MyTime/Content/Images/badge.png" />
+									<span data-bind="visible: isAdherenceBronzeBadgeMessage">
+										<img src="~/Areas/MyTime/Content/Images/adherenceBronzeBadge.png" />
+									</span>
+									<span data-bind="visible: isAdherenceSilverBadgeMessage">
+										<img src="~/Areas/MyTime/Content/Images/adherenceSilverBadge.png" />
+									</span>
+									<span data-bind="visible: isAdherenceGoldBadgeMessage">
+										<img src="~/Areas/MyTime/Content/Images/adherenceGoldBadge.png" />
+									</span>
+									<span data-bind="visible: isAHTBronzeBadgeMessage">
+										<img src="~/Areas/MyTime/Content/Images/AHTBronzeBadge.png" />
+									</span>
+									<span data-bind="visible: isAHTSilverBadgeMessage">
+										<img src="~/Areas/MyTime/Content/Images/AHTSilverBadge.png" />
+									</span>
+									<span data-bind="visible: isAHTGoldBadgeMessage">
+										<img src="~/Areas/MyTime/Content/Images/AHTGoldBadge.png" />
+									</span>
+									<span data-bind="visible: isAnsweredCallsBronzeBadgeMessage">
+										<img src="~/Areas/MyTime/Content/Images/answeredCallsBronzeBadge.png" />
+									</span>
+									<span data-bind="visible: isAnsweredCallsSilverBadgeMessage">
+										<img src="~/Areas/MyTime/Content/Images/answeredCallsSilverBadge.png" />
+									</span>
+									<span data-bind="visible: isAnsweredCallsGoldBadgeMessage">
+										<img src="~/Areas/MyTime/Content/Images/answeredCallsGoldBadge.png" />
 									</span>
 									<!-- /ko -->
 									<span>@Resources.Sender: </span>

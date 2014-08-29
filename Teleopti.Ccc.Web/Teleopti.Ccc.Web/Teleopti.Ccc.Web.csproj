@@ -920,6 +920,15 @@
     <Content Include="Areas\MyTime\Content\Css\MyReport.css" />
     <Content Include="Areas\MyTime\Content\Css\MonthView.css" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
+    <Content Include="Areas\MyTime\Content\Images\adherenceBronzeBadge.png" />
+    <Content Include="Areas\MyTime\Content\Images\adherenceGoldBadge.png" />
+    <Content Include="Areas\MyTime\Content\Images\adherenceSilverBadge.png" />
+    <Content Include="Areas\MyTime\Content\Images\AHTBronzeBadge.png" />
+    <Content Include="Areas\MyTime\Content\Images\AHTGoldBadge.png" />
+    <Content Include="Areas\MyTime\Content\Images\AHTSilverBadge.png" />
+    <Content Include="Areas\MyTime\Content\Images\answeredCallsBronzeBadge.png" />
+    <Content Include="Areas\MyTime\Content\Images\answeredCallsGoldBadge.png" />
+    <Content Include="Areas\MyTime\Content\Images\answeredCallsSilverBadge.png" />
     <Content Include="Areas\MyTime\Content\Images\badge.png" />
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyQueueMetrics.js" />
