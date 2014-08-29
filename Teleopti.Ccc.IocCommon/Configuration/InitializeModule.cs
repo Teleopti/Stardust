@@ -42,11 +42,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterInstance(MessageFilterManager.Instance).As<IMessageFilterManager>().SingleInstance();
 			builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>();
 			builder.RegisterType<RestartOnClosed>().As<IConnectionKeepAliveStrategy>();
+
+			builder.RegisterType<SignalRClient>()
+				.As<ISignalRClient>()
+				.WithParameter(new NamedParameter("serverUrl", null))
+				.SingleInstance();
 			builder.RegisterType<SignalBroker>()
 				.As<IMessageBroker>()
 				.As<IMessageBrokerSender>()
 				.As<IMessageBrokerListener>()
-				.WithParameter(new NamedParameter("serverUrl", null))
 				.SingleInstance();
 		}
 	}
