@@ -27,27 +27,27 @@ namespace Teleopti.Messaging.Client.Composite
 			_client = client;
 		}
 
-		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
+		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
 		{
 			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
 		}
 
-		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType)
+		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType)
 		{
 			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
 		}
 
-		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
+		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
 			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, null, domainObjectType, startDate, endDate);
 		}
 
-		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
+		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
 			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, domainObjectId, domainObjectType, startDate, endDate);
 		}
 
-		public void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType, DateTime startDate, DateTime endDate)
+		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
 			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, null, domainObjectType, startDate, endDate);
 		}
@@ -82,7 +82,7 @@ namespace Teleopti.Messaging.Client.Composite
 			addSubscription(subscription);
 		}
 
-		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
+		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
 			// cleanup refactoring, but keeping the same buggy behavior: does not remove subscription from the server.
 			// should also do this somewhere, when there are no local routes left:
@@ -133,9 +133,6 @@ namespace Teleopti.Messaging.Client.Composite
 
 		private void InvokeEventHandlers(EventMessage eventMessage, IEnumerable<string> routes)
 		{
-			// locks everywhere in this class, but no lock here?!!!
-			// if locks are even required, should be here aswell no?
-
 			var matchingHandlers = from s in _subscriptions
 				from r in routes
 				let route = s.Subscription.Route()

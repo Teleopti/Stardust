@@ -149,8 +149,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void unregisterMessageBrooker()
 		{
 			if (_messageBroker == null) return;
-			_messageBroker.UnregisterEventSubscription(messageBrokerDayOffMessage);
-			_messageBroker.UnregisterEventSubscription(messageBrokerShiftCategoryMessage);
+			_messageBroker.UnregisterSubscription(messageBrokerDayOffMessage);
+			_messageBroker.UnregisterSubscription(messageBrokerShiftCategoryMessage);
 			_messageBroker = null;
 		}
 

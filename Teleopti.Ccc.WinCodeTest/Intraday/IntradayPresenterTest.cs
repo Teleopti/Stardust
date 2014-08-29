@@ -106,11 +106,11 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		{
 			_target.UnregisterMessageBrokerEvents();
 
-			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventActualAgentStateMessageHandler));
-			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventForecastDataMessageHandler));
-			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventMeetingMessageHandler));
-			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventScheduleMessageHandler));
-			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventStatisticMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventActualAgentStateMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventForecastDataMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventMeetingMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventScheduleMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventStatisticMessageHandler));
 		}
 
         [Test]

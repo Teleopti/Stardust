@@ -92,7 +92,7 @@ namespace Teleopti.Common.UI.SmartPartControls.SmartParts
         public void UnregisterForMessageBrokerEvents()
         {
             if (SmartPartEnvironment.MessageBroker != null)
-                SmartPartEnvironment.MessageBroker.UnregisterEventSubscription(OnEventMessageHandler);
+                SmartPartEnvironment.MessageBroker.UnregisterSubscription(OnEventMessageHandler);
         }
 
         public virtual void OnBackgroundProcess(DoWorkEventArgs e)

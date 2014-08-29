@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 		{
 			if (disposing)
 			{
-				_messageBroker.UnregisterEventSubscription(handleIncomingJobStatus);
+				_messageBroker.UnregisterSubscription(handleIncomingJobStatus);
 				_messageBroker = null;
 				_view = null;
 			}

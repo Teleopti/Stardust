@@ -368,11 +368,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
         public void UnregisterMessageBrokerEvents()
         {
             if (_messageBroker == null) return;
-            _messageBroker.UnregisterEventSubscription(OnEventActualAgentStateMessageHandler);
-            _messageBroker.UnregisterEventSubscription(OnEventForecastDataMessageHandler);
-            _messageBroker.UnregisterEventSubscription(OnEventScheduleMessageHandler);
-            _messageBroker.UnregisterEventSubscription(OnEventStatisticMessageHandler);
-            _messageBroker.UnregisterEventSubscription(OnEventMeetingMessageHandler);
+            _messageBroker.UnregisterSubscription(OnEventActualAgentStateMessageHandler);
+            _messageBroker.UnregisterSubscription(OnEventForecastDataMessageHandler);
+            _messageBroker.UnregisterSubscription(OnEventScheduleMessageHandler);
+            _messageBroker.UnregisterSubscription(OnEventStatisticMessageHandler);
+            _messageBroker.UnregisterSubscription(OnEventMeetingMessageHandler);
         }
 
         public void Save()

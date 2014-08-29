@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void Unload()
 		{
 			// Disposes or flag anything possible.
-			_messageBroker.UnregisterEventSubscription(refreshMultiplicatorDefinitionSet);
+			_messageBroker.UnregisterSubscription(refreshMultiplicatorDefinitionSet);
 			timeSpanTextBoxPlanningMin.Validated -= timeSpanTextBoxPlanningMinValidated;
 			timeSpanTextBoxPlanningMax.Validated -= timeSpanTextBoxPlanningMaxValidated;
 			_contractList = null;

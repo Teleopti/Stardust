@@ -42,7 +42,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = new HubProxySubscribableFake(subscription);
 			var target = makeTarget(hubProxy);
 
-			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
+			target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
 				typeof(IInterfaceForTest));
 
 			var notification = new Notification
@@ -67,7 +67,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = new HubProxySubscribableFake(subscription);
 			var target = MessageBrokerCompositeClientForTest.Make(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
 
-			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => {}, typeof(IInterfaceForTest));
+			target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => {}, typeof(IInterfaceForTest));
 		}
 
 		[Test]
@@ -77,7 +77,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = new HubProxySubscribableFake(subscription);
 			var target = MessageBrokerCompositeClientForTest.Make(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
 
-			target.UnregisterEventSubscription((sender, args) => {});
+			target.UnregisterSubscription((sender, args) => {});
 		}
 
 		[Test]
@@ -88,7 +88,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = new HubProxySubscribableFake(subscription);
 			var target = makeTarget(hubProxy);
 
-			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
+			target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
 				typeof(IInterfaceForTest), DateTime.UtcNow.AddHours(-3),
 				DateTime.UtcNow.AddHours(-1));
 
@@ -115,7 +115,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = new HubProxySubscribableFake(subscription);
 			var target = makeTarget(hubProxy);
 
-			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
+			target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
 				typeof(IInterfaceForTest), DateTime.UtcNow.AddHours(1),
 				DateTime.UtcNow.AddHours(3));
 
@@ -145,7 +145,7 @@ namespace Teleopti.MessagingTest.SignalR
 				new[] { hubConnection1 }, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
 			target.StartBrokerService();
 
-			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
+			target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
 				typeof(IInterfaceForTest));
 			target.Send(string.Empty, Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
 				typeof(IInterfaceForTest), DomainUpdateType.Update, new byte[] { });
@@ -166,7 +166,7 @@ namespace Teleopti.MessagingTest.SignalR
 				new[] { hubConnection1, hubConnection2 }, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
 			target.StartBrokerService();
 
-			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
+			target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
 				typeof(IInterfaceForTest));
 			hubProxy1.BreakTheConnection();
 			time.Passes(TimeSpan.FromMinutes(2));

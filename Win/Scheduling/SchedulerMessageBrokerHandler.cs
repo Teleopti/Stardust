@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void stopListen()
 		{
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.UnregisterEventSubscription(OnEventMessage);
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.UnregisterSubscription(OnEventMessage);
 		}
 
 		private void OnEventMessage(object sender, EventMessageArgs e)

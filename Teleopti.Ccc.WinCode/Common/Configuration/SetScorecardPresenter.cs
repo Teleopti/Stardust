@@ -109,9 +109,9 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         {
             if (_messageBroker != null)
             {
-                _messageBroker.UnregisterEventSubscription(OnTeamEvent);
-                _messageBroker.UnregisterEventSubscription(OnSiteEvent);
-                _messageBroker.UnregisterEventSubscription(OnScorecardEvent);
+                _messageBroker.UnregisterSubscription(OnTeamEvent);
+                _messageBroker.UnregisterSubscription(OnSiteEvent);
+                _messageBroker.UnregisterSubscription(OnScorecardEvent);
             }
         }
 

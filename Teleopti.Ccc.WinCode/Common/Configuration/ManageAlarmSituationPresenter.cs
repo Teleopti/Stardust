@@ -455,9 +455,9 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		{
 			if (_messageBroker != null)
 			{
-				_messageBroker.UnregisterEventSubscription(OnActivityEvent);
-				_messageBroker.UnregisterEventSubscription(OnAlarmEvent);
-				_messageBroker.UnregisterEventSubscription(OnRtaStateGroupEvent);
+				_messageBroker.UnregisterSubscription(OnActivityEvent);
+				_messageBroker.UnregisterSubscription(OnAlarmEvent);
+				_messageBroker.UnregisterSubscription(OnRtaStateGroupEvent);
 			}
 			_manageAlarmSituationView = null;
 		}
