@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
         {
             if (disposing)
             {
-                UnhookEvents();
-                ReleaseManagedResources();
+                unhookEvents();
+                releaseManagedResources();
                 if (components != null)
                     components.Dispose();
             }
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.trackBarExTrend.TrackBarGradientEnd = System.Drawing.Color.FromArgb(((int)(((byte)(178)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.trackBarExTrend.TrackBarGradientStart = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(247)))), ((int)(((byte)(255)))));
 			this.trackBarExTrend.Value = 0;
-			this.trackBarExTrend.ValueChanged += new System.EventHandler(this.trackBarExTrend_ValueChanged);
+			this.trackBarExTrend.ValueChanged += new System.EventHandler(this.trackBarExTrendValueChanged);
 			// 
 			// percentTextBoxTrend
 			// 
@@ -124,8 +124,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.percentTextBoxTrend.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.percentTextBoxTrend.TabIndex = 5;
 			this.percentTextBoxTrend.Text = "0,00 %";
-			this.percentTextBoxTrend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.percentTextBoxTrend_KeyDown);
-			this.percentTextBoxTrend.Leave += new System.EventHandler(this.percentTextBoxTrend_Leave);
+			this.percentTextBoxTrend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.percentTextBoxTrendKeyDown);
+			this.percentTextBoxTrend.Leave += new System.EventHandler(this.percentTextBoxTrendLeave);
 			// 
 			// label1
 			// 
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.xxResetYearlyTrend.TabIndex = 6;
 			this.xxResetYearlyTrend.Text = "xxResetTrend";
 			this.xxResetYearlyTrend.UseVisualStyle = true;
-			this.xxResetYearlyTrend.Click += new System.EventHandler(this.xxResetYearlyTrend_Click);
+			this.xxResetYearlyTrend.Click += new System.EventHandler(this.xxResetYearlyTrendClick);
 			// 
 			// checkBoxAdvUseTrend
 			// 
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.checkBoxAdvUseTrend.TabIndex = 3;
 			this.checkBoxAdvUseTrend.Text = "xxUseTrend";
 			this.checkBoxAdvUseTrend.ThemesEnabled = false;
-			this.checkBoxAdvUseTrend.CheckStateChanged += new System.EventHandler(this.checkBoxAdvUseTrend_CheckStateChanged);
+			this.checkBoxAdvUseTrend.CheckStateChanged += new System.EventHandler(this.checkBoxAdvUseTrendCheckStateChanged);
 			// 
 			// label2
 			// 
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.splitContainerAdv2.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
 			this.splitContainerAdv2.TabIndex = 3;
 			this.splitContainerAdv2.Text = "splitContainerAdv4";
-			this.splitContainerAdv2.DoubleClick += new System.EventHandler(this.splitContainerAdv2_DoubleClick);
+			this.splitContainerAdv2.DoubleClick += new System.EventHandler(this.splitContainerAdv2DoubleClick);
 			// 
 			// WorkflowTrendView
 			// 

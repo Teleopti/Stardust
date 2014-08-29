@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		private void setupTrendView(IList<IVolumeYear> volumeYears)
 		{
 			//_workflowTrendView = new WorkflowTrendView(volumeYears, Presenter.Model.WorkloadDaysWithoutOutliers, this)
-			_workflowTrendView = new WorkflowTrendView();
+			_workflowTrendView = new WorkflowTrendView(){Dock = DockStyle.Fill};
 			_workflowTrendView.LoadAllComponents(volumeYears, Presenter.Model.WorkloadDaysWithoutOutliers, this);
 			tabPageTrend.Controls.Add(_workflowTrendView);
 		}
