@@ -337,6 +337,17 @@
     <None Include="Resources\Reports_filled_space_32x32.png" />
     <None Include="Resources\Schedules_filled_space_32x32.png" />
     <None Include="Resources\Shifts_filled_space_32x32.png" />
+    <None Include="Resources\Budgets_filled_16x16.png" />
+    <None Include="Resources\Forecasts_filled_simplified_16x16.png" />
+    <None Include="Resources\Intraday_filled_16x16.png" />
+    <None Include="Resources\Payroll_filled_16x16.png" />
+    <None Include="Resources\People_filled_16x16.png" />
+    <None Include="Resources\Performance-Manager_filled_16x16.png" />
+    <None Include="Resources\Reports_filled_16x16.png" />
+    <None Include="Resources\Schedules_filled_simplified_16x16.png" />
+    <None Include="Resources\Shifts_filled_16x16.png" />
+    <None Include="Resources\Teleopti-WFM-main-icon_simplified-16x16.png" />
+    <None Include="Resources\PeopleWFM.ico" />
     <Content Include="StaticPage.min.html">
       <DependentUpon>StaticPage.html</DependentUpon>
     </Content>
