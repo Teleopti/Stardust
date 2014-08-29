@@ -294,16 +294,14 @@ namespace Teleopti.Ccc.Domain.Collection
                         foreach (var part in scheduleParts)
                         {
                             var range = ((ScheduleRange) this[part.Person]);
-
                             var partBefore = range.ReFetch(part);
-
                             scheduleDayChangeCallback.ScheduleDayChanging(partBefore);
-
                             range.ModifyInternal(part);
+							// permission can prevent part to be applied so let us check
+							var partAfter = range.ReFetch(part);				
+							scheduleDayChangeCallback.ScheduleDayChanged(partAfter);
 
-                            scheduleDayChangeCallback.ScheduleDayChanged(part);
-
-                            OnPartModified(new ModifyEventArgs(modifier, part.Person, part.Period, part));
+							OnPartModified(new ModifyEventArgs(modifier, partAfter.Person, partAfter.Period, part));
 
                         }
                     }
