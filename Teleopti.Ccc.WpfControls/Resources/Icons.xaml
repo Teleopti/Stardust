@@ -4,6 +4,30 @@
 	<!-- Delete -->
 	<DrawingBrush x:Key="Raptor_DeleteIcon">
 		<DrawingBrush.Drawing>
+			<GeometryDrawing >
+				<GeometryDrawing.Geometry>
+					<GeometryGroup>
+						<StreamGeometry >
+							M10.61,7.5 L87.096,86.75 M87,8.86 L7.5000001,85.588
+						</StreamGeometry>
+
+					</GeometryGroup>
+				</GeometryDrawing.Geometry>
+				<GeometryDrawing.Pen>
+					<Pen Thickness="20">
+						<Pen.Brush>
+							<SolidColorBrush Color="#FFC90808">
+
+							</SolidColorBrush>
+						</Pen.Brush>
+					</Pen>
+				</GeometryDrawing.Pen>
+			</GeometryDrawing>
+		</DrawingBrush.Drawing>
+	</DrawingBrush>
+	
+	<DrawingBrush x:Key="Raptor_DeleteIcon_old">
+		<DrawingBrush.Drawing>
 			<DrawingGroup>
 				<DrawingGroup.Children>
 					<GeometryDrawing Brush="#FF990000" Geometry="F1 M 119.453,82.048C 141.256,77.5293 157.763,82.7414 172.201,96.7467L 280.497,222.629L 389.013,134.48C 410.677,119.876 433.697,148.897 417.648,166.928L 325.609,275.072L 416.568,380.812C 424.492,395.237 405.58,427.503 384.724,411.101L 282.12,326.168L 220.98,398.003C 205.976,416.917 187.76,424.931 166.759,420.685C 145.027,418.932 125.304,398.711 125.169,375.205C 125.169,361.717 129.155,345.58 149.149,329.34L 218.191,273.249L 102.755,177.691C 85.692,162.423 79.9707,143.815 82.1107,121.545C 85.9907,102.281 100.661,86.5653 119.453,82.048 Z "/>
