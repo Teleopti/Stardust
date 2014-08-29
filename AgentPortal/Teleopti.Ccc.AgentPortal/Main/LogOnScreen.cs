@@ -578,10 +578,10 @@ namespace Teleopti.Ccc.AgentPortal.Main
                     return false;
                 }
 #else
-                StateHolder.Configure(stateManager);
+                StateHolder.Initialize(stateManager);
 #endif
 
-                Thread.CurrentThread.CurrentCulture =
+				Thread.CurrentThread.CurrentCulture =
                     CultureInfo.GetCultureInfo(
 						loggedPerson.CultureLanguageId.GetValueOrDefault(CultureInfo.CurrentCulture.LCID)).FixPersianCulture();
 
