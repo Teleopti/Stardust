@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools.Enums;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
@@ -739,26 +740,41 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				IScenarioRepository scenarioRepository = new ScenarioRepository(unitOfWork);
 				IList<IScenario> scenarios = scenarioRepository.FindAllSorted();
 
-				flowLayoutExportToScenario.ContainerControl.Controls.Clear();
+				clearExistingExportScenarioButtons();
 				foreach (var scenario in scenarios)
 				{
 					if (_scenario.Description.Name == scenario.Description.Name) continue;
-					var button = new ButtonAdv
-					{
-						Text = scenario.Description.Name,
-						Width = 300,
-						Height = 80,
-						Appearance = ButtonAppearance.Metro,
-						UseVisualStyle = true,
-						Tag = scenario,
-						BackColor = Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))))
-					};
-
-					button.Font.ChangeToBold();
-					button.Click += scenarioMenuItem_Click;
+					var button = createExportScenarioButton(scenario);
 					flowLayoutExportToScenario.ContainerControl.Controls.Add(button);
 				}
 			}
+		}
+
+		private void clearExistingExportScenarioButtons()
+		{
+			flowLayoutExportToScenario.ContainerControl.Controls.OfType<ButtonAdv>().ForEach(c =>
+			{
+				c.Click -= scenarioMenuItem_Click;
+			});
+			flowLayoutExportToScenario.ContainerControl.Controls.Clear();
+		}
+
+		private ButtonAdv createExportScenarioButton(IScenario scenario)
+		{
+			var button = new ButtonAdv
+			{
+				Text = scenario.Description.Name,
+				Width = 300,
+				Height = 80,
+				Appearance = ButtonAppearance.Metro,
+				UseVisualStyle = true,
+				Tag = scenario,
+				BackColor = Color.FromArgb(((int) (((byte) (0)))), ((int) (((byte) (153)))), ((int) (((byte) (255)))))
+			};
+
+			button.Font.ChangeToBold();
+			button.Click += scenarioMenuItem_Click;
+			return button;
 		}
 
 		private void scenarioMenuItem_Click(object sender, EventArgs e)
@@ -2382,6 +2398,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void ReleaseManagedResources()
 		{
+			clearExistingExportScenarioButtons();
 			foreach (AbstractDetailView detailView in _detailViews)
 			{
 				detailView.WorkingIntervalChanged -= detailView_WorkingIntervalChanged;
